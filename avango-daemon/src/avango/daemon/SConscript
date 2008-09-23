@@ -1,0 +1,68 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+# Sources section
+lib_sources = Split('''
+    Device.cpp
+    DeviceActuator.cpp
+    DeviceDaemon.cpp
+    DeviceSensor.cpp
+    DeviceService.cpp
+    DTrack.cpp
+    HIDInput.cpp
+    Init.cpp
+    LinuxEvent.cpp
+    SharedMemorySegment.cpp
+    Station.cpp
+    StationBlock.cpp
+    StationSegment.cpp
+    WacomTablet.cpp
+    Wiimote.cpp
+    WiimoteActuator.cpp
+    ''')
+
+# append external sources
+lib_sources.append(Split('''
+    dtrack/dtrack.cpp
+    '''))
+
+#bin_source = ['DeviceDaemon.cpp']
+
+# Rules section
+daemon_env = avango.build.Environment()
+if 'icpc' in daemon_env['CXX']:
+    daemon_env.Append(CXXFLAGS='-wd593')
+avango.build.add_library(daemon_env, 'avango-core')
+avango.build.add_library(daemon_env, 'avango-osg')
+lib = daemon_env.SharedLibrary('avangoDaemon', lib_sources)
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+
+# Alias section
+Alias('daemon', [lib])
+Alias('install-daemon', Install(avango.build.get_library_path(), lib))
+#Alias('install-daemon', Install(avango.build.get_binary_path(), bin))

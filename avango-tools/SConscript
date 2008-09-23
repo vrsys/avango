@@ -1,0 +1,61 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+tools_env = avango.build.Environment()
+
+# Substitutions
+tools_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_TOOLS_DEBUG': int(tools_env['DEBUG']),
+    'AVANGO_TOOLS_OSG_SUPPORT': int(tools_env['OPENSCENEGRAPH_SUPPORT']),
+    'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
+    'AVANGO_TOOLS_VERSION': '1.90.0',
+    'AVANGO_TOOLS_VERSION_MAJOR': '1',
+    'AVANGO_TOOLS_VERSION_MINOR': '90',
+    'AVANGO_TOOLS_VERSION_MAINT': '0',
+    }
+
+avango_tools_pc = tools_env.Subst('dist/pkg-config/avango-tools.pc.in')
+Alias('tools', avango_tools_pc)
+Alias('install-tools', tools_env.Install(avango.build.get_pkgconfig_path(), avango_tools_pc))
+
+config_h = tools_env.Subst('include/avango/tools/Config.h.in')
+Alias('tools', config_h)
+Alias('install-tools', tools_env.Install(avango.build.get_include_path('avango/tools'), config_h))
+
+Alias('all', Alias('tools'))
+Alias('install', Alias('install-tools'))
+
+# Subdirs
+Export('tools_env')
+
+SConscript ([
+    'include/avango/tools/SConscript',
+    'src/avango/tools/SConscript',
+    'python/SConscript',
+])

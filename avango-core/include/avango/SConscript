@@ -1,0 +1,74 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+SConscript('logging/SConscript')
+
+headers = Split('''
+                Action.h
+                Application.h
+                Assert.h
+                Base.h
+                ContainerPool.h
+                Create.h
+                Distributed.h
+                Field.h
+                FieldContainer.h
+                FieldContainerHelper.h
+                FieldRef.h
+                Init.h
+                InputStream.h
+                Link.h
+                Logger.h
+                MultiField.h
+                Object.h
+                ObjectValue.h
+                OutputStream.h
+                Reader.h
+                Semaphore.h
+                SingleField.h
+                Singleton.h
+                StandardFields.h
+                TimeSensor.h
+                Type.h
+                Typed.h
+                UUID.h
+                WriteAction.h
+                windows_specific.h
+                ''')
+
+if avango.build.Environment()['DISTRIBUTION_SUPPORT']:
+    headers += Split('''
+                     MaestroEID.h
+                     NetID.h
+                     NetInfo.h
+                     NetLock.h
+                     NetMap.h
+                     Msg.h
+                     NetNode.h
+                     ''')
+
+Alias('install-core', Install(avango.build.get_include_path('avango'), headers))

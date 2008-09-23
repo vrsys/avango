@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+
+Name: Avango Tools
+Description: Avango Tools Library
+Version: %(AVANGO_TOOLS_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoTools
+Cflags: -I${includedir}
+Requires: ${requires}

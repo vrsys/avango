@@ -1,0 +1,55 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+unittest_env = avango.build.Environment()
+
+# Substitutions
+unittest_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_UNITTEST_DEBUG': int(unittest_env['DEBUG']),
+    'AVANGO_UNITTEST_VERSION': '1.90.0',
+    'AVANGO_UNITTEST_VERSION_MAJOR': '1',
+    'AVANGO_UNITTEST_VERSION_MINOR': '90',
+    'AVANGO_UNITTEST_VERSION_MAINT': '0',
+    }
+
+avango_unittest_pc = unittest_env.Subst('dist/pkg-config/avango-unittest.pc.in')
+Alias('unittest', avango_unittest_pc)
+Alias('install-unittest', unittest_env.Install(avango.build.get_pkgconfig_path(), avango_unittest_pc))
+
+Alias('all', Alias('unittest'))
+Alias('install', Alias('install-unittest'))
+
+SConscript (['include/avango/UnitTest++/SConscript'])
+if avango.build.oshelper.os_is_windows():
+    SConscript (['include/avango/UnitTest++/Win32/SConscript'])
+else:
+    SConscript (['include/avango/UnitTest++/Posix/SConscript'])
+SConscript([
+    'src/avango/UnitTest++/SConscript',
+    'src/avango/UnitTest++/tests/SConscript',
+])

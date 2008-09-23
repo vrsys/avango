@@ -1,0 +1,103 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+from config import *
+from configstore import _config_store
+import oshelper
+
+def _setup_default():
+    _plain_libs = """
+        dl
+        uuid
+        boost_thread
+        boost_signals
+        boost_python
+        osg
+        osgDB
+        osgViewer
+        osgParticle
+        osgText
+        osgUtil
+        osgGA
+        """
+
+    for lib in _plain_libs.split():
+        _config_store.set(lib, PlainConfig(libraries = [lib]))
+
+    # Uncomment the following lines to add boost debug libs
+    # FIXME add flag to set these
+    #_config_store.set('boost_thread', PlainConfig(libraries = ['boost_thread-d']))
+    #_config_store.set('boost_signals', PlainConfig(libraries = ['boost_signals-d']))
+    #_config_store.set('boost_python', PlainConfig(libraries = ['boost_python-d']))
+
+    _config_store.set('avango-core', PKGConfig('avango-core'))
+    _config_store.set('avango-daemon', PKGConfig('avango-daemon'))
+    _config_store.set('avango-python', PlainConfig())
+    _config_store.set('avango-osg', PKGConfig('avango-osg'))
+    _config_store.set('avango-osgviewer', PKGConfig('avango-osgviewer'))
+    _config_store.set('avango-moving', PKGConfig('avango-moving'))
+    _config_store.set('avango-tools', PKGConfig('avango-tools'))
+    _config_store.set('avango-ensemble', PKGConfig('avango-ensemble'))
+    _config_store.set('avango-unittest', PKGConfig('avango-unittest'))
+    _config_store.set('avango-sound', PlainConfig(libraries = ["avangoSound"]))
+    _config_store.set('openal', PlainConfig(libraries = ["openal"]))
+    _config_store.set('alut', PlainConfig(libraries = ["alut"]))
+    _config_store.set('vorbisfile', PKGConfig('vorbisfile'))
+
+    # Dummy packages
+    _config_store.set('osgUtil', PlainConfig(libraries = ['']))
+    _config_store.set('GL', PlainConfig(libraries = ['']))
+    _config_store.set('GLU', PlainConfig(libraries = ['']))
+
+    # Override some libraries for Windows
+    if oshelper.os_is_windows():
+        # Boost libraries use auto-link
+        _config_store.set('boost_thread', PlainConfig(libraries = ['']))
+        _config_store.set('boost_signals', PlainConfig(libraries = ['']))
+        _config_store.set('boost_python', PlainConfig(libraries = ['']))
+        # dl is in standard system libraries
+        # TODO check that dl functionality is included in system library
+        _config_store.set('dl', PlainConfig(libraries = ['']))
+        # Windows-only(?) OSG library
+        _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
+        _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
+        # GL libraries are required under Windows
+        _config_store.set('GL', PlainConfig(libraries = ['OPENGL32']))
+        _config_store.set('GLU', PlainConfig(libraries = ['GLU32']))
+
+def set_config_flag(key, value):
+    if key == "OPENSCENEGRAPH_DEBUG" and value:
+        if not oshelper.os_is_windows():
+            return
+        _config_store.set('osg', PlainConfig(libraries = ['osgd', 'OpenThreadsd']))
+        _config_store.set('osgDB', PlainConfig(libraries = ['osgDBd']))
+        _config_store.set('osgViewer', PlainConfig(libraries = ['osgViewerd']))
+        _config_store.set('osgParticle', PlainConfig(libraries = ['osgParticled']))
+        _config_store.set('osgText', PlainConfig(libraries = ['osgTextd']))
+        _config_store.set('osgGA', PlainConfig(libraries = ['osgGAd']))
+        _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtild']))
+
+
+_setup_default()

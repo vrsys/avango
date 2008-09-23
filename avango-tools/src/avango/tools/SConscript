@@ -1,0 +1,59 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+Import('tools_env')
+
+sources = Split('''
+    ChangeSelector.cpp
+    Init.cpp
+    InjectSelector.cpp
+    ObjectSelector.cpp
+    NameSelector.cpp
+    Selector.cpp
+    SingleSelector.cpp
+    TargetHolder.cpp
+    Tool.cpp
+    TriggerSelector.cpp
+    TypeSelector.cpp
+    UnionSelector.cpp
+    ''')
+
+if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
+    avango.build.add_library(tools_env, 'avango-osg')
+    sources += Split('''
+        DragTool.cpp
+        IntersectionTargetHolder.cpp
+        NodePathTargetHolder.cpp
+        PickSelector.cpp
+        ProximitySelector.cpp
+        ScaledGrabTool.cpp
+        ''')
+
+lib = tools_env.SharedLibrary('avangoTools', sources)
+Alias('tools', lib)
+Alias('install-tools', Install(avango.build.get_library_path(), lib))
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)

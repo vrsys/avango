@@ -1,0 +1,30 @@
+// -*- Mode:C++ -*- 
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+/**
+   
+\mainpage
+
+\section topics Topics
+
+- \ref styleguide
+
+\section external External Documents
+
+- <a target="_blank" href="epydoc/index.html">Avango-NG Python Bindings</a>
+
+- <a target="_blank" href="../avango-ng.pdf">PDF Avango-NG Reference Manual</a>
+- <a target="_blank" href="../avango-ng-python.pdf">PDF Avango-NG Python Bindings</a>
+
+*/

@@ -1,0 +1,74 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+* This file is part of Avango.                                           *
+*                                                                        *
+* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* angewandten Forschung (FhG), Munich, Germany.                          *
+*                                                                        *
+* Avango is free software: you can redistribute it and/or modify         *
+* it under the terms of the GNU Lesser General Public License as         *
+* published by the Free Software Foundation, version 3.                  *
+*                                                                        *
+* Avango is distributed in the hope that it will be useful,              *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
+* GNU General Public License for more details.                           *
+*                                                                        *
+* You should have received a copy of the GNU Lesser General Public       *
+* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
+*                                                                        *
+* Avango is a trademark owned by FhG.                                    *
+*                                                                        *
+\************************************************************************/
+
+#include <avango/daemon/StationBlock.h>
+
+#include <avango/Logger.h>
+
+
+namespace
+{
+  av::Logger& logger(av::getLogger("av::daemon::StationBlock"));
+}
+
+av::daemon::StationBlock::StationBlock()
+  : mNumStations(0),
+    mMutex()
+{}
+
+av::daemon::StationBlock::~StationBlock()
+{}
+
+av::daemon::Station*
+av::daemon::StationBlock::getStation(const char* name)
+{
+  // very simple and inefficient for now
+  Station* station = 0;
+
+  boost::mutex::scoped_lock lock(mMutex);
+
+  int i;
+
+  for (i=0; i<mNumStations; i++)
+  {
+    if (strcmp(name, mStations[i].getName()) == 0)
+    {
+      station = &mStations[i];
+      LOG_TRACE(logger) << "getStation(): referenced station '" << name << "', " << station;
+
+      break;
+    }
+  }
+
+  if (!station && i < sMaxStationNum) {
+    station = new (&mStations[i]) Station;
+    station->setName(name);
+    logger.debug() << "getStation(): created station '" << name << "', " << station;
+
+    mNumStations++;
+  }
+
+  return station;
+}

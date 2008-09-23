@@ -1,0 +1,31 @@
+// -*- Mode:Outline -*-
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+
+This example shows the compatibility of an Avango Classic fpHIDInput running
+in the device daemon (av-daemon) to an instances of DeviceService and
+DeviceSensor of the Avango NG framework.
+
+Usage:
+
+  1. Start Avango Classic Tracker:
+
+     ~/old-avango/bin/./av-daemon.sh -f devices.scm
+
+     NOTE: For parametrization look into the file.
+
+
+  2. Start TestDevice using Avango NG instances:
+
+     ./TestDevice

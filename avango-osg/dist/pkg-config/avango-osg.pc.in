@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+
+Name: Avango OSG
+Description: Avango OpenSceneGraph Library
+Version: %(AVANGO_OSG_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoOsg -lavangoOsgParticle %(AVANGO_OSG_DISTRIBUTION_LIB)s
+Cflags: -I${includedir}
+Requires: ${requires}

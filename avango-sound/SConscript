@@ -1,0 +1,76 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+local_env = avango.build.Environment()
+avango.build.add_library(local_env, 'avango-core')
+avango.build.add_library(local_env, 'avango-osg')
+
+# Substitutions
+local_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_SOUND_DEBUG': int(local_env['DEBUG']),
+    'AVANGO_SOUND_OSG_SUPPORT': int(local_env['OPENSCENEGRAPH_SUPPORT']),
+    'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
+    'AVANGO_SOUND_VERSION': '1.90.0',
+    'AVANGO_SOUND_VERSION_MAJOR': '1',
+    'AVANGO_SOUND_VERSION_MINOR': '90',
+    'AVANGO_SOUND_VERSION_MAINT': '0',
+    }
+
+avango_sound_pc = local_env.Subst('dist/pkg-config/avango-sound.pc.in')
+Alias('sound', avango_sound_pc)
+Alias('install-sound', local_env.Install(avango.build.get_pkgconfig_path(), avango_sound_pc))
+
+config_h = local_env.Subst('include/avango/sound/Config.h.in')
+Alias('sound', config_h)
+Alias('install-sound', local_env.Install(avango.build.get_include_path('avango/sound'), config_h))
+
+sound_files = Split('''
+    src/SoundTraverser.cpp
+    src/SoundSource.cpp
+    src/SoundRenderer.cpp
+    src/SampleBuffer.cpp
+    ''')
+sound_lib = local_env.SharedLibrary('avangoSound', sound_files)
+Alias('install-sound', local_env.Install(avango.build.get_library_path(), sound_lib))
+
+local_test_env = avango.build.TestEnvironment()
+local_test_env.Append(LIBS=[sound_lib])
+
+Alias('sound', sound_lib)
+Alias('all', Alias('sound'))
+Alias('check', Alias("check-sound"))
+Alias('install', Alias('install-sound'))
+
+
+SConscript ([
+    'include/avango/sound/SConscript',
+    'src/tests/SConscript',
+    'python/SConscript'
+])

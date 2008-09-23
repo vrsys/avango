@@ -1,0 +1,52 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+sources = Split('''
+    TestAvangoOSG.cpp
+    TestNodes.cpp
+    TestIntersection.cpp
+    ''')
+
+local_test_env = avango.build.TestEnvironment()
+local_test_env.Append(LIBS = ['avangoOsg'])
+
+for lib in ['avango-core', 'osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(local_test_env, lib)
+
+if local_test_env['DISTRIBUTION_SUPPORT']:
+    local_test_env.Append(LIBS = ['avangoOsgNetwork'])
+    local_test_env.Prepend(LIBPATH=['../network'])
+    local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('../network').abspath)
+
+local_test_env.Prepend(LIBPATH=['..'])
+local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('..').abspath)
+
+tests = local_test_env.Program ('TestAvangoOSG', sources)
+tests_alias = local_test_env.Alias('test-osg', tests, "${SOURCE.abspath}")
+
+AlwaysBuild(tests_alias)
+Alias('check-osg', tests_alias)

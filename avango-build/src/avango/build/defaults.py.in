@@ -1,0 +1,19 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+BINARY_PATH='%(BINARY_PATH)s'
+INCLUDE_PATH='%(INCLUDE_PATH)s'
+LIBRARY_PATH='%(LIBRARY_PATH)s'
+PKG_CONFIG_PATH='%(PKG_CONFIG_PATH)s'
+PYTHON_PATH='%(PYTHON_PATH)s'

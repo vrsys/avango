@@ -1,0 +1,53 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+Import('avango_test_env')
+
+tests = []
+
+test_field_referencing = avango_test_env.Program('TestFieldReferencing.cpp')
+tests += avango_test_env.Alias('test-core-field-referencing', test_field_referencing,
+                               "${SOURCE.abspath}")
+
+test_fields = avango_test_env.Program(Split('''
+                                     TestFields.cpp
+                                     TestFieldTypeConversion.cpp
+                                     TestFieldMultiPush.cpp
+                                     TestMultiFields.cpp
+                                     TestCloneFields.cpp
+                                     TestFieldConst.cpp
+                                     '''))
+tests += avango_test_env.Alias('test-core-field-fields', test_fields, "${SOURCE.abspath}")
+
+test_field_callbacks = avango_test_env.Program('TestFieldCallbacks.cpp')
+tests += avango_test_env.Alias('test-core-field-callbacks', test_field_callbacks,
+                               "${SOURCE.abspath}")
+
+test_field_value_callbacks = avango_test_env.Program('TestFieldValueCallbacks.cpp')
+tests += avango_test_env.Alias('test-core-field-value-callbacks', test_field_value_callbacks,
+                               "${SOURCE.abspath}")
+
+AlwaysBuild(tests)
+Alias('check-core', Alias('check-core-fields', tests))

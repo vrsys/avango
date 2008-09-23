@@ -1,0 +1,66 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+#if !defined(AVANGO_MODULENAME_CLASSNAME_H)
+#define AVANGO_MODULENAME_CLASSNAME_H
+
+/**
+ * \file
+ * \ingroup av_moduleName
+ */
+
+// includes, system
+
+#include <>
+
+// includes, project
+
+#include <>
+
+namespace av::moduleName
+{
+
+  // types, exported (class, enum, struct, union, typedef)
+
+  /**
+   * Class documentation
+   *
+   * \ingroup av_moduleName
+   */
+  class ClassName : public BaseClass
+  {
+
+  public:
+
+    /**
+     * Constructor
+     */
+    ClassName();
+
+    /**
+     * Destructor
+     */
+    ~ClassName();
+
+  };
+
+  // variables, exported
+
+  // functions, inlined
+
+  // functions, exported
+
+}
+
+#endif // define AVANGO_MODULENAME_CLASSNAME_H

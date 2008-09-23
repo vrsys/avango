@@ -1,0 +1,45 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2008 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+#if !defined(AVANGO_SOUND_CONFIG_H)
+#define AVANGO_SOUND_CONFIG_H
+
+/**
+ * \defgroup av_sound Avango Sound Library
+ */
+
+/**
+ * \file
+ * \ingroup av_sound
+ */
+
+/**
+ * \namespace av::sound
+ * Avango Sound Library
+ *
+ * \ingroup av_sound
+ */
+
+#if %(AVANGO_SOUND_DEBUG)s
+#define AVANGO_SOUND_DEBUG 1
+#else
+#undef AVANGO_SOUND_DEBUG
+#endif
+
+#define AVANGO_SOUND_VERSION_MAJOR %(AVANGO_SOUND_VERSION_MAJOR)s
+#define AVANGO_SOUND_VERSION_MINOR %(AVANGO_SOUND_VERSION_MINOR)s
+#define AVANGO_SOUND_VERSION_MAINT %(AVANGO_SOUND_VERSION_MAINT)s
+
+#endif // #if !defined(AVANGO_SOUND_CONFIG_H)
+

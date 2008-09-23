@@ -1,0 +1,46 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_python_path(Dir('.').abspath)
+module_env = avango.build.PythonEnvironment()
+avango.build.add_library(module_env, 'boost_python')
+module_env.Prepend(LIBS="avangoMoving")
+
+Alias('install-moving', avango.build.get_python_path('avango'))
+
+moving_files = Split("""
+    avango/moving/_moving.cpp
+    """)
+
+moving_lib = module_env.SharedLibrary("avango/moving/_moving", moving_files)
+moving_module = Alias('moving-python', [
+    moving_lib,
+    File("avango/moving/__init__.py"),
+    ])
+module_env.Install(avango.build.get_python_path('avango/moving'), "avango/moving/__init__.py")
+module_env.Install(avango.build.get_python_path('avango/moving'), moving_lib)
+Alias('moving', moving_module)

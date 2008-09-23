@@ -1,0 +1,30 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+#if !defined(AVANGO_ENSEMBLE_CONFIG_H)
+#define AVANGO_ENSEMBLE_CONFIG_H
+
+#if @AVANGO_ENSEMBLE_DEBUG@
+#define AVANGO_ENSEMBLE_DEBUG 1
+#else
+#undef AVANGO_ENSEMBLE_DEBUG
+#endif
+
+#define AVANGO_ENSEMBLE_VERSION @PACKAGE_VERSION@
+#define AVANGO_ENSEMBLE_VERSION_MAJOR @AVANGO_ENSEMBLE_VERSION_MAJOR@
+#define AVANGO_ENSEMBLE_VERSION_MINOR @AVANGO_ENSEMBLE_VERSION_MINOR@
+#define AVANGO_ENSEMBLE_VERSION_MAINT @AVANGO_ENSEMBLE_VERSION_MAINT@
+
+#endif // #if !defined(AVANGO_ENSEMBLE_CONFIG_H)
+

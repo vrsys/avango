@@ -1,0 +1,60 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+daemon_env = avango.build.Environment()
+
+# Substitutions
+daemon_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_DAEMON_DEBUG': int(daemon_env['DEBUG']),
+    'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
+    'AVANGO_DAEMON_VERSION': '1.90.0',
+    'AVANGO_DAEMON_VERSION_MAJOR': '1',
+    'AVANGO_DAEMON_VERSION_MINOR': '90',
+    'AVANGO_DAEMON_VERSION_MAINT': '0',
+    }
+
+avango_daemon_pc = daemon_env.Subst('dist/pkg-config/avango-daemon.pc.in')
+Alias('daemon', avango_daemon_pc)
+Alias('install-daemon', daemon_env.Install(avango.build.get_library_path('pkgconfig'), avango_daemon_pc))
+
+config_h = daemon_env.Subst('include/avango/daemon/Config.h.in')
+Alias('daemon', config_h)
+Alias('install-daemon', daemon_env.Install(avango.build.get_include_path('avango/daemon'), config_h))
+
+Alias('all', Alias('daemon'))
+Alias('check', Alias('check-daemon'))
+Alias('install', Alias('install-daemon'))
+
+# Subdirs
+SConscript ([
+    'include/avango/daemon/SConscript',
+    'src/avango/daemon/SConscript',
+    'src/avango/daemon/tests/SConscript',
+    'python/SConscript',
+])

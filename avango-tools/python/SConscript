@@ -1,0 +1,53 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_python_path(Dir('.').abspath)
+module_env = avango.build.PythonEnvironment()
+avango.build.add_library(module_env, 'boost_python')
+module_env.Prepend(LIBS="avangoTools")
+
+Alias('install-tools', avango.build.get_python_path('avango'))
+
+tools_files = Split("""
+    avango/tools/_tools.cpp
+    avango/tools/Selectors.cpp
+    avango/tools/ScriptTool.cpp
+    """)
+
+if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
+    tools_files += Split('''
+        avango/tools/OSGTools.cpp
+        ''')
+
+tools_lib = module_env.SharedLibrary("avango/tools/_tools", tools_files)
+tools_module = Alias('tools-python', [
+    tools_lib,
+    File("avango/tools/__init__.py"),
+    ])
+module_env.Install(avango.build.get_python_path('avango/tools'), "avango/tools/__init__.py")
+module_env.Install(avango.build.get_python_path('avango/tools'), tools_lib)
+Alias('tools', tools_module)

@@ -1,0 +1,84 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+osg_env = avango.build.Environment()
+avango.build.add_library(osg_env, 'avango-core')
+
+Alias('all', Alias('osg'))
+Alias('check', Alias('check-osg'))
+Alias('install', Alias('install-osg'))
+
+# Check for distribution support
+
+distlib = ''
+if osg_env['DISTRIBUTION_SUPPORT']:
+    distlib = '-lavangoOsgNetwork'
+osg_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_OSG_DEBUG': int(osg_env['DEBUG']),
+    'AVANGO_DISTRIBUTION_SUPPORT': osg_env.get("do_distribution", False),
+    'PKG_CONFIG_REQUIRES': 'avango-core',
+    'AVANGO_OSG_VERSION': '1.90.0',
+    'AVANGO_OSG_VERSION_MAJOR': '1',
+    'AVANGO_OSG_VERSION_MINOR': '90',
+    'AVANGO_OSG_VERSION_MAINT': '0',
+    'AVANGO_OSG_DISTRIBUTION_LIB': distlib,
+    }
+
+avango_osg_pc = osg_env.Subst('dist/pkg-config/avango-osg.pc.in')
+Alias('osg', avango_osg_pc)
+osg_env.Alias('install-osg', osg_env.Install(avango.build.get_pkgconfig_path(), avango_osg_pc))
+
+avango_osgviewer_pc = osg_env.Subst('dist/pkg-config/avango-osgviewer.pc.in')
+Alias('osg', avango_osgviewer_pc)
+osg_env.Alias('install-osg', osg_env.Install(avango.build.get_pkgconfig_path(), avango_osgviewer_pc))
+
+config_h = osg_env.Subst('include/avango/osg/Config.h.in')
+Alias('osg', config_h)
+osg_env.Alias('install-osg', osg_env.Install(avango.build.get_include_path('avango/osg'), config_h))
+
+for lib in ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(osg_env, lib)
+
+Export('osg_env')
+
+SConscript ([
+    'include/avango/osg/SConscript',
+    'include/avango/osg/network/SConscript',
+    'include/avango/osg/particle/SConscript',
+    'include/avango/osg/viewer/SConscript',
+    'src/avango/osg/SConscript',
+    'src/avango/osg/network/SConscript',
+    'src/avango/osg/network/tests/SConscript',
+    'src/avango/osg/particle/SConscript',
+    'src/avango/osg/tests/SConscript',
+    'src/avango/osg/viewer/SConscript',
+    'python/SConscript',
+])
+
+avango.build.make_vcproject(osg_env, 'avango-osg', 'osg')

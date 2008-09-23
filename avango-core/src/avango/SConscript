@@ -1,0 +1,62 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+subdirs = Split('''
+    actions
+    fields
+    interface
+    logging
+    network
+    nodes
+    types
+    streams
+    support
+    ''')
+
+avango_env = avango.build.Environment()
+
+avango_env.Append(LDFLAGS='-export-dynamic') # FIXME does this work on Windows?
+avango_env.Append(CPPDEFINES=['AV_LIBRARY'])
+for lib in Split('dl uuid boost_thread boost_signals'):
+    avango.build.add_library(avango_env, lib)
+if avango_env['DISTRIBUTION_SUPPORT']:
+    avango.build.add_library(avango_env, 'avango-ensemble')
+Export('avango_env')
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+avango_test_env = avango.build.TestEnvironment()
+avango_test_env.Append(LIBS = ['avango'])
+Export('avango_test_env')
+
+objects = []
+for dir in subdirs:
+    objects += SConscript(dir+'/SConscript')
+
+lib = avango_env.SharedLibrary('avango', objects+['Init.cpp'])
+Alias('core', lib)
+installed_avango_lib = Install(avango.build.get_library_path(), lib)
+Alias('install-core', installed_avango_lib)

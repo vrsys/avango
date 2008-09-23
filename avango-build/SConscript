@@ -1,0 +1,57 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+Alias('install', Alias('install-build'))
+Alias('install-build', avango.build.get_python_path('avango/build'))
+
+build_module = Split("""
+    src/avango/build/__init__.py
+    src/avango/build/config.py
+    src/avango/build/configstore.py
+    src/avango/build/recipes.py
+    src/avango/build/oshelper.py
+    src/avango/build/environment.py
+    src/avango/build/utility.py
+    """)
+
+build_tools_module = Split("""
+    src/avango/build/tools/subst.py
+    """)
+
+Install(avango.build.get_python_path('avango/build'), build_module)
+Install(avango.build.get_python_path('avango/build/tools'), build_tools_module)
+
+local_env = avango.build.Environment()
+local_env['SUBST'] = {
+    'BINARY_PATH': ':'.join((local_env['BINARY_PATH'], avango.build.get_binary_path().abspath)),
+    'INCLUDE_PATH': ':'.join((local_env['INCLUDE_PATH'], avango.build.get_include_path().abspath)),
+    'LIBRARY_PATH': ':'.join((local_env['LIBRARY_PATH'], avango.build.get_library_path().abspath)),
+    'PKG_CONFIG_PATH': ':'.join((local_env['PKG_CONFIG_PATH'], avango.build.get_pkgconfig_path().abspath)),
+    'PYTHON_PATH': ':'.join((local_env['PYTHON_PATH'], avango.build.get_python_path().abspath)),
+    }
+defaults = local_env.Subst('src/avango/build/defaults.py.in')
+Install(avango.build.get_python_path('avango/build'), defaults)

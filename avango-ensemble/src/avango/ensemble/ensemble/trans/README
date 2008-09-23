@@ -1,0 +1,11 @@
+-*- Mode: indented-text -*- 
+README: Transports & Alarms
+Author: Mark Hayden
+Last updated: 8/3/96
+
+htk		Tcl/Tk alarm
+ipmc		IP multicast interface
+netsim		network simulator alarm & domain
+real		wall-clock timers
+tcp		TCP transport
+udp	  	UDP transport

@@ -1,0 +1,289 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  Avango Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+*  Avango is a trademark owned by FhG.                                   *
+*                                                                        *
+\************************************************************************/
+
+/**
+
+\page styleguide Developer's Guide
+
+\section overview Overview
+
+- \ref objectives
+- \ref overall
+- \ref naming
+- \ref coding
+- \ref documentation
+- \ref header
+- \ref implementation
+- \ref subversion
+- \ref references
+
+\section objectives Objectives
+The goal of this guide is to provide standard rules for Avango C++
+developers which help to maintain a uniform coding style. This not only
+supports easier understanding but should ideally help to produce less
+erroneous code. Unless there are good reasons you should really follow
+the rules written down in this document.
+
+We start with a general overview over source code layout and naming
+issues before going into the details and providing a minimal template as
+a starting point for your Avango modules.
+
+\section overall Overall Format
+
+- Add yourself to the AUTHORS file when you change something inside a
+  module
+- Page width is 100 chars
+- Do not use tabs for indentation
+- Indentation width is 2 spaces
+- Every file starts with a copyright header which may only be preceeded by
+  a Mode line, e.g. \verbatim // -*- Mode:C++ -*- \endverbatim or a
+  <a target="_blank"
+     href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">Shebang</a>,
+  e.g. \verbatim #! /bin/sh \endverbatim
+
+\section naming Naming Guidelines
+
+- File names usually correspond to the contained class (e.g. \c Type.h)
+- Type names have the format: \c Word1Word2...
+- Function names have the format: \c word1Word2...();
+- Function arguments have the format: \c word1Word2...
+- Avango Fields have the format: <tt>(S|M)[A]FType Word1Word2...;</tt>
+- Other instance members have the format: \c mWord1Word2...
+- Static members have the format: \c sWord1Word2...
+- Global variables have the format: \c gWord1Word2...
+- Local variables and file static variables
+  (variables in unnamed namespace) have the format \c word1_word2...
+- Constants are uppercase, words separated with underscores:
+  \c WORD1_WORD2_...
+- Namespace naming Scheme: \c av for core library, \c av::moduleName for
+  extension libraries (e.g. \c av::osg, \c av::osgParticle, \c av::tools)
+- Don't add redundant namespace information (e.g. to function parameters)
+- Include directories usually correspond to namespaces with \c av replaced
+  with \c avango, i.e. core library headers go to
+  \c $prefix/include/avango, <a target="_blank"
+  href="http://www.openscenegraph.org">OpenSceneGraph</a> extension
+  headers to \c $prefix/include/avango/osg. More examples:
+  \c $prefix/include/avango/osgParticle, \c $prefix/include/avango/tools
+
+\section coding Coding Guidelines
+
+- Check arguments at beginning of functions and throw an exception if you
+  can't recover
+- Check pointer arguments for validness
+- Use C++-style casts wherever possible. If you really \em have to use
+  C-style casts, add a comment why
+- \c TRUE and \c FALSE are deprecated, use \c bool type wherever possible
+- \c NULL is deprecated, use \c 0 instead
+- Use \c typename instead of \c class for template arguments
+- Do not declare variables at beginning of the block, but as needed
+- Don't add unnecessary spaces inside brackets. Use this style:
+\verbatim
+void f(int i);
+template <typename T> void g();
+std::set<int> s;
+\endverbatim
+- Initializer lists in Constructors have the following format:
+\verbatim
+Class::Class() :
+  mMember1(),
+  mMember2(),
+  ...
+  mMemberN()
+{
+  ...
+}
+\endverbatim
+- Within function blocks, follow this style for conditionals:
+\verbatim
+if ()
+{
+  ...
+}
+
+if ()
+{
+  ...
+}
+else if ()
+{
+  ...
+}
+
+switch ()
+{
+  case1:
+    break;
+  default:
+    break;
+}
+\endverbatim
+- In general, break brackets apart from declarations and command lines
+\verbatim
+namespace av
+{
+
+  class C
+  {
+    ...
+  public:
+    ...
+  };
+
+}
+
+void f()
+{
+  while (true)
+  {
+    doSomething();
+  }
+}
+\endverbatim
+
+\section errorhandling Error handling
+
+Use assertions to validate internal assumptions. Use exception to announce wrong
+interface usage or to signal local error states to the user. Whenever possible try
+to use std exceptions.
+
+\section writetests Write tests
+Write self-contained tests for your modules using the Avango UnitTest++ infrastructure.
+Link the tests against the final library instead of the separate convenience libraries
+(e.g. don't use libfields.la but libavango.la). This way we don't run into trouble when
+new dependencies are introduced.
+
+\section documentation Documentation Guidelines
+
+- Document at least the public and protected interface using Doxygen
+  comments in Javadoc style (see \ref references).
+- Document arguments when there meaning is not obvious.
+- Document exceptions functions may throw.
+- Define groups for your extension library and document your extensions
+  library namespace (see Avango.h).
+- Insert documentation blocks for all top-level entities (file, class,
+  enum, struct, union, typedef, defines) and add them to the correct
+  group. This must be done for each top-level entity.
+- Document function arguments only when necessary (speaking names).
+- Comments for base class functions must not be replicated in the derived
+  class.
+- Start sentences with capital letters (correct orthography!).
+
+\section header Format for Header Files
+
+- File extension is '.h'
+- Filename same as classname (ClassName.h)
+- Add an enclosing namespace to all declarations and definitions, e.g.
+\verbatim
+namespace av
+{
+  ...
+}
+\endverbatim
+- Virtual functions are only explicitly declared as such at the
+  introduction in the base class
+  \verbatim virtual f(); \endverbatim
+- Inherited virtual functions are commented to be virtual:
+  \verbatim /* virtual */ f(); \endverbatim
+- Avoid using inline functions (exceptions for template functions)
+- Prototype: \verbinclude styleguide.h.expl
+- Specify default parameters only in header file, don't repeat them in implementation
+  (nor commented out)
+
+\section implementation Format for Implementation Files
+
+- File extension is '.cpp'
+- Filename same as classname (ClassName.cpp)
+- Make everything top-level (no enclosing namespace)
+- Break apart return value from function name and add commented additional
+  specifiers (\c static, \c virtual)
+\verbatim
+/* virtual */ void
+doSomeThing(int param1, int param2)
+{}
+
+/* static */ int
+someClassFunction()
+{}
+\endverbatim
+- Prototype:
+  \verbinclude styleguide.cpp.expl
+
+\section subversion Subversion Guidelines
+
+- Use correct
+  <a target="_blank" href="http://www.iana.org/assignments/media-types">
+  MIME</a> Media Types (especially for binaries), e.g.
+\verbatim
+% svn propset svn:mime-type "application/pdf" some.pdf
+\endverbatim
+- Use \c Id keyword substitution for all user-generated text-type files,
+  e.g.
+\verbatim
+% svn propset svn:keywords "Id" Makefile.am
+\endverbatim
+- Auto-props are used to set properties on newly added files based on
+  their filenames. Functionality can be configured by setting options in
+  \c ~/.subversion/config. All entries which match will be applied to the
+  file. Prototype:
+\verbatim
+[miscellany]
+enable-auto-props = yes
+
+[auto-props]
+*.c = svn:eol-style=native ; svn:keywords=Id
+*.cpp = svn:eol-style=native; svn:keywords=Id
+*.h = svn:eol-style=native; svn:keywords=Id
+*.html = svn:eol-style=native; svn:keywords=Id; svn:mime-type=text/html
+*.m4 = svn:eol-style=native; svn:keywords=Id
+*.pdf = svn:mime-type=application/pdf
+*.scm = svn:eol-style=native; svn:keywords=Id
+*.sgm = svn:eol-style=native; svn:keywords=Id; svn:mime-type=text/sgml
+*.sh = svn:eol-style=native; svn:keywords=Id; svn:executable
+Makefile* = svn:eol-style=native; svn:keywords=Id
+\endverbatim
+
+\section references References
+
+- <a target="_blank"
+     href="http://www.scons.org/">SCons: Software construction tool</a>
+- <a target="_blank"
+     href="http://www.doxygen.org/">Doxygen: Source code documentation generator tool</a>
+- <a target="_blank"
+     href="http://epydoc.sourceforge.net/">Epydoc: Automatic API Documentation Generation for Python</a>
+- <a target="_blank"
+     href="http://docutils.sourceforge.net/rst.html">reStructuredText: What-you-see-is-what-you-get plaintext markup syntax</a>
+- <a target="_blank"
+     href="http://subversion.tigris.org/">Subversion: Version control system</a>
+- <a target="_blank"
+     href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">C++ TR1 Draft</a>
+- <a target="_blank"
+     href="http://www.boost.org/">
+     Boost: Portable C++ source libraries</a>
+- <a target="_blank"
+     href="http://unittest-cpp.sourceforge.net/">
+     UnitTest++: Lightweight unit testing framework for C++</a>
+- <a target="_blank"
+     href="http://www.openscenegraph.org/">
+     OpenSceneGraph: High performance 3D graphics toolkit</a>
+- <a target="_blank"
+     href="http://www.openal.org/">
+     OpenAL: Cross-platform 3D audio API</a>
+- <a target="_blank"
+     href="http://dsl.cs.technion.ac.il/projects/Ensemble/">
+     Ensemble: Distributed group Ccmmunication system</a>
+
+
+Back to \ref main "Main Page"
+
+*/

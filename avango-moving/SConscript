@@ -1,0 +1,60 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+moving_env = avango.build.Environment()
+
+# Substitutions
+moving_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_MOVING_DEBUG': int(moving_env['DEBUG']),
+    'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
+    'AVANGO_MOVING_VERSION': '1.90.0',
+    'AVANGO_MOVING_VERSION_MAJOR': '1',
+    'AVANGO_MOVING_VERSION_MINOR': '90',
+    'AVANGO_MOVING_VERSION_MAINT': '0',
+    }
+
+avango_moving_pc = moving_env.Subst('dist/pkg-config/avango-moving.pc.in')
+Alias('moving', avango_moving_pc)
+Alias('install-moving', moving_env.Install(avango.build.get_pkgconfig_path(), avango_moving_pc))
+
+config_h = moving_env.Subst('include/avango/moving/Config.h.in')
+Alias('moving', config_h)
+Alias('install-moving', moving_env.Install(avango.build.get_include_path('avango/moving'), config_h))
+
+Alias('all', Alias('moving'))
+Alias('install', Alias('install-moving'))
+
+# Subdirs
+Export('moving_env')
+
+SConscript ([
+    'include/avango/moving/SConscript',
+    'src/avango/moving/SConscript',
+    'python/SConscript',
+])

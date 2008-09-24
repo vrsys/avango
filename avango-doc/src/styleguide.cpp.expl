@@ -2,13 +2,24 @@
 
 /************************************************************************\
 *                                                                        *
-*  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        *
-*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+* This file is part of Avango.                                           *
 *                                                                        *
-*  Avango Software (both binary and source code - if released) is        *
-*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
-*  Avango is a trademark owned by FhG.                                   *
+* Avango is free software: you can redistribute it and/or modify         *
+* it under the terms of the GNU Lesser General Public License as         *
+* published by the Free Software Foundation, version 3.                  *
+*                                                                        *
+* Avango is distributed in the hope that it will be useful,              *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
+* GNU General Public License for more details.                           *
+*                                                                        *
+* You should have received a copy of the GNU Lesser General Public       *
+* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
+*                                                                        *
+* Avango is a trademark owned by FhG.                                    *
 *                                                                        *
 \************************************************************************/
 

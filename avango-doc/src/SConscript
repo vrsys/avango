@@ -67,14 +67,14 @@ doxygen_install_html = doc_env.Install(
 doc_env.AddPreAction(doxygen_install_html, 'rm -rf ' + avango.build.get_documentation_path().abspath + '/html')
 
 doxygen_install_pdf = doc_env.InstallAs(
-    target = avango.build.get_documentation_path().abspath + '/avango-ng.pdf',
+    target = avango.build.get_documentation_path().abspath + '/avango.pdf',
     source = 'latex/refman.pdf')
 
 # epydoc build
 epydoc_html = doc_env.Command(
     'html/epydoc/index.html',
     '',
-    'epydoc --name "Avango-NG Python Bindings" --docformat="restructuredtext" --html'
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --html'
     + ' --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
     + avango.build.get_python_path().abspath + '/avango',
     chdir = 1)
@@ -82,7 +82,7 @@ epydoc_html = doc_env.Command(
 epydoc_latex = doc_env.Command(
     'epydoc-latex/api.pdf',
     '',
-    'epydoc --name "Avango-NG Python Bindings" --docformat="restructuredtext" --pdf'
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --pdf'
     + ' --no-private --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
     + avango.build.get_python_path().abspath + '/avango',
     chdir = 1)
@@ -92,7 +92,7 @@ doc_env.Clean(epydoc_latex, 'epydoc-latex')
 
 # epydoc install
 epydoc_install_pdf = doc_env.InstallAs(
-    target = avango.build.get_documentation_path().abspath + '/avango-ng-python.pdf',
+    target = avango.build.get_documentation_path().abspath + '/avango-python.pdf',
     source = 'epydoc-latex/api.pdf')
 
 # aliases

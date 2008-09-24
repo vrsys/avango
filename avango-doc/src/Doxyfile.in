@@ -25,7 +25,7 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded 
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = "Avango-NG"
+PROJECT_NAME           = "AVANGO"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. 
 # This could be handy for archiving the generated documentation or 
@@ -367,7 +367,7 @@ GENERATE_DEPRECATEDLIST= YES
 
 # The ENABLED_SECTIONS tag can be used to enable conditional 
 # documentation sections, marked by \if sectionname ... \endif.
-# Section labels used in Avango NG are:
+# Section labels used in AVANGO are:
 # DOXYGEN_SHOULD_SKIP_THIS : ignoring some lines of code while generating docu
 
 ENABLED_SECTIONS       = 

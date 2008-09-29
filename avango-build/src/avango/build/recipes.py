@@ -38,6 +38,7 @@ def _setup_default():
         osgDB
         osgViewer
         osgParticle
+        osgShadow
         osgText
         osgUtil
         osgGA

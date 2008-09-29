@@ -66,6 +66,9 @@ def _setup_default():
     _config_store.set('alut', PlainConfig(libraries = ["alut"]))
     _config_store.set('vorbisfile', PKGConfig('vorbisfile'))
 
+    #add common libs (plain)
+    _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))
+
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))
     _config_store.set('GL', PlainConfig(libraries = ['']))

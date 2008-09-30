@@ -93,8 +93,6 @@ def _setup_default():
 
 def set_config_flag(key, value):
     if key == "OPENSCENEGRAPH_DEBUG" and value:
-        if not oshelper.os_is_windows():
-            return
         _config_store.set('osg', PlainConfig(libraries = ['osgd', 'OpenThreadsd']))
         _config_store.set('osgDB', PlainConfig(libraries = ['osgDBd']))
         _config_store.set('osgViewer', PlainConfig(libraries = ['osgViewerd']))

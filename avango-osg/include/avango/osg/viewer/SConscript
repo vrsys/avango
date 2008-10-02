@@ -32,6 +32,7 @@ headers = Split('''
     Init.h
     View.h
     Viewer.h
+    windows_specific_osg_viewer.h
     ''')
 
 Alias('install-osg', Install(avango.build.get_include_path('/avango/osg/viewer'), headers))

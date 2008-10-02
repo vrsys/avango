@@ -13,21 +13,30 @@ class Inspector(avango.script.Script):
 
     def __init__(self):
         self.always_evaluate(True)
+
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("AVANGO Inspector")
-        self.window.add(self._create_treeview())
+        vbox = gtk.VBox()
+        self.window.add(vbox)
+        vbox.pack_start(self._create_treeview())
+        commandline = gtk.HBox()
+        vbox.pack_start(commandline, expand=False)
+        execute_button = gtk.Button("Execute")
+        execute_button.connect("clicked", self.handle_execute_button, None)
+        self.entry_field = gtk.Entry()
+        commandline.pack_start(self.entry_field)
+        commandline.pack_start(execute_button, expand=False)
         self.window.show_all()
 
     def _create_treeview(self):
-        self.model = gtk.TreeStore(str, str)
-        self.update_model()
+        self.model = gtk.TreeStore(str, str, object)
         
-        view = gtk.TreeView(self.model)
+        self.view = gtk.TreeView(self.model)
         name_column = gtk.TreeViewColumn('Name')
         value_column = gtk.TreeViewColumn('Value')
         
-        view.append_column(name_column)
-        view.append_column(value_column)
+        self.view.append_column(name_column)
+        self.view.append_column(value_column)
         
         name_cell = gtk.CellRendererText()
         value_cell = gtk.CellRendererText()
@@ -38,24 +47,41 @@ class Inspector(avango.script.Script):
         name_column.add_attribute(name_cell, 'text', 0)
         value_column.add_attribute(value_cell, 'text', 1)
 
-        return view
+        self.update_model()
+        return self.view
+
+    def handle_execute_button(self, widget, data=None):
+        field = None
+        selection = self.view.get_selection()
+        model, iter = selection.get_selected()
+        if model and iter:
+            field = model.get(iter, 2)[0]
+        sandbox = {'nodes': self.Children.value, 'field': field }
+
+        exec self.entry_field.get_text() in globals(), sandbox
+        self.entry_field.set_text("")
+        self.update_model()
 
     def update_model(self):
         def recurse_fields(node, parent):
             for i in xrange(node._get_num_fields()):
                 name = node._get_field_name(i)
-                value = node._get_field(i).value
+                field = node._get_field(i)
+                value = field.value
                 if name != "Children":
-                    self.model.append(parent, [name, value])
+                    self.model.append(parent, [name, value, field])
                 else:
-                    new_parent = self.model.append(parent, [name, ""])
+                    new_parent = self.model.append(parent, [name, "", field])
                     for child in value:
                         recurse_fields(child, new_parent)
 
         self.model.clear()
         for node in self.Children.value:
-            parent = self.model.append(None, [node.Name.value, ""])
+            parent = self.model.append(None, [node.Name.value, "", None])
             recurse_fields(node, parent)
+
+        self.view.expand_all()
+
 
     @avango.script.field_has_changed(Children)
     def children_changed(self):

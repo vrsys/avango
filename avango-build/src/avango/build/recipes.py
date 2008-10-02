@@ -90,6 +90,9 @@ def _setup_default():
         # GL libraries are required under Windows
         _config_store.set('GL', PlainConfig(libraries = ['OPENGL32']))
         _config_store.set('GLU', PlainConfig(libraries = ['GLU32']))
+        # for avango extensions, there is no pkg-config
+        _config_store.set('avango-core', PlainConfig(libraries = ['avango']))
+        _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
 
 def set_config_flag(key, value):
     if key == "OPENSCENEGRAPH_DEBUG" and value:
@@ -100,6 +103,7 @@ def set_config_flag(key, value):
         _config_store.set('osgText', PlainConfig(libraries = ['osgTextd']))
         _config_store.set('osgGA', PlainConfig(libraries = ['osgGAd']))
         _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtild']))
+        _config_store.set('osgShadow', PlainConfig(libraries = ['osgShadowd']))
 
 
 _setup_default()

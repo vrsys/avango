@@ -58,6 +58,7 @@ headers = Split('''
                 UUID.h
                 WriteAction.h
                 windows_specific.h
+                stdint_replacement.h
                 ''')
 
 if avango.build.Environment()['DISTRIBUTION_SUPPORT']:

@@ -99,4 +99,5 @@ if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Wi
     avango.build.SConscript('avango-sound/SConscript')
 if env['OPENAL_SUPPORT']:
     avango.build.SConscript('avango-openal/SConscript')
+avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')

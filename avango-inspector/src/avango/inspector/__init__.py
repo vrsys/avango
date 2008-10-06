@@ -71,9 +71,10 @@ class Inspector(avango.script.Script):
                 if name != "Children":
                     self.model.append(parent, [name, value, field])
                 else:
-                    new_parent = self.model.append(parent, [name, "", field])
+                    children_node = self.model.append(parent, [name, "", field])
                     for child in value:
-                        recurse_fields(child, new_parent)
+                        parent_node = self.model.append(children_node, [child.Name.value, "", None])
+                        recurse_fields(child, parent_node)
 
         self.model.clear()
         for node in self.Children.value:

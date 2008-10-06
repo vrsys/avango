@@ -29,6 +29,7 @@ headers = Split('''
     Init.h
     Trackball.h
     DesktopFlyer.h
+    windows_specific_moving.h
     ''')
 
 Alias('install-moving', Install(avango.build.get_include_path('avango/moving'), headers))

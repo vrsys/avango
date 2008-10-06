@@ -93,6 +93,8 @@ def _setup_default():
         # for avango extensions, there is no pkg-config
         _config_store.set('avango-core', PlainConfig(libraries = ['avango']))
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
+        # xerces
+        _config_store.set('xerces', PlainConfig(libraries = ['xerces-c_2']))
 
 def set_config_flag(key, value):
     if key == "OPENSCENEGRAPH_DEBUG" and value:

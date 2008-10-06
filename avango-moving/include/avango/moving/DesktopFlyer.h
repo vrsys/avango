@@ -36,6 +36,7 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/MatrixTransform.h>
 //#include <avango/TimeSensor.h>
+#include "windows_specific_moving.h"
 
 namespace av
 {
@@ -46,7 +47,7 @@ namespace av
      *
      * \ingroup av_moving
      */
-    class DesktopFlyer : public av::osg::MatrixTransform
+    class AV_MOVING_DLL DesktopFlyer : public av::osg::MatrixTransform
     {
       AV_FC_DECLARE();
 
@@ -160,6 +161,11 @@ namespace av
     typedef SingleField<Link<DesktopFlyer> > SFDesktopFlyer;
     typedef MultiField<Link<DesktopFlyer> > MFDesktopFlyer;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_MOVING_DLL SingleField<Link<moving::DesktopFlyer> >;
+  template class AV_MOVING_DLL MultiField<Link<moving::DesktopFlyer> >;
+#endif
 }
 
 #endif

@@ -89,8 +89,7 @@ avango.build.SConscript('avango-core/SConscript')
 avango.build.SConscript('avango-python/SConscript')
 if env['OPENSCENEGRAPH_SUPPORT']:
     avango.build.SConscript('avango-osg/SConscript')
-    if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Windows
-        avango.build.SConscript('avango-moving/SConscript')
+    avango.build.SConscript('avango-moving/SConscript')
     avango.build.SConscript('avango-menu/SConscript')
     if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Windows
         avango.build.SConscript('avango-daemon/SConscript')

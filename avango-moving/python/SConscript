@@ -27,6 +27,7 @@ import avango.build
 
 avango.build.Environment.prepend_python_path(Dir('.').abspath)
 module_env = avango.build.PythonEnvironment()
+avango.build.add_library(module_env, 'avango-core')
 avango.build.add_library(module_env, 'boost_python')
 module_env.Prepend(LIBS="avangoMoving")
 

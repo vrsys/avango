@@ -32,6 +32,7 @@
  */
 
 #include <avango/Typed.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -43,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class Init
+    class AV_TOOLS_DLL Init
     {
       AV_TYPED_DECLARE_ABSTRACT();
     };

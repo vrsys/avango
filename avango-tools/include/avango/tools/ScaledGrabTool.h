@@ -32,8 +32,8 @@
  */
 
 #include <avango/tools/Tool.h>
-
 #include <avango/osg/Fields.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -44,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class ScaledGrabTool : public Tool
+    class AV_TOOLS_DLL ScaledGrabTool : public Tool
     {
       AV_FC_DECLARE();
 
@@ -89,6 +89,12 @@ namespace av
     typedef SingleField<Link<ScaledGrabTool> > SFScaledGrabTool;
     typedef MultiField<Link<ScaledGrabTool> > MFScaledGrabTool;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool> >;
+#endif
+
 }
 
 #endif

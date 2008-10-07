@@ -32,8 +32,8 @@
  */
 
 #include <avango/Object.h>
-
 #include <avango/tools/TargetHolder.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -44,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class Selector : public av::Object
+    class AV_TOOLS_DLL Selector : public av::Object
     {
       AV_FC_DECLARE_ABSTRACT();
 
@@ -75,6 +75,12 @@ namespace av
     typedef SingleField<Link<Selector> > SFSelector;
     typedef MultiField<Link<Selector> > MFSelector;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::Selector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::Selector> >;
+#endif
+
 }
 
 #endif

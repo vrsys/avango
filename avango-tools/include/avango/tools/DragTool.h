@@ -32,8 +32,8 @@
  */
 
 #include <avango/tools/Tool.h>
-
 #include <avango/osg/Fields.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -44,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class DragTool : public Tool
+    class AV_TOOLS_DLL DragTool : public Tool
     {
       AV_FC_DECLARE();
 
@@ -82,6 +82,12 @@ namespace av
     typedef SingleField<Link<DragTool> > SFDragTool;
     typedef MultiField<Link<DragTool> > MFDragTool;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::DragTool> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::DragTool> >;
+#endif
+
 }
 
 #endif

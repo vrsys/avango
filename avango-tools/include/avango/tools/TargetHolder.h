@@ -32,8 +32,9 @@
  */
 
 #include <avango/Object.h>
-
 #include <avango/tools/Config.h>
+#include "windows_specific_tools.h"
+
 
 namespace av
 {
@@ -51,7 +52,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class TargetHolder : public av::Object
+    class AV_TOOLS_DLL TargetHolder : public av::Object
     {
       AV_FC_DECLARE();
 
@@ -156,6 +157,12 @@ namespace av
       return (find(holders, target) != holders.end());
     }
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::TargetHolder> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::TargetHolder> >;
+#endif
+
 }
 
 #endif

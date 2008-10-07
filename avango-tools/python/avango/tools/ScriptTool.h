@@ -81,6 +81,12 @@ namespace av
     typedef SingleField<Link<ScriptTool> > SFScriptTool;
     typedef MultiField<Link<ScriptTool> > MFScriptTool;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class SingleField<Link<tools::ScriptTool> >;
+  template class MultiField<Link<tools::ScriptTool> >;
+#endif
+
 }
 
 #endif

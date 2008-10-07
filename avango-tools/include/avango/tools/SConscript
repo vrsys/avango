@@ -38,6 +38,7 @@ headers = Split('''
     TriggerSelector.h
     TypeSelector.h
     UnionSelector.h
+    windows_specific_tools.h
     ''')
 
 if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:

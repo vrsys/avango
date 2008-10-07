@@ -37,6 +37,9 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
+#else
+#include <osgViewer/api/Win32/GraphicsWindowWin32>
+#include <osgViewer/api/Win32/PixelBufferWin32>
 #endif // !_WIN32
 
 #if !defined(_WIN32)
@@ -596,7 +599,20 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
 #if !defined(_WIN32)
     dynamic_cast< ::osgViewer::GraphicsWindowX11*>(mOsgGraphicsWindow.get())->
       ::osgViewer::GraphicsWindowX11::checkEvents();
+#else
+    ::osgViewer::GraphicsWindowWin32 *window = 
+       dynamic_cast< ::osgViewer::GraphicsWindowWin32*>(mOsgGraphicsWindow.get());
+
+    if (window)
+    {
+      window->::osgViewer::GraphicsWindowWin32::checkEvents();
+    }
+    else
+    {
+       logger.error() << "evaluateLocalSideEffect(): checking events failed";
+    }
 #endif
+
   }
 }
 

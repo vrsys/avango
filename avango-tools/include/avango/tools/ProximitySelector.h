@@ -36,6 +36,8 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/Node.h>
 
+#include "windows_specific_tools.h"
+
 namespace av
 {
   namespace tools
@@ -46,7 +48,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class ProximitySelector : public Selector
+    class AV_TOOLS_DLL ProximitySelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -145,6 +147,12 @@ namespace av
     typedef SingleField<Link<ProximitySelector> > SFProximitySelector;
     typedef MultiField<Link<ProximitySelector> > MFProximitySelector;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::ProximitySelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ProximitySelector> >;
+#endif
+
 }
 
 #endif

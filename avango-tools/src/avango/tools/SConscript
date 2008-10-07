@@ -26,6 +26,8 @@
 import avango.build
 Import('tools_env')
 
+tools_env.Append(CPPDEFINES='AV_TOOLS_LIBRARY')
+
 sources = Split('''
     ChangeSelector.cpp
     Init.cpp
@@ -43,6 +45,9 @@ sources = Split('''
 
 if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
     avango.build.add_library(tools_env, 'avango-osg')
+    avango.build.add_library(tools_env, 'avango-core')
+    avango.build.add_library(tools_env, 'osg')
+    avango.build.add_library(tools_env, 'osgUtil')
     sources += Split('''
         DragTool.cpp
         IntersectionTargetHolder.cpp

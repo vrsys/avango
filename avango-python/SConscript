@@ -27,7 +27,10 @@ import avango.build
 
 avango.build.Environment.prepend_include_path(Dir('include').abspath)
 avango.build.Environment.prepend_python_path(Dir('src/test_package').abspath)
+avango.build.Environment.prepend_library_path(Dir('src/avango').abspath)
+avango.build.Environment.prepend_library_path(Dir('src/avango/script').abspath)
 avango_env = avango.build.PythonEnvironment()
+avango_env.Append(CPPDEFINES='AV_PYTHON_LIBRARY')
 avango.build.add_library(avango_env, 'boost_python')
 avango.build.add_library(avango_env, 'avango-core')
 

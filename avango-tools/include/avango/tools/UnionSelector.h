@@ -32,6 +32,8 @@
  */
 
 #include <avango/tools/Selector.h>
+#include "windows_specific_tools.h"
+
 
 namespace av
 {
@@ -42,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class UnionSelector : public Selector
+    class AV_TOOLS_DLL UnionSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -75,6 +77,12 @@ namespace av
     typedef SingleField<Link<UnionSelector> > SFUnionSelector;
     typedef MultiField<Link<UnionSelector> > MFUnionSelector;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::UnionSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::UnionSelector> >;
+#endif
+
 }
 
 #endif

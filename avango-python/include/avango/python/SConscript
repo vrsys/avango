@@ -29,6 +29,7 @@ import avango.build
 headers = Split('''
                 register_field.h
                 exceptions.h
+                windows_specific_python.h
                 ''')
 
 Alias('install-python', Install(avango.build.get_include_path('/avango/python'), headers))

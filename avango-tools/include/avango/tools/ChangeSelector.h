@@ -32,6 +32,7 @@
  */
 
 #include <avango/tools/Selector.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -43,7 +44,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class ChangeSelector : public Selector
+    class AV_TOOLS_DLL ChangeSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -89,6 +90,12 @@ namespace av
     typedef SingleField<Link<ChangeSelector> > SFChangeSelector;
     typedef MultiField<Link<ChangeSelector> > MFChangeSelector;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::ChangeSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ChangeSelector> >;
+#endif
+
 }
 
 #endif

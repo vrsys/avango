@@ -32,8 +32,8 @@
  */
 
 #include <avango/tools/TargetHolder.h>
-
 #include <avango/osg/Node.h>
+#include "windows_specific_tools.h"
 
 
 namespace av
@@ -48,7 +48,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class NodePathTargetHolder : public TargetHolder
+    class AV_TOOLS_DLL NodePathTargetHolder : public TargetHolder
     {
       AV_FC_DECLARE();
 
@@ -78,6 +78,12 @@ namespace av
     typedef SingleField<Link<NodePathTargetHolder> > SFNodePathTargetHolder;
     typedef MultiField<Link<NodePathTargetHolder> > MFNodePathTargetHolder;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::NodePathTargetHolder> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::NodePathTargetHolder> >;
+#endif
+
 }
 
 #endif

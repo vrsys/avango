@@ -45,6 +45,7 @@
 #include <avango/MultiField.h>
 #include <avango/InputStream.h>
 #include <avango/OutputStream.h>
+#include <avango/python/windows_specific_python.h>
 
 namespace av
 {
@@ -58,14 +59,20 @@ namespace av
 
 #endif
 
-  InputStream& operator>>(InputStream&, boost::python::api::object&);
-  OutputStream& operator<<(OutputStream&, const boost::python::api::object&);
+  AV_PYTHON_DLL InputStream& operator>>(InputStream&, boost::python::api::object&);
+  AV_PYTHON_DLL OutputStream& operator<<(OutputStream&, const boost::python::api::object&);
 
   namespace script
   {
     typedef SingleField<boost::python::object> SFObject;
     typedef MultiField<boost::python::object> MFObject;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_PYTHON_DLL SingleField<boost::python::object>;
+  template class AV_PYTHON_DLL MultiField<boost::python::object>;
+#endif
+
 } // namespace av
 
 #endif // #if !defined(AVANGO_PYTHON_TYPES_H)

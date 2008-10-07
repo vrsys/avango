@@ -32,6 +32,7 @@
  */
 
 #include <avango/tools/Selector.h>
+#include "windows_specific_tools.h"
 
 namespace av
 {
@@ -42,7 +43,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class SingleSelector : public Selector
+    class AV_TOOLS_DLL SingleSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -79,6 +80,12 @@ namespace av
     typedef SingleField<Link<SingleSelector> > SFSingleSelector;
     typedef MultiField<Link<SingleSelector> > MFSingleSelector;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_TOOLS_DLL SingleField<Link<tools::SingleSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::SingleSelector> >;
+#endif
+
 }
 
 #endif

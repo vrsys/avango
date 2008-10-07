@@ -56,6 +56,7 @@ def _setup_default():
     _config_store.set('avango-core', PKGConfig('avango-core'))
     _config_store.set('avango-daemon', PKGConfig('avango-daemon'))
     _config_store.set('avango-python', PlainConfig())
+    _config_store.set('avango-python-script', PlainConfig(libraries = ['_script']))
     _config_store.set('avango-osg', PKGConfig('avango-osg'))
     _config_store.set('avango-osgviewer', PKGConfig('avango-osgviewer'))
     _config_store.set('avango-moving', PKGConfig('avango-moving'))
@@ -95,8 +96,6 @@ def _setup_default():
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
         # xerces
         _config_store.set('xerces', PlainConfig(libraries = ['xerces-c_2']))
-        # avango Python libs
-        _config_store.set('avango-python-script', PlainConfig(libraries = ['_script']))
 
 def set_config_flag(key, value):
     if key == "OPENSCENEGRAPH_DEBUG" and value:

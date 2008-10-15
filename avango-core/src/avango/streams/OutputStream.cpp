@@ -24,6 +24,8 @@
 \************************************************************************/
 
 #include <avango/OutputStream.h>
+#include <cstring>
+
 
 av::OutputStream::OutputStream() :
   std::ostream(0),
@@ -189,7 +191,7 @@ av::OutputStream& av::operator<<(av::OutputStream& os, const std::string& value)
 {
   if (os.isBinaryEnabled()) {
     if (value.c_str()) {
-      int length = strlen(value.c_str());
+      int length = std::strlen(value.c_str());
       os.write((char*) &length, sizeof(length));
       os.write(value.c_str(), length);
     } else {
@@ -199,7 +201,7 @@ av::OutputStream& av::operator<<(av::OutputStream& os, const std::string& value)
   } else {
     (std::ostream&)os << '"';
     if (value.c_str())
-      os.write(value.c_str(), strlen(value.c_str()));
+      os.write(value.c_str(), std::strlen(value.c_str()));
     (std::ostream&)os << '"';
   }
   return os;

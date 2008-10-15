@@ -26,6 +26,7 @@
 #if !defined(AVANGO_NETID_H)
 #define AVANGO_NETID_H
 
+#include <string>
 #include <iosfwd>
 #include <tr1/unordered_set>
 

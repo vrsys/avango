@@ -24,6 +24,7 @@
 \************************************************************************/
 
 #include <cerrno>
+#include <cstring>
 #include <fcntl.h>
 #include <sstream>
 #include <iomanip>
@@ -605,7 +606,7 @@ av::daemon::HIDInput::processMappingRequest(const std::string& feature, const st
       int station_id = -1;
 
       for (ns = mStations.begin(); ns != mStations.end(); ++ns) {
-        if (0 == strcmp((*ns).second->getName(),station.c_str())) {
+        if (0 == std::strcmp((*ns).second->getName(),station.c_str())) {
           station_id = (*ns).first;
           break;
         }

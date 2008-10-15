@@ -26,7 +26,7 @@
 #include <avango/daemon/StationBlock.h>
 
 #include <avango/Logger.h>
-
+#include <cstring>
 
 namespace
 {
@@ -53,7 +53,7 @@ av::daemon::StationBlock::getStation(const char* name)
 
   for (i=0; i<mNumStations; i++)
   {
-    if (strcmp(name, mStations[i].getName()) == 0)
+    if (std::strcmp(name, mStations[i].getName()) == 0)
     {
       station = &mStations[i];
       LOG_TRACE(logger) << "getStation(): referenced station '" << name << "', " << station;

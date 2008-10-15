@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <cstring>
 
 #ifdef OS_UNIX
 	#include <sys/socket.h>
@@ -441,7 +441,7 @@ int DTrack::send_udp_command(unsigned short cmd, int val)
 
 	// send udp packet:
 
-	if(udp_send(_udpsock, cmdstr, strlen(cmdstr) + 1, _remote_ip, _remote_port, _udptimeout_us)){
+	if(udp_send(_udpsock, cmdstr, std::strlen(cmdstr) + 1, _remote_ip, _remote_port, _udptimeout_us)){
 		return DTRACK_ERR_CMD;
 	}
 

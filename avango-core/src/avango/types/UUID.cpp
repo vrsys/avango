@@ -138,6 +138,8 @@
 
 #include <avango/Config.h>
 
+#include <cstring>
+
 namespace
 {
   av::Logger& logger(av::getLogger("av::UUID"));
@@ -260,7 +262,7 @@ av::UUID::UUID () :
     logger.warn() << "UUID: 'uuid_create' returned unsuccessful status of " << result;
   }
 
-  (void) memcpy (&mId, &new_uuid.bits, sizeof (mId));
+  (void) std::memcpy (&mId, &new_uuid.bits, sizeof (mId));
 
   if (!valid ())
   {
@@ -284,7 +286,7 @@ av::UUID::UUID (const av::UUID& a) :
 av::UUID::UUID (const RawType& a) :
   mId (av::UUID::nil.mId)
 {
-  (void) memcpy (&mId, &a.bits, sizeof (mId));
+  (void) std::memcpy (&mId, &a.bits, sizeof (mId));
 
   if (!valid ()) {
     mId = av::UUID::nil.mId;
@@ -342,7 +344,7 @@ av::UUID::operator av::UUID::RawType() const
 {
   UUID::RawType result;
 
-  (void) memcpy (&result.bits, &mId, sizeof (result.bits));
+  (void) std::memcpy (&result.bits, &mId, sizeof (result.bits));
 
   return result;
 }

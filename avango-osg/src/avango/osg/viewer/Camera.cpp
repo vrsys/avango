@@ -31,6 +31,7 @@
 
 #include <avango/Logger.h>
 
+#include <cmath>
 namespace
 {
   av::Logger& logger(av::getLogger("av::osg::viewer::Camera"));

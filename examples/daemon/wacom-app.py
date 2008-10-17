@@ -76,6 +76,7 @@ class Tablet(avango.script.Script) :
     PenTiltX = avango.SFFloat()
     PenTiltY = avango.SFFloat()
     UnknownRelWheel = avango.SFFloat()
+    Ratio = avango.SFFloat()
     Button0 = avango.SFBool()
     Button1 = avango.SFBool()
     Button2 = avango.SFBool()
@@ -100,6 +101,8 @@ class Tablet(avango.script.Script) :
     ButtonTouch = avango.SFBool()
     ButtonStylus = avango.SFBool()
     ButtonStylus2 = avango.SFBool()
+    Proximity = avango.SFBool()
+    Matrix = avango.osg.SFMatrix()
 
     def evaluate(self):
         #values = self.get_values()
@@ -118,6 +121,7 @@ class Tablet(avango.script.Script) :
         print "PenTiltX: " + str(self.PenTiltX.value)
         print "PenTiltY: " + str(self.PenTiltY.value)
         print "UnknownRelWheel: " + str(self.UnknownRelWheel.value)
+        print "Ratio: " + str(self.Ratio.value)
         print "---Buttons-------------------------------------"
         print "Button0: " + str(self.Button0.value)
         print "Button1: " + str(self.Button1.value)
@@ -143,6 +147,8 @@ class Tablet(avango.script.Script) :
         print "ButtonTouch: " + str(self.ButtonTouch.value)
         print "ButtonStylus: " + str(self.ButtonStylus.value)
         print "ButtonStylus2: " + str(self.ButtonStylus2.value)
+        print "Proximity: " + str(self.Proximity.value)
+        print "Matrix: " + str(self.Matrix.value)
 
         if (self.ButtonAirbrush.value):
             transform.Matrix.value = avango.osg.make_scale_mat(1,1,1-self.PenWheel.value)
@@ -151,8 +157,8 @@ class Tablet(avango.script.Script) :
 
         transform.Matrix.value = transform.Matrix.value*\
             avango.osg.make_rot_mat(1.047*self.PenTiltX.value, avango.osg.Vec3(0,1,0))*\
-            avango.osg.make_rot_mat(1.047*self.PenTiltY.value,avango.osg.Vec3(1,0,0))*\
-            avango.osg.make_trans_mat(1*self.PenX.value,-1*self.PenY.value,-10)
+            avango.osg.make_rot_mat(-1.047*self.PenTiltY.value,avango.osg.Vec3(1,0,0))*\
+            avango.osg.make_trans_mat(1*self.PenX.value,self.PenY.value,-10)
         sphereTrans2.Matrix.value = avango.osg.make_trans_mat(0,0,0.25 - (0.175*self.PenPressure.value))
         sphereTrans3.Matrix.value = avango.osg.make_trans_mat(0,0,0.4 - (0.25*self.PenPressure.value))
         if (self.ButtonTouch.value):
@@ -183,6 +189,7 @@ tablet.PenDistance.connect_from(sensor.Value8)
 tablet.PenTiltX.connect_from(sensor.Value9)
 tablet.PenTiltY.connect_from(sensor.Value10)
 tablet.UnknownRelWheel.connect_from(sensor.Value11)
+tablet.Ratio.connect_from(sensor.Value12)
 tablet.Button0.connect_from(sensor.Button0)
 tablet.Button1.connect_from(sensor.Button1)
 tablet.Button2.connect_from(sensor.Button2)
@@ -207,6 +214,8 @@ tablet.ButtonLens.connect_from(sensor.Button20)
 tablet.ButtonTouch.connect_from(sensor.Button21)
 tablet.ButtonStylus.connect_from(sensor.Button22)
 tablet.ButtonStylus2.connect_from(sensor.Button23)
+tablet.Proximity.connect_from(sensor.Button24)
+tablet.Matrix.connect_from(sensor.Matrix)
 
 # set up viewing
 window = avango.osg.viewer.nodes.GraphicsWindow()

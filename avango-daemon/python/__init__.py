@@ -158,7 +158,7 @@ class WacomTablet(_DeviceMixIn, _WacomTabletHelper):
     system. Required properties: station, device. Map incoming events like this:
     mydev.value[0] = \'EV_REL::REL_X\'. All appearing value und button events of a tablet
     are already set up in the constructor of this class. Optional properties: value, button,
-    led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout."""
+    led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout, toggle_reset."""
     def __init__(self):
         super(WacomTablet, self).__init__()
 

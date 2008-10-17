@@ -26,6 +26,7 @@
 #include <cerrno>
 #include <cstring>
 #include <fcntl.h>
+#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <sys/types.h>
@@ -268,7 +269,7 @@ namespace av
   }
 }
 
-int
+/*virtual*/ int
 av::daemon::HIDInput::parse_features()
 {
   try
@@ -284,7 +285,7 @@ av::daemon::HIDInput::parse_features()
   mAccumRel = scanForOptionalFeature<bool>("accum-rel-events", false);
   mResetRelCycle = scanForOptionalFeature<int>("reset-rel-values-cycle", 0);
   mTimeout = scanForOptionalFeature<unsigned int>("timeout", 200);
-
+  std::cout << "Parse Features, mNormAbs = " << mNormAbs << std::endl;
   return 1;
 }
 

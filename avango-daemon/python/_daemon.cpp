@@ -73,14 +73,23 @@ namespace
   std::string getResetRelCycleFeature(av::daemon::Device* self) { return self->queryFeature("reset-rel-values-cycle"); }
   std::string getTimeoutFeature(av::daemon::Device* self) { return self->queryFeature("timeout"); }
   std::string getPortFeature(av::daemon::Device* self) { return self->queryFeature("port"); }
+  std::string getToggleResetFeature(av::daemon::Device* self) { return self->queryFeature("toggle-reset"); }
 
   // wrapper for specialized configureFeature calls, required by .add_property
+  std::string parseBoolString(std::string value)
+  {
+    if ((value == "true")||(value=="TRUE")||(value=="True")) return "1";
+    if ((value == "false")||(value=="FALSE")||(value=="False")) return "0";
+    return value;
+  }
   void setTTYFeature(av::daemon::Device* self, std::string value) { self->configureFeature("tty", value); }
-  void setNormAbsFeature(av::daemon::Device* self, std::string value) { self->configureFeature("norm-abs", value); }
-  void setAccumRelFeature(av::daemon::Device* self, std::string value) { self->configureFeature("accum-rel-events", value); }
+  void setNormAbsFeature(av::daemon::Device* self, std::string value) { self->configureFeature("norm-abs",parseBoolString(value)); }
+  //void setNormAbsFeature(av::daemon::Device* self, bool value) { (value)?self->configureFeature("norm-abs", "1"):self->configureFeature("norm-abs", "0"); }
+  void setAccumRelFeature(av::daemon::Device* self, std::string value) { self->configureFeature("accum-rel-events", parseBoolString(value)); }
   void setResetRelCycleFeature(av::daemon::Device* self, std::string value) { self->configureFeature("reset-rel-values-cycle", value); }
   void setTimeoutFeature(av::daemon::Device* self, std::string value) { self->configureFeature("timeout", value); }
   void setPortFeature(av::daemon::Device* self, std::string value) { self->configureFeature("port", value); }
+  void setToggleResetFeature(av::daemon::Device* self, std::string value) { self->configureFeature("toggle-reset", parseBoolString(value)); }
 
   // set LED states
   void setLED(av::daemon::HIDInput* self, int number, int value)
@@ -174,6 +183,7 @@ BOOST_PYTHON_MODULE(_daemon)
   // Avango NG device: WacomTablet (derived from HIDInput)
   class_<av::daemon::WacomTablet, av::Link<av::daemon::WacomTablet>, bases<av::daemon::HIDInput>, boost::noncopyable >("_WacomTabletHelper",
     "A helper class that provides some basic properties and functions inherited from HIDInput.")
+    .add_property("toggle_reset", &::getToggleResetFeature, &::setToggleResetFeature)
     ;
 
   // Avango NG device: Wiimote (derived from HIDInput)

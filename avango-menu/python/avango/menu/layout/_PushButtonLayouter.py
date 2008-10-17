@@ -97,7 +97,6 @@ class PushButtonLayouter(LayoutBase):
                 self.Panel.value.close()
         self._last_select = self.Select.value
 
-
     def push_button_enable_changed(self):
         self.super().layout_base_enable_changed()
         self.label.Color.disconnect()

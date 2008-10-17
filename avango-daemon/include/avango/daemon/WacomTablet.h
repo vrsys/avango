@@ -32,6 +32,10 @@
  */
 
 #include <avango/daemon/HIDInput.h>
+#include <osg/Matrixf>
+#include <avango/osg/Object.h>
+#include <avango/osg/Fields.h>
+#include <avango/osg/MatrixTransform.h>
 
 namespace av
 {
@@ -51,6 +55,7 @@ namespace av
        */
       WacomTablet();
 
+
     protected:
 
       /**
@@ -64,10 +69,28 @@ namespace av
       void startDevice();
 
       /**
+       * overrides readloop() from av::daemon::HIDInput, used to create a transformation Matrix
+       * from pen input
+       */
+      void readLoop();
+
+      /**
        * overrides normalizeAbsValue from HIDInput, used to perform custom normalization
        * of some values
        */
       float normalizeAbsValue(const input_event& event) const;
+
+      /**
+       * Retrieves aspect ratio of tablet from maximum absolute values, Ratio is written in Value12
+       */
+      void retrieveAspectRatio();
+
+      /**
+       * overrides HIDInput::parse_features() to add toggle_reset property
+       */
+      int parse_features();
+
+      bool mToggleReset;
     };
   }
 }

@@ -220,9 +220,18 @@ namespace av
 
       virtual float normalizeAbsValue(const struct input_event& event) const;
 
+      bool stationLooksForEvent(int station_index, const struct input_event& event) const;
+
+      void applyEventToStation(int station_index, const struct input_event& event);
+
+      void clearRelativeStationValues();
+
+      template <class ValueType> ValueType scanForOptionalFeature(const std::string& feature, ValueType default_value);
+
+
     private:
 
-      bool stationLooksForEvent(int station_index, const struct input_event& event) const;
+//      bool stationLooksForEvent(int station_index, const struct input_event& event) const;
       const HIDMapping&  getStationHIDMapping(int station_index) const;
       const HIDLEDMapping&  getStationHIDLEDMapping(int station_index) const;
 
@@ -230,10 +239,9 @@ namespace av
       bool  scanInteger(const std::string& int_string, int& return_value) const;
 
       template <class ValueType> ValueType scanForRequiredFeature(const std::string& feature);
-      template <class ValueType> ValueType scanForOptionalFeature(const std::string& feature, ValueType default_value);
 
-      void applyEventToStation(int station_index, const struct input_event& event);
-      void clearRelativeStationValues();
+//      void applyEventToStation(int station_index, const struct input_event& event);
+//      void clearRelativeStationValues();
 
     };
   }

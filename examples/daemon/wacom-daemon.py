@@ -38,10 +38,11 @@ import avango.daemon
 station = avango.daemon.Station('wacomstation')
 
 # configure a tablet device
-wacom = avango.daemon.WacomIntuos3()
+wacom = avango.daemon.WacomTablet()
 wacom.station = station
 wacom.device = '/dev/input/wacom'
-#wacom.norm_abs = 'False'
+wacom.norm_abs = 'True'
+wacom.toggle_reset = 'False'
 
 #input events are configures automatically in WacomIntuos3
 #the mapping is as following
@@ -58,6 +59,7 @@ wacom.device = '/dev/input/wacom'
 #wacom.values[9] = "EV_ABS::ABS_TILT_X" #abs pen tilt X axis
 #wacom.values[10] = "EV_ABS::ABS_TILT_Y" #abs pen tilt Y axis
 #wacom.values[11] = "EV_REL::REL_WHEEL"
+#wacom.values[12] = "AspectRatio" #Width/Height of tablet CUSTOM
 
 # map incoming key events to station buttons
 #wacom.buttons[0] = "EV_KEY::BTN_0"
@@ -84,6 +86,7 @@ wacom.device = '/dev/input/wacom'
 #wacom.buttons[21] = "EV_KEY::BTN_TOUCH"
 #wacom.buttons[22] = "EV_KEY::BTN_STYLUS"
 #wacom.buttons[23] = "EV_KEY::BTN_STYLUS2"
+#wacom.buttons[24] = "Proximity, True if anything active on tablet, CUSTOM
 
 
 # alternative way of mapping events

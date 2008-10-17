@@ -285,7 +285,7 @@ av::daemon::HIDInput::parse_features()
   mAccumRel = scanForOptionalFeature<bool>("accum-rel-events", false);
   mResetRelCycle = scanForOptionalFeature<int>("reset-rel-values-cycle", 0);
   mTimeout = scanForOptionalFeature<unsigned int>("timeout", 200);
-  std::cout << "Parse Features, mNormAbs = " << mNormAbs << std::endl;
+
   return 1;
 }
 

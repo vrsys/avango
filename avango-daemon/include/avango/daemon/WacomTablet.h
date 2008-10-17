@@ -90,6 +90,9 @@ namespace av
        */
       int parse_features();
 
+      /**
+       * toggle switch to reset absolute axes when pen is lifted up to zero
+       */
       bool mToggleReset;
     };
   }

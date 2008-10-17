@@ -25,7 +25,6 @@
 
 #include <avango/Logger.h>
 #include <avango/daemon/WacomTablet.h>
-#include <iostream>
 #include <math.h>
 
 namespace
@@ -36,8 +35,7 @@ namespace
 AV_BASE_DEFINE(av::daemon::WacomTablet);
 
 av::daemon::WacomTablet::WacomTablet()
-{
-}
+{}
 
 av::daemon::WacomTablet::~WacomTablet()
 {}
@@ -233,11 +231,8 @@ av::daemon::WacomTablet::normalizeAbsValue(const input_event& event) const
     else normalized_value = 0.0f;
     break;
   case ABS_PRESSURE:
-    if (iter != mAbsInfoMap.end())
-    {
-      //info = (*iter).second;
-      normalized_value = (float)event.value / (float)(info.maximum - info.minimum);
-    }
+    if (event.value>0.0)
+      normalized_value = ((float)event.value -(float)info.minimum)/ (float)(info.maximum - info.minimum);
     break;
   case ABS_DISTANCE:
     if (event.value < 50) normalized_value = 1.0f;
@@ -252,14 +247,6 @@ av::daemon::WacomTablet::normalizeAbsValue(const input_event& event) const
   case ABS_TILT_Y:
     normalized_value = -2.0f* ((float)event.value -(float)info.minimum) / (float)(info.maximum + info.minimum ) + 1.0f;
     break;
-  case ABS_MISC:
-    std::cout << event.value << std::endl;
-    if (iter != mAbsInfoMap.end())
-    {
-       //info = (*iter).second;
-       std::cout << info.maximum << " <-max min-> " << info.minimum << std::endl;
-    }
-    break;
   default:
     normalized_value = HIDInput::normalizeAbsValue(event);
   }
@@ -272,6 +259,5 @@ av::daemon::WacomTablet::parse_features()
 {
   if (HIDInput::parse_features())
     mToggleReset = HIDInput::scanForOptionalFeature<bool>("toggle-reset", false);
-  std::cout << "Parse Features, mToggleReset = " << mToggleReset << std::endl;
   return 1;
 }

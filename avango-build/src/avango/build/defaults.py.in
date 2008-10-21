@@ -12,8 +12,8 @@
 #                                                                        #
 ##########################################################################
 
-BINARY_PATH='%(BINARY_PATH)s'
-INCLUDE_PATH='%(INCLUDE_PATH)s'
-LIBRARY_PATH='%(LIBRARY_PATH)s'
-PKG_CONFIG_PATH='%(PKG_CONFIG_PATH)s'
-PYTHON_PATH='%(PYTHON_PATH)s'
+BINARY_PATH=%(BINARY_PATH)s
+INCLUDE_PATH=%(INCLUDE_PATH)s
+LIBRARY_PATH=%(LIBRARY_PATH)s
+PKG_CONFIG_PATH=%(PKG_CONFIG_PATH)s
+PYTHON_PATH=%(PYTHON_PATH)s

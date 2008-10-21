@@ -24,6 +24,7 @@
 ##########################################################################
 
 import avango.build
+import os
 
 Alias('install', Alias('install-build'))
 Alias('install-build', avango.build.get_python_path('avango/build'))
@@ -45,13 +46,16 @@ build_tools_module = Split("""
 Install(avango.build.get_python_path('avango/build'), build_module)
 Install(avango.build.get_python_path('avango/build/tools'), build_tools_module)
 
+def build_path(*args):
+  return repr(os.pathsep.join([ x for x in args if x ]))
+
 local_env = avango.build.Environment()
 local_env['SUBST'] = {
-    'BINARY_PATH': ':'.join((local_env['BINARY_PATH'], avango.build.get_binary_path().abspath)),
-    'INCLUDE_PATH': ':'.join((local_env['INCLUDE_PATH'], avango.build.get_include_path().abspath)),
-    'LIBRARY_PATH': ':'.join((local_env['LIBRARY_PATH'], avango.build.get_library_path().abspath)),
-    'PKG_CONFIG_PATH': ':'.join((local_env['PKG_CONFIG_PATH'], avango.build.get_pkgconfig_path().abspath)),
-    'PYTHON_PATH': ':'.join((local_env['PYTHON_PATH'], avango.build.get_python_path().abspath)),
+    'BINARY_PATH': build_path(local_env['BINARY_PATH'], avango.build.get_binary_path().abspath),
+    'INCLUDE_PATH': build_path(local_env['INCLUDE_PATH'], avango.build.get_include_path().abspath),
+    'LIBRARY_PATH': build_path(local_env['LIBRARY_PATH'], avango.build.get_library_path().abspath),
+    'PKG_CONFIG_PATH': build_path(local_env['PKG_CONFIG_PATH'], avango.build.get_pkgconfig_path().abspath),
+    'PYTHON_PATH': build_path(local_env['PYTHON_PATH'], avango.build.get_python_path().abspath),
     }
 defaults = local_env.Subst('src/avango/build/defaults.py.in')
 Install(avango.build.get_python_path('avango/build'), defaults)

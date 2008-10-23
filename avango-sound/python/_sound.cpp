@@ -51,6 +51,7 @@ BOOST_PYTHON_MODULE(_sound)
   av::sound::SoundTraverser::initClass();
   av::sound::SoundRenderer::initClass();
   av::sound::SoundSource::initClass();
+  av::sound::SampleBuffer::initClass();
 
   class_<av::sound::SoundTraverser, av::Link<av::sound::SoundTraverser>, bases<av::FieldContainer>, boost::noncopyable >("SoundTraverser", "docstring");
   class_<av::sound::SoundRenderer, av::Link<av::sound::SoundRenderer>, bases<av::FieldContainer>, boost::noncopyable >("SoundRenderer", "docstring", no_init);

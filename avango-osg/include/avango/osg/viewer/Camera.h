@@ -165,6 +165,11 @@ namespace av
         /* virtual */ void evaluate();
 
         /**
+         * Outputs the projection matrix of the osg camera
+         */
+        SFMatrix ProjectionMatrix;
+
+        /**
          * Get the wrapped ::osg::Camera.
          */
         ::osg::Camera* getOsgCamera() const;

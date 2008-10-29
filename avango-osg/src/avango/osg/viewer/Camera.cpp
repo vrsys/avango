@@ -137,6 +137,7 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_FIELD(MouseTransform, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(MouseViewerTransform, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(MouseNearTransform, ::osg::Matrix::identity());
+  AV_FC_ADD_FIELD(ProjectionMatrix, ::osg::Matrix::identity());
 
   mOsgCamera->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
   mOsgCamera->setDisplaySettings(new ::osg::DisplaySettings);
@@ -357,6 +358,8 @@ av::osg::viewer::Camera::evaluate()
       MouseViewerTransform.setValue(mouse_viewer_trans);
     if (MouseNearTransform.getValue() != mouse_near_trans)
       MouseNearTransform.setValue(mouse_near_trans);
+    if (ProjectionMatrix.getValue() != mOsgCamera->getProjectionMatrix())
+      ProjectionMatrix.setValue(mOsgCamera->getProjectionMatrix());
   }
 }
 

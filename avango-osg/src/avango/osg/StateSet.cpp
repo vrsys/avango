@@ -84,6 +84,14 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
   AV_FC_ADD_ADAPTOR_FIELD(CullFaceMode,
                             boost::bind(&StateSet::getCullFaceModeCB, this, _1),
                             boost::bind(&StateSet::setCullFaceModeCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RescaleNormalMode,
+                            boost::bind(&StateSet::getRescaleNormalModeCB, this, _1),
+                            boost::bind(&StateSet::setRescaleNormalModeCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(NormalizeMode,
+                            boost::bind(&StateSet::getNormalizeModeCB, this, _1),
+                            boost::bind(&StateSet::setNormalizeModeCB, this, _1));
 }
 
 av::osg::StateSet::~StateSet()
@@ -274,3 +282,28 @@ av::osg::StateSet::setCullFaceModeCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgStateSet->setMode(GL_CULL_FACE, event.getValue());
 }
+
+/* virtual */ void
+av::osg::StateSet::getRescaleNormalModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgStateSet->getMode(GL_RESCALE_NORMAL);
+}
+
+/* virtual */ void
+av::osg::StateSet::setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgStateSet->setMode(GL_RESCALE_NORMAL, event.getValue());
+}
+
+/* virtual */ void
+av::osg::StateSet::getNormalizeModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgStateSet->getMode(GL_NORMALIZE);
+}
+
+/* virtual */ void
+av::osg::StateSet::setNormalizeModeCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgStateSet->setMode(GL_NORMALIZE, event.getValue());
+}
+

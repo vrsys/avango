@@ -71,6 +71,8 @@ namespace av
       SFInt RenderBin;
       SFCullFace CullFace;
       SFInt CullFaceMode;
+      SFInt RescaleNormalMode;
+      SFInt NormalizeMode;
 
       /**
        * Destructor made protected to prevent allocation on stack.
@@ -107,6 +109,10 @@ namespace av
       virtual void setCullFaceCB(const av::osg::SFCullFace::SetValueEvent& event);
       virtual void getCullFaceModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setCullFaceModeCB(const av::SFInt::SetValueEvent& event);
+      virtual void getRescaleNormalModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
+      virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
 
     private:
 

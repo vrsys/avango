@@ -29,6 +29,8 @@
 
 #include <boost/bind.hpp>
 
+#include <cmath>
+
 namespace
 {
   av::Logger& logger(av::getLogger("av::moving::Trackball"));

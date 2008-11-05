@@ -67,8 +67,7 @@
 #include "OSGSphere.h"
 #include "OSGAbsoluteTransform.h"
 #include "OSGTriangleContainer.h"
-
-
+#include "OSGProjection.h"
 
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -139,5 +138,5 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGSphere();
   init_OSGAbsoluteTransform();
   init_OSGTriangleContainer();
-
+  init_OSGProjection();
 }

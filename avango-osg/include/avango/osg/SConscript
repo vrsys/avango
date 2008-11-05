@@ -46,6 +46,7 @@ headers = Split('''
     ObjectLink.h
     Panel.h
     PolygonOffset.h
+    Projection.h
     Quad.h
     Sphere.h
     StateAttribute.h

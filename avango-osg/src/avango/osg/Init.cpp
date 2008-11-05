@@ -44,6 +44,7 @@
 #include <avango/osg/Node.h>
 #include <avango/osg/Panel.h>
 #include <avango/osg/PolygonOffset.h>
+#include <avango/osg/Projection.h>
 #include <avango/osg/Quad.h>
 #include <avango/osg/Sphere.h>
 #include <avango/osg/StateAttribute.h>
@@ -84,6 +85,7 @@ av::osg::Init::initClass()
     av::osg::Node::initClass();
     av::osg::Panel::initClass();
     av::osg::PolygonOffset::initClass();
+    av::osg::Projection::initClass();
     av::osg::Quad::initClass();
     av::osg::Sphere::initClass();
     av::osg::StateAttribute::initClass();

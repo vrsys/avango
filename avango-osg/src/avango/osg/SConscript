@@ -51,6 +51,7 @@ sources = Split('''
     ObjectLink.cpp
     Panel.cpp
     PolygonOffset.cpp
+    Projection.cpp
     Quad.cpp
     Sphere.cpp
     StateAttribute.cpp

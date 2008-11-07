@@ -32,6 +32,7 @@
 #include <osg/ref_ptr>
 
 #include <osgViewer/Viewer>
+#include <osgViewer/GraphicsWindow>
 #include <osgViewer/ViewerEventHandlers>
 
 #include <osgGA/TrackballManipulator>
@@ -91,6 +92,35 @@ namespace
     // add Avango root not to our root
     viewer_root->addChild(root->getOsgNode());
   }
+
+  class EmbeddedViewer
+  {
+  public:
+
+    EmbeddedViewer(av::osg::Node* root, int x, int y, int width, int height)
+    {
+      mViewer = new osgViewer::Viewer;
+      mViewer->setSceneData(root->getOsgNode());
+      mGraphicsWindow = mViewer->setUpViewerAsEmbeddedInWindow (x, y, width, height);
+    }
+
+    void resized(int x, int y, int width, int height)
+    {
+      if (!mGraphicsWindow)
+        return;
+
+      mGraphicsWindow->resized(x, y, width, height);
+    }
+
+    void frame(void)
+    {
+      mViewer->frame();
+    }
+
+  private:
+    osg::ref_ptr<osgViewer::Viewer> mViewer;
+    osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> mGraphicsWindow;
+  };
 }
 
 void run(av::osg::Node* root)
@@ -128,4 +158,9 @@ BOOST_PYTHON_MODULE(_simpleviewer)
   def("realize", realize);
   def("frame", frame);
   def("done", done);
+
+  class_<EmbeddedViewer>("EmbeddedViewer", init<av::osg::Node*, int, int, int, int>())
+    .def("resized", &EmbeddedViewer::resized)
+    .def("frame", &EmbeddedViewer::frame)
+    ;
 }

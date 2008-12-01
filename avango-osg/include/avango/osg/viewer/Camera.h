@@ -93,6 +93,12 @@ namespace av
          */
         SFDouble Near;
         SFDouble Far;
+        
+        /**
+         * Defines the background color.
+         * Default is Vec4(0,0,0,1).
+         */
+        SFVec4 BackgroundColor; 
 
         /**
          * Defines the orientation and translation of the viewer

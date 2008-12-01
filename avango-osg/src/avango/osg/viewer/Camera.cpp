@@ -125,7 +125,8 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_FIELD(Viewport, ::osg::Vec4(0.0, 0.0, 1.0, 1.0));
   AV_FC_ADD_FIELD(Near, 0.1);
   AV_FC_ADD_FIELD(Far, 500.0);
-
+  AV_FC_ADD_FIELD(BackgroundColor, ::osg::Vec4(0.0, 0.0, 0.0, 1.0));
+  
   AV_FC_ADD_FIELD(ViewerTransform, ::osg::Matrix::translate(0.0, 0.0, 0.6));
   AV_FC_ADD_FIELD(ScreenTransform, ::osg::Matrix::translate(0.0, 0.0, -0.6));
   AV_FC_ADD_FIELD(ScreenRelativeToViewer, true);
@@ -199,6 +200,10 @@ av::osg::viewer::Camera::fieldHasChangedLocalSideEffect(const av::Field& field)
   else if (&field == &Viewport)
   {
     mViewportChanged = true;
+  }
+  else if (&field == &BackgroundColor)
+  {
+    mOsgCamera->setClearColor(BackgroundColor.getValue());
   }
 }
 

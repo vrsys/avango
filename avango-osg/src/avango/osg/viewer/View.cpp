@@ -28,8 +28,6 @@
 
 #include <boost/bind.hpp>
 
-#include <osgViewer/ViewerEventHandlers>
-
 #include <avango/Logger.h>
 
 
@@ -46,7 +44,8 @@ AV_FIELD_DEFINE(av::osg::viewer::MFView);
 av::osg::viewer::View::View(::osgViewer::View* osgview) :
   av::osg::Object(osgview),
   mOsgView(osgview),
-  mOsgStateSetManipulator(new ::osgGA::StateSetManipulator())
+  mOsgStateSetManipulator(new ::osgGA::StateSetManipulator()),
+  mStatsMode(0)
 {
   AV_FC_ADD_ADAPTOR_FIELD(MasterCamera,
                           boost::bind(&av::osg::viewer::View::getMasterCameraCB, this, _1),
@@ -57,10 +56,16 @@ av::osg::viewer::View::View(::osgViewer::View* osgview) :
   AV_FC_ADD_ADAPTOR_FIELD(Scene, boost::bind(&av::osg::viewer::View::getSceneCB, this, _1),
                                  boost::bind(&av::osg::viewer::View::setSceneCB, this, _1));
 
+  AV_FC_ADD_FIELD(StatsMode, mStatsMode);
+
   mOsgView->addEventHandler(mOsgStateSetManipulator.get());
   mOsgView->addEventHandler(new ::osgViewer::ThreadingHandler);
   mOsgView->addEventHandler(new ::osgViewer::HelpHandler);
-  mOsgView->addEventHandler(new ::osgViewer::StatsHandler);
+  mOsgStatsHandler = new ::osgViewer::StatsHandler;
+  mOsgView->addEventHandler(mOsgStatsHandler.get());
+  mOsgStatsToggle = new ::osgGA::GUIEventAdapter;
+  mOsgStatsToggle->setEventType(::osgGA::GUIEventAdapter::KEYDOWN);
+  mOsgStatsToggle->setKey(mOsgStatsHandler->getKeyEventTogglesOnScreenStats());
 }
 
 /* virtual */
@@ -109,6 +114,18 @@ av::osg::viewer::View::fieldHasChangedLocalSideEffect(const Field& field)
     }
 
     mOsgView->assignSceneDataToCameras();
+  }
+}
+
+/* virtual */ void
+av::osg::viewer::View::evaluateLocalSideEffect()
+{
+  const int newStatsMode = (StatsMode.getValue() % ::osgViewer::StatsHandler::LAST);
+  mOsgStatsToggle->setHandled(false);
+  while (mStatsMode != newStatsMode && mOsgStatsHandler->handle(*mOsgStatsToggle, *mOsgView))
+  {
+    mStatsMode = ((mStatsMode + 1) % ::osgViewer::StatsHandler::LAST);
+    mOsgStatsToggle->setHandled(false);
   }
 }
 

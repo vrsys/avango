@@ -32,6 +32,7 @@
  */
 
 #include <osgViewer/View>
+#include <osgViewer/ViewerEventHandlers>
 #include <osgGA/StateSetManipulator>
 
 #include <avango/osg/Object.h>
@@ -86,7 +87,18 @@ namespace av
          */
         SFNode Scene;
 
+        /**
+         * Sets the displayed statistics mode:
+         * 0 = No statistics
+         * 1 = Frame rate only
+         * 2 = Full statistics
+         * 
+         * See StatsHandler::StatsType in OpenSceneGraph/include/osgViewer/ViewerEventHandlers
+         */
+        SFInt StatsMode;
+
         /* virtual */ void fieldHasChangedLocalSideEffect(const Field& field);
+        /* virtual */ void evaluateLocalSideEffect();
 
         /**
          * Get the wrapped ::osgViewer::View.
@@ -103,6 +115,10 @@ namespace av
 
         ::osgViewer::View *mOsgView;
         ::osg::ref_ptr< ::osgGA::StateSetManipulator> mOsgStateSetManipulator;
+        ::osg::ref_ptr< ::osgViewer::StatsHandler> mOsgStatsHandler;
+        ::osg::ref_ptr< ::osgGA::GUIEventAdapter> mOsgStatsToggle;
+
+        int mStatsMode;
       };
 
       typedef SingleField<Link<View> > SFView;

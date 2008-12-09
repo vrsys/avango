@@ -42,7 +42,7 @@ control for manipulating the objects fields like size, scale and color.
 As the menus are created just in time, the limits of having complex context
 menus are visible: creating menu structures with lots of field connections is
 somewhat slow. For more complex applications, it is recommended to create all
-availlable context menus at startup time and just connect, show and hide them
+available context menus at startup time and just connect, show and hide them
 when needed.
 '''
 import avango.menu.widget
@@ -214,7 +214,7 @@ class CatchAllSphereContextBehavior(avango.script.Script):
 
 # Here is the context menu behavior class for the object. Like above, it's main purpose is to
 # open a context menu when an object is right-clicked. But this one uses a real "context" for
-# showing the needed controls (widgets): It asks the clicked object for availlable fields and
+# showing the needed controls (widgets): It asks the clicked object for available fields and
 # creates and connects widgets for manipulating these fields.
 class ObjectBehavior(avango.script.Script):
     ActivePanel = avango.SFObject()

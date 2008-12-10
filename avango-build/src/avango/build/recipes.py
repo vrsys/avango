@@ -42,6 +42,7 @@ def _setup_default():
         osgText
         osgUtil
         osgGA
+        sloow
         """
 
     for lib in _plain_libs.split():

@@ -27,21 +27,26 @@ import avango.build
 
 headers = Split('''
     AssertException.h
-    Test.h
+    CheckMacros.h
     Checks.h
-    TestRunner.h
-    TestResults.h
-    TestReporter.h
-    TestReporterStdout.h
-    ReportAssert.h
-    TestList.h
-    TimeConstraint.h
-    TestDetails.h
-    MemoryOutStream.h
+    Config.h
     DeferredTestReporter.h
     DeferredTestResult.h
-    XmlTestReporter.h
+    MemoryOutStream.h
+    ReportAssert.h
+    Test.h
+    TestDetails.h
+    TestList.h
+    TestMacros.h
+    TestReporter.h
+    TestReporterStdout.h
+    TestResults.h
+    TestRunner.h
+    TestSuite.h
+    TimeConstraint.h
+    TimeHelpers.h
     UnitTest++.h  
+    XmlTestReporter.h
     ''')
 
 Alias('install-unittest', Install(avango.build.get_include_path('avango/UnitTest++'), headers))

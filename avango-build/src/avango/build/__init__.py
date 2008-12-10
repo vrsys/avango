@@ -230,6 +230,7 @@ def setup():
     scons.Help(options.GenerateHelpText(env))
     if os.path.abspath(env['BUILD']) != os.path.abspath('.'):
         scons.BuildDir(env['BUILD'], '.', not oshelper.os_is_windows())
+        env.SConsignFile("${BUILD}/sconsign")
 
 def get_prefix(path = ''):
     "Returns the generic installation prefix."

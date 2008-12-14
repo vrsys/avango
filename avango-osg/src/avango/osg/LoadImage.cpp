@@ -71,5 +71,8 @@ av::osg::LoadImage::evaluateLocalSideEffect()
   LOG_TRACE(logger) << "evaluateLocalSideEffect()";
 
   ::osg::ref_ptr< ::osg::Image> image = osgDB::readImageFile(Filename.getValue());
-  Image.setValue(new av::osg::Image(image.get()));
+  if (image.valid())
+    Image.setValue(new av::osg::Image(image.get()));
+  else
+    Image.setValue(0);
 }

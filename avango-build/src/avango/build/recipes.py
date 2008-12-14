@@ -65,6 +65,7 @@ def _setup_default():
     _config_store.set('avango-ensemble', PKGConfig('avango-ensemble'))
     _config_store.set('avango-unittest', PKGConfig('avango-unittest'))
     _config_store.set('avango-sound', PlainConfig(libraries = ["avangoSound"]))
+    _config_store.set('avango-sloow', PlainConfig(libraries = ["avangoSloow"]))
     _config_store.set('openal', PlainConfig(libraries = ["openal"]))
     _config_store.set('alut', PlainConfig(libraries = ["alut"]))
     _config_store.set('vorbisfile', PKGConfig('vorbisfile'))

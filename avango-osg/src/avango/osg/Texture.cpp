@@ -1,0 +1,116 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+* This file is part of Avango.                                           *
+*                                                                        *
+* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* angewandten Forschung (FhG), Munich, Germany.                          *
+*                                                                        *
+* Avango is free software: you can redistribute it and/or modify         *
+* it under the terms of the GNU Lesser General Public License as         *
+* published by the Free Software Foundation, version 3.                  *
+*                                                                        *
+* Avango is distributed in the hope that it will be useful,              *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
+* GNU General Public License for more details.                           *
+*                                                                        *
+* You should have received a copy of the GNU Lesser General Public       *
+* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
+*                                                                        *
+* Avango is a trademark owned by FhG.                                    *
+*                                                                        *
+\************************************************************************/
+
+#include <avango/osg/Texture.h>
+#include <avango/Logger.h>
+#include <boost/bind.hpp>
+
+namespace
+{
+  av::Logger& logger(av::getLogger("av::osg::Texture"));
+}
+
+AV_FC_DEFINE_ABSTRACT(av::osg::Texture);
+
+AV_FIELD_DEFINE(av::osg::SFTexture);
+AV_FIELD_DEFINE(av::osg::MFTexture);
+
+av::osg::Texture::Texture(::osg::Texture* osgtexture) :
+  Object(osgtexture),
+  mOsgTexture(osgtexture)
+{
+  AV_FC_ADD_ADAPTOR_FIELD(MinFilter,
+                          boost::bind(&Texture::getMinFilterCB, this, _1),
+                          boost::bind(&Texture::setMinFilterCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(MagFilter,
+                          boost::bind(&Texture::getMagFilterCB, this, _1),
+                          boost::bind(&Texture::setMagFilterCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(MaxAnisotropy,
+                          boost::bind(&Texture::getMaxAnisotropyCB, this, _1),
+                          boost::bind(&Texture::setMaxAnisotropyCB, this, _1));
+}
+
+/* virtual */
+av::osg::Texture::~Texture()
+{}
+
+/* static */ void
+av::osg::Texture::initClass()
+{
+  if (!isTypeInitialized())
+  {
+    av::osg::Object::initClass();
+
+    AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::Texture, true);
+
+    SFTexture::initClass("av::osg::SFTexture", "av::Field");
+    MFTexture::initClass("av::osg::MFTexture", "av::Field");
+
+    sClassTypeId.setDistributable(true);
+  }
+}
+
+::osg::Texture*
+av::osg::Texture::getOsgTexture() const {
+  return mOsgTexture;
+}
+
+/* virtual */ void
+av::osg::Texture::getMinFilterCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getFilter(::osg::Texture::MIN_FILTER);
+}
+
+/* virtual */ void
+av::osg::Texture::setMinFilterCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture->setFilter(::osg::Texture::MIN_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+}
+
+/* virtual */ void
+av::osg::Texture::getMagFilterCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getFilter(::osg::Texture::MAG_FILTER);
+}
+
+/* virtual */ void
+av::osg::Texture::setMagFilterCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture->setFilter(::osg::Texture::MAG_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+}
+
+/* virtual */ void
+av::osg::Texture::getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getMaxAnisotropy();
+}
+
+/* virtual */ void
+av::osg::Texture::setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event)
+{
+  mOsgTexture->setMaxAnisotropy(event.getValue());
+}

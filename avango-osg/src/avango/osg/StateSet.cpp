@@ -92,6 +92,10 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
   AV_FC_ADD_ADAPTOR_FIELD(NormalizeMode,
                             boost::bind(&StateSet::getNormalizeModeCB, this, _1),
                             boost::bind(&StateSet::setNormalizeModeCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Texture0,
+                            boost::bind(&StateSet::getTextureCB, this, _1),
+                            boost::bind(&StateSet::setTextureCB, this, _1));
 }
 
 av::osg::StateSet::~StateSet()
@@ -307,3 +311,24 @@ av::osg::StateSet::setNormalizeModeCB(const av::SFInt::SetValueEvent& event)
   mOsgStateSet->setMode(GL_NORMALIZE, event.getValue());
 }
 
+/* virtual */ void
+av::osg::StateSet::getTextureCB(const av::osg::SFTexture::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Texture>(mOsgStateSet->getTextureAttribute(0, ::osg::StateAttribute::TEXTURE));
+}
+
+/* virtual */ void
+av::osg::StateSet::setTextureCB(const av::osg::SFTexture::SetValueEvent& event)
+{
+  ::osg::Texture *osg_tex = (event.getValue().isValid() ? event.getValue()->getOsgTexture() : 0);
+  if (osg_tex != 0)
+    mOsgStateSet->setTextureAttributeAndModes(0, osg_tex);
+  else
+  {
+    ::osg::Texture *osg_old_tex = dynamic_cast< ::osg::Texture*>(mOsgStateSet->getTextureAttribute(0, ::osg::StateAttribute::TEXTURE));
+    if (!osg_old_tex)
+      return;
+    mOsgStateSet->removeTextureAttribute(0, osg_old_tex->getType());
+  }
+
+}

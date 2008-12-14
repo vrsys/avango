@@ -71,6 +71,10 @@ osg_files = Split("""
     avango/osg/OSGAbsoluteTransform.cpp
     avango/osg/OSGTriangleContainer.cpp
     avango/osg/OSGProjection.cpp
+    avango/osg/OSGImage.cpp
+    avango/osg/OSGLoadImage.cpp
+    avango/osg/OSGTexture.cpp
+    avango/osg/OSGTexture2D.cpp
     """)
 
 if module_env['DISTRIBUTION_SUPPORT']:

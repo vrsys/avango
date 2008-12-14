@@ -34,12 +34,14 @@ headers = Split('''
     Geode.h
     Geometry.h
     Group.h
+    Image.h
     Init.h
     Intersection.h
     LayerGeode.h
     LayerGroup.h
     LineSegmentIntersector.h
     LoadFile.h
+    LoadImage.h
     MatrixTransform.h
     Node.h
     Object.h
@@ -53,6 +55,8 @@ headers = Split('''
     StateSet.h
     Switch.h
     Text.h
+    Texture.h
+    Texture2D.h
     TexturedQuad.h
     Transform.h
     Types.h

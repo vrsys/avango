@@ -68,6 +68,10 @@
 #include "OSGAbsoluteTransform.h"
 #include "OSGTriangleContainer.h"
 #include "OSGProjection.h"
+#include "OSGImage.h"
+#include "OSGLoadImage.h"
+#include "OSGTexture.h"
+#include "OSGTexture2D.h"
 
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -139,4 +143,8 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGAbsoluteTransform();
   init_OSGTriangleContainer();
   init_OSGProjection();
+  init_OSGImage();
+  init_OSGLoadImage();
+  init_OSGTexture();
+  init_OSGTexture2D();
 }

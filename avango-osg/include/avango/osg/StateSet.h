@@ -37,6 +37,7 @@
 #include <avango/osg/Fog.h>
 #include <avango/osg/PolygonOffset.h>
 #include <avango/osg/CullFace.h>
+#include <avango/osg/Texture.h>
 
 namespace av
 {
@@ -73,6 +74,8 @@ namespace av
       SFInt CullFaceMode;
       SFInt RescaleNormalMode;
       SFInt NormalizeMode;
+
+      SFTexture Texture0;
 
       /**
        * Destructor made protected to prevent allocation on stack.
@@ -113,6 +116,8 @@ namespace av
       virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
+      virtual void getTextureCB(const av::osg::SFTexture::GetValueEvent& event);
+      virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
 
     private:
 

@@ -39,12 +39,14 @@ sources = Split('''
     Geode.cpp
     Geometry.cpp
     Group.cpp
+    Image.cpp
     Init.cpp
     Intersection.cpp
     LayerGeode.cpp
     LayerGroup.cpp
     LineSegmentIntersector.cpp
     LoadFile.cpp
+    LoadImage.cpp
     MatrixTransform.cpp
     Node.cpp
     Object.cpp
@@ -58,6 +60,8 @@ sources = Split('''
     StateSet.cpp
     Switch.cpp
     Text.cpp
+    Texture.cpp
+    Texture2D.cpp
     TexturedQuad.cpp
     Transform.cpp
     Types.cpp

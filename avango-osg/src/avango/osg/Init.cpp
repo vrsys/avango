@@ -35,11 +35,13 @@
 #include <avango/osg/Geode.h>
 #include <avango/osg/Geometry.h>
 #include <avango/osg/Group.h>
+#include <avango/osg/Image.h>
 #include <avango/osg/Intersection.h>
 #include <avango/osg/LayerGeode.h>
 #include <avango/osg/LayerGroup.h>
 #include <avango/osg/LineSegmentIntersector.h>
 #include <avango/osg/LoadFile.h>
+#include <avango/osg/LoadImage.h>
 #include <avango/osg/MatrixTransform.h>
 #include <avango/osg/Node.h>
 #include <avango/osg/Panel.h>
@@ -51,6 +53,8 @@
 #include <avango/osg/StateSet.h>
 #include <avango/osg/Switch.h>
 #include <avango/osg/Text.h>
+#include <avango/osg/Texture.h>
+#include <avango/osg/Texture2D.h>
 #include <avango/osg/TexturedQuad.h>
 #include <avango/osg/Transform.h>
 #include <avango/osg/TriangleContainer.h>
@@ -76,11 +80,13 @@ av::osg::Init::initClass()
     av::osg::Geode::initClass();
     av::osg::Geometry::initClass();
     av::osg::Group::initClass();
+    av::osg::Image::initClass();
     av::osg::Intersection::initClass();
     av::osg::LayerGeode::initClass();
     av::osg::LayerGroup::initClass();
     av::osg::LineSegmentIntersector::initClass();
     av::osg::LoadFile::initClass();
+    av::osg::LoadImage::initClass();
     av::osg::MatrixTransform::initClass();
     av::osg::Node::initClass();
     av::osg::Panel::initClass();
@@ -92,6 +98,8 @@ av::osg::Init::initClass()
     av::osg::StateSet::initClass();
     av::osg::Switch::initClass();
     av::osg::Text::initClass();
+    av::osg::Texture::initClass();
+    av::osg::Texture2D::initClass();
     av::osg::TexturedQuad::initClass();
     av::osg::Transform::initClass();
     av::osg::TriangleContainer::initClass();

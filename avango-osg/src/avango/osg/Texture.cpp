@@ -41,6 +41,16 @@ av::osg::Texture::Texture(::osg::Texture* osgtexture) :
   Object(osgtexture),
   mOsgTexture(osgtexture)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(WrapS,
+                          boost::bind(&Texture::getWrapCB, this, ::osg::Texture::WRAP_S, _1),
+                          boost::bind(&Texture::setWrapCB, this, ::osg::Texture::WRAP_S, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(WrapT,
+                          boost::bind(&Texture::getWrapCB, this, ::osg::Texture::WRAP_T, _1),
+                          boost::bind(&Texture::setWrapCB, this, ::osg::Texture::WRAP_T, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(WrapR,
+                          boost::bind(&Texture::getWrapCB, this, ::osg::Texture::WRAP_R, _1),
+                          boost::bind(&Texture::setWrapCB, this, ::osg::Texture::WRAP_R, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MinFilter,
                           boost::bind(&Texture::getMinFilterCB, this, _1),
                           boost::bind(&Texture::setMinFilterCB, this, _1));
@@ -77,6 +87,18 @@ av::osg::Texture::initClass()
 ::osg::Texture*
 av::osg::Texture::getOsgTexture() const {
   return mOsgTexture;
+}
+
+/* virtual */ void
+av::osg::Texture::getWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getWrap(param);
+}
+
+/* virtual */ void
+av::osg::Texture::setWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture->setWrap(param, (::osg::Texture::WrapMode)(event.getValue()));
 }
 
 /* virtual */ void

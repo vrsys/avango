@@ -65,6 +65,9 @@ namespace av
 
     public:
 
+      SFInt WrapS;
+      SFInt WrapT;
+      SFInt WrapR;
       SFInt MinFilter;
       SFInt MagFilter;
       SFFloat MaxAnisotropy;
@@ -81,6 +84,8 @@ namespace av
 
     protected:
 
+      virtual void getWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::GetValueEvent& event);
+      virtual void setWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::SetValueEvent& event);
       virtual void getMinFilterCB(const av::SFInt::GetValueEvent& event);
       virtual void setMinFilterCB(const av::SFInt::SetValueEvent& event);
       virtual void getMagFilterCB(const av::SFInt::GetValueEvent& event);

@@ -83,6 +83,20 @@ av::sound::SoundRenderer::setListenerPosCB(const av::osg::SFMatrix::SetValueEven
 }
 
 void
+av::sound::SoundRenderer::getListenerVeloCB(const av::osg::SFVec3::GetValueEvent& event)
+{
+  av::osg::SFVec3f::ValueType &vector(*event.getValuePtr());
+  vector = getListenerVelocity();
+}
+
+void
+av::sound::SoundRenderer::setListenerVeloCB(const av::osg::SFVec3::SetValueEvent& event)
+{
+  const av::osg::SFVec3f::ValueType &vector(event.getValue());
+  setListenerVelocity(vector);
+}
+
+void
 av::sound::SoundRenderer::updateSoundSourcePosition(av::Link<av::sound::SoundSource> source, const ::osg::Matrix& transform)
 {
   const unsigned int num_local_sources = source->numLocalSources();

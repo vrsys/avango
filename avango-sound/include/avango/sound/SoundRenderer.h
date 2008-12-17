@@ -49,6 +49,7 @@ namespace av {
         /* virtual */~SoundRenderer();
       public:
         av::osg::SFMatrix ListenerPosition;
+        av::osg::SFVec3 ListenerVelocity;
 
         virtual boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
         virtual void updateSoundSourcePosition(Link<SoundSource> source, const ::osg::Matrix& transform);
@@ -58,9 +59,14 @@ namespace av {
         virtual void setListenerPosition(const ::osg::Matrix& /* position */) {}
         virtual ::osg::Matrix getListenerPosition() const {return ::osg::Matrix::identity();}
 
+        virtual void setListenerVelocity(const ::osg::Vec3& /* velocity */) {}
+        virtual ::osg::Vec3 getListenerVelocity() const {return ::osg::Vec3f(0.0f, 0.0f, 0.0f);}
       private:
         void getListenerPosCB(const av::osg::SFMatrix::GetValueEvent& event);
         void setListenerPosCB(const av::osg::SFMatrix::SetValueEvent& event);
+        
+        void getListenerVeloCB(const av::osg::SFVec3::GetValueEvent& event);
+        void setListenerVeloCB(const av::osg::SFVec3::SetValueEvent& event);
 
     };
     typedef SingleField<Link<SoundRenderer> > SFSoundRenderer;

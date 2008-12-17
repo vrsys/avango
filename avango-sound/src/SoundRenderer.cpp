@@ -37,6 +37,9 @@ av::sound::SoundRenderer::SoundRenderer()
   AV_FC_ADD_ADAPTOR_FIELD(ListenerPosition,
                           boost::bind(&SoundRenderer::getListenerPosCB, this, _1),
                           boost::bind(&SoundRenderer::setListenerPosCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(ListenerVelocity,
+                          boost::bind(&SoundRenderer::getListenerVeloCB, this, _1),
+                          boost::bind(&SoundRenderer::setListenerVeloCB, this, _1));
 }
 
 

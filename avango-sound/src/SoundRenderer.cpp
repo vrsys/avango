@@ -113,7 +113,7 @@ av::sound::SoundRenderer::updateSoundSourcePosition(av::Link<av::sound::SoundSou
   if (local_source_index == num_local_sources) // no local source found, create one
   {
     boost::shared_ptr<SoundSource::LocalSource> local_source = createLocalSource();
-    source->addLocalSource(createLocalSource());
+    source->addLocalSource(local_source);
     local_source->setWorldTransform(transform);
   }
 }

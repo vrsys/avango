@@ -35,6 +35,9 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(URL, "");
   AV_FC_ADD_FIELD(Loop, false);
   AV_FC_ADD_FIELD(Velocity, ::osg::Vec3f(0,0,0));
+  AV_FC_ADD_FIELD(Direction, ::osg::Vec3f(0,0,0));
+  AV_FC_ADD_FIELD(ConeInnerAngle, 360.0f);
+  AV_FC_ADD_FIELD(ConeOuterAngle, 360.0f);
   AV_FC_ADD_FIELD(Gain, 1.0f);
   AV_FC_ADD_FIELD(Pitch, 1.0f);
   AV_FC_ADD_FIELD(Play, false);
@@ -45,7 +48,7 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(PlayTime, 0.0);
   AV_FC_ADD_FIELD(NewSampleBuffer, Link<av::sound::SampleBuffer>());
   AV_FC_ADD_FIELD(SpatMode, "");
-
+  AV_FC_ADD_FIELD(Priority, 1.0f);
 }
 
 /* virtual */
@@ -107,12 +110,24 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
   } else if (&field == &Velocity) {
     ::osg::Vec3f velocity = Velocity.getValue();
     for_each_local_source(&LocalSource::setVelocity, velocity);
+  } else if (&field == &Direction) {
+    ::osg::Vec3f direction = Direction.getValue();
+    for_each_local_source(&LocalSource::setDirection, direction);
+  } else if (&field == &ConeInnerAngle) {
+    float angle = ConeInnerAngle.getValue();
+    for_each_local_source(&LocalSource::setConeInnerAngle, angle);
+  } else if (&field == &ConeOuterAngle) {
+    float angle = ConeOuterAngle.getValue();
+    for_each_local_source(&LocalSource::setConeOuterAngle, angle);
   } else if (&field == &Gain) {
     float gain = Gain.getValue();
     for_each_local_source(&LocalSource::setGain, gain);
   } else if (&field == &Pitch) {
     float pitch = Pitch.getValue();
     for_each_local_source(&LocalSource::setPitch, pitch);
+  } else if (&field == &Priority) {
+    float priority = Priority.getValue();
+    for_each_local_source(&LocalSource::setPriority, priority);
   } else if (&field == &Play) {
     for_each_local_source(&LocalSource::play);
     mPollPlaying = true;
@@ -139,7 +154,11 @@ av::sound::SoundSource::initializeLocalSource(boost::shared_ptr<SoundSource::Loc
     localSource->setVelocity(Velocity.getValue());
     localSource->setGain(Gain.getValue());
     localSource->setPitch(Pitch.getValue());
-    localSource->setVelocity(Velocity.getValue());
+    localSource->setDirection(Direction.getValue());
+    localSource->setConeInnerAngle(ConeInnerAngle.getValue());
+    localSource->setConeOuterAngle(ConeOuterAngle.getValue());
+    localSource->setPriority(Priority.getValue());
+    
 }
 
 void

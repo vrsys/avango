@@ -65,6 +65,18 @@ namespace av {
          */
         av::osg::SFVec3   Velocity;
         /**
+         * The direction of the source.
+         */
+        av::osg::SFVec3   Direction;
+        /**
+         * The inner angle of the cone for a directional source (in deg)
+         */
+        SFFloat ConeInnerAngle;
+        /**
+         * The outer angle of the cone for a directional source (in deg)
+         */
+        SFFloat ConeOuterAngle;
+        /**
          * Gain for the sound source ( in dB )
          */
         SFFloat  Gain;
@@ -105,6 +117,10 @@ namespace av {
          * To distinguish between static and dynamic sound sources
          */
         SFString SpatMode;
+        /**
+         * for resource management
+         */
+        SFFloat Priority;
 
         /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
         /* virtual */ void evaluateLocalSideEffect();
@@ -150,6 +166,21 @@ namespace av {
              */
             virtual void setVelocity(const ::osg::Vec3f& velocity) {}
             /**
+             * Set direction of sound source
+             * @param direction The direction vector for this source
+             */
+            virtual void setDirection(const ::osg::Vec3f& direction) {}
+            /**
+             * Set inner angle of the cone for a directional sound source
+             * @param angle The inner angle for the cone
+             */
+            virtual void setConeInnerAngle(float angle) {}
+            /**
+             * Set outer angle of the cone for a directional sound source
+             * @param angle The outer angle for the cone
+             */
+            virtual void setConeOuterAngle(float angle) {}
+            /**
              * Set gain for this source
              * @param gain The gain value ( in dB)
              */
@@ -159,6 +190,11 @@ namespace av {
              * @param pitch The pitch value
              */
             virtual void setPitch(float pitch) {}
+            /**
+             * Set priority for this source
+             * @param priority The priority value
+             */
+            virtual void setPriority(float priority) {}
 
             /**
              * Start playback

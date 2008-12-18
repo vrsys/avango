@@ -38,8 +38,10 @@ namespace av
 {
   namespace osg
   {
+    typedef ::osg::Image OsgImage;
+
     /**
-     * Abstract Wrapper for ::osg::Image
+     * Wrapper for ::osg::Image
      *
      * \ingroup av_osg
      */
@@ -52,7 +54,8 @@ namespace av
       /**
        * Constructor.
        */
-      Image(::osg::Image* osgimage);
+      Image(OsgImage* osgimage = new OsgImage);
+      // use defined type to circumvent compiler bug in VS8
 
     protected:
 

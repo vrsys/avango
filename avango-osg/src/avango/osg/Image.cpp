@@ -30,9 +30,9 @@ AV_FC_DEFINE(av::osg::Image);
 AV_FIELD_DEFINE(av::osg::SFImage);
 AV_FIELD_DEFINE(av::osg::MFImage);
 
-av::osg::Image::Image(::osg::Image* osgdrawable) :
-  Object(osgdrawable),
-  mOsgImage(osgdrawable)
+av::osg::Image::Image(::osg::Image* osgimage) :
+  Object(osgimage),
+  mOsgImage(osgimage)
 {
 }
 
@@ -46,7 +46,7 @@ av::osg::Image::initClass()
   {
     av::osg::Object::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::Image, true);
+    AV_FC_INIT(av::osg::Object, av::osg::Image, true);
 
     SFImage::initClass("av::osg::SFImage", "av::Field");
     MFImage::initClass("av::osg::MFImage", "av::Field");

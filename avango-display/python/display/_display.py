@@ -74,7 +74,7 @@ def init(argv):
         print "not implemented."
         exit(0)
 
-    elif _display_type == "Cone":
+    elif _display_type == "iCone":
         # generate 4 _screen_transforms
         _screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0))
         _screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0))
@@ -254,7 +254,7 @@ def make_view(subdisplay=""):
                 osg_view.MasterCamera.value = camera
                 _composite_viewer.Views.value.append(osg_view)
 
-        elif _display_type == "Cone":
+        elif _display_type == "iCone":
             for i in range(0, len(_windows)):
                 osg_view = avango.osg.viewer.nodes.View()
                 osg_view.Scene.connect_from(display_view.Root)

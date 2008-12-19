@@ -62,6 +62,7 @@ sources = Split('''
     Text.cpp
     Texture.cpp
     Texture2D.cpp
+    Texture2DArray.cpp
     TexturedQuad.cpp
     Transform.cpp
     Types.cpp

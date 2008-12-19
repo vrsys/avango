@@ -55,6 +55,7 @@
 #include <avango/osg/Text.h>
 #include <avango/osg/Texture.h>
 #include <avango/osg/Texture2D.h>
+#include <avango/osg/Texture2DArray.h>
 #include <avango/osg/TexturedQuad.h>
 #include <avango/osg/Transform.h>
 #include <avango/osg/TriangleContainer.h>
@@ -100,6 +101,7 @@ av::osg::Init::initClass()
     av::osg::Text::initClass();
     av::osg::Texture::initClass();
     av::osg::Texture2D::initClass();
+    av::osg::Texture2DArray::initClass();
     av::osg::TexturedQuad::initClass();
     av::osg::Transform::initClass();
     av::osg::TriangleContainer::initClass();

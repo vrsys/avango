@@ -72,6 +72,7 @@
 #include "OSGLoadImage.h"
 #include "OSGTexture.h"
 #include "OSGTexture2D.h"
+#include "OSGTexture2DArray.h"
 
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)

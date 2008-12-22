@@ -23,30 +23,9 @@
 *                                                                        *
 \************************************************************************/
 
-#include <boost/python.hpp>
-#include <avango/python/register_field.h>
-#include <avango/osg/Transform.h>
-#include "OSGTransform.h"
+#ifndef AV_PYTHON_OSG_LINESEGMENTINTERSECTOR
+#define AV_PYTHON_OSG_LINESEGMENTINTERSECTOR
 
-using namespace boost::python;
-using namespace av::python;
+void init_OSGLineSegmentIntersector(void);
 
-namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
-
-void init_OSGTransform(void)
- {
-  // wrapping osg::Transform functionality
-  register_field<av::osg::SFTransform>("SFTransform");
-  register_multifield<av::osg::MFTransform>("MFTransform");
-  scope in_Transform = class_<av::osg::Transform, av::Link<av::osg::Transform>, bases<av::osg::Group>, boost::noncopyable >("Transform", "docstring", no_init)
-  ;
- }
+#endif

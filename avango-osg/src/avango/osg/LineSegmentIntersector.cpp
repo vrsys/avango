@@ -36,6 +36,7 @@ namespace
 }
 
 
+
 ::osg::Vec3
 av::osg::lineIntersect(::osg::Vec3 start, ::osg::Vec3 end, Link<Node> node)
 {
@@ -70,6 +71,10 @@ av::osg::LineSegmentIntersector::LineSegmentIntersector()
   AV_FC_ADD_FIELD(HitPoint,       ::osg::Vec3(0.0f,0.0f,0.0f));
   AV_FC_ADD_FIELD(HitNormal,      ::osg::Vec3(0.0f,0.0f,0.0f));
   AV_FC_ADD_FIELD(HitNodePath,    std::vector<Link<Node> >());
+
+  logger.addConsoleAppender();
+  ::av::logging::Level logLevel = ::av::logging::TRACE;
+  logger.setLevel(logLevel);
 }
 
 /* virtual */

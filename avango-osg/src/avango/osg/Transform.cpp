@@ -40,7 +40,9 @@ AV_FIELD_DEFINE(av::osg::MFTransform);
 av::osg::Transform::Transform(::osg::Transform* osgtransform) :
   Group(osgtransform),
   mOsgTransform(osgtransform)
-{}
+{
+  AV_FC_ADD_FIELD(ReferenceFrame,"RELATIVE_RF");
+}
 
 av::osg::Transform::~Transform()
 {}
@@ -56,6 +58,25 @@ av::osg::Transform::initClass()
 
     SFTransform::initClass("av::osg::SFTransform", "av::Field");
     MFTransform::initClass("av::osg::MFTransform", "av::Field");
+  }
+}
+
+void
+av::osg::Transform::fieldHasChangedLocalSideEffect(const av::Field& field)
+{
+  av::osg::Group::fieldHasChangedLocalSideEffect(field);
+  if (&field == &ReferenceFrame)
+  {
+    if(ReferenceFrame.getValue()=="RELATIVE_RF") {
+      mOsgTransform->setReferenceFrame(::osg::Transform::RELATIVE_RF);
+    } else if (ReferenceFrame.getValue()=="ABSOLUTE_RF") {
+      mOsgTransform->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
+    } else if (ReferenceFrame.getValue()=="ABSOLUTE_RF_INHERIT_VIEWPOINT") {
+      mOsgTransform->setReferenceFrame(::osg::Transform::ABSOLUTE_RF_INHERIT_VIEWPOINT);
+    } else {
+        logger.warn() << "fieldHadChangedLocalSideEffect(): unknown referenceFrame " << ReferenceFrame.getValue() << ". Reference frame not changed";
+    }
+
   }
 }
 

@@ -68,6 +68,13 @@ namespace av
 
     public:
 
+      // TODO: Wrap this as an int and utilize the boost::python enum wrapper
+      // String representing an enum for setting the reference frame of this transform
+      // valid options: RELATIVE_RF, ABSOLUTE_RF, ABSOLUTE_RF_INHERIT_VIEWPOINT
+      ::av::SFString ReferenceFrame;
+
+      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+
       /**
        * Get the wrapped ::osg::Transform.
        */

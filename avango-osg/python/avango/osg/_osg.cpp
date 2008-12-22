@@ -68,6 +68,7 @@
 #include "OSGAbsoluteTransform.h"
 #include "OSGTriangleContainer.h"
 #include "OSGProjection.h"
+#include "OSGLineSegmentIntersector.h"
 #include "OSGImage.h"
 #include "OSGLoadImage.h"
 #include "OSGTexture.h"
@@ -144,8 +145,10 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGAbsoluteTransform();
   init_OSGTriangleContainer();
   init_OSGProjection();
+  init_OSGLineSegmentIntersector();
   init_OSGImage();
   init_OSGLoadImage();
   init_OSGTexture();
   init_OSGTexture2D();
+
 }

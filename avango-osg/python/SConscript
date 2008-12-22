@@ -75,6 +75,7 @@ osg_files = Split("""
     avango/osg/OSGLoadImage.cpp
     avango/osg/OSGTexture.cpp
     avango/osg/OSGTexture2D.cpp
+    avango/osg/OSGLineSegmentIntersector.cpp
     """)
 
 if module_env['DISTRIBUTION_SUPPORT']:

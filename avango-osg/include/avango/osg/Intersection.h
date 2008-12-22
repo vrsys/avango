@@ -43,7 +43,7 @@ namespace av
      * Note that this object does not provide any information about the position of
      * the intersection point in the local coordinate system of the intersected node,
      * since this is most probably a osg object whose local coordinate system is not
-     * the desired one. Therefore calculate the position by yourself.
+     * the desired one. Therefore, you have to calculate the position yourself.
      * localPos = globalPos * InvAbsTransform (of the desired node)
      *
      * \ingroup av_osg

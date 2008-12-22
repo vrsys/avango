@@ -81,6 +81,7 @@ av::osg::Projection::getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event)
   *(event.getValuePtr()) = mOsgProjection->getMatrix();
 }
 
+
 /* virtual */ void
 av::osg::Projection::setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event)
 {

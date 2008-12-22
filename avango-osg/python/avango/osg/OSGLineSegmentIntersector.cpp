@@ -25,8 +25,8 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/osg/Transform.h>
-#include "OSGTransform.h"
+#include <avango/osg/LineSegmentIntersector.h>
+#include "OSGLineSegmentIntersector.h"
 
 using namespace boost::python;
 using namespace av::python;
@@ -42,11 +42,10 @@ namespace boost
    }
  }
 
-void init_OSGTransform(void)
- {
-  // wrapping osg::Transform functionality
-  register_field<av::osg::SFTransform>("SFTransform");
-  register_multifield<av::osg::MFTransform>("MFTransform");
-  scope in_Transform = class_<av::osg::Transform, av::Link<av::osg::Transform>, bases<av::osg::Group>, boost::noncopyable >("Transform", "docstring", no_init)
-  ;
- }
+void init_OSGLineSegmentIntersector(void)
+{
+  def("line_intersect", ::av::osg::lineIntersect);
+
+  // wrapping osg::LineSegmentIntersector functionality
+  class_<av::osg::LineSegmentIntersector, av::Link<av::osg::LineSegmentIntersector>, bases<av::Object>, boost::noncopyable >("LineSegmentIntersector", "docstring", no_init);
+}

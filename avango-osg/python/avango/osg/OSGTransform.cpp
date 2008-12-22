@@ -47,6 +47,6 @@ void init_OSGTransform(void)
   // wrapping osg::Transform functionality
   register_field<av::osg::SFTransform>("SFTransform");
   register_multifield<av::osg::MFTransform>("MFTransform");
-  scope in_Transform = class_<av::osg::Transform, av::Link<av::osg::Transform>, bases<av::osg::Group>, boost::noncopyable >("Transform", "docstring", no_init)
+  class_<av::osg::Transform, av::Link<av::osg::Transform>, bases<av::osg::Group>, boost::noncopyable >("Transform", "docstring", no_init)
   ;
  }

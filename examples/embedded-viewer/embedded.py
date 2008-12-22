@@ -33,6 +33,7 @@ class OSGViewer(object):
         window.add(container)
         window.show_all()
 
+        window.connect("destroy", gtk.mainquit)
 
     def draw_event(self, widget, event):
         alloc = self.draw.get_allocation()

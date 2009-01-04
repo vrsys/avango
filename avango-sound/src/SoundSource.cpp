@@ -47,7 +47,7 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(FinishedPlaying, false);
   AV_FC_ADD_FIELD(PlayTime, 0.0);
   AV_FC_ADD_FIELD(NewSampleBuffer, Link<av::sound::SampleBuffer>());
-  AV_FC_ADD_FIELD(SpatMode, "");
+  AV_FC_ADD_FIELD(Spatialize, true);
   AV_FC_ADD_FIELD(Priority, 1.0f);
 }
 
@@ -101,9 +101,9 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
     std::string url = URL.getValue();
     for_each_local_source(&LocalSource::setURL, url);
     PlayTime.setValue ( mLocalSources.empty() ? 0.0 : mLocalSources.front()->getPlayTime() );
-  } else if (&field == &SpatMode) {
-    std::string spatMode = SpatMode.getValue();
-    for_each_local_source(&LocalSource::setSpatMode, spatMode);
+  } else if (&field == &Spatialize) {
+    bool spatialize = Spatialize.getValue();
+    for_each_local_source(&LocalSource::setSpatialize, spatialize);
   } else if (&field == &Loop) {
     bool loop = Loop.getValue();
     for_each_local_source(&LocalSource::setLooping, loop);
@@ -148,7 +148,7 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
 void
 av::sound::SoundSource::initializeLocalSource(boost::shared_ptr<SoundSource::LocalSource> localSource)
 {
-    localSource->setSpatMode(SpatMode.getValue());
+    localSource->setSpatialize(Spatialize.getValue());
     localSource->setURL(URL.getValue());
     localSource->setLooping(Loop.getValue());
     localSource->setVelocity(Velocity.getValue());
@@ -158,7 +158,7 @@ av::sound::SoundSource::initializeLocalSource(boost::shared_ptr<SoundSource::Loc
     localSource->setConeInnerAngle(ConeInnerAngle.getValue());
     localSource->setConeOuterAngle(ConeOuterAngle.getValue());
     localSource->setPriority(Priority.getValue());
-    
+
 }
 
 void

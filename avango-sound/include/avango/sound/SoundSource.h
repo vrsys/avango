@@ -114,9 +114,9 @@ namespace av {
          */
         SFSampleBuffer NewSampleBuffer;
         /**
-         * To distinguish between static and dynamic sound sources
+         * To switch between a static or dynamic sound source
          */
-        SFString SpatMode;
+        SFBool Spatialize;
         /**
          * for resource management
          */
@@ -156,10 +156,10 @@ namespace av {
              */
             virtual void setURL(const std::string& url) = 0;
             /**
-             * Set spatial Mode of sound source
-             * @param spatMode The spatial Mode for this source
+             * Should sound source be spatial?
+             * @param spatialize Enable/Disable spatial sound source
              */
-            virtual void setSpatMode(const std::string& spatMode) {}
+            virtual void setSpatialize(bool spatialize) {}
             /**
              * Set velocity of sound source ( in m/s )
              * @param velocity The velocity vector for this source

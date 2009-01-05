@@ -1,0 +1,41 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of Avango.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# Avango is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# Avango is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+# Avango is a trademark owned by FhG.                                    #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango_env = avango.build.PythonEnvironment()
+
+Alias('all', Alias('display'))
+Alias('install', Alias('install-display'))
+
+av_display_python_files = Split("""
+    python/avango/display/__init__.py
+    python/avango/display/_device.py
+    python/avango/display/_display.py
+    python/avango/display/_view.py
+    """)
+av_display = avango_env.Install(avango.build.get_python_path('avango/display'), av_display_python_files)
+Alias('display', av_display)
+Alias('install-display', avango.build.get_python_path('avango'))

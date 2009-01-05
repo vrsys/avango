@@ -1,4 +1,4 @@
-import display
+import avango.display #FIXME remove cyclic dependency
 import avango.osg.viewer
 import getopt
 import sys

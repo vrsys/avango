@@ -43,7 +43,10 @@ opts.AddOptions(
                False),
     BoolOption('OPENAL_SUPPORT',
                'Enable building OpenAL sound module',
-               False)
+               False),
+    BoolOption('DISPLAY_SUPPORT',
+               'Enable building display setup module (EXPERIMENTAL)',
+               False),
     )
 
 avango.build.setup()
@@ -98,5 +101,7 @@ if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Wi
 if env['OPENAL_SUPPORT']:
     avango.build.SConscript('avango-openal/SConscript')
 avango.build.SConscript('avango-tools/SConscript')    
+if env['DISPLAY_SUPPORT']:
+    avango.build.SConscript('avango-display/SConscript')
 avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')

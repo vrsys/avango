@@ -23,4 +23,9 @@
 *                                                                        *
 \************************************************************************/
 
+#ifndef AV_PYTHON_OSG_NODE
+#define AV_PYTHON_OSG_NODE
+
 void init_OSGNode(void);
+
+#endif

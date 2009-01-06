@@ -47,6 +47,12 @@ opts.AddOptions(
     BoolOption('DISPLAY_SUPPORT',
                'Enable building display setup module (EXPERIMENTAL)',
                False),
+    BoolOption('CONNECT_SUPPORT',
+               'Enable building module to connect mobile devices to avango',
+               False),
+    BoolOption('CONNECT_CSHARP_SUPPORT',
+               'Enable C# support for the connect module',
+               False),
     )
 
 avango.build.setup()
@@ -103,5 +109,7 @@ if env['OPENAL_SUPPORT']:
 avango.build.SConscript('avango-tools/SConscript')    
 if env['DISPLAY_SUPPORT']:
     avango.build.SConscript('avango-display/SConscript')
+if env['CONNECT_SUPPORT']:
+    avango.build.SConscript('avango-connect/SConscript')
 avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')

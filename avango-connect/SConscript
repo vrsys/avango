@@ -1,0 +1,98 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+
+Alias('check', Alias('check-connect'))
+Alias('check-connect', Alias('check-connect-python'))
+Alias('check-connect', Alias('check-connect-csharp'))
+
+test_package_dir = 'python/test_package/'
+avango.build.Environment.prepend_python_path(Dir(test_package_dir).abspath)
+
+connect_files = Split("""
+    python/avango/connect/_MFString.py
+    python/avango/connect/_MFVec2.py
+    python/avango/connect/_MFVec3.py
+    python/avango/connect/_SFBool.py
+    python/avango/connect/_SFDouble.py
+    python/avango/connect/_SFInt.py
+    python/avango/connect/_SFString.py
+    python/avango/connect/__init__.py
+    python/avango/connect/_io.py
+    python/avango/connect/_nodes.py
+    python/avango/connect/_pipe.py
+    python/avango/connect/_registry.py
+    python/avango/connect/_server.py
+    """)
+
+av_connect = Install(avango.build.get_python_path('avango/connect'), connect_files)
+Alias('connect', av_connect)
+Alias('install-connect', avango.build.get_python_path('avango'))
+
+connect_test_files = Split("""
+    python/tests/TestField.py
+    python/tests/TestNodes.py
+    python/tests/TestPipe.py
+    python/tests/TestServer.py
+    python/tests/runtests.py
+    """)
+avango.build.install_python(test_package_dir+'avango/connect', connect_files)
+avango.build.install_python(test_package_dir+'tests/', connect_test_files)
+Install(test_package_dir+'tests/', "python/tests/fielddata")
+local_test_env = avango.build.TestEnvironment()
+check = local_test_env.Alias('test-connect-python', test_package_dir+'tests/runtests.pyc', 'python $SOURCE')
+AlwaysBuild(check)
+Alias('check-connect-python', check)
+Depends(check, test_package_dir)
+
+if local_test_env['CONNECT_CSHARP_SUPPORT']:
+    csharp_files = Split("""
+        csharp/connect/Connection.cs
+        csharp/connect/Field.cs
+        csharp/connect/IntField.cs
+        csharp/connect/StringField.cs
+        csharp/connect/MultiStringField.cs
+        csharp/connect/BoolField.cs
+        csharp/connect/DoubleField.cs
+        csharp/connect/MultiVec2Field.cs
+        csharp/connect/MultiVec3Field.cs
+        """)
+    csharp_tests = Split("""
+        csharp/tests/TestFields.cs
+        csharp/tests/TestThreads.cs
+        """)
+
+    csharp_env = Environment(tools=['default', 'CLI'], toolpath=['tools'])
+    csharp_env.Append(CSCFLAGS='-debug')
+     
+    connect_dll = csharp_env.CLILibrary('csharp/connect/connect.dll', csharp_files)
+
+    csharp_test_env = csharp_env.Clone()
+    csharp_test_env.Append(CILPKGS=['nunit'])
+    csharp_test_env.Append(CILLIBS=['connect'], CILLIBPATH=Dir('csharp/connect').abspath)
+    test_dll = csharp_test_env.CLILibrary('csharp/tests/tests.dll', csharp_tests)
+    Depends(test_dll, connect_dll)  # FIXME builder should do this automatically
+
+    # FIXME We need to force the v2 runtime library, as nunit is compiled against v1 ...
+    csharp_testrun_env = avango.build.TestEnvironment()
+    csharp_testrun_env['ENV']['MONO_PATH'] = Dir('csharp/connect').abspath
+    csharp_testrun_env['ENV']['TEST_DATA_PATH'] = Dir('python/tests').abspath
+    check_sharp = csharp_testrun_env.Alias('test-connect-sharp', test_dll,
+                                           "mono --debug --runtime=v2.0.50727"
+                                           " /usr/lib/nunit/nunit-console.exe"
+                                           " $SOURCE")
+    AlwaysBuild(check_sharp)
+    Alias('check-connect-csharp', check_sharp)

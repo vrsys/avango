@@ -42,6 +42,7 @@ def _setup_default():
         osgText
         osgUtil
         osgGA
+        osgFX
         sloow
         """
 

@@ -170,15 +170,15 @@ def make_dominant_user_device(user=0, interface="", subdisplay=""):
         identifiers contains the informations which target was identified and
         chosen as the active device.
     """
-    device = display.nodes.Device()
+    device = avango.display.nodes.Device()
     #TODO: add hardwired PDA-Device for Bernini
     if (_display_type == "TouchscreenEmulator" or _display_type == "TwoviewTouchscreenEmulator") and subdisplay == "Touchscreen":
         device.Matrix.connect_from(_touchscreen_camera.MouseNearTransform)
         device.Button1.connect_from(_touchscreen_camera.Window.value.MouseButtons_OnlyLeft)
     elif _display_type == "TwoView":
-        device.Matrix.connect_from(display.pda_sensor.Matrix)
+        device.Matrix.connect_from(avango.display.pda_sensor.Matrix)
     elif _dominant_user_device == "Wiimote1":
-        device.Matrix.connect_from(display.wiimote_atek_sensor.Matrix)
+        device.Matrix.connect_from(avango.display.wiimote_atek_sensor.Matrix)
     return device
 
 def make_non_dominant_user_device(user=0, interface="", subdisplay=""):
@@ -221,7 +221,7 @@ def make_view(subdisplay=""):
       - *Far* is the near clipping plane.
     """
 
-    display_view = display.nodes.View()
+    display_view = avango.display.nodes.View()
 
     singlescreen_displays = ["TwoView", "FakeTwoView", "Monitor", "TwoviewTouchscreenEmulator", "TouchscreenEmulator"]
 
@@ -305,7 +305,7 @@ class OsgViewHandler(avango.script.Script):
         if self.related_user == "1" and (self.UserSelector.value == "1" or self.UserSelector.value == ""):
             self.Window.value = _windows[0]
             if _display_type == "TwoView":
-                self.EyeTransform.connect_from(display.head_sensor_1.Matrix)
+                self.EyeTransform.connect_from(avango.display.head_sensor_1.Matrix)
             else:
                 self.EyeTransform.value = avango.osg.make_trans_mat(_eye_vec)
 
@@ -313,7 +313,7 @@ class OsgViewHandler(avango.script.Script):
             if len(_windows) >= 2:
                 self.Window.value = _windows[1]
                 if _display_type == "TwoView":
-                    self.EyeTransform.connect_from(display.head_sensor_2.Matrix)
+                    self.EyeTransform.connect_from(avango.display.head_sensor_2.Matrix)
                 else:
                     self.EyeTransform.value = avango.osg.make_trans_mat(_eye_vec)
         else:

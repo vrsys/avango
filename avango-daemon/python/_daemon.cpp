@@ -23,6 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
+#include <avango/Type.h>
 #include <avango/daemon/Config.h>
 #include <avango/daemon/DeviceDaemon.h>
 #include <avango/daemon/DeviceSensor.h>
@@ -60,6 +61,12 @@ namespace
 {
   boost::shared_ptr<av::daemon::StationSegment> mStationSegment(new av::daemon::StationSegment());
 
+  bool
+  doesTypeExist(std::string name)
+  {
+    return (av::Type::getByName(name) != av::Type::badType())? true : false; 
+  }
+  
   void
   addStation(av::daemon::Device* self, int number, std::string name)
   {
@@ -205,11 +212,16 @@ BOOST_PYTHON_MODULE(_daemon)
     .add_property("port", &::getPortFeature, &::setPortFeature)
     ;
 
+#ifdef VRPN_SUPPORT
   // Avango NG device: VRPNClient
   class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable >("_VRPNClientHelper",
     "A helper class used to construct a concrete Python VRPN client device representation.")
     .add_property("server", &::getServerFeature, &::setServerFeature)
     ;
+#endif
+
+  // wrap helper function
+  def("does_type_exist", &::doesTypeExist);
   
   // start the daemon
   def("run", &::run);

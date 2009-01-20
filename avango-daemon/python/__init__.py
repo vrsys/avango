@@ -77,7 +77,6 @@ from _daemon import _HIDHelper
 from _daemon import _WacomTabletHelper
 from _daemon import _WiimoteHelper
 from _daemon import _DTrackHelper
-from _daemon import _VRPNClientHelper
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::daemon::')
@@ -199,18 +198,21 @@ class DTrack(_DTrackHelper):
 
     stations = property(StationProxy)
 
-class VRPNClient(_VRPNClientHelper):
-    """Avango NG device for processing data sent by a VRPN server. This
-    client consists of vrpn_Tracker, vrpn_Button and vrpn_Analog devices."""
-    def __init__(self):
-        super(VRPNClient, self).__init__()
-        self._station = None
+if does_type_exist("av::daemon::VRPNClient"):
+    from _daemon import _VRPNClientHelper
 
-    def get_station(self):
-        return self._station
+    class VRPNClient(_VRPNClientHelper):
+        """Avango NG device for processing data sent by a VRPN server. This
+        client consists of vrpn_Tracker, vrpn_Button and vrpn_Analog devices."""
+        def __init__(self):
+            super(VRPNClient, self).__init__()
+            self._station = None
 
-    def set_station(self, st):
-        self._station = st
-        self.add_station(0, st.name)
+        def get_station(self):
+            return self._station
 
-    station = property(get_station, set_station)
+        def set_station(self, st):
+            self._station = st
+            self.add_station(0, st.name)
+
+        station = property(get_station, set_station)

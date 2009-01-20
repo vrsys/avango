@@ -53,6 +53,9 @@ opts.AddOptions(
     BoolOption('CONNECT_CSHARP_SUPPORT',
                'Enable C# support for the connect module',
                False),
+    BoolOption('VRPN_SUPPORT',
+               'Enable VRPN support for the AvangoDaemon module',
+               False),
     )
 
 avango.build.setup()

@@ -25,6 +25,8 @@
 
 import avango.build
 
+daemon_env = avango.build.Environment()
+
 # Sources section
 lib_sources = Split('''
     Device.cpp
@@ -45,6 +47,11 @@ lib_sources = Split('''
     WiimoteActuator.cpp
     ''')
 
+if daemon_env['VRPN_SUPPORT']:
+    lib_sources += Split('''
+        VRPNClient.cpp
+        ''')
+
 # append external sources
 lib_sources.append(Split('''
     dtrack/dtrack.cpp
@@ -53,11 +60,14 @@ lib_sources.append(Split('''
 #bin_source = ['DeviceDaemon.cpp']
 
 # Rules section
-daemon_env = avango.build.Environment()
 if 'icpc' in daemon_env['CXX']:
     daemon_env.Append(CXXFLAGS='-wd593')
 avango.build.add_library(daemon_env, 'avango-core')
 avango.build.add_library(daemon_env, 'avango-osg')
+
+if daemon_env['VRPN_SUPPORT']:
+    avango.build.add_library(daemon_env, 'vrpn')
+
 lib = daemon_env.SharedLibrary('avangoDaemon', lib_sources)
 
 avango.build.Environment.prepend_library_path(Dir('.').abspath)

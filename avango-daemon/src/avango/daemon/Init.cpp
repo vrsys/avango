@@ -27,6 +27,7 @@
 
 #include <avango/Logger.h>
 
+#include <avango/daemon/Config.h>
 #include <avango/daemon/Device.h>
 #include <avango/daemon/DeviceActuator.h>
 #include <avango/daemon/DeviceDaemon.h>
@@ -37,6 +38,10 @@
 #include <avango/daemon/WacomTablet.h>
 #include <avango/daemon/Wiimote.h>
 #include <avango/daemon/WiimoteActuator.h>
+
+#ifdef VRPN_SUPPORT
+#include <avango/daemon/VRPNClient.h>
+#endif
 
 namespace
 {
@@ -60,6 +65,10 @@ av::daemon::Init::initClass()
     av::daemon::WacomTablet::initClass();
     av::daemon::Wiimote::initClass();
     av::daemon::WiimoteActuator::initClass();
+
+#ifdef VRPN_SUPPORT
+    av::daemon::VRPNClient::initClass();
+#endif
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
   }

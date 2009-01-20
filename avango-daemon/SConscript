@@ -32,6 +32,7 @@ daemon_env = avango.build.Environment()
 daemon_env['SUBST'] = {
     'PREFIX': avango.build.get_prefix().abspath,
     'AVANGO_DAEMON_DEBUG': int(daemon_env['DEBUG']),
+    'AVANGO_DAEMON_VRPN_SUPPORT': int(daemon_env['VRPN_SUPPORT']),
     'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
     'AVANGO_DAEMON_VERSION': '1.90.0',
     'AVANGO_DAEMON_VERSION_MAJOR': '1',

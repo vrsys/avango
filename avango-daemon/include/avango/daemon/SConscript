@@ -43,5 +43,10 @@ headers = Split('''
     Wiimote.h
     WiimoteActuator.h
     ''')
+ 
+if avango.build.Environment()['VRPN_SUPPORT']:
+    headers += Split('''
+        VRPNClient.h
+        ''')
 
 Alias('install-daemon', Install(avango.build.get_include_path('avango/daemon'), headers))

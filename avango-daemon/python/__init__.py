@@ -58,12 +58,17 @@ DTrack
 WacomTablet
     To communicate with a Wacom tablet.
 
+VRPNClient
+    A VRPN client consisting of vrpn_Tracker, vrpn_Button and vrpn_Analog devices.
+    Note: This device is linked to the vrpn library.
+    (http://www.cs.unc.edu/Research/vrpn)
+
 
 Examples
 ========
 
-There are some basic examples that show the configuration and usage of
-these input devices in examples/daemon within your Avango NG installation.
+There are some basic examples within your Avango NG installation,
+that show the configuration and usage of these input devices.
 '''
 
 from _daemon import *
@@ -72,6 +77,7 @@ from _daemon import _HIDHelper
 from _daemon import _WacomTabletHelper
 from _daemon import _WiimoteHelper
 from _daemon import _DTrackHelper
+from _daemon import _VRPNClientHelper
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::daemon::')
@@ -192,3 +198,19 @@ class DTrack(_DTrackHelper):
             return self._dtrack.add_station(key, st.name)
 
     stations = property(StationProxy)
+
+class VRPNClient(_VRPNClientHelper):
+    """Avango NG device for processing data sent by a VRPN server. This
+    client consists of vrpn_Tracker, vrpn_Button and vrpn_Analog devices."""
+    def __init__(self):
+        super(VRPNClient, self).__init__()
+        self._station = None
+
+    def get_station(self):
+        return self._station
+
+    def set_station(self, st):
+        self._station = st
+        self.add_station(0, st.name)
+
+    station = property(get_station, set_station)

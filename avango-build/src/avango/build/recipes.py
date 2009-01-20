@@ -73,7 +73,8 @@ def _setup_default():
 
     #add common libs (plain)
     _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))
-
+    _config_store.set('vrpn', PlainConfig(libraries = ['vrpn']))
+    
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))
     _config_store.set('GL', PlainConfig(libraries = ['']))

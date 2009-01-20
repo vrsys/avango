@@ -23,6 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
+#include <avango/daemon/Config.h>
 #include <avango/daemon/DeviceDaemon.h>
 #include <avango/daemon/DeviceSensor.h>
 #include <avango/daemon/DeviceService.h>
@@ -36,6 +37,10 @@
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
+
+#ifdef VRPN_SUPPORT
+#include <avango/daemon/VRPNClient.h>
+#endif
 
 using namespace boost::python;
 using namespace av::python;
@@ -74,7 +79,8 @@ namespace
   std::string getTimeoutFeature(av::daemon::Device* self) { return self->queryFeature("timeout"); }
   std::string getPortFeature(av::daemon::Device* self) { return self->queryFeature("port"); }
   std::string getToggleResetFeature(av::daemon::Device* self) { return self->queryFeature("toggle-reset"); }
-
+  std::string getServerFeature(av::daemon::Device* self) { return self->queryFeature("server"); }
+  
   // wrapper for specialized configureFeature calls, required by .add_property
   std::string parseBoolString(std::string value)
   {
@@ -90,7 +96,8 @@ namespace
   void setTimeoutFeature(av::daemon::Device* self, std::string value) { self->configureFeature("timeout", value); }
   void setPortFeature(av::daemon::Device* self, std::string value) { self->configureFeature("port", value); }
   void setToggleResetFeature(av::daemon::Device* self, std::string value) { self->configureFeature("toggle-reset", parseBoolString(value)); }
-
+  void setServerFeature(av::daemon::Device* self, std::string value) { self->configureFeature("server", value); }
+  
   // set LED states
   void setLED(av::daemon::HIDInput* self, int number, int value)
   {
@@ -198,6 +205,12 @@ BOOST_PYTHON_MODULE(_daemon)
     .add_property("port", &::getPortFeature, &::setPortFeature)
     ;
 
+  // Avango NG device: VRPNClient
+  class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable >("_VRPNClientHelper",
+    "A helper class used to construct a concrete Python VRPN client device representation.")
+    .add_property("server", &::getServerFeature, &::setServerFeature)
+    ;
+  
   // start the daemon
   def("run", &::run);
 }

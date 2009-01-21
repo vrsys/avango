@@ -141,7 +141,7 @@ if '-c' in sys.argv or '--clean' in sys.argv or '--remove' in sys.argv:
     _do_parse_config = False
 
 def build_default_options():
-    result = scons.Options('localdefs.py')
+    result = scons.Options(['sitedefs.py', 'localdefs.py'])
     result.AddOptions(
         scons.PathOption('BUILD', 'Build path', '.', scons.PathOption.PathIsDirCreate),
         ('CXX','C++ compiler'),

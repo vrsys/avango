@@ -38,6 +38,7 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(Direction, ::osg::Vec3f(0,0,0));
   AV_FC_ADD_FIELD(ConeInnerAngle, 360.0f);
   AV_FC_ADD_FIELD(ConeOuterAngle, 360.0f);
+  AV_FC_ADD_FIELD(ConeOuterGain, 0.0);
   AV_FC_ADD_FIELD(Gain, 1.0f);
   AV_FC_ADD_FIELD(Pitch, 1.0f);
   AV_FC_ADD_FIELD(Play, false);
@@ -49,6 +50,7 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(NewSampleBuffer, Link<av::sound::SampleBuffer>());
   AV_FC_ADD_FIELD(Spatialize, true);
   AV_FC_ADD_FIELD(Priority, 1.0f);
+  AV_FC_ADD_FIELD(Free, false);
 }
 
 /* virtual */
@@ -119,6 +121,9 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
   } else if (&field == &ConeOuterAngle) {
     float angle = ConeOuterAngle.getValue();
     for_each_local_source(&LocalSource::setConeOuterAngle, angle);
+  } else if (&field == &ConeOuterGain) {
+    float gain = ConeOuterGain.getValue();
+    for_each_local_source(&LocalSource::setConeOuterGain, gain);
   } else if (&field == &Gain) {
     float gain = Gain.getValue();
     for_each_local_source(&LocalSource::setGain, gain);
@@ -128,6 +133,8 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
   } else if (&field == &Priority) {
     float priority = Priority.getValue();
     for_each_local_source(&LocalSource::setPriority, priority);
+  } else if (&field == &Free) {
+    for_each_local_source(&LocalSource::setFree);
   } else if (&field == &Play) {
     for_each_local_source(&LocalSource::play);
     mPollPlaying = true;
@@ -157,6 +164,7 @@ av::sound::SoundSource::initializeLocalSource(boost::shared_ptr<SoundSource::Loc
     localSource->setDirection(Direction.getValue());
     localSource->setConeInnerAngle(ConeInnerAngle.getValue());
     localSource->setConeOuterAngle(ConeOuterAngle.getValue());
+    localSource->setConeOuterGain(ConeOuterGain.getValue());
     localSource->setPriority(Priority.getValue());
 
 }

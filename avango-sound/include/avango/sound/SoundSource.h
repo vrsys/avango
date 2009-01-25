@@ -77,6 +77,10 @@ namespace av {
          */
         SFFloat ConeOuterAngle;
         /**
+         * The outer gain of the cone for a directional source
+         */
+        SFFloat ConeOuterGain;
+        /**
          * Gain for the sound source ( in dB )
          */
         SFFloat  Gain;
@@ -121,6 +125,8 @@ namespace av {
          * for resource management
          */
         SFFloat Priority;
+
+        SFBool Free;
 
         /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
         /* virtual */ void evaluateLocalSideEffect();
@@ -181,6 +187,11 @@ namespace av {
              */
             virtual void setConeOuterAngle(float angle) {}
             /**
+             * Set outer gain of the cone for a directional sound source
+             * @param gain The outer gain for the cone
+             */
+            virtual void setConeOuterGain(float gain) {}
+            /**
              * Set gain for this source
              * @param gain The gain value ( in dB)
              */
@@ -195,6 +206,8 @@ namespace av {
              * @param priority The priority value
              */
             virtual void setPriority(float priority) {}
+
+            virtual void setFree() {}
 
             /**
              * Start playback

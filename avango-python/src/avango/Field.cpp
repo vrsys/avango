@@ -44,6 +44,11 @@ namespace
     self->connectFrom(other, true);
   }
 
+  void connect_weak_from(av::Field* self, av::Field* other)
+  {
+    self->connectFrom(other, false);
+  }
+
   list
   FieldGetConnectedFields(av::Field* self)
   {
@@ -65,6 +70,7 @@ void init_Field(void)
     .def("get_container", &av::Field::getContainer, return_internal_reference<>())
     .def("connect_from", &av::Field::connectFrom)
     .def("connect_from", connect_from_dependant)
+    .def("connect_weak_from", connect_weak_from)
     .def("disconnect", disconnect_void)
     .def("disconnect_from", disconnect_from)
     .def("get_connected_fields", FieldGetConnectedFields)

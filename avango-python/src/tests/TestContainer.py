@@ -44,8 +44,8 @@ class TestContainer(avango.script.Container):
         node2 = self.register_internal_node(DoubleValue())
         node2.Input.connect_from(node1.Output)
 
-        node1.Input.connect_from(self.Input, False)
-        self.Output.connect_from(node2.Output, False)
+        node1.Input.connect_weak_from(self.Input)
+        self.Output.connect_weak_from(node2.Output)
 
 
 class ContainerTestCase(unittest.TestCase):

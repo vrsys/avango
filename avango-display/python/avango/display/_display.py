@@ -1,4 +1,5 @@
 import avango.display #FIXME remove cyclic dependency
+import avango.daemon
 import avango.osg.viewer
 import getopt
 import sys
@@ -12,7 +13,6 @@ _screen_transforms = []                 # Cone has 4 Screens
 _eye_vec = avango.osg.Vec3(0, 1.7, 0)
 _touchscreen_camera = None
 _touchscreen_window = None
-_dominant_user_device = ""
 
 def get_display_type():
     return _display_type
@@ -113,6 +113,15 @@ def init(argv):
 
     return argv
 
+def get_num_users(subdisplay=""):
+    if _display_type == "TwoView":
+        return 2
+    return 1
+
+# TODO move this elsewhere
+_perf2osg = avango.osg.make_rot_mat(radians(-90), 1, 0, 0)
+_device_service = avango.daemon.DeviceService()
+
 def make_user(user=0, interface="", subdisplay=""):
     """Create a field container that represents the user position.
     
@@ -139,7 +148,25 @@ def make_user(user=0, interface="", subdisplay=""):
         identifiers contains the informations which target was identified and
         chosen as the active user.
     """
-    pass
+
+    user = avango.display.nodes.User()
+
+    def create_glasses(name, receiver_offset):
+        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = _device_service,
+                                                  Station = name)
+        sensor.ReceiverOffset.value = avango.osg.make_trans_mat(receiver_offset)
+        sensor.TransmitterOffset.value = _perf2osg
+        return sensor
+
+    if _display_type == "TwoView":
+        if user == 0:
+            view1_yellow_glasses = create_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
+            user.Matrix.connect_from(view1_yellow_glasses.Matrix)
+        elif user == 1:
+            view2_blue_glasses = create_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
+            user.Matrix.connect_from(view2_blue_glasses.Matrix)
+        
+    return user
 
 def make_dominant_user_device(user=0, interface="", subdisplay=""):
     """Create a field container that represents the device held in the dominant
@@ -171,14 +198,15 @@ def make_dominant_user_device(user=0, interface="", subdisplay=""):
         chosen as the active device.
     """
     device = avango.display.nodes.Device()
-    #TODO: add hardwired PDA-Device for Bernini
     if (_display_type == "TouchscreenEmulator" or _display_type == "TwoviewTouchscreenEmulator") and subdisplay == "Touchscreen":
         device.Matrix.connect_from(_touchscreen_camera.MouseNearTransform)
         device.Button1.connect_from(_touchscreen_camera.Window.value.MouseButtons_OnlyLeft)
     elif _display_type == "TwoView":
-        device.Matrix.connect_from(avango.display.pda_sensor.Matrix)
-    elif _dominant_user_device == "Wiimote1":
-        device.Matrix.connect_from(avango.display.wiimote_atek_sensor.Matrix)
+        pda_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = _device_service,
+                                                      Station = "ve-dtrack-pda2")
+        pda_sensor.TransmitterOffset.value = _perf2osg
+        pda_sensor.ReceiverOffset.value = avango.osg.make_trans_mat(0.076, -0.016, 0.025)
+        device.Matrix.connect_from(pda_sensor.Matrix)
     return device
 
 def make_non_dominant_user_device(user=0, interface="", subdisplay=""):
@@ -227,7 +255,7 @@ def make_view(subdisplay=""):
 
     if subdisplay == "":
         if _display_type in singlescreen_displays:
-            for user_counter in range(0, 2):
+            for user_counter in range(0, 1): # FIXME Removed full build for both users. Needs rewrite!
                 osg_view = avango.osg.viewer.nodes.View()
                 osg_view.Scene.connect_from(display_view.Root)
 
@@ -338,16 +366,17 @@ class SplitscreenHandling(avango.script.Script):
         self.screenheight = 2.4
 
     def evaluate(self):
-        x = 1-self.ViewportIn.value.z
+        viewport_in = self.ViewportIn.value
+        x = 1-viewport_in.z
 
         x_trans = 0
         y_trans = 0
         z_trans = 0
 
-        x = self.ViewportIn.value.x
-        y = self.ViewportIn.value.y
-        z = self.ViewportIn.value.z
-        w = self.ViewportIn.value.w
+        x = viewport_in.x
+        y = viewport_in.y
+        z = viewport_in.z
+        w = viewport_in.w
         self.ViewportOut.value = avango.osg.Vec4(x, y,z-x, w-y)
 
         old_center_x = 0.5*self.screenwidth

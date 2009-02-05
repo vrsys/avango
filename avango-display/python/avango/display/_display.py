@@ -10,6 +10,7 @@ _composite_viewer = avango.osg.viewer.nodes.CompositeViewer()
 _windows = []                           # How to use Windows?
 _two_view_walls = [":0.0", ":0.0"]      # needed for Twopipe/Onepipe Mode
 _screen_transforms = []                 # Cone has 4 Screens
+_screen_sizes = []
 _eye_vec = avango.osg.Vec3(0, 1.7, 0)
 _touchscreen_camera = None
 _touchscreen_window = None
@@ -267,6 +268,7 @@ def make_view(subdisplay=""):
                 osg_view.Scene.connect_from(display_view.Root)
 
                 screen_transform = _screen_transforms[0]
+                screen_size = _screen_sizes[0]
 
                 camera = avango.osg.viewer.nodes.Camera()
                 camera.EyeOffset.value = 0.03
@@ -274,8 +276,9 @@ def make_view(subdisplay=""):
                 camera.Near.connect_from(display_view.Near)
                 camera.Far.connect_from(display_view.Far)
 
-                splitscreen_handling = SplitscreenHandling()
+                splitscreen_handling = ViewportConverter()
                 splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
+                splitscreen_handling.ScreenSizeIn.value = screen_size
                 splitscreen_handling.ScreenTransformIn.value = screen_transform
                 camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
                 camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
@@ -294,6 +297,7 @@ def make_view(subdisplay=""):
             osg_view.Scene.connect_from(display_view.Root)
 
             screen_transform = _screen_transforms[0]
+            screen_size = _screen_sizes[0]
 
             camera = avango.osg.viewer.nodes.Camera()
             camera.EyeOffset.value = -0.03  # TODO for broken stereo setup
@@ -301,8 +305,9 @@ def make_view(subdisplay=""):
             camera.Near.connect_from(display_view.Near)
             camera.Far.connect_from(display_view.Far)
 
-            splitscreen_handling = SplitscreenHandling()
+            splitscreen_handling = ViewportConverter()
             splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
+            splitscreen_handling.ScreenSizeIn.value = screen_size
             splitscreen_handling.ScreenTransformIn.value = screen_transform
             camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
             camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
@@ -387,17 +392,17 @@ class OsgViewHandler(avango.script.Script):
                 self.EyeTransform.value = avango.osg.make_trans_mat(_eye_vec)
 
 
-class SplitscreenHandling(avango.script.Script):
+class ViewportConverter(avango.script.Script):
+
+    """Given a (relative) Viewport (i.e. as rectangular section of a window)
+    as new Transformation and (camera) Viewport is calculated that is 
+    correctly aligned with the user eyepoint."""
 
     ViewportIn = avango.osg.SFVec4()
     ViewportOut = avango.osg.SFVec4()
+    ScreenSizeIn = avango.osg.SFVec2()
     ScreenTransformIn = avango.osg.SFMatrix()
     ScreenTransformOut = avango.osg.SFMatrix()
-
-    def __init__(self):
-        self.ScreenTransformIn.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
-        self.screenwidth = 3.
-        self.screenheight = 2.4
 
     def evaluate(self):
         viewport_in = self.ViewportIn.value
@@ -413,12 +418,14 @@ class SplitscreenHandling(avango.script.Script):
         w = viewport_in.w
         self.ViewportOut.value = avango.osg.Vec4(x, y,z-x, w-y)
 
-        old_center_x = 0.5*self.screenwidth
-        new_center_x = (x + (z-x) / 2) * self.screenwidth
+        screen_width = self.ScreenSizeIn.value.x
+        screen_height = self.ScreenSizeIn.value.y
+        old_center_x = 0.5*screen_width
+        new_center_x = (x + (z-x) / 2) * screen_width
         x_trans = new_center_x - old_center_x
 
-        old_center_y = 0.5*self.screenheight
-        new_center_y = (y + (w-y) / 2) * self.screenheight
+        old_center_y = 0.5*screen_height
+        new_center_y = (y + (w-y) / 2) * screen_height
         y_trans = new_center_y - old_center_y
 
         self.ScreenTransformOut.value = avango.osg.make_trans_mat(x_trans, y_trans, z_trans) * self.ScreenTransformIn.value
@@ -438,4 +445,5 @@ def _make_window(x_position, y_position, width, height, real_width, real_height,
     window.WantedPositionY.value = y_position
     window.AutoHeight.value = False
     window.QuadBufferStereo.value = use_stereo
+    _screen_sizes.append(avango.osg.Vec2(real_width, real_height))
     return window

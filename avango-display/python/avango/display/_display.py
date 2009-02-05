@@ -104,6 +104,13 @@ def init(argv):
         _touchscreen_window = _make_window(0, 0, 1280, 1024, 6, 2.4, False, "labws2:0.0")
         _touchscreen_window.Name.value = "Touchscreen"
 
+    elif _display_type == "Wall":
+        _screen_transforms.append(avango.osg.make_trans_mat(0, 1.6+0.15, -1.2))
+
+        # Viewer 1
+        _windows.append(_make_window(0, 0, 800, 600, 1.2, 0.9, True))
+        _windows[0].Name.value = ""
+
     else:
         # Viewer 1
         _screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
@@ -281,6 +288,33 @@ def make_view(subdisplay=""):
 
                 osg_view.MasterCamera.value = camera
                 _composite_viewer.Views.value.append(osg_view)
+
+        elif _display_type == "Wall":
+            osg_view = avango.osg.viewer.nodes.View()
+            osg_view.Scene.connect_from(display_view.Root)
+
+            screen_transform = _screen_transforms[0]
+
+            camera = avango.osg.viewer.nodes.Camera()
+            camera.EyeOffset.value = -0.03  # TODO for broken stereo setup
+            camera.ViewerTransform.connect_from(display_view.Camera)
+            camera.Near.connect_from(display_view.Near)
+            camera.Far.connect_from(display_view.Far)
+
+            splitscreen_handling = SplitscreenHandling()
+            splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
+            splitscreen_handling.ScreenTransformIn.value = screen_transform
+            camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
+            camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
+
+            osg_view_handler = OsgViewHandler()
+            osg_view_handler.related_user = "1"
+            osg_view_handler.UserSelector.connect_from(display_view.UserSelector)
+            camera.Window.connect_from(osg_view_handler.Window)
+            camera.EyeTransform.connect_from(osg_view_handler.EyeTransform)
+
+            osg_view.MasterCamera.value = camera
+            _composite_viewer.Views.value.append(osg_view)
 
         elif _display_type == "iCone":
             for i in range(0, len(_windows)):

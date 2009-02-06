@@ -27,15 +27,12 @@
 
 #include <avango/Logger.h>
 
+#include <osg/Version>
 #include <osg/DeleteHandler>
 
 #if !defined(_WIN32)
 #include <osgViewer/api/X11/GraphicsWindowX11>
 #include <osgViewer/api/X11/PixelBufferX11>
-
-#ifdef OSGVIEWER_USE_XRANDR
-#include <X11/extensions/Xrandr.h>
-#endif
 
 #else
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
@@ -49,31 +46,31 @@ extern "C"
 
   int X11ErrorHandling(Display* display, XErrorEvent* event)
   {
-    osg::notify(osg::NOTICE) << "Got an X11ErrorHandling call display = " << display
-                             << " event = " << event << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Got an X11ErrorHandling call display = " << display
+                                 << " event = " << event << std::endl;
 
     char buffer[256];
     XGetErrorText(display, event->error_code, buffer, 256);
 
-    osg::notify(osg::NOTICE) << buffer << std::endl;
-    osg::notify(osg::NOTICE) << "Major opcode: " << (int)event->request_code << std::endl;
-    osg::notify(osg::NOTICE) << "Minor opcode: " << (int)event->minor_code << std::endl;
-    osg::notify(osg::NOTICE) << "Error code: " << (int)event->error_code << std::endl;
-    osg::notify(osg::NOTICE) << "Request serial: " << event->serial << std::endl;
-    osg::notify(osg::NOTICE) << "Current serial: " << NextRequest( display ) - 1 << std::endl;
+    ::osg::notify(::osg::NOTICE) << buffer << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Major opcode: " << (int)event->request_code << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Minor opcode: " << (int)event->minor_code << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Error code: " << (int)event->error_code << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Request serial: " << event->serial << std::endl;
+    ::osg::notify(::osg::NOTICE) << "Current serial: " << NextRequest( display ) - 1 << std::endl;
 
     switch(event->error_code)
     {
       case BadValue:
-        osg::notify(osg::NOTICE) << "  Value: " << event->resourceid << std::endl;
+        ::osg::notify(::osg::NOTICE) << "  Value: " << event->resourceid << std::endl;
         break;
 
       case BadAtom:
-        osg::notify(osg::NOTICE) << "  AtomID: " << event->resourceid << std::endl;
+        ::osg::notify(::osg::NOTICE) << "  AtomID: " << event->resourceid << std::endl;
         break;
 
       default:
-        osg::notify(osg::NOTICE) << "  ResourceID: " << event->resourceid << std::endl;
+        ::osg::notify(::osg::NOTICE) << "  ResourceID: " << event->resourceid << std::endl;
         break;
     }
 
@@ -93,102 +90,15 @@ namespace
   class GraphicsWindowX11NoEvents : public osgViewer::GraphicsWindowX11
   {
   public:
-    GraphicsWindowX11NoEvents(osg::GraphicsContext::Traits* traits):
+    GraphicsWindowX11NoEvents(::osg::GraphicsContext::Traits* traits):
       GraphicsWindowX11(traits)
     {}
 
     /* virtual */ void checkEvents() {}
   };
 
-  class X11WindowingSystemInterface : public osg::GraphicsContext::WindowingSystemInterface
+  class X11WindowingSystemInterface : public ::osg::GraphicsContext::WindowingSystemInterface
   {
-#ifdef OSGVIEWER_USE_XRANDR
-
-    bool _setScreen(const osg::GraphicsContext::ScreenIdentifier& si,
-                    unsigned int width, unsigned height, double rate)
-    {
-      Display* display = XOpenDisplay(si.displayName().c_str());
-      if (display)
-      {
-        XRRScreenConfiguration* sc = XRRGetScreenInfo(display, RootWindow(display, si.screenNum));
-
-        if (!sc)
-        {
-          osg::notify(osg::NOTICE) << "Unable to create XRRScreenConfiguration on display \""
-                                   << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
-          return false;
-        }
-
-        int      numScreens = 0;
-        int      numRates   = 0;
-        Rotation currentRot = 0;
-        bool     okay       = false;
-
-        XRRConfigRotations(sc, &currentRot);
-
-        // If the width or height are zero, use our defaults.
-        if (!width || !height)
-        {
-          getScreenResolution(si, width, height);
-        }
-
-        // If this somehow fails, okay will still be false, no iteration will take place below,
-        // and the sc pointer will still be freed later on.
-        XRRScreenSize* ss = XRRConfigSizes(sc, &numScreens);
-
-        for (int i = 0; i < numScreens; i++)
-        {
-          if (ss[i].width == static_cast<int>(width) && ss[i].height == static_cast<int>(height))
-          {
-            short* rates     = XRRConfigRates(sc, i, &numRates);
-            bool   rateFound = false;
-
-            // Search for our rate in the list of acceptable rates given to us by Xrandr.
-            // If it's not found, rateFound will still be false and the call will never
-            // be made to XRRSetScreenConfigAndRate since the rate will be invalid.
-            for (int r = 0; r < numRates; r++)
-            {
-              if (rates[r] == static_cast<short>(rate))
-              {
-                rateFound = true;
-                break;
-              }
-            }
-
-            if (rate > 0.0f && !rateFound)
-            {
-              osg::notify(osg::NOTICE) << "Unable to find valid refresh rate " << rate
-                                       << " on display \"" << XDisplayName(si.displayName().c_str())
-                                       << "\"." << std::endl;
-            }
-            else if (XRRSetScreenConfigAndRate(display, sc, DefaultRootWindow(display), i,
-                     currentRot, static_cast<short>(rate), CurrentTime) != RRSetConfigSuccess)
-            {
-              osg::notify(osg::NOTICE) << "Unable to set resolution to " << width << "x" << height
-                                       << " on display \"" << XDisplayName(si.displayName().c_str())
-                                       << "\"." << std::endl;
-            }
-            else
-            {
-              okay = true;
-              break;
-            }
-          }
-        }
-
-        XRRFreeScreenConfigInfo(sc);
-
-        return okay;
-      }
-      else
-      {
-        osg::notify(osg::NOTICE) << "Unable to open display \""
-                                 << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
-        return false;
-      }
-    }
-
-#endif // OSGVIEWER_USE_XRANDR
 
   protected:
 
@@ -198,7 +108,7 @@ namespace
 
     X11WindowingSystemInterface()
     {
-      osg::notify(osg::INFO) << "X11WindowingSystemInterface()" << std::endl;
+      ::osg::notify(::osg::INFO) << "X11WindowingSystemInterface()" << std::endl;
 
       // Install an X11 error handler, if the application has not already done so.
 
@@ -223,10 +133,10 @@ namespace
 
     ~X11WindowingSystemInterface()
     {
-      if (osg::Referenced::getDeleteHandler())
+      if (::osg::Referenced::getDeleteHandler())
       {
-        osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(0);
-        osg::Referenced::getDeleteHandler()->flushAll();
+        ::osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(0);
+        ::osg::Referenced::getDeleteHandler()->flushAll();
       }
 
       // Unset our X11 error handler, providing the application has not replaced it.
@@ -242,25 +152,79 @@ namespace
       }
     }
 
-    virtual unsigned int getNumScreens(const osg::GraphicsContext::ScreenIdentifier& si)
+    virtual unsigned int getNumScreens(const ::osg::GraphicsContext::ScreenIdentifier& si)
     {
       Display* display = XOpenDisplay(si.displayName().c_str());
       if (display)
       {
         unsigned int numScreens = ScreenCount(display);
         XCloseDisplay(display);
-
         return numScreens;
       }
       else
       {
-        osg::notify(osg::NOTICE) << "A Unable to open display \""
-                                 << XDisplayName(si.displayName().c_str()) << "\"" << std::endl;
+        ::osg::notify(::osg::NOTICE) << "A Unable to open display \""
+                                     << XDisplayName(si.displayName().c_str()) << "\"" << std::endl;
         return 0;
       }
     }
 
-    virtual void getScreenResolution(const osg::GraphicsContext::ScreenIdentifier& si,
+#if (OPENSCENEGRAPH_MAJOR_VERSION == 2) && (OPENSCENEGRAPH_MINOR_VERSION > 6)
+    bool supportsRandr(Display* display) const
+    {
+      return false;
+    }
+
+    virtual void getScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
+                                    ::osg::GraphicsContext::ScreenSettings & resolution)
+    {
+      Display* display = XOpenDisplay(si.displayName().c_str());
+      if (display)
+      {
+        resolution.width = DisplayWidth(display, si.screenNum);
+        resolution.height = DisplayHeight(display, si.screenNum);
+        resolution.colorDepth = DefaultDepth(display, si.screenNum);
+        resolution.refreshRate = 0;            // Missing call. Need a X11 expert.
+
+        XCloseDisplay(display);
+      }
+      else
+      {
+        ::osg::notify(::osg::NOTICE) << "Unable to open display \""
+                                     << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
+        resolution.width = 0;
+        resolution.height = 0;
+        resolution.colorDepth = 0;
+        resolution.refreshRate = 0;
+      }
+    }
+
+    virtual bool setScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
+                                    const ::osg::GraphicsContext::ScreenSettings & resolution)
+    {
+      return false;
+    }
+
+    virtual void enumerateScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
+                                          ::osg::GraphicsContext::ScreenSettingsList & resolutionList)
+    {
+      resolutionList.clear();
+
+      Display* display = XOpenDisplay(si.displayName().c_str());
+      if (display)
+      {
+        XCloseDisplay(display);
+      }
+
+      if (resolutionList.empty())
+      {
+        ::osg::notify(::osg::NOTICE) << "X11WindowingSystemInterface::enumerateScreenSettings()"
+                                     << " not supported." << std::endl;
+      }
+    }
+
+#else
+    virtual void getScreenResolution(const ::osg::GraphicsContext::ScreenIdentifier& si,
                                      unsigned int& width, unsigned int& height)
     {
       Display* display = XOpenDisplay(si.displayName().c_str());
@@ -272,51 +236,50 @@ namespace
       }
       else
       {
-        osg::notify(osg::NOTICE) << "Unable to open display \""
-                                 << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
+        ::osg::notify(::osg::NOTICE) << "Unable to open display \""
+                                     << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
         width = 0;
         height = 0;
       }
     }
 
-    virtual bool setScreenResolution(const osg::GraphicsContext::ScreenIdentifier& si,
+    virtual bool setScreenResolution(const ::osg::GraphicsContext::ScreenIdentifier& si,
                                      unsigned int width, unsigned int height)
     {
-#ifdef OSGVIEWER_USE_XRANDR
-      return _setScreen(si, width, height, 0.0f);
-#else
-      osg::notify(osg::NOTICE) << "You must build osgViewer with Xrandr 1.2 or higher for setScreenResolution support!" << std::endl;
       return false;
-#endif
     }
 
-    virtual bool setScreenRefreshRate(const osg::GraphicsContext::ScreenIdentifier& si, double rate)
+    virtual bool setScreenRefreshRate(const ::osg::GraphicsContext::ScreenIdentifier& si, double rate)
     {
-#ifdef OSGVIEWER_USE_XRANDR
-      return _setScreen(si, 0, 0, rate);
-#else
-      osg::notify(osg::NOTICE) << "You must build osgViewer with Xrandr 1.2 or higher for setScreenRefreshRate support!" << std::endl;
       return false;
-#endif
     }
+#endif  // (OPENSCENEGRAPH_MAJOR_VERSION == 2) && (OPENSCENEGRAPH_MINOR_VERSION > 6)
 
-    virtual osg::GraphicsContext* createGraphicsContext(osg::GraphicsContext::Traits* traits)
+    virtual ::osg::GraphicsContext* createGraphicsContext(::osg::GraphicsContext::Traits* traits)
     {
       if (traits->pbuffer)
       {
-        osg::ref_ptr<osgViewer::PixelBufferX11> pbuffer = new osgViewer::PixelBufferX11(traits);
+        ::osg::ref_ptr<osgViewer::PixelBufferX11> pbuffer = new osgViewer::PixelBufferX11(traits);
         if (pbuffer->valid())
+        {
           return pbuffer.release();
+        }
         else
+        {
           return 0;
+        }
       }
       else
       {
-        osg::ref_ptr<osgViewer::GraphicsWindowX11> window = new GraphicsWindowX11NoEvents(traits);
+        ::osg::ref_ptr<osgViewer::GraphicsWindowX11> window = new GraphicsWindowX11NoEvents(traits);
         if (window->valid())
+        {
           return window.release();
+        }
         else
+        {
           return 0;
+        }
       }
     }
   };

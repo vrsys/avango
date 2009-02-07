@@ -88,8 +88,14 @@ av::osg::Texture2DArray::setImageCB(const av::osg::MFImage::SetValueEvent& event
   const av::osg::MFImage::ContainerType& container(event.getValue());
   mOsgTexture2DArray->setTextureDepth(container.size());
   int index = 0;
+  bool is_mipmap = true;
   for (av::osg::MFImage::ContainerType::const_iterator i = container.begin(); i != container.end(); ++i, ++index)
   {
+    is_mipmap &= (*i)->getOsgImage()->isMipmap();
     mOsgTexture2DArray->setImage(index, (*i)->getOsgImage());
   }
+
+  // FIXME This should somehow happen automatically, but it does not.
+  if (is_mipmap)
+    mOsgTexture2DArray->allocateMipmapLevels();
 }

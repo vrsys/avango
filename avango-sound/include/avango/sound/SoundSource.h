@@ -42,7 +42,7 @@ namespace av {
     class SoundRenderer;
     /**
     * This class represents a sound source in the scenegraph. Its position in world
-    * coordinates depends on teh transformations of its parent nodes.
+    * coordinates depends on the transformations of its parent nodes.
     * This class doesn't do the sound rendering itself, but holds a list of
     * LocalSources, which are implemented by the concrete SoundRenderers.
     */
@@ -125,6 +125,10 @@ namespace av {
          * for resource management
          */
         SFFloat Priority;
+        /**
+         * level for reverb
+         */
+        SFFloat ReverbLevel;
 
         SFBool Free;
 
@@ -206,6 +210,11 @@ namespace av {
              * @param priority The priority value
              */
             virtual void setPriority(float priority) {}
+            /**
+             * Set reverb level for this source
+             * @param level The level value
+             */
+            virtual void setReverbLevel(float level) {}
 
             virtual void setFree() {}
 

@@ -50,6 +50,7 @@ av::sound::SoundSource::SoundSource()
   AV_FC_ADD_FIELD(NewSampleBuffer, Link<av::sound::SampleBuffer>());
   AV_FC_ADD_FIELD(Spatialize, true);
   AV_FC_ADD_FIELD(Priority, 1.0f);
+  AV_FC_ADD_FIELD(ReverbLevel, 0.0f);
   AV_FC_ADD_FIELD(Free, false);
 }
 
@@ -133,6 +134,9 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
   } else if (&field == &Priority) {
     float priority = Priority.getValue();
     for_each_local_source(&LocalSource::setPriority, priority);
+  } else if (&field == &ReverbLevel) {
+    float revlevel = ReverbLevel.getValue();
+    for_each_local_source(&LocalSource::setReverbLevel, revlevel);
   } else if (&field == &Free) {
     for_each_local_source(&LocalSource::setFree);
   } else if (&field == &Play) {
@@ -166,6 +170,7 @@ av::sound::SoundSource::initializeLocalSource(boost::shared_ptr<SoundSource::Loc
     localSource->setConeOuterAngle(ConeOuterAngle.getValue());
     localSource->setConeOuterGain(ConeOuterGain.getValue());
     localSource->setPriority(Priority.getValue());
+    localSource->setReverbLevel(ReverbLevel.getValue());
 
 }
 

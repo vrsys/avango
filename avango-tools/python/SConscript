@@ -31,8 +31,6 @@ module_env = avango.build.PythonEnvironment()
 avango.build.add_library(module_env, 'boost_python')
 avango.build.add_library(module_env, 'avango-core')
 avango.build.add_library(module_env, 'avango-python')
-if avango.build.oshelper.os_is_windows():
-  avango.build.add_library(module_env, 'avango-python-script')
 module_env.Prepend(LIBS="avangoTools")
 
 Alias('install-tools', avango.build.get_python_path('avango'))

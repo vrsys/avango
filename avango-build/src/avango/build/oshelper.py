@@ -24,6 +24,10 @@
 ##########################################################################
 
 import sys
+import platform
+
+def os_is_mac():
+    return platform.system() in ('Darwin', 'darwin')
 
 def os_is_windows():
     return sys.platform == 'win32'

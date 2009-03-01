@@ -33,6 +33,10 @@ avango_env = avango.build.PythonEnvironment()
 avango_env.Append(CPPDEFINES='AV_PYTHON_LIBRARY')
 avango.build.add_library(avango_env, 'boost_python')
 avango.build.add_library(avango_env, 'avango-core')
+#changed
+avango.build.add_library(avango_env, 'boost_signals')
+avango.build.add_library(avango_env, 'boost_thread')
+avango.build.add_library(avango_env, 'python')
 
 Alias('all', Alias('python'))
 Alias('check', Alias('check-python'))

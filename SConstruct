@@ -103,9 +103,12 @@ if env['OPENSCENEGRAPH_SUPPORT']:
     avango.build.SConscript('avango-osg/SConscript')
     avango.build.SConscript('avango-moving/SConscript')
     avango.build.SConscript('avango-menu/SConscript')
-    if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Windows
+    if not avango.build.oshelper.os_is_windows() and \
+    	 not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
         avango.build.SConscript('avango-daemon/SConscript')
-if not avango.build.oshelper.os_is_windows(): #FIXME get module running under Windows
+        
+if not avango.build.oshelper.os_is_windows() and \
+	 not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
     avango.build.SConscript('avango-sound/SConscript')
 if env['OPENAL_SUPPORT']:
     avango.build.SConscript('avango-openal/SConscript')

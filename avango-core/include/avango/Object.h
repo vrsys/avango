@@ -53,8 +53,10 @@ namespace av
 
   };
 
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
   template class AV_DLL SingleField<Link<Object> >;
   template class AV_DLL MultiField<Link<Object> >;
+#endif
 
   typedef SingleField<Link<Object> > SFObject;
   typedef MultiField<Link<Object> >  MFObject;

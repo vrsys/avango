@@ -30,16 +30,22 @@
 #include <osg/Version>
 #include <osg/DeleteHandler>
 
-#if !defined(_WIN32)
+#if defined(__APPLE__)
+#include <osgViewer/api/Carbon/GraphicsWindowCarbon>
+#include <osgViewer/api/Carbon/PixelBufferCarbon>
+#endif
+
+#if defined(LINUX)
 #include <osgViewer/api/X11/GraphicsWindowX11>
 #include <osgViewer/api/X11/PixelBufferX11>
+#endif
 
-#else
+#if defined(_WIN32)
 #include <osgViewer/api/Win32/GraphicsWindowWin32>
 #include <osgViewer/api/Win32/PixelBufferWin32>
-#endif // !_WIN32
+#endif
 
-#if !defined(_WIN32)
+#if defined(LINUX)
 extern "C"
 {
   typedef int (*X11ErrorHandler)(Display*, XErrorEvent*);
@@ -77,13 +83,13 @@ extern "C"
     return 0;
   }
 }
-#endif // !_WIN32
+#endif // LINUX
 
 namespace
 {
   av::Logger& logger(av::getLogger("av::osg::viewer::GraphicsWindow"));
 
-#if !defined(_WIN32)
+#if defined(LINUX)
   // We need to check the window events in the avango evaluate instead of the
   // OSG event traversal, so we create and register a new window class, which
   // does not check the window events.
@@ -308,7 +314,7 @@ namespace
 
   RegisterWindowingSystemInterfaceProxy createWindowingSystemInterfaceProxy;
 
-#endif // !_WIN32
+#endif // LINUX
 
 } // namespace
 
@@ -559,11 +565,18 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
       mShowCursor = showCursor;
     }
 
-#if !defined(_WIN32)
+#if defined(__APPLE__)
+    dynamic_cast< ::osgViewer::GraphicsWindowCarbon*>(mOsgGraphicsWindow.get())->
+      ::osgViewer::GraphicsWindowCarbon::checkEvents();
+#endif
+
+#if defined(LINUX)
     dynamic_cast< ::osgViewer::GraphicsWindowX11*>(mOsgGraphicsWindow.get())->
       ::osgViewer::GraphicsWindowX11::checkEvents();
-#else
-    ::osgViewer::GraphicsWindowWin32 *window = 
+#endif
+
+#if defined(_WIN32)
+    ::osgViewer::GraphicsWindowWin32 *window =
        dynamic_cast< ::osgViewer::GraphicsWindowWin32*>(mOsgGraphicsWindow.get());
 
     if (window)

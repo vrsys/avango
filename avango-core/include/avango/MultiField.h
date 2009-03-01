@@ -249,12 +249,16 @@ namespace av
     {
       getValue();
 
-#if !defined(_WIN32)
-      os << mValue.size();
-#else
-      // cl of VS 8 apparently not able to resolve os << mValue.size()
-      os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
-#endif // _WIN32
+#if defined(__APPLE__)
+      os.operator<<(static_cast< typename std::vector<Value>::size_type>(mValue.size()));
+#endif
+#if defined(_WIN32)
+    // cl of VS 8 apparently not able to resolve os << mValue.size()
+    os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
+#endif
+#if defined(LINUX)
+    os << mValue.size();
+#endif
 
       typename ContainerType::const_iterator i(mValue.begin());
 

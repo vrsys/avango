@@ -78,6 +78,15 @@ def _setup_default():
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))
     _config_store.set('GL', PlainConfig(libraries = ['']))
     _config_store.set('GLU', PlainConfig(libraries = ['']))
+    
+    if oshelper.os_is_mac():
+      _config_store.set('avango-python', PlainConfig(libraries = ['_script']))
+      _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
+      _config_store.set('OpenThreads', PlainConfig(libraries = ['OpenThreads']))
+      _config_store.set('python', PlainConfig(libraries = ['python']))
+      _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
+      _config_store.set('GL', PlainConfig(libraries = ['GL']))
+      _config_store.set('GLU', PlainConfig(libraries = ['GLU'])) 
 
     # Override some libraries for Windows
     if oshelper.os_is_windows():

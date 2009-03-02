@@ -256,7 +256,7 @@ namespace av
     // cl of VS 8 apparently not able to resolve os << mValue.size()
     os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
 #endif
-#if defined(LINUX)
+#if defined(__linux__)
     os << mValue.size();
 #endif
 

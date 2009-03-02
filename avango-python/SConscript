@@ -24,6 +24,7 @@
 ##########################################################################
 
 import avango.build
+import avango.build.oshelper
 
 avango.build.Environment.prepend_include_path(Dir('include').abspath)
 avango.build.Environment.prepend_python_path(Dir('src/test_package').abspath)
@@ -34,9 +35,10 @@ avango_env.Append(CPPDEFINES='AV_PYTHON_LIBRARY')
 avango.build.add_library(avango_env, 'boost_python')
 avango.build.add_library(avango_env, 'avango-core')
 #changed
-avango.build.add_library(avango_env, 'boost_signals')
-avango.build.add_library(avango_env, 'boost_thread')
-avango.build.add_library(avango_env, 'python')
+if avango.build.oshelper.os_is_mac():
+  avango.build.add_library(avango_env, 'boost_signals')
+  avango.build.add_library(avango_env, 'boost_thread')
+  avango.build.add_library(avango_env, 'python')
 
 Alias('all', Alias('python'))
 Alias('check', Alias('check-python'))

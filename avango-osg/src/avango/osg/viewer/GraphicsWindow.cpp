@@ -35,7 +35,7 @@
 #include <osgViewer/api/Carbon/PixelBufferCarbon>
 #endif
 
-#if defined(LINUX)
+#if defined(__linux__)
 #include <osgViewer/api/X11/GraphicsWindowX11>
 #include <osgViewer/api/X11/PixelBufferX11>
 #endif
@@ -45,7 +45,7 @@
 #include <osgViewer/api/Win32/PixelBufferWin32>
 #endif
 
-#if defined(LINUX)
+#if defined(__linux__)
 extern "C"
 {
   typedef int (*X11ErrorHandler)(Display*, XErrorEvent*);
@@ -83,13 +83,13 @@ extern "C"
     return 0;
   }
 }
-#endif // LINUX
+#endif // __linux__
 
 namespace
 {
   av::Logger& logger(av::getLogger("av::osg::viewer::GraphicsWindow"));
 
-#if defined(LINUX)
+#if defined(__linux__)
   // We need to check the window events in the avango evaluate instead of the
   // OSG event traversal, so we create and register a new window class, which
   // does not check the window events.
@@ -314,7 +314,7 @@ namespace
 
   RegisterWindowingSystemInterfaceProxy createWindowingSystemInterfaceProxy;
 
-#endif // LINUX
+#endif // __linux__
 
 } // namespace
 
@@ -570,7 +570,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
       ::osgViewer::GraphicsWindowCarbon::checkEvents();
 #endif
 
-#if defined(LINUX)
+#if defined(__linux__)
     dynamic_cast< ::osgViewer::GraphicsWindowX11*>(mOsgGraphicsWindow.get())->
       ::osgViewer::GraphicsWindowX11::checkEvents();
 #endif

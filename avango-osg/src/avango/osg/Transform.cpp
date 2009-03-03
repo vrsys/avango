@@ -73,8 +73,6 @@ av::osg::Transform::fieldHasChangedLocalSideEffect(const av::Field& field)
       mOsgTransform->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
     } else if (ReferenceFrame.getValue()=="ABSOLUTE_RF_INHERIT_VIEWPOINT") {
       mOsgTransform->setReferenceFrame(::osg::Transform::ABSOLUTE_RF_INHERIT_VIEWPOINT);
-    } else {
-        logger.warn() << "fieldHadChangedLocalSideEffect(): unknown referenceFrame " << ReferenceFrame.getValue() << ". Reference frame not changed";
     }
 
   }

@@ -66,6 +66,7 @@ BOOST_PYTHON_MODULE(_viewer)
     .def("frame", &av::osg::viewer::CompositeViewer::frame)
     .def("run", &av::osg::viewer::CompositeViewer::run)
     .def("done", &av::osg::viewer::CompositeViewer::done)
+    .def("frame_without_evaluation", &av::osg::viewer::CompositeViewer::frameWithoutEvaluation)
     ;
   class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::Object>, boost::noncopyable >("GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
   class_<av::osg::viewer::View, av::Link<av::osg::viewer::View>, bases<av::osg::Object>, boost::noncopyable >("View", "View: contains cameras and the scene", no_init);

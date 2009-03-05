@@ -108,6 +108,12 @@ namespace av
          */
         void renderCB();
 
+        /**
+         * Triggers the rendering of a frame in the osgViewer without a call of the avango
+         * evaluation loop
+         */
+        void frameWithoutEvaluation();
+
         virtual void getThreadingModelCB(const SFInt::GetValueEvent& event);
         virtual void setThreadingModelCB(const SFInt::SetValueEvent& event);
 

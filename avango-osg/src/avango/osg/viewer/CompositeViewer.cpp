@@ -146,6 +146,13 @@ av::osg::viewer::CompositeViewer::renderCB()
     mOsgCompositeViewer->frame();
 }
 
+void
+av::osg::viewer::CompositeViewer::frameWithoutEvaluation()
+{
+  if (mOsgCompositeViewer->getNumViews() != 0u)
+    mOsgCompositeViewer->frame();
+}
+
 /* virtual */ void
 av::osg::viewer::CompositeViewer::getThreadingModelCB(const SFInt::GetValueEvent& event)
 {

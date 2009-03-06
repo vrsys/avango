@@ -378,9 +378,11 @@ def make_view(subdisplay=""):
     elif subdisplay == "Touchscreen" and (_display_type == "TouchscreenEmulator" or _display_type == "TwoviewTouchscreenEmulator"):
         osg_view = avango.osg.viewer.nodes.View()
         osg_view.Scene.connect_from(display_view.Root)
-        camera = avango.osg.viewer.nodes.Camera(Far=3000.)
+        camera = avango.osg.viewer.nodes.Camera()
         camera.ViewerTransform.connect_from(display_view.Camera)
         camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
+        camera.Near.connect_from(display_view.Near)
+        camera.Far.connect_from(display_view.Far)
         camera.Window.value = _touchscreen_window
         camera.Window.value.Decoration.value = True
         camera.Window.value.ShowCursor.value = True

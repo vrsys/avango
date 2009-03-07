@@ -262,6 +262,8 @@ def make_view(subdisplay=""):
       - *Near* is the near clipping plane.
       
       - *Far* is the near clipping plane.
+
+      - *BackgroundColor* is the clearing color
     """
 
     display_view = avango.display.nodes.View()
@@ -282,6 +284,7 @@ def make_view(subdisplay=""):
                 camera.ViewerTransform.connect_from(display_view.Camera)
                 camera.Near.connect_from(display_view.Near)
                 camera.Far.connect_from(display_view.Far)
+                camera.BackgroundColor.connect_from(display_view.BackgroundColor)
 
                 splitscreen_handling = ViewportConverter()
                 splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
@@ -311,6 +314,7 @@ def make_view(subdisplay=""):
             camera.ViewerTransform.connect_from(display_view.Camera)
             camera.Near.connect_from(display_view.Near)
             camera.Far.connect_from(display_view.Far)
+            camera.BackgroundColor.connect_from(display_view.BackgroundColor)
 
             splitscreen_handling = ViewportConverter()
             splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
@@ -340,6 +344,7 @@ def make_view(subdisplay=""):
             camera.ViewerTransform.connect_from(display_view.Camera)
             camera.Near.connect_from(display_view.Near)
             camera.Far.connect_from(display_view.Far)
+            camera.BackgroundColor.connect_from(display_view.BackgroundColor)
 
             splitscreen_handling = ViewportConverter()
             splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
@@ -383,6 +388,7 @@ def make_view(subdisplay=""):
         camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
         camera.Near.connect_from(display_view.Near)
         camera.Far.connect_from(display_view.Far)
+        camera.BackgroundColor.connect_from(display_view.BackgroundColor)
         camera.Window.value = _touchscreen_window
         camera.Window.value.Decoration.value = True
         camera.Window.value.ShowCursor.value = True

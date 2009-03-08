@@ -41,6 +41,9 @@ av::osg::Fog::Fog(::osg::Fog* osgfog) :
   StateAttribute(osgfog),
   mOsgFog(osgfog)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(Mode,
+                            boost::bind(&Fog::getModeCB, this, _1),
+                            boost::bind(&Fog::setModeCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(Density,
                             boost::bind(&Fog::getDensityCB, this, _1),
                             boost::bind(&Fog::setDensityCB, this, _1));
@@ -76,6 +79,18 @@ av::osg::Fog::initClass()
 av::osg::Fog::getOsgFog() const
 {
   return mOsgFog;
+}
+
+/* virtual */ void
+av::osg::Fog::getModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgFog->getMode();
+}
+
+/* virtual */ void
+av::osg::Fog::setModeCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgFog->setMode(static_cast< ::osg::Fog::Mode>(event.getValue()));
 }
 
 /* virtual */ void

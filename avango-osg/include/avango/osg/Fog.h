@@ -68,6 +68,7 @@ namespace av
 
     public:
 
+      SFInt Mode;
       SFFloat Density;
       SFFloat Start;
       SFFloat End;
@@ -82,6 +83,8 @@ namespace av
 
     protected:
 
+      virtual void getModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getDensityCB(const av::SFFloat::GetValueEvent& event);
       virtual void setDensityCB(const av::SFFloat::SetValueEvent& event);
       virtual void getStartCB(const av::SFFloat::GetValueEvent& event);

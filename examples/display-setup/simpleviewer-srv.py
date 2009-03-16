@@ -52,9 +52,9 @@ obj = avango.osg.nodes.LoadFile(Filename=sys.argv[1])
 nettrans.distribute_object(obj)
 trans = avango.osg.nodes.MatrixTransform()
 nettrans.distribute_object(trans)
-trans.Children.append(obj)
+trans.Children.value.append(obj)
 
-nettrans.Children.append(trans)
+nettrans.Children.value.append(trans)
 
 class RotateTransform(object):
     def __init__(self, trans):

@@ -55,6 +55,8 @@ av::osg::Panel::Panel() :
   AV_FC_ADD_FIELD(BorderColor, ::osg::Vec4(0.1f,0.1f,0.1f,0.9f));
   AV_FC_ADD_FIELD(BorderWidth, 0.015f);
   AV_FC_ADD_FIELD(Position, ::osg::Vec3(0,0,0));
+  AV_FC_ADD_FIELD(ShowPanel, true);
+  AV_FC_ADD_FIELD(ShowBorder, true);
 
   updateGeometry();
 }
@@ -99,6 +101,13 @@ av::osg::Panel::fieldHasChangedLocalSideEffect(const av::Field& field)
   {
     mColorChanged = true;
   }
+
+  if (&field == &ShowPanel ||
+      &field == &ShowBorder)
+  {
+    mVisibilityChanged = true;
+  }
+
 }
 
 /* virtual */ void
@@ -208,12 +217,31 @@ av::osg::Panel::updateGeometry()
   updateColor();
 
   // set up drawable
+//  if(getOsgGeometry()->getPrimitiveSetList().size() > 0)
+//  {
+//    getOsgGeometry()->removePrimitiveSet(0,2); //remove prims on panel recreation
+//  }
+//  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::POLYGON,0,e * 4));
+//  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::TRIANGLE_STRIP,e * 4,e * 8 + 2));
+
+  updatePanelVisibility();
+}
+
+void
+av::osg::Panel::updatePanelVisibility()
+{
+  int e = EdgeSmooth.getValue();
+  // set up drawable
   if(getOsgGeometry()->getPrimitiveSetList().size() > 0)
   {
     getOsgGeometry()->removePrimitiveSet(0,2); //remove prims on panel recreation
   }
-  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::POLYGON,0,e * 4));
-  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::TRIANGLE_STRIP,e * 4,e * 8 + 2));
+
+  if(ShowPanel.getValue())
+    getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::POLYGON,0,e * 4));
+
+  if(ShowBorder.getValue())
+    getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::TRIANGLE_STRIP,e * 4,e * 8 + 2));
 }
 
 void

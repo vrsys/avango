@@ -73,6 +73,11 @@ namespace av
       SFVec4 BorderColor;
       SFFloat BorderWidth;
       SFVec3 Position;
+      //Indicates the visibility of the panel interior
+      SFBool ShowPanel;
+      //Indicates the visibility of the panel border
+      SFBool ShowBorder;
+
 
       /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
       /* virtual */ void evaluateLocalSideEffect();
@@ -81,9 +86,11 @@ namespace av
 
       bool mGeometryChanged;
       bool mColorChanged;
+      bool mVisibilityChanged;
 
       void updateGeometry();
       void updateColor();
+      void updatePanelVisibility();
 
     };
 

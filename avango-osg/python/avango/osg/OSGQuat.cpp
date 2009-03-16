@@ -32,6 +32,7 @@
 #include <osg/Matrix>
 #include "OSGVectors.h"
 
+
 #include <avango/python/register_field.h>
 
 using namespace boost::python;
@@ -65,6 +66,7 @@ namespace
     q.getRotate(angle, *axis);
     return *axis;
   }
+
 }
 
 void init_OSGQuat(void)
@@ -108,10 +110,11 @@ void init_OSGQuat(void)
     .def("get_angle", QuatGetAngle)
     .def("get_axis", QuatGetAxis)
     .def("__repr__", QuatString)
-      .def("conjugate", &osg::Quat::conj)
+    .def("conjugate", &osg::Quat::conj)
     ;
 
   // register as a field
   register_field<av::osg::SFQuat>("SFQuat");
   register_multifield<av::osg::MFQuat>("MFQuat");
+
  }

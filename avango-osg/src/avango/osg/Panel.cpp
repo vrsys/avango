@@ -217,13 +217,6 @@ av::osg::Panel::updateGeometry()
   updateColor();
 
   // set up drawable
-//  if(getOsgGeometry()->getPrimitiveSetList().size() > 0)
-//  {
-//    getOsgGeometry()->removePrimitiveSet(0,2); //remove prims on panel recreation
-//  }
-//  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::POLYGON,0,e * 4));
-//  getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::TRIANGLE_STRIP,e * 4,e * 8 + 2));
-
   updatePanelVisibility();
 }
 
@@ -231,11 +224,9 @@ void
 av::osg::Panel::updatePanelVisibility()
 {
   int e = EdgeSmooth.getValue();
-  // set up drawable
-  if(getOsgGeometry()->getPrimitiveSetList().size() > 0)
-  {
-    getOsgGeometry()->removePrimitiveSet(0,2); //remove prims on panel recreation
-  }
+
+  getOsgGeometry()->removePrimitiveSet(0,getOsgGeometry()->getPrimitiveSetList().size());
+
 
   if(ShowPanel.getValue())
     getOsgGeometry()->addPrimitiveSet(new ::osg::DrawArrays(::osg::PrimitiveSet::POLYGON,0,e * 4));

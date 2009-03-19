@@ -74,6 +74,7 @@ namespace av
       SFInt CullFaceMode;
       SFInt RescaleNormalMode;
       SFInt NormalizeMode;
+      SFInt DepthTestMode;
 
       SFTexture Texture0;
 
@@ -118,6 +119,8 @@ namespace av
       virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getTextureCB(const av::osg::SFTexture::GetValueEvent& event);
       virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
+      virtual void getDepthTestModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setDepthTestModeCB(const av::SFInt::SetValueEvent& event);
 
     private:
 

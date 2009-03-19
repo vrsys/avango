@@ -96,6 +96,10 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
   AV_FC_ADD_ADAPTOR_FIELD(Texture0,
                             boost::bind(&StateSet::getTextureCB, this, _1),
                             boost::bind(&StateSet::setTextureCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(DepthTestMode,
+                            boost::bind(&StateSet::getDepthTestModeCB, this, _1),
+                            boost::bind(&StateSet::setDepthTestModeCB, this, _1));
 }
 
 av::osg::StateSet::~StateSet()
@@ -331,4 +335,16 @@ av::osg::StateSet::setTextureCB(const av::osg::SFTexture::SetValueEvent& event)
     mOsgStateSet->removeTextureAttribute(0, osg_old_tex->getType());
   }
 
+}
+
+/* virtual */ void
+av::osg::StateSet::getDepthTestModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgStateSet->getMode(GL_DEPTH_TEST);
+}
+
+/* virtual */ void
+av::osg::StateSet::setDepthTestModeCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgStateSet->setMode(GL_DEPTH_TEST, event.getValue());
 }

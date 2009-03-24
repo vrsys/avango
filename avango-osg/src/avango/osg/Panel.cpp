@@ -239,8 +239,15 @@ void
 av::osg::Panel::updateColor()
 {
   ::osg::ref_ptr< ::osg::Vec4Array> color = new ::osg::Vec4Array;
-  color->push_back(PanelColor.getValue());
-  color->push_back(BorderColor.getValue());
+
+  if(ShowPanel.getValue() && ShowBorder.getValue()) {
+    color->push_back(PanelColor.getValue());
+    color->push_back(BorderColor.getValue());
+  } else if (ShowPanel.getValue()) {
+    color->push_back(PanelColor.getValue());
+  } else if (ShowBorder.getValue()) {
+    color->push_back(BorderColor.getValue());
+  }
 
   getOsgGeometry()->setColorArray(color.get());
   getOsgGeometry()->setColorBinding(::osg::Geometry::BIND_PER_PRIMITIVE_SET);

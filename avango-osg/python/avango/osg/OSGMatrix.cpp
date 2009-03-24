@@ -124,6 +124,9 @@ void init_OSGMatrix(void)
   osg::Vec3 (*transform1)(const osg::Vec3&, const osg::Matrix&) = &osg::Matrix::transform3x3;
   osg::Vec3 (*transform2)(const osg::Matrix&, const osg::Vec3&) = &osg::Matrix::transform3x3;
 
+  // introducing member function pointers for static osg::Matrix::lookAt
+  osg::Matrix (*makeLookAt)(const osg::Vec3&, const osg::Vec3&, const osg::Vec3&) = &osg::Matrix::lookAt;
+
   // wrapping osg::Matrix functionality
   class_<osg::Matrix>("Matrix")
     .def(init<osg::Matrix>())
@@ -177,6 +180,7 @@ void init_OSGMatrix(void)
   def("make_inverse_mat", osg::Matrix::inverse);
   def("transform3x3", transform1);
   def("transform3x3", transform2);
+  def("make_lookat_mat", makeLookAt);
 
   // register as a field
   register_field<av::osg::SFMatrix>("SFMatrix");

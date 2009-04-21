@@ -27,6 +27,7 @@
 #define AVANGO_SEMAPHORE_H
 
 #include <boost/thread.hpp>
+#include "windows_specific.h"
 
 namespace av
 {
@@ -35,7 +36,7 @@ namespace av
    *
    * \ingroup av
    */
-  class Semaphore
+  class AV_DLL Semaphore
   {
     public:
 

@@ -106,6 +106,7 @@ def _setup_default():
         # for avango extensions, there is no pkg-config
         _config_store.set('avango-core', PlainConfig(libraries = ['avango']))
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
+        _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
         # xerces
         _config_store.set('xerces', PlainConfig(libraries = ['xerces-c_2']))
         # FIXME make proper avangoPython library and always add to avango-python

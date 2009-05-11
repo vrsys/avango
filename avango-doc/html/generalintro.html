@@ -3,31 +3,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<title>Avango Primer - General introduction</title>
+<title>AVANGO Primer - General introduction</title>
 <link rel="stylesheet" type="text/css" href="screen.css" />
 </head>
 <body>
 
 <!-- Start page contents -->
 
-<h2>Avango Primer - General introduction</h2>
+<h2>AVANGO Primer - General introduction</h2>
 <p>
-AVANGO is a free software framework designed for interactive, distributed VR applications. It supports a large range of displays, ranging from standard desktop setups to large-scale immersive Virtual Reality installations. Avango helps you to 
+AVANGO is a free software framework designed for interactive, distributed Virtual Reality applications. It supports a large range of setups, ranging from desktop PCs to large-scale immersive VR installations. AVANGO facilitates rapid development of immersive 3D applications by offering efficient techniques for many common VR tasks. 
 
+
+<h3 >What has AVANGO to offer?</h3>
+<dl>
+	<dt>Dynamic 3D scenes</dt>
+	<dd>One core concept of AVANGO is the notion of networked objects in a scene. A typical AVANGO application uses a scene graph to display a 3D scene. But AVANGO does more than hierarchical structuring of 3D content: AVANGO scene nodes are active elements, containing their state in fields that can be connected to each other. This mechanism offers a convenient way of defining dynamic and/or interactive scene behaviour. Scene elements may respond to changes in other parts of the scene. AVANGO knows about its scene objects, their states and their interconnections and enures proper behaviour of the overall scene.</dd>
+	<dt>Scripting support</dt>
+	<dd>AVANGO allows you to write VR applications in two levels. AVANGO's core is implemented in C++. Due to its straightforward and consistent design, you can easily extend it in C++. At the same time, AVANGO offers a transparent bridge of all runtime aspects to a higher level scripting language - currently, Python. In most cases, you can write your application entirely in Python, without writing a single line of C++ code. If you want to, you can even mix both languages easily - AVANGO will provide synchronisation between the two levels for you.</dd>
+	<dt>Distributed VR</dt>
+	<dd>AVANGO can synchronize a scene (or parts) over the network - in a transparent way</dd>
+</dl>
+
+<!-- 
 
 Support for distribution across multiple computers in a straightforward way
 Integrated modules for running Virtual Reality displays (like device support, 3D menus and viewing setup)
 Uses OpenSceneGraph and Python
 Licensed under the LGPL</p>
-<h3 >What does Avango offer?</h3>
-<dl>
-	<dt>Scripting support</dt>
-	<dd>Avango offers an easy way to ...</dd>
-	<dt>Distributed VR</dt>
-	<dd>Avango can synchronize a scene (or parts) over the network - in a transparent way</dd>
-</dl>
+
+-->
 
 <!-- Start page contents -->
+
 
 </body>
 </html>

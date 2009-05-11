@@ -102,7 +102,7 @@ def init(argv):
         _windows.append(_make_window(0, 0, 1280, 1024, 6, 2.4, True, ":0.0"))
         _windows[0].Name.value = ""
         global _touchscreen_window
-        _touchscreen_window = _make_window(0, 0, 1280, 1024, 6, 2.4, False, "labws2:0.0")
+        _touchscreen_window = _make_window(1280, 0, 1280, 1024, 6., 2.4, False, ":0.0")
         _touchscreen_window.Name.value = "Touchscreen"
 
     elif _display_type == "Wall":

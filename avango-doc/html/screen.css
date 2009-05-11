@@ -1,0 +1,29 @@
+html, body, p {
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+p {
+	line-height:130%;
+}
+
+dt {
+	font-weight:bold;
+}
+
+dd {
+	margin-bottom:1em;
+}
+
+.todo:before {
+	content: "To do: ";
+}
+
+.todo {
+	background:yellow;
+	border:dotted 3px white;
+	padding:3px;
+}
+
+a {
+	color:#666;
+}

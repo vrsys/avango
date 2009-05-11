@@ -12,7 +12,7 @@
 
 <h2>AVANGO Primer - General introduction</h2>
 <p>
-AVANGO is a free software framework designed for interactive, distributed Virtual Reality applications. It supports a large range of setups, ranging from desktop PCs to large-scale immersive VR installations. AVANGO facilitates rapid development of immersive 3D applications by offering efficient techniques for many common VR tasks. 
+AVANGO is a free, cross-platform software framework designed for interactive, distributed Virtual Reality applications. It supports a large range of setups, ranging from desktop PCs to large-scale immersive VR installations. AVANGO facilitates rapid development of immersive 3D applications by offering efficient techniques for many common VR tasks. 
 
 
 <h3 >What has AVANGO to offer?</h3>
@@ -21,9 +21,24 @@ AVANGO is a free software framework designed for interactive, distributed Virtua
 	<dd>One core concept of AVANGO is the notion of networked objects in a scene. A typical AVANGO application uses a scene graph to display a 3D scene. But AVANGO does more than hierarchical structuring of 3D content: AVANGO scene nodes are active elements, containing their state in fields that can be connected to each other. This mechanism offers a convenient way of defining dynamic and/or interactive scene behaviour. Scene elements may respond to changes in other parts of the scene. AVANGO knows about its scene objects, their states and their interconnections and enures proper behaviour of the overall scene.</dd>
 	<dt>Scripting support</dt>
 	<dd>AVANGO allows you to write VR applications in two levels. AVANGO's core is implemented in C++. Due to its straightforward and consistent design, you can easily extend it in C++. At the same time, AVANGO offers a transparent bridge of all runtime aspects to a higher level scripting language - currently, Python. In most cases, you can write your application entirely in Python, without writing a single line of C++ code. If you want to, you can even mix both languages easily - AVANGO will provide synchronisation between the two levels for you.</dd>
+	<dt>Interaction diversity</dt>
+	<dd>VR is more than keyboard and mouse. Instead, a multitude of interaction devices can be useful for interaction in 3D space. AVANGO provides a simple way to incorporate various interaction devices into your application. In addition, AVANGO offers a variety of ready-to-use interaction widgets in 3D space, such as 3D menus.</dd>
+	<dt>Display setups</dt>
+	<dd>AVANGO allows you to write scaleable applications. Your 3D application does not need to know whether it should run on a standard PC or in a high-end, large-scale, head-tracked immersive display environment. AVANGO's display setup helps you to write applications that will run on all of these systems - without modifications.</dd>
 	<dt>Distributed VR</dt>
-	<dd>AVANGO can synchronize a scene (or parts) over the network - in a transparent way</dd>
+	<dd>Since AVANGO knows your scene objects and their state, it can synchronize a scene (or parts) over the network for you - in a transparent way. This allows distributed, collaborative, multi-user applications, for example.</dd>
 </dl>
+
+<h3 >What is AVANGO not?</h3>
+<p>AVANGO is a powerful and generic software framework. Due to its universality, it is sometimes difficult to grasp what AVANGO was made for, what it offers and where its limits are. Here are some common misconceptions:
+<dl>
+	<dt>AVANGO is not a scene graph framework</dt>
+	<dd>Although AVANGO relies on the concept of a scene graph, it is not a scene graph implementation itself. Instead, it builds on top of a known open source scene graph framework, <a href="http://www.openscenegraph.org">OpenSceneGraph</a>. AVANGO encapsulates OpenSceneGraph, extends the graph concepts by  field connections and offers both functionalities to users.</dd>
+	<dt>AVANGO is not a game engine</dt>
+	<dd>AVANGO is a powerful and flexible engine for dynamic and interactive 3D applications, something that is also useful for 3D games. You can write 3D games using AVANGO. However, games are not the primary focus. AVANGO does not offer built-in support for many common game tasks (although you can implement them yourselves or embed existing libraries, if you wish to). AVANGO is designed to provide a flexible and extensible umbrella for scaleable VR applications, which might be overkill for 'just' a game.</dd>
+</dl>
+
+
 
 <!-- 
 

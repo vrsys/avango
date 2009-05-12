@@ -12,10 +12,11 @@
 
 <h2>AVANGO Primer - Fields, Containers and Connections</h2>
 
+<h3>Fields and field containers</h3>
 <p>
 Fields are the main concept of AVANGO's programming model. All AVANGO nodes are field containers - which means that they can contain fields. Fields in AVANGO nodes can be seen similar to instance properties in ordinary object-oriented programming. An AVANGO node can have any number of fields. Each field has a name and a value of a specified type. The field values of a node fully describe the node's state. AVANGO offers a set of field types, ranging from simple scalar types to vectors, matrices and other multi-valued structures. 
 
-The main difference between ordinary object properties and fields is that AVANGO is aware of fields, which allows to automatically provide a set of services for you:
+One main difference between ordinary object properties and fields is that AVANGO is aware of fields, which allows to automatically provide a set of services for you:
 <dl>
 <dt>Consistent programming model</dt>
 <dd>The field mechanism gives you an easy way to define your own nodes. If your node implements a service, make it available through fields. In some cases, this may be unfamiliar in the beginning, but it's always possible. And in many cases, it is more elegant than one might think. AVANGO gives you opportunities to implement your services correspondingly. As a nice side effect, the field interface helps you keeping your service independentfrom other components.</dd>
@@ -24,14 +25,45 @@ The main difference between ordinary object properties and fields is that AVANGO
 <dt>Core - script bridging</dt>
 <dd>AVANGO fields are available to both low-level (C++) and high-level (Python) programs. AVANGO automatically makes tham available and automatically synchronizes them - you don't have to (and should not) do anything about it manually. Fields are registered to the AVANGO runtime during node initialisation. Usually one line, that's all.</dd>
 <dt>Field connections</dt>
-<dd>The best feature of fields is that they can be connected. Field connections forward values from one node to another, allowing you to specify a  behavioural network throughout your scene. Field connections are described in detail below.
+<dd>The best feature of fields is that they can be connected. Field connections forward values from one node to another, allowing you to specify a  behaviour network throughout your scene, independent of the scene graph hierarchy. Field connections are described in detail below.
 </dd>
 </dl>
 
-
-
-
+Field containers are dynamic, which means that you can add or remove fields to your nodes at runtime, even after the creation of a node. Fields that were added after node creation used to be called <em>external fields</em>, because they are often used as tags to mark a node for external services. However, there is technically no difference between static and dynamic fields. This mechanism is powerful, but may add runtime complexity to your application.
 </p>
+
+<h3>Fields Connections</h3>
+<p>
+Field connections forward values from one field to another, from a node to another node. They provide the glue for combining node's behaviour to the overall application interaction behaviour. This powerful mechanism allows you to combine simple mechanism to impressively complex structures.
+</p>
+
+<p>For example, you have written a script node that implements a proximity sensor. It has four fields: Two input position fields, <em>inPos1</em> and <em>inPos2</em> for the positions of two objects (type: <code>avango.osg.SFVec3</code>, a three-dimensional vector), a distance threshold input field, <em>inDistanceThreshold</em> and an output field, <em>outProximity</em> (type: <code>avango.SFBool</code> - a boolean value). Whenever the distance of the two input vectors falls below the distance threshold, the output will be set to true, false otherwise.
+
+Without connections, this node does not make any sense, since you cannot see it itself. With field connections, it can be used, for example, to trigger an action when an avatar reaches a certain area in a scene. In Python, the corresponding code could look like this:
+</p>
+<p><code>
+	point_of_interest = avango.osg.SFVec3(100,0,100)<br />
+	radius = 50<br />
+	sensor = avango.nodes.MyProximitySensor()<br />
+	sensor.inPos1.connect_from(avatar.position)<br />
+	sensor.inPos2.value = point_of_interest<br />
+	sensor.inDistanceThreshold.value = radius<br />
+	my_action.trigger.connect_from(sensor.outProximity)<br />
+</code></p>
+
+<p>The code assumes that there is an <em>avatar</em> node with a <em>position</em> field (that contains the current avatar's position) and a <em>my_action</em> node with a <em>trigger</em> field (that triggers the action). Whenever the avatar reaches a region of 50 units around <em>point_of_interest</em> the action is triggered.</p>
+<p>To connect a field to another, use <code>&lt;destinationfield&gt;.connect_from(&lt;sourcefield&gt;)</code>. This will establish a directed connection from source to destination - whenever the value of the source field changes, the new value will be forwarded to the destination field.</p>
+<p>The code sample shows that <code>&lt;node&gt;.&lt;fieldname&gt;</code> specifies a field of a node itself. To access the field value, use <code>&lt;node&gt;.&lt;fieldname&gt;.value</code>. It also shows that fields do not need to be connected - you can also just set a static value. When fields are unconnected </p>
+
+<p>AVANGO does not distinguish between input and output nodes - you can even use fields for both. However, it's a good practice to use fields either for input or output and to give them corresponding names. Conventionally, field names have <em>in</em> or <em>out</em> as prefix.</p>
+
+<h4>Evaluation order</h4>
+<p>AVANGO allows you to immediately react to a field change, using the <code>field_has_changed()</code> method. However, this is not recommended because it can impose deep propagation depth and may cause performance problems. Usage of <code>field_has_changed()</code> can almost always be avoided. You should try to react (lazily) to field changes during your <code>evaluate()</code> implementation, which is executed once per frame, before rendering, when a field value of your node has changed. Since AVANGO knows about the connections between nodes, it knows about internal dependencies and will call the node's <code>evaluate()</code> methods in order of dependency. This will ensure that changes will be quickly propagated throughout the scene. Howeer, in case of cyclic dependencies, order of evaluation is undefined. For more information, see <a href="effectiveavango.html">Effective AVANGO</a>.</p>
+
+<h4>Type conversion</h4>
+<p>If two fields of different types are connected, AVANGO will perform implicit type conversions for primitive types - between integers, booleans and floats, according to C++ conventions. Unconvertible connections are not allowed. Implicit conversions are convenient, however be aware that some types of conversion may not always yield the results you expect (i.e. converting from float to boolean). 
+</p>
+
 
 <!-- End page contents -->
 

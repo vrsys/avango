@@ -26,7 +26,8 @@
 #if !defined(AVANGO_SEMAPHORE_H)
 #define AVANGO_SEMAPHORE_H
 
-#include <boost/thread.hpp>
+#include <boost/thread/thread.hpp>
+
 #include "windows_specific.h"
 
 namespace av

@@ -27,6 +27,7 @@
 #define AVANGO_SEMAPHORE_H
 
 #include <boost/thread/thread.hpp>
+#include <boost/thread/condition.hpp>
 
 #include "windows_specific.h"
 

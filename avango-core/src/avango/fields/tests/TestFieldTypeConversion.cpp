@@ -150,10 +150,16 @@ namespace
     Link<FieldsNode> node2(new FieldsNode);
 
 
-    // check float->bool
+    // check float->bool (true)
     node2->BoolField.connectFrom(&(node1->FloatField));
     node1->FloatField.setValue(2.0f);
     CHECK_EQUAL(true, node2->BoolField.getValue());
+    node2->BoolField.disconnect(); node2->BoolField.setValue(false);
+
+    // check float->bool (false)
+    node2->BoolField.connectFrom(&(node1->FloatField));
+    node1->FloatField.setValue(0.0f);
+    CHECK_EQUAL(false, node2->BoolField.getValue());
     node2->BoolField.disconnect(); node2->BoolField.setValue(false);
 
     //check int->bool ( true )
@@ -168,31 +174,29 @@ namespace
     CHECK_EQUAL(false, node2->BoolField.getValue());
     node2->BoolField.disconnect(); node2->BoolField.setValue(false);
 
-    //check bool->int ( false )
-    node2->IntField.connectFrom(&(node1->BoolField));
-    node1->BoolField.setValue(false);
-    CHECK_EQUAL(0, node2->IntField.getValue());
-    node2->IntField.disconnect();
-
     //check bool->int ( true )
     node2->IntField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(true);
     CHECK_EQUAL(1, node2->IntField.getValue());
     node2->IntField.disconnect();
 
-    //check bool->float ( false )
-    node2->FloatField.connectFrom(&(node1->BoolField));
+    //check bool->int ( false )
+    node2->IntField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(false);
-    CHECK_EQUAL(0.0f, node2->FloatField.getValue());
-    node2->FloatField.disconnect();
+    CHECK_EQUAL(0, node2->IntField.getValue());
+    node2->IntField.disconnect();
 
-    //check bool->int ( true )
+    //check bool->float ( true )
     node2->FloatField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(true);
     CHECK_EQUAL(1.0f, node2->FloatField.getValue());
     node2->FloatField.disconnect();
 
-
+    //check bool->float ( false )
+    node2->FloatField.connectFrom(&(node1->BoolField));
+    node1->BoolField.setValue(false);
+    CHECK_EQUAL(0.0f, node2->FloatField.getValue());
+    node2->FloatField.disconnect();
   }
 
 } // namespace

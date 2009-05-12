@@ -755,7 +755,6 @@ av::Field::removeDisconnectedCallback(const DisconnectedCallbackHandle& handle)
   handle.disconnect();
 }
 
-#include <omp.h>
 void
 av::Field::evaluateDependencies(void)
 {

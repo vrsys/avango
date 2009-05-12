@@ -130,11 +130,6 @@ av::FieldContainer::addField(Field* field, const std::string& fieldName)
 av::FieldContainer::FieldInfo*
 av::FieldContainer::getFieldInfo(const std::string& name)
 {
-//  FieldInfos::iterator field_iter =
-//    std::find_if(mFields.begin(), mFields.end(),
-//                 boost::lambda::bind(&FieldInfo::mName, boost::lambda::_1) == name);
-//  return (field_iter != mFields.end() ? &*field_iter : 0);
-
   FieldsIndex::iterator iter = mFieldsIndex.find(name);
   if(iter == mFieldsIndex.end()) {
     return 0;

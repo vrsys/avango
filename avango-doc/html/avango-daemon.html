@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Avango Primer - Avango concepts - Essential classes</title>
+<link rel="stylesheet" type="text/css" href="screen.css" />
+<link rel="stylesheet" type="text/css" href="screen-module.css" />
+</head>
+<body>
+
+<!-- Start page contents -->
+
+<h2>Module: avango-daemon</h2>
+<p>
+The module "avango-daemon" provides the functionality to access input devices.
+
+
+<h3>Implementing the daemon side</h3>
+To initialize the daemon, one or more Station objects with a station name must be created.
+This Station must then be assigned to a Device object.
+
+<pre class="snippet">
+dtrack = avango.daemon.DTrack()
+dtrack.port = "5000"
+dtrack.stations[1] = avango.daemon.Station("ve-dtrack-head1")
+dtrack.stations[2] = avango.daemon.Station("ve-dtrack-head2")
+dtrack.stations[3] = avango.daemon.Station("ve-dtrack-head3")
+
+vrpn = avango.daemon.VRPNClient()
+vrpn.station = avango.daemon.Station('vrpn-client')
+vrpn.server = "Tracker0@localhost"
+	
+wiimote = avango.daemon.Wiimote()
+wiimote.station = avango.daemon.Station("wiimote")
+wiimote.device = "/dev/input/ve-wiimote"
+
+tablet = avango.daemon.WacomTablet()
+tablet.station = avango.daemon.Station("tablet")
+tablet.device = "/dev/input/ve-wacom"
+
+avango.daemon.run([dtrack, vrpn, wiimote, tablet])
+</pre>
+
+<ul class="classlist">
+	<li>avango.daemon.DTrack</li>
+	<li>avango.daemon.Station</li>
+	<li>avango.daemon.VRPNClient</li>
+	<li>avango.daemon.WacomTablet</li>
+	<li>avango.daemon.Wiimote</li>
+</ul>
+
+
+<h3>Implementing the application side</h3>
+The client must create only one DeviceService and assign it to a DeviceSensor or DeviceActuator.
+The name of the Station must also be assigned to the DeviceSensor or DeviceActuator. This is the name used on the daemon
+side to create the Station. A DeviceSensor represents the input part of a device, while a DeviceActuator represents the output part.
+<pre class="snippet">
+device_service = avango.daemon.DeviceService()
+
+dtrack_sensor1 = avango.daemon.nodes.DeviceSensor(DeviceService = device_service, Station = "ve-dtrack-head1")
+dtrack_sensor2 = avango.daemon.nodes.DeviceSensor(DeviceService = device_service, Station = "ve-dtrack-head2")
+dtrack_sensor3 = avango.daemon.nodes.DeviceSensor(DeviceService = device_service, Station = "ve-dtrack-head3")
+
+wiimote_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = device_service, Station = "wiimote")
+wiimote_actuator = avango.daemon.nodes.WiimoteActuator(DeviceService = device_service, Station = "wiimote")
+
+tablet_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = vrgeo.device.service, Station = "tablet")
+</pre>
+
+<ul class="classlist">
+	<li>avango.daemon.DeviceActuator</li>
+	<li>avango.daemon.DeviceSensor</li>
+	<li>avango.daemon.DeviceService</li>
+</ul>
+
+<!-- End page contents -->
+
+</body>
+</html>

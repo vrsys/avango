@@ -74,7 +74,7 @@ namespace av
 # if defined __ASSERT_FUNCTION
 #  define AV_ASSERT_FUNCTION __ASSERT_FUNCTION
 # else
-#  define AV_ASSERT_FUNCTION ((__const char *) 0)
+#  define AV_ASSERT_FUNCTION ((const char *) 0)
 # endif
 
 #endif // #ifdef NDEBUG

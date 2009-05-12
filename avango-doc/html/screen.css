@@ -12,6 +12,7 @@ dt {
 
 dd {
 	margin-bottom:1em;
+	line-height:130%;
 }
 
 .todo:before {

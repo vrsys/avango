@@ -12,7 +12,26 @@
 
 <h2>AVANGO Primer - Fields, Containers and Connections</h2>
 
-<p class="todo">needs to be written</p>
+<p>
+Fields are the main concept of AVANGO's programming model. All AVANGO nodes are field containers - which means that they can contain fields. Fields in AVANGO nodes can be seen similar to instance properties in ordinary object-oriented programming. An AVANGO node can have any number of fields. Each field has a name and a value of a specified type. The field values of a node fully describe the node's state. AVANGO offers a set of field types, ranging from simple scalar types to vectors, matrices and other multi-valued structures. 
+
+The main difference between ordinary object properties and fields is that AVANGO is aware of fields, which allows to automatically provide a set of services for you:
+<dl>
+<dt>Consistent programming model</dt>
+<dd>The field mechanism gives you an easy way to define your own nodes. If your node implements a service, make it available through fields. In some cases, this may be unfamiliar in the beginning, but it's always possible. And in many cases, it is more elegant than one might think. AVANGO gives you opportunities to implement your services correspondingly. As a nice side effect, the field interface helps you keeping your service independentfrom other components.</dd>
+<dt>Automatic serialization</dt>
+<dd>Since the field set of an AVANGO node fully describe its internal state, AVANGO can automatically serialized and unserialize nodes. This mecahnism is used, for example, for automatic distribution of partial scenes over a network for collaborative applications.</dd>
+<dt>Core - script bridging</dt>
+<dd>AVANGO fields are available to both low-level (C++) and high-level (Python) programs. AVANGO automatically makes tham available and automatically synchronizes them - you don't have to (and should not) do anything about it manually. Fields are registered to the AVANGO runtime during node initialisation. Usually one line, that's all.</dd>
+<dt>Field connections</dt>
+<dd>The best feature of fields is that they can be connected. Field connections forward values from one node to another, allowing you to specify a  behavioural network throughout your scene. Field connections are described in detail below.
+</dd>
+</dl>
+
+
+
+
+</p>
 
 <!-- End page contents -->
 

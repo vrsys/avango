@@ -35,6 +35,8 @@
 #include <avango/Distributed.h>
 #include <avango/StandardFields.h>
 
+#include <tr1/unordered_map>
+
 namespace av
 {
   class InputStream;
@@ -282,6 +284,9 @@ namespace av
 
     typedef std::vector<FieldInfo> FieldInfos;
     FieldInfos mFields;
+
+    typedef std::tr1::unordered_map<std::string, FieldInfos::size_type> FieldsIndex;
+    FieldsIndex mFieldsIndex;
 
     FieldInfo* getFieldInfo(const std::string& name);
     FieldInfo* getFieldInfo(unsigned int index);

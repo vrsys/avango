@@ -71,6 +71,7 @@ namespace av
 
     /**
      * Triggers Avango object evaluation once.
+     * TODO: Why is the pre and post evaluation signal needed? Does it make sense? As far as we know, it is only used in the NetMatrixTransform node.
      */
     void evaluate();
 

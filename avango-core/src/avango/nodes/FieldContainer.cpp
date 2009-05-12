@@ -120,6 +120,8 @@ av::FieldContainer::addField(Field* field, const std::string& fieldName)
   newFieldInfo.mName = fieldName;
 
   mFields.push_back(newFieldInfo);
+  mFieldsIndex.insert(std::make_pair(newFieldInfo.mName, mFields.size()-1));
+
   mFlags.mFieldsCalculated = false;
 
   return mFields.size() - 1;
@@ -128,10 +130,17 @@ av::FieldContainer::addField(Field* field, const std::string& fieldName)
 av::FieldContainer::FieldInfo*
 av::FieldContainer::getFieldInfo(const std::string& name)
 {
-  FieldInfos::iterator field_iter =
-    std::find_if(mFields.begin(), mFields.end(),
-                 boost::lambda::bind(&FieldInfo::mName, boost::lambda::_1) == name);
-  return (field_iter != mFields.end() ? &*field_iter : 0);
+//  FieldInfos::iterator field_iter =
+//    std::find_if(mFields.begin(), mFields.end(),
+//                 boost::lambda::bind(&FieldInfo::mName, boost::lambda::_1) == name);
+//  return (field_iter != mFields.end() ? &*field_iter : 0);
+
+  FieldsIndex::iterator iter = mFieldsIndex.find(name);
+  if(iter == mFieldsIndex.end()) {
+    return 0;
+  } else {
+    return &mFields[iter->second];
+  }
 }
 
 av::FieldContainer::FieldInfo*
@@ -228,11 +237,15 @@ av::FieldContainer::callEvaluate()
 #endif
 
       // Evaluate field containers that our own fields depend on
-      FieldPtrVec &fields = getFields();
-      for (FieldPtrVec::iterator field_it = fields.begin(); field_it != fields.end(); ++field_it)
-      {
-        (*field_it)->evaluateDependencies();
-      }
+//      FieldPtrVec &fields = getFields();
+//      for (FieldPtrVec::iterator field_it = fields.begin(); field_it != fields.end(); ++field_it)
+//      {
+//        (*field_it)->evaluateDependencies();
+//      }
+
+      // Evaluate field containers that our own fields depend on
+      //TODO Changed for simplicity
+      std::for_each (getFields().begin(), getFields().end(), std::mem_fun(&Field::evaluateDependencies));
 
       if (mFlags.mNeedsEvaluation)
       {
@@ -252,6 +265,7 @@ av::FieldContainer::callEvaluate()
           this->evaluate();
         }
 
+        //reset the status of the fields
         std::for_each (getFields().begin(), getFields().end(), std::mem_fun(&Field::reset));
 
         mFlags.mNeedsEvaluation = mFlags.mAlwaysEvaluate;

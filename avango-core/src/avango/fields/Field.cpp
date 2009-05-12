@@ -755,6 +755,7 @@ av::Field::removeDisconnectedCallback(const DisconnectedCallbackHandle& handle)
   handle.disconnect();
 }
 
+#include <omp.h>
 void
 av::Field::evaluateDependencies(void)
 {
@@ -765,18 +766,23 @@ av::Field::evaluateDependencies(void)
 
   // reference all connected containers as connections may change dynamically
   std::list<Link<FieldContainer> > connected_from_containers;
+
   for (Field::InputFieldsList::iterator from_field_it = mConnectedFrom.begin();
       from_field_it != mConnectedFrom.end(); ++from_field_it)
   {
+
     if (from_field_it->second)
     {
       connected_from_containers.push_back(from_field_it->first->getContainer());
     }
   }
 
+  //Currently, the input field iterator can be invalidated, in case the user calls connect_from in an evaluate
+  //Therefore, all fields are first copied into a list and then evaluated
   while (!connected_from_containers.empty())
   {
     connected_from_containers.front()->callEvaluate();
     connected_from_containers.pop_front();
   }
+
 }

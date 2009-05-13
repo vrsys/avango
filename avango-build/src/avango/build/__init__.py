@@ -192,7 +192,10 @@ def _build_environment():
     else:
         result.Append(CCFLAGS='-ansi -Wall')
     if result['DEBUG']:
-        result.Append(CCFLAGS='-g')
+        if oshelper.os_is_windows():
+            result.Append(CCFLAGS='/DEBUG /Zi /D_DEBUG /Ob0 /Od /RTC1')
+        else:
+            result.Append(CCFLAGS='-g')
     else:
         result.Append(CCFLAGS='-O2 -DNDEBUG')
         if result['CXX'] == 'g++':

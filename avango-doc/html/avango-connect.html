@@ -67,8 +67,9 @@ class Output(avango.connect.OutputNode):
 
 <h3>Implementing the server side</h3>
 <p>
-On the server side, the only thing to do is to create a "Server" object and assign it to the input and output nodes.
-At this time, it is only allowed to use no more than one single input and output node, each. Otherwise the behavior is undefined.
+On the server side, the only thing to do is to create a Server object and assign it to the input and output nodes.
+At this time, it is only allowed to use no more than one single input and output node, each. Otherwise the behavior is undefined.<br>
+The <b>Server node</b> must be created by the <b>listening host</b>.
 </p>
 
 <pre class="snippet">
@@ -97,7 +98,8 @@ output_node.set_stream(server)
 <h3>Implementing the client side</h3>
 <p>
 On the client side, the only thing to do is to create a "Client" object and assign it to the input and output nodes.
-At this time, it is only allowed to use no more than one single input and output node, each. Otherwise the behavior is undefined.
+At this time, it is only allowed to use no more than one single input and output node, each. Otherwise the behavior is undefined.<br>
+The <b>Client node</b> must be created by the <b>connecting host</b>.
 </p>
 
 <pre class="snippet">

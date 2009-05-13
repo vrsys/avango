@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Installing Avango</title>
+<link rel="stylesheet" type="text/css" href="screen.css" />
+</head>
+<body>
+
+<!-- Start page contents -->
+
+<h1>Installing Avango under Windows</h1>
+
+<h3>Installing Avango Run-time Environment</h3>
+If you would like to run a specific Avango application or
+perform benchmarking tests, you could download the self-installing Avango Run-time Environment.
+It is available here: <a href="http://avango.org/avango-win-installer">http://avango.org/avango-win-installer</a>.
+The following examples are included into the package: TBA
+
+
+<h3>Installing Avango Development Environment</h3>
+For Avango developers working under Windows, it is recommended
+to compile Avango locally with Microsoft Visual Studio. <br><br>
+
+This can be done in the following steps. <br><br>
+
+<b>1. Installing prerequisites</b><br>
+The following software modules have to be downloaded, installed and configured prior to Avango
+compilation:
+<ul>
+<li><a href="http://msdn.microsoft.com/en-us/vstudio/default.aspx">Microsoft Visual Studio 2005 or 2008</a> (also known as VS 8 and VS 9)</li>
+<li><a href="http://www.python.org/download/">Python programming language</a> 2.5 or later</li>
+<li><a href="http://www.scons.org/download.php">scons build system</a> 1.0.0 or later</li>
+<li><a href="http://www.boost.org/">boost C++ library</a> 1.35 or later. It is recommended to select all variants all the library for Visual Studio 2005</li>
+<li><a href="http://www.openscenegraph.org/projects/osg">OpenSceneGraph 3D graphic toolkit</a> 2.6.0 or later. It is also recommended
+to compile the toolkit locally. To do that one should download and install <a href="http://www.cmake.org">Cmake</a> (version 2.4.6 or later),
+download the <a href="http://www.openscenegraph.org/projects/osg/wiki/Downloads/Dependencies">prebuilt dependencies</a>,
+include their bin directory to the system's PATH variable and configure and compile OpenSceneGraph following the instructions
+of the README.txt in its root directory.</li>
+</ul>
+<br>
+<b>2. Configuring paths</b><br>
+Include the locations of Python, Python/scripts, OpenSceneGraph/bin to the system's PATH environment variable.
+Include the locations of OpenSceneGraph/lib and OpenSceneGrpah/include to the Visual Studio library and include directories.
+<br><br>
+<b>3. Downloading and Compiling Avango</b><br>
+Avango source code can be downloaded using an SVN client (such as <a href="http://tortoisesvn.tigris.org/">TortoiseSVN</a>)
+from the following address: <a href="">http://avango.org/svn/trunk</a>.
+<br> <br>
+You have the following possibilities of compiling Avango:
+<ul>
+<li>Open the supplied solution file avango.sln and build the project in the Visual Studio 2008
+<li>Create a new project from existing code in the Visual Studio:
+	<ul>
+	<li>Select the menu "File -> New -> Project from Existing Code"
+	<li>Select the directory in which you sources for avango for Windows reside.
+	<li>Enter the project name
+	<li>Select "Use external build system"
+	<li>As build command, enter the scons command
+	<li>Build the solution  
+</ul>
+<li>Build Avango modules from the Visual Studio command prompt:
+	<ul>
+	<li>Open the Visual Studio Command prompt
+	<li>Go to the location where the top level SConstruct file resides.
+	<li>Enter the scons command (you can also build only selected modules by providing the module
+            name after the scons command, e.g. scons core, scons osg, scons python, scons unittest, etc) 
+</ul></ul>
+
+In case the compilation was successfull, you should be able to start the SnowLand example (it is located in TBA). <br><br>
+
+In order to be able to use the built dlls (e.g. to "import avango" into a python application), the so-called manifest
+file has to be included into the dll. The command for an executable is
+<blockquote>
+mt.exe -manifest MyApp.exe.manifest -outputresource:MyApp.exe;1
+</blockquote>
+for a dll it is
+<blockquote>
+mt.exe -manifest MyLibrary.dll.manifest -outputresource:MyLibrary.dll;2 
+</blockquote>
+
+<!-- End page contents -->
+</body>
+</html>
+

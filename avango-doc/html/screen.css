@@ -15,16 +15,79 @@ dd {
 	line-height:130%;
 }
 
-.todo:before {
-	content: "To do: ";
+
+a {
+	color:#666;
 }
 
+/* Mark work in progress with class "todo". */
 .todo {
 	background:yellow;
 	border:dotted 3px white;
 	padding:3px;
 }
 
-a {
-	color:#666;
+/* Add todo label */
+
+.todo:before {
+	content: "To do: ";
+}
+
+/* Code snippets should be formatted with <div class="snippet"> */
+
+.snippet {
+	background-color:#ffd;
+	font-family:Fixedsys,Courier,monospace;
+	padding:10px;
+	border:dotted 1px black;
+}
+
+/* insert "code snippet" badge */
+
+.snippet:before {
+	width:7.5em;
+	display:block;
+	margin-top:-10px;
+	margin-left:-10px;
+	margin-right:-10px;
+	margin-bottom:10px;
+	padding:1px;
+	border-color:#999;
+	border-right-style:dotted;
+	border-right-width:1px;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	font-style:italic;
+	content: "code snippet";
+}
+
+/* Class lists - displayed in a separate block. TODO: Make consistent with other lists */
+
+ul.classlist {
+	background:#ddd;
+	font-family:Fixedsys,Courier,monospace;
+	padding: 10px;
+	border:dotted 1px black;
+
+	white-space:nowrap;
+	list-style-type:none;
+}
+
+/* Add "classes" badge */
+
+ul.classlist:before {
+	width:4.5em;
+	display:block;
+	margin-top:-10px;
+	margin-left:-10px;
+	margin-right:-10px;
+	margin-bottom:10px;
+	padding:1px;
+	border-color:#999;
+	border-right-style:dotted;
+	border-right-width:1px;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	font-style:italic;
+	content: "classes";
 }

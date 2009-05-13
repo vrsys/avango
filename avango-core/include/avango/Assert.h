@@ -28,9 +28,15 @@
 
 #include <cassert>
 
+#if defined(_WIN32)
+#include <avango/windows_specific.h>
+#else
+#define AV_DLL
+#endif
+
 namespace av
 {
-  void assert_fail(const char* assertion, const char* file,
+  AV_DLL void assert_fail(const char* assertion, const char* file,
                    unsigned int line, const char* function);
 }
 
@@ -67,7 +73,7 @@ namespace av
 # define AV_ASSERT(expr)                                                \
   ((expr)                                                               \
    ? static_cast<void>(0)                                               \
-   : (::av::assert_fail(#expr, __FILE__, __LINE__, AV_ASSERT_FUNCTION),   \
+   : (::av::assert_fail(#expr, __FILE__, __LINE__, AV_ASSERT_FUNCTION), \
       static_cast<void>(0)))
 
 // use GLIBC __ASSERT_FUNCTION whenever possible

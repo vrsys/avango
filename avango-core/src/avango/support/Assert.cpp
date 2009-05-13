@@ -29,15 +29,17 @@
 #include <sys/types.h>
 
 #if defined(_WIN32)
+#include <avango/windows_specific.h>
 #include <process.h>
 #else
 #include <unistd.h>
+#define AV_DLL
 #endif
 
 #include <sstream>
 #include <iostream>
 
-void av::assert_fail(const char* assertion, const char* file,
+AV_DLL void av::assert_fail(const char* assertion, const char* file,
                      unsigned int line, const char* function)
 {
   std::cerr << "Assertion \"" << assertion << "\" failed in file " << file

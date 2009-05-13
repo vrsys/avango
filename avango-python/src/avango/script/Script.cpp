@@ -93,7 +93,7 @@ namespace
 
         // FIXME This assertion triggers almost always as python still holds
         // references to our unborn class
-        assert((not this->referenceCount()));
+        assert((!this->referenceCount()));
 
         throw;
       }

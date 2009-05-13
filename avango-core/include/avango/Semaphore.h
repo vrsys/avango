@@ -27,11 +27,26 @@
 #define AVANGO_SEMAPHORE_H
 
 #include <boost/thread/thread.hpp>
+#include <boost/version.hpp>
+
+
+#if BOOST_VERSION > 103800
+#include <boost/thread/condition_variable.hpp>
+namespace av
+{
+	typedef boost::condition_variable condition;
+}
+#else
 #include <boost/thread/condition.hpp>
+namespace av
+{
+	typedef boost::condition condition;
+}
+#endif
 
 #include "windows_specific.h"
 
-namespace av
+namespace av 
 {
   /**
    * Semaphore implementation using boost::mutex
@@ -74,7 +89,7 @@ namespace av
     Semaphore(const Semaphore&);
     const Semaphore& operator=(const Semaphore&);
 
-    boost::condition mCondition;
+    av::condition mCondition;
     boost::mutex mMutex;
     int mValue;
 

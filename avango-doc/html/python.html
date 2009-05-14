@@ -23,7 +23,8 @@
 </ul>
 In any case, it is usually good idea to start your development in Python. Only if you come across insolvable problems, you should consider re-implementation of critical parts in C++.</p>
 <p>The Python programming model of AVANGO is simpler, easier to learn and more offers more efficient development. This is especially useful for beginners and for rapid prototyping applications (but, as said, not restricted to these cases). The following sections assume some basic familiarity with imerative and object-oriented programming and some basic knowledege about the Python programming language.</p>
-<h4>A simple application</h4>
+
+<h3>Scene setup</h3>
 
 <p>The main entry point of an AVANGO application is usually written in Python. The task of the main script is to set up the scene graph and start main loop. A very simple, but fully functinal AVANGO application:</p>
 <pre class="snippet">
@@ -43,7 +44,87 @@ avango.osg.simpleviewer.run(scene)
 
 <div class="sidenote">The Sphere node is very convenient for testing purposes because it can be used off the shelf. It allows in-line transformation. Besides, it already provides a ready-to-use geode. In fact, it derives from MatrixTransform. This behaviour is specific to the Sphere node, not all geometry nodes provide this functionality.</div>
 
-<div class="todo">more to come...</div>
+<h4>Setting field values</h4>
+<p>There are multiple ways to set the field values of fields:
+<dl>
+<dt>Specify in constructor</dt>
+<dd>
+When creating a node, field values may be directly specified in the constructor. This is very quick and convenient for setting initial values since multiple values can be set in one line. Unspecified field values will be initialized with a default value. This method is used twice in the above code.
+The following section sets the <em>Color</em> field to a reddish color and the <em>Matrix</em> field to a uniform scale by 0.2:
+<pre class="snippet">
+sphere = avango.osg.nodes.Sphere(
+            Color = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0),
+            Matrix = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
+</pre>
+The following section sets the <em>Children</em> field (a mutlifield) to one entry &quot;sphere&quot;:
+<pre class="snippet">
+scene = avango.osg.nodes.Group(Children = [sphere])
+</pre>
+</dd>
+<dt>Direct field access</dt>
+<dd>The above fields can also be specified by manually setting field values directly after node construction. The above passages can be rewritten in this fashion:
+<pre class="snippet">
+sphere = avango.osg.nodes.Sphere()
+sphere.Color.value = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0)
+sphere.Matrix.value = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
+</pre>
+and
+<pre class="snippet">
+scene = avango.osg.nodes.Group()
+scene.Children.value = [sphere]
+</pre>
+The second part could also be written as this:
+<pre class="snippet">
+scene = avango.osg.nodes.Group()
+scene.Children.value.append(sphere)
+</pre>
+</dd>
+<dt>Quick field access using <em>values</em></dt>
+<dd>When values of multiple fields of a node should be accessed, AVANGO offers a shortcut notation. The <em>values</em> property holds all field values of a node. Using this method, the first part would look like this:
+<pre class="snippet">
+sphere = avango.osg.nodes.Sphere()
+values = sphere.values
+values.Color = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0)
+values.Matrix = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
+</pre>
+</dd>
+</dl>
+<p>
+
+<h3>Implementing your own nodes</h3>
+<p>AVANGO allows you to specify your own nodes that perform calculations or specify custom behaviour. Custom nodes are the key to dynamic, interactive behaviour. Custom nodes in Python should subclass the <code>avango.script.Script</code> class. A node definition typically consists of three parts: Class declaration, field definition and behaviour method(s). The following section describes the three parts using the sample class <em>Bouncer</em>, which generates a simple bouncing motion for a ball.
+<dl>
+<dt>Class declaration</dt>
+<dd>The class declaration looks like this:
+<pre class="snippet">
+class Bouncer (avango.script.Script):
+    "Generates a time-dependent bouncing transformation"
+</pre>
+This is a standard Python class declaration, using the superclass <code>avango.script.Script</code>. No special code is needed. The second line is a class description that may be omitted - nevertheless, it's good practice to always specify a short description of the class.
+</dd>
+<dt>Field definition</dt>
+<dd>A Python script node is, as all AVANGO nodes are, a field container, which allows your node to interact with the remaining scene (see <a href="fieldscontainersconnections.html">Fields, Containers and Connections</a>). In this part, the fields of this node may be specified as class instance variables (you can dynamically add other fields later, but should rarely need to do so). AVANGO automatically gathers field definitions during object initialization and registers them to the AVANGO runtime environment, so you usually don't have to care about this. However, only AVANGO types are recognized as fields. The following snipped defines four single fields:
+<pre class="snippet">
+    HeightIn = avango.SFDouble()
+    SpeedIn = avango.SFDouble()
+    TimeIn = avango.SFDouble()
+    TransformOut = avango.osg.SFMatrix()
+</pre>
+Three fields are used as inputs, one as output. AVANGO does not distinguish input from output fields, but programmers should. 
+</dd>
+<dt>Behaviour implementation</dt>
+<dd>AVANGO offers you to perform your own calculations when a field value has changed. Two hooks are provided: <code>fieldHasChanged</code> is invoced immediately and synchronously when a field value has changed. However, since this implementation may cause deep cascading and may result in unnecessary evaluation, this is not the recommended mechanism for your behaviour implementation and you should rarely need to use it. Instead, the recommended mechanism for your calculations is the <code>evaluate</code> method. The method is called once per frame, before rendering, when a field value has changed. AVANGO ensures correct order of evaluation, according to the connection graph. The following snippet shows the <em>Bouncer</em> implementation:
+<pre class="snippet">
+    def evaluate(self):
+        position = self.HeightIn.value * fabs(sin( self.TimeIn.value * self.SpeedIn.value))
+        self.TransformOut.value = avango.osg.make_trans_mat(0,0,position)
+</pre>
+The implementation calculates the current bounce position, according to the time, height and speed input fields. Based on the bounce position, a transformation matrix is calculated and put into the corresponding output field.
+<div class="sidenote">Implementations of <code>evaulate</code> should only access the node's own fields and never change field values of other nodes. For manipulations of other nodes, use local output fields and establish a field connection.</div>
+ 
+</dl>
+
+</p>
 
 <!-- End page contents -->
 

@@ -25,8 +25,11 @@
 
 import avango.build
 
+Alias('install', Alias('install-examples'))
+
 examples_dir = avango.build.get_documentation_path('examples')
 Export('examples_dir')
+
 
 # basic examples
 

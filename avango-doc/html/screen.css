@@ -33,6 +33,34 @@ a {
 	content: "To do: ";
 }
 
+/* Side notes should be formatted with <div class="sidenote"> */
+
+.sidenote {
+	background-color:#fdf;
+	padding:10px;
+	border:dotted 1px black;
+}
+
+/* insert "side note" badge */
+
+.sidenote:before {
+	font-family:Fixedsys,Courier,monospace;
+	width:7.5em;
+	display:block;
+	margin-top:-10px;
+	margin-left:-10px;
+	margin-right:-10px;
+	margin-bottom:10px;
+	padding:1px;
+	border-color:#999;
+	border-right-style:dotted;
+	border-right-width:1px;
+	border-bottom-style:dotted;
+	border-bottom-width:1px;
+	font-style:italic;
+	content: "side note";
+}
+
 /* Code snippets should be formatted with <div class="snippet"> */
 
 .snippet {

@@ -22,12 +22,28 @@
 <li>Your application contains extensive computations that have proven to be impossible to implement in Python</li>
 </ul>
 In any case, it is usually good idea to start your development in Python. Only if you come across insolvable problems, you should consider re-implementation of critical parts in C++.</p>
-<p>The Python programming model of AVANGO is simpler, easier to learn and more offers more efficient development. This is especially useful for beginners and for rapid prototyping applications (but, as said, not restricted to these cases).</p>
+<p>The Python programming model of AVANGO is simpler, easier to learn and more offers more efficient development. This is especially useful for beginners and for rapid prototyping applications (but, as said, not restricted to these cases). The following sections assume some basic familiarity with imerative and object-oriented programming and some basic knowledege about the Python programming language.</p>
 <h4>A simple application</h4>
 
+<p>The main entry point of an AVANGO application is usually written in Python. The task of the main script is to set up the scene graph and start main loop. A very simple, but fully functinal AVANGO application:</p>
+<pre class="snippet">
+import avango.osg
+import avango.osg.simpleviewer
+ 
+sphere = avango.osg.nodes.Sphere(
+            Color = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0),
+            Matrix = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
 
+scene = avango.osg.nodes.Group(Children = [sphere])
 
-<div class="todo">needs to be written...</div>
+avango.osg.simpleviewer.run(scene)
+</pre>
+
+<p>After importing the required modules, the script generates a sphere geode with a given color and a scale matrix (which resizes the unit sphere to a radius of 0.2 units). The sphere is inserted into a scene group. Finally, an interactive renderer is launched with the scene.</p>
+
+<div class="sidenote">The Sphere node is very convenient for testing purposes because it can be used off the shelf. It allows in-line transformation. Besides, it already provides a ready-to-use geode. In fact, it derives from MatrixTransform. This behaviour is specific to the Sphere node, not all geometry nodes provide this functionality.</div>
+
+<div class="todo">more to come...</div>
 
 <!-- End page contents -->
 

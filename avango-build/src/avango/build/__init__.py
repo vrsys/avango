@@ -249,7 +249,7 @@ def get_library_path(path = ''):
 
 def get_documentation_path(path = ''):
     "Returns the installation prefix for documentation."
-    return scons.Dir(Environment.env['PREFIX']+'/doc/'+path)
+    return scons.Dir(Environment.env['PREFIX']+'/share/doc/avango/'+path)
 
 def get_binary_path(path = ''):
     "Returns the installation prefix for binary files."

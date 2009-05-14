@@ -119,3 +119,4 @@ if env['CONNECT_SUPPORT']:
     avango.build.SConscript('avango-connect/SConscript')
 avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')
+avango.build.SConscript('examples/SConscript')

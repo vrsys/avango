@@ -113,7 +113,7 @@ This is a standard Python class declaration, using the superclass <code>avango.s
 Three fields are used as inputs, one as output. AVANGO does not distinguish input from output fields, but programmers should. 
 </dd>
 <dt>Behaviour implementation</dt>
-<dd>AVANGO offers you to perform your own calculations when a field value has changed. Two hooks are provided: <code>fieldHasChanged</code> is invoced immediately and synchronously when a field value has changed. However, since this implementation may cause deep cascading and may result in unnecessary evaluation, this is not the recommended mechanism for your behaviour implementation and you should rarely need to use it. Instead, the recommended mechanism for your calculations is the <code>evaluate</code> method. The method is called once per frame, before rendering, when a field value has changed. AVANGO ensures correct order of evaluation, according to the connection graph. The following snippet shows the <em>Bouncer</em> implementation:
+<dd>AVANGO offers you to perform your own calculations when a field value has changed. Two hooks are provided: <code>fieldHasChanged</code> is invoced immediately and synchronously when a field value has changed. However, since this implementation may cause deep cascading and may result in unnecessary evaluation, this is not the recommended mechanism for your behaviour implementation and you should rarely need to use it. Instead, the recommended mechanism for your calculations is the <code>evaluate</code> method. The method is called once per frame, before rendering, when a field value has changed. AVANGO ensures correct order of evaluation, according to the connection graph. AVANGO also ensures that the node is only evaluated once per frame, helping application performance. The following snippet shows the <em>Bouncer</em> implementation:
 <pre class="snippet">
     def evaluate(self):
         position = self.HeightIn.value * fabs(sin( self.TimeIn.value * self.SpeedIn.value))
@@ -125,6 +125,80 @@ The implementation calculates the current bounce position, according to the time
 </dl>
 
 </p>
+<h3>Connecting fields</h3>
+
+<p>The last important task is to connect node fields to assemble the scene behaviour. In this example, a <em>Bouncer</em> node should be used to let a ball bounce in the scene. In order to archieve this behaviour, a <code>Sphere</code> node (the ball) is put into a <code>MatrixTransform</code> node, which will move the ball in the scene. The MatrixTransform node is added to the scene, as usual. In addition to the scene graph, a second graph is created using field connections, establishing a data flow graph within the scene. A <code>TimeSensor</code> node will provide timing information for the <code>Bouncer</code>. The bouncer node creates a transformation matrix, which is used to control the <code>MatrixTransform</code> of the ball. The corresponding part of the code could look like this:
+<pre class="snippet">
+sphere = avango.osg.nodes.Sphere(
+            Color = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0),
+            Matrix = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
+
+sphereTransformation = avango.osg.nodes.MatrixTransform(Children = [sphere])
+
+scene = avango.osg.nodes.Group(Children = [sphereTransformation])
+
+timer = avango.nodes.TimeSensor()
+
+bouncer = Bouncer(HeightIn = 0.5, SpeedIn = 3.0)
+
+bouncer.TimeIn.connect_from(timer.Time)
+
+sphereTransformation.Matrix.connect_from(bouncer.TransformOut)
+</pre>
+The first lines of code create the scene graph, the last two lines establish the field connection. The result is an animated scene with a bouncing ball. The following code shows the full AVANGO application, which can be saved as <em>bouncingball.py</em> and executed using <code>python bouncingball.py</code>. If AVANGO is properly installed and configured, the bouncing scene should appear. In addition, the code displays a ground plane, illustrating the use of a Quad.
+</p>
+<pre class="snippet">
+import avango.osg
+import avango.osg.simpleviewer
+import avango.script
+
+from math import pi
+from math import fabs
+from math import sin
+
+class Bouncer (avango.script.Script):
+    "Make a time-dependent bouncing transformation"
+
+    HeightIn = avango.SFDouble()
+    SpeedIn = avango.SFDouble()
+    TimeIn = avango.SFDouble()
+    TransformOut = avango.osg.SFMatrix()
+
+    def evaluate(self):
+        position = self.HeightIn.value * fabs(sin( self.TimeIn.value * self.SpeedIn.value))
+        self.TransformOut.value = avango.osg.make_trans_mat(0,0,position)
+
+floor = avango.osg.nodes.Quad(
+            Color = avango.osg.Vec4(0.2,0.9,0.2,1.0),
+            Width = 1.0,
+            Height = 1.0,
+            Position = avango.osg.Vec3(0,0,0))
+
+floorGeode = avango.osg.nodes.Geode(Drawables = [floor])
+
+floorTransformation = avango.osg.nodes.MatrixTransform(
+            Children = [floorGeode],
+            Matrix = avango.osg.make_trans_mat(-0.5, 0.5, -0.2))
+
+sphere = avango.osg.nodes.Sphere(
+            Color = avango.osg.Vec4(0.9, 0.2, 0.2, 1.0),
+            Matrix = avango.osg.make_scale_mat(0.2, 0.2, 0.2))
+
+sphereTransformation = avango.osg.nodes.MatrixTransform(Children = [sphere])
+
+scene = avango.osg.nodes.Group(Children = [sphereTransformation, floorTransformation])
+
+timer = avango.nodes.TimeSensor()
+
+bouncer = Bouncer(HeightIn = 0.5, SpeedIn = 3.0)
+
+bouncer.TimeIn.connect_from(timer.Time)
+
+sphereTransformation.Matrix.connect_from(bouncer.TransformOut)
+
+avango.osg.simpleviewer.run(scene)
+</pre>
+
 
 <!-- End page contents -->
 

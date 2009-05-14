@@ -23,10 +23,46 @@
 #                                                                        #
 ##########################################################################
 
-SConscript ([
-    'doxygen/SConscript',
-    'epydoc/SConscript',
-])
+import avango.build
 
-Alias('doc', ['doxygen', 'epydoc'])
-Alias('install-doc', ['install-doxygen', 'install-epydoc']);
+# environment
+epydoc_env = avango.build.Environment()
+
+
+# epydoc build
+epydoc_html = epydoc_env.Command(
+    'html/index.html',
+    '',
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --html'
+    + ' --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
+    + avango.build.get_python_path().abspath + '/avango',
+    chdir = 1)
+
+epydoc_env.Clean(epydoc_html, 'html')
+
+epydoc_pdf = epydoc_env.Command(
+    'latex/api.pdf',
+    '',
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --pdf'
+    + ' --no-private --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
+    + avango.build.get_python_path().abspath + '/avango',
+    chdir = 1)
+
+epydoc_env.Clean(epydoc_pdf, 'latex')
+
+
+# epydoc install
+epydoc_install_html = epydoc_env.Install(
+    avango.build.get_documentation_path().abspath + '/epydoc',
+    source = 'html')
+
+epydoc_env.Clean(epydoc_install_html, avango.build.get_documentation_path().abspath + '/epydoc/html')
+
+epydoc_install_pdf = epydoc_env.InstallAs(
+    target = avango.build.get_documentation_path().abspath + '/epydoc/avango-python-reference.pdf',
+    source = 'latex/api.pdf')
+
+
+# aliases
+Alias('epydoc', [epydoc_html, epydoc_pdf])
+Alias('install-epydoc', ['epydoc', epydoc_install_html, epydoc_install_pdf]);

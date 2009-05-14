@@ -169,9 +169,9 @@ av::daemon::VRPNClient::handleButton(const vrpn_BUTTONCB b)
 void
 av::daemon::VRPNClient::handleTracker(const vrpn_TRACKERCB t)
 {
-  NumStationMap::iterator ns = mStations.find(t.sensor+1);
+  NumStationMap::iterator ns;
 
-  if (ns != mStations.end()) 
+  for (ns=mStations.begin(); ns!=mStations.end(); ns++) 
   {
     ::osg::Matrixf pos_mat;
     pos_mat.makeTranslate(t.pos[0], t.pos[1], t.pos[2]);

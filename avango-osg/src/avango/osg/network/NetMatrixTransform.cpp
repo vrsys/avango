@@ -111,7 +111,7 @@ av::osg::NetMatrixTransform::fieldHasChangedLocalSideEffect(const Field& field)
 
   if (&field == &Groupname) {
     if (Groupname.getValue().size()) {
-      logger.trace() << "fpNetDCS::fieldHasChangedLocalSideEffect: joining net-group '%s'.", Groupname.getValue().c_str();
+      AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fpNetDCS::fieldHasChangedLocalSideEffect: joining net-group '%1%'.") % Groupname.getValue().c_str()));
       // if the groupname is not empty try to join
       join(Groupname.getValue());
       Name.setValue(Groupname.getValue());
@@ -278,7 +278,7 @@ av::osg::NetMatrixTransform::_setStateFragment(const std::string& fragment, Msg&
   }
   // consume the state message
   consumeMessage(stateMsg);
-  // consume the shared container message 
+  // consume the shared container message
   consumeMessage(stateMsg);
 }
 
@@ -369,8 +369,8 @@ av::osg::NetMatrixTransform::setChildrenCB(const av::osg::MFNode::SetValueEvent&
       if (distributor != mGroupMap.end()) {
         distributor->second->Children.add1Value(node);
       } else {
-        logger.warn() << "cannot find node @0x%x (created by '%s') in group map",
-          node.getPtr(), node->netCreator();
+        AVANGO_LOG(logger, av::logging::WARN, boost::str(boost::format("cannot find node @0x%1% (created by '%2%') in group map")
+                  % node.getPtr() % node->netCreator()));
       }
     } else {
       mLocalGroups->Children.add1Value(node);
@@ -419,12 +419,12 @@ av::osg::NetMatrixTransform::setSharedContainersCB(const MFContainer::SetValueEv
       if (distributor != mSharedContainerMap.end()) {
         distributor->second->SharedContainers.add1Value(container);
       } else {
-        logger.warn() << "cannot find field container @0x%x (created by '%s') in shared container map",
+        AVANGO_LOG(logger, av::logging::WARN, boost::str(boost::format("cannot find field container @0x%1% (created by '%2%') in shared container map") % container.getPtr() % container->netCreator()));
         container.getPtr(), container->netCreator();
       }
     } else
     {
-      logger.warn() << " object is not distributed !";
+      AVANGO_LOG(logger, av::logging::WARN, " object is not distributed !");
     }
   }
 }

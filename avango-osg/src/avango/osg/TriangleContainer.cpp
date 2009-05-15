@@ -77,7 +77,7 @@ av::osg::TriangleContainer::updateVertexBuffer()
   //check if we have enough points for a triangle
   if (numEle < 3)
   {
-    logger.warn("Not enough points to create triangle");
+    AVANGO_LOG(logger, av::logging::WARN, "Not enough points to create triangle");
     return;
   }
   ::osg::ref_ptr< ::osg::Vec3Array> vertexBuffer = new ::osg::Vec3Array(numEle);
@@ -246,7 +246,7 @@ av::osg::TriangleContainer::updateMode()
     update();
   }
   else
-    logger.warn("Mode type not supported");
+    AVANGO_LOG(logger, av::logging::WARN, "Mode type not supported");
 }
 
 unsigned

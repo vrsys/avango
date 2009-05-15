@@ -433,8 +433,6 @@ av::osg::viewer::GraphicsWindow::fieldHasChangedLocalSideEffect(const av::Field&
 /* virtual */ void
 av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
 {
-  logger.trace() << "evaluateLocalSideEffect()";
-
   // delete window, if settings have changed which can't be updated dynamically
   if (mOsgGraphicsWindow.valid() &&
       (mScreenIdentifier != ScreenIdentifier.getValue() ||
@@ -474,12 +472,12 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
     if (traits->displayNum == -1)
     {
       traits->displayNum = 0;
-      logger.warn() << "evaluateLocalSideEffect(): invalid display identifier, using display 0";
+      AVANGO_LOG(logger, av::logging::WARN, "evaluateLocalSideEffect(): invalid display identifier, using display 0");
     }
     if (traits->screenNum == -1)
     {
       traits->screenNum = 0;
-      logger.warn() << "evaluateLocalSideEffect(): invalid screen identifier, using screen 0";
+      AVANGO_LOG(logger, av::logging::WARN, "evaluateLocalSideEffect(): invalid screen identifier, using screen 0");
     }
 
     // update screen resolution
@@ -519,7 +517,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
       {
         mOsgGraphicsWindow = 0;
         mOsgSharedContextMaster = 0;
-        logger.warn() << "evaluateLocalSideEffect(): couldn't create window";
+        AVANGO_LOG(logger, av::logging::WARN, "evaluateLocalSideEffect(): couldn't create window");
       }
     }
   }
@@ -585,7 +583,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
     }
     else
     {
-       logger.error() << "evaluateLocalSideEffect(): checking events failed";
+      AVANGO_LOG(logger, av::logging::ERROR, "evaluateLocalSideEffect(): checking events failed");
     }
 #endif
 
@@ -595,8 +593,6 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
 /* virtual */ void
 av::osg::viewer::GraphicsWindow::evaluate()
 {
-  logger.trace() << "evaluate()";
-
   int posX = -1, posY = -1, width = 0, height = 0;
   ::osg::Vec2 mouseMove(0.0, 0.0), mouseMoveNorm(0.0, 0.0);
 

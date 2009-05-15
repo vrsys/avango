@@ -110,7 +110,7 @@ av::osg::viewer::View::fieldHasChangedLocalSideEffect(const Field& field)
         mOsgView->addSlave(osg_camera);
       }
       else
-        logger.warn() << "fieldHasChangedLocalSideEffect: invalid slave camera";
+        AVANGO_LOG(logger, av::logging::WARN, "fieldHasChangedLocalSideEffect: invalid slave camera");
     }
 
     mOsgView->assignSceneDataToCameras();

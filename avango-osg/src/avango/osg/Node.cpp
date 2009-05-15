@@ -134,13 +134,12 @@ av::osg::Node::getParentsCB(const av::osg::MFGroup::GetValueEvent& event)
       }
       else
       {
-        logger.info() << "getParentsCB: "
-                      << "found user data at a parent that doesn't reference an av::osg::Group.";
+        AVANGO_LOG(logger, av::logging::INFO, "getParentsCB: found user data at a parent that doesn't reference an av::osg::Group.");
       }
     }
     else
     {
-      logger.warn() << "getParentsCB: invalid osg parent found!";
+      AVANGO_LOG(logger, av::logging::WARN, "getParentsCB: invalid osg parent found!");
     }
   }
 }
@@ -148,7 +147,7 @@ av::osg::Node::getParentsCB(const av::osg::MFGroup::GetValueEvent& event)
 /* virtual */ void
 av::osg::Node::setParentsCB(const av::osg::MFGroup::SetValueEvent&)
 {
-  logger.info() << "setParentsCB: Parents field is read only!";
+  AVANGO_LOG(logger, av::logging::INFO, "setParentsCB: Parents field is read only!");
 }
 
 /* virtual */ void

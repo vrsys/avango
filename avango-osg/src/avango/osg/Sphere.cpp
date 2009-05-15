@@ -49,7 +49,7 @@ av::osg::Sphere::Sphere() :
   mDetailRatioChanged(false)
 {
   AV_FC_ADD_FIELD(Radius, 1.0f);
-  AV_FC_ADD_FIELD(DetailRatio, 1.0f);
+  AV_FC_ADD_FIELD(DetailRatio, 0.5f);
   AV_FC_ADD_FIELD(Color, ::osg::Vec4(1, 1, 1, 1));
 
   mSphere = new ::osg::Sphere(::osg::Vec3(), Radius.getValue());
@@ -86,23 +86,23 @@ av::osg::Sphere::initClass()
 av::osg::Sphere::fieldHasChangedLocalSideEffect(const av::Field& field)
 {
   MatrixTransform::fieldHasChangedLocalSideEffect(field);
-  LOG_TRACE(logger) << "fieldHasChangedLocalSideEffect()";
+  AVANGO_LOG(logger, av::logging::TRACE, "fieldHasChangedLocalSideEffect()");
 
   if (&field == &Radius)
   {
-    logger.debug() << "fieldHadChangedLocalSideEffect(): Radius changed to " << Radius.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Radius changed to %1%") % Radius.getValue()));
     mRadiusChanged = true;
   }
 
   if (&field == &DetailRatio)
   {
-    logger.debug() << "fieldHadChangedLocalSideEffect(): DetailRatio changed to " << DetailRatio.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): DetailRatio changed to %1%") % DetailRatio.getValue()));
     mDetailRatioChanged = true;
   }
 
   if (&field == &Color)
   {
-    logger.debug() << "fieldHadChangedLocalSideEffect(): Color changed to " << &Color.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Color changed to %1%") % &Color.getValue()));
     mColorChanged = true;
   }
 }
@@ -115,7 +115,7 @@ av::osg::Sphere::evaluateLocalSideEffect()
 
   if (mRadiusChanged)
   {
-    logger.debug() << "evaluateLocalSideEffect(): got new Radius " << Radius.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new Radius %1%") % Radius.getValue()));
     mSphere->setRadius(Radius.getValue());
     mShapeDrawable->dirtyDisplayList();
     mShapeDrawable->dirtyBound();
@@ -124,7 +124,7 @@ av::osg::Sphere::evaluateLocalSideEffect()
 
   if (mDetailRatioChanged)
   {
-    logger.debug() << "evaluateLocalSideEffect(): got new DetailRatio " << DetailRatio.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new DetailRatio %1%") % DetailRatio.getValue()));
     mHints->setDetailRatio(DetailRatio.getValue());
     mShapeDrawable->dirtyDisplayList();
     mShapeDrawable->dirtyBound();
@@ -133,7 +133,7 @@ av::osg::Sphere::evaluateLocalSideEffect()
 
   if (mColorChanged)
   {
-    logger.debug() << "evaluateLocalSideEffect(): got new Color " << &Color.getValue();
+    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new Color %1%") % &Color.getValue()));
     mShapeDrawable.get()->setColor(Color.getValue());
     mColorChanged = false;
   }

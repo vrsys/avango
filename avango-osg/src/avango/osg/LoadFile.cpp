@@ -78,16 +78,16 @@ av::osg::LoadFile::getLoadedNode() const
 av::osg::LoadFile::fieldHasChangedLocalSideEffect(const av::Field& field)
 {
   MatrixTransform::fieldHasChangedLocalSideEffect(field);
-  LOG_TRACE(logger) << "fieldHasChangedLocalSideEffect()";
+  AVANGO_LOG(logger, av::logging::TRACE, "fieldHasChangedLocalSideEffect()");
 
   if (&field == &Filename)
   {
     mFilename = Filename.getValue();
-    logger.debug() << "fieldHadChangedLocalSideEffect(): Filename changed to " << mFilename;
+    AVANGO_LOG(logger, av::logging::DEBUG, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Filename changed to %1%") % mFilename));
 
     if (mFilename != mOldFilename)
     {
-      logger.debug() << "fieldHadChangedLocalSideEffect(): Filename changed";
+      AVANGO_LOG(logger, av::logging::DEBUG, "fieldHadChangedLocalSideEffect(): Filename changed");
       mFilenameChanged = true;
       mOldFilename = mFilename;
     }
@@ -98,11 +98,11 @@ av::osg::LoadFile::fieldHasChangedLocalSideEffect(const av::Field& field)
 av::osg::LoadFile::evaluateLocalSideEffect()
 {
   MatrixTransform::evaluateLocalSideEffect();
-  LOG_TRACE(logger) << "evaluateLocalSideEffect()";
+  AVANGO_LOG(logger, av::logging::TRACE, "evaluateLocalSideEffect()");
 
   if (mFilenameChanged)
   {
-    logger.debug() << "evaluateLocalSideEffect(): got new filename " << mFilename;
+    AVANGO_LOG(logger, av::logging::DEBUG, boost::str(boost::format("evaluateLocalSideEffect(): got new filename %1%") % mFilename));
 
     if (mLoadedNode.valid())
     {
@@ -112,7 +112,7 @@ av::osg::LoadFile::evaluateLocalSideEffect()
 
     // there are much more option to readNodeFile*(). This is just the first try.
     mLoadedNode = ::osgDB::readNodeFile(mFilename);
-    logger.debug() << "evaluateLocalSideEffect(): loaded scene graph " << mFilename;
+    AVANGO_LOG(logger, av::logging::DEBUG, boost::str(boost::format("evaluateLocalSideEffect(): loaded scene graph %1%") % mFilename));
 
     if (mLoadedNode.valid())
     {

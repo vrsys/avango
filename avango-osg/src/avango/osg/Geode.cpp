@@ -95,13 +95,12 @@ av::osg::Geode::getDrawablesCB(const av::osg::MFDrawable::GetValueEvent& event)
       }
       else
       {
-        logger.info() << "getDrawablesCB: "
-                      << "found user data that doesn't reference an av::osg::Drawable.";
+        AVANGO_LOG(logger, av::logging::INFO, "getDrawablesCB: found user data that doesn't reference an av::osg::Drawable.");
       }
     }
     else
     {
-      logger.warn() << "getDrawableCB: null osg drawable found!";
+      AVANGO_LOG(logger, av::logging::WARN, "getDrawableCB: null osg drawable found!");
     }
   }
 }
@@ -128,7 +127,7 @@ av::osg::Geode::setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event)
     }
     else
     {
-      logger.warn() << "setDrawableCB: null osg drawable found!";
+      AVANGO_LOG(logger, av::logging::WARN, "setDrawableCB: null osg drawable found!");
     }
   }
 
@@ -142,11 +141,11 @@ av::osg::Geode::setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event)
     if (d_it->isValid() && d_it->getPtr()->getOsgDrawable() != 0)
     {
       if (!mOsgGeode->addDrawable(d_it->getPtr()->getOsgDrawable()))
-        logger.warn() << "setDrawableCB: couldn't insert drawable!";
+        AVANGO_LOG(logger, av::logging::WARN, "setDrawableCB: couldn't insert drawable!");
     }
     else
     {
-      logger.warn() << "setDrawableCB: invalid drawable to add found!";
+      AVANGO_LOG(logger, av::logging::WARN, "setDrawableCB: invalid drawable to add found!");
     }
   }
 }

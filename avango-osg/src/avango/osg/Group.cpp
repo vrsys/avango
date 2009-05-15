@@ -99,13 +99,12 @@ av::osg::Group::getChildrenCB(const av::osg::MFNode::GetValueEvent& event)
       }
       else
       {
-        logger.info() << "getChildrenCB: "
-                      << "found user data at a child that doesn't reference an av::osg::Node.";
+        AVANGO_LOG(logger, av::logging::INFO, "getChildrenCB: found user data at a child that doesn't reference an av::osg::Node.");
       }
     }
     else
     {
-      logger.warn() << "getChildrenCB: null osg child found!";
+      AVANGO_LOG(logger, av::logging::WARN, "getChildrenCB: null osg child found!");
     }
   }
 }
@@ -132,7 +131,7 @@ av::osg::Group::setChildrenCB(const av::osg::MFNode::SetValueEvent& event)
     }
     else
     {
-      logger.warn() << "setChildrenCB: null osg child found!";
+      AVANGO_LOG(logger, av::logging::WARN, "setChildrenCB: null osg child found!");
     }
   }
 
@@ -146,11 +145,11 @@ av::osg::Group::setChildrenCB(const av::osg::MFNode::SetValueEvent& event)
     if (ch_it->isValid() && ch_it->getPtr()->getOsgNode() != 0)
     {
       if (!mOsgGroup->addChild(ch_it->getPtr()->getOsgNode()))
-        logger.warn() << "setChildrenCB: couldn't insert child!";
+        AVANGO_LOG(logger, av::logging::WARN, "setChildrenCB: couldn't insert child!");
     }
     else
     {
-      logger.warn() << "setChildrenCB: invalid child to add found!";
+      AVANGO_LOG(logger, av::logging::WARN, "setChildrenCB: invalid child to add found!");
     }
   }
 }

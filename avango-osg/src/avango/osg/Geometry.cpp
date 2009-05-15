@@ -138,7 +138,7 @@ av::osg::Geometry::evaluateLocalSideEffect()
           }
           else
           {
-            logger.warn() << "not enough indices for given primitive lengths";
+            AVANGO_LOG(logger, av::logging::WARN, "not enough indices for given primitive lengths");
             break;
           }
         }

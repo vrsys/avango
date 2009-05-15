@@ -2,6 +2,30 @@ html, body, p {
 	font-family: Helvetica, Arial, sans-serif;
 }
 
+body {
+	padding:30px;
+	padding-top:100px;
+	background-image:url(media/avangong.png);
+	background-repeat:no-repeat;
+	background-position:10px 10px;
+}
+
+h1 {
+	font-size:1.4em;
+}
+
+h2 {
+	font-size:1.3em;
+}
+
+h3 {
+	font-size:1.2em;
+}
+
+h4 {
+	font-size:1.1em;
+}
+
 p {
 	line-height:130%;
 }

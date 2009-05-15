@@ -236,7 +236,7 @@ extern "C" {
 
   void uuid_create(my_uuid_t*, uint_t*)
   {
-    AVANGO_LOG(logger,logging::ERROR , "uuid_create() not available on this platform!")
+    AVANGO_LOG(logger,av::logging::ERROR , "uuid_create() not available on this platform!")
   }
 #endif
 

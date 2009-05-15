@@ -58,6 +58,13 @@ viewer = avango.osg.viewer.nodes.Viewer()
 viewer.MasterCamera.value = camera
 viewer.Scene.value = root_group
 
+# set up event handling
+
+eventfields = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(eventfields.KeyAltReturn)
+window.DragEvent.connect_from(eventfields.DragEvent)
+window.MoveEvent.connect_from(eventfields.MoveEvent)
+
 
 # set up desktop flyer mover
 
@@ -72,29 +79,29 @@ camera.ViewerTransform.connect_from(desktopflyer.Matrix)
 
 # typical mouse/keyboard setup:
 # control xy view rotation with mouse right button and mouse movement
-desktopflyer.RotateXYTrigger.connect_from(window.MouseButtons_OnlyRight)
+desktopflyer.RotateXYTrigger.connect_from(eventfields.MouseButtons_OnlyRight)
 
 # control move xz with cursor keys
-desktopflyer.MoveForward.connect_from(window.KeyUp)
-desktopflyer.MoveBackward.connect_from(window.KeyDown)
-desktopflyer.MoveLeft.connect_from(window.KeyLeft)
-desktopflyer.MoveRight.connect_from(window.KeyRight)
+desktopflyer.MoveForward.connect_from(eventfields.KeyUp)
+desktopflyer.MoveBackward.connect_from(eventfields.KeyDown)
+desktopflyer.MoveLeft.connect_from(eventfields.KeyLeft)
+desktopflyer.MoveRight.connect_from(eventfields.KeyRight)
 
 # control move up down and z rotation with additional keys
-desktopflyer.MoveUp.connect_from(window.KeyHome)
-desktopflyer.MoveDown.connect_from(window.KeyEnd)
-desktopflyer.RotateCW.connect_from(window.KeyDelete)
-desktopflyer.RotateCCW.connect_from(window.KeyPageDown)
+desktopflyer.MoveUp.connect_from(eventfields.KeyHome)
+desktopflyer.MoveDown.connect_from(eventfields.KeyEnd)
+desktopflyer.RotateCW.connect_from(eventfields.KeyDelete)
+desktopflyer.RotateCCW.connect_from(eventfields.KeyPageDown)
 
 # controlling xy rotation is also possible using keys
-#desktopflyer.RotateLeft.connect_from(window.KeySpace)
-#desktopflyer.RotateRight.connect_from(window.KeyEnter)
-#desktopflyer.RotateUp.connect_from(window.KeyShift)
-#desktopflyer.RotateDown.connect_from(window.KeyCtrl)
+#desktopflyer.RotateLeft.connect_from(eventfields.KeySpace)
+#desktopflyer.RotateRight.connect_from(eventfields.KeyEnter)
+#desktopflyer.RotateUp.connect_from(eventfields.KeyShift)
+#desktopflyer.RotateDown.connect_from(eventfields.KeyCtrl)
 
 # it's possible to control all 6 dof with mouse only
-#desktopflyer.MoveXZTrigger.connect_from(window.MouseButtons_OnlyMiddle)
-#desktopflyer.MoveYRotateZTrigger.connect_from(window.MouseButtons_MiddleAndRight)
+#desktopflyer.MoveXZTrigger.connect_from(eventfields.MouseButtons_OnlyMiddle)
+#desktopflyer.MoveYRotateZTrigger.connect_from(eventfields.MouseButtons_MiddleAndRight)
 
 # uncomment and play around with custom properties
 #desktopflyer.MoveSpeed.value = 100

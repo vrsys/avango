@@ -59,6 +59,17 @@ window2 = avango.osg.viewer.nodes.GraphicsWindow(WantedPositionX = 700, WantedPo
 camera2 = avango.osg.viewer.nodes.Camera(Window = window2)
 view2 = avango.osg.viewer.nodes.View(MasterCamera = camera2, Scene = root_group2)
 
+# set up event handlers
+
+events1 = avango.osg.viewer.nodes.EventFields(View = view1)
+window1.ToggleFullScreen.connect_from(events1.KeyAltReturn)
+window1.DragEvent.connect_from(events1.DragEvent)
+window1.MoveEvent.connect_from(events1.MoveEvent)
+
+events2 = avango.osg.viewer.nodes.EventFields(View = view2)
+window2.ToggleFullScreen.connect_from(events2.KeyAltReturn)
+window2.DragEvent.connect_from(events2.DragEvent)
+window2.MoveEvent.connect_from(events2.MoveEvent)
 
 # set up composite viewer
 
@@ -69,9 +80,9 @@ composite_viewer = avango.osg.viewer.nodes.CompositeViewer(Views = [view1, view2
 
 trackball1 = avango.moving.nodes.Trackball(Matrix = camera1.ViewerTransform.value)
 trackball1.Direction.connect_from(window1.MousePositionNorm)
-trackball1.RotateTrigger.connect_from(window1.MouseButtons_OnlyLeft)
-trackball1.ZoomTrigger.connect_from(window1.MouseButtons_LeftAndRight)
-trackball1.PanTrigger.connect_from(window1.MouseButtons_OnlyRight)
+trackball1.RotateTrigger.connect_from(events1.MouseButtons_OnlyLeft)
+trackball1.ZoomTrigger.connect_from(events1.MouseButtons_LeftAndRight)
+trackball1.PanTrigger.connect_from(events1.MouseButtons_OnlyRight)
 trackball1.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)
@@ -83,9 +94,9 @@ camera1.ViewerTransform.connect_from(trackball1.Matrix)
 
 trackball2 = avango.moving.nodes.Trackball(Matrix = camera2.ViewerTransform.value)
 trackball2.Direction.connect_from(window2.MousePositionNorm)
-trackball2.RotateTrigger.connect_from(window2.MouseButtons_OnlyLeft)
-trackball2.ZoomTrigger.connect_from(window2.MouseButtons_LeftAndRight)
-trackball2.PanTrigger.connect_from(window2.MouseButtons_OnlyRight)
+trackball2.RotateTrigger.connect_from(events2.MouseButtons_OnlyLeft)
+trackball2.ZoomTrigger.connect_from(events2.MouseButtons_LeftAndRight)
+trackball2.PanTrigger.connect_from(events2.MouseButtons_OnlyRight)
 trackball2.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)

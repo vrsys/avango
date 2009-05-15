@@ -27,7 +27,6 @@ import avango.osg.viewer
 import avango.moving
 import avango.tools
 
-
 # set up scene graph
 
 obj_trans = avango.osg.nodes.MatrixTransform()
@@ -55,14 +54,21 @@ window = avango.osg.viewer.nodes.GraphicsWindow()
 camera = avango.osg.viewer.nodes.Camera(Window = window)
 viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = root_group)
 
+# set up event handling
+
+eventfields = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(eventfields.KeyAltReturn)
+window.DragEvent.connect_from(eventfields.DragEvent)
+window.MoveEvent.connect_from(eventfields.MoveEvent)
+
 
 # set up trackball mover
 
 trackball = avango.moving.nodes.Trackball(Matrix = camera.ViewerTransform.value)
 trackball.Direction.connect_from(window.MousePositionNorm)
-trackball.RotateTrigger.connect_from(window.MouseButtons_OnlyMiddle)
-trackball.ZoomTrigger.connect_from(window.MouseButtons_MiddleAndRight)
-trackball.PanTrigger.connect_from(window.MouseButtons_OnlyRight)
+trackball.RotateTrigger.connect_from(eventfields.MouseButtons_OnlyMiddle)
+trackball.ZoomTrigger.connect_from(eventfields.MouseButtons_MiddleAndRight)
+trackball.PanTrigger.connect_from(eventfields.MouseButtons_OnlyRight)
 trackball.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)
@@ -73,7 +79,7 @@ camera.ViewerTransform.connect_from(trackball.Matrix)
 # setup tool interaction
 
 pick_selector = avango.tools.nodes.PickSelector()
-pick_selector.PickTrigger.connect_from(window.MouseButtons_OnlyLeft)
+pick_selector.PickTrigger.connect_from(eventfields.MouseButtons_OnlyLeft)
 pick_selector.PickRayTransform.connect_from(camera.MouseNearTransform)
 pick_selector.RootNode.connect_from(viewer.Scene)
 

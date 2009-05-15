@@ -26,6 +26,7 @@
 #include <avango/osg/viewer/Camera.h>
 #include <avango/osg/viewer/CompositeViewer.h>
 #include <avango/osg/viewer/GraphicsWindow.h>
+#include <avango/osg/viewer/EventFields.h>
 #include <avango/osg/viewer/Init.h>
 #include <avango/osg/viewer/View.h>
 #include <avango/osg/viewer/Viewer.h>
@@ -57,6 +58,8 @@ BOOST_PYTHON_MODULE(_viewer)
   register_field<av::osg::viewer::SFCompositeViewer>("SFCompositeViewer");
   register_field<av::osg::viewer::SFGraphicsWindow>("SFGraphicsWindow");
   register_multifield<av::osg::viewer::MFGraphicsWindow>("MFGraphicsWindow");
+  register_field<av::osg::viewer::SFEventFields>("SFEventFields");
+  register_multifield<av::osg::viewer::MFEventFields>("MFEventFields");
   register_field<av::osg::viewer::SFView>("SFView");
   register_multifield<av::osg::viewer::MFView>("MFView");
   register_field<av::osg::viewer::SFViewer>("SFViewer");
@@ -69,6 +72,7 @@ BOOST_PYTHON_MODULE(_viewer)
     .def("frame_without_evaluation", &av::osg::viewer::CompositeViewer::frameWithoutEvaluation)
     ;
   class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::Object>, boost::noncopyable >("GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
+  class_<av::osg::viewer::EventFields, av::Link<av::osg::viewer::EventFields>, bases<av::Object>, boost::noncopyable >("EventFields", "EventFields: setting fields for exposing events ", no_init);
   class_<av::osg::viewer::View, av::Link<av::osg::viewer::View>, bases<av::osg::Object>, boost::noncopyable >("View", "View: contains cameras and the scene", no_init);
   class_<av::osg::viewer::Viewer, av::Link<av::osg::viewer::Viewer>, bases<av::osg::viewer::View>, boost::noncopyable >("Viewer", "Viewer: is and renders a View", no_init)
     .def("frame", &av::osg::viewer::Viewer::frame)

@@ -30,292 +30,9 @@
 #include <osg/Version>
 #include <osg/DeleteHandler>
 
-#if defined(__APPLE__)
-#include <osgViewer/api/Carbon/GraphicsWindowCarbon>
-#include <osgViewer/api/Carbon/PixelBufferCarbon>
-#endif
-
-#if defined(__linux__)
-#include <osgViewer/api/X11/GraphicsWindowX11>
-#include <osgViewer/api/X11/PixelBufferX11>
-#endif
-
-#if defined(_WIN32)
-#include <osgViewer/api/Win32/GraphicsWindowWin32>
-#include <osgViewer/api/Win32/PixelBufferWin32>
-#endif
-
-#if defined(__linux__)
-extern "C"
-{
-  typedef int (*X11ErrorHandler)(Display*, XErrorEvent*);
-
-  int X11ErrorHandling(Display* display, XErrorEvent* event)
-  {
-    ::osg::notify(::osg::NOTICE) << "Got an X11ErrorHandling call display = " << display
-                                 << " event = " << event << std::endl;
-
-    char buffer[256];
-    XGetErrorText(display, event->error_code, buffer, 256);
-
-    ::osg::notify(::osg::NOTICE) << buffer << std::endl;
-    ::osg::notify(::osg::NOTICE) << "Major opcode: " << (int)event->request_code << std::endl;
-    ::osg::notify(::osg::NOTICE) << "Minor opcode: " << (int)event->minor_code << std::endl;
-    ::osg::notify(::osg::NOTICE) << "Error code: " << (int)event->error_code << std::endl;
-    ::osg::notify(::osg::NOTICE) << "Request serial: " << event->serial << std::endl;
-    ::osg::notify(::osg::NOTICE) << "Current serial: " << NextRequest( display ) - 1 << std::endl;
-
-    switch(event->error_code)
-    {
-      case BadValue:
-        ::osg::notify(::osg::NOTICE) << "  Value: " << event->resourceid << std::endl;
-        break;
-
-      case BadAtom:
-        ::osg::notify(::osg::NOTICE) << "  AtomID: " << event->resourceid << std::endl;
-        break;
-
-      default:
-        ::osg::notify(::osg::NOTICE) << "  ResourceID: " << event->resourceid << std::endl;
-        break;
-    }
-
-    return 0;
-  }
-}
-#endif // __linux__
-
 namespace
 {
   av::Logger& logger(av::getLogger("av::osg::viewer::GraphicsWindow"));
-
-#if defined(__linux__)
-  // We need to check the window events in the avango evaluate instead of the
-  // OSG event traversal, so we create and register a new window class, which
-  // does not check the window events.
-  class GraphicsWindowX11NoEvents : public osgViewer::GraphicsWindowX11
-  {
-  public:
-    GraphicsWindowX11NoEvents(::osg::GraphicsContext::Traits* traits):
-      GraphicsWindowX11(traits)
-    {}
-
-    /* virtual */ void checkEvents() {}
-  };
-
-  class X11WindowingSystemInterface : public ::osg::GraphicsContext::WindowingSystemInterface
-  {
-
-  protected:
-
-    bool _errorHandlerSet;
-
-  public:
-
-    X11WindowingSystemInterface()
-    {
-      ::osg::notify(::osg::INFO) << "X11WindowingSystemInterface()" << std::endl;
-
-      // Install an X11 error handler, if the application has not already done so.
-
-      // Set default handler, and get pointer to current handler.
-      X11ErrorHandler currentHandler = XSetErrorHandler(0);
-
-      // Set our handler, and get pointer to default handler.
-      X11ErrorHandler defHandler = XSetErrorHandler(X11ErrorHandling);
-
-      if (currentHandler == defHandler)
-      {
-        // No application error handler, use ours.
-        _errorHandlerSet = true;
-      }
-      else
-      {
-        // Application error handler exists, leave it set.
-        _errorHandlerSet = false;
-        XSetErrorHandler(currentHandler);
-      }
-    }
-
-    ~X11WindowingSystemInterface()
-    {
-      if (::osg::Referenced::getDeleteHandler())
-      {
-        ::osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(0);
-        ::osg::Referenced::getDeleteHandler()->flushAll();
-      }
-
-      // Unset our X11 error handler, providing the application has not replaced it.
-
-      if (_errorHandlerSet)
-      {
-        X11ErrorHandler currentHandler = XSetErrorHandler(0);
-        if (currentHandler != X11ErrorHandling)
-        {
-          // Not our error handler, leave it set.
-          XSetErrorHandler(currentHandler);
-        }
-      }
-    }
-
-    virtual unsigned int getNumScreens(const ::osg::GraphicsContext::ScreenIdentifier& si)
-    {
-      Display* display = XOpenDisplay(si.displayName().c_str());
-      if (display)
-      {
-        unsigned int numScreens = ScreenCount(display);
-        XCloseDisplay(display);
-        return numScreens;
-      }
-      else
-      {
-        ::osg::notify(::osg::NOTICE) << "A Unable to open display \""
-                                     << XDisplayName(si.displayName().c_str()) << "\"" << std::endl;
-        return 0;
-      }
-    }
-
-#if (OPENSCENEGRAPH_MAJOR_VERSION == 2) && (OPENSCENEGRAPH_MINOR_VERSION > 6)
-    bool supportsRandr(Display* display) const
-    {
-      return false;
-    }
-
-    virtual void getScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
-                                    ::osg::GraphicsContext::ScreenSettings & resolution)
-    {
-      Display* display = XOpenDisplay(si.displayName().c_str());
-      if (display)
-      {
-        resolution.width = DisplayWidth(display, si.screenNum);
-        resolution.height = DisplayHeight(display, si.screenNum);
-        resolution.colorDepth = DefaultDepth(display, si.screenNum);
-        resolution.refreshRate = 0;            // Missing call. Need a X11 expert.
-
-        XCloseDisplay(display);
-      }
-      else
-      {
-        ::osg::notify(::osg::NOTICE) << "Unable to open display \""
-                                     << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
-        resolution.width = 0;
-        resolution.height = 0;
-        resolution.colorDepth = 0;
-        resolution.refreshRate = 0;
-      }
-    }
-
-    virtual bool setScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
-                                    const ::osg::GraphicsContext::ScreenSettings & resolution)
-    {
-      return false;
-    }
-
-    virtual void enumerateScreenSettings(const ::osg::GraphicsContext::ScreenIdentifier& si,
-                                          ::osg::GraphicsContext::ScreenSettingsList & resolutionList)
-    {
-      resolutionList.clear();
-
-      Display* display = XOpenDisplay(si.displayName().c_str());
-      if (display)
-      {
-        XCloseDisplay(display);
-      }
-
-      if (resolutionList.empty())
-      {
-        ::osg::notify(::osg::NOTICE) << "X11WindowingSystemInterface::enumerateScreenSettings()"
-                                     << " not supported." << std::endl;
-      }
-    }
-
-#else
-    virtual void getScreenResolution(const ::osg::GraphicsContext::ScreenIdentifier& si,
-                                     unsigned int& width, unsigned int& height)
-    {
-      Display* display = XOpenDisplay(si.displayName().c_str());
-      if (display)
-      {
-        width = DisplayWidth(display, si.screenNum);
-        height = DisplayHeight(display, si.screenNum);
-        XCloseDisplay(display);
-      }
-      else
-      {
-        ::osg::notify(::osg::NOTICE) << "Unable to open display \""
-                                     << XDisplayName(si.displayName().c_str()) << "\"." << std::endl;
-        width = 0;
-        height = 0;
-      }
-    }
-
-    virtual bool setScreenResolution(const ::osg::GraphicsContext::ScreenIdentifier& si,
-                                     unsigned int width, unsigned int height)
-    {
-      return false;
-    }
-
-    virtual bool setScreenRefreshRate(const ::osg::GraphicsContext::ScreenIdentifier& si, double rate)
-    {
-      return false;
-    }
-#endif  // (OPENSCENEGRAPH_MAJOR_VERSION == 2) && (OPENSCENEGRAPH_MINOR_VERSION > 6)
-
-    virtual ::osg::GraphicsContext* createGraphicsContext(::osg::GraphicsContext::Traits* traits)
-    {
-      if (traits->pbuffer)
-      {
-        ::osg::ref_ptr<osgViewer::PixelBufferX11> pbuffer = new osgViewer::PixelBufferX11(traits);
-        if (pbuffer->valid())
-        {
-          return pbuffer.release();
-        }
-        else
-        {
-          return 0;
-        }
-      }
-      else
-      {
-        ::osg::ref_ptr<osgViewer::GraphicsWindowX11> window = new GraphicsWindowX11NoEvents(traits);
-        if (window->valid())
-        {
-          return window.release();
-        }
-        else
-        {
-          return 0;
-        }
-      }
-    }
-  };
-
-  struct RegisterWindowingSystemInterfaceProxy
-  {
-    RegisterWindowingSystemInterfaceProxy()
-    {
-      ::osg::notify(::osg::INFO) << "RegisterWindowingSystemInterfaceProxy()" << std::endl;
-      ::osg::GraphicsContext::setWindowingSystemInterface(new X11WindowingSystemInterface);
-    }
-
-    ~RegisterWindowingSystemInterfaceProxy()
-    {
-      ::osg::notify(::osg::INFO) << "~RegisterWindowingSystemInterfaceProxy()" << std::endl;
-
-      if (::osg::Referenced::getDeleteHandler())
-      {
-        ::osg::Referenced::getDeleteHandler()->setNumFramesToRetainObjects(0);
-        ::osg::Referenced::getDeleteHandler()->flushAll();
-      }
-
-      ::osg::GraphicsContext::setWindowingSystemInterface(0);
-    }
-  };
-
-  RegisterWindowingSystemInterfaceProxy createWindowingSystemInterfaceProxy;
-
-#endif // __linux__
-
 } // namespace
 
 
@@ -329,6 +46,8 @@ av::osg::viewer::GraphicsWindow::GraphicsWindow() :
   mStereo(false), mDoubleBuffer(false), mShowCursor(false), mFullScreen(false),
   mSizeFieldsHasChanged(false),
   mNumStencilBits(0),
+  mDragEvent(false),
+  mMoveEvent(false),
   mLastMousePos(0.0, 0.0)
 {
   AV_FC_ADD_FIELD(SharedContextMaster, 0);
@@ -362,39 +81,10 @@ av::osg::viewer::GraphicsWindow::GraphicsWindow() :
   AV_FC_ADD_FIELD(MouseMovement, ::osg::Vec2(0.0, 0.0));
   AV_FC_ADD_FIELD(MouseMovementNorm, ::osg::Vec2(0.0, 0.0));
   AV_FC_ADD_FIELD(MouseFixed, false);
-  AV_FC_ADD_FIELD(MouseButtonLeft, false);
-  AV_FC_ADD_FIELD(MouseButtonMiddle, false);
-  AV_FC_ADD_FIELD(MouseButtonRight, false);
-  AV_FC_ADD_FIELD(MouseButtons_OnlyLeft, false);
-  AV_FC_ADD_FIELD(MouseButtons_OnlyMiddle, false);
-  AV_FC_ADD_FIELD(MouseButtons_OnlyRight, false);
-  AV_FC_ADD_FIELD(MouseButtons_LeftAndMiddle, false);
-  AV_FC_ADD_FIELD(MouseButtons_LeftAndRight, false);
-  AV_FC_ADD_FIELD(MouseButtons_MiddleAndRight, false);
-  AV_FC_ADD_FIELD(MouseButtons_LeftAndMiddleAndRight, false);
-  AV_FC_ADD_FIELD(MouseButtonLeftDoubleClick, false);
-  AV_FC_ADD_FIELD(MouseButtonMiddleDoubleClick, false);
-  AV_FC_ADD_FIELD(MouseButtonRightDoubleClick, false);
-  AV_FC_ADD_FIELD(MouseScrollUp, false);
-  AV_FC_ADD_FIELD(MouseScrollDown, false);
+  AV_FC_ADD_FIELD(DragEvent, ::osg::Vec2(0.0, 0.0));
+  AV_FC_ADD_FIELD(MoveEvent, ::osg::Vec2(0.0, 0.0));
 
-  AV_FC_ADD_FIELD(KeysPressed, MFInt::ContainerType());
-  AV_FC_ADD_FIELD(KeyShift, false);
-  AV_FC_ADD_FIELD(KeyCtrl, false);
-  AV_FC_ADD_FIELD(KeyAlt, false);
-  AV_FC_ADD_FIELD(KeyInsert, false);
-  AV_FC_ADD_FIELD(KeyDelete, false);
-  AV_FC_ADD_FIELD(KeyHome, false);
-  AV_FC_ADD_FIELD(KeyEnd, false);
-  AV_FC_ADD_FIELD(KeyPageUp, false);
-  AV_FC_ADD_FIELD(KeyPageDown, false);
-  AV_FC_ADD_FIELD(KeyLeft, false);
-  AV_FC_ADD_FIELD(KeyRight, false);
-  AV_FC_ADD_FIELD(KeyUp, false);
-  AV_FC_ADD_FIELD(KeyDown, false);
-  AV_FC_ADD_FIELD(KeyEsc, false);
-  AV_FC_ADD_FIELD(KeySpace, false);
-  AV_FC_ADD_FIELD(KeyEnter, false);
+  AV_FC_ADD_FIELD(ToggleFullScreen, false);
 
   alwaysEvaluate(true);
 }
@@ -427,6 +117,19 @@ av::osg::viewer::GraphicsWindow::fieldHasChangedLocalSideEffect(const av::Field&
       &field == &Decoration) // windows decoration affects the window position
   {
     mSizeFieldsHasChanged = true;
+  }
+  else if ((&field == &ToggleFullScreen) && ToggleFullScreen.getValue())
+  {
+    mFullScreen = !mFullScreen;
+    mSizeFieldsHasChanged = true;
+  }
+  else if (&field == &DragEvent && (DragEvent.getValue() != ::osg::Vec2(0.0, 0.0)))
+  {
+    mDragEvent = true;
+  }
+  else if (&field == &MoveEvent && (MoveEvent.getValue() != ::osg::Vec2(0.0, 0.0)))
+  {
+    mMoveEvent = true;
   }
 }
 
@@ -562,31 +265,6 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
       mOsgGraphicsWindow->useCursor(showCursor);
       mShowCursor = showCursor;
     }
-
-#if defined(__APPLE__)
-    dynamic_cast< ::osgViewer::GraphicsWindowCarbon*>(mOsgGraphicsWindow.get())->
-      ::osgViewer::GraphicsWindowCarbon::checkEvents();
-#endif
-
-#if defined(__linux__)
-    dynamic_cast< ::osgViewer::GraphicsWindowX11*>(mOsgGraphicsWindow.get())->
-      ::osgViewer::GraphicsWindowX11::checkEvents();
-#endif
-
-#if defined(_WIN32)
-    ::osgViewer::GraphicsWindowWin32 *window =
-       dynamic_cast< ::osgViewer::GraphicsWindowWin32*>(mOsgGraphicsWindow.get());
-
-    if (window)
-    {
-      window->::osgViewer::GraphicsWindowWin32::checkEvents();
-    }
-    else
-    {
-      AVANGO_LOG(logger, av::logging::ERROR, "evaluateLocalSideEffect(): checking events failed");
-    }
-#endif
-
   }
 }
 
@@ -596,22 +274,9 @@ av::osg::viewer::GraphicsWindow::evaluate()
   int posX = -1, posY = -1, width = 0, height = 0;
   ::osg::Vec2 mouseMove(0.0, 0.0), mouseMoveNorm(0.0, 0.0);
 
-  if (MouseButtonLeftDoubleClick.getValue())
-    MouseButtonLeftDoubleClick.setValue(false);
-  if (MouseButtonMiddleDoubleClick.getValue())
-    MouseButtonMiddleDoubleClick.setValue(false);
-  if (MouseButtonRightDoubleClick.getValue())
-    MouseButtonRightDoubleClick.setValue(false);
-  if (MouseScrollUp.getValue())
-    MouseScrollUp.setValue(false);
-  if (MouseScrollDown.getValue())
-    MouseScrollDown.setValue(false);
-
   if (mOsgGraphicsWindow.valid())
   {
     mOsgGraphicsWindow->getWindowRectangle(posX, posY, width, height);
-    ::osgGA::EventQueue::Events events;
-    mOsgGraphicsWindow->getEventQueue()->copyEvents(events);
 
     if (MouseFixed.getValue())
     {
@@ -623,197 +288,60 @@ av::osg::viewer::GraphicsWindow::evaluate()
         MousePositionNorm.setValue(::osg::Vec2(0.0, 0.0));
     }
 
-    ::osgGA::EventQueue::Events::iterator eventIter;
-    for(eventIter = events.begin(); eventIter != events.end(); ++eventIter)
+    if (mDragEvent || mMoveEvent)
     {
-      ::osgGA::GUIEventAdapter *event = eventIter->get();
+      ::osg::Vec2 eventPos(0.0, 0.0);
 
-      switch(event->getEventType())
+      /*
+      Events have set Y_INCREASING_UPWARDS. Should be Y_INCREASING_DOWNWARDS.
+      Events processed with ::osgGA::GUIEventHandler::handle(const ::osgGA::GUIEventAdapter&, ::osgGA::GUIActionAdapter&)
+      seem not to be aware of their graphics context...
+      */
+      if (mDragEvent)
       {
-        case(::osgGA::GUIEventAdapter::DRAG):
-        case(::osgGA::GUIEventAdapter::MOVE):
-        {
-          if (!MouseFixed.getValue() || static_cast<int>(event->getX()) != width / 2 ||
-                                        static_cast<int>(event->getY()) != height / 2)
-          {
-            const ::osg::Vec2 mousePos(event->getX(), event->getY());
-
-            if (!MouseFixed.getValue())
-            {
-              if (MousePosition.getValue() != mousePos)
-                MousePosition.setValue(mousePos);
-
-              ::osg::Vec2 mousePosNorm(0.0, 0.0);
-              if (width > 1 && height > 1)
-              {
-                mousePosNorm.set(-1.0 + 2.0 * mousePos[0] / (width - 1.0),
-                                  1.0 - 2.0 * mousePos[1] / (height - 1.0));
-              }
-
-              if (MousePositionNorm.getValue() != mousePosNorm)
-                MousePositionNorm.setValue(mousePosNorm);
-            }
-
-            mouseMove = mousePos - mLastMousePos;
-            if (mouseMove.length2() < 0.1)
-              mouseMove.set(0.0, 0.0);
-            if (width > 1 && height > 1)
-            {
-              mouseMoveNorm.set( 2.0 * mouseMove[0] / (width - 1.0),
-                                -2.0 * mouseMove[1] / (height - 1.0));
-            }
-            if (mouseMove.length2() < 0.1)
-              mouseMoveNorm.set(0.0, 0.0);
-          }
-
-          break;
-        }
-
-        case(::osgGA::GUIEventAdapter::PUSH):
-        case(::osgGA::GUIEventAdapter::RELEASE):
-        {
-          const unsigned int buttonmask = event->getButtonMask();
-          const bool left   = (buttonmask & ::osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON) != 0u;
-          const bool middle = (buttonmask & ::osgGA::GUIEventAdapter::MIDDLE_MOUSE_BUTTON) != 0u;
-          const bool right  = (buttonmask & ::osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON) != 0u;
-
-          if (MouseButtonLeft.getValue() != left)
-            MouseButtonLeft.setValue(left);
-          if (MouseButtonMiddle.getValue() != middle)
-            MouseButtonMiddle.setValue(middle);
-          if (MouseButtonRight.getValue() != right)
-            MouseButtonRight.setValue(right);
-
-          if (MouseButtons_OnlyLeft.getValue() != (left && !middle && !right))
-            MouseButtons_OnlyLeft.setValue(left && !middle && !right);
-          if (MouseButtons_OnlyMiddle.getValue() != (!left && middle && !right))
-            MouseButtons_OnlyMiddle.setValue(!left && middle && !right);
-          if (MouseButtons_OnlyRight.getValue() != (!left && !middle && right))
-            MouseButtons_OnlyRight.setValue(!left && !middle && right);
-          if (MouseButtons_LeftAndMiddle.getValue() != (left && middle && !right))
-            MouseButtons_LeftAndMiddle.setValue(left && middle && !right);
-          if (MouseButtons_LeftAndRight.getValue() != (left && !middle && right))
-            MouseButtons_LeftAndRight.setValue(left && !middle && right);
-          if (MouseButtons_MiddleAndRight.getValue() != (!left && middle && right))
-            MouseButtons_MiddleAndRight.setValue(!left && middle && right);
-          if (MouseButtons_LeftAndMiddleAndRight.getValue() != (left && middle && right))
-            MouseButtons_LeftAndMiddleAndRight.setValue(left && middle && right);
-
-          break;
-        }
-
-        case(::osgGA::GUIEventAdapter::DOUBLECLICK):
-        {
-          switch (event->getButton())
-          {
-            case ::osgGA::GUIEventAdapter::LEFT_MOUSE_BUTTON:
-            {
-              MouseButtonLeftDoubleClick.setValue(true);
-              break;
-            }
-
-            case ::osgGA::GUIEventAdapter::MIDDLE_MOUSE_BUTTON:
-            {
-              MouseButtonMiddleDoubleClick.setValue(true);
-              break;
-            }
-
-            case ::osgGA::GUIEventAdapter::RIGHT_MOUSE_BUTTON:
-            {
-              MouseButtonRightDoubleClick.setValue(true);
-              break;
-            }
-
-            default:
-              break;
-          }
-
-          break;
-        }
-
-        case(::osgGA::GUIEventAdapter::SCROLL):
-        {
-          switch (event->getScrollingMotion())
-          {
-            case ::osgGA::GUIEventAdapter::SCROLL_UP:
-            {
-              MouseScrollUp.setValue(true);
-              break;
-            }
-
-            case ::osgGA::GUIEventAdapter::SCROLL_DOWN:
-            {
-              MouseScrollDown.setValue(true);
-              break;
-            }
-
-            default:
-              break;
-          }
-
-          break;
-        }
-
-        case(::osgGA::GUIEventAdapter::KEYDOWN):
-        case(::osgGA::GUIEventAdapter::KEYUP):
-        {
-          const bool pressed = (event->getEventType() == ::osgGA::GUIEventAdapter::KEYDOWN);
-          const int key = event->getKey();
-
-          const bool shiftPressed =
-            (event->getModKeyMask() & (::osgGA::GUIEventAdapter::MODKEY_LEFT_SHIFT |
-                                       ::osgGA::GUIEventAdapter::MODKEY_RIGHT_SHIFT)) != 0u;
-          const bool ctrlPressed =
-            (event->getModKeyMask() & (::osgGA::GUIEventAdapter::MODKEY_LEFT_CTRL |
-                                       ::osgGA::GUIEventAdapter::MODKEY_RIGHT_CTRL)) != 0u;
-          const bool altPressed =
-            (event->getModKeyMask() & (::osgGA::GUIEventAdapter::MODKEY_LEFT_ALT |
-                                       ::osgGA::GUIEventAdapter::MODKEY_RIGHT_ALT)) != 0u;
-
-          if (KeyShift.getValue() != shiftPressed)
-            KeyShift.setValue(shiftPressed);
-          if (KeyCtrl.getValue() != ctrlPressed)
-            KeyCtrl.setValue(ctrlPressed);
-          if (KeyAlt.getValue() != altPressed)
-            KeyAlt.setValue(altPressed);
-
-          if (pressed)
-            mKeys.insert(key);
-          else
-            mKeys.erase(key);
-          std::vector<int> keys(mKeys.size());
-          std::copy(mKeys.begin(), mKeys.end(), keys.begin());
-          KeysPressed.setValue(keys);
-
-          switch (key)
-          {
-            case ::osgGA::GUIEventAdapter::KEY_Insert:    KeyInsert.setValue(pressed);   break;
-            case ::osgGA::GUIEventAdapter::KEY_Delete:    KeyDelete.setValue(pressed);   break;
-            case ::osgGA::GUIEventAdapter::KEY_Home:      KeyHome.setValue(pressed);     break;
-            case ::osgGA::GUIEventAdapter::KEY_End:       KeyEnd.setValue(pressed);      break;
-            case ::osgGA::GUIEventAdapter::KEY_Page_Up:   KeyPageUp.setValue(pressed);   break;
-            case ::osgGA::GUIEventAdapter::KEY_Page_Down: KeyPageDown.setValue(pressed); break;
-            case ::osgGA::GUIEventAdapter::KEY_Left:      KeyLeft.setValue(pressed);     break;
-            case ::osgGA::GUIEventAdapter::KEY_Right:     KeyRight.setValue(pressed);    break;
-            case ::osgGA::GUIEventAdapter::KEY_Up:        KeyUp.setValue(pressed);       break;
-            case ::osgGA::GUIEventAdapter::KEY_Down:      KeyDown.setValue(pressed);     break;
-            case ::osgGA::GUIEventAdapter::KEY_Escape:    KeyEsc.setValue(pressed);      break;
-            case ::osgGA::GUIEventAdapter::KEY_Space:     KeySpace.setValue(pressed);    break;
-            case ::osgGA::GUIEventAdapter::KEY_Return:    KeyEnter.setValue(pressed);    break;
-          }
-
-          if (altPressed && key == ::osgGA::GUIEventAdapter::KEY_Return && pressed)
-          {
-            mFullScreen = !mFullScreen;
-            mSizeFieldsHasChanged = true;
-          }
-
-          break;
-        }
-
-        default:
-          break;
+        eventPos = DragEvent.getValue();
+        eventPos[1] = height-eventPos[1];
       }
+      else
+      {
+        eventPos = MoveEvent.getValue();
+        eventPos[1] = height-eventPos[1];
+      }
+
+      if (!MouseFixed.getValue() || (eventPos[0] != width / 2) || (eventPos[1] != height / 2))
+      {
+        ::osg::Vec2 mousePos(eventPos[0], eventPos[1]);
+
+        if (!MouseFixed.getValue())
+        {
+          if (MousePosition.getValue() != mousePos)
+            MousePosition.setValue(mousePos);
+
+          ::osg::Vec2 mousePosNorm(0.0, 0.0);
+          if (width > 1 && height > 1)
+          {
+            mousePosNorm.set(-1.0 + 2.0 * mousePos[0] / (width - 1.0),
+                              1.0 - 2.0 * mousePos[1] / (height - 1.0));
+          }
+
+          if (MousePositionNorm.getValue() != mousePosNorm)
+            MousePositionNorm.setValue(mousePosNorm);
+        }
+
+        mouseMove = mousePos - mLastMousePos;
+        if (mouseMove.length2() < 0.1)
+          mouseMove.set(0.0, 0.0);
+        if (width > 1 && height > 1)
+        {
+          mouseMoveNorm.set( 2.0 * mouseMove[0] / (width - 1.0),
+                            -2.0 * mouseMove[1] / (height - 1.0));
+        }
+        if (mouseMove.length2() < 0.1)
+          mouseMoveNorm.set(0.0, 0.0);
+      }
+
+      mDragEvent = false;
+      mMoveEvent = false;
     }
 
     mLastMousePos = MousePosition.getValue();

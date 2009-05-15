@@ -38,6 +38,7 @@ sources = Split('''
     Init.cpp
     View.cpp
     Viewer.cpp
+    EventFields.cpp
     ''')
 
 lib = local_env.SharedLibrary('avangoOsgViewer', sources)

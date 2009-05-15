@@ -136,6 +136,8 @@ void realize(av::osg::Node* root)
 {
   viewer = new osgViewer::Viewer;
   setupViewer(viewer.get(), root);
+  EvaluateCallback* ec = new EvaluateCallback();
+  viewer->getSceneData()->setUpdateCallback(ec);
   viewer->realize();
 }
 

@@ -30,6 +30,7 @@
 #include <avango/osg/viewer/Camera.h>
 #include <avango/osg/viewer/CompositeViewer.h>
 #include <avango/osg/viewer/GraphicsWindow.h>
+#include <avango/osg/viewer/EventFields.h>
 #include <avango/osg/viewer/View.h>
 #include <avango/osg/viewer/Viewer.h>
 
@@ -54,6 +55,7 @@ av::osg::viewer::Init::initClass()
     av::osg::viewer::Camera::initClass();
     av::osg::viewer::CompositeViewer::initClass();
     av::osg::viewer::GraphicsWindow::initClass();
+    av::osg::viewer::EventFields::initClass();
     av::osg::viewer::View::initClass();
     av::osg::viewer::Viewer::initClass();
 

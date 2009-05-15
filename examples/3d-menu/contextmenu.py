@@ -71,6 +71,11 @@ camera = avango.osg.viewer.nodes.Camera(Window=window)
 viewer = avango.osg.viewer.nodes.Viewer(MasterCamera=camera)
 viewer.Scene.value = scene_root
 
+# Setup event handler and connect certain events to window
+eventfields = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(eventfields.KeyAltReturn)
+window.DragEvent.connect_from(eventfields.DragEvent)
+window.MoveEvent.connect_from(eventfields.MoveEvent)
 
 # Edit menu preferences
 # When re-opening a menu panel, no entry should be highlighted
@@ -94,8 +99,8 @@ scene_root.Children.value.append(panel_group.root)
 
 # Set up menu tools to interact with the menu and open a context menu
 tools = avango.menu.Tool(Enable=True, MenuRootNode=scene_root)
-tools.PickTrigger.connect_from(window.MouseButtons_OnlyLeft)
-tools.ContextTrigger.connect_from(window.MouseButtons_OnlyRight)
+tools.PickTrigger.connect_from(eventfields.MouseButtons_OnlyLeft)
+tools.ContextTrigger.connect_from(eventfields.MouseButtons_OnlyRight)
 tools.Transform.connect_from(camera.MouseNearTransform)
 
 # Set up tools for dragging objects with name 'draggable'
@@ -105,7 +110,7 @@ drag_tool = avango.tools.nodes.DragTool()
 name_selector.Targets.connect_from(pick_selector.SelectedTargets)
 drag_tool.Targets.connect_from(name_selector.SelectedTargets)
 
-pick_selector.PickTrigger.connect_from(window.MouseButtons_OnlyLeft)
+pick_selector.PickTrigger.connect_from(eventfields.MouseButtons_OnlyLeft)
 pick_selector.PickRayTransform.connect_from(camera.MouseNearTransform)
 drag_tool.DragTransform.connect_from(camera.MouseNearTransform)
 

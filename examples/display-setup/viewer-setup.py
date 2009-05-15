@@ -49,14 +49,21 @@ window = avango.osg.viewer.nodes.GraphicsWindow()
 camera = avango.osg.viewer.nodes.Camera(Window = window)
 viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = root_group)
 
+# set up event handling
+
+events = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(events.KeyAltReturn)
+window.DragEvent.connect_from(events.DragEvent)
+window.MoveEvent.connect_from(events.MoveEvent)
+
 
 # set up trackball mover
 
 trackball = avango.moving.nodes.Trackball(Matrix = camera.ViewerTransform.value)
 trackball.Direction.connect_from(window.MousePositionNorm)
-trackball.RotateTrigger.connect_from(window.MouseButtons_OnlyLeft)
-trackball.ZoomTrigger.connect_from(window.MouseButtons_LeftAndRight)
-trackball.PanTrigger.connect_from(window.MouseButtons_OnlyRight)
+trackball.RotateTrigger.connect_from(events.MouseButtons_OnlyLeft)
+trackball.ZoomTrigger.connect_from(events.MouseButtons_LeftAndRight)
+trackball.PanTrigger.connect_from(events.MouseButtons_OnlyRight)
 trackball.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)

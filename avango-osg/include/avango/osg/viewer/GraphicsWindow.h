@@ -171,57 +171,19 @@ namespace av
         SFBool MouseFixed;
 
         /**
-         * Mouse buttons.
+         * Input toggle full screen mode.
          */
-        SFBool MouseButtonLeft;
-        SFBool MouseButtonMiddle;
-        SFBool MouseButtonRight;
+        SFBool ToggleFullScreen;
 
         /**
-         * Combinations of mouse buttons.
+         * Input drag event from event handler
          */
-        SFBool MouseButtons_OnlyLeft;
-        SFBool MouseButtons_OnlyMiddle;
-        SFBool MouseButtons_OnlyRight;
-        SFBool MouseButtons_LeftAndMiddle;
-        SFBool MouseButtons_LeftAndRight;
-        SFBool MouseButtons_MiddleAndRight;
-        SFBool MouseButtons_LeftAndMiddleAndRight;
+        SFVec2 DragEvent;
 
         /**
-         * Mouse buttons double click trigger fields.
-         * Only implemented for Windows in OSG!
+         * Input move event from event handler
          */
-        SFBool MouseButtonLeftDoubleClick;
-        SFBool MouseButtonMiddleDoubleClick;
-        SFBool MouseButtonRightDoubleClick;
-
-        /**
-         * Mouse scroll wheel trigger fields.
-         */
-        SFBool MouseScrollUp;
-        SFBool MouseScrollDown;
-
-        /**
-         * Keys.
-         */
-        MFInt KeysPressed;
-        SFBool KeyShift;
-        SFBool KeyCtrl;
-        SFBool KeyAlt;
-        SFBool KeyInsert;
-        SFBool KeyDelete;
-        SFBool KeyHome;
-        SFBool KeyEnd;
-        SFBool KeyPageUp;
-        SFBool KeyPageDown;
-        SFBool KeyLeft;
-        SFBool KeyRight;
-        SFBool KeyUp;
-        SFBool KeyDown;
-        SFBool KeyEsc;
-        SFBool KeySpace;
-        SFBool KeyEnter;
+        SFVec2 MoveEvent;
 
         /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
         /* virtual */ void evaluateLocalSideEffect();
@@ -267,6 +229,8 @@ namespace av
         bool mStereo, mDoubleBuffer, mShowCursor, mFullScreen;
         bool mSizeFieldsHasChanged;
         int mNumStencilBits;
+        bool mDragEvent;
+        bool mMoveEvent;
         ::osg::Vec2 mLastMousePos;
         std::set<int> mKeys;
 

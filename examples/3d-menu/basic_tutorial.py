@@ -40,6 +40,13 @@ window = avango.osg.viewer.nodes.GraphicsWindow(NumStencilBits=1) # avango.menu 
 camera = avango.osg.viewer.nodes.Camera(Window=window)
 viewer = avango.osg.viewer.nodes.Viewer(MasterCamera=camera)
 
+# In case you need to process mouse or key events, you need to create an event handler
+# You need to connect some window fields to corresponding event handler fields
+eventfields = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(eventfields.KeyAltReturn)
+window.DragEvent.connect_from(eventfields.DragEvent)
+window.MoveEvent.connect_from(eventfields.MoveEvent)
+
 ### STEP 1 - create two menu panels and a panel group, then make my_menu visible
 my_menu = avango.menu.Panel(Title='My Menu', Name='mymenu') # setting a name is not necessary, see below
 sub_menu = avango.menu.Panel(Title='Sub Menu', Orientation=1) # 1=vertical (default), 2=horizontal
@@ -78,9 +85,9 @@ scene_root = avango.osg.nodes.MatrixTransform()
 scene_root.Matrix.value = avango.osg.make_scale_mat(0.1, 0.1, 0.1) * avango.osg.make_rot_mat(0.01, 1, 0, 0)
 scene_root.Children.value.append(panel_group.root)
 
-### STEP 4 - define and set up tools to interact with the menu
+### STEP 4 - define and set up tools to interact with the menu.
 my_tools = avango.menu.Tool(Enable=True)
-my_tools.PickTrigger.connect_from(window.MouseButtons_OnlyLeft)
+my_tools.PickTrigger.connect_from(eventfields.MouseButtons_OnlyLeft)
 my_tools.Transform.connect_from(camera.MouseNearTransform)
 my_tools.MenuRootNode.value = scene_root
 

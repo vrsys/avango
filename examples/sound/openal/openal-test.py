@@ -73,6 +73,13 @@ viewer = avango.osg.viewer.nodes.Viewer()
 viewer.MasterCamera.value = camera
 viewer.Scene.value = root_group
 
+# set up event handling
+
+events = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(events.KeyAltReturn)
+window.DragEvent.connect_from(events.DragEvent)
+window.MoveEvent.connect_from(events.MoveEvent)
+
 
 soundtraverser.RootNode.value = root_group
 soundtraverser.Traverse.value = True
@@ -81,9 +88,9 @@ soundtraverser.Traverse.value = True
 
 trackball = avango.moving.nodes.Trackball()
 trackball.Direction.connect_from(window.MousePositionNorm)
-trackball.RotateTrigger.connect_from(window.MouseButtons_OnlyLeft)
-trackball.ZoomTrigger.connect_from(window.MouseButtons_LeftAndRight)
-trackball.PanTrigger.connect_from(window.MouseButtons_OnlyRight)
+trackball.RotateTrigger.connect_from(events.MouseButtons_OnlyLeft)
+trackball.ZoomTrigger.connect_from(events.MouseButtons_LeftAndRight)
+trackball.PanTrigger.connect_from(events.MouseButtons_OnlyRight)
 trackball.Matrix.value = camera.ViewerTransform.value
 trackball.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \

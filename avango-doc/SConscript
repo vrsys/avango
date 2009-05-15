@@ -23,10 +23,35 @@
 #                                                                        #
 ##########################################################################
 
+import avango.build
+
+# guide environment
+guide_env = avango.build.Environment()
+
+# guide sources
+guide_sources = Split("""
+    index.html
+    """)
+guide_sources += Glob('guide/*')
+guide_sources += Glob('guide/media/*')
+
+# guide install
+guide_install = guide_env.Install(
+    avango.build.get_documentation_path().abspath,
+    source = ['index.html', 'guide'])
+
+guide_env.Clean(guide_install, avango.build.get_documentation_path().abspath + '/guide')
+
+Alias('guide', guide_sources)
+Alias('install-guide', ['guide', guide_install])
+
+
+# doc subdirectories
 SConscript ([
     'doxygen/SConscript',
     'epydoc/SConscript',
 ])
 
-Alias('doc', ['doxygen', 'epydoc'])
-Alias('install-doc', ['install-doxygen', 'install-epydoc']);
+# doc aliases
+Alias('doc', ['guide', 'doxygen', 'epydoc'])
+Alias('install-doc', ['install-guide', 'install-doxygen', 'install-epydoc']);

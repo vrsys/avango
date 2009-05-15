@@ -25,7 +25,7 @@
 
 import avango.build
 
-# environment
+# doxygen environment
 doxygen_env = avango.build.Environment()
 
 # doxygen sources

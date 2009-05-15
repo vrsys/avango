@@ -66,11 +66,10 @@ namespace
 
 AV_BASE_DEFINE_ABSTRACT(av::Distributed)
 
-av::Distributed::Distributed() :
+av::Distributed::Distributed()
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  mNetInfo(0),
+  : mNetInfo(0)
 #endif
-  mUUID()
 {}
 
 /* virtual */

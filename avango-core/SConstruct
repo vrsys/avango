@@ -42,7 +42,6 @@ if env['DISTRIBUTION_SUPPORT']:
 
 used_libs = Split("""
     dl
-    uuid
     boost_thread
     boost_signals
     """)

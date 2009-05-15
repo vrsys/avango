@@ -79,7 +79,6 @@ if env['OPENSCENEGRAPH_DEBUG']:
 
 used_libs = Split("""
     dl
-    uuid
     boost_thread
     boost_signals
     boost_python

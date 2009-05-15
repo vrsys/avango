@@ -33,7 +33,6 @@
 #include <avango/NetLock.h>
 #include <avango/NetNode.h>
 #include <avango/ObjectValue.h>
-#include <avango/UUID.h>
 
 #include <avango/UnitTest++/UnitTest++.h>
 
@@ -87,7 +86,7 @@ namespace
   TEST(useNetNode)
   {
     MyBoolObject::initClass();
-    std::string net_group_name = av::UUID();
+    std::string net_group_name = "av_net_group";
 
     pid_t pid = ::fork();
 

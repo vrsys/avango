@@ -55,7 +55,6 @@ headers = Split('''
                 TimeSensor.h
                 Type.h
                 Typed.h
-                UUID.h
                 WriteAction.h
                 windows_specific.h
                 stdint_replacement.h

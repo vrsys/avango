@@ -32,7 +32,6 @@ sources = Split('''
     Create.cpp
     Link.cpp
     Type.cpp
-    UUID.cpp
     ''')
 
 objects = avango_env.SharedObject(sources)

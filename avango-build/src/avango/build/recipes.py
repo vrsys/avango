@@ -30,7 +30,6 @@ import oshelper
 def _setup_default():
     _plain_libs = """
         dl
-        uuid
         boost_thread
         boost_signals
         boost_python

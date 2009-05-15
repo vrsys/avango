@@ -41,7 +41,7 @@ avango_env = avango.build.Environment()
 
 avango_env.Append(LDFLAGS='-export-dynamic') # FIXME does this work on Windows?
 avango_env.Append(CPPDEFINES=['AV_LIBRARY'])
-for lib in Split('dl uuid boost_thread boost_signals'):
+for lib in Split('dl boost_thread boost_signals'):
     avango.build.add_library(avango_env, lib)
 if avango_env['DISTRIBUTION_SUPPORT']:
     avango.build.add_library(avango_env, 'avango-ensemble')

@@ -38,7 +38,6 @@
 #include <avango/Base.h>
 #include <avango/Config.h>
 #include <avango/Link.h>
-#include <avango/UUID.h>
 
 namespace av
 {
@@ -145,10 +144,6 @@ namespace av
     NetInfo* mNetInfo;
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-
-  private:
-
-    UUID mUUID;
 
   };
 

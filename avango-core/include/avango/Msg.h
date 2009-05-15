@@ -117,7 +117,6 @@ namespace av
 
   class Field;
   class Distributed;
-  class UUID;
   class NetID;
   class AnyLink;
   class Type;
@@ -174,10 +173,6 @@ namespace av
   // std::vector<double>
   void av_pushMsg(Msg& msg, const std::vector<double>& buf);
   void av_popMsg(Msg& msg, std::vector<double>& buf);
-
-  // UUID
-  void av_pushMsg(Msg& msg, const UUID& buf);
-  void av_popMsg(Msg& msg, UUID& buf);
 
   // AnyLink
   void av_pushMsg(Msg& msg, const AnyLink& buf);

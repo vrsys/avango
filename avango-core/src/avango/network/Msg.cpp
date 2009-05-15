@@ -515,27 +515,6 @@ av::av_popMsg(av::Msg& msg, std::vector<double>& buf)
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (vector<double>) [%1%]") % buf.size()))
 }
 
-// UUID
-void
-av::av_pushMsg(av::Msg& msg, const UUID& buf)
-{
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (UUID) [%1%]") % (std::string) buf))
-
-  av_pushMsg(msg, static_cast<std::string>(buf));
-}
-
-void
-av::av_popMsg(av::Msg& msg, UUID& buf)
-{
-  std::string tmp;
-
-  av_popMsg(msg, tmp);
-
-  buf = UUID(tmp);
-
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop (UUID) [%1%]") % (std::string) buf))
-}
-
 // AnyLink
 void
 av::av_pushMsg(av::Msg& msg, const AnyLink& buf)

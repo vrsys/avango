@@ -32,7 +32,6 @@ doxygen_env = avango.build.Environment()
 doxygen_sources = Split("""
     index.dox
     styleguide.cpp.expl
-    styleguide.dox
     styleguide.h.expl
     """)
 

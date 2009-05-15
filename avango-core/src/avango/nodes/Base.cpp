@@ -62,7 +62,7 @@ namespace
 AV_TYPED_DEFINE_ABSTRACT(av::Base);
 
 av::Base::Base()
-  : mRefCount(0)
+  : mRefCount(0), mHasFloatingRef(false)
 {
 #if defined(AVANGO_DEBUG)
   LOG_TRACE(logger) << "Base(): @0x%x", this;
@@ -151,18 +151,27 @@ av::Base::referenceCount()
   return refCountImpl();
 }
 
+void
+av::Base::setFloatingReference()
+{
+  setFloatingRefImpl();
+}
+
 /* virtual */ void
 av::Base::refImpl()
 {
   ++mRefCount;
+  mHasFloatingRef = false;
 }
 
 /* virtual */ void
 av::Base::unrefImpl()
 {
+  assert(mRefCount > 0);
+
   --mRefCount;
 
-  if (delete_on_unref && (mRefCount <= 0))
+  if (delete_on_unref && !mHasFloatingRef && (mRefCount == 0))
   {
     delete this;
   }
@@ -171,6 +180,8 @@ av::Base::unrefImpl()
 /* virtual */ void
 av::Base::unrefWithoutDeletionImpl()
 {
+  assert(mRefCount > 0);
+
   --mRefCount;
 }
 
@@ -178,6 +189,12 @@ av::Base::unrefWithoutDeletionImpl()
 av::Base::refCountImpl()
 {
   return mRefCount;
+}
+
+/*virtual*/ void
+av::Base::setFloatingRefImpl()
+{
+  mHasFloatingRef = true;
 }
 
 /* virtual */ void

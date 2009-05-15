@@ -99,12 +99,17 @@ namespace av
      * Decrement the reference count. If the reference count becomes 0,
      * the object is destroyed. This can be overriden by setting the
      * AVANGO_NO_DELETE_ON_UNREF environment variable.
+     *
+     * Aborts if the reference count is already 0.
      */
     void unreference();
 
     /**
      * Decrement the reference count, but do not delete object if the
      * reference count becomes 0. Use with care.
+     *
+     * To delete the object later on, it first needs to be referenced, as
+     * otherwise the unreference will abort.
      */
     void unreferenceWithoutDeletion();
 
@@ -112,6 +117,17 @@ namespace av
      * Return the current reference count of the object.
      */
     int  referenceCount();
+
+    /**
+     * Sets a 'floating' reference. The floating reference ensures that an
+     * object is not deleted, even if its actual reference count decreases to
+     * zero. The next increment of the reference count will convert the
+     * floating reference to a normal one.
+     *
+     * This is mostly required during the 'birth' of an object. It helps to
+     * ensure that the object will actually survive.
+     */
+    void setFloatingReference();
 
     /**
      * Try to find an inheritance path to the requested Type.
@@ -192,9 +208,18 @@ namespace av
      */
     virtual int refCountImpl();
 
+    /**
+     * Sets a 'floating' reference.
+     *
+     * This virtual function implements part of the reference
+     * counting mechanism.
+     */
+    virtual void setFloatingRefImpl();
+
   private:
 
     int mRefCount;
+    bool mHasFloatingRef;
 
     void writeToBinaryStream(WriteAction& action);
     void writeToASCIIStream(WriteAction& action);

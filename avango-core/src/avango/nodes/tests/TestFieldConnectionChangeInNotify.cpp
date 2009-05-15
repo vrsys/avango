@@ -24,6 +24,7 @@
 \************************************************************************/
 
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 
 #include <avango/Application.h>
 #include <avango/Link.h>
@@ -66,14 +67,14 @@ namespace
   {
     if (event.getTriggeredFromField() && Value.getValue() == 1)
     {
-      logger.info() << "fieldHasChanged: disconnecting from source field";
+      AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting from source field");
       Value.enableNotify(false);
       Value.disconnectFrom(event.getTriggeredFromField());
       Value.enableNotify(true);
     }
     if (event.getTriggeredFromField() && Value.getValue() == 3)
     {
-      logger.info() << "fieldHasChanged: disconnecting all fields from source field";
+      AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting all fields from source field");
       Value.enableNotify(false);
       event.getTriggeredFromField()->disconnectAuditors();
       Value.enableNotify(true);

@@ -30,6 +30,7 @@
 // includes, system
 
 #include <cstdlib>
+#include <boost/format.hpp>
 
 // includes, project
 
@@ -82,7 +83,9 @@ av::Typed::initClass()
 av::Typed::getClassTypeId()
 {
   if (Type::badType() == sClassTypeId) {
-    logger.warn() << "getClassTypeId(): returning 'bad_type'!";
+
+    AVANGO_LOG(logger,logging::WARN , "getClassTypeId(): returning 'bad_type'!")
+
     return Type::badType();
   }
 

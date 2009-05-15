@@ -127,8 +127,7 @@ av::operator>>(av::InputStream& is, av::AnyLink& bl)
                                    << obj_id;
         if (!bl.setBasePtr(is.getReader()->lookupObject(obj_id)))
         {
-          logger.warn() << "operator>>(av::InputStream&, av::AnyLink&): type clash: "
-                                 << obj_id;
+          AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("operator>>(av::InputStream&, av::AnyLink&): type clash %1%") % obj_id))
         }
       }
       else
@@ -137,7 +136,7 @@ av::operator>>(av::InputStream& is, av::AnyLink& bl)
         LOG_TRACE(logger) << "operator>>(av::InputStream&, av::AnyLink&): reading object";
         if (!bl.setBasePtr(is.getReader()->readObject(is)))
         {
-          logger.warn() << "operator>>(fpInputStream&, fpAnyLink&): type clash.";
+          AVANGO_LOG(logger,logging::WARN , "operator>>(av::InputStream&, av::AnyLink&): type clash.")
         }
       }
     }

@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <map>
 #include <stdexcept>
+#include <boost/format.hpp>
 
 // includes, project
 
@@ -251,9 +252,7 @@ av::Type::createAbstractType(Type parentType, const std::string& typeName,
 {
   // check for duplicates
   if (isTypeRegistered(typeName)) {
-    logger.fatal() << "createAbstractType(): "
-                   << "duplicate type name '%s' used. exiting!",
-      typeName;
+    AVANGO_LOG(logger,logging::FATAL , boost::str(boost::format("createAbstractType(): duplicate type name '%1%' used. exiting!") % typeName))
 
     ::abort();
 
@@ -262,12 +261,8 @@ av::Type::createAbstractType(Type parentType, const std::string& typeName,
   // check if parent type exists
   if (parentType != badType() &&
       parentType.getIndex() >= type_data_vec.size()) {
-    logger.warn() << "createAbstractType(): "
-                  << "parent '%s' of '%s' doesn't exist yet "
-                  << "(parent idx: % 09d, max idx: %d), "
-                  << "returning 'badType'",
-      parentType.getName(), typeName, parentType.getIndex(),
-      type_data_vec.size();
+
+    AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("createAbstractType(): parent '%1%' of '%2%' doesn't exist yet (parent idx: %3%, max idx: %4%), returning 'badType'") % parentType.getName() % typeName % parentType.getIndex() % type_data_vec.size()))
 
     return badType();
   }
@@ -277,11 +272,7 @@ av::Type::createAbstractType(Type parentType, const std::string& typeName,
 
   registerNewType(typeName, parentType, new_type, 0);
 
-  logger.debug() << "createAbstractType(): "
-                 << "created abstract type '%s' "
-                 << "(id: % 09d, idx: % 09d, parent: '%s')."
-    , typeName , new_type.getId(), new_type.getIndex()
-    , parentType.getName();
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("createAbstractType(): created abstract type '%s' (id: % 09d, idx: % 09d, parent: '%s').") % typeName % new_type.getId() % new_type.getIndex() % parentType.getName()))
 
   return new_type;
 }
@@ -292,21 +283,17 @@ av::Type::createType(Type parentType, const std::string& typeName,
 {
   // check for duplicates
   if (isTypeRegistered(typeName)) {
-    logger.fatal() << "createType(): "
-                   << "duplicate type name '%s' used. exiting!"
-      , typeName;
+    AVANGO_LOG(logger,logging::FATAL , boost::str(boost::format("createType(): duplicate type name '%1%' used. exiting!") % typeName))
+
     ::abort();
   }
 
   // check if parent type exists
   if (parentType != badType() &&
       parentType.getIndex() >= type_data_vec.size()) {
-    logger.warn() << "createType(): "
-                  << "parent '%s' of '%s' doesn't exist yet "
-                  << "(parent idx: % 09d, max idx: %d), "
-                  << "returning 'badType!"
-      , parentType.getName(), typeName, parentType.getIndex()
-      , type_data_vec.size();
+
+      AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("createType(): parent '%1%' of '%2%' doesn't exist yet (parent idx: %3%, max idx: %4%), returning 'badType'") % parentType.getName() % typeName % parentType.getIndex() % type_data_vec.size()))
+
     return badType();
   }
 
@@ -314,11 +301,7 @@ av::Type::createType(Type parentType, const std::string& typeName,
   Type new_type = allocateNewType(isPublic, true, false);
   registerNewType(typeName, parentType, new_type, create);
 
-  logger.debug() << "createType(): "
-                 << "created type '%s' "
-                 << "(id: % 09d, idx: % 09d, parent: '%s')"
-    , typeName, new_type.getId(), new_type.getIndex()
-    , parentType.getName();
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("createType(): created type '%s' (id: % 09d, idx: % 09d, parent: '%s')") % typeName % new_type.getId() % new_type.getIndex() % parentType.getName()))
 
   return new_type;
 }
@@ -377,11 +360,8 @@ av::Type::createInstance()
 
   av::Typed* obj = type_data_vec[getIndex()].mCreate->makeInstance();
 
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "createInstance(): "
-                 << "created instance of type '%s'"
-    , type_data_vec[getIndex()].mName;
-#endif
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("createInstance(): created instance of type '%1%'") % type_data_vec[getIndex()].mName))
+
   return obj;
 }
 
@@ -400,7 +380,7 @@ av::Type::createInstanceOfType(const std::string& typeName,
 /* static */ void
 av::Type::dumpTypeMap()
 {
-  logger.info() << "dumpTypeMap(): dumping %09d types" , type_map.size();
+  AVANGO_LOG(logger,logging::INFO , boost::str(boost::format("dumpTypeMap(): dumping %1% types") % type_map.size()))
 
   size_t longest_name_size = 0;
 
@@ -436,12 +416,10 @@ av::Type::dumpTypeMap()
 
     std::string buffer(longest_name_size - name.size(), ' ');
 
-    logger.info() << "%s'%s' idx: %09d "
-                  << "[derivation: %s] [public: %s] [distributable: %s]"
-      , buffer, name, index
-      , (!derivation.empty() ? derivation : "none")
-      , (current_type_data.mCreate ? "yes" : " no")
-      , (current_type_data.mDistributable ? "yes" : " no");
+    AVANGO_LOG(logger,logging::INFO , boost::str(boost::format("%1%'%2%' idx: %3% [derivation: %4%] [public: %5%] [distributable: %6%]") % buffer % name % index
+        % (!derivation.empty() ? derivation : "none")
+        % (current_type_data.mCreate ? "yes" : " no")
+        % (current_type_data.mDistributable ? "yes" : " no")))
 
     buffer = std::string(longest_name_size + 17, ' ');
 

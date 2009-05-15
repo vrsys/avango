@@ -31,6 +31,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <boost/format.hpp>
 
 // includes, project
 
@@ -64,17 +65,13 @@ AV_TYPED_DEFINE_ABSTRACT(av::Base);
 av::Base::Base()
   : mRefCount(0), mHasFloatingRef(false)
 {
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "Base(): @0x%x", this;
-#endif
+  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("Base(): @0x%1%") % this));
 }
 
 /* virtual */
 av::Base::~Base()
 {
-#if defined(AVAVNGO_DEBUG)
-  LOG_TRACE(logger) << "~Base(): @0x%x", this;
-#endif
+  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("~Base(): @0x%1%") % this));
 }
 
 /* static */ void
@@ -89,7 +86,7 @@ av::Base::initClass()
 
     if (!delete_on_unref)
     {
-      logger.info() << "initClass: disabling 'delete this' when reference count goes to zero!";
+      AVANGO_LOG(logger,logging::INFO , "initClass: disabling 'delete this' when reference count goes to zero!");
     }
   }
 }
@@ -117,19 +114,14 @@ av::Base::reference()
 {
   refImpl();
 
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "reference(): '%s' @0x%x refcount = %d after ref",
-    getTypeId().getName().c_str(), this , referenceCount();
-#endif
+  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% after ref") % getTypeId().getName().c_str() % this % referenceCount()))
+
 }
 
 void
 av::Base::unreference()
 {
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "reference(): '%s' @0x%x refcount = %d before unref",
-    getTypeId().getName().c_str(), this, referenceCount();
-#endif
+  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
 
   unrefImpl();
 }
@@ -137,10 +129,7 @@ av::Base::unreference()
 void
 av::Base::unreferenceWithoutDeletion()
 {
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "reference(): '%s' @0x%x refcount = %d before unref",
-    getTypeId().getName().c_str(), this, referenceCount();
-#endif
+  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
 
   unrefWithoutDeletionImpl();
 }

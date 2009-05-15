@@ -138,6 +138,8 @@
 
 #include <avango/Config.h>
 
+#include <boost/format.hpp>
+
 #include <cstring>
 
 namespace
@@ -234,7 +236,7 @@ extern "C" {
 
   void uuid_create(my_uuid_t*, uint_t*)
   {
-    logger.error() << "uuid_create() not available on this platform!";
+    AVANGO_LOG(logger,logging::ERROR , "uuid_create() not available on this platform!")
   }
 #endif
 
@@ -259,7 +261,7 @@ av::UUID::UUID () :
   if (0 != result)
   {
     mId = av::UUID::nil.mId;
-    logger.warn() << "UUID: 'uuid_create' returned unsuccessful status of " << result;
+    AVANGO_LOG(logger, logging::WARN , boost::str(boost::format("UUID: 'uuid_create' returned unsuccessful status of %1%") % result))
   }
 
   (void) std::memcpy (&mId, &new_uuid.bits, sizeof (mId));
@@ -267,20 +269,18 @@ av::UUID::UUID () :
   if (!valid ())
   {
     mId = av::UUID::nil.mId;
-    logger.warn() << "UUID: not a valid UUID: '%s'", new_uuid.bits;
+
+    AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("UUID: not a valid UUID: '%1%'") % new_uuid.bits));
+
   }
 
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "UUID: created '%s'", static_cast<std::string>(*this);
-#endif
+  AVANGO_LOG(logger, logging::TRACE , boost::str(boost::format("UUID: created '%1%'") % static_cast<std::string>(*this)))
 }
 
 av::UUID::UUID (const av::UUID& a) :
   mId (a.mId)
 {
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) <<"UUID: copied '%s'", static_cast<std::string>(*this);
-#endif
+  AVANGO_LOG(logger, logging::TRACE , boost::str(boost::format("UUID: copied '%1%'") % static_cast<std::string>(*this)))
 }
 
 av::UUID::UUID (const RawType& a) :
@@ -290,24 +290,23 @@ av::UUID::UUID (const RawType& a) :
 
   if (!valid ()) {
     mId = av::UUID::nil.mId;
-    logger.warn() << "UUID: not a valid UUID: '%s'", a.bits;
+    AVANGO_LOG(logger, logging::WARN , boost::str(boost::format("UUID: not a valid UUID: '%1%'") % a.bits))
   }
 
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "UUID: initialized (raw) '%s'", static_cast<std::string>(*this);
-#endif
+  AVANGO_LOG(logger, logging::TRACE , boost::str(boost::format("UUID: initialized (raw) '%1%'") % static_cast<std::string>(*this)))
+
 }
 
 av::UUID::UUID (const std::string& a) :
   mId (av::UUID::nil.mId)
 {
   if (36 < a.size ()) {
-    logger.warn() << "UUID: string '%s' size < 36", a;
+    AVANGO_LOG(logger, logging::WARN , boost::str(boost::format("UUID: string '%1%' size < 36") % a))
     return;
   }
 
   if ('-' != a[8]) {
-    logger.warn() << "UUID: string '%s' not convertible", a;
+    AVANGO_LOG(logger, logging::WARN , boost::str(boost::format("UUID: string '%1%' not convertible") % a))
     return;
   }
 
@@ -327,13 +326,12 @@ av::UUID::UUID (const std::string& a) :
 
   if (!valid ()) {
     mId = av::UUID::nil.mId;
-    logger.warn() << "UUID: not a valid UUID: '%s'", a;
+    AVANGO_LOG(logger, logging::WARN , boost::str(boost::format("UUID: not a valid UUID: '%1%'") % a))
     return;
   }
 
-#if defined(AVANGO_DEBUG)
-  LOG_TRACE(logger) << "UUID: initialized (str) '%s'", static_cast<std::string>(*this);
-#endif
+  AVANGO_LOG(logger, logging::TRACE , boost::str(boost::format("UUID: initialized (str) '%1%'") % static_cast<std::string>(*this)))
+
 }
 
 /* virtual */

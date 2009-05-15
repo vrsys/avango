@@ -33,6 +33,7 @@
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
 
 #include <avango/Assert.h>
 #include <avango/ContainerPool.h>
@@ -41,7 +42,6 @@
 #include <avango/FieldRef.h>
 #include <avango/Logger.h>
 #include <avango/InputStream.h>
-#include <iostream>
 
 #include <avango/Config.h>
 
@@ -164,11 +164,11 @@ av::FieldContainer::addDynamicField(const std::string& typeName, const std::stri
     else
     {
       delete typed;
-      logger.warn() << "type '" << typeName << "' is no field";
+      AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("type '%1%' is no field") % typeName))
     }
   }
   else
-    logger.warn() << "could not create instance of type '" << typeName << "'";
+    AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("could not create instance of type '%1%'") % typeName))
 }
 
 /* virtual */ void
@@ -177,7 +177,7 @@ av::FieldContainer::addDynamicField(Field* field, const std::string& fieldName)
   if (field != 0)
     field->clone()->bind(this, fieldName, true);
   else
-    logger.warn() << "invalid field";
+    AVANGO_LOG(logger,logging::WARN , "invalid field")
 }
 
 /* virtual */ bool
@@ -226,10 +226,7 @@ av::FieldContainer::callEvaluate()
     {
       mFlags.mIsEvaluating = true;
 
-#if defined(AVANGO_DEBUG)
-      LOG_TRACE(logger) << "callEvaluate: evaluating dependencies of '"
-                     << getTypeId().getName() << "' @0x" << this << ".";
-#endif
+      AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("callEvaluate: evaluating dependencies of '%1%' @0x%2%.") % getTypeId().getName() % this));
 
       // Evaluate field containers that our own fields depend on
 //      FieldPtrVec &fields = getFields();
@@ -244,10 +241,7 @@ av::FieldContainer::callEvaluate()
 
       if (mFlags.mNeedsEvaluation)
       {
-#if defined(AVANGO_DEBUG)
-        LOG_TRACE(logger) << "callEvaluate: evaluating '" << getTypeId().getName()
-                       << "' @0x" << this << " (%07.3lf).", mLastChange;
-#endif
+        AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("callEvaluate: evaluating '%1%' @0x%2% (%07.3lf).%3%") % getTypeId().getName() % this % mLastChange));
 
         // evaluate for local sideeffect
         this->evaluateLocalSideEffect();
@@ -265,10 +259,8 @@ av::FieldContainer::callEvaluate()
 
         mFlags.mNeedsEvaluation = mFlags.mAlwaysEvaluate;
 
-#if defined(AVANGO_DEBUG)
-        logger.debug() << "callEvaluate: '" << getTypeId().getName()
-                       << "' @0x" << this << " evaluated.";
-#endif
+        AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("callEvaluate: '%1%' @0x%2% evaluated.") % getTypeId().getName() % this));
+
       }
 
       mEvaluateId = sEvaluateId;
@@ -277,8 +269,7 @@ av::FieldContainer::callEvaluate()
   }
   else
   {
-    logger.warn() << "callEvaluate: detected evaluation loop: "
-                  << getTypeId().getName() << ", " << Name.getValue() << ".";
+    AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("callEvaluate: detected evaluation loop: '%1%', %2%.") % getTypeId().getName() % Name.getValue()));
   }
 }
 
@@ -300,14 +291,8 @@ av::FieldContainer::scheduleForEvaluation()
 
     evaluation_list.push_back(Link<FieldContainer>(this));
 
-#if defined(AVANGO_DEBUG)
-    logger.debug()
-      << "scheduleForEvaluation: "
-      << "'%s' @0x%x scheduled, list size: %d.",
-      getTypeId().getName(),
-      this,
-      evaluation_list.size();
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("scheduleForEvaluation: '%1%' @0x%2% scheduled, list size %3%.") % getTypeId().getName() % this % evaluation_list.size()));
+
   }
 }
 
@@ -344,8 +329,8 @@ av::FieldContainer::alwaysEvaluate(bool on)
   {
     mFlags.mAlwaysEvaluate = on;
 
-    logger.info() << "alwaysEvaluate: " << (on ? "en" : "dis") << "abled 'alwaysEvaluate' for '"
-                  << getTypeId().getName() << "' @0x" << this;
+    AVANGO_LOG(logger,logging::INFO , boost::str(boost::format("alwaysEvaluate: %1%abled 'alwaysEvaluate' for '%2%' @0x%3%") % (on ? "en" : "dis") % getTypeId().getName() % this));
+
     touch();
   }
 }
@@ -356,7 +341,7 @@ av::FieldContainer::evaluateDependency(FieldContainer& dependency)
   if (mFlags.mIsEvaluating)
     dependency.callEvaluate();
   else
-    logger.warn() << "evaluateDependency: called from outside of evaluate";
+    AVANGO_LOG(logger,logging::WARN , "evaluateDependency: called from outside of evaluate");
 }
 
 /* virtual */ void
@@ -379,9 +364,7 @@ av::FieldContainer::evaluateAllContainers()
     // create new evaluate traversal id
     ++sEvaluateId;
 
-#if defined(AVANGO_DEBUG)
-    logger.debug() << "evaluateAllContainers: " << evaluation_list.size() << " in evaluation list";
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("evaluateAllContainers: %1% in evaluation list") % evaluation_list.size()));
 
     FieldContainerList::iterator current_container = evaluation_list.begin();
     while (current_container != evaluation_list.end())
@@ -406,13 +389,12 @@ av::FieldContainer::evaluateAllContainers()
       else
       {
         current_container = evaluation_list.erase(current_container);
-        logger.warn() << "evaluateAllContainers: skipping invalid container";
+        AVANGO_LOG(logger,logging::WARN , "evaluateAllContainers: skipping invalid container");
       }
     }
 
-#if defined(AVANGO_DEBUG)
-    logger.debug() << "evaluateAllContainers: " << evaluation_list.size() << " rescheduled.";
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("evaluateAllContainers: %1% rescheduled") % evaluation_list.size()));
+
   }
 }
 
@@ -480,33 +462,25 @@ av::FieldContainer::getFieldRef(const std::string& name, av::FieldRef& fr)
 void
 av::FieldContainer::evaluate()
 {
-#if defined(AVANGO_DEBUG)
-  logger.trace() << "evalute: called";
-#endif
+  AVANGO_LOG(logger,logging::TRACE , "evaluated: called");
 }
 
 void
 av::FieldContainer::evaluateLocalSideEffect()
 {
-#if defined(AVANGO_DEBUG)
-    logger.trace() << "evaluteLocalSideEffect: called";
-#endif
+  AVANGO_LOG(logger,logging::TRACE , "evaluteLocalSideEffect: called");
 }
 
 void
 av::FieldContainer::fieldHasChanged(const Field& /*field*/)
 {
-#if defined(AVANGO_DEBUG)
-  logger.trace() << "fieldHasChanged: called";
-#endif
+  AVANGO_LOG(logger,logging::TRACE , "fieldHasChanged: called");
 }
 
 void
 av::FieldContainer::fieldHasChangedLocalSideEffect(const Field& /*field*/)
 {
-#if defined(AVANGO_DEBUG)
-  logger.trace() << "fieldHasChangedLocalSideEffect: called";
-#endif
+  AVANGO_LOG(logger,logging::TRACE , "fieldHasChangedLocalSideEffect: called");
 }
 
 void
@@ -521,13 +495,7 @@ av::FieldContainer::fieldChanged(const Field& field, bool from_net)
     this->fieldHasChanged(field);
   }
 
-#if defined(AVANGO_DEBUG)
-  logger.debug() << "FieldContainer::fieldChanged: '%s' @0x%x: field '%s' changed %s.",
-    getTypeId().getName(),
-    this,
-    field.getName(),
-    (from_net? "from net" : "locally");
-#endif
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("FieldContainer::fieldChanged: '%1%' @0x%2%: field '%3%' changed %4%.") % getTypeId().getName()  % this % field.getName() % (from_net? "from net" : "locally") ));
 
   // TODO timestamp for last change
   // mLastChange = pfGetFrameTimeStamp();
@@ -548,9 +516,7 @@ av::FieldContainer::read(InputStream& is)
 
     is.read((char*) &count, sizeof(count));
 
-#if defined(AVANGO_DEBUG)
-    logger.debug() << "read: reading " << count << " fields";
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("read: reading %1% fields") % count));
 
     for (unsigned int i = 0; i < count; i++)
     {
@@ -565,9 +531,7 @@ av::FieldContainer::read(InputStream& is)
       is >> fields[index];
       fields[index]->readConnection(is);
 
-#if defined(AVANGO_DEBUG)
-      logger.debug() << "    " << fields[index]->getName();
-#endif
+      AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("    %1%") % fields[index]->getName()));
 
     }
   }
@@ -595,9 +559,8 @@ av::FieldContainer::read(InputStream& is)
 /* virtual */ void
 av::FieldContainer::push(av::Msg& msg)
 {
-#if defined(AVANGO_DEBUG)
-  logger.debug() << "push: pushing a %s (%s)", getTypeId().getName(), typeid(*this).name();
-#endif
+
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("push: pushing a %1% (%2%)") % getTypeId().getName() % typeid(*this).name() ));
 
   FieldPtrVec& fields = getFields();
   int fields_pushed = 0;
@@ -625,9 +588,7 @@ av::FieldContainer::push(av::Msg& msg)
     }
   }
 
-#if defined(AVANGO_DEBUG)
-  logger.debug() << "push: %d of %d fields.", fields_pushed, this->getNumFields();
-#endif
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("push: %1% of %2% fields.") % fields_pushed % this->getNumFields()));
 
   av_pushMsg(msg, fields_pushed);
 }
@@ -635,16 +596,13 @@ av::FieldContainer::push(av::Msg& msg)
 /* virtual */ void
 av::FieldContainer::pop(av::Msg& msg)
 {
-#if defined(AVANGO_DEBUG)
-  logger.debug() << "pop: popping a %s (%s)", getTypeId().getName(), typeid(*this).name();
-#endif
+
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("pop: popping a %1% (%2%).") % getTypeId().getName() % typeid(*this).name()));
 
   unsigned int num_fields;
   av_popMsg(msg, num_fields);
 
-#if defined(AVANGO_DEBUG)
-  logger.debug() << "pop: %d of %d fields.", num_fields, this->getNumFields();
-#endif
+  AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("pop: %1% of %2% fields.") % num_fields % this->getNumFields()));
 
   AV_ASSERT(num_fields <= this->getNumFields());
 
@@ -655,9 +613,7 @@ av::FieldContainer::pop(av::Msg& msg)
     AV_ASSERT(index < this->getNumFields());
     Field* field = getField(index);
 
-#if defined(AVANGO_DEBUG)
-    logger.debug() << "pop: (index %d:%s)", index, field->getTypeId().getName();
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("pop: (index %1%:%2%)") % index % field->getTypeId().getName()));
 
     av_popMsg(msg, field);
   }
@@ -674,9 +630,7 @@ av::FieldContainer::write(OutputStream& os)
     // write number of fields
     uint32_t size = getNumWriteableFields();
 
-#if defined(AVANGO_DEBUG)
-    logger.debug() << "write: writing " << size << " fields";
-#endif
+    AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("write: writing %1% fields") % size));
 
     os.write((char*) &size, sizeof(size));
 
@@ -687,9 +641,7 @@ av::FieldContainer::write(OutputStream& os)
       if ((*i)->isWritable())
       {
 
-#if defined(AVANGO_DEBUG)
-        logger.debug() << "    " << (*i)->getName();
-#endif
+        AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("    %1%") % (*i)->getName()));
 
         // write index of this field
         uint32_t index = (*i)->getIndex();

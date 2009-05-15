@@ -30,6 +30,7 @@
 // includes, system
 
 #include <cstdlib>
+#include <boost/format.hpp>
 
 // includes, project
 
@@ -60,8 +61,8 @@ av::Create::~Create()
 /* virtual */ av::Typed*
 av::Create::makeInstance() const
 {
-  logger.fatal() << "makeInstance(): "
-                 << "logically 'pure virtual' function called; aborting!";
+  AVANGO_LOG(logger,logging::FATAL , "makeInstance(): logically 'pure virtual' function called; aborting!")
+
   ::abort();
 
 #if defined(_WIN32)

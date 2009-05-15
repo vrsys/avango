@@ -37,6 +37,8 @@
 #undef AVANGO_DEBUG
 #endif
 
+#define AVANGO_LOG_LEVEL av::logging::%(AVANGO_LOG_LEVEL)s
+
 #if %(AVANGO_DISTRIBUTION_SUPPORT)s
 #define AVANGO_DISTRIBUTION_SUPPORT 1
 #else

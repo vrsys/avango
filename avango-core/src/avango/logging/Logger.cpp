@@ -159,15 +159,30 @@ av::logging::Logger::passMessage(LoggingEvent& event)
 }
 
 const std::string&
-av::logging::Logger::getName()
+av::logging::Logger::getName() const
 {
   return mName;
 }
 
 bool
-av::logging::Logger::hasParent()
+av::logging::Logger::hasParent() const
 {
   return mParent;
+}
+
+const av::logging::Logger&
+av::logging::Logger::getParent() const
+{
+  if (mParent)
+  {
+    return *mParent;
+  }
+  else
+  {
+    AV_ASSERT(this == &getRootLogger());
+    throw std::logic_error("av::logging::Logger::getParent: Logger has no parent.");
+    return *this;
+  }
 }
 
 av::logging::Logger&
@@ -186,7 +201,7 @@ av::logging::Logger::getParent()
 }
 
 av::logging::Level
-av::logging::Logger::getLevel()
+av::logging::Logger::getLevel() const
 {
   return mLevel;
 }
@@ -228,6 +243,12 @@ av::logging::Logger::removeAllAppenders()
 {
   boost::mutex::scoped_lock lock(mAppenderMutex);
   mAppenders.clear();
+}
+
+bool
+av::logging::Logger::isActive(Level level) const
+{
+  return ( (!mAppenders.empty() && level <= mLevel) || getParent().isActive(level));
 }
 
 const std::set<boost::shared_ptr<av::logging::Appender>, av::logging::Logger::compareSharedPtrs >&

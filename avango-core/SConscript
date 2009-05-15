@@ -32,6 +32,7 @@ local_env = avango.build.Environment()
 local_env['SUBST'] = {
     'PREFIX': avango.build.get_prefix().abspath,
     'AVANGO_DEBUG': int(local_env['DEBUG']),
+    'AVANGO_LOG_LEVEL': local_env['LOG_LEVEL'],
     'AVANGO_DISTRIBUTION_SUPPORT': int(local_env['DISTRIBUTION_SUPPORT']),
     'PKG_CONFIG_REQUIRES': '',
     'AVANGO_VERSION': '1.90.0',

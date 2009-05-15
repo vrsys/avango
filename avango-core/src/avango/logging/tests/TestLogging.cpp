@@ -191,12 +191,51 @@ namespace
     CHECK(av::Logger::getRootLogger().getAppenders().size() == 1);
   }
 
+  TEST(isActive)
+  {
+    av::Logger& child = av::Logger::getLogger("useLoggerHierarchy::Node");
+    av::Logger& parent = av::Logger::getLogger("useLoggerHierarchy");
+
+    boost::shared_ptr<av::logging::Appender> file_app(new av::logging::FileAppender(filename));
+    parent.addAppender(file_app);
+
+    parent.setLevel(av::logging::ERROR);
+    child.setLevel(av::logging::FATAL);
+
+    CHECK(child.isActive(av::logging::ERROR));
+  }
+
+  TEST(LOGMacroSuccessfulLogging)
+  {
+    av::Logger& logger = av::Logger::getLogger("useLoggerHierarchy");
+    std::ostringstream os;
+    boost::shared_ptr<av::logging::Appender> stream_app(new av::logging::StreamAppender(os));
+    logger.addAppender(stream_app);
+    logger.setLevel(av::logging::ERROR);
+
+    AVANGO_LOG(logger, av::logging::ERROR, "Test");
+
+    CHECK(!os.str().empty());
+  }
+
+  TEST(LOGMacroUnsuccessfulLogging)
+  {
+    av::Logger& logger = av::Logger::getLogger("useLoggerHierarchy");
+    std::ostringstream os;
+    boost::shared_ptr<av::logging::Appender> stream_app(new av::logging::StreamAppender(os));
+    logger.addAppender(stream_app);
+    logger.setLevel(av::logging::ERROR);
+
+    AVANGO_LOG(logger, av::logging::WARN, "Test");
+
+    CHECK(os.str().empty());
+  }
+
 } // namespace
 
 // functions, exported
 
 int main()
 {
-  //av::getRootLogger().addConsoleAppender();
   return UnitTest::RunAllTests();
 }

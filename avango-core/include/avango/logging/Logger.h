@@ -44,6 +44,7 @@
 // includes, project
 
 #include <avango/Assert.h>
+#include <avango/Config.h>
 #include <avango/logging/Level.h>
 #include <avango/logging/LoggerManager.h>
 #include <avango/windows_specific.h>
@@ -242,12 +243,12 @@ namespace av
       /**
        * Returns the name of this logger.
        */
-      AV_DLL const std::string& getName();
+      AV_DLL const std::string& getName() const;
 
       /**
        * Returns true if the logger has a parent logger.
        */
-      AV_DLL bool hasParent();
+      AV_DLL bool hasParent() const;
 
       /**
        * Returns the parent logger of this logger.
@@ -256,9 +257,15 @@ namespace av
       AV_DLL Logger& getParent();
 
       /**
+       * Returns the parent logger of this logger.
+       * \throw std::logic_error If the logger has no parents (which means it is the root logger).
+       */
+      AV_DLL const Logger& getParent() const;
+
+      /**
        * Get level of this logger. Only messages >= this level are logged
        */
-      AV_DLL Level getLevel();
+      AV_DLL Level getLevel() const;
 
       /**
        * Set level of this logger. Only messages >= level are logged
@@ -293,6 +300,11 @@ namespace av
        * Removes all appenders from this logger.
        */
       AV_DLL void removeAllAppenders();
+
+      /**
+       * Check if this logger (or one of its parents) has at least one appender
+       */
+      AV_DLL bool isActive(Level level) const;
 
       /**
        * Functor used to compare two boost::shared_ptrs
@@ -403,5 +415,9 @@ namespace av
 #define LOG_TRACE(trace_logger)\
   if (false) (trace_logger).trace()
 #endif
+
+#define AVANGO_LOG(logger, level, message)\
+  if ((level <= AVANGO_LOG_LEVEL) && (logger.isActive(level)))\
+    logger.log(level, message);
 
 #endif // #if !defined(AVANGO_LOGGING_LOGGER_H)

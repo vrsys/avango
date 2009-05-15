@@ -147,6 +147,8 @@ def build_default_options():
         ('CXX','C++ compiler'),
         scons.BoolOption('DEBUG', 'Debug build option', False),
         scons.BoolOption('TRACE_LOGGING', 'Enable/Disable trace log level', False),
+        scons.EnumOption('LOG_LEVEL', 'Support for higher log levels will be compiled out', "DEBUG",
+                         ("FATAL", "ERROR", "WARN", "INFO", "DEBUG", "TRACE")),
         scons.PathOption('BINARY_PATH',
                    'Additional binary search paths',
                    defaults.BINARY_PATH,

@@ -72,7 +72,7 @@ namespace
 
   void MyObject::fieldEventCallback(av::Field::Event)
   {
-    logger.info() << "MyObject::fieldEventCallback";
+    AVANGO_LOG(logger, av::logging::INFO, "MyObject::fieldEventCallback");
     ++callback_counter;
   }
 

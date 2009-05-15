@@ -4,7 +4,7 @@
 *                                                                        *
 * This file is part of Avango.                                           *
 *                                                                        *
-* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       *
 * angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
 * Avango is free software: you can redistribute it and/or modify         *
@@ -30,6 +30,7 @@
 #include <iterator>
 
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 
 #include <avango/Assert.h>
 #include <avango/Config.h>
@@ -154,20 +155,16 @@ av::Field::notify(Field* triggered_from)
     SingleField<std::string>* container_name =
       dynamic_cast<SingleField<std::string>* >(getContainer()->getField("Name"));
 
-    LOG_TRACE(logger) << "notify: "
-                   << (0 != container_name ? container_name->getValue() : "unnamed")
-                   << "."
-                   <<  getName()
-                   << " of type <"
-                   << getContainer()->getTypeId().getName()
-                   << "."
-                   << getTypeId().getName() << "> ("
-                   << (mFlags.multiPush ? "multi" : "single")
-                   << "-pushed, "
-                   << mAuditors.size()
-                   << " auditor"
-                   << (1 != mAuditors.size() ? "s" : "")
-                   << "was already notified.";
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("notify: "
+    		"%1% . %2% of type <%3%.%4%> %5%-pushed, %6% auditor%7% was already notified.")
+    		% (0 != container_name ? container_name->getValue() : "unnamed")
+    		% getName()
+    		% getContainer()->getTypeId().getName()
+    		% getTypeId().getName()
+    		% (mFlags.multiPush ? "multi" : "single")
+    		% mAuditors.size()
+    		% (1 != mAuditors.size() ? "s" : "")
+    		));
   }
 #endif
 
@@ -276,7 +273,7 @@ av::Field::setMultiPush (bool onoff)
 {
   if (!onoff)
   {
-    logger.warn() << "Disabling multi-push on a field is deprecated.";
+    AVANGO_LOG(logger, logging::WARN, "Disabling multi-push on a field is deprecated.");
   }
 
   mFlags.multiPush = onoff;
@@ -293,7 +290,7 @@ av::Field::setMultiInput (bool onoff)
 {
   if (!onoff)
   {
-    logger.warn() << "Disabling multi-input on a field is deprecated.";
+    AVANGO_LOG(logger, logging::WARN, "Disabling multi-input on a field is deprecated.");
   }
 
   mFlags.multiInput = onoff;
@@ -520,11 +517,9 @@ av::Field::bind(av::FieldContainer* container, const std::string& name, bool own
 
   if (isBound())
   {
-    logger.warn() << "bind: "
-    << (container ? container->getTypeId().getName() : "null-pointer" )
-    << "."
-    << name
-    << " already bound";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("bind: %1%.%2% already bound")
+        % (container ? container->getTypeId().getName() : "null-pointer" )
+        % name));
     return;
   }
 
@@ -561,22 +556,20 @@ av::Field::registerType(const std::string&  classname,
                         av::Create* creator)
 {
 #if defined(AVANGO_DEBUG)
-  logger.debug() << "registerType: registration request for type '"
-                 << classname
-                 << "' with parent type '"
-                 << parentname
-                 << "'.";
+  AVANGO_LOG(logger, logging::DEBUG, boost::str(boost::format("registerType: registration request for type '%1%' with parent type '%2%'.")
+            % classname
+            % parentname
+            ));
 #endif
 
   Type type (Type::getByName(classname));
 
   if (Type::badType() != type)
   {
-    logger.warn() << "registerType: type '"
-                  << classname
-                  << "' already registered, returning '"
-                  << type.getName()
-                  << "'!";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("registerType: type '%1%' already registered, returning '%2%'!")
+                % classname
+                % type.getName()
+                ));
     return type;
   }
 
@@ -586,37 +579,32 @@ av::Field::registerType(const std::string&  classname,
     parent = Type::getByName(parentname);
     if (Type::badType() == parent)
     {
-      logger.warn() << "registerType: parent type '"
-      << parentname
-      << "' of type '"
-      << classname
-      << "' doesn't exist, returning '"
-      << Type::badType().getName()
-      << "'!";
+      AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("registerType: parent type '%1%' of type '%2%' doesn't exist, returning '%3%'!")
+                % parentname
+                % classname
+                % Type::badType().getName()
+                ));
       return Type::badType();
     }
   }
   else
   {
-    logger.warn() << "registerType: setting parent type '"
-    << parentname << "' of type '"
-    << classname
-    << "' to '"
-    << Type::badType().getName()
-    << "'!";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("registerType: setting parent type '%1%' of type '%2%' to '%3%'!")
+              % parentname
+              % classname
+              % Type::badType().getName()
+              ));
     parent = Type::badType();
   }
 
   type = Type::createType(parent, classname, creator, true);
 
 #if defined(AVANGO_DEBUG)
-  logger.debug() << "registerType: created type '"
-                 << type.getName()
-                 << "' (id: "
-                 << type.getId()
-                 << ", parent: '"
-                 << type.getParent().getName()
-                 << ")";
+  AVANGO_LOG(logger, logging::DEBUG, boost::str(boost::format("registerType: created type '%1%' (id: %2%, parent: '%3%').")
+            % type.getName()
+            % type.getId()
+            % type.getParent().getName()
+            ));
 #endif
   return type;
 }
@@ -713,9 +701,9 @@ av::Field::readConnection(av::InputStream& is)
   }
   else
   {
-    logger.warn() << "read: can't resolve field connection for type '"
-    << (from_base ? from_base->getTypeId().getName() : "unnamed at 0x0")
-    << "'!";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("read: can't resolve field connection for type '%1%'!")
+              % (from_base ? from_base->getTypeId().getName() : "unnamed at 0x0")
+              ));
   }
 }
 

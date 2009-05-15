@@ -52,11 +52,11 @@ av::Reader::readObject(av::InputStream& stream)
   std::string type_str;
   stream >> type_str;
 
-  logger.info() << "readObject: type: " << type_str;
+  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: type: %1%") % type_str));
 
   if (stream.eof())
   {
-    logger.warn() << "readObject: eof encountered";
+    AVANGO_LOG(logger, logging::WARN, "readObject: eof encountered");
     return 0;
   }
 
@@ -64,7 +64,7 @@ av::Reader::readObject(av::InputStream& stream)
 
   if (!object.isValid())
   {
-    logger.warn() << "readObject: illegal type name '" << type_str << "'";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: illegal type name '%1%'") % type_str));
     return 0;
   }
 
@@ -72,12 +72,11 @@ av::Reader::readObject(av::InputStream& stream)
   std::string obj_id;
   stream >> obj_id;
 
-
-  logger.info() << "readObject: id: " << obj_id;
+  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: id: ") % obj_id));
 
   if (stream.fail() || stream.bad())
   {
-    logger.warn() << "readObject: error reading object id for '" << type_str << "'";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object id for '%1%'") % type_str))
     return 0;
   }
 
@@ -86,7 +85,7 @@ av::Reader::readObject(av::InputStream& stream)
 
   if (stream.fail() || stream.bad())
   {
-    logger.warn() << "readObject: error reading object of type '" << type_str << "'";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object of type '%1%'") % type_str));
     return 0;
   }
 
@@ -102,11 +101,11 @@ av::Reader::readFromFile(const std::string& filename)
 
   if (!file || file->bad())
   {
-    logger.warn() << "readFromFile: can't open file '" << filename << "'";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: can't open file '%1%'") % filename));
     return 0;
   }
 
-  logger.info() << "readFromFile: '" << filename << "'";
+  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: '%1%'") % filename));
 
   InputStream* stream = new InputStream(*file);
 
@@ -142,11 +141,11 @@ av::Reader::readFromFile(const std::string& filename)
     }
     else
     {
-      logger.warn() << "readFromFile: error resolving connection from object '" << from_id << "'!";
+      AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: error resolving connection from object '%1%'!") % from_id));
     }
   }
 
-  logger.info() << "readFromFile: " << mConnectionMap.size() << " connections resolved!";
+  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: %1% connections resolved!") % mConnectionMap.size()));
 
   mObjectMap.clear();
   mConnectionMap.clear();

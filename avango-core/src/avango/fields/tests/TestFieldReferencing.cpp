@@ -83,31 +83,31 @@ namespace
     MyObject *dst(new MyObject(&dst_deleted));
     dst->reference();
 
-    logger.info() << "before connect";
-    logger.info() << "src:" << src->referenceCount();
-    logger.info() << "dst:" << dst->referenceCount();
+    AVANGO_LOG(logger, av::logging::INFO, "before connect");
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     dst->Name.connectFrom(&src->Name);
-    logger.info() << "after connect";
-    logger.info() << "src:" << src->referenceCount();
-    logger.info() << "dst:" << dst->referenceCount();
+    AVANGO_LOG(logger, av::logging::INFO, "after connect");
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     // evaluate once because containers have been touched
     av::ApplicationInstance::get().evaluate();
 
-    logger.info() << "after evaluate";
-    logger.info() << "src:" << src->referenceCount();
-    logger.info() << "dst:" << dst->referenceCount();
+    AVANGO_LOG(logger, av::logging::INFO, "after evaluate");
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     dst->unreference();
-    logger.info() << "after dst unref";
-    if (!src_deleted) logger.info() << "src:" << src->referenceCount();
-    if (!dst_deleted) logger.info() << "dst:" << dst->referenceCount();
+    AVANGO_LOG(logger, av::logging::INFO, "after dst unref");
+    if (!src_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    if (!dst_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     src->unreference();
-    logger.info() << "after src unref";
-    if (!src_deleted) logger.info() << "src:" << src->referenceCount();
-    if (!dst_deleted) logger.info() << "dst:" << dst->referenceCount();
+    AVANGO_LOG(logger, av::logging::INFO, "after src unref");
+    if (!src_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    if (!dst_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     // simulate application exit
     av::ApplicationInstance::get().exit(false);

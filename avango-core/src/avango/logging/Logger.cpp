@@ -248,7 +248,7 @@ av::logging::Logger::removeAllAppenders()
 bool
 av::logging::Logger::isActive(Level level) const
 {
-  return ( (!mAppenders.empty() && level <= mLevel) || getParent().isActive(level));
+  return ( (!mAppenders.empty() && level <= mLevel) || ( hasParent() && getParent().isActive(level)));
 }
 
 const std::set<boost::shared_ptr<av::logging::Appender>, av::logging::Logger::compareSharedPtrs >&

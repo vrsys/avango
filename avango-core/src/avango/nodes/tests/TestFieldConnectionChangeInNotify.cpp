@@ -42,9 +42,12 @@ namespace
 
   public:
 
-    MyObject();
-    void valueChanged(const av::SFInt::ChangedEvent event);
+    MyObject() {}
+    MyObject(av::Field* field);
+    void fieldHasChanged(const av::Field& field);
 
+  private:
+    av::Field* mOtherField;
   };
 
   AV_FC_DEFINE(MyObject);
@@ -58,25 +61,25 @@ namespace
     }
   }
 
-  MyObject::MyObject()
+  MyObject::MyObject(av::Field* field) :
+    mOtherField(field)
   {
-    Value.addChangedCallback(boost::bind(&MyObject::valueChanged, this, _1));
   }
 
-  void MyObject::valueChanged(const av::SFInt::ChangedEvent event)
+  void MyObject::fieldHasChanged(const av::Field& field)
   {
-    if (event.getTriggeredFromField() && Value.getValue() == 1)
+    if (Value.getValue() == 1)
     {
       AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting from source field");
       Value.enableNotify(false);
-      Value.disconnectFrom(event.getTriggeredFromField());
+      Value.disconnectFrom(mOtherField);
       Value.enableNotify(true);
     }
-    if (event.getTriggeredFromField() && Value.getValue() == 3)
+    if (Value.getValue() == 3)
     {
       AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting all fields from source field");
       Value.enableNotify(false);
-      event.getTriggeredFromField()->disconnectAuditors();
+      mOtherField->disconnectAuditors();
       Value.enableNotify(true);
     }
   }
@@ -86,7 +89,7 @@ namespace
     MyObject::initClass();
 
     av::Link<av::IntObject> src(new av::IntObject);
-    av::Link<MyObject> dst1(new MyObject);
+    av::Link<MyObject> dst1(new MyObject(&src->Value));
     av::Link<av::IntObject> dst2(new av::IntObject);
 
     src->Value.setValue(0);

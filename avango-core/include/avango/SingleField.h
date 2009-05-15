@@ -28,6 +28,8 @@
 
 #include <stdexcept>
 
+#include <boost/signal.hpp>
+
 #include <avango/Assert.h>
 #include <avango/Config.h>
 #include <avango/Create.h>

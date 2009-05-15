@@ -41,10 +41,6 @@ test_fields = avango_test_env.Program(Split('''
                                      '''))
 tests += avango_test_env.Alias('test-core-field-fields', test_fields, "${SOURCE.abspath}")
 
-test_field_callbacks = avango_test_env.Program('TestFieldCallbacks.cpp')
-tests += avango_test_env.Alias('test-core-field-callbacks', test_field_callbacks,
-                               "${SOURCE.abspath}")
-
 test_field_value_callbacks = avango_test_env.Program('TestFieldValueCallbacks.cpp')
 tests += avango_test_env.Alias('test-core-field-value-callbacks', test_field_value_callbacks,
                                "${SOURCE.abspath}")

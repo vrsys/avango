@@ -31,8 +31,6 @@
 #include <vector>
 #include <utility>
 
-#include <boost/signal.hpp>
-
 #include <avango/Config.h>
 #include <avango/Typed.h>
 
@@ -64,9 +62,6 @@ namespace av
 
   public:
 
-    /**
-     * Field event base class passed to functions attached to field signals.
-     */
     class Event
     {
       friend class Field;
@@ -95,98 +90,6 @@ namespace av
     private:
       const Field *mField;
     };
-
-    /**
-     * Event class for field change events.
-     */
-    class ChangedEvent : public Event
-    {
-      friend class Field;
-
-    public:
-
-      /**
-       * Was the field change triggered from network or locally?
-       */
-      bool getChangedFromNet() const { return mChangedFromNet; }
-
-      /**
-       * Returns the connected field which triggered this field change.
-       * Returns 0 if the field was not changed by a connection.
-       * \see FieldEvent::getField for notes about holding the field after
-       * the callback has returned.
-       */
-      Field* getTriggeredFromField() const { return mTriggeredFromField; }
-
-    protected:
-      ChangedEvent(Field *field, bool changedFromNet, Field* triggeredFromField) :
-        Event(field), mChangedFromNet(changedFromNet), mTriggeredFromField(triggeredFromField) {}
-
-    private:
-      bool mChangedFromNet;
-      Field* mTriggeredFromField;
-    };
-
-    /**
-     * Event class for field connect events.
-     */
-    class ConnectedEvent : public Event
-    {
-      friend class Field;
-
-    public:
-
-      /**
-       * Get the field just connected to the originating field of the event.
-       * \see FieldEvent::getField for notes about holding the field after
-       * the callback has returned.
-       */
-      Field* getConnectedField() const { return mConnectedField; }
-
-    protected:
-      ConnectedEvent(Field *field, Field *connectedField) :
-        Event(field), mConnectedField(connectedField) {}
-
-    private:
-      Field* mConnectedField;
-    };
-
-    /**
-     * Event class for field disconnect events.
-     */
-    class DisconnectedEvent : public Event
-    {
-      friend class Field;
-
-    public:
-
-      /**
-       * Get the fields just disconnected to the originating field of the event.
-       * \see FieldEvent::getField for notes about holding a field after
-       * the callback has returned.
-       */
-      std::vector<Field*> getDisconnectedFields() const { return mDisconnectedFields; }
-
-    protected:
-      DisconnectedEvent(Field *field, std::vector<Field*> disconnectedFields) :
-        Event(field), mDisconnectedFields(disconnectedFields) {}
-
-    private:
-      std::vector<Field*> mDisconnectedFields;
-    };
-
-
-    typedef boost::signal<void (const ChangedEvent&)> ChangedSignal;
-    typedef ChangedSignal::slot_type ChangedCallback;
-    typedef boost::signals::connection ChangedCallbackHandle;
-
-    typedef boost::signal<void (const ConnectedEvent&)> ConnectedSignal;
-    typedef ConnectedSignal::slot_type ConnectedCallback;
-    typedef boost::signals::connection ConnectedCallbackHandle;
-
-    typedef boost::signal<void (const DisconnectedEvent&)> DisconnectedSignal;
-    typedef DisconnectedSignal::slot_type DisconnectedCallback;
-    typedef boost::signals::connection DisconnectedCallbackHandle;
 
     enum FieldChangeSource
     {
@@ -370,39 +273,6 @@ namespace av
     void setFieldChangeSource(FieldChangeSource src);
 
     /**
-     * Register callback invoked after a field change or field touch.
-     * The callback must take exactly one parameter of ChangedEvent.
-     */
-    ChangedCallbackHandle addChangedCallback(const ChangedCallback& callback);
-
-    /**
-     * Remove previously registered field changed callback via its handle.
-     */
-    void removeChangedCallback(const ChangedCallbackHandle& handle);
-
-    /**
-     * Register callback invoked after a field has been connected to this field.
-     * The callback must take exactly one parameter of ConnectedEvent.
-     */
-    ConnectedCallbackHandle addConnectedCallback(const ConnectedCallback& callback);
-
-    /**
-     * Remove previously registered field ConnectedCallback via its handle.
-     */
-    void removeConnectedCallback(const ConnectedCallbackHandle& handle);
-
-    /**
-     * Register callback invoked after a field has been disconnected from this field.
-     * The callback must take exactly one parameter of DisconnectedEvent.
-     */
-    DisconnectedCallbackHandle addDisconnectedCallback(const DisconnectedCallback& callback);
-
-    /**
-     * Remove previously registered field DisconnectedCallback via its handle.
-     */
-    void removeDisconnectedCallback(const DisconnectedCallbackHandle& handle);
-
-    /**
      * Create a new instance of same field type and same value.
      * This type is not added to any container or event handler.
      */
@@ -440,12 +310,6 @@ namespace av
 
     // disable copy construction
     Field(const Field&);
-
-    void containerFieldChanged(const ChangedEvent& event);
-
-    ChangedSignal mChangedSignal;
-    ConnectedSignal mConnectedSignal;
-    DisconnectedSignal mDisconnectedSignal;
 
     FieldPtrSet mAuditors;
 

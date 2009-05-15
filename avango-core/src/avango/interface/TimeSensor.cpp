@@ -70,7 +70,6 @@ av::TimeSensor::TimeSensor()
   AV_FC_ADD_FIELD(ReferenceTime, RealTime.getValue());
   AV_FC_ADD_FIELD(Time, 0);
 
-  ReferenceTime.addChangedCallback(boost::bind(&av::TimeSensor::referenceTimeChanged, this, _1));
   alwaysEvaluate(true);
 }
 
@@ -92,10 +91,4 @@ av::TimeSensor::evaluate()
 {
   Time.setValue(RealTime.getValue()-ReferenceTime.getValue());
   RealTime.touch();
-}
-
-void
-av::TimeSensor::referenceTimeChanged(const av::SFDouble::ChangedEvent&)
-{
-  Time.setValue(RealTime.getValue()-ReferenceTime.getValue());
 }

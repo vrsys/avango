@@ -39,21 +39,12 @@
 
 namespace
 {
-  double real_time = 0;
-
-  void realTimeChanged(const av::SFDouble::ChangedEvent& event)
-  {
-    real_time = dynamic_cast<const av::SFDouble*>(event.getField())->getValue();
-    AV_ASSERT(real_time);
-    av::getRootLogger().info() << "real_time: " << real_time;
-  }
-
   TEST(TimeSensor)
   {
     av::TimeSensor::initClass();
     av::Link<av::TimeSensor> time_sensor(new av::TimeSensor);
-    time_sensor->RealTime.addChangedCallback(&realTimeChanged);
     av::ApplicationInstance::get().evaluate();
+    double real_time = time_sensor->RealTime.getValue();
     CHECK(real_time > 0);
     double old_time = real_time;
 #ifdef _WIN32
@@ -62,6 +53,7 @@ namespace
     usleep(50000);
 #endif
     av::ApplicationInstance::get().evaluate();
+    real_time = time_sensor->RealTime.getValue();
     av::getRootLogger().info() << "real_time - old_time : " << real_time - old_time;
     CHECK(old_time < real_time);
   }

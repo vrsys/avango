@@ -181,22 +181,12 @@ av::Field::notify(Field* triggered_from)
   SetBoolFlag isNotifying(mIsNotifying);
 
   // copy and reference auditors while in notify because the connection topology may change
-
   FieldPtrVec auditors;
   auditors.reserve(mAuditors.size());
   std::copy(mAuditors.begin(), mAuditors.end(), std::back_inserter(auditors));
 
   FieldPtrVec::const_iterator current;
   FieldPtrVec::const_iterator past_of_end = auditors.end();
-
-  // create references to field containers
-  std::vector<Link<FieldContainer> > auditor_containers;
-  auditor_containers.reserve(mAuditors.size());
-  std::transform(auditors.begin(), auditors.end(), std::back_inserter(auditor_containers),
-                 boost::bind(&Field::getContainer, _1));
-
-  // notify
-
   for (current = auditors.begin(); current != past_of_end; ++current)
   {
     Field* to_field(*current);
@@ -343,7 +333,7 @@ av::Field::fieldChanged(bool fromNet, Field* triggeredFrom)
 
   if (notifyEnabled())
   {
-    mChangedSignal(ChangedEvent(this, fromNet, triggeredFrom));
+    mContainer->fieldChanged(*this, fromNet);
     notify(triggeredFrom);
     ContainerPool::notifyFieldHasChanged(this);
     setFieldChangeSource(fromNet ? net : internal);
@@ -369,7 +359,6 @@ av::Field::connectFrom(av::Field* field, bool dependent)
 
   mConnectedFrom.push_back(std::make_pair(field, dependent));
   field->addAuditor(this);
-  mConnectedSignal(ConnectedEvent(this, field));
 
   ContainerPool::notifyConnect(this);
 }
@@ -400,8 +389,6 @@ av::Field::disconnect()
 
   // we can notice disconnects this way
   touch();
-
-  mDisconnectedSignal(DisconnectedEvent(this, disconnected_fields));
 
   ContainerPool::notifyDisconnect(this);
 }
@@ -451,8 +438,6 @@ av::Field::disconnectFrom(av::Field* field)
 
   // we can notice disconnects this way
   touch();
-
-  mDisconnectedSignal(DisconnectedEvent(this, std::vector<Field*>(1, field)));
 
   ContainerPool::notifyDisconnect(this);
 }
@@ -504,13 +489,6 @@ av::Field::setFieldChangeSource(FieldChangeSource src)
 }
 
 void
-av::Field::containerFieldChanged(const ChangedEvent& event)
-{
-  AV_ASSERT(this == event.getField());
-  mContainer->fieldChanged(*(event.getField()), event.getChangedFromNet());
-}
-
-void
 av::Field::bind(av::FieldContainer* container, const std::string& name, bool owned)
 {
   AV_ASSERT(container);
@@ -525,7 +503,6 @@ av::Field::bind(av::FieldContainer* container, const std::string& name, bool own
 
   unsigned int index = container->addField(this, name);
   setContainer(container, index, owned);
-  addChangedCallback(boost::bind(&Field::containerFieldChanged, this, _1));
 }
 
 /* vitual */ void
@@ -705,42 +682,6 @@ av::Field::readConnection(av::InputStream& is)
               % (from_base ? from_base->getTypeId().getName() : "unnamed at 0x0")
               ));
   }
-}
-
-av::Field::ChangedCallbackHandle
-av::Field::addChangedCallback(const ChangedCallback& callback)
-{
-  return mChangedSignal.connect(callback);
-}
-
-void
-av::Field::removeChangedCallback(const ChangedCallbackHandle& handle)
-{
-  handle.disconnect();
-}
-
-av::Field::ConnectedCallbackHandle
-av::Field::addConnectedCallback(const ConnectedCallback& callback)
-{
-  return mConnectedSignal.connect(callback);
-}
-
-void
-av::Field::removeConnectedCallback(const ConnectedCallbackHandle& handle)
-{
-  handle.disconnect();
-}
-
-av::Field::DisconnectedCallbackHandle
-av::Field::addDisconnectedCallback(const DisconnectedCallback& callback)
-{
-  return mDisconnectedSignal.connect(callback);
-}
-
-void
-av::Field::removeDisconnectedCallback(const DisconnectedCallbackHandle& handle)
-{
-  handle.disconnect();
 }
 
 void

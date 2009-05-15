@@ -70,11 +70,6 @@ namespace av
     SFDouble Time;
 
     virtual void evaluate();
-
-  private:
-
-    void referenceTimeChanged(const av::SFDouble::ChangedEvent& event);
-
   };
 
 } // namespace av

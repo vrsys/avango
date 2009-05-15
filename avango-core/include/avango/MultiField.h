@@ -29,6 +29,8 @@
 #include <vector>
 #include <stdexcept>
 
+#include <boost/signal.hpp>
+
 #include <avango/Config.h>
 #include <avango/Create.h>
 #include <avango/Field.h>

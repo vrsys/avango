@@ -38,4 +38,4 @@ av_display_python_files = Split("""
     """)
 av_display = avango_env.Install(avango.build.get_python_path('avango/display'), av_display_python_files)
 Alias('display', av_display)
-Alias('install-display', avango.build.get_python_path('avango'))
+Alias('install-display', avango.build.get_python_path('avango/display'))

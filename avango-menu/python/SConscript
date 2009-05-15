@@ -104,4 +104,4 @@ menu_env.Install(avango.build.get_python_path('avango/menu/layout'), menu_layout
 menu_env.Install(avango.build.get_python_path('avango/menu/widget'), menu_widget_python_files)
 menu_env.Install(avango.build.get_python_path('avango/menu/data'), menu_data_files)
 
-Alias('install-menu', avango.build.get_python_path('avango'))
+Alias('install-menu', avango.build.get_python_path('avango/menu'))

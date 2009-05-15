@@ -36,7 +36,7 @@ for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osg
 
 module_env.Prepend(LIBS=['avangoOsg'])
 
-Alias('install-osg', avango.build.get_python_path('avango'))
+Alias('install-osg', avango.build.get_python_path('avango/osg'))
 
 osg_files = Split("""
     avango/osg/_osg.cpp

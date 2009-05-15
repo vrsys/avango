@@ -39,7 +39,7 @@ if avango.build.oshelper.os_is_mac():
 
 module_env.Prepend(LIBS="avangoTools")
 
-Alias('install-tools', avango.build.get_python_path('avango'))
+Alias('install-tools', avango.build.get_python_path('avango/tools'))
 
 tools_files = Split("""
     avango/tools/_tools.cpp

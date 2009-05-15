@@ -40,7 +40,7 @@ connect_files = Split("""
 
 av_connect = Install(avango.build.get_python_path('avango/connect'), connect_files)
 Alias('connect', av_connect)
-Alias('install-connect', avango.build.get_python_path('avango'))
+Alias('install-connect', avango.build.get_python_path('avango/connect'))
 
 connect_test_files = Split("""
     python/tests/TestField.py

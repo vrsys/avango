@@ -61,10 +61,10 @@ avango_python_files = Split("""
 
 avango_module = avango_env.SharedLibrary("src/avango/_avango", avango_files)
 avango_env.Depends(avango_module, avango_python_files)
-avango_env.Install(avango.build.get_python_path('avango'), avango_python_files)
-avango_env.Install(avango.build.get_python_path('avango'), avango_module)
+install_python_files = avango_env.Install(avango.build.get_python_path('avango'), avango_python_files)
+install_python_module = avango_env.Install(avango.build.get_python_path('avango'), avango_module)
 Alias('python', avango_module)
-Alias('install-python', avango.build.get_python_path('avango'))
+Alias('install-python', [install_python_files, install_python_module])
 
 av_script_files = Split("""
     src/avango/script/_script.cpp
@@ -81,6 +81,7 @@ av_script = avango_env.SharedLibrary("src/avango/script/_script", av_script_file
 avango_env.Depends(av_script, av_script_python_files)
 avango_env.Install(avango.build.get_python_path('avango/script'), av_script_python_files)
 avango_env.Install(avango.build.get_python_path('avango/script'), av_script)
+Alias('install-python', avango.build.get_python_path('avango/script'))
 Alias('python', av_script)
 
 

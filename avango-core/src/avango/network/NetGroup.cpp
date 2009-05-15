@@ -29,6 +29,7 @@
 
 
 #include <avango/ensemble/maestro/Maestro_CSX.h>
+#include <boost/format.hpp>
 
 #include <avango/Distributed.h>
 #include <avango/NetNode.h>
@@ -58,9 +59,7 @@ av::NetGroup::NetGroup(NetNode* net_node, Maestro_ClSv_Options &options)
 // destroy this group member and leave the group
 av::NetGroup::~NetGroup()
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::~NetGroup: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::~NetGroup: ")
 }
 
 av::UpcallSerializer&
@@ -92,9 +91,7 @@ av::NetGroup::send(const std::string &destEID, av::Msg& msg)
 void
 av::NetGroup::Merge_Join_Callback(Maestro_EndpID& /*myeid*/)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_Join_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_Join_Callback: ")
   // maestro_eid dummy(myeid);
   // _net_node->joined(dummy);
 
@@ -106,9 +103,7 @@ av::NetGroup::Merge_Join_Callback(Maestro_EndpID& /*myeid*/)
 void
 av::NetGroup::Merge_SetState_Callback(Maestro_EndpID& fragment, Maestro_Message& stateMessage)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_SetState_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_SetState_Callback: ")
 
   // _net_node->set_state_fragment(fragment, state_message);
   // _net_node->queue_state_fragment(fragment, state_message);
@@ -124,9 +119,7 @@ av::NetGroup::Merge_SetState_Callback(Maestro_EndpID& fragment, Maestro_Message&
 void
 av::NetGroup::Merge_GetState_Callback(Maestro_EndpID& fragment, Maestro_Message& stateMessage)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_GetState_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_GetState_Callback: ")
 
   boost::shared_ptr<GetStateUpcall> get_state(new GetStateUpcall(fragment.getHotEndpt().name));
 
@@ -141,9 +134,7 @@ av::NetGroup::Merge_GetState_Callback(Maestro_EndpID& fragment, Maestro_Message&
 void
 av::NetGroup::Merge_RemoveState_Callback(Maestro_EndpID& fragment)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_RemoveState_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_RemoveState_Callback: ")
 
   boost::shared_ptr<RemoveStateUpcall> remove_state(new RemoveStateUpcall(fragment.getHotEndpt().name));
   mUpcallSerializer.makeUpcall(remove_state);
@@ -153,9 +144,7 @@ av::NetGroup::Merge_RemoveState_Callback(Maestro_EndpID& fragment)
 void
 av::NetGroup::Merge_ReceiveCast_Callback(Maestro_EndpID &/*origin*/, Maestro_Message &msg)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_ReceiveCast_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_ReceiveCast_Callback: ")
 
   // _net_node->receive_message(origin, msg);
   Msg av_msg;
@@ -169,9 +158,7 @@ av::NetGroup::Merge_ReceiveCast_Callback(Maestro_EndpID &/*origin*/, Maestro_Mes
 void
 av::NetGroup::Merge_ReceiveSend_Callback(Maestro_EndpID &/*origin*/, Maestro_Message &msg)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_ReceiveSend_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_ReceiveSend_Callback: ")
 
   // _net_node->receive_message(origin, msg);
   Msg av_msg;
@@ -186,9 +173,8 @@ av::NetGroup::Merge_ReceiveSend_Callback(Maestro_EndpID &/*origin*/, Maestro_Mes
 void
 av::NetGroup::Merge_AcceptedView_Callback(MaestroMergeViewData &view_data, Maestro_Message &msg)
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_AcceptedView_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_AcceptedView_Callback: ")
+
   Msg av_msg;
   av_msg.resize(msg.getPos());
   msg.read(av_msg.getBuffer(), av_msg.getSize());
@@ -216,9 +202,7 @@ av::NetGroup::Merge_AcceptedView_Callback(MaestroMergeViewData &view_data, Maest
 void
 av::NetGroup::Merge_Block_Callback()
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_Block_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_Block_Callback: ")
 
   boost::shared_ptr<BlockUpcall> block(new BlockUpcall);
   mUpcallSerializer.makeUpcall(block);
@@ -227,9 +211,7 @@ av::NetGroup::Merge_Block_Callback()
 void
 av::NetGroup::Merge_UnBlock_Callback()
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_UnBlock_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_UnBlock_Callback: ")
 
   boost::shared_ptr<UnblockUpcall> unblock(new UnblockUpcall);
   mUpcallSerializer.makeUpcall(unblock);
@@ -239,9 +221,7 @@ av::NetGroup::Merge_UnBlock_Callback()
 void
 av::NetGroup::Merge_Exit_Callback()
 {
-#if AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetGroup::Merge_Exit_Callback: ";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "av::NetGroup::Merge_Exit_Callback: ")
 
   boost::shared_ptr<ExitUpcall> exit(new ExitUpcall);
   mUpcallSerializer.makeUpcall(exit);

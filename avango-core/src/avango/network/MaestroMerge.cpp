@@ -26,6 +26,7 @@
 #include "MaestroMerge.h"
 
 #include <iostream>
+#include <boost/format.hpp>
 
 #include <avango/Config.h>
 #include <avango/Logger.h>
@@ -51,12 +52,12 @@ av::MaestroMerge::MaestroMerge(MaestroMerge& hMerge) :
   Maestro_Base(hMerge),
   Maestro_GroupMember(hMerge)
 {
-  logger.error("copy constructor not supported");
+  AVANGO_LOG(logger, logging::ERROR, "copy constructor not supported")
 }
 
 av::MaestroMerge& av::MaestroMerge::operator= (MaestroMerge&)
 {
-  logger.error("operator= not supported");
+  AVANGO_LOG(logger, logging::ERROR, "operator= not supported")
   return *this;
 }
 
@@ -64,10 +65,7 @@ void
 av::MaestroMerge::join()
 {
   Maestro_GroupMember::join();
-#ifdef AVANGO_DEBUG
-  logger.debug("join");
-  //dump("av::MaestroMerge::join");
-#endif
+  AVANGO_LOG(logger, logging::DEBUG, "join")
 }
 
 void
@@ -75,9 +73,7 @@ av::MaestroMerge::leave()
 {
   Maestro_GroupMember::leave();
   mFirstViewInstalled = 0;
-#ifdef AVANGO_DEBUG
-  logger.debug("leave");
-#endif
+  AVANGO_LOG(logger, logging::DEBUG, "leave")
 }
 
 /**************************** cast **************************************/
@@ -156,37 +152,34 @@ void
 av::MaestroMerge::grpMemb_AcceptedView_Callback(Maestro_GrpMemb_ViewData &gmView,
                                                 Maestro_Message &msg)
 {
-#ifdef AVANGO_DEBUG
-  //dump("av::MaestroMerge::grpMemb_AcceptedView_Callback: enter");
-#endif
-
   // Extract membership info from the view message.
   MaestroMergeViewData vd(gmView);
   vd.blend_in(msg);
 
-#ifdef AVANGO_DEBUG
-  logger.debug() << "grpMemb_AcceptedView_Callback: "
-                 //<< vd.viewID
-                 << " ["
-                 << (vd.coordinator == vd.myEndpID ? " coordinator" : "")
-                 << "]";
-
-  for (size_t i = 0; i < vd.members.size(); i++)
+  if (logger.isActive(logging::DEBUG))
   {
-    MaestroEID eid(vd.members[i]);
-
     logger.debug() << "grpMemb_AcceptedView_Callback: "
-                   << eid
-                   << (vd.newMembers.contains(eid) ? " (new)" : "");
-  }
+                   //<< vd.viewID
+                   << " ["
+                   << (vd.coordinator == vd.myEndpID ? " coordinator" : "")
+                   << "]";
 
-  for (size_t j = 0; j < vd.departedMembers.size(); j++)
-  {
-    MaestroEID eid(vd.departedMembers[j]);
-    logger.debug() << "grpMemb_AcceptedView_Callback: "
-                   << eid << " (departed)";
+    for (size_t i = 0; i < vd.members.size(); i++)
+    {
+      MaestroEID eid(vd.members[i]);
+
+      logger.debug() << "grpMemb_AcceptedView_Callback: "
+                     << eid
+                     << (vd.newMembers.contains(eid) ? " (new)" : "");
+    }
+
+    for (size_t j = 0; j < vd.departedMembers.size(); j++)
+    {
+      MaestroEID eid(vd.departedMembers[j]);
+      logger.debug() << "grpMemb_AcceptedView_Callback: "
+                     << eid << " (departed)";
+    }
   }
-#endif
 
   if (mFirstViewInstalled == 0)
   {
@@ -213,9 +206,7 @@ av::MaestroMerge::grpMemb_AcceptedView_Callback(Maestro_GrpMemb_ViewData &gmView
     Maestro_MsgSendView sendView = MAESTRO_MSG_SEND_CURRENT_VIEW;
     Maestro_GroupMember::cast(state_msg, sendView);
 
-#ifdef AVANGO_DEBUG
-    logger.debug() << "grpMemb_AcceptedView_Callback: casted state.";
-#endif
+    AVANGO_LOG(logger, logging::DEBUG, "grpMemb_AcceptedView_Callback: casted state.")
   }
 
   // for all departed members tell the application to remove that state fragment
@@ -305,7 +296,7 @@ av::MaestroMerge::grpMemb_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_M
   // ignore any casts before we properly joined the group
   if (!mFirstViewInstalled)
   {
-    logger.info() << "grpMemb_ReceiveCast_Callback: received cast before join.";
+    AVANGO_LOG(logger, logging::INFO, "grpMemb_ReceiveCast_Callback: received cast before join.")
     return;
   }
 
@@ -319,7 +310,7 @@ av::MaestroMerge::grpMemb_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_M
   if (!mMyView.members.contains(origin))
   {
     // discard stray messages from departed members
-    logger.info() << "grpMemb_ReceiveCast_Callback: received cast from nonmember.";
+    AVANGO_LOG(logger, logging::INFO, "grpMemb_ReceiveCast_Callback: received cast from nonmember.")
 
     // return;
     non_member = true;
@@ -337,7 +328,7 @@ av::MaestroMerge::grpMemb_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_M
     Merge_ReceiveCast_Callback(origin, msg);
     if (non_member)
     {
-      logger.info() << "grpMemb_ReceiveCast_Callback: was: MAESTRO_MERGE_CAST";
+      AVANGO_LOG(logger, logging::INFO, "grpMemb_ReceiveCast_Callback: was: MAESTRO_MERGE_CAST")
     }
     break;
 
@@ -345,12 +336,12 @@ av::MaestroMerge::grpMemb_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_M
     receive_state(origin, msg);
     if (non_member)
     {
-      logger.info() << "grpMemb_ReceiveCast_Callback: was: MAESTRO_STATE_CAST";
+      AVANGO_LOG(logger, logging::INFO, "grpMemb_ReceiveCast_Callback: was: MAESTRO_STATE_CAST")
     }
     break;
 
   default:
-    logger.error() << "grpMemb_ReceiveCast_Callback: Bad message type";
+    AVANGO_LOG(logger, logging::ERROR, "grpMemb_ReceiveCast_Callback: Bad message type")
   }
 }
 
@@ -372,7 +363,7 @@ av::MaestroMerge::grpMemb_ReceiveSend_Callback(Maestro_EndpID &origin, Maestro_M
     break;
 
   default:
-    logger.error() << "grpMemb_ReceiveSend_Callback: Bad message class";
+    AVANGO_LOG(logger, logging::ERROR, "grpMemb_ReceiveSend_Callback: Bad message class")
   }
 }
 
@@ -396,9 +387,7 @@ av::MaestroMerge::grpMemb_Exit_Callback()
 void
 av::MaestroMerge::block_client()
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "block_client: enter";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "block_client: enter")
 
   if (mFirstViewInstalled)
   {
@@ -408,33 +397,25 @@ av::MaestroMerge::block_client()
       mBlocked = true;
     }
   }
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "block_client: leave";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "block_client: leave")
 }
 
 void
 av::MaestroMerge::unblock_client()
 {
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "unblock_client: enter";
-#endif
+  AVANGO_LOG(logger, logging::TRACE, "unblock_client: enter")
   if (mBlocked)
   {
     Merge_UnBlock_Callback();
     mBlocked = false;
   }
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "unblock_client: leave";
-#endif
+  AVANGO_LOG(logger, logging_TRACE, "unblock_client: leave")
 }
 
 void
 av::MaestroMerge::receive_state(Maestro_EndpID &origin, Maestro_Message &state_msg)
 {
-#ifdef AVANGO_DEBUG
-  logger.debug() << "av::Maestro_Merge::receive_state: received state from " << origin;
-#endif
+  AVANGO_LOG(logger, logging::DEBUG, "av::Maestro_Merge::receive_state: received state from " << origin)
 
   // must deliver to application here
   Merge_SetState_Callback(origin, state_msg);

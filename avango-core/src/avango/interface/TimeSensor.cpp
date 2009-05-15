@@ -35,6 +35,7 @@
 #endif
 
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 
 #include <avango/Logger.h>
 
@@ -57,7 +58,7 @@ namespace
 
   void setRealTime(const av::SFDouble::SetValueEvent&)
   {
-    logger.warn() << "RealTime is read-only";
+    AVANGO_LOG(logger, av::logging::WARN, "RealTime is read-only")
   }
 }
 

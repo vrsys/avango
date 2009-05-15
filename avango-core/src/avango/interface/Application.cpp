@@ -29,6 +29,7 @@
 #include <cstdlib>
 
 #include <boost/bind.hpp>
+#include <boost/format.hpp>
 
 #include <avango/ContainerPool.h>
 #include <avango/FieldContainer.h>
@@ -169,11 +170,9 @@ av::Application::disconnectAllFields()
        container_it != containers.end(); ++container_it)
   {
     Link<FieldContainer> container(*container_it);
-    logger.debug() << "cleanExit: disconnecting fields from container "
-                   << container.getPtr()
-                   << " ("
-                   << (container->Name.getValue().empty()? "<unnamed>" : container->Name.getValue())
-                   << ")";
+    AVANGO_LOG(logger, logging::DEBUG, boost::str(boost::format("cleanExit: disconnecting fields from container 0x%x (%s)")
+          % container.getPtr()
+          % (container->Name.getValue().empty()? "<unnamed>" : container->Name.getValue())))
     container->enableNotify(false);
     for_each(container->getFields().begin(), container->getFields().end(),
              boost::bind(&Field::disconnect, _1));
@@ -189,18 +188,15 @@ av::Application::cleanExit()
   ContainerPool::InstancePoolType pool(ContainerPool::getContainerPool());
   if (!pool.empty())
   {
-    logger.warn() << "cleanExit: container pool still not empty after cleanup:";
+    AVANGO_LOG(logger, logging::WARN, "cleanExit: container pool still not empty after cleanup:")
     ContainerPool::InstancePoolType::const_iterator pool_end(pool.end());
     for (ContainerPool::InstancePoolType::iterator pool_it = pool.begin();
          pool_it != pool_end; ++pool_it)
     {
       Link<FieldContainer> container(pool_it->second);
-      logger.debug()
-        << "           "
-        << container.getPtr()
-        << " ("
-        << (container->Name.getValue().empty()? "<unnamed>" : container->Name.getValue())
-        << ")";
+      AVANGO_LOG(logger, logging::DEBUG, boost::str(boost::format("           0x%x (%s)")
+            % container.getPtr()
+            % (container->Name.getValue().empty()? "<unnamed>" : container->Name.getValue())))
     }
   }
 

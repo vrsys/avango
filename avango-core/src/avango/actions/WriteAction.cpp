@@ -31,6 +31,7 @@
 
 #include <fstream>
 #include <stdexcept>
+#include <boost/format.hpp>
 
 // includes, project
 
@@ -86,19 +87,19 @@ void av::WriteAction::initClass()
 
 void av::WriteAction::setFileName(const std::string& fileName)
 {
-  LOG_TRACE(logger) << "setFileName(): file name is '" << mName << "'";
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("setFileName(): file name is '%1%'") % mName))
   mName = fileName;
 }
 
 /* virtual */void av::WriteAction::apply(av::Link<av::Base> node)
 {
-  LOG_TRACE(logger) << "apply(): writing to '" << mName << "'";
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): writing to ''%1%'") % mName))
 
   std::ofstream file(mName.c_str());
 
   if (file.fail())
   {
-    logger.warn() << "apply(): can't open file '" << mName << "'";
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("apply(): can't open file ''%1%'") % mName))
     return;
   }
 
@@ -113,14 +114,15 @@ void av::WriteAction::setFileName(const std::string& fileName)
 
   mIdMap.clear();
 
-  LOG_TRACE(logger) << "apply(): closing file '" << mName << "'";
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): closing file ''%1%'") % mName))
 }
 
 /* virtual */void av::WriteAction::traverse(av::Link<av::Base> node)
 {
   ++mTravDepth;
 
-  LOG_TRACE(logger) << "traverse(): %snode: 0x%x (%s)", depthIndent(), node.getPtr(), node->getTypeId().getName().c_str();
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("traverse(): %snode: 0x%x (%s)")
+        % depthIndent() % node.getPtr() % node->getTypeId().getName().c_str()))
 
   if (node.isValid())
   {

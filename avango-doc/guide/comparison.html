@@ -10,46 +10,30 @@
 
 <!-- Start page contents -->
 
-<h1>Comparing Avango with other frameworks</h1>
+<h1>Avango and other VR-frameworks</h1>
 
-The tables below describes the most popular frameworks for the development of Virtual Reality applications
-and shows their relationships with Avango.
+The tables below describe the most popular frameworks for the development of Virtual Reality applications (as found on the web-sites of their
+respected producers) and shows their relationships with Avango, when needed.
 
 <h3>Open Source frameworks</h3>
 <table border="1">
 <tr>
- <td><b>Developers</b></td>
- <td><b>Name and reference</b></td>
+ <td width="220"><b>Developers</b></td>
+ <td width="180"><b>Name and reference</b></td>
  <td><b>Features</b></td>
 </tr>
 <tr>
- <td>Team of Avango developers (~10 persons) of the <a href="http://www.iais.fraunhofer.de/ve.html">Fraunhofer IAIS Virtual Environments department</a></td>
+<td colspan=3><b><center>Complete frameworks</center></b></td>
+</tr>
+<tr>
+ <td>Team of developers (~10 persons) of the <a href="http://www.iais.fraunhofer.de/ve.html">Virtual Environments department of Fraunhofer IAIS </a></td>
  <td><a href="http://avango.org">Avango</a></td>
  <td><small>AVANGO is a free, cross-platform software framework designed for interactive, distributed Virtual Reality applications.
      It supports a large range of setups, ranging from desktop PCs to large-scale immersive VR installations.
      AVANGO facilitates rapid development of immersive 3D applications by offering efficient techniques for many common VR tasks.
      The key features of Avango that differentiate it from other frameworks are: easy creation and control of dynamic 3D scenes,
      scripting support, built-in multimodal interaction techniques, support for numerous interaction devices and display setups,
-     possibilities to develop distributed VR applications.</small></td>
-</tr> 
-<tr>
- <td>&gt300 idividual contributors </td>
- <td><a href="http://www.openscenegraph.org/projects/osg/wiki/About/Introduction">OpenSceneGraph</a></td>
- <td><small>The OpenSceneGraph is an OpenSource, cross-platform graphics toolkit for the development of high-performance
-     graphics applications such as flight simulators, games, virtual reality and scientific visualization.
-     It is based around the concept of a SceneGraph, providing an object-oriented framework on top of OpenGL.
-     This frees the developer from implementing and optimizing low-level graphics calls and provides many additional
-     utilities for rapid development of graphics applications. <br><br>
-     Avango is based on OpenSceneGraph. Avango extends the functionality of OpenSceneGraph with its 
-     dynamic and distributed scenes, scripting support and the support for different display systems and interaction devices</small></td>
-</tr>
-<tr>
- <td>currently supported by 2 individual developers; originated from the <a href="http://www.igd.fhg.de/">Fraunhofer IGD</a></td>
- <td><a href="http://opensg.vrsource.org/">OpenSG</a></td>
- <td><small>OpenSG is a portable scenegraph system to create realtime graphics programs, e.g. for virtual reality applications.
-     It is developed following Open Source principles (LGPL) and can be used freely. It runs on Windows, Linux, Solaris
-     and MacOS X and is based on OpenGL. The features that differentiate OpenSG from other scenegraphs are extensibility,
-     multi-thread safety and clustering capabilities. The detailed comparison with OpenSceneGraph is available <a href="http://opensg.vrsource.org/trac/wiki/OSGComparison">here</a>.</small></td>
+     possibilities to develop distributed VR applications. Avango is licensed under the LGPL.</small></td>
 </tr> 
 <tr>
  <td><a href="http://www.iastate.edu/">Iowa State University</a></td>
@@ -59,10 +43,10 @@ It is scalable from simple desktop systems like PCs to complex multi-screen syst
 or on high-end workstations and supercomputers. The flexibility of VR Juggler allows applications
 to execute in many VR system configurations including desktop VR, HMD, CAVE-like devices, and Powerwall-like devices.
 The portability of the VR Juggler code ensures that any operating system can be used. VR Juggler 2.0 supports
-IRIX, Linux, Windows, FreeBSD, Solaris, and Mac OS X.</small></td>
+IRIX, Linux, Windows, FreeBSD, Solaris, and Mac OS X. It is released under the GNU LGPL.</small></td>
 </tr> 
 <tr>
- <td><a href="http://www.isl.uiuc.edu/">University of Illinois at Urbana-Champaign</a></td>
+ <td>2 main developers of the <a href="http://www.isl.uiuc.edu/">Illinois Simulator Laboratory of University of Illinois at Urbana-Champaign</a></td>
  <td><a href="http://syzygy.isl.uiuc.edu/">Syzygy</a></td>
  <td><small>Syzygy is a programming toolkit for writing virtual reality or other graphical applications to run on clusters of networked computers.
      The rendering of your virtual world is synchronized on all of the computers (to within a few milliseconds), so different screens in
@@ -81,90 +65,257 @@ IRIX, Linux, Windows, FreeBSD, Solaris, and Mac OS X.</small></td>
      and works under Windows, Linux and Mac OSX.</small></td>
 </tr>
 <tr>
- <td>Virginia Tech</td>
+ <td>Team of developers (~20 persons) affiliated with the Visualization and Animation Group of <a href="http://www.vt.edu/">Virginia Tech University</a></td>
  <td><a href="http://diverse.sourceforge.net/">DIVERSE toolkit (DTK)</a></td>
- <td>~</td>
+ <td><small>DIVERSE is a cross-platform, open source, API for developing virtual reality applications that can run almost anywhere.
+     It currently runs on Linux, IRIX, Windows XP, and Mac OS X. The goal of DIVERSE is to enable developers to quickly build
+     applications that will run on the desktop as well as various immersive systems. To avoid hindering development
+     DIVERSE is designed without the "center of the universe" paradigm; you only use the parts of DIVERSE that you need. DIVERSE provides:
+     a common user interface to interactive graphics and/or VE programs, a common API to VE oriented
+     hardware such as trackers, wands, joysticks, and motion bases, many other tools such as "remote shared memory",
+     message passing, and collaboration tools., basic "cluster" support through DADS. DIVERSE includes user applications
+     to load, view, and navigate models in the CAVE as easily as the desktop. </small></td>
 </tr>
 <tr>
- <td>INRIA</td>
- <td>FlowVR</td>
- <td>~</td>
+ <td>Team of developers (~20 persons) of <a href="http://moais.imag.fr/">INRIA MOAIS group</a> and the <a href="http://www.univ-orleans.fr/lifo/">
+ Fundamental Informatics Laboratory of the University or Orleans</a></td>
+ <td><a href="http://flowvr.sourceforge.net/">FlowVR</a></td>
+ <td><small>
+  The goal of the FlowVR library is to provide users with the necessary tools to develop and run high performance interactive
+  applications on PC clusters and Grids. The main target applications include virtual reality and scientific visualization.
+  FlowVR enforces a modular programming that leverages software engineering issues while enabling high performance executions
+  on distribued and parallel architectures. The FlowVR software suite has 3 main components:
+  FlowVR: the core middleware library, FlowVR Render: a parallel rendering library, VTK FlowVR: a VTK / FlowVR / FlowVR Render
+  coupling library that enables to render VTK applications using FlowVR Render.
+ </small>
+</td>
 </tr>
 <tr>
- <td>INRIA</td>
- <td>OpenMask</td>
- <td>~</td>
+ <td><a href="http://www.irisa.fr/bunraku/home_html-en">Bunraku/Siames team of IRISA</a>, laboratory of INRIA</td>
+ <td><a href="http://www.irisa.fr/bunraku/OpenMASK/">OpenMask</a></td>
+ <td><small>
+ The OpenMask platform is a state of the art technology and will allow you to create powerful simulations thanks to VR device and OpenMask Platform.
+ OpenMASK (Modular Animation and Simulation Kit) is a platform for modular applications development and execution in animation, simulation
+ and virtual reality fields. The main features provided by OpenMASK concern its capabilities: to interact with a virtual environment using
+ various devices (sensors, data gloves, haptic devices) in a local or distant 3D cooperation (collaborative work); to integrate different
+ computation modules (mechanical simulators, human motion, behavioural models) using high level abstractions; to automatically distribute
+ computation on a network of workstations; to display results on an immersive environment (Reality Center, Workbench) or on a standard
+ display. It uses Performer, OpenSG and Ogre for 3D visualization, MAX/MSP and OpenAL for sound generation, and VRPN for integration
+ with VR devices. It supports Windows and Linux and is available under the QPL license.
+</small></td>
 </tr>
+<tr>
+<td colspan=3><b><center>Game engines</b><br>for the full list of game engines please refer to <a href="http://en.wikipedia.org/wiki/List_of_game_engines">wikipedia</a>. Here the descibe
+only the engines that support VR display systems.</center></td>
+</tr>
+<tr>
+ <td>Team of developers of the <a href="http://www.etc.cmu.edu/">Entertainment Technology Center of the Carnegie Mellon University</a>.
+ Originated from Disney VR center.</td>
+ <td><a href="http://www.panda3d.org/">Panda3D</a></td>
+ <td><small>Panda3D is a game engine which includes graphics, audio, I/O, collision detection, and other abilities relevant to the creation of 3D games. 
+ Panda  includes the following subsystems: particle systems, physics and collisions, soft- and hard-skin character animation,
+ 2D and 3D nonuniform rational B-spline support, 2D graphical user interface support, multipass rendering, and real-time shader framework.
+ Panda can drive a range of displays from low-end PCs up to high-end multiscreen immersive theater environments.
+ A developer using Panda3D typically writes code in Python, but it is also possible to directly access the engine using C++ code.
+ It is available under the revised BSD license.
+ </small></td>
+</tr>
+<tr>
+<td colspan=3><b><center>Scene graphs</center></b></td>
+</tr>
+<tr>
+ <td>&gt300 idividual contributors </td>
+ <td><a href="http://www.openscenegraph.org/projects/osg/wiki/About/Introduction">OpenSceneGraph</a></td>
+ <td><small>The OpenSceneGraph is an OpenSource, cross-platform graphics toolkit for the development of high-performance
+     graphics applications such as flight simulators, games, virtual reality and scientific visualization.
+     It is based around the concept of a SceneGraph, providing an object-oriented framework on top of OpenGL.
+     This frees the developer from implementing and optimizing low-level graphics calls and provides many additional
+     utilities for rapid development of graphics applications. The code is freely available,
+     modifiable and redistributed under the terms of the The OpenSceneGraph Public License (OSGPL), which is
+     based on the LGPL.<br><br>
+     AVANGO is based on OpenSceneGraph; it extends the functionality of OpenSceneGraph with its 
+     dynamic and distributed scenes, scripting support and the support for different display systems and interaction devices</small></td>
+</tr>
+<tr>
+ <td>currently led by 2 individual developers; originated from the <a href="http://www.igd.fhg.de/">Fraunhofer IGD</a></td>
+ <td><a href="http://opensg.vrsource.org/">OpenSG</a></td>
+ <td><small>OpenSG is a portable scenegraph system to create realtime graphics programs, e.g. for virtual reality applications.
+     It is developed following Open Source principles (LGPL) and can be used freely. It runs on Windows, Linux, Solaris
+     and MacOS X and is based on OpenGL. The features that differentiate OpenSG from other scenegraphs are extensibility,
+     multi-thread safety and clustering capabilities. The detailed comparison with OpenSceneGraph is available <a href="http://opensg.vrsource.org/trac/wiki/OSGComparison">here</a>.
+     <br><br>Please refer to the <a href="comparison.html#a1">additional comments</a> in the section about Avalon.
+</small></td>
+</tr> 
+<tr>
+<td colspan=3><b><center>Peripheral support</center></b></td>
+</tr>
+<tr>
+ <td><a href="http://www.cs.unc.edu/">Department of Computer Science of the University of North Carolina at Chapel Hill</a></td>
+ <td><a href="http://www.cs.unc.edu/Research/vrpn/">VRPN: Virtual Reality Peripheral Network</a></td>
+ <td><small>The Virtual-Reality Peripheral Network (VRPN) is a set of classes within a library and a set of servers
+     that are designed to implement a network-transparent interface between application programs and the set 
+     of physical devices (tracker, etc.) used in a virtual-reality (VR) system. The idea is to have a PC or
+     other host at each VR station that controls the peripherals (tracker, button device, haptic device,
+     analog inputs, sound, etc). VRPN provides connections between the application and all of the devices
+     using the appropriate class-of-service for each type of device sharing this link. The application
+     remains unaware of the network topology. VRPN also provides an abstraction layer that makes all
+     devices of the same base class look the same.  At the same time, it is possible for an application that requires
+     access to specialized features of a certain device to derive a class that communicates with this type of device.
+     The VRPN client (application-side) library has been tested on SGI/Irix, PC/Win32, PC/Cygwin, HP700/Hpux,
+     Sparc/Solaris, PC/Linux, Mac/OSX, Ipaq/Linux, and Zaurus/Linux. The server-side library compiles under SGI/Irix,
+     PC/Win32, and PC/Linux. VRPN support is provided in many VR frameworks. The software can be use without license fees;
+     cmmercial support is available through <a href="http://www.3rdtech.com/">3rdtech</a>.
+     <br><br>
+     AVANGO currently has its own interfaces to physical devices. However, VRPN support could be provided at a later time.</small>
+</td>
+</tr>
+
 </table>
 
 <br>
 <h3>Commercial frameworks</h3>
 <table border="1">
 <tr>
- <td><b>Developers</b></td>
- <td><b>Name and reference</b></td>
+ <td width="220"><b>Developers</b></td>
+ <td width="180"><b>Name and reference</b></td>
  <td><b>Features</b></td>
 </tr>
 <tr>
- <td>Dassault Systems</td>
- <td>Virtools</td>
- <td>~</td>
+ <td><a href="http://www.3ds.com/">Dassault Systems</a></td>
+ <td><a href="http://a2.media.3ds.com/products/3dvia/3dvia-virtools/">3DVIA Virtools</a></td>
+ <td><small>3DVIA Virtools is a complete development and deployment platform with an innovative approach
+     to interactive 3D content creation. The 3DVIA Virtools production process facilitates
+     prototyping and robust development up to large-scale, immersive or online, lifelike experience delivery.
+     Product and user experiences are within reach for non-specialists seeking more than static presentations
+     and basic walkthroughs. 3DVIA Virtools offers a comprehensive, 3D VR development environment and deployment
+     solutions tailored to industrial and educational needs. The VR Library/Publisher (an add-on of 3DVIA Virtools)
+     enables distributed computing for PC clusters, and supports a range of VR devices and display systems.
+ </small></td>
 </tr>
 <tr>
- <td>RTT</td>
- <td>DeltaGen</td>
- <td>~</td>
+ <td><a href="http://www.realtime-technology.com/home.html">RTT</a></td>
+ <td><a href="http://www.realtime-technology.com/software/rtt-deltagen.html">DeltaGen</a></td>
+ <td><small>
+  RTT DeltaGen allows you to create a quick and efficient workflow for product development, design, construction, marketing and sales
+  processes - with ultimate flexibility. Images, films and animations produced with the 3D high-end visualisation software from RTT thrill
+  and impress with outstanding visual quality.   RTT DeltaGen is compliant with and can be used to process data from all professional
+  CAD/CAS systems and, not least, can really bring the data to life. RTT DeltaGen allows raw data to be transformed to impressive,
+  realistic visualisations, viewable in realtime! Its array of modular functions allows RTT DeltaGen to fit perfectly with
+  the requirements of a wide range of industry sectors and companies.  Free licenses could be provided to students.
+ </small></td>
 </tr>
 <tr>
- <td>Autodesk</td>
- <td>Showcase</td>
- <td>~</td>
+ <td><a href="http://www.autodesk.com/">Autodesk</a></td>
+ <td><a href="http://usa.autodesk.com/adsk/servlet/index?siteID=123112&id=8412244">Showcase</a></td>
+ <td><small>Autodesk Showcase software (part of the Autodesk solution for Digital Prototyping) addresses the visualization
+  requirements to help designers interactively evaluate their work and present it for review. Designed for visualization
+  specialists, Autodesk Showcase Professional software   includes all of the functionality of Autodesk Showcase, plus
+  additional specialized features. Included are high-end visualization environments and tools for automating the visualization
+  workflow, enhancing asset and presentation authoring, and building complex visualization setups.
+</small></td>
 </tr>
 <tr>
- <td>Mechdyne</td>
- <td>CAVELib</td>
- <td>~</td>
+ <td><a href="http://www.mechdyne.com">Mechdyne</a></td>
+ <td><a href="http://www.mechdyne.com/integratedSolutions/software/products/CAVELib/CAVELib.htm">CAVELib</a></td>
+ <td><small>
+  CAVELib is a powerful application programmer interface (API) that provides the cornerstone for creating robust interactive three-dimensional
+  environments. The CAVELib API provides the building blocks to handle the intricacies of creating robust applications for Virtual Environments.
+  Some of the items the CAVELib abstracts away for a developer are, window and viewport creation, viewer-centered perspective calculations,
+  displaying to multiple graphics channels, multi-processing and multi-threading, cluster synchronization and data sharing, and stereoscopic viewing.
+  The CAVELib dramatically extends a developer's abilities to create solutions with scalable, immersive 3D representations without having
+  to contend with operating system, display system, and device-level programming details. Furthermore, the CAVELib's networking capabilities
+  allows collaboration, interaction and data sharing with users across the hall or around the world.   The CAVELib API is platform independent
+  enabling developers to create high-end virtual reality applications on IRIX, Solaris, Windows, and Linux operating systems. 
+  CAVELib-based applications are externally configurable at run-time making an application executable independent of the display system.
+  Applications created with the CAVELib have the ability to run in nearly all immersive display systems.
+ </small></td>
 </tr>
 <tr>
- <td>IC:IDo</td>
- <td>-</td>
- <td>~</td>
-</tr>
-<tr>
- <td>Fraunhofer IAO</td>
- <td>Lightning</td>
- <td>~</td>
-</tr>
-<tr>
- <td>ZGDV</td>
- <td>Avalon</td>
- <td>~</td>
-</tr>
-<tr>
- <td>University of Stuttgart</td>
- <td>COVISE</td>
- <td>~</td>
+ <td><a href="http://www.hlrs.de/">The High Performance Computing Center</a> of the University of Stuttgart</td>
+ <td><a href="http://www.hlrs.de/organization/av/vis/covise/">COVISE</a></td>
+ <td><small>
+ COVISE stands for COllaborative VIsualization and Simulation Environment. It is an extendable distributed software environment
+ to integrate simulations, postprocessing and visualization functionalities in a seamless manner. From the beginning COVISE
+ was designed for collaborative working allowing engineers and scientists to spread on a network infrastructure. In COVISE
+ an application is divided into several processing steps, which are represented by COVISE modules. These modules, being
+ implemented as separate processes, can be arbitrarily spread across different heterogeneous machine platforms.
+ Major emphasis was put on the usage of high performance infrastructures such as parallel and vector computers
+ and fast networks. COVISE Rendering modules support Virtual environments ranging form workbenches over powerwalls,
+ curved screens up to full domes or CAVEs. The users can thus analyze their datasets intuitively in a fully immersive 
+ environment through state of the art visualization techniques including Volume rendering and fast sphere rendering.
+ Physical prototypes or experiments can be included into the analysis process through Augmented Reality techniques.
+ COVISE is <a href="http://www.hlrs.de/organization/av/vis/covise/applications-and-users/">widely used</a> in research and industrial projects.
+ </small></td>
 </tr>
 </table>
 
 <h3>Proprietary frameworks</h3>
 <table border="1">
 <tr>
- <td><b>Developers</b></td>
- <td><b>Name and reference</b></td>
+ <td width="220"><b>Developers</b></td>
+ <td width="180"><b>Name and reference</b></td>
  <td><b>Features</b></td>
 </tr>
 <tr>
- <td>Fraunhofer FIT</td>
+ <td><a href="http://www.icido.de/en/Products/">IC:IDO</a></td>
+ <td>-</td>
+ <td><small>The Visual Decision Platform (VDP) from ICIDO is the leading software for targeted, interactive decision-making on
+  the basis of Virtual Reality. The VDP provides a platform for a collaborative work of locally, globally and departmentally
+  distributed teams. Organization will realize efficiency potentials that have not yet been lifted through stand-alone
+  solutions or central systems. Many global companies use ICIDOs standardized solutions that are easily integrated
+  into existing structures and processes. Areas of application range across the entire product life cycle,
+  from design/styling, engineering, assembly and production planning to marketing, sales and service. The customer
+  receives from ICIDO a complete solution consisting of software and services as well as the necessary hardware, such as a power wall system.
+  The IDO:Software modules provide for the stereoscopic representation of 3D data in real time and interactive working
+  in the 3D world. With WINDOWS-based applications (Personal Workspace) we bring VR solutions to the workplace.
+</small></td>
+</tr>
+<tr>
+ <td><a href="http://www.fit.fraunhofer.de/services/cvae_en.html">Collaborative Virtual and Augmented Environments department of Fraunhofer FIT</a></td>
  <td><a href="http://www.fit.fraunhofer.de/products/morgan_en.html">MORGAN</a></td>
- <td>~</td>
+ <td><small>
+ The MORGAN AR/VR Framework is platform-independent, distributed, and component-based, supporting developers in
+ realizing Mixed Reality prototypes and applications. MORGAN is assembled from a set of individual components
+ including a render engine, external scene graph support, and access to manifold input and output devices. We further
+ developed a light-weight version of MORGAN for handheld devices, such as PDAs and Smartphones, sharing most of the
+ functionality and offering full runtime compatibility with MORGAN (see Figure 2). Therefore, MORGAN Light and MORGAN
+ cannot only process the same scene formats, but may also be part of the same distributed application. Applications developed for
+ MORGAN require no or only minimal effort to be adapted for MORGAN Light. The render engine consists of the framebuffer 
+ abstraction layer for OpenGL and Direct3D and the internal scene graph. MORGAN modules also includes Marvin, a stereoscopic AR/VR viewer,
+ and DEVAL, to support all input and output devices. Researchers and developers of AR/VR projects
+ may license the Morgan AR/VR Framework for evaluation, development and distribution. Academic institutes and universities
+ may apply for free licenses for teaching.
+ </small></td>
+</tr>
+<tr>
+ <td><a href="http://www.ve.iao.fraunhofer.de/">Virtual Environments department of Fraunhofer IAO</a></td>
+ <td><a href="http://vr.iao.fhg.de/index.php?id=11&L=0&T=0">Lightning</a></td>
+ <td><small>The VR development system Lightning is a valuable tool to create interactive VR applications;
+  its open structure facilitates the flexible adjustment for a large variety of requirements.</small></td>
+</tr>
+<tr>
+ <td><a href="http://www.zgdv.de">ZGDV</a></td>
+ <td><a href="http://www.zgdv.de/zgdv/departments/z2/Projekte/AVALON">Avalon</a></td>
+ <td><small>
+ Avalon is an open environment for virtual and augmented reality applications. It was designed and built to serve as a platform for
+ various projects and applications, both built in-house and by our project partners. The development process started at the end of 1997
+ and is still ongoing. One of the main reasons to start the project was the ever present need for a faster and more efficient
+ application development cycle. Therefore the goal was to define abstractions for interaction and behaviour descriptions,
+ which work well for VR and AR applications. Like most traditional toolkits, Avalon uses a scene-graph to organize the data,
+ as well as spatial and logical relations. In addition, a VR application needs to deal with specific behaviour of objects,
+ and the user interaction via assorted input devices. The major drawback of traditional VR-toolkits is the fact that
+ the application developer has to implement a controller to handle all aspects of both behaviour and interaction
+ for most applications anew. To overcome this drawback, we extended the scene-graph concept of a node to a more generic component,
+ which not just holds the data but defines a state, state-changes, and input/output slots for every node.
+ Therefore application development is done by instantiating and connecting scene components, which are provided by the system.
+ It uses OpenSG as rendering backend.
+ <br><br>
+ <a name="a1"></a>Avalon, OpenSG and some other frameworks have been integrated into the <a href="http://www.instantreality.org/story/what-is-it/">instantreality
+ framework</a>, a high-performance Mixed-Reality (MR) system, which combines various components to provide a single and consistent
+ interface for AR/VR developers. The binary modules of the framework are available <a href="http://www.instantreality.org/downloads/">here</a>.
+ </small></td>
 </tr>
 </table>
-<br>
-Should be mentioned:
-VRPN: Virtual Reality Peripheral Network
-http://www.cs.unc.edu/Research/vrpn/
-
 <!-- End page contents -->
 </body>
 </html>

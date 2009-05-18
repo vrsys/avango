@@ -159,7 +159,38 @@ class SingleFieldTestCase(unittest.TestCase):
             self.assertAlmostEqual(a.y, b.y, self.osg_float_places)
             self.assertAlmostEqual(a.z, b.z, self.osg_float_places)
 
+    def testWriteMFMatrix(self):
+        field = avango.osg.MFMatrix()
+        field.value = [ avango.osg.make_trans_mat(1, 2, 3), avango.osg.make_trans_mat(4, 5, 6) ]
+        hout = StringIO.StringIO()
+        connect.write("A", field, hout)
+        self.assertFloatListEqual("A\x00MFMatrix\x00", """1.0\x000.0\x000.0\x000.0\x00
+                                                          0.0\x001.0\x000.0\x000.0\x00
+                                                          0.0\x000.0\x001.0\x000.0\x00
+                                                          1.0\x002.0\x003.0\x001.0\x00
+                                                          1.0\x000.0\x000.0\x000.0\x00
+                                                          0.0\x001.0\x000.0\x000.0\x00
+                                                          0.0\x000.0\x001.0\x000.0\x00
+                                                          4.0\x005.0\x006.0\x001.0
+                                                          """, "\n",
+                                  hout.getvalue())
 
+    def testReadMFMatrix(self):
+        hin = StringIO.StringIO("""C\x00MFMatrix\x00 \
+                                   1.0\x000.0\x000.0\x000.0\x00 \
+                                   0.0\x001.0\x000.0\x000.0\x00 \
+                                   0.0\x000.0\x001.0\x000.0\x00 \
+                                   1.0\x002.0\x003.0\x001.0\x00 \
+                                   1.0\x000.0\x000.0\x000.0\x00 \
+                                   0.0\x001.0\x000.0\x000.0\x00 \
+                                   0.0\x000.0\x001.0\x000.0\x00 \
+                                   4.0\x005.0\x006.0\x001.0\n""")
+        name, field = connect.read(hin)
+        self.assertEqual("C", name)
+        for a, b in zip([ avango.osg.make_trans_mat(1, 2, 3), avango.osg.make_trans_mat(4, 5, 6) ], field.value):
+            self.assertAlmostEqual(a.get_translate().x, b.get_translate().x, self.osg_float_places)
+            self.assertAlmostEqual(a.get_translate().y, b.get_translate().y, self.osg_float_places)
+            self.assertAlmostEqual(a.get_translate().z, b.get_translate().z, self.osg_float_places)
 
 def Suite():
     suite = unittest.TestSuite()
@@ -181,6 +212,8 @@ def Suite():
         'testReadMFVec2',
         'testWriteMFVec3',
         'testReadMFVec3',
+        'testWriteMFMatrix',
+        'testReadMFMatrix',
     ]
     suite.addTests(map(SingleFieldTestCase, SingleFieldTests))
 

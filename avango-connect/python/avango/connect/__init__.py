@@ -36,3 +36,4 @@ import _SFBool
 import _SFDouble
 import _MFVec2
 import _MFVec3
+import _MFMatrix

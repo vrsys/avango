@@ -30,6 +30,7 @@ connect_files = Split("""
     python/avango/connect/_SFDouble.py
     python/avango/connect/_SFInt.py
     python/avango/connect/_SFString.py
+	python/avango/connect/_MFMatrix.py
     python/avango/connect/__init__.py
     python/avango/connect/_io.py
     python/avango/connect/_nodes.py

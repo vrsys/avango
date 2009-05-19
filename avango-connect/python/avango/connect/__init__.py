@@ -38,3 +38,4 @@ import _MFVec2
 import _MFVec3
 import _MFMatrix
 import _MFInt
+import _SFMatrix

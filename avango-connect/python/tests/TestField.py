@@ -192,6 +192,33 @@ class SingleFieldTestCase(unittest.TestCase):
             self.assertAlmostEqual(a.get_translate().y, b.get_translate().y, self.osg_float_places)
             self.assertAlmostEqual(a.get_translate().z, b.get_translate().z, self.osg_float_places)
 
+    def testWriteSFMatrix(self):
+        field = avango.osg.SFMatrix()
+        field.value = avango.osg.make_trans_mat(0, 8, 15)
+        hout = StringIO.StringIO()
+        connect.write("A", field, hout)
+        self.assertFloatListEqual("A\x00SFMatrix\x00", """1.0\x000.0\x000.0\x000.0\x00
+                                                          0.0\x001.0\x000.0\x000.0\x00
+                                                          0.0\x000.0\x001.0\x000.0\x00
+                                                          0.0\x008.0\x0015.0\x001.0""",
+                                                          "\n", 
+                                  hout.getvalue())
+
+    def testReadSFMatrix(self):
+        hin = StringIO.StringIO("""C\x00SFMatrix\x00 \
+                                   1.0\x000.0\x000.0\x000.0\x00 \
+                                   0.0\x001.0\x000.0\x000.0\x00 \
+                                   0.0\x000.0\x001.0\x000.0\x00 \
+                                   0.0\x008.0\x0015.0\x001.0\n""")
+        name, field = connect.read(hin)
+        self.assertEqual("C", name)
+        a = avango.osg.make_trans_mat(0, 8, 15)
+        b = field.value
+        self.assertAlmostEqual(a.get_translate().x, b.get_translate().x, self.osg_float_places)
+        self.assertAlmostEqual(a.get_translate().y, b.get_translate().y, self.osg_float_places)
+        self.assertAlmostEqual(a.get_translate().z, b.get_translate().z, self.osg_float_places)
+
+
     def testWriteMFInt(self):
         mfint = avango.MFInt()
         mfint.value = [ 0, 8, 15 ]
@@ -230,6 +257,8 @@ def Suite():
         'testReadMFMatrix',
         'testWriteMFInt',
         'testReadMFInt',
+        'testWriteSFMatrix',
+        'testReadSFMatrix',
     ]
     suite.addTests(map(SingleFieldTestCase, SingleFieldTests))
 

@@ -192,6 +192,20 @@ class SingleFieldTestCase(unittest.TestCase):
             self.assertAlmostEqual(a.get_translate().y, b.get_translate().y, self.osg_float_places)
             self.assertAlmostEqual(a.get_translate().z, b.get_translate().z, self.osg_float_places)
 
+    def testWriteMFInt(self):
+        mfint = avango.MFInt()
+        mfint.value = [ 0, 8, 15 ]
+        hout = StringIO.StringIO()
+        connect.write("C", mfint, hout)
+        self.assertEqual("C\x00MFInt\x000\x008\x0015\n", hout.getvalue())
+
+    def testReadMFInt(self):
+        hin = StringIO.StringIO("C\x00MFInt\x000\x008\x0015\n")
+        name, field = connect.read(hin)
+        self.assertEqual("C", name)
+        for a, b in zip([0, 8, 15], field.value):
+            self.assertEqual(a, b)
+
 def Suite():
     suite = unittest.TestSuite()
 
@@ -214,6 +228,8 @@ def Suite():
         'testReadMFVec3',
         'testWriteMFMatrix',
         'testReadMFMatrix',
+        'testWriteMFInt',
+        'testReadMFInt',
     ]
     suite.addTests(map(SingleFieldTestCase, SingleFieldTests))
 

@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of Avango.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # Avango is free software: you can redistribute it and/or modify         #
@@ -24,17 +24,24 @@
 ##########################################################################
 
 import avango
-from _nodes import *
-from _io import *
-from _pipe import *
-from _server import *
+from _registry import _register_field
 
-import _SFInt
-import _SFString
-import _MFString
-import _SFBool
-import _SFDouble
-import _MFVec2
-import _MFVec3
-import _MFMatrix
-import _MFInt
+class MFIntDescriptor(object):
+    'Simple stream support for MFInt'
+
+    key = "MFInt"
+
+    def write(self, field, hout):
+        if field.value:
+            hout.write('\x00')
+        values = []
+        for v in field.value:
+            values.append(str(v))
+        hout.write('\x00'.join(values))
+
+    def read(self, line):
+        field = avango.MFInt()
+        field.value = [int(x) for x in line]
+        return field
+
+_register_field(avango.MFInt, MFIntDescriptor())

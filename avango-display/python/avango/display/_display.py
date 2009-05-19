@@ -215,7 +215,7 @@ def make_dominant_user_device(user=0, interface="", subdisplay=""):
     device = avango.display.nodes.Device()
     if (_display_type == "TouchscreenEmulator" or _display_type == "TwoviewTouchscreenEmulator") and subdisplay == "Touchscreen":
         device.Matrix.connect_from(_touchscreen_camera.MouseNearTransform)
-        device.Button1.connect_from(_touchscreen_camera.Window.value.MouseButtons_OnlyLeft)
+        device.Button1.connect_from(_touchscreen_event.MouseButtons_OnlyLeft)
     elif _display_type == "TwoView":
         pda_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = _device_service,
                                                       Station = "ve-dtrack-pda2")
@@ -396,8 +396,11 @@ def make_view(subdisplay=""):
         osg_view.MasterCamera.value = camera
         _composite_viewer.Views.value.append(osg_view)
 
-        global _touchscreen_camera
+        global _touchscreen_camera, _touchscreen_event
         _touchscreen_camera = camera
+        _touchscreen_event = avango.osg.viewer.nodes.EventFields(View = osg_view) 
+ 	_touchscreen_window.DragEvent.connect_from(_touchscreen_event.DragEvent) 
+ 	_touchscreen_window.MoveEvent.connect_from(_touchscreen_event.MoveEvent) 
 
     return display_view
 

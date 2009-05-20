@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of Avango.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # Avango is free software: you can redistribute it and/or modify         #
@@ -233,6 +233,25 @@ class SingleFieldTestCase(unittest.TestCase):
         for a, b in zip([0, 8, 15], field.value):
             self.assertEqual(a, b)
 
+    def testWriteSFVec4(self):
+        field = avango.osg.SFVec4()
+        field.value = avango.osg.Vec4(1.1, 1.2, 1.3, 1.4)
+        hout = StringIO.StringIO()
+        connect.write("A", field, hout)
+        self.assertFloatListEqual("A\x00SFVec4\x00", "1.1\x001.2\x001.3\x001.4", "\n",
+                                  hout.getvalue())
+
+    def testReadSFVec4(self):
+        hin = StringIO.StringIO("C\x00SFVec4\x001.1\x001.2\x001.3\x001.4\n")
+        name, field = connect.read(hin)
+        self.assertEqual("C", name)
+        a = avango.osg.Vec4(1.1, 1.2, 1.3, 1.4)
+        b = field.value
+        self.assertAlmostEqual(a.x, b.x, self.osg_float_places)
+        self.assertAlmostEqual(a.y, b.y, self.osg_float_places)
+        self.assertAlmostEqual(a.z, b.z, self.osg_float_places)
+        self.assertAlmostEqual(a.w, b.w, self.osg_float_places)
+
 def Suite():
     suite = unittest.TestSuite()
 
@@ -259,6 +278,8 @@ def Suite():
         'testReadMFInt',
         'testWriteSFMatrix',
         'testReadSFMatrix',
+        'testWriteSFVec4',
+        'testReadSFVec4',
     ]
     suite.addTests(map(SingleFieldTestCase, SingleFieldTests))
 

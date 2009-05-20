@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of Avango.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # Avango is free software: you can redistribute it and/or modify         #
@@ -23,20 +23,31 @@
 #                                                                        #
 ##########################################################################
 
-import avango
-from _nodes import *
-from _io import *
-from _pipe import *
-from _server import *
+import avango.osg
+from _registry import _register_field
 
-import _SFInt
-import _SFString
-import _MFString
-import _SFBool
-import _SFDouble
-import _MFVec2
-import _MFVec3
-import _MFMatrix
-import _MFInt
-import _SFMatrix
-import _SFVec4
+class SFVec4Descriptor(object):
+    'Simple stream support for SFVec4'
+
+    key = "SFVec4"
+
+    def write(self, field, hout):
+        if field.value:
+            hout.write('\x00')
+        value = []
+        v = field.value
+        value.append(str(v.x))
+        value.append(str(v.y))
+        value.append(str(v.z))
+        value.append(str(v.w))
+        hout.write('\x00'.join(value))
+
+    def read(self, line):
+        field = avango.osg.SFVec4()
+        for x in zip(line[::4], line[1::4], line[2::4], line[3::4]):
+            vec = avango.osg.Vec4(float(x[0]), float(x[1]), float(x[2]), float(x[3]))
+        field.value = vec 
+        return field
+
+_register_field(avango.osg.SFVec4, SFVec4Descriptor())
+

@@ -143,3 +143,9 @@ ul.classlist:before {
 	font-style:italic;
 	content: "classes";
 }
+
+/* Mark the name of the person who is supposed to contribute to the documentation */
+
+.who {
+	color:red;
+}

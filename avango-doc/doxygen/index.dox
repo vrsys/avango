@@ -27,8 +27,11 @@
 
 \mainpage
 
-\section topics Topics
+<a target="_blank" href="http://www.avango.org">AVANGO</a> is a free software framework designed for interactive, distributed applications. It supports a large range of displays from standard desktop applications to large-scale immersive Virtual Reality installations. Its features include:
 
-- \ref styleguide
+- Support for distribution across multiple computers in a straightforward way
+- Integrated modules for running Virtual Reality displays (like device support, 3D menus and viewing setup)
+- Uses OpenSceneGraph and Python
+- Licensed under the LGPL 
 
 */

@@ -32,10 +32,10 @@
  * \ingroup av_daemon
  */
 
-#include <vrpn/vrpn_Analog.h>
-#include <vrpn/vrpn_Button.h>
-#include <vrpn/vrpn_Dial.h>
-#include <vrpn/vrpn_Tracker.h>
+#include <vrpn_Analog.h>
+#include <vrpn_Button.h>
+#include <vrpn_Dial.h>
+#include <vrpn_Tracker.h>
 
 #include <avango/daemon/Device.h>
 

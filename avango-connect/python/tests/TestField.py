@@ -127,6 +127,19 @@ class SingleFieldTestCase(unittest.TestCase):
         self.assertEqual("A", name)
         self.assertAlmostEqual(1.2, field.value, self.osg_float_places)
 
+    def testWriteSFFloat(self):
+        field = avango.SFFloat()
+        field.value = float(1.2)
+        hout = StringIO.StringIO()
+        connect.write("A", field, hout)
+        self.assertFloatListEqual("A\x00SFFloat\x00", "1.2", "\n", hout.getvalue())
+
+    def testReadSFFloat(self):
+        hin = StringIO.StringIO("A\x00SFFloat\x001.2\n")
+        name, field = connect.read(hin)
+        self.assertEqual("A", name)
+        self.assertAlmostEqual(1.2, field.value, self.osg_float_places)
+
     def testWriteMFVec2(self):
         field = avango.osg.MFVec2()
         field.value = [ avango.osg.Vec2(1.1, 1.2), avango.osg.Vec2(2.1, 2.2) ]
@@ -268,6 +281,8 @@ def Suite():
         'testReadSFBool',
         'testWriteSFDouble',
         'testReadSFDouble',
+        'testWriteSFFloat',
+        'testReadSFFloat',
         'testWriteMFVec2',
         'testReadMFVec2',
         'testWriteMFVec3',

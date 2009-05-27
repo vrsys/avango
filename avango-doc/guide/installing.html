@@ -11,58 +11,56 @@
 <!-- Start page contents -->
 
 <h1>Installing AVANGO</h1>
+
 <ol>
-<li><a href="installing.html#a1">Installing AVANGO Run-time Environment</a>
-<li><a href="installing.html#a2">Installing AVANGO Development Environment</a>
-<li><a href="installing.html#a3">Using Eclipse for AVANGO development</a>
-<li><a href="installing.html#a4">Using Microsoft Visual Studio for AVANGO development</a>
+<li><a href="#install-runtime">Installing AVANGO Run-time Environment</a></li>
+<li><a href="#install-dev">Installing AVANGO Development Environment</a></li>
+<li><a href="#use-eclipse">Using Eclipse for AVANGO development</a></li>
+<li><a href="#use-msvs">Using Microsoft Visual Studio for AVANGO development</a></li>
 </ol>
-<br><br>
-<h3 id="#a1">1. Installing AVANGO Run-time Environment</h3>
-If you would like to run a specific AVANGO application or perform benchmarking tests, you could download the self-installing 
-AVANGO Run-time Environment. The following examples are included into the package: <p class=todo>TBA</p>
-The Windows version is available here: <span class=todo><a href="http://avango.org/avango-win-installer">http://avango.org/avango-win-installer</a>.</span>
 
+<a name="install-runtime"></a>
+<h3>1. Installing AVANGO Run-time Environment</h3>
+<p>If you would like to run a specific AVANGO application or perform benchmarking tests, you could download the self-installing 
+AVANGO Run-time Environment. The following examples are included into the package:<span class="todo">TBA</span></p>
 
-<h3 id="#a2">2. Installing AVANGO Development Environment</h3>
-For AVANGO developers, it is recommended
-to compile AVANGO locally.<br><br>
+<p>The Windows version is available here: <span class="todo"><a href="http://avango.org/avango-win-installer">http://avango.org/avango-win-installer</a>.</span></p>
 
-This can be done in the following steps. <br><br>
+<a name="install-dev"></a>
+<h3>2. Installing AVANGO Development Environment</h3>
+<p>For AVANGO developers, it is recommended
+to compile AVANGO locally. This can be done in the following steps.</p>
 
-<b>Installing prerequisites</b><br><br>
-The following software modules have to be downloaded, installed and configured prior to AVANGO
-compilation:
-<ul><li>Development tools:</li>
-     <ul>
-     <li>Suitable C++ compiler: building AVANGO has been tested with the <a href="http://gcc.gnu.org/">GNU C++ compiler</a>,
-     the <a href="http://software.intel.com/en-us/intel-compilers/">Intel C++ compiler</a> and the <a href="http://msdn.microsoft.com/en-us/visualc/default.aspx">Microsoft C++ compiler</a>. Note that the C++ TR1 feature set is required.
-     <li><a href="http://www.python.org/download/">Python programming language</a>2.4 or later (however, no work has
-           been done to make AVANGO compatible with the upcoming 3.0 release).</li>
-     <li><a href="http://www.scons.org/download.php">scons build system</a> 0.96.93 or later (1.0.0 is supported)</li>
-     </ul>
-<li>External libraries:</li>
-     <ul>
-     <li><a href="http://www.boost.org/">boost C++ library</a> 1.34 or later.</li>
-     <li><a href="http://www.openscenegraph.org/projects/osg">OpenSceneGraph 3D graphic toolkit</a> 2.2.0, 2.4.0 or 2.6.0. 
-         Note that the precompiled binary for 2.4 does not work correctly with AVANGO. In any case it is recommended
-      to compile the toolkit locally. To do that one should download and install <a href="http://www.cmake.org">Cmake</a> (version 2.4.6 or later),
-      download the <a href="http://www.openscenegraph.org/projects/osg/wiki/Downloads/Dependencies">prebuilt dependencies</a>,
-      include their bin directory to the system's PATH variable and configure and compile OpenSceneGraph following the instructions
-      of the README.txt in its root directory.</li>
-      </ul>
+<h4>Installing prerequisites</h4>
+<p>The following software modules have to be downloaded, installed and configured prior to AVANGO
+compilation:</p>
+<ul>
+    <li>Development tools:
+        <ul>
+            <li>Suitable C++ compiler: building AVANGO has been tested with the <a href="http://gcc.gnu.org/">GNU C++ compiler</a>, the <a href="http://software.intel.com/en-us/intel-compilers/">Intel C++ compiler</a> and the <a href="http://msdn.microsoft.com/en-us/visualc/default.aspx">Microsoft C++ compiler</a>. Note that the C++ TR1 feature set is required.</li>
+            <li><a href="http://www.python.org/download/">Python programming language</a>2.4 or later (however, no work has been done to make AVANGO compatible with the upcoming 3.0 release).</li>
+            <li><a href="http://www.scons.org/download.php">scons build system</a> 0.96.93 or later (1.0.0 is supported)</li>
+        </ul>
+    </li>
+    <li>External libraries:
+        <ul>
+            <li><a href="http://www.boost.org/">boost C++ library</a> 1.34 or later.</li>
+            <li><a href="http://www.openscenegraph.org/projects/osg">OpenSceneGraph 3D graphic toolkit</a> 2.2.0, 2.4.0 or 2.6.0. Note that the precompiled binary for 2.4 does not work correctly with AVANGO. In any case it is recommended to compile the toolkit locally. To do that one should download and install <a href="http://www.cmake.org">Cmake</a> (version 2.4.6 or later), download the <a href="http://www.openscenegraph.org/projects/osg/wiki/Downloads/Dependencies">prebuilt dependencies</a>, include their bin directory to the system's PATH variable and configure and compile OpenSceneGraph following the instructions of the README.txt in its root directory.</li>
+        </ul>
+    </li>
 </ul>
 
-<b>Obtaining AVANGO</b><br><br>
-AVANGO source code can be downloaded using an <a href="http://en.wikipedia.org/wiki/Comparison_of_Subversion_clients">SVN client</a>
-from the following address:
+<h4>Obtaining AVANGO</h4>
+<p>AVANGO source code can be downloaded using an <a href="http://en.wikipedia.org/wiki/Comparison_of_Subversion_clients">SVN client</a>
+from the following address:</p>
+
 <div class="code"><pre>
 http://avango.org/svn/trunk
 </pre></div>
 
-<b>Configuring paths</b><br><br>
-The AVANGO build system uses SCons. A list of all available build options is
-shown using the following command in the AVANGO source directory: 
+<h4>Configuring paths</h4>
+<p>The AVANGO build system uses SCons. A list of all available build options is
+shown using the following command in the AVANGO source directory:</p>
 <div class="code"><pre>scons --help</pre></div>
 Options can be set on the command line, such as 
 <div class="code"><pre>
@@ -78,165 +76,184 @@ DEBUG=True
 OPENSCENEGRAPH=True
 </pre></div>
 
-The AVANGO build system assumes that all required files are in the default search paths. These search paths
+<p>The AVANGO build system assumes that all required files are in the default search paths. These search paths
 can be extended with the appropriate build option, e.g. LIBRARY_PATH for the search path for libraries.
 In the example above we extended the search path to contain a OpenSceneGraph installation.
-Multiple paths are separated with an ':' on Linux and a ';' on Windows. 
+Multiple paths are separated with an ':' on Linux and a ';' on Windows.</p>
 
-<br><br>
+<p>Note that the AVANGO build system does not differentiate between different search paths
+for different libraries.</p>
 
-Note that the AVANGO build system does not differentiate between different search paths
-for different libraries.
-
-<br><br><b>Compiling AVANGO</b><br><br>
-To build AVANGO, issue the following command in the source directory: 
+<h4>Compiling AVANGO</h4>
+<p>To build AVANGO, issue the following command in the source directory:</p>
 <div class="code"><pre>
 scons
 </pre></div>
 
-This will automatically build and execute test programs that verify correct behavior.
+<p>This will automatically build and execute test programs that verify correct behavior.
 All tests should run without failure. If some tests do fail on your setup, please contact the <a href="http://avango.org/wiki/Contact">development team</a>.
-Alternatively, you can use Eclipse or Microsoft Visual Studio 2008 IDE (see sections 3 and 4 of this document).
+Alternatively, you can use Eclipse or Microsoft Visual Studio 2008 IDE (see sections 3 and 4 of this document).</p>
 
-<br><br>
-<b>Installing AVANGO</b><br><br>
-The AVANGO build system uses the PREFIX option as the path where AVANGO should be installed.
-If your localdefs.py file contains the following line, 
+<h4>Installing AVANGO</h4>
+<p>The AVANGO build system uses the PREFIX option as the path where AVANGO should be installed.
+If your localdefs.py file contains the following line: </p>
+
 <div class="code"><pre>
 PREFIX='/usr/local'
 </pre></div>
-your files will be installed under '/usr/local'. Note that this is also the default location
-used if this option is omitted (even under Windows). 
-<br><br>
-To install issue the following command in the source directory: 
+<p>your files will be installed under '/usr/local'. Note that this is also the default location
+used if this option is omitted (even under Windows).</p>
+
+<p>To install issue the following command in the source directory:</p>
+
 <div class="code"><pre>
 scons install
 </pre></div>
-If the installation directory is not in your default search path, you need to set both the library
+
+<p>If the installation directory is not in your default search path, you need to set both the library
 and the Python search path. If you installed AVANGO under '/opt/avango' the following commands
-can be executed to run AVANGO (this examples assumes that you are using version 2.5 of Python): 
+can be executed to run AVANGO (this examples assumes that you are using version 2.5 of Python):</p>
+
 <div class="code"><pre>
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/avango/lib
 export PYTHONPATH=$PYTHONPATH:/opt/avango/lib/python2.5
 </pre></div>
-If your are using Windows and installed AVANGO under 'C:\AVANGO' you can use the following commands: 
+
+<p>If your are using Windows and installed AVANGO under 'C:\AVANGO' you can use the following commands:</p>
+
 <div class="code"><pre>
 set PATH=%PATH%;C:\AVANGO\lib
 set PYTHONPATH=%PYTHONPATH%;C:\AVANGO\lib\python2.5
 </pre></div>
-You can now e.g. start the Snowland demo in the examples directory. Change to that directory and 
-execute the following command:
+
+<p>You can now e.g. start the Snowland demo in the examples directory. Change to that directory and 
+execute the following command:</p>
+
 <div class="code"><pre>
 python snowland.py
 </pre></div>
 
+<a name="use-eclipse"></a>
+<h3>3. Using Eclipse for AVANGO development</h3>
 
-<h3 id="#a3">3. Using Eclipse for AVANGO development</h3>
-Before using Eclipse, you should install the prerequisites and obtain Avango (see <a href="installing.html#a2">section 2</a>).
+<p>Before using Eclipse, you should install the prerequisites and obtain Avango (see <a href="#install-dev">section 2</a>).
 We support loading AVANGO into an Eclipse development environment. In the repository you can find
 the appropriate project files (.project and .cproject) on top-level. Currently the Eclipse support
 is organized in a way that the whole AVANGO software is managed in one Eclipse project.
-As a start we recommend to install the following environment: 
+As a start we recommend to install the following environment:</p>
 
 <ul>
-<li>Eclipse
-<ul><li><a href="http://www.eclipse.org/downloads/ ">Eclipse IDE for C/C++ Developers</a>
-</ul>
-<li>Plugins
-<ul><li><a href="http://pydev.sf.net/">Pydev</a> (v1.3.x or higher)
-<li><a href="http://subclipse.tigris.org/ ">Subclipse</a> (v1.2.x or higher)
-<li><a href="http://www.eclipse.org/mylyn/">Mylyn</a> (v2.1.x or higher)
-</ul>
+    <li>Eclipse
+        <ul>
+            <li><a href="http://www.eclipse.org/downloads/ ">Eclipse IDE for C/C++ Developers</a></li>
+        </ul>
+    </li>
+    <li>Plugins
+        <ul>
+            <li><a href="http://pydev.sf.net/">Pydev</a> (v1.3.x or higher)</li>
+            <li><a href="http://subclipse.tigris.org/ ">Subclipse</a> (v1.2.x or higher)</li>
+            <li><a href="http://www.eclipse.org/mylyn/">Mylyn</a> (v2.1.x or higher)</li>
+        </ul>
+    </li>
 </ul>
 
-<b>Checkout</b><br><br>
+<h4>Checkout</h4>
 
-With this you can check out AVANGO by creating a new project via File > New > Other... > SVN > "Checkout Projects from SVN".
-Use repository location shown in the image below and select the trunk directory. 
-<blockquote><img src="media/repository.jpg"></blockquote>
-Note: For the initial checkout it might be better to deactivate the Project > Build Automatically option
-in advance to avoid building the project locally without using your individual environment defined in localdefs.py.
+<p>With this you can check out AVANGO by creating a new project via File > New > Other... > SVN > "Checkout Projects from SVN".
+Use repository location shown in the image below and select the trunk directory.</p>
 
-<br><br><b>Building the project</b><br><br>
-First, ensure that all additional required libraries are installed on your system (see <a href="installing.html#a2">section 2</a>).
-You can build the project by using one of the build configurations that will appear right after the checkout.
-<blockquote><img src="media/buildconfs.jpg"></blockquote>
+<p><img src="media/repository.jpg" alt="svn checkout screenshot" /></p>
+
+<p>Note: For the initial checkout it might be better to deactivate the Project > Build Automatically option
+in advance to avoid building the project locally without using your individual environment defined in localdefs.py.</p>
+
+<h4>Building the project</h4>
+
+<p>First, ensure that all additional required libraries are installed on your system (see <a href="#install-dev">section 2</a>).
+You can build the project by using one of the build configurations that will appear right after the checkout.</p>
+
+<p><img src="media/buildconfs.jpg" alt="build options menu" /></p>
+
 <ul>
-<li>build - executes scons all on top-level 
-<li>check - executes scons check on top-level 
-<li>install - executes scons install on top-level 
+<li>build - executes scons all on top-level</li>
+<li>check - executes scons check on top-level</li>
+<li>install - executes scons install on top-level</li>
 </ul>
 
-The currently selected build configuration can also be triggered using the CTRL + B keyboard shortcut.
+<p>The currently selected build configuration can also be triggered using the CTRL + B keyboard shortcut.
 For each submodule (e.g. avango-osg) own make targets exist with which you can invoke a more specified
-build process (see image below). 
-<blockquote><img src="media/maketargets.jpg"></blockquote>
+build process (see image below).</p>
 
-<b>AVANGO Code Style</b><br><br>
-Developers submitting code are encouraged to follow the AVANGO code conventions. Therefore go to Window > Preferences > C/C++ > Code Style and import the following file: 
-<a href="Eclipse_AVANGO_C++_Code_Style.xml ">Eclipse_AVANGO_C++_Code_Style.xml</a>
+<p><img src="media/maketargets.jpg" alt="list of targets" /></p>
 
-<br><br><b>Important Note</b><br><br>
-Since the svn:ignore property doesn't work for files which are under version control any local modification
+<h4>AVANGO Code Style</h4>
+
+<p>Developers submitting code are encouraged to follow the AVANGO code conventions. Therefore go to Window > Preferences > C/C++ > Code Style and import the following file: 
+<a href="Eclipse_AVANGO_C++_Code_Style.xml ">Eclipse_AVANGO_C++_Code_Style.xml</a>.</p>
+
+<div class="sidenote">Since the svn:ignore property doesn't work for files which are under version control any local modification
 of the Eclipse project files .project and .cproject would be committed to the repository.
-Therefore please be careful on committing your changes on top-level. 
+Therefore please be careful on committing your changes on top-level.</div>
+
+<a name="use-msvs"></a>
+<h3>4. Using Microsoft Visual Studio 2008 for AVANGO development</h3>
+
+<p>First, you should download and install the <a href="http://msdn.microsoft.com/en-us/vstudio/default.aspx">Microsoft Visual Studio 2008</a> (also known VC 9) and the <a href="http://www.microsoft.com/downloads/details.aspx?FamilyId=D466226B-8DAB-445F-A7B4-448B326C48E7&amp;displaylang=en"> Visual C++ 2008 Feature Pack</a> for C++ TR1 support.</p>
 
 
-<h3 id="#a4">4. Using Microsoft Visual Studio 2008 for AVANGO development</h3>
+<p>You should also install the prerequisites and obtain Avango (see <a href="installing.html#a2">section 2</a>).</p>
 
-First, you should download and install the <a href="http://msdn.microsoft.com/en-us/vstudio/default.aspx">Microsoft Visual
-Studio 2008</a> (also known VC 9) and the
-<a href="http://www.microsoft.com/downloads/details.aspx?FamilyId=D466226B-8DAB-445F-A7B4-448B326C48E7&displaylang=en">
-Visual C++ 2008 Feature Pack</a> for C++ TR1 support.
-<br><br>
-You should also install the prerequisites and obtain Avango (see <a href="installing.html#a2">section 2</a>).
-<br><br>
-You should make sure, you have included the locations of Python, Python/scripts, OpenSceneGraph/bin,
-your compiler and linker (they usually reside within */VC/Bin) to the system's PATH environment variable.
+<p>You should make sure, you have included the locations of Python, Python/scripts, OpenSceneGraph/bin, your compiler and linker (they usually reside within */VC/Bin) to the system's PATH environment variable.</p>
 
-<br><br><b>Building in Visual Studio</b><br><br>
-Since SCons does not support VC 9 at the moment, you need to set up a small workaround: 
+<h4>Building in Visual Studio</h4>
+
+<p>Since SCons does not support VC 9 at the moment, you need to set up a small workaround:</p>
+
 <ul>
-<li>before compilng make sure to invoke vcvars32.bat once on the command line
-<li>add into your localdefs.py (see <a href="installing.html#a2">section 2</a>) in the top directory of your checkout:
-   <ul>   
-   <li>to BINARY_PATH: <pre>BINARY_PATH = os.environ.get('PATH')</pre>
-   <li>to INCLUDE_PATH (note that you separate paths by a ';' and double slash each sub directory (e.g.: VC//include//foo)):<br>
-       <ul>
-       <li>boost include path
-       <li>OpenSceneGraph include path
-       <li>VC include path (usually */VC/include) 
-       <li>Platform SDK include path
-       </ul>
-   <li>to LIBRARY_PATH:
-       <ul>
-       <li>boost lib path 
-       <li>OpenSceneGraph lib path
-       <li>python lib path 
-       <li>VC lib path
-       <li>Platform SDK lib path
-       </ul>
-   </ul>
+    <li>before compilng make sure to invoke vcvars32.bat once on the command line</li>
+    <li>add into your localdefs.py (see <a href="installing.html#a2">section 2</a>) in the top directory of your checkout:
+        <ul>   
+            <li>to BINARY_PATH:
+                <pre>BINARY_PATH = os.environ.get('PATH')</pre>
+            </li>
+            <li>to INCLUDE_PATH (note that you separate paths by a ';' and double slash each sub directory (e.g.: VC//include//foo)):
+                <ul>
+                    <li>boost include path</li>
+                    <li>OpenSceneGraph include path</li>
+                    <li>VC include path (usually */VC/include)</li>
+                    <li>Platform SDK include path</li>
+               </ul>
+            </li>
+            <li>to LIBRARY_PATH:
+                <ul>
+                    <li>boost lib path</li>
+                    <li>OpenSceneGraph lib path</li>
+                    <li>python lib path</li>
+                    <li>VC lib path</li>
+                    <li>Platform SDK lib path</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
 </ul>
 
-Keep in mind that SCons will take complete control over the compilation even with the generated project files.
-So do not make custom changes to the project files thus wasting your time. On a fresh checkout there will
-be just an empty solution file. You should generate the project files by invoking: 
+<p>Keep in mind that SCons will take complete control over the compilation even with the generated project files. So do not make custom changes to the project files thus wasting your time. On a fresh checkout there will be just an empty solution file. You should generate the project files by invoking:</p>
+
 <div class="code"><pre>
 scons vcprojects
 </pre></div>
 
-Now you can open the solution file avango.sln, which resides in the top directory of AVANGO, and copmile the projects.
+<p>Now you can open the solution file avango.sln, which resides in the top directory of AVANGO, and copmile the projects.</p>
 
-<br><br><b>Installing and running on Windows</b><br><br>
+<h4>Installing and running on Windows</h4>
 
-Install avango as usual using 
+<p>Install avango as usual using</p>
 
 <div class="code"><pre>
 scons install
 </pre></div>
 
-The following batch file is an example how to start a python shell with a proper environment: 
+<p>The following batch file is an example how to start a python shell with a proper environment:</p>
 
 <div class="code"><pre>
 REM Do NOT use quotes in PYTHONPATH

@@ -28,7 +28,12 @@
 
 #include <string>
 #include <iosfwd>
+
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/unordered_set>
+#else
+#include <unordered_map>
+#endif
 
 
 namespace av

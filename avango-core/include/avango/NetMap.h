@@ -27,8 +27,13 @@
 #define AVANGO_NETMAP_H
 
 #include <iosfwd>
-#include <tr1/unordered_map>
 #include <vector>
+
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
+#include <tr1/unordered_map>
+#else
+#include <unordered_map>
+#endif
 
 // #include <avango/MaestroEID.h>
 #include <avango/Distributed.h>

@@ -31,8 +31,10 @@
  * \ingroup av
  */
 
-#if !defined(_WIN32)
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/unordered_set>
+#else
+#include <unordered_set>
 #endif
 
 #include <avango/Base.h>
@@ -147,9 +149,7 @@ namespace av
 
   };
 
-#if !defined(_WIN32)
   typedef std::tr1::unordered_set<Link<Distributed>, AnyLink::Hasher, std::equal_to<AnyLink> > DistributedSet;
-#endif
 }
 
 #endif // #if !defined(AVANGO_DISTRIBUTED_H)

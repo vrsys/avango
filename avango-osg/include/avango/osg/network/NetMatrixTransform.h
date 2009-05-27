@@ -35,7 +35,11 @@
 #include <avango/NetNode.h>
 #include <avango/Application.h>
 
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/unordered_map>
+#else
+#include <unordered_map>
+#endif
 
 namespace av
 {

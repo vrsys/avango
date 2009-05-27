@@ -37,7 +37,8 @@ compilation:</p>
 <ul>
     <li>Development tools:
         <ul>
-            <li>Suitable C++ compiler: building AVANGO has been tested with the <a href="http://gcc.gnu.org/">GNU C++ compiler</a>, the <a href="http://software.intel.com/en-us/intel-compilers/">Intel C++ compiler</a> and the <a href="http://msdn.microsoft.com/en-us/visualc/default.aspx">Microsoft C++ compiler</a>. Note that the C++ TR1 feature set is required.</li>
+            <li>Suitable C++ compiler: building AVANGO has been tested with the <a href="http://gcc.gnu.org/">GNU C++ compiler</a>, the <a href="http://software.intel.com/en-us/intel-compilers/">Intel C++ compiler</a> and the <a href="http://msdn.microsoft.com/en-us/visualc/default.aspx">Microsoft C++ compiler</a>. Note that the C++ TR1 feature set is required, which most modern C++ compilers provide. Otherwise the TR1 implementation from the Boost library can be used (1.36 is required in this case; see below for the required setup).</li>
+
             <li><a href="http://www.python.org/download/">Python programming language</a>2.4 or later (however, no work has been done to make AVANGO compatible with the upcoming 3.0 release).</li>
             <li><a href="http://www.scons.org/download.php">scons build system</a> 0.96.93 or later (1.0.0 is supported)</li>
         </ul>
@@ -83,6 +84,12 @@ Multiple paths are separated with an ':' on Linux and a ';' on Windows.</p>
 
 <p>Note that the AVANGO build system does not differentiate between different search paths
 for different libraries.</p>
+
+<p>If the Boost TR1 library has to be used (e.g. when no implementation is provided by the compiler), the header search path has to be setup properly. <a href="http://www.boost.org/doc/html/boost_tr1/usage.html">This documentation</a> gives more information. As a simple example, assume that Boost is installed under <code>/opt/boost-1.36</code>. The following line should then be appended to your <code>localdefs.py</code>:</p>
+
+<div class="code"><pre>
+INCLUDE_PATH = '/opt/boost-1.36/boost/tr1/tr1'
+</pre></div>
 
 <h4>Compiling AVANGO</h4>
 <p>To build AVANGO, issue the following command in the source directory:</p>

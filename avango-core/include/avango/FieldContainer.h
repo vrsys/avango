@@ -35,10 +35,10 @@
 #include <avango/Distributed.h>
 #include <avango/StandardFields.h>
 
-#ifdef _MSC_VER //MS stores headers differently
-#include <unordered_map>
-#else
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/unordered_map>
+#else
+#include <unordered_map>
 #endif
 
 namespace av

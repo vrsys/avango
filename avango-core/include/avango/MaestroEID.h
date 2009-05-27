@@ -29,10 +29,17 @@
 #include <iosfwd>
 #include <set>
 #include <string>
+#include <vector>
+
+#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/functional>
 #include <tr1/unordered_map>
 #include <tr1/unordered_set>
-#include <vector>
+#else
+#include <functional>
+#include <unordered_map>
+#include <unordered_set>
+#endif
 
 #include <avango/ensemble/maestro/Maestro_Types.h>
 

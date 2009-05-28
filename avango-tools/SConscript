@@ -29,12 +29,6 @@ from avango.build.oshelper import *
 avango.build.Environment.prepend_include_path(Dir('include').abspath)
 tools_env = avango.build.Environment()
 
-if avango.build.oshelper.os_is_mac():
-	avango.build.add_library(tools_env, 'boost_signals')
-	avango.build.add_library(tools_env, 'boost_thread')
-	avango.build.add_library(tools_env, 'python')
-	avango.build.add_library(tools_env, 'OpenThreads')
-
 # Substitutions
 tools_env['SUBST'] = {
     'PREFIX': avango.build.get_prefix().abspath,

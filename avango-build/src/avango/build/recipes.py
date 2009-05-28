@@ -81,7 +81,7 @@ def _setup_default():
     if oshelper.os_is_mac():
       _config_store.set('avango-python', PlainConfig(libraries = ['_script']))
       _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
-      _config_store.set('OpenThreads', PlainConfig(libraries = ['OpenThreads']))
+      _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
       _config_store.set('GL', PlainConfig(libraries = ['GL']))
       _config_store.set('GLU', PlainConfig(libraries = ['GLU'])) 

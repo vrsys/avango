@@ -85,13 +85,6 @@ if module_env['DISTRIBUTION_SUPPORT']:
         """))
     module_env.Prepend(LIBS=Split("avangoOsgNetwork"))
 
-#changed
-if avango.build.oshelper.os_is_mac():
-	avango.build.add_library(module_env, 'boost_signals')
-	avango.build.add_library(module_env, 'boost_thread')
-	avango.build.add_library(module_env, 'python')
-	avango.build.add_library(module_env, 'OpenThreads')
-
 osg_lib = module_env.SharedLibrary("avango/osg/_osg", osg_files)
 module_env.Install(avango.build.get_python_path('avango/osg'), "avango/osg/__init__.py")
 module_env.Install(avango.build.get_python_path('avango/osg'), osg_lib)

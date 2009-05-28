@@ -37,10 +37,6 @@ sources = Split('''
 avango.build.add_library(moving_env, 'avango-osg')
 avango.build.add_library(moving_env, 'avango-core')
 
-if avango.build.oshelper.os_is_mac():
-	avango.build.add_library(moving_env, 'boost_signals')
-	avango.build.add_library(moving_env, 'boost_thread')
-
 moving_env.Append(CPPDEFINES='AV_MOVING_LIBRARY')
 lib = moving_env.SharedLibrary('avangoMoving', sources)
 Alias('moving', lib)

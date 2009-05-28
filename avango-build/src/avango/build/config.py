@@ -24,6 +24,7 @@
 ##########################################################################
 
 from environment import *
+from configstore import _config_store
 
 _do_parse_config = True
 _do_recurse = True
@@ -43,23 +44,30 @@ class Config(object):
 
 class PlainConfig(Config):
 
-    def __init__(self, library_path = [], include_path = [], python_path = [], libraries = []):
+    def __init__(self, library_path = [], include_path = [], python_path = [], libraries = [], dependencies = []):
         self._library_path = library_path
         self._include_path = include_path
         self._python_path = python_path
         self._libraries = libraries
+        self._dependencies = dependencies
+
+    def _join_dependencies(self, retriever):
+        result = []
+        for d in self._dependencies:
+            result += retriever(d)
+        return result
 
     def get_library_path(self):
-        return self._library_path
+        return self._library_path+self._join_dependencies(_config_store.get_library_path)
 
     def get_include_path(self):
-        return self._include_path
+        return self._include_path+self._join_dependencies(_config_store.get_include_path)
 
     def get_python_path(self):
-        return self._python_path
+        return self._python_path+self._join_dependencies(_config_store.get_python_path)
 
     def get_libraries(self):
-        return self._libraries
+        return self._libraries+self._join_dependencies(_config_store.get_libraries)
 
 class PKGConfig(Config):
 

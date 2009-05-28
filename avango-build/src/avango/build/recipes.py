@@ -32,7 +32,6 @@ def _setup_default():
         dl
         boost_thread
         boost_signals
-        boost_python
         osg
         osgDB
         osgViewer
@@ -43,6 +42,9 @@ def _setup_default():
         osgGA
         osgFX
         sloow
+        alut
+        openal
+        vrpn
         """
 
     for lib in _plain_libs.split():
@@ -65,13 +67,11 @@ def _setup_default():
     _config_store.set('avango-unittest', PKGConfig('avango-unittest'))
     _config_store.set('avango-sound', PlainConfig(libraries = ["avangoSound"]))
     _config_store.set('avango-sloow', PlainConfig(libraries = ["avangoSloow"]))
-    _config_store.set('openal', PlainConfig(libraries = ["openal"]))
-    _config_store.set('alut', PlainConfig(libraries = ["alut"]))
     _config_store.set('vorbisfile', PKGConfig('vorbisfile'))
-
-    #add common libs (plain)
     _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))
-    _config_store.set('vrpn', PlainConfig(libraries = ['vrpn']))
+
+    _config_store.set('python', PythonConfig())
+    _config_store.set('boost_python', PlainConfig(libraries = ["boost_python"], dependencies = ["python"]))
     
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))
@@ -82,7 +82,6 @@ def _setup_default():
       _config_store.set('avango-python', PlainConfig(libraries = ['_script']))
       _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
       _config_store.set('OpenThreads', PlainConfig(libraries = ['OpenThreads']))
-      _config_store.set('python', PlainConfig(libraries = ['python']))
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
       _config_store.set('GL', PlainConfig(libraries = ['GL']))
       _config_store.set('GLU', PlainConfig(libraries = ['GLU'])) 
@@ -103,7 +102,7 @@ def _setup_default():
         _config_store.set('GL', PlainConfig(libraries = ['OPENGL32']))
         _config_store.set('GLU', PlainConfig(libraries = ['GLU32']))
         # for avango extensions, there is no pkg-config
-        _config_store.set('avango-core', PlainConfig(libraries = ['avango']))
+        _config_store.set('avango-core', PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread"]))
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
         _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
         # xerces

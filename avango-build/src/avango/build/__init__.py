@@ -215,9 +215,8 @@ def _build_environment():
 
 def _build_python_environment(env):
     result = env.Clone()
-    result.PrependUnique(CPPPATH=[distutils.sysconfig.get_python_inc()],
-                             LIBPATH=[distutils.sysconfig.get_config_var('LIBDIR')])
-    result.MergeFlags(distutils.sysconfig.get_config_var('BLDLIBRARY'))
+    add_search_path(result, 'python')
+    add_library(result, 'python')
     result['SHLIBPREFIX'] = ''
     result['SHLIBSUFFIX'] = distutils.sysconfig.get_config_var('SO')
     return result

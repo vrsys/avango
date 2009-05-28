@@ -61,7 +61,7 @@ opts.AddOptions(
 avango.build.setup()
 
 avango.build.set_config('avango-unittest', avango.build.PlainConfig(libraries = ['avangoUnitTest++']))
-avango.build.set_config('avango-core', avango.build.PlainConfig(libraries = ['avango']))
+avango.build.set_config('avango-core', avango.build.PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread"]))
 
 # avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg', 'avangoOsgParticle']))
 avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg']))

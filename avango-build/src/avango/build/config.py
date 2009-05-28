@@ -25,6 +25,8 @@
 
 from environment import *
 from configstore import _config_store
+import distutils.sysconfig
+import SCons.Script as scons
 
 _do_parse_config = True
 _do_recurse = True
@@ -88,4 +90,17 @@ class PKGConfig(Config):
         if not _do_parse_config:
             return []
         return Environment.env.ParseFlags('!pkg-config --libs-only-l %s' % self._name)['LIBS']
+
+class PythonConfig(Config):
+
+    def get_library_path(self):
+        return [distutils.sysconfig.get_config_var('LIBDIR')]
+
+    def get_include_path(self):
+        return [distutils.sysconfig.get_python_inc()]
+
+    def get_libraries(self):
+        env = scons.Environment()
+        flags = env.ParseFlags(distutils.sysconfig.get_config_var('BLDLIBRARY'))
+        return flags['LIBS']
 

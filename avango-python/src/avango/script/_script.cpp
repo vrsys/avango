@@ -23,26 +23,14 @@
 *                                                                        *
 \************************************************************************/
 
-#include "Update.h"
 #include "Script.h"
-#include <avango/python/script/Types.h>
-#include <avango/python/register_field.h>
+#include <avango/python/script/Init.h>
 #include <boost/python.hpp>
-
-using namespace av::python;
-using namespace boost::python;
-
-AV_FIELD_DEFINE(av::script::SFObject);
-AV_FIELD_DEFINE(av::script::MFObject);
 
 BOOST_PYTHON_MODULE(_script)
 {
-  av::script::SFObject::initClass("av::script::SFObject", "av::Field");
-  av::script::MFObject::initClass("av::script::MFObject", "av::Field");
-  av::script::Update::initClass();
-
-  register_field<av::script::SFObject>("SFObject");
-  register_multifield<av::script::MFObject>("MFObject");
+  av::script::register_object();
+  av::script::register_object_fields();
 
   av::script::register_script();
 }

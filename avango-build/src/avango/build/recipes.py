@@ -58,7 +58,7 @@ def _setup_default():
 
     _config_store.set('avango-core', PKGConfig('avango-core'))
     _config_store.set('avango-daemon', PKGConfig('avango-daemon'))
-    _config_store.set('avango-python', PlainConfig())
+    _config_store.set('avango-python', PlainConfig(libraries = ["avangoScript"]))
     _config_store.set('avango-osg', PKGConfig('avango-osg'))
     _config_store.set('avango-osgviewer', PKGConfig('avango-osgviewer'))
     _config_store.set('avango-moving', PKGConfig('avango-moving'))
@@ -79,7 +79,6 @@ def _setup_default():
     _config_store.set('GLU', PlainConfig(libraries = ['']))
     
     if oshelper.os_is_mac():
-      _config_store.set('avango-python', PlainConfig(libraries = ['_script']))
       _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
       _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
@@ -91,7 +90,7 @@ def _setup_default():
         # Boost libraries use auto-link
         _config_store.set('boost_thread', PlainConfig(libraries = ['']))
         _config_store.set('boost_signals', PlainConfig(libraries = ['']))
-        _config_store.set('boost_python', PlainConfig(libraries = ['']))
+        _config_store.set('boost_python', PlainConfig(libraries = [''], dependencies = ["python"]))
         # dl is in standard system libraries
         # TODO check that dl functionality is included in system library
         _config_store.set('dl', PlainConfig(libraries = ['']))
@@ -107,8 +106,6 @@ def _setup_default():
         _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
         # xerces
         _config_store.set('xerces', PlainConfig(libraries = ['xerces-c_2']))
-        # FIXME make proper avangoPython library and always add to avango-python
-        _config_store.set('avango-python', PlainConfig(libraries = ['_script']))
 
 def set_config_flag(key, value):
     if key == "OPENSCENEGRAPH_DEBUG" and value:

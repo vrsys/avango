@@ -27,6 +27,7 @@
 import avango.build
 
 headers = Split('''
+                Init.h
                 Types.h
                 ''')
 

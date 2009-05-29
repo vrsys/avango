@@ -54,7 +54,9 @@ class NodeFactory(object):
                     for key, value in args.iteritems():
                         setattr(values, key, value)
                     return node
-                except RuntimeError:
+                except RuntimeError: # We don't have a expection translation ...
+                    raise ImportError("Unknown node %s" % self._name)
+                except ValueError:   # ... but boost does (since boost changeset 43546)
                     raise ImportError("Unknown node %s" % self._name)
 
         return ProxyClass

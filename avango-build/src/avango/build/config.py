@@ -94,10 +94,16 @@ class PKGConfig(Config):
 class PythonConfig(Config):
 
     def get_library_path(self):
-        return [distutils.sysconfig.get_config_var('LIBDIR')]
+        result = distutils.sysconfig.get_config_var('LIBDIR')
+        if not result:
+            return []
+        return [result]
 
     def get_include_path(self):
-        return [distutils.sysconfig.get_python_inc()]
+        result = distutils.sysconfig.get_python_inc()
+        if not result:
+            return []
+        return [result]
 
     def get_libraries(self):
         env = scons.Environment()

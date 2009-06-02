@@ -78,13 +78,21 @@ camera = avango.osg.viewer.nodes.Camera(Window = window)
 viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = root_group)
 
 
+# set up event handling
+
+eventfields = avango.osg.viewer.nodes.EventFields(View = viewer)
+window.ToggleFullScreen.connect_from(eventfields.KeyAltReturn)
+window.DragEvent.connect_from(eventfields.DragEvent)
+window.MoveEvent.connect_from(eventfields.MoveEvent)
+
+
 # set up trackball mover
 
 trackball = avango.moving.nodes.Trackball(Matrix = camera.ViewerTransform.value)
 trackball.Direction.connect_from(window.MousePositionNorm)
-trackball.RotateTrigger.connect_from(window.MouseButtons_OnlyMiddle)
-trackball.ZoomTrigger.connect_from(window.MouseButtons_MiddleAndRight)
-trackball.PanTrigger.connect_from(window.MouseButtons_OnlyRight)
+trackball.RotateTrigger.connect_from(eventfields.MouseButtons_OnlyMiddle)
+trackball.ZoomTrigger.connect_from(eventfields.MouseButtons_MiddleAndRight)
+trackball.PanTrigger.connect_from(eventfields.MouseButtons_OnlyRight)
 trackball.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)
@@ -103,14 +111,14 @@ class SphereCreator(avango.script.Script):
             make_sphere(self.Transform.value.get_translate())
 
 sphere_creator = SphereCreator()
-sphere_creator.Trigger.connect_from(window.KeySpace)
+sphere_creator.Trigger.connect_from(eventfields.KeySpace)
 sphere_creator.Transform.connect_from(camera.MouseTransform)
 
 
 # setup drag tool
 
 pick_selector = avango.tools.nodes.PickSelector()
-pick_selector.PickTrigger.connect_from(window.MouseButtons_OnlyLeft)
+pick_selector.PickTrigger.connect_from(eventfields.MouseButtons_OnlyLeft)
 pick_selector.PickRayTransform.connect_from(camera.MouseNearTransform)
 pick_selector.RootNode.connect_from(viewer.Scene)
 
@@ -122,7 +130,7 @@ drag_tool.Targets.connect_from(pick_selector.SelectedTargets)
 # setup jumphome tool
 
 jump_home_selector = avango.tools.nodes.PickSelector()
-jump_home_selector.PickTrigger.connect_from(window.MouseButtons_LeftAndRight)
+jump_home_selector.PickTrigger.connect_from(eventfields.MouseButtons_LeftAndRight)
 jump_home_selector.PickRayTransform.connect_from(camera.MouseNearTransform)
 jump_home_selector.RootNode.connect_from(viewer.Scene)
 
@@ -158,7 +166,7 @@ highlight_tool.Targets.connect_from(highlight_selector.SelectedTargets)
 # setup sphere destruct tool, highlighted spheres are deleted with delete key
 
 sphere_destruct_selector = avango.tools.nodes.TriggerSelector()
-sphere_destruct_selector.Trigger.connect_from(window.KeyDelete)
+sphere_destruct_selector.Trigger.connect_from(eventfields.KeyDelete)
 sphere_destruct_selector.Targets.connect_from(highlight_selector.SelectedTargets)
 
 def destruct_callback(holder):

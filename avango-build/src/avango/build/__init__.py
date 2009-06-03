@@ -131,6 +131,7 @@ from utility import *
 import recipes
 import defaults
 import oshelper
+from oshelper import get_library_search_path_env
 
 scons.EnsureSConsVersion(0,96,93)
 

@@ -128,7 +128,7 @@ avango.build.install_python(test_package_dir+'tests/', avango_python_test_files)
 avango.build.install_python(test_package_dir+'tests/apackage', avango_python_test_pkg_files)
 
 local_test_env = avango.build.TestEnvironment()
-local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('src/tests').abspath) # Not needed for Windows as library is in execution path of test script
+local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('src/tests').abspath)
 check = local_test_env.Alias('test-python', 'src/test_package/tests/runtests.pyc', 'python $SOURCE')
 AlwaysBuild(check)
 Alias('check-python', check)

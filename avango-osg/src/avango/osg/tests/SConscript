@@ -40,10 +40,10 @@ for lib in ['avango-core', 'osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText'
 if local_test_env['DISTRIBUTION_SUPPORT']:
     local_test_env.Append(LIBS = ['avangoOsgNetwork'])
     local_test_env.Prepend(LIBPATH=['../network'])
-    local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('../network').abspath)
+    local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('../network').abspath)
 
 local_test_env.Prepend(LIBPATH=['..'])
-local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('..').abspath)
+local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('..').abspath)
 
 tests = local_test_env.Program ('TestAvangoOSG', sources)
 tests_alias = local_test_env.Alias('test-osg', tests, "${SOURCE.abspath}")

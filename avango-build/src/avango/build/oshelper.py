@@ -35,5 +35,7 @@ def os_is_windows():
 def get_library_search_path_env():
     if os_is_windows():
         return "PATH"
+    elif os_is_mac():
+        return "DYLD_LIBRARY_PATH"
     else:
         return "LD_LIBRARY_PATH"

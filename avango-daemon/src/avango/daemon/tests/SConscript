@@ -35,7 +35,7 @@ local_test_env = avango.build.TestEnvironment()
 local_test_env.Append(LIBS = ['avangoDaemon'])
 
 local_test_env.Prepend(LIBPATH=['../../../..'])
-local_test_env.PrependENVPath('LD_LIBRARY_PATH', Dir('../../../..').abspath)
+local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('../../../..').abspath)
 
 tests = local_test_env.Program ('TestAvangoDaemon', sources)
 tests_alias = local_test_env.Alias('test-daemon', tests, "${SOURCE.abspath}")

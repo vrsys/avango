@@ -27,6 +27,7 @@ from environment import *
 from configstore import _config_store
 import distutils.sysconfig
 import SCons.Script as scons
+import oshelper
 
 _do_parse_config = True
 _do_recurse = True
@@ -106,7 +107,9 @@ class PythonConfig(Config):
         return [result]
 
     def get_libraries(self):
+        if oshelper.os_is_mac():
+            # FIXME find proper way to detect this
+            return ['Python']
         env = scons.Environment()
         flags = env.ParseFlags(distutils.sysconfig.get_config_var('BLDLIBRARY'))
         return flags['LIBS']
-

@@ -49,7 +49,7 @@ Export('avango_env')
 
 avango.build.Environment.prepend_library_path(Dir('.').abspath)
 avango_test_env = avango.build.TestEnvironment()
-avango_test_env.Append(LIBS = ['avango'])
+avango.build.add_library(avango_test_env, 'avango-core')
 Export('avango_test_env')
 
 objects = []

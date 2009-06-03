@@ -84,6 +84,7 @@ av_script_python_files = Split("""
 avango_script_env = avango_env.Clone()
 avango_script_env.Append(LIBS=["avangoScript"])
 av_script = avango_script_env.SharedLibrary("src/avango/script/_script", av_script_files)
+Depends(av_script, avango_script_library)
 Depends(av_script, av_script_python_files)
 Install(avango.build.get_python_path('avango/script'), av_script_python_files)
 Install(avango.build.get_python_path('avango/script'), av_script)
@@ -101,6 +102,7 @@ local_mock_env = avango_env.Clone()
 local_mock_env.Prepend(LIBPATH=[Dir('src/tests').abspath])
 local_mock_env.Append(LIBS=['MockFieldContainer'])
 mockfieldcontainer_python = local_mock_env.SharedLibrary("src/tests/_mockfieldcontainer.cpp")
+Depends(mockfieldcontainer_python, mockfieldcontainer)
 
 test_package_dir = 'src/test_package/'
 Install(test_package_dir+'avango/', avango_module)

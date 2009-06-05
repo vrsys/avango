@@ -50,7 +50,7 @@ Alias('install-moving', moving_env.Install(avango.build.get_include_path('avango
 Alias('all', Alias('moving'))
 Alias('install', Alias('install-moving'))
 
-for lib in ['avango-osg', 'avango-python', 'avango-osg', 'osg']:
+for lib in ['avango-core', 'avango-osg', 'avango-python', 'osg']:
     avango.build.add_library(moving_env, lib)
 
 # Subdirs

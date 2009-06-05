@@ -34,9 +34,6 @@ sources = Split('''
     DesktopFlyer.cpp
     ''')
 
-avango.build.add_library(moving_env, 'avango-osg')
-avango.build.add_library(moving_env, 'avango-core')
-
 moving_env.Append(CPPDEFINES='AV_MOVING_LIBRARY')
 lib = moving_env.SharedLibrary('avangoMoving', sources)
 Alias('moving', lib)

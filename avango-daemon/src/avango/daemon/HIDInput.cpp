@@ -95,10 +95,11 @@ av::daemon::HIDInput::open()
     close();
     return false;
   }
-  logger.info() << "open: found device " << device_info.vendor
-                << device_info.product
-                << mTty.c_str()
-                << " on " << mFd;
+  logger.info() << "open: found device "
+                << std::hex << device_info.vendor << ":"
+                << std::hex << device_info.product
+                << " on " << mTty.c_str()
+                << " (fd: " << mFd << ")";
   return true;
 }
 

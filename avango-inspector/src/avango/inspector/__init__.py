@@ -23,13 +23,9 @@ class Inspector(avango.script.Script):
         scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         scrolled_window.add(self._create_treeview())
         vbox.pack_start(scrolled_window)
-        commandline = gtk.HBox()
-        vbox.pack_start(commandline, expand=False)
-        execute_button = gtk.Button("Execute")
-        execute_button.connect("clicked", self.handle_execute_button, None)
         self.entry_field = gtk.Entry()
-        commandline.pack_start(self.entry_field)
-        commandline.pack_start(execute_button, expand=False)
+        self.entry_field.connect("activate", self.handle_commandline, None)
+        vbox.pack_start(self.entry_field, expand=False)
         self.window.show_all()
 
     def _create_treeview(self):
@@ -54,7 +50,7 @@ class Inspector(avango.script.Script):
         self.update_model()
         return self.view
 
-    def handle_execute_button(self, widget, data=None):
+    def handle_commandline(self, widget, data=None):
         field = None
         selection = self.view.get_selection()
         model, iter = selection.get_selected()

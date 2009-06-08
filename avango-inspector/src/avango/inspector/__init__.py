@@ -3,6 +3,8 @@ import avango.script
 import pygtk
 pygtk.require('2.0')
 import gtk
+import sys
+import cStringIO
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
@@ -22,7 +24,22 @@ class Inspector(avango.script.Script):
         scrolled_window = gtk.ScrolledWindow()
         scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
         scrolled_window.add(self._create_treeview())
-        vbox.pack_start(scrolled_window)
+
+        paned = gtk.VPaned()
+        paned.props.position = 300
+        paned.pack1(scrolled_window)
+
+        output_viewport = gtk.ScrolledWindow()
+        output_viewport.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
+        self.output = gtk.TextBuffer()
+        textview = gtk.TextView(buffer=self.output)
+        textview.props.editable = False
+        textview.props.cursor_visible = False
+        output_viewport.add(textview)
+        output_viewport.props.vadjustment.connect("changed", self.handle_output_scroll, None)
+        paned.pack2(output_viewport)
+
+        vbox.pack_start(paned)
         self.entry_field = gtk.Entry()
         self.entry_field.connect("activate", self.handle_commandline, None)
         vbox.pack_start(self.entry_field, expand=False)
@@ -58,9 +75,22 @@ class Inspector(avango.script.Script):
             field = model.get(iter, 2)[0]
         sandbox = {'nodes': self.Children.value, 'field': field }
 
-        exec self.entry_field.get_text() in globals(), sandbox
+        stdout = sys.stdout 
+        redirected_stdout = cStringIO.StringIO()
+        sys.stdout = redirected_stdout
+
+        try:
+            exec self.entry_field.get_text() in globals(), sandbox
+        finally:
+            sys.stdout = stdout
+
+        self.output.insert(self.output.get_end_iter(), redirected_stdout.getvalue())
         self.entry_field.set_text("")
+
         self.update_model()
+
+    def handle_output_scroll(self, widget, data=None):
+        widget.set_value(widget.upper)
 
     def update_model(self):
         def recurse_fields(node, parent):

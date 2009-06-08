@@ -16,6 +16,8 @@ class Inspector(avango.script.Script):
     def __init__(self):
         self.always_evaluate(True)
 
+        self.sandbox = {}
+
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("AVANGO Inspector")
         self.window.set_size_request(400, 400)
@@ -75,7 +77,8 @@ class Inspector(avango.script.Script):
         model, iter = selection.get_selected()
         if model and iter:
             field = model.get(iter, 2)[0]
-        sandbox = {'nodes': self.Children.value, 'field': field }
+        self.sandbox['nodes'] = self.Children.value
+        self.sandbox['field'] = field
 
         stdout = sys.stdout 
         redirected_stdout = cStringIO.StringIO()
@@ -85,7 +88,7 @@ class Inspector(avango.script.Script):
         sys.stderr = redirected_stderr
 
         try:
-            exec self.entry_field.get_text() in globals(), sandbox
+            exec self.entry_field.get_text() in globals(), self.sandbox
         except:
             cls, obj, traceback = sys.exc_info()
             print >> sys.stderr, "%s: %s" % (cls.__name__, str(obj))

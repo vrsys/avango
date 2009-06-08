@@ -26,6 +26,7 @@
 #include <boost/python.hpp>
 #include <avango/FieldContainer.h>
 #include <avango/FieldContainerHelper.h>
+#include <avango/ContainerPool.h>
 
 #include "FieldContainer.h"
 
@@ -35,6 +36,11 @@ av::Link<av::FieldContainer> make_instance_by_name(std::string name)
 {
   av::Link<av::FieldContainer> retval(dynamic_cast<av::FieldContainer*>(av::Type::createInstanceOfType(name)));
   return retval;
+}
+
+av::Link<av::FieldContainer> ContainerPoll_get_instance_by_name(std::string name)
+{
+  return av::Link<av::FieldContainer>(av::ContainerPool::getInstanceByName(name));
 }
 
 bool Base_equal(const av::Base* a, const av::Base* b)
@@ -80,5 +86,6 @@ void init_FieldContainer(void)
     ;
 
   def("_make_instance_by_name", make_instance_by_name);
+  def("get_instance_by_name", ContainerPoll_get_instance_by_name);
   def("disconnect_and_clear_all_fields", av::disconnectAndClearAllFields);
 }

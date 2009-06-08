@@ -104,6 +104,13 @@ class FieldContainerTestCase(unittest.TestCase):
         mcf.AFieldContainer.value = mcf
         self.assertEqual(mcf, mcf.AFieldContainer.value)
 
+    def testGetInstanceByName(self):
+        node = mock.nodes.MockFieldContainer()
+        self.failIfEqual(None, node)
+        name = "MyNode"
+        node.Name.value = name
+        self.assertEqual(node, avango.get_instance_by_name(name))
+
 def Suite():
     suite = unittest.TestSuite()
 
@@ -121,6 +128,7 @@ def Suite():
         'testImplicitCreateUnknownInstance',
         'testGetValues',
         'testCompare',
+        'testGetInstanceByName',
     ]
     suite.addTests(map(FieldContainerTestCase, FieldContainerTests))
 

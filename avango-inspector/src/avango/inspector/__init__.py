@@ -32,6 +32,8 @@ class Inspector(avango.script.Script):
         output_viewport = gtk.ScrolledWindow()
         output_viewport.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
         self.output = gtk.TextBuffer()
+        self.output_command_tag = self.output.create_tag(foreground="blue")
+        self.output_error_tag = self.output.create_tag(foreground="red")
         textview = gtk.TextView(buffer=self.output)
         textview.props.editable = False
         textview.props.cursor_visible = False
@@ -78,12 +80,21 @@ class Inspector(avango.script.Script):
         stdout = sys.stdout 
         redirected_stdout = cStringIO.StringIO()
         sys.stdout = redirected_stdout
+        stderr = sys.stderr 
+        redirected_stderr = cStringIO.StringIO()
+        sys.stderr = redirected_stderr
 
         try:
             exec self.entry_field.get_text() in globals(), sandbox
-        finally:
-            sys.stdout = stdout
+        except:
+            cls, obj, traceback = sys.exc_info()
+            print >> sys.stderr, "%s: %s" % (cls.__name__, str(obj))
 
+        sys.stdout = stdout
+        sys.stderr = stderr
+
+        self.output.insert_with_tags(self.output.get_end_iter(), self.entry_field.get_text()+"\n", self.output_command_tag)
+        self.output.insert_with_tags(self.output.get_end_iter(), redirected_stderr.getvalue(), self.output_error_tag)
         self.output.insert(self.output.get_end_iter(), redirected_stdout.getvalue())
         self.entry_field.set_text("")
 

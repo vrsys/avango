@@ -9,6 +9,10 @@ import cStringIO
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
 
+class Instances(object):
+    def __getattr__(self, name):
+        return avango.get_instance_by_name(name)
+
 class Inspector(avango.script.Script):
 
     Children = avango.MFContainer()
@@ -16,7 +20,7 @@ class Inspector(avango.script.Script):
     def __init__(self):
         self.always_evaluate(True)
 
-        self.sandbox = {}
+        self.sandbox = { 'inst': Instances() }
 
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("AVANGO Inspector")

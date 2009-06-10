@@ -108,7 +108,7 @@ class Inspector(avango.script.Script):
 
         self.update_model()
 
-    def _exec(self, cmd):
+    def _exec(self, cmd, filename = "<input>", filetype = "single"):
         self.output.insert_with_tags(self.output.get_end_iter(), cmd+"\n", self.output_command_tag)
 
         stdout = sys.stdout 
@@ -119,7 +119,8 @@ class Inspector(avango.script.Script):
         sys.stderr = redirected_stderr
 
         try:
-            exec cmd in globals(), self.sandbox
+            code = compile(cmd, filename, filetype)
+            exec code in globals(), self.sandbox
         except:
             cls, obj, traceback = sys.exc_info()
             print >> sys.stderr, "%s: %s" % (cls.__name__, str(obj))
@@ -156,7 +157,7 @@ class Inspector(avango.script.Script):
 
     def _edit(self):
         cmds = _edit()
-        self._exec(cmds)
+        self._exec(cmds, filetype="exec")
 
     @avango.script.field_has_changed(Children)
     def children_changed(self):

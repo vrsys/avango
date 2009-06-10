@@ -51,6 +51,8 @@ class Inspector(avango.script.Script):
     def __init__(self):
         self.always_evaluate(True)
 
+        avango.script.register_exception_handler(self._handle_exception)
+
         self.sandbox = { 'inst': Instances(), 'edit': self._edit }
         self._sources = {}
         self._sources_prefix = "<internal_buffer>:"
@@ -136,8 +138,7 @@ class Inspector(avango.script.Script):
             code = compile(cmd, filename, filetype)
             exec code in globals(), self.sandbox
         except:
-            cls, obj, traceback = sys.exc_info()
-            print >> sys.stderr, "%s: %s" % (cls.__name__, str(obj))
+            self._dump_exception(sys.exc_info())
 
         sys.stdout = stdout
         sys.stderr = stderr
@@ -208,10 +209,20 @@ class Inspector(avango.script.Script):
             return 0
         return int(name[len(self._sources_prefix):])
 
+    def _handle_exception(self, cls, obj, traceback):
+        self._dump_exception((cls, obj, traceback))
+
+    def _dump_exception(self, exc_info):
+        cls, obj, traceback = exc_info
+        if cls is None:
+            return
+        self.output.insert_with_tags(self.output.get_end_iter(), "%s: %s\n" % (cls.__name__, str(obj)), self.output_error_tag)
+
     @avango.script.field_has_changed(Children)
     def children_changed(self):
         self.update_model()
 
     def evaluate(self):
-        gtk.main_iteration_do(block=False)
+        while gtk.events_pending():
+            gtk.main_iteration()
 

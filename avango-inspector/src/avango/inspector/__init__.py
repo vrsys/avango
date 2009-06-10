@@ -8,6 +8,7 @@ import cStringIO
 import subprocess
 import os
 import tempfile
+import inspect
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
@@ -28,6 +29,17 @@ def _edit(data = ""):
         os.unlink(buffer[1])
     return result
 
+def _remove_indent(block):
+    lines = block.splitlines(True)
+    min_indent = min([len(x)-len(x.lstrip()) for x in lines if x.lstrip()])
+    stripped_lines = []
+    for x in lines:
+        if not x.lstrip():
+            stripped_lines.append('\n')
+            continue
+        stripped_lines.append(x[min_indent:])
+    return ''.join(stripped_lines)
+
 class Instances(object):
     def __getattr__(self, name):
         return avango.get_instance_by_name(name)
@@ -40,6 +52,8 @@ class Inspector(avango.script.Script):
         self.always_evaluate(True)
 
         self.sandbox = { 'inst': Instances(), 'edit': self._edit }
+        self._sources = {}
+        self._sources_prefix = "<internal_buffer>:"
 
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("AVANGO Inspector")
@@ -155,9 +169,44 @@ class Inspector(avango.script.Script):
 
         self.view.expand_all()
 
-    def _edit(self):
-        cmds = _edit()
-        self._exec(cmds, filetype="exec")
+    def _edit(self, method = None):
+        if method:
+            if not hasattr(method, 'im_class'):
+                return
+            sources_name = inspect.getfile(method)
+            sources_key = self._get_sources_key(sources_name)
+            if sources_key:
+                source = self._sources[sources_key]
+            else:
+                source = inspect.getsource(method)
+                sources_name = self._get_sources_name()
+                sources_key = self._get_sources_key(sources_name)
+
+            source = _edit(source)
+            self.output.insert_with_tags(self.output.get_end_iter(), source+"\n", self.output_command_tag)
+
+            env = {}
+            clean_source = _remove_indent(source)
+            code = compile(clean_source, sources_name, "exec")
+            exec code in method.im_func.func_globals, env
+
+            # FIXME this ugliness is due to the way avango.script works.
+            cls = method.im_self._get_object().__class__
+            setattr(cls, method.__name__, env[method.__name__])
+
+            self._sources[sources_key] = source
+
+        else:
+            cmds = _edit()
+            self._exec(cmds, filetype="exec")
+
+    def _get_sources_name(self):
+        return self._sources_prefix+str(len(self._sources)+1)
+
+    def _get_sources_key(self, name):
+        if not name.startswith(self._sources_prefix):
+            return 0
+        return int(name[len(self._sources_prefix):])
 
     @avango.script.field_has_changed(Children)
     def children_changed(self):

@@ -107,7 +107,14 @@ namespace
 
     /*virtual*/ void evaluate(void)
     {
-      object(av::Link<Script>(this)).attr("evaluate")();
+      try
+      {
+        object(av::Link<Script>(this)).attr("evaluate")();
+      }
+      catch(...)
+      {
+        handle_exception();
+      }
     }
 
     /*virtual*/ void fieldHasChanged(const av::Field& field)
@@ -115,11 +122,25 @@ namespace
       std::map<const av::Field*,std::string>::const_iterator result = mCallbacks.find(&field);
       if (result != mCallbacks.end())
       {
-        object(av::Link<Script>(this)).attr(result->second.c_str())();
+        try
+        {
+          object(av::Link<Script>(this)).attr(result->second.c_str())();
+        }
+        catch(...)
+        {
+          handle_exception();
+        }
       }
       else if (mHasFieldHasChanged)
       {
-        object(av::Link<Script>(this)).attr(mFieldHasChangedCallback.c_str())(field.getName(), boost::ref(field));
+        try
+        {
+          object(av::Link<Script>(this)).attr(mFieldHasChangedCallback.c_str())(field.getName(), boost::ref(field));
+        }
+        catch(...)
+        {
+          handle_exception();
+        }
       }
     }
 
@@ -128,6 +149,25 @@ namespace
       return mInstance;
     }
 
+    static void register_exception_handler(object handler)
+    {
+      sHandler = handler;
+    }
+
+    static void handle_exception(void)
+    {
+      if (!sHandler)
+        throw_error_already_set();
+
+      PyObject* type;
+      PyObject* value;
+      PyObject* traceback;
+      PyErr_Fetch(&type, &value, &traceback);
+
+      sHandler(handle<>(type), handle<>(value), handle<>(traceback));
+    }
+
+
   private:
 
     av::Type mType;
@@ -135,7 +175,10 @@ namespace
     std::map< const av::Field*, std::string > mCallbacks;
     bool mHasFieldHasChanged;
     std::string mFieldHasChangedCallback;
+    static object sHandler;
   };
+
+  object Script::sHandler;
 
   class ScriptCreator : public av::Create
   {
@@ -174,6 +217,7 @@ namespace
 void av::script::register_script(void)
 {
   def("_create_type", create_type);
+  def("register_exception_handler", &Script::register_exception_handler);
 
   class_<Script, av::Link<Script>, bases<av::Object>, boost::noncopyable>
     ("_Script", "Internal base class for Script nodes", no_init)

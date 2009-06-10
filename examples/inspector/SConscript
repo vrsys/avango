@@ -29,6 +29,7 @@ Import('examples_dir')
 
 files = Split('''
               inspector.py
+              gvim-foreground.sh
               ''')
 
 Alias('install-examples', Install(examples_dir.abspath + '/inspector', files))

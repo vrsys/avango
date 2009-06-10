@@ -5,9 +5,28 @@ pygtk.require('2.0')
 import gtk
 import sys
 import cStringIO
+import subprocess
+import os
+import tempfile
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
+
+def _edit(data = ""):
+    result = data
+    editor = os.environ.get('AVANGO_EDITOR', '')
+    if not editor:
+        return result
+    try:
+        buffer = tempfile.mkstemp(suffix = '.py')
+        os.write(buffer[0], data)
+        os.close(buffer[0])
+        subprocess.call([editor, buffer[1]])
+        file = open(buffer[1])
+        result = file.read()
+    finally:
+        os.unlink(buffer[1])
+    return result
 
 class Instances(object):
     def __getattr__(self, name):
@@ -20,7 +39,7 @@ class Inspector(avango.script.Script):
     def __init__(self):
         self.always_evaluate(True)
 
-        self.sandbox = { 'inst': Instances() }
+        self.sandbox = { 'inst': Instances(), 'edit': self._edit }
 
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_title("AVANGO Inspector")
@@ -84,6 +103,14 @@ class Inspector(avango.script.Script):
         self.sandbox['nodes'] = self.Children.value
         self.sandbox['field'] = field
 
+        self._exec(self.entry_field.get_text())
+        self.entry_field.set_text("")
+
+        self.update_model()
+
+    def _exec(self, cmd):
+        self.output.insert_with_tags(self.output.get_end_iter(), cmd+"\n", self.output_command_tag)
+
         stdout = sys.stdout 
         redirected_stdout = cStringIO.StringIO()
         sys.stdout = redirected_stdout
@@ -92,7 +119,7 @@ class Inspector(avango.script.Script):
         sys.stderr = redirected_stderr
 
         try:
-            exec self.entry_field.get_text() in globals(), self.sandbox
+            exec cmd in globals(), self.sandbox
         except:
             cls, obj, traceback = sys.exc_info()
             print >> sys.stderr, "%s: %s" % (cls.__name__, str(obj))
@@ -100,12 +127,8 @@ class Inspector(avango.script.Script):
         sys.stdout = stdout
         sys.stderr = stderr
 
-        self.output.insert_with_tags(self.output.get_end_iter(), self.entry_field.get_text()+"\n", self.output_command_tag)
         self.output.insert_with_tags(self.output.get_end_iter(), redirected_stderr.getvalue(), self.output_error_tag)
         self.output.insert(self.output.get_end_iter(), redirected_stdout.getvalue())
-        self.entry_field.set_text("")
-
-        self.update_model()
 
     def handle_output_scroll(self, widget, data=None):
         widget.set_value(widget.upper)
@@ -130,6 +153,10 @@ class Inspector(avango.script.Script):
             recurse_fields(node, parent)
 
         self.view.expand_all()
+
+    def _edit(self):
+        cmds = _edit()
+        self._exec(cmds)
 
 
     @avango.script.field_has_changed(Children)

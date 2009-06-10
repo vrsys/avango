@@ -63,12 +63,12 @@ class Inspector(avango.script.Script):
         textview.props.editable = False
         textview.props.cursor_visible = False
         output_viewport.add(textview)
-        output_viewport.props.vadjustment.connect("changed", self.handle_output_scroll, None)
+        output_viewport.props.vadjustment.connect("changed", self._handle_output_scroll, None)
         paned.pack2(output_viewport)
 
         vbox.pack_start(paned)
         self.entry_field = gtk.Entry()
-        self.entry_field.connect("activate", self.handle_commandline, None)
+        self.entry_field.connect("activate", self._handle_commandline, None)
         vbox.pack_start(self.entry_field, expand=False)
         self.window.show_all()
 
@@ -94,7 +94,7 @@ class Inspector(avango.script.Script):
         self.update_model()
         return self.view
 
-    def handle_commandline(self, widget, data=None):
+    def _handle_commandline(self, widget, data=None):
         field = None
         selection = self.view.get_selection()
         model, iter = selection.get_selected()
@@ -130,7 +130,7 @@ class Inspector(avango.script.Script):
         self.output.insert_with_tags(self.output.get_end_iter(), redirected_stderr.getvalue(), self.output_error_tag)
         self.output.insert(self.output.get_end_iter(), redirected_stdout.getvalue())
 
-    def handle_output_scroll(self, widget, data=None):
+    def _handle_output_scroll(self, widget, data=None):
         widget.set_value(widget.upper)
 
     def update_model(self):
@@ -157,7 +157,6 @@ class Inspector(avango.script.Script):
     def _edit(self):
         cmds = _edit()
         self._exec(cmds)
-
 
     @avango.script.field_has_changed(Children)
     def children_changed(self):

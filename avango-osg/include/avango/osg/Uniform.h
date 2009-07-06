@@ -71,7 +71,6 @@ namespace av
       SFInt Type;
       SFString UniformName;
       MFFloat Values;
-      SFObject GummiObject;
 
       /**
        * Get the wrapped ::osg::Uniform.
@@ -88,8 +87,6 @@ namespace av
       virtual void setValuesCB(const av::MFFloat::SetValueEvent& event);
       virtual void getUniformNameCB(const av::SFString::GetValueEvent& event);
       virtual void setUniformNameCB(const av::SFString::SetValueEvent& event);
-      virtual void getGummiObjectCB(const av::osg::SFObject::GetValueEvent& event);
-      virtual void setGummiObjectCB(const av::osg::SFObject::SetValueEvent& event);
 
     private:
 

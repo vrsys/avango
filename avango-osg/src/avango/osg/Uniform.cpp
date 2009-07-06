@@ -68,9 +68,6 @@ av::osg::Uniform::Uniform(::osg::Uniform* osguniform) :
   AV_FC_ADD_ADAPTOR_FIELD(UniformName,
                             boost::bind(&Uniform::getUniformNameCB, this, _1),
                             boost::bind(&Uniform::setUniformNameCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(GummiObject,
-                            boost::bind(&Uniform::getGummiObjectCB, this, _1),
-                            boost::bind(&Uniform::setGummiObjectCB, this, _1));
 }
 
 av::osg::Uniform::~Uniform()
@@ -169,20 +166,5 @@ av::osg::Uniform::touchFields()
   Values.touch();
 }
 
-
-
-/* virtual */ void
-av::osg::Uniform::getGummiObjectCB(const av::osg::SFObject::GetValueEvent& event)
-{
-  //*(event.getValuePtr()) = mOsgUniform->getType();
-  ::osg::notify(::osg::INFO)<<"av::osg::Uniform::getGummiObjectCB"<<std::endl;
-}
-
-/* virtual */ void
-av::osg::Uniform::setGummiObjectCB(const av::osg::SFObject::SetValueEvent& event)
-{
-  //mOsgUniform->setType(static_cast< ::osg::Uniform::Type>(event.getValue()));
-  ::osg::notify(::osg::INFO)<<"av::osg::Uniform::setGummiObjectCB" << std::endl;
-}
 
 

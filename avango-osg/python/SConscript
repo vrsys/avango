@@ -60,6 +60,8 @@ osg_files = Split("""
     avango/osg/OSGShader.cpp
     avango/osg/OSGUniform.cpp
     avango/osg/OSGProgram.cpp
+    avango/osg/OSGLight.cpp
+    avango/osg/OSGLightSource.cpp
     avango/osg/OSGGroup.cpp
     avango/osg/OSGPolygonOffset.cpp
     avango/osg/OSGQuad.cpp

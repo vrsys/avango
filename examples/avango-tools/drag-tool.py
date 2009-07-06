@@ -73,8 +73,10 @@ trackball.CenterTransform.value = \
   avango.osg.make_scale_mat(0.1, 0.1, 0.1) * \
   avango.osg.make_trans_mat(0, 0, -0.6)
 
-camera.ViewerTransform.connect_from(trackball.Matrix)
+dm = DumpMatrix()
+dm.Matrix.connect_from(trackball.Matrix)
 
+camera.ViewerTransform.connect_from(trackball.Matrix)
 
 # setup tool interaction
 

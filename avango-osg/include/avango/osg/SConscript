@@ -34,6 +34,8 @@ headers = Split('''
     Shader.h
     Program.h
     Uniform.h
+    Light.h
+    LightSource.h
     Geode.h
     Geometry.h
     Group.h

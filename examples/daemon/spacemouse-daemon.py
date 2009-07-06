@@ -40,7 +40,7 @@ station = avango.daemon.Station('spacemousestation')
 # configure a mouse device
 spacemouse = avango.daemon.HIDInput()
 spacemouse.station = station
-spacemouse.device = '/dev/input/event6'
+spacemouse.device = '/dev/input/event3'
 
 # map incoming Spacemouse events to station values
 spacemouse.values[0] = "EV_ABS::ABS_X"   # trans X

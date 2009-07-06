@@ -56,6 +56,8 @@
 #include "OSGProgram.h"
 #include "OSGUniform.h"
 #include "OSGShader.h"
+#include "OSGLight.h"
+#include "OSGLightSource.h"
 #include "OSGGroup.h"
 #include "OSGPolygonOffset.h"
 #include "OSGQuad.h"
@@ -135,6 +137,8 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGShader();
   init_OSGProgram();
   init_OSGUniform();
+  init_OSGLight();
+  init_OSGLightSource();
   init_OSGGroup();
   init_OSGPolygonOffset();
   init_OSGQuad();

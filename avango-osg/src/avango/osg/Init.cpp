@@ -35,6 +35,8 @@
 #include <avango/osg/Shader.h>
 #include <avango/osg/Uniform.h>
 #include <avango/osg/Program.h>
+#include <avango/osg/Light.h>
+#include <avango/osg/LightSource.h>
 #include <avango/osg/Geode.h>
 #include <avango/osg/Geometry.h>
 #include <avango/osg/Group.h>
@@ -84,6 +86,8 @@ av::osg::Init::initClass()
     av::osg::Shader::initClass();
     av::osg::Program::initClass();
     av::osg::Uniform::initClass();
+    av::osg::Light::initClass();
+    av::osg::LightSource::initClass();
     av::osg::Geode::initClass();
     av::osg::Geometry::initClass();
     av::osg::Group::initClass();

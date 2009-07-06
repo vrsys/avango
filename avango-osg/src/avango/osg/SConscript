@@ -39,6 +39,8 @@ sources = Split('''
     Uniform.cpp
     Shader.cpp
     Program.cpp
+    Light.cpp
+    LightSource.cpp
     Geode.cpp
     Geometry.cpp
     Group.cpp

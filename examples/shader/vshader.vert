@@ -1,18 +1,14 @@
 
+/* A basic phong shader*/          
 
 
-
-varying vec3 position_es;
-varying vec3 normal_es;
-
-
-
-void main()
+varying vec3 Position;
+varying vec3 Normal;
+   
+void main( void )
 {
-  gl_Position = ftransform();
+   gl_Position    = ftransform();
 
-
-  position_es = (gl_ModelViewMatrix * gl_Vertex).xyz;
-  normal_es = gl_NormalMatrix * gl_Normal;
-
+   Position       = (gl_ModelViewMatrix * gl_Vertex).xyz;
+   Normal         = gl_NormalMatrix * gl_Normal;
 }

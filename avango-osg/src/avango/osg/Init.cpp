@@ -32,6 +32,9 @@
 #include <avango/osg/Drawable.h>
 #include <avango/osg/Fields.h>
 #include <avango/osg/Fog.h>
+#include <avango/osg/Shader.h>
+#include <avango/osg/Uniform.h>
+#include <avango/osg/Program.h>
 #include <avango/osg/Geode.h>
 #include <avango/osg/Geometry.h>
 #include <avango/osg/Group.h>
@@ -78,6 +81,9 @@ av::osg::Init::initClass()
     av::osg::CullFace::initClass();
     av::osg::Drawable::initClass();
     av::osg::Fog::initClass();
+    av::osg::Shader::initClass();
+    av::osg::Program::initClass();
+    av::osg::Uniform::initClass();
     av::osg::Geode::initClass();
     av::osg::Geometry::initClass();
     av::osg::Group::initClass();

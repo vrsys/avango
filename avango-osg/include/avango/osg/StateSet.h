@@ -35,6 +35,8 @@
 
 #include <avango/osg/Object.h>
 #include <avango/osg/Fog.h>
+#include <avango/osg/Program.h>
+#include <avango/osg/Uniform.h>
 #include <avango/osg/PolygonOffset.h>
 #include <avango/osg/CullFace.h>
 #include <avango/osg/Texture.h>
@@ -77,6 +79,8 @@ namespace av
       SFInt DepthTestMode;
 
       SFTexture Texture0;
+      SFProgram Program;
+      MFUniform Uniforms;
 
       /**
        * Destructor made protected to prevent allocation on stack.
@@ -121,6 +125,12 @@ namespace av
       virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
       virtual void getDepthTestModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setDepthTestModeCB(const av::SFInt::SetValueEvent& event);
+
+      virtual void getProgramCB(const av::osg::SFProgram::GetValueEvent& event);
+      virtual void setProgramCB(const av::osg::SFProgram::SetValueEvent& event);
+
+      virtual void getUniformsCB(const av::osg::MFUniform::GetValueEvent& event);
+      virtual void setUniformsCB(const av::osg::MFUniform::SetValueEvent& event);
 
     private:
 

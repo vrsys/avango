@@ -100,6 +100,12 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
   AV_FC_ADD_ADAPTOR_FIELD(DepthTestMode,
                             boost::bind(&StateSet::getDepthTestModeCB, this, _1),
                             boost::bind(&StateSet::setDepthTestModeCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Program,
+                            boost::bind(&StateSet::getProgramCB, this, _1),
+                            boost::bind(&StateSet::setProgramCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Uniforms,
+                            boost::bind(&StateSet::getUniformsCB, this, _1),
+                            boost::bind(&StateSet::setUniformsCB, this, _1));
 }
 
 av::osg::StateSet::~StateSet()
@@ -348,3 +354,45 @@ av::osg::StateSet::setDepthTestModeCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgStateSet->setMode(GL_DEPTH_TEST, event.getValue());
 }
+
+/* virtual */ void
+av::osg::StateSet::getProgramCB(const av::osg::SFProgram::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Program>(mOsgStateSet->getAttribute(::osg::StateAttribute::PROGRAM));
+}
+
+/* virtual */ void
+av::osg::StateSet::setProgramCB(const av::osg::SFProgram::SetValueEvent& event)
+{
+  ::osg::Program *osg_program = (event.getValue().isValid() ? event.getValue()->getOsgProgram() : 0);
+  if (osg_program != 0)
+    //mOsgStateSet->setAttribute(osg_program);
+    mOsgStateSet->setAttributeAndModes(osg_program,::osg::StateAttribute::ON);
+  else
+    mOsgStateSet->removeAttribute(::osg::StateAttribute::PROGRAM);
+}
+
+/* virtual */ void
+av::osg::StateSet::getUniformsCB(const av::osg::MFUniform::GetValueEvent& event)
+{
+
+  av::osg::MFUniform::ContainerType& container(*event.getValuePtr());
+  container.clear();
+  typedef ::osg::StateSet::UniformList::iterator itType;
+  ::osg::StateSet::UniformList& m = mOsgStateSet->getUniformList();
+  for (itType i = m.begin(); i!=m.end();++i)
+  {
+    container.push_back(av::osg::get_from_osg_object<av::osg::Uniform>(mOsgStateSet->getUniform(i->first)));
+  }
+}
+
+/* virtual */ void
+av::osg::StateSet::setUniformsCB(const av::osg::MFUniform::SetValueEvent& event)
+{
+  const av::osg::MFUniform::ContainerType& container(event.getValue());
+  for (av::osg::MFUniform::ContainerType::const_iterator i = container.begin(); i != container.end(); ++i)
+  {
+    mOsgStateSet->addUniform((*i)->getOsgUniform());
+  }
+}
+

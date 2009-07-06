@@ -31,6 +31,9 @@ headers = Split('''
     Drawable.h
     Fields.h
     Fog.h
+    Shader.h
+    Program.h
+    Uniform.h
     Geode.h
     Geometry.h
     Group.h

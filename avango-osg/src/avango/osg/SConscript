@@ -36,6 +36,9 @@ sources = Split('''
     Drawable.cpp
     Fields.cpp
     Fog.cpp
+    Uniform.cpp
+    Shader.cpp
+    Program.cpp
     Geode.cpp
     Geometry.cpp
     Group.cpp

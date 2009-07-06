@@ -53,6 +53,9 @@
 #include "OSGPlane.h"
 #include "OSGTexturedQuad.h"
 #include "OSGFog.h"
+#include "OSGProgram.h"
+#include "OSGUniform.h"
+#include "OSGShader.h"
 #include "OSGGroup.h"
 #include "OSGPolygonOffset.h"
 #include "OSGQuad.h"
@@ -129,6 +132,9 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGPanel();
   init_OSGTexturedQuad();
   init_OSGFog();
+  init_OSGShader();
+  init_OSGProgram();
+  init_OSGUniform();
   init_OSGGroup();
   init_OSGPolygonOffset();
   init_OSGQuad();

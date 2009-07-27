@@ -374,15 +374,11 @@ av::Field::disconnect()
   // prevent deletion if container is only referenced via field connections
   Link<FieldContainer> container_ref(getContainer());
 
-  std::vector<Field*> disconnected_fields;
-  disconnected_fields.reserve(mConnectedFrom.size());
-
   for (InputFieldsList::iterator list_iter = mConnectedFrom.begin();
        list_iter != mConnectedFrom.end();
        ++list_iter)
   {
     list_iter->first->removeAuditor(this);
-    disconnected_fields.push_back(list_iter->first);
   }
 
   mConnectedFrom.clear();
@@ -513,9 +509,12 @@ av::Field::clear()
 av::Field::~Field()
 {
   disconnectAuditors();
-
-  AV_ASSERT(mConnectedFrom.size() == 0);
   AV_ASSERT(mAuditors.size() == 0);
+
+  //disconnectAllFields is not needed, since this field is referenced by the auditor field. In case this
+  //assertion should be triggered, a fault in the avango field mechanism exists
+  AV_ASSERT(mConnectedFrom.size() == 0);
+
 }
 
 void

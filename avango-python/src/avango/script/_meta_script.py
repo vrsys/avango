@@ -120,21 +120,28 @@ class Script(object):
     def init_super(self, class_):
         class_.__init__.im_func(self)
 
-    def super(self):
+    def super(self, cls = None):
         class SuperWrapper(object):
-            def __init__(self, script):
-                self.script = script
-            def __getattr__(self, name):
-                script_class = self.script._get_object().__class__
+            script = None
+            def __getattribute__(self, name):
+                script = object.__getattribute__(self, 'script')
+                if not script:
+                    raise AttributeError, 'Super class not initialized'
+                if cls:
+                    script_class = cls
+                else:
+                    script_class = script._get_object().__class__
                 for class_ in script_class.__mro__:
                     if class_ == script_class:
                         continue
                     if name not in class_.__dict__:
                         continue
                     attribute = class_.__dict__[name]
-                    return type(attribute).__get__(attribute, self.script, _script._Script)
+                    return type(attribute).__get__(attribute, script, _script._Script)
                 raise AttributeError, 'No attribute '+name+' in super class'
-        return SuperWrapper(self)
+        result = SuperWrapper()
+        result.script = self
+        return result
 
 
 def Script_getattr(self, name):

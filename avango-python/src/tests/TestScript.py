@@ -137,12 +137,19 @@ class DerivedLocalWithInit(Local):
 
 class DerivedUpcallingIncValue(IncValue):
     def __init__(self):
-        self.init_super(IncValue)
+        self.super(DerivedUpcallingIncValue).__init__()
         self.value = 0
 
     def evaluate(self):
-        self.super().evaluate()
+        self.super(DerivedUpcallingIncValue).evaluate()
         self.value = 1
+
+class DoubleDerivedUpcallingIncValue(DerivedUpcallingIncValue):
+    def __init__(self):
+        self.super(DoubleDerivedUpcallingIncValue).__init__()
+
+    def evaluate(self):
+        self.super(DoubleDerivedUpcallingIncValue).evaluate()
 
 
 class ScriptTestCase(unittest.TestCase):
@@ -373,6 +380,13 @@ class ScriptTestCase(unittest.TestCase):
         self.assertEqual(node.field.value, 1)
         self.assertEqual(1, node.value)
 
+    def testDoubleDerivedUpcalling(self):
+        node = DoubleDerivedUpcallingIncValue()
+        node.field.value = 0
+        avango.evaluate()
+        self.assertEqual(node.field.value, 1)
+        self.assertEqual(1, node.value)
+
     def testSetAttributeWithNameOfField(self):
         node = HasFields(field = 5)
         def assign():
@@ -417,6 +431,7 @@ def Suite():
         'testGenericFieldHadChanged',
         'testInitCascade',
         'testDerivedUpcalling',
+        'testDoubleDerivedUpcalling',
         'testSetAttributeWithNameOfField',
     ]
     suite.addTests(map(ScriptTestCase, ScriptTests))

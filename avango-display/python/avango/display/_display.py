@@ -148,9 +148,7 @@ class _Display(object):
         return self._display_type
 
     def get_num_users(self, subdisplay):
-        if self._display_type == "TwoView":
-            return 2
-        return 1
+        return len(self._users)
 
     def make_user(self, user, interface, subdisplay):
         if user > len(self._users):
@@ -179,12 +177,25 @@ class _Display(object):
     def make_view(self, subdisplay):
         display_view = avango.display.nodes.View()
 
-        singlescreen_displays = ["TwoView", "FakeTwoView", "Monitor", "TwoviewTouchscreenEmulator", "TouchscreenEmulator"]
-
         if subdisplay == "":
-            if self._display_type in singlescreen_displays:
-                for current_user in xrange(0, len(self._users)):
+            if self._display_type == "iCone":
+                for i in range(0, len(self._windows)):
+                    camera = avango.osg.viewer.nodes.Camera()
+                    camera.EyeOffset.value = 0.03
+                    camera.Viewport.connect_from(display_view.Viewport)
+                    camera.ViewerTransform.connect_from(display_view.Camera)
+                    camera.ScreenTransform.value = self._screen_transforms[i]
+                    camera.Window.value = self._windows[i]
+                    camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
 
+                    osg_view = avango.osg.viewer.nodes.View()
+                    osg_view.Scene.connect_from(display_view.Root)
+                    osg_view.MasterCamera.value = camera
+
+                    index = self._merge_viewer.add_input()
+                    self._merge_viewer.get_input(index).value = osg_view
+            else:
+                for current_user in xrange(0, len(self._users)):
                     screen_transform = self._screen_transforms[0]
                     screen_size = self._screen_sizes[0]
 
@@ -216,81 +227,6 @@ class _Display(object):
 
                     index = self._merge_viewer.add_input()
                     self._merge_viewer.get_input(index).connect_from(user_selector.ViewOut)
-
-            elif self._display_type == "Wall":
-                camera = avango.osg.viewer.nodes.Camera()
-                camera.EyeOffset.value = -0.03  # TODO for broken stereo setup
-                camera.ViewerTransform.connect_from(display_view.Camera)
-                camera.Near.connect_from(display_view.Near)
-                camera.Far.connect_from(display_view.Far)
-                camera.BackgroundColor.connect_from(display_view.BackgroundColor)
-                camera.Window.value = self._windows[0]
-                camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
-
-                splitscreen_handling = ViewportConverter()
-                splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
-                splitscreen_handling.RealActualWidth.connect_from(self._windows[0].RealActualWidth)
-                splitscreen_handling.RealActualHeight.connect_from(self._windows[0].RealActualHeight)
-                splitscreen_handling.ScreenTransformIn.value = self._screen_transform[0]
-                camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
-                camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
-
-                osg_view = avango.osg.viewer.nodes.View()
-                osg_view.Scene.connect_from(display_view.Root)
-                osg_view.MasterCamera.value = camera
-
-                user_selector = ViewUserSelector(UserMatch=0)
-                user_selector.ViewIn.value = osg_view
-                user_selector.UserSelector.connect_from(display_view.UserSelector)
-
-                index = self._merge_viewer.add_input()
-                self._merge_viewer.get_input(index).connect_from(user_selector.ViewOut)
-
-            elif self._display_type == "AutoStereoDisplay":
-                camera = avango.osg.viewer.nodes.Camera()
-                camera.EyeOffset.value = +0.03
-                camera.ViewerTransform.connect_from(display_view.Camera)
-                camera.Near.connect_from(display_view.Near)
-                camera.Far.connect_from(display_view.Far)
-                camera.BackgroundColor.connect_from(display_view.BackgroundColor)
-                camera.Window.value = self._windows[0]
-                camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
-
-                splitscreen_handling = ViewportConverter()
-                splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
-                splitscreen_handling.RealActualWidth.connect_from(self._windows[0].RealActualWidth)
-                splitscreen_handling.RealActualHeight.connect_from(self._windows[0].RealActualHeight)
-                splitscreen_handling.ScreenTransformIn.value = self._screen_transform[0]
-                camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
-                camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
-
-                osg_view = avango.osg.viewer.nodes.View()
-                osg_view.Scene.connect_from(display_view.Root)
-                osg_view.MasterCamera.value = camera
-
-                user_selector = ViewUserSelector(UserMatch=0)
-                user_selector.ViewIn.value = osg_view
-                user_selector.UserSelector.connect_from(display_view.UserSelector)
-
-                index = self._merge_viewer.add_input()
-                self._merge_viewer.get_input(index).connect_from(user_selector.ViewOut)
-
-            elif self._display_type == "iCone":
-                for i in range(0, len(self._windows)):
-                    camera = avango.osg.viewer.nodes.Camera()
-                    camera.EyeOffset.value = 0.03
-                    camera.Viewport.connect_from(display_view.Viewport)
-                    camera.ViewerTransform.connect_from(display_view.Camera)
-                    camera.ScreenTransform.value = self._screen_transforms[i]
-                    camera.Window.value = self._windows[i]
-                    camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
-
-                    osg_view = avango.osg.viewer.nodes.View()
-                    osg_view.Scene.connect_from(display_view.Root)
-                    osg_view.MasterCamera.value = camera
-
-                    index = self._merge_viewer.add_input()
-                    self._merge_viewer.get_input(index).value = osg_view
 
         elif subdisplay == "Touchscreen" and (self._display_type == "TouchscreenEmulator" or self._display_type == "TwoviewTouchscreenEmulator"):
             camera = avango.osg.viewer.nodes.Camera()

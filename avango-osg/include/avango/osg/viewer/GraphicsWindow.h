@@ -124,6 +124,12 @@ namespace av
         SFUInt ActualHeight;
 
         /**
+         * Outputs real world window size
+         */
+        SFDouble RealActualWidth;
+        SFDouble RealActualHeight;
+
+        /**
          * Outputs actual screen resolution (0, if screen is invalid).
          */
         SFUInt ScreenWidth;

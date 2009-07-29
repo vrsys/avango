@@ -69,6 +69,8 @@ av::osg::viewer::GraphicsWindow::GraphicsWindow() :
   AV_FC_ADD_FIELD(ActualPositionY, -1);
   AV_FC_ADD_FIELD(ActualWidth, 0u);
   AV_FC_ADD_FIELD(ActualHeight, 0u);
+  AV_FC_ADD_FIELD(RealActualWidth, 0.);
+  AV_FC_ADD_FIELD(RealActualHeight, 0.);
 
   AV_FC_ADD_FIELD(ScreenWidth, 0u);
   AV_FC_ADD_FIELD(ScreenHeight, 0u);
@@ -358,15 +360,28 @@ av::osg::viewer::GraphicsWindow::evaluate()
       ActualWidth.getValue() != static_cast<unsigned int>(width) ||
       ActualHeight.getValue() != static_cast<unsigned int>(height))
   {
+    bool recalculate_real_size(false);
     if (ActualPositionX.getValue() != posX)
       ActualPositionX.setValue(posX);
     if (ActualPositionY.getValue() != posY)
       ActualPositionY.setValue(posY);
     if (ActualWidth.getValue() != static_cast<unsigned int>(width))
+    {
       ActualWidth.setValue(static_cast<unsigned int>(width));
+      recalculate_real_size = true;
+    }
     if (ActualHeight.getValue() != static_cast<unsigned int>(height))
+    {
       ActualHeight.setValue(static_cast<unsigned int>(height));
+      recalculate_real_size = true;
+    }
     mSizeChangedSignal();
+    if (recalculate_real_size)
+    {
+      ::osg::Vec2 size(getRealWindowSize());
+      RealActualWidth.setValue(size[0]);
+      RealActualHeight.setValue(size[1]);
+    }
   }
 }
 

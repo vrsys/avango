@@ -1,4 +1,4 @@
-import display
+from avango import display
 import avango
 import avango.osg
 import sys

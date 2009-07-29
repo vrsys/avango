@@ -8,7 +8,7 @@ class View(avango.script.Script):
     Camera = avango.osg.SFMatrix()
     Viewport = avango.osg.SFVec4()
     Depth = avango.SFFloat()
-    UserSelector = avango.SFString()
+    UserSelector = avango.SFInt()
     Near = avango.SFFloat()
     Far = avango.SFFloat()
     BackgroundColor = avango.osg.SFVec4()
@@ -19,6 +19,7 @@ class View(avango.script.Script):
         self.Near.value = 0.1
         self.Far.value = 500.
         self.BackgroundColor.value = avango.osg.Vec4(0., 0., 0., 1.)
+        self.UserSelector.value = 0
 
     def evaluate(self):
         pass

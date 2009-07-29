@@ -1,16 +1,22 @@
-import display
+from avango import display
 import avango
 import sys
 
 argv = display.init(sys.argv)
-view1 = display.make_view()
-scene1 = avango.osg.nodes.Sphere(Radius=0.3, Matrix=avango.osg.make_trans_mat(0, 1.2, -3))
-view1.Root.value = scene1
-view1.Viewport.value = avango.osg.Vec4(0, 0, 0.48, 1)
 
-view2 = display.make_view()
-scene2 = avango.osg.nodes.Sphere(Radius=0.3, Matrix=avango.osg.make_trans_mat(0, 1.2, -3), Color=avango.osg.Vec4(1, 0, 0, 0))
-view2.Root.value = scene2
-view2.Viewport.value = avango.osg.Vec4(0.48, 0, 0.52, 1)
+xsplit = 0.5
+ysplit = 0.5
+
+def setup_view(viewport, color, background):
+    view = display.make_view()
+    scene = avango.osg.nodes.Sphere(Radius=0.3, Matrix=avango.osg.make_trans_mat(0, 1.2, -3), Color=color)
+    view.Root.value = scene
+    view.Viewport.value = viewport
+    view.BackgroundColor.value = background
+
+setup_view(avango.osg.Vec4(0., 0., xsplit, ysplit), avango.osg.Vec4(1, 0, 0, 0), avango.osg.Vec4(0.2, 0.2, 0.2, 1.))
+setup_view(avango.osg.Vec4(xsplit, ysplit, 1., 1.), avango.osg.Vec4(0, 1, 0, 0), avango.osg.Vec4(0.4, 0.4, 0.4, 1.))
+setup_view(avango.osg.Vec4(xsplit, 0., 1, ysplit), avango.osg.Vec4(0, 0, 1, 0), avango.osg.Vec4(0.6, 0.6, 0.6, 1.))
+setup_view(avango.osg.Vec4(0., ysplit, xsplit, 1.), avango.osg.Vec4(0, 1, 1, 0), avango.osg.Vec4(0.8, 0.8, 0.8, 1.))
 
 display.run()

@@ -9,7 +9,7 @@ ysplit = 0.5
 
 def setup_view(viewport, color, background):
     view = display.make_view()
-    scene = avango.osg.nodes.Sphere(Radius=0.3, Matrix=avango.osg.make_trans_mat(0, 1.2, -3), Color=color)
+    scene = avango.osg.nodes.Sphere(Radius=0.1, Matrix=avango.osg.make_trans_mat(0, 1.7, -3), Color=color)
     view.Root.value = scene
     view.Viewport.value = viewport
     view.BackgroundColor.value = background

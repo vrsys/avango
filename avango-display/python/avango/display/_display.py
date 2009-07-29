@@ -135,10 +135,12 @@ class _Display(object):
 
         else:
             # Viewer 1
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
+            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.7, -0.6))
             self._display_type = "Monitor"
-            self._windows.append(self._make_window(0, 0, 1280, 1024, 6, 2.4, False))
-            self._windows[0].Name.value = ""
+            window = self._make_window(0, 0, 1024, 768, 0.4, 0.3, False)
+            window.Decoration.value = True
+            window.AutoHeight.value = True
+            self._windows.append(window)
 
         return argv
 
@@ -187,7 +189,8 @@ class _Display(object):
                     screen_size = self._screen_sizes[0]
 
                     camera = avango.osg.viewer.nodes.Camera()
-                    camera.EyeOffset.value = 0.03
+                    if self._windows[current_user].QuadBufferStereo.value:
+                        camera.EyeOffset.value = 0.03
                     camera.ViewerTransform.connect_from(display_view.Camera)
                     camera.Near.connect_from(display_view.Near)
                     camera.Far.connect_from(display_view.Far)

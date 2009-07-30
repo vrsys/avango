@@ -259,7 +259,7 @@ class _Display(object):
             self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
             self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
 
-        if len(self._inspector.Children.value) == 0:
+        if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node
             converter = SFNode2MFContainerConverter()
             converter.Input.connect_from(display_view.Root)

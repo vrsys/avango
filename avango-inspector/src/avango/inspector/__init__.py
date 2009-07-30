@@ -62,13 +62,26 @@ class Inspector(avango.script.Script):
         self.window.set_size_request(400, 400)
         vbox = gtk.VBox()
         self.window.add(vbox)
-        scrolled_window = gtk.ScrolledWindow()
-        scrolled_window.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        scrolled_window.add(self._create_treeview())
+
+        scrolled_instances = gtk.ScrolledWindow()
+        scrolled_instances.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+        scrolled_instances.add(self._create_treeview())
+        self.view.connect("cursor-changed", self._handle_instance_select, None)
+
+        scrolled_fields = gtk.ScrolledWindow()
+        scrolled_fields.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+        scrolled_fields.add(self._create_fields_view())
+
+        viewers = gtk.HPaned()
+        viewers.props.position = 200
+        viewers.pack1(scrolled_instances)
+        viewers.pack2(scrolled_fields)
+
+        self.update_model()
 
         paned = gtk.VPaned()
         paned.props.position = 300
-        paned.pack1(scrolled_window)
+        paned.pack1(viewers)
 
         output_viewport = gtk.ScrolledWindow()
         output_viewport.set_policy(gtk.POLICY_NEVER, gtk.POLICY_ALWAYS)
@@ -88,6 +101,27 @@ class Inspector(avango.script.Script):
         vbox.pack_start(self.entry_field, expand=False)
         self.window.show_all()
 
+    def _create_fields_view(self):
+        self.field_model = gtk.ListStore(str, str, object)
+        
+        self.field_view = gtk.TreeView(self.field_model)
+        name_column = gtk.TreeViewColumn('Field')
+        value_column = gtk.TreeViewColumn('Value')
+        
+        self.field_view.append_column(name_column)
+        self.field_view.append_column(value_column)
+        
+        name_cell = gtk.CellRendererText()
+        value_cell = gtk.CellRendererText()
+        
+        name_column.pack_start(name_cell, True)
+        value_column.pack_start(value_cell, True)
+        
+        name_column.add_attribute(name_cell, 'text', 0)
+        value_column.add_attribute(value_cell, 'text', 1)
+
+        return self.field_view
+
     def _create_treeview(self):
         self.model = gtk.TreeStore(str, str, object)
         
@@ -106,18 +140,12 @@ class Inspector(avango.script.Script):
         
         name_column.add_attribute(name_cell, 'text', 0)
         value_column.add_attribute(value_cell, 'text', 1)
-
-        self.update_model()
         return self.view
 
     def _handle_commandline(self, widget, data=None):
-        field = None
-        selection = self.view.get_selection()
-        model, iter = selection.get_selected()
-        if model and iter:
-            field = model.get(iter, 2)[0]
         self.sandbox['nodes'] = self.Children.value
-        self.sandbox['field'] = field
+        self.sandbox['field'] = self.get_selected_field()
+        self.sandbox['node'] = self.get_selected_instance()
 
         self._exec(self.entry_field.get_text())
         self.entry_field.set_text("")
@@ -127,10 +155,10 @@ class Inspector(avango.script.Script):
     def _exec(self, cmd, filename = "<input>", filetype = "single"):
         self.output.insert_with_tags(self.output.get_end_iter(), cmd+"\n", self.output_command_tag)
 
-        stdout = sys.stdout 
+        stdout = sys.stdout
         redirected_stdout = cStringIO.StringIO()
         sys.stdout = redirected_stdout
-        stderr = sys.stderr 
+        stderr = sys.stderr
         redirected_stderr = cStringIO.StringIO()
         sys.stderr = redirected_stderr
 
@@ -149,26 +177,79 @@ class Inspector(avango.script.Script):
     def _handle_output_scroll(self, widget, data=None):
         widget.set_value(widget.upper)
 
+    def _handle_instance_select(self, widget, data=None):
+        self.update_field_model()
+
+    def get_selected_instance(self):
+        instance = None
+        selection = self.view.get_selection()
+        model, iter = selection.get_selected()
+        if model and iter:
+            instance = model.get(iter, 2)[0]
+        return instance
+
+    def get_selected_field(self, column = 2):
+        field = None
+        selection = self.field_view.get_selection()
+        model, iter = selection.get_selected()
+        if model and iter:
+            field = model.get(iter, column)[0]
+        return field
+
     def update_model(self):
-        def recurse_fields(node, parent):
+        def recurse_fields(node, parent, selected):
+            result = None
+            if selected == node:
+                result = parent
             for i in xrange(node._get_num_fields()):
                 name = node._get_field_name(i)
                 field = node._get_field(i)
                 value = field.value
                 if name != "Children":
-                    self.model.append(parent, [name, value, field])
-                else:
-                    children_node = self.model.append(parent, [name, "", field])
-                    for child in value:
-                        parent_node = self.model.append(children_node, [child.Name.value, "", None])
-                        recurse_fields(child, parent_node)
+                    continue
+                for child in value:
+                    new_parent_node = self.model.append(parent, [child.Name.value, name, child])
+                    possible_result = recurse_fields(child, new_parent_node, selected)
+                    if possible_result:
+                        result = possible_result
+            return result
 
+        selected_instance = self.get_selected_instance()
         self.model.clear()
+        selected_row = None
         for node in self.Children.value:
             parent = self.model.append(None, [node.Name.value, "", None])
-            recurse_fields(node, parent)
+            selected_row = recurse_fields(node, parent, selected_instance)
 
         self.view.expand_all()
+
+        if selected_row:
+            self.view.get_selection().select_iter(selected_row)
+
+        self.update_field_model()
+
+    def update_field_model(self):
+        instance = self.get_selected_instance()
+        if not instance:
+            return
+
+        selected_field = self.get_selected_field()
+        selected_field_name = None
+        if selected_field and instance == selected_field.get_container():
+            selected_field_name = selected_field._get_name()
+
+        self.field_model.clear()
+        selected_row = None
+        for i in xrange(instance._get_num_fields()):
+            name = instance._get_field_name(i)
+            field = instance._get_field(i)
+            value = field.value
+            field_iter = self.field_model.append([name, value, field])
+            if selected_field_name == name:
+                selected_row = field_iter
+
+        if selected_row:
+            self.field_view.get_selection().select_iter(selected_row)
 
     def _edit(self, method = None):
         if method:

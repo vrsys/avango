@@ -1,6 +1,7 @@
 import avango.display #FIXME remove cyclic dependency
 import avango.daemon
 import avango.osg.viewer
+import avango.inspector
 import getopt
 import sys
 from math import *
@@ -27,24 +28,30 @@ class _Display(object):
         self._touchscreen_camera = None
         self._touchscreen_window = None
 
+        self._inspector = None
+
     def parse(self, argv):
         try:
-            opts, args = getopt.getopt(argv[1:], "hn:", ["help", "display=", "onepipe", "twopipe"])
+            opts, args = getopt.getopt(argv[1:], "hn:", ["help", "display=", "onepipe", "twopipe", "inspector"])
         except getopt.GetoptError, err:
             print "error: wrong arguments"
             opts = [("-h", "")]
 
         for opt, arg in opts:
             if opt in ("-h", "--help"):
-                print "Usage: python programm.py [--display=TwoWiew] [--twopipe]"
+                print "Usage: python programm.py [--display=TwoWiew] [--twopipe] [--inspector]"
                 print "options and arguments:"
                 print "--display <screenid>     : selects Display setup"
+                print "--twopipe                : use TwoPipe mode, i.e. two graphics cards"
+                print "--inspector              : inspect scene graph with AVANGO inspector"
             elif opt in ("--display"):
                 self._display_type = arg
             elif opt in ("--onepipe"):
                 self._two_view_walls = [":0.0", ":0.0"]
             elif opt in ("--twopipe"):
                 self._two_view_walls = [":0.0", ":0.1"]
+            elif opt in ("--inspector"):
+                self._inspector = avango.inspector.nodes.Inspector()
 
         # We always have one user
         self._users.append(avango.display.nodes.User())
@@ -252,6 +259,12 @@ class _Display(object):
             self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
             self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
 
+        if len(self._inspector.Children.value) == 0:
+            # FIXME this should use a proper aggregation node
+            converter = SFNode2MFContainerConverter()
+            converter.Input.connect_from(display_view.Root)
+            self._inspector.Children.connect_from(converter.Output)
+
         return display_view
 
     def _make_window(self, x_position, y_position, width, height, real_width, real_height, use_stereo, screen_identifier=":0.0"):
@@ -354,3 +367,12 @@ class ViewportConverter(avango.script.Script):
         x_trans = 0.5 * (viewport_in.x + viewport_in.z - 1.) * self.RealActualWidth.value
         y_trans = 0.5 * (viewport_in.y + viewport_in.w - 1.) * self.RealActualHeight.value
         self.ScreenTransformOut.value = avango.osg.make_trans_mat(x_trans, y_trans, 0.) * self.ScreenTransformIn.value
+
+class SFNode2MFContainerConverter(avango.script.Script):
+    "Converts a SFNode to a MFNode"
+
+    Input = avango.osg.SFNode()
+    Output = avango.MFContainer()
+
+    def evaluate(self):
+        self.Output.value = [ self.Input.value ]

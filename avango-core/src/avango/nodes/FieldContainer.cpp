@@ -241,7 +241,7 @@ av::FieldContainer::callEvaluate()
 
       if (mFlags.mNeedsEvaluation)
       {
-        AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("callEvaluate: evaluating '%1%' @0x%2% (%07.3lf).%3%") % getTypeId().getName() % this % mLastChange));
+        AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("callEvaluate: evaluating '%1%' @0x%2% (%3$07.3lf).") % getTypeId().getName() % this % mLastChange));
 
         // evaluate for local sideeffect
         this->evaluateLocalSideEffect();

@@ -32,11 +32,13 @@ class _Display(object):
 
     def parse(self, argv):
         try:
-            opts, args = getopt.getopt(argv[1:], "hn:", ["help", "display=", "onepipe", "twopipe", "inspector"])
+            opts, args = getopt.getopt(argv[1:], "hn:l:d:i",
+                                       ["help", "notify=", "log-file=", "display=", "inspector", "onepipe", "twopipe"])
         except getopt.GetoptError, err:
-            print "error: wrong arguments"
-            opts = [("-h", "")]
+            pass
 
+        notify_level = -1
+        notify_logfile = ''
         for opt, arg in opts:
             if opt in ("-h", "--help"):
                 print "Usage: python programm.py [--display=TwoWiew] [--twopipe] [--inspector]"
@@ -44,14 +46,24 @@ class _Display(object):
                 print "--display <screenid>     : selects Display setup"
                 print "--twopipe                : use TwoPipe mode, i.e. two graphics cards"
                 print "--inspector              : inspect scene graph with AVANGO inspector"
-            elif opt in ("--display"):
+            elif opt in ("-n", "--notify"):
+                notify_level = int(arg)
+            elif opt in ("-l", "--log-file"):
+                notify_logfile = arg
+            elif opt in ("-d", "--display"):
                 self._display_type = arg
+            elif opt in ("-i", "--inspector"):
+                self._inspector = avango.inspector.nodes.Inspector()
             elif opt in ("--onepipe"):
                 self._two_view_walls = [":0.0", ":0.0"]
             elif opt in ("--twopipe"):
                 self._two_view_walls = [":0.0", ":0.1"]
-            elif opt in ("--inspector"):
-                self._inspector = avango.inspector.nodes.Inspector()
+
+        if notify_level > -1:
+            if notify_logfile == '':
+                avango.enable_logging(notify_level)
+            else:
+                avango.enable_logging(notify_level, notify_logfile)
 
         # We always have one user
         self._users.append(avango.display.nodes.User())

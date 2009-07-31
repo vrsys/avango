@@ -46,39 +46,8 @@ warnings.showwarning = showwarning_buffer
 
 # Import all public members of C++ export
 from _avango import *
-# Explicily import hidden members
+# Explicitly import hidden members
 from _avango import _make_instance_by_name
-
-# Parse command line options to configure logging
-import getopt
-opts = []
-try:
-    opts,args = getopt.getopt(sys.argv[1:], "n:l:h", ["notify=","log-file=","help"])
-except getopt.GetoptError, err:
-    pass
-
-_notify = -1
-_logfile = ''
-
-for o, a in opts:
-    if o in ("-h", "--help"):
-        print "usage: ", sys.argv[0],"[options]"
-        print "Avango NG options and arguments:"
-        print "--help [-h]           : print help"
-        print "--notify= [-n] arg    : log level (accepts 0-5)"
-        print "--log-file= [-l] arg  : log to file (none = console)"
-#       sys.exit(0)
-    elif o in ("-n", "--notify"):
-        _notify = a
-    elif o in ("-l", "--log-file"):
-        _logfile = a
-#    else:
-#        assert False, "unhandled option"
-
-if _notify > -1:
-    if _logfile == '':
-        enable_logging(int(_notify))
-    else: enable_logging(int(_notify), _logfile)
 
 # Now register proper avango logging warnings hook
 def showwarning_logging(message, category, filename, lineno, file = None, line = None):

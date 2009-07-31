@@ -81,7 +81,7 @@ if _notify > -1:
     else: enable_logging(int(_notify), _logfile)
 
 # Now register proper avango logging warnings hook
-def showwarning_logging(message, category, filename, lineno, file = None):
+def showwarning_logging(message, category, filename, lineno, file = None, line = None):
     _avango.log("av::python::warnings", warnings.formatwarning(message, category, filename, lineno))
 warnings.showwarning = showwarning_logging
 for w in warning_buffer:

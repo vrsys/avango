@@ -2,8 +2,14 @@ import avango
 import avango.script
 import pygtk
 pygtk.require('2.0')
-import gtk
 import sys
+# We need to 'cleanup' sys.argv as gtk just grabs what is there.
+# Note: This means that GTK options can not be set via the command-line
+argv = sys.argv
+sys.argv = argv[:1]
+import gtk
+sys.argv = argv
+#
 import cStringIO
 import subprocess
 import os

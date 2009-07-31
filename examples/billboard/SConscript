@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of Avango.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # Avango is free software: you can redistribute it and/or modify         #
@@ -25,50 +25,10 @@
 
 import avango.build
 
-headers = Split('''
-    AbsoluteTransform.h
-    Billboard.h
-    CullFace.h
-    Drawable.h
-    Fields.h
-    Fog.h
-    Shader.h
-    Program.h
-    Uniform.h
-    Light.h
-    LightSource.h
-    Geode.h
-    Geometry.h
-    Group.h
-    Image.h
-    Init.h
-    Intersection.h
-    LayerGeode.h
-    LayerGroup.h
-    LineSegmentIntersector.h
-    LoadFile.h
-    LoadImage.h
-    MatrixTransform.h
-    Node.h
-    Object.h
-    ObjectLink.h
-    Panel.h
-    PolygonOffset.h
-    Projection.h
-    Quad.h
-    Sphere.h
-    StateAttribute.h
-    StateSet.h
-    Switch.h
-    Text.h
-    Texture.h
-    Texture2D.h
-    Texture2DArray.h
-    TexturedQuad.h
-    Transform.h
-    Types.h
-    TriangleContainer.h
-    windows_specific_osg.h
-    ''')
+Import('examples_dir')
 
-Alias('install-osg', Install(avango.build.get_include_path('avango/osg'), headers))
+files = Split('''
+              billboard.py
+              ''')
+
+Alias('install-examples', Install(examples_dir.abspath + '/billboard', files))

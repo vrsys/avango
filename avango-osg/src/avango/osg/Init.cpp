@@ -28,6 +28,7 @@
 #include <avango/Logger.h>
 
 #include <avango/osg/AbsoluteTransform.h>
+#include <avango/osg/Billboard.h>
 #include <avango/osg/CullFace.h>
 #include <avango/osg/Drawable.h>
 #include <avango/osg/Fields.h>
@@ -80,6 +81,7 @@ av::osg::Init::initClass()
     av::osg::initFields();
 
     av::osg::AbsoluteTransform::initClass();
+    av::osg::Billboard::initClass();
     av::osg::CullFace::initClass();
     av::osg::Drawable::initClass();
     av::osg::Fog::initClass();

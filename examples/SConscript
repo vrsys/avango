@@ -36,6 +36,7 @@ Export('examples_dir')
 if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
 	SConscript('3d-menu/SConscript')
 	SConscript('avango-tools/SConscript')
+	SConscript('billboard/SConscript')
 	SConscript('desktop-flyer/SConscript')
 	SConscript('display-setup/SConscript')
 	SConscript('embedded-viewer/SConscript')

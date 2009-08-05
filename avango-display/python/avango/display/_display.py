@@ -30,6 +30,9 @@ class _Display(object):
 
         self._inspector = None
 
+        # Keeps references to objects alive
+        self._keep_alive = []
+
     def parse(self, argv):
         try:
             opts, args = getopt.getopt(argv[1:], "hn:l:d:i",
@@ -304,6 +307,37 @@ class _Display(object):
 
         return sensor
 
+    def make_device(self, device, interface):
+        if self._display_type == "Monitor":
+            if device == "SpaceMouse" and interface == "Relative6DOF":
+                sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
+                                                          Station = "spacemousestation")
+                self._keep_alive.append(sensor)
+
+                spacemouse = avango.display.nodes.SpaceMouse()
+                spacemouse.SensorAbsX.connect_from(sensor.Value0)
+                spacemouse.SensorAbsY.connect_from(sensor.Value1)
+                spacemouse.SensorAbsZ.connect_from(sensor.Value2)
+                spacemouse.SensorAbsRX.connect_from(sensor.Value3)
+                spacemouse.SensorAbsRY.connect_from(sensor.Value4)
+                spacemouse.SensorAbsRZ.connect_from(sensor.Value5)
+                spacemouse.SensorRelX.connect_from(sensor.Value6)
+                spacemouse.SensorRelY.connect_from(sensor.Value7)
+                spacemouse.SensorRelZ.connect_from(sensor.Value8)
+                spacemouse.SensorRelRX.connect_from(sensor.Value9)
+                spacemouse.SensorRelRY.connect_from(sensor.Value10)
+                spacemouse.SensorRelRZ.connect_from(sensor.Value11)
+                spacemouse.SensorBtnA0.connect_from(sensor.Button0)
+                spacemouse.SensorBtnA1.connect_from(sensor.Button1)
+                spacemouse.SensorBtnB0.connect_from(sensor.Button9)
+                spacemouse.SensorBtnB1.connect_from(sensor.Button10)
+
+                time_sensor = avango.nodes.TimeSensor()
+                self._keep_alive.append(time_sensor)
+                spacemouse.TimeIn.connect_from(time_sensor.Time)
+
+                return spacemouse
+
 
 class ViewUserSelector(avango.script.Script):
     'Activates or deactivates a viewport depending on the selected user'
@@ -388,3 +422,68 @@ class SFNode2MFContainerConverter(avango.script.Script):
 
     def evaluate(self):
         self.Output.value = [ self.Input.value ]
+
+class SpaceMouse(avango.script.Script):
+    TimeIn = avango.SFFloat()
+
+    SensorAbsX = avango.SFFloat()
+    SensorAbsY = avango.SFFloat()
+    SensorAbsZ = avango.SFFloat()
+    SensorAbsRX = avango.SFFloat()
+    SensorAbsRY = avango.SFFloat()
+    SensorAbsRZ = avango.SFFloat()
+    SensorRelX = avango.SFFloat()
+    SensorRelY = avango.SFFloat()
+    SensorRelZ = avango.SFFloat()
+    SensorRelRX = avango.SFFloat()
+    SensorRelRY = avango.SFFloat()
+    SensorRelRZ = avango.SFFloat()
+
+    SensorBtnA0 = avango.SFBool()
+    SensorBtnA1 = avango.SFBool()
+    SensorBtnB0 = avango.SFBool()
+    SensorBtnB1 = avango.SFBool()
+
+    TranslationScale = avango.SFFloat()
+    RotationScale = avango.SFFloat()
+
+    MatrixOut = avango.osg.SFMatrix()
+    Button0 = avango.SFBool()
+    Button1 = avango.SFBool()
+
+    # Class attribute will be overridden once last time was set
+    _last_time = -1.
+
+    def get_last_time(self, cur_time):
+        result = cur_time
+        if self._last_time != -1.:
+            result = cur_time - self._last_time
+        self._last_time = cur_time
+        return result
+        
+    def evaluate(self):
+        values = self.get_values()
+
+        cur_time = values.TimeIn
+        time_delta = self.get_last_time(cur_time) - cur_time
+
+        # Mix values from different SpaceMouse types
+        trans_x = -values.SensorAbsX - values.SensorRelX/500.
+        trans_y = -values.SensorAbsY + values.SensorRelZ/500.
+	trans_z = -values.SensorAbsZ - values.SensorRelY/500.
+        translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
+        rot_x = -values.SensorAbsRX - values.SensorRelRX/500.
+        rot_y = -values.SensorAbsRY + values.SensorRelRZ/500.
+        rot_z = -values.SensorAbsRZ - values.SensorRelRY/500.
+        rotation = avango.osg.Vec3(rot_x, rot_y, rot_z)
+
+        translation *= time_delta * values.TranslationScale
+        rotation *= time_delta * values.RotationScale
+
+        rot_mat_x = avango.osg.make_rot_mat(rotation.x, 1., 0., 0.)
+        rot_mat_y = avango.osg.make_rot_mat(rotation.y, 0., 1., 0.)
+        rot_mat_z = avango.osg.make_rot_mat(rotation.z, 0., 0., 1.)
+        values.MatrixOut = rot_mat_x * rot_mat_y * rot_mat_z * avango.osg.make_trans_mat(translation)
+
+        values.Button0 = values.SensorBtnA0 | values.SensorBtnB0
+        values.Button1 = values.SensorBtnA1 | values.SensorBtnB1

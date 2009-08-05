@@ -28,6 +28,7 @@ import avango.build
 Import('examples_dir')
 
 files = Split('''
+              custom-device.py
               test_app_1.py
               test_app_2.py
               test_app_3.py

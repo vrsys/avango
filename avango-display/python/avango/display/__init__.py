@@ -123,6 +123,32 @@ def make_view(subdisplay=""):
 
     return _selected_display.make_view(subdisplay)
 
+def make_device(device, interface=""):
+    """Create a field container that represents a generic device.
+    
+      - *device* is the name of the device. A display maps this name to a
+        specific device and returns a field container representing it.
+
+      - *interface* is used to select a different field container than the
+        default one, i.e. different display may provide more specific or
+        incompatible information about the device. The resulting interface
+        will still always contain the *Active* boolean field (see below).
+
+    The resulting (default) field container will have the following fields. As
+    this interface is rather limited, one typically provides a specific
+    interface:
+        
+      - *Active* is a boolean that is true if the device is recognized by the
+        system (e.g. because the tracking cameras see the corresponding target)
+
+      - *Identifier* is a unique name that indicate which device is the active
+        device. Some tracking systems can recognize different target and this
+        identifiers contains the informations which target was identified and
+        chosen as the active device.
+    """
+
+    return _selected_display.make_device(device, interface)
+
 def run():
     "Run the AVANGO evaluation loop."
 

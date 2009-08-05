@@ -164,7 +164,7 @@ class _Display(object):
             window.AutoHeight.value = True
             self._windows.append(window)
 
-        return argv
+        return args
 
     def get_display_type(self):
         return self._display_type

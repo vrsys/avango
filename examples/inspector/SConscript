@@ -28,8 +28,10 @@ import avango.build
 Import('examples_dir')
 
 files = Split('''
-              inspector.py
               gvim-foreground.sh
+              inspector-with-display.py
+              inspector.py
+              wobble.py
               ''')
 
 Alias('install-examples', Install(examples_dir.abspath + '/inspector', files))

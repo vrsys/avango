@@ -28,13 +28,9 @@ import avango.build
 Import('examples_dir')
 
 files = Split('''
-              compositeviewer-setup.py
-              simpleviewer2.py
-              simpleviewer-clnt.py
-              simpleviewer.py
-              simpleviewer-srv.py
-              twoview.py
-              viewer-setup.py
+              test_app_1.py
+              test_app_2.py
+              test_app_3.py
               ''')
 
-Alias('install-examples', Install(examples_dir.abspath + '/display-setup', files))
+Alias('install-examples', Install(examples_dir.abspath + '/display', files))

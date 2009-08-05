@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of Avango.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # Avango is free software: you can redistribute it and/or modify         #
@@ -23,36 +23,14 @@
 #                                                                        #
 ##########################################################################
 
-import avango.osg.simpleviewer
-import avango.script
-import time
-import math
-import sys
+import avango.build
 
-print """Note:
-Even though this example works, it does not show the recommended way to implement
-the shown behaviour.
+Import('examples_dir')
 
-Please look at simpleviewer2.py."""
+files = Split('''
+              compositeviewer-setup.py
+              twoview.py
+              viewer-setup.py
+              ''')
 
-if len(sys.argv) != 2:
-    print "Usage: "+sys.argv[0]+" <modelname>"
-    sys.exit(1)
-
-obj = avango.osg.nodes.LoadFile(Filename=sys.argv[1])
-trans = avango.osg.nodes.MatrixTransform()
-trans.Children.value.append(obj)
-
-class RotateTransform(object):
-    def __init__(self, trans):
-        self.trans = trans
-        self.time = time.time()
-    def callback(self):
-        cur_rot = math.sin((time.time()-self.time)/2.)
-        cur_mat = avango.osg.make_rot_mat(cur_rot, 1., 0., 0.)
-        self.trans.Matrix.value = cur_mat
-
-rt = RotateTransform(trans)
-update = avango.script.nodes.Update(Callback = rt.callback, Active = True)
-
-avango.osg.simpleviewer.run(trans)
+Alias('install-examples', Install(examples_dir.abspath + '/low-level-display-setup', files))

@@ -250,7 +250,7 @@ class _Display(object):
                     index = self._merge_viewer.add_input()
                     self._merge_viewer.get_input(index).connect_from(user_selector.ViewOut)
 
-        elif subdisplay == "Touchscreen" and (self._display_type == "TouchscreenEmulator" or self._display_type == "TwoviewTouchscreenEmulator"):
+        elif subdisplay == "Touchscreen" and (self._display_type in ["TouchscreenEmulator", "TwoviewTouchscreenEmulator"]):
             camera = avango.osg.viewer.nodes.Camera()
             camera.ViewerTransform.connect_from(display_view.Camera)
             camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
@@ -273,6 +273,36 @@ class _Display(object):
             self._touchscreen_event = avango.osg.viewer.nodes.EventFields(View = osg_view)
             self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
             self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
+
+        elif subdisplay != "" and self._display_type == "Monitor":
+            # In the Monitor setting each subdisplay simply get a new window
+            camera = avango.osg.viewer.nodes.Camera()
+            camera.ViewerTransform.connect_from(display_view.Camera)
+            camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
+            camera.Near.connect_from(display_view.Near)
+            camera.Far.connect_from(display_view.Far)
+            camera.BackgroundColor.connect_from(display_view.BackgroundColor)
+            window = self._make_window(0, 0, 1024, 768, 4, 3, False)
+            window.Decoration.value = True
+            window.AutoHeight.value = True
+            window.Name.value = subdisplay
+            camera.Window.value = window
+            camera.Window.value.Decoration.value = True
+            camera.Window.value.ShowCursor.value = True
+            camera.Window.value.Title.value = subdisplay
+
+            osg_view = avango.osg.viewer.nodes.View()
+            osg_view.Scene.connect_from(display_view.Root)
+            osg_view.MasterCamera.value = camera
+
+            index = self._merge_viewer.add_input()
+            self._merge_viewer.get_input(index).value = osg_view
+
+            window_event = avango.osg.viewer.nodes.EventFields(View = osg_view)
+            self._keep_alive.append(window_event)
+            window.DragEvent.connect_from(window_event.DragEvent)
+            window.MoveEvent.connect_from(window_event.MoveEvent)
+            self._keep_alive.append(window)
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node

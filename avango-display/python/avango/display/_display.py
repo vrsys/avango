@@ -484,7 +484,7 @@ class SpaceMouse(avango.script.Script):
     # Class attribute will be overridden once last time was set
     _last_time = -1.
 
-    def get_last_time(self, cur_time):
+    def get_time_diff(self, cur_time):
         result = cur_time
         if self._last_time != -1.:
             result = cur_time - self._last_time
@@ -495,16 +495,16 @@ class SpaceMouse(avango.script.Script):
         values = self.get_values()
 
         cur_time = values.TimeIn
-        time_delta = self.get_last_time(cur_time) - cur_time
+        time_delta = self.get_time_diff(cur_time)
 
         # Mix values from different SpaceMouse types
-        trans_x = -values.SensorAbsX - values.SensorRelX/500.
-        trans_y = -values.SensorAbsY + values.SensorRelZ/500.
-	trans_z = -values.SensorAbsZ - values.SensorRelY/500.
+        trans_x = values.SensorAbsX + values.SensorRelX/500.
+        trans_y = values.SensorAbsY - values.SensorRelZ/500.
+	trans_z = values.SensorAbsZ + values.SensorRelY/500.
         translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
-        rot_x = -values.SensorAbsRX - values.SensorRelRX/500.
-        rot_y = -values.SensorAbsRY + values.SensorRelRZ/500.
-        rot_z = -values.SensorAbsRZ - values.SensorRelRY/500.
+        rot_x = values.SensorAbsRX + values.SensorRelRX/500.
+        rot_y = values.SensorAbsRY - values.SensorRelRZ/500.
+        rot_z = values.SensorAbsRZ + values.SensorRelRY/500.
         rotation = avango.osg.Vec3(rot_x, rot_y, rot_z)
 
         translation *= time_delta * values.TranslationScale

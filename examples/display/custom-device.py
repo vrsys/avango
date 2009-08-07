@@ -59,8 +59,8 @@ transform.Children.value.append(sphere)
 transform.Matrix.value = avango.osg.make_trans_mat(0., 1.7, -2.)
 
 spacemouse = avango.display.make_device("SpaceMouse", "Relative6DOF")
-spacemouse.TranslationScale.value = 1. / 2000.
-spacemouse.RotationScale.value = 1. / 10000.
+spacemouse.TranslationScale.value = 1.
+spacemouse.RotationScale.value = 0.1
 
 accumulator = Accumulator()
 accumulator.MatrixIn.connect_from(spacemouse.MatrixOut)

@@ -33,6 +33,9 @@ class _Display(object):
         # Keeps references to objects alive
         self._keep_alive = []
 
+        self._subdisplay_window_events = {}
+        self._subdisplay_camera = {}
+
     def parse(self, argv):
         try:
             opts, args = getopt.getopt(argv[1:], "hn:l:d:i",
@@ -188,6 +191,9 @@ class _Display(object):
             pda_sensor.TransmitterOffset.value = self._perf2osg
             pda_sensor.ReceiverOffset.value = avango.osg.make_trans_mat(0.076, -0.016, 0.025)
             device.Matrix.connect_from(pda_sensor.Matrix)
+        elif self._display_type == "Monitor":
+            device.Matrix.connect_from(self._subdisplay_camera[subdisplay].MouseNearTransform)
+            device.Button1.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyLeft)
         return device
 
     def make_non_dominant_user_device(self, user, interface, subdisplay):
@@ -299,10 +305,10 @@ class _Display(object):
             self._merge_viewer.get_input(index).value = osg_view
 
             window_event = avango.osg.viewer.nodes.EventFields(View = osg_view)
-            self._keep_alive.append(window_event)
+            self._subdisplay_window_events[subdisplay] = window_event
             window.DragEvent.connect_from(window_event.DragEvent)
             window.MoveEvent.connect_from(window_event.MoveEvent)
-            self._keep_alive.append(window)
+            self._subdisplay_camera[subdisplay] = camera
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node

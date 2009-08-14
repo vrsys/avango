@@ -52,7 +52,7 @@ av::osg::viewer::GraphicsWindow::GraphicsWindow() :
 {
   AV_FC_ADD_FIELD(SharedContextMaster, 0);
   AV_FC_ADD_FIELD(ScreenIdentifier, (::getenv("DISPLAY") != 0 ? ::getenv("DISPLAY") : ":0.0"));
-  AV_FC_ADD_FIELD(Title, "Avango NG - " + ScreenIdentifier.getValue());
+  AV_FC_ADD_FIELD(Title, "AVANGO NG - " + ScreenIdentifier.getValue());
 
   AV_FC_ADD_FIELD(Decoration, true);
   AV_FC_ADD_FIELD(QuadBufferStereo, false);

@@ -302,7 +302,8 @@ template<> void
 av::MultiField<float>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 
@@ -317,7 +318,8 @@ template<> void
 av::MultiField<double>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 
@@ -332,7 +334,8 @@ template<> void
 av::MultiField<int32_t>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 
@@ -347,7 +350,8 @@ template<> void
 av::MultiField<uint32_t>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 
@@ -362,7 +366,8 @@ template<> void
 av::MultiField<int64_t>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 
@@ -377,7 +382,8 @@ template<> void
 av::MultiField<uint64_t>::pop(av::Msg& msg)
 {
   av_popMsg(msg, mValue);
-  mSetValueSignal(SetValueEvent(this, mValue));
+  if (mHasSetValueCallback)
+    mSetValueCallback(SetValueEvent(this, mValue));
   fieldChanged(true);
 }
 

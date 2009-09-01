@@ -28,7 +28,7 @@
 
 #include <stdexcept>
 
-#include <boost/signal.hpp>
+#include <boost/function.hpp>
 
 #include <avango/Assert.h>
 #include <avango/Config.h>
@@ -126,17 +126,14 @@ namespace av
       const ValueType& mValue;
     };
 
-    typedef boost::signal<void (const GetValueEvent&)> GetValueSignal;
-    typedef typename GetValueSignal::slot_type GetValueCallback;
-    typedef boost::signals::connection GetValueCallbackHandle;
-
-    typedef boost::signal<void (const SetValueEvent&)> SetValueSignal;
-    typedef typename SetValueSignal::slot_type SetValueCallback;
-    typedef boost::signals::connection SetValueCallbackHandle;
+    typedef boost::function<void (const GetValueEvent&)> GetValueCallback;
+    typedef boost::function<void (const SetValueEvent&)> SetValueCallback;
 
     SingleField() :
       Field(),
-      mValue(Value())
+      mValue(Value()),
+      mHasGetValueCallback(false),
+      mHasSetValueCallback(false)
     {
       AV_ASSERT(validateRequirements());
     }
@@ -172,7 +169,8 @@ namespace av
     {
       Field::bind(container, name, owned);
       mValue = init;
-      mSetValueSignal(SetValueEvent(this, mValue));
+      if (mHasSetValueCallback)
+        mSetValueCallback(SetValueEvent(this, mValue));
     }
 
     void bind(FieldContainer* container, const std::string& name, bool owned,
@@ -206,7 +204,8 @@ namespace av
 
     virtual const Value& getValue() const
     {
-      mGetValueSignal(GetValueEvent(this, &mValue));
+      if (mHasGetValueCallback)
+        mGetValueCallback(GetValueEvent(this, &mValue));
       return mValue;
     }
 
@@ -244,7 +243,8 @@ namespace av
     virtual void pop(Msg& msg)
     {
       av_popMsg(msg, mValue);
-      mSetValueSignal(SetValueEvent(this, mValue));
+      if (mHasSetValueCallback)
+        mSetValueCallback(SetValueEvent(this, mValue));
       fieldChanged(true);
     }
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -255,34 +255,38 @@ namespace av
      * Register callback invoked for a getValue called on this field.
      * The callback must take exactly one parameter of GetValueEvent.
      */
-    GetValueCallbackHandle addGetValueCallback(const GetValueCallback& callback)
+    void addGetValueCallback(const GetValueCallback& callback)
     {
-      return mGetValueSignal.connect(callback);
+      mHasGetValueCallback = true;
+      mGetValueCallback = callback;
     }
 
     /**
      * Remove previously registered field GetValueCallback via its handle.
      */
-    void removeGetValueCallback(const GetValueCallbackHandle& handle)
+    void removeGetValueCallback(void)
     {
-      handle.disconnect();
+      mHasGetValueCallback = false;
+      mGetValueCallback = 0;
     }
 
     /**
      * Register callback invoked for a setValue called on this field.
      * The callback must take exactly one parameter of SetValueEvent.
      */
-    SetValueCallbackHandle addSetValueCallback(const SetValueCallback& callback)
+    void addSetValueCallback(const SetValueCallback& callback)
     {
-      return mSetValueSignal.connect(callback);
+      mHasSetValueCallback = true;
+      mSetValueCallback = callback;
     }
 
     /**
      * Remove previously registered field SetValueCallback via its handle.
      */
-    void removeSetValueCallback(const SetValueCallbackHandle& handle)
+    void removeSetValueCallback(void)
     {
-      handle.disconnect();
+      mHasSetValueCallback = false;
+      mSetValueCallback = 0;
     }
 
     /*virtual*/ Field* clone(void) const
@@ -297,7 +301,8 @@ namespace av
     virtual void setValue(const Value& v, Field* triggered_from)
     {
       mValue = v;
-      mSetValueSignal(SetValueEvent(this, mValue));
+      if (mHasSetValueCallback)
+        mSetValueCallback(SetValueEvent(this, mValue));
       fieldChanged(false, triggered_from);
     }
 
@@ -314,9 +319,14 @@ namespace av
 
     static Type sClassTypeId;
 
-    GetValueSignal mGetValueSignal;
-    SetValueSignal mSetValueSignal;
+    GetValueCallback mGetValueCallback;
+    SetValueCallback mSetValueCallback;
 
+    // Even though boost::function provides an empty() method, we track this
+    // status ourselves as it is quite a bit faster and speed is quite
+    // important here.
+    bool mHasGetValueCallback;
+    bool mHasSetValueCallback;
   };
 
   template <typename Value> inline bool

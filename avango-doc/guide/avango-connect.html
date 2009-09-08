@@ -38,16 +38,21 @@ If you need more advanced functionality, using the distribution feature of avang
 </p>
 
 <p>
-Supported field types:
+The following list shows the supported field types. At this time, there is only a small subset of the existing types,
+which grows on demand.
 <ul>
 	<li>SFBool</li>
 	<li>SFInt</li>
+	<li>SFFloat</li>
 	<li>SFDouble</li>
 	<li>SFString</li>
-	<li>MFBool</li>
+	<li>SFVec4</li>
+	<li>SFMatrix</li>
 	<li>MFInt</li>
-	<li>MFDouble</li>
 	<li>MFString</li>
+	<li>MFVec2</li>
+	<li>MFVec3</li>
+	<li>MFMatrix</li>
 </ul>
 </p>
 
@@ -124,6 +129,25 @@ output_node.set_stream(client)
 <ul class="classlist">
 	<li>avango.connect.Client</li>
 </ul>
+
+<h3>Network protocol</h3>
+<p>
+The values of the fields are sent over a TCP connection with a simple stream based text protocol.
+Every line of text carries the information of one single field and ends in a line feed (ASCII code 0x0a).
+The different parts of a line are separated by NUL characters (ASCII code 0x00).
+
+<pre class="example">
+Text<b>&lt;NUL&gt;</b>SFString<b>&lt;NUL&gt;</b>This is a test<b>&lt;LF&gt;</b>
+Translation<b>&lt;NUL&gt;</b>SFVec4<b>&lt;NUL&gt;</b>1<b>&lt;NUL&gt;</b>2<b>&lt;NUL&gt;</b>3<b>&lt;NUL&gt;</b>4<b>&lt;LF&gt;</b>
+</pre>
+
+In this example, the information about two fields is sent:
+<ul>
+	<li>A field called "Text" of type "SFString" containing the text "This is a text"</li>
+	<li>A field called "Translation" of type "SFVec4" containing the value "(1, 2, 3, 4)".</li>
+</ul>
+
+</p>
 
 <!-- End page contents -->
 

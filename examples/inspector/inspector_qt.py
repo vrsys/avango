@@ -2,9 +2,12 @@ import avango.osg
 import avango.osg.simpleviewer
 import avango.script
 
+from elasticnodes import *
 import sys
+import random
 from PySide import QtCore, QtGui
-    
+#from PyQt4 import QtCore, QtGui
+
     
 class TreeItem:
     def __init__(self, data, parent=None):
@@ -38,15 +41,17 @@ class TreeItem:
 
 
 class TreeModel(QtCore.QAbstractItemModel):
-    def __init__(self, data=None, parent=None):
+    def __init__(self, columnDesc, parent=None):
         QtCore.QAbstractItemModel.__init__(self, parent)
 
-        rootData = []
-        rootData.append(QtCore.QVariant("Field"))
-        rootData.append(QtCore.QVariant("Value"))
-        self.rootItem = TreeItem(rootData)
-        self.prevRoot = self.rootItem
-        
+        self.columnDesc = []
+        for desc in columnDesc:
+            self.columnDesc.append(QtCore.QVariant(desc))
+            
+        self.rootItem = TreeItem(self.columnDesc)
+       
+    def clear(self):
+         self.rootItem = TreeItem(self.columnDesc)
 
     def columnCount(self, parent):
         if parent.isValid():
@@ -115,6 +120,36 @@ class TreeModel(QtCore.QAbstractItemModel):
 
         return parentItem.childCount()
 
+#    def setupModelData(self, rootNode):
+#        print "setupModelData"
+#        
+#        def update_tree_model(node,tree_item_parent):
+#            for i in xrange(node._get_num_fields()):
+#                name = node._get_field_name(i)
+#                field = node._get_field(i)
+#                value = field.value
+#                if name != "Children":
+#                    continue
+#                
+#                for child in value:
+#                    new_parent_node = TreeItem([child.Name.value, name],tree_item_parent)
+#                    tree_item_parent.appendChild(new_parent_node)
+#                    update_tree_model(child,new_parent_node)
+#                    
+#
+#        for child in rootNode.value:
+#            new_parent_node = TreeItem([child.Name.value, "RootChild"],self.rootItem)
+#            self.rootItem.appendChild(new_parent_node)
+#            update_tree_model(child, new_parent_node)
+#        
+#        self.reset()
+        
+class NodeTreeModel(TreeModel):
+    
+    def __init__(self, columnDesc, parent=None):
+        super(NodeTreeModel,self).__init__(columnDesc,parent)
+        
+
     def setupModelData(self, rootNode):
         print "setupModelData"
         
@@ -137,17 +172,50 @@ class TreeModel(QtCore.QAbstractItemModel):
             self.rootItem.appendChild(new_parent_node)
             update_tree_model(child, new_parent_node)
         
-        self.reset()
+        self.reset()   
+
+def createGraphNodes(rootNode,graphWidget):
+    
+    def update_tree_model(node, tree_item_parent, graphWidget, items):
         
+        for i in xrange(node._get_num_fields()):
+            name = node._get_field_name(i)
+            field = node._get_field(i)
+            value = field.value
+            if name != "Children":
+                continue
+            
+            for child in value:
+                #create new node
+                actual_node = Node(graphWidget, child.Name.value, child)
+                random.seed(42)
+                x = random.randint(0,75)
+                y = random.randint(0,75)
+                actual_node.setPos(x, y)
+                #add to list
+                items.append(actual_node)
+                items.append(Edge(tree_item_parent, actual_node))
+                
+                update_tree_model(child,actual_node,graphWidget,items)
+                
+    items = []
+    parent_node = Node(graphWidget,"Root",rootNode)
+    parent_node.setPos(50, 50)
+    
+    items.append(parent_node)
+    for child in rootNode.value:
+        update_tree_model(child, parent_node, graphWidget, items)
+    
+    return items   
     
 class ScenegraphTreeNodeWidget(QtGui.QWidget):
     
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         
-        self.nodesWidget = QtGui.QWidget()
-        self.nodesLayout = QtGui.QVBoxLayout()
-        self.nodesWidget.setLayout(self.nodesLayout)
+        
+        
+        
         self.createNodeWidgets()
         
         self.fieldsWidget = QtGui.QWidget()
@@ -163,29 +231,99 @@ class ScenegraphTreeNodeWidget(QtGui.QWidget):
         
         
     def createNodeWidgets(self):
+        
+        self.nodeTabWidget = QtGui.QTabWidget()
+        
+        self.nodesWidget = QtGui.QWidget()
+        self.nodesLayout = QtGui.QVBoxLayout()
+        self.nodesWidget.setLayout(self.nodesLayout)
+        
         self.nodeRefresh = QtGui.QPushButton("Refresh", self.nodesWidget)
         
         self.nodeGraphView = QtGui.QTreeView()
-        self.nodeModel = TreeModel()
+        self.nodeModel = NodeTreeModel(["Nodes"])
         self.nodeGraphView.setModel(self.nodeModel)
-        self.nodeGraphView.setWindowTitle("SceneGraphNodes")
         
-        self.nodesLayout.addWidget(self.nodeGraphView)
+        
+        
+        self.graphWidget = GraphWidget()
+        QtGui.QWidget.connect(self.graphWidget, 
+                              QtCore.SIGNAL("nodeSelected"),
+                              self.updateFieldWidget)
+        
+        #add widgets to the tab widget
+        self.nodeTabWidget.addTab(self.graphWidget,"Spring graph view")
+        self.nodeTabWidget.addTab(self.nodeGraphView,"Tree view")
+        
+        
+        self.nodesLayout.addWidget(self.nodeTabWidget)
         self.nodesLayout.addWidget(self.nodeRefresh)
+        
+        
+        #self.nodesLayout.addWidget(self.graphWidget)
+        
+        self.scene = self.graphWidget.scene
+        
+        
         
     def createFieldWidgets(self):
         
         self.fieldsGraphView = QtGui.QTreeView()
-        self.fieldsModel = TreeModel()
+        self.fieldsModel = QtGui.QStandardItemModel(0, 2)
+        self.fieldsModel.setHeaderData(0, QtCore.Qt.Horizontal, QtCore.QVariant("Field"))
+        self.fieldsModel.setHeaderData(1, QtCore.Qt.Horizontal, QtCore.QVariant("Value"))
+    
         self.fieldsGraphView.setModel(self.fieldsModel)
         self.fieldsGraphView.setWindowTitle("Fields")
         
         self.fieldsLayout.addWidget(self.fieldsGraphView)
+        
+        
       
     def updateNodeTreeWidget(self, rootNode):
+        #update the tree view
+        self.nodeModel.clear()
         self.nodeModel.setupModelData(rootNode)
+        self.nodeGraphView.expandAll()
+        
+        #update the graph view
+        self.graphWidget.removeAllItems()
+        
+        #add the new items
+        items = createGraphNodes(rootNode,self.graphWidget)
+        self.graphWidget.addItems(items)
         
         
+    def updateFieldWidget(self, node):
+        self.fieldsModel.removeRows(0,self.fieldsModel.rowCount())
+        self.fieldsModel.setRowCount(node._get_num_fields())
+        
+        for i in xrange(node._get_num_fields()):
+            name = node._get_field_name(i)
+            field = node._get_field(i)
+            value = field.value
+            
+            self.fieldsModel.setData(self.fieldsModel.index(i, 0), QtCore.QVariant(str(name)))
+            self.fieldsModel.setData(self.fieldsModel.index(i, 1), QtCore.QVariant(str(value)))     
+
+class EditWidget(QtGui.QWidget):
+    
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+    
+        self.textDisplayWidget = QtGui.QTextEdit()
+        self.textDisplayWidget.setReadOnly(True)
+        
+        self.textEditWidget = QtGui.QLineEdit()
+        
+        
+        self.mainLayout = QtGui.QVBoxLayout()
+        self.setLayout(self.mainLayout)
+        
+        self.mainLayout.addWidget(self.textDisplayWidget)
+        self.mainLayout.addWidget(self.textEditWidget)
+        
+ 
 class QTInspector(avango.script.Script):
 
     Children = avango.MFContainer()
@@ -195,20 +333,48 @@ class QTInspector(avango.script.Script):
 
         self.app = QtGui.QApplication(sys.argv)
         
+        
+        self.mainWidget = QtGui.QWidget()
+        self.mainLayout = QtGui.QVBoxLayout()
+        self.mainWidget.setLayout(self.mainLayout)
+        
+        
         self.sceneGraphWidget = ScenegraphTreeNodeWidget()
-        self.sceneGraphWidget.show()
+        self.editWidget = EditWidget()
         
-        QtGui.QWidget.connect(self.sceneGraphWidget.nodeRefresh, QtCore.SIGNAL("clicked()"),
-                     self.updateTreeNodeModel)
+        self.mainLayout.addWidget(self.sceneGraphWidget)
+        self.mainLayout.addWidget(self.editWidget)
         
         
+        #Refresh nodes
+        QtGui.QWidget.connect(self.sceneGraphWidget.nodeRefresh, 
+                              QtCore.SIGNAL("clicked()"),
+                              self.updateTreeNodeModel)
+
+        #Node selected
+        QtGui.QWidget.connect(self.sceneGraphWidget.nodeGraphView, 
+                              QtCore.SIGNAL("activated(QModelIndex)"),
+                              self.updateFieldModel)
+        
+        
+        self.mainWindow = QtGui.QMainWindow()
+        self.mainWindow.setCentralWidget(self.mainWidget)
+        self.mainWindow.show()
+
+    @avango.script.field_has_changed(Children)
+    def children_changed(self):
+        self.updateTreeNodeModel()
+
     def evaluate(self):
         if self.app.hasPendingEvents():
             self.app.processEvents()
             
     def updateTreeNodeModel(self):
+        print "updateTreeNodeModel"
         self.sceneGraphWidget.updateNodeTreeWidget(self.Children)
         
+    def updateFieldModel(self,index):
+        print "activate index: " + str(index.row()) + " " + str(index.data())
 
 
 root = avango.osg.nodes.Group(Name="RootNode")

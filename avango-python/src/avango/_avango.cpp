@@ -40,6 +40,8 @@
 
 #include "FieldContainer.h"
 #include "Field.h"
+#include "InputStream.h"
+#include "OutputStream.h"
 
 using namespace boost::python;
 using namespace av::python;
@@ -121,6 +123,8 @@ BOOST_PYTHON_MODULE(_avango)
   register_exception_translation();
   init_FieldContainer();
   init_Field();
+  init_InputStream();
+  init_OutputStream();
 
   register_field<av::SFObject>("SFObject");
   register_multifield<av::MFObject>("MFObject");

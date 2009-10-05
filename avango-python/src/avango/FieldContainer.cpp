@@ -38,6 +38,11 @@ av::Link<av::FieldContainer> make_instance_by_name(std::string name)
   return retval;
 }
 
+av::Field* make_field_by_name(std::string name)
+{
+  return dynamic_cast<av::Field*>(av::Type::createInstanceOfType(name));
+}
+
 av::Link<av::FieldContainer> ContainerPoll_get_instance_by_name(std::string name)
 {
   return av::Link<av::FieldContainer>(av::ContainerPool::getInstanceByName(name));
@@ -83,9 +88,12 @@ void init_FieldContainer(void)
     .def("allow_scheduling", &av::FieldContainer::allowScheduling)
     .def("disconnect_all_fields", &av::FieldContainer::disconnectAllFields)
     .def("evaluate_dependency", &av::FieldContainer::evaluateDependency)
+    .def("read", &av::FieldContainer::read)
+    .def("write", &av::FieldContainer::write)
     ;
 
   def("_make_instance_by_name", make_instance_by_name);
+  def("_make_field_by_name", make_field_by_name, return_internal_reference<>());
   def("get_instance_by_name", ContainerPoll_get_instance_by_name);
   def("disconnect_and_clear_all_fields", av::disconnectAndClearAllFields);
 }

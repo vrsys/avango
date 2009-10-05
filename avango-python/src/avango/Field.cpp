@@ -39,6 +39,11 @@ using namespace av::python;
 
 namespace
 {
+  std::string get_type_name(av::Field* self)
+  {
+    return self->getTypeId().getName();
+  }
+
   void connect_from_dependant(av::Field* self, av::Field* other)
   {
     self->connectFrom(other, true);
@@ -67,6 +72,7 @@ void init_Field(void)
   class_<av::Field, boost::noncopyable>("Field", "docstring", no_init)
     .def("_get_index", &av::Field::getIndex)
     .def("_get_name", &av::Field::getName, return_value_policy<copy_const_reference>())
+    .def("_get_type", get_type_name)
     .def("get_container", &av::Field::getContainer, return_internal_reference<>())
     .def("connect_from", &av::Field::connectFrom)
     .def("connect_from", connect_from_dependant)
@@ -79,6 +85,8 @@ void init_Field(void)
     .def("enable_notify", &av::Field::enableNotify)
     .def("notify_enabled", &av::Field::notifyEnabled)
     .def("touch", &av::Field::touch)
+    .def("read", &av::Field::read)
+    .def("write", &av::Field::write)
     ;
 
   register_field<av::SFBool>("SFBool");

@@ -195,6 +195,8 @@ av::operator>>(av::InputStream& is, std::string& value)
     char chr;
     (std::istream&)is >> chr;
     AV_ASSERT(chr == '"');
+    std::ios_base::fmtflags old_flags = is.flags();
+    is.unsetf(std::istream::skipws);
     int size = -1;
     do {
       (std::istream&)is >> chr;
@@ -203,6 +205,7 @@ av::operator>>(av::InputStream& is, std::string& value)
       str[size] = chr;
     } while (chr != '"');
     str[size] = '\0';
+    is.flags(old_flags);
     value = str;
   }
   return is;

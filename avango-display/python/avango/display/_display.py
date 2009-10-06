@@ -367,6 +367,8 @@ class _Display(object):
                 spacemouse.SensorBtnA1.connect_from(sensor.Button1)
                 spacemouse.SensorBtnB0.connect_from(sensor.Button9)
                 spacemouse.SensorBtnB1.connect_from(sensor.Button10)
+                spacemouse.SensorBtnB2.connect_from(sensor.Button3)
+                spacemouse.SensorBtnB3.connect_from(sensor.Button4)
 
                 time_sensor = avango.nodes.TimeSensor()
                 self._keep_alive.append(time_sensor)
@@ -479,6 +481,8 @@ class SpaceMouse(avango.script.Script):
     SensorBtnA1 = avango.SFBool()
     SensorBtnB0 = avango.SFBool()
     SensorBtnB1 = avango.SFBool()
+    SensorBtnB2 = avango.SFBool()
+    SensorBtnB3 = avango.SFBool()
 
     TranslationScale = avango.SFFloat()
     RotationScale = avango.SFFloat()
@@ -486,6 +490,8 @@ class SpaceMouse(avango.script.Script):
     MatrixOut = avango.osg.SFMatrix()
     Button0 = avango.SFBool()
     Button1 = avango.SFBool()
+    Button2 = avango.SFBool()
+    Button3 = avango.SFBool()
 
     # Class attribute will be overridden once last time was set
     _last_time = -1.
@@ -523,3 +529,5 @@ class SpaceMouse(avango.script.Script):
 
         values.Button0 = values.SensorBtnA0 | values.SensorBtnB0
         values.Button1 = values.SensorBtnA1 | values.SensorBtnB1
+        values.Button2 = values.SensorBtnB2
+        values.Button3 = values.SensorBtnB3

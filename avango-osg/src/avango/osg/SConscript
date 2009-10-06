@@ -63,6 +63,7 @@ sources = Split('''
     Quad.cpp
     Sphere.cpp
     Box.cpp
+    Capsule.cpp
     StateAttribute.cpp
     StateSet.cpp
     Switch.cpp

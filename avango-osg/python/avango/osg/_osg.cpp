@@ -4,7 +4,7 @@
 *                                                                        *
 * This file is part of Avango.                                           *
 *                                                                        *
-* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       *
 * angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
 * Avango is free software: you can redistribute it and/or modify         *
@@ -71,6 +71,7 @@
 #include "OSGLoadFile.h"
 #include "OSGSphere.h"
 #include "OSGBox.h"
+#include "OSGCapsule.h"
 #include "OSGAbsoluteTransform.h"
 #include "OSGTriangleContainer.h"
 #include "OSGProjection.h"
@@ -154,6 +155,7 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGLoadFile();
   init_OSGSphere();
   init_OSGBox();
+  init_OSGCapsule();
   init_OSGAbsoluteTransform();
   init_OSGTriangleContainer();
   init_OSGProjection();

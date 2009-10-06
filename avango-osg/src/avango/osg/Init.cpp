@@ -56,6 +56,7 @@
 #include <avango/osg/Quad.h>
 #include <avango/osg/Sphere.h>
 #include <avango/osg/Box.h>
+#include <avango/osg/Capsule.h>
 #include <avango/osg/StateAttribute.h>
 #include <avango/osg/StateSet.h>
 #include <avango/osg/Switch.h>
@@ -109,6 +110,7 @@ av::osg::Init::initClass()
     av::osg::Quad::initClass();
     av::osg::Sphere::initClass();
     av::osg::Box::initClass();
+    av::osg::Capsule::initClass();
     av::osg::StateAttribute::initClass();
     av::osg::StateSet::initClass();
     av::osg::Switch::initClass();

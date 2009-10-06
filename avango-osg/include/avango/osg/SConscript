@@ -58,6 +58,7 @@ headers = Split('''
     Quad.h
     Box.h
     Sphere.h
+    Capsule.h
     StateAttribute.h
     StateSet.h
     Switch.h

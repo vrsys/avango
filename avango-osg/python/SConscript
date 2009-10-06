@@ -74,6 +74,7 @@ osg_files = Split("""
     avango/osg/OSGMatrixTransform.cpp
     avango/osg/OSGLoadFile.cpp
     avango/osg/OSGSphere.cpp
+    avango/osg/OSGBox.cpp
     avango/osg/OSGAbsoluteTransform.cpp
     avango/osg/OSGTriangleContainer.cpp
     avango/osg/OSGProjection.cpp

@@ -70,6 +70,7 @@
 #include "OSGMatrixTransform.h"
 #include "OSGLoadFile.h"
 #include "OSGSphere.h"
+#include "OSGBox.h"
 #include "OSGAbsoluteTransform.h"
 #include "OSGTriangleContainer.h"
 #include "OSGProjection.h"
@@ -152,6 +153,7 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGMatrixTransform();
   init_OSGLoadFile();
   init_OSGSphere();
+  init_OSGBox();
   init_OSGAbsoluteTransform();
   init_OSGTriangleContainer();
   init_OSGProjection();

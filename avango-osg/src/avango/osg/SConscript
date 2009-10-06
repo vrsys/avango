@@ -62,6 +62,7 @@ sources = Split('''
     Projection.cpp
     Quad.cpp
     Sphere.cpp
+    Box.cpp
     StateAttribute.cpp
     StateSet.cpp
     Switch.cpp

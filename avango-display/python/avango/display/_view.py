@@ -14,6 +14,7 @@ class View(avango.script.Script):
     BackgroundColor = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(View).__init__()
         self.Viewport.value = avango.osg.Vec4(0, 0, 1, 1)
         self.Depth.value = 0
         self.Near.value = 0.1

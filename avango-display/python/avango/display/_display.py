@@ -249,7 +249,7 @@ class _Display(object):
                     osg_view.Scene.connect_from(display_view.Root)
                     osg_view.MasterCamera.value = camera
 
-                    user_selector = ViewUserSelector(UserMatch=current_user)
+                    user_selector = ViewUserSelector(UserMatch=current_user+1)
                     user_selector.ViewIn.value = osg_view
                     user_selector.UserSelector.connect_from(display_view.UserSelector)
 
@@ -387,7 +387,7 @@ class ViewUserSelector(avango.script.Script):
     ViewOut = avango.osg.viewer.SFView()
 
     def evaluate(self):
-        if self.UserSelector.value != self.UserMatch.value:
+        if self.UserSelector.value != 0 and self.UserSelector.value != self.UserMatch.value:
             self.ViewOut.value = None
             return
 

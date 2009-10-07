@@ -107,8 +107,10 @@ class _Display(object):
             self._users.append(avango.display.nodes.User())
             view1_yellow_glasses = self._create_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
             self._users[0].Matrix.connect_from(view1_yellow_glasses.Matrix)
+            self._keep_alive.append(view1_yellow_glasses)
             view2_blue_glasses = self._create_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
             self._users[1].Matrix.connect_from(view2_blue_glasses.Matrix)
+            self._keep_alive.append(view2_blue_glasses)
 
         elif self._display_type == "LShape":
             # generate 2 _screen_transforms
@@ -252,6 +254,7 @@ class _Display(object):
                     user_selector = ViewUserSelector(UserMatch=current_user+1)
                     user_selector.ViewIn.value = osg_view
                     user_selector.UserSelector.connect_from(display_view.UserSelector)
+                    self._keep_alive.append(user_selector)
 
                     index = self._merge_viewer.add_input()
                     self._merge_viewer.get_input(index).connect_from(user_selector.ViewOut)

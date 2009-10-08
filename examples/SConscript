@@ -47,6 +47,7 @@ if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
 	SConscript('simple/SConscript')
 	SConscript('snowland/SConscript')
 	SConscript('wireframe/SConscript')
+	SConscript('shader/SConscript')
 
 
 # examples requiring specific avango modules

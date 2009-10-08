@@ -42,12 +42,14 @@
 #include <avango/osg/Geometry.h>
 #include <avango/osg/Group.h>
 #include <avango/osg/Image.h>
+#include <avango/osg/ImageStream.h>
 #include <avango/osg/Intersection.h>
 #include <avango/osg/LayerGeode.h>
 #include <avango/osg/LayerGroup.h>
 #include <avango/osg/LineSegmentIntersector.h>
 #include <avango/osg/LoadFile.h>
 #include <avango/osg/LoadImage.h>
+#include <avango/osg/LoadImageStream.h>
 #include <avango/osg/MatrixTransform.h>
 #include <avango/osg/Node.h>
 #include <avango/osg/Panel.h>
@@ -96,12 +98,14 @@ av::osg::Init::initClass()
     av::osg::Geometry::initClass();
     av::osg::Group::initClass();
     av::osg::Image::initClass();
+    av::osg::ImageStream::initClass();
     av::osg::Intersection::initClass();
     av::osg::LayerGeode::initClass();
     av::osg::LayerGroup::initClass();
     av::osg::LineSegmentIntersector::initClass();
     av::osg::LoadFile::initClass();
     av::osg::LoadImage::initClass();
+    av::osg::LoadImageStream::initClass();
     av::osg::MatrixTransform::initClass();
     av::osg::Node::initClass();
     av::osg::Panel::initClass();

@@ -41,6 +41,7 @@ headers = Split('''
     Geometry.h
     Group.h
     Image.h
+    ImageStream.h
     Init.h
     Intersection.h
     LayerGeode.h
@@ -48,6 +49,7 @@ headers = Split('''
     LineSegmentIntersector.h
     LoadFile.h
     LoadImage.h
+    LoadImageStream.h
     MatrixTransform.h
     Node.h
     Object.h

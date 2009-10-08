@@ -46,6 +46,7 @@ sources = Split('''
     Geometry.cpp
     Group.cpp
     Image.cpp
+    ImageStream.cpp
     Init.cpp
     Intersection.cpp
     LayerGeode.cpp
@@ -53,6 +54,7 @@ sources = Split('''
     LineSegmentIntersector.cpp
     LoadFile.cpp
     LoadImage.cpp
+    LoadImageStream.cpp
     MatrixTransform.cpp
     Node.cpp
     Object.cpp

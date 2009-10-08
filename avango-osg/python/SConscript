@@ -80,7 +80,9 @@ osg_files = Split("""
     avango/osg/OSGTriangleContainer.cpp
     avango/osg/OSGProjection.cpp
     avango/osg/OSGImage.cpp
+    avango/osg/OSGImageStream.cpp
     avango/osg/OSGLoadImage.cpp
+    avango/osg/OSGLoadImageStream.cpp
     avango/osg/OSGTexture.cpp
     avango/osg/OSGTexture2D.cpp
     avango/osg/OSGLineSegmentIntersector.cpp

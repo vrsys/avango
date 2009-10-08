@@ -77,7 +77,9 @@
 #include "OSGProjection.h"
 #include "OSGLineSegmentIntersector.h"
 #include "OSGImage.h"
+#include "OSGImageStream.h"
 #include "OSGLoadImage.h"
+#include "OSGLoadImageStream.h"
 #include "OSGTexture.h"
 #include "OSGTexture2D.h"
 #include "OSGTexture2DArray.h"
@@ -161,7 +163,9 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGProjection();
   init_OSGLineSegmentIntersector();
   init_OSGImage();
+  init_OSGImageStream();
   init_OSGLoadImage();
+  init_OSGLoadImageStream();
   init_OSGTexture();
   init_OSGTexture2D();
 

@@ -62,6 +62,8 @@ namespace
       py_connected_fields.append(boost::ref(*self->getConnectedField(field)));
     return py_connected_fields;
   }
+
+
 }
 
 void init_Field(void)
@@ -85,6 +87,7 @@ void init_Field(void)
     .def("enable_notify", &av::Field::enableNotify)
     .def("notify_enabled", &av::Field::notifyEnabled)
     .def("touch", &av::Field::touch)
+    .def("get_number_of_connected_fields", &av::Field::getNumberOfConnectedFields)
     .def("read", &av::Field::read)
     .def("write", &av::Field::write)
     ;

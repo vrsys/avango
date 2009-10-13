@@ -543,7 +543,7 @@ char* DTrack::get_f(const char* str, float* f)
 // fdat (o): array for 'float' values (long enough due to fmt)
 // return value (o): pointer behind read value in str; NULL in case of error
 
-char* DTrack::get_block(const char* str, const char* fmt, unsigned long* uldat, float* fdat)
+char* DTrack::get_block(char* str, const char* fmt, unsigned long* uldat, float* fdat)
 {
 	char* strend;
 	int index_ul, index_f;

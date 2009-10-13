@@ -173,7 +173,7 @@ class DTrack
 	static char* get_ul(const char* str, unsigned long* ul);
 	static char* get_d(const char* str, double* d);
 	static char* get_f(const char* str, float* f);
-	static char* get_block(const char* str, const char* fmt, unsigned long* uldat, float* fdat);
+	static char* get_block(char* str, const char* fmt, unsigned long* uldat, float* fdat);
 	
 	static int udp_init(unsigned short port);
 	static int udp_exit(int sock);

@@ -151,6 +151,38 @@ class DoubleDerivedUpcallingIncValue(DerivedUpcallingIncValue):
     def evaluate(self):
         self.super(DoubleDerivedUpcallingIncValue).evaluate()
 
+class HasSingleFieldCallbackBase1(avango.script.Script):
+    value1 = avango.SFInt()
+
+    def __init__(self):
+        self.super(HasSingleFieldCallbackBase1).__init__()
+        self.set_value1 = 0
+
+    @avango.script.field_has_changed(value1)
+    def callback1(self):
+        self.set_value1 = 1
+
+class HasSingleFieldCallbackBase2(avango.script.Script):
+    value2 = avango.SFInt()
+
+    def __init__(self):
+        self.super(HasSingleFieldCallbackBase2).__init__()
+        self.set_value2 = 0
+
+    @avango.script.field_has_changed(value2)
+    def callback2(self):
+        self.set_value2 = 2
+
+class DerivedFromMultipleScript(HasSingleFieldCallbackBase1, HasSingleFieldCallbackBase2):
+    value3 = avango.SFInt()
+
+    def __init__(self):
+        self.super(DerivedFromMultipleScript).__init__()
+        self.set_value3 = 0
+
+    @avango.script.field_has_changed(value3)
+    def callback(self):
+        self.set_value3 = 3
 
 class ScriptTestCase(unittest.TestCase):
 
@@ -394,6 +426,22 @@ class ScriptTestCase(unittest.TestCase):
         self.assertRaises(AttributeError, assign)
         self.assertEqual(5, node.field.value)
 
+    def testDerivedFromMultipleScriptFieldHasChanged(self):
+        node = DerivedFromMultipleScript()
+        self.assert_(node)
+        
+        self.assert_(hasattr(node, "set_value1"))
+        self.assert_(hasattr(node, "set_value2"))
+        self.assert_(hasattr(node, "set_value3"))
+
+        node.value1.value = 1
+        self.assertEqual(node.set_value1, 1)
+
+        node.value2.value = 1
+        self.assertEqual(node.set_value2, 2)
+
+        node.value3.value = 1
+        self.assertEqual(node.set_value3, 3)
 
 def Suite():
     suite = unittest.TestSuite()
@@ -433,6 +481,7 @@ def Suite():
         'testDerivedUpcalling',
         'testDoubleDerivedUpcalling',
         'testSetAttributeWithNameOfField',
+        'testDerivedFromMultipleScriptFieldHasChanged',
     ]
     suite.addTests(map(ScriptTestCase, ScriptTests))
 

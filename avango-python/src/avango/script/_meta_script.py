@@ -131,7 +131,14 @@ class Script(object):
                     script_class = cls
                 else:
                     script_class = script._get_object().__class__
-                for class_ in script_class.__mro__:
+                mro = script._get_object().__class__.__mro__
+                # FIXME the following loop is a reimplementation of mro.index, which does not work
+                index = 0
+                for i in xrange(len(mro)):
+                    if script_class == mro[i]:
+                        index = i+1
+                        break
+                for class_ in mro[index:]:
                     if class_ == script_class:
                         continue
                     if name not in class_.__dict__:

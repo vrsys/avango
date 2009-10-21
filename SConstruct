@@ -56,6 +56,11 @@ opts.AddOptions(
     BoolOption('VRPN_SUPPORT',
                'Enable VRPN support for the AvangoDaemon module',
                False),
+
+    BoolOption('BUILD_32',
+               'Force a 32 bit build',
+               False),
+    
     )
 
 avango.build.setup()

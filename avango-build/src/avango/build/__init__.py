@@ -205,6 +205,12 @@ def _build_environment():
             result.Append(CCFLAGS='-fno-strict-aliasing')
     if result['TRACE_LOGGING']:
         result.Append(CPPDEFINES='TRACE_LOGGING')
+
+    if result['BUILD_32']:
+        result.Append(CCFLAGS='-m32')
+        result.Append(LINKFLAGS='-m32')
+        
+    
     result.PrependENVPath('PATH', result['BINARY_PATH'])
     result.Prepend(CPPPATH=result['INCLUDE_PATH'].split(os.pathsep))
     result.Prepend(LIBPATH=result['LIBRARY_PATH'].split(os.pathsep))

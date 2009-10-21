@@ -67,9 +67,26 @@ namespace av
     public:
 
       /**
+       * Width directly sets and gets the width of the wrapped ::osg::Image.
+       */
+      SFUInt Width;
+
+      /**
+       * Height directly sets and gets the height of the wrapped ::osg::Image.
+       */
+      SFUInt Height;
+
+      /**
        * Get the wrapped ::osg::Image.
        */
       ::osg::Image* getOsgImage() const;
+
+    protected:
+
+      virtual void getWidthCB(const SFUInt::GetValueEvent& event);
+      virtual void setWidthCB(const SFUInt::SetValueEvent& event);
+      virtual void getHeightCB(const SFUInt::GetValueEvent& event);
+      virtual void setHeightCB(const SFUInt::SetValueEvent& event);
 
     private:
 

@@ -23,6 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
+#include <boost/bind.hpp>
 #include <avango/osg/Image.h>
 
 AV_FC_DEFINE(av::osg::Image);
@@ -34,6 +35,12 @@ av::osg::Image::Image(::osg::Image* osgimage) :
   Object(osgimage),
   mOsgImage(osgimage)
 {
+   AV_FC_ADD_ADAPTOR_FIELD(Width,
+                         boost::bind(&Image::getWidthCB, this, _1),
+                         boost::bind(&Image::setWidthCB, this, _1));
+   AV_FC_ADD_ADAPTOR_FIELD(Height,
+                         boost::bind(&Image::getHeightCB, this, _1),
+                         boost::bind(&Image::setHeightCB, this, _1));
 }
 
 av::osg::Image::~Image()
@@ -57,4 +64,28 @@ av::osg::Image::initClass()
 av::osg::Image::getOsgImage() const
 {
   return mOsgImage;
+}
+
+/* virtual */ void
+av::osg::Image::getWidthCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgImage->s();
+}
+
+/* virtual */ void
+av::osg::Image::setWidthCB(const SFUInt::SetValueEvent& event)
+{
+  // NOOP
+}
+
+/* virtual */ void
+av::osg::Image::getHeightCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgImage->t();
+}
+
+/* virtual */ void
+av::osg::Image::setHeightCB(const SFUInt::SetValueEvent& event)
+{
+  // NOOP
 }

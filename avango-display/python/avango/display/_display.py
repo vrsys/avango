@@ -2,13 +2,13 @@ import avango.display #FIXME remove cyclic dependency
 import avango.daemon
 import avango.osg.viewer
 import avango.inspector
-import getopt
-import sys
 from math import *
 
 class Display(object):
 
-    def __init__(self):
+    def __init__(self, display_type):
+        self._display_type = display_type
+
         self._perf2osg = avango.osg.make_rot_mat(radians(-90), 1, 0, 0)
         self._keep_alive = [] # Keeps references to objects alive
 
@@ -17,9 +17,6 @@ class Display(object):
         self._composite_viewer.Views.connect_from(self._merge_viewer.ViewsOut)
 
         self.device_service = avango.daemon.DeviceService()
-
-    def parse(self, argv):
-        return argv
 
     def get_display_type(self):
         return self._display_type
@@ -114,11 +111,15 @@ class Display(object):
 
 class _Display(Display):
 
-    def __init__(self):
-        super(_Display, self).__init__()
+    def __init__(self, display_type, inspector, options):
+        super(_Display, self).__init__(display_type)
 
-        self._display_type = ""
-        self._two_view_walls = [":0.0", ":0.0"]      # needed for Twopipe/Onepipe Mode
+        self._inspector = inspector
+
+        if "twopipe" in options:
+            self._two_view_walls = [":0.0", ":0.1"]
+        else:
+            self._two_view_walls = [":0.0", ":0.0"]
 
         self._windows = []
         self._users = []
@@ -128,45 +129,8 @@ class _Display(Display):
         self._touchscreen_camera = None
         self._touchscreen_window = None
 
-        self._inspector = None
-
         self._subdisplay_window_events = {}
         self._subdisplay_camera = {}
-
-    def parse(self, argv):
-        try:
-            opts, args = getopt.getopt(argv[1:], "hn:l:d:i",
-                                       ["help", "notify=", "log-file=", "display=", "inspector", "onepipe", "twopipe"])
-        except getopt.GetoptError, err:
-            pass
-
-        notify_level = -1
-        notify_logfile = ''
-        for opt, arg in opts:
-            if opt in ("-h", "--help"):
-                print "Usage: python programm.py [--display=TwoWiew] [--twopipe] [--inspector]"
-                print "options and arguments:"
-                print "--display <screenid>     : selects Display setup"
-                print "--twopipe                : use TwoPipe mode, i.e. two graphics cards"
-                print "--inspector              : inspect scene graph with AVANGO inspector"
-            elif opt in ("-n", "--notify"):
-                notify_level = int(arg)
-            elif opt in ("-l", "--log-file"):
-                notify_logfile = arg
-            elif opt in ("-d", "--display"):
-                self._display_type = arg
-            elif opt in ("-i", "--inspector"):
-                self._inspector = avango.inspector.nodes.Inspector()
-            elif opt in ("--onepipe"):
-                self._two_view_walls = [":0.0", ":0.0"]
-            elif opt in ("--twopipe"):
-                self._two_view_walls = [":0.0", ":0.1"]
-
-        if notify_level > -1:
-            if notify_logfile == '':
-                avango.enable_logging(notify_level)
-            else:
-                avango.enable_logging(notify_level, notify_logfile)
 
         # We always have one user
         self._users.append(avango.display.nodes.User())
@@ -265,8 +229,6 @@ class _Display(Display):
             window.Decoration.value = True
             window.AutoHeight.value = True
             self._windows.append(window)
-
-        return args
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         device = avango.display.nodes.Device()

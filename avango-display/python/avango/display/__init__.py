@@ -6,12 +6,57 @@ from _view import *
 from _device import *
 from _display import _Display
 
+import getopt
+
 def init(argv):
     "Initialize display setup"
 
+    try:
+        opts, args = getopt.getopt(argv[1:], "hn:l:d:io:",
+                                   ["help", "notify=", "log-file=",
+                                    "display=", "inspector", "option="])
+    except getopt.GetoptError, err:
+        pass
+
+    display_type=''
+    notify_level = -1
+    notify_logfile = ''
+    inspector = None
+    options = {}
+    for opt, arg in opts:
+        if opt in ("-h", "--help"):
+            print "Usage: python %s [OPTIONS ...]" % argv[0]
+            print "Allowed options:"
+            print "--display <Display Name> : Selects Display setup"
+            print "--notify <Level>         : Selects notify level"
+            print "--log-file <Log File>    : Selects log messages output file"
+            print "--inspector              : Inspect scene graph with AVANGO inspector"
+            print "--option <Key>:<Value>   : Sets specific option"
+        elif opt in ("-n", "--notify"):
+            notify_level = int(arg)
+        elif opt in ("-l", "--log-file"):
+            notify_logfile = arg
+        elif opt in ("-d", "--display"):
+            display_type = arg
+        elif opt in ("-i", "--inspector"):
+            inspector = avango.inspector.nodes.Inspector()
+        elif opt in ("-o", "--option"):
+            try:
+                key, value = arg.split(":")
+                options[key] = value
+            except:
+                print "WARNING: Ignoring ill-formated option: '%s'" % arg
+
+    if notify_level > -1:
+        if notify_logfile == '':
+            avango.enable_logging(notify_level)
+        else:
+            avango.enable_logging(notify_level, notify_logfile)
+
     global _selected_display
-    _selected_display = _Display()
-    return _selected_display.parse(argv)
+    _selected_display = _make_display(display_type, inspector, options)
+
+    return args
 
 def get_display_type():
     "Returns a string identifying the used display"
@@ -153,3 +198,6 @@ def run():
     "Run the AVANGO evaluation loop."
 
     _selected_display.run()
+
+def _make_display(display_type, inspector, options):
+    return _Display(display_type, inspector, options)

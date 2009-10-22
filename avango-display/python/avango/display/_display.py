@@ -6,8 +6,9 @@ from math import *
 
 class Display(object):
 
-    def __init__(self, display_type):
+    def __init__(self, display_type, inspector):
         self._display_type = display_type
+        self._inspector = inspector
 
         self._perf2osg = avango.osg.make_rot_mat(radians(-90), 1, 0, 0)
         self._keep_alive = [] # Keeps references to objects alive
@@ -17,6 +18,9 @@ class Display(object):
         self._composite_viewer.Views.connect_from(self._merge_viewer.ViewsOut)
 
         self.device_service = avango.daemon.DeviceService()
+
+        self._users = []
+        self._windows = []
 
     def get_display_type(self):
         return self._display_type
@@ -30,7 +34,31 @@ class Display(object):
         return self._users[user]
 
     def make_view(self, subdisplay):
-        pass
+        display_view = avango.display.nodes.View()
+
+        for window, transform, current_user in self._windows:
+            eye_offset = 0.
+            if window.QuadBufferStereo.value:
+                eye_offset = 0.03
+
+            camera, view = self.make_camera_with_viewport(
+                display_view, eye_offset, transform, window)
+            camera.EyeTransform.connect_from(self._users[current_user].Matrix)
+
+            user_selector = ViewUserSelector(UserMatch=current_user+1)
+            user_selector.ViewIn.value = view
+            user_selector.UserSelector.connect_from(display_view.UserSelector)
+            self.keep_alive(user_selector)
+
+            self.connect_view_field(user_selector.ViewOut)
+
+        if self._inspector and len(self._inspector.Children.value) == 0:
+            # FIXME this should use a proper aggregation node
+            converter = SFNode2MFContainerConverter()
+            converter.Input.connect_from(display_view.Root)
+            self._inspector.Children.connect_from(converter.Output)
+
+        return display_view
 
     def make_device(self, device, interface):
         return None
@@ -108,21 +136,23 @@ class Display(object):
         index = self._merge_viewer.add_input()
         self._merge_viewer.get_input(index).connect_from(view_field)
 
+    def add_window(self, window, transform, user):
+        self._windows.append((window, transform, user))
+
+    def add_user(self, user):
+        self._users.append(user)
+
 
 class _Display(Display):
 
     def __init__(self, display_type, inspector, options):
-        super(_Display, self).__init__(display_type)
-
-        self._inspector = inspector
+        super(_Display, self).__init__(display_type, inspector)
 
         if "twopipe" in options:
             self._two_view_walls = [":0.0", ":0.1"]
         else:
             self._two_view_walls = [":0.0", ":0.0"]
 
-        self._windows = []
-        self._users = []
         self._screen_transforms = []
         self._eye_vec = avango.osg.Vec3(0., 1.7, 0.)
 
@@ -133,44 +163,48 @@ class _Display(Display):
         self._subdisplay_camera = {}
 
         # We always have one user
-        self._users.append(avango.display.nodes.User())
-        self._users[0].Matrix.value = avango.osg.make_trans_mat(self._eye_vec)
+        user = avango.display.nodes.User()
+        user.Matrix.value = avango.osg.make_trans_mat(self._eye_vec)
+        self.add_user(user)
 
         if self._display_type == "FakeTwoView":
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
-
             # Viewer 1
-            self._windows.append(self.make_window(0, 0, 1280, 1024, 6, 2.4, False, self._two_view_walls[0]))
-            self._windows[0].Name.value = "1"
+            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
+            window1.Name.value = "User 1"
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
+            # User 2
+            user2 = avango.display.nodes.User()
+            user2.Matrix.value = avango.osg.make_trans_mat(self._eye_vec)
+            self.add_user(user2)
 
             # Viewer 2
-            xpos = 0
-            if self._two_view_walls[1] == ":0.0":
-                xpos = 1280
-            self._windows.append(self.make_window(xpos, 0, 1280, 1024, 6, 2.4, False, self._two_view_walls[1]))
-            self._windows[1].Name.value = "2"
+            window2 = self.make_window(1280, 0, 1280, 1024, 6, 2.4, False)
+            window2.Name.value = "User 2"
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
 
         elif self._display_type == "TwoView":
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
-
             # Viewer 1
-            self._windows.append(self.make_window(0, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[0]))
-            self._windows[0].Name.value = "1"
+            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[0])
+            window1.Name.value = "1"
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
 
             # Viewer 2
             xpos = 0
             if self._two_view_walls[1] == ":0.0":
                 xpos = 1280
-            self._windows.append(self.make_window(xpos, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[1]))
-            self._windows[1].Name.value = "2"
+            window2 = self.make_window(xpos, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[1])
+            window2.Name.value = "2"
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
 
             # Properly connect the two users (and add second user before)
-            self._users.append(avango.display.nodes.User())
+            user2 = avango.display.nodes.User()
+            self.add_user(user2)
             view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
-            self._users[0].Matrix.connect_from(view1_yellow_glasses.Matrix)
+            user.Matrix.connect_from(view1_yellow_glasses.Matrix)
             self.keep_alive(view1_yellow_glasses)
             view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
-            self._users[1].Matrix.connect_from(view2_blue_glasses.Matrix)
+            user2.Matrix.connect_from(view2_blue_glasses.Matrix)
             self.keep_alive(view2_blue_glasses)
 
         elif self._display_type == "LShape":
@@ -180,55 +214,51 @@ class _Display(Display):
             exit(0)
 
         elif self._display_type == "iCone":
-            # generate 4 _screen_transforms
-            self._screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0))
-            self._screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0))
-            self._screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(-28.045), 0, 1, 0))
-            self._screen_transforms.append(avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) * avango.osg.make_trans_mat(0, 1.390, -2.818) * avango.osg.make_rot_mat(radians(-84.135), 0, 1, 0))
+            common_transform = avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) \
+                             * avango.osg.make_trans_mat(0, 1.390, -2.818)
 
-            # Viewer 1
-            self._windows.append(self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.0"))
-            self._windows.append(self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.1"))
-            self._windows.append(self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.2"))
-            self._windows.append(self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.3"))
+            transforms = [
+                common_transform * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0),
+                common_transform * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0),
+                common_transform * avango.osg.make_rot_mat(radians(-28.045), 0, 1, 0),
+                common_transform * avango.osg.make_rot_mat(radians(-84.135), 0, 1, 0),
+            ]
+
+            for i in len(transforms):
+                window = self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.%i"%i)
+                self.add_window(window, transform[i], 0)
 
         elif self._display_type == "TouchscreenEmulator":
-            # Viewer 1
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
-            self._windows.append(self.make_window(0, 0, 1280, 1024, 6, 2.4, False))
-            self._windows[0].Name.value = ""
+            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
+            window1.Name.value = ""
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
             self._touchscreen_window = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
 
         elif self._display_type == "TwoviewTouchscreenEmulator":
-            # Viewer 1
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.2, -2.4))
-            self._windows.append(self.make_window(0, 0, 1280, 1024, 6, 2.4, True, ":0.0"))
-            self._windows[0].Name.value = ""
+            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, ":0.0")
+            window1.Name.value = ""
+            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
             self._touchscreen_window = self.make_window(1280, 0, 1280, 1024, 6., 2.4, False, ":0.0")
             self._touchscreen_window.Name.value = "Touchscreen"
 
         elif self._display_type == "Wall":
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.6+0.15, -1.2))
-
-            # Viewer 1
-            self._windows.append(self.make_window(0, 0, 800, 600, 1.2, 0.9, True))
-            self._windows[0].Name.value = ""
+            window1 = self.make_window(0, 0, 800, 600, 1.2, 0.9, True)
+            window1.Name.value = ""
+            self.add_window(window1, avango.osg.make_trans_mat(0, 1.6+0.15, -1.2), 0)
 
         elif self._display_type == "AutoStereoDisplay":
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.7, -0.7))
-
-            # Viewer 1
-            self._windows.append(self.make_window(0, 0, 1200, 1600, 0.33, 0.43, True))
-            self._windows[0].Name.value = ""
+            window1 = self.make_window(0, 0, 1200, 1600, 0.33, 0.43, True)
+            window1.Name.value = ""
+            self.add_window(window1, avango.osg.make_trans_mat(0, 1.7, -0.7), 0)
 
         else:
-            # Viewer 1
-            self._screen_transforms.append(avango.osg.make_trans_mat(0, 1.7, -0.6))
-            self._display_type = "Monitor"
             window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False)
+            window.Name.value = "AVANGO"
             window.Decoration.value = True
             window.AutoHeight.value = True
-            self._windows.append(window)
+            self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.6), 0)
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         device = avango.display.nodes.Device()
@@ -247,35 +277,21 @@ class _Display(Display):
         return device
 
     def make_view(self, subdisplay):
-        display_view = avango.display.nodes.View()
-
         if subdisplay == "":
             if self._display_type == "iCone":
+                display_view = avango.display.nodes.View()
                 for i in range(0, len(self._windows)):
                     camera, view = self.make_camera(display_view, 0.03, self._windows[i])
                     camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
                     camera.ScreenTransform.value = self._screen_transforms[i]
                     self.add_view(view)
+                return display_view
             else:
-                for current_user in xrange(0, len(self._users)):
-                    eye_offset = 0.
-                    if self._windows[current_user].QuadBufferStereo.value:
-                        eye_offset = 0.03
-
-                    camera, view = self.make_camera_with_viewport(
-                        display_view, eye_offset,
-                        self._screen_transforms[0],
-                        self._windows[current_user])
-                    camera.EyeTransform.connect_from(self._users[current_user].Matrix)
-
-                    user_selector = ViewUserSelector(UserMatch=current_user+1)
-                    user_selector.ViewIn.value = view
-                    user_selector.UserSelector.connect_from(display_view.UserSelector)
-                    self.keep_alive(user_selector)
-
-                    self.connect_view_field(user_selector.ViewOut)
+                return super(_Display, self).make_view(subdisplay)
 
         elif subdisplay == "Touchscreen" and (self._display_type in ["TouchscreenEmulator", "TwoviewTouchscreenEmulator"]):
+            display_view = avango.display.nodes.View()
+
             camera, view = self.make_camera(display_view, 0., self._touchscreen_window)
             camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
             camera.Window.value.Decoration.value = True
@@ -289,7 +305,11 @@ class _Display(Display):
             self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
             self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
 
+            return display_view
+
         elif subdisplay != "" and self._display_type == "Monitor":
+            display_view = avango.display.nodes.View()
+
             # In the Monitor setting each subdisplay simply get a new window
             window = self.make_window(0, 0, 1024, 768, 4, 3, False)
             window.Decoration.value = True
@@ -309,13 +329,9 @@ class _Display(Display):
             window.MoveEvent.connect_from(window_event.MoveEvent)
             self._subdisplay_camera[subdisplay] = camera
 
-        if self._inspector and len(self._inspector.Children.value) == 0:
-            # FIXME this should use a proper aggregation node
-            converter = SFNode2MFContainerConverter()
-            converter.Input.connect_from(display_view.Root)
-            self._inspector.Children.connect_from(converter.Output)
+            return display_view
 
-        return display_view
+        return None
 
     def make_device(self, device, interface):
         if self._display_type == "Monitor":

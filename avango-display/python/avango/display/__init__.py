@@ -18,7 +18,7 @@ def init(argv):
     except getopt.GetoptError, err:
         pass
 
-    display_type=''
+    display_type='Monitor'
     notify_level = -1
     notify_logfile = ''
     inspector = None

@@ -4,9 +4,10 @@ nodes = avango.nodefactory.NodeFactory(module=__name__)
 
 from _view import *
 from _device import *
-from _display import TwoView, FakeTwoView, iCone, TouchscreenEmulator, Monitor
+from _display import Display
 
 import getopt
+import os.path
 
 def init(argv):
     "Initialize display setup"
@@ -200,13 +201,13 @@ def run():
     _selected_display.run()
 
 def _make_display(display_type, inspector, options):
-    if display_type == "TwoView":
-        return TwoView(inspector, options)
-    elif display_type == "FakeTwoView":
-        return FakeTwoView(inspector, options)
-    elif display_type == "iCone":
-        return iCone(inspector, options)
-    elif display_type == "TouchscreenEmulator":
-        return TouchscreenEmulator(inspector, options)
-    else: # assume display_type == "Monitor"
-        return Monitor(inspector, options)
+    module_path = os.path.split(__file__)[0]
+    full_path = os.path.join(module_path, 'setups', display_type+".py")
+    source_file = open(full_path, 'r')
+    source = source_file.read()
+    code = compile(source, full_path, 'exec')
+
+    scope = {}
+    exec code in scope
+
+    return scope[display_type](inspector, options)

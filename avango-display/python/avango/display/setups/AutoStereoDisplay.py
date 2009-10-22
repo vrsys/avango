@@ -23,31 +23,17 @@
 #                                                                        #
 ##########################################################################
 
-import avango.build
+import avango.display
 
-avango_env = avango.build.PythonEnvironment()
+class AutoStereoDisplay(avango.display.Display):
 
-Alias('all', Alias('display'))
-Alias('install', Alias('install-display'))
+    def __init__(self, inspector, options):
+        super(AutoStereoDisplay, self).__init__("AutoStereoDisplay", inspector)
 
-av_display_python_files = Split("""
-    python/avango/display/__init__.py
-    python/avango/display/_device.py
-    python/avango/display/_display.py
-    python/avango/display/_view.py
-    """)
-av_display_setups_files = Split("""
-    python/avango/display/setups/AutoStereoDisplay.py
-    python/avango/display/setups/FakeTwoView.py
-    python/avango/display/setups/iCone.py
-    python/avango/display/setups/Monitor.py
-    python/avango/display/setups/Monitor.py
-    python/avango/display/setups/TouchscreenEmulator.py
-    python/avango/display/setups/TwoView.py
-    python/avango/display/setups/Wall.py
-    """)
-av_display = avango_env.Install(avango.build.get_python_path('avango/display'), av_display_python_files)
-av_display_setups = avango_env.Install(avango.build.get_python_path('avango/display/setups'), av_display_setups_files)
-av_display_daemon = avango_env.Install(avango.build.get_binary_path(), 'python/avango-display-daemon.py')
-Alias('display', [av_display, av_display_setups])
-Alias('install-display', [av_display, av_display_setups, av_display_daemon])
+        window = self.make_window(0, 0, 1200, 1600, 0.33, 0.43, True)
+        window.Name.value = ""
+        self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.7), 0)
+
+        user = avango.display.nodes.User()
+        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user)

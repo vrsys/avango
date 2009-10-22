@@ -8,6 +8,7 @@ from _display import Display
 
 import getopt
 import os.path
+import itertools
 
 def init(argv):
     "Initialize display setup"
@@ -200,12 +201,38 @@ def run():
 
     _selected_display.run()
 
+
+_search_path = []
+
+def add_search_path(path):
+    "Add path to search paths for display setups"
+    global _search_path
+    _search_path.append(path)
+
+class DisplayNotFound(IOError):
+    'The given Display setup file was not found'
+    def __init__(self, display_type):
+        self._display_type = display_type
+    def __str__(self):
+        return "Display '%s' was not found" % self._display_type
+
 def _make_display(display_type, inspector, options):
-    module_path = os.path.split(__file__)[0]
-    full_path = os.path.join(module_path, 'setups', display_type+".py")
-    source_file = open(full_path, 'r')
+    module_path = [os.path.join(os.path.split(__file__)[0], 'setups')]
+    env_path = os.environ.get('AVANGO_DISPLAY_PATH', "").split(':')
+
+    display_filename = display_type+'.py'
+    for path in itertools.chain(env_path, module_path, _search_path):
+        if not path:
+            continue
+        display_path = os.path.join(path, display_filename)
+        if os.path.exists(display_path):
+            break
+    else:
+        raise DisplayNotFound(display_type)
+
+    source_file = open(display_path, 'r')
     source = source_file.read()
-    code = compile(source, full_path, 'exec')
+    code = compile(source, display_path, 'exec')
 
     scope = {}
     exec code in scope

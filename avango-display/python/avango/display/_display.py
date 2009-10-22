@@ -143,228 +143,289 @@ class Display(object):
         self._users.append(user)
 
 
-class _Display(Display):
+class TwoView(Display):
 
-    def __init__(self, display_type, inspector, options):
-        super(_Display, self).__init__(display_type, inspector)
+    def __init__(self, inspector, options):
+        super(TwoView, self).__init__("TwoView", inspector)
 
         if "twopipe" in options:
-            self._two_view_walls = [":0.0", ":0.1"]
+            two_view_walls = [":0.0", ":0.1"]
+            twopipe = True
         else:
-            self._two_view_walls = [":0.0", ":0.0"]
+            two_view_walls = [":0.0", ":0.0"]
+            twopipe = False
 
-        self._screen_transforms = []
+        # Viewer 1
+        window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, two_view_walls[0])
+        window1.Name.value = "1"
+        self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
+        # Viewer 2
+        if not twopipe:
+            xpos = 1280
+        else:
+            xpos = 0
+        window2 = self.make_window(xpos, 0, 1280, 1024, 6, 2.4, True, two_view_walls[1])
+        window2.Name.value = "2"
+        self.add_window(window2, avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
+
+        # Users
+        user1 = avango.display.nodes.User()
+        self.add_user(user1)
+        user2 = avango.display.nodes.User()
+        self.add_user(user2)
+
+        # Connect head-tracking
+        view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
+        user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
+        self.keep_alive(view1_yellow_glasses)
+        view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
+        user2.Matrix.connect_from(view2_blue_glasses.Matrix)
+        self.keep_alive(view2_blue_glasses)
+
+    def make_dominant_user_device(self, user, interface, subdisplay):
+        pda_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
+                                                      Station = "ve-dtrack-pda2")
+        pda_sensor.TransmitterOffset.value = self._perf2osg
+        pda_sensor.ReceiverOffset.value = avango.osg.make_trans_mat(0.076, -0.016, 0.025)
+        self.keep_alive(pda_sensor)
+
+        device = avango.display.nodes.Device()
+        device.Matrix.connect_from(pda_sensor.Matrix)
+        return device
+
+class FakeTwoView(Display):
+
+    def __init__(self, inspector, options):
+        super(FakeTwoView, self).__init__("FakeTwoView", inspector)
+
+        # Viewer 1
+        window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
+        window1.Name.value = "User 1"
+        self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
+        # Viewer 2
+        window2 = self.make_window(1280, 0, 1280, 1024, 6, 2.4, False)
+        window2.Name.value = "User 2"
+        self.add_window(window2, avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
+
+        # Users
+        user1 = avango.display.nodes.User()
+        user1.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user1)
+        user2 = avango.display.nodes.User()
+        user2.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user2)
+
+class iCone(Display):
+
+    def __init__(self, inspector, options):
+        super(iCone, self).__init__("iCone", inspector)
+
         self._eye_vec = avango.osg.Vec3(0., 1.7, 0.)
 
-        self._touchscreen_camera = None
-        self._touchscreen_window = None
+        common_transform = avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) \
+                         * avango.osg.make_trans_mat(0, 1.390, -2.818)
+
+        transforms = [
+            common_transform * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(radians(-28.045), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(radians(-84.135), 0, 1, 0),
+        ]
+
+        self._cone_windows = []
+        for i in len(transforms):
+            window = self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.%i"%i)
+            self._cone_windows.append((window, transform[i]))
+
+    def make_view(self, subdisplay):
+        display_view = avango.display.nodes.View()
+
+        for window, transform in self._cone_windows:
+            camera, view = self.make_camera(display_view, 0.03, window)
+            camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
+            camera.ScreenTransform.value = transform
+            self.add_view(view)
+
+        return display_view
+
+class Monitor(Display):
+
+    def __init__(self, inspector, options):
+        super(Monitor, self).__init__("Monitor", inspector)
 
         self._subdisplay_window_events = {}
         self._subdisplay_camera = {}
 
-        # We always have one user
+        window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False)
+        window.Name.value = "AVANGO"
+        window.Decoration.value = True
+        window.AutoHeight.value = True
+        self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.6), 0)
+
         user = avango.display.nodes.User()
-        user.Matrix.value = avango.osg.make_trans_mat(self._eye_vec)
+        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
         self.add_user(user)
-
-        if self._display_type == "FakeTwoView":
-            # Viewer 1
-            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
-            window1.Name.value = "User 1"
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
-
-            # User 2
-            user2 = avango.display.nodes.User()
-            user2.Matrix.value = avango.osg.make_trans_mat(self._eye_vec)
-            self.add_user(user2)
-
-            # Viewer 2
-            window2 = self.make_window(1280, 0, 1280, 1024, 6, 2.4, False)
-            window2.Name.value = "User 2"
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
-
-        elif self._display_type == "TwoView":
-            # Viewer 1
-            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[0])
-            window1.Name.value = "1"
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
-
-            # Viewer 2
-            xpos = 0
-            if self._two_view_walls[1] == ":0.0":
-                xpos = 1280
-            window2 = self.make_window(xpos, 0, 1280, 1024, 6, 2.4, True, self._two_view_walls[1])
-            window2.Name.value = "2"
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
-
-            # Properly connect the two users (and add second user before)
-            user2 = avango.display.nodes.User()
-            self.add_user(user2)
-            view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
-            user.Matrix.connect_from(view1_yellow_glasses.Matrix)
-            self.keep_alive(view1_yellow_glasses)
-            view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
-            user2.Matrix.connect_from(view2_blue_glasses.Matrix)
-            self.keep_alive(view2_blue_glasses)
-
-        elif self._display_type == "LShape":
-            # generate 2 _screen_transforms
-            # how many windows needed?
-            print "not implemented."
-            exit(0)
-
-        elif self._display_type == "iCone":
-            common_transform = avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) \
-                             * avango.osg.make_trans_mat(0, 1.390, -2.818)
-
-            transforms = [
-                common_transform * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0),
-                common_transform * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0),
-                common_transform * avango.osg.make_rot_mat(radians(-28.045), 0, 1, 0),
-                common_transform * avango.osg.make_rot_mat(radians(-84.135), 0, 1, 0),
-            ]
-
-            for i in len(transforms):
-                window = self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.%i"%i)
-                self.add_window(window, transform[i], 0)
-
-        elif self._display_type == "TouchscreenEmulator":
-            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
-            window1.Name.value = ""
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
-
-            self._touchscreen_window = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
-
-        elif self._display_type == "TwoviewTouchscreenEmulator":
-            window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, ":0.0")
-            window1.Name.value = ""
-            self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
-
-            self._touchscreen_window = self.make_window(1280, 0, 1280, 1024, 6., 2.4, False, ":0.0")
-            self._touchscreen_window.Name.value = "Touchscreen"
-
-        elif self._display_type == "Wall":
-            window1 = self.make_window(0, 0, 800, 600, 1.2, 0.9, True)
-            window1.Name.value = ""
-            self.add_window(window1, avango.osg.make_trans_mat(0, 1.6+0.15, -1.2), 0)
-
-        elif self._display_type == "AutoStereoDisplay":
-            window1 = self.make_window(0, 0, 1200, 1600, 0.33, 0.43, True)
-            window1.Name.value = ""
-            self.add_window(window1, avango.osg.make_trans_mat(0, 1.7, -0.7), 0)
-
-        else:
-            window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False)
-            window.Name.value = "AVANGO"
-            window.Decoration.value = True
-            window.AutoHeight.value = True
-            self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.6), 0)
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         device = avango.display.nodes.Device()
-        if (self._display_type == "TouchscreenEmulator" or self._display_type == "TwoviewTouchscreenEmulator") and subdisplay == "Touchscreen":
-            device.Matrix.connect_from(self._touchscreen_camera.MouseNearTransform)
-            device.Button1.connect_from(self._touchscreen_event.MouseButtons_OnlyLeft)
-        elif self._display_type == "TwoView":
-            pda_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
-                                                          Station = "ve-dtrack-pda2")
-            pda_sensor.TransmitterOffset.value = self._perf2osg
-            pda_sensor.ReceiverOffset.value = avango.osg.make_trans_mat(0.076, -0.016, 0.025)
-            device.Matrix.connect_from(pda_sensor.Matrix)
-        elif self._display_type == "Monitor" and subdisplay != "":
-            device.Matrix.connect_from(self._subdisplay_camera[subdisplay].MouseNearTransform)
-            device.Button1.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyLeft)
+        if subdisplay == "":
+            return device
+
+        device.Matrix.connect_from(self._subdisplay_camera[subdisplay].MouseNearTransform)
+        device.Button1.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyLeft)
+
         return device
 
     def make_view(self, subdisplay):
         if subdisplay == "":
-            if self._display_type == "iCone":
-                display_view = avango.display.nodes.View()
-                for i in range(0, len(self._windows)):
-                    camera, view = self.make_camera(display_view, 0.03, self._windows[i])
-                    camera.EyeTransform.value = avango.osg.make_trans_mat(self._eye_vec)
-                    camera.ScreenTransform.value = self._screen_transforms[i]
-                    self.add_view(view)
-                return display_view
-            else:
-                return super(_Display, self).make_view(subdisplay)
+            return super(Monitor, self).make_view(subdisplay)
 
-        elif subdisplay == "Touchscreen" and (self._display_type in ["TouchscreenEmulator", "TwoviewTouchscreenEmulator"]):
-            display_view = avango.display.nodes.View()
+        display_view = avango.display.nodes.View()
 
-            camera, view = self.make_camera(display_view, 0., self._touchscreen_window)
-            camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
-            camera.Window.value.Decoration.value = True
-            camera.Window.value.ShowCursor.value = True
-            camera.Window.value.Title.value = "Touchscreen"
+        # In the Monitor setting each subdisplay simply get a new window
+        window = self.make_window(0, 0, 1024, 768, 4, 3, False)
+        window.Decoration.value = True
+        window.AutoHeight.value = True
+        window.ShowCursor.value = True
+        window.Title.value = subdisplay
+        window.Name.value = subdisplay
 
-            self.add_view(view)
+        camera, view = self.make_camera(display_view, 0., window)
+        camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
 
-            self._touchscreen_camera = camera
-            self._touchscreen_event = avango.osg.viewer.nodes.EventFields(View = view)
-            self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
-            self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
+        self.add_view(view)
 
-            return display_view
+        window_event = avango.osg.viewer.nodes.EventFields(View = view)
+        self._subdisplay_window_events[subdisplay] = window_event
+        window.DragEvent.connect_from(window_event.DragEvent)
+        window.MoveEvent.connect_from(window_event.MoveEvent)
+        self._subdisplay_camera[subdisplay] = camera
 
-        elif subdisplay != "" and self._display_type == "Monitor":
-            display_view = avango.display.nodes.View()
-
-            # In the Monitor setting each subdisplay simply get a new window
-            window = self.make_window(0, 0, 1024, 768, 4, 3, False)
-            window.Decoration.value = True
-            window.AutoHeight.value = True
-            window.ShowCursor.value = True
-            window.Title.value = subdisplay
-            window.Name.value = subdisplay
-
-            camera, view = self.make_camera(display_view, 0., window)
-            camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
-
-            self.add_view(view)
-
-            window_event = avango.osg.viewer.nodes.EventFields(View = view)
-            self._subdisplay_window_events[subdisplay] = window_event
-            window.DragEvent.connect_from(window_event.DragEvent)
-            window.MoveEvent.connect_from(window_event.MoveEvent)
-            self._subdisplay_camera[subdisplay] = camera
-
-            return display_view
-
-        return None
+        return display_view
 
     def make_device(self, device, interface):
-        if self._display_type == "Monitor":
-            if device == "SpaceMouse" and interface == "Relative6DOF":
-                sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
-                                                          Station = "spacemousestation")
-                self.keep_alive(sensor)
+        if device != "SpaceMouse" or interface != "Relative6DOF":
+            return None
 
-                spacemouse = avango.display.nodes.SpaceMouse()
-                spacemouse.SensorAbsX.connect_from(sensor.Value0)
-                spacemouse.SensorAbsY.connect_from(sensor.Value1)
-                spacemouse.SensorAbsZ.connect_from(sensor.Value2)
-                spacemouse.SensorAbsRX.connect_from(sensor.Value3)
-                spacemouse.SensorAbsRY.connect_from(sensor.Value4)
-                spacemouse.SensorAbsRZ.connect_from(sensor.Value5)
-                spacemouse.SensorRelX.connect_from(sensor.Value6)
-                spacemouse.SensorRelY.connect_from(sensor.Value7)
-                spacemouse.SensorRelZ.connect_from(sensor.Value8)
-                spacemouse.SensorRelRX.connect_from(sensor.Value9)
-                spacemouse.SensorRelRY.connect_from(sensor.Value10)
-                spacemouse.SensorRelRZ.connect_from(sensor.Value11)
-                spacemouse.SensorBtnA0.connect_from(sensor.Button0)
-                spacemouse.SensorBtnA1.connect_from(sensor.Button1)
-                spacemouse.SensorBtnB0.connect_from(sensor.Button9)
-                spacemouse.SensorBtnB1.connect_from(sensor.Button10)
-                spacemouse.SensorBtnB2.connect_from(sensor.Button3)
-                spacemouse.SensorBtnB3.connect_from(sensor.Button4)
+        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
+                                                  Station = "spacemousestation")
+        self.keep_alive(sensor)
 
-                time_sensor = avango.nodes.TimeSensor()
-                self.keep_alive(time_sensor)
-                spacemouse.TimeIn.connect_from(time_sensor.Time)
+        spacemouse = avango.display.nodes.SpaceMouse()
+        spacemouse.SensorAbsX.connect_from(sensor.Value0)
+        spacemouse.SensorAbsY.connect_from(sensor.Value1)
+        spacemouse.SensorAbsZ.connect_from(sensor.Value2)
+        spacemouse.SensorAbsRX.connect_from(sensor.Value3)
+        spacemouse.SensorAbsRY.connect_from(sensor.Value4)
+        spacemouse.SensorAbsRZ.connect_from(sensor.Value5)
+        spacemouse.SensorRelX.connect_from(sensor.Value6)
+        spacemouse.SensorRelY.connect_from(sensor.Value7)
+        spacemouse.SensorRelZ.connect_from(sensor.Value8)
+        spacemouse.SensorRelRX.connect_from(sensor.Value9)
+        spacemouse.SensorRelRY.connect_from(sensor.Value10)
+        spacemouse.SensorRelRZ.connect_from(sensor.Value11)
+        spacemouse.SensorBtnA0.connect_from(sensor.Button0)
+        spacemouse.SensorBtnA1.connect_from(sensor.Button1)
+        spacemouse.SensorBtnB0.connect_from(sensor.Button9)
+        spacemouse.SensorBtnB1.connect_from(sensor.Button10)
+        spacemouse.SensorBtnB2.connect_from(sensor.Button3)
+        spacemouse.SensorBtnB3.connect_from(sensor.Button4)
 
-                return spacemouse
+        time_sensor = avango.nodes.TimeSensor()
+        self.keep_alive(time_sensor)
+        spacemouse.TimeIn.connect_from(time_sensor.Time)
+
+        return spacemouse
+
+class Wall(Display):
+
+    def __init__(self, inspector, options):
+        super(Wall, self).__init__("Wall", inspector)
+
+        window = self.make_window(0, 0, 800, 600, 1.2, 0.9, True)
+        window.Name.value = ""
+        self.add_window(window, avango.osg.make_trans_mat(0, 1.6+0.15, -1.2), 0)
+
+        user = avango.display.nodes.User()
+        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user)
+
+class AutoStereoDisplay(Display):
+
+    def __init__(self, inspector, options):
+        super(AutoStereoDisplay, self).__init__("AutoStereoDisplay", inspector)
+
+        window = self.make_window(0, 0, 1200, 1600, 0.33, 0.43, True)
+        window.Name.value = ""
+        self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.7), 0)
+
+        user = avango.display.nodes.User()
+        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user)
+
+
+class TouchscreenEmulator(Display):
+
+    def __init__(self, inspector, options):
+        super(TouchscreenEmulator, self).__init__("TouchscreenEmulator", inspector)
+
+        twoview = False
+        if 'twoview' in options:
+            twoview = True
+
+        self._touchscreen_camera = None
+        self._touchscreen_window = None
+
+        user = avango.display.nodes.User()
+        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        self.add_user(user)
+
+        if not twoview:
+            window = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
+            window.Name.value = ""
+            self.add_window(window, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
+            self._touchscreen_window = self.make_window(0, 0, 1280, 1024, 6, 2.4, False)
+
+        else:
+            window = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, ":0.0")
+            window.Name.value = ""
+            self.add_window(window, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
+
+            self._touchscreen_window = self.make_window(1280, 0, 1280, 1024, 6., 2.4, False, ":0.0")
+            self._touchscreen_window.Name.value = "Touchscreen"
+
+    def make_dominant_user_device(self, user, interface, subdisplay):
+        device = avango.display.nodes.Device()
+        device.Matrix.connect_from(self._touchscreen_camera.MouseNearTransform)
+        device.Button1.connect_from(self._touchscreen_event.MouseButtons_OnlyLeft)
+        return device
+
+    def make_view(self, subdisplay):
+        if subdisplay == "":
+            return super(TouchscreenEmulator, self).make_view(subdisplay)
+
+        if subdisplay != "Touchscreen":
+            return None
+
+        display_view = avango.display.nodes.View()
+
+        camera, view = self.make_camera(display_view, 0., self._touchscreen_window)
+        camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
+        camera.Window.value.Decoration.value = True
+        camera.Window.value.ShowCursor.value = True
+        camera.Window.value.Title.value = "Touchscreen"
+
+        self.add_view(view)
+
+        self._touchscreen_camera = camera
+        self._touchscreen_event = avango.osg.viewer.nodes.EventFields(View = view)
+        self._touchscreen_window.DragEvent.connect_from(self._touchscreen_event.DragEvent)
+        self._touchscreen_window.MoveEvent.connect_from(self._touchscreen_event.MoveEvent)
+
+        return display_view
 
 
 class ViewUserSelector(avango.script.Script):

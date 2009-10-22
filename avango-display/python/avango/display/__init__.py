@@ -4,7 +4,7 @@ nodes = avango.nodefactory.NodeFactory(module=__name__)
 
 from _view import *
 from _device import *
-from _display import _Display
+from _display import TwoView, FakeTwoView, iCone, TouchscreenEmulator, Monitor
 
 import getopt
 
@@ -200,4 +200,13 @@ def run():
     _selected_display.run()
 
 def _make_display(display_type, inspector, options):
-    return _Display(display_type, inspector, options)
+    if display_type == "TwoView":
+        return TwoView(inspector, options)
+    elif display_type == "FakeTwoView":
+        return FakeTwoView(inspector, options)
+    elif display_type == "iCone":
+        return iCone(inspector, options)
+    elif display_type == "TouchscreenEmulator":
+        return TouchscreenEmulator(inspector, options)
+    else: # assume display_type == "Monitor"
+        return Monitor(inspector, options)

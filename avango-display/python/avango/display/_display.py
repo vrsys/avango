@@ -1,7 +1,7 @@
 import avango.display #FIXME remove cyclic dependency
 import avango.daemon
+import avango.osg
 import avango.osg.viewer
-import avango.inspector
 from math import *
 
 class Display(object):

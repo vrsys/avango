@@ -41,6 +41,7 @@ def init(argv):
         elif opt in ("-d", "--display"):
             display_type = arg
         elif opt in ("-i", "--inspector"):
+            import avango.inspector # Only import if request! GTK fails without a proper display
             inspector = avango.inspector.nodes.Inspector()
         elif opt in ("-o", "--option"):
             try:

@@ -12,8 +12,13 @@
 #                                                                        #
 ##########################################################################
 
+CXX=%(CXX)s
+DEBUG=%(DEBUG)s
+TRACE_LOGGING=%(TRACE_LOGGING)s
+LOG_LEVEL=%(LOG_LEVEL)s
 BINARY_PATH=%(BINARY_PATH)s
 INCLUDE_PATH=%(INCLUDE_PATH)s
 LIBRARY_PATH=%(LIBRARY_PATH)s
 PKG_CONFIG_PATH=%(PKG_CONFIG_PATH)s
 PYTHON_PATH=%(PYTHON_PATH)s
+BUILD_32=%(BUILD_32)s

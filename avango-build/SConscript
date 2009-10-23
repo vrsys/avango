@@ -51,11 +51,16 @@ def build_path(*args):
 
 local_env = avango.build.Environment()
 local_env['SUBST'] = {
+    'CXX': repr(local_env['CXX']),
+    'DEBUG': repr(local_env['DEBUG']),
+    'TRACE_LOGGING': repr(local_env['TRACE_LOGGING']),
+    'LOG_LEVEL': repr(local_env['LOG_LEVEL']),
     'BINARY_PATH': build_path(local_env['BINARY_PATH'], avango.build.get_binary_path().abspath),
     'INCLUDE_PATH': build_path(local_env['INCLUDE_PATH'], avango.build.get_include_path().abspath),
     'LIBRARY_PATH': build_path(local_env['LIBRARY_PATH'], avango.build.get_library_path().abspath),
     'PKG_CONFIG_PATH': build_path(local_env['PKG_CONFIG_PATH'], avango.build.get_pkgconfig_path().abspath),
     'PYTHON_PATH': build_path(local_env['PYTHON_PATH'], avango.build.get_python_path().abspath),
+    'BUILD_32': repr(local_env['BUILD_32']),
     }
 defaults = local_env.Subst('src/avango/build/defaults.py.in')
 Install(avango.build.get_python_path('avango/build'), defaults)

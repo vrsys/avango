@@ -143,12 +143,18 @@ if '-c' in sys.argv or '--clean' in sys.argv or '--remove' in sys.argv:
 
 def build_default_options():
     result = scons.Options(['sitedefs.py', 'localdefs.py'])
+    compiler_option_template = ('CXX','C++ compiler')
+    if defaults.CXX:
+        compiler_option = (compiler_option_template[0], compiler_option_template[1], defaults.CXX)
+    else:
+        compiler_option = compiler_option_template
+
     result.AddOptions(
         scons.PathOption('BUILD', 'Build path', '.', scons.PathOption.PathIsDirCreate),
-        ('CXX','C++ compiler'),
-        scons.BoolOption('DEBUG', 'Debug build option', False),
-        scons.BoolOption('TRACE_LOGGING', 'Enable/Disable trace log level', False),
-        scons.EnumOption('LOG_LEVEL', 'Support for higher log levels will be compiled out', "DEBUG",
+        compiler_option,
+        scons.BoolOption('DEBUG', 'Debug build option', defaults.DEBUG),
+        scons.BoolOption('TRACE_LOGGING', 'Enable/Disable trace log level', defaults.TRACE_LOGGING),
+        scons.EnumOption('LOG_LEVEL', 'Support for higher log levels will be compiled out', defaults.LOG_LEVEL,
                          ("FATAL", "ERROR", "WARN", "INFO", "DEBUG", "TRACE")),
         scons.PathOption('BINARY_PATH',
                    'Additional binary search paths',
@@ -174,6 +180,9 @@ def build_default_options():
                    'Additional python search paths',
                    defaults.PYTHON_PATH,
                    scons.PathOption.PathAccept),
+        scons.BoolOption('BUILD_32',
+                   'Force a 32 bit build',
+                   defaults.BUILD_32),
         )
     return result
 
@@ -181,7 +190,6 @@ def _build_environment():
     result = scons.Environment(options = options)
     result.Tool('subst', toolpath = [os.path.dirname(__file__)+'/tools'])
 
-# windows
     if 'icpc' in result['CXX']:
         result.Append(CCFLAGS='-wd177,383,424,810,981,1418,1419,1572')
         result.Append(LINKFLAGS='-static-intel')
@@ -206,15 +214,10 @@ def _build_environment():
     if result['TRACE_LOGGING']:
         result.Append(CPPDEFINES='TRACE_LOGGING')
     
-    #check if the BUILD_32 flag is set at all. Some old scripts (or other build systems, 
-    #which just call scons to build avango) may not set it. 
-    if 'BUILD_32' in result:
-        #check if BUILD_32 is set to True
-        if result['BUILD_32']:
-            result.Append(CCFLAGS='-m32')
-            result.Append(LINKFLAGS='-m32')
-    
-        
+    if result['BUILD_32']:
+        # FIXME does this work in Windows or Mac OS X?
+        result.Append(CCFLAGS='-m32')
+        result.Append(LINKFLAGS='-m32')
     
     result.PrependENVPath('PATH', result['BINARY_PATH'])
     result.Prepend(CPPPATH=result['INCLUDE_PATH'].split(os.pathsep))

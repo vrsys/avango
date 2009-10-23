@@ -23,8 +23,13 @@
 #                                                                        #
 ##########################################################################
 
+CXX=''
+DEBUG=False
+TRACE_LOGGING=False
+LOG_LEVEL='DEBUG'
 BINARY_PATH=''
 INCLUDE_PATH=''
 LIBRARY_PATH=''
 PKG_CONFIG_PATH=''
 PYTHON_PATH=''
+BUILD_32=False

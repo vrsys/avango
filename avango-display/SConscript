@@ -42,7 +42,6 @@ av_display_setups_files = Split("""
     python/avango/display/setups/iCone.py
     python/avango/display/setups/Monitor.py
     python/avango/display/setups/Monitor.py
-    python/avango/display/setups/TouchscreenEmulator.py
     python/avango/display/setups/TwoView.py
     python/avango/display/setups/Wall.py
     """)

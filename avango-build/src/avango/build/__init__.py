@@ -205,10 +205,15 @@ def _build_environment():
             result.Append(CCFLAGS='-fno-strict-aliasing')
     if result['TRACE_LOGGING']:
         result.Append(CPPDEFINES='TRACE_LOGGING')
-
-    if result['BUILD_32']:
-        result.Append(CCFLAGS='-m32')
-        result.Append(LINKFLAGS='-m32')
+    
+    #check if the BUILD_32 flag is set at all. Some old scripts (or other build systems, 
+    #which just call scons to build avango) may not set it. 
+    if 'BUILD_32' in result:
+        #check if BUILD_32 is set to True
+        if result['BUILD_32']:
+            result.Append(CCFLAGS='-m32')
+            result.Append(LINKFLAGS='-m32')
+    
         
     
     result.PrependENVPath('PATH', result['BINARY_PATH'])

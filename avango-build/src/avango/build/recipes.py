@@ -30,8 +30,6 @@ import oshelper
 def _setup_default():
     _plain_libs = """
         dl
-        boost_thread
-        boost_signals
         osg
         osgDB
         osgViewer
@@ -50,11 +48,9 @@ def _setup_default():
     for lib in _plain_libs.split():
         _config_store.set(lib, PlainConfig(libraries = [lib]))
 
-    # Uncomment the following lines to add boost debug libs
-    # FIXME add flag to set these
-    #_config_store.set('boost_thread', PlainConfig(libraries = ['boost_thread-d']))
-    #_config_store.set('boost_signals', PlainConfig(libraries = ['boost_signals-d']))
-    #_config_store.set('boost_python', PlainConfig(libraries = ['boost_python-d']))
+    _config_store.set('boost_thread', BoostConfig('boost_thread'))
+    _config_store.set('boost_signals', BoostConfig('boost_signals'))
+    _config_store.set('boost_python', BoostConfig('boost_python', dependencies = ['python']))
 
     _config_store.set('avango-core', PKGConfig('avango-core'))
     _config_store.set('avango-daemon', PKGConfig('avango-daemon'))
@@ -71,7 +67,6 @@ def _setup_default():
     _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))
 
     _config_store.set('python', PythonConfig())
-    _config_store.set('boost_python', PlainConfig(libraries = ["boost_python"], dependencies = ["python"]))
     
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))

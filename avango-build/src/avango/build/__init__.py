@@ -183,6 +183,12 @@ def build_default_options():
         scons.BoolOption('BUILD_32',
                    'Force a 32 bit build',
                    defaults.BUILD_32),
+        scons.BoolOption('BOOST_DEBUG',
+                   'Use debug build of Boost library',
+                   defaults.BOOST_DEBUG),
+        scons.EnumOption('BOOST_LAYOUT',
+                   'Sets Boost library naming scheme',
+                   defaults.BOOST_LAYOUT, ['versioned', 'tagged', 'system']),
         )
     return result
 
@@ -247,9 +253,53 @@ def setup():
     PythonEnvironment.env = _build_python_environment(env)
 
     scons.Help(options.GenerateHelpText(env))
+
+    def CheckBoost(context):
+        context.Message('Checking for boost library ... ')
+        ret = context.TryRun("""
+#include <iostream>
+#include <boost/version.hpp>
+int main(int argc, char **argv) {
+  std::cout << BOOST_LIB_VERSION;
+  return 0;
+}
+""", ".cpp")
+        context.Result(ret[0])
+        return ret[1]
+
+    def CheckToolset(context):
+        context.Message('Checking for toolset ... ')
+        ret = context.TryRun("""
+#include <iostream>
+int main(int argc, char **argv) {
+#ifdef __GNUC__
+  std::cout << "gcc" << __GNUC__ << __GNUC_MINOR__;
+#else
+  std::cout << "unknown";
+#endif
+  return 0;
+}
+""", ".cpp")
+        context.Result(ret[1])
+        return ret[1]
+
+    custom_tests = { 'CheckBoost':CheckBoost, 'CheckToolset':CheckToolset }
+    conf_env = env.Clone()
+
     if os.path.abspath(env['BUILD']) != os.path.abspath('.'):
         scons.BuildDir(env['BUILD'], '.', not oshelper.os_is_windows())
         env.SConsignFile("${BUILD}/sconsign")
+        conf = scons.Configure(conf_env, custom_tests = custom_tests,
+                               conf_dir = "${BUILD}/.sconf_temp",
+                               log_file = "${BUILD}/config.log",
+                               help=False)
+    else:
+        conf = sconsConfigure(conf_env, custom_tests = custom_tests,
+                              help=False)
+
+    env['BOOST_LIB_VERSION'] = conf.CheckBoost()
+    env['BOOST_TOOLSET'] = conf.CheckToolset()
+    conf.Finish()
 
 def get_prefix(path = ''):
     "Returns the generic installation prefix."

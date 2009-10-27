@@ -61,6 +61,8 @@ local_env['SUBST'] = {
     'PKG_CONFIG_PATH': build_path(local_env['PKG_CONFIG_PATH'], avango.build.get_pkgconfig_path().abspath),
     'PYTHON_PATH': build_path(local_env['PYTHON_PATH'], avango.build.get_python_path().abspath),
     'BUILD_32': repr(local_env['BUILD_32']),
+    'BOOST_DEBUG': repr(local_env['BOOST_DEBUG']),
+    'BOOST_LAYOUT': repr(local_env['BOOST_LAYOUT']),
     }
 defaults = local_env.Subst('src/avango/build/defaults.py.in')
 Install(avango.build.get_python_path('avango/build'), defaults)

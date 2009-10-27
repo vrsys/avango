@@ -113,3 +113,22 @@ class PythonConfig(Config):
         env = scons.Environment()
         flags = env.ParseFlags(distutils.sysconfig.get_config_var('BLDLIBRARY'))
         return flags['LIBS']
+
+class BoostConfig(PlainConfig):
+
+    def __init__(self, name, dependencies = []):
+        super(BoostConfig, self).__init__(dependencies = dependencies)
+        self._name = name
+
+    def get_libraries(self):
+        result = self._name
+        env = Environment.env
+        if env['BOOST_LAYOUT'] == 'versioned':
+            result += '-' + env['BOOST_TOOLSET']
+        if env['BOOST_LAYOUT'] in ['versioned', 'tagged']:
+            result += '-mt'
+        if env['BOOST_LAYOUT'] in ['versioned', 'tagged'] and env['BOOST_DEBUG']:
+                result += '-d'
+        if env['BOOST_LAYOUT'] == 'versioned':
+            result += '-'+env['BOOST_LIB_VERSION']
+        return [result]+super(BoostConfig, self).get_libraries()

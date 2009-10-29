@@ -294,7 +294,7 @@ int main(int argc, char **argv) {
                                log_file = "${BUILD}/config.log",
                                help=False)
     else:
-        conf = sconsConfigure(conf_env, custom_tests = custom_tests,
+        conf = scons.Configure(conf_env, custom_tests = custom_tests,
                               help=False)
 
     env['BOOST_LIB_VERSION'] = conf.CheckBoost()

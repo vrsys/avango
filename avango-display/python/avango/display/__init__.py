@@ -222,7 +222,7 @@ def _make_display(display_type, inspector, options):
     env_path = os.environ.get('AVANGO_DISPLAY_PATH', "").split(':')
 
     display_filename = display_type+'.py'
-    for path in itertools.chain(env_path, module_path, _search_path):
+    for path in itertools.chain(env_path, _search_path, module_path):
         if not path:
             continue
         display_path = os.path.join(path, display_filename)

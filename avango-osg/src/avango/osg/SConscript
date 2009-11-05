@@ -33,7 +33,9 @@ local_env.Append(CPPDEFINES='AV_OSG_LIBRARY')
 sources = Split('''
     AbsoluteTransform.cpp
     Billboard.cpp
+    BlendFunc.cpp
     CullFace.cpp
+    Depth.cpp
     Drawable.cpp
     Fields.cpp
     Fog.cpp

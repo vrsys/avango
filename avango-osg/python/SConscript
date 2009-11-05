@@ -51,6 +51,8 @@ osg_files = Split("""
     avango/osg/OSGIntersection.cpp
     avango/osg/OSGObject.cpp
     avango/osg/OSGCullFace.cpp
+    avango/osg/OSGDepth.cpp
+    avango/osg/OSGBlendFunc.cpp
     avango/osg/OSGGeometry.cpp
     avango/osg/OSGText.cpp
     avango/osg/OSGPanel.cpp

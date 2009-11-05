@@ -39,6 +39,8 @@
 #include <avango/osg/Uniform.h>
 #include <avango/osg/PolygonOffset.h>
 #include <avango/osg/CullFace.h>
+#include <avango/osg/Depth.h>
+#include <avango/osg/BlendFunc.h>
 #include <avango/osg/Texture.h>
 
 namespace av
@@ -74,6 +76,8 @@ namespace av
       SFInt RenderBin;
       SFCullFace CullFace;
       SFInt CullFaceMode;
+      SFDepth Depth;
+      SFBlendFunc BlendFunc;
       SFInt RescaleNormalMode;
       SFInt NormalizeMode;
       SFInt DepthTestMode;
@@ -117,6 +121,10 @@ namespace av
       virtual void setCullFaceCB(const av::osg::SFCullFace::SetValueEvent& event);
       virtual void getCullFaceModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setCullFaceModeCB(const av::SFInt::SetValueEvent& event);
+      virtual void getDepthCB(const av::osg::SFDepth::GetValueEvent& event);
+      virtual void setDepthCB(const av::osg::SFDepth::SetValueEvent& event);
+      virtual void getBlendFuncCB(const av::osg::SFBlendFunc::GetValueEvent& event);
+      virtual void setBlendFuncCB(const av::osg::SFBlendFunc::SetValueEvent& event);
       virtual void getRescaleNormalModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);

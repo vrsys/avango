@@ -29,7 +29,9 @@
 
 #include <avango/osg/AbsoluteTransform.h>
 #include <avango/osg/Billboard.h>
+#include <avango/osg/BlendFunc.h>
 #include <avango/osg/CullFace.h>
+#include <avango/osg/Depth.h>
 #include <avango/osg/Drawable.h>
 #include <avango/osg/Fields.h>
 #include <avango/osg/Fog.h>
@@ -87,6 +89,8 @@ av::osg::Init::initClass()
     av::osg::AbsoluteTransform::initClass();
     av::osg::Billboard::initClass();
     av::osg::CullFace::initClass();
+    av::osg::Depth::initClass();
+    av::osg::BlendFunc::initClass();
     av::osg::Drawable::initClass();
     av::osg::Fog::initClass();
     av::osg::Shader::initClass();

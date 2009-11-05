@@ -47,6 +47,8 @@
 #include "OSGIntersection.h"
 #include "OSGObject.h"
 #include "OSGCullFace.h"
+#include "OSGDepth.h"
+#include "OSGBlendFunc.h"
 #include "OSGGeometry.h"
 #include "OSGText.h"
 #include "OSGPanel.h"
@@ -132,6 +134,8 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGNode();
 
   init_OSGCullFace();
+  init_OSGDepth();
+  init_OSGBlendFunc();
   init_OSGDrawable();
   init_OSGGeometry();
   init_OSGText();

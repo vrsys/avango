@@ -85,6 +85,14 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
                             boost::bind(&StateSet::getCullFaceModeCB, this, _1),
                             boost::bind(&StateSet::setCullFaceModeCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(Depth,
+                            boost::bind(&StateSet::getDepthCB, this, _1),
+                            boost::bind(&StateSet::setDepthCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(BlendFunc,
+                            boost::bind(&StateSet::getBlendFuncCB, this, _1),
+                            boost::bind(&StateSet::setBlendFuncCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(RescaleNormalMode,
                             boost::bind(&StateSet::getRescaleNormalModeCB, this, _1),
                             boost::bind(&StateSet::setRescaleNormalModeCB, this, _1));
@@ -295,6 +303,40 @@ av::osg::StateSet::getCullFaceModeCB(const av::SFInt::GetValueEvent& event)
 av::osg::StateSet::setCullFaceModeCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgStateSet->setMode(GL_CULL_FACE, event.getValue());
+}
+
+/* virtual */ void
+av::osg::StateSet::getDepthCB(const av::osg::SFDepth::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Depth>(mOsgStateSet->getAttribute(::osg::Depth::DEPTH));
+}
+
+/* virtual */ void
+av::osg::StateSet::setDepthCB(const av::osg::SFDepth::SetValueEvent& event)
+{
+  ::osg::Depth *osg_depth =
+    (event.getValue().isValid() ? event.getValue()->getOsgDepth() : 0);
+  if (osg_depth != 0)
+    mOsgStateSet->setAttribute(osg_depth);
+  else
+    mOsgStateSet->removeAttribute(::osg::StateAttribute::DEPTH);
+}
+
+/* virtual */ void
+av::osg::StateSet::getBlendFuncCB(const av::osg::SFBlendFunc::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::BlendFunc>(mOsgStateSet->getAttribute(::osg::BlendFunc::BLENDFUNC));
+}
+
+/* virtual */ void
+av::osg::StateSet::setBlendFuncCB(const av::osg::SFBlendFunc::SetValueEvent& event)
+{
+  ::osg::BlendFunc *osg_blend_func =
+    (event.getValue().isValid() ? event.getValue()->getOsgBlendFunc() : 0);
+  if (osg_blend_func != 0)
+    mOsgStateSet->setAttribute(osg_blend_func);
+  else
+    mOsgStateSet->removeAttribute(::osg::StateAttribute::BLENDFUNC);
 }
 
 /* virtual */ void

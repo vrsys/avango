@@ -34,8 +34,10 @@ sources = Split('''
     AbsoluteTransform.cpp
     Billboard.cpp
     BlendFunc.cpp
+    Box.cpp
     Camera.cpp
     CameraAttachment.cpp
+    Capsule.cpp
     CullFace.cpp
     Depth.cpp
     Drawable.cpp
@@ -68,8 +70,6 @@ sources = Split('''
     Projection.cpp
     Quad.cpp
     Sphere.cpp
-    Box.cpp
-    Capsule.cpp
     StateAttribute.cpp
     StateSet.cpp
     Switch.cpp

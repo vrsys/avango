@@ -34,6 +34,8 @@ sources = Split('''
     AbsoluteTransform.cpp
     Billboard.cpp
     BlendFunc.cpp
+    Camera.cpp
+    CameraAttachment.cpp
     CullFace.cpp
     Depth.cpp
     Drawable.cpp

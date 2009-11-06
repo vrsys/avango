@@ -30,6 +30,8 @@
 #include <avango/osg/AbsoluteTransform.h>
 #include <avango/osg/Billboard.h>
 #include <avango/osg/BlendFunc.h>
+#include <avango/osg/Camera.h>
+#include <avango/osg/CameraAttachment.h>
 #include <avango/osg/CullFace.h>
 #include <avango/osg/Depth.h>
 #include <avango/osg/Drawable.h>
@@ -88,6 +90,8 @@ av::osg::Init::initClass()
 
     av::osg::AbsoluteTransform::initClass();
     av::osg::Billboard::initClass();
+    av::osg::Camera::initClass();
+    av::osg::CameraAttachment::initClass();
     av::osg::CullFace::initClass();
     av::osg::Depth::initClass();
     av::osg::BlendFunc::initClass();

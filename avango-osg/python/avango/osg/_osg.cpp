@@ -36,55 +36,57 @@
 #include <avango/osg/network/Init.h>
 #endif
 
-#include "OSGMatrix.h"
-#include "OSGVectors.h"
-#include "OSGQuat.h"
+#include "OSGAbsoluteTransform.h"
+#include "OSGBlendFunc.h"
 #include "OSGBoundingBox.h"
 #include "OSGBoundingSphere.h"
-#include "OSGNode.h"
-#include "OSGGeode.h"
-#include "OSGDrawable.h"
-#include "OSGIntersection.h"
-#include "OSGObject.h"
+#include "OSGBox.h"
+#include "OSGCameraAttachment.h"
+#include "OSGCamera.h"
+#include "OSGCapsule.h"
 #include "OSGCullFace.h"
 #include "OSGDepth.h"
-#include "OSGBlendFunc.h"
-#include "OSGGeometry.h"
-#include "OSGText.h"
-#include "OSGPanel.h"
-#include "OSGPlane.h"
-#include "OSGTexturedQuad.h"
+#include "OSGDrawable.h"
 #include "OSGFog.h"
-#include "OSGProgram.h"
-#include "OSGUniform.h"
-#include "OSGShader.h"
-#include "OSGLight.h"
-#include "OSGLightSource.h"
+#include "OSGGeode.h"
+#include "OSGGeometry.h"
 #include "OSGGroup.h"
-#include "OSGPolygonOffset.h"
-#include "OSGQuad.h"
-#include "OSGStateAttribute.h"
-#include "OSGStateSet.h"
-#include "OSGLayerGeode.h"
-#include "OSGLayerGroup.h"
-#include "OSGSwitch.h"
-#include "OSGTransform.h"
-#include "OSGMatrixTransform.h"
-#include "OSGLoadFile.h"
-#include "OSGSphere.h"
-#include "OSGBox.h"
-#include "OSGCapsule.h"
-#include "OSGAbsoluteTransform.h"
-#include "OSGTriangleContainer.h"
-#include "OSGProjection.h"
-#include "OSGLineSegmentIntersector.h"
 #include "OSGImage.h"
 #include "OSGImageStream.h"
+#include "OSGIntersection.h"
+#include "OSGLayerGeode.h"
+#include "OSGLayerGroup.h"
+#include "OSGLight.h"
+#include "OSGLightSource.h"
+#include "OSGLineSegmentIntersector.h"
+#include "OSGLoadFile.h"
 #include "OSGLoadImage.h"
 #include "OSGLoadImageStream.h"
-#include "OSGTexture.h"
-#include "OSGTexture2D.h"
+#include "OSGMatrix.h"
+#include "OSGMatrixTransform.h"
+#include "OSGNode.h"
+#include "OSGObject.h"
+#include "OSGPanel.h"
+#include "OSGPlane.h"
+#include "OSGPolygonOffset.h"
+#include "OSGProgram.h"
+#include "OSGProjection.h"
+#include "OSGQuad.h"
+#include "OSGQuat.h"
+#include "OSGShader.h"
+#include "OSGSphere.h"
+#include "OSGStateAttribute.h"
+#include "OSGStateSet.h"
+#include "OSGSwitch.h"
+#include "OSGText.h"
 #include "OSGTexture2DArray.h"
+#include "OSGTexture2D.h"
+#include "OSGTexturedQuad.h"
+#include "OSGTexture.h"
+#include "OSGTransform.h"
+#include "OSGTriangleContainer.h"
+#include "OSGUniform.h"
+#include "OSGVectors.h"
 
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -133,6 +135,11 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGObject();
   init_OSGNode();
 
+  init_OSGGroup();
+  init_OSGTransform();
+
+  init_OSGCamera();
+  init_OSGCameraAttachment();
   init_OSGCullFace();
   init_OSGDepth();
   init_OSGBlendFunc();
@@ -147,7 +154,6 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGUniform();
   init_OSGLight();
   init_OSGLightSource();
-  init_OSGGroup();
   init_OSGPolygonOffset();
   init_OSGQuad();
   init_OSGStateAttribute();
@@ -156,7 +162,6 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGLayerGeode();
   init_OSGLayerGroup();
   init_OSGSwitch();
-  init_OSGTransform();
   init_OSGMatrixTransform();
   init_OSGLoadFile();
   init_OSGSphere();

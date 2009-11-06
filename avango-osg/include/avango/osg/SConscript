@@ -28,6 +28,8 @@ import avango.build
 headers = Split('''
     AbsoluteTransform.h
     Billboard.h
+    Camera.h
+    CameraAttachment.h
     CullFace.h
     Drawable.h
     Fields.h

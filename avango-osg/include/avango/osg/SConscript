@@ -28,9 +28,13 @@ import avango.build
 headers = Split('''
     AbsoluteTransform.h
     Billboard.h
+    BlendFunc.h
+    Box.h
     Camera.h
     CameraAttachment.h
+    Capsule.h
     CullFace.h
+    Depth.h
     Drawable.h
     Fields.h
     Fog.h
@@ -60,9 +64,7 @@ headers = Split('''
     PolygonOffset.h
     Projection.h
     Quad.h
-    Box.h
     Sphere.h
-    Capsule.h
     StateAttribute.h
     StateSet.h
     Switch.h

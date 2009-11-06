@@ -44,6 +44,12 @@ av::osg::Texture2D::Texture2D(::osg::Texture2D* osgtexture) :
   AV_FC_ADD_ADAPTOR_FIELD(Image,
                           boost::bind(&Texture2D::getImageCB, this, _1),
                           boost::bind(&Texture2D::setImageCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(TextureWidth,
+                          boost::bind(&Texture2D::getTextureWidthCB, this, _1),
+                          boost::bind(&Texture2D::setTextureWidthCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(TextureHeight,
+                          boost::bind(&Texture2D::getTextureHeightCB, this, _1),
+                          boost::bind(&Texture2D::setTextureHeightCB, this, _1));
 }
 
 /* virtual */
@@ -84,4 +90,28 @@ av::osg::Texture2D::setImageCB(const av::osg::SFImage::SetValueEvent& event)
   {
     mOsgTexture2D->setImage(event.getValue()->getOsgImage());
   }
+}
+
+/* virtual */ void
+av::osg::Texture2D::getTextureWidthCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth();
+}
+
+/* virtual */ void
+av::osg::Texture2D::setTextureWidthCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture2D->setTextureWidth(event.getValue());
+}
+
+/* virtual */ void
+av::osg::Texture2D::getTextureHeightCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth();
+}
+
+/* virtual */ void
+av::osg::Texture2D::setTextureHeightCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture2D->setTextureHeight(event.getValue());
 }

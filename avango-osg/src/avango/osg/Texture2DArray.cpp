@@ -44,6 +44,12 @@ av::osg::Texture2DArray::Texture2DArray(::osg::Texture2DArray* osgtexture) :
   AV_FC_ADD_ADAPTOR_FIELD(Image,
                           boost::bind(&Texture2DArray::getImageCB, this, _1),
                           boost::bind(&Texture2DArray::setImageCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(TextureWidth,
+                          boost::bind(&Texture2DArray::getTextureWidthCB, this, _1),
+                          boost::bind(&Texture2DArray::setTextureWidthCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(TextureHeight,
+                          boost::bind(&Texture2DArray::getTextureHeightCB, this, _1),
+                          boost::bind(&Texture2DArray::setTextureHeightCB, this, _1));
 }
 
 /* virtual */
@@ -98,4 +104,28 @@ av::osg::Texture2DArray::setImageCB(const av::osg::MFImage::SetValueEvent& event
   // FIXME This should somehow happen automatically, but it does not.
   if (is_mipmap)
     mOsgTexture2DArray->allocateMipmapLevels();
+}
+
+/* virtual */ void
+av::osg::Texture2DArray::getTextureWidthCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture2DArray->getTextureWidth();
+}
+
+/* virtual */ void
+av::osg::Texture2DArray::setTextureWidthCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture2DArray->setTextureWidth(event.getValue());
+}
+
+/* virtual */ void
+av::osg::Texture2DArray::getTextureHeightCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture2DArray->getTextureWidth();
+}
+
+/* virtual */ void
+av::osg::Texture2DArray::setTextureHeightCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture2DArray->setTextureHeight(event.getValue());
 }

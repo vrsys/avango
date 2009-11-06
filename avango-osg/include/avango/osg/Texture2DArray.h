@@ -69,6 +69,9 @@ namespace av
 
       MFImage Image;
 
+      SFInt TextureWidth;
+      SFInt TextureHeight;
+
       /**
        * Get the wrapped ::osg::Texture2DArray object.
        * \return a pointer to the texture object
@@ -83,6 +86,10 @@ namespace av
 
       virtual void getImageCB(const av::osg::MFImage::GetValueEvent& event);
       virtual void setImageCB(const av::osg::MFImage::SetValueEvent& event);
+      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+      virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
+      virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
 
     };
 

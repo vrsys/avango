@@ -38,7 +38,7 @@ class Display(object):
 
         for window, transform, current_user in self._windows:
             eye_offset = 0.
-            if window.QuadBufferStereo.value:
+            if window.StereoMode.value != avango.osg.viewer.stereo_mode.STEREO_MODE_NONE:
                 eye_offset = 0.03
 
             camera, view = self.make_camera_with_viewport(
@@ -96,7 +96,7 @@ class Display(object):
         window.WantedPositionX.value = x_position
         window.WantedPositionY.value = y_position
         window.AutoHeight.value = False
-        window.QuadBufferStereo.value = use_stereo
+        window.StereoMode.value = avango.osg.viewer.stereo_mode.STEREO_MODE_QUAD_BUFFER
         return window
 
     def make_camera(self, display_view, eye_offset, window, connect_viewport = True):

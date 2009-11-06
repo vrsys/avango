@@ -43,7 +43,7 @@ AV_FIELD_DEFINE(av::osg::viewer::SFGraphicsWindow);
 AV_FIELD_DEFINE(av::osg::viewer::MFGraphicsWindow);
 
 av::osg::viewer::GraphicsWindow::GraphicsWindow() :
-  mStereo(false), mDoubleBuffer(false), mShowCursor(false), mFullScreen(false),
+  mStereoMode(STEREO_MODE_NONE), mDoubleBuffer(false), mShowCursor(false), mFullScreen(false),
   mSizeFieldsHasChanged(false),
   mNumStencilBits(0),
   mDragEvent(false),
@@ -55,7 +55,7 @@ av::osg::viewer::GraphicsWindow::GraphicsWindow() :
   AV_FC_ADD_FIELD(Title, "AVANGO NG - " + ScreenIdentifier.getValue());
 
   AV_FC_ADD_FIELD(Decoration, true);
-  AV_FC_ADD_FIELD(QuadBufferStereo, false);
+  AV_FC_ADD_FIELD(StereoMode, STEREO_MODE_NONE);
   AV_FC_ADD_FIELD(DoubleBuffer, true);
   AV_FC_ADD_FIELD(ShowCursor, true);
   AV_FC_ADD_FIELD(NumStencilBits, 0);
@@ -141,7 +141,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
   // delete window, if settings have changed which can't be updated dynamically
   if (mOsgGraphicsWindow.valid() &&
       (mScreenIdentifier != ScreenIdentifier.getValue() ||
-       mStereo != QuadBufferStereo.getValue() ||
+       mStereoMode != StereoMode.getValue() ||
        mDoubleBuffer != DoubleBuffer.getValue() ||
        mNumStencilBits != NumStencilBits.getValue() ||
        mOsgSharedContextMaster.valid() != SharedContextMaster.getValue().isValid() ||
@@ -169,10 +169,18 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
     traits->setScreenIdentifier(ScreenIdentifier.getValue());
     traits->windowName = Title.getValue();
     traits->windowDecoration = Decoration.getValue();
-    traits->quadBufferStereo = QuadBufferStereo.getValue();
+    traits->quadBufferStereo = (StereoMode.getValue() == STEREO_MODE_QUAD_BUFFER);
     traits->doubleBuffer = DoubleBuffer.getValue();
     traits->useCursor = showCursor;
     traits->stencil = NumStencilBits.getValue();
+
+    // these stereo modes require a stencil buffer
+    switch (StereoMode.getValue()) {
+        case STEREO_MODE_HORIZONTAL_INTERLACE:
+        case STEREO_MODE_VERTIVAL_INTERLACE:
+        case STEREO_MODE_CHECKERBOARD:
+            traits->stencil = 8;
+    }
 
     if (traits->displayNum == -1)
     {
@@ -212,7 +220,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
           mOsgSharedContextMaster = SharedContextMaster.getValue()->getOsgGraphicsWindow();
 
         mScreenIdentifier = ScreenIdentifier.getValue();
-        mStereo = QuadBufferStereo.getValue();
+        mStereoMode = StereoMode.getValue();
         mDoubleBuffer = DoubleBuffer.getValue();
         mShowCursor = showCursor;
         mNumStencilBits = NumStencilBits.getValue();

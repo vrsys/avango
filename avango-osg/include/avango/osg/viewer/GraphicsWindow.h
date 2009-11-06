@@ -33,6 +33,7 @@
 
 #include <boost/signal.hpp>
 
+#include <osg/DisplaySettings>
 #include <osgViewer/GraphicsWindow>
 
 #include <avango/Object.h>
@@ -90,9 +91,21 @@ namespace av
          */
         SFString ScreenIdentifier;
 
+        typedef enum {
+            STEREO_MODE_QUAD_BUFFER             = ::osg::DisplaySettings::QUAD_BUFFER,
+            STEREO_MODE_ANAGLYPHIC              = ::osg::DisplaySettings::ANAGLYPHIC,
+            STEREO_MODE_HORIZONTAL_SPLIT        = ::osg::DisplaySettings::HORIZONTAL_SPLIT,
+            STEREO_MODE_VERTICAL_SPLIT          = ::osg::DisplaySettings::VERTICAL_SPLIT,
+            STEREO_MODE_HORIZONTAL_INTERLACE    = ::osg::DisplaySettings::HORIZONTAL_INTERLACE,
+            STEREO_MODE_VERTIVAL_INTERLACE      = ::osg::DisplaySettings::VERTICAL_INTERLACE,
+            STEREO_MODE_CHECKERBOARD            = ::osg::DisplaySettings::CHECKERBOARD,
+
+            STEREO_MODE_NONE
+        } StereoModeType;
+
         SFString Title;
         SFBool Decoration;
-        SFBool QuadBufferStereo;
+        SFInt  StereoMode;
         SFBool DoubleBuffer;
         SFBool ShowCursor;
 
@@ -232,7 +245,8 @@ namespace av
         ::osg::ref_ptr< ::osgViewer::GraphicsWindow> mOsgSharedContextMaster;
 
         std::string mScreenIdentifier;
-        bool mStereo, mDoubleBuffer, mShowCursor, mFullScreen;
+        int mStereoMode;
+        bool mDoubleBuffer, mShowCursor, mFullScreen;
         bool mSizeFieldsHasChanged;
         int mNumStencilBits;
         bool mDragEvent;

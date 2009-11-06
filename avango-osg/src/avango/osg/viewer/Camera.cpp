@@ -234,12 +234,12 @@ av::osg::viewer::Camera::evaluateLocalSideEffect()
         osgUtil::SceneView *scene_view0 = renderer->getSceneView(0);
         osgUtil::SceneView *scene_view1 = renderer->getSceneView(1);
 
-        if (mWindow->QuadBufferStereo.getValue())
+        if (mWindow->StereoMode.getValue() != GraphicsWindow::STEREO_MODE_NONE)
         {
           if (scene_view0->getComputeStereoMatricesCallback() == 0)
           {
             if (!mStereoCallback.valid())
-              mStereoCallback = new ComputeStereoMatricesCallback(this);
+            mStereoCallback = new ComputeStereoMatricesCallback(this);
             scene_view0->setComputeStereoMatricesCallback(mStereoCallback.get());
             scene_view1->setComputeStereoMatricesCallback(mStereoCallback.get());
           }
@@ -247,7 +247,19 @@ av::osg::viewer::Camera::evaluateLocalSideEffect()
           if (!mOsgCamera->getDisplaySettings()->getStereo())
           {
             mOsgCamera->getDisplaySettings()->setStereo(true);
-            mOsgCamera->getDisplaySettings()->setStereoMode(::osg::DisplaySettings::QUAD_BUFFER);
+
+            ::osg::DisplaySettings::StereoMode stereo_mode = ::osg::DisplaySettings::QUAD_BUFFER;
+            switch (mWindow->StereoMode.getValue()) {
+                case GraphicsWindow::STEREO_MODE_ANAGLYPHIC:            stereo_mode = ::osg::DisplaySettings::ANAGLYPHIC;break;
+                case GraphicsWindow::STEREO_MODE_HORIZONTAL_SPLIT:      stereo_mode = ::osg::DisplaySettings::HORIZONTAL_SPLIT;break;
+                case GraphicsWindow::STEREO_MODE_VERTICAL_SPLIT:        stereo_mode = ::osg::DisplaySettings::VERTICAL_SPLIT;break;
+                case GraphicsWindow::STEREO_MODE_HORIZONTAL_INTERLACE:  stereo_mode = ::osg::DisplaySettings::HORIZONTAL_INTERLACE;break;
+                case GraphicsWindow::STEREO_MODE_VERTIVAL_INTERLACE:    stereo_mode = ::osg::DisplaySettings::VERTICAL_INTERLACE;break;
+                case GraphicsWindow::STEREO_MODE_CHECKERBOARD:          stereo_mode = ::osg::DisplaySettings::CHECKERBOARD;break;
+                case GraphicsWindow::STEREO_MODE_QUAD_BUFFER:           stereo_mode = ::osg::DisplaySettings::QUAD_BUFFER;
+                default:; // try quad buffer
+            }
+            mOsgCamera->getDisplaySettings()->setStereoMode(stereo_mode);
           }
         }
         else
@@ -319,7 +331,7 @@ av::osg::viewer::Camera::evaluate()
       mouse_viewer_trans *= ::osg::Matrix::inverse(ViewerTransform.getValue());
 
     ::osg::Matrix model_view_proj = mOsgCamera->getViewMatrix() * mOsgCamera->getProjectionMatrix();
-    if (mWindow->QuadBufferStereo.getValue() && std::abs(EyeOffset.getValue()) > 0.001)
+    if ((mWindow->StereoMode.getValue() != GraphicsWindow::STEREO_MODE_NONE) && (std::abs(EyeOffset.getValue()) > 0.001))
     {
       if (!mStereoCallback.valid())
         mStereoCallback = new ComputeStereoMatricesCallback(this);

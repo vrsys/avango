@@ -79,4 +79,16 @@ BOOST_PYTHON_MODULE(_viewer)
     .def("run", &av::osg::viewer::Viewer::run)
     .def("done", &av::osg::viewer::Viewer::done)
     ;
+
+  enum_<av::osg::viewer::GraphicsWindow::StereoModeType>("stereo_mode")
+    .value("STEREO_MODE_QUAD_BUFFER", av::osg::viewer::GraphicsWindow::STEREO_MODE_QUAD_BUFFER)
+    .value("STEREO_MODE_ANAGLYPHIC", av::osg::viewer::GraphicsWindow::STEREO_MODE_ANAGLYPHIC)
+    .value("STEREO_MODE_HORIZONTAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_SPLIT)
+    .value("STEREO_MODE_VERTICAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTICAL_SPLIT)
+    .value("STEREO_MODE_HORIZONTAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_INTERLACE)
+    .value("STEREO_MODE_VERTIVAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTIVAL_INTERLACE)
+    .value("STEREO_MODE_CHECKERBOARD", av::osg::viewer::GraphicsWindow::STEREO_MODE_CHECKERBOARD)
+    .value("STEREO_MODE_NONE", av::osg::viewer::GraphicsWindow::STEREO_MODE_NONE)
+    .export_values()
+    ;
 }

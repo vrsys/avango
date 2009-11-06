@@ -70,6 +70,7 @@ headers = Split('''
     Texture.h
     Texture2D.h
     Texture2DArray.h
+    TextureCubeMap.h
     TexturedQuad.h
     Transform.h
     Types.h

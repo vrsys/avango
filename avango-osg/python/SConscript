@@ -89,6 +89,8 @@ osg_files = Split("""
     avango/osg/OSGLoadImageStream.cpp
     avango/osg/OSGTexture.cpp
     avango/osg/OSGTexture2D.cpp
+    avango/osg/OSGTexture2DArray.cpp
+    avango/osg/OSGTextureCubeMap.cpp
     avango/osg/OSGLineSegmentIntersector.cpp
     """)
 

@@ -81,6 +81,7 @@
 #include "OSGText.h"
 #include "OSGTexture2DArray.h"
 #include "OSGTexture2D.h"
+#include "OSGTextureCubeMap.h"
 #include "OSGTexturedQuad.h"
 #include "OSGTexture.h"
 #include "OSGTransform.h"
@@ -177,5 +178,7 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGLoadImageStream();
   init_OSGTexture();
   init_OSGTexture2D();
+  init_OSGTexture2DArray();
+  init_OSGTextureCubeMap();
 
 }

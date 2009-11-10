@@ -43,6 +43,7 @@ def _setup_default():
         alut
         openal
         vrpn
+        CGAL
         """
 
     for lib in _plain_libs.split():
@@ -65,6 +66,7 @@ def _setup_default():
     _config_store.set('avango-sloow', PlainConfig(libraries = ["avangoSloow"]))
     _config_store.set('vorbisfile', PKGConfig('vorbisfile'))
     _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))
+    _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
 
     _config_store.set('python', PythonConfig())
     
@@ -74,7 +76,6 @@ def _setup_default():
     _config_store.set('GLU', PlainConfig(libraries = ['']))
     
     if oshelper.os_is_mac():
-      _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
       _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
       _config_store.set('GL', PlainConfig(libraries = ['GL']))

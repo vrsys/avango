@@ -183,6 +183,13 @@ class DerivedFromMultipleScript(HasSingleFieldCallbackBase1, HasSingleFieldCallb
     @avango.script.field_has_changed(value3)
     def callback(self):
         self.set_value3 = 3
+        
+class DynamicFieldScript(avango.script.Script):
+    
+    def add_dynamic_int_fields(self,prefix,num):
+        for i in range(0,num):
+            name = str(prefix) + str(i)
+            self.add_and_init_field(avango.SFInt(), name, 0)
 
 class ScriptTestCase(unittest.TestCase):
 
@@ -442,7 +449,40 @@ class ScriptTestCase(unittest.TestCase):
 
         node.value3.value = 1
         self.assertEqual(node.set_value3, 3)
-
+        
+    def testDynamicFieldRemoval(self):
+        node1 = DynamicFieldScript()
+        #Every script node has a Name field by default
+        self.assertEqual(1, node1._get_num_fields())
+        node1.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node1._get_num_fields())
+        
+        node2 = DynamicFieldScript()
+        self.assertEqual(1, node2._get_num_fields())
+        node2.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node2._get_num_fields())
+        
+        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
+        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
+        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
+        
+        node2._get_field("field_0").value = 42
+        avango.evaluate()
+        self.assertEqual(42, node1._get_field("field_0").value)
+        
+        node2.remove_field("field_0")
+        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
+        self.assertEqual(1, node2._get_num_fields())
+        
+        node2.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node2._get_num_fields())
+        
+        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
+        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
+        node2._get_field("field_0").value = 23
+        avango.evaluate()
+        self.assertEqual(23, node1._get_field("field_0").value)
+        
 def Suite():
     suite = unittest.TestSuite()
 
@@ -482,6 +522,7 @@ def Suite():
         'testDoubleDerivedUpcalling',
         'testSetAttributeWithNameOfField',
         'testDerivedFromMultipleScriptFieldHasChanged',
+        'testDynamicFieldRemoval',
     ]
     suite.addTests(map(ScriptTestCase, ScriptTests))
 

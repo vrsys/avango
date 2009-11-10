@@ -501,6 +501,16 @@ av::Field::bind(av::FieldContainer* container, const std::string& name, bool own
   setContainer(container, index, owned);
 }
 
+void
+av::Field::unbind()
+{
+  AV_ASSERT(mContainer);
+  mContainer->removeField(mIndex);
+  mContainer=0;
+  mIndex=0;
+}
+
+
 /* vitual */ void
 av::Field::clear()
 {}

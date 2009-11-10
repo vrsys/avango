@@ -216,6 +216,12 @@ namespace av
     void bind(FieldContainer* container, const std::string& name, bool owned);
 
     /**
+     * Unset the current container of the field.
+     * This function shouldn't be invoked directly. It is called by the FieldContainer::removeDynamicField function.
+     */
+    void unbind();
+
+    /**
      * Sets the field to a type dependent default value.
      */
     virtual void clear();

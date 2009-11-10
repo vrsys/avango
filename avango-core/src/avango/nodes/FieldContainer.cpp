@@ -110,6 +110,7 @@ av::FieldContainer::initClass()
   }
 }
 
+
 unsigned int
 av::FieldContainer::addField(Field* field, const std::string& fieldName)
 {
@@ -147,12 +148,16 @@ av::FieldContainer::getFieldInfo(unsigned int index)
 unsigned int
 av::FieldContainer::getNumFields()
 {
-  return getFields().size();
+  return mFields.size();
 }
 
 /* virtual */ void
 av::FieldContainer::addDynamicField(const std::string& typeName, const std::string& fieldName)
 {
+  //check if a field with the given name already exists
+  FieldsIndex::iterator fieldIter = mFieldsIndex.find(fieldName);
+  AV_ASSERT(fieldIter == mFieldsIndex.end());
+
   Typed *typed = av::Type::createInstanceOfType(typeName);
   if (typed != 0)
   {
@@ -168,22 +173,82 @@ av::FieldContainer::addDynamicField(const std::string& typeName, const std::stri
     }
   }
   else
+  {
     AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("could not create instance of type '%1%'") % typeName))
+  }
 }
 
 /* virtual */ void
 av::FieldContainer::addDynamicField(Field* field, const std::string& fieldName)
 {
+  //check if a field with the given name already exists
+  FieldsIndex::iterator fieldIter = mFieldsIndex.find(fieldName);
+  AV_ASSERT(fieldIter == mFieldsIndex.end());
+
   if (field != 0)
+  {
     field->clone()->bind(this, fieldName, true);
+  }
   else
-    AVANGO_LOG(logger,logging::WARN , "invalid field")
+  {
+    AVANGO_LOG(logger,logging::WARN , "invalid field");
+  }
+}
+
+/* virtual */
+av::Field*
+av::FieldContainer::removeField(unsigned int index)
+{
+  AV_ASSERT(index < mFields.size());
+
+  //get the FieldInfo object
+  FieldInfo fInfo = mFields[index];
+
+  //disconnect
+  fInfo.mField->disconnect();
+  fInfo.mField->disconnectAuditors();
+
+  unsigned int numFields = mFields.size()-1;
+  if(numFields > 0) {
+    //relocate the last field into the freed entry
+    mFields[index] = mFields[numFields];
+    mFieldsIndex[mFields[index].mName] = index;
+
+    //update the field id
+    mFields[index].mField->mIndex = index;
+  }
+
+  //remove last entry.
+  mFields.erase(mFields.end()-1);
+  mFieldsIndex.erase(fInfo.mName);
+
+  mFlags.mFieldsCalculated = false;
+
+  return fInfo.mField;
+}
+
+/* virtual */
+av::Field*
+av::FieldContainer::removeDynamicField(const std::string& fieldName)
+{
+  //get the field id
+  FieldsIndex::iterator fieldIter = mFieldsIndex.find(fieldName);
+  AV_ASSERT(fieldIter != mFieldsIndex.end());
+
+  //get the FieldInfo object
+  FieldInfo & fInfo = mFields[fieldIter->second];
+
+  //unbind the field. Unset the internal reference of the field to the FieldContainer
+  fInfo.mField->unbind();
+
+  return fInfo.mField;
 }
 
 /* virtual */ bool
 av::FieldContainer::hasField(const std::string& name)
 {
-  return (getFieldInfo(name) != 0);
+  FieldsIndex::const_iterator iter = mFieldsIndex.find(name);
+  return (iter != mFieldsIndex.end());
 }
 
 av::Field*

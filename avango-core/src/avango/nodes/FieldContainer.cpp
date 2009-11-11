@@ -196,7 +196,7 @@ av::FieldContainer::addDynamicField(Field* field, const std::string& fieldName)
 }
 
 /* virtual */
-av::Field*
+void
 av::FieldContainer::removeField(unsigned int index)
 {
   AV_ASSERT(index < mFields.size());
@@ -224,11 +224,10 @@ av::FieldContainer::removeField(unsigned int index)
 
   mFlags.mFieldsCalculated = false;
 
-  return fInfo.mField;
 }
 
 /* virtual */
-av::Field*
+void
 av::FieldContainer::removeDynamicField(const std::string& fieldName)
 {
   //get the field id
@@ -236,12 +235,14 @@ av::FieldContainer::removeDynamicField(const std::string& fieldName)
   AV_ASSERT(fieldIter != mFieldsIndex.end());
 
   //get the FieldInfo object
-  FieldInfo & fInfo = mFields[fieldIter->second];
+  Field * field = mFields[fieldIter->second].mField;
 
   //unbind the field. Unset the internal reference of the field to the FieldContainer
-  fInfo.mField->unbind();
+  field->unbind();
 
-  return fInfo.mField;
+  //delete the removed field
+  delete field;
+
 }
 
 /* virtual */ bool

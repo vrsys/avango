@@ -125,7 +125,7 @@ namespace av
      * 2) The id of the fields will change. Therefore code which stores and resembles
      *    the id of fields may and most propably will not work correctly.
      */
-    virtual Field* removeDynamicField(const std::string& fieldName);
+    virtual void removeDynamicField(const std::string& fieldName);
 
     /**
      * Returns true if there is a field named \e name.
@@ -309,7 +309,7 @@ namespace av
     FieldInfo* getFieldInfo(unsigned int index);
 
     unsigned int addField(Field* field, const std::string& fieldName);
-    Field* removeField(unsigned int index);
+    void removeField(unsigned int index);
     IDType mId;
 
     unsigned int mEvaluateId;

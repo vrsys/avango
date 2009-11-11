@@ -69,7 +69,7 @@ void init_FieldContainer(void)
   av::Field* (av::FieldContainer::*getField_uint)(unsigned int) = &av::FieldContainer::getField;
   av::Field* (av::FieldContainer::*getField_string)(const std::string&) = &av::FieldContainer::getField;
   void (av::FieldContainer::*addField)(av::Field*, const std::string&) = &av::FieldContainer::addDynamicField;
-  av::Field* (av::FieldContainer::*removeField)(const std::string&) = &av::FieldContainer::removeDynamicField;
+  void (av::FieldContainer::*removeField)(const std::string&) = &av::FieldContainer::removeDynamicField;
 
   class_<av::Base, av::Link<av::Base>, boost::noncopyable >("Base", "docstring", no_init)
     .def("__eq__", Base_equal)

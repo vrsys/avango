@@ -32,6 +32,16 @@
 
 using namespace boost::python;
 
+std::string get_type_name(av::FieldContainer* self)
+{
+  return self->getTypeId().getName();
+}
+
+bool is_derived_from(av::FieldContainer* self, std::string name)
+{
+  return self->getTypeId().isDerivedFrom(av::Type::getByName(name));
+}
+
 av::Link<av::FieldContainer> make_instance_by_name(std::string name)
 {
   av::Link<av::FieldContainer> retval(dynamic_cast<av::FieldContainer*>(av::Type::createInstanceOfType(name)));
@@ -79,6 +89,8 @@ void init_FieldContainer(void)
   class_<av::Distributed, av::Link<av::Distributed>, bases<av::Base>, boost::noncopyable >("Distributed", "docstring", no_init);
 
   class_<av::FieldContainer, av::Link<av::FieldContainer>, bases<av::Distributed>, boost::noncopyable >("FieldContainer", "docstring", no_init)
+    .def("_get_type", get_type_name)
+    .def("_is_derived_from", is_derived_from)
     .def("_get_num_fields", &av::FieldContainer::getNumFields)
     .def("_get_field_name", &av::FieldContainer::getFieldName, return_value_policy<copy_const_reference>())
     .def("_get_field", getField_uint, return_internal_reference<>())

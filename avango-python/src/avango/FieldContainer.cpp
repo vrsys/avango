@@ -58,6 +58,11 @@ av::Link<av::FieldContainer> ContainerPoll_get_instance_by_name(std::string name
   return av::Link<av::FieldContainer>(av::ContainerPool::getInstanceByName(name));
 }
 
+unsigned int getNumberOfContainersToEvaluate()
+{
+  return av::FieldContainer::getNumberOfContainersToEvaluate();
+}
+
 bool Base_equal(const av::Base* a, const av::Base* b)
 {
   return a == b;
@@ -111,4 +116,5 @@ void init_FieldContainer(void)
   def("_make_field_by_name", make_field_by_name, return_internal_reference<>());
   def("get_instance_by_name", ContainerPoll_get_instance_by_name);
   def("disconnect_and_clear_all_fields", av::disconnectAndClearAllFields);
+  def("get_number_of_containers_to_evaluate",getNumberOfContainersToEvaluate);
 }

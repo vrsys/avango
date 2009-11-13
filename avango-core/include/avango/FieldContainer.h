@@ -210,6 +210,11 @@ namespace av
     static void unscheduleEvaluationForAllContainers();
 
     /**
+     * Get the number of FieldContainers which need to be evaluated
+     */
+    static unsigned int getNumberOfContainersToEvaluate();
+
+    /**
      * Get time of last change.
      */
     double lastChange() const;

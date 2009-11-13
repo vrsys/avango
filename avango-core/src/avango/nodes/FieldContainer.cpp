@@ -422,6 +422,12 @@ av::FieldContainer::setNameCB(const av::SFString::SetValueEvent& event)
   ContainerPool::setNameForInstance(this, event.getValue());
 }
 
+/* static */ unsigned int
+av::FieldContainer::getNumberOfContainersToEvaluate()
+{
+  return evaluation_list.size();
+}
+
 /* static */ void
 av::FieldContainer::evaluateAllContainers()
 {

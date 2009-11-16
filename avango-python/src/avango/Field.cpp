@@ -70,6 +70,7 @@ void init_Field(void)
 {
   void (av::Field::*disconnect_void)(void) = &av::Field::disconnect;
   void (av::Field::*disconnect_from)(av::Field*) = &av::Field::disconnectFrom;
+  void (av::Field::*disconnect_auditors)(void) = &av::Field::disconnectAuditors;
 
   class_<av::Field, boost::noncopyable>("Field", "docstring", no_init)
     .def("_get_index", &av::Field::getIndex)
@@ -81,6 +82,7 @@ void init_Field(void)
     .def("connect_weak_from", connect_weak_from)
     .def("disconnect", disconnect_void)
     .def("disconnect_from", disconnect_from)
+    .def("disconnect_auditors", disconnect_auditors)
     .def("get_connected_fields", FieldGetConnectedFields)
     .def("enable_dependency", &av::Field::enableDependency)
     .def("dependency_enabled", &av::Field::dependencyEnabled)

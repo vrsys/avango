@@ -32,6 +32,7 @@ local_env.Append(CPPDEFINES='AV_OSG_LIBRARY')
 
 sources = Split('''
     AbsoluteTransform.cpp
+    AutoTransform.cpp
     Billboard.cpp
     BlendFunc.cpp
     Box.cpp

@@ -28,6 +28,7 @@
 #include <avango/Logger.h>
 
 #include <avango/osg/AbsoluteTransform.h>
+#include <avango/osg/AutoTransform.h>
 #include <avango/osg/Billboard.h>
 #include <avango/osg/BlendFunc.h>
 #include <avango/osg/Camera.h>
@@ -90,6 +91,7 @@ av::osg::Init::initClass()
     av::osg::initFields();
 
     av::osg::AbsoluteTransform::initClass();
+    av::osg::AutoTransform::initClass();
     av::osg::Billboard::initClass();
     av::osg::Camera::initClass();
     av::osg::CameraAttachment::initClass();

@@ -27,6 +27,7 @@ import avango.build
 
 headers = Split('''
     AbsoluteTransform.h
+    AutoTransform.h
     Billboard.h
     BlendFunc.h
     Box.h

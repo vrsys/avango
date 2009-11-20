@@ -43,10 +43,10 @@ namespace boost
  }
 
 void init_OSGAutoTransform(void)
- {
+{
   // wrapping osg::Transform functionality
   register_field<av::osg::SFAutoTransform>("SFAutoTransform");
   register_multifield<av::osg::MFAutoTransform>("MFAutoTransform");
   class_<av::osg::AutoTransform, av::Link<av::osg::AutoTransform>, bases<av::osg::Transform>, boost::noncopyable >("AutoTransform", "docstring", no_init);
 
- }
+}

@@ -42,6 +42,10 @@ av::osg::AutoTransform::AutoTransform(::osg::AutoTransform* osgAutoTransform) :
   Transform(osgAutoTransform),
   mOsgAutoTransform(osgAutoTransform)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(Scale,
+                               boost::bind(&AutoTransform::getScaleCB, this, _1),
+                               boost::bind(&AutoTransform::setScaleCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(AutoScaleToScreen,
                                boost::bind(&AutoTransform::getAutoScaleToScreenCB, this, _1),
                                boost::bind(&AutoTransform::setAutoScaleToScreenCB, this, _1));
@@ -65,6 +69,11 @@ av::osg::AutoTransform::AutoTransform(::osg::AutoTransform* osgAutoTransform) :
   AV_FC_ADD_ADAPTOR_FIELD(PivotPoint,
                               boost::bind(&AutoTransform::getPivotPointCB, this, _1),
                               boost::bind(&AutoTransform::setPivotPointCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(AutoScaleTransitionWidthRatio,
+                              boost::bind(&AutoTransform::getAutoScaleTransitionWidthRatioCB, this, _1),
+                              boost::bind(&AutoTransform::setAutoScaleTransitionWidthRatioCB, this, _1));
+
 
 
 }
@@ -92,6 +101,17 @@ av::osg::AutoTransform::getOsgAutoTransform() const
   return mOsgAutoTransform;
 }
 
+/* virtual */ void
+av::osg::AutoTransform::getScaleCB(const av::osg::SFVec3::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgAutoTransform->getScale();
+}
+
+/* virtual */ void
+av::osg::AutoTransform::setScaleCB(const av::osg::SFVec3::SetValueEvent& event)
+{
+  mOsgAutoTransform->setScale(event.getValue());
+}
 
 /* virtual */ void
 av::osg::AutoTransform::getMinimumScaleCB(const av::SFDouble::GetValueEvent& event)
@@ -163,4 +183,16 @@ av::osg::AutoTransform::getPivotPointCB(const av::osg::SFVec3::GetValueEvent& ev
 av::osg::AutoTransform::setPivotPointCB(const av::osg::SFVec3::SetValueEvent& event)
 {
   mOsgAutoTransform->setPivotPoint(event.getValue());
+}
+
+/* virtual */ void
+av::osg::AutoTransform::getAutoScaleTransitionWidthRatioCB(const av::SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgAutoTransform->getAutoScaleTransitionWidthRatio();
+}
+
+/* virtual */ void
+av::osg::AutoTransform::setAutoScaleTransitionWidthRatioCB(const av::SFFloat::SetValueEvent& event)
+{
+  mOsgAutoTransform->setAutoScaleTransitionWidthRatio(event.getValue());
 }

@@ -69,11 +69,13 @@ namespace av
 
     public:
 
+      typedef enum {
+          NO_ROTATION      = ::osg::AutoTransform::NO_ROTATION,
+          ROTATE_TO_SCREEN = ::osg::AutoTransform::ROTATE_TO_SCREEN,
+          ROTATE_TO_CAMERA = ::osg::AutoTransform::ROTATE_TO_CAMERA
+      } RotationModeType;
       /**
-       * AutoTransform-modes:
-       * 0 = NO_ROTATION,
-       * 1 = ROTATE_TO_SCREEN,
-       * 2 = ROTATE_TO_CAMERA
+       * Set the AutoTransform rotation mode
        */
       SFUInt AutoRotateMode;
 
@@ -81,6 +83,11 @@ namespace av
        * Minimal scale of the children
        */
       SFDouble MinimumScale;
+
+      /**
+       * Scale
+       */
+      SFVec3 Scale;
 
       /**
        * Maximal scale of the children
@@ -102,6 +109,11 @@ namespace av
        */
       SFVec3 PivotPoint;
 
+      /**
+       * Set the AutoScaleTransitionWidthRatio
+       */
+      SFFloat AutoScaleTransitionWidthRatio;
+
 
 
       /**
@@ -110,6 +122,9 @@ namespace av
       OsgAutoTransform* getOsgAutoTransform() const;
 
     protected:
+
+      virtual void getScaleCB(const av::osg::SFVec3::GetValueEvent& event);
+      virtual void setScaleCB(const av::osg::SFVec3::SetValueEvent& event);
 
       virtual void getMinimumScaleCB(const av::SFDouble::GetValueEvent& event);
       virtual void setMinimumScaleCB(const av::SFDouble::SetValueEvent& event);
@@ -128,6 +143,9 @@ namespace av
 
       virtual void getPivotPointCB(const av::osg::SFVec3::GetValueEvent& event);
       virtual void setPivotPointCB(const av::osg::SFVec3::SetValueEvent& event);
+
+      virtual void getAutoScaleTransitionWidthRatioCB(const av::SFFloat::GetValueEvent& event);
+      virtual void setAutoScaleTransitionWidthRatioCB(const av::SFFloat::SetValueEvent& event);
 
     private:
 

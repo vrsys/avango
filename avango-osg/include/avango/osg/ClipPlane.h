@@ -69,6 +69,7 @@ namespace av
 
     public:
 
+      SFInt PlaneNumber;
       osg::SFVec4 Plane;
 
       /**
@@ -77,6 +78,9 @@ namespace av
       ::osg::ClipPlane* getOsgClipPlane() const;
 
     protected:
+
+      virtual void getPlaneNumberCB(const av::SFInt::GetValueEvent& event);
+      virtual void setPlaneNumberCB(const av::SFInt::SetValueEvent& event);
 
       virtual void getPlaneCB(const av::osg::SFVec4::GetValueEvent& event);
       virtual void setPlaneCB(const av::osg::SFVec4::SetValueEvent& event);

@@ -31,6 +31,9 @@
 
 #include <avango/Logger.h>
 
+#include <osg/Plane>
+#include <iostream>
+
 namespace
 {
   av::Logger& logger(av::getLogger("av::osg::ClipNode"));
@@ -48,6 +51,8 @@ av::osg::ClipNode::ClipNode(::osg::ClipNode* osggroup) :
     AV_FC_ADD_ADAPTOR_FIELD(ClipPlanes,
                             boost::bind(&av::osg::ClipNode::getClipPlaneCB, this, _1),
                             boost::bind(&av::osg::ClipNode::setClipPlaneCB, this, _1));
+
+    mOsgClipNode->addClipPlane(new ::osg::ClipPlane(0, ::osg::Plane(1.0, 0.0, 0.0, 0.0)));
 }
 
 /* virtual */
@@ -142,10 +147,13 @@ av::osg::ClipNode::setClipPlaneCB(const av::osg::MFClipPlane::SetValueEvent& eve
   std::vector<av::Link<av::osg::ClipPlane> >::const_iterator ch_it;
   for (ch_it = clipPlanes.begin(); ch_it != clipPlanes.end(); ++ch_it)
   {
+
     if (ch_it->isValid() && ch_it->getPtr()->getOsgClipPlane() != 0)
     {
-      if (!mOsgClipNode->addClipPlane(ch_it->getPtr()->getOsgClipPlane()))
+      if (! mOsgClipNode->addClipPlane(ch_it->getPtr()->getOsgClipPlane()))
+      {
         AVANGO_LOG(logger, av::logging::WARN, "setClipPlanesCB: couldn't insert clip node!");
+      }
     }
     else
     {

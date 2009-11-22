@@ -41,6 +41,10 @@ av::osg::ClipPlane::ClipPlane(::osg::ClipPlane* osgClipPlane) :
   StateAttribute(osgClipPlane),
   mOsgClipPlane(osgClipPlane)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(PlaneNumber,
+                             boost::bind(&ClipPlane::getPlaneNumberCB, this, _1),
+                             boost::bind(&ClipPlane::setPlaneNumberCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(Plane,
                            boost::bind(&ClipPlane::getPlaneCB, this, _1),
                            boost::bind(&ClipPlane::setPlaneCB, this, _1));
@@ -67,6 +71,18 @@ av::osg::ClipPlane::initClass()
 av::osg::ClipPlane::getOsgClipPlane() const
 {
   return mOsgClipPlane;
+}
+
+/* virtual */ void
+av::osg::ClipPlane::getPlaneNumberCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgClipPlane->getClipPlaneNum();
+}
+
+/* virtual */ void
+av::osg::ClipPlane::setPlaneNumberCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgClipPlane->setClipPlaneNum(event.getValue());
 }
 
 /* virtual */ void

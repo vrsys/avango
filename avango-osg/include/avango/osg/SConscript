@@ -34,6 +34,8 @@ headers = Split('''
     Camera.h
     CameraAttachment.h
     Capsule.h
+    ClipPlane.h
+    ClipNode.h
     CullFace.h
     Depth.h
     Drawable.h

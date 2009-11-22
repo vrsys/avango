@@ -39,6 +39,8 @@ sources = Split('''
     Camera.cpp
     CameraAttachment.cpp
     Capsule.cpp
+    ClipPlane.cpp
+    ClipNode.cpp
     CullFace.cpp
     Depth.cpp
     Drawable.cpp

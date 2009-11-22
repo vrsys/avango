@@ -54,6 +54,8 @@ osg_files = Split("""
     avango/osg/OSGCamera.cpp
     avango/osg/OSGCameraAttachment.cpp
     avango/osg/OSGCullFace.cpp
+    avango/osg/OSGClipPlane.cpp
+    avango/osg/OSGClipNode.cpp
     avango/osg/OSGDepth.cpp
     avango/osg/OSGBlendFunc.cpp
     avango/osg/OSGGeometry.cpp

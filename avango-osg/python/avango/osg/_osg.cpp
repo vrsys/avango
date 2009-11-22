@@ -44,6 +44,8 @@
 #include "OSGCameraAttachment.h"
 #include "OSGCamera.h"
 #include "OSGCapsule.h"
+#include "OSGClipPlane.h"
+#include "OSGClipNode.h"
 #include "OSGCullFace.h"
 #include "OSGDepth.h"
 #include "OSGDrawable.h"
@@ -142,6 +144,8 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGCamera();
   init_OSGCameraAttachment();
   init_OSGCullFace();
+  init_OSGClipPlane();
+  init_OSGClipNode();
   init_OSGDepth();
   init_OSGBlendFunc();
   init_OSGDrawable();

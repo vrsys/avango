@@ -34,6 +34,7 @@
 #include <avango/osg/Camera.h>
 #include <avango/osg/CameraAttachment.h>
 #include <avango/osg/ClipPlane.h>
+#include <avango/osg/ClipNode.h>
 #include <avango/osg/CullFace.h>
 #include <avango/osg/Depth.h>
 #include <avango/osg/Drawable.h>
@@ -97,6 +98,7 @@ av::osg::Init::initClass()
     av::osg::Camera::initClass();
     av::osg::CameraAttachment::initClass();
     av::osg::ClipPlane::initClass();
+    av::osg::ClipNode::initClass();
     av::osg::CullFace::initClass();
     av::osg::Depth::initClass();
     av::osg::BlendFunc::initClass();

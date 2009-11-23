@@ -73,6 +73,11 @@ namespace av
       MFClipPlane ClipPlanes;
 
       /**
+       * Creates six clip planes corresponding to the given BoundingBox, specified by min and max
+       */
+      void createClipBox(::osg::Vec3 min, ::osg::Vec3 max);
+
+      /**
        * Get the wrapped ::osg::ClipNode.
        */
       ::osg::ClipNode* getOsgClipNode() const;

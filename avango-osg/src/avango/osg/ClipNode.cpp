@@ -78,6 +78,14 @@ av::osg::ClipNode::getOsgClipNode() const
   return mOsgClipNode;
 }
 
+void
+av::osg::ClipNode::createClipBox(::osg::Vec3 min, ::osg::Vec3 max)
+{
+  ::osg::BoundingBox bBox;
+  bBox.set(min,max);
+  mOsgClipNode->createClipBox(bBox);
+}
+
 /* virtual */ void
 av::osg::ClipNode::getClipPlaneCB(const av::osg::MFClipPlane::GetValueEvent& event)
 {

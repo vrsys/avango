@@ -51,8 +51,6 @@ av::osg::ClipNode::ClipNode(::osg::ClipNode* osggroup) :
     AV_FC_ADD_ADAPTOR_FIELD(ClipPlanes,
                             boost::bind(&av::osg::ClipNode::getClipPlaneCB, this, _1),
                             boost::bind(&av::osg::ClipNode::setClipPlaneCB, this, _1));
-
-    mOsgClipNode->addClipPlane(new ::osg::ClipPlane(0, ::osg::Plane(1.0, 0.0, 0.0, 0.0)));
 }
 
 /* virtual */

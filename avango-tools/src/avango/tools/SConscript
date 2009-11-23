@@ -42,6 +42,8 @@ sources = Split('''
     TypeSelector.cpp
     UnionSelector.cpp
     ''')
+    
+avango.build.add_library(tools_env, 'boost_regex')
 
 if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
     avango.build.add_library(tools_env, 'avango-osg')

@@ -30,6 +30,10 @@
 #endif
 
 #include <avango/Logger.h>
+#include <boost/regex.hpp>
+#include <iostream>
+
+
 
 namespace
 {
@@ -50,6 +54,7 @@ av::tools::NameSelector::NameSelector():
   AV_FC_ADD_FIELD(EqualNameOnly, true);
   AV_FC_ADD_FIELD(SearchTargetHolderNodePaths, false);
   AV_FC_ADD_FIELD(SearchOSGNodePaths, false);
+  AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
 }
 
 av::tools::NameSelector::~NameSelector()
@@ -188,13 +193,28 @@ av::tools::NameSelector::isSelectable(av::Object& object)
 
   if (!object_name.empty())
   {
-    if (EqualNameOnly.getValue())
-      name = mNames.find(object_name);
+    if (!TreatAsRegularExpression.getValue() )
+    {
+      if (EqualNameOnly.getValue())
+        name = mNames.find(object_name);
+      else
+      {
+        name = mNames.begin();
+        while (name != mNames.end() && object_name.find(*name) == std::string::npos)
+          ++name;
+      }
+    }
     else
     {
-      name = mNames.begin();
-      while (name != mNames.end() && object_name.find(*name) == std::string::npos)
-        ++name;
+      for(name = mNames.begin();name!=mNames.end();++name)
+      {
+        const std::string expr = EqualNameOnly.getValue() ? (".*" + *name + ".*") : *name;
+        boost::regex e(expr);
+        if(regex_match(object_name, e))
+          break;
+      }
+
+
     }
   }
 

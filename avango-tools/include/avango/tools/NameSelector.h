@@ -85,6 +85,14 @@ namespace av
       SFBool EqualNameOnly;
 
       /**
+       * Specify, if the given strings in SelectableNames and SelectableTargetNames should be treated
+       * as regular expressions. Default value: False.
+       * If EqualNameOnly and TreatAsRegularExpression are both set to True, each regular expression is
+       * surrounded by .*<Expression>.*
+       */
+      SFBool TreatAsRegularExpression;
+
+      /**
        * Set to true if the selectable names should also be searched in the OSG node paths
        * found in NodePathTargetHolder objects.
        */

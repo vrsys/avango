@@ -51,6 +51,7 @@ def _setup_default():
 
     _config_store.set('boost_thread', BoostConfig('boost_thread'))
     _config_store.set('boost_signals', BoostConfig('boost_signals'))
+    _config_store.set('boost_regex', BoostConfig('boost_regex'))
     _config_store.set('boost_python', BoostConfig('boost_python', dependencies = ['python']))
 
     _config_store.set('avango-core', PKGConfig('avango-core'))
@@ -97,7 +98,7 @@ def _setup_default():
         _config_store.set('GL', PlainConfig(libraries = ['OPENGL32']))
         _config_store.set('GLU', PlainConfig(libraries = ['GLU32']))
         # for avango extensions, there is no pkg-config
-        _config_store.set('avango-core', PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread"]))
+        _config_store.set('avango-core', PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread", "boost_regex"]))
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg']))
         _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
         # xerces

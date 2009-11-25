@@ -87,6 +87,7 @@ def _setup_default():
         # Boost libraries use auto-link
         _config_store.set('boost_thread', PlainConfig(libraries = ['']))
         _config_store.set('boost_signals', PlainConfig(libraries = ['']))
+        _config_store.set('boost_regex', PlainConfig(libraries = ['']))
         _config_store.set('boost_python', PlainConfig(libraries = [''], dependencies = ["python"]))
         # dl is in standard system libraries
         # TODO check that dl functionality is included in system library

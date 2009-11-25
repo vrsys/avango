@@ -199,24 +199,28 @@ def _build_environment():
     if 'icpc' in result['CXX']:
         result.Append(CCFLAGS='-wd177,383,424,810,981,1418,1419,1572')
         result.Append(LINKFLAGS='-static-intel')
+        
     if oshelper.os_is_windows():
         if result.get('OPENSCENEGRAPH_DEBUG', None):  # FIXME move this elswhere
             result.Append(CXXFLAGS='/EHsc /W3 /MDd /wd4099 /wd4244 /wd4800 /wd4996 /wd4251 /wd4661') # FIXME remove deactivation of warnings
         else:
-            result.Append(CXXFLAGS='/EHsc /W3 /MD /wd4099 /wd4244 /wd4800 /wd4996 /wd4251 /wd4661') # FIXME remove deactivation of warnings
+            result.Append(CXXFLAGS=['/EHsc', '/W3', '/MD', '/wd4099', '/wd4244', '/wd4800', '/wd4996', '/wd4251', '/wd4661']) # FIXME remove deactivation of warnings
         result.Append(CPPDEFINES=['WIN32', 'AV_INSTANTIATE_FIELD_TEMPLATES'])
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
         result.Append(CCFLAGS='-ansi -Wall')
+        
     if result['DEBUG']:
         if oshelper.os_is_windows():
             result.Append(CCFLAGS='/DEBUG /Zi /D_DEBUG /Ob0 /Od /RTC1')
         else:
             result.Append(CCFLAGS='-g')
     else:
-        result.Append(CCFLAGS='-O2 -DNDEBUG')
-        if result['CXX'] == 'g++':
-            result.Append(CCFLAGS='-fno-strict-aliasing')
+        if not oshelper.os_is_windows():
+            result.Append(CCFLAGS='-O2 -DNDEBUG')
+            if result['CXX'] == 'g++':
+                result.Append(CCFLAGS='-fno-strict-aliasing')
+            
     if result['TRACE_LOGGING']:
         result.Append(CPPDEFINES='TRACE_LOGGING')
     

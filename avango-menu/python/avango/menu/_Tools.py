@@ -73,9 +73,9 @@ class Tool(avango.script.Script):
         self.menu_drag_selector = _MenuDragSelector()
         self.menu_drag_selector.Targets.connect_from(self.pick_selector.SelectedTargets)
 
-        dragtool = avango.tools.nodes.DragTool()
-        dragtool.DragTransform.connect_from(self.Transform)
-        dragtool.Targets.connect_from(self.menu_drag_selector.SelectedTargets)
+        self.dragtool = avango.tools.nodes.DragTool()
+        self.dragtool.DragTransform.connect_from(self.Transform)
+        self.dragtool.Targets.connect_from(self.menu_drag_selector.SelectedTargets)
 
         self.highlight_selector = avango.tools.nodes.PickSelector()
         self.highlight_selector.PickTrigger.connect_from(self.Enable)
@@ -113,6 +113,12 @@ class Tool(avango.script.Script):
     @field_has_changed(EnableContext)
     def enable_context_changed(self):
         self._ContextTrigger.value = self.EnableContext.value and self.ContextTrigger.value
+        
+    def set_drag_tool(self, drag_tool):
+        self.dragtool.disconnect_all_fields()
+        self.dragtool = drag_tool
+        self.dragtool.DragTransform.connect_from(self.Transform)
+        self.dragtool.Targets.connect_from(self.menu_drag_selector.SelectedTargets)
 
     def cleanup(self):
         self.disconnect_all_fields()

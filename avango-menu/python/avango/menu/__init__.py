@@ -136,3 +136,4 @@ from _SliderMouseInteractor import SliderMouseInteractor
 from _SliderStylusInteractor import SliderStylusInteractor
 from _PlacementBase import PlacementBase
 from _PlacementWall import PlacementWall
+from _PlacementMonitor import PlacementMonitor

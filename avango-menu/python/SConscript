@@ -34,6 +34,7 @@ menu_python_files = Split("""
     avango/menu/_PanelRotator.py
     avango/menu/_PlacementBase.py
     avango/menu/_PlacementWall.py
+    avango/menu/_PlacementMonitor.py
     avango/menu/_RadioButtonGroup.py
     avango/menu/_SliderMouseInteractor.py
     avango/menu/_SliderStylusInteractor.py

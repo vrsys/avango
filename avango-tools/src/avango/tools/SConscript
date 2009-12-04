@@ -34,6 +34,7 @@ sources = Split('''
     InjectSelector.cpp
     ObjectSelector.cpp
     NameSelector.cpp
+    FieldSelector.cpp
     Selector.cpp
     SingleSelector.cpp
     TargetHolder.cpp

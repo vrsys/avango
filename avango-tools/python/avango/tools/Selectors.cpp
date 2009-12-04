@@ -35,6 +35,7 @@
 #include <avango/tools/InjectSelector.h>
 #include <avango/tools/ObjectSelector.h>
 #include <avango/tools/NameSelector.h>
+#include <avango/tools/FieldSelector.h>
 #include <avango/tools/Selector.h>
 #include <avango/tools/SingleSelector.h>
 #include <avango/tools/TriggerSelector.h>
@@ -67,6 +68,8 @@ void init_Selectors(void)
   register_multifield<av::tools::MFObjectSelector>("MFObjectSelector");
   register_field<av::tools::SFNameSelector>("SFNameSelector");
   register_multifield<av::tools::MFNameSelector>("MFNameSelector");
+  register_field<av::tools::SFFieldSelector>("SFFieldSelector");
+  register_multifield<av::tools::MFFieldSelector>("MFFieldSelector");
   register_field<av::tools::SFSelector>("SFSelector");
   register_multifield<av::tools::MFSelector>("MFSelector");
   register_field<av::tools::SFSingleSelector>("SFSingleSelector");
@@ -83,6 +86,7 @@ void init_Selectors(void)
   class_<av::tools::InjectSelector, av::Link<av::tools::InjectSelector>, bases<av::tools::Selector>, boost::noncopyable >("InjectSelector", "InjectSelector class", no_init);
   class_<av::tools::ObjectSelector, av::Link<av::tools::ObjectSelector>, bases<av::tools::Selector>, boost::noncopyable >("ObjectSelector", "ObjectSelector class", no_init);
   class_<av::tools::NameSelector, av::Link<av::tools::NameSelector>, bases<av::tools::Selector>, boost::noncopyable >("NameSelector", "NameSelector class", no_init);
+  class_<av::tools::FieldSelector, av::Link<av::tools::FieldSelector>, bases<av::tools::Selector>, boost::noncopyable >("FieldSelector", "FieldSelector class", no_init);
   class_<av::tools::SingleSelector, av::Link<av::tools::SingleSelector>, bases<av::tools::Selector>, boost::noncopyable >("SingleSelector", "SingleSelector class", no_init);
   class_<av::tools::TriggerSelector, av::Link<av::tools::TriggerSelector>, bases<av::tools::Selector>, boost::noncopyable >("TriggerSelector", "TriggerSelector class", no_init);
   class_<av::tools::TypeSelector, av::Link<av::tools::TypeSelector>, bases<av::tools::Selector>, boost::noncopyable >("TypeSelector", "TypeSelector class", no_init);

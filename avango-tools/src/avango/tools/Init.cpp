@@ -31,6 +31,7 @@
 #include <avango/tools/InjectSelector.h>
 #include <avango/tools/ObjectSelector.h>
 #include <avango/tools/NameSelector.h>
+#include <avango/tools/FieldSelector.h>
 #include <avango/tools/Selector.h>
 #include <avango/tools/SingleSelector.h>
 #include <avango/tools/TargetHolder.h>
@@ -65,6 +66,7 @@ av::tools::Init::initClass()
     av::tools::InjectSelector::initClass();
     av::tools::ObjectSelector::initClass();
     av::tools::NameSelector::initClass();
+    av::tools::FieldSelector::initClass();
     av::tools::Selector::initClass();
     av::tools::SingleSelector::initClass();
     av::tools::TargetHolder::initClass();

@@ -157,6 +157,7 @@ class PlacementBase(avango.script.Script):
     def gap_to_object(self):
         eye_to_menu = self.menu_position - self.head_position
         menu_distance = eye_to_menu.length() - self.ObjectDistance.value
+        menu_distance = max(menu_distance, self.MinDistance.value)
         self.menu_position = self.head_position + menu_distance * eye_to_menu / eye_to_menu.length()
 
     def pre_placement(self):

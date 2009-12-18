@@ -77,6 +77,10 @@ namespace av
       SFBool ShowPanel;
       //Indicates the visibility of the panel border
       SFBool ShowBorder;
+      //Set the centering of the panel
+      //0 = the value of the Position field corresponds the center of the panel (default)
+      //1 = the value of the Position field corresponds the upper left corner of the panel
+      SFInt Centering;
 
 
       /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);

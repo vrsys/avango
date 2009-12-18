@@ -57,6 +57,7 @@ av::osg::Panel::Panel() :
   AV_FC_ADD_FIELD(Position, ::osg::Vec3(0,0,0));
   AV_FC_ADD_FIELD(ShowPanel, true);
   AV_FC_ADD_FIELD(ShowBorder, true);
+  AV_FC_ADD_FIELD(Centering, 0);
 
   updateGeometry();
 }
@@ -91,7 +92,8 @@ av::osg::Panel::fieldHasChangedLocalSideEffect(const av::Field& field)
       &field == &Position ||
       &field == &EdgeRadius ||
       &field == &EdgeSmooth ||
-      &field == &BorderWidth)
+      &field == &BorderWidth ||
+      &field == &Centering )
   {
     mGeometryChanged = true;
   }
@@ -131,13 +133,22 @@ av::osg::Panel::evaluateLocalSideEffect()
 void
 av::osg::Panel::updateGeometry()
 {
+  //center offset
+  float xOffset = 0.0;
+  float yOffset = 0.0;
+  if(Centering.getValue() == 1)
+  {
+    xOffset = Width.getValue() * 0.5f;
+    yOffset = -Height.getValue() * 0.5f;
+  }
+
   // create vertices in XY plane
   int e = EdgeSmooth.getValue();
   float w  = Width.getValue() * 0.5f;
   float h  = Height.getValue() * 0.5f;
   float b  = BorderWidth.getValue();
-  float x = Position.getValue().x();
-  float y = Position.getValue().y();
+  float x = Position.getValue().x() + xOffset;
+  float y = Position.getValue().y() + yOffset;
   float z = Position.getValue().z();
 
   ::osg::ref_ptr< ::osg::Vec3Array> vertices = new ::osg::Vec3Array(e * 12 + 2);

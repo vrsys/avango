@@ -96,6 +96,7 @@ void init_OSGMatrix(void)
                              osg::Matrix::value_type, const osg::Vec3&) = &osg::Matrix::makeRotate;
 
   // introducing member function pointers for overloaded function of osg::Matrix::makeOrtho2D
+  void (osg::Matrix::*makeOrtho)(double,double,double,double,double,double) = &osg::Matrix::makeOrtho;
   void (osg::Matrix::*makeOrtho2D)(double,double,double,double) = &osg::Matrix::makeOrtho2D;
 
   // introducing member function pointers for overloaded function of osg::Matrix::setTranslate
@@ -151,6 +152,7 @@ void init_OSGMatrix(void)
     .def("make_rotate", mrot3)
     .def("make_rotate", mrot4)
     .def("make_rotate", mrot5)
+    .def("make_ortho", makeOrtho)
     .def("make_ortho_2d", makeOrtho2D)
     .def("invert", &osg::Matrix::invert)
     .def("mult", &osg::Matrix::mult)

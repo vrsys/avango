@@ -23,13 +23,46 @@
 #                                                                        #
 ##########################################################################
 
-The build system uses SCons. Use
+AVANGO uses SCons (www.scons.org) as build system. Detailed information 
+about the build process of AVANGO for different platforms can be found under:
+http://www.avango.org/wiki/Installation
+
+Here are some basic infos how to build AVANGO under Linux.
+Use:
 
   scons --help
 
 to see all configurations options. These options can also be set in a file
 called 'localdefs.py' in the top-level directory. Note that this is a python
 script with full support for all advanced features of python.
+Here is a sample localdefs.py file:
+--------------------------------------------------------------------
+#adjust these according to your system
+avango_src_dir     ='/home/YOUR_USER/apps/avango'
+avango_build_dir   ='/home/YOUR_USER/apps/avango_build'
+avango_install_dir ='/home/YOUR_USER/apps/avango_install'
+osg_install_dir    ='/home/YOUR_USER/apps/OpenSceneGraph-2.9.5_install'
+
+#This is the directory, where AVANGO will put its object files during compilation
+BUILD=avango_build_dir
+#This is the installation directory of AVANGO
+PREFIX=avango_install_dir
+
+PKG_CONFIG_PATH = avango_install_dir + '/lib/pkgconfig'
+INCLUDE_PATH    = osg_install_dir+'/include'
+LIBRARY_PATH    = osg_install_dir+'/lib'
+
+#Build in debug mode
+DEBUG=True
+#Build with OpenSceneGraph support
+OPENSCENEGRAPH=True
+#Set the log level
+LOG_LEVEL="WARN"
+--------------------------------------------------------------------
+Note, that this file assumes that python and boost are in the system paths. If
+this is not the case, you also have to add them to the INCLUDE_PATH respectively 
+LIBRARY_PATH variables in your localdefs.py.
+
 
 By default the SCons build uses the 'all' build target which will recursively
 build all modules with respect to your 'localdefs.py' environment.  For each

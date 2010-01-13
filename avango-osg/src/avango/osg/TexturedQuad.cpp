@@ -45,14 +45,18 @@ av::osg::TexturedQuad::TexturedQuad() :
   mVertexArray(new ::osg::Vec3Array(4)),
   mNormals(new ::osg::Vec3Array(1)),
   mColors(new ::osg::Vec4Array(1)),
-  mTexCoords(new ::osg::Vec2Array(4)),
-  mOsgTexture(new ::osg::Texture2D)
+  mTexCoords(new ::osg::Vec2Array(4))
 {
+  av::osg::Texture2D *texture = new av::osg::Texture2D();
+
   AV_FC_ADD_FIELD(Width, 1.0f);
   AV_FC_ADD_FIELD(Height, 1.0f);
   AV_FC_ADD_FIELD(Color, ::osg::Vec4(1,1,1,1));
   AV_FC_ADD_FIELD(Position, ::osg::Vec3(0,0,0));
+  AV_FC_ADD_FIELD(UseFilename, true);
   AV_FC_ADD_FIELD(Filename, "");
+  AV_FC_ADD_FIELD(Texture, texture);
+
 
   AV_FC_ADD_ADAPTOR_FIELD(MinFilter,
                           boost::bind(&TexturedQuad::getMinFilterCB, this, _1),
@@ -79,11 +83,11 @@ av::osg::TexturedQuad::TexturedQuad() :
   (*mTexCoords)[2].set(1.0f,0.0f);
   (*mTexCoords)[3].set(1.0f,1.0f);
   getOsgGeometry()->setTexCoordArray(0,mTexCoords.get());
-  getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,mOsgTexture.get(),::osg::StateAttribute::ON);
+  getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
 
   // set up texture
-  mOsgTexture->setWrap(::osg::Texture::WRAP_S, ::osg::Texture::CLAMP_TO_EDGE);
-  mOsgTexture->setWrap(::osg::Texture::WRAP_T, ::osg::Texture::CLAMP_TO_EDGE);
+  Texture.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_S, ::osg::Texture::CLAMP_TO_EDGE);
+  Texture.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_T, ::osg::Texture::CLAMP_TO_EDGE);
 }
 
 /* virtual */
@@ -155,7 +159,8 @@ av::osg::TexturedQuad::evaluateLocalSideEffect()
 
 ::osg::ref_ptr< ::osg::Texture2D>
 av::osg::TexturedQuad::getOsgTexture() const {
-  return mOsgTexture;
+  ::osg::ref_ptr< ::osg::Texture2D> tex = Texture.getValue()->getOsgTexture2D();
+  return tex;
 }
 
 void
@@ -178,9 +183,9 @@ av::osg::TexturedQuad::updateGeometry()
 void
 av::osg::TexturedQuad::updateTexture()
 {
-  if(Filename.getValue().size() != 0)
+  if(Filename.getValue().size() != 0 && UseFilename.getValue())
   {
-    mOsgTexture->setImage(::osgDB::readImageFile(Filename.getValue()));
+    Texture.getValue()->getOsgTexture2D()->setImage(::osgDB::readImageFile(Filename.getValue()));
   }
 }
 
@@ -195,35 +200,35 @@ av::osg::TexturedQuad::updateColor()
 /* virtual */ void
 av::osg::TexturedQuad::getMinFilterCB(const av::SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = mOsgTexture->getFilter(::osg::Texture2D::MIN_FILTER);
+  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MIN_FILTER);
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMinFilterCB(const av::SFInt::SetValueEvent& event)
 {
-  mOsgTexture->setFilter(::osg::Texture2D::MIN_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+	Texture.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MIN_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::getMagFilterCB(const av::SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = mOsgTexture->getFilter(::osg::Texture2D::MAG_FILTER);
+  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MAG_FILTER);
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMagFilterCB(const av::SFInt::SetValueEvent& event)
 {
-  mOsgTexture->setFilter(::osg::Texture2D::MAG_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+  Texture.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MAG_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = mOsgTexture->getMaxAnisotropy();
+  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getMaxAnisotropy();
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event)
 {
-  mOsgTexture->setMaxAnisotropy(event.getValue());
+  Texture.getValue()->getOsgTexture2D()->setMaxAnisotropy(event.getValue());
 }

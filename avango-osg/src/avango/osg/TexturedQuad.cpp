@@ -42,6 +42,7 @@ av::osg::TexturedQuad::TexturedQuad() :
   mGeometryChanged(true),
   mColorChanged(true),
   mFilenameChanged(false),
+  mTextureChanged(false),
   mVertexArray(new ::osg::Vec3Array(4)),
   mNormals(new ::osg::Vec3Array(1)),
   mColors(new ::osg::Vec4Array(1)),
@@ -131,6 +132,11 @@ av::osg::TexturedQuad::fieldHasChangedLocalSideEffect(const av::Field& field)
   {
     mFilenameChanged = true;
   }
+
+  if (&field == &Texture)
+  {
+	mTextureChanged = true;
+  }
 }
 
 /* virtual */ void
@@ -154,6 +160,15 @@ av::osg::TexturedQuad::evaluateLocalSideEffect()
   {
     updateTexture();
     mFilenameChanged = false;
+  }
+
+  if (mTextureChanged)
+  {
+	if(!UseFilename.getValue())
+	{
+      getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
+    }
+	mTextureChanged = false;
   }
 }
 

@@ -94,6 +94,7 @@ namespace av
       bool mGeometryChanged;
       bool mColorChanged;
       bool mFilenameChanged;
+      bool mTextureChanged;
       ::osg::ref_ptr< ::osg::Vec3Array> mVertexArray;
       ::osg::ref_ptr< ::osg::Vec3Array> mNormals;
       ::osg::ref_ptr< ::osg::Vec4Array> mColors;

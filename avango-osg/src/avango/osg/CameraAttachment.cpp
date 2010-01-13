@@ -24,7 +24,6 @@
 \************************************************************************/
 
 #include <avango/osg/CameraAttachment.h>
-#include <avango/osg/Texture.h>
 #include <osg/Camera>
 #include <avango/Logger.h>
 #include <boost/bind.hpp>
@@ -44,6 +43,7 @@ av::osg::CameraAttachment::CameraAttachment()
   AV_FC_ADD_FIELD(BufferComponent, ::osg::Camera::COLOR_BUFFER);
   AV_FC_ADD_FIELD(InternalFormat, GL_RGBA);
   AV_FC_ADD_FIELD(Texture, Link< ::av::osg::Texture >());
+  AV_FC_ADD_FIELD(Image, Link< ::av::osg::Image >());
   AV_FC_ADD_FIELD(Level, 0);
   AV_FC_ADD_FIELD(Face, 0);
   AV_FC_ADD_FIELD(MIPMapGeneration, false);

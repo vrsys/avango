@@ -35,6 +35,7 @@
 #include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/osg/Texture.h>
+#include <avango/osg/Image.h>
 
 namespace av
 {
@@ -60,6 +61,7 @@ namespace av
 
       SFInt InternalFormat;
       SFTexture Texture;
+      SFImage Image;
       SFUInt Level;
       SFUInt Face;
       SFBool MIPMapGeneration;

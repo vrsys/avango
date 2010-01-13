@@ -203,6 +203,11 @@ av::osg::Camera::getAttachmentCB(const av::osg::MFCameraAttachment::GetValueEven
       Texture* texture = dynamic_cast<Texture*>(i->second._texture->getUserData());
       if (texture) a->Texture.setValue(texture);
     }
+    if (i->second._image)
+    {
+      Image* image = dynamic_cast<Image*>(i->second._image->getUserData());
+      if (image) a->Image.setValue(image);
+    }
     a->Level.setValue(i->second._level);
     a->Face.setValue(i->second._face);
     a->MIPMapGeneration.setValue(i->second._mipMapGeneration);
@@ -242,6 +247,10 @@ av::osg::Camera::setAttachmentCB(const av::osg::MFCameraAttachment::SetValueEven
     if ((*i)->Texture.getValue().isValid())
     {
       attachment._texture = (*i)->Texture.getValue()->getOsgTexture();
+    }
+    if ((*i)->Image.getValue().isValid())
+    {
+      attachment._image = (*i)->Image.getValue()->getOsgImage();
     }
     attachment._mipMapGeneration = (*i)->MIPMapGeneration.getValue();
     attachment._multisampleSamples = (*i)->MultisampleSamples.getValue();

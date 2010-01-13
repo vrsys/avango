@@ -26,26 +26,34 @@
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
 #include <avango/osg/Image.h>
+#include <osgDB/WriteFile>
 #include "OSGImage.h"
 
 using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
+{
   namespace python
-   {
+  {
     template <class T> struct pointee<av::Link<T> >
-     {
+    {
       typedef T type;
-     };
-   }
- }
+    };
+  }
+}
+
+void write_image_file(av::osg::Image* image, const std::string& name)
+{
+  osgDB::writeImageFile(*(image->getOsgImage()), name);
+}
 
 void init_OSGImage(void)
- {
+{
   // wrapping osg::Image functionality
   register_field<av::osg::SFImage>("SFImage");
   register_multifield<av::osg::MFImage>("MFImage");
-  class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable >("Image", "docstring", no_init);
- }
+  class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable >("Image", "docstring", no_init)
+    .def("write_file", write_image_file)
+    ;
+}

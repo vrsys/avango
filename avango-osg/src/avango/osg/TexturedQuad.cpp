@@ -43,6 +43,7 @@ av::osg::TexturedQuad::TexturedQuad() :
   mColorChanged(true),
   mFilenameChanged(false),
   mTextureChanged(false),
+  mTexCoordsChanged(false),
   mVertexArray(new ::osg::Vec3Array(4)),
   mNormals(new ::osg::Vec3Array(1)),
   mColors(new ::osg::Vec4Array(1)),
@@ -57,7 +58,15 @@ av::osg::TexturedQuad::TexturedQuad() :
   AV_FC_ADD_FIELD(UseFilename, true);
   AV_FC_ADD_FIELD(Filename, "");
   AV_FC_ADD_FIELD(Texture, texture);
+  AV_FC_ADD_FIELD(TexCoord01, ::osg::Vec2(0.0f,1.0f));
+  AV_FC_ADD_FIELD(TexCoord00, ::osg::Vec2(0.0f,0.0f));
+  AV_FC_ADD_FIELD(TexCoord10, ::osg::Vec2(1.0f,0.0f));
+  AV_FC_ADD_FIELD(TexCoord11, ::osg::Vec2(1.0f,1.0f));
 
+  SFVec3 TexCoord01;
+        SFVec3 TexCoord00;
+        SFVec3 TexCoord10;
+        SFVec3 TexCoord11;
 
   AV_FC_ADD_ADAPTOR_FIELD(MinFilter,
                           boost::bind(&TexturedQuad::getMinFilterCB, this, _1),
@@ -135,7 +144,12 @@ av::osg::TexturedQuad::fieldHasChangedLocalSideEffect(const av::Field& field)
 
   if (&field == &Texture)
   {
-	mTextureChanged = true;
+    mTextureChanged = true;
+  }
+
+  if (&field == &TexCoord01 || &field == &TexCoord00 || &field == &TexCoord10 || &field == &TexCoord11 )
+  {
+    mTexCoordsChanged = true;
   }
 }
 
@@ -164,11 +178,21 @@ av::osg::TexturedQuad::evaluateLocalSideEffect()
 
   if (mTextureChanged)
   {
-	if(!UseFilename.getValue())
-	{
+    if(!UseFilename.getValue())
+    {
       getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
     }
-	mTextureChanged = false;
+    mTextureChanged = false;
+  }
+
+  if (mTexCoordsChanged)
+  {
+    (*mTexCoords)[0] = TexCoord01.getValue();
+    (*mTexCoords)[1] = TexCoord00.getValue();
+    (*mTexCoords)[2] = TexCoord10.getValue();
+    (*mTexCoords)[3] = TexCoord11.getValue();
+    getOsgGeometry()->setTexCoordArray(0,mTexCoords.get());
+    mTexCoordsChanged = false;
   }
 }
 

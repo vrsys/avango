@@ -79,6 +79,10 @@ namespace av
       SFInt MinFilter;
       SFInt MagFilter;
       SFFloat MaxAnisotropy;
+      SFVec2 TexCoord01;
+      SFVec2 TexCoord00;
+      SFVec2 TexCoord10;
+      SFVec2 TexCoord11;
 
       /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
       /* virtual */ void evaluateLocalSideEffect();
@@ -95,6 +99,8 @@ namespace av
       bool mColorChanged;
       bool mFilenameChanged;
       bool mTextureChanged;
+      bool mTexCoordsChanged;
+
       ::osg::ref_ptr< ::osg::Vec3Array> mVertexArray;
       ::osg::ref_ptr< ::osg::Vec3Array> mNormals;
       ::osg::ref_ptr< ::osg::Vec4Array> mColors;

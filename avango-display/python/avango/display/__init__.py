@@ -41,7 +41,11 @@ def init(argv):
         elif opt in ("-d", "--display"):
             display_type = arg
         elif opt in ("-i", "--inspector"):
-            import avango.inspector # Only import if request! GTK fails without a proper display
+            # Only import if request! GTK fails without a proper display.
+            # 'global' statement is used to avoid making avango a local variable and
+            # thus inaccessible for the rest of the function!
+            global avango
+            import avango.inspector
             inspector = avango.inspector.nodes.Inspector()
         elif opt in ("-o", "--option"):
             try:

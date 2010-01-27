@@ -41,6 +41,9 @@ av::osg::Image::Image(::osg::Image* osgimage) :
    AV_FC_ADD_ADAPTOR_FIELD(Height,
                          boost::bind(&Image::getHeightCB, this, _1),
                          boost::bind(&Image::setHeightCB, this, _1));
+   AV_FC_ADD_ADAPTOR_FIELD(InternalTextureFormat,
+                         boost::bind(&Image::getInternalTextureFormatCB, this, _1),
+                         boost::bind(&Image::setInternalTextureFormatCB, this, _1));
 }
 
 av::osg::Image::~Image()
@@ -88,4 +91,16 @@ av::osg::Image::getHeightCB(const SFUInt::GetValueEvent& event)
 av::osg::Image::setHeightCB(const SFUInt::SetValueEvent& event)
 {
   // NOOP
+}
+
+/* virtual */ void
+av::osg::Image::getInternalTextureFormatCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgImage->getInternalTextureFormat();
+}
+
+/* virtual */ void
+av::osg::Image::setInternalTextureFormatCB(const SFInt::SetValueEvent& event)
+{
+  mOsgImage->setInternalTextureFormat(event.getValue());
 }

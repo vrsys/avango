@@ -77,6 +77,11 @@ namespace av
       SFUInt Height;
 
       /**
+       * Internal (i.e. GPU) pixel format if used as a texture
+       */
+      SFInt InternalTextureFormat;
+
+      /**
        * Get the wrapped ::osg::Image.
        */
       ::osg::Image* getOsgImage() const;
@@ -87,6 +92,8 @@ namespace av
       virtual void setWidthCB(const SFUInt::SetValueEvent& event);
       virtual void getHeightCB(const SFUInt::GetValueEvent& event);
       virtual void setHeightCB(const SFUInt::SetValueEvent& event);
+      virtual void getInternalTextureFormatCB(const SFInt::GetValueEvent& event);
+      virtual void setInternalTextureFormatCB(const SFInt::SetValueEvent& event);
 
     private:
 

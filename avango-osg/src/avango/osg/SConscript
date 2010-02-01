@@ -78,6 +78,7 @@ sources = Split('''
     Switch.cpp
     Text.cpp
     Texture.cpp
+    Texture1D.cpp
     Texture2D.cpp
     Texture2DArray.cpp
     TextureCubeMap.cpp

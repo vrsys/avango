@@ -33,6 +33,7 @@
 
 #include <avango/osg/Geometry.h>
 #include <osg/Texture2D>
+#include <avango/osg/Texture1D.h>
 #include <avango/osg/Texture2D.h>
 #include <osgDB/ReadFile>
 #include <avango/osg/Fields.h>
@@ -71,8 +72,9 @@ namespace av
       SFFloat Height;
       SFVec4 Color;
       SFVec3 Position;
-      SFTexture2D Texture;
-      //Due to backwards compatibility, thie flag indicates if the field Filename can be used to load a texture directly.
+      SFTexture1D Texture1D;
+      SFTexture2D Texture2D;
+      //Due to backwards compatibility, this flag indicates if the field Filename can be used to load a texture directly.
       //If this is set to False, the Texture field must be used directly. Default is True
       SFBool UseFilename;
       SFString Filename;
@@ -98,7 +100,8 @@ namespace av
       bool mGeometryChanged;
       bool mColorChanged;
       bool mFilenameChanged;
-      bool mTextureChanged;
+      bool mTextureChanged1D;
+      bool mTextureChanged2D;
       bool mTexCoordsChanged;
 
       ::osg::ref_ptr< ::osg::Vec3Array> mVertexArray;

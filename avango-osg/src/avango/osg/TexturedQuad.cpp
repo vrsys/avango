@@ -42,14 +42,16 @@ av::osg::TexturedQuad::TexturedQuad() :
   mGeometryChanged(true),
   mColorChanged(true),
   mFilenameChanged(false),
-  mTextureChanged(false),
+  mTextureChanged1D(false),
+  mTextureChanged2D(false),
   mTexCoordsChanged(false),
   mVertexArray(new ::osg::Vec3Array(4)),
   mNormals(new ::osg::Vec3Array(1)),
   mColors(new ::osg::Vec4Array(1)),
   mTexCoords(new ::osg::Vec2Array(4))
 {
-  av::osg::Texture2D *texture = new av::osg::Texture2D();
+  av::osg::Texture1D *texture1D = new av::osg::Texture1D();
+  av::osg::Texture2D *texture2D = new av::osg::Texture2D();
 
   AV_FC_ADD_FIELD(Width, 1.0f);
   AV_FC_ADD_FIELD(Height, 1.0f);
@@ -57,16 +59,17 @@ av::osg::TexturedQuad::TexturedQuad() :
   AV_FC_ADD_FIELD(Position, ::osg::Vec3(0,0,0));
   AV_FC_ADD_FIELD(UseFilename, true);
   AV_FC_ADD_FIELD(Filename, "");
-  AV_FC_ADD_FIELD(Texture, texture);
+  AV_FC_ADD_FIELD(Texture1D, texture1D);
+  AV_FC_ADD_FIELD(Texture2D, texture2D);
   AV_FC_ADD_FIELD(TexCoord01, ::osg::Vec2(0.0f,1.0f));
   AV_FC_ADD_FIELD(TexCoord00, ::osg::Vec2(0.0f,0.0f));
   AV_FC_ADD_FIELD(TexCoord10, ::osg::Vec2(1.0f,0.0f));
   AV_FC_ADD_FIELD(TexCoord11, ::osg::Vec2(1.0f,1.0f));
 
   SFVec3 TexCoord01;
-        SFVec3 TexCoord00;
-        SFVec3 TexCoord10;
-        SFVec3 TexCoord11;
+  SFVec3 TexCoord00;
+  SFVec3 TexCoord10;
+  SFVec3 TexCoord11;
 
   AV_FC_ADD_ADAPTOR_FIELD(MinFilter,
                           boost::bind(&TexturedQuad::getMinFilterCB, this, _1),
@@ -93,11 +96,10 @@ av::osg::TexturedQuad::TexturedQuad() :
   (*mTexCoords)[2].set(1.0f,0.0f);
   (*mTexCoords)[3].set(1.0f,1.0f);
   getOsgGeometry()->setTexCoordArray(0,mTexCoords.get());
-  getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
 
   // set up texture
-  Texture.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_S, ::osg::Texture::CLAMP_TO_EDGE);
-  Texture.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_T, ::osg::Texture::CLAMP_TO_EDGE);
+  Texture2D.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_S, ::osg::Texture::CLAMP_TO_EDGE);
+  Texture2D.getValue()->getOsgTexture2D()->setWrap(::osg::Texture::WRAP_T, ::osg::Texture::CLAMP_TO_EDGE);
 }
 
 /* virtual */
@@ -142,9 +144,14 @@ av::osg::TexturedQuad::fieldHasChangedLocalSideEffect(const av::Field& field)
     mFilenameChanged = true;
   }
 
-  if (&field == &Texture)
+  if (&field == &Texture1D)
   {
-    mTextureChanged = true;
+    mTextureChanged1D = true;
+  }
+
+  if (&field == &Texture2D)
+  {
+    mTextureChanged2D = true;
   }
 
   if (&field == &TexCoord01 || &field == &TexCoord00 || &field == &TexCoord10 || &field == &TexCoord11 )
@@ -170,19 +177,22 @@ av::osg::TexturedQuad::evaluateLocalSideEffect()
     mColorChanged = false;
   }
 
-  if (mFilenameChanged)
+  if (mFilenameChanged && UseFilename.getValue())
   {
     updateTexture();
     mFilenameChanged = false;
   }
 
-  if (mTextureChanged)
+  if (mTextureChanged1D && !UseFilename.getValue())
   {
-    if(!UseFilename.getValue())
-    {
-      getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
-    }
-    mTextureChanged = false;
+    getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture1D.getValue()->getOsgTexture1D(),::osg::StateAttribute::ON);
+    mTextureChanged1D = false;
+  }
+
+  if (mTextureChanged2D && !UseFilename.getValue())
+  {
+    getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture2D.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
+    mTextureChanged2D = false;
   }
 
   if (mTexCoordsChanged)
@@ -198,7 +208,7 @@ av::osg::TexturedQuad::evaluateLocalSideEffect()
 
 ::osg::ref_ptr< ::osg::Texture2D>
 av::osg::TexturedQuad::getOsgTexture() const {
-  ::osg::ref_ptr< ::osg::Texture2D> tex = Texture.getValue()->getOsgTexture2D();
+  ::osg::ref_ptr< ::osg::Texture2D> tex = Texture2D.getValue()->getOsgTexture2D();
   return tex;
 }
 
@@ -224,7 +234,8 @@ av::osg::TexturedQuad::updateTexture()
 {
   if(Filename.getValue().size() != 0 && UseFilename.getValue())
   {
-    Texture.getValue()->getOsgTexture2D()->setImage(::osgDB::readImageFile(Filename.getValue()));
+    Texture2D.getValue()->getOsgTexture2D()->setImage(::osgDB::readImageFile(Filename.getValue()));
+    getOsgGeometry()->getOrCreateStateSet()->setTextureAttributeAndModes(0,Texture2D.getValue()->getOsgTexture2D(),::osg::StateAttribute::ON);
   }
 }
 
@@ -239,35 +250,35 @@ av::osg::TexturedQuad::updateColor()
 /* virtual */ void
 av::osg::TexturedQuad::getMinFilterCB(const av::SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MIN_FILTER);
+  *(event.getValuePtr()) = Texture2D.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MIN_FILTER);
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMinFilterCB(const av::SFInt::SetValueEvent& event)
 {
-	Texture.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MIN_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+	Texture2D.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MIN_FILTER,(::osg::Texture2D::FilterMode)(event.getValue()));
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::getMagFilterCB(const av::SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MAG_FILTER);
+  *(event.getValuePtr()) = Texture2D.getValue()->getOsgTexture2D()->getFilter(::osg::Texture2D::MAG_FILTER);
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMagFilterCB(const av::SFInt::SetValueEvent& event)
 {
-  Texture.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MAG_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+  Texture2D.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MAG_FILTER,(::osg::Texture2D::FilterMode)(event.getValue()));
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = Texture.getValue()->getOsgTexture2D()->getMaxAnisotropy();
+  *(event.getValuePtr()) = Texture2D.getValue()->getOsgTexture2D()->getMaxAnisotropy();
 }
 
 /* virtual */ void
 av::osg::TexturedQuad::setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event)
 {
-  Texture.getValue()->getOsgTexture2D()->setMaxAnisotropy(event.getValue());
+  Texture2D.getValue()->getOsgTexture2D()->setMaxAnisotropy(event.getValue());
 }

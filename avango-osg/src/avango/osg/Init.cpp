@@ -71,6 +71,7 @@
 #include <avango/osg/Switch.h>
 #include <avango/osg/Text.h>
 #include <avango/osg/Texture.h>
+#include <avango/osg/Texture1D.h>
 #include <avango/osg/Texture2D.h>
 #include <avango/osg/Texture2DArray.h>
 #include <avango/osg/TextureCubeMap.h>
@@ -135,6 +136,7 @@ av::osg::Init::initClass()
     av::osg::Switch::initClass();
     av::osg::Text::initClass();
     av::osg::Texture::initClass();
+    av::osg::Texture1D::initClass();
     av::osg::Texture2D::initClass();
     av::osg::Texture2DArray::initClass();
     av::osg::TextureCubeMap::initClass();

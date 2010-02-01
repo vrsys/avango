@@ -25,42 +25,27 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/osg/Image.h>
-#include <osgDB/WriteFile>
-#include <osgDB/ReadFile>
-#include "OSGImage.h"
+#include <avango/osg/Texture1D.h>
+#include "OSGTexture1D.h"
 
 using namespace boost::python;
 using namespace av::python;
 
 namespace boost
-{
+ {
   namespace python
-  {
+   {
     template <class T> struct pointee<av::Link<T> >
-    {
+     {
       typedef T type;
-    };
-  }
-}
+     };
+   }
+ }
 
-void write_image_file(av::osg::Image* image, const std::string& name)
-{
-  osgDB::writeImageFile(*(image->getOsgImage()), name);
-}
-
-av::Link< av::osg::Image> read_image_file(const std::string& name)
-{
-  return av::Link< av::osg::Image>(new av::osg::Image( ::osgDB::readImageFile(name) ) );
-}
-
-void init_OSGImage(void)
-{
-  // wrapping osg::Image functionality
-  register_field<av::osg::SFImage>("SFImage");
-  register_multifield<av::osg::MFImage>("MFImage");
-  class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable >("Image", "docstring", no_init)
-    .def("write_file", write_image_file)
-    ;
-  def("read_image_file", read_image_file);
-}
+void init_OSGTexture1D(void)
+ {
+  // wrapping osg::Texture1D functionality
+  register_field<av::osg::SFTexture1D>("SFTexture1D");
+  register_multifield<av::osg::MFTexture1D>("MFTexture1D");
+  class_<av::osg::Texture1D, av::Link<av::osg::Texture1D>, bases<av::osg::Texture>, boost::noncopyable >("Texture1D", "docstring", no_init);
+ }

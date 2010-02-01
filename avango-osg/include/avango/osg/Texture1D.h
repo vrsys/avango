@@ -23,44 +23,82 @@
 *                                                                        *
 \************************************************************************/
 
-#include <boost/python.hpp>
-#include <avango/python/register_field.h>
+#if !defined(AVANGO_OSG_TEXTURE1D_H)
+#define AVANGO_OSG_TEXTURE1D_H
+
+/**
+ * \file
+ * \ingroup av_osg
+ */
+
+#include <avango/osg/Texture.h>
+#include <osg/Texture1D>
 #include <avango/osg/Image.h>
-#include <osgDB/WriteFile>
-#include <osgDB/ReadFile>
-#include "OSGImage.h"
 
-using namespace boost::python;
-using namespace av::python;
-
-namespace boost
+namespace av
 {
-  namespace python
+  namespace osg
   {
-    template <class T> struct pointee<av::Link<T> >
+    typedef ::osg::Texture1D OsgTexture1D;
+
+    /**
+     * Abstract Wrapper for ::osg::Texture
+     *
+     * \ingroup av_osg
+     */
+    class AV_OSG_DLL Texture1D : public Texture
     {
-      typedef T type;
+      AV_FC_DECLARE();
+
+    public:
+
+      /**
+       * Constructor.
+       */
+      Texture1D(OsgTexture1D* osgtexture = new OsgTexture1D());
+      // use defined type to circumvent compiler bug in VS8
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~Texture1D();
+
+    public:
+
+      SFImage Image;
+
+      SFInt TextureWidth;
+
+      /**
+       * Get the wrapped ::osg::Texture1D object.
+       * \return a pointer to the texture object
+       */
+      ::osg::Texture1D* getOsgTexture1D() const;
+
+    private:
+
+      ::osg::Texture1D* mOsgTexture1D;
+
+    protected:
+
+      virtual void getImageCB(const av::osg::SFImage::GetValueEvent& event);
+      virtual void setImageCB(const av::osg::SFImage::SetValueEvent& event);
+      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+
     };
-  }
-}
 
-void write_image_file(av::osg::Image* image, const std::string& name)
-{
-  osgDB::writeImageFile(*(image->getOsgImage()), name);
-}
+    typedef SingleField<Link<Texture1D> > SFTexture1D;
+    typedef MultiField<Link<Texture1D> > MFTexture1D;
+  } // namespace osg
 
-av::Link< av::osg::Image> read_image_file(const std::string& name)
-{
-  return av::Link< av::osg::Image>(new av::osg::Image( ::osgDB::readImageFile(name) ) );
-}
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_OSG_DLL SingleField<Link<osg::Texture1D> >;
+  template class AV_OSG_DLL MultiField<Link<osg::Texture1D> >;
+#endif
 
-void init_OSGImage(void)
-{
-  // wrapping osg::Image functionality
-  register_field<av::osg::SFImage>("SFImage");
-  register_multifield<av::osg::MFImage>("MFImage");
-  class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable >("Image", "docstring", no_init)
-    .def("write_file", write_image_file)
-    ;
-  def("read_image_file", read_image_file);
-}
+} // namespace av
+
+#endif

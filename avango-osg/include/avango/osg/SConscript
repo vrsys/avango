@@ -73,6 +73,7 @@ headers = Split('''
     Switch.h
     Text.h
     Texture.h
+    Texture1D.h
     Texture2D.h
     Texture2DArray.h
     TextureCubeMap.h

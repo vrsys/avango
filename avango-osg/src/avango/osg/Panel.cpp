@@ -140,6 +140,12 @@ av::osg::Panel::updateGeometry()
   {
     xOffset = Width.getValue() * 0.5f;
     yOffset = -Height.getValue() * 0.5f;
+
+    if(ShowBorder.getValue())
+    {
+      xOffset += BorderWidth.getValue();
+      yOffset -= BorderWidth.getValue();
+    }
   }
 
   // create vertices in XY plane

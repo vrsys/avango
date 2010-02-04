@@ -127,6 +127,7 @@ namespace av
       SFFloat MoveBreak;
       SFFloat MaxSpeed;
       SFFloat RotationSpeed;
+      SFFloat MouseSpeed;
 
       /**
        * Invert Y Rotation Axis, default is false

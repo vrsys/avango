@@ -79,6 +79,7 @@ av::moving::DesktopFlyer::DesktopFlyer():
   AV_FC_ADD_FIELD(RelativeMouseTrigger, false);
   AV_FC_ADD_FIELD(HaltOnClutch, true);
   AV_FC_ADD_FIELD(InvertYMouseAxis, false);
+  AV_FC_ADD_FIELD(MouseSpeed, 10.);
 
   alwaysEvaluate(true);
   mOldTime = TimeIn.getValue();
@@ -130,7 +131,7 @@ av::moving::DesktopFlyer::evaluate()
   float mouse_x = MouseIn.getValue().x();
   float mouse_y = MouseIn.getValue().y();
 
-  float ms = 10;
+  float ms = MouseSpeed.getValue();
   bool move_xz_trigger = MoveXZTrigger.getValue();
   bool move_xy_trigger = MoveXYTrigger.getValue();
   bool move_y_rot_z_trigger = MoveYRotateZTrigger.getValue();

@@ -273,7 +273,7 @@ class SpaceMouse(avango.script.Script):
             result = cur_time - self._last_time
         self._last_time = cur_time
         return result
-        
+
     def evaluate(self):
         values = self.get_values()
 
@@ -283,7 +283,7 @@ class SpaceMouse(avango.script.Script):
         # Mix values from different SpaceMouse types
         trans_x = values.SensorAbsX + values.SensorRelX/500.
         trans_y = values.SensorAbsY - values.SensorRelZ/500.
-	trans_z = values.SensorAbsZ + values.SensorRelY/500.
+        trans_z = values.SensorAbsZ + values.SensorRelY/500.
         translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
         rot_x = values.SensorAbsRX + values.SensorRelRX/500.
         rot_y = values.SensorAbsRY - values.SensorRelRZ/500.

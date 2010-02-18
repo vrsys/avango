@@ -61,7 +61,9 @@ void init_OSGCameraAttachment(void)
   enum_< ::osg::Camera::BufferComponent >("BufferComponent")
     .value("DEPTH_BUFFER", ::osg::Camera::DEPTH_BUFFER)
     .value("STENCIL_BUFFER", ::osg::Camera::STENCIL_BUFFER)
+#if OPENSCENEGRAPH_MAJOR_VERSION >= 2 && OPENSCENEGRAPH_MINOR_VERSION >= 8
     .value("PACKED_DEPTH_STENCIL_BUFFER", ::osg::Camera::PACKED_DEPTH_STENCIL_BUFFER)
+#endif
     .value("COLOR_BUFFER", ::osg::Camera::COLOR_BUFFER)
     .value("COLOR_BUFFER0", ::osg::Camera::COLOR_BUFFER0)
     .value("COLOR_BUFFER1", ::osg::Camera::COLOR_BUFFER1)

@@ -198,12 +198,12 @@ av::osg::Camera::getAttachmentCB(const av::osg::MFCameraAttachment::GetValueEven
     Link<CameraAttachment> a(new CameraAttachment);
     a->BufferComponent.setValue(i->first);
     a->InternalFormat.setValue(i->second._internalFormat);
-    if (i->second._texture)
+    if (i->second._texture.valid())
     {
       Texture* texture = dynamic_cast<Texture*>(i->second._texture->getUserData());
       if (texture) a->Texture.setValue(texture);
     }
-    if (i->second._image)
+    if (i->second._image.valid())
     {
       Image* image = dynamic_cast<Image*>(i->second._image->getUserData());
       if (image) a->Image.setValue(image);

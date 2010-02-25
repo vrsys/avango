@@ -24,6 +24,7 @@
 ##########################################################################
 
 import avango.display
+import math
 
 class iCone(avango.display.Display):
 
@@ -32,20 +33,20 @@ class iCone(avango.display.Display):
 
         self._eye_vec = avango.osg.Vec3(0., 1.7, 0.)
 
-        common_transform = avango.osg.make_rot_mat(radians(-4.43), 1, 0, 0) \
+        common_transform = avango.osg.make_rot_mat(math.radians(-4.43), 1, 0, 0) \
                          * avango.osg.make_trans_mat(0, 1.390, -2.818)
 
         transforms = [
-            common_transform * avango.osg.make_rot_mat(radians(84.135), 0, 1, 0),
-            common_transform * avango.osg.make_rot_mat(radians(28.045), 0, 1, 0),
-            common_transform * avango.osg.make_rot_mat(radians(-28.045), 0, 1, 0),
-            common_transform * avango.osg.make_rot_mat(radians(-84.135), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(math.radians(84.135), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(math.radians(28.045), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(math.radians(-28.045), 0, 1, 0),
+            common_transform * avango.osg.make_rot_mat(math.radians(-84.135), 0, 1, 0),
         ]
-
+        print str(transforms)
         self._cone_windows = []
-        for i in len(transforms):
+        for i in range(0,len(transforms)):
             window = self.make_window(0, 0, 1440, 1320, 3.540, 2.830, True, ":0.%i"%i)
-            self._cone_windows.append((window, transform[i]))
+            self._cone_windows.append((window, transforms[i]))
 
     def make_view(self, subdisplay):
         display_view = avango.display.nodes.View()

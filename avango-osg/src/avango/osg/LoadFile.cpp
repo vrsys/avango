@@ -46,6 +46,7 @@ av::osg::LoadFile::LoadFile() :
   mOldFilename()
 {
   AV_FC_ADD_FIELD(Filename, mFilename);
+  AV_FC_ADD_FIELD(FilenameLoaded, "");
 }
 
 av::osg::LoadFile::~LoadFile()
@@ -118,6 +119,7 @@ av::osg::LoadFile::evaluateLocalSideEffect()
     {
       // add new geometry
       getOsgMatrixTransform()->addChild(mLoadedNode.get());
+      FilenameLoaded.setValue(mFilename);
     }
 
     mFilenameChanged = false;

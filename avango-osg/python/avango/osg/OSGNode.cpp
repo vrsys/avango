@@ -28,6 +28,13 @@
 #include <avango/osg/Node.h>
 #include "OSGNode.h"
 
+#include <osg/NodeVisitor>
+#include <osg/BoundingBox>
+#include <osg/BoundingSphere>
+#include <osg/MatrixTransform>
+#include <osg/Billboard>
+
+
 using namespace boost::python;
 using namespace av::python;
 
@@ -42,6 +49,75 @@ namespace boost
    }
  }
 
+
+namespace {
+  class CalculateBoundingBox : public ::osg::NodeVisitor
+  {
+  public:
+    CalculateBoundingBox() :
+      NodeVisitor(NodeVisitor::TRAVERSE_ALL_CHILDREN)
+    {
+      m_transformMatrix.makeIdentity();
+    }
+
+    virtual ~CalculateBoundingBox()
+    {
+    }
+
+    virtual
+    void apply(::osg::Geode &geode)
+    {
+      ::osg::BoundingBox bbox;
+      for (unsigned int i = 0; i < geode.getNumDrawables(); ++i)
+      {
+        bbox.expandBy(geode.getDrawable(i)->getBound());
+      }
+      ::osg::BoundingBox bboxTrans;
+      for (unsigned int i = 0; i < 8; ++i)
+      {
+        ::osg::Vec3 xvec = bbox.corner(i) * m_transformMatrix;
+        bboxTrans.expandBy(xvec);
+      }
+      m_boundingBox.expandBy(bboxTrans);
+      traverse(geode);
+    }
+
+    virtual
+    void apply(::osg::MatrixTransform &node)
+    {
+      m_transformMatrix *= node.getMatrix();
+      traverse(node);
+    }
+
+    virtual
+    void apply(::osg::Billboard &node)
+    {
+      traverse(node);
+    }
+
+    ::osg::BoundingBox &getBoundBox()
+    {
+      return m_boundingBox;
+    }
+
+  protected:
+    ::osg::BoundingBox m_boundingBox; // the overall resultant bounding box
+    ::osg::Matrix m_transformMatrix; // the current transform matrix
+  };
+
+
+  osg::BoundingBox CalcBoundingBox(av::osg::Node* node)
+  {
+    CalculateBoundingBox bbox;
+    node->getOsgNode()->accept( bbox );
+    return bbox.getBoundBox();
+  }
+
+}
+
+
+
+
 void init_OSGNode(void)
  {
   // wrapping osg::Node functionality
@@ -51,4 +127,6 @@ void init_OSGNode(void)
     .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
     .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
     ;
+
+  def("calc_bounding_box", CalcBoundingBox);
  }

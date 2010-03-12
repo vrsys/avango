@@ -70,6 +70,12 @@ namespace av
        */
       SFString Filename;
 
+      /**
+       * Outputs the file name of the geometry as soon as it is actually loaded.
+       * You can connect to this field to get a notification when the loading of the file was done.
+       */
+      SFString FilenameLoaded;
+
       /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
       /* virtual */ void evaluateLocalSideEffect();
 

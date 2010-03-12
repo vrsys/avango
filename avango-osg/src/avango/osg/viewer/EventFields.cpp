@@ -205,6 +205,19 @@ av::osg::viewer::InputEventHandler::handle(const ::osgGA::GUIEventAdapter& event
         case ::osgGA::GUIEventAdapter::KEY_Escape:    mEventFields->KeyEsc.setValue(pressed);      break;
         case ::osgGA::GUIEventAdapter::KEY_Space:     mEventFields->KeySpace.setValue(pressed);    break;
         case ::osgGA::GUIEventAdapter::KEY_Return:    mEventFields->KeyEnter.setValue(pressed);    break;
+        case ::osgGA::GUIEventAdapter::KEY_F1:        mEventFields->KeyF1.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F2:        mEventFields->KeyF2.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F3:        mEventFields->KeyF3.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F4:        mEventFields->KeyF4.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F5:        mEventFields->KeyF5.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F6:        mEventFields->KeyF6.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F7:        mEventFields->KeyF7.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F8:        mEventFields->KeyF8.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F9:        mEventFields->KeyF9.setValue(pressed);       break;
+        case ::osgGA::GUIEventAdapter::KEY_F10:       mEventFields->KeyF10.setValue(pressed);      break;
+        case ::osgGA::GUIEventAdapter::KEY_F11:       mEventFields->KeyF11.setValue(pressed);      break;
+        case ::osgGA::GUIEventAdapter::KEY_F12:       mEventFields->KeyF12.setValue(pressed);      break;
+
       }
 
       if (altPressed && key == ::osgGA::GUIEventAdapter::KEY_Return && pressed)
@@ -268,6 +281,18 @@ av::osg::viewer::EventFields::EventFields() :
   AV_FC_ADD_FIELD(KeySpace, false);
   AV_FC_ADD_FIELD(KeyEnter, false);
   AV_FC_ADD_FIELD(KeyAltReturn, false);
+  AV_FC_ADD_FIELD(KeyF1, false);
+  AV_FC_ADD_FIELD(KeyF2, false);
+  AV_FC_ADD_FIELD(KeyF3, false);
+  AV_FC_ADD_FIELD(KeyF4, false);
+  AV_FC_ADD_FIELD(KeyF5, false);
+  AV_FC_ADD_FIELD(KeyF6, false);
+  AV_FC_ADD_FIELD(KeyF7, false);
+  AV_FC_ADD_FIELD(KeyF8, false);
+  AV_FC_ADD_FIELD(KeyF9, false);
+  AV_FC_ADD_FIELD(KeyF10, false);
+  AV_FC_ADD_FIELD(KeyF11, false);
+  AV_FC_ADD_FIELD(KeyF12, false);
 }
 
 /* virtual */

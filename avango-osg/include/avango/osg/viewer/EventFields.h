@@ -153,6 +153,18 @@ namespace av
         SFBool KeySpace;
         SFBool KeyEnter;
         SFBool KeyAltReturn;
+        SFBool KeyF1;
+        SFBool KeyF2;
+        SFBool KeyF3;
+        SFBool KeyF4;
+        SFBool KeyF5;
+        SFBool KeyF6;
+        SFBool KeyF7;
+        SFBool KeyF8;
+        SFBool KeyF9;
+        SFBool KeyF10;
+        SFBool KeyF11;
+        SFBool KeyF12;
 
         /* virtual */ void fieldHasChanged(const av::Field& field);
 

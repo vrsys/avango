@@ -69,6 +69,26 @@ class Display(object):
     def make_non_dominant_user_device(self, user, interface, subdisplay):
         return None
 
+    def make_screen_descriptor(self, subdisplay):
+        screen = avango.display.nodes.ScreenDescriptor()
+        if len(self._windows) == 1:
+            # Only handle simple case here: one window
+            screen.Transform.value = self._windows[0][1]
+
+            real_size = Float2Vec2Converter()
+            self.keep_alive(real_size)
+            real_size.Value0.connect_from(self._windows[0][0].RealActualWidth)
+            real_size.Value1.connect_from(self._windows[0][0].RealActualHeight)
+            screen.RealSize.connect_from(real_size.Output)
+
+            pixel_size = Float2Vec2Converter()
+            self.keep_alive(pixel_size)
+            pixel_size.Value0.connect_from(self._windows[0][0].ActualWidth)
+            pixel_size.Value1.connect_from(self._windows[0][0].ActualHeight)
+            screen.PixelSize.connect_from(pixel_size.Output)
+
+        return screen
+
     def run(self):
         self._composite_viewer.run()
 
@@ -231,6 +251,15 @@ class SFNode2MFContainerConverter(avango.script.Script):
     def evaluate(self):
         self.Output.value = [ self.Input.value ]
 
+class Float2Vec2Converter(avango.script.Script):
+    "Converts two Floats into on Vec2"
+
+    Value0 = avango.SFFloat()
+    Value1 = avango.SFFloat()
+    Output = avango.osg.SFVec2()
+
+    def evaluate(self):
+        self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
 
 class SpaceMouse(avango.script.Script):
     TimeIn = avango.SFFloat()

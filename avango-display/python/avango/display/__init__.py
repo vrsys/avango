@@ -3,6 +3,7 @@ import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
 
 from _view import *
+from _screen_descriptor import *
 from _device import *
 from _display import Display
 
@@ -174,6 +175,28 @@ def make_view(subdisplay=""):
     """
 
     return _selected_display.make_view(subdisplay)
+
+def make_screen_descriptor(subdisplay=""):
+    """Create a field container that represents the virtual screen defined by
+       the display
+
+      - *subdisplay* is used, if the display has multiple disjoint subdisplays
+        and the viewport on a specific display has to be selected.
+
+    The resulting (default) field container will have the following fields:
+
+      - *Transformation* is a matrix describing the transformation of the
+        virtual screen in display local coordinates.
+
+      - *RealSize* is a Vec2 describing the dimension of the screen in display
+        local coordinates.
+
+      - *PixelSize* is a Vec2 describing the dimension of the screen in
+        pixels. Note that this is only an approximation and the real pixel
+        counts may be different.
+    """
+
+    return _selected_display.make_screen_descriptor(subdisplay)
 
 def make_device(device, interface=""):
     """Create a field container that represents a generic device.

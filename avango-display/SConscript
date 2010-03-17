@@ -35,6 +35,7 @@ av_display_python_files = Split("""
     python/avango/display/_device.py
     python/avango/display/_display.py
     python/avango/display/_view.py
+    python/avango/display/_screen_descriptor.py
     """)
 av_display_setups_files = Split("""
     python/avango/display/setups/AutoStereoDisplay.py

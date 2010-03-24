@@ -34,7 +34,8 @@ epydoc_html = epydoc_env.Command(
     'html/index.html',
     '',
     'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --html'
-    + ' --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
+    + ' --graph="classtree" --src-code-tab-width="2"'
+    + ' --exclude-introspect="daemon" --exclude-introspect="display" -o . '
     + avango.build.get_python_path().abspath + '/avango',
     chdir = 1)
 
@@ -44,7 +45,8 @@ epydoc_pdf = epydoc_env.Command(
     'latex/api.pdf',
     '',
     'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --pdf'
-    + ' --no-private --graph="classtree" --src-code-tab-width="2" --exclude-introspect="daemon" -o . '
+    + ' --no-private --graph="classtree" --src-code-tab-width="2"'
+    + '  --exclude-introspect="daemon" --exclude-introspect="display" -o . '
     + avango.build.get_python_path().abspath + '/avango',
     chdir = 1)
 

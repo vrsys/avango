@@ -1,0 +1,38 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2008 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+import avango.build.oshelper
+
+avango.build.Environment.prepend_include_path(Dir('.').abspath)
+
+sources = Split('''
+    ip/IpEndpointName.cpp    
+    osc/OscOutboundPacketStream.cpp
+    osc/OscPrintReceivedElements.cpp
+    osc/OscReceivedElements.cpp
+    osc/OscTypes.cpp
+    ''')
+
+if avango.build.oshelper.os_is_windows():
+    sources += Split('''
+        ip/win32/NetworkingUtils.cpp
+    	ip/win32/UdpSocket.cpp
+    	''')
+else:
+    sources += Split('''
+        ip/posix/NetworkingUtils.cpp
+    	ip/posix/UdpSocket.cpp
+    	''')
+
+Return('sources')

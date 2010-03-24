@@ -1,0 +1,35 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2008 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+
+avango.build.Environment.prepend_include_path(Dir('.').abspath)
+
+def multiprepend(list, prefix):
+    newlist = []
+    for i in list:
+         newlist.append(prefix + i)
+    return newlist
+
+
+oscpack_sources = SConscript('oscpack/SConscript')
+
+sources = multiprepend(oscpack_sources, 'oscpack/')
+sources += Split('''
+    FingerInfo.cpp
+    FingerClient.cpp
+    ''')
+
+Return('sources')

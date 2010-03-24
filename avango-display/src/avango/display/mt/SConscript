@@ -1,0 +1,60 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2008 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+import sys
+import platform
+import avango.build
+import avango.build.oshelper
+
+def multiprepend(list, prefix):
+    newlist = []
+    for i in list:
+         newlist.append(prefix + i)
+    return newlist
+
+
+Import('display_mt_env')
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+avango.build.add_library(display_mt_env, 'avango-core')
+avango.build.add_library(display_mt_env, 'avango-osg')
+
+display_mt_env.Append(CPPPATH=['multitouch'])
+display_mt_env.Append(CPPPATH=['multitouch/oscpack'])
+
+if platform.architecture()[0] == '64bit':
+	display_mt_env.Append(CPPDEFINES=['x86_64'])
+
+if not sys.platform == 'win32':
+    display_mt_env.Append(CPPDEFINES=['OSC_HOST_LITTLE_ENDIAN'])
+
+multitouch_sources = SConscript('multitouch/SConscript')
+
+sources = multiprepend(multitouch_sources, 'multitouch/')
+sources += Split('''
+    MultitouchFinger.cpp
+    MultitouchDevice.cpp
+    ''')
+
+lib = display_mt_env.SharedLibrary('avangoDisplayMT', sources)
+
+if avango.build.oshelper.os_is_windows():
+    avango.build.add_library(display_mt_env, 'boost_signals')
+    avango.build.add_library(display_mt_env, 'boost_thread')
+    display_mt_env.Prepend(LIBS=['ws2_32', 'winmm'])
+
+
+#display_mt_env.Prepend(CXXFLAGS='-msse -msse2 -ffast-math -mfpmath=sse -funroll-loops -fomit-frame-pointer -finline-functions')
+Alias('display', lib)
+Alias('install-display', display_mt_env.Install(avango.build.get_library_path(), lib))

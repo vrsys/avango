@@ -178,7 +178,7 @@ class Display(object):
     def add_user(self, user):
         self._users.append(user)
         
-    def view_created(camera,view):
+    def view_created(self,camera,view):
         '''
         Template function, which can be overridden by subclasses.
         This function is called every time a view has been created.

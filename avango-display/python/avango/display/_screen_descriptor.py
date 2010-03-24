@@ -12,6 +12,7 @@ class ScreenDescriptor(avango.script.Script):
         self.super(ScreenDescriptor).__init__()
         self.RealSize.value = avango.osg.Vec2(1., 1.)
         self.PixelSize.value = avango.osg.Vec2(1., 1.)
+    
 
 class ScreenSpaceTransform(avango.script.Script):
 
@@ -23,5 +24,4 @@ class ScreenSpaceTransform(avango.script.Script):
     def evaluate(self):
         scale = 0.5 * min(self.RealSize.value.x, self.RealSize.value.y)
         scale_mat = avango.osg.make_scale_mat(scale, scale, scale)
-
         self.Transform.value = scale_mat * self.ScreenTransform.value * self.ViewerTransform.value

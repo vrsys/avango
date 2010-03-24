@@ -83,8 +83,11 @@ class Monitor(avango.display.Display):
     def make_device(self, device, interface):
         if device != "SpaceMouse" or interface != "Relative6DOF":
             return None
-
-        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
+        
+        if not self._device_service: 
+            self._device_service = avango.daemon.DeviceService()
+        
+        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
                                                   Station = "spacemousestation")
         self.keep_alive(sensor)
 

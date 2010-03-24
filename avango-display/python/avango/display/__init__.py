@@ -6,20 +6,22 @@ from _view import *
 from _screen_descriptor import *
 from _device import *
 from _display import Display
+from _display import Float2Vec2Converter
 
 import getopt
 import os.path
 import itertools
 
-def init(argv):
+def init(argv,options="", long_options=[]):
     "Initialize display setup"
 
     try:
-        opts, args = getopt.getopt(argv[1:], "hn:l:d:io:",
+        opts, args = getopt.getopt(argv[1:], "hn:l:d:io:" + options,
                                    ["help", "notify=", "log-file=",
-                                    "display=", "inspector", "option="])
+                                    "display=", "inspector", "option="] + long_options)
     except getopt.GetoptError, err:
-        pass
+        opts = []
+        args = list(argv)
 
     display_type='Monitor'
     notify_level = -1
@@ -54,6 +56,11 @@ def init(argv):
                 options[key] = value
             except:
                 print "WARNING: Ignoring ill-formated option: '%s'" % arg
+        else:
+            if arg: 
+                args.insert(0, arg)                
+            args.insert(0, opt)
+        
 
     if notify_level > -1:
         if notify_logfile == '':
@@ -153,8 +160,7 @@ def make_view(subdisplay=""):
 
     The resulting (default) field container will have the following fields:
 
-      - *Root* is a matrix representing the position of the device in display
-        local coordinates.
+      - *Root* is the root node of the scene.
 
       - *Camera* is a matrix describing the translation of the display local
         coordinates into the scene.
@@ -247,7 +253,7 @@ class DisplayNotFound(IOError):
 def _make_display(display_type, inspector, options):
     module_path = [os.path.join(os.path.split(__file__)[0], 'setups')]
     env_path = os.environ.get('AVANGO_DISPLAY_PATH', "").split(':')
-
+    
     display_filename = display_type+'.py'
     for path in itertools.chain(env_path, _search_path, module_path):
         if not path:

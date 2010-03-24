@@ -1,8 +1,16 @@
 import avango.display #FIXME remove cyclic dependency
-import avango.daemon
+
 import avango.osg
 import avango.osg.viewer
+import avango.script
+from avango.script import field_has_changed
+
+import sys
 from math import *
+
+#The avango.daemon module is currently not available under windows 
+if sys.platform != 'win32':
+   import avango.daemon
 
 class Display(object):
 
@@ -16,9 +24,10 @@ class Display(object):
         self._composite_viewer = avango.osg.viewer.nodes.CompositeViewer()
         self._merge_viewer = ViewMerger()
         self._composite_viewer.Views.connect_from(self._merge_viewer.ViewsOut)
-
-        self.device_service = avango.daemon.DeviceService()
-
+        
+        #the device service will be created as soon as it is needed
+        self._device_service = None
+        
         self._users = []
         self._windows = []
 
@@ -35,7 +44,7 @@ class Display(object):
 
     def make_view(self, subdisplay):
         display_view = avango.display.nodes.View()
-
+        
         for window, transform, current_user in self._windows:
             eye_offset = 0.
             if window.StereoMode.value != avango.osg.viewer.stereo_mode.STEREO_MODE_NONE:
@@ -44,13 +53,16 @@ class Display(object):
             camera, view = self.make_camera_with_viewport(
                 display_view, eye_offset, transform, window)
             camera.EyeTransform.connect_from(self._users[current_user].Matrix)
-
+            
             user_selector = ViewUserSelector(UserMatch=current_user+1)
             user_selector.ViewIn.value = view
             user_selector.UserSelector.connect_from(display_view.UserSelector)
             self.keep_alive(user_selector)
 
             self.connect_view_field(user_selector.ViewOut)
+            
+            #call template function
+            self.view_created(camera,view)
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node
@@ -133,6 +145,7 @@ class Display(object):
         camera.ViewerTransform.connect_from(display_view.Camera)
         camera.Window.value = window
 
+        
         view = avango.osg.viewer.nodes.View()
         view.Scene.connect_from(display_view.Root)
         view.MasterCamera.value = camera
@@ -164,7 +177,13 @@ class Display(object):
 
     def add_user(self, user):
         self._users.append(user)
-
+        
+    def view_created(camera,view):
+        '''
+        Template function, which can be overridden by subclasses.
+        This function is called every time a view has been created.
+        '''
+        pass
 
 class ViewUserSelector(avango.script.Script):
     'Activates or deactivates a viewport depending on the selected user'

@@ -25,7 +25,7 @@ class Display(object):
         self._merge_viewer = ViewMerger()
         self._composite_viewer.Views.connect_from(self._merge_viewer.ViewsOut)
         
-        #the device service will be created as soon as it is needed
+        #the device service will be created as soon as it is used.
         self._device_service = None
         
         self._users = []
@@ -61,7 +61,6 @@ class Display(object):
 
             self.connect_view_field(user_selector.ViewOut)
             
-            #call template function
             self.view_created(camera,view)
 
         if self._inspector and len(self._inspector.Children.value) == 0:
@@ -173,6 +172,8 @@ class Display(object):
         self._merge_viewer.get_input(index).connect_from(view_field)
 
     def add_window(self, window, transform, user):
+#        import traceback
+#        traceback.print_stack()
         self._windows.append((window, transform, user))
 
     def add_user(self, user):

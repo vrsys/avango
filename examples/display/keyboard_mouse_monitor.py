@@ -44,13 +44,18 @@ class KeyboardListener(avango.script.Script):
         
 argv = display.init(sys.argv)
 view = display.make_view()
+
+#only the Monitor display setup supports Mouse and Keyboard
+if display.get_display_type() != "Monitor":
+    print "The display <" + display.get_display_type() + "> does not support the device Keyboard and/or Mouse. Use the <Monitor> setup instead."
+    sys.exit()
+
 ##create a keyboard device
 keyboard = display.make_dominant_user_device(interface="Keyboard")
 ##create a mouse device
 mouse = display.make_dominant_user_device(interface="Mouse")
 
-if not keyboard or not mouse:
-    print "The display <" + display.get_display_type() + "> does not support the device Keyboard and/or Mouse"
+
 
 mouse_listener = MouseListener()
 mouse_listener.MousePosNorm.connect_from(mouse.MousePosNorm)

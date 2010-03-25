@@ -55,10 +55,86 @@ class KeyboardDevice(avango.script.Script):
     KeyF10 = avango.SFBool()
     KeyF11 = avango.SFBool()
     KeyF12 = avango.SFBool()
+    
+    Key0 = avango.SFBool()
+    Key1 = avango.SFBool()
+    Key2 = avango.SFBool()
+    Key3 = avango.SFBool()
+    Key4 = avango.SFBool()
+    Key5 = avango.SFBool()
+    Key6 = avango.SFBool()
+    Key7 = avango.SFBool()
+    Key8 = avango.SFBool()
+    Key9 = avango.SFBool()
+    
+    KeyX = avango.SFBool()
+    KeyZ = avango.SFBool()
+    
+    KeyBackslash = avango.SFBool()
+    KeyCloseBracket = avango.SFBool()
  
     def __init__(self):
         self.super(KeyboardDevice).__init__()
         
+        self.__prev_keys_pressed = []
+        
+        self.__keymap = {}
+        
+        self.__keymap[48] = self.Key1
+        self.__keymap[49] = self.Key1
+        self.__keymap[50] = self.Key2
+        self.__keymap[51] = self.Key3
+        self.__keymap[52] = self.Key4
+        self.__keymap[53] = self.Key5
+        self.__keymap[54] = self.Key6
+        self.__keymap[55] = self.Key7
+        self.__keymap[56] = self.Key8
+        self.__keymap[57] = self.Key9
+        
+        self.__keymap[120] = self.KeyX
+        self.__keymap[122] = self.KeyZ
+        
+        self.__keymap[92] = self.KeyBackslash
+        self.__keymap[41] = self.KeyCloseBracket
+        
+    def add_key(self,name,id):
+        """
+        Add a SFBool, which will be connected to the key press with the given id
+        The naming convention says that you should pass Key<Name> as name parameter. 
+        E.g.: If you want to add the key <1> call add_key("Key1",48)
+        """
+        
+        #if a field with the given name is already known, no new field will be added
+        field = self._get_field(name)
+        if field:
+            return False
+        
+        self.add_and_init_field(avango.SFBool(), name, id)
+        self.__keymap[id] = getattr(self, name)
+        self.__keymap[id].value = False
+        
+        return True
+        
+    def evaluate(self):
+        
+        pressed_keys = []
+        for k in self.KeysPressed.value:
+            pressed_keys.append(k)
+            
+        #pressed keys
+        for key in pressed_keys:
+            if key in self.__keymap:
+                self.__keymap[key].value = True
+
+        #release keys
+        released_keys=filter(lambda x:x not in pressed_keys, self.__prev_keys_pressed)
+        for key in released_keys:
+            if key in self.__keymap:
+                self.__keymap[key].value = False
+        
+        self.__prev_keys_pressed = pressed_keys
+        
+                
     def connect(self, eventfields):
         
         self.KeysPressed.connect_from(eventfields.KeysPressed)

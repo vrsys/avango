@@ -33,6 +33,9 @@ class KeyboardListener(avango.script.Script):
     KeyDown = avango.SFBool()
     KeyLeft = avango.SFBool()
     KeyRight = avango.SFBool()
+    Key1 = avango.SFBool()
+    KeyA = avango.SFBool()
+    KeyB = avango.SFBool()
     
     def __init__(self):
         self.super(KeyboardListener).__init__()
@@ -50,24 +53,35 @@ if display.get_display_type() != "Monitor":
     print "The display <" + display.get_display_type() + "> does not support the device Keyboard and/or Mouse. Use the <Monitor> setup instead."
     sys.exit()
 
-##create a keyboard device
+#create a keyboard device
 keyboard = display.make_dominant_user_device(interface="Keyboard")
-##create a mouse device
+#add some custom keys
+keyboard.add_key("KeyA",97)
+keyboard.add_key("KeyB",98)
+
+#create a mouse device
 mouse = display.make_dominant_user_device(interface="Mouse")
 
 
-
+#create a script, which simply prints its field values
 mouse_listener = MouseListener()
 mouse_listener.MousePosNorm.connect_from(mouse.MousePosNorm)
 mouse_listener.MousePos.connect_from(mouse.MousePos)
 mouse_listener.MouseButtonLeft.connect_from(mouse.MouseButtonLeft)
 mouse_listener.MouseButtonRight.connect_from(mouse.MouseButtonRight)
 
+#create a script, which simply prints its field values
 keyboard_listener = KeyboardListener()
+keyboard_listener.Key1.connect_from(keyboard.Key1)
 keyboard_listener.KeyUp.connect_from(keyboard.KeyUp)
 keyboard_listener.KeyDown.connect_from(keyboard.KeyDown)
 keyboard_listener.KeyLeft.connect_from(keyboard.KeyLeft)
 keyboard_listener.KeyRight.connect_from(keyboard.KeyRight)
+keyboard_listener.KeyA.connect_from(keyboard.KeyA)
+keyboard_listener.KeyB.connect_from(keyboard.KeyB)
+
+
+
 
 sphere = avango.osg.nodes.Sphere(Radius=0.1, Matrix=avango.osg.make_trans_mat(0, 1.7, -1.2))
 view.Root.value = sphere

@@ -56,6 +56,9 @@ opts.AddOptions(
     BoolOption('VRPN_SUPPORT',
                'Enable VRPN support for the AvangoDaemon module',
                False),
+    BoolOption('UTILS_SUPPORT',
+               'Enable building utility module (EXPERIMENTAL)',
+               False),
     )
 
 avango.build.setup()
@@ -109,15 +112,17 @@ if env['OPENSCENEGRAPH_SUPPORT']:
         avango.build.SConscript('avango-daemon/SConscript')
         
 if not avango.build.oshelper.os_is_windows() and \
-	 not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
+   not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
     avango.build.SConscript('avango-sound/SConscript')
 if env['OPENAL_SUPPORT']:
     avango.build.SConscript('avango-openal/SConscript')
-avango.build.SConscript('avango-tools/SConscript')    
+avango.build.SConscript('avango-tools/SConscript')
 if env['DISPLAY_SUPPORT']:
     avango.build.SConscript('avango-display/SConscript')
 if env['CONNECT_SUPPORT']:
     avango.build.SConscript('avango-connect/SConscript')
+if env['UTILS_SUPPORT']:
+    avango.build.SConscript('avango-utils/SConscript')
 avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')
 avango.build.SConscript('examples/SConscript')

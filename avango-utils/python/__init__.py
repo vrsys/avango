@@ -23,6 +23,12 @@
 
 from _utils import *
 from _MFMerger import *
+from _bool_script_merge import *
+from _bool_scripts import *
+from _converter import *
+from _property_modifier import *
+from _task_scheduler import *
+from _triggers import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)

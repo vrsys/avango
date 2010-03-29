@@ -22,6 +22,7 @@
 ##########################################################################
 
 import avango.build
+import glob
 
 env = avango.build.PythonEnvironment()
 env.Append(LIBS=["avangoUtils"])
@@ -31,7 +32,14 @@ Alias('utils', lib)
 
 avango_utils_python_files = Split("""
     __init__.py
+    _bool_script_merge.py
+    _bool_scripts.py
+    _converter.py
+    _loadfile_scaler.py
     _MFMerger.py
+    _property_modifier.py
+    _task_scheduler.py
+    _triggers.py
     """)
 
 Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))

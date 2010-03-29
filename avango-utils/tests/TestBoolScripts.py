@@ -21,21 +21,21 @@
 #                                                                        #
 ##########################################################################
 
-import avango.build
+import avango
+import avango.osg
+import avango.utils
+import unittest
 
-test_package_dir = '../test_package/'
+class BoolScriptsTestCase(unittest.TestCase):
+    def testMakeInstance(self):
+        self.assert_(avango.utils.nodes.Bool2And())
+        self.assert_(avango.utils.nodes.Bool2Or())
+        self.assert_(avango.utils.nodes.Bool3And())
+        self.assert_(avango.utils.nodes.Bool3Or())
+        
+        combined_script = avango.utils.merge_and_connect_bool_scripts(avango.utils.nodes.Bool2And(),avango.utils.nodes.Bool2And())
+        self.assert_(combined_script)
 
-avango_utils_test_files = Split("""
-    TestProximitySensor.py
-    TestBoolScripts.py
-    TestMFMerger.py
-    runtests.py
-    __init__.py
-    """)
-avango.build.install_python(test_package_dir+'avango/utils/tests/', avango_utils_test_files)
-
-test_env = avango.build.TestEnvironment()
-check = test_env.Alias('test-utils', test_package_dir+'avango/utils/tests/runtests.pyc', 'python $SOURCE')
-AlwaysBuild(check)
-Alias('check-utils', check)
-test_env.Depends(check, test_package_dir)
+def Suite():
+   suite = unittest.TestLoader().loadTestsFromTestCase(BoolScriptsTestCase)
+   return suite

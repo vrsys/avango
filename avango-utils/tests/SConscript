@@ -29,6 +29,7 @@ avango_utils_test_files = Split("""
     TestProximitySensor.py
     TestBoolScripts.py
     TestMFMerger.py
+    TestTriggers.py
     runtests.py
     __init__.py
     """)

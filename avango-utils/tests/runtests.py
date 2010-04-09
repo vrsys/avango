@@ -26,12 +26,14 @@ import sys
 from avango.utils.tests import TestProximitySensor
 from avango.utils.tests import TestMFMerger
 from avango.utils.tests import TestBoolScripts
+from avango.utils.tests import TestTriggers
 
 if __name__ == '__main__':
     suites = [
         TestProximitySensor.Suite(),
         TestMFMerger.Suite(),
         TestBoolScripts.Suite(),
+        TestTriggers.Suite(),
     ]
     alltests = unittest.TestSuite(suites)
     result = unittest.TextTestRunner(verbosity=2).run(alltests)

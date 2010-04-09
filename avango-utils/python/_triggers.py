@@ -2,16 +2,15 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 
-class ImmediateTriggerCallback(avango.script.Script):
+class ImmediateEdgeTrigger(avango.script.Script):
+    """
+    Triggers immediately (as soon as the field has been changed) on 
+    the edge transitions of the value of the Trigger field.
+    """
+    
     Trigger = avango.SFBool()
-    EnableCallback = avango.script.SFObject()
-    DisableCallback = avango.script.SFObject()
 
     def __init__(self):
-        self._last_trigger = False
-
-    def cleanup(self):
-        self.disconnect_and_clear_all_fields()
         self._last_trigger = False
 
     @field_has_changed(Trigger)
@@ -20,25 +19,24 @@ class ImmediateTriggerCallback(avango.script.Script):
         if self.Trigger.value:
             if not self._last_trigger:
                 self._last_trigger = True
-                callback = self.EnableCallback.value
+                self.on_up_transition()
         else:
             if self._last_trigger:
                 self._last_trigger = False
-                callback = self.DisableCallback.value
-        if callback is not None:
-            callback()
+                self.on_down_transition()
+
+    def on_up_transition(self):
+        pass
+    def on_down_transition(self):
+        pass
 
 
-class TriggerCallback(avango.script.Script):
+
+class EdgeTrigger(avango.script.Script):
+    "Triggers on the edge transitions of the value of the Trigger field."
     Trigger = avango.SFBool()
-    EnableCallback = avango.script.SFObject()
-    DisableCallback = avango.script.SFObject()
 
     def __init__(self):
-        self._last_trigger = False
-
-    def cleanup(self):
-        self.disconnect_and_clear_all_fields()
         self._last_trigger = False
 
     def evaluate(self):
@@ -46,10 +44,13 @@ class TriggerCallback(avango.script.Script):
         if self.Trigger.value:
             if not self._last_trigger:
                 self._last_trigger = True
-                callback = self.EnableCallback.value
+                self.on_up_transition()
         else:
             if self._last_trigger:
                 self._last_trigger = False
-                callback = self.DisableCallback.value
-        if callback is not None:
-            callback()
+                self.on_down_transition()
+            
+    def on_up_transition(self):
+        pass
+    def on_down_transition(self):
+        pass

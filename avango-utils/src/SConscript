@@ -30,6 +30,10 @@ avango.build.add_library(env, 'avango-osg')
 env.Append(CPPDEFINES='AV_UTILS_LIBRARY')
 
 sources = Split('''
+    Bool2Or.cpp
+    Bool2And.cpp
+    Bool3Or.cpp
+    Bool3And.cpp
     ProximitySensor.cpp
     Init.cpp
     ''')

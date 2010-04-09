@@ -21,33 +21,49 @@
 *                                                                        *
 \************************************************************************/
 
-#include "../include/avango/utils/Init.h"
-#include "../include/avango/utils/ProximitySensor.h"
-#include "../include/avango/utils/Bool2Or.h"
-#include "../include/avango/utils/Bool2And.h"
-#include "../include/avango/utils/Bool3Or.h"
-#include "../include/avango/utils/Bool3And.h"
+#if !defined(AV_UTILS_BOOL2AND_H)
+#define AV_UTILS_BOOL2AND_H
 
-#include <avango/Logger.h>
+/**
+ * \file
+ * \ingroup av_utils
+ */
 
-namespace
+#include <avango/FieldContainer.h>
+#include <avango/StandardFields.h>
+#include <avango/osg/Fields.h>
+#include "windows_specific_utils.h"
+
+namespace av
 {
-  av::Logger& logger(av::getLogger("av::utils::Init"));
-}
-
-AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
-
-/* static */ void
-av::utils::Init::initClass()
-{
-  if (!isTypeInitialized())
+  namespace utils
   {
-    av::utils::ProximitySensor::initClass();
-    av::utils::Bool2Or::initClass();
-    av::utils::Bool2And::initClass();
-    av::utils::Bool3Or::initClass();
-    av::utils::Bool3And::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
+    class AV_UTILS_DLL Bool2And : public av::FieldContainer
+    {
+      AV_FC_DECLARE();
+
+    public:
+
+      Bool2And();
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~Bool2And();
+
+      /* virtual */ void evaluate();
+
+    public:
+
+      av::SFBool Input1;
+      av::SFBool Input2;
+      av::SFBool Output;
+    };
+
   }
 }
+
+#endif

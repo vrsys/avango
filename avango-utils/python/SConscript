@@ -32,6 +32,7 @@ Alias('utils', lib)
 
 avango_utils_python_files = Split("""
     __init__.py
+    _nodes.py
     _bool_script_merge.py
     _bool_scripts.py
     _converter.py

@@ -26,6 +26,10 @@ import avango.build
 avango.build.Environment.prepend_include_path(Dir('../..').abspath)
 
 headers = Split('''
+    Bool2Or.h
+    Bool2And.h
+    Bool3Or.h
+    Bool3And.h
     ProximitySensor.h
     Init.h
     windows_specific_utils.h

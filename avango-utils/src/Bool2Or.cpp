@@ -21,33 +21,47 @@
 *                                                                        *
 \************************************************************************/
 
-#include "../include/avango/utils/Init.h"
-#include "../include/avango/utils/ProximitySensor.h"
 #include "../include/avango/utils/Bool2Or.h"
-#include "../include/avango/utils/Bool2And.h"
-#include "../include/avango/utils/Bool3Or.h"
-#include "../include/avango/utils/Bool3And.h"
-
-#include <avango/Logger.h>
+#include <osg/Vec3>
+#include <osg/Quat>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::utils::Init"));
+  av::Logger& logger(av::getLogger("av::utils::Bool2Or"));
 }
 
-AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
+AV_FC_DEFINE(av::utils::Bool2Or);
 
-/* static */ void
-av::utils::Init::initClass()
+av::utils::Bool2Or::Bool2Or()
 {
-  if (!isTypeInitialized())
-  {
-    av::utils::ProximitySensor::initClass();
-    av::utils::Bool2Or::initClass();
-    av::utils::Bool2And::initClass();
-    av::utils::Bool3Or::initClass();
-    av::utils::Bool3And::initClass();
+    AV_FC_ADD_FIELD(Input1,false);
+    AV_FC_ADD_FIELD(Input2,false);
+    AV_FC_ADD_FIELD(Output,false);
+}
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
+av::utils::Bool2Or::~Bool2Or()
+{}
+
+void
+av::utils::Bool2Or::initClass()
+{
+  if (isTypeInitialized())
+    return;
+
+  av::FieldContainer::initClass();
+  AV_FC_INIT(av::FieldContainer, av::utils::Bool2Or, true);
+}
+
+/* virtual */ void
+av::utils::Bool2Or::evaluate()
+{
+  if ( Input1.getValue() || Input2.getValue() )
+  {
+    Output.setValue(true);
   }
+  else
+  {
+    Output.setValue(false);
+  }
+
 }

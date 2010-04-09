@@ -25,16 +25,15 @@ def merge_and_connect_bool_scripts(script1, script2):
         
         #check if the type of the field is not SFBool and 
         #the merged script already does not already contain a field with the given name
-        if type != "SFBool" and merged_script._get_field(field1_name):
+        if field1_type != "SFBool" and merged_script._get_field(field1_name):
             continue 
         
         new_field = avango._avango._make_field_by_name(script1_field._get_type())
         merged_script.add_field(new_field, field1_name)
 
-        # connect new field from node's field   
+        # connect new field from node's field
+        # use an OR relationship
         new_field = merged_script._get_field(field1_name)    
-#        new_field.connect_from(script1_field)
-#        new_field.connect_from(script2_field)
         new_field.connect_from(_bool_scripts.make_bool2_or(script1_field,script2_field))
         
     return merged_script

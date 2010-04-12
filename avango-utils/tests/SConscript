@@ -40,3 +40,5 @@ check = test_env.Alias('test-utils', test_package_dir+'avango/utils/tests/runtes
 AlwaysBuild(check)
 Alias('check-utils', check)
 test_env.Depends(check, test_package_dir)
+
+print str(test_env["ENV"])

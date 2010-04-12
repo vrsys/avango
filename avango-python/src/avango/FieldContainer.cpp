@@ -94,12 +94,21 @@ void init_FieldContainer(void)
   class_<av::Distributed, av::Link<av::Distributed>, bases<av::Base>, boost::noncopyable >("Distributed", "docstring", no_init);
 
   class_<av::FieldContainer, av::Link<av::FieldContainer>, bases<av::Distributed>, boost::noncopyable >("FieldContainer", "docstring", no_init)
+    //Deprecated. Use the non underscore versions
     .def("_get_type", get_type_name)
     .def("_is_derived_from", is_derived_from)
     .def("_get_num_fields", &av::FieldContainer::getNumFields)
     .def("_get_field_name", &av::FieldContainer::getFieldName, return_value_policy<copy_const_reference>())
     .def("_get_field", getField_uint, return_internal_reference<>())
     .def("_get_field", getField_string, return_internal_reference<>())
+
+    .def("get_type", get_type_name)
+    .def("is_derived_from", is_derived_from)
+    .def("get_num_fields", &av::FieldContainer::getNumFields)
+    .def("get_field_name", &av::FieldContainer::getFieldName, return_value_policy<copy_const_reference>())
+    .def("get_field", getField_uint, return_internal_reference<>())
+    .def("get_field", getField_string, return_internal_reference<>())
+
     .def("has_field", &av::FieldContainer::hasField)
     .def("add_field", addField)
     .def("remove_field", removeField, return_internal_reference<>())

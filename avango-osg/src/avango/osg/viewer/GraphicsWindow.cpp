@@ -281,6 +281,7 @@ av::osg::viewer::GraphicsWindow::evaluateLocalSideEffect()
 /* virtual */ void
 av::osg::viewer::GraphicsWindow::evaluate()
 {
+
   int posX = -1, posY = -1, width = 0, height = 0;
   ::osg::Vec2 mouseMove(0.0, 0.0), mouseMoveNorm(0.0, 0.0);
 
@@ -363,34 +364,28 @@ av::osg::viewer::GraphicsWindow::evaluate()
     MouseMovementNorm.setValue(mouseMoveNorm);
 
   // update output fields
-  if (ActualPositionX.getValue() != posX ||
-      ActualPositionY.getValue() != posY ||
-      ActualWidth.getValue() != static_cast<unsigned int>(width) ||
-      ActualHeight.getValue() != static_cast<unsigned int>(height))
+  if (ActualPositionX.getValue() != posX)
+    ActualPositionX.setValue(posX);
+  if (ActualPositionY.getValue() != posY)
+    ActualPositionY.setValue(posY);
+  if (ActualWidth.getValue() != static_cast<unsigned int>(width))
+    ActualWidth.setValue(static_cast<unsigned int>(width));
+  if (ActualHeight.getValue() != static_cast<unsigned int>(height))
+    ActualHeight.setValue(static_cast<unsigned int>(height));
+  if (ActualHeight.getValue() != static_cast<unsigned int>(height))
+    ActualHeight.setValue(static_cast<unsigned int>(height));
+
+  ::osg::Vec2 size = getRealWindowSize();
+  if (size[0] != RealActualWidth.getValue())
   {
-    bool recalculate_real_size(false);
-    if (ActualPositionX.getValue() != posX)
-      ActualPositionX.setValue(posX);
-    if (ActualPositionY.getValue() != posY)
-      ActualPositionY.setValue(posY);
-    if (ActualWidth.getValue() != static_cast<unsigned int>(width))
-    {
-      ActualWidth.setValue(static_cast<unsigned int>(width));
-      recalculate_real_size = true;
-    }
-    if (ActualHeight.getValue() != static_cast<unsigned int>(height))
-    {
-      ActualHeight.setValue(static_cast<unsigned int>(height));
-      recalculate_real_size = true;
-    }
-    mSizeChangedSignal();
-    if (recalculate_real_size)
-    {
-      ::osg::Vec2 size(getRealWindowSize());
-      RealActualWidth.setValue(size[0]);
-      RealActualHeight.setValue(size[1]);
-    }
+    RealActualWidth.setValue(size[0]);
   }
+  if (size[1] != RealActualHeight.getValue())
+  {
+    RealActualHeight.setValue(size[1]);
+  }
+
+  mSizeChangedSignal();
 }
 
 ::osgViewer::GraphicsWindow*

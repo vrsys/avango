@@ -26,3 +26,23 @@ class Float4AddVec2Converter(avango.script.Script):
 
     def evaluate(self):
         self.Output.value = avango.osg.Vec2(self.Value00.value+self.Value01.value, self.Value10.value+self.Value11.value)
+
+class SFNode2MFContainerConverter(avango.script.Script):
+    "Converts a SFNode to a MFNode"
+
+    Input = avango.osg.SFNode()
+    Output = avango.MFContainer()
+
+    def evaluate(self):
+        self.Output.value = [ self.Input.value ]
+
+class Float2Vec2Converter(avango.script.Script):
+    "Converts two Floats into on Vec2"
+
+    Value0 = avango.SFFloat()
+    Value1 = avango.SFFloat()
+    Output = avango.osg.SFVec2()
+
+    def evaluate(self):
+        self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
+        

@@ -53,11 +53,9 @@ class TaskSchedulerTestCase(unittest.TestCase):
         task_scheduler.TimeIn.connect_from(time_sensor.Time)
         
         task1 = TimeDeltaIncrement()
-        task1.Name.value = "Task1"
         task1.TimeDelta.value = 0.1
         
         task2 = TimeDeltaIncrement()
-        task2.Name.value = "Task2"
         task2.TimeDelta.value = 0.2
         
         task_scheduler.add_delayed_task(task1)

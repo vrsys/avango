@@ -11,6 +11,8 @@ class ImmediateEdgeTrigger(avango.script.Script):
     Trigger = avango.SFBool()
 
     def __init__(self):
+        self.super(ImmediateEdgeTrigger).__init__()
+        
         self._last_trigger = False
 
     @field_has_changed(Trigger)
@@ -37,6 +39,8 @@ class EdgeTrigger(avango.script.Script):
     Trigger = avango.SFBool()
 
     def __init__(self):
+        self.super(EdgeTrigger).__init__()
+        
         self._last_trigger = False
 
     def evaluate(self):

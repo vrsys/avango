@@ -28,6 +28,7 @@ from avango.utils.tests import TestMFMerger
 from avango.utils.tests import TestBoolScripts
 from avango.utils.tests import TestTriggers
 from avango.utils.tests import TestTaskScheduler
+from avango.utils.tests import TestNormalization
 
 if __name__ == '__main__':
     suites = [
@@ -36,6 +37,7 @@ if __name__ == '__main__':
         TestBoolScripts.Suite(),
         TestTriggers.Suite(),
         TestTaskScheduler.Suite(),
+        TestNormalization.Suite(),
     ]
     alltests = unittest.TestSuite(suites)
     result = unittest.TextTestRunner(verbosity=2).run(alltests)

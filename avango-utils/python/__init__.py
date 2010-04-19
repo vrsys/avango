@@ -31,5 +31,6 @@ from _converter import *
 from _property_modifier import *
 from _task_scheduler import *
 from _triggers import *
+from _normalization import *
 
 

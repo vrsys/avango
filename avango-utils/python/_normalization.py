@@ -42,4 +42,13 @@ class FloatNormalization(avango.script.Script):
             
         self.ValueOut.value = min_out + val_in*(max_out-min_out)
         
+def make_float_normalization(min_in, max_in, min_out, max_out, value_in_field):
+    normalization = avango.utils.nodes.FloatNormalization()
+    normalization.MinIn.value = min_in
+    normalization.MaxIn.value = max_in
+    normalization.MinOut.value = min_out
+    normalization.MaxOut.value = max_out
+    normalization.ValueIn.connect_from(value_in_field)
+    return normalization.ValueOut
+        
          

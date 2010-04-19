@@ -28,6 +28,12 @@ import unittest
 import time
 
 
+class Widget(avango.script.Script):
+    
+    Value = avango.SFFloat()
+    
+    def __init__(self):
+        self.super(Widget).__init__()
 
                   
         
@@ -93,6 +99,19 @@ class NormalizationTestCase(unittest.TestCase):
         normalization.ValueIn.value = 40.0
         avango.evaluate()
         self.assertEqual(normalization.ValueOut.value, -0.5)
+        
+    def testCreatorFunction(self):
+        w1 = Widget()
+        w2 = Widget()
+        w1.Value.value = 0.5
+        
+        w2.Value.connect_from( avango.utils.make_float_normalization(-1,1,0,1,w1.Value) )
+        avango.evaluate()
+        self.assertEqual(w2.Value.value, 0.75)
+        
+        w1.Value.value = 1.0
+        avango.evaluate()
+        self.assertEqual(w2.Value.value, 1.0)
         
 def Suite():
    suite = unittest.TestLoader().loadTestsFromTestCase(NormalizationTestCase)

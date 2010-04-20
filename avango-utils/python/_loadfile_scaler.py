@@ -31,11 +31,7 @@ class LoadFileScaler(avango.script.Script):
         width = b.x_max() - b.x_min()
         height = b.y_max() - b.y_min()
         depth = b.z_max() - b.z_min()
-        print "LoadFileScaler::width: " + str(width)
-        print "LoadFileScaler::height: " + str(height)
-        print "LoadFileScaler::depth: " + str(depth)
         max_extend = max(max(width,height),depth)
         scaleFactor = 2.0 / (max_extend);
         scaleFactor *= self.Radius.value;
-        print "LoadFileScaler::scaleFactor: " + str(scaleFactor)
         return avango.osg.make_scale_mat(scaleFactor,scaleFactor,scaleFactor)

@@ -22,8 +22,6 @@
 \************************************************************************/
 
 #include "../include/avango/utils/Bool3Or.h"
-#include <osg/Vec3>
-#include <osg/Quat>
 
 namespace
 {

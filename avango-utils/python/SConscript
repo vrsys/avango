@@ -42,6 +42,7 @@ avango_utils_python_files = Split("""
     _task_scheduler.py
     _triggers.py
     _normalization.py
+    _field_dump.py
     """)
 
 Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))

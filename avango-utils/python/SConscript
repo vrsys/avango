@@ -27,7 +27,14 @@ import glob
 env = avango.build.PythonEnvironment()
 env.Append(LIBS=["avangoUtils"])
 
+avango.build.add_library(env, 'boost_python')
+avango.build.add_library(env, 'avango-core')
+avango.build.add_library(env, "osg")
+
 lib = env.SharedLibrary("_utils.cpp")
+
+
+
 Alias('utils', lib)
 
 avango_utils_python_files = Split("""

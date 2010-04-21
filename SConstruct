@@ -69,7 +69,7 @@ avango.build.set_config('avango-core', avango.build.PlainConfig(libraries = ['av
 avango.build.set_config('avango-python', avango.build.PlainConfig(libraries = ['avangoScript']))
 
 # avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg', 'avangoOsgParticle']))
-avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg']))
+avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
 avango.build.set_config('avango-osgparticle', avango.build.PlainConfig(libraries = ['avangoOsgParticle']))
 
 avango.build.set_config('avango-osgviewer', avango.build.PlainConfig(libraries = ['avangoOsgViewer']))
@@ -100,6 +100,7 @@ for lib in used_libs:
 avango.build.SConscript('avango-unittest/SConscript')
 avango.build.TestEnvironment.add_library('avango-unittest')
 
+# List is ordered by dependency of modules 
 avango.build.SConscript('avango-build/SConscript')
 avango.build.SConscript('avango-core/SConscript')
 avango.build.SConscript('avango-python/SConscript')
@@ -110,7 +111,6 @@ if env['OPENSCENEGRAPH_SUPPORT']:
     if not avango.build.oshelper.os_is_windows() and \
     	 not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
         avango.build.SConscript('avango-daemon/SConscript')
-        
 if not avango.build.oshelper.os_is_windows() and \
    not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
     avango.build.SConscript('avango-sound/SConscript')

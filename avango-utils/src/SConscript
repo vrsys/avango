@@ -26,7 +26,6 @@ import avango.build
 env = avango.build.Environment()
 avango.build.add_library(env, 'avango-core')
 avango.build.add_library(env, 'avango-osg')
-avango.build.add_library(env, 'osg')
 
 env.Append(CPPDEFINES='AV_UTILS_LIBRARY')
 

@@ -41,7 +41,7 @@ AV_FIELD_DEFINE(av::osg::MFCameraAttachment);
 av::osg::CameraAttachment::CameraAttachment()
 {
   AV_FC_ADD_FIELD(BufferComponent, ::osg::Camera::COLOR_BUFFER);
-  AV_FC_ADD_FIELD(InternalFormat, GL_RGBA);
+  AV_FC_ADD_FIELD(InternalFormat, GL_NONE);
   AV_FC_ADD_FIELD(Texture, Link< ::av::osg::Texture >());
   AV_FC_ADD_FIELD(Image, Link< ::av::osg::Image >());
   AV_FC_ADD_FIELD(Level, 0);

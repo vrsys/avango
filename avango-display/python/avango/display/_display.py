@@ -107,7 +107,7 @@ class Display(object):
         self._keep_alive.append(value)
 
     def make_glasses(self, name, receiver_offset):
-        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,
+        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
                                                   Station = name)
         sensor.ReceiverOffset.value = avango.osg.make_trans_mat(receiver_offset)
         sensor.TransmitterOffset.value = self._perf2osg
@@ -144,7 +144,6 @@ class Display(object):
         camera.ViewerTransform.connect_from(display_view.Camera)
         camera.Window.value = window
 
-        
         view = avango.osg.viewer.nodes.View()
         view.Scene.connect_from(display_view.Root)
         view.MasterCamera.value = camera

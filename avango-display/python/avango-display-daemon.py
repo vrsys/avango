@@ -27,6 +27,26 @@
 import avango.daemon
 import sys
 import getopt
+
+def add_wiimote(device, station):
+    wiimote = avango.daemon.Wiimote()
+    wiimote.station = avango.daemon.Station(station)
+    wiimote.device = device
+
+    wiimote.buttons[ 0] = "EV_KEY::KEY_HOME"     # home
+    wiimote.buttons[ 1] = "EV_KEY::KEY_UP"       # up
+    wiimote.buttons[ 2] = "EV_KEY::KEY_DOWN"     # down
+    wiimote.buttons[ 3] = "EV_KEY::KEY_LEFT"     # left
+    wiimote.buttons[ 4] = "EV_KEY::KEY_RIGHT"    # right
+    wiimote.buttons[ 5] = "EV_KEY::BTN_LEFT"     # A
+    wiimote.buttons[ 6] = "EV_KEY::BTN_RIGHT"    # B
+    wiimote.buttons[ 7] = "EV_KEY::KEY_PROG1"    # 1
+    wiimote.buttons[ 8] = "EV_KEY::KEY_PROG2"    # 2
+    wiimote.buttons[ 9] = "EV_KEY::KEY_BACK"     # -
+    wiimote.buttons[10] = "EV_KEY::KEY_FORWARD"  # +
+    
+    return wiimote
+    
  
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hn:l:d:o:",
@@ -108,6 +128,34 @@ if display_type == "Monitor":
         spacemouse.buttons[8] = "EV_KEY::BTN_BASE2"    # 8
         spacemouse.buttons[9] = "EV_KEY::BTN_0"        # Left SpaceNavigator Button
         spacemouse.buttons[10] = "EV_KEY::BTN_1"       # Right SpaceNavigator Button
+        
+elif display_type == "TwoView" or display_type == "iCone":
+    #add the DTrack daemon and its known targets
+    dtrack = avango.daemon.DTrack()
+    dtrack.port = "5000"
+    devices.append(dtrack)
+    dtrack.stations[ 1] = avango.daemon.Station("ve-dtrack-head1")
+    dtrack.stations[ 2] = avango.daemon.Station("ve-dtrack-head2")
+    dtrack.stations[ 3] = avango.daemon.Station("ve-dtrack-head3")
+    dtrack.stations[ 4] = avango.daemon.Station("ve-dtrack-pda1")
+    dtrack.stations[ 5] = avango.daemon.Station("ve-dtrack-pda2")
+    dtrack.stations[ 6] = avango.daemon.Station("ve-dtrack-head4")
+    dtrack.stations[ 7] = avango.daemon.Station("ve-dtrack-head5")
+    dtrack.stations[ 8] = avango.daemon.Station("ve-dtrack-head6")
+    dtrack.stations[ 9] = avango.daemon.Station("ve-dtrack-head7")
+    dtrack.stations[10] = avango.daemon.Station("ve-dtrack-atek")
+    dtrack.stations[11] = avango.daemon.Station("ve-dtrack-reddot")
+    dtrack.stations[12] = avango.daemon.Station("ve-dtrack-raytac")
+    dtrack.stations[13] = avango.daemon.Station("ve-dtrack-spare")
+    dtrack.stations[14] = avango.daemon.Station("ve-dtrack-head8")
+    dtrack.stations[15] = avango.daemon.Station("ve-dtrack-logitech")
+    
+    #add the wiimotes
+    devices.append(add_wiimote("/dev/input/ve-wiimote1", "wiimote1"))
+    devices.append(add_wiimote("/dev/input/ve-wiimote2", "wiimote2"))
+    devices.append(add_wiimote("/dev/input/ve-wiimote3", "wiimote3"))
+    devices.append(add_wiimote("/dev/input/ve-wiimote4", "wiimote4"))
+    
 
 # start daemon (will enter the main loop)
 avango.daemon.run(devices)

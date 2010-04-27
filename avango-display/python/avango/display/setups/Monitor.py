@@ -34,7 +34,7 @@ class Monitor(avango.display.Display):
         self._subdisplay_window_events = {}
         self._subdisplay_camera = {}
 
-        window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False)
+        window = self.make_window(0, 0,  1024, 768, 0.3, 0.3, False)
         window.Name.value = "AVANGO"
         window.Decoration.value = True
         window.AutoHeight.value = True
@@ -76,6 +76,7 @@ class Monitor(avango.display.Display):
     
     
     def view_created(self, camera, view):
+        'Primary window is automatically created by the constructor. All other windows are created by explicit calls of make_view(subdisplay)'
         window_event = avango.osg.viewer.nodes.EventFields(View = view)
         self._subdisplay_window_events[""] = window_event
         self._subdisplay_window[""].DragEvent.connect_from(window_event.DragEvent)

@@ -200,3 +200,89 @@ class MouseDevice(avango.script.Script):
         self.MouseButtonMiddle.connect_from(eventfields.MouseButtonMiddle)
         self.MouseLeftDoubleClick.connect_from(eventfields.MouseButtonLeftDoubleClick)
         self.MouseLeftAndRight.connect_from(eventfields.MouseButtons_LeftAndRight)
+   
+   
+def make_wiimote_device(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset): 
+    device = WiimoteDevice()
+    device._setup(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset)
+    return device
+
+        
+class WiimoteDevice(avango.script.Script):
+    
+    Button0 = avango.SFBool()
+    Button1 = avango.SFBool()
+    Button2 = avango.SFBool()
+    Button3 = avango.SFBool()
+    Button4 = avango.SFBool()
+    Button5 = avango.SFBool()
+    Button6 = avango.SFBool()
+    Button7 = avango.SFBool()
+    Button8 = avango.SFBool()
+    Button9 = avango.SFBool()
+    Button10 = avango.SFBool()
+    
+    LED0 = avango.SFBool()
+    LED1 = avango.SFBool()
+    LED2 = avango.SFBool()
+    LED3 = avango.SFBool()
+    
+    Matrix = avango.osg.SFMatrix()
+    
+    def __init__(self):
+        self.super(WiimoteDevice).__init__()
+        
+        self.Button0.value = False
+        self.Button1.value = False
+        self.Button2.value = False
+        self.Button3.value = False
+        self.Button4.value = False
+        self.Button5.value = False
+        self.Button6.value = False
+        self.Button7.value = False
+        self.Button8.value = False
+        self.Button9.value = False
+        self.Button10.value = False
+        
+        self.LED0.value = False
+        self.LED1.value = False
+        self.LED2.value = False
+        self.LED3.value = False
+        
+        #will be initialized by the init function
+        self.dtrack_sensor = None
+        self.wiimote_sensor = None
+        self.wiimote_actuator = None
+        self.device_service = None
+        
+        
+    def _setup(self, wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset):
+        self.device_service = device_service
+        self.dtrack_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = device_service,
+                                                              Station = dtrack_station,
+                                                              ReceiverOffset = receiver_offset,
+                                                              TransmitterOffset = transmitter_offset)
+        self.wiimote_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = device_service,
+                                                               Station = wiimote_station)
+        self.wiimote_actuator = avango.daemon.nodes.WiimoteActuator(DeviceService = device_service,
+                                                                    Station = wiimote_station)
+        
+        self.Button0.connect_from(self.wiimote_sensor.Button0)
+        self.Button1.connect_from(self.wiimote_sensor.Button1)
+        self.Button2.connect_from(self.wiimote_sensor.Button2)
+        self.Button3.connect_from(self.wiimote_sensor.Button3)
+        self.Button4.connect_from(self.wiimote_sensor.Button4)
+        self.Button5.connect_from(self.wiimote_sensor.Button5)
+        self.Button6.connect_from(self.wiimote_sensor.Button6)
+        self.Button7.connect_from(self.wiimote_sensor.Button7)
+        self.Button8.connect_from(self.wiimote_sensor.Button8)
+        self.Button9.connect_from(self.wiimote_sensor.Button9)
+        self.Button10.connect_from(self.wiimote_sensor.Button10)
+    
+        self.wiimote_actuator.LED0.connect_from(self.LED0)
+        self.wiimote_actuator.LED1.connect_from(self.LED1)
+        self.wiimote_actuator.LED2.connect_from(self.LED2)
+        self.wiimote_actuator.LED3.connect_from(self.LED3)
+        
+        self.Matrix.connect_from(self.dtrack_sensor.Matrix)
+        

@@ -28,6 +28,8 @@ class Display(object):
         #the device service will be created as soon as it is used.
         self._device_service = None
         
+        self._bool_dict={'false':False, 'true':True}
+        
         self._users = []
         self._windows = []
 

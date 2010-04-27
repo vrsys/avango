@@ -34,7 +34,7 @@ class Monitor(avango.display.Display):
         self._subdisplay_window_events = {}
         self._subdisplay_camera = {}
 
-        window = self.make_window(0, 0,  1024, 768, 0.3, 0.3, False)
+        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False)
         window.Name.value = "AVANGO"
         window.Decoration.value = True
         window.AutoHeight.value = True

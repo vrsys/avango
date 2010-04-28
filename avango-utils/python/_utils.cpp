@@ -23,8 +23,10 @@
 
 #include <boost/python.hpp>
 #include <avango/Link.h>
-#include "../include/avango/utils/Init.h"
 
+#include <osg/Matrix>
+
+#include "../include/avango/utils/Init.h"
 #include "../include/avango/utils/Bool2Or.h"
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
@@ -44,6 +46,32 @@ namespace boost
   }
 }
 
+osg::Vec3 CalcHpr(const osg::Matrix& mat)
+{
+  osg::Vec3 hpr;
+  if(mat(1,0)>0.998) {
+    float heading = atan2(mat(0,2),mat(2,2));
+    float attitude = 3.14/2.0;
+    float bank =0;
+    hpr = osg::Vec3(heading,attitude,bank);
+    return hpr;
+  }
+
+  if(mat(1,0)<-0.998) {
+    float heading = atan2(mat(0,2),mat(2,2));
+    float attitude = -3.14/2.0;
+    float bank =0;
+    hpr = osg::Vec3(heading,attitude,bank);
+    return hpr;
+  }
+
+  float heading = atan2(-mat(2,0),mat(0,0));
+  float attitude = atan2(-mat(1,2),mat(1,1));
+  float bank = sin(mat(1,0));
+  hpr = osg::Vec3(heading,attitude,bank);
+  return hpr;
+}
+
 BOOST_PYTHON_MODULE(_utils)
 {
   av::utils::Init::initClass();
@@ -52,4 +80,6 @@ BOOST_PYTHON_MODULE(_utils)
   class_<av::utils::Bool2And, av::Link<av::utils::Bool2And>, bases<av::FieldContainer>, boost::noncopyable >("Bool2And", "docstring", no_init);
   class_<av::utils::Bool3Or, av::Link<av::utils::Bool3Or>, bases<av::FieldContainer>, boost::noncopyable >("Bool3Or", "docstring", no_init);
   class_<av::utils::Bool3And, av::Link<av::utils::Bool3And>, bases<av::FieldContainer>, boost::noncopyable >("Bool3And", "docstring", no_init);
+
+  def("calc_hpr", CalcHpr);
 }

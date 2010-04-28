@@ -14,3 +14,17 @@ def dump_fields(script):
         buffer += "Field: <"+ str(field_name) + "> of type: <" + str(field_type) + "> = <" + str(field.value) + ">\n" 
         
     return buffer
+
+
+class ScriptFieldPrinter(avango.script.Script):
+    
+    Script = avango.script.SFObject()
+    
+    def __init__(self):
+        self.super(ScriptFieldPrinter).__init__()
+        self.always_evaluate(True)
+    
+    def evaluate(self):
+        if self.Script.value:
+            buffer = dump_fields(self.Script.value)
+            print buffer

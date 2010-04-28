@@ -8,8 +8,9 @@ def dump_fields(script):
     buffer += "ScriptName <" + str(script.Name.value) +">\n"
     
     for i in xrange(num_fields):
-        field = script.get_field(i)
-        name = script.get_field_name(i)
-        buffer += " " + str(name) +" <"+ str(field.value) +">\n" 
+        field = script._get_field(i)
+        field_name = field._get_name()
+        field_type = field._get_type()
+        buffer += "Field: <"+ str(field_name) + "> of type: <" + str(field_type) + "> = <" + str(field.value) + ">\n" 
         
     return buffer

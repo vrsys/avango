@@ -7,11 +7,14 @@ class LoadFileScaler(avango.script.Script):
     LoadFile = avango.osg.SFLoadFile()
     LoadFileFinished = avango.SFString()
     Radius = avango.SFFloat()
+    
     MatrixOut = avango.osg.SFMatrix()
+    Trigger = avango.SFBool()
     
     def __init__(self):
         self.super(LoadFileScaler).__init__()
         
+        self.bounding_box = None
         self.Radius.value = 1.0
         self.__file_loaded = False
         
@@ -24,13 +27,14 @@ class LoadFileScaler(avango.script.Script):
     def evaluate(self):
         if self.__file_loaded:
             self.MatrixOut.value = self.calc_scale_matrix()
+            self.Trigger.value = True
             self.__file_loaded = False
 
     def calc_scale_matrix(self):
-        b = avango.osg.calc_bounding_box(self.LoadFile.value)
-        width = b.x_max() - b.x_min()
-        height = b.y_max() - b.y_min()
-        depth = b.z_max() - b.z_min()
+        self.bounding_box = avango.osg.calc_bounding_box(self.LoadFile.value)
+        width =  self.bounding_box.x_max() - self.bounding_box.x_min()
+        height = self.bounding_box.y_max() - self.bounding_box.y_min()
+        depth =  self.bounding_box.z_max() - self.bounding_box.z_min()
         max_extend = max(max(width,height),depth)
         scaleFactor = 2.0 / (max_extend);
         scaleFactor *= self.Radius.value;

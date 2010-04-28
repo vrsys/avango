@@ -23,18 +23,45 @@ class SwingMatrix(avango.script.Script):
 
 def build_texture(time_sensor, root):
     texture2d = avango.osg.nodes.Texture2D()
+    texture2d.TextureWidth.value = 48
+    texture2d.TextureHeight.value = 48
 
     camera_attachment = avango.osg.nodes.CameraAttachment(Texture=texture2d)
 
     camera = avango.osg.nodes.Camera(Attachment=[camera_attachment],
                                      RenderOrder=avango.osg.RenderOrder.PRE_RENDER,
+                                     RenderTargetImplementation=avango.osg.RenderTargetImplementation.FRAME_BUFFER_OBJECT, # only frame buffer works at all
                                      ClearColor=avango.osg.Vec4(0., 1., 0.,  1.),
-                                     Viewport=avango.osg.Vec4(0., 0., 256., 256.),
+                                     Viewport=avango.osg.Vec4(0., 0., 2048., 2048),
+                                     ClearMask=avango.osg.ClearMask.GL_COLOR_BUFFER_BIT|avango.osg.ClearMask.GL_DEPTH_BUFFER_BIT|avango.osg.ClearMask.GL_ACCUM_BUFFER_BIT|avango.osg.ClearMask.GL_STENCIL_BUFFER_BIT,
+                                     ReferenceFrame="ABSOLUTE_RF",
                                     )
+    #set the view matrix
+    position = avango.osg.Vec3(0,0,1)
+    center = avango.osg.Vec3(0,0,0)
+    up = avango.osg.Vec3(0,1,0)
+    view_matrix = avango.osg.make_lookat_mat(position,center,up)
+    camera.ViewMatrix.value = view_matrix
+    
+    #set the projection matrix
+    near = 0.1
+    far = 10000
+    if ortho_projection:
+        left = -1.0
+        right = 1.0
+        bottom = -1.0
+        top = 1.0
+        projection_matrix = avango.osg.make_ortho_mat(left, right, bottom, top, near, far)
+        camera.ProjectionMatrix.value = projection_matrix
+    else:
+        fov = 75.0
+        aspect = 1.0
+        projection_matrix = avango.osg.make_perspective_mat(fov,aspect,near,far)
+        camera.ProjectionMatrix.value = projection_matrix
+    
+    sphere = avango.osg.nodes.Sphere(Radius=1.0, Matrix=avango.osg.make_trans_mat(0., 0., -1.))
 
-    sphere = avango.osg.nodes.Sphere(Radius=0.1, Matrix=avango.osg.make_trans_mat(0., 0., 0.))
-
-    swing = SwingMatrix(Scale=0.1)
+    swing = SwingMatrix(Scale=1.0)
     swing.TimeIn.connect_from(time_sensor.Time)
 
     transform = avango.osg.nodes.MatrixTransform()
@@ -63,8 +90,8 @@ def build_quad(time_sensor):
     geometry.PrimitiveLengths.value = [4]
 
     root = avango.osg.nodes.Group()
-
-    texture2d, keep_alive = build_texture(time_sensor, root)
+    rtt_root = avango.osg.nodes.Group()
+    texture2d, keep_alive = build_texture(time_sensor, rtt_root)
     state_set = avango.osg.nodes.StateSet(Texture0 = texture2d)
 
     rotation = RotateMatrix()
@@ -75,18 +102,20 @@ def build_quad(time_sensor):
     transform.Children.value = [avango.osg.nodes.Geode(Drawables=[geometry], StateSet=state_set)]
 
     root.Children.value.append(transform)
-    return root, keep_alive+[rotation]
+    return root, rtt_root, keep_alive+[rotation]
 
 
 argv = display.init(sys.argv)
 view1 = display.make_view()
 view1.BackgroundColor.value = avango.osg.Vec4(0.5, 0.5, 0.5, 1.)
 
+ortho_projection = False
+if "ortho" in argv:
+    ortho_projection = True
+
 time_sensor = avango.nodes.TimeSensor()
-
-sphere, keep_alive = build_quad(time_sensor)
-
-transform = avango.osg.nodes.MatrixTransform(Children=[sphere], Matrix=avango.osg.make_trans_mat(0, 1.7, -1.2))
+quad_geom, rtt_root, keep_alive = build_quad(time_sensor)
+transform = avango.osg.nodes.MatrixTransform(Children=[quad_geom,rtt_root], Matrix=avango.osg.make_trans_mat(0, 1.7, -2.2))
 view1.Root.value = transform
 
 display.run()

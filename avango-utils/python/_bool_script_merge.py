@@ -1,5 +1,4 @@
 import avango
-import avango.osg
 import avango.script
 
 import _bool_scripts

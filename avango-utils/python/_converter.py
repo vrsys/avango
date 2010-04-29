@@ -2,6 +2,49 @@ import avango
 import avango.script
 import avango.osg
 
+class FloatXAdd(avango.script.Script):
+    "Add x float values"
+    
+    BaseFieldName = avango.SFString()
+    NumFieldsOut = avango.SFInt() 
+    
+    Output = avango.SFFloat()
+    
+    def __init__(self):
+        self.super(FloatXAdd).__init__()  
+        
+        self.Output.value = 0      
+        self.BaseFieldName.value = "Input"
+        self.NumFields.value = 0
+        
+        self.__actual_id=0
+    
+    def add_and_connect_float_field(self,field):
+        
+        field_name = self.BaseFieldName.value + str(self.__actual_id)
+        if self.has_field(field_name):
+            return
+        #create and add the new field
+        self.add_and_init_field(avango.SFFloat(), field_name, 0)
+        
+        #connect the field with the given field
+        getattr(self, field_name).connect_from(field)
+        
+        self.__actual_id += 1
+        self.NumFieldsOut.value = self.__actual_id
+       
+    def evaluate(self):
+        sum = 0
+        for field_id in range(0,self.__actual_id):
+            field_name = self.BaseFieldName.value + str(field_id)
+            field = self.get_field(field_name)
+            if not field:
+                continue
+            sum += field.value
+         
+        self.Output.value = sum    
+    
+
 class Float2Add(avango.script.Script):
     "Adds two float values"
     

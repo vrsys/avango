@@ -48,11 +48,11 @@ class EdgeTrigger(avango.script.Script):
         if self.Trigger.value:
             if not self._last_trigger:
                 self._last_trigger = True
-                self.on_down_transition()
+                self.on_up_transition()
         else:
             if self._last_trigger:
                 self._last_trigger = False
-                self.on_up_transition()
+                self.on_down_transition()
             
     def on_up_transition(self):
         pass

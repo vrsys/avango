@@ -21,27 +21,23 @@
 #                                                                        #
 ##########################################################################
 
+import avango
+import avango.osg
+import avango.utils
 import unittest
-import sys
-from avango.utils.tests import TestProximitySensor
-from avango.utils.tests import TestMFMerger
-from avango.utils.tests import TestBoolScripts
-from avango.utils.tests import TestTriggers
-from avango.utils.tests import TestTaskScheduler
-from avango.utils.tests import TestNormalization
-from avango.utils.tests import TestConverters
 
-if __name__ == '__main__':
-    suites = [
-        TestProximitySensor.Suite(),
-        TestMFMerger.Suite(),
-        TestBoolScripts.Suite(),
-        TestTriggers.Suite(),
-        TestTaskScheduler.Suite(),
-        TestNormalization.Suite(),
-        TestConverters.Suite(),
-    ]
-    alltests = unittest.TestSuite(suites)
-    result = unittest.TextTestRunner(verbosity=2).run(alltests)
-    if not result.wasSuccessful():
-        sys.exit(1)
+class Widget(avango.script.Script):
+    
+    Value = avango.SFFloat()
+    
+    def __init__(self):
+        self.super(Widget).__init__()    
+          
+
+class ConvertersTestCase(unittest.TestCase):
+    pass
+        
+
+def Suite():
+   suite = unittest.TestLoader().loadTestsFromTestCase(ConvertersTestCase)
+   return suite

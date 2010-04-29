@@ -35,7 +35,27 @@ class Widget(avango.script.Script):
           
 
 class ConvertersTestCase(unittest.TestCase):
-    pass
+    def testMakeInstance(self):
+        self.assert_(avango.utils.nodes.FloatXAdd())
+        
+    def testFloatXAdd(self):
+        
+        sum = avango.utils.nodes.FloatXAdd()
+        sum.BaseFieldName.value = "InputField"
+        
+        w1 = Widget(Value=1)
+        sum.add_and_connect_float_field(w1.Value)
+        w2 = Widget(Value=2)
+        sum.add_and_connect_float_field(w2.Value)
+        avango.evaluate()
+        self.assertEqual(sum.Output.value, 3)
+        
+        w3 = Widget(Value=-3)
+        sum.add_and_connect_float_field(w3.Value)
+        self.assertEqual(sum.InputField2.value, -3)
+        avango.evaluate()
+        self.assertEqual(sum.Output.value, 0)
+        
         
 
 def Suite():

@@ -15,9 +15,9 @@ class FloatXAdd(avango.script.Script):
         
         self.Output.value = 0      
         self.BaseFieldName.value = "Input"
-        self.NumFields.value = 0
+        self.NumFieldsOut.value = 0
         
-        self.__actual_id=0
+        self.__actual_id = 0
     
     def add_and_connect_float_field(self,field):
         

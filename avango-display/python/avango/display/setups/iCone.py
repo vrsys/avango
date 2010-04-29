@@ -25,6 +25,7 @@
 
 import avango.display
 import avango.daemon
+import avango.utils
 import math
 import re
 
@@ -79,6 +80,36 @@ class iCone(avango.display.Display):
             self.add_view(view)
 
         return display_view
+    
+    def make_screen_descriptor(self, subdisplay):
+        #assume horizontal ordering of the screens
+        screen = avango.display.nodes.ScreenDescriptor()
+        screen.Transform.value = avango.osg.make_ident_mat()
+        
+        real_size_sum_width = avango.utils.nodes.FloatXSum()
+        real_size_min_height = avango.utils.nodes.FloatXMin()
+        real_size = avango.utils.nodes.Float2Vec2Converter()
+        real_size.Value0.connect_from(real_size_sum_width.Output)
+        real_size.Value1.connect_from(real_size_min_height.Output)
+        screen.RealSize.connect_from(real_size.Output)
+        
+        pixel_size_sum_width = avango.utils.nodes.FloatXSum()
+        pixel_size_min_height = avango.utils.nodes.FloatXMin()
+        pixel_size = avango.utils.nodes.Float2Vec2Converter()
+        pixel_size.Value0.connect_from(pixel_size_sum_width.Output)
+        pixel_size.Value1.connect_from(pixel_size_min_height.Output)
+        screen.PixelSize.connect_from(pixel_size.Output)
+        
+        for window_config in self._windows:
+            window = window_config[0]
+            real_size_sum_width.add_and_connect_float_field(window.RealActualWidth)
+            real_size_min_height.add_and_connect_float_field(window.RealActualHeight)
+            
+            pixel_size_sum_width.add_and_connect_float_field(window.ActualWidth)
+            pixel_size_min_height.add_and_connect_float_field(window.ActualHeight)
+
+        return screen
+            
     
     def make_device(self, device, interface):
         #check for wiimote

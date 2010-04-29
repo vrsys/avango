@@ -2,8 +2,8 @@ import avango
 import avango.script
 import avango.osg
 
-class FloatXAdd(avango.script.Script):
-    "Add x float values"
+class FloatXBase(avango.script.Script):
+    "Base for sequential operations on floats"
     
     BaseFieldName = avango.SFString()
     NumFieldsOut = avango.SFInt() 
@@ -11,17 +11,17 @@ class FloatXAdd(avango.script.Script):
     Output = avango.SFFloat()
     
     def __init__(self):
-        self.super(FloatXAdd).__init__()  
+        self.super(FloatXBase).__init__()  
         
         self.Output.value = 0      
         self.BaseFieldName.value = "Input"
         self.NumFieldsOut.value = 0
         
-        self.__actual_id = 0
+        self._actual_id = 0
     
     def add_and_connect_float_field(self,field):
         
-        field_name = self.BaseFieldName.value + str(self.__actual_id)
+        field_name = self.BaseFieldName.value + str(self._actual_id)
         if self.has_field(field_name):
             return
         #create and add the new field
@@ -30,20 +30,42 @@ class FloatXAdd(avango.script.Script):
         #connect the field with the given field
         getattr(self, field_name).connect_from(field)
         
-        self.__actual_id += 1
-        self.NumFieldsOut.value = self.__actual_id
+        self._actual_id += 1
+        self.NumFieldsOut.value = self._actual_id
        
     def evaluate(self):
+        self.on_calculate()
+        
+    def on_calculate(self): 
+        pass
+
+class FloatXSum(FloatXBase):
+    
+    def on_calculate(self):
         sum = 0
-        for field_id in range(0,self.__actual_id):
+        for field_id in range(0,self._actual_id):
             field_name = self.BaseFieldName.value + str(field_id)
             field = self.get_field(field_name)
             if not field:
                 continue
             sum += field.value
          
-        self.Output.value = sum    
+        self.Output.value = sum  
+        
+class FloatXMin(FloatXBase):
     
+    def on_calculate(self):
+        min = 1e+100 # TODO: Find a way to get the real maximum
+        for field_id in range(0,self._actual_id):
+            field_name = self.BaseFieldName.value + str(field_id)
+            field = self.get_field(field_name)
+            if not field:
+                continue
+            if field.value < min:
+                min = field.value 
+            
+        self.Output.value = min        
+        
 
 class Float2Add(avango.script.Script):
     "Adds two float values"

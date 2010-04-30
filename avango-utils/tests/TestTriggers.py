@@ -35,10 +35,10 @@ class AddSubtractImmediateDeltaTrigger(avango.utils.ImmediateEdgeTrigger):
         self.Delta.value = 1
         self.Value.value = 0
     
-    def on_up_transition(self):
+    def on_down_transition(self):
         self.Value.value += self.Delta.value
         
-    def on_down_transition(self):
+    def on_up_transition(self):
         self.Value.value -= self.Delta.value
       
 class AddSubtractDeltaTrigger(avango.utils.EdgeTrigger):
@@ -50,10 +50,10 @@ class AddSubtractDeltaTrigger(avango.utils.EdgeTrigger):
         self.Delta.value = 1
         self.Value.value = 0
     
-    def on_up_transition(self):
+    def on_down_transition(self):
         self.Value.value += self.Delta.value
         
-    def on_down_transition(self):
+    def on_up_transition(self):
         self.Value.value -= self.Delta.value
           
         

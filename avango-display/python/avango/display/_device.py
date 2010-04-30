@@ -6,6 +6,8 @@ class User(avango.script.Script):
     Matrix = avango.osg.SFMatrix()
 
     def __init__(self):
+        self.super(User).__init__()
+        
         self.Active.value = True
 
 class Device(avango.script.Script):

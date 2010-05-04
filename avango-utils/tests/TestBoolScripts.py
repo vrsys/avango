@@ -42,6 +42,7 @@ class BoolScriptsTestCase(unittest.TestCase):
         self.assert_(avango.utils.nodes.Bool3And())
         self.assert_(avango.utils.nodes.Bool3Or())
         
+        
     def testBoolMerge(self):
         
         w1 = Widget()
@@ -66,6 +67,46 @@ class BoolScriptsTestCase(unittest.TestCase):
         avango.evaluate()
         self.assertEqual(combined_widget.Trigger.value, False)
         
+        
+    def testBoolXOr(self):
+        keep_alive = []
+        trigger_fields = []
+        num_fields = 10
+        for i in range(0,num_fields):
+            w = Widget(Trigger = False)
+            keep_alive.append(w)
+            trigger_fields.append(w.Trigger)
+        
+        output = avango.utils.make_boolX_or(trigger_fields)
+        self.assertEqual(output.value, False)
+        avango.evaluate()
+        self.assertEqual(output.value, False)
+        trigger_fields[1].value = True
+        avango.evaluate()
+        self.assertEqual(output.value, True)
+    
+        
+    def testBoolXOr(self):
+        keep_alive = []
+        trigger_fields = []
+        num_fields = 10
+        for i in range(0,num_fields):
+            w = Widget(Trigger = False)
+            keep_alive.append(w)
+            trigger_fields.append(w.Trigger)
+        
+        output = avango.utils.make_boolX_and(trigger_fields)
+        self.assertEqual(output.value, False)
+        avango.evaluate()
+        self.assertEqual(output.value, False)
+        for field in trigger_fields:
+            field.value = True
+        avango.evaluate()
+        self.assertEqual(output.value, True)
+        
+        trigger_fields[1].value = False
+        avango.evaluate()
+        self.assertEqual(output.value, False)
 
 def Suite():
    suite = unittest.TestLoader().loadTestsFromTestCase(BoolScriptsTestCase)

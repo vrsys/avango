@@ -26,10 +26,11 @@
 import socket
 import errno
 import datetime
-import avango.script
 import platform
 import re
 
+import avango.script
+from avango.script import field_has_changed
 
 class InterconnectOutputNode(avango.script.Script):
     def __init__(self):
@@ -451,3 +452,55 @@ class InterconnectClient(_InterconnectNetworkStream):
         self._output = InterconnectPipe()
         self._pending_output = ""
         return True
+  
+    
+class InterconnectManagerBase(avango.script.Script):
+    
+    Host = avango.SFString()
+    Port = avango.SFInt()
+    Connected = avango.SFBool()
+    
+    InputNode = avango.script.SFObject()
+    OutputNode = avango.script.SFObject()
+    
+    #InterconnectStream = avango.script.SFObject()
+    
+    def __init__(self):
+        self.super(InterconnectManagerBase).__init__()
+        
+        self._stream = None
+        self._connected = False
+    
+    def init_connection(self, interconnect_object):
+        try:
+            print "init_connection"
+            #self._stream = InterconnectServer()
+            self._stream = interconnect_object
+            self._stream.Port.connect_from(self.Port)
+            self._stream.Host.connect_from(self.Host)
+            
+            self.InputNode.value.set_stream(self._stream)
+            self.OutputNode.value.set_stream(self._stream)
+            
+            self.Connected.connect_from(self._stream.Connected)
+            
+            return True
+            
+        except socket.error, msg:
+            print "Connection: " + str(port) + " failed. Error: " + str(msg)
+            return False
+        
+    @field_has_changed(Connected)
+    def connection_status_changed(self):
+        
+        if not self._connected and self.Connected.value:
+            self.on_connection_online()
+        if self._connected and not self.Connected.value:
+            self.on_connection_offline()
+        self._connected = self.Connected.value
+        
+    def on_connection_online(self):
+        pass
+    
+    def on_connection_offline(self):
+        pass

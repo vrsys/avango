@@ -30,8 +30,9 @@ headers = Split('''
     Bool2And.h
     Bool3Or.h
     Bool3And.h
-    ProximitySensor.h
+    Doxygen.h
     Init.h
+    ProximitySensor.h
     windows_specific_utils.h
     ''')
 

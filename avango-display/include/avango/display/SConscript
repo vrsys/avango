@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # AVANGO is free software: you can redistribute it and/or modify         #
@@ -23,30 +23,10 @@
 
 import avango.build
 
+avango.build.Environment.prepend_include_path(Dir('../..').abspath)
+
 headers = Split('''
-    AssertException.h
-    CheckMacros.h
-    Checks.h
-    Config.h
-    DeferredTestReporter.h
-    DeferredTestResult.h
-    MemoryOutStream.h
-    ReportAssert.h
-    Test.h
-    TestDetails.h
-    TestList.h
-    TestMacros.h
-    TestReporter.h
-    TestReporterStdout.h
-    TestResults.h
-    TestRunner.h
-    TestSuite.h
-    TimeConstraint.h
-    TimeHelpers.h
-    UnitTest++.h  
-    XmlTestReporter.h
+    Doxygen.h
     ''')
 
-Alias('install-unittest', Install(avango.build.get_include_path('avango/UnitTest++'), headers))
-
-avango.build.TestEnvironment.prepend_include_path(Dir('../..').abspath)
+Alias('install-display', Install(avango.build.get_include_path('avango/display'), headers))

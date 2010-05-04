@@ -21,29 +21,24 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AVANGO_DAEMON_CONFIG_H)
-#define AVANGO_DAEMON_CONFIG_H
+#if !defined(AVANGO_DISPLAY_DOXYGEN_H)
+#define AVANGO_DISPLAY_DOXYGEN_H
+
+/**
+ * \defgroup av_display AVANGO Display Library
+ */
 
 /**
  * \file
- * \ingroup av_daemon
+ * \ingroup av_display
  */
 
-#if %(AVANGO_DAEMON_DEBUG)s
-#define AVANGO_DAEMON_DEBUG 1
-#else
-#undef AVANGO_DAEMON_DEBUG
-#endif
+/**
+ * \namespace av::display
+ * AVANGO Display Library
+ *
+ * \ingroup av_display
+ */
 
-#if %(AVANGO_DAEMON_VRPN_SUPPORT)s
-#define VRPN_SUPPORT 1
-#else
-#undef VRPN_SUPPORT
-#endif
-
-#define AVANGO_DAEMON_VERSION_MAJOR %(AVANGO_DAEMON_VERSION_MAJOR)s
-#define AVANGO_DAEMON_VERSION_MINOR %(AVANGO_DAEMON_VERSION_MINOR)s
-#define AVANGO_DAEMON_VERSION_MAINT %(AVANGO_DAEMON_VERSION_MAINT)s
-
-#endif // #if !defined(AVANGO_DAEMON_CONFIG_H)
+#endif // #if !defined(AVANGO_DISPLAY_DOXYGEN_H)
 

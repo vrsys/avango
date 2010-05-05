@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # AVANGO is free software: you can redistribute it and/or modify         #
@@ -18,8 +18,6 @@
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
 # License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# AVANGO is a trademark owned by FhG.                                    #
 #                                                                        #
 ##########################################################################
 

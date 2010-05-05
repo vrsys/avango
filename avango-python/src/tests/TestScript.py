@@ -34,12 +34,13 @@ nodes = avango.nodefactory.NodeFactory(module=__name__)
 class Empty(avango.script.Script):
     pass
 
-#class Local(avango.script.Script):
-#    value = 42
-#
-#    def __init__(self):
-#        self.other_value = 10
-#
+class Local(avango.script.Script):
+    value = 42
+
+    def __init__(self):
+        self.super(Local, self).__init__()
+        self.other_value = 10
+
 #class DerivedLocal(Local): pass
 #
 #class HasFields(avango.script.Script):
@@ -196,36 +197,36 @@ class ScriptTestCase(unittest.TestCase):
     def testCreateInstance(self):
         self.assert_(nodes.Empty())
 
-#    def testGetClassAttribute(self):
-#        node = nodes.Local()
-#        self.assert_(node)
-#        self.assertEqual(node.value, 42)
-#
-#    def testSetClassAttribute(self):
-#        node1 = nodes.Local()
-#        node2 = nodes.Local()
-#        self.assert_(node1)
-#        self.assertEqual(node1.value, 42)
-#        self.assertEqual(node2.value, 42)
-#        node1.value = 12
-#        self.assertEqual(node1.value, 12)
-#        self.assertEqual(node2.value, 42)
-#
-#    def testGetAttribute(self):
-#        node = nodes.Local()
-#        self.assert_(node)
-#        self.assertEqual(node.other_value, 10)
-#
-#    def testSetAttribute(self):
-#        node1 = nodes.Local()
-#        node2 = nodes.Local()
-#        self.assert_(node1)
-#        self.assertEqual(node1.other_value, 10)
-#        self.assertEqual(node2.other_value, 10)
-#        node1.other_value = 12
-#        self.assertEqual(node1.other_value, 12)
-#        self.assertEqual(node2.other_value, 10)
-#
+    def testGetClassAttribute(self):
+        node = nodes.Local()
+        self.assert_(node)
+        self.assertEqual(node.value, 42)
+
+    def testSetClassAttribute(self):
+        node1 = nodes.Local()
+        node2 = nodes.Local()
+        self.assert_(node1)
+        self.assertEqual(node1.value, 42)
+        self.assertEqual(node2.value, 42)
+        node1.value = 12
+        self.assertEqual(node1.value, 12)
+        self.assertEqual(node2.value, 42)
+
+    def testGetAttribute(self):
+        node = nodes.Local()
+        self.assert_(node)
+        self.assertEqual(node.other_value, 10)
+
+    def testSetAttribute(self):
+        node1 = nodes.Local()
+        node2 = nodes.Local()
+        self.assert_(node1)
+        self.assertEqual(node1.other_value, 10)
+        self.assertEqual(node2.other_value, 10)
+        node1.other_value = 12
+        self.assertEqual(node1.other_value, 12)
+        self.assertEqual(node2.other_value, 10)
+
 #    def testGetField(self):
 #        node = nodes.HasFields(field=42)
 #        self.assert_(node)
@@ -484,46 +485,4 @@ class ScriptTestCase(unittest.TestCase):
 #        self.assertEqual(23, node1._get_field("field_0").value)
         
 def Suite():
-    suite = unittest.TestSuite()
-
-    ScriptTests= [
-        'testCreateInstance',
-        #'testGetClassAttribute',
-        #'testSetClassAttribute',
-        #'testGetAttribute',
-        #'testSetAttribute',
-        #'testGetField',
-        #'testSetField',
-        #'testGetValues',
-        #'testSetFieldInMultipleInstances',
-        #'testEvaluate',
-        #'testEvaluateWithValues',
-        #'testStandardConstructor',
-        #'testStandardConstructorWithInitialization',
-        #'testFieldHasChanged',
-        #'testFieldConnection',
-        #'testSetObjectValue',
-        #'testDerivedGetClassAttribute',
-        #'testDerivedGetField',
-        #'testDoubleDerivedGetField',
-        #'testDerivedFieldHasChanged',
-        #'testDerivedHasFieldsWithOwnCallback',
-        #'testDoubleDerivedFieldHasChanged',
-        #'testCreateInstanceFromModule',
-        #'testCreateInstanceFromModuleWithConstructor',
-        #'testInstanceSelfCompare',
-        #'testTouchMyself',
-        #'testDerivedExposedTouch',
-        #'testIndirectField',
-        #'testAddField',
-        #'testGenericFieldHadChanged',
-        #'testInitCascade',
-        #'testDerivedUpcalling',
-        #'testDoubleDerivedUpcalling',
-        #'testSetAttributeWithNameOfField',
-        #'testDerivedFromMultipleScriptFieldHasChanged',
-        #'testDynamicFieldRemoval',
-    ]
-    suite.addTests(map(ScriptTestCase, ScriptTests))
-
-    return suite
+    return unittest.TestLoader().loadTestsFromTestCase(ScriptTestCase)

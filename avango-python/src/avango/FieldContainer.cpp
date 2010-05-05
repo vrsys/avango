@@ -29,6 +29,7 @@
 #include <avango/ContainerPool.h>
 
 #include "FieldContainer.h"
+#include "script/Script.h"
 
 using namespace boost::python;
 
@@ -44,8 +45,8 @@ bool is_derived_from(av::FieldContainer* self, std::string name)
 
 av::Link<av::FieldContainer> make_instance_by_name(std::string name)
 {
-  av::Link<av::FieldContainer> retval(dynamic_cast<av::FieldContainer*>(av::Type::createInstanceOfType(name)));
-  return retval;
+  av::Typed* instance(av::Type::createInstanceOfType(name));
+  return av::Link<av::FieldContainer>(dynamic_cast<av::FieldContainer*>(instance));
 }
 
 av::Field* make_field_by_name(std::string name)
@@ -78,6 +79,62 @@ void FieldContainer_touch(av::FieldContainer* self)
   self->touch();
 }
 
+namespace
+{
+  class FieldContainerLink : public av::Link<av::FieldContainer>
+  {
+  public:
+
+    FieldContainerLink(av::Link<av::FieldContainer> const& container) :
+      mLink(container)
+    {
+    }
+
+    av::FieldContainer* getPtr(void) const
+    {
+      return mLink.getPtr();
+    }
+
+  private:
+    av::Link<av::FieldContainer> mLink;
+  };
+
+  av::FieldContainer* get_pointer(const FieldContainerLink& link)
+  {
+    return link.getPtr();
+  }
+
+  struct FieldContainerLinkConverter
+  {
+    static PyObject* convert(av::Link<av::FieldContainer> const& container)
+    {
+      av::script::Script* script(dynamic_cast<av::script::Script*>(container.getPtr()));
+      if (script)
+      {
+        PyObject* result(script->getSelf());
+        Py_INCREF(result);
+        return script->getSelf();
+      }
+
+      object wrapped_container((FieldContainerLink(container)));
+      PyObject* result(wrapped_container.ptr());
+      Py_INCREF(result);
+      return result;
+    }
+  };
+}
+
+namespace boost
+{
+  namespace python
+  {
+    template<> struct pointee<FieldContainerLink>
+    {
+      typedef av::FieldContainer type;
+    };
+  }
+}
+
 void init_FieldContainer(void)
 {
 
@@ -93,7 +150,7 @@ void init_FieldContainer(void)
 
   class_<av::Distributed, av::Link<av::Distributed>, bases<av::Base>, boost::noncopyable >("Distributed", "docstring", no_init);
 
-  class_<av::FieldContainer, av::Link<av::FieldContainer>, bases<av::Distributed>, boost::noncopyable >("FieldContainer", "docstring", no_init)
+  class_<av::FieldContainer, FieldContainerLink, bases<av::Distributed>, boost::noncopyable >("FieldContainer", "docstring", no_init)
     //Deprecated. Use the non underscore versions
     .def("_get_type", get_type_name)
     .def("_is_derived_from", is_derived_from)
@@ -120,6 +177,8 @@ void init_FieldContainer(void)
     .def("read", &av::FieldContainer::read)
     .def("write", &av::FieldContainer::write)
     ;
+
+  to_python_converter<av::Link<av::FieldContainer>, FieldContainerLinkConverter>();
 
   def("_make_instance_by_name", make_instance_by_name);
   def("_make_field_by_name", make_field_by_name, return_internal_reference<>());

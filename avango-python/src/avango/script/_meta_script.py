@@ -27,18 +27,42 @@ import avango.nodefactory
 import _script
 
 class ScriptMetaclass(type):
-    def __init__(cls, name, bases, dict):
-        super(ScriptMetaclass, cls).__init__(name, bases, dict)
+    def __init__(cls, classname, bases, classdict):
+        super(ScriptMetaclass, cls).__init__(classname, bases, classdict)
 
-        class Wrapper(_script._Script):
-            def __init__(self):
-                super(Wrapper, self).__init__(self._type)
+        wrapped_bases = []
+        for base in bases:
+            if base == object:
+                base = _script._Script
+            else:
+                base = base._wrapper
+            wrapped_bases.append(base)
+        if len(wrapped_bases) != 1:
+            raise "Unsupported multiple inheritance"
+        wrapped_base = wrapped_bases[0]
+        class Wrapper(wrapped_base):
+            pass
+        cls._wrapper = Wrapper
+
+        for name, attribute in classdict.iteritems():
+            setattr(Wrapper, name, attribute)
 
         def create():
             return Wrapper()
-        mangled_classname = avango.nodefactory.mangle_class_name(dict['__module__'], name)
+        mangled_classname = avango.nodefactory.mangle_class_name(classdict['__module__'], classname)
         Wrapper._type = _script._create_type(mangled_classname, create)
 
+        def __new(cls, **args):
+            return cls._wrapper()
+        setattr(cls, '__new__', staticmethod(__new))
 
 class Script(object):
     __metaclass__ = ScriptMetaclass
+
+    def __init__(self):
+        self.super(Script, self).__init__(self._type)
+
+    @staticmethod
+    def super(cls, inst):
+        'Replacement for built-in super to be used by subclasses'
+        return super(cls._wrapper, inst)

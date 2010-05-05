@@ -30,6 +30,7 @@ avango.build.Environment.prepend_library_path(Dir('.').abspath)
 avango.build.Environment.prepend_library_path(Dir('src/avango').abspath)
 avango.build.Environment.prepend_library_path(Dir('src/avango/script').abspath)
 avango_env = avango.build.PythonEnvironment()
+avango_env.Append(LIBS=["avangoScript"])
 avango.build.add_library(avango_env, 'boost_python')
 avango.build.add_library(avango_env, 'avango-core')
 
@@ -41,6 +42,7 @@ avango_script_library_files = Split("""
     src/avango/script/Init.cpp
     src/avango/script/Types.cpp
     src/avango/script/Update.cpp
+    src/avango/script/Script.cpp
     """)
 avango_lib_env = avango.build.Environment()
 avango_lib_env.Append(CPPDEFINES='AV_PYTHON_LIBRARY')
@@ -74,7 +76,6 @@ Alias('install-python', [install_python_files, install_python_module])
 
 av_script_files = Split("""
     src/avango/script/_script.cpp
-    src/avango/script/Script.cpp
     """)
 av_script_python_files = Split("""
     src/avango/script/__init__.py
@@ -82,7 +83,6 @@ av_script_python_files = Split("""
     src/avango/script/_container.py
     """)
 avango_script_env = avango_env.Clone()
-avango_script_env.Append(LIBS=["avangoScript"])
 av_script = avango_script_env.SharedLibrary("src/avango/script/_script", av_script_files)
 Depends(av_script, avango_script_library)
 Depends(av_script, av_script_python_files)

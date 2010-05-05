@@ -26,11 +26,50 @@
 #if !defined(AV_SCRIPT_SCRIPT_H)
 #define AV_SCRIPT_SCRIPT_H
 
+#include <avango/FieldContainer.h>
+#include <boost/python.hpp>
+
 namespace av
 {
   namespace script
   {
+
+    class Script : public av::FieldContainer, public boost::python::wrapper<Script>
+    {
+    public:
+      Script(PyObject* self, av::Type type);
+
+      /*virtual*/ av::Type getTypeId() const;
+      static ::av::Type getClassTypeId(void);
+
+      static void initClass(void);
+
+      /*virtual*/ void refImpl();
+      /*virtual*/ void unrefImpl();
+      /*virtual*/ void unrefWithoutDeletionImpl();
+      /*virtual*/ int refCountImpl();
+      /*virtual*/ void setFloatingRefImpl();
+
+      PyObject* getSelf(void) const;
+
+      static void register_exception_handler(boost::python::object handler);
+      static void handle_exception(void);
+
+    private:
+
+      /* Forbid copy constructor and operator */
+      Script(const Script&) {}
+      void operator=(const Script&) {}
+
+      PyObject* mSelf;
+      av::Type mType;
+      bool mIsFloatingRef;
+      static av::Type sType;
+      static boost::python::object sHandler;
+    };
+
    void register_script(void);
+
   }
 }
 

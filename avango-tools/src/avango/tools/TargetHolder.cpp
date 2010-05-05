@@ -53,9 +53,9 @@ av::tools::TargetHolder::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object, av::tools::TargetHolder, true);
+    AV_FC_INIT(av::FieldContainer, av::tools::TargetHolder, true);
 
     SFTargetHolder::initClass("av::tools::SFTargetHolder", "av::Field");
     MFTargetHolder::initClass("av::tools::MFTargetHolder", "av::Field");

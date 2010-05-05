@@ -103,7 +103,7 @@ av::tools::PickSelector::pick()
 
     if(mIntersector->containsIntersections())
     {
-      MFObject::ContainerType targets;
+      MFContainer::ContainerType targets;
       const bool create_node_paths = CreateNodePaths.getValue();
       const bool create_intersections = CreateIntersections.getValue();
       const ::osgUtil::LineSegmentIntersector::Intersections &intersections =
@@ -115,7 +115,7 @@ av::tools::PickSelector::pick()
       for (::osgUtil::LineSegmentIntersector::Intersections::const_iterator intersection =
            intersections.begin(); intersection != intersections.end(); ++intersection)
       {
-        av::Link<av::Object> target;
+        av::Link<av::FieldContainer> target;
         std::list<av::Link<av::osg::Node> > node_path_list;
 
         // iterate over the node path from the intersected node to the root node,

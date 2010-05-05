@@ -40,7 +40,7 @@ namespace av
   namespace tools
   {
     /**
-     * ObjectSelector class selects targets from given av::Objects.
+     * ObjectSelector class selects targets from given av::FieldContainers.
      *
      * \ingroup av_tools
      */
@@ -72,7 +72,7 @@ namespace av
       /**
        * Defines the objects which may be selected. The output is in SelectedTargets.
        */
-      MFObject SelectableObjects;
+      MFContainer SelectableObjects;
 
       /**
        * Defines additional selectable objects wihch may come as output from another Selector.

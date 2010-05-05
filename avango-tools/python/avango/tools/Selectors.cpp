@@ -81,7 +81,7 @@ void init_Selectors(void)
   register_field<av::tools::SFUnionSelector>("SFUnionSelector");
   register_multifield<av::tools::MFUnionSelector>("MFUnionSelector");
 
-  class_<av::tools::Selector, av::Link<av::tools::Selector>, bases<av::Object>, boost::noncopyable >("Selector", "Selector base class", no_init);
+  class_<av::tools::Selector, av::Link<av::tools::Selector>, bases<av::FieldContainer>, boost::noncopyable >("Selector", "Selector base class", no_init);
   class_<av::tools::ChangeSelector, av::Link<av::tools::ChangeSelector>, bases<av::tools::Selector>, boost::noncopyable >("ChangeSelector", "ChangeSelector class", no_init);
   class_<av::tools::InjectSelector, av::Link<av::tools::InjectSelector>, bases<av::tools::Selector>, boost::noncopyable >("InjectSelector", "InjectSelector class", no_init);
   class_<av::tools::ObjectSelector, av::Link<av::tools::ObjectSelector>, bases<av::tools::Selector>, boost::noncopyable >("ObjectSelector", "ObjectSelector class", no_init);

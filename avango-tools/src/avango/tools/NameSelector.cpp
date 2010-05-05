@@ -98,7 +98,7 @@ av::tools::NameSelector::evaluate()
     for (MFTargetHolder::ContainerType::const_iterator sel_holder = sel_targets.begin();
          sel_holder != sel_targets.end(); ++sel_holder)
     {
-      SFObject::ValueType target = (*sel_holder)->Target.getValue();
+      SFContainer::ValueType target = (*sel_holder)->Target.getValue();
       if (target.isValid())
       {
         SFString::ValueType name = target->Name.getValue();
@@ -114,7 +114,7 @@ av::tools::NameSelector::evaluate()
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     bool found = false;
 
     if (isSelectable(*target))
@@ -186,7 +186,7 @@ av::tools::NameSelector::evaluate()
 }
 
 bool
-av::tools::NameSelector::isSelectable(av::Object& object)
+av::tools::NameSelector::isSelectable(av::FieldContainer& object)
 {
   std::set<std::string>::const_iterator name = mNames.end();
   const std::string object_name = object.Name.getValue();

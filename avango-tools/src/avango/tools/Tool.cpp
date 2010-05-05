@@ -50,10 +50,10 @@ av::tools::Tool::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
     av::tools::TargetHolder::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::Object, av::tools::Tool, true);
+    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Tool, true);
 
     SFTool::initClass("av::tools::SFTool", "av::Field");
     MFTool::initClass("av::tools::MFTool", "av::Field");
@@ -63,7 +63,7 @@ av::tools::Tool::initClass()
 /* virtual */ void
 av::tools::Tool::evaluate()
 {
-  av::Object::evaluate();
+  av::FieldContainer::evaluate();
 
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
   for (MFTargetHolder::ContainerType::const_iterator last_holder = mLastTargets.begin();

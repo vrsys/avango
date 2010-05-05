@@ -45,7 +45,7 @@ AV_FIELD_DEFINE(av::tools::MFProximitySelector);
 
 av::tools::ProximitySelector::ProximitySelector()
 {
-  AV_FC_ADD_FIELD(TargetObjects, MFObject::ContainerType());
+  AV_FC_ADD_FIELD(TargetObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(Position, ::osg::Vec3(0.0, 0.0, 0.0));
   AV_FC_ADD_FIELD(PositionTransform, ::osg::Matrix());
@@ -79,7 +79,7 @@ av::tools::ProximitySelector::evaluate()
   av::tools::Selector::evaluate();
 
   // get needed field values
-  const MFObject::ContainerType &target_objects = TargetObjects.getValue();
+  const MFContainer::ContainerType &target_objects = TargetObjects.getValue();
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
   const ::osg::Vec3 pos = Position.getValue() * PositionTransform.getValue();
   const double prox_radius = ProximityRadius.getValue();
@@ -124,7 +124,7 @@ av::tools::ProximitySelector::evaluate()
     MFTargetHolder::ContainerType::iterator holder = mSelTargets.begin();
     while (holder != mSelTargets.end())
     {
-      const SFObject::ValueType &target = (*holder)->Target.getValue();
+      const SFContainer::ValueType &target = (*holder)->Target.getValue();
       if (hasObject(target_objects, target) || av::tools::hasTarget(targets, target))
         ++holder;
       else
@@ -136,7 +136,7 @@ av::tools::ProximitySelector::evaluate()
   MFTargetHolder::ContainerType new_sel_targets;
 
   // check for new proximity candidates in TargetObjects
-  for (MFObject::ContainerType::const_iterator target = target_objects.begin();
+  for (MFContainer::ContainerType::const_iterator target = target_objects.begin();
        target != target_objects.end(); ++target)
   {
     if (!hasTarget(mProxCands, *target) && !av::tools::hasTarget(mSelTargets, *target))
@@ -162,7 +162,7 @@ av::tools::ProximitySelector::evaluate()
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     if (!hasTarget(mProxCands, target) && !av::tools::hasTarget(mSelTargets, target))
     {
       // we only accept osg nodes to get the absolute transform
@@ -210,7 +210,7 @@ av::tools::ProximitySelector::evaluate()
     MFTargetHolder::ContainerType::iterator holder = mSelTargets.begin();
     while (holder != mSelTargets.end())
     {
-      const SFObject::ValueType target = (*holder)->Target.getValue();
+      const SFContainer::ValueType target = (*holder)->Target.getValue();
       MFTargetHolder::ContainerType::const_iterator input_holder = av::tools::find(targets, target);
       if (input_holder != targets.end() && *holder != *input_holder)
         *holder = *input_holder;

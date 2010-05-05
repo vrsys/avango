@@ -50,10 +50,10 @@ av::tools::Selector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
     av::tools::TargetHolder::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::Object, av::tools::Selector, true);
+    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Selector, true);
 
     SFSelector::initClass("av::tools::SFSelector", "av::Field");
     MFSelector::initClass("av::tools::MFSelector", "av::Field");

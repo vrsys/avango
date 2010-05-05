@@ -71,7 +71,7 @@ namespace av
       /**
        * Defines the input objects whose distances will be obversed.
        */
-      MFObject TargetObjects;
+      MFContainer TargetObjects;
 
       /**
        * Defines additional input targets which may come as output from another Selector.
@@ -126,7 +126,7 @@ namespace av
       typedef std::list<TargetTimePair_t> TargetTimeList_t;
 
       static inline TargetTimeList_t::iterator
-      find(TargetTimeList_t& candidates, const SFObject::ValueType& target)
+      find(TargetTimeList_t& candidates, const SFContainer::ValueType& target)
       {
         TargetTimeList_t::iterator candidate = candidates.begin();
         while (candidate != candidates.end() && candidate->first != target)
@@ -135,7 +135,7 @@ namespace av
       }
 
       inline bool
-      hasTarget(TargetTimeList_t& candidates, const SFObject::ValueType& target)
+      hasTarget(TargetTimeList_t& candidates, const SFContainer::ValueType& target)
       {
         return (find(candidates, target) != candidates.end());
       }

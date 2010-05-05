@@ -85,7 +85,7 @@ av::tools::DragTool::evaluateKeptTarget(TargetHolder& holder)
   // apply dragging only if drag transformation matrix was changed
   if (mDragged)
   {
-    const SFObject::ValueType &target_obj = holder.Target.getValue();
+    const SFContainer::ValueType &target_obj = holder.Target.getValue();
 
     // apply dragging only to MatrixTransform nodes.
     av::osg::MatrixTransform *target = dynamic_cast<av::osg::MatrixTransform*>(target_obj.getPtr());

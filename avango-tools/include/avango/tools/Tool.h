@@ -31,7 +31,7 @@
  * \ingroup av_tools
  */
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/tools/TargetHolder.h>
 #include "windows_specific_tools.h"
 
@@ -45,7 +45,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class AV_TOOLS_DLL Tool : public av::Object
+    class AV_TOOLS_DLL Tool : public av::FieldContainer
     {
       AV_FC_DECLARE_ABSTRACT();
 

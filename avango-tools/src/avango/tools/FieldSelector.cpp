@@ -83,7 +83,7 @@ av::tools::FieldSelector::evaluate()
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     bool found = false;
 
     if (isSelectable(*target))
@@ -155,7 +155,7 @@ av::tools::FieldSelector::evaluate()
 }
 
 bool
-av::tools::FieldSelector::isSelectable(av::Object& object)
+av::tools::FieldSelector::isSelectable(av::FieldContainer& object)
 {
   const std::string field_name = SelectableFieldName.getValue();
   const std::vector<Field*> &fields = object.getFields();

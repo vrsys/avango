@@ -71,7 +71,7 @@ av::tools::InjectSelector::evaluate()
   for (MFTargetHolder::ContainerType::iterator holder = selected_targets.begin();
        holder != selected_targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     MFTargetHolder::ContainerType::const_iterator inject_holder = find(inject_targets, target);
     if (inject_holder != inject_targets.end())
     {

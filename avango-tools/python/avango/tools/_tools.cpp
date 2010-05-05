@@ -88,9 +88,9 @@ BOOST_PYTHON_MODULE(_tools)
   register_field<av::tools::SFTool>("SFTool");
   register_multifield<av::tools::MFTool>("MFTool");
 
-  class_<av::tools::Tool, av::Link<av::tools::Tool>, bases<av::Object>, boost::noncopyable >("Tool", "Tool base class", no_init);
+  class_<av::tools::Tool, av::Link<av::tools::Tool>, bases<av::FieldContainer>, boost::noncopyable >("Tool", "Tool base class", no_init);
   class_<av::tools::ScriptTool, av::Link<av::tools::ScriptTool>, bases<av::tools::Tool>, boost::noncopyable >("ScriptTool", "ScriptTool class", no_init);
-  class_<av::tools::TargetHolder, av::Link<av::tools::TargetHolder>, bases<av::Object>, boost::noncopyable >("TargetHolder", "TargetHolder base class", no_init)
+  class_<av::tools::TargetHolder, av::Link<av::tools::TargetHolder>, bases<av::FieldContainer>, boost::noncopyable >("TargetHolder", "TargetHolder base class", no_init)
     .def("find", TargetHolderFind)
     ;
 

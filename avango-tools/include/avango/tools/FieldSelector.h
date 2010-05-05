@@ -102,7 +102,7 @@ namespace av
 
     protected:
 
-      bool isSelectable(av::Object& object);
+      bool isSelectable(av::FieldContainer& object);
     };
 
     typedef SingleField<Link<FieldSelector> > SFFieldSelector;

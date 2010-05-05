@@ -44,7 +44,7 @@ AV_FIELD_DEFINE(av::tools::MFObjectSelector);
 av::tools::ObjectSelector::ObjectSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
-  AV_FC_ADD_FIELD(SelectableObjects, MFObject::ContainerType());
+  AV_FC_ADD_FIELD(SelectableObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(SelectableTargets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(SearchTargetHolderNodePaths, false);
   AV_FC_ADD_FIELD(SearchOSGNodePaths, false);
@@ -73,14 +73,14 @@ av::tools::ObjectSelector::evaluate()
   av::tools::Selector::evaluate();
 
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
-  const MFObject::ContainerType &sel_objects = SelectableObjects.getValue();
+  const MFContainer::ContainerType &sel_objects = SelectableObjects.getValue();
   const MFTargetHolder::ContainerType &sel_targets = SelectableTargets.getValue();
   MFTargetHolder::ContainerType selected_targets;
 
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     bool found = false;
 
     if (hasObject(sel_objects, target))

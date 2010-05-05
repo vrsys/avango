@@ -83,7 +83,7 @@ av::tools::UnionSelector::evaluate()
     for (MFTargetHolder::ContainerType::const_iterator holder1 = set1.begin();
          holder1 != set1.end(); ++holder1)
     {
-      const SFObject::ValueType &target = (*holder1)->Target.getValue();
+      const SFContainer::ValueType &target = (*holder1)->Target.getValue();
       MFTargetHolder::ContainerType::const_iterator holder2 = find(set2, target);
       if (holder2 == set2.end())
         selected_targets.push_back(*holder1);

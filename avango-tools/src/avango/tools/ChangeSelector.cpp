@@ -79,7 +79,7 @@ av::tools::ChangeSelector::evaluate()
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     (hasTarget(mLastTargets, target) ? kept_targets : added_targets).push_back(*holder);
   }
 

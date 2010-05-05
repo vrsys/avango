@@ -40,7 +40,7 @@ namespace av
   namespace tools
   {
     /**
-     * TypeSelector class selects targets from the types of given av::Objects.
+     * TypeSelector class selects targets from the types of given av::FieldContainers.
      *
      * \ingroup av_tools
      */
@@ -72,7 +72,7 @@ namespace av
       /**
        * Defines types by objects which may be selected. The output is in SelectedTargets.
        */
-      MFObject SelectableTypes;
+      MFContainer SelectableTypes;
 
       /**
        * Defines additional types by objects which may come as output from another Selector.
@@ -101,7 +101,7 @@ namespace av
 
     protected:
 
-      bool isSelectable(const av::Object& object);
+      bool isSelectable(const av::FieldContainer& object);
 
       std::set<Type> mTypes;
       bool mTypesDirty;

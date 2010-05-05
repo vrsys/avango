@@ -45,7 +45,7 @@ av::tools::TypeSelector::TypeSelector():
   mTypesDirty(true)
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
-  AV_FC_ADD_FIELD(SelectableTypes, MFObject::ContainerType());
+  AV_FC_ADD_FIELD(SelectableTypes, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(SelectableTargetTypes, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(EqualTypeOnly, false);
   AV_FC_ADD_FIELD(SearchTargetHolderNodePaths, false);
@@ -87,8 +87,8 @@ av::tools::TypeSelector::evaluate()
   {
     mTypes.clear();
 
-    const MFObject::ContainerType &sel_objects = SelectableTypes.getValue();
-    for (MFObject::ContainerType::const_iterator sel_object = sel_objects.begin();
+    const MFContainer::ContainerType &sel_objects = SelectableTypes.getValue();
+    for (MFContainer::ContainerType::const_iterator sel_object = sel_objects.begin();
          sel_object != sel_objects.end(); ++sel_object)
     {
       mTypes.insert((*sel_object)->getTypeId());
@@ -109,7 +109,7 @@ av::tools::TypeSelector::evaluate()
   for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
        holder != targets.end(); ++holder)
   {
-    const SFObject::ValueType &target = (*holder)->Target.getValue();
+    const SFContainer::ValueType &target = (*holder)->Target.getValue();
     bool found = false;
 
     if (isSelectable(*target))
@@ -181,7 +181,7 @@ av::tools::TypeSelector::evaluate()
 }
 
 bool
-av::tools::TypeSelector::isSelectable(const av::Object& object)
+av::tools::TypeSelector::isSelectable(const av::FieldContainer& object)
 {
   std::set<Type>::const_iterator type = mTypes.end();
   const Type object_type = object.getTypeId();

@@ -31,7 +31,7 @@
  * \ingroup av_tools
  */
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/tools/Config.h>
 #include "windows_specific_tools.h"
 
@@ -48,11 +48,11 @@ namespace av
      * TargetHolder base class
      *
      * TargetHolders are created by or passed through Selectors and passed to Tools.
-     * They typically hold an av::Object reference that should be manipulated by a tool.
+     * They typically hold an av::FieldContainer reference that should be manipulated by a tool.
      *
      * \ingroup av_tools
      */
-    class AV_TOOLS_DLL TargetHolder : public av::Object
+    class AV_TOOLS_DLL TargetHolder : public av::FieldContainer
     {
       AV_FC_DECLARE();
 
@@ -75,12 +75,12 @@ namespace av
       /**
        * Defines the target that should be used by a Selector or Tool.
        */
-      SFObject Target;
+      SFContainer Target;
 
       /**
        * May be used to define the creator of this TargetHolder instance, typically a Selector.
        */
-      SFObject Creator;
+      SFContainer Creator;
 
       /**
        * Selectors put incoming TargetHolders here, if they want to replace the Targetholder
@@ -113,10 +113,10 @@ namespace av
     };
 
     /**
-     * Shortcut for std::find in av::MFObject values.
+     * Shortcut for std::find in av::MFContainer values.
      */
     inline bool
-    hasObject(const av::MFObject::ContainerType& container, const av::MFObject::ValueType& value)
+    hasObject(const av::MFContainer::ContainerType& container, const av::MFContainer::ValueType& value)
     {
       return (std::find(container.begin(), container.end(), value) != container.end());
     }
@@ -125,7 +125,7 @@ namespace av
      * Search in MFTargetHolder values.
      */
     inline MFTargetHolder::ContainerType::iterator
-    find(MFTargetHolder::ContainerType& holders, const SFObject::ValueType& target)
+    find(MFTargetHolder::ContainerType& holders, const SFContainer::ValueType& target)
     {
       MFTargetHolder::ContainerType::iterator holder = holders.begin();
       while (holder != holders.end() && (*holder)->Target.getValue() != target)
@@ -134,7 +134,7 @@ namespace av
     }
 
     inline bool
-    hasTarget(MFTargetHolder::ContainerType& holders, const SFObject::ValueType& target)
+    hasTarget(MFTargetHolder::ContainerType& holders, const SFContainer::ValueType& target)
     {
       return (find(holders, target) != holders.end());
     }
@@ -143,7 +143,7 @@ namespace av
      * Search in const MFTargetHolder values.
      */
     inline MFTargetHolder::ContainerType::const_iterator
-    find(const MFTargetHolder::ContainerType& holders, const SFObject::ValueType& target)
+    find(const MFTargetHolder::ContainerType& holders, const SFContainer::ValueType& target)
     {
       MFTargetHolder::ContainerType::const_iterator holder = holders.begin();
       while (holder != holders.end() && (*holder)->Target.getValue() != target)
@@ -152,7 +152,7 @@ namespace av
     }
 
     inline bool
-    hasTarget(const MFTargetHolder::ContainerType& holders, const SFObject::ValueType& target)
+    hasTarget(const MFTargetHolder::ContainerType& holders, const SFContainer::ValueType& target)
     {
       return (find(holders, target) != holders.end());
     }

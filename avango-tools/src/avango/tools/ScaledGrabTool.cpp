@@ -68,7 +68,7 @@ av::tools::ScaledGrabTool::initClass()
 /* virtual */ void
 av::tools::ScaledGrabTool::evaluateAddedTarget(TargetHolder& holder)
 {
-  const SFObject::ValueType &target_obj = holder.Target.getValue();
+  const SFContainer::ValueType &target_obj = holder.Target.getValue();
 
   // grab only MatrixTransform nodes
   av::osg::MatrixTransform *target = dynamic_cast<av::osg::MatrixTransform*>(target_obj.getPtr());
@@ -130,7 +130,7 @@ av::tools::ScaledGrabTool::evaluateAddedTarget(TargetHolder& holder)
 /* virtual */ void
 av::tools::ScaledGrabTool::evaluateKeptTarget(TargetHolder& holder)
 {
-  const SFObject::ValueType &target_obj = holder.Target.getValue();
+  const SFContainer::ValueType &target_obj = holder.Target.getValue();
 
   // apply dragging only to MatrixTransform nodes
   av::osg::MatrixTransform *target = dynamic_cast<av::osg::MatrixTransform*>(target_obj.getPtr());

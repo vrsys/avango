@@ -41,14 +41,14 @@ class Local(avango.script.Script):
         self.super(Local, self).__init__()
         self.other_value = 10
 
-#class DerivedLocal(Local): pass
-#
-#class HasFields(avango.script.Script):
-#    field = avango.SFInt()
-#    anobject = avango.script.SFObject()
-#
-#class DerivedHasFields(HasFields): pass
-#
+class DerivedLocal(Local): pass
+
+class HasFields(avango.script.Script):
+    field = avango.SFInt()
+    anobject = avango.script.SFObject()
+
+class DerivedHasFields(HasFields): pass
+
 #class DerivedHasFieldsWithOwnCallback(HasFields):
 #    def __init__(self):
 #        self.value = 0
@@ -56,9 +56,9 @@ class Local(avango.script.Script):
 #    @avango.script.field_has_changed(HasFields.field)
 #    def callback(self):
 #        self.value = 1
-#
-#class DoubleDerivedHasFields(DerivedHasFields): pass
-#
+
+class DoubleDerivedHasFields(DerivedHasFields): pass
+
 #class IncValue(avango.script.Script):
 #    field = avango.SFInt()
 #
@@ -91,11 +91,11 @@ class Local(avango.script.Script):
 #class DerivedHasFieldCallbacks(HasFieldCallbacks): pass
 #
 #class DoubleDerivedHasFieldCallbacks(DerivedHasFieldCallbacks): pass
-#
-#class SelfReturn(avango.script.Script):
-#    def self(self):
-#        return self
-#
+
+class SelfReturn(avango.script.Script):
+    def self(self):
+        return self
+
 #class TouchMyself(avango.script.Script):
 #    def __init__(self):
 #        self.value = 1
@@ -131,11 +131,11 @@ class Local(avango.script.Script):
 #    def callback(self, name, field):
 #        self.name = name
 #        self.value = field.value
-#
-#class DerivedLocalWithInit(Local):
-#    def __init__(self):
-#        self.init_super(Local)
-#
+
+class DerivedLocalWithInit(Local):
+    def __init__(self):
+        self.super(DerivedLocalWithInit, self).__init__()
+
 #class DerivedUpcallingIncValue(IncValue):
 #    def __init__(self):
 #        self.super(DerivedUpcallingIncValue).__init__()
@@ -192,6 +192,7 @@ class Local(avango.script.Script):
 #            name = str(prefix) + str(i)
 #            self.add_and_init_field(avango.SFInt(), name, 0)
 
+
 class ScriptTestCase(unittest.TestCase):
 
     def testCreateInstance(self):
@@ -227,39 +228,44 @@ class ScriptTestCase(unittest.TestCase):
         self.assertEqual(node1.other_value, 12)
         self.assertEqual(node2.other_value, 10)
 
-#    def testGetField(self):
-#        node = nodes.HasFields(field=42)
-#        self.assert_(node)
-#        self.assertEqual(node.field.value, 42)
-#
-#    def testSetField(self):
-#        node = nodes.HasFields(field=42)
-#        self.assert_(node)
-#        self.assertEqual(node.field.value, 42)
-#        node.field.value = 10
-#        self.assertEqual(node.field.value, 10)
-#
-#    def testGetValues(self):
-#        node = nodes.HasFields(field=42)
-#        values = node.get_values()
-#        self.assertEqual(values.field, 42)
-#        self.assertEqual(node.field.value, 42)
-#        values.field = 10
-#        self.assertEqual(values.field, 10)
-#        self.assertEqual(node.field.value, 10)
-#
-#    def testSetFieldInMultipleInstances(self):
-#        node1 = nodes.HasFields(field=42)
-#        node2 = nodes.HasFields(field=10)
-#        self.assert_(node1)
-#        self.assert_(node2)
-#        self.assertEqual(node1.field.value, 42)
-#        self.assertEqual(node2.field.value, 10)
-#        node1.field.value = 43
-#        node2.field.value = 11
-#        self.assertEqual(node1.field.value, 43)
-#        self.assertEqual(node2.field.value, 11)
-#
+    def testGetField(self):
+        node = nodes.HasFields(field=42)
+        self.assert_(node)
+        self.assertEqual(node.field.value, 42)
+
+    def testSetField(self):
+        node = nodes.HasFields(field=42)
+        self.assert_(node)
+        self.assertEqual(node.field.value, 42)
+        node.field.value = 10
+        self.assertEqual(node.field.value, 10)
+
+    def testGetValues(self):
+        node = nodes.HasFields(field=42)
+        values = node.get_values()
+        self.assertEqual(values.field, 42)
+        self.assertEqual(node.field.value, 42)
+        values.field = 10
+        self.assertEqual(values.field, 10)
+        self.assertEqual(node.field.value, 10)
+
+    def testSetFieldInMultipleInstances(self):
+        node1 = nodes.HasFields(field=42)
+        node2 = nodes.HasFields(field=10)
+        self.assert_(node1)
+        self.assert_(node2)
+        self.assertEqual(node1.field.value, 42)
+        self.assertEqual(node2.field.value, 10)
+        node1.field.value = 43
+        node2.field.value = 11
+        self.assertEqual(node1.field.value, 43)
+        self.assertEqual(node2.field.value, 11)
+
+    def testSetFieldInStandardConstructor(self):
+        node = HasFields(field=42)
+        self.assert_(node)
+        self.assertEqual(node.field.value, 42)
+
 #    def testEvaluate(self):
 #        node = nodes.IncValue()
 #        self.assert_(node)
@@ -300,38 +306,27 @@ class ScriptTestCase(unittest.TestCase):
 #
 #        node.value2.value = 1
 #        self.assertEqual(node.set_value2, 3)
-#
-#    def testFieldConnection(self):
-#        node1 = nodes.HasFields(field=42)
-#        node2 = nodes.HasFields(field=42)
-#        self.assert_(node1)
-#        self.assertEqual(node1.field.value, 42)
-#        self.assertEqual(node2.field.value, 42)
-#        node2.field.connect_from(node1.field)
-#        node1.field.value = 10
-#        self.assertEqual(node1.field.value, 10)
-#        self.assertEqual(node2.field.value, 10)
-#
-#    def testSetObjectValue(self):
-#        value = lambda x: x+1
-#        node = nodes.HasFields(anobject = value)
-#        self.assertEqual(node.anobject.value, value)
-#
-#    def testDerivedGetClassAttribute(self):
-#        node = nodes.DerivedLocal()
-#        self.assert_(node)
-#        self.assertEqual(node.value, 42)
-#
-#    def testDerivedGetField(self):
-#        node = nodes.DerivedHasFields(field=42)
-#        self.assert_(node)
-#        self.assertEqual(node.field.value, 42)
-#
-#    def testDoubleDerivedGetField(self):
-#        node = nodes.DoubleDerivedHasFields(field=42)
-#        self.assert_(node)
-#        self.assertEqual(node.field.value, 42)
-#
+
+    def testSetObjectValue(self):
+        value = lambda x: x+1
+        node = nodes.HasFields(anobject = value)
+        self.assertEqual(node.anobject.value, value)
+
+    def testDerivedGetClassAttribute(self):
+        node = nodes.DerivedLocal()
+        self.assert_(node)
+        self.assertEqual(node.value, 42)
+
+    def testDerivedGetField(self):
+        node = nodes.DerivedHasFields(field=42)
+        self.assert_(node)
+        self.assertEqual(node.field.value, 42)
+
+    def testDoubleDerivedGetField(self):
+        node = nodes.DoubleDerivedHasFields(field=42)
+        self.assert_(node)
+        self.assertEqual(node.field.value, 42)
+
 #    def testDerivedFieldHasChanged(self):
 #        node = DerivedHasFieldCallbacks()
 #        self.assert_(node)
@@ -358,31 +353,31 @@ class ScriptTestCase(unittest.TestCase):
 #
 #        node.value2.value = 1
 #        self.assertEqual(node.set_value2, 3)
-#
-#    def testCreateInstanceFromModule(self):
-#        self.assert_(apackage.empty.nodes.Empty())
-#
-#    def testCreateInstanceFromModuleWithConstructor(self):
-#        self.assert_(apackage.empty.Empty())
-#
-#    def testInstanceSelfCompare(self):
-#        node = SelfReturn()
-#        self.assertEqual(node, node)
-#        self.assertEqual(node.self(), node)
-#        self.assertEqual(node, node.self())
-#        self.assertEqual(node.self(), node.self())
-#
-#        empty = Empty()
-#        self.assertNotEqual(node, empty)
-#        self.assertNotEqual(node.self(), empty)
-#        self.assertNotEqual(empty, node)
-#        self.assertNotEqual(empty, node.self())
-#
-#        self.assertNotEqual(node, 5)
-#        self.assertNotEqual(5, node)
-#        self.assertNotEqual(node.self(), 5)
-#        self.assertNotEqual(5, node.self())
-#
+
+    def testCreateInstanceFromModule(self):
+        self.assert_(apackage.empty.nodes.Empty())
+
+    def testCreateInstanceFromModuleWithConstructor(self):
+        self.assert_(apackage.empty.Empty())
+
+    def testInstanceSelfCompare(self):
+        node = SelfReturn()
+        self.assertEqual(node, node)
+        self.assertEqual(node.self(), node)
+        self.assertEqual(node, node.self())
+        self.assertEqual(node.self(), node.self())
+
+        empty = Empty()
+        self.assertNotEqual(node, empty)
+        self.assertNotEqual(node.self(), empty)
+        self.assertNotEqual(empty, node)
+        self.assertNotEqual(empty, node.self())
+
+        self.assertNotEqual(node, 5)
+        self.assertNotEqual(5, node)
+        self.assertNotEqual(node.self(), 5)
+        self.assertNotEqual(5, node.self())
+
 #    def testTouchMyself(self):
 #        node = TouchMyself()
 #        avango.evaluate()
@@ -397,22 +392,22 @@ class ScriptTestCase(unittest.TestCase):
 #    def testIndirectField(self):
 #        node = IndirectField(field = 42)
 #        self.assertEqual(42, node.get())
-#
-#    def testAddField(self):
-#        node = Empty()
-#        node.add_field(avango.SFInt(), "field")
-#        self.assert_(node._get_field('field'))
-#
+
+    def testAddField(self):
+        node = Empty()
+        node.add_field(avango.SFInt(), "field")
+        self.assert_(node._get_field('field'))
+
 #    def testGenericFieldHadChanged(self):
 #        node = GenericFieldHasChanged()
 #        node.field.value = 42
 #        self.assertEqual('field', node.name)
 #        self.assertEqual(42, node.value)
-#
-#    def testInitCascade(self):
-#        node = DerivedLocalWithInit()
-#        self.assertEqual(10, node.other_value)
-#
+
+    def testInitCascade(self):
+        node = DerivedLocalWithInit()
+        self.assertEqual(10, node.other_value)
+
 #    def testDerivedUpcalling(self):
 #        node = DerivedUpcallingIncValue()
 #        node.field.value = 0
@@ -426,14 +421,14 @@ class ScriptTestCase(unittest.TestCase):
 #        avango.evaluate()
 #        self.assertEqual(node.field.value, 1)
 #        self.assertEqual(1, node.value)
-#
-#    def testSetAttributeWithNameOfField(self):
-#        node = HasFields(field = 5)
-#        def assign():
-#            node.field = 10
-#        self.assertRaises(AttributeError, assign)
-#        self.assertEqual(5, node.field.value)
-#
+
+    def testSetAttributeWithNameOfField(self):
+        node = HasFields(field = 5)
+        def assign():
+            node.field = 10
+        self.assertRaises(AttributeError, assign)
+        self.assertEqual(5, node.field.value)
+
 #    def testDerivedFromMultipleScriptFieldHasChanged(self):
 #        node = DerivedFromMultipleScript()
 #        self.assert_(node)

@@ -23,6 +23,7 @@
 #                                                                        #
 ##########################################################################
 
+import avango
 import avango.nodefactory
 import _script
 
@@ -44,7 +45,11 @@ class ScriptMetaclass(type):
             pass
         cls._wrapper = Wrapper
 
+        Wrapper._fields = list(getattr(base, '_fields', []))
         for name, attribute in classdict.iteritems():
+            if isinstance(attribute, avango.Field):
+                Wrapper._fields.append( (name, attribute) )
+                continue
             setattr(Wrapper, name, attribute)
 
         def create():
@@ -53,7 +58,10 @@ class ScriptMetaclass(type):
         Wrapper._type = _script._create_type(mangled_classname, create)
 
         def __new(cls, **args):
-            return cls._wrapper()
+            result = cls._wrapper()
+            for name, value in args.iteritems():
+                getattr(result, name).value = value
+            return result
         setattr(cls, '__new__', staticmethod(__new))
 
 class Script(object):
@@ -61,6 +69,8 @@ class Script(object):
 
     def __init__(self):
         self.super(Script, self).__init__(self._type)
+        for name, field in self._fields:
+            self.add_field(field, name)
 
     @staticmethod
     def super(cls, inst):

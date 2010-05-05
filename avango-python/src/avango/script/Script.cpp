@@ -86,13 +86,25 @@ void av::script::Script::initClass(void)
 /*virtual*/ int av::script::Script::refCountImpl()
 {
   // TODO fixme
-  return 1;
+  return 42;
 }
 
 /*virtual*/ void av::script::Script::setFloatingRefImpl()
 {
   Py_INCREF(mSelf);
   mIsFloatingRef = true;
+}
+
+/*virtual*/ void av::script::Script::evaluate()
+{
+  try
+  {
+    call_method<void>(mSelf, "evaluate");
+  }
+  catch(...)
+  {
+    handle_exception();
+  }
 }
 
 PyObject* av::script::Script::getSelf(void) const

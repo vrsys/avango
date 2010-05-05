@@ -59,19 +59,19 @@ class DerivedHasFields(HasFields): pass
 
 class DoubleDerivedHasFields(DerivedHasFields): pass
 
-#class IncValue(avango.script.Script):
-#    field = avango.SFInt()
-#
-#    def evaluate(self):
-#        self.field.value += 1
-#
-#class IncValueWithValues(avango.script.Script):
-#    field = avango.SFInt()
-#
-#    def evaluate(self):
-#        values = self.get_values()
-#        values.field += 1
-#
+class IncValue(avango.script.Script):
+    field = avango.SFInt()
+
+    def evaluate(self):
+        self.field.value += 1
+
+class IncValueWithValues(avango.script.Script):
+    field = avango.SFInt()
+
+    def evaluate(self):
+        values = self.get_values()
+        values.field += 1
+
 #class HasFieldCallbacks(avango.script.Script):
 #    value1 = avango.SFInt()
 #    value2 = avango.SFInt()
@@ -96,30 +96,32 @@ class SelfReturn(avango.script.Script):
     def self(self):
         return self
 
-#class TouchMyself(avango.script.Script):
-#    def __init__(self):
-#        self.value = 1
-#        self.touch()
-#    def evaluate(self):
-#        self.value += 1
-#
-#class ExposedTouch(avango.script.Script):
-#    def __init__(self):
-#        self.value = 1
-#    def exposed_touch(self):
-#        self.touch()
-#    def evaluate(self):
-#        self.value += 1
-#
-#class DerivedExposedTouch(ExposedTouch):
-#    def derived_touch(self):
-#        self.exposed_touch()
-#
-#class IndirectField(avango.script.Script):
-#    field = avango.SFInt()
-#    def get(self):
-#        return self.field.value
-#
+class TouchMyself(avango.script.Script):
+    def __init__(self):
+        self.super(TouchMyself, self).__init__()
+        self.value = 1
+        self.touch()
+    def evaluate(self):
+        self.value += 1
+
+class ExposedTouch(avango.script.Script):
+    def __init__(self):
+        self.super(ExposedTouch, self).__init__()
+        self.value = 1
+    def exposed_touch(self):
+        self.touch()
+    def evaluate(self):
+        self.value += 1
+
+class DerivedExposedTouch(ExposedTouch):
+    def derived_touch(self):
+        self.exposed_touch()
+
+class IndirectField(avango.script.Script):
+    field = avango.SFInt()
+    def get(self):
+        return self.field.value
+
 #class GenericFieldHasChanged(avango.script.Script):
 #    field = avango.SFInt()
 #
@@ -136,22 +138,22 @@ class DerivedLocalWithInit(Local):
     def __init__(self):
         self.super(DerivedLocalWithInit, self).__init__()
 
-#class DerivedUpcallingIncValue(IncValue):
-#    def __init__(self):
-#        self.super(DerivedUpcallingIncValue).__init__()
-#        self.value = 0
-#
-#    def evaluate(self):
-#        self.super(DerivedUpcallingIncValue).evaluate()
-#        self.value = 1
-#
-#class DoubleDerivedUpcallingIncValue(DerivedUpcallingIncValue):
-#    def __init__(self):
-#        self.super(DoubleDerivedUpcallingIncValue).__init__()
-#
-#    def evaluate(self):
-#        self.super(DoubleDerivedUpcallingIncValue).evaluate()
-#
+class DerivedUpcallingIncValue(IncValue):
+    def __init__(self):
+        self.super(DerivedUpcallingIncValue, self).__init__()
+        self.value = 0
+
+    def evaluate(self):
+        self.super(DerivedUpcallingIncValue, self).evaluate()
+        self.value = 1
+
+class DoubleDerivedUpcallingIncValue(DerivedUpcallingIncValue):
+    def __init__(self):
+        self.super(DoubleDerivedUpcallingIncValue, self).__init__()
+
+    def evaluate(self):
+        self.super(DoubleDerivedUpcallingIncValue, self).evaluate()
+
 #class HasSingleFieldCallbackBase1(avango.script.Script):
 #    value1 = avango.SFInt()
 #
@@ -184,13 +186,13 @@ class DerivedLocalWithInit(Local):
 #    @avango.script.field_has_changed(value3)
 #    def callback(self):
 #        self.set_value3 = 3
-#
-#class DynamicFieldScript(avango.script.Script):
-#
-#    def add_dynamic_int_fields(self,prefix,num):
-#        for i in range(0,num):
-#            name = str(prefix) + str(i)
-#            self.add_and_init_field(avango.SFInt(), name, 0)
+
+class DynamicFieldScript(avango.script.Script):
+
+    def add_dynamic_int_fields(self,prefix,num):
+        for i in range(0,num):
+            name = str(prefix) + str(i)
+            self.add_and_init_field(avango.SFInt(), name, 0)
 
 
 class ScriptTestCase(unittest.TestCase):
@@ -261,42 +263,37 @@ class ScriptTestCase(unittest.TestCase):
         self.assertEqual(node1.field.value, 43)
         self.assertEqual(node2.field.value, 11)
 
-    def testSetFieldInStandardConstructor(self):
-        node = HasFields(field=42)
+    def testStandardConstructor(self):
+        node = IncValue()
+        self.assert_(node)
+        node.value = 42
+        self.assertEqual(node.value, 42)
+
+    def testStandardConstructorWithInitialization(self):
+        node = IncValue(field = 42)
         self.assert_(node)
         self.assertEqual(node.field.value, 42)
 
-#    def testEvaluate(self):
-#        node = nodes.IncValue()
-#        self.assert_(node)
-#        node.field.value = 0
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 1)
-#        node.field.value = 2
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 3)
-#
-#    def testEvaluateWithValues(self):
-#        node = nodes.IncValueWithValues()
-#        self.assert_(node)
-#        node.field.value = 0
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 1)
-#        node.field.value = 2
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 3)
-#
-#    def testStandardConstructor(self):
-#        node = IncValue()
-#        self.assert_(node)
-#        node.value = 42
-#        self.assertEqual(node.value, 42)
-#
-#    def testStandardConstructorWithInitialization(self):
-#        node = IncValue(field = 42)
-#        self.assert_(node)
-#        self.assertEqual(node.field.value, 42)
-#
+    def testEvaluate(self):
+        node = nodes.IncValue()
+        self.assert_(node)
+        node.field.value = 0
+        avango.evaluate()
+        self.assertEqual(node.field.value, 1)
+        node.field.value = 2
+        avango.evaluate()
+        self.assertEqual(node.field.value, 3)
+
+    def testEvaluateWithValues(self):
+        node = nodes.IncValueWithValues()
+        self.assert_(node)
+        node.field.value = 0
+        avango.evaluate()
+        self.assertEqual(node.field.value, 1)
+        node.field.value = 2
+        avango.evaluate()
+        self.assertEqual(node.field.value, 3)
+
 #    def testFieldHasChanged(self):
 #        node = HasFieldCallbacks()
 #        self.assert_(node)
@@ -378,20 +375,20 @@ class ScriptTestCase(unittest.TestCase):
         self.assertNotEqual(node.self(), 5)
         self.assertNotEqual(5, node.self())
 
-#    def testTouchMyself(self):
-#        node = TouchMyself()
-#        avango.evaluate()
-#        self.assertEqual(2, node.value)
-#
-#    def testDerivedExposedTouch(self):
-#        node = DerivedExposedTouch()
-#        node.derived_touch()
-#        avango.evaluate()
-#        self.assertEqual(2, node.value)
-#
-#    def testIndirectField(self):
-#        node = IndirectField(field = 42)
-#        self.assertEqual(42, node.get())
+    def testTouchMyself(self):
+        node = TouchMyself()
+        avango.evaluate()
+        self.assertEqual(2, node.value)
+
+    def testDerivedExposedTouch(self):
+        node = DerivedExposedTouch()
+        node.derived_touch()
+        avango.evaluate()
+        self.assertEqual(2, node.value)
+
+    def testIndirectField(self):
+        node = IndirectField(field = 42)
+        self.assertEqual(42, node.get())
 
     def testAddField(self):
         node = Empty()
@@ -408,19 +405,19 @@ class ScriptTestCase(unittest.TestCase):
         node = DerivedLocalWithInit()
         self.assertEqual(10, node.other_value)
 
-#    def testDerivedUpcalling(self):
-#        node = DerivedUpcallingIncValue()
-#        node.field.value = 0
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 1)
-#        self.assertEqual(1, node.value)
-#
-#    def testDoubleDerivedUpcalling(self):
-#        node = DoubleDerivedUpcallingIncValue()
-#        node.field.value = 0
-#        avango.evaluate()
-#        self.assertEqual(node.field.value, 1)
-#        self.assertEqual(1, node.value)
+    def testDerivedUpcalling(self):
+        node = DerivedUpcallingIncValue()
+        node.field.value = 0
+        avango.evaluate()
+        self.assertEqual(1, node.field.value)
+        self.assertEqual(1, node.value)
+
+    def testDoubleDerivedUpcalling(self):
+        node = DoubleDerivedUpcallingIncValue()
+        node.field.value = 0
+        avango.evaluate()
+        self.assertEqual(node.field.value, 1)
+        self.assertEqual(1, node.value)
 
     def testSetAttributeWithNameOfField(self):
         node = HasFields(field = 5)
@@ -445,39 +442,39 @@ class ScriptTestCase(unittest.TestCase):
 #
 #        node.value3.value = 1
 #        self.assertEqual(node.set_value3, 3)
-#
-#    def testDynamicFieldRemoval(self):
-#        node1 = DynamicFieldScript()
-#        #Every script node has a Name field by default
-#        self.assertEqual(1, node1._get_num_fields())
-#        node1.add_dynamic_int_fields("field_", 1)
-#        self.assertEqual(2, node1._get_num_fields())
-#
-#        node2 = DynamicFieldScript()
-#        self.assertEqual(1, node2._get_num_fields())
-#        node2.add_dynamic_int_fields("field_", 1)
-#        self.assertEqual(2, node2._get_num_fields())
-#
-#        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
-#        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
-#        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
-#
-#        node2._get_field("field_0").value = 42
-#        avango.evaluate()
-#        self.assertEqual(42, node1._get_field("field_0").value)
-#
-#        node2.remove_field("field_0")
-#        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
-#        self.assertEqual(1, node2._get_num_fields())
-#
-#        node2.add_dynamic_int_fields("field_", 1)
-#        self.assertEqual(2, node2._get_num_fields())
-#
-#        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
-#        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
-#        node2._get_field("field_0").value = 23
-#        avango.evaluate()
-#        self.assertEqual(23, node1._get_field("field_0").value)
+
+    def testDynamicFieldRemoval(self):
+        node1 = DynamicFieldScript()
+        #Every script node has a Name field by default
+        self.assertEqual(1, node1._get_num_fields())
+        node1.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node1._get_num_fields())
+
+        node2 = DynamicFieldScript()
+        self.assertEqual(1, node2._get_num_fields())
+        node2.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node2._get_num_fields())
+
+        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
+        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
+        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
+
+        node2._get_field("field_0").value = 42
+        avango.evaluate()
+        self.assertEqual(42, node1._get_field("field_0").value)
+
+        node2.remove_field("field_0")
+        self.assertEqual(0, node1._get_field("field_0").get_number_of_connected_fields())
+        self.assertEqual(1, node2._get_num_fields())
+
+        node2.add_dynamic_int_fields("field_", 1)
+        self.assertEqual(2, node2._get_num_fields())
+
+        node1._get_field("field_0").connect_from(node2._get_field("field_0"))
+        self.assertEqual(1, node1._get_field("field_0").get_number_of_connected_fields())
+        node2._get_field("field_0").value = 23
+        avango.evaluate()
+        self.assertEqual(23, node1._get_field("field_0").value)
         
 def Suite():
     return unittest.TestLoader().loadTestsFromTestCase(ScriptTestCase)

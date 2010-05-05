@@ -76,3 +76,6 @@ class Script(object):
     def super(cls, inst):
         'Replacement for built-in super to be used by subclasses'
         return super(cls._wrapper, inst)
+
+    def evaluate(self):
+        pass

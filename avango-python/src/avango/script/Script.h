@@ -53,9 +53,14 @@ namespace av
       PyObject* getSelf(void) const;
 
       static void register_exception_handler(boost::python::object handler);
-      static void handle_exception(void);
+
+    protected:
+
+      /*virtual*/ void evaluate();
 
     private:
+
+      static void handle_exception(void);
 
       /* Forbid copy constructor and operator */
       Script(const Script&) {}

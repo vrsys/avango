@@ -58,7 +58,7 @@ Export('shade_core_example_env')
 
 shade_core_unittest_env = avango.build.TestEnvironment()
 append_shade_core_options(shade_core_unittest_env)
-shade_core_unittest_env.Append(CPPPATH=[Dir('../avango-unittest/include/avango/Unittest++').abspath])
+shade_core_unittest_env.Append(CPPPATH=[Dir('../avango-unittest/include/avango/UnitTest++').abspath])
 Export('shade_core_unittest_env')
 
 SConscript('core/SConscript')

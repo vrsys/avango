@@ -44,6 +44,13 @@ class ScriptMetaclass(type):
     def __init__(cls, classname, bases, classdict):
         super(ScriptMetaclass, cls).__init__(classname, bases, classdict)
 
+        # Script is not derived from _Script as with boost.python we can not
+        # use metaclasses, which we need to be informed about new classes.
+        # We thus create an identical class hierarchy, with object exchanged
+        # with _script._Script.
+        # For this we also need to create a new class for our given class with
+        # the bases exchanged properly. As the number of base classes can be
+        # varying we have to rely on exec.
         wrapped_bases = []
         for base in bases:
             if base == object:
@@ -51,15 +58,22 @@ class ScriptMetaclass(type):
             else:
                 base = base._Script__wrapper
             wrapped_bases.append(base)
-        if len(wrapped_bases) != 1:
-            raise "Unsupported multiple inheritance"
-        wrapped_base = wrapped_bases[0]
-        class Wrapper(wrapped_base):
-            pass
+        wrapped_code = "class %s(%s): pass" % (classname, ','.join([ 'wrapped_bases[%i]'%i for i in xrange(len(wrapped_bases)) ]))
+        wrapped_locals = { 'wrapped_bases': wrapped_bases }
+        exec wrapped_code in wrapped_locals
+        Wrapper = wrapped_locals[classname]
         cls._Script__wrapper = Wrapper
 
-        Wrapper._Script__fields = list(getattr(base, '_Script__fields', []))
-        Wrapper._Script__field_has_changed = dict(getattr(base, '_Script__field_has_changed', {}))
+        # Build list of all fields (including fields of bases) and
+        # field_has_changes methods
+        Wrapper._Script__fields = list(reduce(lambda x,y: x+y, [ getattr(base, '_Script__fields', []) for base in wrapped_bases ]))
+        bases_field_has_changed = [ getattr(base, '_Script__field_has_changed', {}) for base in wrapped_bases ]
+        Wrapper._Script__field_has_changed = {}
+        for base_field_has_changed in bases_field_has_changed:
+            Wrapper._Script__field_has_changed.update(base_field_has_changed)
+
+        # Copy all attributes to our wrapping class. Ignore fields as these
+        # will be set in class __init__ function
         for name, attribute in classdict.iteritems():
             if isinstance(attribute, avango.Field):
                 Wrapper._Script__fields.append( (name, attribute) )
@@ -71,11 +85,13 @@ class ScriptMetaclass(type):
 
             setattr(Wrapper, name, attribute)
 
+        # Register AVANGO type
         def create():
             return Wrapper()
         mangled_classname = avango.nodefactory.mangle_class_name(classdict['__module__'], classname)
         Wrapper._Script__type = _script._create_type(mangled_classname, create)
 
+        # The user-defined class must create our wrapping class
         def __new(cls, **args):
             result = cls._Script__wrapper()
             for name, value in args.iteritems():

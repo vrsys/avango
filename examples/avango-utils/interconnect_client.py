@@ -36,7 +36,7 @@ class ColorSwitcher(avango.script.Script):
 	Text = avango.MFString()
 	KeyShift = avango.SFBool()
 	
-	ReferencedObject = avango.SFObject()
+	ReferencedObject = avango.script.SFObject()
 	ObjectName = avango.SFString()
 	PickedTargets = avango.tools.MFTargetHolder()
 

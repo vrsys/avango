@@ -51,6 +51,17 @@ class SingleFieldTestCase(FieldTestCase):
         self.node.AnIntField.value |= 4
         self.assertEqual(7, self.node.AnIntField.value)
 
+    def testEqual(self):
+        self.assertEqual(self.node.AnIntField, self.node.AnIntField)
+
+    def testUnequal(self):
+        self.failIfEqual(self.node.AnIntField, self.node.AnIntMultiField)
+
+    def testHash(self):
+        hash = {}
+        hash[self.node.AnIntField] = 5
+        self.assertEqual(5, hash[self.node.AnIntField])
+
 
 class MultiFieldTestCase(FieldTestCase):
 
@@ -119,6 +130,9 @@ def Suite():
         'testConstantAddition',
         'testInplaceAddition',
         'testArithmetics',
+        'testEqual',
+        'testUnequal',
+        'testHash',
     ]
     suite.addTests(map(SingleFieldTestCase, SingleFieldTests))
 

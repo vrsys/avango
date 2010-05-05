@@ -44,6 +44,16 @@ namespace
     return self->getTypeId().getName();
   }
 
+  bool Field_equals(const av::Field* a, const av::Field* b)
+  {
+    return (a == b);
+  }
+
+  long Field_hash(const av::Field* self)
+  {
+    return reinterpret_cast<long>(self);
+  }
+
   void connect_from_dependant(av::Field* self, av::Field* other)
   {
     self->connectFrom(other, true);
@@ -99,6 +109,8 @@ void init_Field(void)
     .def("get_number_of_connected_fields", &av::Field::getNumberOfConnectedFields)
     .def("read", &av::Field::read)
     .def("write", &av::Field::write)
+    .def("__eq__", Field_equals)
+    .def("__hash__", Field_hash)
     ;
 
   register_field<av::SFBool>("SFBool");

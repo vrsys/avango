@@ -40,7 +40,7 @@ except:
 # First register first-stage warning hook to record warnings during avango import
 import warnings
 warning_buffer = []
-def showwarning_buffer(message, category, filename, lineno, file = None):
+def showwarning_buffer(message, category, filename, lineno, file = None, line = None):
     warning_buffer.append([message, category, filename, lineno])
 warnings.showwarning = showwarning_buffer
 

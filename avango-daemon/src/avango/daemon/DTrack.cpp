@@ -29,6 +29,7 @@
 #include <avango/Logger.h>
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/Station.h>
+#include <cstring>
 
 
 

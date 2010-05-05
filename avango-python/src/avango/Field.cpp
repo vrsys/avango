@@ -92,6 +92,7 @@ void init_Field(void)
 
     .def("get_container", &av::Field::getContainer, return_internal_reference<>())
     .def("clone", &av::Field::clone, return_internal_reference<>())
+    .def("clear", &av::Field::clear)
     .def("connect_from", &av::Field::connectFrom)
     .def("connect_from", connect_from_dependant)
     .def("connect_weak_from", connect_weak_from)

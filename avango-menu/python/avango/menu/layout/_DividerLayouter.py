@@ -38,7 +38,7 @@ class DividerLayouter(LayoutBase):
     Color = avango.osg.SFVec4()
 
     def __init__(self):
-        self.init_super(LayoutBase)
+        self.super(DividerLayouter).__init__()
         self.divider = _ContainerAlignedDividerLayouter()
         self.divider.Thickness.connect_from(self.Thickness)
         self.divider.Color.connect_from(self.Color)
@@ -57,7 +57,7 @@ class DividerLayouter(LayoutBase):
         self.Orientation.disconnect()
         self.Orientation.enable_dependency(False)
         self.Orientation.connect_from(container.Orientation)
-        # self.super().update_container() # do not call to prevent creation of proxy geometry.
+        # self.super(DividerLayouter).update_container() # do not call to prevent creation of proxy geometry.
         # without proxy, a menu entry is not highlightable and not clickable
 
     @field_has_changed(Thickness)
@@ -81,7 +81,7 @@ class DividerLayouter(LayoutBase):
     def cleanup(self):
         self.disconnect_all_fields()
         self.divider.cleanup()
-        self.super().layoutbase_cleanup()
+        self.super(DividerLayouter).layoutbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:
@@ -95,6 +95,8 @@ class _ContainerAlignedDividerLayouter(avango.script.Script):
     Color = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(_ContainerAlignedDividerLayouter).__init__()
+
         self.orientation_dirty = False
         self.quad = avango.osg.nodes.Quad()
         self.root = avango.osg.nodes.Geode()

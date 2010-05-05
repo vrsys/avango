@@ -42,6 +42,8 @@ class SliderMouseInteractor(avango.script.Script):
     DeviceMatrix = avango.osg.SFMatrix()
 
     def __init__(self):
+        self.super(SliderMouseInteractor).__init__()
+
         self.pickray_direction = None
         self.slider_plane = None
         self.slider_length = None

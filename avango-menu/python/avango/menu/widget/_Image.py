@@ -34,7 +34,7 @@ class Image(WidgetBase):
     ImageCentered = avango.SFBool()
 
     def __init__(self):
-        self.init_super(WidgetBase)
+        self.super(Image).__init__()
         self.ImageWidth.value = 1.0
         self.ImageCentered.value = True
         self.ImageAspectRatio.value = 1.0
@@ -45,7 +45,7 @@ class Image(WidgetBase):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        self.super().widgetbase_cleanup()
+        self.super(Image).widgetbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

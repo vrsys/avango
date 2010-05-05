@@ -38,8 +38,9 @@ class PanelDecorationLayouter(LayoutBase):
     Layouter = avango.script.SFObject()
 
     def __init__(self):
+        self.super(PanelDecorationLayouter).__init__()
+
         self.callback = None
-        self.init_super(LayoutBase)
         self.icon = self.create_icon()
         self.proxy = PanelDecorationProxy(Layouter=self)
         self.proxy.Width.connect_from(self.IconSize)
@@ -71,9 +72,10 @@ class PanelDecorationLayouter(LayoutBase):
 
     @field_has_changed(LayoutBase.Select)
     def select_changed(self):
-        if self.callback is not None and self.Select.value:
-            self.callback()
-        self.super().select_changed()
+        callback = getattr(self, 'callback', None)
+        if callback is not None and self.Select.value:
+            callback()
+        self.super(PanelDecorationLayouter).select_changed()
 
     def create_proxy(self):
         pass
@@ -87,7 +89,7 @@ class PanelDecorationLayouter(LayoutBase):
             self.icon.cleanup()
         if self.proxy is not None:
             self.proxy.cleanup()
-        self.super().layoutbase_cleanup()
+        self.super(PanelDecorationLayouter).layoutbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:
@@ -101,6 +103,8 @@ class PanelDecorationProxy(avango.script.Script):
     Color = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(PanelDecorationProxy).__init__()
+
         self.root = avango.osg.nodes.Group()
         self.geom = avango.osg.nodes.Quad()
         self.geode = avango.osg.nodes.Geode()

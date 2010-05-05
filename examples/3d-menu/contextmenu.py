@@ -129,6 +129,8 @@ class CatchAllSphereContextBehavior(avango.script.Script):
     CreatePanel = avango.SFBool()
 
     def __init__(self):
+        self.super(CatchAllSphereContextBehavior).__init__()
+
         self.old_sphere_state = False
         self.old_panel_state = False
 
@@ -226,6 +228,8 @@ class ObjectBehavior(avango.script.Script):
     DeleteObject = avango.SFBool()
 
     def __init__(self):
+        self.super(ObjectBehavior).__init__()
+
         self.radius_slider = avango.menu.widget.Slider(Min=0.01, Max=0.1, Title="Radius")
         self.width_slider = avango.menu.widget.Slider(Min=0.01, Max=0.1, Title="Width")
         self.height_slider = avango.menu.widget.Slider(Min=0.01, Max=0.1, Title="Height")
@@ -307,6 +311,8 @@ class ColorTool(avango.script.Script):
     B = avango.SFFloat()
 
     def __init__(self):
+        self.super(ColorTool).__init__()
+
         self.divider = avango.menu.widget.Divider()
 
         # Small, yellow, non-clickable textlabel
@@ -358,6 +364,7 @@ class SizeTool(avango.script.Script):
     Size = avango.SFFloat()
 
     def __init__(self):
+        self.super(SizeTool).__init__()
         self.size_slider = avango.menu.widget.Slider(Min=0.1, Max=2.5, Title="Transform Size")
         self.Size.connect_from(self.size_slider.Value)
 

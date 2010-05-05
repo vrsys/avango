@@ -32,7 +32,7 @@ class Divider(WidgetBase):
     Color = avango.osg.SFVec4()
 
     def __init__(self):
-        self.init_super(WidgetBase)
+        self.super(Divider).__init__()
 
         # preferences field connections
         self.Thickness.connect_from(avango.menu.Preferences.widget.DividerThickness)
@@ -44,7 +44,7 @@ class Divider(WidgetBase):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        self.super().widgetbase_cleanup()
+        self.super(Divider).widgetbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

@@ -89,6 +89,8 @@ class PanelPreferenceFields(avango.script.Script):
     RemoveHighlightOnHide = avango.SFBool()
 
     def __init__(self):
+        self.super(PanelPreferenceFields).__init__()
+
         self.TitleSize.value = 0.08
         self.TitlePadding.value = 0.02
         self.TitleColor.value = avango.osg.Vec4(0,0,0,1)
@@ -143,6 +145,8 @@ class WidgetPreferenceFields(avango.script.Script):
     SliderStep = avango.SFFloat() # step for ValueUp/ValueDown keyboard input
 
     def __init__(self):
+        self.super(WidgetPreferenceFields).__init__()
+
         self.IconSize.value = 0.1
         self.IconPadding.value = 0.02
         self.IconColor.value = avango.osg.Vec4(1,1,1,1)
@@ -175,6 +179,7 @@ class ContainerPreferenceFields(avango.script.Script):
     WidgetHorizontalPadding = avango.SFFloat()
 
     def __init__(self):
+        self.super(ContainerPreferenceFields).__init__()
         self.WidgetVerticalPadding.value = 0.03
         self.WidgetHorizontalPadding.value = 0.03
 
@@ -190,6 +195,8 @@ class LayouterPreferenceFields(avango.script.Script):
     ProxyColor = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(LayouterPreferenceFields).__init__()
+
         self.ProxyDisplacement.value = 0.003
         self.ProxyVerticalPadding.value = 0.015 # should be half of ContainerPreferenceFields.WidgetVerticalPadding
         self.ProxyHorizontalPadding.value = 0.015 # should be half of ContainerPreferenceFields.WidgetHorizontalPadding
@@ -204,6 +211,7 @@ class InteractionPreferenceFields(avango.script.Script):
     SliderStylusInteractorFullRangeAngle = avango.SFFloat()
 
     def __init__(self):
+        self.super(InteractionPreferenceFields).__init__()
         self.SliderStylusInteractorFullRangeAngle.value = 30.0
 
 
@@ -226,6 +234,8 @@ class PlacementPreferenceFields(avango.script.Script):
     WallMinTextSize = avango.SFFloat() # minimal text rendering size in screen plane
 
     def __init__(self):
+        self.super(PlacementPreferenceFields).__init__()
+
         self.MenuSize.value = 0.10
         self.MinDistance.value = 0.2
         self.MaxDistance.value = 1.0

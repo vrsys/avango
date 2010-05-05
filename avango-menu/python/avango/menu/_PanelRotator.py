@@ -44,6 +44,8 @@ class PanelRotator(avango.script.Script):
     TransitionOut = avango.SFBool()
 
     def __init__(self):
+        self.super(PanelRotator).__init__()
+
         self.time_sensor = avango.nodes.TimeSensor()
         self.TimeIn.connect_from(self.time_sensor.Time)
         self.start_time = None

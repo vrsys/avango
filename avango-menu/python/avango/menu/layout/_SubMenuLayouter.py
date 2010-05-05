@@ -34,13 +34,13 @@ class SubMenuLayouter(PushButtonLayouter):
     ArrowPadding = avango.SFFloat()
 
     def __init__(self):
-        self.init_super(PushButtonLayouter)
+        self.super(SubMenuLayouter).__init__()
         self.arrow = _ContainerAlignedSubMenuLayouter()
         self.arrow.ArrowSize.connect_from(self.ArrowSize)
         self.root.Children.value.append(self.arrow.root)
 
     def init_widget(self):
-        self.super().init_widget()
+        self.super(SubMenuLayouter).init_widget()
         widget = self.Widget.value
         self.ArrowSize.connect_from(widget.ArrowSize)
         self.ArrowPadding.connect_from(widget.ArrowPadding)
@@ -48,18 +48,18 @@ class SubMenuLayouter(PushButtonLayouter):
         self.arrow.IconColor.connect_from(self.icon.Color)
 
     def update_container(self):
-        self.super().update_container()
+        self.super(SubMenuLayouter).update_container()
         self.arrow.ContainerWidth.connect_from(self.Container.value.Width)
 
     def update_dimensions(self):
-        self.super().update_dimensions()
+        self.super(SubMenuLayouter).update_dimensions()
         self.Width.value += self.ArrowPadding.value + self.ArrowSize.value
         self.Height.value = max(self.Height.value, self.ArrowSize.value)
 
     def cleanup(self):
         self.disconnect_all_fields()
         self.arrow.cleanup()
-        self.super().pushbuttonlayouter_cleanup()
+        self.super(SubMenuLayouter).pushbuttonlayouter_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:
@@ -72,6 +72,8 @@ class _ContainerAlignedSubMenuLayouter(avango.script.Script):
     IconColor = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(_ContainerAlignedSubMenuLayouter).__init__()
+
         self.dimensions_dirty = False
         self.icon = self.create_icon()
         self.root = self.icon.root

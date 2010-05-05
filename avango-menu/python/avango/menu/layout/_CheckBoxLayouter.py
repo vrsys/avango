@@ -36,7 +36,7 @@ class CheckBoxLayouter(PushButtonLayouter):
     CheckState = avango.SFBool()
 
     def init_widget(self):
-        self.super().init_widget()
+        self.super(CheckBoxLayouter).init_widget()
         self.CheckState.connect_from(self.Widget.value.CheckState)
 
     @field_has_changed(CheckState)
@@ -48,7 +48,7 @@ class CheckBoxLayouter(PushButtonLayouter):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        self.super().pushbuttonlayouter_cleanup()
+        self.super(CheckBoxLayouter).pushbuttonlayouter_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

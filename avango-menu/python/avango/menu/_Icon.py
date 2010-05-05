@@ -41,6 +41,8 @@ class Icon(avango.script.Script):
     Switch = avango.SFInt()
 
     def __init__(self):
+        self.super(Icon).__init__()
+
         self.Width.value = 1
         self.Height.value = 1
         self.Filenames.value = []

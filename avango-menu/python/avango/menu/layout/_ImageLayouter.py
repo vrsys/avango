@@ -38,7 +38,7 @@ class ImageLayouter(LayoutBase):
     ImageAspectRatio = avango.SFFloat()
 
     def __init__(self):
-        self.init_super(LayoutBase)
+        self.super(ImageLayouter).__init__()
         self.image = _ContainerAlignedImageLayouter()
         self.root.Children.value.append(self.image.geode)
 
@@ -57,7 +57,7 @@ class ImageLayouter(LayoutBase):
         self.image.Orientation.connect_from(container.Orientation)
         self.image.ContainerWidth.connect_from(container.Width)
         self.image.ContainerHeight.connect_from(container.Height)
-        # self.super().update_container() # do not call to prevent creation of proxy geometry.
+        # self.super(ImageLayouter).update_container() # do not call to prevent creation of proxy geometry.
         # without proxy, a menu entry is not highlightable and not clickable
 
     @field_has_changed(ImageAspectRatio)
@@ -76,7 +76,7 @@ class ImageLayouter(LayoutBase):
     def cleanup(self):
         self.disconnect_all_fields()
         self.image.cleanup()
-        self.super().layoutbase_cleanup()
+        self.super(ImageLayouter).layoutbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:
@@ -93,6 +93,8 @@ class _ContainerAlignedImageLayouter(avango.script.Script):
     ImageCentered = avango.SFBool()
 
     def __init__(self):
+        self.super(_ContainerAlignedImageLayouter).__init__()
+
         self.dimensions_dirty = False
         self.image = avango.osg.nodes.TexturedQuad()
         self.image.Filename.connect_from(self.ImageFilename)

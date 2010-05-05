@@ -44,6 +44,8 @@ class Proxy(avango.script.Script):
     Color = avango.osg.SFVec4()
 
     def __init__(self):
+        self.super(Proxy).__init__()
+
         self.root = avango.osg.nodes.Group()
         self.geom = avango.osg.nodes.Quad()
         self.geode = avango.osg.nodes.Geode()

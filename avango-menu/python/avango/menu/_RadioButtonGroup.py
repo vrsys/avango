@@ -32,6 +32,7 @@ class RadioButtonGroup(avango.script.Script):
     RadioButtons = avango.script.MFObject()
 
     def __init__(self):
+        self.super(RadioButtonGroup).__init__()
         self.checked_changed = False
         self.CheckedRadioButton.value = None
 

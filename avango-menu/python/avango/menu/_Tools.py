@@ -49,6 +49,8 @@ class Tool(avango.script.Script):
     _ContextTrigger = avango.SFBool()
 
     def __init__(self):
+        self.super(Tool).__init__()
+
         self._panels_dirty = False
         self.PickTrigger.value = False
         self.ContextTrigger.value = False
@@ -139,6 +141,8 @@ class _MenuTool(avango.script.Script):
     PanelVisible = avango.SFBool()
 
     def __init__(self):
+        self.super(_MenuTool).__init__()
+
         self._targets_dirty = False
         self._lock_dirty = False
         self._selected_object = None
@@ -218,7 +222,7 @@ class _SelectTool(_MenuTool):
         self.PanelVisible.value = True
 
     def cleanup(self):
-        self.super().cleanup()
+        self.super(_SelectTool).cleanup()
         self.SliderInteractor.value = None
         self.disconnect_all_fields()
 
@@ -229,7 +233,7 @@ class _HighlightTool(_MenuTool):
     Supports highlight lock and release when menu is locked.
     '''
     def __init__(self):
-        self.init_super(_MenuTool)
+        self.super(_HighlightTool).__init__()
         self._last_targets = []
         self.clear = False
 
@@ -306,7 +310,7 @@ class _MenuDragSelector(_MenuTool):
     def cleanup(self):
         self.disconnect_all_fields()
         self.SelectedTargets.value = []
-        self.super().cleanup()
+        self.super(_MenuDragSelector).cleanup()
 
 class _ContextTool(_MenuTool):
     '''

@@ -36,6 +36,8 @@ class WidgetBase(avango.script.Script):
     TextOnly = avango.SFBool() # only supported by PushButton
 
     def __init__(self):
+        self.super(WidgetBase).__init__()
+
         self.Name.value = ""
         self.Highlighted.value = False
         self.Select.value = False

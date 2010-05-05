@@ -201,7 +201,7 @@ Fields for panel states:
 HighlightItem (avango.SFInt)
     Number of the actually highlighted widget in the menu.
 
-HighlightWidget (avango.SFObject)
+HighlightWidget (avango.SFContainer)
     The actually highlighted widget
 
 Dragged (avango.SFBool)
@@ -319,13 +319,15 @@ _VisibleChild (avango.SFInt)
     _VisibleChild = avango.SFInt()
 
     def __init__(self):
+        self.super(Panel).__init__()
+
         self._visible_dirty = False
         self._dimensions_dirty = False
         self._decoration_dirty = False
         self._highlight_dirty = False
         self._entryselect_dirty = False
 
-        self._select_dirty = False
+        self._select_dirty = getattr(self, '_select_dirty', False)
         self._go_back_dirty = False
         self._close_dirty = False
         self._lock_dirty = False
@@ -341,6 +343,29 @@ _VisibleChild (avango.SFInt)
         self.HighlightItem.value = 0 # Off
         self.Dragged.value = False
         self.Transition.value = False
+
+        self.panel = avango.osg.nodes.Panel()
+        self.content_panel = avango.osg.nodes.Panel()
+        self.highlight_panel = avango.osg.nodes.Panel()
+        self.container = avango.menu.layout.ContainerLayouter(Panel=self, ContainerEnable=True)
+
+        self.label = avango.menu._Label.Label()
+        self.close_button = avango.menu.layout.PanelDecorationLayouter()
+        self.back_button = avango.menu.layout.PanelDecorationLayouter()
+
+        self.panel_geode = avango.osg.nodes.LayerGeode()
+        self.panel_transform = avango.osg.nodes.MatrixTransform()
+        self.content_transform = avango.osg.nodes.MatrixTransform()
+        self.decoration_transform = avango.osg.nodes.MatrixTransform()
+        self.switch = avango.osg.nodes.Switch()
+        self.root = avango.osg.nodes.MatrixTransform()
+        self.root.Children.value = [self.switch]
+
+        # panel_geode dynamic fields for dragging the Panel
+        self.panel_geode.add_field(avango.script.SFObject(), "Panel")
+        self.panel_geode.Panel.value = self
+        self.panel_geode.add_field(avango.SFContainer(), "Root")
+        self.panel_geode.Root.value = self.root
 
         # preferences field connections
         self.TitleSize.connect_from(avango.menu.Preferences.panel.TitleSize)
@@ -382,29 +407,6 @@ _VisibleChild (avango.SFInt)
         self.ArrowPadding.connect_from(avango.menu.Preferences.widget.SubMenuArrowPadding)
         self.ArrowFilenames.connect_from(avango.menu.Preferences.widget.SubMenuArrowFilenames)
 
-        self.panel = avango.osg.nodes.Panel()
-        self.content_panel = avango.osg.nodes.Panel()
-        self.highlight_panel = avango.osg.nodes.Panel()
-        self.container = avango.menu.layout.ContainerLayouter(Panel=self, ContainerEnable=True)
-
-        self.label = avango.menu._Label.Label()
-        self.close_button = avango.menu.layout.PanelDecorationLayouter()
-        self.back_button = avango.menu.layout.PanelDecorationLayouter()
-
-        self.panel_geode = avango.osg.nodes.LayerGeode()
-        self.panel_transform = avango.osg.nodes.MatrixTransform()
-        self.content_transform = avango.osg.nodes.MatrixTransform()
-        self.decoration_transform = avango.osg.nodes.MatrixTransform()
-        self.switch = avango.osg.nodes.Switch()
-        self.root = avango.osg.nodes.MatrixTransform()
-        self.root.Children.value = [self.switch]
-
-        # panel_geode dynamic fields for dragging the Panel
-        self.panel_geode.add_field(avango.script.SFObject(), "Panel")
-        self.panel_geode.Panel.value = self
-        self.panel_geode.add_field(avango.SFObject(), "Root")
-        self.panel_geode.Root.value = self.root
-
         self.setup_panel()
         self.setup_content_panel()
         self.setup_highlight_panel()
@@ -431,7 +433,8 @@ _VisibleChild (avango.SFInt)
 
         self.switch.VisibleChild.connect_from(self._VisibleChild)
 
-        self.init_super(WidgetBase)
+        # Trigger muted field_has_changed events
+        self.enable_changed()
 
     def setup_panel(self):
         self.panel.Width.connect_from(self.PanelWidth)
@@ -644,6 +647,8 @@ _VisibleChild (avango.SFInt)
 
     @field_has_changed(WidgetBase.Enable)
     def enable_changed(self):
+        if not hasattr(self, "label"):
+            return
         self.label.Color.disconnect()
         if self.Enable.value:
             self.label.Color.connect_from(self.TitleColor)
@@ -947,7 +952,7 @@ _VisibleChild (avango.SFInt)
         self._layouters = []
 
         self.HighlightWidget.value = None
-        self.super().cleanup()
+        self.super(Panel).cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

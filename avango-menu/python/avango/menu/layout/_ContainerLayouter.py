@@ -45,7 +45,7 @@ class ContainerLayouter(LayoutBase):
     WidgetHorizontalPadding = avango.SFFloat()
 
     def __init__(self):
-        self.init_super(LayoutBase)
+        self.super(ContainerLayouter).__init__()
         self.WidgetVerticalPadding.connect_from(avango.menu.Preferences.container.WidgetVerticalPadding)
         self.WidgetHorizontalPadding.connect_from(avango.menu.Preferences.container.WidgetHorizontalPadding)
         self.Orientation.value = 1
@@ -94,7 +94,7 @@ class ContainerLayouter(LayoutBase):
         if self.orientation_dirty:
             self.update_orientation()
             self.orientation_dirty = False
-        self.super().evaluate()
+        self.super(ContainerLayouter).evaluate()
 
     def update_orientation(self):
         # clamp to allowed values
@@ -184,7 +184,7 @@ class ContainerLayouter(LayoutBase):
         self.Layouters.value = []
 
         self.Panel.value = None
-        self.super().layoutbase_cleanup()
+        self.super(ContainerLayouter).layoutbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

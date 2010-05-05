@@ -43,6 +43,8 @@ class PlacementBase(avango.script.Script):
     _Trigger = avango.SFBool()
 
     def __init__(self):
+        self.super(PlacementBase).__init__()
+
         self.MenuSize.connect_from(avango.menu.Preferences.placement.MenuSize)
         self.MinDistance.connect_from(avango.menu.Preferences.placement.MinDistance)
         self.MaxDistance.connect_from(avango.menu.Preferences.placement.MaxDistance)

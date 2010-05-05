@@ -52,7 +52,7 @@ class Slider(WidgetBase):
     TextFontname = avango.SFString()
 
     def __init__(self):
-        self.init_super(WidgetBase)
+        self.super(Slider).__init__()
 
         # preferences field connections
         self.IconSize.connect_from(avango.menu.Preferences.widget.IconSize)
@@ -106,7 +106,7 @@ class Slider(WidgetBase):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        self.super().widgetbase_cleanup()
+        self.super(Slider).widgetbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

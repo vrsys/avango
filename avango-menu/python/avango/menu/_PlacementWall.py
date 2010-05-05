@@ -49,7 +49,8 @@ class PlacementWall(PlacementBase):
     MinTextSize = avango.SFFloat()
 
     def __init__(self):
-        self.init_super(PlacementBase)
+        self.super(PlacementWall).__init__()
+
         self.screen_dimensions_changed = False
         self.screen_plane = None
         self.ScreenWidth.connect_from(avango.menu.Preferences.placement.WallScreenWidth)
@@ -74,7 +75,7 @@ class PlacementWall(PlacementBase):
         if self.screen_dimensions_changed:
             self.update_screen_dimensions()
             self.screen_dimensions_changed = False
-        self.super().evaluate()
+        self.super(PlacementWall).evaluate()
 
     def update_screen_dimensions(self):
         x_vec = avango.osg.Vec3(1,0,0) + self.ScreenCenter.value
@@ -225,7 +226,7 @@ class PlacementWall(PlacementBase):
             self.menu_scale *= enlarge
 
     def cleanup(self):
-        self.super().cleanup()
+        self.super(PlacementWall).cleanup()
         self.disconnect_all_fields()
 
     def __del__(self):

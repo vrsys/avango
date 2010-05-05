@@ -131,7 +131,7 @@ class Script(object):
         return super(cls._Script__wrapper, self)
 
     def init_super(self, cls):
-        'Deprecated replacement for built-in super. Use self.super()'
+        'Deprecated replacement for built-in super. Use self.super(Classname)'
         cls._Script__wrapper.__init__.im_func(self)
 
     def evaluate(self):

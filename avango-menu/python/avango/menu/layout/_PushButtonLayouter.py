@@ -48,7 +48,7 @@ class PushButtonLayouter(LayoutBase):
     TextOnly = avango.SFBool()
 
     def __init__(self):
-        self.init_super(LayoutBase)
+        self.super(PushButtonLayouter).__init__()
         self.icon = self.create_icon()
         self.label = self.create_label()
         self._last_select = False
@@ -98,7 +98,7 @@ class PushButtonLayouter(LayoutBase):
         self._last_select = self.Select.value
 
     def push_button_enable_changed(self):
-        self.super().layout_base_enable_changed()
+        self.super(PushButtonLayouter).layout_base_enable_changed()
         self.label.Color.disconnect()
         self.icon.Color.disconnect()
         if self.Enable.value:
@@ -144,7 +144,7 @@ class PushButtonLayouter(LayoutBase):
             self.icon.cleanup()
         if self.label is not None:
             self.label.cleanup()
-        self.super().layoutbase_cleanup()
+        self.super(PushButtonLayouter).layoutbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

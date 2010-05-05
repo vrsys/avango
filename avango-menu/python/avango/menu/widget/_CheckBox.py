@@ -32,8 +32,9 @@ class CheckBox(PushButton):
     CheckState = avango.SFBool()
 
     def __init__(self):
-        self.last_select = False
-        self.init_super(PushButton)
+        self.super(CheckBox).__init__()
+
+        self.last_select = getattr(self, 'last_select', False)
         self.CheckState.value = False
 
     def init_defaults(self):
@@ -43,7 +44,8 @@ class CheckBox(PushButton):
 
     @field_has_changed(PushButton.Select)
     def select_changed(self):
-        if not self.last_select and self.Select.value:
+        last_select = getattr(self, 'last_select', False)
+        if not last_select and self.Select.value:
             self.CheckState.value = not self.CheckState.value
         self.last_select = self.Select.value
 
@@ -53,7 +55,7 @@ class CheckBox(PushButton):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        self.super().pushbutton_cleanup()
+        self.super(CheckBox).pushbutton_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

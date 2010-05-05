@@ -45,6 +45,8 @@ class LayoutBase(avango.script.Script):
     Enable = avango.SFBool()
 
     def __init__(self):
+        self.super(LayoutBase).__init__()
+
         self.dimensions_dirty = False
         self.container_dirty = False
         self.widget_dirty = False

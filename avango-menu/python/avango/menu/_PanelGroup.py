@@ -32,7 +32,7 @@ import math
 
 class PanelGroup(avango.script.Script):
     Panels = avango.MFObject() # read only! use add/remove_panel methods
-    ActivePanel = avango.SFObject()
+    ActivePanel = avango.SFContainer()
     HighlightNext = avango.SFBool()
     HighlightPrev = avango.SFBool()
     ValueUp = avango.SFBool()
@@ -40,9 +40,11 @@ class PanelGroup(avango.script.Script):
     EntrySelect = avango.SFBool()
     GoBack = avango.SFBool()
     Close = avango.SFBool()
-    PlacementTool = avango.SFObject()
+    PlacementTool = avango.SFContainer()
 
     def __init__(self):
+        self.super(PanelGroup).__init__()
+
         self.root = avango.osg.nodes.MatrixTransform()
         self.panels = []
         self.panels_dirty = False

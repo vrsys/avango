@@ -38,11 +38,11 @@ class SliderLayouter(PushButtonLayouter):
     SliderBarMaxLength = avango.SFFloat()
 
     def __init__(self):
-        self.init_super(PushButtonLayouter)
+        self.super(SliderLayouter).__init__()
         self.slider = _ContainerAlignedSliderLayouter()
 
     def init_widget(self):
-        self.super().init_widget()
+        self.super(SliderLayouter).init_widget()
         widget = self.Widget.value
 
         self.SliderBarMinLength.connect_from(widget.SliderBarMinLength)
@@ -77,7 +77,7 @@ class SliderLayouter(PushButtonLayouter):
         self.root.Children.value.append(self.proxy.root)
 
     def update_container(self):
-        self.super().update_container()
+        self.super(SliderLayouter).update_container()
         self.slider.ContainerWidth.connect_from(self.Container.value.Width)
 
     def update_dimensions(self):
@@ -97,7 +97,7 @@ class SliderLayouter(PushButtonLayouter):
     def cleanup(self):
         self.disconnect_all_fields()
         self.slider.cleanup()
-        self.super().pushbuttonlayouter_cleanup()
+        self.super(SliderLayouter).pushbuttonlayouter_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:
@@ -118,6 +118,8 @@ class _ContainerAlignedSliderLayouter(avango.script.Script):
     Position = avango.osg.SFVec3()
 
     def __init__(self):
+        self.super(_ContainerAlignedSliderLayouter).__init__()
+
         self.background_border = avango.osg.nodes.Quad()
         self.background_border.Color.connect_from(self.SliderBarBorderColor)
         self.background = avango.osg.nodes.TexturedQuad()
@@ -240,7 +242,7 @@ class SliderProxyBehavior(ProxyBehavior):
         self.Caller.value.SliderInteractor.value.TargetHolder.value = self.TargetHolder.value
 
     def cleanup(self):
-        self.super().cleanup()
+        self.super(SliderProxyBehavior).cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

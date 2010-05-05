@@ -7,7 +7,6 @@ class User(avango.script.Script):
 
     def __init__(self):
         self.super(User).__init__()
-        
         self.Active.value = True
 
 class Device(avango.script.Script):
@@ -20,6 +19,7 @@ class Device(avango.script.Script):
     Button5 = avango.SFBool()
 
     def __init__(self):
+        self.super(Device).__init__()
         self.Active.value = True
         
         

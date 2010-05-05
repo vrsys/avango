@@ -33,9 +33,9 @@ class RadioButton(PushButton):
     Group = avango.script.SFObject()
 
     def __init__(self):
-        self.last_select = False
+        self.super(RadioButton).__init__()
+        self.last_select = getattr(self, 'last_select', False)
         self.CheckState.value = False
-        self.init_super(PushButton)
 
     def init_defaults(self):
         self.Title.value = avango.menu.Preferences.radiobutton_text
@@ -45,7 +45,8 @@ class RadioButton(PushButton):
 
     @field_has_changed(PushButton.Select)
     def select_changed(self):
-        if not self.last_select and self.Select.value and not self.CheckState.value:
+        last_select = getattr(self, 'last_select', False)
+        if not last_select and self.Select.value and not self.CheckState.value:
             self.CheckState.value = True
         self.last_select = self.Select.value
 
@@ -67,7 +68,7 @@ class RadioButton(PushButton):
 
     def cleanup(self):
         self.disconnect_all_fields()
-        #self.super().cleanup()
+        #self.super(RadioButton).cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

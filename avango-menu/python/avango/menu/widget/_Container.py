@@ -38,10 +38,10 @@ class Container(WidgetBase):
     Orientation = avango.SFInt()
 
     def __init__(self):
+        self.super(Container).__init__()
         self.widgets = []
         self.container_layouters = []
         self.Orientation.value = 1
-        self.init_super(WidgetBase)
 
     def add_widget(self, widget):
         self.widgets.append(widget)
@@ -72,7 +72,8 @@ class Container(WidgetBase):
 
     @field_has_changed(WidgetBase.Enable)
     def enable_changed(self):
-        for layouter in self.container_layouters:
+        container_layouters = getattr(self, 'container_layouters', [])
+        for layouter in container_layouters:
             layouter.Enable.value = self.Enable.value
 
     def cleanup(self):
@@ -81,7 +82,7 @@ class Container(WidgetBase):
             layouter.cleanup()
         self.container_layouters = []
         self.widgets = []
-        self.super().widgetbase_cleanup()
+        self.super(Container).widgetbase_cleanup()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

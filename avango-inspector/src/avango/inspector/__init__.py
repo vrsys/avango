@@ -55,6 +55,7 @@ class Inspector(avango.script.Script):
     Children = avango.MFContainer()
 
     def __init__(self):
+        self.super(Inspector).__init__()
         self.always_evaluate(True)
 
         avango.script.register_exception_handler(self._handle_exception)

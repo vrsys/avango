@@ -43,6 +43,8 @@ class Label(avango.script.Script):
     Position = avango.osg.SFVec3()
 
     def __init__(self):
+        self.super(Label).__init__()
+
         self.Alignment.value = 0
         self.OffsetX.value = 0
         self.OffsetY.value = 0

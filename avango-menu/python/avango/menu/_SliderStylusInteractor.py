@@ -50,6 +50,8 @@ class SliderStylusInteractor(avango.script.Script):
     FullRangeAngle = avango.SFFloat()
 
     def __init__(self):
+        self.super(SliderStylusInteractor).__init__()
+
         self.FullRangeAngle.connect_from(Preferences.interaction.SliderStylusInteractorFullRangeAngle)
         self.quat = avango.osg.Quat()
         self.pickray_direction = None

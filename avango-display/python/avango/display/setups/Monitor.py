@@ -2,28 +2,27 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
 import avango.display
+import os
 
 class Monitor(avango.display.Display):
 
@@ -34,7 +33,9 @@ class Monitor(avango.display.Display):
         self._subdisplay_window_events = {}
         self._subdisplay_camera = {}
 
-        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False)
+        self._screen_identifier = os.environ.get('DISPLAY', '')
+
+        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier)
         window.Name.value = "AVANGO"
         window.Decoration.value = True
         window.AutoHeight.value = True
@@ -54,7 +55,7 @@ class Monitor(avango.display.Display):
         display_view = avango.display.nodes.View()
 
         # In the Monitor setting each subdisplay simply get a new window
-        window = self.make_window(0, 0, 1024, 768, 4, 3, False)
+        window = self.make_window(0, 0, 1024, 768, 4, 3, False, self._screen_identifier)
         window.Decoration.value = True
         window.AutoHeight.value = True
         window.ShowCursor.value = True

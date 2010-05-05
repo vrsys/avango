@@ -24,6 +24,7 @@
 import avango.build
 
 headers = Split('''
+    avango/shade/Doxygen.h
     avango/shade/FieldAdapter.h
     avango/shade/Init.h
     avango/shade/LightSource.h

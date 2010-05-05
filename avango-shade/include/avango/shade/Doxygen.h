@@ -21,17 +21,24 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AVANGO_SHADE_CONFIG_H)
-#define AVANGO_SHADE_CONFIG_H
+#if !defined(AVANGO_SHADE_DOXYGEN_H)
+#define AVANGO_SHADE_DOXYGEN_H
+
+/**
+ * \defgroup av_shade AVANGO SHADE Integration Library
+ */
 
 /**
  * \file
  * \ingroup av_shade
  */
 
-#define AVANGO_SHADE_VERSION_MAJOR %(AVANGO_SHADE_VERSION_MAJOR)s
-#define AVANGO_SHADE_VERSION_MINOR %(AVANGO_SHADE_VERSION_MINOR)s
-#define AVANGO_SHADE_VERSION_MAINT %(AVANGO_SHADE_VERSION_MAINT)s
+/**
+ * \namespace av::shade
+ * AVANGO SHADE Integration Library
+ *
+ * \ingroup av_shade
+ */
 
-#endif // #if !defined(AVANGO_SHADE_CONFIG_H)
+#endif // #if !defined(AVANGO_SHADE_DOXYGEN_H)
 

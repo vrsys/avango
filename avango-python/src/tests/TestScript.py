@@ -49,13 +49,14 @@ class HasFields(avango.script.Script):
 
 class DerivedHasFields(HasFields): pass
 
-#class DerivedHasFieldsWithOwnCallback(HasFields):
-#    def __init__(self):
-#        self.value = 0
-#
-#    @avango.script.field_has_changed(HasFields.field)
-#    def callback(self):
-#        self.value = 1
+class DerivedHasFieldsWithOwnCallback(HasFields):
+    def __init__(self):
+        self.super(DerivedHasFieldsWithOwnCallback, self).__init__()
+        self.value = 0
+
+    @avango.script.field_has_changed(HasFields.field)
+    def callback(self):
+        self.value = 1
 
 class DoubleDerivedHasFields(DerivedHasFields): pass
 
@@ -89,9 +90,9 @@ class HasFieldCallbacks(avango.script.Script):
     def callback2(self):
         self.set_value2 = 3
 
-#class DerivedHasFieldCallbacks(HasFieldCallbacks): pass
-#
-#class DoubleDerivedHasFieldCallbacks(DerivedHasFieldCallbacks): pass
+class DerivedHasFieldCallbacks(HasFieldCallbacks): pass
+
+class DoubleDerivedHasFieldCallbacks(DerivedHasFieldCallbacks): pass
 
 class SelfReturn(avango.script.Script):
     def self(self):
@@ -325,32 +326,32 @@ class ScriptTestCase(unittest.TestCase):
         self.assert_(node)
         self.assertEqual(node.field.value, 42)
 
-#    def testDerivedFieldHasChanged(self):
-#        node = DerivedHasFieldCallbacks()
-#        self.assert_(node)
-#
-#        node.value1.value = 1
-#        self.assertEqual(node.set_value1, 2)
-#
-#        node.value2.value = 1
-#        self.assertEqual(node.set_value2, 3)
-#
-#    def testDerivedHasFieldsWithOwnCallback(self):
-#        node = DerivedHasFieldsWithOwnCallback()
-#        self.assert_(node)
-#
-#        node.field.value = 1
-#        self.assertEqual(node.value, 1)
-#
-#    def testDoubleDerivedFieldHasChanged(self):
-#        node = DoubleDerivedHasFieldCallbacks()
-#        self.assert_(node)
-#
-#        node.value1.value = 1
-#        self.assertEqual(node.set_value1, 2)
-#
-#        node.value2.value = 1
-#        self.assertEqual(node.set_value2, 3)
+    def testDerivedFieldHasChanged(self):
+        node = DerivedHasFieldCallbacks()
+        self.assert_(node)
+
+        node.value1.value = 1
+        self.assertEqual(node.set_value1, 2)
+
+        node.value2.value = 1
+        self.assertEqual(node.set_value2, 3)
+
+    def testDerivedHasFieldsWithOwnCallback(self):
+        node = DerivedHasFieldsWithOwnCallback()
+        self.assert_(node)
+
+        node.field.value = 1
+        self.assertEqual(node.value, 1)
+
+    def testDoubleDerivedFieldHasChanged(self):
+        node = DoubleDerivedHasFieldCallbacks()
+        self.assert_(node)
+
+        node.value1.value = 1
+        self.assertEqual(node.set_value1, 2)
+
+        node.value2.value = 1
+        self.assertEqual(node.set_value2, 3)
 
     def testCreateInstanceFromModule(self):
         self.assert_(apackage.empty.nodes.Empty())

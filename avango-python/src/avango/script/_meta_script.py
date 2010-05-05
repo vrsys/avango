@@ -59,7 +59,7 @@ class ScriptMetaclass(type):
         cls._wrapper = Wrapper
 
         Wrapper._fields = list(getattr(base, '_fields', []))
-        Wrapper._field_has_changed = {}
+        Wrapper._field_has_changed = dict(getattr(base, '_field_has_changed', {}))
         for name, attribute in classdict.iteritems():
             if isinstance(attribute, avango.Field):
                 Wrapper._fields.append( (name, attribute) )

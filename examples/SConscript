@@ -42,7 +42,6 @@ if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
 	SConscript('inspector/SConscript')
 	SConscript('layer/SConscript')
 	SConscript('low-level-display-setup/SConscript')
-	SConscript('shade/SConscript')
 	SConscript('shader/SConscript')
 	SConscript('simple/SConscript')
 	SConscript('snowland/SConscript')
@@ -61,3 +60,5 @@ if not avango.build.oshelper.os_is_windows() and \
 	SConscript('daemon/SConscript')
 if avango.build.Environment()['UTILS_SUPPORT']:
   SConscript('avango-utils/SConscript')
+if avango.build.Environment()['SHADE_SUPPORT']:
+  SConscript('shade/SConscript')

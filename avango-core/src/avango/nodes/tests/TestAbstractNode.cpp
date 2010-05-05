@@ -30,7 +30,7 @@
 // includes, project
 
 #include <avango/Link.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/UnitTest++/UnitTest++.h>
 
@@ -41,7 +41,7 @@
 namespace {
   using namespace av;
 
-  class AbstractNode : public av::Object {
+  class AbstractNode : public av::FieldContainer {
     AV_FC_DECLARE_ABSTRACT();
 
   public:
@@ -70,9 +70,9 @@ namespace {
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
+      av::FieldContainer::initClass();
 
-      AV_FC_INIT_ABSTRACT(av::Object, AbstractNode, false);
+      AV_FC_INIT_ABSTRACT(av::FieldContainer, AbstractNode, false);
     }
   }
 

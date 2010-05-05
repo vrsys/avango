@@ -28,14 +28,14 @@
 
 #include <avango/python/script/Types.h>
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 
 namespace av
 {
   namespace script
   {
 
-    class Update : public av::Object
+    class Update : public av::FieldContainer
     {
       AV_FC_DECLARE();
 

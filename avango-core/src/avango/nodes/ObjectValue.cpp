@@ -43,7 +43,7 @@ template <> const std::string
 av::ObjectValue<double>::sClassTypeName = "av::DoubleObject";
 
 template <> const std::string
-av::ObjectValue<av::Link<av::Object> >::sClassTypeName = "av::ObjectObject";
+av::ObjectValue<av::Link<av::FieldContainer> >::sClassTypeName = "av::FieldContainerObject";
 
 template <> const std::string
 av::ObjectValue<std::string>::sClassTypeName = "av::StringObject";

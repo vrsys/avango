@@ -47,5 +47,5 @@ void init_OSGLineSegmentIntersector(void)
   def("line_intersect", ::av::osg::lineIntersect);
 
   // wrapping osg::LineSegmentIntersector functionality
-  class_<av::osg::LineSegmentIntersector, av::Link<av::osg::LineSegmentIntersector>, bases<av::Object>, boost::noncopyable >("LineSegmentIntersector", "docstring", no_init);
+  class_<av::osg::LineSegmentIntersector, av::Link<av::osg::LineSegmentIntersector>, bases<av::FieldContainer>, boost::noncopyable >("LineSegmentIntersector", "docstring", no_init);
 }

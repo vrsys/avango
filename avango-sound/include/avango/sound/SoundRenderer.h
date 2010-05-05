@@ -26,7 +26,7 @@
 #ifndef AV_SOUND_SOUNDRENDERER_H
 #define AV_SOUND_SOUNDRENDERER_H
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/sound/SoundSource.h>
 #include <avango/osg/Fields.h>
 #include <boost/shared_ptr.hpp>
@@ -39,7 +39,7 @@
 namespace av {
   namespace sound {
 
-    class SoundRenderer : public Object {
+    class SoundRenderer : public FieldContainer {
 
       AV_FC_DECLARE_ABSTRACT();
 

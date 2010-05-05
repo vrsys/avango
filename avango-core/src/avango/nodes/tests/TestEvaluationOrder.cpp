@@ -24,13 +24,13 @@
 \************************************************************************/
 
 #include <avango/Application.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/UnitTest++/UnitTest++.h>
 
 namespace
 {
-  class EvaluateNode : public av::Object
+  class EvaluateNode : public av::FieldContainer
   {
     AV_FC_DECLARE();
 
@@ -63,8 +63,8 @@ namespace
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
-      AV_FC_INIT(av::Object, EvaluateNode, false);
+      av::FieldContainer::initClass();
+      AV_FC_INIT(av::FieldContainer, EvaluateNode, false);
     }
   }
 
@@ -76,7 +76,7 @@ namespace
       IntFieldOut.setValue(IntFieldIn.getValue() + 1);
   }
 
-  class DependantNode : public av::Object
+  class DependantNode : public av::FieldContainer
   {
     AV_FC_DECLARE();
 
@@ -101,8 +101,8 @@ namespace
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
-      AV_FC_INIT(av::Object, DependantNode, false);
+      av::FieldContainer::initClass();
+      AV_FC_INIT(av::FieldContainer, DependantNode, false);
     }
   }
 

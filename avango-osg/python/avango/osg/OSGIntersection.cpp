@@ -47,5 +47,5 @@ void init_OSGIntersection(void)
   // wrapping osg::Intersection functionality
   register_field<av::osg::SFIntersection>("SFIntersection");
   register_multifield<av::osg::MFIntersection>("MFIntersection");
-  class_<av::osg::Intersection, av::Link<av::osg::Intersection>, bases<av::Object>, boost::noncopyable >("Intersection", "docstring", no_init);
+  class_<av::osg::Intersection, av::Link<av::osg::Intersection>, bases<av::FieldContainer>, boost::noncopyable >("Intersection", "docstring", no_init);
  }

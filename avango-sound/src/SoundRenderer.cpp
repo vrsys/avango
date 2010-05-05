@@ -53,8 +53,8 @@ av::sound::SoundRenderer::initClass()
 {
   if(!isTypeInitialized())
   {
-    Object::initClass();
-    AV_FC_INIT_ABSTRACT(av::Object,
+    FieldContainer::initClass();
+    AV_FC_INIT_ABSTRACT(av::FieldContainer,
                         av::sound::SoundRenderer,
                         false);
 

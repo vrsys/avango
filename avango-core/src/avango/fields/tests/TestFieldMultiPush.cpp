@@ -30,7 +30,7 @@
 // includes, project
 
 #include <avango/Link.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/UnitTest++/UnitTest++.h>
 
@@ -42,7 +42,7 @@ namespace
 {
   using namespace av;
 
-  class FieldNodeMultiPush : public av::Object {
+  class FieldNodeMultiPush : public av::FieldContainer {
     AV_FC_DECLARE();
 
   public:
@@ -77,9 +77,9 @@ namespace
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
+      av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::Object, FieldNodeMultiPush, false);
+      AV_FC_INIT(av::FieldContainer, FieldNodeMultiPush, false);
     }
   }
 

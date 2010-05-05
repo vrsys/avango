@@ -26,7 +26,7 @@
 #ifndef AV_SOUND_SAMPLEBUFFER_H
 #define AV_SOUND_SAMPLEBUFFER_H
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <boost/shared_array.hpp>
 #include <inttypes.h>
 
@@ -38,7 +38,7 @@
 namespace av {
   namespace sound {
 
-    class SampleBuffer : public av::Object {
+    class SampleBuffer : public av::FieldContainer {
       AV_FC_DECLARE();
       public:
         typedef int16_t SampleType;

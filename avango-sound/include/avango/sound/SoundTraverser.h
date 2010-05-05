@@ -26,7 +26,7 @@
 #ifndef AV_SOUND_SOUNDTRAVERSER_H
 #define AV_SOUND_SOUNDTRAVERSER_H
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/osg/Fields.h>
 #include <avango/osg/Node.h>
 #include <avango/sound/SoundRenderer.h>
@@ -45,7 +45,7 @@ namespace av {
      * matrix. It then lets the SoundRenderers stored in Renderers update their LocalSources stored
      * in a SoundSource that is found in the tree.
      */
-    class SoundTraverser : public Object {
+    class SoundTraverser : public FieldContainer {
 
       AV_FC_DECLARE();
 

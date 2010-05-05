@@ -24,7 +24,7 @@
 \************************************************************************/
 
 #include "MockFieldContainer.h"
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/UnitTest++/UnitTest++.h>
 
@@ -43,7 +43,7 @@ namespace
 
   using namespace av;
 
-  class TestNode : public av::Object {
+  class TestNode : public av::FieldContainer {
     AV_FC_DECLARE();
 
   public:
@@ -69,9 +69,9 @@ namespace
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
+      av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::Object, TestNode, false);
+      AV_FC_INIT(av::FieldContainer, TestNode, false);
     }
   }
 

@@ -54,9 +54,9 @@ av::osg::Object::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::Object, av::osg::Object, true);
+    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::osg::Object, true);
 
     SFObject::initClass("av::osg::SFObject", "av::Field");
     MFObject::initClass("av::osg::MFObject", "av::Field");

@@ -90,7 +90,7 @@ namespace av
        * Define the caller object, if called from an evaluate function,
        * to call evaluate on all nodes on the traversal to the root node.
        */
-      ::osg::Matrix getAbsoluteTransform(av::Object* caller = 0) const;
+      ::osg::Matrix getAbsoluteTransform(av::FieldContainer* caller = 0) const;
 
     protected:
 

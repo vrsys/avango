@@ -83,9 +83,9 @@ av::sound::SampleBuffer::setSampleRate( unsigned int sampleRate)
 av::sound::SampleBuffer::initClass()
 {
   if (!isTypeInitialized()) {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object,
+    AV_FC_INIT(av::FieldContainer,
                av::sound::SampleBuffer,
                true);
     SFSampleBuffer::initClass("av::sound::SFSampleBuffer", "av::Field");

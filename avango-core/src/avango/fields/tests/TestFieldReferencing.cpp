@@ -26,6 +26,7 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 #include <avango/ObjectValue.h>
+#include <avango/FieldContainer.h>
 
 #include <avango/UnitTest++/UnitTest++.h>
 
@@ -33,7 +34,7 @@ namespace
 {
   av::Logger& logger(av::getLogger("TestFieldReferencing"));
 
-  class MyObject : public av::Object
+  class MyObject : public av::FieldContainer
   {
     AV_FC_DECLARE();
 
@@ -51,7 +52,7 @@ namespace
   AV_FC_DEFINE(MyObject);
 
   MyObject::MyObject(bool* deleted) :
-    Object(),
+    FieldContainer(),
     mDeleted(deleted)
   {
     if (mDeleted) *mDeleted = false;
@@ -66,8 +67,8 @@ namespace
   {
     if (!isTypeInitialized())
     {
-      av::Object::initClass();
-      AV_FC_INIT(av::Object, MyObject, true);
+      av::FieldContainer::initClass();
+      AV_FC_INIT(av::FieldContainer, MyObject, true);
     }
   }
 

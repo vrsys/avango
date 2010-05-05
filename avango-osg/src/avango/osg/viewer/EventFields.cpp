@@ -304,9 +304,9 @@ av::osg::viewer::EventFields::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object, av::osg::viewer::EventFields, true);
+    AV_FC_INIT(av::FieldContainer, av::osg::viewer::EventFields, true);
 
     SFEventFields::initClass("av::osg::viewer::SFEventFields", "av::Field");
     MFEventFields::initClass("av::osg::viewer::MFEventFields", "av::Field");

@@ -48,5 +48,5 @@ void init_OSGObject(void)
   register_field<av::osg::SFObject>("SFObject");
   register_multifield<av::osg::MFObject>("MFObject");
 
-  class_<av::osg::Object, av::Link<av::osg::Object>, bases<av::Object>, boost::noncopyable >("Object", "docstring", no_init);
+  class_<av::osg::Object, av::Link<av::osg::Object>, bases<av::FieldContainer>, boost::noncopyable >("Object", "docstring", no_init);
  }

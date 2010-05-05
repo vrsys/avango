@@ -33,8 +33,6 @@
 
 #include <osg/Referenced>
 
-#include <avango/Object.h>
-
 #include <avango/osg/windows_specific_osg.h>
 
 namespace av

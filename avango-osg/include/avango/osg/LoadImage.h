@@ -31,7 +31,7 @@
  * \ingroup av_osg
  */
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/osg/Image.h>
 #include "windows_specific_osg.h"
@@ -47,7 +47,7 @@ namespace av
      *
      * \ingroup av_osg
      */
-    class AV_OSG_DLL LoadImage : public ::av::Object
+    class AV_OSG_DLL LoadImage : public ::av::FieldContainer
     {
       AV_FC_DECLARE();
 

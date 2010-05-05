@@ -31,7 +31,7 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/Node.h>
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 
 namespace av
 {
@@ -50,7 +50,7 @@ namespace av
      *
      * \ingroup av_osg
      */
-    class AV_OSG_DLL LineSegmentIntersector : public av::Object
+    class AV_OSG_DLL LineSegmentIntersector : public av::FieldContainer
     {
       AV_FC_DECLARE();
 

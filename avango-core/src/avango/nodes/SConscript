@@ -30,7 +30,6 @@ sources = Split('''
     Base.cpp
     Distributed.cpp
     Typed.cpp
-    Object.cpp
     ObjectValue.cpp
     ''')
 

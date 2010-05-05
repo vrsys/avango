@@ -71,8 +71,8 @@ BOOST_PYTHON_MODULE(_viewer)
     .def("done", &av::osg::viewer::CompositeViewer::done)
     .def("frame_without_evaluation", &av::osg::viewer::CompositeViewer::frameWithoutEvaluation)
     ;
-  class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::Object>, boost::noncopyable >("GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
-  class_<av::osg::viewer::EventFields, av::Link<av::osg::viewer::EventFields>, bases<av::Object>, boost::noncopyable >("EventFields", "EventFields: setting fields for exposing events ", no_init);
+  class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::FieldContainer>, boost::noncopyable >("GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
+  class_<av::osg::viewer::EventFields, av::Link<av::osg::viewer::EventFields>, bases<av::FieldContainer>, boost::noncopyable >("EventFields", "EventFields: setting fields for exposing events ", no_init);
   class_<av::osg::viewer::View, av::Link<av::osg::viewer::View>, bases<av::osg::Object>, boost::noncopyable >("View", "View: contains cameras and the scene", no_init);
   class_<av::osg::viewer::Viewer, av::Link<av::osg::viewer::Viewer>, bases<av::osg::viewer::View>, boost::noncopyable >("Viewer", "Viewer: is and renders a View", no_init)
     .def("frame", &av::osg::viewer::Viewer::frame)

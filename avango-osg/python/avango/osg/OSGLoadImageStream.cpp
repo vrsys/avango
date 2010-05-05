@@ -47,5 +47,5 @@ void init_OSGLoadImageStream(void)
   // wrapping osg::LoadImageStream functionality
   register_field<av::osg::SFLoadImageStream>("SFLoadImageStream");
   register_multifield<av::osg::MFLoadImageStream>("MFLoadImageStream");
-  class_<av::osg::LoadImageStream, av::Link<av::osg::LoadImageStream>, bases<av::Object>, boost::noncopyable >("LoadImageStream", "docstring", no_init);
+  class_<av::osg::LoadImageStream, av::Link<av::osg::LoadImageStream>, bases<av::FieldContainer>, boost::noncopyable >("LoadImageStream", "docstring", no_init);
 }

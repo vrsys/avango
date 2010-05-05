@@ -34,7 +34,7 @@
 #include <avango/osg/Types.h>
 #include <osg/Object>
 #include <osg/observer_ptr>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/osg/ObjectLink.h>
 
 namespace av
@@ -57,7 +57,7 @@ namespace av
      *
      * \ingroup av_osg
      */
-    class AV_OSG_DLL Object : public av::Object, public ::osg::Observer
+    class AV_OSG_DLL Object : public av::FieldContainer, public ::osg::Observer
     {
       AV_FC_DECLARE_ABSTRACT();
 

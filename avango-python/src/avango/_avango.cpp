@@ -29,7 +29,7 @@
 #include <avango/logging/Logger.h>
 #include <avango/logging/FileAppender.h>
 #include <avango/Application.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/python/exceptions.h>
 #include <avango/python/register_field.h>
@@ -126,10 +126,10 @@ BOOST_PYTHON_MODULE(_avango)
   init_InputStream();
   init_OutputStream();
 
-  register_field<av::SFObject>("SFObject");
-  register_multifield<av::MFObject>("MFObject");
-
-  class_<av::Object, av::Link<av::Object>, bases<av::FieldContainer>, boost::noncopyable >("Object", "Object base class", no_init);
+  // Use of these fields is deprecated. Use SFContainer instead.
+  // TODO Remove at a later time
+  register_field<av::SFContainer>("SFObject");
+  register_multifield<av::MFContainer>("MFObject");
 
 #ifdef AVANGO_DISTRIBUTION_SUPPORT
   av::NetLock::initClass();

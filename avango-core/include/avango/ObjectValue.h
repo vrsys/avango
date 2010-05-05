@@ -29,14 +29,15 @@
 #include <string>
 
 #include <avango/Assert.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 
 namespace av
 {
   /**
-   * The ObjectValue template encapsulates a single value in an Avango object.
+   * The ObjectValue template encapsulates a single value in an AVANGO field
+   * container.
    */
-  template <typename T> class ObjectValue : public Object
+  template <typename T> class ObjectValue : public FieldContainer
   {
 
   public:
@@ -64,9 +65,9 @@ namespace av
     {
       if (!isTypeInitialized())
       {
-        Object::initClass();
+        FieldContainer::initClass();
 
-        sClassTypeId = Type::createType(Object::getClassTypeId(),
+        sClassTypeId = Type::createType(FieldContainer::getClassTypeId(),
                                         sClassTypeName,
                                         new CreateA<ObjectValue<T> >,
                                         true);
@@ -106,16 +107,16 @@ namespace av
   template class AV_DLL ObjectValue<unsigned int>;
   template class AV_DLL ObjectValue<float>;
   template class AV_DLL ObjectValue<double>;
-  template class AV_DLL ObjectValue<Link<Object> >;
+  template class AV_DLL ObjectValue<Link<FieldContainer> >;
   template class AV_DLL ObjectValue<std::string>;
 
-  typedef ObjectValue<bool>          BoolObject;
-  typedef ObjectValue<int>           IntObject;
-  typedef ObjectValue<unsigned int>  UIntObject;
-  typedef ObjectValue<float>         FloatObject;
-  typedef ObjectValue<double>        DoubleObject;
-  typedef ObjectValue<Link<Object> > ObjectObject;
-  typedef ObjectValue<std::string>   StringObject;
+  typedef ObjectValue<bool>                   BoolObject;
+  typedef ObjectValue<int>                    IntObject;
+  typedef ObjectValue<unsigned int>           UIntObject;
+  typedef ObjectValue<float>                  FloatObject;
+  typedef ObjectValue<double>                 DoubleObject;
+  typedef ObjectValue<Link<FieldContainer> >  ObjectObject;
+  typedef ObjectValue<std::string>            StringObject;
 }
 
 #endif // #if !defined(AVANGO_OBJECTVALUE_H)

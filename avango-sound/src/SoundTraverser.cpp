@@ -67,8 +67,8 @@ av::sound::SoundTraverser::initClass()
 {
   if(!isTypeInitialized())
   {
-    Object::initClass();
-    AV_FC_INIT(av::Object,
+    FieldContainer::initClass();
+    AV_FC_INIT(av::FieldContainer,
                av::sound::SoundTraverser,
                true);
   }

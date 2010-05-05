@@ -53,9 +53,9 @@ av::osg::Intersection::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object, av::osg::Intersection, true);
+    AV_FC_INIT(av::FieldContainer, av::osg::Intersection, true);
 
     SFIntersection::initClass("av::osg::SFIntersection", "av::Field");
     MFIntersection::initClass("av::osg::MFIntersection", "av::Field");

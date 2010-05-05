@@ -29,7 +29,7 @@
 #include "Script.h"
 
 #include <avango/Create.h>
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/Type.h>
 
 #include <boost/shared_ptr.hpp>
@@ -49,7 +49,7 @@ namespace boost
 namespace
 {
 
-  class Script : public av::Object
+  class Script : public av::FieldContainer
   {
   public:
 
@@ -189,8 +189,7 @@ namespace
       mFields(fields),
       mCallbacks(callbacks)
     {
-      // FIXME this creates a new Object object each time a Script node is created.
-      mType = av::Type::createType(av::Link<av::Object>(new av::Object())->getTypeId(), name, this, true);
+      mType = av::Type::createType(av::FieldContainer::getClassTypeId(), name, this, true);
     }
 
     /*virtual*/ av::Typed* makeInstance() const
@@ -219,7 +218,7 @@ void av::script::register_script(void)
   def("_create_type", create_type);
   def("register_exception_handler", &Script::register_exception_handler);
 
-  class_<Script, av::Link<Script>, bases<av::Object>, boost::noncopyable>
+  class_<Script, av::Link<Script>, bases<av::FieldContainer>, boost::noncopyable>
     ("_Script", "Internal base class for Script nodes", no_init)
     .def("_get_object", &Script::getObject)
     ;

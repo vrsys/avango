@@ -79,7 +79,7 @@ av::osg::Node::getOsgNode() const
 }
 
 ::osg::Matrix
-av::osg::Node::getAbsoluteTransform(av::Object* caller) const
+av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller) const
 {
   ::osg::Node *osg_node = getOsgNode();
 

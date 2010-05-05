@@ -33,7 +33,7 @@
 
 #include <osgGA/GUIEventHandler>
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 #include <avango/osg/Fields.h>
 #include <avango/osg/viewer/View.h>
 #include <avango/osg/viewer/windows_specific_osg_viewer.h>
@@ -65,7 +65,7 @@ namespace av
       /**
        * \ingroup av_osg_viewer
        */
-      class AV_OSG_VIEWER_DLL EventFields : public av::Object
+      class AV_OSG_VIEWER_DLL EventFields : public av::FieldContainer
       {
         AV_FC_DECLARE();
 

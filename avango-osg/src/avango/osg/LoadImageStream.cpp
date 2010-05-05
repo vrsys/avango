@@ -53,9 +53,9 @@ av::osg::LoadImageStream::initClass()
 {
   if (!isTypeInitialized())
   {
-    ::av::Object::initClass();
+    ::av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object, av::osg::LoadImageStream, true);
+    AV_FC_INIT(av::FieldContainer, av::osg::LoadImageStream, true);
 
     SFLoadImageStream::initClass("av::osg::SFLoadImageStream", "av::Field");
     MFLoadImageStream::initClass("av::osg::MFLoadImageStream", "av::Field");
@@ -67,7 +67,7 @@ av::osg::LoadImageStream::initClass()
 /* virtual */ void
 av::osg::LoadImageStream::evaluateLocalSideEffect()
 {
-  Object::evaluateLocalSideEffect();
+  FieldContainer::evaluateLocalSideEffect();
   LOG_TRACE(logger) << "evaluateLocalSideEffect()";
 
   ::osg::ref_ptr< ::osg::Image> image = osgDB::readImageFile(Filename.getValue());

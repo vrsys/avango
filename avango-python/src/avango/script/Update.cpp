@@ -38,8 +38,8 @@ void av::script::Update::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
-    AV_FC_INIT(av::Object, av::script::Update, true);
+    av::FieldContainer::initClass();
+    AV_FC_INIT(av::FieldContainer, av::script::Update, true);
   }
 }
 

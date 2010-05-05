@@ -23,44 +23,4 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AVANGO_OBJECT_H)
-#define AVANGO_OBJECT_H
-
-#include <avango/FieldContainer.h>
-
-namespace av
-{
-  /**
-   * Avango object base class
-   *
-   * This is the base class to extend avango with own classes.
-   */
-  class AV_DLL Object : public FieldContainer
-  {
-
-    AV_FC_DECLARE();
-
-  public:
-
-    Object();
-
-  protected:
-
-    /**
-     * Destructor made protected to prevent allocation on stack.
-     */
-    virtual ~Object();
-
-  };
-
-#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_DLL SingleField<Link<Object> >;
-  template class AV_DLL MultiField<Link<Object> >;
-#endif
-
-  typedef SingleField<Link<Object> > SFObject;
-  typedef MultiField<Link<Object> >  MFObject;
-
-} // namespace av
-
-#endif // #if !defined(AVANGO_OBJECT_H)
+#error This class was removed. Use FieldContainer instead.

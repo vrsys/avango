@@ -100,9 +100,9 @@ av::osg::viewer::GraphicsWindow::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::Object::initClass();
+    av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::Object, av::osg::viewer::GraphicsWindow, true);
+    AV_FC_INIT(av::FieldContainer, av::osg::viewer::GraphicsWindow, true);
 
     SFGraphicsWindow::initClass("av::osg::viewer::SFGraphicsWindow", "av::Field");
     MFGraphicsWindow::initClass("av::osg::viewer::MFGraphicsWindow", "av::Field");

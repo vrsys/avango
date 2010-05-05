@@ -34,6 +34,7 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/Object.h>
 #include <avango/osg/StateSet.h>
+#include <avango/FieldContainer.h>
 
 namespace av
 {

@@ -72,22 +72,23 @@ class IncValueWithValues(avango.script.Script):
         values = self.get_values()
         values.field += 1
 
-#class HasFieldCallbacks(avango.script.Script):
-#    value1 = avango.SFInt()
-#    value2 = avango.SFInt()
-#
-#    def __init__(self):
-#        self.set_value1 = 0
-#        self.set_value2 = 0
-#
-#    @avango.script.field_has_changed(value1)
-#    def callback1(self):
-#        self.set_value1 = 2
-#
-#    @avango.script.field_has_changed(value2)
-#    def callback2(self):
-#        self.set_value2 = 3
-#
+class HasFieldCallbacks(avango.script.Script):
+    value1 = avango.SFInt()
+    value2 = avango.SFInt()
+
+    def __init__(self):
+        self.super(HasFieldCallbacks, self).__init__()
+        self.set_value1 = 0
+        self.set_value2 = 0
+
+    @avango.script.field_has_changed(value1)
+    def callback1(self):
+        self.set_value1 = 2
+
+    @avango.script.field_has_changed(value2)
+    def callback2(self):
+        self.set_value2 = 3
+
 #class DerivedHasFieldCallbacks(HasFieldCallbacks): pass
 #
 #class DoubleDerivedHasFieldCallbacks(DerivedHasFieldCallbacks): pass
@@ -294,15 +295,15 @@ class ScriptTestCase(unittest.TestCase):
         avango.evaluate()
         self.assertEqual(node.field.value, 3)
 
-#    def testFieldHasChanged(self):
-#        node = HasFieldCallbacks()
-#        self.assert_(node)
-#
-#        node.value1.value = 1
-#        self.assertEqual(node.set_value1, 2)
-#
-#        node.value2.value = 1
-#        self.assertEqual(node.set_value2, 3)
+    def testFieldHasChanged(self):
+        node = HasFieldCallbacks()
+        self.assert_(node)
+
+        node.value1.value = 1
+        self.assertEqual(node.set_value1, 2)
+
+        node.value2.value = 1
+        self.assertEqual(node.set_value2, 3)
 
     def testSetObjectValue(self):
         value = lambda x: x+1

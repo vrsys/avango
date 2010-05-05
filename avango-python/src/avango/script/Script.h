@@ -52,11 +52,14 @@ namespace av
 
       PyObject* getSelf(void) const;
 
+      void enableFieldHasChanged(void);
+
       static void register_exception_handler(boost::python::object handler);
 
     protected:
 
       /*virtual*/ void evaluate();
+      /*virtual*/ void fieldHasChanged(const Field& field);
 
     private:
 
@@ -69,6 +72,7 @@ namespace av
       PyObject* mSelf;
       av::Type mType;
       bool mIsFloatingRef;
+      bool mHasFieldHasChangedEnabled;
       static av::Type sType;
       static boost::python::object sHandler;
     };

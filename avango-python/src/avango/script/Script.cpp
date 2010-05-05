@@ -42,7 +42,8 @@ object av::script::Script::sHandler;
 av::script::Script::Script(PyObject* self, av::Type type) :
   mSelf(self),
   mType(type),
-  mIsFloatingRef(false)
+  mIsFloatingRef(false),
+  mHasFieldHasChangedEnabled(false)
 {
 }
 
@@ -105,6 +106,17 @@ void av::script::Script::initClass(void)
   {
     handle_exception();
   }
+}
+
+/*virtual*/ void av::script::Script::fieldHasChanged(const Field& field)
+{
+  if (mHasFieldHasChangedEnabled)
+    call_method<void>(mSelf, "_fieldHasChanged", boost::ref(field));
+}
+
+void av::script::Script::enableFieldHasChanged(void)
+{
+  mHasFieldHasChangedEnabled = true;
 }
 
 PyObject* av::script::Script::getSelf(void) const
@@ -206,6 +218,7 @@ void av::script::register_script(void)
 
   class_<Script, bases<av::FieldContainer>, boost::noncopyable>
     ("_Script", "Internal base class for Script nodes", init<av::Type>())
+    .def("_enable_field_has_changed", &Script::enableFieldHasChanged)
     ;
 
   class_<av::Type>("_Type");

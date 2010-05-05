@@ -27,6 +27,19 @@ import avango
 import avango.nodefactory
 import _script
 
+def field_has_changed(field):
+    class container(object):
+        def __init__(self, field):
+            self.field = field
+        def __call__(self, function):
+            function.field_has_changed_field = self.field
+            return function
+    if isinstance(field, avango.Field):
+        return container(field)
+    else:
+        field.field_has_changed_field = None
+        return field
+
 class ScriptMetaclass(type):
     def __init__(cls, classname, bases, classdict):
         super(ScriptMetaclass, cls).__init__(classname, bases, classdict)
@@ -46,10 +59,15 @@ class ScriptMetaclass(type):
         cls._wrapper = Wrapper
 
         Wrapper._fields = list(getattr(base, '_fields', []))
+        Wrapper._field_has_changed = {}
         for name, attribute in classdict.iteritems():
             if isinstance(attribute, avango.Field):
                 Wrapper._fields.append( (name, attribute) )
                 continue
+
+            if hasattr(attribute, "field_has_changed_field"):
+                Wrapper._field_has_changed[attribute.field_has_changed_field] = attribute
+
             setattr(Wrapper, name, attribute)
 
         def create():
@@ -69,8 +87,20 @@ class Script(object):
 
     def __init__(self):
         self.super(Script, self).__init__(self._type)
+
+        # Fields that are added are clones of the prototype given in the class
+        # definition. We therefore need to transform the dictionary mapping
+        # fields to registered callbacks
+        transformed_field_has_changed = {}
+
         for name, field in self._fields:
             self.add_field(field, name)
+            if field in self._field_has_changed:
+                transformed_field_has_changed[self._get_field(name)] = self._field_has_changed[field]
+        self._field_has_changed = transformed_field_has_changed
+
+        if self._field_has_changed:
+            self._enable_field_has_changed()
 
     @staticmethod
     def super(cls, inst):
@@ -79,3 +109,7 @@ class Script(object):
 
     def evaluate(self):
         pass
+
+    def _fieldHasChanged(self, field):
+        if field in self._field_has_changed:
+            self._field_has_changed[field](self)

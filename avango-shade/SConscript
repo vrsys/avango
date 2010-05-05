@@ -1,0 +1,101 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+import os
+
+Alias('all', [Alias('shade-core'), Alias('shade')])
+Alias('check', Alias('check-shade'))
+Alias('install', Alias('install-shade'))
+Alias('check-shade', Alias('check-shade-core'))
+Alias('install-shade', Alias('install-shade-core'))
+
+#
+# Build core shade library
+#
+
+def append_shade_core_options(env):
+    env.Append(CPPPATH=Dir('core/include').abspath)
+    # The PREFIX_* settings allow us to move the shade library file inside the
+    # AVANGO installation directories. Note that the build recipes need to be
+    # adjusted accordingly.
+    shade_core_libname = "avangoShadeCore"
+    Export("shade_core_libname")
+    env['PREFIX_LIB'] = os.path.join(env['PREFIX'], 'lib')
+    env['PREFIX_SHADER_LIB'] = os.path.join(env['PREFIX_LIB'], 'avango/shade')
+    env['PREFIX_INCLUDE'] = os.path.join(env['PREFIX'], 'include/avango/shade/core')
+    avango.build.add_library(env, "boost_signals")
+    avango.build.add_library(env, "boost_filesystem")
+    avango.build.add_library(env, "osg")
+    env.Append(LIBS=['GLEW']) # TODO remove from AVANGO build
+
+shade_core_env = avango.build.Environment()
+append_shade_core_options(shade_core_env)
+Export('shade_core_env')
+
+shade_core_example_env = shade_core_env.Clone()
+Export('shade_core_example_env')
+
+shade_core_unittest_env = avango.build.TestEnvironment()
+append_shade_core_options(shade_core_unittest_env)
+shade_core_unittest_env.Append(CPPPATH=[Dir('../avango-unittest/include/avango/Unittest++').abspath])
+Export('shade_core_unittest_env')
+
+SConscript('core/SConscript')
+
+avango.build.Environment.prepend_library_path(Dir('core').abspath)
+
+#
+# Build avango.shade
+#
+
+shade_env = avango.build.Environment()
+avango.build.add_library(shade_env, 'avango-core')
+avango.build.add_library(shade_env, 'avango-python')
+avango.build.add_library(shade_env, 'avango-osg')
+
+shade_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'PKG_CONFIG_REQUIRES': 'avango-core,avango-python,avango-osg',
+    'AVANGO_SHADE_VERSION': '1.90.0',
+    'AVANGO_SHADE_VERSION_MAJOR': '1',
+    'AVANGO_SHADE_VERSION_MINOR': '90',
+    'AVANGO_SHADE_VERSION_MAINT': '0',
+    }
+
+avango_shade_pc = shade_env.Subst('dist/pkg-config/avango-shade.pc.in')
+Alias('shade', avango_shade_pc)
+shade_env.Alias('install-shade', shade_env.Install(avango.build.get_pkgconfig_path(), avango_shade_pc))
+
+config_h = shade_env.Subst('include/avango/shade/Config.h.in')
+Alias('shade', config_h)
+shade_env.Alias('install-shade', shade_env.Install(avango.build.get_include_path('avango/shade'), config_h))
+
+SConscript ([
+    'include/SConscript',
+    'src/avango/SConscript',
+    'src/tests/SConscript',
+    'python/SConscript',
+])
+
+avango.build.make_vcproject(shade_env, 'avango-shade', 'shade')

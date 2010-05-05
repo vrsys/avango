@@ -1,0 +1,11 @@
+To start an example, first set search path for example shaders:
+
+export SHADE_SHADER_PATH=$PWD/examples/
+
+Also, if the library is not yet installed, the standard shaders need to be 
+added to the search path as well:
+
+export SHADE_SHADER_PATH=$PWD/examples/:$PWD/lib/shade/
+
+Then simply run the example by running the executable. The current directory 
+should be top-level directory of the library.

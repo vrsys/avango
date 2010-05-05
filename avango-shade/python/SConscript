@@ -1,0 +1,48 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+Import('shade_core_libname')
+
+avango.build.Environment.prepend_python_path(Dir('.').abspath)
+module_env = avango.build.PythonEnvironment()
+module_env.Prepend(LIBS=["avangoShade", shade_core_libname])
+avango.build.add_library(module_env, 'avango-core')
+avango.build.add_library(module_env, 'avango-osg')
+avango.build.add_library(module_env, 'boost_python')
+
+Alias('install-shade', avango.build.get_python_path('avango'))
+
+shade_files = Split("""
+    avango/shade/_shade.cpp
+    """)
+
+shade_lib = module_env.SharedLibrary("avango/shade/_shade", shade_files)
+shade_module = Alias('shade-python', [
+    shade_lib,
+    File("avango/shade/__init__.py"),
+    ])
+module_env.Install(avango.build.get_python_path('avango/shade'), "avango/shade/__init__.py")
+module_env.Install(avango.build.get_python_path('avango/shade'), shade_lib)
+Alias('shade', shade_module)

@@ -39,6 +39,9 @@ opts.AddOptions(
     BoolOption('OPENSCENEGRAPH_DEBUG',
                'Use debug version of OpenSceneGraph library',
                False),
+    BoolOption('SHADE_SUPPORT',
+               'Enable building shade module',
+               False),
     BoolOption('OPENAL_SUPPORT',
                'Enable building OpenAL sound module',
                False),
@@ -68,6 +71,7 @@ avango.build.set_config('avango-python', avango.build.PlainConfig(libraries = ['
 
 # avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg', 'avangoOsgParticle']))
 avango.build.set_config('avango-osg', avango.build.PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
+avango.build.set_config('avango-shade', avango.build.PlainConfig(libraries = ['avangoSloow', 'shade']))
 avango.build.set_config('avango-osgparticle', avango.build.PlainConfig(libraries = ['avangoOsgParticle']))
 
 avango.build.set_config('avango-osgviewer', avango.build.PlainConfig(libraries = ['avangoOsgViewer']))
@@ -104,6 +108,8 @@ avango.build.SConscript('avango-core/SConscript')
 avango.build.SConscript('avango-python/SConscript')
 if env['OPENSCENEGRAPH_SUPPORT']:
     avango.build.SConscript('avango-osg/SConscript')
+    if env['SHADE_SUPPORT']:
+        avango.build.SConscript('avango-shade/SConscript')
     avango.build.SConscript('avango-moving/SConscript')
     avango.build.SConscript('avango-menu/SConscript')
     if not avango.build.oshelper.os_is_windows() and \

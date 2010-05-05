@@ -1,0 +1,37 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+*  AVANGO Software, Copyright 2001 - 2010 Fraunhofer Gesellschaft        *
+*  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      *
+*                                                                        *
+*  AVANGO Software (both binary and source code - if released) is        *
+*  intellectual property owned by FhG and copyrighted by FhG worldwide.  *
+*                                                                        *
+\************************************************************************/
+
+#if !defined(AVANGO_SHADE_CONFIG_H)
+#define AVANGO_SHADE_CONFIG_H
+
+/**
+ * \defgroup av_shade AVANGO SHADE Integration Library
+ */
+
+/**
+ * \file
+ * \ingroup av_shade
+ */
+
+/**
+ * \namespace av::shade
+ * AVANGO SHADE Integration Library
+ *
+ * \ingroup av_shade
+ */
+
+#define AVANGO_SHADE_VERSION_MAJOR %(AVANGO_SHADE_VERSION_MAJOR)s
+#define AVANGO_SHADE_VERSION_MINOR %(AVANGO_SHADE_VERSION_MINOR)s
+#define AVANGO_SHADE_VERSION_MAINT %(AVANGO_SHADE_VERSION_MAINT)s
+
+#endif // #if !defined(AVANGO_SHADE_CONFIG_H)
+

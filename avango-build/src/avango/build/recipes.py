@@ -39,7 +39,6 @@ def _setup_default():
         osgUtil
         osgGA
         osgFX
-        sloow
         alut
         openal
         vrpn
@@ -51,6 +50,7 @@ def _setup_default():
 
     _config_store.set('boost_thread', BoostConfig('boost_thread'))
     _config_store.set('boost_signals', BoostConfig('boost_signals'))
+    _config_store.set('boost_filesystem', BoostConfig('boost_filesystem'))
     _config_store.set('boost_regex', BoostConfig('boost_regex'))
     _config_store.set('boost_python', BoostConfig('boost_python', dependencies = ['python']))
 
@@ -64,7 +64,7 @@ def _setup_default():
     _config_store.set('avango-ensemble', PKGConfig('avango-ensemble'))
     _config_store.set('avango-unittest', PKGConfig('avango-unittest'))
     _config_store.set('avango-sound', PlainConfig(libraries = ["avangoSound"]))
-    _config_store.set('avango-sloow', PlainConfig(libraries = ["avangoSloow"]))
+    _config_store.set('avango-shade', PlainConfig(libraries = ["avangoShade", "avangoShadeCore"]))
     _config_store.set('avango-utils', PlainConfig(libraries = ["avangoUtils"]))
     _config_store.set('vorbisfile', PKGConfig('vorbisfile'))
     _config_store.set('xerces', PlainConfig(libraries = ['xerces-c']))

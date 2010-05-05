@@ -50,52 +50,9 @@ namespace
   class Script : public av::FieldContainer
   {
   public:
-
-    Script(av::Type type, object class_, object fields, dict callbacks) :
+    Script(av::Type type) :
       mType(type)
     {
-      mInstance = class_.attr("_new")();
-
-      for (int i = 0; i != extract<int>(fields.attr("__len__")()); ++i)
-      {
-        std::string name = extract<std::string>(fields[i][0]);
-        av::Field* field = extract<av::Field*>(fields[i][1]);
-
-        av::Field* field_copy = field->clone();
-        //mFields.add(name, boost::shared_ptr<av::Field>(field_copy));
-
-        if (callbacks.has_key(name))
-        {
-          mCallbacks[field_copy] = extract<std::string>(callbacks[name]);
-        }
-
-        field_copy->bind(this, name, true);
-      }
-
-      if (mHasFieldHasChanged = callbacks.has_key(object()))
-      {
-        mFieldHasChangedCallback = extract<std::string>(callbacks[object()]);
-      }
-
-      // Now instance is setup, call initialization method
-      this->reference();
-      try
-      {
-        // The '__init__' method exists in the Boost base object, we therefore
-        // cannot rely on '__getattr__' to get the correct function for us.
-        mInstance.attr("__init__").attr("im_func")(av::Link<Script>(this));
-      }
-      catch(...)
-      {
-        this->unreferenceWithoutDeletion();
-
-        // FIXME This assertion triggers almost always as python still holds
-        // references to our unborn class
-        assert((!this->referenceCount()));
-
-        throw;
-      }
-      this->unreferenceWithoutDeletion();
     }
 
     /*virtual*/ av::Type getTypeId() const
@@ -103,48 +60,14 @@ namespace
       return mType;
     }
 
-    /*virtual*/ void evaluate(void)
+    static ::av::Type getClassTypeId(void)
     {
-      try
-      {
-        object(av::Link<Script>(this)).attr("evaluate")();
-      }
-      catch(...)
-      {
-        handle_exception();
-      }
+      return sType;
     }
 
-    /*virtual*/ void fieldHasChanged(const av::Field& field)
+    static void initClass(void)
     {
-      std::map<const av::Field*,std::string>::const_iterator result = mCallbacks.find(&field);
-      if (result != mCallbacks.end())
-      {
-        try
-        {
-          object(av::Link<Script>(this)).attr(result->second.c_str())();
-        }
-        catch(...)
-        {
-          handle_exception();
-        }
-      }
-      else if (mHasFieldHasChanged)
-      {
-        try
-        {
-          object(av::Link<Script>(this)).attr(mFieldHasChangedCallback.c_str())(field.getName(), boost::ref(field));
-        }
-        catch(...)
-        {
-          handle_exception();
-        }
-      }
-    }
-
-    object getObject(void)
-    {
-      return mInstance;
+      sType = av::Type::createAbstractType(av::FieldContainer::getClassTypeId(), "av::script::_Script", true);
     }
 
     static void register_exception_handler(object handler)
@@ -154,6 +77,8 @@ namespace
 
     static void handle_exception(void)
     {
+      // TODO This was called during method invocation or fieldHasChanged
+      // callbacks. See if this still applies. Otherwise remove.
       if (!sHandler)
         throw_error_already_set();
 
@@ -165,59 +90,56 @@ namespace
       sHandler(handle<>(type), handle<>(value), handle<>(traceback));
     }
 
-
   private:
 
     av::Type mType;
-    object mInstance;
-    std::map< const av::Field*, std::string > mCallbacks;
-    bool mHasFieldHasChanged;
-    std::string mFieldHasChangedCallback;
+    static av::Type sType;
     static object sHandler;
   };
 
   object Script::sHandler;
+  av::Type Script::sType;
 
   class ScriptCreator : public av::Create
   {
   public:
 
-    ScriptCreator(const std::string& name, object class_, object fields, dict callbacks) :
-      mClass(class_),
-      mFields(fields),
-      mCallbacks(callbacks)
+    ScriptCreator(object creator) :
+      mCreator(creator)
     {
-      mType = av::Type::createType(av::FieldContainer::getClassTypeId(), name, this, true);
     }
 
     /*virtual*/ av::Typed* makeInstance() const
     {
-      Script* script = new Script(mType, mClass, mFields, mCallbacks);
-      return script;
+      av::Link<Script> script = extract<av::Link<Script> >(mCreator());
+      script->setFloatingReference();
+      return script.getBasePtr();
     }
 
   private:
-
-    av::Type mType;
-    object mClass;
-    object mFields;
-    dict mCallbacks;
+    object mCreator;
   };
 
-  void create_type(const std::string& name, object class_, object fields, dict callbacks)
+  av::Type create_type(const std::string& name, object creator)
   {
-    new ScriptCreator(name, class_, fields, callbacks);
+    ScriptCreator* script_creator = new ScriptCreator(creator);
+    av::Type type = av::Type::createType(Script::getClassTypeId(), name, script_creator, true);
+    return type;
   }
 
 }
 
 void av::script::register_script(void)
 {
+  av::FieldContainer::initClass();
+  Script::initClass();
+
   def("_create_type", create_type);
   def("register_exception_handler", &Script::register_exception_handler);
 
-  class_<Script, av::Link<Script>, bases<av::FieldContainer>, boost::noncopyable>
-    ("_Script", "Internal base class for Script nodes", no_init)
-    .def("_get_object", &Script::getObject)
+  class_<Script, av::Link<Script>, bases<av::FieldContainer> >
+    ("_Script", "Internal base class for Script nodes", init<av::Type>())
     ;
+
+  class_<av::Type>("_Type");
 }

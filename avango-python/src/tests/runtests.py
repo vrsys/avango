@@ -29,8 +29,8 @@ import TestField
 import TestUpdate
 import TestScript
 import TestNodefactory
-import TestContainer
-import TestUtility
+#import TestContainer
+#import TestUtility
 import sys
 
 if __name__ == '__main__':
@@ -40,8 +40,8 @@ if __name__ == '__main__':
         TestUpdate.Suite(),
         TestScript.Suite(),
         TestNodefactory.Suite(),
-        TestContainer.Suite(),
-        TestUtility.Suite(),
+#        TestContainer.Suite(),
+#        TestUtility.Suite(),
     ]
     alltests = unittest.TestSuite(suites)
     result = unittest.TextTestRunner(verbosity=2).run(alltests)

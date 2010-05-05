@@ -38,7 +38,7 @@ class TestContainer(avango.script.Container):
     Output = avango.SFInt()
 
     def __init__(self):
-        self.init_super(avango.script.Container)
+        self.super(TestContainer).__init__()
 
         node1 = self.register_internal_node(DoubleValue())
         node2 = self.register_internal_node(DoubleValue())

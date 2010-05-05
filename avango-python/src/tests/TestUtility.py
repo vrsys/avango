@@ -33,6 +33,7 @@ class A(avango.script.Script):
     Field3 = avango.SFInt()
 
     def __init__(self):
+        self.super(A).__init__()
         self.Field1.value = 0
         self.Field2.value = 0
         self.Field3.value = 0

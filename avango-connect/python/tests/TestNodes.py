@@ -43,7 +43,7 @@ class AOutputNode(connect.OutputNode):
     morestrings = avango.MFString()
 
     def __init__(self):
-        self.init_super(connect.OutputNode)
+        self.super(AOutputNode).__init__()
         self.anint.value = 0
 
 class AInputNode(connect.InputNode):
@@ -52,7 +52,7 @@ class AInputNode(connect.InputNode):
     morestrings = avango.MFString()
 
     def __init__(self):
-        self.init_super(connect.InputNode)
+        self.super(AInputNode).__init__()
         self.anint.value = 0
 
 class NodesTestCase(unittest.TestCase):

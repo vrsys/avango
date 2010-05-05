@@ -87,7 +87,7 @@ class Script(object):
     __metaclass__ = ScriptMetaclass
 
     def __init__(self):
-        self.super(Script, self).__init__(self._Script__type)
+        self.super(Script).__init__(self._Script__type)
 
         # Fields that are added are clones of the prototype given in the class
         # definition. We therefore need to transform the dictionary mapping
@@ -107,10 +107,16 @@ class Script(object):
         if self._Script__field_has_changed:
             self._Script__enable_field_has_changed()
 
-    @staticmethod
-    def super(cls, inst):
-        'Replacement for built-in super to be used by subclasses'
-        return super(cls._Script__wrapper, inst)
+    def super(self, cls):
+        """Replacement for built-in super to be used by subclasses.
+           This is normally called like:
+                self.super(SelfClass).__init__()
+        """
+        return super(cls._Script__wrapper, self)
+
+    def init_super(self, cls):
+        'Deprecated replacement for built-in super. Use self.super()'
+        cls._Script__wrapper.__init__.im_func(self)
 
     def evaluate(self):
         pass

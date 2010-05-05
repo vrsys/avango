@@ -28,6 +28,7 @@ from _io import *
 
 class OutputNode(avango.script.Script):
     def __init__(self):
+        self.super(OutputNode).__init__()
         self.always_evaluate(True)
         self._old_output = None
         self._stream = None
@@ -63,6 +64,7 @@ class OutputNode(avango.script.Script):
 
 class InputNode(avango.script.Script):
     def __init__(self):
+        self.super(InputNode).__init__()
         self.always_evaluate(True)
         self._stream = None
 

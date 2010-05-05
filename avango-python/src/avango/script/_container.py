@@ -35,6 +35,7 @@ class Container(_meta_script.Script):
        instantiated.'''
 
     def __init__(self):
+        self.super(Container).__init__()
         self._nodes = []
 
     def register_internal_node(self, node):

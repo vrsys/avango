@@ -38,7 +38,7 @@ class Local(avango.script.Script):
     value = 42
 
     def __init__(self):
-        self.super(Local, self).__init__()
+        self.super(Local).__init__()
         self.other_value = 10
 
 class DerivedLocal(Local): pass
@@ -51,7 +51,7 @@ class DerivedHasFields(HasFields): pass
 
 class DerivedHasFieldsWithOwnCallback(HasFields):
     def __init__(self):
-        self.super(DerivedHasFieldsWithOwnCallback, self).__init__()
+        self.super(DerivedHasFieldsWithOwnCallback).__init__()
         self.value = 0
 
     @avango.script.field_has_changed(HasFields.field)
@@ -78,7 +78,7 @@ class HasFieldCallbacks(avango.script.Script):
     value2 = avango.SFInt()
 
     def __init__(self):
-        self.super(HasFieldCallbacks, self).__init__()
+        self.super(HasFieldCallbacks).__init__()
         self.set_value1 = 0
         self.set_value2 = 0
 
@@ -100,7 +100,7 @@ class SelfReturn(avango.script.Script):
 
 class TouchMyself(avango.script.Script):
     def __init__(self):
-        self.super(TouchMyself, self).__init__()
+        self.super(TouchMyself).__init__()
         self.value = 1
         self.touch()
     def evaluate(self):
@@ -108,7 +108,7 @@ class TouchMyself(avango.script.Script):
 
 class ExposedTouch(avango.script.Script):
     def __init__(self):
-        self.super(ExposedTouch, self).__init__()
+        self.super(ExposedTouch).__init__()
         self.value = 1
     def exposed_touch(self):
         self.touch()
@@ -128,7 +128,7 @@ class GenericFieldHasChanged(avango.script.Script):
     field = avango.SFInt()
 
     def __init__(self):
-        self.super(GenericFieldHasChanged, self).__init__()
+        self.super(GenericFieldHasChanged).__init__()
         self.name = ''
         self.value = 0
 
@@ -139,23 +139,23 @@ class GenericFieldHasChanged(avango.script.Script):
 
 class DerivedLocalWithInit(Local):
     def __init__(self):
-        self.super(DerivedLocalWithInit, self).__init__()
+        self.super(DerivedLocalWithInit).__init__()
 
 class DerivedUpcallingIncValue(IncValue):
     def __init__(self):
-        self.super(DerivedUpcallingIncValue, self).__init__()
+        self.super(DerivedUpcallingIncValue).__init__()
         self.value = 0
 
     def evaluate(self):
-        self.super(DerivedUpcallingIncValue, self).evaluate()
+        self.super(DerivedUpcallingIncValue).evaluate()
         self.value = 1
 
 class DoubleDerivedUpcallingIncValue(DerivedUpcallingIncValue):
     def __init__(self):
-        self.super(DoubleDerivedUpcallingIncValue, self).__init__()
+        self.super(DoubleDerivedUpcallingIncValue).__init__()
 
     def evaluate(self):
-        self.super(DoubleDerivedUpcallingIncValue, self).evaluate()
+        self.super(DoubleDerivedUpcallingIncValue).evaluate()
 
 #class HasSingleFieldCallbackBase1(avango.script.Script):
 #    value1 = avango.SFInt()

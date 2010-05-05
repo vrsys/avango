@@ -49,35 +49,35 @@ class ScriptMetaclass(type):
             if base == object:
                 base = _script._Script
             else:
-                base = base._wrapper
+                base = base._Script__wrapper
             wrapped_bases.append(base)
         if len(wrapped_bases) != 1:
             raise "Unsupported multiple inheritance"
         wrapped_base = wrapped_bases[0]
         class Wrapper(wrapped_base):
             pass
-        cls._wrapper = Wrapper
+        cls._Script__wrapper = Wrapper
 
-        Wrapper._fields = list(getattr(base, '_fields', []))
-        Wrapper._field_has_changed = dict(getattr(base, '_field_has_changed', {}))
+        Wrapper._Script__fields = list(getattr(base, '_Script__fields', []))
+        Wrapper._Script__field_has_changed = dict(getattr(base, '_Script__field_has_changed', {}))
         for name, attribute in classdict.iteritems():
             if isinstance(attribute, avango.Field):
-                Wrapper._fields.append( (name, attribute) )
+                Wrapper._Script__fields.append( (name, attribute) )
                 continue
 
             if hasattr(attribute, "field_has_changed_field"):
                 field = attribute.field_has_changed_field
-                Wrapper._field_has_changed[field] = attribute
+                Wrapper._Script__field_has_changed[field] = attribute
 
             setattr(Wrapper, name, attribute)
 
         def create():
             return Wrapper()
         mangled_classname = avango.nodefactory.mangle_class_name(classdict['__module__'], classname)
-        Wrapper._type = _script._create_type(mangled_classname, create)
+        Wrapper._Script__type = _script._create_type(mangled_classname, create)
 
         def __new(cls, **args):
-            result = cls._wrapper()
+            result = cls._Script__wrapper()
             for name, value in args.iteritems():
                 getattr(result, name).value = value
             return result
@@ -87,36 +87,36 @@ class Script(object):
     __metaclass__ = ScriptMetaclass
 
     def __init__(self):
-        self.super(Script, self).__init__(self._type)
+        self.super(Script, self).__init__(self._Script__type)
 
         # Fields that are added are clones of the prototype given in the class
         # definition. We therefore need to transform the dictionary mapping
         # fields to registered callbacks
         transformed_field_has_changed = {}
 
-        for name, field in self._fields:
+        for name, field in self._Script__fields:
             self.add_field(field, name)
-            if field in self._field_has_changed:
-                transformed_field_has_changed[self._get_field(name)] = self._field_has_changed[field]
+            if field in self._Script__field_has_changed:
+                transformed_field_has_changed[self._get_field(name)] = self._Script__field_has_changed[field]
 
-        if None in self._field_has_changed:
-            transformed_field_has_changed[None] = self._field_has_changed[None]
+        if None in self._Script__field_has_changed:
+            transformed_field_has_changed[None] = self._Script__field_has_changed[None]
 
-        self._field_has_changed = transformed_field_has_changed
+        self._Script__field_has_changed = transformed_field_has_changed
 
-        if self._field_has_changed:
-            self._enable_field_has_changed()
+        if self._Script__field_has_changed:
+            self._Script__enable_field_has_changed()
 
     @staticmethod
     def super(cls, inst):
         'Replacement for built-in super to be used by subclasses'
-        return super(cls._wrapper, inst)
+        return super(cls._Script__wrapper, inst)
 
     def evaluate(self):
         pass
 
-    def _fieldHasChanged(self, field):
-        if field in self._field_has_changed:
-            self._field_has_changed[field](self)
-        if None in self._field_has_changed:
-            self._field_has_changed[None](self, field._get_name(), field)
+    def _Script__fieldHasChanged(self, field):
+        if field in self._Script__field_has_changed:
+            self._Script__field_has_changed[field](self)
+        if None in self._Script__field_has_changed:
+            self._Script__field_has_changed[None](self, field._get_name(), field)

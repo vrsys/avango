@@ -111,7 +111,7 @@ void av::script::Script::initClass(void)
 /*virtual*/ void av::script::Script::fieldHasChanged(const Field& field)
 {
   if (mHasFieldHasChangedEnabled)
-    call_method<void>(mSelf, "_fieldHasChanged", boost::ref(field));
+    call_method<void>(mSelf, "_Script__fieldHasChanged", boost::ref(field));
 }
 
 void av::script::Script::enableFieldHasChanged(void)
@@ -218,7 +218,7 @@ void av::script::register_script(void)
 
   class_<Script, bases<av::FieldContainer>, boost::noncopyable>
     ("_Script", "Internal base class for Script nodes", init<av::Type>())
-    .def("_enable_field_has_changed", &Script::enableFieldHasChanged)
+    .def("_Script__enable_field_has_changed", &Script::enableFieldHasChanged)
     ;
 
   class_<av::Type>("_Type");

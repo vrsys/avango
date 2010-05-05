@@ -78,7 +78,7 @@ av::daemon::DTrack::startDevice()
   ini.udpbufsize = default_udp_bufsize;
   ini.udptimeout_us = mTimeout;
 
-  ::strcpy(ini.remote_ip, "");
+  std::strcpy(ini.remote_ip, "");
   ini.remote_port = 0;
 
   if (int err = mDTrack->init(&ini))
@@ -205,7 +205,7 @@ av::daemon::DTrack::convert_charpointer_to_ulong(const char* arg) const
     if (errno)
     {
       logger.warn() << "convert_charpointer_to_ulong: unable to convert arg '%s' to int; errno: '%s' ",
-                 arg, ::strerror(errno);
+                 arg, std::strerror(errno);
       result = 0;
     }
     else

@@ -66,7 +66,8 @@ class ScriptMetaclass(type):
                 continue
 
             if hasattr(attribute, "field_has_changed_field"):
-                Wrapper._field_has_changed[attribute.field_has_changed_field] = attribute
+                field = attribute.field_has_changed_field
+                Wrapper._field_has_changed[field] = attribute
 
             setattr(Wrapper, name, attribute)
 
@@ -97,6 +98,10 @@ class Script(object):
             self.add_field(field, name)
             if field in self._field_has_changed:
                 transformed_field_has_changed[self._get_field(name)] = self._field_has_changed[field]
+
+        if None in self._field_has_changed:
+            transformed_field_has_changed[None] = self._field_has_changed[None]
+
         self._field_has_changed = transformed_field_has_changed
 
         if self._field_has_changed:
@@ -113,3 +118,5 @@ class Script(object):
     def _fieldHasChanged(self, field):
         if field in self._field_has_changed:
             self._field_has_changed[field](self)
+        if None in self._field_has_changed:
+            self._field_has_changed[None](self, field._get_name(), field)

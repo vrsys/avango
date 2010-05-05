@@ -124,17 +124,18 @@ class IndirectField(avango.script.Script):
     def get(self):
         return self.field.value
 
-#class GenericFieldHasChanged(avango.script.Script):
-#    field = avango.SFInt()
-#
-#    def __init__(self):
-#        self.name = ''
-#        self.value = 0
-#
-#    @avango.script.field_has_changed
-#    def callback(self, name, field):
-#        self.name = name
-#        self.value = field.value
+class GenericFieldHasChanged(avango.script.Script):
+    field = avango.SFInt()
+
+    def __init__(self):
+        self.super(GenericFieldHasChanged, self).__init__()
+        self.name = ''
+        self.value = 0
+
+    @avango.script.field_has_changed
+    def callback(self, name, field):
+        self.name = name
+        self.value = field.value
 
 class DerivedLocalWithInit(Local):
     def __init__(self):
@@ -397,11 +398,11 @@ class ScriptTestCase(unittest.TestCase):
         node.add_field(avango.SFInt(), "field")
         self.assert_(node._get_field('field'))
 
-#    def testGenericFieldHadChanged(self):
-#        node = GenericFieldHasChanged()
-#        node.field.value = 42
-#        self.assertEqual('field', node.name)
-#        self.assertEqual(42, node.value)
+    def testGenericFieldHadChanged(self):
+        node = GenericFieldHasChanged()
+        node.field.value = 42
+        self.assertEqual('field', node.name)
+        self.assertEqual(42, node.value)
 
     def testInitCascade(self):
         node = DerivedLocalWithInit()

@@ -174,6 +174,7 @@ void init_FieldContainer(void)
     .def("evaluate_dependency", &av::FieldContainer::evaluateDependency)
     .def("read", &av::FieldContainer::read)
     .def("write", &av::FieldContainer::write)
+    .def("reference_count",&av::FieldContainer::referenceCount)
     ;
 
   to_python_converter<av::Link<av::FieldContainer>, FieldContainerLinkConverter>();

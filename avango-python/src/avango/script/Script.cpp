@@ -220,7 +220,6 @@ namespace
       return -1;
     else
       return res;
-
   }
 }
 

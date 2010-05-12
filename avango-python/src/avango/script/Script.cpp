@@ -208,6 +208,22 @@ namespace boost
   }
 }
 
+namespace
+{
+  int num_py_references(av::script::Script* self)
+  {
+    PyObject * sys = PyImport_ImportModule("sys");
+    PyObject * method = PyString_FromString("getrefcount");
+    PyObject * result = PyObject_CallMethodObjArgs(sys, method, self->getSelf(), NULL);
+    int res = (int)PyInt_AsLong(result);
+    if(PyErr_Occurred())
+      return -1;
+    else
+      return res;
+
+  }
+}
+
 void av::script::register_script(void)
 {
   av::FieldContainer::initClass();
@@ -219,6 +235,7 @@ void av::script::register_script(void)
   class_<Script, bases<av::FieldContainer>, boost::noncopyable>
     ("_Script", "Internal base class for Script nodes", init<av::Type>())
     .def("_Script__enable_field_has_changed", &Script::enableFieldHasChanged)
+    .def("reference_count", num_py_references)
     ;
 
   class_<av::Type>("_Type");

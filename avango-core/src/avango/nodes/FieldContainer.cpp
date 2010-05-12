@@ -2,24 +2,22 @@
 
 /************************************************************************\
 *                                                                        *
-* This file is part of Avango.                                           *
+* This file is part of AVANGO.                                           *
 *                                                                        *
-* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       *
 * angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
-* Avango is free software: you can redistribute it and/or modify         *
+* AVANGO is free software: you can redistribute it and/or modify         *
 * it under the terms of the GNU Lesser General Public License as         *
 * published by the Free Software Foundation, version 3.                  *
 *                                                                        *
-* Avango is distributed in the hope that it will be useful,              *
+* AVANGO is distributed in the hope that it will be useful,              *
 * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
 * GNU General Public License for more details.                           *
 *                                                                        *
 * You should have received a copy of the GNU Lesser General Public       *
-* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
-*                                                                        *
-* Avango is a trademark owned by FhG.                                    *
+* License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. *
 *                                                                        *
 \************************************************************************/
 
@@ -67,6 +65,7 @@ av::FieldContainer::FieldContainer() :
   mEvaluateId(0u)
 {
   mFlags.mNeedsEvaluation = false;
+  mFlags.mIsInEvaluationList = false;
   mFlags.mFieldsCalculated = false;
   mFlags.mAlwaysEvaluate = false;
   mFlags.mIsEvaluating = false;
@@ -348,17 +347,14 @@ av::FieldContainer::lastChange() const
 void
 av::FieldContainer::scheduleForEvaluation()
 {
-  if (!mFlags.mNeedsEvaluation)
+  mFlags.mNeedsEvaluation = true;
+
+  if (!mFlags.mIsInEvaluationList && mFlags.mAllowScheduling)
   {
-    mFlags.mNeedsEvaluation = true;
-
-    if (!mFlags.mAllowScheduling)
-      return;
-
     evaluation_list.push_back(Link<FieldContainer>(this));
+    mFlags.mIsInEvaluationList = true;
 
     AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("scheduleForEvaluation: '%1%' @0x%2% scheduled, list size %3%.") % getTypeId().getName() % this % evaluation_list.size()));
-
   }
 }
 
@@ -441,7 +437,11 @@ av::FieldContainer::evaluateAllContainers()
     FieldContainerList::iterator current_container = evaluation_list.begin();
     while (current_container != evaluation_list.end())
     {
-      if ((*current_container).isValid())
+      if (!(*current_container).isValid())
+      {
+        AVANGO_LOG(logger,logging::WARN , "evaluateAllContainers: skipping invalid container");
+      }
+      else
       {
         // only evaluate if the evaluation_list has not the last reference to the object
         // TODO: evaluation_list should use weak pointers
@@ -451,18 +451,15 @@ av::FieldContainer::evaluateAllContainers()
 
           // setup for reschedule if requested or needed
           if ((*current_container)->mFlags.mNeedsEvaluation)
+          {
             ++current_container;
-          else
-            current_container = evaluation_list.erase(current_container);
+            continue;
+          }
         }
-        else
-          current_container = evaluation_list.erase(current_container);
       }
-      else
-      {
-        current_container = evaluation_list.erase(current_container);
-        AVANGO_LOG(logger,logging::WARN , "evaluateAllContainers: skipping invalid container");
-      }
+
+      (*current_container)->mFlags.mIsInEvaluationList = false;
+      current_container = evaluation_list.erase(current_container);
     }
 
     AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("evaluateAllContainers: %1% rescheduled") % evaluation_list.size()));

@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # AVANGO is free software: you can redistribute it and/or modify         #
@@ -32,6 +32,7 @@ test_nodes = avango_test_env.Program(Split('''
                                     TestAbstractNode.cpp
                                     TestFieldConnectionChangeInNotify.cpp
                                     TestEvaluationOrder.cpp
+                                    TestEvaluation.cpp
                                     TestUnref.cpp
                                     '''))
 tests += avango_test_env.Alias('test-core-nodes', test_nodes, "${SOURCE.abspath}")

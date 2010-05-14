@@ -42,7 +42,7 @@ headers = Split('''
     Wiimote.h
     WiimoteActuator.h
     ''')
- 
+
 if avango.build.Environment()['VRPN_SUPPORT']:
     headers += Split('''
         VRPNClient.h

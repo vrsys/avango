@@ -27,15 +27,15 @@ from avango.script import field_has_changed
 
 class ImmediateEdgeTrigger(avango.script.Script):
     """
-    Triggers immediately (as soon as the field has been changed) on 
+    Triggers immediately (as soon as the field has been changed) on
     the edge transitions of the value of the Trigger field.
     """
-    
+
     Trigger = avango.SFBool()
 
     def __init__(self):
         self.super(ImmediateEdgeTrigger).__init__()
-        
+
         self._last_trigger = False
 
     @field_has_changed(Trigger)
@@ -63,7 +63,7 @@ class EdgeTrigger(avango.script.Script):
 
     def __init__(self):
         self.super(EdgeTrigger).__init__()
-        
+
         self._last_trigger = False
 
     def evaluate(self):
@@ -76,7 +76,7 @@ class EdgeTrigger(avango.script.Script):
             if self._last_trigger:
                 self._last_trigger = False
                 self.on_up_transition()
-            
+
     def on_up_transition(self):
         pass
     def on_down_transition(self):

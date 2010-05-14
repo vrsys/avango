@@ -21,8 +21,6 @@
 #                                                                        #
 ##########################################################################
 
-
 env = Environment()
 env.Append(LIBS=[ 'osg', 'avango', 'avangoOsg', 'avangoDaemon'])
 env.Program('TestDevice.cpp')
-

@@ -31,61 +31,61 @@ import time
 class TimeDeltaIncrement(avango.utils.TaskSchedulerTask):
     Delta = avango.SFInt()
     Value = avango.SFInt()
-    
+
     def __init__(self):
         self.super(TimeDeltaIncrement).__init__()
-        
+
         self.Delta.value = 1
         self.Value.value = 0
-    
+
     def on_active(self):
         self.Value.value += self.Delta.value
-                  
-        
+
+
 class TaskSchedulerTestCase(unittest.TestCase):
     def testMakeInstance(self):
         self.assert_(avango.utils.nodes.TaskScheduler())
         self.assert_(avango.utils.nodes.TaskSchedulerTask())
-        
+
     def testTaskInvokation(self):
         time_sensor = avango.nodes.TimeSensor()
         task_scheduler = avango.utils.nodes.TaskScheduler()
         task_scheduler.TimeIn.connect_from(time_sensor.Time)
-        
+
         task1 = TimeDeltaIncrement()
         task1.TimeDelta.value = 0.1
-        
+
         task2 = TimeDeltaIncrement()
         task2.TimeDelta.value = 0.2
-        
+
         task_scheduler.add_delayed_task(task1)
         task_scheduler.add_delayed_task(task2)
-        
+
         avango.evaluate()
-        
+
         self.assertEqual(task1.Value.value, 0)
         self.assertEqual(task2.Value.value, 0)
         self.assertEqual(task_scheduler.get_num_tasks(),2)
         time.sleep(0.05)
         avango.evaluate()
-        
+
         self.assertEqual(task1.Value.value, 0)
         self.assertEqual(task2.Value.value, 0)
         self.assertEqual(task_scheduler.get_num_tasks(),2)
         time.sleep(0.06)
         avango.evaluate()
-        
+
         self.assertEqual(task1.Value.value, 1)
         self.assertEqual(task2.Value.value, 0)
         self.assertEqual(task_scheduler.get_num_tasks(),1)
         time.sleep(0.1)
         avango.evaluate()
-        
+
         self.assertEqual(task1.Value.value, 1)
         self.assertEqual(task2.Value.value, 1)
         self.assertEqual(task_scheduler.get_num_tasks(),0)
-        
-        
+
+
 def Suite():
    suite = unittest.TestLoader().loadTestsFromTestCase(TaskSchedulerTestCase)
    return suite

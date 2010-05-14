@@ -1,3 +1,26 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
 #!/usr/bin/env python
 
 #############################################################################
@@ -113,7 +136,7 @@ class Edge(QtGui.QGraphicsItem):
         sourceArrowP1 = self.sourcePoint + QtCore.QPointF(math.sin(angle + Edge.Pi / 3) * self.arrowSize,
                                                           math.cos(angle + Edge.Pi / 3) * self.arrowSize)
         sourceArrowP2 = self.sourcePoint + QtCore.QPointF(math.sin(angle + Edge.Pi - Edge.Pi / 3) * self.arrowSize,
-                                                          math.cos(angle + Edge.Pi - Edge.Pi / 3) * self.arrowSize);   
+                                                          math.cos(angle + Edge.Pi - Edge.Pi / 3) * self.arrowSize);
         destArrowP1 = self.destPoint + QtCore.QPointF(math.sin(angle - Edge.Pi / 3) * self.arrowSize,
                                                       math.cos(angle - Edge.Pi / 3) * self.arrowSize)
         destArrowP2 = self.destPoint + QtCore.QPointF(math.sin(angle - Edge.Pi + Edge.Pi / 3) * self.arrowSize,
@@ -137,7 +160,7 @@ class Node(QtGui.QGraphicsItem):
         self.newPos = QtCore.QPointF()
         self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
         self.setZValue(1)
-        
+
         self.eWidth = -20
         self.eHeight = 40
 
@@ -155,7 +178,7 @@ class Node(QtGui.QGraphicsItem):
         if not self.scene() or self.scene().mouseGrabberItem() is self:
             self.newPos = self.pos()
             return
-    
+
         # Sum up all forces pushing this item away.
         xvel = 0.0
         yvel = 0.0
@@ -180,12 +203,12 @@ class Node(QtGui.QGraphicsItem):
                 pos = self.mapFromItem(edge.sourceNode(), 0, 0)
             xvel += pos.x() / weight
             yvel += pos.y() / weight
-    
+
         if QtCore.qAbs(xvel) < 0.1 and QtCore.qAbs(yvel) < 0.1:
             xvel = yvel = 0.0
 
         sceneRect = self.scene().sceneRect()
-        
+
         self.newPos = self.pos() + QtCore.QPointF(xvel, yvel)
         self.newPos.setX(min(max(self.newPos.x(), sceneRect.left() + self.eHeight), sceneRect.right() - self.eHeight))
         self.newPos.setY(min(max(self.newPos.y(), sceneRect.top() + self.eHeight), sceneRect.bottom() - self.eHeight))
@@ -206,16 +229,16 @@ class Node(QtGui.QGraphicsItem):
         path = QtGui.QPainterPath()
         #path.addEllipse(-10, -10, 20, 20)
         path.addEllipse(self.eWidth, self.eWidth, self.eHeight, self.eHeight)
-        
+
         return path
 
     def paint(self, painter, option, widget):
-        
-        
+
+
         painter.setPen(QtCore.Qt.NoPen)
         painter.setBrush(QtCore.Qt.darkGray)
-        
-        
+
+
         gradient = QtGui.QRadialGradient(-3, -3, 10)
         if option.state & QtGui.QStyle.State_Sunken:
             gradient.setCenter(3, 3)
@@ -230,8 +253,8 @@ class Node(QtGui.QGraphicsItem):
         painter.setPen(QtGui.QPen(QtCore.Qt.black, 0))
         #painter.drawEllipse(-10, -10, 20, 20)
         painter.drawEllipse(self.eWidth, self.eWidth, self.eHeight, self.eHeight)
-        
-        
+
+
         painter.setPen(QtCore.Qt.red)
         #painter.drawEllipse(-7, -7, 20, 20)
         #painter.drawText(QtGui.QPoint(-10,-10),"A")
@@ -243,8 +266,8 @@ class Node(QtGui.QGraphicsItem):
         #font.setPointSize(14)
         #painter.setFont(font)
         painter.drawText(p, self.desc)
-        
-        
+
+
 
     def itemChange(self, change, value):
         if change == QtGui.QGraphicsItem.ItemPositionChange:
@@ -257,7 +280,7 @@ class Node(QtGui.QGraphicsItem):
     def mousePressEvent(self, event):
         self.update()
         QtGui.QGraphicsItem.mousePressEvent(self, event)
-        
+
         self.graph.emit(QtCore.SIGNAL("nodeSelected"),self.data)
 
     def mouseReleaseEvent(self, event):
@@ -268,7 +291,7 @@ class Node(QtGui.QGraphicsItem):
 class GraphWidget(QtGui.QGraphicsView):
     def __init__(self):
         QtGui.QGraphicsView.__init__(self)
-        
+
         self.items = []
 
         self.timerId = 0
@@ -285,19 +308,19 @@ class GraphWidget(QtGui.QGraphicsView):
         #check why this is needed
         self.setViewportUpdateMode(QtGui.QGraphicsView.FullViewportUpdate)
         #self.setViewportUpdateMode(QtGui.QGraphicsView.MinimalViewportUpdate)
-        
+
         self.setCacheMode(QtGui.QGraphicsView.CacheBackground);
-        
+
 
         self.scale(0.8, 0.8)
         #self.setMinimumSize(400, 400)
         #self.setWindowTitle(self.tr("Elastic Nodes"))
-        
-    
+
+
     def removeAllItems(self):
         for item in self.items:
-            self.scene().removeItem(item) 
-            
+            self.scene().removeItem(item)
+
     def addItems(self,items):
         self.items = items
         for item in self.items:
@@ -349,16 +372,16 @@ class GraphWidget(QtGui.QGraphicsView):
 
     def drawBackground(self, painter, rect):
 
-        self.scene().setSceneRect(rect)        
+        self.scene().setSceneRect(rect)
         # Shadow.
         sceneRect = self.scene().sceneRect()
-        
+
         rightShadow = QtCore.QRectF(sceneRect.right(), sceneRect.top() + 5, 5, sceneRect.height())
         bottomShadow = QtCore.QRectF(sceneRect.left() + 5, sceneRect.bottom(), sceneRect.width(), 5)
         if rightShadow.intersects(rect) or rightShadow.contains(rect):
-	        painter.fillRect(rightShadow, QtCore.Qt.darkGray)
+            painter.fillRect(rightShadow, QtCore.Qt.darkGray)
         if bottomShadow.intersects(rect) or bottomShadow.contains(rect):
-	        painter.fillRect(bottomShadow, QtCore.Qt.darkGray)
+            painter.fillRect(bottomShadow, QtCore.Qt.darkGray)
 
         # Fill.
         gradient = QtGui.QLinearGradient(sceneRect.topLeft(), sceneRect.bottomRight())

@@ -1,3 +1,26 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
 from avango import display
 import avango
 import avango.utils
@@ -8,24 +31,24 @@ import sys
 
 
 class ExitTrigger(avango.utils.EdgeTrigger):
-    
+
     def on_up_transition(self):
-        sys.exit()    
-        
-        
+        sys.exit()
+
+
 class StatusToggleTrigger(avango.utils.EdgeTrigger):
     StatsNumOut = avango.SFInt()
     MaxStatsNum = avango.SFInt()
-    
+
     def __init__(self):
         self.super(StatusToggleTrigger).__init__()
-        
+
         self.StatsNumOut.value = 0
         self.MaxStatsNum.value = 3
-        
+
     def on_up_transition(self):
         self.StatsNumOut.value =  (self.StatsNumOut.value+1)%self.MaxStatsNum.value
-    
+
 
 #init avango.display
 argv = avango.display.init(sys.argv)

@@ -43,7 +43,7 @@ headers = Split('''
     TestSuite.h
     TimeConstraint.h
     TimeHelpers.h
-    UnitTest++.h  
+    UnitTest++.h
     XmlTestReporter.h
     ''')
 

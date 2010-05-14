@@ -30,23 +30,23 @@ class LoadFileScaler(avango.script.Script):
     LoadFile = avango.osg.SFLoadFile()
     LoadFileFinished = avango.SFString()
     Radius = avango.SFFloat()
-    
+
     MatrixOut = avango.osg.SFMatrix()
     Trigger = avango.SFBool()
-    
+
     def __init__(self):
         self.super(LoadFileScaler).__init__()
-        
+
         self.bounding_box = None
         self.Radius.value = 1.0
         self.__file_loaded = False
-        
+
     @field_has_changed(LoadFileFinished)
     def loading_finished(self):
-        
+
         if self.LoadFile.value.Filename.value == self.LoadFileFinished.value:
             self.__file_loaded = True
-        
+
     def evaluate(self):
         if self.__file_loaded:
             self.MatrixOut.value = self.calc_scale_matrix()

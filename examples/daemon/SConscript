@@ -40,9 +40,9 @@ files = Split('''
               ''')
 
 if avango.build.Environment()['VRPN_SUPPORT']:
-	files += Split('''
-                  vrpn-app.py	   
-                  vrpn-daemon.py             
-	               ''')
+    files += Split('''
+                  vrpn-app.py
+                  vrpn-daemon.py
+                   ''')
 
 Alias('install-examples', Install(examples_dir.abspath + '/daemon', files))

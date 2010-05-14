@@ -43,18 +43,18 @@ camera.ViewerTransform.value = avango.osg.make_trans_mat(0, 0, 50)
 # a node that receives data (from a client)
 class Input(avango.utils.InterconnectInputNode):
 
-	def __init__(self):
-		self.super(Input).__init__()
+    def __init__(self):
+        self.super(Input).__init__()
 
-	def node_was_added(self, node):
-		scene.Children.value.append(node)
+    def node_was_added(self, node):
+        scene.Children.value.append(node)
 
-	def node_was_deleted(self, node):
-		scene.Children.value.remove(node)
+    def node_was_deleted(self, node):
+        scene.Children.value.remove(node)
 
 # a node that sends data (to a client)
 class Output(avango.utils.InterconnectOutputNode):
-	pass
+    pass
 
 server = avango.utils.InterconnectServer(Port=19901)
 

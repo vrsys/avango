@@ -29,4 +29,3 @@ headers_av = Split('''
     ''')
 
 Alias('install-display', Install(avango.build.get_include_path('avango/display/mt'), headers_av))
-

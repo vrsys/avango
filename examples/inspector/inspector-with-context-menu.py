@@ -2,24 +2,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -147,14 +145,14 @@ class CatchAllSphereContextBehavior(avango.script.Script):
         self.old_cow_state = False
         self.old_sphere_state = False
         self.old_panel_state = False
-        
+
         self.actual_object_num = 0
 
         # The menus build-in icon files can be reached through a join of the preference-datapath and the filename
         self.create_cow_button = avango.menu.widget.PushButton(
           Title="Create New Cow",
           IconFilenames=[join(avango.menu.Preferences.datapath,"plus.png")])
-        
+
         self.create_sphere_button = avango.menu.widget.PushButton(
           Title="Create New Sphere",
           IconFilenames=[join(avango.menu.Preferences.datapath,"plus.png")])
@@ -167,7 +165,7 @@ class CatchAllSphereContextBehavior(avango.script.Script):
         self.CreateCow.connect_from(self.create_cow_button.Select)
         self.CreateSphere.connect_from(self.create_sphere_button.Select)
         self.CreatePanel.connect_from(self.create_panel_button.Select)
-        
+
 
     def show_context_menu(self, target_holder=None):
         context_menu.Title.value = "World Menu"
@@ -186,32 +184,32 @@ class CatchAllSphereContextBehavior(avango.script.Script):
         # show panel
         panel_group.show_placed_panel(context_menu, hit_point)
         self.ActivePanel.connect_from(panel_group.ActivePanel)
-        
+
     @field_has_changed(CreateCow)
     def create_cow_changed(self):
         if self.CreateCow.value:
             transform_name = "transformObject"+str(self.actual_object_num)
             wobble_name = "wobbleObject"+str(self.actual_object_num)
             drag_name = "dragObject"+str(self.actual_object_num)
-            
-            
+
+
             state_set = avango.osg.nodes.StateSet()
             state_set.RescaleNormalMode.value = 1
-            
+
             transform_object = avango.osg.nodes.LoadFile(Name=transform_name,Filename="/home/ddangelo/data/osgData/cow.osg", StateSet=state_set)
             drag_object = avango.osg.nodes.MatrixTransform(Name=drag_name)
             inspector_object = avango.osg.nodes.MatrixTransform(Name=wobble_name)
-            
+
             drag_object.Children.value.append(inspector_object)
             inspector_object.Children.value.append(transform_object)
-            
+
 
             transform_object.add_and_init_field(avango.script.SFObject(), "MenuToolBehavior", object_behavior)
-            
+
             object_root.Children.value.append(drag_object)
-            
+
             self.actual_object_num += 1
-            
+
             inspector.update_model()
 
         # wait for button release to close menu - otherwise the widget will miss the button release,
@@ -224,15 +222,15 @@ class CatchAllSphereContextBehavior(avango.script.Script):
     @field_has_changed(CreateSphere)
     def create_sphere_changed(self):
         if self.CreateSphere.value:
-            
+
             new_sphere = avango.osg.nodes.Sphere(Radius=1.0,
                                                  Name="dragObject"+str(self.actual_object_num))
             new_sphere.add_and_init_field(avango.script.SFObject(), "MenuToolBehavior", object_behavior)
-            
+
             object_root.Children.value.append(new_sphere)
-            
+
             self.actual_object_num += 1
-            
+
             inspector.update_model()
 
         # wait for button release to close menu - otherwise the widget will miss the button release,
@@ -241,8 +239,8 @@ class CatchAllSphereContextBehavior(avango.script.Script):
             panel_group.hide_panels()
 
         self.old_sphere_state = self.CreateSphere.value
-        
-         
+
+
 
     @field_has_changed(CreatePanel)
     def create_panel_changed(self):
@@ -272,7 +270,7 @@ class CatchAllSphereContextBehavior(avango.script.Script):
             # add new object to scene
             #scene_root.Children.value.append(new_transform)
             object_root.Children.value.append(new_transform)
-            
+
             self.actual_object_num += 1
 
         if self.old_panel_state and not self.CreatePanel.value:
@@ -369,11 +367,11 @@ class ObjectBehavior(avango.script.Script):
             object_root.Children.value.remove(scene_graph_parent)
             self.delete_old_state = False
             panel_group.hide_panels()
-            
+
             print "B Delete object"
-            
+
             inspector.update_model()
-            
+
             #self.actual_object_num -= 1
 
         self.delete_old_state = self.DeleteObject.value
@@ -478,7 +476,7 @@ class Wobble(avango.script.Script):
 
 wobble = Wobble(Name='Wobble')
 wobble.TimeIn.connect_from(time_sensor.Time)
-        
+
 
 # Start application
 viewer.run()

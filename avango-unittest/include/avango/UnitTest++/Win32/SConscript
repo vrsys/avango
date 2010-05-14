@@ -24,7 +24,7 @@
 import avango.build
 
 headers = Split('''
-    TimeHelpers.h  
+    TimeHelpers.h
     ''')
 
 Alias('install-unittest', Install(avango.build.get_include_path('avango/UnitTest++/Win32'), headers))

@@ -42,7 +42,7 @@ class Monitor(avango.display.Display):
         window.ShowCursor.value = True
         self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.6), 0)
         self._subdisplay_window[""]=window
-        
+
         user = avango.display.nodes.User()
         user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
         self.add_user(user)
@@ -74,8 +74,8 @@ class Monitor(avango.display.Display):
         self._subdisplay_camera[subdisplay] = camera
         self._subdisplay_window[subdisplay] = window
         return display_view
-    
-    
+
+
     def view_created(self, camera, view):
         'Primary window is automatically created by the constructor. All other windows are created by explicit calls of make_view(subdisplay)'
         window_event = avango.osg.viewer.nodes.EventFields(View = view)
@@ -83,17 +83,17 @@ class Monitor(avango.display.Display):
         self._subdisplay_window[""].DragEvent.connect_from(window_event.DragEvent)
         self._subdisplay_window[""].MoveEvent.connect_from(window_event.MoveEvent)
         self._subdisplay_camera[""] = camera
-        
+
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         if subdisplay not in self._subdisplay_camera:
             return avango.display.nodes.Device()
-        
+
         if interface == "Keyboard":
             keyboard = avango.display.KeyboardDevice()
             keyboard.connect(self._subdisplay_window_events[subdisplay])
             return keyboard
-        
+
         elif interface == "Mouse":
             mouse = avango.display.MouseDevice()
             mouse.connect(self._subdisplay_window_events[subdisplay],
@@ -101,21 +101,21 @@ class Monitor(avango.display.Display):
                           self._subdisplay_window[subdisplay]
                           )
             return mouse
-        
+
         else:
             device = avango.display.nodes.Device()
             device.Matrix.connect_from(self._subdisplay_camera[subdisplay].MouseNearTransform)
             device.Button1.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyLeft)
             return device
-        
+
 
     def make_device(self, device, interface):
         if device != "SpaceMouse" or interface != "Relative6DOF":
             return None
-        
-        if not self._device_service: 
+
+        if not self._device_service:
             self._device_service = avango.daemon.DeviceService()
-        
+
         sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
                                                   Station = "spacemousestation")
         self.keep_alive(sensor)

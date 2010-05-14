@@ -2,24 +2,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -199,7 +197,7 @@ def _build_environment():
     if 'icpc' in result['CXX']:
         result.Append(CCFLAGS='-wd177,383,424,810,981,1418,1419,1572')
         result.Append(LINKFLAGS='-static-intel')
-        
+
     if oshelper.os_is_windows():
         if result.get('OPENSCENEGRAPH_DEBUG', None):  # FIXME move this elswhere
             result.Append(CXXFLAGS='/EHsc /W3 /MDd /wd4099 /wd4244 /wd4800 /wd4996 /wd4251 /wd4661') # FIXME remove deactivation of warnings
@@ -209,7 +207,7 @@ def _build_environment():
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
         result.Append(CCFLAGS='-ansi -Wall')
-        
+
     if result['DEBUG']:
         if oshelper.os_is_windows():
             result.Append(CCFLAGS='/DEBUG /Zi /D_DEBUG /Ob0 /Od /RTC1')
@@ -220,15 +218,15 @@ def _build_environment():
             result.Append(CCFLAGS='-O2 -DNDEBUG')
             if result['CXX'] == 'g++':
                 result.Append(CCFLAGS='-fno-strict-aliasing')
-            
+
     if result['TRACE_LOGGING']:
         result.Append(CPPDEFINES='TRACE_LOGGING')
-    
+
     if result['BUILD_32']:
         # FIXME does this work in Windows or Mac OS X?
         result.Append(CCFLAGS='-m32')
         result.Append(LINKFLAGS='-m32')
-    
+
     result.PrependENVPath('PATH', result['BINARY_PATH'])
     result.Prepend(CPPPATH=result['INCLUDE_PATH'].split(os.pathsep))
     result.Prepend(LIBPATH=result['LIBRARY_PATH'].split(os.pathsep))

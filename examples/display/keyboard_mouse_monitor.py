@@ -1,3 +1,26 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
 from avango import display
 import avango
 import avango.script
@@ -10,15 +33,15 @@ def field_dump(script):
         field_name = field._get_name()
         field_type = field._get_type()
         buffer += "Field: <"+ str(field_name) + "> of type: <" + str(field_type) + "> = <" + str(field.value) + ">\n"
-    return buffer  
+    return buffer
 
 class MouseListener(avango.script.Script):
-    
+
     MousePosNorm = avango.osg.SFVec2()
     MousePos = avango.osg.SFVec2()
     MouseButtonLeft = avango.SFBool()
     MouseButtonRight = avango.SFBool()
-    
+
     def __init__(self):
         self.super(MouseListener).__init__()
         self.Name.value = "MouseListener"
@@ -26,9 +49,9 @@ class MouseListener(avango.script.Script):
     def evaluate(self):
         buffer = field_dump(self)
         print buffer
-        
+
 class KeyboardListener(avango.script.Script):
-    
+
     KeyUp = avango.SFBool()
     KeyDown = avango.SFBool()
     KeyLeft = avango.SFBool()
@@ -36,15 +59,15 @@ class KeyboardListener(avango.script.Script):
     Key1 = avango.SFBool()
     KeyA = avango.SFBool()
     KeyB = avango.SFBool()
-    
+
     def __init__(self):
         self.super(KeyboardListener).__init__()
         self.Name.value = "KeyboardListener"
-        
+
     def evaluate(self):
         buffer = field_dump(self)
         print buffer
-        
+
 argv = display.init(sys.argv)
 view = display.make_view()
 

@@ -25,7 +25,7 @@ import avango.build
 
 headers = Split('''
     SignalTranslator.h
-    TimeHelpers.h  
+    TimeHelpers.h
     ''')
 
 Alias('install-unittest', Install(avango.build.get_include_path('avango/UnitTest++/Posix'), headers))

@@ -113,7 +113,7 @@ class Tool(avango.script.Script):
     @field_has_changed(EnableContext)
     def enable_context_changed(self):
         self._ContextTrigger.value = self.EnableContext.value and self.ContextTrigger.value
-        
+
     def set_drag_tool(self, drag_tool):
         self.dragtool.disconnect_all_fields()
         self.dragtool = drag_tool

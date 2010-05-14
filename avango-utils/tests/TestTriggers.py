@@ -29,39 +29,39 @@ import unittest
 class AddSubtractImmediateDeltaTrigger(avango.utils.ImmediateEdgeTrigger):
     Delta = avango.SFInt()
     Value = avango.SFInt()
-    
+
     def __init__(self):
         self.super(AddSubtractImmediateDeltaTrigger).__init__()
         self.Delta.value = 1
         self.Value.value = 0
-    
+
     def on_down_transition(self):
         self.Value.value += self.Delta.value
-        
+
     def on_up_transition(self):
         self.Value.value -= self.Delta.value
-      
+
 class AddSubtractDeltaTrigger(avango.utils.EdgeTrigger):
     Delta = avango.SFInt()
     Value = avango.SFInt()
-    
+
     def __init__(self):
         self.super(AddSubtractDeltaTrigger).__init__()
         self.Delta.value = 1
         self.Value.value = 0
-    
+
     def on_down_transition(self):
         self.Value.value += self.Delta.value
-        
+
     def on_up_transition(self):
         self.Value.value -= self.Delta.value
-          
-        
+
+
 class TriggersTestCase(unittest.TestCase):
     def testMakeInstance(self):
         self.assert_(avango.utils.nodes.ImmediateEdgeTrigger())
         self.assert_(avango.utils.nodes.EdgeTrigger())
-        
+
     def testImmediateEdgeTrigger(self):
         field_container = AddSubtractImmediateDeltaTrigger()
         self.assertEqual(field_container.Value.value, 0)
@@ -73,7 +73,7 @@ class TriggersTestCase(unittest.TestCase):
         self.assertEqual(field_container.Value.value, 0)
         field_container.Trigger.value = False
         self.assertEqual(field_container.Value.value, 0)
-  
+
 
     def testEdgeTrigger(self):
         field_container = AddSubtractDeltaTrigger()
@@ -82,15 +82,15 @@ class TriggersTestCase(unittest.TestCase):
         self.assertEqual(field_container.Value.value, 0)
         avango.evaluate()
         self.assertEqual(field_container.Value.value, 1)
-        
-        
+
+
         field_container.Trigger.value = False
         self.assertEqual(field_container.Value.value, 1)
         avango.evaluate()
         self.assertEqual(field_container.Value.value, 0)
         field_container.Trigger.value = False
         self.assertEqual(field_container.Value.value, 0)
-    
+
 
 def Suite():
    suite = unittest.TestLoader().loadTestsFromTestCase(TriggersTestCase)

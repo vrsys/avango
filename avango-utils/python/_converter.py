@@ -27,43 +27,43 @@ import avango.osg
 
 class FloatXBase(avango.script.Script):
     "Base for sequential operations on floats"
-    
+
     BaseFieldName = avango.SFString()
-    NumFieldsOut = avango.SFInt() 
-    
+    NumFieldsOut = avango.SFInt()
+
     Output = avango.SFFloat()
-    
+
     def __init__(self):
-        self.super(FloatXBase).__init__()  
-        
-        self.Output.value = 0      
+        self.super(FloatXBase).__init__()
+
+        self.Output.value = 0
         self.BaseFieldName.value = "Input"
         self.NumFieldsOut.value = 0
-        
+
         self._actual_id = 0
-    
+
     def add_and_connect_float_field(self,field):
-        
+
         field_name = self.BaseFieldName.value + str(self._actual_id)
         if self.has_field(field_name):
             return
         #create and add the new field
         self.add_and_init_field(avango.SFFloat(), field_name, 0)
-        
+
         #connect the field with the given field
         getattr(self, field_name).connect_from(field)
-        
+
         self._actual_id += 1
         self.NumFieldsOut.value = self._actual_id
-       
+
     def evaluate(self):
         self.on_calculate()
-        
-    def on_calculate(self): 
+
+    def on_calculate(self):
         pass
 
 class FloatXSum(FloatXBase):
-    
+
     def on_calculate(self):
         sum = 0
         for field_id in range(0,self._actual_id):
@@ -72,11 +72,11 @@ class FloatXSum(FloatXBase):
             if not field:
                 continue
             sum += field.value
-         
-        self.Output.value = sum  
-        
+
+        self.Output.value = sum
+
 class FloatXMin(FloatXBase):
-    
+
     def on_calculate(self):
         min = 1e+100 # TODO: Find a way to get the real maximum
         for field_id in range(0,self._actual_id):
@@ -85,19 +85,19 @@ class FloatXMin(FloatXBase):
             if not field:
                 continue
             if field.value < min:
-                min = field.value 
-            
-        self.Output.value = min        
-        
+                min = field.value
+
+        self.Output.value = min
+
 
 class Float2Add(avango.script.Script):
     "Adds two float values"
-    
+
     Value0 = avango.SFFloat()
     Value1 = avango.SFFloat()
-    
+
     Output = avango.SFFloat()
-    
+
     def evaluate(self):
         self.Output.value = self.Value0.value + self.Value1.value
 
@@ -106,10 +106,10 @@ class Float4AddVec2Converter(avango.script.Script):
 
     Value00 = avango.SFFloat()
     Value01 = avango.SFFloat()
-    
+
     Value10 = avango.SFFloat()
     Value11 = avango.SFFloat()
-    
+
     Output = avango.osg.SFVec2()
 
     def evaluate(self):
@@ -133,4 +133,3 @@ class Float2Vec2Converter(avango.script.Script):
 
     def evaluate(self):
         self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
-        

@@ -26,7 +26,7 @@ import avango.build.oshelper
 avango.build.Environment.prepend_include_path(Dir('.').abspath)
 
 sources = Split('''
-    ip/IpEndpointName.cpp    
+    ip/IpEndpointName.cpp
     osc/OscOutboundPacketStream.cpp
     osc/OscPrintReceivedElements.cpp
     osc/OscReceivedElements.cpp
@@ -36,12 +36,12 @@ sources = Split('''
 if avango.build.oshelper.os_is_windows():
     sources += Split('''
         ip/win32/NetworkingUtils.cpp
-    	ip/win32/UdpSocket.cpp
-    	''')
+        ip/win32/UdpSocket.cpp
+        ''')
 else:
     sources += Split('''
         ip/posix/NetworkingUtils.cpp
-    	ip/posix/UdpSocket.cpp
-    	''')
+        ip/posix/UdpSocket.cpp
+        ''')
 
 Return('sources')

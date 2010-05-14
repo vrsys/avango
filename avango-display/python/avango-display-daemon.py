@@ -3,24 +3,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -44,10 +42,10 @@ def add_wiimote(device, station):
     wiimote.buttons[ 8] = "EV_KEY::KEY_PROG2"    # 2
     wiimote.buttons[ 9] = "EV_KEY::KEY_BACK"     # -
     wiimote.buttons[10] = "EV_KEY::KEY_FORWARD"  # +
-    
+
     return wiimote
-    
- 
+
+
 try:
     opts, args = getopt.getopt(sys.argv[1:], "hn:l:d:o:",
                                ["help", "notify=", "log-file=", "display=", "option="])
@@ -123,12 +121,12 @@ if display_type == "Monitor":
         spacemouse.buttons[3] = "EV_KEY::BTN_THUMB2"   # 3
         spacemouse.buttons[4] = "EV_KEY::BTN_TOP"      # 4
         spacemouse.buttons[5] = "EV_KEY::BTN_TOP2"     # 5
-        spacemouse.buttons[6] = "EV_KEY::BTN_PINKIE"   # 6  
+        spacemouse.buttons[6] = "EV_KEY::BTN_PINKIE"   # 6
         spacemouse.buttons[7] = "EV_KEY::BTN_BASE"     # 7
         spacemouse.buttons[8] = "EV_KEY::BTN_BASE2"    # 8
         spacemouse.buttons[9] = "EV_KEY::BTN_0"        # Left SpaceNavigator Button
         spacemouse.buttons[10] = "EV_KEY::BTN_1"       # Right SpaceNavigator Button
-        
+
 elif display_type == "TwoView" or display_type == "iCone":
     #add the DTrack daemon and its known targets
     dtrack = avango.daemon.DTrack()
@@ -149,13 +147,13 @@ elif display_type == "TwoView" or display_type == "iCone":
     dtrack.stations[13] = avango.daemon.Station("ve-dtrack-spare")
     dtrack.stations[14] = avango.daemon.Station("ve-dtrack-head8")
     dtrack.stations[15] = avango.daemon.Station("ve-dtrack-logitech")
-    
+
     #add the wiimotes
     devices.append(add_wiimote("/dev/input/ve-wiimote1", "wiimote1"))
     devices.append(add_wiimote("/dev/input/ve-wiimote2", "wiimote2"))
     devices.append(add_wiimote("/dev/input/ve-wiimote3", "wiimote3"))
     devices.append(add_wiimote("/dev/input/ve-wiimote4", "wiimote4"))
-    
+
 
 # start daemon (will enter the main loop)
 avango.daemon.run(devices)

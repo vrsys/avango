@@ -71,7 +71,7 @@ display_mt_env['SUBST'] = {
     'AVANGO_DISPLAY_MT_VERSION_MINOR': '1',
     'AVANGO_DISPLAY_MT_VERSION_MAINT': '0',
     }
-    
+
 
 display_mt_env.Append(CPPDEFINES='AV_DISPLAY_MT_LIBRARY')
 
@@ -87,4 +87,3 @@ SConscript ([
     'src/avango/display/mt/SConscript',
     'wrapper/avango/display/mt/SConscript'
 ])
-

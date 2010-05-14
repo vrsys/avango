@@ -3,24 +3,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -57,7 +55,7 @@ spacemouse.buttons[2] = "EV_KEY::BTN_THUMB"    # 2
 spacemouse.buttons[3] = "EV_KEY::BTN_THUMB2"   # 3
 spacemouse.buttons[4] = "EV_KEY::BTN_TOP"      # 4
 spacemouse.buttons[5] = "EV_KEY::BTN_TOP2"     # 5
-spacemouse.buttons[6] = "EV_KEY::BTN_PINKIE"   # 6  
+spacemouse.buttons[6] = "EV_KEY::BTN_PINKIE"   # 6
 spacemouse.buttons[7] = "EV_KEY::BTN_BASE"     # 7
 spacemouse.buttons[8] = "EV_KEY::BTN_BASE2"    # 8
 

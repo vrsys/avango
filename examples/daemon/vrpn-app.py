@@ -3,24 +3,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
 # Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -29,7 +27,7 @@ Learn how to setup and use DeviceDaemon and DeviceService to readout data
 from a VRPN client running in the AvangoDaemon.
 
 This example manipulates position and color of a displayed sphere
-based on button press and analog events sent by the VRPN server. 
+based on button press and analog events sent by the VRPN server.
 '''
 
 import avango.daemon
@@ -63,8 +61,8 @@ class Change(avango.script.Script) :
     def evaluate(self):
         values = self.get_values()
         # set transformation
-        values.MatrixOut = avango.osg.make_trans_mat(values.ValueX * -10, 
-                                                     values.ValueY * -10, 
+        values.MatrixOut = avango.osg.make_trans_mat(values.ValueX * -10,
+                                                     values.ValueY * -10,
                                                      values.ValueZ * -10)
         # set color
         if (values.Button4 == 1) :

@@ -2,24 +2,22 @@
 
 ##########################################################################
 #                                                                        #
-# This file is part of Avango.                                           #
+# This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
-# Avango is free software: you can redistribute it and/or modify         #
+# AVANGO is free software: you can redistribute it and/or modify         #
 # it under the terms of the GNU Lesser General Public License as         #
 # published by the Free Software Foundation, version 3.                  #
 #                                                                        #
-# Avango is distributed in the hope that it will be useful,              #
+# AVANGO is distributed in the hope that it will be useful,              #
 # but WITHOUT ANY WARRANTY; without even the implied warranty of         #
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
 # GNU General Public License for more details.                           #
 #                                                                        #
 # You should have received a copy of the GNU Lesser General Public       #
-# License along with Avango. If not, see <http://www.gnu.org/licenses/>. #
-#                                                                        #
-# Avango is a trademark owned by FhG.                                    #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
 
@@ -71,17 +69,17 @@ def _setup_default():
     _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
 
     _config_store.set('python', PythonConfig())
-    
+
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))
     _config_store.set('GL', PlainConfig(libraries = ['']))
     _config_store.set('GLU', PlainConfig(libraries = ['']))
-    
+
     if oshelper.os_is_mac():
       _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
       _config_store.set('GL', PlainConfig(libraries = ['GL']))
-      _config_store.set('GLU', PlainConfig(libraries = ['GLU'])) 
+      _config_store.set('GLU', PlainConfig(libraries = ['GLU']))
 
     # Override some libraries for Windows
     if oshelper.os_is_windows():

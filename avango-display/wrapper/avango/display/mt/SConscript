@@ -48,9 +48,8 @@ lib = local_env.SharedLibrary("_mt", display_mt_files)
 local_env.Depends(lib, display_mt_python_files)
 local_env.Install(avango.build.get_python_path('avango/display/mt'), display_mt_python_files)
 local_env.Install(avango.build.get_python_path('avango/display/mt'), lib)
-   
-   
+
+
 Alias('display', lib)
 #issues the copying of the compiled lib to the installation folder
 Alias('install-display', avango.build.get_python_path('avango/display/mt'))
-

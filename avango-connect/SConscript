@@ -32,7 +32,7 @@ test_package_dir = 'python/test_package/'
 avango.build.Environment.prepend_python_path(Dir(test_package_dir).abspath)
 
 connect_files = Split("""
-	python/avango/connect/_MFInt.py
+    python/avango/connect/_MFInt.py
     python/avango/connect/_MFMatrix.py
     python/avango/connect/_MFString.py
     python/avango/connect/_MFVec2.py
@@ -95,7 +95,7 @@ if local_test_env['CONNECT_CSHARP_SUPPORT']:
 
     csharp_env = Environment(tools=['default', 'CLI'], toolpath=['tools'])
     csharp_env.Append(CSCFLAGS='-debug')
-     
+
     connect_dll = csharp_env.CLILibrary('csharp/connect/connect.dll', csharp_files)
 
     csharp_test_env = csharp_env.Clone()

@@ -1,3 +1,5 @@
+# -*- Mode:Python -*-
+
 #
 # C# builder
 #

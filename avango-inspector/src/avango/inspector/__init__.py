@@ -133,20 +133,20 @@ class Inspector(avango.script.Script):
 
     def _create_fields_view(self):
         self.field_model = gtk.ListStore(str, str, object)
-        
+
         self.field_view = gtk.TreeView(self.field_model)
         name_column = gtk.TreeViewColumn('Field')
         value_column = gtk.TreeViewColumn('Value')
-        
+
         self.field_view.append_column(name_column)
         self.field_view.append_column(value_column)
-        
+
         name_cell = gtk.CellRendererText()
         value_cell = gtk.CellRendererText()
-        
+
         name_column.pack_start(name_cell, True)
         value_column.pack_start(value_cell, True)
-        
+
         name_column.add_attribute(name_cell, 'text', 0)
         value_column.add_attribute(value_cell, 'text', 1)
 
@@ -154,20 +154,20 @@ class Inspector(avango.script.Script):
 
     def _create_treeview(self):
         self.model = gtk.TreeStore(str, str, object)
-        
+
         self.view = gtk.TreeView(self.model)
         name_column = gtk.TreeViewColumn('Name')
         value_column = gtk.TreeViewColumn('Value')
-        
+
         self.view.append_column(name_column)
         self.view.append_column(value_column)
-        
+
         name_cell = gtk.CellRendererText()
         value_cell = gtk.CellRendererText()
-        
+
         name_column.pack_start(name_cell, True)
         value_column.pack_start(value_cell, True)
-        
+
         name_column.add_attribute(name_cell, 'text', 0)
         value_column.add_attribute(value_cell, 'text', 1)
         return self.view
@@ -336,4 +336,3 @@ class Inspector(avango.script.Script):
     def evaluate(self):
         while gtk.events_pending():
             gtk.main_iteration()
-

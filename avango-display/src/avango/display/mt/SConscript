@@ -43,7 +43,7 @@ display_mt_env.Append(CPPPATH=['multitouch'])
 display_mt_env.Append(CPPPATH=['multitouch/oscpack'])
 
 if platform.architecture()[0] == '64bit':
-	display_mt_env.Append(CPPDEFINES=['x86_64'])
+    display_mt_env.Append(CPPDEFINES=['x86_64'])
 
 if not sys.platform == 'win32':
     display_mt_env.Append(CPPDEFINES=['OSC_HOST_LITTLE_ENDIAN'])

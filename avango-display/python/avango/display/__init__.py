@@ -1,3 +1,26 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
 import avango # Trigger type registration
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
@@ -57,10 +80,10 @@ def init(argv,options="", long_options=[]):
             except:
                 print "WARNING: Ignoring ill-formated option: '%s'" % arg
         else:
-            if arg: 
-                args.insert(0, arg)                
+            if arg:
+                args.insert(0, arg)
             args.insert(0, opt)
-        
+
 
     if notify_level > -1:
         if notify_logfile == '':
@@ -85,7 +108,7 @@ def get_num_users(subdisplay=""):
 
 def make_user(user=0, interface="", subdisplay=""):
     """Create a field container that represents the user position.
-    
+
       - *user* selects the n-th *active* user of the display.
 
       - *interface* is used to select a different field container than the
@@ -115,7 +138,7 @@ def make_user(user=0, interface="", subdisplay=""):
 def make_dominant_user_device(user=0, interface="", subdisplay=""):
     """Create a field container that represents the device held in the dominant
     hand of the active user
-    
+
       - *user* selects the n-th *active* user of the display.
 
       - *interface* is used to select a different field container than the
@@ -154,7 +177,7 @@ def make_non_dominant_user_device(user=0, interface="", subdisplay=""):
 
 def make_view(subdisplay=""):
     """Create a field container that represents a viewport into a scene.
-    
+
       - *subdisplay* is used, if the display has multiple disjoint subdisplays
         and the viewport on a specific display has to be selected.
 
@@ -174,7 +197,7 @@ def make_view(subdisplay=""):
       - *UserSelector* contains the *active* user that should see this viewport.
 
       - *Near* is the near clipping plane.
-      
+
       - *Far* is the near clipping plane.
 
       - *BackgroundColor* is the clearing color
@@ -206,7 +229,7 @@ def make_screen_descriptor(subdisplay=""):
 
 def make_device(device, interface=""):
     """Create a field container that represents a generic device.
-    
+
       - *device* is the name of the device. A display maps this name to a
         specific device and returns a field container representing it.
 
@@ -218,7 +241,7 @@ def make_device(device, interface=""):
     The resulting (default) field container will have the following fields. As
     this interface is rather limited, one typically provides a specific
     interface:
-        
+
       - *Active* is a boolean that is true if the device is recognized by the
         system (e.g. because the tracking cameras see the corresponding target)
 
@@ -253,7 +276,7 @@ class DisplayNotFound(IOError):
 def _make_display(display_type, inspector, options):
     module_path = [os.path.join(os.path.split(__file__)[0], 'setups')]
     env_path = os.environ.get('AVANGO_DISPLAY_PATH', "").split(':')
-    
+
     display_filename = display_type+'.py'
     for path in itertools.chain(env_path, _search_path, module_path):
         if not path:

@@ -1,3 +1,26 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
 from avango import display
 import avango
 import avango.osg
@@ -42,7 +65,7 @@ def build_texture(time_sensor, root):
     up = avango.osg.Vec3(0,1,0)
     view_matrix = avango.osg.make_lookat_mat(position,center,up)
     camera.ViewMatrix.value = view_matrix
-    
+
     #set the projection matrix
     near = 0.1
     far = 10000
@@ -58,7 +81,7 @@ def build_texture(time_sensor, root):
         aspect = 1.0
         projection_matrix = avango.osg.make_perspective_mat(fov,aspect,near,far)
         camera.ProjectionMatrix.value = projection_matrix
-    
+
     sphere = avango.osg.nodes.Sphere(Radius=1.0, Matrix=avango.osg.make_trans_mat(0., 0., -1.))
 
     swing = SwingMatrix(Scale=1.0)

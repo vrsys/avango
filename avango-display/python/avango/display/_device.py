@@ -44,10 +44,10 @@ class Device(avango.script.Script):
     def __init__(self):
         self.super(Device).__init__()
         self.Active.value = True
-        
-        
+
+
 class KeyboardDevice(avango.script.Script):
-    
+
     KeysPressed = avango.MFInt()
 
     KeyRight = avango.SFBool()
@@ -80,7 +80,7 @@ class KeyboardDevice(avango.script.Script):
     KeyF10 = avango.SFBool()
     KeyF11 = avango.SFBool()
     KeyF12 = avango.SFBool()
-    
+
     Key0 = avango.SFBool()
     Key1 = avango.SFBool()
     Key2 = avango.SFBool()
@@ -91,20 +91,20 @@ class KeyboardDevice(avango.script.Script):
     Key7 = avango.SFBool()
     Key8 = avango.SFBool()
     Key9 = avango.SFBool()
-    
+
     KeyX = avango.SFBool()
     KeyZ = avango.SFBool()
-    
+
     KeyBackslash = avango.SFBool()
     KeyCloseBracket = avango.SFBool()
- 
+
     def __init__(self):
         self.super(KeyboardDevice).__init__()
-        
+
         self.__prev_keys_pressed = []
-        
+
         self.__keymap = {}
-        
+
         self.__keymap[48] = self.Key1
         self.__keymap[49] = self.Key1
         self.__keymap[50] = self.Key2
@@ -115,37 +115,37 @@ class KeyboardDevice(avango.script.Script):
         self.__keymap[55] = self.Key7
         self.__keymap[56] = self.Key8
         self.__keymap[57] = self.Key9
-        
+
         self.__keymap[120] = self.KeyX
         self.__keymap[122] = self.KeyZ
-        
+
         self.__keymap[92] = self.KeyBackslash
         self.__keymap[41] = self.KeyCloseBracket
-        
+
     def add_key(self,name,id):
         """
         Add a SFBool, which will be connected to the key press with the given id
-        The naming convention says that you should pass Key<Name> as name parameter. 
+        The naming convention says that you should pass Key<Name> as name parameter.
         E.g.: If you want to add the key <1> call add_key("Key1",48)
         """
-        
+
         #if a field with the given name is already known, no new field will be added
         field = self._get_field(name)
         if field:
             return False
-        
+
         self.add_and_init_field(avango.SFBool(), name, id)
         self.__keymap[id] = getattr(self, name)
         self.__keymap[id].value = False
-        
+
         return True
-        
+
     def evaluate(self):
-        
+
         pressed_keys = []
         for k in self.KeysPressed.value:
             pressed_keys.append(k)
-            
+
         #pressed keys
         for key in pressed_keys:
             if key in self.__keymap:
@@ -156,14 +156,14 @@ class KeyboardDevice(avango.script.Script):
         for key in released_keys:
             if key in self.__keymap:
                 self.__keymap[key].value = False
-        
+
         self.__prev_keys_pressed = pressed_keys
-        
-                
+
+
     def connect(self, eventfields):
-        
+
         self.KeysPressed.connect_from(eventfields.KeysPressed)
-    
+
         self.KeyRight.connect_from(eventfields.KeyRight)
         self.KeyLeft.connect_from(eventfields.KeyLeft)
         self.KeyUp.connect_from(eventfields.KeyUp)
@@ -171,7 +171,7 @@ class KeyboardDevice(avango.script.Script):
         self.PageUp.connect_from(eventfields.KeyPageUp)
         self.PageDown.connect_from(eventfields.KeyPageDown)
         self.Shift.connect_from(eventfields.KeyShift)
-        self.Ctrl.connect_from(eventfields.KeyCtrl) 
+        self.Ctrl.connect_from(eventfields.KeyCtrl)
         self.KeyAlt.connect_from(eventfields.KeyAlt)
         self.Insert.connect_from(eventfields.KeyInsert)
         self.Delete.connect_from(eventfields.KeyDelete)
@@ -193,7 +193,7 @@ class KeyboardDevice(avango.script.Script):
         self.KeyF10.connect_from(eventfields.KeyF10)
         self.KeyF11.connect_from(eventfields.KeyF11)
         self.KeyF12.connect_from(eventfields.KeyF12)
-        
+
 
 class MouseDevice(avango.script.Script):
     Matrix = avango.osg.SFMatrix()
@@ -204,20 +204,20 @@ class MouseDevice(avango.script.Script):
     MouseButtonRight = avango.SFBool()
     MouseButtonMiddle = avango.SFBool()
     MouseScrollUp = avango.SFBool()
-    MouseScrollDown = avango.SFBool()   
+    MouseScrollDown = avango.SFBool()
     MouseLeftDoubleClick = avango.SFBool()
     MouseLeftAndRight = avango.SFBool()
-    
+
     def __init__(self):
         self.super(MouseDevice).__init__()
-        
+
     def connect(self, eventfields, camera, window):
         self.Matrix.connect_from(camera.MouseNearTransform)
-    
+
         self.MousePosNorm.connect_from(window.MousePositionNorm)
         self.MousePos.connect_from(window.MousePosition)
         self.MouseMovementNorm.connect_from(window.MouseMovementNorm)
-        
+
         self.MouseButtonLeft.connect_from(eventfields.MouseButtonLeft)
         self.MouseButtonRight.connect_from(eventfields.MouseButtonRight)
         self.MouseScrollUp.connect_from(eventfields.MouseScrollUp)
@@ -225,16 +225,16 @@ class MouseDevice(avango.script.Script):
         self.MouseButtonMiddle.connect_from(eventfields.MouseButtonMiddle)
         self.MouseLeftDoubleClick.connect_from(eventfields.MouseButtonLeftDoubleClick)
         self.MouseLeftAndRight.connect_from(eventfields.MouseButtons_LeftAndRight)
-   
-   
-def make_wiimote_device(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset): 
+
+
+def make_wiimote_device(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset):
     device = WiimoteDevice()
     device._setup(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset)
     return device
 
-        
+
 class WiimoteDevice(avango.script.Script):
-    
+
     Button0 = avango.SFBool()
     Button1 = avango.SFBool()
     Button2 = avango.SFBool()
@@ -246,17 +246,17 @@ class WiimoteDevice(avango.script.Script):
     Button8 = avango.SFBool()
     Button9 = avango.SFBool()
     Button10 = avango.SFBool()
-    
+
     LED0 = avango.SFBool()
     LED1 = avango.SFBool()
     LED2 = avango.SFBool()
     LED3 = avango.SFBool()
-    
+
     Matrix = avango.osg.SFMatrix()
-    
+
     def __init__(self):
         self.super(WiimoteDevice).__init__()
-        
+
         self.Button0.value = False
         self.Button1.value = False
         self.Button2.value = False
@@ -268,19 +268,19 @@ class WiimoteDevice(avango.script.Script):
         self.Button8.value = False
         self.Button9.value = False
         self.Button10.value = False
-        
+
         self.LED0.value = False
         self.LED1.value = False
         self.LED2.value = False
         self.LED3.value = False
-        
+
         #will be initialized by the init function
         self.dtrack_sensor = None
         self.wiimote_sensor = None
         self.wiimote_actuator = None
         self.device_service = None
-        
-        
+
+
     def _setup(self, wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset):
         self.device_service = device_service
         self.dtrack_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = device_service,
@@ -291,7 +291,7 @@ class WiimoteDevice(avango.script.Script):
                                                                Station = wiimote_station)
         self.wiimote_actuator = avango.daemon.nodes.WiimoteActuator(DeviceService = device_service,
                                                                     Station = wiimote_station)
-        
+
         self.Button0.connect_from(self.wiimote_sensor.Button0)
         self.Button1.connect_from(self.wiimote_sensor.Button1)
         self.Button2.connect_from(self.wiimote_sensor.Button2)
@@ -303,11 +303,10 @@ class WiimoteDevice(avango.script.Script):
         self.Button8.connect_from(self.wiimote_sensor.Button8)
         self.Button9.connect_from(self.wiimote_sensor.Button9)
         self.Button10.connect_from(self.wiimote_sensor.Button10)
-    
+
         self.wiimote_actuator.LED0.connect_from(self.LED0)
         self.wiimote_actuator.LED1.connect_from(self.LED1)
         self.wiimote_actuator.LED2.connect_from(self.LED2)
         self.wiimote_actuator.LED3.connect_from(self.LED3)
-        
+
         self.Matrix.connect_from(self.dtrack_sensor.Matrix)
-        

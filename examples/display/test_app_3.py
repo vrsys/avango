@@ -39,4 +39,3 @@ view1 = display.make_view()
 view1.Root.value = sphere_transform
 
 display.run()
-

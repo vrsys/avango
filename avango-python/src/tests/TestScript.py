@@ -476,6 +476,6 @@ class ScriptTestCase(unittest.TestCase):
         node2._get_field("field_0").value = 23
         avango.evaluate()
         self.assertEqual(23, node1._get_field("field_0").value)
-        
+
 def Suite():
     return unittest.TestLoader().loadTestsFromTestCase(ScriptTestCase)

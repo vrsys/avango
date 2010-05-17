@@ -126,7 +126,32 @@ if display_type == "Monitor":
         spacemouse.buttons[8] = "EV_KEY::BTN_BASE2"    # 8
         spacemouse.buttons[9] = "EV_KEY::BTN_0"        # Left SpaceNavigator Button
         spacemouse.buttons[10] = "EV_KEY::BTN_1"       # Right SpaceNavigator Button
+    
+    device_key = "GamePadDevice"
+    if device_key in options:
+        station = avango.daemon.Station('gamepadstation')
 
+        gamepad = avango.daemon.HIDInput()
+        gamepad.station = station
+        gamepad.device = options[device_key]
+        devices.append(gamepad)      
+
+        gamepad.values[0] = "EV_ABS::ABS_X" #cursor pad x
+        gamepad.values[1] = "EV_ABS::ABS_Y" #cursor pad y
+        gamepad.values[2] = "EV_ABS::ABS_Z" #analog  stick 0 x
+        gamepad.values[3] = "EV_ABS::ABS_RZ"#analog  stick 0 y
+        
+        gamepad.buttons[0] = "EV_KEY::BTN_BASE3"
+        gamepad.buttons[1] = "EV_KEY::BTN_TRIGGER"
+        gamepad.buttons[2] = "EV_KEY::BTN_THUMB"
+        gamepad.buttons[3] = "EV_KEY::BTN_THUMB2"
+        gamepad.buttons[4] = "EV_KEY::BTN_TOP"
+        gamepad.buttons[5] = "EV_KEY::BTN_TOP2"
+        gamepad.buttons[6] = "EV_KEY::BTN_PINKIE"  
+        gamepad.buttons[7] = "EV_KEY::BTN_BASE"
+        gamepad.buttons[8] = "EV_KEY::BTN_BASE2"
+        gamepad.buttons[9] = "EV_KEY::BTN_BASE4"
+        
 elif display_type == "TwoView" or display_type == "iCone":
     #add the DTrack daemon and its known targets
     dtrack = avango.daemon.DTrack()
@@ -153,7 +178,6 @@ elif display_type == "TwoView" or display_type == "iCone":
     devices.append(add_wiimote("/dev/input/ve-wiimote2", "wiimote2"))
     devices.append(add_wiimote("/dev/input/ve-wiimote3", "wiimote3"))
     devices.append(add_wiimote("/dev/input/ve-wiimote4", "wiimote4"))
-
 
 # start daemon (will enter the main loop)
 avango.daemon.run(devices)

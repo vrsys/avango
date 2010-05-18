@@ -8,6 +8,7 @@
 class FingerListener
 {
 public:
+  virtual ~FingerListener();
   virtual void fingerAdded(FingerInfo *pFingerInfo) = 0;
   virtual void fingerMoved(FingerInfo *pFingerInfo) = 0;
   virtual void fingerRemoved(FingerInfo *pFingerInfo) = 0;

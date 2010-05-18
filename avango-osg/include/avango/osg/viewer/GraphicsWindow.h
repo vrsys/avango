@@ -183,7 +183,7 @@ namespace av
         /**
          * Reset mouse pointer to window center in every frame.
          * Used by movers using mouse movement instead of position.
-         * Addititonally hides the mouse cursor.
+         * Additionally hides the mouse cursor.
          */
         SFBool MouseFixed;
 

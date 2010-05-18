@@ -33,6 +33,7 @@ headers = Split('''
     Doxygen.h
     Init.h
     ProximitySensor.h
+    Trackball.h
     windows_specific_utils.h
     ''')
 

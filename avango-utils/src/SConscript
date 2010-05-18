@@ -35,6 +35,7 @@ sources = Split('''
     Bool3Or.cpp
     Bool3And.cpp
     ProximitySensor.cpp
+    Trackball.cpp
     Init.cpp
     ''')
 

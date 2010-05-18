@@ -31,6 +31,7 @@
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
+#include "../include/avango/utils/Trackball.h"
 
 using namespace boost::python;
 
@@ -80,6 +81,8 @@ BOOST_PYTHON_MODULE(_utils)
   class_<av::utils::Bool2And, av::Link<av::utils::Bool2And>, bases<av::FieldContainer>, boost::noncopyable >("Bool2And", "docstring", no_init);
   class_<av::utils::Bool3Or, av::Link<av::utils::Bool3Or>, bases<av::FieldContainer>, boost::noncopyable >("Bool3Or", "docstring", no_init);
   class_<av::utils::Bool3And, av::Link<av::utils::Bool3And>, bases<av::FieldContainer>, boost::noncopyable >("Bool3And", "docstring", no_init);
+
+  class_<av::utils::Trackball, av::Link<av::utils::Trackball>, bases<av::FieldContainer>, boost::noncopyable >("Trackball", "docstring", no_init);
 
   def("calc_hpr", CalcHpr);
 }

@@ -27,6 +27,7 @@
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
+#include "../include/avango/utils/Trackball.h"
 
 #include <avango/Logger.h>
 
@@ -47,6 +48,7 @@ av::utils::Init::initClass()
     av::utils::Bool2And::initClass();
     av::utils::Bool3Or::initClass();
     av::utils::Bool3And::initClass();
+    av::utils::Trackball::initClass();
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
   }

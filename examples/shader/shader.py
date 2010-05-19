@@ -25,7 +25,12 @@ import math
 
 import avango.osg
 import avango.inspector
-import avango.osg.simpleviewer
+import avango.display
+import sys
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 
 ###############################################################################
@@ -192,4 +197,6 @@ root.Children.value.append(avango.osg.nodes.Sphere(StateSet = wirestate,
 
 ###############################################################################
 # run the example
-avango.osg.simpleviewer.run(root)
+view.Root.value = root
+
+avango.display.run()

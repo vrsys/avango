@@ -49,6 +49,8 @@ class Trigger(avango.script.Script):
 
 
 avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 # create a simple scene
 sphere = avango.osg.nodes.Sphere(Radius = 0.15)
@@ -70,8 +72,8 @@ trigger1 = Trigger(Text = "Button 1 was pressed")
 trigger1.Input.connect_from(spacemouse.Button1)
 
 # enter render loop
-view = avango.display.make_view()
 view.Root.value = transform
-view.Camera.connect_from(accumulator.MatrixOut)
+#TODO rewrite this so that the spacemouse controls the object not the camera
+#view.Camera.connect_from(accumulator.MatrixOut)
 
 avango.display.run()

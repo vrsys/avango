@@ -26,6 +26,10 @@ import avango
 import avango.script
 import sys
 
+argv = display.init(sys.argv)
+view = display.make_view()
+view.EnableTrackball.value = True
+
 def field_dump(script):
     buffer = ""
     for i in xrange(script._get_num_fields()):
@@ -67,9 +71,6 @@ class KeyboardListener(avango.script.Script):
     def evaluate(self):
         buffer = field_dump(self)
         print buffer
-
-argv = display.init(sys.argv)
-view = display.make_view()
 
 #only the Monitor display setup supports Mouse and Keyboard
 if display.get_display_type() != "Monitor":

@@ -30,6 +30,7 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 time_sensor = avango.nodes.TimeSensor()
 

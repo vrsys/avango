@@ -25,15 +25,16 @@ import avango.osg
 import avango.display
 import sys
 
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
+
 class Rotation(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.osg.SFMatrix()
 
     def evaluate(self):
         self.MatrixOut.value = avango.osg.make_rot_mat(self.TimeIn.value, 0, 1, 0)
-
-
-argv = avango.display.init(sys.argv)
 
 text1 = avango.osg.nodes.Text(String = "LayerGeode",
                             Size = 0.2,
@@ -81,7 +82,7 @@ rotation.TimeIn.connect_from(time_sensor.Time)
 
 root = avango.osg.nodes.Group(Name="Root")
 root.Children.value = [ translation_world ]
-view = avango.display.make_view()
+
 view.Root.value = root
 
 avango.display.run()

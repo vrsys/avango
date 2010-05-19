@@ -29,6 +29,7 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 # 1. simple scene
 # ===============

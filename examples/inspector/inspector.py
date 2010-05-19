@@ -29,6 +29,7 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 root = avango.osg.nodes.MatrixTransform(Name="Root",Matrix=avango.osg.make_trans_mat(0,1.7,-20))
 sphere1 = avango.osg.nodes.Sphere(Name="RedSphere", Color=avango.osg.Vec4(1., 0., 0., 1))

@@ -27,6 +27,7 @@ import avango.display
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 if len(sys.argv) > 1:
     text_str = sys.argv[1]

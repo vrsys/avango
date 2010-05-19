@@ -43,6 +43,7 @@ def destruct(self):
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 #create mouse device
 mouse = avango.display.make_dominant_user_device(interface="Mouse")

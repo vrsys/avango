@@ -68,7 +68,7 @@ void init_OSGBoundingBox(void)
   float (osg::BoundingBox::*zMax1)() const = &osg::BoundingBox::zMax;
 
   // wrapping osg::BoundingBox functionality
-  class_<osg::BoundingBox>("BoundingBox")
+  class_<osg::BoundingBox>("OSGBoundingBox")
     .def(init<float, float, float, float, float, float>())
     .def(init<osg::Vec3, osg::Vec3>())
     .def("init", &osg::BoundingBox::init)

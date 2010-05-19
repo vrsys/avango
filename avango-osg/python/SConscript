@@ -41,6 +41,7 @@ osg_files = Split("""
     avango/osg/OSGMatrix.cpp
     avango/osg/OSGVectors.cpp
     avango/osg/OSGQuat.cpp
+    avango/osg/OSGBoundingBoxCalculator.cpp
     avango/osg/OSGBoundingBox.cpp
     avango/osg/OSGBoundingSphere.cpp
     avango/osg/OSGNode.cpp

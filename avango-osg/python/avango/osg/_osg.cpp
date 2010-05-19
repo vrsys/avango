@@ -38,6 +38,7 @@
 
 #include "OSGAbsoluteTransform.h"
 #include "OSGBlendFunc.h"
+#include "OSGBoundingBoxCalculator.h"
 #include "OSGBoundingBox.h"
 #include "OSGBoundingSphere.h"
 #include "OSGBox.h"
@@ -148,6 +149,7 @@ BOOST_PYTHON_MODULE(_osg)
   init_OSGClipNode();
   init_OSGDepth();
   init_OSGBlendFunc();
+  init_OSGBoundingBoxCalculator();
   init_OSGDrawable();
   init_OSGGeometry();
   init_OSGText();

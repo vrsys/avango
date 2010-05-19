@@ -30,7 +30,22 @@
 #include <osg/Vec3>
 #include "OSGBoundingSphere.h"
 
+#include <avango/python/register_field.h>
+#include <avango/osg/BoundingSphere.h>
+
+using namespace av::python;
 using namespace boost::python;
+
+namespace boost
+ {
+  namespace python
+   {
+    template <class T> struct pointee<av::Link<T> >
+     {
+      typedef T type;
+     };
+   }
+ }
 
 namespace
 {
@@ -39,11 +54,19 @@ namespace
     return b.center();
   }
 
-  std::string BoundingSphereString(const osg::BoundingSphere& b)
+  std::string OSGBoundingSphereString(const osg::BoundingSphere& b)
   {
     std::stringstream ss;
     osg::Vec3 v = b.center();
     ss << boost::format("<BoundingSphere center: %.6f %.6f %.6f  radius: %.6f>") % v[0] % v[1] % v[2] % b.radius();
+    return ss.str();
+  }
+
+  std::string BoundingSphereString(const ::av::osg::BoundingSphere * b)
+  {
+    std::stringstream ss;
+    osg::Vec3 v = b->Center.getValue();
+    ss << boost::format("<BoundingSphere center: %.6f %.6f %.6f  radius: %.6f>") % v[0] % v[1] % v[2] % b->Radius.getValue();
     return ss.str();
   }
 }
@@ -62,7 +85,7 @@ void init_OSGBoundingSphere(void)
   void (osg::BoundingSphere::*expandRadiusBy3)(const osg::BoundingSphere&) = &osg::BoundingSphere::expandRadiusBy;
 
   // wrapping osg::BoundingSphere functionality
-  class_<osg::BoundingSphere>("BoundingSphere")
+  class_<osg::BoundingSphere>("OSGBoundingSphere")
     .def(init<osg::Vec3, float>())
     .def(init<osg::BoundingSphere>())
     .def(init<osg::BoundingBox>())
@@ -80,6 +103,16 @@ void init_OSGBoundingSphere(void)
     .def("expand_radius_by", expandRadiusBy3)
     .def("intersects", &osg::BoundingSphere::intersects)
     .def("contains", &osg::BoundingSphere::contains)
-    .def("__repr__", BoundingSphereString)
+    .def("__repr__", OSGBoundingSphereString)
     ;
+
+  // wrapping av::osg::BoundingSphere functionality
+  register_field<av::osg::SFBoundingSphere>("SFBoundingSphere");
+  register_multifield<av::osg::MFBoundingSphere>("MFBoundingSphere");
+  class_<av::osg::BoundingSphere, av::Link<av::osg::BoundingSphere>, bases<av::FieldContainer>, boost::noncopyable >("BoundingSphere", "docstring", no_init)
+  .def("__repr__", BoundingSphereString)
+  ;
+
+
  }
+

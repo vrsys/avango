@@ -31,6 +31,8 @@
 #include <avango/osg/AutoTransform.h>
 #include <avango/osg/Billboard.h>
 #include <avango/osg/BlendFunc.h>
+#include <avango/osg/BoundingBoxCalculator.h>
+#include <avango/osg/BoundingSphere.h>
 #include <avango/osg/Camera.h>
 #include <avango/osg/CameraAttachment.h>
 #include <avango/osg/ClipPlane.h>
@@ -103,6 +105,8 @@ av::osg::Init::initClass()
     av::osg::CullFace::initClass();
     av::osg::Depth::initClass();
     av::osg::BlendFunc::initClass();
+    av::osg::BoundingBoxCalculator::initClass();
+    av::osg::BoundingSphere::initClass();
     av::osg::Drawable::initClass();
     av::osg::Fog::initClass();
     av::osg::Shader::initClass();

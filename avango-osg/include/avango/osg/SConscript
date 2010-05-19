@@ -28,6 +28,8 @@ headers = Split('''
     AutoTransform.h
     Billboard.h
     BlendFunc.h
+    BoundingBoxCalculator.h
+    BoundingSphere.h
     Box.h
     Camera.h
     CameraAttachment.h

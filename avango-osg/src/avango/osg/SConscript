@@ -32,6 +32,8 @@ sources = Split('''
     AutoTransform.cpp
     Billboard.cpp
     BlendFunc.cpp
+    BoundingBoxCalculator.cpp
+    BoundingSphere.cpp
     Box.cpp
     Camera.cpp
     CameraAttachment.cpp

@@ -56,6 +56,7 @@ class MonitorView(avango.script.Script):
     TransformAndScaleNode = avango.osg.SFMatrixTransform()
     ToggleFullScreen = avango.SFBool()
     WindowDecoration = avango.SFBool()
+    EnableTrackball = avango.SFBool()
     
     Root = avango.osg.SFNode()
     Camera = avango.osg.SFMatrix()
@@ -73,6 +74,9 @@ class MonitorView(avango.script.Script):
         self.TransformAndScaleNode.value = avango.osg.nodes.MatrixTransform()
         bounding_sphere_root.Children.value.append(self.TransformAndScaleNode.value)
         self.BoundingSphereRoot.value = bounding_sphere_root
+        
+        self.WindowDecoration.value = True
+        self.EnableTrackball.value = False
         
         self.Viewport.value = avango.osg.Vec4(0, 0, 1, 1)
         self.Depth.value = 0

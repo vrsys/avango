@@ -83,6 +83,35 @@ class Monitor(avango.display.Display):
             self._subdisplay_camera[subdisplay] = camera
             self._subdisplay_window[subdisplay] = window
         
+        
+        #configure trackball
+        display_view.EnableTrackball.value = self._enable_trackball
+        time_sensor = avango.nodes.TimeSensor()
+        self.keep_alive(time_sensor)
+        trackball = avango.utils.nodes.Trackball()
+        trackball.Enable.connect_from(display_view.EnableTrackball)
+        toggle_field = avango.utils.make_key_toggle_trigger_alternate(
+                        avango.utils.make_bool2_and(self._subdisplay_window_events[subdisplay].KeyShift,
+                                                    self._subdisplay_window_events[subdisplay].KeyEnter),
+                       True)
+        trackball.CenterToBoundingSphere.connect_from(toggle_field)
+        trackball.BoundingSphere.connect_from(display_view.BoundingSphereRoot.value.BoundingSphere)
+        trackball.TimeIn.connect_from(time_sensor.Time)
+        trackball.SpinningTimeThreshold.value = 0.5
+        trackball.Direction.connect_from(self._subdisplay_window[subdisplay].MousePositionNorm)
+        trackball.RotateTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyMiddle)
+        trackball.PanTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_LeftAndMiddle)
+        trackball.ZoomTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyRight)
+        trackball.ResetTrigger.connect_from(self._subdisplay_window_events[subdisplay].KeySpace)
+        
+        display_view.Camera.connect_from(trackball.Matrix)
+        self.keep_alive(trackball)
+        #TODO Enable the osg auto near/far plane computation
+        display_view.Near.value = 0.1 
+        display_view.Far.value = 100000
+        
+        
+        
         #add some default actions
         #show window decoration (Ctrl+Enter)
         toggle_field = avango.utils.make_key_toggle_trigger_alternate(
@@ -97,33 +126,6 @@ class Monitor(avango.display.Display):
                                                         self._subdisplay_window_events[subdisplay].KeyEnter) )
         display_view.ToggleFullScreen.connect_from(toggle_field)
         self._subdisplay_window[subdisplay].ToggleFullScreen.connect_from(display_view.ToggleFullScreen)
-        
-        #check for automatic scaling and trackball support   
-        if self._enable_trackball:
-            time_sensor = avango.nodes.TimeSensor()
-            self.keep_alive(time_sensor)
-        
-            trackball = avango.utils.nodes.Trackball()
-            toggle_field = avango.utils.make_key_toggle_trigger_alternate(
-                            avango.utils.make_bool2_and(self._subdisplay_window_events[subdisplay].KeyShift,
-                                                        self._subdisplay_window_events[subdisplay].KeyEnter),
-                           True)
-            trackball.CenterToBoundingSphere.connect_from(toggle_field)
-            
-            trackball.BoundingSphere.connect_from(display_view.BoundingSphereRoot.value.BoundingSphere)
-            trackball.TimeIn.connect_from(time_sensor.Time)
-            trackball.SpinningTimeThreshold.value = 0.5
-            trackball.Direction.connect_from(self._subdisplay_window[subdisplay].MousePositionNorm)
-            trackball.RotateTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyMiddle)
-            trackball.PanTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_LeftAndMiddle)
-            trackball.ZoomTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyRight)
-            trackball.ResetTrigger.connect_from(self._subdisplay_window_events[subdisplay].KeySpace)
-            
-            display_view.Camera.connect_from(trackball.Matrix)
-            self.keep_alive(trackball)
-            #TODO Enable the osg auto near/far plane computation
-            display_view.Near.value = 0.1 
-            display_view.Far.value = 100000
         
         return display_view
  

@@ -25,6 +25,8 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 
+from _nodes import *
+
 class ImmediateEdgeTrigger(avango.script.Script):
     """
     Triggers immediately (as soon as the field has been changed) on
@@ -81,3 +83,37 @@ class EdgeTrigger(avango.script.Script):
         pass
     def on_down_transition(self):
         pass
+
+   
+def make_key_toggle_trigger_alternate(input,initial_state):
+    toggle_tigger = nodes.KeyToggleTriggerAlternate()
+    toggle_tigger.init(initial_state)
+    toggle_tigger.Trigger.connect_from(input)
+    return toggle_tigger.Toggle
+    
+class KeyToggleTriggerAlternate(EdgeTrigger):
+    Toggle = avango.SFBool()
+
+    def __init__(self):
+        self.super(KeyToggleTriggerAlternate).__init__()
+        
+    def init(self,initial_state):
+        self.Toggle.value = initial_state
+        
+    def on_up_transition(self):
+        self.Toggle.value = not self.Toggle.value
+
+        
+def make_key_toggle_trigger(input):
+    toggle_tigger = nodes.KeyToggleTrigger()
+    toggle_tigger.Trigger.connect_from(input)
+    return toggle_tigger.Toggle
+    
+class KeyToggleTrigger(EdgeTrigger):
+    Toggle = avango.SFBool()
+
+    def __init__(self):
+        self.super(KeyToggleTrigger).__init__()
+        
+    def on_up_transition(self):
+        self.Toggle.value = True

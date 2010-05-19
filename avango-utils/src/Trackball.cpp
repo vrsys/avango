@@ -56,6 +56,8 @@ av::utils::Trackball::Trackball():
   mDragging(false),
   mSpinning(false)
 {
+  av::Link< ::av::osg::BoundingSphere > b = new ::av::osg::BoundingSphere();
+
   AV_FC_ADD_FIELD(Matrix, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(TimeIn, 0.0);
   AV_FC_ADD_FIELD(Direction, ::osg::Vec2(0.0, 0.0));
@@ -64,10 +66,15 @@ av::utils::Trackball::Trackball():
   AV_FC_ADD_FIELD(PanTrigger, false);
   AV_FC_ADD_FIELD(ResetTrigger, false);
   AV_FC_ADD_FIELD(AutoAdjustCenterTransform, true);
+  AV_FC_ADD_FIELD(EnableSpinning,true);
   AV_FC_ADD_FIELD(SpinningTimeThreshold, 0.3);
   AV_FC_ADD_FIELD(SpinningWeightingCoefficient,0.97);
   AV_FC_ADD_FIELD(CenterTransform, ::osg::Matrix::translate(0.0, 0.0, -0.6));
-  AV_FC_ADD_FIELD(CenterTransformReset, ::osg::Matrix::translate(0.0, 0.0, -0.6));
+  AV_FC_ADD_FIELD(CenterToBoundingSphere, false);
+  AV_FC_ADD_FIELD(BoundingSphere, b);
+  AV_FC_ADD_FIELD(CenterTransformOffset, ::osg::Vec3(0,-1.7,0));
+  AV_FC_ADD_FIELD(CenterTransformOffsetZCoefficient, 17.0);
+  AV_FC_ADD_FIELD(ZoomPanFactor,2.0);
 
 
   mRotation = ::osg::Matrix::identity();
@@ -92,13 +99,37 @@ av::utils::Trackball::initClass()
   }
 }
 
+void
+av::utils::Trackball::reset()
+{
+  if(CenterToBoundingSphere.getValue())
+  {
+    const ::osg::Vec3 center = BoundingSphere.getValue()->Center.getValue();
+    const float radius = BoundingSphere.getValue()->Radius.getValue();
+
+    ::osg::Vec3 offset = CenterTransformOffset.getValue();
+    offset.z()= offset.z() + radius*CenterTransformOffsetZCoefficient.getValue();
+
+    ::osg::Vec3 offset_inv = ::osg::Vec3(-offset.x(),-offset.y(),-offset.z());
+    Matrix.setValue( ::osg::Matrix::translate( center + offset ));
+
+    CenterTransform.setValue(::osg::Matrix::translate(offset_inv));
+  }
+}
+
 /* virtual */ void
 av::utils::Trackball::fieldHasChanged(const av::Field& field)
 {
   av::FieldContainer::fieldHasChanged(field);
 
   if (&field == &CenterTransform)
+  {
     mCenterTransInv = ::osg::Matrix::inverse(CenterTransform.getValue());
+  }
+  else if(&field == &BoundingSphere)
+  {
+    reset();
+  }
 }
 
 /* virtual */ void
@@ -125,20 +156,26 @@ av::utils::Trackball::evaluate()
     else if (ZoomTrigger.getValue())
     {
       const ::osg::Vec2 offset = mLastDirection - Direction.getValue();
+      float zoomFactor = offset.y();
+      zoomFactor *= BoundingSphere.getValue()->Radius.getValue()*ZoomPanFactor.getValue();
 
       if(AutoAdjustCenterTransform.getValue())
       {
-        ::osg::Matrix mat = CenterTransform.getValue() * ::osg::Matrix::translate(0.0, 0.0, offset[1]);
+        ::osg::Matrix mat = CenterTransform.getValue() * ::osg::Matrix::translate(0.0, 0.0, zoomFactor);
         CenterTransform.setValue(mat);
       }
 
-      Matrix.setValue(mCenterTransInv * ::osg::Matrix::translate(0.0, 0.0, -offset[1]) *
+      Matrix.setValue(mCenterTransInv * ::osg::Matrix::translate(0.0, 0.0, -zoomFactor) *
                       CenterTransform.getValue() * Matrix.getValue());
     }
     else if (PanTrigger.getValue())
     {
       const ::osg::Vec2 offset = mLastDirection - Direction.getValue();
-      Matrix.setValue(mCenterTransInv * ::osg::Matrix::translate(offset[0], offset[1], 0.0) *
+
+      float xPanFactor = offset.x() * BoundingSphere.getValue()->Radius.getValue()*ZoomPanFactor.getValue();
+      float yPanFactor = offset.y() * BoundingSphere.getValue()->Radius.getValue()*ZoomPanFactor.getValue();
+
+      Matrix.setValue(mCenterTransInv * ::osg::Matrix::translate(xPanFactor, yPanFactor, 0.0) *
                       CenterTransform.getValue() * Matrix.getValue());
     }
     mSpinning = false;
@@ -166,8 +203,9 @@ av::utils::Trackball::evaluate()
 
   if (ResetTrigger.getValue())
   {
-    Matrix.setValue(::osg::Matrix::identity());
-    CenterTransform.setValue(CenterTransformReset.getValue());
+    reset();
+
+    mSpinning = false;
   }
 
   mDragging = newDragging;

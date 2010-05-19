@@ -76,6 +76,16 @@ class ConvertersTestCase(unittest.TestCase):
         w2.Value.value = -42
         avango.evaluate()
         self.assertEqual(min.Output.value, -42)
+        
+    def testMatrixTranslationCalculator(self):
+        calculator = avango.utils.nodes.TranslationMatrixCalculator()
+        
+        m0 = avango.osg.make_trans_mat(1,1,1)
+        m1 = avango.osg.make_trans_mat(11,21,31)
+        
+        calculator.MatrixFrom.value = m0
+        calculator.MatrixTo.value = m1
+        avango.evaluate()
 
 def Suite():
    suite = unittest.TestLoader().loadTestsFromTestCase(ConvertersTestCase)

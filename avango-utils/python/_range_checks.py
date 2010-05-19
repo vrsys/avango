@@ -21,18 +21,13 @@
 #                                                                        #
 ##########################################################################
 
-from _nodes import *
+import avango.osg
 
-from _utils import *
-from _MFMerger import *
-from _bool_script_merge import *
-from _bool_scripts import *
-from _converter import *
-from _property_modifier import *
-from _task_scheduler import *
-from _triggers import *
-from _normalization import *
-from _field_dump import *
-from _interconnect import *
-from _range_checks import *
-from _node_scalers import *
+def in_range_float(ref_value,test_value,range):
+    if test_value > ref_value - range and test_value < ref_value + range:
+      return True
+    else:
+      return False
+  
+def in_range_vec3(ref_vec, test_vec, range):
+    return in_range_float(ref_vec.x, test_vec.x, range) and in_range_float(ref_vec.y, test_vec.y, range) and in_range_float(ref_vec.z, test_vec.z, range)

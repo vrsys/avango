@@ -32,6 +32,7 @@
  */
 
 #include <avango/osg/Fields.h>
+#include <avango/osg/BoundingSphere.h>
 #include <avango/FieldContainer.h>
 #include "windows_specific_utils.h"
 
@@ -102,6 +103,12 @@ namespace av
       av::SFBool AutoAdjustCenterTransform;
 
       /**
+       * Flag to enable/disable the spinning of the model
+       * Default: true
+       */
+      av::SFBool EnableSpinning;
+
+      /**
        * All rotation interactions whose duration (in seconds) is below this threshold trigger a spinning
        * Default: 0.3
        */
@@ -115,13 +122,41 @@ namespace av
 
       /**
        * Defines the orientation and translation of the rotation center relative
-       * to the local coordinate system. Default is 0.6 meter in front of it.
+       * to the local coordinate system.
        */
       av::osg::SFMatrix CenterTransform;
+
       /**
-       * Defines the center transform, which will be set if the field ResetTrigger is set to true
+       * BoundingSphere to which the Trackball should be centered.
        */
-      av::osg::SFMatrix CenterTransformReset;
+      av::osg::SFBoundingSphere BoundingSphere;
+
+      /**
+       * Flag indicating if the Trackball should be centered to the given BoundingSphere.
+       * Default: false
+       */
+      av::SFBool CenterToBoundingSphere;
+
+      /**
+       * Offset which is used to automatically calculate the CenterTransform from the BoundingSphere.
+       * To the offset in z direction, a dynamic offset depending on the radius of the bounding sphere
+       * and the CenterTransformOffsetZCoefficient will be added.
+       * Default is: (0.0, -1.7, 0.0)
+       */
+      av::osg::SFVec3 CenterTransformOffset;
+
+      /**
+       * Factor that will be multiplied with the radius of the BoundingSphere and added to the z center offset.
+       * This acts as a zomm.
+       * Default is: 17.0 (an object with radius 1 is fully visible)
+       */
+      av::SFFloat CenterTransformOffsetZCoefficient;
+
+      /**
+       * Scale factor for the zoom and pan interaction
+       * Default: 2.0
+       */
+      av::SFFloat ZoomPanFactor;
 
       /* virtual */ void fieldHasChanged(const av::Field& field);
       /* virtual */ void evaluate();
@@ -136,6 +171,11 @@ namespace av
       bool mDragging;
       bool mSpinning;
       ::osg::Matrix mCenterTransInv;
+
+      /**
+       * Reset the trackball to the default state
+       */
+      void reset();
     };
 
     typedef SingleField<Link<Trackball> > SFTrackball;

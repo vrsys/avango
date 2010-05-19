@@ -133,3 +133,29 @@ class Float2Vec2Converter(avango.script.Script):
 
     def evaluate(self):
         self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
+        
+class Vec3ToTransMatrix(avango.script.Script):
+    TransVec = avango.osg.SFVec3()
+    TransOffset = avango.osg.SFVec3()
+    Matrix = avango.osg.SFMatrix()
+    
+    def evaluate(self):
+        self.Matrix.value = avango.osg.make_trans_mat(self.TransVec.value + self.TransOffset.value)
+        
+def make_vec3_to_trans_matrix(vec3_field, trans_offset=avango.osg.Vec3(0,0,0)):
+    converter = Vec3ToTransMatrix()
+    converter.TransVec.connect_from(vec3_field)
+    converter.TransOffset.value = trans_offset
+    
+    return converter.Matrix
+
+
+class TranslationMatrixCalculator(avango.script.Script):
+    MatrixFrom = avango.osg.SFMatrix()
+    MatrixTo = avango.osg.SFMatrix()
+    MatrixTransDif = avango.osg.SFMatrix()
+    
+    def evaluate(self):
+        if not self.MatrixFrom.value or not self.MatrixTo.value:
+            return
+        self.MatrixTransDif.value = avango.osg.make_trans_mat( self.MatrixFrom.value.get_translate() - self.MatrixTo.value.get_translate() )

@@ -21,10 +21,9 @@
 #                                                                        #
 ##########################################################################
 
-import avango
 import avango.script
-import avango.osg
 from avango.script import field_has_changed
+import avango.osg
 
 class LoadFileScaler(avango.script.Script):
     LoadFile = avango.osg.SFLoadFile()
@@ -62,3 +61,4 @@ class LoadFileScaler(avango.script.Script):
         scaleFactor = 2.0 / (max_extend);
         scaleFactor *= self.Radius.value;
         return avango.osg.make_scale_mat(scaleFactor,scaleFactor,scaleFactor)
+    

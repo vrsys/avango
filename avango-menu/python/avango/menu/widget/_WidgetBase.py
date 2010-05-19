@@ -25,7 +25,6 @@ import avango.script
 
 class WidgetBase(avango.script.Script):
 
-    Name = avango.SFString()
     Highlighted = avango.SFBool()
     Select = avango.SFBool()
     Enable = avango.SFBool()

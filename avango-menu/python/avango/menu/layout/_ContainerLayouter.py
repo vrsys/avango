@@ -32,7 +32,6 @@ class ContainerLayouter(LayoutBase):
     Widgets = avango.script.MFObject()
     Layouters = avango.script.MFObject()
     UpdateTrigger = avango.SFBool()
-    Panel = avango.script.SFObject()
 
     # if layouter is used as internal panel container, the container should
     # at least be as wide as the panel content area
@@ -60,7 +59,7 @@ class ContainerLayouter(LayoutBase):
         for widget in widget.widgets:
             self.add_widget(widget)
 
-    @field_has_changed(Panel)
+    @field_has_changed(LayoutBase.Panel)
     def panel_touched(self):
         for layouter in self.Layouters.value:
             layouter.Panel.value = self.Panel.value

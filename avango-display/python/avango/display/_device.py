@@ -227,6 +227,78 @@ class MouseDevice(avango.script.Script):
         self.MouseLeftAndRight.connect_from(eventfields.MouseButtons_LeftAndRight)
 
 
+class SpaceMouse(avango.script.Script):
+    TimeIn = avango.SFFloat()
+
+    SensorAbsX = avango.SFFloat()
+    SensorAbsY = avango.SFFloat()
+    SensorAbsZ = avango.SFFloat()
+    SensorAbsRX = avango.SFFloat()
+    SensorAbsRY = avango.SFFloat()
+    SensorAbsRZ = avango.SFFloat()
+    SensorRelX = avango.SFFloat()
+    SensorRelY = avango.SFFloat()
+    SensorRelZ = avango.SFFloat()
+    SensorRelRX = avango.SFFloat()
+    SensorRelRY = avango.SFFloat()
+    SensorRelRZ = avango.SFFloat()
+
+    SensorBtnA0 = avango.SFBool()
+    SensorBtnA1 = avango.SFBool()
+    SensorBtnB0 = avango.SFBool()
+    SensorBtnB1 = avango.SFBool()
+    SensorBtnB2 = avango.SFBool()
+    SensorBtnB3 = avango.SFBool()
+
+    TranslationScale = avango.SFFloat()
+    RotationScale = avango.SFFloat()
+
+    MatrixOut = avango.osg.SFMatrix()
+    Button0 = avango.SFBool()
+    Button1 = avango.SFBool()
+    Button2 = avango.SFBool()
+    Button3 = avango.SFBool()
+
+    # Class attribute will be overridden once last time was set
+    _last_time = -1.
+
+    def get_time_diff(self, cur_time):
+        result = cur_time
+        if self._last_time != -1.:
+            result = cur_time - self._last_time
+        self._last_time = cur_time
+        return result
+
+    def evaluate(self):
+        values = self.get_values()
+
+        cur_time = values.TimeIn
+        time_delta = self.get_time_diff(cur_time)
+
+        # Mix values from different SpaceMouse types
+        trans_x = values.SensorAbsX + values.SensorRelX/500.
+        trans_y = values.SensorAbsY - values.SensorRelZ/500.
+        trans_z = values.SensorAbsZ + values.SensorRelY/500.
+        translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
+        rot_x = values.SensorAbsRX + values.SensorRelRX/500.
+        rot_y = values.SensorAbsRY - values.SensorRelRZ/500.
+        rot_z = values.SensorAbsRZ + values.SensorRelRY/500.
+        rotation = avango.osg.Vec3(rot_x, rot_y, rot_z)
+
+        translation *= time_delta * values.TranslationScale
+        rotation *= time_delta * values.RotationScale
+
+        rot_mat_x = avango.osg.make_rot_mat(rotation.x, 1., 0., 0.)
+        rot_mat_y = avango.osg.make_rot_mat(rotation.y, 0., 1., 0.)
+        rot_mat_z = avango.osg.make_rot_mat(rotation.z, 0., 0., 1.)
+        values.MatrixOut = rot_mat_x * rot_mat_y * rot_mat_z * avango.osg.make_trans_mat(translation)
+
+        values.Button0 = values.SensorBtnA0 | values.SensorBtnB0
+        values.Button1 = values.SensorBtnA1 | values.SensorBtnB1
+        values.Button2 = values.SensorBtnB2
+        values.Button3 = values.SensorBtnB3
+
+
 def make_wiimote_device(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset):
     device = WiimoteDevice()
     device._setup(wiimote_station, dtrack_station, device_service, receiver_offset, transmitter_offset)

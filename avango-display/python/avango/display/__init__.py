@@ -29,7 +29,7 @@ from _view import *
 from _screen_descriptor import *
 from _device import *
 from _display import Display
-from _display import Float2Vec2Converter
+from _display import ViewUserSelector
 
 import getopt
 import os.path

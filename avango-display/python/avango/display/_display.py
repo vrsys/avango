@@ -27,6 +27,7 @@ import avango.osg
 import avango.osg.viewer
 import avango.script
 from avango.script import field_has_changed
+import avango.utils
 
 import sys
 from math import *
@@ -51,7 +52,8 @@ class Display(object):
         #the device service will be created as soon as it is used.
         self._device_service = None
 
-        self._bool_dict={'false':False, 'true':True}
+        self._bool_dict={'false':False, 'off':False, 'no':False, 
+                         'true':True, 'on':True, 'yes':True }
 
         self._users = []
         self._windows = []
@@ -67,8 +69,9 @@ class Display(object):
             return None
         return self._users[user]
 
-    def make_view(self, subdisplay):
-        display_view = avango.display.nodes.View()
+    def make_view(self, subdisplay, display_view = None):
+        if not display_view:
+            display_view = avango.display.nodes.View()
 
         for window, transform, current_user in self._windows:
             eye_offset = 0.
@@ -90,7 +93,7 @@ class Display(object):
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node
-            converter = SFNode2MFContainerConverter()
+            converter = avango.utils.nodes.SFNode2MFContainerConverter()
             converter.Input.connect_from(display_view.Root)
             self._inspector.Children.connect_from(converter.Output)
 
@@ -111,13 +114,13 @@ class Display(object):
             # Only handle simple case here: one window
             screen.Transform.value = self._windows[0][1]
 
-            real_size = Float2Vec2Converter()
+            real_size = avango.utils.nodes.Float2Vec2Converter()
             self.keep_alive(real_size)
             real_size.Value0.connect_from(self._windows[0][0].RealActualWidth)
             real_size.Value1.connect_from(self._windows[0][0].RealActualHeight)
             screen.RealSize.connect_from(real_size.Output)
 
-            pixel_size = Float2Vec2Converter()
+            pixel_size = avango.utils.nodes.Float2Vec2Converter()
             self.keep_alive(pixel_size)
             pixel_size.Value0.connect_from(self._windows[0][0].ActualWidth)
             pixel_size.Value1.connect_from(self._windows[0][0].ActualHeight)
@@ -170,7 +173,13 @@ class Display(object):
         camera.Window.value = window
 
         view = avango.osg.viewer.nodes.View()
-        view.Scene.connect_from(display_view.Root)
+        #check for an alternative root node (Monitor setup)
+        root = getattr(display_view,"BoundingSphereRoot",None)
+        if root:
+            view.Scene.connect_from(root)
+        else:
+            view.Scene.connect_from(display_view.Root)
+            
         view.MasterCamera.value = camera
         return camera, view
 
@@ -284,94 +293,3 @@ class ViewportConverter(avango.script.Script):
         x_trans = 0.5 * (viewport_in.x + viewport_in.z - 1.) * self.RealActualWidth.value
         y_trans = 0.5 * (viewport_in.y + viewport_in.w - 1.) * self.RealActualHeight.value
         self.ScreenTransformOut.value = avango.osg.make_trans_mat(x_trans, y_trans, 0.) * self.ScreenTransformIn.value
-
-
-class SFNode2MFContainerConverter(avango.script.Script):
-    "Converts a SFNode to a MFNode"
-
-    Input = avango.osg.SFNode()
-    Output = avango.MFContainer()
-
-    def evaluate(self):
-        self.Output.value = [ self.Input.value ]
-
-class Float2Vec2Converter(avango.script.Script):
-    "Converts two Floats into on Vec2"
-
-    Value0 = avango.SFFloat()
-    Value1 = avango.SFFloat()
-    Output = avango.osg.SFVec2()
-
-    def evaluate(self):
-        self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
-
-class SpaceMouse(avango.script.Script):
-    TimeIn = avango.SFFloat()
-
-    SensorAbsX = avango.SFFloat()
-    SensorAbsY = avango.SFFloat()
-    SensorAbsZ = avango.SFFloat()
-    SensorAbsRX = avango.SFFloat()
-    SensorAbsRY = avango.SFFloat()
-    SensorAbsRZ = avango.SFFloat()
-    SensorRelX = avango.SFFloat()
-    SensorRelY = avango.SFFloat()
-    SensorRelZ = avango.SFFloat()
-    SensorRelRX = avango.SFFloat()
-    SensorRelRY = avango.SFFloat()
-    SensorRelRZ = avango.SFFloat()
-
-    SensorBtnA0 = avango.SFBool()
-    SensorBtnA1 = avango.SFBool()
-    SensorBtnB0 = avango.SFBool()
-    SensorBtnB1 = avango.SFBool()
-    SensorBtnB2 = avango.SFBool()
-    SensorBtnB3 = avango.SFBool()
-
-    TranslationScale = avango.SFFloat()
-    RotationScale = avango.SFFloat()
-
-    MatrixOut = avango.osg.SFMatrix()
-    Button0 = avango.SFBool()
-    Button1 = avango.SFBool()
-    Button2 = avango.SFBool()
-    Button3 = avango.SFBool()
-
-    # Class attribute will be overridden once last time was set
-    _last_time = -1.
-
-    def get_time_diff(self, cur_time):
-        result = cur_time
-        if self._last_time != -1.:
-            result = cur_time - self._last_time
-        self._last_time = cur_time
-        return result
-
-    def evaluate(self):
-        values = self.get_values()
-
-        cur_time = values.TimeIn
-        time_delta = self.get_time_diff(cur_time)
-
-        # Mix values from different SpaceMouse types
-        trans_x = values.SensorAbsX + values.SensorRelX/500.
-        trans_y = values.SensorAbsY - values.SensorRelZ/500.
-        trans_z = values.SensorAbsZ + values.SensorRelY/500.
-        translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
-        rot_x = values.SensorAbsRX + values.SensorRelRX/500.
-        rot_y = values.SensorAbsRY - values.SensorRelRZ/500.
-        rot_z = values.SensorAbsRZ + values.SensorRelRY/500.
-        rotation = avango.osg.Vec3(rot_x, rot_y, rot_z)
-
-        translation *= time_delta * values.TranslationScale
-        rotation *= time_delta * values.RotationScale
-
-        rot_mat_x = avango.osg.make_rot_mat(rotation.x, 1., 0., 0.)
-        rot_mat_y = avango.osg.make_rot_mat(rotation.y, 0., 1., 0.)
-        rot_mat_z = avango.osg.make_rot_mat(rotation.z, 0., 0., 1.)
-        values.MatrixOut = rot_mat_x * rot_mat_y * rot_mat_z * avango.osg.make_trans_mat(translation)
-
-        values.Button0 = values.SensorBtnA0 | values.SensorBtnB0
-        values.Button1 = values.SensorBtnA1 | values.SensorBtnB1
-        values.Button2 = values.SensorBtnB2
-        values.Button3 = values.SensorBtnB3

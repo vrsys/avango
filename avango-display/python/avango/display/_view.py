@@ -24,6 +24,7 @@
 import avango
 import avango.osg
 import avango.script
+from avango.script import field_has_changed
 
 class View(avango.script.Script):
 
@@ -47,3 +48,40 @@ class View(avango.script.Script):
 
     def evaluate(self):
         pass
+
+
+class MonitorView(avango.script.Script):
+    
+    BoundingSphereRoot = avango.osg.SFNode()
+    TransformAndScaleNode = avango.osg.SFMatrixTransform()
+    ToggleFullScreen = avango.SFBool()
+    WindowDecoration = avango.SFBool()
+    
+    Root = avango.osg.SFNode()
+    Camera = avango.osg.SFMatrix()
+    Viewport = avango.osg.SFVec4()
+    Depth = avango.SFFloat()
+    UserSelector = avango.SFInt()
+    Near = avango.SFFloat()
+    Far = avango.SFFloat()
+    BackgroundColor = avango.osg.SFVec4()
+
+    def __init__(self):
+        self.super(MonitorView).__init__()
+    
+        bounding_sphere_root = avango.osg.nodes.BoundingBoxCalculator()
+        self.TransformAndScaleNode.value = avango.osg.nodes.MatrixTransform()
+        bounding_sphere_root.Children.value.append(self.TransformAndScaleNode.value)
+        self.BoundingSphereRoot.value = bounding_sphere_root
+        
+        self.Viewport.value = avango.osg.Vec4(0, 0, 1, 1)
+        self.Depth.value = 0
+        self.Near.value = 0.1
+        self.Far.value = 500.
+        self.BackgroundColor.value = avango.osg.Vec4(0., 0., 0., 1.)
+        self.UserSelector.value = 0
+    
+    @field_has_changed(Root)
+    def root_has_changed(self):
+        self.TransformAndScaleNode.value.Children.value = [self.Root.value]
+

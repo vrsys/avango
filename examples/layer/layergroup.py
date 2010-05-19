@@ -28,8 +28,14 @@
 # See avango/osg/include/LayerGroup.h for more information on bugs and
 # missing features.
 
-import avango.osg.simpleviewer
+import avango.display
+import avango.osg
+
+import sys
 import math
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
 
 panel1 = avango.osg.nodes.Panel(PanelColor = avango.osg.Vec4(1,0,0,0.5),
                                 Width = 2,
@@ -105,7 +111,8 @@ layergroup = avango.osg.nodes.LayerGroup(Children=[midgroup,icongeode])
 trans1 = avango.osg.nodes.MatrixTransform(Children=[layergroup, sphere])
 
 root = avango.osg.nodes.MatrixTransform(Children=[trans1],
-                                        Matrix = avango.osg.make_rot_mat(math.pi/2,1,0,0) * \
-                                                 avango.osg.make_rot_mat(math.pi,0,0,1))
+                                        Matrix = avango.osg.make_trans_mat(0,1.7,-20))
 
-avango.osg.simpleviewer.run(root)
+
+view.Root.value = root
+avango.display.run()

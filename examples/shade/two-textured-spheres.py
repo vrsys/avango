@@ -22,8 +22,13 @@
 ##########################################################################
 
 import avango.osg
-import avango.osg.simpleviewer
 import avango.shade
+import avango.display
+import sys
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 def make_sphere():
     dependencies = []
@@ -51,4 +56,6 @@ sphere2.Matrix.value = avango.osg.make_trans_mat(-1., 0., 0.)
 root = avango.osg.nodes.Group()
 root.Children.value = [ sphere1, sphere2 ]
 
-avango.osg.simpleviewer.run(root)
+view.Root.value = root
+
+avango.display.run()

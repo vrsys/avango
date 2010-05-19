@@ -22,8 +22,13 @@
 ##########################################################################
 
 import avango.osg
-import avango.osg.simpleviewer
 import avango.shade
+import avango.display
+import sys
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 light = avango.shade.nodes.DirectionalLight()
 light_source = avango.shade.nodes.LightSource(LightNum = 1)
@@ -48,5 +53,6 @@ root = avango.shade.nodes.StateGroup(State=state)
 sphere = avango.osg.nodes.Sphere(Radius=1.)
 
 root.Children.value = [ sphere, light_source]
+view.Root.value = root
 
-avango.osg.simpleviewer.run(root)
+avango.display.run()

@@ -22,8 +22,13 @@
 ##########################################################################
 
 import avango.osg
-import avango.osg.simpleviewer
 import avango.shade
+import avango.display
+import sys
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 image_loader = avango.osg.nodes.LoadImage(Filename="pattern.dds")
 texture = avango.osg.nodes.Texture2D()
@@ -38,4 +43,6 @@ root = avango.shade.nodes.StateGroup(State=state)
 sphere = avango.osg.nodes.Sphere(Radius=1.)
 root.Children.value.append(sphere)
 
-avango.osg.simpleviewer.run(root)
+view.Root.value = root
+
+avango.display.run()

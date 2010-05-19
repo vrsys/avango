@@ -36,6 +36,7 @@ import math
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 panel1 = avango.osg.nodes.Panel(PanelColor = avango.osg.Vec4(1,0,0,0.5),
                                 Width = 2,

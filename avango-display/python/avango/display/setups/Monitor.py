@@ -201,13 +201,5 @@ class Monitor(avango.display.Display):
             spacemouse.TimeIn.connect_from(time_sensor.Time)
     
             return spacemouse
-        
-        elif device == "MenuTool":
-            import avango.menu
-            menu_tool = avango.menu.Tool(Enable=True)
-            #TODO Change the treatment of the interface parameter as subdisplay
-            menu_tool.PickTrigger.connect_from(self._subdisplay_window_events[interface].MouseButtons_OnlyLeft)
-            menu_tool.ContextTrigger.connect_from(self._subdisplay_window_events[interface].MouseButtons_OnlyRight)
-            menu_tool.Transform.connect_from(self._subdisplay_camera[interface].MouseNearTransform)
-            return menu_tool
+            
             

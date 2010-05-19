@@ -23,7 +23,10 @@
 
 import sys
 import avango.connect
-import avango.osg.viewer
+import avango.display
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
 
 if len(sys.argv) > 1:
     text_str = sys.argv[1]
@@ -34,15 +37,15 @@ else:
 
 # 1. simple scene
 # ===============
+scene_root = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-1))
 
 text = avango.osg.nodes.Text(String = text_str,
-                             Size = 0.012,
+                             Size = 0.022,
                              Alignment = 4)
 geode = avango.osg.nodes.Geode(Drawables = [text])
+scene_root.Children.value = [geode]
 
-window = avango.osg.viewer.nodes.GraphicsWindow()
-camera = avango.osg.viewer.nodes.Camera(Window = window)
-viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = geode)
+view.Root.value = scene_root
 
 # 2. distribution setup
 # =====================
@@ -66,4 +69,4 @@ output_node.set_stream(server)
 output_node.Text.connect_from(text.String)
 
 # enter render loop
-viewer.run()
+avango.display.run()

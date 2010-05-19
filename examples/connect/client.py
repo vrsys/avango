@@ -23,17 +23,25 @@
 
 import socket
 import avango.connect
-import avango.osg.viewer
+import avango.display
+import sys
+
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
 
 # 1. simple scene
 # ===============
+scene_root = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-1))
 
-text = avango.osg.nodes.Text(Size = 0.012, Alignment = 4)
+text = avango.osg.nodes.Text(String = "",
+                             Size = 0.022,
+                             Alignment = 4)
 geode = avango.osg.nodes.Geode(Drawables = [text])
+scene_root.Children.value = [geode]
 
-window = avango.osg.viewer.nodes.GraphicsWindow()
-camera = avango.osg.viewer.nodes.Camera(Window = window)
-viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = geode)
+view.Root.value = scene_root
+
 
 # 2. distribution setup
 # =====================
@@ -62,4 +70,4 @@ except socket.error, msg:
     print "Not connected."
 
 # enter render loop
-viewer.run()
+avango.display.run()

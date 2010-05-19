@@ -28,6 +28,14 @@ import avango.tools
 import avango.utils
 import socket
 
+import avango.display
+import sys
+
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+#view.EnableTrackball.value = True
+
+
 sphere_count = 0
 
 class ColorSwitcher(avango.script.Script):
@@ -70,10 +78,10 @@ class InteractionInput(avango.script.Script):
             print "add " + sphere_name
 
             color_switcher = ColorSwitcher()
-            color_switcher.Active.connect_from(events.MouseButtonLeft)
+            color_switcher.Active.connect_from(mouse.MouseButtonLeft)
             color_switcher.ObjectName.value = sphere_name
             color_switcher.PickedTargets.connect_from(pick_tool.SelectedTargets)
-            color_switcher.KeyShift.connect_from(events.KeyShift)
+            color_switcher.KeyShift.connect_from(keyboard.KeyShift)
             sphere = avango.osg.nodes.Sphere(Radius = 1, Name = sphere_name)
             sphere.Color.connect_from(color_switcher.Color)
             scene.Children.value.append(sphere)
@@ -81,28 +89,25 @@ class InteractionInput(avango.script.Script):
 
             color_switcher.ReferencedObject.value = sphere
 
-scene = avango.osg.nodes.Group()
+scene = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-30))
 
-window = avango.osg.viewer.nodes.GraphicsWindow(Title = "Client")
-camera = avango.osg.viewer.nodes.Camera(Window = window)
-viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = scene)
-events = avango.osg.viewer.nodes.EventFields(View = viewer)
-window.DragEvent.connect_from(events.DragEvent)
-window.MoveEvent.connect_from(events.MoveEvent)
+#create devices
+mouse = avango.display.make_dominant_user_device(interface="Mouse")
+keyboard = avango.display.make_dominant_user_device(interface="Keyboard")
 
-camera.ViewerTransform.value = avango.osg.make_trans_mat(0, 0, 50)
+#camera.ViewerTransform.value = avango.osg.make_trans_mat(0, 0, 50)
 
 interaction_input = InteractionInput()
-interaction_input.KeyEnter.connect_from(events.KeyEnter)
+interaction_input.KeyEnter.connect_from(keyboard.KeyEnter)
 
 pick_tool = avango.tools.nodes.PickSelector()
 pick_tool.RootNode.value = scene
-pick_tool.PickTrigger.connect_from(events.MouseButtonLeft)
-pick_tool.PickRayTransform.connect_from(camera.MouseNearTransform)
+pick_tool.PickTrigger.connect_from(mouse.MouseButtonLeft)
+pick_tool.PickRayTransform.connect_from(mouse.MouseNearTransform)
 
 drag_tool = avango.tools.nodes.DragTool()
 drag_tool.Targets.connect_from(pick_tool.SelectedTargets)
-drag_tool.DragTransform.connect_from(camera.MouseNearTransform)
+drag_tool.DragTransform.connect_from(mouse.MouseNearTransform)
 
 
 
@@ -127,6 +132,7 @@ except socket.error, msg:
     print "Error: " + str(msg)
     print "Not connected."
 
+view.Root.value = scene
 
 
-viewer.run()
+avango.display.run()

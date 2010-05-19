@@ -26,19 +26,14 @@ import avango.osg
 import avango.osg.viewer
 import avango.tools
 import avango.utils
+import avango.display
+import sys
 
-scene = avango.osg.nodes.Group()
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
 
-window = avango.osg.viewer.nodes.GraphicsWindow(Title = "Server")
-camera = avango.osg.viewer.nodes.Camera(Window = window)
-viewer = avango.osg.viewer.nodes.Viewer(MasterCamera = camera, Scene = scene)
-events = avango.osg.viewer.nodes.EventFields(View = viewer)
-window.DragEvent.connect_from(events.DragEvent)
-window.MoveEvent.connect_from(events.MoveEvent)
-
-camera.ViewerTransform.value = avango.osg.make_trans_mat(0, 0, 50)
-
-
+scene = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-30))
+#view.EnableTrackball.value = True
 
 # a node that receives data (from a client)
 class Input(avango.utils.InterconnectInputNode):
@@ -64,6 +59,6 @@ output_node = Output()
 input_node.set_stream(server)
 output_node.set_stream(server)
 
+view.Root.value = scene
 
-
-viewer.run()
+avango.display.run()

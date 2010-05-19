@@ -104,7 +104,12 @@ class Monitor(avango.display.Display):
             self.keep_alive(time_sensor)
         
             trackball = avango.utils.nodes.Trackball()
-            trackball.CenterToBoundingSphere.value = True
+            toggle_field = avango.utils.make_key_toggle_trigger_alternate(
+                            avango.utils.make_bool2_and(self._subdisplay_window_events[subdisplay].KeyShift,
+                                                        self._subdisplay_window_events[subdisplay].KeyEnter),
+                           True)
+            trackball.CenterToBoundingSphere.connect_from(toggle_field)
+            
             trackball.BoundingSphere.connect_from(display_view.BoundingSphereRoot.value.BoundingSphere)
             trackball.TimeIn.connect_from(time_sensor.Time)
             trackball.SpinningTimeThreshold.value = 0.5
@@ -161,38 +166,48 @@ class Monitor(avango.display.Display):
 
 
     def make_device(self, device, interface):
-        if device != "SpaceMouse" or interface != "Relative6DOF":
-            return None
+        
+        if device == "SpaceMouse" or interface == "Relative6DOF":
 
-        if not self._device_service:
-            self._device_service = avango.daemon.DeviceService()
-
-        sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
-                                                  Station = "spacemousestation")
-        self.keep_alive(sensor)
-
-        spacemouse = avango.display.nodes.SpaceMouse()
-        spacemouse.SensorAbsX.connect_from(sensor.Value0)
-        spacemouse.SensorAbsY.connect_from(sensor.Value1)
-        spacemouse.SensorAbsZ.connect_from(sensor.Value2)
-        spacemouse.SensorAbsRX.connect_from(sensor.Value3)
-        spacemouse.SensorAbsRY.connect_from(sensor.Value4)
-        spacemouse.SensorAbsRZ.connect_from(sensor.Value5)
-        spacemouse.SensorRelX.connect_from(sensor.Value6)
-        spacemouse.SensorRelY.connect_from(sensor.Value7)
-        spacemouse.SensorRelZ.connect_from(sensor.Value8)
-        spacemouse.SensorRelRX.connect_from(sensor.Value9)
-        spacemouse.SensorRelRY.connect_from(sensor.Value10)
-        spacemouse.SensorRelRZ.connect_from(sensor.Value11)
-        spacemouse.SensorBtnA0.connect_from(sensor.Button0)
-        spacemouse.SensorBtnA1.connect_from(sensor.Button1)
-        spacemouse.SensorBtnB0.connect_from(sensor.Button9)
-        spacemouse.SensorBtnB1.connect_from(sensor.Button10)
-        spacemouse.SensorBtnB2.connect_from(sensor.Button3)
-        spacemouse.SensorBtnB3.connect_from(sensor.Button4)
-
-        time_sensor = avango.nodes.TimeSensor()
-        self.keep_alive(time_sensor)
-        spacemouse.TimeIn.connect_from(time_sensor.Time)
-
-        return spacemouse
+            if not self._device_service:
+                self._device_service = avango.daemon.DeviceService()
+    
+            sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
+                                                      Station = "spacemousestation")
+            self.keep_alive(sensor)
+    
+            spacemouse = avango.display.nodes.SpaceMouse()
+            spacemouse.SensorAbsX.connect_from(sensor.Value0)
+            spacemouse.SensorAbsY.connect_from(sensor.Value1)
+            spacemouse.SensorAbsZ.connect_from(sensor.Value2)
+            spacemouse.SensorAbsRX.connect_from(sensor.Value3)
+            spacemouse.SensorAbsRY.connect_from(sensor.Value4)
+            spacemouse.SensorAbsRZ.connect_from(sensor.Value5)
+            spacemouse.SensorRelX.connect_from(sensor.Value6)
+            spacemouse.SensorRelY.connect_from(sensor.Value7)
+            spacemouse.SensorRelZ.connect_from(sensor.Value8)
+            spacemouse.SensorRelRX.connect_from(sensor.Value9)
+            spacemouse.SensorRelRY.connect_from(sensor.Value10)
+            spacemouse.SensorRelRZ.connect_from(sensor.Value11)
+            spacemouse.SensorBtnA0.connect_from(sensor.Button0)
+            spacemouse.SensorBtnA1.connect_from(sensor.Button1)
+            spacemouse.SensorBtnB0.connect_from(sensor.Button9)
+            spacemouse.SensorBtnB1.connect_from(sensor.Button10)
+            spacemouse.SensorBtnB2.connect_from(sensor.Button3)
+            spacemouse.SensorBtnB3.connect_from(sensor.Button4)
+    
+            time_sensor = avango.nodes.TimeSensor()
+            self.keep_alive(time_sensor)
+            spacemouse.TimeIn.connect_from(time_sensor.Time)
+    
+            return spacemouse
+        
+        elif device == "MenuTool":
+            import avango.menu
+            menu_tool = avango.menu.Tool(Enable=True)
+            #TODO Change the treatment of the interface parameter as subdisplay
+            menu_tool.PickTrigger.connect_from(self._subdisplay_window_events[interface].MouseButtons_OnlyLeft)
+            menu_tool.ContextTrigger.connect_from(self._subdisplay_window_events[interface].MouseButtons_OnlyRight)
+            menu_tool.Transform.connect_from(self._subdisplay_camera[interface].MouseNearTransform)
+            return menu_tool
+            

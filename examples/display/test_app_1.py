@@ -21,13 +21,15 @@
 #                                                                        #
 ##########################################################################
 
-from avango import display
 import avango
+import avango.display
 import sys
 
-argv = display.init(sys.argv)
-view1 = display.make_view()
-sphere = avango.osg.nodes.Sphere(Radius=0.1, Matrix=avango.osg.make_trans_mat(0, 1.7, -1.2))
-view1.Root.value = sphere
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
-display.run()
+sphere = avango.osg.nodes.Sphere(Radius=0.1, Matrix=avango.osg.make_trans_mat(0, 1.7, -1.2))
+view.Root.value = sphere
+
+avango.display.run()

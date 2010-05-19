@@ -65,6 +65,7 @@ av::utils::Trackball::Trackball():
   AV_FC_ADD_FIELD(ZoomTrigger, false);
   AV_FC_ADD_FIELD(PanTrigger, false);
   AV_FC_ADD_FIELD(ResetTrigger, false);
+  AV_FC_ADD_FIELD(Enable, true);
   AV_FC_ADD_FIELD(AutoAdjustCenterTransform, true);
   AV_FC_ADD_FIELD(EnableSpinning,true);
   AV_FC_ADD_FIELD(SpinningTimeThreshold, 0.3);
@@ -102,7 +103,7 @@ av::utils::Trackball::initClass()
 void
 av::utils::Trackball::reset()
 {
-  if(CenterToBoundingSphere.getValue())
+  if(CenterToBoundingSphere.getValue() && Enable.getValue())
   {
     const ::osg::Vec3 center = BoundingSphere.getValue()->Center.getValue();
     const float radius = BoundingSphere.getValue()->Radius.getValue();
@@ -136,6 +137,9 @@ av::utils::Trackball::fieldHasChanged(const av::Field& field)
 av::utils::Trackball::evaluate()
 {
   av::FieldContainer::evaluate();
+
+  if(!Enable.getValue())
+      return;
 
   const bool newDragging =
     (RotateTrigger.getValue() || ZoomTrigger.getValue() || PanTrigger.getValue());

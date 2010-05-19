@@ -96,6 +96,12 @@ namespace av
       av::SFBool ResetTrigger;
 
       /**
+       * Enable or disable the trackball
+       * Default: true
+       */
+      av::SFBool Enable;
+
+      /**
        * If set to true, the specified center transform will automatically be adjusted
        * so that the trackball still rotates around the specified object, regardless of any applied zoom
        * Default: True

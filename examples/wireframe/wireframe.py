@@ -27,7 +27,13 @@ Rendering objects in wireframe mode. Exemplary usage of the corresponding mode i
 
 import avango.osg
 import avango.osg.simpleviewer
+import avango.display
+import sys
 
+#initialize the display
+argv = avango.display.init(sys.argv)
+view = avango.display.make_view()
+view.EnableTrackball.value = True
 
 root = avango.osg.nodes.Group()
 
@@ -44,4 +50,6 @@ root.Children.value.append(avango.osg.nodes.Sphere(StateSet = avango.osg.nodes.S
                                                    Color = avango.osg.Vec4(0.3,0.3,0.9,0.0),
                                                    Matrix = avango.osg.make_scale_mat(0.25,0.25,0.25) * avango.osg.make_trans_mat(-0.5,0,0)))
 
-avango.osg.simpleviewer.run(root)
+view.Root.value = root
+
+avango.display.run()

@@ -77,22 +77,6 @@ root_group = avango.osg.nodes.Group(Children = [obj_trans])
 view.Root.value = root_group
 
 
-# setup sphere creator, creates a sphere with space key at mouse position
-
-class SphereCreator(avango.script.Script):
-    Trigger = avango.SFBool()
-    Transform = avango.osg.SFMatrix()
-
-    def evaluate(self):
-        if self.Trigger.value:
-            make_sphere(self.Transform.value.get_translate())
-
-sphere_creator = SphereCreator()
-sphere_creator.Trigger.connect_from(keyboard.KeySpace)
-sphere_creator.Transform.connect_from(mouse.MouseTransform)
-
-
-
 # setup drag tool
 pick_selector = avango.tools.nodes.PickSelector()
 pick_selector.PickTrigger.connect_from(mouse.MouseButtonLeft)
@@ -100,7 +84,7 @@ pick_selector.PickRayTransform.connect_from(mouse.MouseNearTransform)
 pick_selector.RootNode.connect_from(view.Root)
 
 drag_tool = avango.tools.nodes.DragTool()
-drag_tool.DragTransform.connect_from(mouse.MouseTransform)
+drag_tool.DragTransform.connect_from(mouse.MouseNearTransform)
 drag_tool.Targets.connect_from(pick_selector.SelectedTargets)
 
 

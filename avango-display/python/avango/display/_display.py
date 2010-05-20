@@ -142,7 +142,7 @@ class Display(object):
 
         return sensor
 
-    def make_window(self, x_position, y_position, width, height, real_width, real_height, use_stereo, screen_identifier=":0.0"):
+    def make_window(self, x_position, y_position, width, height, real_width, real_height, use_stereo, screen_identifier=":0.0", num_stencil_bits=2):
         """Generates Window with Position and Stereo enabled/disabled"""
         window = avango.osg.viewer.nodes.GraphicsWindow()
         window.ScreenIdentifier.value = screen_identifier
@@ -155,6 +155,7 @@ class Display(object):
         window.WantedPositionX.value = x_position
         window.WantedPositionY.value = y_position
         window.AutoHeight.value = False
+        window.NumStencilBits.value = num_stencil_bits
         if use_stereo:
             window.StereoMode.value = avango.osg.viewer.stereo_mode.STEREO_MODE_QUAD_BUFFER
         else:

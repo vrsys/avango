@@ -43,7 +43,7 @@ class Monitor(avango.display.Display):
         if options.has_key(trackball_token) and self._bool_dict.has_key(options[trackball_token].lower()):
             self._enable_trackball=self._bool_dict[options[trackball_token].lower()]
             
-        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier)
+        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
         window.Name.value = "AVANGO"
         window.Decoration.value = True
         window.AutoHeight.value = True
@@ -64,7 +64,7 @@ class Monitor(avango.display.Display):
                 
         # In the Monitor setting each subdisplay simply get a new window
         else:
-            window = self.make_window(0, 0, 1024, 768, 4, 3, False, self._screen_identifier)
+            window = self.make_window(0, 0, 1024, 768, 4, 3, False, self._screen_identifier, 2)
             window.Decoration.value = True
             window.AutoHeight.value = True
             window.ShowCursor.value = True

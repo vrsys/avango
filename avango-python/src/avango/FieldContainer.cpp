@@ -25,9 +25,9 @@
 #include <avango/FieldContainer.h>
 #include <avango/FieldContainerHelper.h>
 #include <avango/ContainerPool.h>
+#include <avango/python/script/Script.h>
 
 #include "FieldContainer.h"
-#include "script/Script.h"
 
 using namespace boost::python;
 

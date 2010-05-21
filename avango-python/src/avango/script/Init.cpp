@@ -23,9 +23,9 @@
 
 #include <avango/python/script/Init.h>
 #include <avango/python/script/Types.h>
+#include <avango/python/script/Script.h>
 #include <avango/python/register_field.h>
 #include "Update.h"
-#include "Script.h"
 #include <boost/python.hpp>
 
 using namespace av::python;

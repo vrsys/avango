@@ -21,8 +21,8 @@
 *                                                                        *
 \************************************************************************/
 
-#include "Script.h"
 #include <avango/python/script/Init.h>
+#include <avango/python/script/Script.h>
 #include <boost/python.hpp>
 
 BOOST_PYTHON_MODULE(_script)

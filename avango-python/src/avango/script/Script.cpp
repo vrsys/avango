@@ -24,7 +24,7 @@
 #include <list>
 #include <map>
 
-#include "Script.h"
+#include <avango/python/script/Script.h>
 
 #include <avango/Create.h>
 #include <avango/FieldContainer.h>

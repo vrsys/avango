@@ -26,13 +26,14 @@
 
 #include <avango/FieldContainer.h>
 #include <boost/python.hpp>
+#include <avango/python/windows_specific_python.h>
 
 namespace av
 {
   namespace script
   {
 
-    class Script : public av::FieldContainer, public boost::python::wrapper<Script>
+    class AV_PYTHON_DLL Script : public av::FieldContainer, public boost::python::wrapper<Script>
     {
     public:
       Script(PyObject* self, av::Type type);
@@ -75,7 +76,7 @@ namespace av
       static boost::python::object sHandler;
     };
 
-   void register_script(void);
+   void AV_PYTHON_DLL register_script(void);
 
   }
 }

@@ -2,24 +2,22 @@
 
 /************************************************************************\
 *                                                                        *
-* This file is part of Avango.                                           *
+* This file is part of AVANGO.                                           *
 *                                                                        *
-* Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       *
+* Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       *
 * angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
-* Avango is free software: you can redistribute it and/or modify         *
+* AVANGO is free software: you can redistribute it and/or modify         *
 * it under the terms of the GNU Lesser General Public License as         *
 * published by the Free Software Foundation, version 3.                  *
 *                                                                        *
-* Avango is distributed in the hope that it will be useful,              *
+* AVANGO is distributed in the hope that it will be useful,              *
 * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
 * GNU General Public License for more details.                           *
 *                                                                        *
 * You should have received a copy of the GNU Lesser General Public       *
-* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
-*                                                                        *
-* Avango is a trademark owned by FhG.                                    *
+* License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. *
 *                                                                        *
 \************************************************************************/
 
@@ -32,15 +30,40 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
+{
   namespace python
-   {
+  {
     template <class T> struct pointee<av::Link<T> >
-     {
+    {
       typedef T type;
-     };
-   }
- }
+    };
+  }
+}
+
+namespace
+{
+  // TODO this should be defined globally and used as field type
+
+  enum ClearMask
+  {
+    COLOR_BUFFER_BIT=GL_COLOR_BUFFER_BIT,
+    DEPTH_BUFFER_BIT=GL_DEPTH_BUFFER_BIT,
+    ACCUM_BUFFER_BIT=GL_ACCUM_BUFFER_BIT,
+    STENCIL_BUFFER_BIT=GL_STENCIL_BUFFER_BIT
+  };
+}
+
+void init_ClearMask(void)
+{
+  // TODO this should be defined globally and used as field type
+
+  enum_<ClearMask>("ClearMask")
+    .value("GL_COLOR_BUFFER_BIT", COLOR_BUFFER_BIT)
+    .value("GL_DEPTH_BUFFER_BIT", DEPTH_BUFFER_BIT)
+    .value("GL_ACCUM_BUFFER_BIT", ACCUM_BUFFER_BIT)
+    .value("GL_STENCIL_BUFFER_BIT", STENCIL_BUFFER_BIT)
+    ;
+}
 
 void init_OSGCamera(void)
  {
@@ -52,13 +75,7 @@ void init_OSGCamera(void)
       "Low-level wrapper of osg::Camera. Mostly used for pre-render effects",
     no_init);
 
-  // TODO this should be defined globally
-  enum_<GLbitfield>("ClearMask")
-    .value("GL_COLOR_BUFFER_BIT", GL_COLOR_BUFFER_BIT)
-    .value("GL_DEPTH_BUFFER_BIT", GL_DEPTH_BUFFER_BIT)
-    .value("GL_ACCUM_BUFFER_BIT", GL_ACCUM_BUFFER_BIT)
-    .value("GL_STENCIL_BUFFER_BIT", GL_STENCIL_BUFFER_BIT)
-    ;
+  init_ClearMask();
 
   enum_< ::osg::Camera::RenderOrder >("RenderOrder")
     .value("PRE_RENDER", ::osg::Camera::PRE_RENDER)

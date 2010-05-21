@@ -124,11 +124,6 @@ BOOST_PYTHON_MODULE(_avango)
   init_InputStream();
   init_OutputStream();
 
-  // Use of these fields is deprecated. Use SFContainer instead.
-  // TODO Remove at a later time
-  register_field<av::SFContainer>("SFObject");
-  register_multifield<av::MFContainer>("MFObject");
-
 #ifdef AVANGO_DISTRIBUTION_SUPPORT
   av::NetLock::initClass();
   class_<av::NetLock, av::Link<av::NetLock>, bases<av::FieldContainer>, boost::noncopyable>("NetLock", "Network-wide Lock object", no_init);

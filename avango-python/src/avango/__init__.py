@@ -61,6 +61,11 @@ from _utility import *
 import nodefactory
 nodes = nodefactory.NodeFactory(module=__name__)
 
+# Use of these fields is deprecated. Use SFContainer instead.
+# TODO Remove at a later time
+SFObject = SFContainer
+MFObject = MFContainer
+
 # Finally add other avango sub-modules (in external directories) to search path
 import sys
 import os.path

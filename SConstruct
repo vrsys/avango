@@ -46,8 +46,8 @@ opts.AddOptions(
                'Enable building OpenAL sound module',
                False),
     BoolOption('DISPLAY_SUPPORT',
-               'Enable building display setup module (EXPERIMENTAL)',
-               False),
+               'Enable building display setup module (REQUIRED)',
+               True),
     BoolOption('CONNECT_SUPPORT',
                'Enable building module to connect mobile devices to AVANGO',
                False),
@@ -58,8 +58,8 @@ opts.AddOptions(
                'Enable VRPN support for the AvangoDaemon module',
                False),
     BoolOption('UTILS_SUPPORT',
-               'Enable building utility module (EXPERIMENTAL)',
-               False),
+               'Enable building utility module (REQUIRED)',
+               True),
     )
 
 avango.build.setup()

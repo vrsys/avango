@@ -26,6 +26,7 @@ import avango.osg
 import avango.display
 import avango.utils
 import os
+    
 
 class Monitor(avango.display.Display):
 
@@ -58,7 +59,6 @@ class Monitor(avango.display.Display):
     def make_view(self, subdisplay, trackball_support=True):
         
         display_view = avango.display.nodes.MonitorView()
-        #display_view = avango.display.nodes.View()
         if subdisplay == "":
             super(Monitor, self).make_view(subdisplay, display_view)
                 
@@ -109,8 +109,6 @@ class Monitor(avango.display.Display):
         #TODO Enable the osg auto near/far plane computation
         display_view.Near.value = 0.1 
         display_view.Far.value = 100000
-        
-        
         
         #add some default actions
         #show window decoration (Ctrl+Enter)
@@ -178,7 +176,7 @@ class Monitor(avango.display.Display):
                                                       Station = "spacemousestation")
             self.keep_alive(sensor)
     
-            spacemouse = avango.display.nodes.SpaceMouse()
+            spacemouse = avango.display.nodes.SpaceMouseDevice()
             spacemouse.SensorAbsX.connect_from(sensor.Value0)
             spacemouse.SensorAbsY.connect_from(sensor.Value1)
             spacemouse.SensorAbsZ.connect_from(sensor.Value2)
@@ -204,4 +202,20 @@ class Monitor(avango.display.Display):
     
             return spacemouse
             
+        elif device == "GamePad":
             
+            if not self._device_service:
+                self._device_service = avango.daemon.DeviceService()
+                
+            sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self._device_service,
+                                                           Station = "gamepadstation")
+            self.keep_alive(sensor)
+ 
+            gamepad = avango.display.nodes.GamePadDevice()
+            gamepad.connect(sensor)
+ 
+            time_sensor = avango.nodes.TimeSensor()
+            self.keep_alive(time_sensor)
+            gamepad.TimeIn.connect_from(time_sensor.Time)
+            
+            return gamepad

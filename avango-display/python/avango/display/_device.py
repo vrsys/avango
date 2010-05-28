@@ -233,7 +233,7 @@ class MouseDevice(avango.script.Script):
         self.MouseLeftAndRight.connect_from(eventfields.MouseButtons_LeftAndRight)
 
 
-class SpaceMouse(avango.script.Script):
+class SpaceMouseDevice(avango.script.Script):
     TimeIn = avango.SFFloat()
 
     SensorAbsX = avango.SFFloat()
@@ -388,3 +388,84 @@ class WiimoteDevice(avango.script.Script):
         self.wiimote_actuator.LED3.connect_from(self.LED3)
 
         self.Matrix.connect_from(self.dtrack_sensor.Matrix)
+        
+class GamePadDevice(avango.script.Script):
+    TimeIn = avango.SFFloat()
+    
+    CursorPad = avango.osg.SFVec2()
+    Stick = avango.osg.SFVec2()
+    
+    Button1 = avango.SFBool()
+    Button2 = avango.SFBool()
+    Button3 = avango.SFBool()
+    Button4 = avango.SFBool()
+    Button5 = avango.SFBool()
+    Button6 = avango.SFBool()
+    Button7 = avango.SFBool()
+    Button8 = avango.SFBool()
+    Button9 = avango.SFBool()
+    Button10 = avango.SFBool()   
+    
+    SensorAbsX = avango.SFFloat()
+    SensorAbsY = avango.SFFloat()
+    SensorAbsZ = avango.SFFloat()
+    SensorAbsRZ = avango.SFFloat()
+   
+    TranslationScale = avango.SFFloat()
+    RotationScale = avango.SFFloat()
+
+    # Class attribute will be overridden once last time was set
+    _last_time = -1.
+    
+    def __init__(self):
+          self.super(GamePadDevice).__init__()
+          
+          self.TranslationScale.value = 1.
+          self.RotationScale.value = 1.
+          
+    def connect(self, sensor):
+        self.SensorAbsX.connect_from(sensor.Value0)
+        self.SensorAbsY.connect_from(sensor.Value1)
+        self.SensorAbsZ.connect_from(sensor.Value2)
+        self.SensorAbsRZ.connect_from(sensor.Value3)
+ 
+        self.Button1.connect_from(sensor.Button1)
+        self.Button2.connect_from(sensor.Button2)
+        self.Button3.connect_from(sensor.Button3)
+        self.Button4.connect_from(sensor.Button4)
+        self.Button5.connect_from(sensor.Button5)
+        self.Button6.connect_from(sensor.Button6)
+        self.Button7.connect_from(sensor.Button7)
+        self.Button8.connect_from(sensor.Button8)
+        self.Button9.connect_from(sensor.Button0)
+        self.Button10.connect_from(sensor.Button9)
+
+    def get_time_diff(self, cur_time):
+        result = cur_time
+        if self._last_time != -1.:
+            result = cur_time - self._last_time
+        self._last_time = cur_time
+        return result
+
+    def evaluate(self):
+        
+        values = self.get_values()
+
+        cur_time = values.TimeIn
+        time_delta = self.get_time_diff(cur_time)
+
+        trans_x = values.SensorAbsX# + values.SensorRelX
+        trans_y = values.SensorAbsY# - values.SensorRelZ
+
+        translation = avango.osg.Vec2(trans_x, -trans_y)
+       
+        stick_trans_x = values.SensorAbsZ
+        stick_trans_y = values.SensorAbsRZ
+            
+        stick_trans = avango.osg.Vec2(stick_trans_x, stick_trans_y)
+    
+        translation *= time_delta * values.TranslationScale       
+        stick_trans *= time_delta * values.TranslationScale
+     
+        self.CursorPad.value = translation
+        self.Stick.value = stick_trans

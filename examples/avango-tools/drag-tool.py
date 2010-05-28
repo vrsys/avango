@@ -29,7 +29,7 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
-view.EnableTrackball.value = True
+view.EnableTrackball.value = False
 
 # set up scene graph
 obj_trans = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-1))

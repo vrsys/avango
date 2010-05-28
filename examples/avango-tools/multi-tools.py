@@ -22,10 +22,11 @@
 ##########################################################################
 
 import avango.script
-import avango.osg.viewer
+from avango.script import field_has_changed
 import avango.moving
 import avango.tools
 import avango.display
+import avango.utils
 import sys
 
 # extend sphere functionality
@@ -39,15 +40,18 @@ def unhighlight(self):
     self.Color.value = avango.osg.Vec4(1.0, 1.0, 1.0, 1.0)
 
 def destruct(self):
-    obj_trans.Children.value.remove(self)
+    root_group.Children.value.remove(self)
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
-view.EnableTrackball.value = True
+view.EnableTrackball.value = False
 
 #create mouse device
 mouse = avango.display.make_dominant_user_device(interface="Mouse")
 keyboard = avango.display.make_dominant_user_device(interface="Keyboard")
+
+root_group = avango.osg.nodes.Group()
+view.Root.value = root_group
 
 avango.osg.Sphere.jump_home = jump_home
 avango.osg.Sphere.highlight = highlight
@@ -57,24 +61,45 @@ avango.osg.Sphere.destruct = destruct
 def make_sphere(pos):
     sphere = avango.osg.nodes.Sphere(Radius = 0.01, Matrix = avango.osg.make_trans_mat(pos))
     sphere.add_field(sphere.Matrix, "HomeMatrix")
-    obj_trans.Children.value.append(sphere)
+    root_group.Children.value.append(sphere)
 
 
 # set up scene graph
-obj_trans = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-1))
+default_offset = avango.osg.Vec3(0.0, 1.7, -1) # move the objects into view 
+make_sphere(avango.osg.Vec3( 0.00,  0.00,  0.00)+default_offset)
+make_sphere(avango.osg.Vec3( 0.05,  0.05,  0.05)+default_offset)
+make_sphere(avango.osg.Vec3( 0.05,  0.05, -0.05)+default_offset)
+make_sphere(avango.osg.Vec3( 0.05, -0.05,  0.05)+default_offset)
+make_sphere(avango.osg.Vec3( 0.05, -0.05, -0.05)+default_offset)
+make_sphere(avango.osg.Vec3(-0.05,  0.05,  0.05)+default_offset)
+make_sphere(avango.osg.Vec3(-0.05,  0.05, -0.05)+default_offset)
+make_sphere(avango.osg.Vec3(-0.05, -0.05,  0.05)+default_offset)
+make_sphere(avango.osg.Vec3(-0.05, -0.05, -0.05)+default_offset)
 
-make_sphere(avango.osg.Vec3( 0.00,  0.00,  0.00))
-make_sphere(avango.osg.Vec3( 0.05,  0.05,  0.05))
-make_sphere(avango.osg.Vec3( 0.05,  0.05, -0.05))
-make_sphere(avango.osg.Vec3( 0.05, -0.05,  0.05))
-make_sphere(avango.osg.Vec3( 0.05, -0.05, -0.05))
-make_sphere(avango.osg.Vec3(-0.05,  0.05,  0.05))
-make_sphere(avango.osg.Vec3(-0.05,  0.05, -0.05))
-make_sphere(avango.osg.Vec3(-0.05, -0.05,  0.05))
-make_sphere(avango.osg.Vec3(-0.05, -0.05, -0.05))
 
-root_group = avango.osg.nodes.Group(Children = [obj_trans])
-view.Root.value = root_group
+
+# setup sphere creator, creates a sphere with space key at mouse position
+
+class SphereCreator(avango.script.Script):
+    Trigger = avango.SFBool()
+    Transform = avango.osg.SFMatrix()
+    
+    def __init__(self):
+        self.super(SphereCreator).__init__()
+        self.__trigger_changed = False
+    
+    @field_has_changed(Trigger)
+    def trigger_changed(self):
+        self.__trigger_changed = True
+    
+    def evaluate(self):
+        if self.__trigger_changed and self.Trigger.value:
+            make_sphere(self.Transform.value.get_translate())
+            self.__trigger_changed=False
+
+sphere_creator = SphereCreator()
+sphere_creator.Trigger.connect_from(avango.utils.make_key_released_trigger(keyboard.KeyEnter))
+sphere_creator.Transform.connect_from(mouse.MouseTransform)
 
 
 # setup drag tool

@@ -23,7 +23,6 @@
 
 import avango.script
 import avango.osg
-import avango.osg.viewer
 import avango.tools
 import avango.utils
 import socket
@@ -33,8 +32,9 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
-#view.EnableTrackball.value = True
+view.EnableTrackball.value = False
 
+print "\nPress Enter to add some spheres."
 
 sphere_count = 0
 

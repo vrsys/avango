@@ -23,7 +23,6 @@
 
 import avango.script
 import avango.osg
-import avango.osg.viewer
 import avango.tools
 import avango.utils
 import avango.display
@@ -31,9 +30,10 @@ import sys
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
+view.EnableTrackball.value = False
 
 scene = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-30))
-#view.EnableTrackball.value = True
+
 
 # a node that receives data (from a client)
 class Input(avango.utils.InterconnectInputNode):

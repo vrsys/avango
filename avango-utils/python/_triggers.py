@@ -84,6 +84,31 @@ class EdgeTrigger(avango.script.Script):
     def on_down_transition(self):
         pass
 
+def make_key_released_trigger(input):
+    toggle_tigger = nodes.KeyMonitorTrigger()
+    toggle_tigger.Trigger.connect_from(input)
+    return toggle_tigger.Released
+
+def make_key_pressed_trigger(input):
+    toggle_tigger = nodes.KeyMonitorTrigger()
+    toggle_tigger.Trigger.connect_from(input)
+    return toggle_tigger.Pressed
+
+class KeyMonitorTrigger(EdgeTrigger):
+    Released = avango.SFBool()
+    Pressed = avango.SFBool()
+
+    def __init__(self):
+        self.super(KeyMonitorTrigger).__init__()
+        
+    def on_up_transition(self):
+        self.Pressed.value = False
+        self.Released.value = True
+    
+    def on_down_transition(self):
+        self.Pressed.value = True
+        self.Released.value = False
+        
    
 def make_key_toggle_trigger_alternate(input,initial_state):
     toggle_tigger = nodes.KeyToggleTriggerAlternate()

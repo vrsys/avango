@@ -54,7 +54,8 @@ av::utils::Trackball::Trackball():
   mLastDirection(0.0, 0.0),
   mLastProjected(0.0, 0.0, 0.0),
   mDragging(false),
-  mSpinning(false)
+  mSpinning(false),
+  mReset(false)
 {
   av::Link< ::av::osg::BoundingSphere > b = new ::av::osg::BoundingSphere();
 
@@ -107,7 +108,6 @@ av::utils::Trackball::reset()
   {
     const ::osg::Vec3 center = BoundingSphere.getValue()->Center.getValue();
     const float radius = BoundingSphere.getValue()->Radius.getValue();
-
     ::osg::Vec3 offset = CenterTransformOffset.getValue();
     offset.z()= offset.z() + radius*CenterTransformOffsetZCoefficient.getValue();
 
@@ -116,6 +116,7 @@ av::utils::Trackball::reset()
 
     CenterTransform.setValue(::osg::Matrix::translate(offset_inv));
   }
+  mReset = false;
 }
 
 /* virtual */ void
@@ -129,7 +130,7 @@ av::utils::Trackball::fieldHasChanged(const av::Field& field)
   }
   else if(&field == &BoundingSphere)
   {
-    reset();
+    mReset=true;
   }
 }
 
@@ -141,6 +142,9 @@ av::utils::Trackball::evaluate()
   if(!Enable.getValue())
       return;
 
+  if(mReset)
+    reset();
+
   const bool newDragging =
     (RotateTrigger.getValue() || ZoomTrigger.getValue() || PanTrigger.getValue());
 
@@ -151,6 +155,7 @@ av::utils::Trackball::evaluate()
     if (RotateTrigger.getValue())
     {
       ::osg::Matrix rotMat = ::osg::Matrix::rotate(projected, mLastProjected);
+
       float fac = SpinningWeightingCoefficient.getValue();
       mRotation = rotMat * ::osg::Matrix::scale(fac,fac,fac) * mRotation;
 

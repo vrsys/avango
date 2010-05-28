@@ -176,6 +176,7 @@ namespace av
       ::osg::Vec3 mLastProjected;
       bool mDragging;
       bool mSpinning;
+      bool mReset;
       ::osg::Matrix mCenterTransInv;
 
       /**

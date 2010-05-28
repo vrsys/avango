@@ -24,7 +24,6 @@
 import avango
 import avango.script
 
-
 class FloatNormalization(avango.script.Script):
     MinIn = avango.SFFloat()
     MaxIn = avango.SFFloat()

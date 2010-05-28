@@ -21,29 +21,20 @@
 #                                                                        #
 ##########################################################################
 
+import avango
+import avango.osg
+import avango.utils
 import unittest
-import sys
-from avango.utils.tests import TestProximitySensor
-from avango.utils.tests import TestMFMerger
-from avango.utils.tests import TestBoolScripts
-from avango.utils.tests import TestTriggers
-from avango.utils.tests import TestTaskScheduler
-from avango.utils.tests import TestNormalization
-from avango.utils.tests import TestConverters
-from avango.utils.tests import TestInterpolators
 
-if __name__ == '__main__':
-    suites = [
-        TestProximitySensor.Suite(),
-        TestMFMerger.Suite(),
-        TestBoolScripts.Suite(),
-        TestTriggers.Suite(),
-        TestTaskScheduler.Suite(),
-        TestNormalization.Suite(),
-        TestConverters.Suite(),
-        TestInterpolators.Suite(),
-    ]
-    alltests = unittest.TestSuite(suites)
-    result = unittest.TextTestRunner(verbosity=2).run(alltests)
-    if not result.wasSuccessful():
-        sys.exit(1)
+
+class InterpolatorsTestCase(unittest.TestCase):
+    def testMakeInstance(self):
+        self.assert_(avango.utils.nodes.Interpolator())
+
+    def testStartInterpolator(self):
+        interpolator = avango.utils.nodes.Interpolator()
+        interpolator.Start.value = True
+
+def Suite():
+   suite = unittest.TestLoader().loadTestsFromTestCase(InterpolatorsTestCase)
+   return suite

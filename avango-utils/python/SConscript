@@ -50,6 +50,7 @@ avango_utils_python_files = Split("""
     _interconnect.py
     _range_checks.py
     _node_scalers.py
+    _interpolators.py
     """)
 
 Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))

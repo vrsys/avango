@@ -33,6 +33,7 @@ avango_utils_test_files = Split("""
     TestTaskScheduler.py
     TestNormalization.py
     TestConverters.py
+    TestInterpolators.py
     runtests.py
     __init__.py
     """)

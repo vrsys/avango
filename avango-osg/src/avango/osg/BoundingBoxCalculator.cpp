@@ -87,10 +87,11 @@ av::osg::BoundingBoxCalculator::evaluate()
 
   const ::osg::Vec3 approximateCenter = approximateBounds.center();
   const float approximateRadius = approximateBounds.radius();
+  const bool valid = approximateBounds.valid();
 
   mFudge = Fudge.getValue();
 
-  if (! inRange(mRadius, approximateRadius, mFudge) || ! inRange(mCenter, approximateCenter, mFudge) )
+  if( (! inRange(mRadius, approximateRadius, mFudge) || ! inRange(mCenter, approximateCenter, mFudge)) && valid )
   {
     // get the exact bounds of the node. The bounds used for culling are only "fast" approximations
     ::osg::ComputeBoundsVisitor cbbv(::osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);

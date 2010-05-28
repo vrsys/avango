@@ -33,6 +33,7 @@
 #include <osg/BoundingSphere>
 #include <osg/MatrixTransform>
 #include <osg/Billboard>
+#include <osg/ComputeBoundsVisitor>
 
 
 using namespace boost::python;
@@ -51,82 +52,26 @@ namespace boost
 
 
 namespace {
-  class CalculateBoundingBox : public ::osg::NodeVisitor
-  {
-  public:
-    CalculateBoundingBox() :
-      NodeVisitor(NodeVisitor::TRAVERSE_ALL_CHILDREN)
-    {
-      m_transformMatrix.makeIdentity();
-    }
-
-    virtual ~CalculateBoundingBox()
-    {
-    }
-
-    virtual
-    void apply(::osg::Geode &geode)
-    {
-      ::osg::BoundingBox bbox;
-      for (unsigned int i = 0; i < geode.getNumDrawables(); ++i)
-      {
-        bbox.expandBy(geode.getDrawable(i)->getBound());
-      }
-      ::osg::BoundingBox bboxTrans;
-      for (unsigned int i = 0; i < 8; ++i)
-      {
-        ::osg::Vec3 xvec = bbox.corner(i) * m_transformMatrix;
-        bboxTrans.expandBy(xvec);
-      }
-      m_boundingBox.expandBy(bboxTrans);
-      traverse(geode);
-    }
-
-    virtual
-    void apply(::osg::MatrixTransform &node)
-    {
-      m_transformMatrix *= node.getMatrix();
-      traverse(node);
-    }
-
-    virtual
-    void apply(::osg::Billboard &node)
-    {
-      traverse(node);
-    }
-
-    ::osg::BoundingBox &getBoundBox()
-    {
-      return m_boundingBox;
-    }
-
-  protected:
-    ::osg::BoundingBox m_boundingBox; // the overall resultant bounding box
-    ::osg::Matrix m_transformMatrix; // the current transform matrix
-  };
-
-
   osg::BoundingBox CalcBoundingBox(av::osg::Node* node)
   {
-    CalculateBoundingBox bbox;
-    node->getOsgNode()->accept( bbox );
-    return bbox.getBoundBox();
+    ::osg::ComputeBoundsVisitor cbbv(::osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
+    node->getOsgNode()->accept(cbbv);
+    return cbbv.getBoundingBox();
   }
-
 }
 
 
 
 
 void init_OSGNode(void)
- {
-  // wrapping osg::Node functionality
-  register_field<av::osg::SFNode>("SFNode");
-  register_multifield<av::osg::MFNode>("MFNode");
-  class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::noncopyable >("Node", "docstring", no_init)
-    .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
-    .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
-    ;
+{
+// wrapping osg::Node functionality
+register_field<av::osg::SFNode>("SFNode");
+register_multifield<av::osg::MFNode>("MFNode");
+class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::noncopyable >("Node", "docstring", no_init)
+  .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
+  .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
+  ;
 
-  def("calc_bounding_box", CalcBoundingBox);
- }
+def("calc_bounding_box", CalcBoundingBox);
+}

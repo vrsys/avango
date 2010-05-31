@@ -32,16 +32,25 @@ class Interpolator(avango.script.Script):
         self.super(Interpolator).__init__()
         
         self.MinVal.value = 0.0
-        self.MaxVal.value = 10.0
+        self.MaxVal.value = 1.0
         self.Duration.value = 1.0
         
         self.__start_time = 0.0
         
         self.__start_interpolation = False
         self.__running = False
-        
+        self.__shutdown = False
         
         self.__time_sensor = avango.nodes.TimeSensor()
+        
+#    def __del__(self):
+#        print "~Interpolator"
+    
+    def do_cleanup(self):
+#        print "do_cleanup"
+        self.__time_sensor.disconnect_and_clear_all_fields()
+        self.disconnect_and_clear_all_fields()
+        self.__shutdown = True
         
     @field_has_changed(Start)
     def start_changed(self):
@@ -52,6 +61,9 @@ class Interpolator(avango.script.Script):
         self.TimeIn.disconnect()
         
     def evaluate(self):
+        if self.__shutdown:
+            return
+        
         #start received
         if not self.__running and self.__start_interpolation: 
             self.TimeIn.connect_from(self.__time_sensor.Time)
@@ -82,3 +94,62 @@ class Interpolator(avango.script.Script):
             self.__start_interpolation = False
             
             self.stop_interpolation()
+         
+def mix_color(col1, col2, val):
+    return col1*val + col2*(1-val)
+            
+            
+def make_color_fading(start_color, end_color, duration):
+    color_fader = ColorFader()
+    color_fader.StartColor.value = start_color
+    color_fader.EndColor.value = end_color
+    color_fader.Duration.value = duration
+    
+    return color_fader
+    
+    
+class ColorFader(avango.script.Script):
+    
+    StartColor = avango.osg.SFVec4()
+    EndColor = avango.osg.SFVec4()
+    Duration = avango.SFFloat()
+    
+    StartFade = avango.SFBool()
+    FadeFinished = avango.SFBool()
+    
+    RawInterpolatedValue = avango.SFFloat()
+    Color = avango.osg.SFVec4()
+    
+    def __init__(self):
+        self.super(ColorFader).__init__()
+        
+        self.StartFade.value = False
+        self.FadeFinished.value = False
+        self.Color.value = avango.osg.Vec4(1,1,1,1)
+        self.__interpolator_running = True
+        
+        self.__interpolator = Interpolator()
+        self.__interpolator.MinVal.value = 0.0
+        self.__interpolator.MaxVal.value = 1.0
+        
+        self.__interpolator.Duration.connect_from(self.Duration)
+        self.__interpolator.Start.connect_from(self.StartFade)
+
+        self.FadeFinished.connect_from(self.__interpolator.Finished)
+        self.RawInterpolatedValue.connect_weak_from(self.__interpolator.Value)
+        
+        
+    @field_has_changed(StartFade)
+    def start_changed(self):
+        self.__interpolator_running = True
+        
+    @field_has_changed(FadeFinished)
+    def fade_finished_changed(self):
+        self.__interpolator_running = False
+        
+    def evaluate(self):
+        if self.__interpolator_running:
+            val = self.RawInterpolatedValue.value
+            self.Color.value = mix_color(self.EndColor.value,self.StartColor.value,val)
+
+        

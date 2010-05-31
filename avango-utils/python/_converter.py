@@ -23,6 +23,7 @@
 
 import avango
 import avango.script
+from avango.script import field_has_changed
 import avango.osg
 
 class FloatXBase(avango.script.Script):
@@ -159,3 +160,30 @@ class TranslationMatrixCalculator(avango.script.Script):
         if not self.MatrixFrom.value or not self.MatrixTo.value:
             return
         self.MatrixTransDif.value = avango.osg.make_trans_mat( self.MatrixFrom.value.get_translate() - self.MatrixTo.value.get_translate() )
+        
+
+class FloatToAlphaConverter(avango.script.Script):
+    ColorIn = avango.osg.SFVec4()
+    Alpha = avango.SFFloat()
+    Color = avango.osg.SFVec4()
+    
+    def __init__(self):
+        self.super(FloatToAlphaConverter).__init__()
+        self.__alpha_changed = False
+        self.__color_in = avango.osg.Vec4(1,1,1,1)
+        
+    @field_has_changed(ColorIn)
+    def color_in_changed(self):
+        self.__color_in = self.ColorIn.value
+    
+    @field_has_changed(Alpha)
+    def alpha_changed(self):
+        self.__alpha_changed = True
+        
+    def evaluate(self):
+        print "eval: " + str(self.Alpha.value)
+        if self.__alpha_changed:
+            
+            self.Color.value = avango.osg.Vec4(self.__color_in.x, self.__color_in.y, self.__color_in.z, self.Alpha.value)
+            self.__alpha_changed = False
+            

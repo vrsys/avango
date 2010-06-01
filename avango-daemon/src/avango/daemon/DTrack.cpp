@@ -30,6 +30,7 @@
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/Station.h>
 #include <cstring>
+#include <string>
 
 
 

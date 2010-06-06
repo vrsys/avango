@@ -24,6 +24,16 @@
 import avango
 import avango.script
 
+def normalize(min_in, max_in, min_out, max_out, val_in):
+    if min_in < 0:
+        val_in += (-min_in)
+        val_in /= max_in+(-min_in)
+    else:
+        val_in -= min_in
+        val_in /= max_in-min_in
+
+    return min_out + val_in*(max_out-min_out)
+
 class FloatNormalization(avango.script.Script):
     MinIn = avango.SFFloat()
     MaxIn = avango.SFFloat()
@@ -55,14 +65,7 @@ class FloatNormalization(avango.script.Script):
         assert(val_in >= min_in)
         assert(val_in <= max_in)
 
-        if min_in < 0:
-            val_in += (-min_in)
-            val_in /= max_in+(-min_in)
-        else:
-            val_in -= min_in
-            val_in /= max_in-min_in
-
-        self.ValueOut.value = min_out + val_in*(max_out-min_out)
+        self.ValueOut.value = normalize(min_in, max_in, min_out, max_out, val_in)
 
 def make_float_normalization(min_in, max_in, min_out, max_out, value_in_field):
     normalization = avango.utils.nodes.FloatNormalization()

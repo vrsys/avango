@@ -59,7 +59,7 @@ video = loadimagestream.ImageStream.get_value()
 video.Loop.value = True
 video.Status.value=avango.osg.streamstatus.playing
 
-videoTexture = avango.osg.nodes.Texture2D(Image = video)
+videoTexture = avango.osg.nodes.Texture2D(Image = video, ResizeNonPowerOfTwoHint = False)
 ss = avango.osg.nodes.StateSet(Texture0 = videoTexture)
 obj = avango.osg.nodes.Sphere(Name="TexturedSphere", StateSet = ss)
 

@@ -62,6 +62,10 @@ av::osg::Texture::Texture(::osg::Texture* osgtexture) :
   AV_FC_ADD_ADAPTOR_FIELD(MaxAnisotropy,
                           boost::bind(&Texture::getMaxAnisotropyCB, this, _1),
                           boost::bind(&Texture::setMaxAnisotropyCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(ResizeNonPowerOfTwoHint,
+                          boost::bind(&Texture::getResizeNonPowerOfTwoHint, this, _1),
+                          boost::bind(&Texture::setResizeNonPowerOfTwoHint, this, _1));
 }
 
 /* virtual */
@@ -135,4 +139,16 @@ av::osg::Texture::getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event)
 av::osg::Texture::setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event)
 {
   mOsgTexture->setMaxAnisotropy(event.getValue());
+}
+
+/* virtual */ void
+av::osg::Texture::getResizeNonPowerOfTwoHint(const av::SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getResizeNonPowerOfTwoHint();
+}
+
+/* virtual */ void
+av::osg::Texture::setResizeNonPowerOfTwoHint(const av::SFBool::SetValueEvent& event)
+{
+  mOsgTexture->setResizeNonPowerOfTwoHint(event.getValue());
 }

@@ -71,6 +71,7 @@ namespace av
       SFInt MinFilter;
       SFInt MagFilter;
       SFFloat MaxAnisotropy;
+      SFBool ResizeNonPowerOfTwoHint;
 
       /**
        * Get the wrapped ::osg::Texture object.
@@ -92,6 +93,8 @@ namespace av
       virtual void setMagFilterCB(const av::SFInt::SetValueEvent& event);
       virtual void getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event);
       virtual void setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event);
+      virtual void getResizeNonPowerOfTwoHint(const av::SFBool::GetValueEvent& event);
+      virtual void setResizeNonPowerOfTwoHint(const av::SFBool::SetValueEvent& event);
 
     };
 

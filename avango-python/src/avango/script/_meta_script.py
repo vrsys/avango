@@ -103,15 +103,15 @@ class Script(object):
     def __init__(self):
         self.super(Script).__init__(self._Script__type)
 
-        # Fields that are added are clones of the prototype given in the class
-        # definition. We therefore need to transform the dictionary mapping
-        # fields to registered callbacks
+        # Register fields. Then check if a callback has been registered and
+        # store this association by name and not by reference to not keep the
+        # FieldContainer alive.
         transformed_field_has_changed = {}
 
         for name, field in self._Script__fields:
             self.add_field(field, name)
             if field in self._Script__field_has_changed:
-                transformed_field_has_changed[self._get_field(name)] = self._Script__field_has_changed[field]
+                transformed_field_has_changed[name] = self._Script__field_has_changed[field]
 
         if None in self._Script__field_has_changed:
             transformed_field_has_changed[None] = self._Script__field_has_changed[None]
@@ -136,7 +136,8 @@ class Script(object):
         pass
 
     def _Script__fieldHasChanged(self, field):
-        if field in self._Script__field_has_changed:
-            self._Script__field_has_changed[field](self)
+        field_name = field._get_name()
+        if field_name in self._Script__field_has_changed:
+            self._Script__field_has_changed[field_name](self)
         if None in self._Script__field_has_changed:
-            self._Script__field_has_changed[None](self, field._get_name(), field)
+            self._Script__field_has_changed[None](self, field_name, field)

@@ -36,6 +36,8 @@
 #include "../include/avango/utils/Trackball.h"
 
 #include <iostream>
+#include <iomanip>
+
 #include <map>
 
 using namespace boost::python;
@@ -92,9 +94,13 @@ void print_actual_registered_field_containers()
   const std::map< av::FieldContainer::IDType, av::FieldContainer* > & containers = av::ContainerPool::getContainerPool();
   std::map< av::FieldContainer::IDType, av::FieldContainer* >::const_iterator iter;
   std::map< std::string,int> m;
+  int maxLength = 0;
   for(iter=containers.begin();iter!=containers.end();++iter)
   {
     std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
+    int l = type.length();
+    if(l>maxLength)
+      maxLength = l;
     std::map< std::string,int >::const_iterator find_iter = m.find(type);
     if(find_iter==m.end())
     {
@@ -105,15 +111,20 @@ void print_actual_registered_field_containers()
       m[type]++;
     }
   }
-  std::cout << "###########################################" << std::endl;
-  std::cout <<"<FieldContainer Name> | Number of containers"<< std::endl;
+  std::ostringstream ss;
   std::map< int, std::string > conversedMap = converseMap( m );
   std::map< int, std::string >::reverse_iterator i;
   for(i=conversedMap.rbegin();i!=conversedMap.rend();++i)
   {
-    std::cout <<"<"<< i->second << "> | " << i->first << std::endl;
+    int l = maxLength - i->second.length();
+    ss <<"\""<< i->second << "\" ";
+    for(int n=0;n<l;++n)
+      ss << " ";
+    ss<< i->first << std::endl;
   }
-  std::cout << "Total number of containers: " << av::ContainerPool::getNumberOfContainers() << std::endl;
+  ss << "Total number of containers: " << av::ContainerPool::getNumberOfContainers() << std::endl;
+
+  std::cout << ss.str();
 }
 
 BOOST_PYTHON_MODULE(_utils)

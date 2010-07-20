@@ -22,7 +22,9 @@
 \************************************************************************/
 
 #include <boost/python.hpp>
+
 #include <avango/Link.h>
+#include <avango/ContainerPool.h>
 
 #include <osg/Matrix>
 
@@ -32,6 +34,9 @@
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
 #include "../include/avango/utils/Trackball.h"
+
+#include <iostream>
+#include <map>
 
 using namespace boost::python;
 
@@ -45,6 +50,15 @@ namespace boost
       typedef T type;
     };
   }
+}
+
+template < typename T, typename U >
+std::map< U, T > converseMap( const std::map< T, U >& o )
+{
+  std::map< U, T > result;
+  for ( typename std::map< T, U >::const_iterator begin( o.begin() ); begin != o.end(); ++begin )
+    result.insert( make_pair( begin->second, begin->first ) );
+  return result;
 }
 
 osg::Vec3 CalcHpr(const osg::Matrix& mat)
@@ -73,6 +87,35 @@ osg::Vec3 CalcHpr(const osg::Matrix& mat)
   return hpr;
 }
 
+void print_actual_registered_field_containers()
+{
+  const std::map< av::FieldContainer::IDType, av::FieldContainer* > & containers = av::ContainerPool::getContainerPool();
+  std::map< av::FieldContainer::IDType, av::FieldContainer* >::const_iterator iter;
+  std::map< std::string,int> m;
+  for(iter=containers.begin();iter!=containers.end();++iter)
+  {
+    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
+    std::map< std::string,int >::const_iterator find_iter = m.find(type);
+    if(find_iter==m.end())
+    {
+      m[type] = 1;
+    }
+    else
+    {
+      m[type]++;
+    }
+  }
+  std::cout << "###########################################" << std::endl;
+  std::cout <<"<FieldContainer Name> | Number of containers"<< std::endl;
+  std::map< int, std::string > conversedMap = converseMap( m );
+  std::map< int, std::string >::reverse_iterator i;
+  for(i=conversedMap.rbegin();i!=conversedMap.rend();++i)
+  {
+    std::cout <<"<"<< i->second << "> | " << i->first << std::endl;
+  }
+  std::cout << "Total number of containers: " << av::ContainerPool::getNumberOfContainers() << std::endl;
+}
+
 BOOST_PYTHON_MODULE(_utils)
 {
   av::utils::Init::initClass();
@@ -85,4 +128,6 @@ BOOST_PYTHON_MODULE(_utils)
   class_<av::utils::Trackball, av::Link<av::utils::Trackball>, bases<av::FieldContainer>, boost::noncopyable >("Trackball", "docstring", no_init);
 
   def("calc_hpr", CalcHpr);
+
+  def("print_registered_field_containers",print_actual_registered_field_containers);
 }

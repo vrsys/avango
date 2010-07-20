@@ -98,7 +98,8 @@ void print_actual_registered_field_containers()
   for(iter=containers.begin();iter!=containers.end();++iter)
   {
 //    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
-    std::string type = iter->second->Name.getValue();
+//    std::string type = iter->second->Name.getValue();
+    std::string type = iter->second->getTypeId().getName();
 
     int l = type.length();
     if(l>maxLength)
@@ -113,19 +114,6 @@ void print_actual_registered_field_containers()
       m[type]++;
     }
   }
-
-//  std::ostringstream ss;
-//  std::map< std::string, int >::reverse_iterator i;
-//  for(i=m.rbegin();i!=m.rend();++i)
-//  {
-//    int l = maxLength - i->first.length();
-//    ss <<"\""<< i->first << "\" ";
-//    for(int n=0;n<l;++n)
-//      ss << " ";
-//    ss<< i->second << std::endl;
-//  }
-//  ss<< av::ContainerPool::getNumberOfContainers() << std::endl;
-//  std::cout << ss.str();
 
   std::ostringstream ss;
   std::multimap< int, std::string > conversedMap = converseMap( m );

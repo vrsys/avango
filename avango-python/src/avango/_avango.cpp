@@ -23,6 +23,7 @@
 
 #include <avango/Config.h>
 #include <boost/python.hpp>
+#include <avango/ContainerPool.h>
 #include <avango/Type.h>
 #include <avango/logging/Logger.h>
 #include <avango/logging/FileAppender.h>
@@ -73,6 +74,11 @@ namespace
   {
     // TODO add proper severity level setting from python
     av::logging::Logger::getLogger(logger)(av::logging::DEBUG) << message;
+  }
+
+  unsigned int get_num_of_registered_field_containers()
+  {
+    return av::ContainerPool::getNumberOfContainers();
   }
 
   void application_evaluate(void)
@@ -133,6 +139,8 @@ BOOST_PYTHON_MODULE(_avango)
   def("enable_logging", logging1);
   def("enable_logging", logging2);
   def("log", python_log);
+
+  def("num_registered_field_containers", get_num_of_registered_field_containers);
 
   def("evaluate", application_evaluate);
   def("running", application_running);

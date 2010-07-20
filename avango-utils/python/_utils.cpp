@@ -55,9 +55,9 @@ namespace boost
 }
 
 template < typename T, typename U >
-std::map< U, T > converseMap( const std::map< T, U >& o )
+std::multimap< U, T > converseMap( const std::map< T, U >& o )
 {
-  std::map< U, T > result;
+  std::multimap< U, T > result;
   for ( typename std::map< T, U >::const_iterator begin( o.begin() ); begin != o.end(); ++begin )
     result.insert( make_pair( begin->second, begin->first ) );
   return result;
@@ -97,8 +97,8 @@ void print_actual_registered_field_containers()
   int maxLength = 0;
   for(iter=containers.begin();iter!=containers.end();++iter)
   {
-    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
-//    std::string type = iter->second->Name.getValue();
+//    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
+    std::string type = iter->second->Name.getValue();
 
     int l = type.length();
     if(l>maxLength)
@@ -113,9 +113,23 @@ void print_actual_registered_field_containers()
       m[type]++;
     }
   }
+
+//  std::ostringstream ss;
+//  std::map< std::string, int >::reverse_iterator i;
+//  for(i=m.rbegin();i!=m.rend();++i)
+//  {
+//    int l = maxLength - i->first.length();
+//    ss <<"\""<< i->first << "\" ";
+//    for(int n=0;n<l;++n)
+//      ss << " ";
+//    ss<< i->second << std::endl;
+//  }
+//  ss<< av::ContainerPool::getNumberOfContainers() << std::endl;
+//  std::cout << ss.str();
+
   std::ostringstream ss;
-  std::map< int, std::string > conversedMap = converseMap( m );
-  std::map< int, std::string >::reverse_iterator i;
+  std::multimap< int, std::string > conversedMap = converseMap( m );
+  std::multimap< int, std::string >::reverse_iterator i;
   for(i=conversedMap.rbegin();i!=conversedMap.rend();++i)
   {
     int l = maxLength - i->second.length();
@@ -133,8 +147,6 @@ void print_actual_registered_field_containers()
   for(int n=0;n<l;++n)
     ss << " ";
   ss<< av::ContainerPool::getNumberOfContainers() << std::endl;
-
-
   std::cout << ss.str();
 }
 

@@ -39,6 +39,8 @@ class LoadFileScaler(avango.script.Script):
         self.bounding_box = None
         self.Radius.value = 1.0
         self.__file_loaded = False
+        
+        self.Name.value = "LoadFileScaler"
 
     @field_has_changed(LoadFileFinished)
     def loading_finished(self):

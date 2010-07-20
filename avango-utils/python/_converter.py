@@ -36,6 +36,8 @@ class FloatXBase(avango.script.Script):
 
     def __init__(self):
         self.super(FloatXBase).__init__()
+        
+        self.Name.value = "FloatXBase"
 
         self.Output.value = 0
         self.BaseFieldName.value = "Input"
@@ -64,6 +66,11 @@ class FloatXBase(avango.script.Script):
         pass
 
 class FloatXSum(FloatXBase):
+    
+    def __init__(self):
+        self.super(FloatXSum).__init__()
+        
+        self.Name.value = "FloatXSum"
 
     def on_calculate(self):
         sum = 0
@@ -77,6 +84,11 @@ class FloatXSum(FloatXBase):
         self.Output.value = sum
 
 class FloatXMin(FloatXBase):
+    
+    def __init__(self):
+        self.super(FloatXMin).__init__()
+        
+        self.Name.value = "FloatXMin"
 
     def on_calculate(self):
         min = 1e+100 # TODO: Find a way to get the real maximum
@@ -98,6 +110,11 @@ class Float2Add(avango.script.Script):
     Value1 = avango.SFFloat()
 
     Output = avango.SFFloat()
+    
+    def __init__(self):
+        self.super(Float2Add).__init__()
+        
+        self.Name.value = "Float2Add"
 
     def evaluate(self):
         self.Output.value = self.Value0.value + self.Value1.value
@@ -112,18 +129,31 @@ class Float4AddVec2Converter(avango.script.Script):
     Value11 = avango.SFFloat()
 
     Output = avango.osg.SFVec2()
+    
+    def __init__(self):
+        self.super(Float4AddVec2Converter).__init__()
+        
+        self.Name.value = "Float4AddVec2Converter"
 
     def evaluate(self):
         self.Output.value = avango.osg.Vec2(self.Value00.value+self.Value01.value, self.Value10.value+self.Value11.value)
+
 
 class SFNode2MFContainerConverter(avango.script.Script):
     "Converts a SFNode to a MFNode"
 
     Input = avango.osg.SFNode()
     Output = avango.MFContainer()
+    
+    def __init__(self):
+        self.super(SFNode2MFContainerConverter).__init__()
+        
+        self.Name.value = "SFNode2MFContainerConverter"
+
 
     def evaluate(self):
         self.Output.value = [ self.Input.value ]
+
 
 class Float2Vec2Converter(avango.script.Script):
     "Converts two Floats into on Vec2"
@@ -131,14 +161,27 @@ class Float2Vec2Converter(avango.script.Script):
     Value0 = avango.SFFloat()
     Value1 = avango.SFFloat()
     Output = avango.osg.SFVec2()
+    
+    def __init__(self):
+        self.super(Float2Vec2Converter).__init__()
+        
+        self.Name.value = "Float2Vec2Converter"
+        
 
     def evaluate(self):
         self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
+        
         
 class Vec3ToTransMatrix(avango.script.Script):
     TransVec = avango.osg.SFVec3()
     TransOffset = avango.osg.SFVec3()
     Matrix = avango.osg.SFMatrix()
+    
+    def __init__(self):
+        self.super(Vec3ToTransMatrix).__init__()
+        
+        self.Name.value = "Vec3ToTransMatrix"
+    
     
     def evaluate(self):
         self.Matrix.value = avango.osg.make_trans_mat(self.TransVec.value + self.TransOffset.value)
@@ -156,6 +199,12 @@ class TranslationMatrixCalculator(avango.script.Script):
     MatrixTo = avango.osg.SFMatrix()
     MatrixTransDif = avango.osg.SFMatrix()
     
+    def __init__(self):
+        self.super(TranslationMatrixCalculator).__init__()
+        
+        self.Name.value = "TranslationMatrixCalculator"
+    
+    
     def evaluate(self):
         if not self.MatrixFrom.value or not self.MatrixTo.value:
             return
@@ -171,6 +220,7 @@ class FloatToAlphaConverter(avango.script.Script):
         self.super(FloatToAlphaConverter).__init__()
         self.__alpha_changed = False
         self.__color_in = avango.osg.Vec4(1,1,1,1)
+        self.Name.value = "FloatToAlphaConverter"
         
     @field_has_changed(ColorIn)
     def color_in_changed(self):

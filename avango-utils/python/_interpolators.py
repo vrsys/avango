@@ -43,6 +43,8 @@ class Interpolator(avango.script.Script):
         
         self.__time_sensor = avango.nodes.TimeSensor()
         
+        self.Name.value = "Interpolator"
+        
 #    def __del__(self):
 #        print "~Interpolator"
     
@@ -138,6 +140,7 @@ class ColorFader(avango.script.Script):
         self.FadeFinished.connect_from(self.__interpolator.Finished)
         self.RawInterpolatedValue.connect_weak_from(self.__interpolator.Value)
         
+        self.Name.value = "ColorFader"
         
     @field_has_changed(StartFade)
     def start_changed(self):

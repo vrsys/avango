@@ -98,6 +98,8 @@ void print_actual_registered_field_containers()
   for(iter=containers.begin();iter!=containers.end();++iter)
   {
     std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
+//    std::string type = iter->second->Name.getValue();
+
     int l = type.length();
     if(l>maxLength)
       maxLength = l;
@@ -122,7 +124,16 @@ void print_actual_registered_field_containers()
       ss << " ";
     ss<< i->first << std::endl;
   }
-  ss << "Total number of containers: " << av::ContainerPool::getNumberOfContainers() << std::endl;
+  for(int n=0;n<maxLength+2;++n)
+      ss << " ";
+  ss << "-------"<<std::endl;
+  std::string total_desc = "Total number of containers:";
+  int l = maxLength - total_desc.length();
+  ss <<"\""<< total_desc << "\" ";
+  for(int n=0;n<l;++n)
+    ss << " ";
+  ss<< av::ContainerPool::getNumberOfContainers() << std::endl;
+
 
   std::cout << ss.str();
 }

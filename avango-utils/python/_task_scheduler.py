@@ -31,6 +31,8 @@ class TaskSchedulerTask(avango.script.Script):
         self.super(TaskSchedulerTask).__init__()
 
         self.TimeDelta.value = 1.0
+        
+        self.Name.value = "TaskSchedulerTask"
 
     def on_active(self):
         pass
@@ -43,6 +45,8 @@ class TaskScheduler(avango.script.Script):
 
         self.__tasks = []
         self.TimeIn.value = 0
+        
+        self.Name.value = "TaskScheduler"
 
     def evaluate(self):
         time = self.TimeIn.value

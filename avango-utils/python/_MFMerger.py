@@ -28,6 +28,8 @@ class MFMerger(avango.script.Script):
     def __init__(self):
         self.super(MFMerger).__init__()
         self._initialized = False
+        
+        self.Name.value = "MFMerger"
 
     def init(self, sftype, mftype):
         self._num_inputs = 0

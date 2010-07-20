@@ -36,6 +36,8 @@ av::utils::Bool3And::Bool3And()
     AV_FC_ADD_FIELD(Input2,false);
     AV_FC_ADD_FIELD(Input3,false);
     AV_FC_ADD_FIELD(Output,false);
+
+    Name.setValue("Bool3And");
 }
 
 av::utils::Bool3And::~Bool3And()

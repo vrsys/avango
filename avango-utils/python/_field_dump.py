@@ -46,6 +46,8 @@ class ScriptFieldPrinter(avango.script.Script):
     def __init__(self):
         self.super(ScriptFieldPrinter).__init__()
         self.always_evaluate(True)
+        
+        self.Name.value = "ScriptFieldPrinter"
 
     def evaluate(self):
         if self.Script.value:

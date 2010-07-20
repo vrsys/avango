@@ -46,12 +46,14 @@ class FloatNormalization(avango.script.Script):
 
     def __init__(self):
         self.super(FloatNormalization).__init__()
-
+        
         self.MinIn.value = -1.0
         self.MaxIn.value = 1.0
 
         self.MinOut.value = 0.0
         self.MaxOut.value = 1.0
+        
+        self.Name.value = "FloatNormalization"
 
     def evaluate(self):
         val_in = self.ValueIn.value

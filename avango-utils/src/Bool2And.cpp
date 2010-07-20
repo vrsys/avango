@@ -35,6 +35,8 @@ av::utils::Bool2And::Bool2And()
     AV_FC_ADD_FIELD(Input1,false);
     AV_FC_ADD_FIELD(Input2,false);
     AV_FC_ADD_FIELD(Output,false);
+
+    Name.setValue("Bool2And");
 }
 
 av::utils::Bool2And::~Bool2And()

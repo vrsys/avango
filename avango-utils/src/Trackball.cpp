@@ -82,6 +82,7 @@ av::utils::Trackball::Trackball():
   mRotation = ::osg::Matrix::identity();
   mCenterTransInv = ::osg::Matrix::inverse(CenterTransform.getValue());
 
+  Name.setValue("Trackball");
 }
 
 av::utils::Trackball::~Trackball()

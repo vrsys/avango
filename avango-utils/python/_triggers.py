@@ -39,6 +39,8 @@ class ImmediateEdgeTrigger(avango.script.Script):
         self.super(ImmediateEdgeTrigger).__init__()
 
         self._last_trigger = False
+        
+        self.Name.value = "ImmediateEdgeTrigger"
 
     @field_has_changed(Trigger)
     def trigger_changed(self):
@@ -67,6 +69,8 @@ class EdgeTrigger(avango.script.Script):
         self.super(EdgeTrigger).__init__()
 
         self._last_trigger = False
+        
+        self.Name.value = "EdgeTrigger"
 
     def evaluate(self):
         callback = None
@@ -101,6 +105,8 @@ class KeyMonitorTrigger(EdgeTrigger):
     def __init__(self):
         self.super(KeyMonitorTrigger).__init__()
         
+        self.Name.value = "KeyMonitorTrigger"
+        
     def on_up_transition(self):
         self.Pressed.value = False
         self.Released.value = True
@@ -122,6 +128,8 @@ class KeyToggleTriggerAlternate(EdgeTrigger):
     def __init__(self):
         self.super(KeyToggleTriggerAlternate).__init__()
         
+        self.Name.value = "KeyToggleTriggerAlternate"
+        
     def init(self,initial_state):
         self.Toggle.value = initial_state
         
@@ -139,6 +147,8 @@ class KeyToggleTrigger(EdgeTrigger):
 
     def __init__(self):
         self.super(KeyToggleTrigger).__init__()
+        
+        self.Name.value = "KeyToggleTrigger"
         
     def on_up_transition(self):
         self.Toggle.value = True

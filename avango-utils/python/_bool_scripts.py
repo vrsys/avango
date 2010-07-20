@@ -42,6 +42,8 @@ class BoolXBase(avango.script.Script):
         self.NumFieldsIn.value = 0
 
         self._actual_id = 0
+        
+        self.Name.value = "BoolXBase"
 
     def add_and_connect_bool_field(self,field):
         field_name = self.BaseFieldName.value + str(self._actual_id)
@@ -66,6 +68,11 @@ class BoolXBase(avango.script.Script):
 
 
 class BoolXOr(BoolXBase):
+    
+    def __init__(self):
+        self.super(BoolXOr).__init__()
+        
+        self.Name.value = "BoolXOr"
 
     def on_calculate(self):
         result = False
@@ -83,6 +90,11 @@ class BoolXOr(BoolXBase):
 
 
 class BoolXAnd(BoolXBase):
+    
+    def __init__(self):
+        self.super(BoolXAnd).__init__()
+        
+        self.Name.value = "BoolXAnd"
 
     def on_calculate(self):
         result = True

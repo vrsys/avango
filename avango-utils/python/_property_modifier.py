@@ -58,6 +58,8 @@ class PropertyModifierInt(avango.script.Script):
         self.TriggerTimeDelta.value = 0.05
 
         self.always_evaluate(True)
+        
+        self.Name.value = "PropertyModifierInt"
 
     def evaluate(self):
 

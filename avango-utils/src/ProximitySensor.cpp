@@ -40,6 +40,8 @@ av::utils::ProximitySensor::ProximitySensor()
     AV_FC_ADD_FIELD(CurrentPosition,   ::osg::Matrix());
     AV_FC_ADD_FIELD(Proximity,         0.);
     AV_FC_ADD_FIELD(Switch,            0);
+
+    Name.setValue("ProximitySensor");
 }
 
 av::utils::ProximitySensor::~ProximitySensor()

@@ -35,6 +35,8 @@ av::utils::Bool2Or::Bool2Or()
     AV_FC_ADD_FIELD(Input1,false);
     AV_FC_ADD_FIELD(Input2,false);
     AV_FC_ADD_FIELD(Output,false);
+
+    Name.setValue("Bool2Or");
 }
 
 av::utils::Bool2Or::~Bool2Or()

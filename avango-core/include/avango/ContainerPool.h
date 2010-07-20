@@ -74,6 +74,8 @@ namespace av
     typedef std::list<std::pair<FieldDisconnectCallback, void*> > FieldDisconnectCallbacksType;
     typedef std::list<FieldHasChangedReg>                         FieldHasChangedCallbacksType;
 
+    static unsigned int getNumberOfContainers() {return sContainerPool.size();};
+
     static const InstancePoolType& getContainerPool () {return sContainerPool;};
     static FieldContainerID registerInstance(FieldContainer*);
     static void unregisterInstance(FieldContainer*);

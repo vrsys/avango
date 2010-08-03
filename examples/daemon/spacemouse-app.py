@@ -57,10 +57,10 @@ class Move(avango.script.Script) :
         values = self.get_values()
         trans_x = values.SensorX
         trans_y = values.SensorY
-    trans_z = values.SensorZ
+        trans_z = values.SensorZ
         trans_x /= -200.
         trans_y /= 200.
-    trans_z /= 200.
+        trans_z /= 200.
         old_pos = values.MatrixOut.get_translate()
         matrix = avango.osg.make_trans_mat(old_pos.x + trans_x, old_pos.y + trans_z, old_pos.z + trans_y)
         values.MatrixOut = matrix

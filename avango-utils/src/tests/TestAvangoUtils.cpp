@@ -21,38 +21,22 @@
 *                                                                        *
 \************************************************************************/
 
-#include "../include/avango/utils/Init.h"
-#include "../include/avango/utils/ProximitySensor.h"
-#include "../include/avango/utils/Bool2Or.h"
-#include "../include/avango/utils/Bool2And.h"
-#include "../include/avango/utils/Bool3Or.h"
-#include "../include/avango/utils/Bool3And.h"
-#include "../include/avango/utils/Trackball.h"
-#include "../include/avango/utils/MultiValueField.h"
-
+#include <avango/osg/Types.h>
+#include <avango/osg/Init.h>
+#include <avango/Application.h>
 #include <avango/Logger.h>
+#include <avango/StandardFields.h>
+#include <avango/utils/MultiValueField.h>
 
-namespace
+#include <avango/UnitTest++/UnitTest++.h>
+
+int main()
 {
-  av::Logger& logger(av::getLogger("av::utils::Init"));
-}
+  av::getRootLogger().addConsoleAppender();
+  av::ApplicationInstance::get();
+  av::osg::Init::initClass();
+  av::utils::initMultiValueFields();
+  av::utils::initMultiValueOSGFields();
 
-AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
-
-/* static */ void
-av::utils::Init::initClass()
-{
-  if (!isTypeInitialized())
-  {
-    av::utils::ProximitySensor::initClass();
-    av::utils::Bool2Or::initClass();
-    av::utils::Bool2And::initClass();
-    av::utils::Bool3Or::initClass();
-    av::utils::Bool3And::initClass();
-    av::utils::Trackball::initClass();
-    av::utils::initMultiValueFields();
-    av::utils::initMultiValueOSGFields();
-
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
-  }
+  return UnitTest::RunAllTests();
 }

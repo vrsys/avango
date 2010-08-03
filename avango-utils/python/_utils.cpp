@@ -34,6 +34,8 @@
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
 #include "../include/avango/utils/Trackball.h"
+#include "../include/avango/utils/MultiValueField.h"
+#include "../include/avango/utils/register_multivaluefield.h"
 
 #include <iostream>
 #include <iomanip>
@@ -138,6 +140,25 @@ void print_actual_registered_field_containers()
   std::cout << ss.str();
 }
 
+void init_MultiValueFields()
+{
+  av::python::register_multivaluefield<av::utils::MVFBool>("MVFBool");
+  av::python::register_multivaluefield<av::utils::MVFDouble>("MVFDouble");
+  av::python::register_multivaluefield<av::utils::MVFFloat>("MVFFloat");
+  av::python::register_multivaluefield<av::utils::MVFInt>("MVFInt");
+  av::python::register_multivaluefield<av::utils::MVFLong>("MVFLong");
+  av::python::register_multivaluefield<av::utils::MVFUInt>("MVFUInt");
+  av::python::register_multivaluefield<av::utils::MVFULong>("MVFULong");
+  av::python::register_multivaluefield<av::utils::MVFString>("MVFString");
+
+  // osg related multi value fields
+  av::python::register_multivaluefield<av::utils::MVFMatrix>("MVFMatrix");
+  av::python::register_multivaluefield<av::utils::MVFVec2>("MVFVec2");
+  av::python::register_multivaluefield<av::utils::MVFVec3>("MVFVec3");
+  av::python::register_multivaluefield<av::utils::MVFVec4>("MVFVec4");
+  av::python::register_multivaluefield<av::utils::MVFQuat>("MVFQuat");
+}
+
 BOOST_PYTHON_MODULE(_utils)
 {
   av::utils::Init::initClass();
@@ -152,4 +173,8 @@ BOOST_PYTHON_MODULE(_utils)
   def("calc_hpr", CalcHpr);
 
   def("print_registered_field_containers",print_actual_registered_field_containers);
+
+  av::utils::initMultiValueFields();
+  av::utils::initMultiValueOSGFields();
+  init_MultiValueFields();
 }

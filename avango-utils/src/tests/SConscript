@@ -23,18 +23,23 @@
 
 import avango.build
 
-Alias('all', Alias('utils'))
-Alias('check', Alias('check-utils'))
-Alias('check-utils', Alias('check-utils-src'))
-Alias('install', Alias('install-utils'))
+sources = Split('''
+    TestAvangoUtils.cpp
+    TestMultiValueFields.cpp
+    ''')
 
-SConscript ([
-    'include/avango/utils/SConscript',
-    'src/SConscript',
-    'python/SConscript',
-    'tests/SConscript',
-    'src/tests/SConscript',
-])
+local_test_env = avango.build.TestEnvironment()
+local_test_env.Append(LIBS = ['avangoOsg'])
+local_test_env.Append(LIBS = ['avangoUtils'])
 
-env = avango.build.Environment()
-avango.build.make_vcproject(env, 'avango-utils', 'utils')
+for lib in ['avango-core', 'osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(local_test_env, lib)
+
+local_test_env.Prepend(LIBPATH=['..'])
+local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('..').abspath)
+
+tests = local_test_env.Program ('TestAvangoUtils', sources)
+tests_alias = local_test_env.Alias('test-utils-src', tests, "${SOURCE.abspath}")
+
+AlwaysBuild(tests_alias)
+Alias('check-utils-src', tests_alias)

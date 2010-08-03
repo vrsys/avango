@@ -34,6 +34,8 @@ headers = Split('''
     Init.h
     ProximitySensor.h
     Trackball.h
+    MultiValueField.h
+    register_multivaluefield.h
     windows_specific_utils.h
     ''')
 

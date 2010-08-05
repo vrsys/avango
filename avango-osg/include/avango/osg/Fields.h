@@ -40,7 +40,7 @@ namespace av
 {
   namespace osg
   {
-    void initFields();
+    void AV_OSG_DLL initFields();
 
     typedef SingleField< ::osg::Matrixf> SFMatrixf;
     typedef MultiField< ::osg::Matrixf> MFMatrixf;

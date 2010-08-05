@@ -344,14 +344,14 @@ namespace av
        */
       virtual void write(OutputStream& os)
       {
-        assert(mValue.size == mChangedValues.size());
+        AV_ASSERT(mValue.size() == mChangedValues.size());
 
   #if defined(__APPLE__)
         os.operator<<(static_cast< typename std::vector<Value>::size_type>(mValue.size()));
   #endif
   #if defined(_WIN32)
         // cl of VS 8 apparently not able to resolve os << mValue.size()
-        os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
+        os.operator<<(static_cast< std::vector<Value>::size_type>(mValue.size()));
   #endif
   #if defined(__linux__)
         os << mValue.size();
@@ -525,8 +525,8 @@ namespace av
     typedef MultiValueField< ::osg::Vec4> MVFVec4;
     typedef MultiValueField< ::osg::Quat> MVFQuat;
 
-    void initMultiValueFields();
-    void initMultiValueOSGFields();
+    void AV_UTILS_DLL initMultiValueFields();
+    void AV_UTILS_DLL initMultiValueOSGFields();
 
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)

@@ -84,7 +84,7 @@ namespace av
   typedef SingleField<std::string>        SFString;
   typedef MultiField<std::string>         MFString;
 
-  void initStandardFields();
+  void AV_DLL initStandardFields();
 }
 
 #endif // #if !defined(AVANGO_STANDARDFIELDS_H)

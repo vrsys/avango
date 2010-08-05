@@ -42,6 +42,7 @@ av::tools::PickSelector::PickSelector():
 {
   AV_FC_ADD_FIELD(PickTrigger, false);
   AV_FC_ADD_FIELD(TransitionOnly, true);
+  AV_FC_ADD_FIELD(SetCreator, true);
   AV_FC_ADD_FIELD(EveryFrame, false);
   AV_FC_ADD_FIELD(PickRayTransform, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(PickRayDirection, ::osg::Vec3(0.0, 0.0, -1.0));
@@ -207,7 +208,10 @@ av::tools::PickSelector::pick()
             holder = new TargetHolder;
 
           holder->Target.setValue(target);
-          holder->Creator.setValue(this);
+
+          if (SetCreator.getValue())
+            holder->Creator.setValue(this);
+
           mSelectedTargets.push_back(holder);
         }
 

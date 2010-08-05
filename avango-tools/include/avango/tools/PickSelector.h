@@ -126,6 +126,11 @@ namespace av
       SFBool FirstHitOnly;
 
       /**
+	   * If true, the creator of the TargetHolder will be set. This is the default.
+	   */
+	  SFBool SetCreator;
+
+      /**
        * To disable picking for specific nodes, add a SFUInt field called "PickMask"
        * to the node. The picking is disabled, if the bitwise AND of it with the
        * NodePickMask of the PickSelector is zero. By default the mask is all 1's.

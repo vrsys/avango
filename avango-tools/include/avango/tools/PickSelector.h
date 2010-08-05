@@ -127,6 +127,9 @@ namespace av
 
       /**
 	   * If true, the creator of the TargetHolder will be set. This is the default.
+	   *
+	   * To deactivate this is considered a workaround.
+	   *
 	   */
 	  SFBool SetCreator;
 

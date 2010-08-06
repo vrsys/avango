@@ -80,6 +80,7 @@ namespace av
       SFString Filename;
       SFInt MinFilter;
       SFInt MagFilter;
+      SFInt InternalFormatMode;
       SFFloat MaxAnisotropy;
       SFVec2 TexCoord01;
       SFVec2 TexCoord00;
@@ -119,6 +120,8 @@ namespace av
       virtual void setMinFilterCB(const av::SFInt::SetValueEvent& event);
       virtual void getMagFilterCB(const av::SFInt::GetValueEvent& event);
       virtual void setMagFilterCB(const av::SFInt::SetValueEvent& event);
+      virtual void getInternalFormatModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setInternalFormatModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event);
       virtual void setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event);
 

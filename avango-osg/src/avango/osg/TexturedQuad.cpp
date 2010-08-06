@@ -79,6 +79,10 @@ av::osg::TexturedQuad::TexturedQuad() :
                           boost::bind(&TexturedQuad::getMagFilterCB, this, _1),
                           boost::bind(&TexturedQuad::setMagFilterCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(InternalFormatMode,
+                          boost::bind(&TexturedQuad::getInternalFormatModeCB, this, _1),
+                          boost::bind(&TexturedQuad::setInternalFormatModeCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MaxAnisotropy,
                           boost::bind(&TexturedQuad::getMaxAnisotropyCB, this, _1),
                           boost::bind(&TexturedQuad::setMaxAnisotropyCB, this, _1));
@@ -269,6 +273,18 @@ av::osg::TexturedQuad::getMagFilterCB(const av::SFInt::GetValueEvent& event)
 av::osg::TexturedQuad::setMagFilterCB(const av::SFInt::SetValueEvent& event)
 {
   Texture2D.getValue()->getOsgTexture2D()->setFilter(::osg::Texture2D::MAG_FILTER,(::osg::Texture2D::FilterMode)(event.getValue()));
+}
+
+/* virtual */ void
+av::osg::TexturedQuad::getInternalFormatModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = Texture2D.getValue()->getOsgTexture2D()->getInternalFormatMode();
+}
+
+/* virtual */ void
+av::osg::TexturedQuad::setInternalFormatModeCB(const av::SFInt::SetValueEvent& event)
+{
+  Texture2D.getValue()->getOsgTexture2D()->setInternalFormatMode((::osg::Texture2D::InternalFormatMode)(event.getValue()));
 }
 
 /* virtual */ void

@@ -59,6 +59,10 @@ av::osg::Texture::Texture(::osg::Texture* osgtexture) :
                           boost::bind(&Texture::getMagFilterCB, this, _1),
                           boost::bind(&Texture::setMagFilterCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(InternalFormatMode,
+                          boost::bind(&Texture::getInternalFormatModeCB, this, _1),
+                          boost::bind(&Texture::setInternalFormatModeCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MaxAnisotropy,
                           boost::bind(&Texture::getMaxAnisotropyCB, this, _1),
                           boost::bind(&Texture::setMaxAnisotropyCB, this, _1));
@@ -127,6 +131,18 @@ av::osg::Texture::getMagFilterCB(const av::SFInt::GetValueEvent& event)
 av::osg::Texture::setMagFilterCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgTexture->setFilter(::osg::Texture::MAG_FILTER,(::osg::Texture::FilterMode)(event.getValue()));
+}
+
+/* virtual */ void
+av::osg::Texture::getInternalFormatModeCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getInternalFormatMode();
+}
+
+/* virtual */ void
+av::osg::Texture::setInternalFormatModeCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture->setInternalFormatMode((::osg::Texture::InternalFormatMode)(event.getValue()));
 }
 
 /* virtual */ void

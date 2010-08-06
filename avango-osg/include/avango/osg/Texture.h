@@ -70,6 +70,7 @@ namespace av
       SFInt WrapR;
       SFInt MinFilter;
       SFInt MagFilter;
+      SFInt InternalFormatMode;
       SFFloat MaxAnisotropy;
       SFBool ResizeNonPowerOfTwoHint;
 
@@ -91,6 +92,8 @@ namespace av
       virtual void setMinFilterCB(const av::SFInt::SetValueEvent& event);
       virtual void getMagFilterCB(const av::SFInt::GetValueEvent& event);
       virtual void setMagFilterCB(const av::SFInt::SetValueEvent& event);
+      virtual void getInternalFormatModeCB(const av::SFInt::GetValueEvent& event);
+      virtual void setInternalFormatModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event);
       virtual void setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event);
       virtual void getResizeNonPowerOfTwoHint(const av::SFBool::GetValueEvent& event);

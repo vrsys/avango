@@ -629,6 +629,8 @@ _VisibleChild (avango.SFInt)
 
     @field_has_changed(Group)
     def group_changed(self):
+        if self.panel_geode is None:
+            return
         if self.Group.value is not None:
             self.panel_geode.Root.value = self.Group.value.root
         else:
@@ -655,11 +657,13 @@ _VisibleChild (avango.SFInt)
         self.container.WidgetEnable.value = self.Enable.value
 
     def evaluate(self):
+        if self.panel_geode is None:
+            return
         if self._visible_dirty:
             self.update_visibility()
         if self._decoration_dirty:
             self.update_decoration()
-        if self._dimensions_dirty:
+        if self._dimensions_dirty and self.panel_transform is not None:
             self.update_dimensions()
         if self._highlight_dirty:
             self.update_highlight()
@@ -929,25 +933,71 @@ _VisibleChild (avango.SFInt)
         return layouter
 
     def cleanup(self):
-        self.panel.disconnect_all_fields()
-        self.content_panel.disconnect_all_fields()
-        self.highlight_panel.disconnect_all_fields()
-        self.label.disconnect_all_fields()
-        self.content_transform.disconnect_all_fields()
-        self.content_transform.StateSet.value.disconnect_all_fields()
-        if self.root.StateSet.value is not None:
-            self.root.StateSet.value.disconnect_all_fields()
-        self.decoration_transform.disconnect_all_fields()
-        self.decoration_transform.StateSet.value.disconnect_all_fields()
-        self.disconnect_all_fields()
-        self.close_button.cleanup()
-        self.back_button.cleanup()
+        avango.disconnect_and_clear_all_fields(self)
+        self.remove_all_widgets()
+
+        if self.decoration_transform is not None:
+            self.decoration_transform.disconnect_all_fields()
+            self.decoration_transform.StateSet.value.disconnect_all_fields()
+            self.decoration_transform.Children.value.remove(self.label.root)
+            self.decoration_transform.Children.value.remove(self.close_button.root)
+            self.decoration_transform.Children.value.remove(self.back_button.root)
+            self.label.root = None
+            self.decoration_transform = None
+
+        if self.close_button is not None:
+            self.close_button.cleanup()
+            self.close_button = None
+        if self.back_button is not None:
+            self.back_button.cleanup()
+            self.back_button = None
         if self.container is not None:
             self.container.cleanup()
+
+        self._layouters = []
+
+        if self.panel_transform is not None:
+            self.panel_transform.disconnect_all_fields()
+            self.panel_transform.Children.value.remove(self.panel_geode)
+            self.panel_transform.Children.value.remove(self.content_transform)
+            self.panel_transform.Children.value.remove(self.decoration_transform)
+            self.panel_transform = None
+
         if self.panel_geode is not None:
             self.panel_geode.Panel.value = None
             self.panel_geode.Root.value = None
-        self._layouters = []
+            self.panel_geode.StateSet.value.disconnect_all_fields()
+            self.panel_geode.disconnect_all_fields()
+            if self.highlight_panel is not None:
+                self.panel_geode.Drawables.value.remove(self.highlight_panel)
+                self.highlight_panel.disconnect_all_fields()
+                self.highlight_panel = None
+            if self.panel is not None:
+                self.panel_geode.Drawables.value.remove(self.panel)
+                self.panel.disconnect_all_fields()
+            if self.content_panel is not None:
+                self.panel_geode.Drawables.value.remove(self.content_panel)
+                self.content_panel.disconnect_all_fields()
+                self.content_panel = None
+            self.panel_geode = None
+
+        if self.content_transform is not None:
+            self.content_transform.disconnect_all_fields()
+            self.content_transform.StateSet.value.disconnect_all_fields()
+            self.content_transform.Children.value.remove(self.container.root)
+            self.container.root = None
+            self.content_transform = None
+
+        if self.label is not None:
+            self.label.disconnect_all_fields()
+
+        if self.root is not None:
+            if self.root.StateSet.value is not None:
+                self.root.StateSet.value.disconnect_all_fields()
+            self.root.Children.value.remove(self.switch)
+            self.switch.disconnect_all_fields()
+            self.switch = None
+            self.root = None
 
         self.HighlightWidget.value = None
         self.super(Panel).cleanup()

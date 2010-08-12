@@ -157,6 +157,8 @@ class PanelDecorationProxy(avango.script.Script):
         self.Layouter.value = None
         self.click_behavior.cleanup()
         self.geode.AvangoMenuBehavior.value = None
+        if self.geom is not None:
+            self.geom.disconnect_all_fields()
 
     def __del__(self):
         if avango.menu.Preferences.print_destruction_of_menu_objects:

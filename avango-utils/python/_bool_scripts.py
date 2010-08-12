@@ -60,11 +60,36 @@ class BoolXBase(avango.script.Script):
         self._actual_id += 1
         self.NumFieldsIn.value = self._actual_id
 
+    def remove_and_disconnect_all_fields(self):
+        for field_id in range(0,self._actual_id):
+            field_name = self.BaseFieldName.value + str(field_id)
+            field = self.get_field(field_name)
+            if not field:
+                continue
+
+            field.disconnect()
+            self.remove_field(field_name)
+
+        self._actual_id = 0
+
+    def remove_and_disconnect_field(self, field_number):
+        if self._actual_id >= field_number:
+            field_name = self.BaseFieldName.value + str(field_number)
+            field = self.get_field(field_name)
+            if not field:
+                return
+
+            field.disconnect()
+            self.remove_field(field_name)
+
     def evaluate(self):
         self.on_calculate()
 
     def on_calculate(self):
         pass
+
+    def cleanup(self):
+        self.remove_and_disconnect_all_fields()
 
 
 class BoolXOr(BoolXBase):

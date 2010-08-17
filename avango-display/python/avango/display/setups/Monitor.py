@@ -30,7 +30,7 @@ import os
 
 class Monitor(avango.display.Display):
 
-    def __init__(self, inspector, options):
+    def __init__(self, inspector, options, generate_window=True, window_translation = avango.osg.make_trans_mat(0, 1.7, -0.6), user_translation = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))):
         super(Monitor, self).__init__("Monitor", inspector)
 
         self._subdisplay_window = {}
@@ -43,17 +43,19 @@ class Monitor(avango.display.Display):
         self._enable_trackball=False
         if options.has_key(trackball_token) and self._bool_dict.has_key(options[trackball_token].lower()):
             self._enable_trackball=self._bool_dict[options[trackball_token].lower()]
+        
+        if generate_window:
+            window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
+            window.Name.value = "AVANGO"
+            window.Decoration.value = True
+            window.AutoHeight.value = True
+            window.ShowCursor.value = True
             
-        window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
-        window.Name.value = "AVANGO"
-        window.Decoration.value = True
-        window.AutoHeight.value = True
-        window.ShowCursor.value = True
-        self.add_window(window, avango.osg.make_trans_mat(0, 1.7, -0.6), 0)
-        self._subdisplay_window[""]=window
+            self.add_window(window, window_translation, 0)
+            self._subdisplay_window[""]=window
         
         user = avango.display.nodes.User()
-        user.Matrix.value = avango.osg.make_trans_mat(avango.osg.Vec3(0., 1.7, 0.))
+        user.Matrix.value = user_translation
         self.add_user(user)
     
     def make_view(self, subdisplay, trackball_support=True):
@@ -166,7 +168,6 @@ class Monitor(avango.display.Display):
 
 
     def make_device(self, device, interface):
-        
         if device == "SpaceMouse" or interface == "Relative6DOF":
 
             if not self._device_service:

@@ -115,6 +115,9 @@ class Label(avango.script.Script):
             self.text.Position.disconnect()
             self.text = None
 
+        self.geode.Drawables.value = []
+        self.root.Children.value = []
+
     def __del__(self):
         if Preferences.print_destruction_of_menu_objects:
             print "Label deleted"

@@ -142,6 +142,8 @@ class LayoutBase(avango.script.Script):
         self.Panel.value = None
         self.Container.value = None
         self.Widget.value = None
+        if self.root is not None:
+            self.root.Children.value = []
 
     def get_widget_layouters(self):
         self.entry_number = 0

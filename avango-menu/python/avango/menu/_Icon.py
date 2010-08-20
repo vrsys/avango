@@ -90,6 +90,9 @@ class Icon(avango.script.Script):
         self.delete_all_icons()
         self.disconnect_all_fields()
 
+        self.root.disconnect_all_fields()
+        self.root.Children.value = []
+
     def __del__(self):
         if Preferences.print_destruction_of_menu_objects:
             print "Icon deleted"

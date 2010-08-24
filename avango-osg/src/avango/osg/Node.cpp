@@ -77,7 +77,7 @@ av::osg::Node::getOsgNode() const
 }
 
 ::osg::Matrix
-av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller) const
+av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller, av::osg::Node * haltTraversalAtNode) const
 {
   ::osg::Node *osg_node = getOsgNode();
 
@@ -104,7 +104,12 @@ av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller) const
   }
 
   ::osg::Matrix abs_mat;
-  ::osg::MatrixList abs_mat_list = getOsgNode()->getWorldMatrices(osg_node);
+  ::osg::MatrixList abs_mat_list;
+  if(haltTraversalAtNode == 0)
+    abs_mat_list = getOsgNode()->getWorldMatrices(osg_node);
+  else
+    abs_mat_list = getOsgNode()->getWorldMatrices(haltTraversalAtNode->getOsgNode());
+
   if (abs_mat_list.size() > 0u)
     abs_mat = abs_mat_list[0];
 

@@ -112,6 +112,17 @@ namespace boost
    }
  }
 
+namespace
+{
+  GLint GetMaximumTextureSize()
+  {
+    GLint maxTextureSize;
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    return maxTextureSize;
+  }
+}
+
+
 BOOST_PYTHON_MODULE(_osg)
 {
   init_OSGVec2();
@@ -131,6 +142,9 @@ BOOST_PYTHON_MODULE(_osg)
   av::osg::Init::initClass();
 
   def("line_intersect", av::osg::lineIntersect);
+
+  def("get_maximum_texture_size",GetMaximumTextureSize);
+
 
   register_field<av::osg::SFDrawable>("SFDrawable");
   register_multifield<av::osg::MFDrawable>("MFDrawable");

@@ -71,6 +71,7 @@ register_multifield<av::osg::MFNode>("MFNode");
 class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::noncopyable >("Node", "docstring", no_init)
   .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
   .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
+  .def("get_absolute_transform_halt_at_node", &av::osg::Node::getAbsoluteTransformHaltAtNode)
   ;
 
 def("calc_bounding_box", CalcBoundingBox);

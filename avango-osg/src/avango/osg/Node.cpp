@@ -77,7 +77,43 @@ av::osg::Node::getOsgNode() const
 }
 
 ::osg::Matrix
-av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller, av::osg::Node * haltTraversalAtNode) const
+av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller) const
+{
+  ::osg::Node *osg_node = getOsgNode();
+
+  // traverse to the root node and trigger evaluate() if a caller was given
+  while(osg_node != 0)
+  {
+    ::osg::Node::ParentList parent_list = osg_node->getParents();
+
+    if (parent_list.size() > 0)
+    {
+      Link<av::osg::Node> av_node = av::osg::get_from_osg_object<av::osg::Node>(parent_list[0]);
+
+      if (av_node.isValid())
+      {
+        if (caller != 0)
+          caller->evaluateDependency(*av_node);
+        osg_node = av_node->getOsgNode();
+      }
+      else
+        break;
+    }
+    else
+      break;
+  }
+
+  ::osg::Matrix abs_mat;
+  ::osg::MatrixList abs_mat_list = getOsgNode()->getWorldMatrices(osg_node);
+  if (abs_mat_list.size() > 0u)
+    abs_mat = abs_mat_list[0];
+
+  return abs_mat;
+}
+
+
+::osg::Matrix
+av::osg::Node::getAbsoluteTransformHaltAtNode(av::FieldContainer* caller, av::osg::Node * haltTraversalAtNode) const
 {
   ::osg::Node *osg_node = getOsgNode();
 
@@ -115,6 +151,7 @@ av::osg::Node::getAbsoluteTransform(av::FieldContainer* caller, av::osg::Node * 
 
   return abs_mat;
 }
+
 
 /* virtual */ void
 av::osg::Node::getParentsCB(const av::osg::MFGroup::GetValueEvent& event)

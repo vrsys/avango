@@ -99,7 +99,7 @@ av::osg::ImageStream::getStatusCB(const av::SFInt::GetValueEvent& event)
 av::osg::ImageStream::setStatusCB(const av::SFInt::SetValueEvent& event)
 {
   //if (event.getValue())
-  switch (static_cast< ::osg::ImageStream::LoopingMode>(event.getValue()))
+  switch (static_cast< ::osg::ImageStream::StreamStatus>(event.getValue()))
   {
     case ::osg::ImageStream::PLAYING :
       mOsgImageStream->play();

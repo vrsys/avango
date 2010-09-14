@@ -119,8 +119,8 @@ void print_actual_registered_field_containers()
 
   std::ostringstream ss;
   std::multimap< int, std::string > conversedMap = converseMap( m );
-  std::multimap< int, std::string >::reverse_iterator i;
-  for(i=conversedMap.rbegin();i!=conversedMap.rend();++i)
+  std::multimap< int, std::string >::iterator i;
+  for(i=conversedMap.begin();i!=conversedMap.end();++i)
   {
     int l = maxLength - i->second.length();
     ss <<"\""<< i->second << "\" ";

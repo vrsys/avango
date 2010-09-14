@@ -106,6 +106,13 @@ def get_num_users(subdisplay=""):
 
     return _selected_display.get_num_users(subdisplay)
 
+def get_camera(subdisplay):
+    """
+    Get the osg.Camera object of the selected subdisplay. If no camera for the
+    given subdisplay is found, None is returned
+    """
+    return _selected_display.get_camera(subdisplay)
+
 def make_user(user=0, interface="", subdisplay=""):
     """Create a field container that represents the user position.
 

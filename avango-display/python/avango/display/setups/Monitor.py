@@ -58,33 +58,39 @@ class Monitor(avango.display.Display):
         user.Matrix.value = user_translation
         self.add_user(user)
     
-    def make_view(self, subdisplay, trackball_support=True):
-        
+    def make_view(self, subdisplay):
         display_view = avango.display.nodes.MonitorView()
         if subdisplay == "":
             super(Monitor, self).make_view(subdisplay, display_view)
                 
         # In the Monitor setting each subdisplay simply get a new window
         else:
-            window = self.make_window(0, 0, 1024, 768, 4, 3, False, self._screen_identifier, 2)
+            window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
             window.Decoration.value = True
             window.AutoHeight.value = True
             window.ShowCursor.value = True
             window.Title.value = subdisplay
             window.Name.value = subdisplay
-    
-            camera, view = self.make_camera(display_view, 0., window)
-            camera.ScreenTransform.value = avango.osg.make_trans_mat(0, 1.2, -2.4)
-    
-            self.add_view(view)
-    
-            window_event = avango.osg.viewer.nodes.EventFields(View = view)
-            self._subdisplay_window_events[subdisplay] = window_event
-            window.DragEvent.connect_from(window_event.DragEvent)
-            window.MoveEvent.connect_from(window_event.MoveEvent)
-            self._subdisplay_camera[subdisplay] = camera
-            self._subdisplay_window[subdisplay] = window
+            
+            window_translation = avango.osg.make_trans_mat(0, 1.7, -0.6)
+            current_user = 0
+            
         
+            eye_offset = 0.0
+            if window.StereoMode.value != avango.osg.viewer.stereo_mode.STEREO_MODE_NONE:
+                eye_offset = 0.03
+
+            camera, view = self.make_camera_with_viewport(
+                display_view, eye_offset, window_translation, window)
+            camera.EyeTransform.connect_from(self._users[current_user].Matrix)
+            
+            #self.connect_view_field(user_selector.ViewOut)
+            self._subdisplay_window[subdisplay] = window
+            
+            #print "<" + str(subdisplay) + "> make_view"
+            self.add_view(view)
+            
+            self.view_created(camera,view,subdisplay)
         
         #configure trackball
         display_view.EnableTrackball.value = self._enable_trackball
@@ -130,17 +136,25 @@ class Monitor(avango.display.Display):
         return display_view
  
     
-    def view_created(self, camera, view):
+    def view_created(self, camera, view, subdisplay):
         'Primary window is automatically created by the constructor. All other windows are created by explicit calls of make_view(subdisplay)'
         # It seems that a view is only allowed to be associated with one EventField at a time.
-        if self._subdisplay_window_events.has_key(""):
+        
+        if self._subdisplay_window_events.has_key(subdisplay):
             return
         else:
             window_event = avango.osg.viewer.nodes.EventFields(View = view)
-            self._subdisplay_window_events[""] = window_event
-            self._subdisplay_window[""].DragEvent.connect_from(window_event.DragEvent)
-            self._subdisplay_window[""].MoveEvent.connect_from(window_event.MoveEvent)
-            self._subdisplay_camera[""] = camera
+            self._subdisplay_window_events[subdisplay] = window_event
+            self._subdisplay_window[subdisplay].DragEvent.connect_from(window_event.DragEvent)
+            self._subdisplay_window[subdisplay].MoveEvent.connect_from(window_event.MoveEvent)
+            self._subdisplay_camera[subdisplay] = camera
+            
+            
+    def get_camera(self, subdisplay):
+        if self._subdisplay_camera.has_key(subdisplay):
+            return self._subdisplay_camera[subdisplay]
+        return None
+        
 
 
     def make_dominant_user_device(self, user, interface, subdisplay):
@@ -220,3 +234,4 @@ class Monitor(avango.display.Display):
             gamepad.TimeIn.connect_from(time_sensor.Time)
             
             return gamepad
+        

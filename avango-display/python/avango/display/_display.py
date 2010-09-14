@@ -89,7 +89,7 @@ class Display(object):
 
             self.connect_view_field(user_selector.ViewOut)
 
-            self.view_created(camera,view)
+            self.view_created(camera,view,subdisplay)
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node
@@ -98,6 +98,9 @@ class Display(object):
             self._inspector.Children.connect_from(converter.Output)
 
         return display_view
+
+    def get_camera(self, subdisplay):
+        return None
 
     def make_device(self, device, interface):
         return None
@@ -213,7 +216,7 @@ class Display(object):
     def add_user(self, user):
         self._users.append(user)
 
-    def view_created(self,camera,view):
+    def view_created(self,camera,view,subdisplay=""):
         '''
         Template function, which can be overridden by subclasses.
         This function is called every time a view has been created.

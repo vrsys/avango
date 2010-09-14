@@ -22,7 +22,6 @@
 ##########################################################################
 
 import avango.display
-import avango.daemon
 import avango.utils
 import math
 import re

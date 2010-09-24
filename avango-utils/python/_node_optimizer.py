@@ -21,28 +21,26 @@
 #                                                                        #
 ##########################################################################
 
-import avango.build
+import avango.script
+from avango.script import field_has_changed
+import avango.osg
 
-test_package_dir = '../test_package/'
+class NodeOptimizer(avango.script.Script):
+    Node = avango.osg.SFNode()
+    Trigger = avango.SFBool()
 
-avango_utils_test_files = Split("""
-    TestProximitySensor.py
-    TestBoolScripts.py
-    TestMFMerger.py
-    TestTriggers.py
-    TestTaskScheduler.py
-    TestNormalization.py
-    TestConverters.py
-    TestInterpolators.py
-    TestMultiValueFields.py
-    TestNodeOptimizer.py
-    runtests.py
-    __init__.py
-    """)
-avango.build.install_python(test_package_dir+'avango/utils/tests/', avango_utils_test_files)
+    def __init__(self):
+        self.super(NodeOptimizer).__init__()
+        
+        self.__triggered = False
 
-test_env = avango.build.TestEnvironment()
-check = test_env.Alias('test-utils', test_package_dir+'avango/utils/tests/runtests.pyc', 'python $SOURCE')
-AlwaysBuild(check)
-Alias('check-utils', check)
-test_env.Depends(check, test_package_dir)
+        self.Name.value = "NodeOptimizer"
+
+    @field_has_changed(Trigger)
+    def loading_finished(self):
+        self.__triggered = self.Trigger.value
+
+    def evaluate(self):
+        if self.__triggered and self.Node.value:
+            avango.osg.optimize_scene_graph(self.Node.value)
+

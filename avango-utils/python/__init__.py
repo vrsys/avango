@@ -37,3 +37,4 @@ from _interconnect import *
 from _range_checks import *
 from _node_scalers import *
 from _interpolators import *
+from _node_optimizer import *

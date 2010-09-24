@@ -21,28 +21,22 @@
 #                                                                        #
 ##########################################################################
 
-import avango.build
+import avango
+import avango.osg
+import avango.utils
+import unittest
 
-test_package_dir = '../test_package/'
 
-avango_utils_test_files = Split("""
-    TestProximitySensor.py
-    TestBoolScripts.py
-    TestMFMerger.py
-    TestTriggers.py
-    TestTaskScheduler.py
-    TestNormalization.py
-    TestConverters.py
-    TestInterpolators.py
-    TestMultiValueFields.py
-    TestNodeOptimizer.py
-    runtests.py
-    __init__.py
-    """)
-avango.build.install_python(test_package_dir+'avango/utils/tests/', avango_utils_test_files)
+class NodeOptimizerTestCase(unittest.TestCase):
+    def testMakeInstance(self):
+        self.assert_(avango.utils.nodes.NodeOptimizer())
 
-test_env = avango.build.TestEnvironment()
-check = test_env.Alias('test-utils', test_package_dir+'avango/utils/tests/runtests.pyc', 'python $SOURCE')
-AlwaysBuild(check)
-Alias('check-utils', check)
-test_env.Depends(check, test_package_dir)
+    def testOptimize(self):
+        node = avango.osg.nodes.Sphere()
+        optimizer = avango.utils.nodes.NodeOptimizer(Node=node)
+        optimizer.Trigger.value = True
+        avango.evaluate() 
+
+def Suite():
+   suite = unittest.TestLoader().loadTestsFromTestCase(NodeOptimizerTestCase)
+   return suite

@@ -32,6 +32,7 @@ from avango.utils.tests import TestNormalization
 from avango.utils.tests import TestConverters
 from avango.utils.tests import TestInterpolators
 from avango.utils.tests import TestMultiValueFields
+from avango.utils.tests import TestNodeOptimizer
 
 if __name__ == '__main__':
     suites = [
@@ -44,6 +45,7 @@ if __name__ == '__main__':
         TestConverters.Suite(),
         TestInterpolators.Suite(),
         TestMultiValueFields.Suite(),
+        TestNodeOptimizer.Suite(),
     ]
     alltests = unittest.TestSuite(suites)
     result = unittest.TextTestRunner(verbosity=2).run(alltests)

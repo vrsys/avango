@@ -89,7 +89,7 @@ class Display(object):
 
             self.connect_view_field(user_selector.ViewOut)
 
-            self.view_created(camera,view,subdisplay)
+            self.view_created(camera, view, subdisplay)
 
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node

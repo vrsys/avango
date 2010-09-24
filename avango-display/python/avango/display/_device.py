@@ -91,6 +91,8 @@ class KeyboardDevice(avango.script.Script):
     Key7 = avango.SFBool()
     Key8 = avango.SFBool()
     Key9 = avango.SFBool()
+    
+    KeyO = avango.SFBool()
 
     KeyX = avango.SFBool()
     KeyZ = avango.SFBool()
@@ -115,6 +117,8 @@ class KeyboardDevice(avango.script.Script):
         self.__keymap[55] = self.Key7
         self.__keymap[56] = self.Key8
         self.__keymap[57] = self.Key9
+        
+        self.__keymap[111] = self.KeyO
 
         self.__keymap[120] = self.KeyX
         self.__keymap[122] = self.KeyZ
@@ -145,7 +149,7 @@ class KeyboardDevice(avango.script.Script):
         pressed_keys = []
         for k in self.KeysPressed.value:
             pressed_keys.append(k)
-
+            
         #pressed keys
         for key in pressed_keys:
             if key in self.__keymap:

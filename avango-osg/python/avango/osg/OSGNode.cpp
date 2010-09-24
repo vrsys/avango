@@ -36,7 +36,7 @@
 #include <osg/ComputeBoundsVisitor>
 
 #include <osgDB/WriteFile>
-
+#include <osgUtil/Optimizer>
 
 using namespace boost::python;
 using namespace av::python;
@@ -66,6 +66,13 @@ namespace {
     osgDB::writeNodeFile(*(node->getOsgNode()),filename);
   }
 
+  void OptimizeSceneGraph(av::osg::Node * node)
+  {
+    osgUtil::Optimizer optimizer;
+    optimizer.optimize(node->getOsgNode());
+  }
+
+
 }
 
 
@@ -84,4 +91,5 @@ class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::no
 
 def("calc_bounding_box", CalcBoundingBox);
 def("write_node_file", WriteNodeFile);
+def("optimize_scene_graph", OptimizeSceneGraph);
 }

@@ -35,6 +35,8 @@
 #include <osg/Billboard>
 #include <osg/ComputeBoundsVisitor>
 
+#include <osgDB/WriteFile>
+
 
 using namespace boost::python;
 using namespace av::python;
@@ -58,6 +60,12 @@ namespace {
     node->getOsgNode()->accept(cbbv);
     return cbbv.getBoundingBox();
   }
+
+  void WriteNodeFile(av::osg::Node * node, std::string filename)
+  {
+    osgDB::writeNodeFile(*(node->getOsgNode()),filename);
+  }
+
 }
 
 
@@ -75,4 +83,5 @@ class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::no
   ;
 
 def("calc_bounding_box", CalcBoundingBox);
+def("write_node_file", WriteNodeFile);
 }

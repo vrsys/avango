@@ -112,9 +112,9 @@ class Monitor(avango.display.Display):
         trackball.TimeIn.connect_from(time_sensor.Time)
         trackball.SpinningTimeThreshold.value = 0.5
         trackball.Direction.connect_from(self._subdisplay_window[subdisplay].MousePositionNorm)
-        trackball.RotateTrigger.connect_from(self._subdisplay_keyboard[subdisplay].MouseButtons_OnlyMiddle)
-        trackball.PanTrigger.connect_from(self._subdisplay_keyboard[subdisplay].MouseButtons_LeftAndMiddle)
-        trackball.ZoomTrigger.connect_from(self._subdisplay_keyboard[subdisplay].MouseButtons_OnlyRight)
+        trackball.RotateTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyMiddle)
+        trackball.PanTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_LeftAndMiddle)
+        trackball.ZoomTrigger.connect_from(self._subdisplay_window_events[subdisplay].MouseButtons_OnlyRight)
         trackball.ResetTrigger.connect_from(self._subdisplay_keyboard[subdisplay].KeySpace)
         
         display_view.Camera.connect_from(trackball.Matrix)

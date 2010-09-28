@@ -138,6 +138,7 @@ class Monitor(avango.display.Display):
         display_view.ToggleFullScreen.connect_from(toggle_field)
         self._subdisplay_window[subdisplay].ToggleFullScreen.connect_from(display_view.ToggleFullScreen)
         
+        #optimize the scenegraph
         node_optimizer = avango.utils.nodes.NodeOptimizer()
         node_optimizer.Node.connect_from(display_view.Root)
         toggle_field = avango.utils.make_key_released_trigger( 

@@ -114,6 +114,11 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
   AV_FC_ADD_ADAPTOR_FIELD(Uniforms,
                             boost::bind(&StateSet::getUniformsCB, this, _1),
                             boost::bind(&StateSet::setUniformsCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(LineWidth,
+                            boost::bind(&StateSet::getLineWidthCB, this, _1),
+                            boost::bind(&StateSet::setLineWidthCB, this, _1));
+
 }
 
 av::osg::StateSet::~StateSet()
@@ -436,5 +441,22 @@ av::osg::StateSet::setUniformsCB(const av::osg::MFUniform::SetValueEvent& event)
   {
     mOsgStateSet->addUniform((*i)->getOsgUniform());
   }
+}
+
+/* virtual */ void
+av::osg::StateSet::getLineWidthCB(const av::osg::SFLineWidth::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::LineWidth>(mOsgStateSet->getAttribute(::osg::LineWidth::LINEWIDTH));
+}
+
+/* virtual */ void
+av::osg::StateSet::setLineWidthCB(const av::osg::SFLineWidth::SetValueEvent& event)
+{
+  ::osg::LineWidth *osg_linewidth =
+    (event.getValue().isValid() ? event.getValue()->getOsgLineWidth() : 0);
+  if (osg_linewidth != 0)
+    mOsgStateSet->setAttribute(osg_linewidth,::osg::StateAttribute::ON);
+  else
+    mOsgStateSet->removeAttribute(::osg::StateAttribute::LINEWIDTH);
 }
 

@@ -42,6 +42,7 @@
 #include <avango/osg/Depth.h>
 #include <avango/osg/BlendFunc.h>
 #include <avango/osg/Texture.h>
+#include <avango/osg/LineWidth.h>
 
 namespace av
 {
@@ -81,6 +82,7 @@ namespace av
       SFInt RescaleNormalMode;
       SFInt NormalizeMode;
       SFInt DepthTestMode;
+      SFLineWidth LineWidth;
 
       SFTexture Texture0;
       SFProgram Program;
@@ -139,6 +141,9 @@ namespace av
 
       virtual void getUniformsCB(const av::osg::MFUniform::GetValueEvent& event);
       virtual void setUniformsCB(const av::osg::MFUniform::SetValueEvent& event);
+
+      virtual void getLineWidthCB(const av::osg::SFLineWidth::GetValueEvent& event);
+      virtual void setLineWidthCB(const av::osg::SFLineWidth::SetValueEvent& event);
 
     private:
 

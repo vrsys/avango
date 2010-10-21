@@ -74,6 +74,7 @@ osg_files = Split("""
     avango/osg/OSGStateSet.cpp
     avango/osg/OSGLayerGeode.cpp
     avango/osg/OSGLayerGroup.cpp
+    avango/osg/OSGLineWidth.cpp
     avango/osg/OSGSwitch.cpp
     avango/osg/OSGTransform.cpp
     avango/osg/OSGMatrixTransform.cpp

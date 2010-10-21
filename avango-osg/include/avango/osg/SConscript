@@ -57,6 +57,7 @@ headers = Split('''
     LayerGeode.h
     LayerGroup.h
     LineSegmentIntersector.h
+    LineWidth.h
     LoadFile.h
     LoadImage.h
     LoadImageStream.h

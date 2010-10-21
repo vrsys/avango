@@ -50,6 +50,7 @@ sources = Split('''
     Program.cpp
     Light.cpp
     LightSource.cpp
+    LineWidth.cpp
     Geode.cpp
     Geometry.cpp
     Group.cpp

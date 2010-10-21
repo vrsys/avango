@@ -241,7 +241,7 @@ av::osg::particle::PrecipitationEffect::setFarTransitionCB(const av::SFFloat::Se
 /* virtual */ void
 av::osg::particle::PrecipitationEffect::getMaximumParticleDensityCB(const av::SFFloat::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = mOsgPrecipitationEffect->getMaximumParticleDensity();
+  *(event.getValuePtr()) = mOsgPrecipitationEffect->setMaximumParticleDensity();
 }
 
 /* virtual */ void

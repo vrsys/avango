@@ -69,6 +69,8 @@ def _setup_default():
     _config_store.set('graphicsMagick', PlainConfig(libraries = ['GraphicsMagick++']))
 
     _config_store.set('python', PythonConfig())
+    
+    _config_store.set('osgEarth', PlainConfig(libraries = ["osgEarth", "osgEarthUtil", "osgEarthFeatures"]))
 
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))

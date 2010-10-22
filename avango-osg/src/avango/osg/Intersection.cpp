@@ -40,6 +40,8 @@ av::osg::Intersection::Intersection()
   AV_FC_ADD_FIELD(NodePath, MFNode::ContainerType());
   AV_FC_ADD_FIELD(Point, ::osg::Vec3(0.0, 0.0, 0.0));
   AV_FC_ADD_FIELD(Normal, ::osg::Vec3(0.0, 0.0, 0.0));
+  AV_FC_ADD_FIELD(IndexList, std::vector<unsigned int>());
+  AV_FC_ADD_FIELD(RatioList, std::vector<double>());
 }
 
 /* virtual */

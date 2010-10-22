@@ -71,6 +71,16 @@ namespace av
        */
       SFVec3 Normal;
 
+      /**
+       * List containing the indices of the intersected geometry.
+       */
+      MFUInt IndexList;
+
+      /**
+       * Ratios between the vertices in IndexList to get the actual intersection point.
+       */
+      MFDouble RatioList;
+
     protected:
       /**
        * Destructor made protected to prevent allocation on stack.

@@ -128,9 +128,10 @@ class Monitor(avango.display.Display):
         toggle_field = avango.utils.make_key_toggle_trigger_alternate(
                           avango.utils.make_bool2_and(self._subdisplay_keyboard[subdisplay].KeyCtrl,
                                                       self._subdisplay_keyboard[subdisplay].KeyEnter),
-                          True)
+                          self._subdisplay_window[subdisplay].Decoration.value)
         display_view.WindowDecoration.connect_from(toggle_field)
         self._subdisplay_window[subdisplay].Decoration.connect_from(display_view.WindowDecoration)
+        
         #toggle fullscreen (Alt+Enter)
         toggle_field = avango.utils.make_key_toggle_trigger( 
                             avango.utils.make_bool2_and(self._subdisplay_keyboard[subdisplay].KeyAlt,
@@ -138,7 +139,7 @@ class Monitor(avango.display.Display):
         display_view.ToggleFullScreen.connect_from(toggle_field)
         self._subdisplay_window[subdisplay].ToggleFullScreen.connect_from(display_view.ToggleFullScreen)
         
-        #optimize the scenegraph
+        #optimize the scenegraph(Alt+O)
         node_optimizer = avango.utils.nodes.NodeOptimizer()
         node_optimizer.Node.connect_from(display_view.Root)
         toggle_field = avango.utils.make_key_released_trigger( 

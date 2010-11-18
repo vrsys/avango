@@ -126,7 +126,7 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_FIELD(Near, 0.1);
   AV_FC_ADD_FIELD(Far, 500.0);
   AV_FC_ADD_FIELD(BackgroundColor, ::osg::Vec4(0.0, 0.0, 0.0, 1.0));
-  
+
   AV_FC_ADD_FIELD(ViewerTransform, ::osg::Matrix::translate(0.0, 0.0, 0.6));
   AV_FC_ADD_FIELD(ScreenTransform, ::osg::Matrix::translate(0.0, 0.0, -0.6));
   AV_FC_ADD_FIELD(ScreenRelativeToViewer, true);
@@ -139,6 +139,8 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_FIELD(MouseViewerTransform, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(MouseNearTransform, ::osg::Matrix::identity());
   AV_FC_ADD_FIELD(ProjectionMatrix, ::osg::Matrix::identity());
+  AV_FC_ADD_FIELD(ViewMatrix, ::osg::Matrix::identity());
+
 
   mOsgCamera->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
   mOsgCamera->setDisplaySettings(new ::osg::DisplaySettings);
@@ -276,6 +278,7 @@ av::osg::viewer::Camera::evaluateLocalSideEffect()
         setViewMatrix(::osg::Matrix::inverse(::osg::Matrix::rotate(screen_trans.getRotate()) *
                                              ::osg::Matrix::translate(eye_trans.getTrans()) *
                                              ViewerTransform.getValue()));
+      ViewMatrix.setValue(mOsgCamera->getViewMatrix());
     }
   }
 }

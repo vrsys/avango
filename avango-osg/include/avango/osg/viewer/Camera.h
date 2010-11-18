@@ -93,12 +93,12 @@ namespace av
          */
         SFDouble Near;
         SFDouble Far;
-        
+
         /**
          * Defines the background color.
          * Default is Vec4(0,0,0,1).
          */
-        SFVec4 BackgroundColor; 
+        SFVec4 BackgroundColor;
 
         /**
          * Defines the orientation and translation of the viewer
@@ -174,6 +174,11 @@ namespace av
          * Outputs the projection matrix of the osg camera
          */
         SFMatrix ProjectionMatrix;
+
+        /**
+         * Outputs the view matrix (modelview) of the osg camera
+         */
+        SFMatrix ViewMatrix;
 
         /**
          * Get the wrapped ::osg::Camera.

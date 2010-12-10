@@ -194,9 +194,14 @@ av::tools::PickSelector::pick()
               av_intersection->NodePath.setValue(node_path);
               av_intersection->Point.setValue(intersection->getWorldIntersectPoint());
               av_intersection->Normal.setValue(intersection->getWorldIntersectNormal());
+
+              av_intersection->IndexList.setValue(intersection->indexList);
+              av_intersection->RatioList.setValue(intersection->ratioList);
+
               Link<IntersectionTargetHolder> intersection_holder = new IntersectionTargetHolder;
               intersection_holder->Intersection.setValue(av_intersection);
               path_holder = intersection_holder;
+
             }
             else
               path_holder = new NodePathTargetHolder;

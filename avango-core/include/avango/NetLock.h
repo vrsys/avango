@@ -26,7 +26,7 @@
 #ifndef AV_NETLOCK_H
 #define AV_NETLOCK_H
 
-#include <avango/Object.h>
+#include <avango/FieldContainer.h>
 
 namespace av {
   /**
@@ -37,7 +37,7 @@ namespace av {
    * which resets the "Granted" field to the empty string.
    * Short: This is cooperative locking, you only have the lock when your id shows up in the "Granted" field.
    */
-  class NetLock : public Object {
+  class NetLock : public FieldContainer {
 
       AV_FC_DECLARE();
 

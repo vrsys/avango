@@ -156,6 +156,7 @@ av::osg::Uniform::setValuesCB(const av::MFFloat::SetValueEvent& event)
       (*ia)[k] = (int)(*i);
     }
   }
+  mOsgUniform->dirty();
 }
 
 void

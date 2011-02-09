@@ -73,6 +73,7 @@ av::SetStateUpcall::upcallQueued(UpcallSerializer&)
 void
 av::SetStateUpcall::handle(NetNode* netNode, UpcallSerializer&)
 {
+  std::cerr << "SetStateUpcall::handle - netNode->setStateFragment(mFragment, mStateMsg)" << std::endl;
   netNode->setStateFragment(mFragment, mStateMsg);
 
 }
@@ -88,6 +89,7 @@ av::GetStateUpcall::upcallQueued(UpcallSerializer& serializer)
 void
 av::GetStateUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
 {
+  std::cerr << "SetStateUpcall::handle - netNode->getStateFragment(mFragment, mStateMsg)" << std::endl;
   netNode->getStateFragment(mFragment, mStateMsg);
   serializer.signalWait();
 }
@@ -185,7 +187,7 @@ av::UpcallSerializer::UpcallSerializer()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::UpcallSerializer(): "
-            << "w/ sema @" << &_sync_sema << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 }
@@ -194,7 +196,7 @@ av::UpcallSerializer::~UpcallSerializer()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::~UpcallSerializer(): "
-            << "w/ sema @" << &_sync_sema << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 }
@@ -273,8 +275,8 @@ av::UpcallSerializer::netWait()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::net_wait(): "
-            << "waiting on sema @" << &_sync_sema
-            << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "waiting on sema @" << &mSyncSema
+            << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 
@@ -282,7 +284,7 @@ av::UpcallSerializer::netWait()
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::net_wait(): "
-            << "done waiting on sema @" << &_sync_sema << " ..."
+            << "done waiting on sema @" << &mSyncSema << " ..."
             << std::endl;
 #endif
 }
@@ -292,8 +294,8 @@ av::UpcallSerializer::signalWait()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::signal_wait(): "
-            << "sleeping while <snapshot() == 0> for sema @" << &_sync_sema
-            << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "sleeping while <snapshot() == 0> for sema @" << &mSyncSema
+            << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 
@@ -304,8 +306,8 @@ av::UpcallSerializer::signalWait()
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::signal_wait(): "
-            << "done sleeping on sema @" << &_sync_sema
-            << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "done sleeping on sema @" << &mSyncSema
+            << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 
@@ -313,8 +315,8 @@ av::UpcallSerializer::signalWait()
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::signal_wait(): "
-            << "posted sema @" << &_sync_sema
-            << " (val: " << _sync_sema.snapshot() << ") ..."
+            << "posted sema @" << &mSyncSema
+            << " (val: " << mSyncSema.snapshot() << ") ..."
             << std::endl;
 #endif
 }

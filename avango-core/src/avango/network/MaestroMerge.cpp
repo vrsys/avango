@@ -409,13 +409,13 @@ av::MaestroMerge::unblock_client()
     Merge_UnBlock_Callback();
     mBlocked = false;
   }
-  AVANGO_LOG(logger, logging_TRACE, "unblock_client: leave")
+  AVANGO_LOG(logger, logging::TRACE, "unblock_client: leave")
 }
 
 void
 av::MaestroMerge::receive_state(Maestro_EndpID &origin, Maestro_Message &state_msg)
 {
-  AVANGO_LOG(logger, logging::DEBUG, "av::Maestro_Merge::receive_state: received state from " << origin)
+  AVANGO_LOG(logger, logging::DEBUG, boost::str(boost::format("av::Maestro_Merge::receive_state: received state from %1%") % origin))
 
   // must deliver to application here
   Merge_SetState_Callback(origin, state_msg);

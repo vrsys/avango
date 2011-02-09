@@ -215,7 +215,7 @@ av::UpcallSerializer::makeUpcall(boost::shared_ptr<Upcall> upcall)
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::make_upcall(): "
-            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall)
+            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall.get())
             << " ..."
             << std::endl;
 #endif
@@ -237,7 +237,7 @@ av::UpcallSerializer::handleUpcall(boost::shared_ptr<Upcall> upcall, NetNode* ne
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
   std::cerr << "UpcallSerializer::handle_upcall(): "
-            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall)
+            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall.get())
             << " ..."
             << std::endl;
 #endif

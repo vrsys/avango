@@ -632,7 +632,7 @@ av::FieldContainer::push(av::Msg& msg)
   AVANGO_LOG(logger,logging::DEBUG , boost::str(boost::format("push: pushing a %1% (%2%)") % getTypeId().getName() % typeid(*this).name() ));
 
   FieldPtrVec& fields = getFields();
-  int fields_pushed = 0;
+  unsigned int fields_pushed = 0;
   FieldPtrVec::iterator i;
 
   for (i=fields.begin(); i!=fields.end(); ++i) {

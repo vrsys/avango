@@ -416,13 +416,13 @@ namespace av
       ++i;
     }
 
-    av_pushMsg(msg, mValue.size());
+    av_pushMsg(msg, static_cast<uint32_t>(mValue.size()));
   }
 
   template<typename Value> inline void
   MultiField<Value>::pop(Msg& msg)
   {
-    int count;
+    uint32_t count;
 
     av_popMsg(msg, count);
 
@@ -432,7 +432,7 @@ namespace av
 
     Value val;
 
-    for (int i = count; i > 0; --i)
+    for (uint32_t i = count; i > 0; --i)
     {
       av_popMsg(msg, val);
       mValue[i-1] = val;

@@ -62,7 +62,7 @@ av::osg::LineWidth::initClass()
     SFLineWidth::initClass("av::osg::SFLineWidth", "av::Field");
     MFLineWidth::initClass("av::osg::MFLineWidth", "av::Field");
 
-    sSclassTypeId.setDistributable(true);
+    sClassTypeId.setDistributable(true);
   }
 }
 

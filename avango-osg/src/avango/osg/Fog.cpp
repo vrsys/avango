@@ -73,7 +73,7 @@ av::osg::Fog::initClass()
     SFFog::initClass("av::osg::SFFog", "av::Field");
     MFFog::initClass("av::osg::MFFog", "av::Field");
 
-    sSclassTypeId.setDistributable(true);
+    sClassTypeId.setDistributable(true);
   }
 }
 

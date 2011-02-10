@@ -26,6 +26,9 @@
 #include <boost/python.hpp>
 #include <avango/osg/network/NetMatrixTransform.h>
 #include <avango/NetNode.h>
+#include <avango/FieldContainer.h>
+#include <avango/Base.h>
+#include <avango/Link.h>
 
 using namespace boost::python;
 
@@ -40,12 +43,41 @@ namespace boost
    }
  }
 
+namespace av
+ {
+  namespace python
+	{
+	 namespace detail
+	  {
+
+		void distributeFieldContainerHelper(av::osg::NetMatrixTransform& self, boost::python::object obj)
+		{
+		  av::Base* av_value = boost::python::extract<av::Base*>(obj);
+		 
+		  av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+		  self.distributeFieldContainer(tmp);
+		}
+
+		void undistributeFieldContainerHelper(av::osg::NetMatrixTransform& self, boost::python::object obj)
+		{
+		  av::Base* av_value = boost::python::extract<av::Base*>(obj);
+		 
+		  av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+		  self.undistributeFieldContainer(tmp);
+		}
+
+	  } // namespace detail
+	} // namespace python
+ } // namespace av
+
 
 void init_NetMatrixTransform(void)
 {
   class_<av::osg::NetMatrixTransform, av::Link<av::osg::NetMatrixTransform>, bases<av::FieldContainer>, boost::noncopyable >("NetMatrixTransform", "docstring", no_init)
-    .def("distribute_object", &av::osg::NetMatrixTransform::distributeFieldContainer)
-    .def("undistribute_object", &av::osg::NetMatrixTransform::undistributeFieldContainer)
+    //.def("distribute_object", &av::osg::NetMatrixTransform::distributeFieldContainer)
+    .def("distribute_object", av::python::detail::distributeFieldContainerHelper)
+    //.def("undistribute_object", &av::osg::NetMatrixTransform::undistributeFieldContainer)
+    .def("undistribute_object", av::python::detail::undistributeFieldContainerHelper)
     ;
   def("set_ensemble_option", av::NetNode::setEnsOption);
 }

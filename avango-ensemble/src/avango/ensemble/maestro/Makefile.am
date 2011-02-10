@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-AM_CPPFLAGS = -I$(top_srcdir)/include $(CXX_WOFFALL_FLAGS) $(ENSEMBLE_CDEFINES)
+AM_CPPFLAGS = -I$(top_srcdir)/include $(CXX_WOFFALL_FLAGS) $(ENSEMBLE_CDEFINES) -fPIC
 
 noinst_LTLIBRARIES = libmaestro.la
 

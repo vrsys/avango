@@ -31,7 +31,7 @@ AM_CPPFLAGS = \
 	-I$(srcdir)/../ensemble/socket/s \
 	-I$(srcdir)/../ensemble/socket/s/unix -I$(OCAML_LIBDIR) \
 	$(ENSEMBLE_CDEFINES) \
-	$(C_WOFFALL_FLAGS)
+	$(C_WOFFALL_FLAGS) -fPIC
 
 OCAML_LOCALINCLUDE = -I ../ensemble
 
@@ -107,8 +107,11 @@ libhoti.o: $(LIB_HOTI_OBJECTS)
 	$(LD) -r -o $@  $(LIB_HOTI_OBJECTS) ../ensemble/socket/libsocket.a \
 	$(OCAML_LIBDIR)/libunix.a $(OCAML_LIBDIR)/libcamlrun.a
 
-libhoti.a: libhoti.o
-	ar cr $@ $<
+#libhoti.a: libhoti.o
+#	ar cr $@ $<
+
+libhoti.a: $(LIB_HOTI_OBJECTS)
+	        ar cr $@ $(LIB_HOTI_OBJECTS) ../ensemble/socket/libsocket.a $(OCAML_LIBDIR)/libunix.a $(OCAML_LIBDIR)/libcamlrun.a
 
 libhoto.a: $(LIB_HOTO_OBJECTS)
 	ar cr $@ $<

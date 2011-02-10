@@ -21,6 +21,18 @@
 #                                                                        #
 ##########################################################################
 
+LIB_HOTI_OBJECTS = \
+				hot/hot.o \
+				hot/hot_mem.o \
+				hot/hot_error.o \
+				hot/hot_sys.o \
+				hot/hot_msg.o \
+				hot/pthread_intf.o \
+				hot/hot_inboard_c.o \
+				$(NULL)
+
+LIBHOTI_A = $(LIB_HOTI_OBJECTS) $(OCAML_LIBDIR)/libunix.a # $(OCAML_LIBDIR)/libcamlrun.a
+
 SUBDIRS = \
 	ensemble \
 	hot \
@@ -41,6 +53,8 @@ lib_LTLIBRARIES = libavangoEnsemble.la
 libavangoEnsemble_la_SOURCES =
 
 libavangoEnsemble_la_LIBADD = \
-	hot/libhoti.a \
+	$(LIBHOTI_A) \
+	-lcamlrun_shared \
+	ensemble/socket/libsocket.a \
 	maestro/libmaestro.la \
 	$(NULL)

@@ -30,7 +30,7 @@ SUBDIRS = u s
 
 AM_CPPFLAGS = \
 	-I$(srcdir)/s -I$(srcdir)/s/unix -I$(OCAML_LIBDIR) \
-	$(ENSEMBLE_CDEFINES) $(C_WOFFALL_FLAGS)
+	$(ENSEMBLE_CDEFINES) $(C_WOFFALL_FLAGS) -fPIC
 
 noinst_LIBRARIES = libsocket.a
 

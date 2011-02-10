@@ -814,7 +814,7 @@ Maestro_ES_ReplicatedUpdates::request_Callback(
   unsigned pos = reqBody.pos();
   unsigned size = reqBody.size() - pos;
   char *data = (char*) reqBody.body();
-  int pad = 4 - ((unsigned) data + pos) % 4;
+  int pad = 4 - ((size_t) data + pos) % 4;
   if (pad < 4) 
     data += pad;
   Maestro_CORBA_Message tmpMsg;

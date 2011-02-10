@@ -59,12 +59,12 @@ av::osg::Uniform::Uniform(::osg::Uniform* osguniform) :
   Object(osguniform),
   mOsgUniform(osguniform)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Type,
-                            boost::bind(&Uniform::getTypeCB, this, _1),
-                            boost::bind(&Uniform::setTypeCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(Values,
                             boost::bind(&Uniform::getValuesCB, this, _1),
                             boost::bind(&Uniform::setValuesCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Type,
+                            boost::bind(&Uniform::getTypeCB, this, _1),
+                            boost::bind(&Uniform::setTypeCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(UniformName,
                             boost::bind(&Uniform::getUniformNameCB, this, _1),
                             boost::bind(&Uniform::setUniformNameCB, this, _1));

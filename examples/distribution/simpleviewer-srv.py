@@ -61,7 +61,7 @@ class RotateTransform(object):
     def callback(self):
         cur_rot = math.sin((time.time()-self.time)/2.)
         cur_mat = avango.osg.make_rot_mat(cur_rot, 1., 0., 0.)
-        self.trans.Matrix = cur_mat
+        self.trans.Matrix.value = cur_mat
 
 rt = RotateTransform(trans)
 update = avango.script.nodes.Update(Callback = rt.callback, Active = True)

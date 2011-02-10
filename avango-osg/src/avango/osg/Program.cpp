@@ -60,6 +60,8 @@ av::osg::Program::initClass()
 
     SFProgram::initClass("av::osg::SFProgram", "av::Field");
     MFProgram::initClass("av::osg::MFProgram", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

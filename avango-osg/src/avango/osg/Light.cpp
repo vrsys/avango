@@ -103,6 +103,8 @@ av::osg::Light::initClass()
 
     SFLight::initClass("av::osg::SFLight", "av::Field");
     MFLight::initClass("av::osg::MFLight", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

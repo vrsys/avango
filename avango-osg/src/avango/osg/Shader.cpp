@@ -66,6 +66,8 @@ av::osg::Shader::initClass()
 
     SFShader::initClass("av::osg::SFShader", "av::Field");
     MFShader::initClass("av::osg::MFShader", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

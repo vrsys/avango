@@ -69,6 +69,8 @@ av::osg::Depth::initClass()
 
     SFDepth::initClass("av::osg::SFDepth", "av::Field");
     MFDepth::initClass("av::osg::MFDepth", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

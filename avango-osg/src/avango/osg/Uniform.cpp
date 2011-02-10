@@ -84,6 +84,8 @@ av::osg::Uniform::initClass()
 
     SFUniform::initClass("av::osg::SFUniform", "av::Field");
     MFUniform::initClass("av::osg::MFUniform", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

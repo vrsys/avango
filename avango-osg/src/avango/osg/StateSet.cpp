@@ -135,6 +135,8 @@ av::osg::StateSet::initClass()
 
     SFStateSet::initClass("av::osg::SFStateSet", "av::Field");
     MFStateSet::initClass("av::osg::MFStateSet", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

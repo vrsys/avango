@@ -69,6 +69,8 @@ av::osg::BlendFunc::initClass()
 
     SFBlendFunc::initClass("av::osg::SFBlendFunc", "av::Field");
     MFBlendFunc::initClass("av::osg::MFBlendFunc", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

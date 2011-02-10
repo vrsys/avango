@@ -63,6 +63,8 @@ av::osg::PolygonOffset::initClass()
 
     SFPolygonOffset::initClass("av::osg::SFPolygonOffset", "av::Field");
     MFPolygonOffset::initClass("av::osg::MFPolygonOffset", "av::Field");
+
+    sSclassTypeId.setDistributable(true);
   }
 }
 

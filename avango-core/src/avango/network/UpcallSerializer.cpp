@@ -73,7 +73,6 @@ av::SetStateUpcall::upcallQueued(UpcallSerializer&)
 void
 av::SetStateUpcall::handle(NetNode* netNode, UpcallSerializer&)
 {
-  std::cerr << "SetStateUpcall::handle - netNode->setStateFragment(mFragment, mStateMsg)" << std::endl;
   netNode->setStateFragment(mFragment, mStateMsg);
 
 }
@@ -89,7 +88,6 @@ av::GetStateUpcall::upcallQueued(UpcallSerializer& serializer)
 void
 av::GetStateUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
 {
-  std::cerr << "SetStateUpcall::handle - netNode->getStateFragment(mFragment, mStateMsg)" << std::endl;
   netNode->getStateFragment(mFragment, mStateMsg);
   serializer.signalWait();
 }

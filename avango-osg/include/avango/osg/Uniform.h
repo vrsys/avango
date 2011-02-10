@@ -68,9 +68,9 @@ namespace av
 
     public:
 
+      MFFloat Values;
       SFInt Type;
       SFString UniformName;
-      MFFloat Values;
 
       /**
        * Get the wrapped ::osg::Uniform.

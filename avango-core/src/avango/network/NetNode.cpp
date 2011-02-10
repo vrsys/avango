@@ -196,6 +196,9 @@ av::NetNode::queueRemoveFragment(const std::string& fragment)
 void
 av::NetNode::applyStateFragments()
 {
+#ifdef AVANGO_DEBUG
+  logger.debug() << "av::NetNode::applyStateFragments:" ;
+#endif
   {
     StateUpdateList::iterator current(mStateUpdates.begin());
 
@@ -228,7 +231,8 @@ void
 av::NetNode::registerWellKnown(const Link<Distributed>& obj, const NetID& id)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::register_well_known: "
+  //LOG_TRACE(logger) << "av::NetNode::register_well_known: "
+  logger.debug()<< "av::NetNode::register_well_known: "
   << "well-known id: "
   << id;
 #endif
@@ -268,7 +272,7 @@ av::NetNode::unregisterWellKnown(const Link<Distributed>& obj)
 
   if (obj->isDistributed()) {
 #ifdef AVANGO_DEBUG
-    LOG_TRACE(logger) << "av::NetNode::unregister_well_known: "
+    logger.debug()<< "av::NetNode::unregister_well_known: "
               << "well-known id: "
               << obj->netID();
 #endif
@@ -303,7 +307,7 @@ void
 av::NetNode::registerObj(const Link<Distributed>& obj, const NetID& id)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::register_obj: "
+  logger.debug()<< "av::NetNode::register_obj: "
             << "id: "
             << id;
 #endif
@@ -341,7 +345,7 @@ av::NetNode::unregisterObj(const Link<Distributed>& obj)
   if (obj->isDistributed()) {
 
 #ifdef AVANGO_DEBUG
-    LOG_TRACE(logger) << "av::NetNode::unregister_obj: "
+    logger.debug()<< "av::NetNode::unregister_obj: "
               << "id: "
               << obj->netID();
 #endif
@@ -372,7 +376,7 @@ void
 av::NetNode::notifyCreations()
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::notify_creations: "
+  logger.debug()<< "av::NetNode::notify_creations: "
                     << "creations pending: "
                     << mPendingCreations.size();
 #endif
@@ -423,7 +427,7 @@ void
 av::NetNode::notifyUpdates()
 {
 #ifdef AVANGO_DEBUG
-    LOG_TRACE(logger) << "av::NetNode::notify_updates: "
+    logger.debug()<< "av::NetNode::notify_updates: "
                       << "updates pending: "
                       << mPendingUpdates.size();
 #endif
@@ -462,7 +466,7 @@ void
 av::NetNode::notifyDeletes()
 {
 #ifdef AVANGO_DEBUG
-    LOG_TRACE(logger) << "av::NetNode::notify_deletes: "
+    logger.debug()<< "av::NetNode::notify_deletes: "
                       << "deletes pending: "
                       << mPendingDeletes.size();
 #endif
@@ -506,7 +510,7 @@ av::NetNode::lookup(const NetID& id, Link<Distributed>& result)
 
 #ifdef AVANGO_DEBUG
     {
-      LOG_TRACE(logger) << "av::NetNode::lookup: "
+      logger.debug()<< "av::NetNode::lookup: "
                         << "searching w/in "
                         << mWellKnownObjects.size()
                         << " well-known objects";
@@ -514,7 +518,7 @@ av::NetNode::lookup(const NetID& id, Link<Distributed>& result)
       NetIDDstMap::iterator i = mWellKnownObjects.begin();
 
       while (i != mWellKnownObjects.end()) {
-        LOG_TRACE(logger) << "av::NetNode::lookup: "
+        logger.debug()<< "av::NetNode::lookup: "
                           << (*i).first
                           << ":"
                           << (*i).second->netID();
@@ -527,7 +531,7 @@ av::NetNode::lookup(const NetID& id, Link<Distributed>& result)
 
     if (i == mWellKnownObjects.end()) {
 #ifdef AVANGO_DEBUG
-      LOG_TRACE(logger) << "av::NetNode::lookup: "
+      logger.debug()<< "av::NetNode::lookup: "
                         << "failed for: "
                         << id;
 #endif
@@ -535,7 +539,7 @@ av::NetNode::lookup(const NetID& id, Link<Distributed>& result)
     } else {
       result = (*i).second;
 #ifdef AVANGO_DEBUG
-      LOG_TRACE(logger) << "av::NetNode::lookup: "
+      logger.debug()<< "av::NetNode::lookup: "
                          << "succeeded for: "
                          << id;
 #endif
@@ -550,7 +554,7 @@ void
 av::NetNode::joined(const std::string& myeid)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::joined: "
+  logger.debug()<< "av::NetNode::joined: "
                     << "called";
 #endif
   // add a slot for ourselfes
@@ -563,7 +567,7 @@ void
 av::NetNode::block()
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::block: "
+  logger.debug()<< "av::NetNode::block: "
                     << "called";
 #endif
   mBlocked = true;
@@ -573,7 +577,7 @@ void
 av::NetNode::unblock()
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::unblock: "
+  logger.debug()<< "av::NetNode::unblock: "
                     << "called";
 #endif
   mBlocked = false;
@@ -583,7 +587,7 @@ void
 av::NetNode::setStateFragment(const std::string& fragment, av::Msg& stateMsg)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::set_state_fragment: from "
+  logger.debug()<< "av::NetNode::set_state_fragment: from "
                     << fragment << " size: "
                     << stateMsg.getSize() << " bytes.";
 #endif
@@ -613,7 +617,7 @@ av::NetNode::setStateFragment(const std::string& fragment, av::Msg& stateMsg)
   av_popMsg(sm, num_objects);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::set_state_fragment: create messages: "
+  logger.debug()<< "av::NetNode::set_state_fragment: create messages: "
                     << num_objects;
 #endif
 
@@ -625,7 +629,7 @@ av::NetNode::setStateFragment(const std::string& fragment, av::Msg& stateMsg)
   av_popMsg(sm, num_objects);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::set_state_fragment: update messages: "
+  logger.debug()<< "av::NetNode::set_state_fragment: update messages: "
                     << num_objects;
 #endif
 
@@ -635,7 +639,7 @@ av::NetNode::setStateFragment(const std::string& fragment, av::Msg& stateMsg)
   }
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::set_state_fragment: setting state fragment for "
+  logger.debug()<< "av::NetNode::set_state_fragment: setting state fragment for "
                     << fragment;
 #endif
 
@@ -683,11 +687,11 @@ av::NetNode::getStateFragment(const std::string& fragment, av::Msg& stateOutMsg)
   stateOutMsg = state_msg.clone();
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::get_state_fragment: for "
+  logger.debug()<< "av::NetNode::get_state_fragment: for "
                     << fragment << " size: "
                     << state_msg.getSize() << " bytes.";
-  LOG_TRACE(logger) << "av::NetNode::get_state_fragment: create messages: " << state.size();
-  LOG_TRACE(logger) << "av::NetNode::get_state_fragment: update messages: " << state.size();
+  logger.debug()<< "av::NetNode::get_state_fragment: create messages: " << state.size();
+  logger.debug()<< "av::NetNode::get_state_fragment: update messages: " << state.size();
 #endif
 }
 
@@ -703,7 +707,7 @@ av::NetNode::removeStateFragment(const std::string& fragment)
   _removeStateFragment(fragment);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::remove_state_fragment: for "
+  logger.debug()<< "av::NetNode::remove_state_fragment: for "
                     << fragment;
 #endif
 }
@@ -766,7 +770,7 @@ void
 av::NetNode::distributeObject(av::Link<av::Distributed> obj)
 {
 #if AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::distribute_object: '"
+  logger.debug()<< "av::NetNode::distribute_object: '"
                     << getName (obj)
                     << "' w/ type id "
                     << obj->getTypeId().getName().c_str();
@@ -788,7 +792,7 @@ void
 av::NetNode::undistributeObject(av::Link<av::Distributed> obj)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::undistribute_object: '"
+  logger.debug()<< "av::NetNode::undistribute_object: '"
                     << getName (obj)
                     << "' w/ type id "
                     << obj->getTypeId().getName().c_str();
@@ -825,7 +829,7 @@ av::NetNode::updateDistributedObject(const av::Link<av::Distributed>& obj)
 {
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::update_distributed_object: '"
+  logger.debug()<< "av::NetNode::update_distributed_object: '"
                     << getName (obj)
                     << "' w/ type id "
                     << obj->getTypeId().getName().c_str();
@@ -851,7 +855,7 @@ void
 av::NetNode::makeCreateMessage(av::Msg& msg, const av::Link<av::Distributed>& obj)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_create_message: start: '"
+  logger.debug()<< "av::NetNode::make_create_message: start: '"
                     << obj->getTypeId().getName().c_str()
                     << "' w/ id: "
                     << obj->netID();
@@ -862,7 +866,7 @@ av::NetNode::makeCreateMessage(av::Msg& msg, const av::Link<av::Distributed>& ob
   av_pushMsg(msg, sCreateMsg);       // push message token
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_create_message: done: '"
+  logger.debug()<< "av::NetNode::make_create_message: done: '"
                     << obj->getTypeId().getName().c_str()
                     << "' w/ id: "
                     << obj->netID();
@@ -873,7 +877,7 @@ void
 av::NetNode::makeUpdateMessage(av::Msg& msg, const av::Link<av::Distributed>& obj)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_update_message: start: '"
+  logger.debug()<< "av::NetNode::make_update_message: start: '"
                     << obj->getTypeId().getName().c_str()
                     << "' w/ id: "
                     << obj->netID();
@@ -885,7 +889,7 @@ av::NetNode::makeUpdateMessage(av::Msg& msg, const av::Link<av::Distributed>& ob
   av_pushMsg(msg, sUpdateMsg);       // push message token
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_update_message: done: '"
+  logger.debug()<< "av::NetNode::make_update_message: done: '"
                     << obj->getTypeId().getName().c_str()
                     << "' w/ id: "
                     << obj->netID();
@@ -896,7 +900,7 @@ void
 av::NetNode::makeDeleteMessage(av::Msg& msg, const av::Link<av::Distributed>& obj)
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_delete_message: start: '"
+  logger.debug()<< "av::NetNode::make_delete_message: start: '"
                     << obj->getTypeId().getName().c_str()
                     << "' w/ id: "
                     << obj->netID();
@@ -913,7 +917,7 @@ av::NetNode::makeDeleteMessage(av::Msg& msg, const av::Link<av::Distributed>& ob
   }
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::make_delete_message: done: '"
+  logger.debug()<< "av::NetNode::make_delete_message: done: '"
                     << obj->getTypeId().getName().c_str()
                     << "' (netID deleted)";
 #endif
@@ -973,7 +977,7 @@ av::NetNode::consumeCreateMessage(av::Msg& msg)
   }
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_create_message: creating a '"
+  logger.debug()<< "av::NetNode::consume_create_message: creating a '"
                      << obj_type.getName().c_str() << "'";
 #endif
 
@@ -981,14 +985,14 @@ av::NetNode::consumeCreateMessage(av::Msg& msg)
   Link<Distributed> obj((Distributed*) obj_type.createInstance());
 
 #if AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_create_message: "
+  logger.debug()<< "av::NetNode::consume_create_message: "
                     << "about to register object ";
 #endif
 
   registerObj(obj, obj_id);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_create_message: '"
+  logger.debug()<< "av::NetNode::consume_create_message: '"
                     << obj_type.getName().c_str()
                     << "' w/ id: "
                     << obj_id;
@@ -1009,7 +1013,7 @@ av::NetNode::consumeUpdateMessage(av::Msg& msg)
   av_popMsg(msg, obj_id);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_update_message: '"
+  logger.debug()<< "av::NetNode::consume_update_message: '"
                     << obj_type.getName().c_str()
                     << "' w/ id: "
                     << obj_id;
@@ -1054,7 +1058,7 @@ av::NetNode::consumeDeleteMessage(av::Msg& msg)
   }
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_delete_message: "
+  logger.debug()<< "av::NetNode::consume_delete_message: "
             << obj_id;
 #endif
 
@@ -1068,7 +1072,7 @@ av::NetNode::consumePackedMessage(av::Msg& msg)
   av_popMsg(msg, msg_count);
 
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "av::NetNode::consume_packed_message: " << msg_count;
+  logger.debug()<< "av::NetNode::consume_packed_message: " << msg_count;
 #endif
 
   for (int i = 0; i < msg_count; ++i) {

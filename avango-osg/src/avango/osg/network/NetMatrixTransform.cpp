@@ -167,8 +167,8 @@ av::osg::NetMatrixTransform::_join(const std::string& fragment)
   mSharedContainerMap[fragment] = container_holder;
   sharedContainersChanged();
 
-#ifdef AVANGO_DEBUG
-  LOG_TRACE(logger)  << "_join: " << "added group node " << group_id << " for: " << fragment;
+#if AVANGO_DEBUG
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("_join: added group node %1% for: %2%]") % group_id % fragment));
 #endif
 }
 

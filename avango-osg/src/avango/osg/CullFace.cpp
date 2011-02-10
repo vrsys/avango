@@ -61,7 +61,7 @@ av::osg::CullFace::initClass()
     SFCullFace::initClass("av::osg::SFCullFace", "av::Field");
     MFCullFace::initClass("av::osg::MFCullFace", "av::Field");
 
-    sSclassTypeId.setDistributable(true);
+    sClassTypeId.setDistributable(true);
   }
 }
 

@@ -34,6 +34,7 @@
 #include <avango/Config.h>
 
 #include <boost/format.hpp>
+#include <boost/scoped_array.hpp>
 
 namespace
 {
@@ -150,7 +151,7 @@ av::av_pushMsg(av::Msg& msg, const int32_t& buf)
 
   msg.push(&b, sizeof(b));
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (int32_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (int32_t) [%1%]") % buf));
 }
 
 void
@@ -163,7 +164,7 @@ av::av_popMsg(av::Msg& msg, int32_t& buf)
 
   xdr_int(xdr.getXDR(), (int32_t*) &buf);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (int32_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (int32_t) [%1%]") % buf));
 }
 
 // std::vector<int32_t>
@@ -211,7 +212,7 @@ av::av_pushMsg(av::Msg& msg, const uint32_t& buf)
 
   msg.push(&b, sizeof(b));
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (uint32_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (uint32_t) [%1%]") % buf));
 }
 
 void
@@ -224,7 +225,7 @@ av::av_popMsg(av::Msg& msg, uint32_t& buf)
 
   xdr_u_int(xdr.getXDR(), &buf);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (uint32_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (uint32_t) [%1%]") % buf));
 }
 
 // std::vector<uint32_t>
@@ -272,7 +273,7 @@ av::av_pushMsg(av::Msg& msg, const int64_t& buf)
 
   msg.push(&b, sizeof(b));
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (int64_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (int64_t) [%1%]") % buf));
 }
 
 void
@@ -285,7 +286,7 @@ av::av_popMsg(av::Msg& msg, int64_t& buf)
 
   xdr_longlong_t(xdr.getXDR(), (int64_t*) &buf);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (int64_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (int64_t) [%1%]") % buf));
 }
 
 // std::vector<int64_t>
@@ -333,7 +334,7 @@ av::av_pushMsg(av::Msg& msg, const uint64_t& buf)
 
   msg.push(&b, sizeof(b));
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (uint64_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (uint64_t) [%1%]") % buf));
 }
 
 void
@@ -346,7 +347,7 @@ av::av_popMsg(av::Msg& msg, uint64_t& buf)
 
   xdr_u_longlong_t(xdr.getXDR(), (uint64_t*) &buf);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (uint64_t) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (uint64_t) [%1%]") % buf));
 }
 
 // std::vector<uint64_t>
@@ -395,7 +396,7 @@ av::av_pushMsg(av::Msg& msg, const float& buf)
 
   msg.push(&b, sizeof(b));
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (float) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (float) [%1%]") % buf));
 }
 
 void
@@ -408,7 +409,7 @@ av::av_popMsg(av::Msg& msg, float& buf)
 
   xdr_float(xdr.getXDR(), &buf);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (float) [%1%]") % buf)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (float) [%1%]") % buf));
 }
 
 // std::vector<float>
@@ -519,7 +520,7 @@ av::av_popMsg(av::Msg& msg, std::vector<double>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const AnyLink& buf)
 {
-  AVANGO_LOG(logger, logging::TRACE, "push: (AnyLink) [<blank>]")
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (AnyLink) [<blank>]")));
 
   if (!buf.isValid())
   {
@@ -545,7 +546,7 @@ av::av_pushMsg(av::Msg& msg, const AnyLink& buf)
 void
 av::av_popMsg(av::Msg& msg, AnyLink& buf)
 {
-  AVANGO_LOG(logger, logging::TRACE, "pop: (AnyLink) [<blank>]")
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (AnyLink) [<blank>]")));
 
   NetID id;
   av_popMsg(msg, id);
@@ -567,7 +568,7 @@ av::av_popMsg(av::Msg& msg, AnyLink& buf)
   if (!obj.isValid() || !buf.setBasePtr(obj.getBasePtr()))
   {
     // this object is either not there or of wrong type.
-    AVANGO_LOG(logger, logging::WARN, "pop: object is either not there or of wrong type.")
+    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("pop: object is either not there or of wrong type.")));
     buf.clear();
   }
 }
@@ -636,7 +637,7 @@ av::av_popMsg(av::Msg& msg, av::Field* field)
 void
 av::av_pushMsg(av::Msg& msg, av::Distributed* distrObj)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (Distributed*) [%1%,%2%,%3%,%4%]")
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (Distributed*) [%1%,%2%]")
                  % distrObj
                  % distrObj->getTypeId().getName()))
 
@@ -647,7 +648,7 @@ av::av_pushMsg(av::Msg& msg, av::Distributed* distrObj)
 void
 av::av_popMsg(av::Msg& msg, av::Distributed* distrObj)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (Distributed*) [%1%,%2%,%3%,%4%]")
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (Distributed*) [%1%,%2%]")
                  % distrObj
                  % distrObj->getTypeId().getName()))
 
@@ -660,7 +661,7 @@ av::av_popMsg(av::Msg& msg, av::Distributed* distrObj)
 void
 av::av_pushMsg(av::Msg& msg, const std::string& str)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (std::string) [%1%]") % str)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (std::string) [%1%]") % str));
 
   int length = str.size();
   if (length)
@@ -687,14 +688,14 @@ av::av_popMsg(av::Msg& msg, std::string& str)
     str.assign("");
   }
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (std::string) [%1%]") % str)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (std::string) [%1%]") % str));
 }
 
 // NetID
 void
 av::av_pushMsg(av::Msg& msg, const av::NetID& id)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str("push: (NetID) [%1%]") % id)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (NetID) [%1%]") % id));
 
   av_pushMsg(msg, id.getEID());
   av_pushMsg(msg, id.getNum());
@@ -712,5 +713,5 @@ av::av_popMsg(av::Msg& msg, av::NetID& id)
 
   id.set(eid, number);
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str("pop: (NetID) [%1%]") % id)
+  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (NetID) [%1%]") % id));
 }

@@ -37,7 +37,7 @@ AV_FC_DEFINE(av::osg::LoadImage);
 AV_FIELD_DEFINE(av::osg::SFLoadImage);
 AV_FIELD_DEFINE(av::osg::MFLoadImage);
 
-av::osg::LoadImage::LoadImage() 
+av::osg::LoadImage::LoadImage()
 {
   AV_FC_ADD_FIELD(Filename, "");
   AV_FC_ADD_FIELD(Image, 0);

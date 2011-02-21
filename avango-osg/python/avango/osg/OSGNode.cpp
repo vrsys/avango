@@ -37,6 +37,7 @@
 
 #include <osgDB/WriteFile>
 #include <osgUtil/Optimizer>
+#include <osgUtil/SmoothingVisitor>
 
 using namespace boost::python;
 using namespace av::python;
@@ -72,6 +73,12 @@ namespace {
     optimizer.optimize(node->getOsgNode());
   }
 
+  void RecalculateSmoothNormals(av::osg::Node * node)
+  {
+    osgUtil::SmoothingVisitor sv;
+    node->getOsgNode()->accept(sv);
+  }
+
 
 }
 
@@ -92,4 +99,5 @@ class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::no
 def("calc_bounding_box", CalcBoundingBox);
 def("write_node_file", WriteNodeFile);
 def("optimize_scene_graph", OptimizeSceneGraph);
+def("recalculate_smooth_normals",RecalculateSmoothNormals);
 }

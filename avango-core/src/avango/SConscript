@@ -43,7 +43,7 @@ for lib in Split('dl boost_thread boost_signals'):
     avango.build.add_library(avango_env, lib)
 if avango_env['DISTRIBUTION_SUPPORT']:
     avango.build.add_library(avango_env, 'avango-ensemble')
-    if avango['ZMQ_DISTRIBUTION_SUPPORT']:
+    if avango_env['ZMQ_DISTRIBUTION_SUPPORT']:
         avango_env.Append(LIBS=['zmq'])
 Export('avango_env')
 

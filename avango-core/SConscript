@@ -32,6 +32,7 @@ local_env['SUBST'] = {
     'AVANGO_DEBUG': int(local_env['DEBUG']),
     'AVANGO_LOG_LEVEL': local_env['LOG_LEVEL'],
     'AVANGO_DISTRIBUTION_SUPPORT': int(local_env['DISTRIBUTION_SUPPORT']),
+    'AVANGO_ZMQ_DISTRIBUTION_SUPPORT': int(local_env['ZMQ_DISTRIBUTION_SUPPORT']),
     'PKG_CONFIG_REQUIRES': '',
     'AVANGO_VERSION': '1.90.0',
     'AVANGO_VERSION_MAJOR': '1',

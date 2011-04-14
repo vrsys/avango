@@ -89,6 +89,7 @@ void init_Field(void)
     .def("get_index", &av::Field::getIndex)
     .def("get_name", &av::Field::getName, return_value_policy<copy_const_reference>())
     .def("get_type", get_type_name)
+    .def("dont_distribute", &av::Field::dontDistribute)
 
     .def("get_container", &av::Field::getContainer, return_internal_reference<>())
     .def("clone", &av::Field::clone, return_internal_reference<>())

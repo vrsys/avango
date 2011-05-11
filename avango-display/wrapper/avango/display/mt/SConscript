@@ -29,6 +29,10 @@ avango.build.Environment.add_search_path('avango-python')
 
 avango.build.add_library(local_env, 'avango-python')
 avango.build.add_library(local_env, 'avango-core')
+avango.build.add_library(local_env, 'boost_python')
+for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(local_env, lib)
+    
 
 #local_env['CPPPATH'] += [ Dir('../src/avango/devices/multitouch') ]
 #local_env['CPPPATH'] += [ Dir('../src/avango/devices/multitouch/oscpack') ]

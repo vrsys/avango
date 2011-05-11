@@ -102,11 +102,11 @@ namespace
 
     av::utils::MultiValueField<FromType> *fromMVField = dynamic_cast<av::utils::MultiValueField<FromType>*>(fromField);
     AV_ASSERT(fromMVField);
-    uint sz(fromMVField->getSize());
+    unsigned int sz(fromMVField->getSize());
     toMVField->resize(sz);
-    uint last_changed_ind = sz;
+    unsigned int last_changed_ind = sz;
 
-    for (uint i = 0; i < sz; i++)
+    for (unsigned int i = 0; i < sz; i++)
     {
       if (fromMVField->valueHasChanged(i))
       {

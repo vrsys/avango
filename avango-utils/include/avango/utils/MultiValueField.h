@@ -95,7 +95,7 @@ namespace av
        * Indicates if the value at position i was changed. Call it in fieldHasChanged()
        * of the field container using this field.
        */
-      virtual bool valueHasChanged(uint i) const
+      virtual bool valueHasChanged(unsigned int i) const
       {
         return mChangedValues.at(i);
       }
@@ -104,11 +104,11 @@ namespace av
        * Returns a vector of indices that point to changed values.
        * Call it in fieldHasChanged() of the field container using this field.
        */
-      virtual std::vector<uint> changedValueInds() const
+      virtual std::vector<unsigned int> changedValueInds() const
       {
-        std::vector<uint> inds;
+        std::vector<unsigned int> inds;
 
-        for (uint i = 0; i < mChangedValues.size(); i++)
+        for (unsigned int i = 0; i < mChangedValues.size(); i++)
           if (mChangedValues[i])
             inds.push_back(i);
 
@@ -129,9 +129,9 @@ namespace av
        * Sets some values of the multi field. The indices into the multi field should be
        * passed in v_inds. The new values should be passed in v.
        */
-      virtual void setSomeValues(const ContainerType& v, const std::vector<uint>& v_inds)
+      virtual void setSomeValues(const ContainerType& v, const std::vector<unsigned int>& v_inds)
       {
-        for (uint u = 0; u < v_inds.size(); u++)
+        for (unsigned int u = 0; u < v_inds.size(); u++)
           set1Value(v.at(u), v_inds[u], false);
 
         if (v_inds.size() > 0)
@@ -183,7 +183,7 @@ namespace av
        * The last set1Value within on frame should get true in order to issue the call of fieldChanged().
        * Or use the method triggerFieldChange().
        */
-      virtual void set1Value(const Value& v, uint i, bool trigger_field_change = true)
+      virtual void set1Value(const Value& v, unsigned int i, bool trigger_field_change = true)
       {
         set1Value(v, i, 0, trigger_field_change);
       }
@@ -191,7 +191,7 @@ namespace av
       /**
        * Returns value at position i.
        */
-      virtual const Value get1Value(uint i) const
+      virtual const Value get1Value(unsigned int i) const
       {
         return mValue.at(i);
       }
@@ -199,7 +199,7 @@ namespace av
       /**
        * Inserts one value before given position. Caller can decide if this should trigger a fieldChanged().
        */
-      virtual void insert1Value(const Value& v, uint before, bool trigger_field_change = true)
+      virtual void insert1Value(const Value& v, unsigned int before, bool trigger_field_change = true)
       {
         if (before > mValue.size())
           throw std::out_of_range("MultiValueField::insert1Value()");
@@ -207,14 +207,14 @@ namespace av
         mValue.insert(mValue.begin() + before, v);
         mChangedValues.insert(mChangedValues.begin() + before, true);
 
-        for (uint p = before + 1; p < mChangedValues.size(); p++)
+        for (unsigned int p = before + 1; p < mChangedValues.size(); p++)
           mChangedValues[p] = true;
 
         if (trigger_field_change)
           fieldChanged(false);
       }
 
-      virtual void erase1Value(uint pos, bool trigger_field_change = true)
+      virtual void erase1Value(unsigned int pos, bool trigger_field_change = true)
       {
         if (pos >= mValue.size())
           throw std::out_of_range("MultiValueField::erase1Value()");
@@ -222,7 +222,7 @@ namespace av
         mValue.erase(mValue.begin() + pos);
         mChangedValues.erase(mChangedValues.begin() + pos);
 
-        for (uint p = pos; p < mChangedValues.size(); p++)
+        for (unsigned int p = pos; p < mChangedValues.size(); p++)
           mChangedValues[p] = true;
 
         if (trigger_field_change)
@@ -242,11 +242,11 @@ namespace av
 
         if (f != mValue.end())
         {
-          uint pos = f - mValue.begin();
+          unsigned int pos = f - mValue.begin();
           mValue.erase(f);
           mChangedValues.erase(mChangedValues.begin() + pos);
 
-          for (uint p = pos; p < mChangedValues.size(); p++)
+          for (unsigned int p = pos; p < mChangedValues.size(); p++)
             mChangedValues[p] = true;
 
           fieldChanged(false);
@@ -264,11 +264,11 @@ namespace av
       }
 
       /**
-       * Help function for set1Value(const Value&, uint, bool). Needed in the public part since the
+       * Help function for set1Value(const Value&, unsigned int, bool). Needed in the public part since the
        * template specializations of pullValueImpl() use a non-member help function that needs to call it.
        * Should appear in the protected part.
        */
-      virtual void set1Value(const Value& v, uint i, Field* triggered_from, bool trigger_field_change = true)
+      virtual void set1Value(const Value& v, unsigned int i, Field* triggered_from, bool trigger_field_change = true)
       {
         mValue.at(i) = v;
         mChangedValues.at(i) = true;
@@ -289,7 +289,7 @@ namespace av
       /**
        * Would prefer to have this in the protected part. Needed by non-member help functions.
        */
-      virtual void resize(uint sz)
+      virtual void resize(unsigned int sz)
       {
         mValue.resize(sz);
         mChangedValues.resize(sz);
@@ -441,11 +441,11 @@ namespace av
 
       MultiValueField<Value> *fromMVField = dynamic_cast<MultiValueField<Value>*>(fromField);
 
-      uint sz = fromMVField->getSize();
+      unsigned int sz = fromMVField->getSize();
       resize(sz);
-      uint last_changed_ind = sz;
+      unsigned int last_changed_ind = sz;
 
-      for (uint i = 0; i < sz; i++)
+      for (unsigned int i = 0; i < sz; i++)
       {
         if (fromMVField->valueHasChanged(i))
         {

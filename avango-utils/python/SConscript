@@ -30,6 +30,9 @@ env.Append(LIBS=["avangoUtils"])
 avango.build.add_library(env, 'boost_python')
 avango.build.add_library(env, 'avango-core')
 avango.build.add_library(env, 'avango-osg')
+avango.build.add_library(env, 'avango-core')
+for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(env, lib)
 
 lib = env.SharedLibrary("_utils.cpp")
 

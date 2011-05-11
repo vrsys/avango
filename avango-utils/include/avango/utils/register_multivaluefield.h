@@ -119,11 +119,11 @@ namespace av
         }
 
         len = boost::python::extract<int>(inds.attr("__len__")());
-        std::vector<uint> inds_list(len);
+        std::vector<unsigned int> inds_list(len);
         for(int i = 0; i != len; ++i)
         {
           boost::python::object indx = inds.attr("__getitem__")(i);
-          inds_list[i] = boost::python::extract<uint>(indx);
+          inds_list[i] = boost::python::extract<unsigned int>(indx);
         }
 
         self.setSomeValues(value_list, inds_list);
@@ -136,7 +136,7 @@ namespace av
       using namespace av::python::detail;
 
       // this declaration is necessary to avoid ambiguities because of function overloading
-      void (Type::*set_1value_fptr)(const typename Type::ValueType&, uint, bool) = &Type::set1Value;
+      void (Type::*set_1value_fptr)(const typename Type::ValueType&, unsigned int, bool) = &Type::set1Value;
 
       boost::python::class_<Type, boost::python::bases<av::Field> >(name.c_str())
         .def("get_all_values", MultiValueField_get_all_values<Type>)

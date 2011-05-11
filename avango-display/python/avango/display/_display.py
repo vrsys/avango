@@ -32,8 +32,8 @@ import avango.utils
 import sys
 from math import *
 
-#The avango.daemon module is currently not available under windows
-if sys.platform != 'win32':
+#The avango.daemon module is currently not available under windows and mac
+if sys.platform != 'win32' and sys.platform != 'darwin':
    import avango.daemon
 
 class Display(object):

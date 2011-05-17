@@ -154,6 +154,8 @@ av::tools::PickSelector::pick()
                 }
               }
             }
+			else
+				break;
           }
         }
 

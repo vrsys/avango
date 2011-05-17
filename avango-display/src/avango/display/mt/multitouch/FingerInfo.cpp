@@ -21,7 +21,11 @@ av::Logger& logger(av::getLogger("av::devices::FingerInfo"));
 
 FingerInfo::FingerInfo(int id, Vec2 position) :
   m_iFingerId(id),
-  m_iHistorySize(0)
+  m_iHistorySize(0),
+  m_angle(0),
+  m_width(0),
+  m_height(0),
+  m_area(0)
   {
   // first position
   addPosition(position);
@@ -34,6 +38,18 @@ FingerInfo::getFingerId()
   return m_iFingerId;
 }
 
+float FingerInfo::getAngle() const { return m_angle; }
+void FingerInfo::setAngle(const float angle) { m_angle = angle; }
+
+float FingerInfo::getWidth() const { return m_width; }
+float FingerInfo::getHeight() const { return m_height; }
+float FingerInfo::getArea() const { return m_area; }
+void FingerInfo::setWidthHeightArea(const float width, const float height, const float area)
+{
+	m_width = width;
+	m_height = height;
+	m_area = area;
+}
 
 void
 FingerInfo::addPosition(Vec2 position)

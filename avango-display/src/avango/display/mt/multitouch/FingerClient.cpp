@@ -96,7 +96,9 @@ FingerClient::ProcessBundle(const osc::ReceivedBundle &bundle, const IpEndpointN
         const osc::ReceivedMessage &message = osc::ReceivedMessage(element);
         osc::ReceivedMessageArgumentStream args = message.ArgumentStream();
 
-        if (strcmp(message.AddressPattern(), "/tuio/2Dcur") == 0)
+        if (strcmp(message.AddressPattern(), "/tuio/2Dcur") == 0
+			|| strcmp(message.AddressPattern(), "/tuio/2Dobj") == 0
+			|| strcmp(message.AddressPattern(), "/tuio/2Dblb") == 0)
         {
           const char *cmd;
           args >> cmd;
@@ -145,7 +147,15 @@ FingerClient::ProcessBundle(const osc::ReceivedBundle &bundle, const IpEndpointN
 void
 FingerClient::ProcessMessage(const osc::ReceivedMessage &message, const IpEndpointName &remoteEndpoint)
 {
-  if (strcmp(message.AddressPattern(), "/tuio/2Dcur") == 0)
+	bool isBlob = false, isObject = false, isValid = true;
+	if(strcmp(message.AddressPattern(), "/tuio/2Dobj") == 0)
+		isObject = true;
+	else if(strcmp(message.AddressPattern(), "/tuio/2Dblb") == 0)
+		isBlob = true;
+	else if (strcmp(message.AddressPattern(), "/tuio/2Dcur") != 0)
+		isValid = false;
+
+  if(isValid)
   {
     osc::ReceivedMessageArgumentStream args = message.ArgumentStream();
 
@@ -154,10 +164,16 @@ FingerClient::ProcessMessage(const osc::ReceivedMessage &message, const IpEndpoi
 
     if (strcmp(cmd, "set") == 0)
     {
-      osc::int32 s_id;
-      float xpos, ypos, xspeed, yspeed, maccel;
+	  static osc::int32 s_id, i_id;
+      static float xpos, ypos, xspeed, yspeed, maccel;
+	  static float angle, width, height, area, rotSpeed, rotAccel;
 
-      args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> maccel >> osc::EndMessage;
+	  if(isBlob)
+		  args >> s_id >> xpos >> ypos >> angle >> width >> height >> area >> xspeed >> yspeed >> rotSpeed >> maccel >> rotAccel >> osc::EndMessage;
+	  else if(isObject)
+		  args >> s_id >> i_id >> xpos >> ypos >> angle >> xspeed >> yspeed >> rotSpeed >> maccel >> rotAccel >> osc::EndMessage;
+	  else
+		  args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> maccel >> osc::EndMessage;
 
       std::map<osc::int32, FingerInfo*>::iterator iter = cursor_id_map.find(s_id);
       if (iter == cursor_id_map.end())
@@ -170,6 +186,13 @@ FingerClient::ProcessMessage(const osc::ReceivedMessage &message, const IpEndpoi
             boost::mutex::scoped_lock lock(mutex);
             fingerlistener_secure = fingerlistener;
             fingerinfo->setPositionHistorySize(historysize);
+			if(isBlob)
+			{
+				fingerinfo->setAngle(angle);
+				fingerinfo->setWidthHeightArea(width, height, area);
+			}
+			else if(isObject)
+				fingerinfo->setAngle(angle);
           }
           cursor_id_map[s_id] = fingerinfo;
           alive_ids.insert(s_id);
@@ -188,6 +211,13 @@ FingerClient::ProcessMessage(const osc::ReceivedMessage &message, const IpEndpoi
             boost::mutex::scoped_lock lock(mutex);
             fingerlistener_secure = fingerlistener;
             fingerinfo->setPositionHistorySize(historysize);
+			if(isBlob)
+			{
+				fingerinfo->setAngle(angle);
+				fingerinfo->setWidthHeightArea(width, height, area);
+			}
+			else if(isObject)
+				fingerinfo->setAngle(angle);
           }
           fingerinfo->addPosition(pos);
           if (fingerlistener_secure)

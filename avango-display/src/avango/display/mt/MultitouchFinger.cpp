@@ -37,11 +37,15 @@ AV_FC_DEFINE(av::display::mt::MultitouchFinger);
 AV_FIELD_DEFINE(av::display::mt::SFMultitouchFinger);
 AV_FIELD_DEFINE(av::display::mt::MFMultitouchFinger);
 
-av::display::mt::MultitouchFinger::MultitouchFinger(int _id, ::osg::Vec2 _position, float _creationTime)
+av::display::mt::MultitouchFinger::MultitouchFinger(int _id, ::osg::Vec2 _position, float _creationTime, float _angle, float _width, float _height, float _area)
 {
   AV_FC_ADD_FIELD(Identifier, _id);
   AV_FC_ADD_FIELD(Position, _position);
   AV_FC_ADD_FIELD(CreationTime, _creationTime);
+  AV_FC_ADD_FIELD(Angle, _angle);
+  AV_FC_ADD_FIELD(Width, _width);
+  AV_FC_ADD_FIELD(Height, _height);
+  AV_FC_ADD_FIELD(Area, _area);
 }
 
 av::display::mt::MultitouchFinger::~MultitouchFinger()

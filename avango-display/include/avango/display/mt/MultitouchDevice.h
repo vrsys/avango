@@ -77,6 +77,7 @@ namespace av
           bool do_remove;
           int finger_id;
           Vec2 position;
+		  float angle, width, height, area;
           Link<MultitouchFinger> finger;
           FingerAction(int _finger_id = -1) : do_add(false), do_move(false), do_remove(false), finger_id(_finger_id)
           {

@@ -109,18 +109,26 @@ av::display::mt::MultitouchDevice::evaluate()
     FingerAction &action = iter->second;
     if (action.do_add)
     {
-      action.finger = new MultitouchFinger(action.finger_id, ::osg::Vec2(action.position.x, action.position.y), time);
+      action.finger = new MultitouchFinger(action.finger_id, ::osg::Vec2(action.position.x, action.position.y), time, action.angle, action.width, action.height, action.area);
       Added.add1Value(action.finger);
       action.do_add = false;
     }
     else if (action.do_move)
     {
       action.finger->Position.setValue(::osg::Vec2(action.position.x, action.position.y));
+	  action.finger->Angle.setValue(action.angle);
+	  action.finger->Width.setValue(action.width);
+	  action.finger->Height.setValue(action.height);
+	  action.finger->Area.setValue(action.area);
       action.do_move = false;
     }
     else if (action.do_remove)
     {
       action.finger->Position.setValue(::osg::Vec2(action.position.x, action.position.y));
+	  action.finger->Angle.setValue(action.angle);
+	  action.finger->Width.setValue(action.width);
+	  action.finger->Height.setValue(action.height);
+	  action.finger->Area.setValue(action.area);
       Available.remove1Value(action.finger);
       Removed.add1Value(action.finger);
       mFingerMap.erase(iter++);
@@ -145,6 +153,10 @@ av::display::mt::MultitouchDevice::fingerAdded(FingerInfo *pFingerInfo)
     iter = mFingerMap.insert(FingerMap::value_type(finger_id, FingerAction(finger_id))).first;
     FingerAction &action = iter->second;
     action.position = Filtering.getValue() ? pFingerInfo->getFilteredPosition() : pFingerInfo->getPosition();
+	action.angle = pFingerInfo->getAngle();
+	action.width = pFingerInfo->getWidth();
+	action.height = pFingerInfo->getHeight();
+	action.area = pFingerInfo->getArea();
     action.do_add = true;
   }
 }
@@ -159,6 +171,10 @@ av::display::mt::MultitouchDevice::fingerMoved(FingerInfo *pFingerInfo)
   {
     FingerAction &action = iter->second;
     action.position = Filtering.getValue() ? pFingerInfo->getFilteredPosition() : pFingerInfo->getPosition();
+	action.angle = pFingerInfo->getAngle();
+	action.width = pFingerInfo->getWidth();
+	action.height = pFingerInfo->getHeight();
+	action.area = pFingerInfo->getArea();
     action.do_move = true;
   }
 }
@@ -179,6 +195,10 @@ av::display::mt::MultitouchDevice::fingerRemoved(FingerInfo *pFingerInfo)
     {
       // if a finger was added officially, it has to go through all the states correctly, so tag them here for remove
       action.position = Filtering.getValue() ? pFingerInfo->getFilteredPosition() : pFingerInfo->getPosition();
+	  action.angle = pFingerInfo->getAngle();
+	  action.width = pFingerInfo->getWidth();
+	  action.height = pFingerInfo->getHeight();
+	  action.area = pFingerInfo->getArea();
       action.do_remove = true;
     }
   }

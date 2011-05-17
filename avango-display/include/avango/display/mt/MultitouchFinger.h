@@ -43,11 +43,12 @@ namespace av
         AV_FC_DECLARE();
 
       public:
-        MultitouchFinger(int _id = -1, OsgVec2 _position = OsgVec2(), float _creationTime= 0.0);
+        MultitouchFinger(int _id = -1, OsgVec2 _position = OsgVec2(), float _creationTime= 0.0, float _angle = 0.0, float _width = 0.0, float _height = 0.0, float _area = 0.0);
         virtual ~MultitouchFinger();
 
         av::SFInt Identifier;
         av::osg::SFVec2 Position;
+		av::SFFloat Angle, Width, Height, Area;
         av::SFFloat CreationTime;
 
       };

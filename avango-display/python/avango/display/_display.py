@@ -98,6 +98,12 @@ class Display(object):
             self._inspector.Children.connect_from(converter.Output)
 
         return display_view
+    
+    def get_viewer(self):
+        return self._composite_viewer
+    
+    def get_view(self, subdisplay):
+        return None
 
     def get_camera(self, subdisplay):
         return None

@@ -37,6 +37,7 @@ class Monitor(avango.display.Display):
         self._subdisplay_window_events = {}
         self._subdisplay_keyboard = {}
         self._subdisplay_camera = {}
+        self._subdisplay_view = {}
 
         self._screen_identifier = os.environ.get('DISPLAY', '')
         
@@ -98,7 +99,13 @@ class Monitor(avango.display.Display):
         self._subdisplay_keyboard[subdisplay].connect(self._subdisplay_window_events[subdisplay])
         
         #configure trackball
-        display_view.EnableTrackball.value = self._enable_trackball
+#        display_view.EnableTrackball.value = self._enable_trackball
+        toggle_field = avango.utils.make_key_toggle_trigger_alternate(
+                        avango.utils.make_bool2_and(self._subdisplay_keyboard[subdisplay].KeyShift,
+                                                    self._subdisplay_keyboard[subdisplay].KeyF1),
+                       self._enable_trackball)
+        display_view.EnableTrackball.connect_from(toggle_field)
+        
         time_sensor = avango.nodes.TimeSensor()
         self.keep_alive(time_sensor)
         trackball = avango.utils.nodes.Trackball()
@@ -121,7 +128,7 @@ class Monitor(avango.display.Display):
         self.keep_alive(trackball)
         #TODO Enable the osg auto near/far plane computation
         display_view.Near.value = 0.1 
-        display_view.Far.value = 100000
+        display_view.Far.value = 10000
         
         #add some default actions
         #show window decoration (Ctrl+Enter)
@@ -163,11 +170,18 @@ class Monitor(avango.display.Display):
             self._subdisplay_window[subdisplay].DragEvent.connect_from(window_event.DragEvent)
             self._subdisplay_window[subdisplay].MoveEvent.connect_from(window_event.MoveEvent)
             self._subdisplay_camera[subdisplay] = camera
+            self._subdisplay_view[subdisplay] = view
+            
             
             
     def get_camera(self, subdisplay):
         if self._subdisplay_camera.has_key(subdisplay):
             return self._subdisplay_camera[subdisplay]
+        return None
+    
+    def get_view(self, subdisplay):
+        if self._subdisplay_view.has_key(subdisplay):
+            return self._subdisplay_view[subdisplay]
         return None
         
 

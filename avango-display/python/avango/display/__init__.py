@@ -113,6 +113,20 @@ def get_camera(subdisplay):
     """
     return _selected_display.get_camera(subdisplay)
 
+def get_viewer():
+    """
+    Get the av::osg::viewer of the used display. Currently, all displays use a
+    CompositeViewer
+    """
+    return _selected_display.get_viewer()
+
+def get_view(subdisplay):
+    """
+    Get the osg.viewer.View object of the selected subdisplay. If no view for the
+    given subdisplay is found, None is returned
+    """
+    return _selected_display.get_view(subdisplay)
+
 def make_user(user=0, interface="", subdisplay=""):
     """Create a field container that represents the user position.
 

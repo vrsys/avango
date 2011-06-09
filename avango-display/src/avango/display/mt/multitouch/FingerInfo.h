@@ -2,6 +2,7 @@
 #define FINGERINFO_H
 
 #include <deque>
+#include <set>
 
 class FingerClient;
 
@@ -22,6 +23,8 @@ public:
   FingerInfo(int id, Vec2 position);
 
   int getFingerId();
+  int getUserId();
+  void setUserId(const int id);
 
   void addPosition(Vec2 position);
   Vec2 getPosition(int index = 0);
@@ -40,11 +43,26 @@ public:
 private:
   typedef std::deque<Vec2> PositionHistory;
 
-  int m_iFingerId;
+  int m_iFingerId, m_iUserId;
   float m_angle, m_width, m_height, m_area;
 
   unsigned int m_iHistorySize;
   PositionHistory m_PositionHistory;
+
+  friend class FingerClient;
+};
+
+
+class UserInfo
+{
+public:
+  UserInfo(int id) : m_iUserId(id) {}
+  int getUserId() { return m_iUserId; }
+  std::set< int > &FingerIds() { return m_FingerIds; }
+
+private:
+  int m_iUserId;
+  std::set< int > m_FingerIds;
 
   friend class FingerClient;
 };

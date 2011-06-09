@@ -42,7 +42,7 @@ namespace av
   {
     namespace mt
     {
-      class AV_DISPLAY_MT_DLL MultitouchDevice : public FieldContainer, public FingerListener
+      class AV_DISPLAY_MT_DLL MultitouchDevice : public FieldContainer, public FingerListener, public UserListener
       {
         AV_FC_DECLARE();
 
@@ -55,11 +55,17 @@ namespace av
         MFMultitouchFinger Available;
         MFMultitouchFinger Removed;
 
+		MFMultitouchUser AddedUsers;
+        MFMultitouchUser AvailableUsers;
+        MFMultitouchUser RemovedUsers;
+
         SFFloat TimeIn;
 
         SFBool Filtering;
         SFInt FilterSize;
 
+		void handleFingers();
+		void handleUsers();
         /* virtual */ void evaluate();
 
         // FingerListener interface
@@ -67,7 +73,14 @@ namespace av
         void fingerMoved(FingerInfo *pFingerInfo);
         void fingerRemoved(FingerInfo *pFingerInfo);
 
+		// FingerListener interface
+        void userAdded(UserInfo *pUserInfo);
+        void userMoved(UserInfo *pUserInfo);
+        void userRemoved(UserInfo *pUserInfo);
+
       private:
+
+		void processMessages(std::queue< std::pair< FingerClient::MyMessage, int > > &messages);
 
         FingerClient *mFingerClient;
         struct FingerAction
@@ -75,17 +88,32 @@ namespace av
           bool do_add;
           bool do_move;
           bool do_remove;
-          int finger_id;
+          int finger_id, user_id;
           Vec2 position;
 		  float angle, width, height, area;
           Link<MultitouchFinger> finger;
-          FingerAction(int _finger_id = -1) : do_add(false), do_move(false), do_remove(false), finger_id(_finger_id)
+          FingerAction(int _finger_id = -1) : do_add(false), do_move(false), do_remove(false), finger_id(_finger_id), user_id(-1)
+          {
+          }
+        };
+		struct UserAction
+        {
+          bool do_add;
+          bool do_move;
+          bool do_remove;
+          int user_id;
+          Link<MultitouchUser> user;
+          UserAction(int _user_id = -1) : do_add(false), do_move(false), do_remove(false), user_id(_user_id)
           {
           }
         };
         typedef std::map<int, FingerAction> FingerMap;
+		typedef std::map<int, UserAction> UserMap;
         FingerMap mFingerMap;
+		UserMap mUserMap;
         boost::mutex mMutex;
+		int mOriginalPort, mReceivedPort;
+		double mReceivedPortTime;
       };
     }
   }

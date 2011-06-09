@@ -38,6 +38,17 @@ FingerInfo::getFingerId()
   return m_iFingerId;
 }
 
+int
+FingerInfo::getUserId()
+{
+  return m_iUserId;
+}
+void
+FingerInfo::setUserId(const int id)
+{
+  m_iUserId = id;
+}
+
 float FingerInfo::getAngle() const { return m_angle; }
 void FingerInfo::setAngle(const float angle) { m_angle = angle; }
 

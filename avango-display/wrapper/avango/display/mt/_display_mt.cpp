@@ -49,6 +49,7 @@ BOOST_PYTHON_MODULE(_mt)
   // initialize Avango type, if necessary
   av::display::mt::MultitouchDevice::initClass();
   av::display::mt::MultitouchFinger::initClass();
+  av::display::mt::MultitouchUser::initClass();
 
   // define python bindings here
   class_<av::display::mt::MultitouchDevice, av::Link<av::display::mt::MultitouchDevice>, bases<av::FieldContainer>, boost::noncopyable >("MultitouchDevice",
@@ -57,6 +58,12 @@ BOOST_PYTHON_MODULE(_mt)
   class_<av::display::mt::MultitouchFinger, av::Link<av::display::mt::MultitouchFinger>, bases<av::FieldContainer>, boost::noncopyable >("MultitouchFinger",
           "Docstring with explanations what this class can be used for.");
 
+  class_<av::display::mt::MultitouchUser, av::Link<av::display::mt::MultitouchUser>, bases<av::FieldContainer>, boost::noncopyable >("MultitouchUser",
+          "Docstring with explanations what this class can be used for.");
+
   register_field<av::display::mt::SFMultitouchFinger>("SFMultitouchFinger");
   register_multifield<av::display::mt::MFMultitouchFinger>("MFMultitouchFinger");
+
+  register_field<av::display::mt::SFMultitouchUser>("SFMultitouchUser");
+  register_multifield<av::display::mt::MFMultitouchUser>("MFMultitouchUser");
 }

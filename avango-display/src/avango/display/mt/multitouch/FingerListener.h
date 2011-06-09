@@ -14,5 +14,14 @@ public:
   virtual void fingerRemoved(FingerInfo *pFingerInfo) = 0;
 };
 
+class UserListener
+{
+public:
+  virtual ~UserListener(){};
+  virtual void userAdded(UserInfo *pUserInfo) = 0;
+  virtual void userMoved(UserInfo *pUserInfo) = 0;
+  virtual void userRemoved(UserInfo *pUserInfo) = 0;
+};
+
 
 #endif //_FINGERLISTENER_H

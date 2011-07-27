@@ -28,9 +28,22 @@
 
 #include <map>
 #include <boost/shared_ptr.hpp>
-#include <boost/thread/thread.hpp>
 #include <avango/Base.h>
 #include <avango/daemon/Station.h>
+
+#if BOOST_VERSION > 104000
+#include <boost/thread.hpp>
+namespace av
+{
+typedef ::boost::thread Thread;
+}
+#else
+#include <boost/thread/thread.hpp>
+namespace av
+{
+  typedef ::boost::thread Thread;
+}
+#endif
 
 /**
  * \file
@@ -161,7 +174,7 @@ namespace av
 
       const std::string mEmptyFeature;
 
-      ::boost::shared_ptr< ::boost::thread::thread> mThread;
+      ::boost::shared_ptr< av::Thread > mThread;
       bool mRunning;
     };
   }

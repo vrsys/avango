@@ -68,7 +68,7 @@ av::daemon::Device::startUp()
 
   startDevice();
   mKeepRunning = true;
-  mThread.reset(new boost::thread::thread(boost::bind(&av::daemon::Device::threadFunction, this)));
+  mThread.reset(new Thread(boost::bind(&av::daemon::Device::threadFunction, this)));
   mRunning = true;
   return true;
 }

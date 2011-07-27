@@ -36,6 +36,13 @@
 
 #include "FingerClient.h"
 
+#ifdef __linux__
+#include <sys/time.h>
+#endif
+
+
+
+
 namespace av
 {
   namespace display
@@ -81,6 +88,22 @@ namespace av
       private:
 
 		void processMessages(std::queue< std::pair< FingerClient::MyMessage, int > > &messages);
+
+#ifdef _WIN32
+		inline long getMilliseconds() const{
+		  timeGetTime();
+    };
+#else
+		inline long getMilliseconds() const{
+      struct timeval start;
+      long mtime, seconds, useconds;
+      gettimeofday(&start, NULL);
+      seconds  = start.tv_sec;
+      useconds = start.tv_usec;
+      mtime = ((seconds) * 1000 + useconds/1000.0) + 0.5;
+      return mtime;
+    };
+#endif
 
         FingerClient *mFingerClient;
         struct FingerAction

@@ -24,6 +24,7 @@
 \************************************************************************/
 
 #include <iostream>
+#include <sys/time.h>
 
 #include <avango/Logger.h>
 #include <avango/display/mt/MultitouchDevice.h>
@@ -38,7 +39,7 @@ av::Logger& logger(av::getLogger("av::display::mt::MultitouchDevice"));
 
 AV_FC_DEFINE(av::display::mt::MultitouchDevice);
 
-av::display::mt::MultitouchDevice::MultitouchDevice() : mOriginalPort(3333), mReceivedPort(mOriginalPort), mReceivedPortTime(timeGetTime())
+av::display::mt::MultitouchDevice::MultitouchDevice() : mOriginalPort(3333), mReceivedPort(mOriginalPort)
 {
   AV_FC_ADD_FIELD(Added, MFMultitouchFinger::ContainerType());
   AV_FC_ADD_FIELD(Available, MFMultitouchFinger::ContainerType());
@@ -52,10 +53,12 @@ av::display::mt::MultitouchDevice::MultitouchDevice() : mOriginalPort(3333), mRe
   if (mFingerClient)
   {
     mFingerClient->registerFingerListener(this);
-	mFingerClient->registerUserListener(this);
+    mFingerClient->registerUserListener(this);
 
     alwaysEvaluate(true);
   }
+
+  mReceivedPortTime = getMilliseconds();
 }
 
 av::display::mt::MultitouchDevice::~MultitouchDevice()
@@ -85,7 +88,8 @@ av::display::mt::MultitouchDevice::processMessages(std::queue< std::pair< Finger
 		{
 		case FingerClient::MYMESS_SET_PORT:
 			mReceivedPort = message.second;
-			mReceivedPortTime = timeGetTime();
+			//mReceivedPortTime = timeGetTime();
+			mReceivedPortTime = getMilliseconds();
 		    break;
 		default:
 			//todo: messages pushen
@@ -218,8 +222,10 @@ av::display::mt::MultitouchDevice::evaluate()
 
   processMessages(mFingerClient->getMessages());
 
-  if(mFingerClient->getPort() != mOriginalPort && (timeGetTime() - mReceivedPortTime) > 500.0)
-	mReceivedPort = mOriginalPort;
+//  if(mFingerClient->getPort() != mOriginalPort && (timeGetTime() - mReceivedPortTime) > 500.0) {
+  if(mFingerClient->getPort() != mOriginalPort && (getMilliseconds() - mReceivedPortTime) > 500.0) {
+    mReceivedPort = mOriginalPort;
+  }
 
   if(mReceivedPort != mFingerClient->getPort())
   {
@@ -231,7 +237,7 @@ av::display::mt::MultitouchDevice::evaluate()
 		mFingerClient->registerFingerListener(this);
 		mFingerClient->registerUserListener(this);
 	  }
-  } 
+  }
 
   handleFingers();
   handleUsers();

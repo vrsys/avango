@@ -26,7 +26,7 @@ import avango.osg
 import avango.display
 import avango.utils
 import os
-    
+
 
 class Monitor(avango.display.Display):
 
@@ -76,7 +76,6 @@ class Monitor(avango.display.Display):
             
             window_translation = avango.osg.make_trans_mat(0, 1.7, -0.6)
             current_user = 0
-            
         
             eye_offset = 0.0
             if window.StereoMode.value != avango.osg.viewer.stereo_mode.STEREO_MODE_NONE:
@@ -172,8 +171,6 @@ class Monitor(avango.display.Display):
             self._subdisplay_camera[subdisplay] = camera
             self._subdisplay_view[subdisplay] = view
             
-            
-            
     def get_camera(self, subdisplay):
         if self._subdisplay_camera.has_key(subdisplay):
             return self._subdisplay_camera[subdisplay]
@@ -183,8 +180,11 @@ class Monitor(avango.display.Display):
         if self._subdisplay_view.has_key(subdisplay):
             return self._subdisplay_view[subdisplay]
         return None
-        
-
+    
+    def get_window(self, subdisplay):
+        if self._subdisplay_window.has_key(subdisplay):
+            return self._subdisplay_window[subdisplay]
+        return None
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         if subdisplay not in self._subdisplay_camera:

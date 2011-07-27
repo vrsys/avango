@@ -44,7 +44,7 @@ public:
   void ProcessBundle(const osc::ReceivedBundle &bundle, const IpEndpointName &remoteEndpoint);
   void ProcessMessage(const osc::ReceivedMessage &message, const IpEndpointName &remoteEndpoint);
 
-  int FingerClient::getPort() const { return mPort; }
+  int getPort() const { return mPort; }
   std::queue< std::pair< MyMessage, int > > &getMessages() { return mMessages; }
 
 private:

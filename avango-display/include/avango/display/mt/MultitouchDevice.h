@@ -91,7 +91,7 @@ namespace av
 
 #ifdef _WIN32
 		inline long getMilliseconds() const{
-		  timeGetTime();
+		  return timeGetTime();
     };
 #else
 		inline long getMilliseconds() const{

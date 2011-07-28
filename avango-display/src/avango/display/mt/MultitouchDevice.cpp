@@ -24,7 +24,6 @@
 \************************************************************************/
 
 #include <iostream>
-#include <sys/time.h>
 
 #include <avango/Logger.h>
 #include <avango/display/mt/MultitouchDevice.h>

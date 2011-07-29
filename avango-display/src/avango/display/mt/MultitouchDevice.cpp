@@ -43,6 +43,11 @@ av::display::mt::MultitouchDevice::MultitouchDevice() : mOriginalPort(3333), mRe
   AV_FC_ADD_FIELD(Added, MFMultitouchFinger::ContainerType());
   AV_FC_ADD_FIELD(Available, MFMultitouchFinger::ContainerType());
   AV_FC_ADD_FIELD(Removed, MFMultitouchFinger::ContainerType());
+
+  AV_FC_ADD_FIELD(AddedUsers, MFMultitouchUser::ContainerType());
+  AV_FC_ADD_FIELD(AvailableUsers, MFMultitouchUser::ContainerType());
+  AV_FC_ADD_FIELD(RemovedUsers, MFMultitouchUser::ContainerType());
+
   AV_FC_ADD_FIELD(Filtering, false);
   AV_FC_ADD_FIELD(FilterSize, 0);
   AV_FC_ADD_FIELD(TimeIn, 0.0);

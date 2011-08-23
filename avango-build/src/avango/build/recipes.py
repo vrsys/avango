@@ -50,6 +50,7 @@ def _setup_default():
     _config_store.set('boost_signals', BoostConfig('boost_signals'))
     _config_store.set('boost_filesystem', BoostConfig('boost_filesystem'))
     _config_store.set('boost_regex', BoostConfig('boost_regex'))
+    _config_store.set('boost_date_time', BoostConfig('boost_date_time'))
     _config_store.set('boost_python', BoostConfig('boost_python', dependencies = ['python']))
 
     _config_store.set('avango-core', PKGConfig('avango-core'))

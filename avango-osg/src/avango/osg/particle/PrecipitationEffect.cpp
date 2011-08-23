@@ -24,6 +24,7 @@
 \************************************************************************/
 
 #include <osg/Fog>
+#include <osg/Version>
 #include <avango/osg/particle/PrecipitationEffect.h>
 #include <avango/osg/ObjectLink.h>
 
@@ -241,7 +242,11 @@ av::osg::particle::PrecipitationEffect::setFarTransitionCB(const av::SFFloat::Se
 /* virtual */ void
 av::osg::particle::PrecipitationEffect::getMaximumParticleDensityCB(const av::SFFloat::GetValueEvent& event)
 {
+#if OSG_VERSION_MAJOR == 3
+  *(event.getValuePtr()) = mOsgPrecipitationEffect->getMaximumParticleDensity();
+#elif OSG_VERSION_MAJOR == 2
   *(event.getValuePtr()) = mOsgPrecipitationEffect->setMaximumParticleDensity();
+#endif
 }
 
 /* virtual */ void

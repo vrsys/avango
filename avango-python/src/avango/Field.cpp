@@ -62,6 +62,17 @@ namespace
     self->connectFrom(other, false);
   }
 
+  void print_auditors(const av::Field* self)
+  {
+    std::cout << "print_auditors: "<< self->getNumberOfConnectedFields()<< std::endl;
+    const std::set< av::Field* > auditors = self->getAuditors();
+    std::set< av::Field* >::const_iterator iter;
+    for(iter=auditors.begin();iter!=auditors.end();++iter)
+    {
+      std::cout << self->getName() << std::endl;
+    }
+  }
+
   list
   FieldGetConnectedFields(av::Field* self)
   {
@@ -111,6 +122,7 @@ void init_Field(void)
     .def("write", &av::Field::write)
     .def("__eq__", Field_equals)
     .def("__hash__", Field_hash)
+    .def("print_auditors", print_auditors)
     ;
 
   register_field<av::SFBool>("SFBool");

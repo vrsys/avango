@@ -21,46 +21,48 @@
 #                                                                        #
 ##########################################################################
 
-import avango.build
-import glob
+import avango.script
+from avango.script import field_has_changed
 
-env = avango.build.PythonEnvironment()
-env.Append(LIBS=["avangoUtils"])
+import avango.osg
+import avango.utils
 
-avango.build.add_library(env, 'boost_python')
-avango.build.add_library(env, 'avango-core')
-avango.build.add_library(env, 'avango-osg')
-avango.build.add_library(env, 'avango-core')
-avango.build.add_library(env, 'avango-osgviewer')
-
-lib = env.SharedLibrary("_utils.cpp")
-
-Alias('utils', lib)
-
-avango_utils_python_files = Split("""
-    __init__.py
-    _nodes.py
-    _bool_script_merge.py
-    _bool_scripts.py
-    _converter.py
-    _MFMerger.py
-    _property_modifier.py
-    _task_scheduler.py
-    _triggers.py
-    _normalization.py
-    _field_dump.py
-    _interconnect.py
-    _range_checks.py
-    _node_scalers.py
-    _interpolators.py
-    _interpolators.py
-    _node_optimizer.py
-    _screen_capture.py
-    """)
-
-Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))
-
-test_package_dir = '../test_package/'
-avango.build.Environment.prepend_python_path(Dir(test_package_dir).abspath)
-Install(test_package_dir+'avango/utils', lib)
-avango.build.install_python(test_package_dir+'avango/utils', avango_utils_python_files)
+class ScreenCapture(avango.script.Script):
+    
+    View = avango.SFObject()
+    NumFrames = avango.SFInt()
+    Start = avango.SFBool()
+    
+    OutputFolder = avango.SFString()
+    BaseFilename = avango.SFString()
+    
+    def __init__(self):
+        self.super(ScreenCapture).__init__()
+        
+        self.NumFrames.value = 1
+        self.OutputFolder.value = "/tmp"
+        self.BaseFilename.value = "screen_capture"
+        
+        self._running = False
+        self._num_captured_frames = 0
+        
+    @field_has_changed(Start)
+    def start_changed(self):
+        if not self._running and self.Start.value and self.View.value:
+            self._start_capturing()
+    
+    def _start_capturing(self):
+        avango.utils.add_screen_capture_handler(self.View.value, self.OutputFolder.value, self.BaseFilename.value, self.NumFrames.value)
+        self.always_evaluate(True)
+        
+    def _stop_capturing(self):
+        self._num_captured_frames = 0
+        self._running = False
+        self.always_evaluate(False)
+    
+    def evaluate(self):
+        
+        if self._num_captured_frames == self.NumFrames.value:
+            self._stop_capturing()
+        self._num_captured_frames += 1    
+            

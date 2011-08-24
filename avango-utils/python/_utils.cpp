@@ -25,8 +25,11 @@
 
 #include <avango/Link.h>
 #include <avango/ContainerPool.h>
+#include <avango/osg/viewer/View.h>
 
 #include <osg/Matrix>
+#include <osgViewer/View>
+#include <osgViewer/ViewerEventHandlers>
 
 #include "../include/avango/utils/Init.h"
 #include "../include/avango/utils/Bool2Or.h"
@@ -159,6 +162,16 @@ void init_MultiValueFields()
   av::python::register_multivaluefield<av::utils::MVFQuat>("MVFQuat");
 }
 
+
+void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
+  ::osgViewer::View * view = avView->getOsgView();
+  osgViewer::ScreenCaptureHandler* scnsvr = new osgViewer::ScreenCaptureHandler(new osgViewer::ScreenCaptureHandler::WriteToFile(folder+"/"+filename,"png"));
+  scnsvr->setFramesToCapture(numFrames);
+  scnsvr->startCapture();
+  view->addEventHandler(scnsvr);
+}
+
+
 BOOST_PYTHON_MODULE(_utils)
 {
   av::utils::Init::initClass();
@@ -173,6 +186,8 @@ BOOST_PYTHON_MODULE(_utils)
   def("calc_hpr", CalcHpr);
 
   def("print_registered_field_containers",print_actual_registered_field_containers);
+
+  def("add_screen_capture_handler",addScreenCaptureHandler);
 
   av::utils::initMultiValueFields();
   av::utils::initMultiValueOSGFields();

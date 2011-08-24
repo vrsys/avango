@@ -27,6 +27,9 @@ env = avango.build.Environment()
 avango.build.add_library(env, 'avango-core')
 avango.build.add_library(env, 'avango-osg')
 
+for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(env, lib)
+
 env.Append(CPPDEFINES='AV_UTILS_LIBRARY')
 
 sources = Split('''

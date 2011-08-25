@@ -30,6 +30,7 @@
 #include <osg/Matrix>
 #include <osgViewer/View>
 #include <osgViewer/ViewerEventHandlers>
+#include <osg/Version>
 
 #include "../include/avango/utils/Init.h"
 #include "../include/avango/utils/Bool2Or.h"
@@ -163,6 +164,7 @@ void init_MultiValueFields()
 }
 
 
+#if OSG_VERSION_MAJOR == 3
 void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
   ::osgViewer::View * view = avView->getOsgView();
   osgViewer::ScreenCaptureHandler* scnsvr = new osgViewer::ScreenCaptureHandler(new osgViewer::ScreenCaptureHandler::WriteToFile(folder+"/"+filename,"png"));
@@ -170,6 +172,13 @@ void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder,
   scnsvr->startCapture();
   view->addEventHandler(scnsvr);
 }
+#elif OSG_VERSION_MAJOR == 2
+void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
+  std::cerr << "addScreenCaptureHandler::ERROR Screen capture functionality is currently only supported with osg3.x" << std::endl;
+}
+#endif
+
+
 
 
 BOOST_PYTHON_MODULE(_utils)

@@ -41,6 +41,7 @@ def _setup_default():
         openal
         vrpn
         CGAL
+        gml
         """
 
     for lib in _plain_libs.split():

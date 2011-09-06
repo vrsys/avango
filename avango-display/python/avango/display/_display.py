@@ -139,6 +139,9 @@ class Display(object):
 
     def run(self):
         self._composite_viewer.run()
+        
+    def done(self):
+        self._composite_viewer.done()
 
     def keep_alive(self, value):
         self._keep_alive.append(value)

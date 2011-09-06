@@ -276,9 +276,11 @@ def make_device(device, interface=""):
 
 def run():
     "Run the AVANGO evaluation loop."
-
     _selected_display.run()
 
+def done():
+    "Stop the AVANGO evaluation loop."
+    _selected_display.done()
 
 _search_path = []
 

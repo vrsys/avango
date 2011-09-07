@@ -73,7 +73,9 @@ class QTMainWindow(QtGui.QMainWindow):
         self._create_widgets()
         
         self.setWindowTitle(self.tr("AVANGO FieldContainers"))
+        #set window size and position
         self.resize(500, 500)
+        self.move(604,0)
         
     def _create_widgets(self):
         widget = QtGui.QWidget() 
@@ -128,8 +130,14 @@ class QTApplicationConnector(avango.script.Script):
         
 
 argv = avango.display.init(sys.argv)
-view = avango.display.make_view()
+view = avango.display.make_view("")
 view.EnableTrackball.value = True
+#set the window size and position
+window = avango.display.get_window("")
+window.WantedWidth.value = 500
+window.WantedHeight.value = 500
+window.WantedPositionX.value = 100
+window.WantedPositionY.value = 0
 
 root = avango.osg.nodes.Group(Name="RootNode")
 view.Root.value = root

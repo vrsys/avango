@@ -107,6 +107,9 @@ class Display(object):
 
     def get_camera(self, subdisplay):
         return None
+    
+    def get_window(self, subdisplay):
+        return None
 
     def make_device(self, device, interface):
         return None

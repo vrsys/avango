@@ -127,6 +127,13 @@ def get_view(subdisplay):
     """
     return _selected_display.get_view(subdisplay)
 
+def get_window(subdisplay):
+    """
+    Get the osg.viewer.GraphicsWindow object of the selected subdisplay. If no window for the
+    given subdisplay is found, None is returned
+    """
+    return _selected_display.get_window(subdisplay)
+
 def make_user(user=0, interface="", subdisplay=""):
     """Create a field container that represents the user position.
 

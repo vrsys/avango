@@ -91,14 +91,11 @@ class KeyboardDevice(avango.script.Script):
     Key7 = avango.SFBool()
     Key8 = avango.SFBool()
     Key9 = avango.SFBool()
-    
-    KeyO = avango.SFBool()
-
-    KeyX = avango.SFBool()
-    KeyZ = avango.SFBool()
 
     KeyBackslash = avango.SFBool()
     KeyCloseBracket = avango.SFBool()
+    
+    #all lower case letters are dynamically added
 
     def __init__(self):
         self.super(KeyboardDevice).__init__()
@@ -107,7 +104,7 @@ class KeyboardDevice(avango.script.Script):
 
         self.__keymap = {}
 
-        self.__keymap[48] = self.Key1
+        self.__keymap[48] = self.Key0
         self.__keymap[49] = self.Key1
         self.__keymap[50] = self.Key2
         self.__keymap[51] = self.Key3
@@ -117,15 +114,16 @@ class KeyboardDevice(avango.script.Script):
         self.__keymap[55] = self.Key7
         self.__keymap[56] = self.Key8
         self.__keymap[57] = self.Key9
-        
-        self.__keymap[111] = self.KeyO
-
-        self.__keymap[120] = self.KeyX
-        self.__keymap[122] = self.KeyZ
 
         self.__keymap[92] = self.KeyBackslash
         self.__keymap[41] = self.KeyCloseBracket
-
+        
+        beginNum = ord('a')
+        endNum = ord('z')
+        for num in xrange(beginNum, endNum+1):
+            self.add_key("Key"+chr(num).upper(), int(num))
+            
+            
     def add_key(self,name,id):
         """
         Add a SFBool, which will be connected to the key press with the given id
@@ -167,7 +165,7 @@ class KeyboardDevice(avango.script.Script):
     def connect(self, eventfields):
 
         self.KeysPressed.connect_from(eventfields.KeysPressed)
-
+        
         self.KeyRight.connect_from(eventfields.KeyRight)
         self.KeyLeft.connect_from(eventfields.KeyLeft)
         self.KeyUp.connect_from(eventfields.KeyUp)
@@ -197,7 +195,7 @@ class KeyboardDevice(avango.script.Script):
         self.KeyF10.connect_from(eventfields.KeyF10)
         self.KeyF11.connect_from(eventfields.KeyF11)
         self.KeyF12.connect_from(eventfields.KeyF12)
-
+        
 
 class MouseDevice(avango.script.Script):
     MouseTransform = avango.osg.SFMatrix()

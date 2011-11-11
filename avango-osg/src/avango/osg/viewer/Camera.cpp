@@ -28,6 +28,7 @@
 #include <boost/bind.hpp>
 
 #include <osgViewer/Renderer>
+#include <osg/CullSettings>
 
 #include <avango/Logger.h>
 
@@ -144,6 +145,7 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
 
   mOsgCamera->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
   mOsgCamera->setDisplaySettings(new ::osg::DisplaySettings);
+  mOsgCamera->setComputeNearFarMode(::osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
   alwaysEvaluate(true);
 }
 

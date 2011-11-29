@@ -65,6 +65,12 @@ class ScreenSpaceToPixelTransform(avango.script.Script):
         self.PixelSize.value = avango.osg.Vec2(1600,1200)
 
     def evaluate(self):
+        print "PixelSize: " +str(self.PixelSize.value)
+        print "RealSize: " +str(self.RealSize.value)
+        
+        if self.PixelSize.value.x==0:
+            return
+        
         x_trans = -(self.PixelSize.value.x*0.5)
         y_trans = -(self.PixelSize.value.y*0.5)
         z_trans = 0

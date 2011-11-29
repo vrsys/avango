@@ -97,7 +97,8 @@ class iCone(avango.display.Display):
         pixel_size.Value1.connect_from(pixel_size_min_height.Output)
         screen.PixelSize.connect_from(pixel_size.Output)
 
-        for window_config in self._windows:
+        #print "num_windows: " + str(len(self._cone_windows))
+        for window_config in self._cone_windows:
             window = window_config[0]
             real_size_sum_width.add_and_connect_float_field(window.RealActualWidth)
             real_size_min_height.add_and_connect_float_field(window.RealActualHeight)
@@ -105,7 +106,7 @@ class iCone(avango.display.Display):
             pixel_size_sum_width.add_and_connect_float_field(window.ActualWidth)
             pixel_size_min_height.add_and_connect_float_field(window.ActualHeight)
 
-        return screen
+        return screenz
 
 
     def make_device(self, device, interface):

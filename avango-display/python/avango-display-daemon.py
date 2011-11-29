@@ -172,6 +172,9 @@ elif display_type == "TwoView" or display_type == "iCone":
     dtrack.stations[13] = avango.daemon.Station("ve-dtrack-spare")
     dtrack.stations[14] = avango.daemon.Station("ve-dtrack-head8")
     dtrack.stations[15] = avango.daemon.Station("ve-dtrack-logitech")
+    dtrack.stations[16] = avango.daemon.Station("ve-dtrack-tablet2")
+    dtrack.stations[17] = avango.daemon.Station("ve-dtrack-xpand2")
+    dtrack.stations[18] = avango.daemon.Station("ve-dtrack-xpand1")
 
     #add the wiimotes
     devices.append(add_wiimote("/dev/input/ve-wiimote1", "wiimote1"))

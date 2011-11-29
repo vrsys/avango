@@ -76,14 +76,18 @@ class TwoView(avango.display.Display):
         self.add_user(user2)
 
         # Connect head-tracking
-        view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
+        #view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
+        view1_yellow_glasses = self.make_glasses("ve-dtrack-xpand1", avango.osg.Vec3(-0.0825, 0.0, -0.045))
+        
         user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
         self.keep_alive(view1_yellow_glasses)
         #blue glasses do not work properly. Use purple glasses instead
         #view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
         #user2.Matrix.connect_from(view2_blue_glasses.Matrix)
         #self.keep_alive(view2_blue_glasses)
-        view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(-0.089, 0.015, -0.040))
+        #view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(-0.089, 0.015, -0.040))
+        view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(0.12, 0.043, 0.0 ))
+        
         user2.Matrix.connect_from(view2_purple_glasses.Matrix)
         self.keep_alive(view2_purple_glasses)
 
@@ -93,7 +97,7 @@ class TwoView(avango.display.Display):
         self._wiimote_config["wiimote3"] = ["ve-dtrack-logitech", avango.osg.Vec3(-0.04 , 0.0, -0.025)]
         self._wiimote_config["wiimote4"] = ["ve-dtrack-raytac",   avango.osg.Vec3( 0.068, 0.02, 0.035)]
 
-    def view_created(self, camera, view):
+    def view_created(self, camera, view,subdisplay=""):
         self._views.append(view)
 
     def make_dominant_user_device(self, user, interface, subdisplay):

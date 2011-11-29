@@ -62,6 +62,7 @@ stats_viewer = avango.display.make_device("StatsViewer")
 
 #continue only if a wiimote and the statsviewer device were successfully created (The TwoView display supports this)
 if not wiimote or not stats_viewer:
+    print "Wiimote or stats viewer is Null. Exit"
     sys.exit()
 
 stats_toggle_tigger = StatusToggleTrigger()
@@ -75,7 +76,7 @@ exit_trigger.Trigger.connect_from(wiimote.Button0) #home button
 #add a visual pickeray representation
 pickray_transform = avango.osg.nodes.MatrixTransform()
 pickray_transform.Matrix.connect_from(wiimote.Matrix)
-pickray_object = avango.osg.nodes.LoadFile(Filename="data/models/ray-gray.iv")
+pickray_object = avango.osg.nodes.LoadFile(Filename="ray-gray.iv")
 pickray_object.add_and_init_field(avango.SFUInt(), "PickMask", 0)
 pickray_transform.Children.value.append(pickray_object)
 

@@ -73,6 +73,162 @@ namespace
     ss << boost::format(">");
     return ss.str();
   }
+
+  //taken from delta3D
+  osg::Matrix HprToMatrix(const osg::Vec3& hpr )
+  {
+     //implementation converted from plib's sg.cxx
+     //PLIB - A Suite of Portable Game Libraries
+     //Copyright (C) 1998,2002  Steve Baker
+     //For further information visit http://plib.sourceforge.net
+
+      osg::Matrix rotation;
+
+     double ch, sh, cp, sp, cr, sr, srsp, crsp, srcp ;
+
+     // this can't be smart for both 32 and 64 bit types.
+     ///\todo find a preprocessor way to assign this constant different for the different precision types.
+     const osg::Vec3::value_type magic_epsilon = 0.00001;
+
+     if ( osg::equivalent(hpr[0],(osg::Vec3::value_type)0.0,magic_epsilon) )
+     {
+        ch = 1.0 ;
+        sh = 0.0 ;
+     }
+     else
+     {
+        sh = sinf(hpr[0]);
+        ch = cosf(hpr[0]);
+     }
+
+     if ( osg::equivalent(hpr[1],(osg::Vec3::value_type)0.0,magic_epsilon) )
+     {
+        cp = 1.0 ;
+        sp = 0.0 ;
+     }
+     else
+     {
+        sp = sinf(hpr[1]);
+        cp = cosf(hpr[1]);
+     }
+
+     if ( osg::equivalent(hpr[2],(osg::Vec3::value_type)0.0,magic_epsilon) )
+     {
+        cr   = 1.0 ;
+        sr   = 0.0 ;
+        srsp = 0.0 ;
+        srcp = 0.0 ;
+        crsp = sp ;
+     }
+     else
+     {
+        sr   = sinf(hpr[2]);
+        cr   = cosf(hpr[2]);
+        srsp = sr * sp ;
+        crsp = cr * sp ;
+        srcp = sr * cp ;
+     }
+
+     rotation(0, 0) = (  ch * cr - sh * srsp ) ;
+     rotation(1, 0) = ( -sh * cp ) ;
+     rotation(2, 0) = (  sr * ch + sh * crsp ) ;
+
+     rotation(0, 1) = ( cr * sh + srsp * ch ) ;
+     rotation(1, 1) = ( ch * cp ) ;
+     rotation(2, 1) = ( sr * sh - crsp * ch ) ;
+
+     rotation(0, 2) = ( -srcp ) ;
+     rotation(1, 2) = (  sp ) ;
+     rotation(2, 2) = (  cr * cp ) ;
+
+     rotation(3, 0) =  0.0;  // x trans
+     rotation(3, 1) =  0.0;  // y trans
+     rotation(3, 2) =  0.0;  // z trans
+
+     rotation(0, 3) =  0.0;
+     rotation(1, 3) =  0.0;
+     rotation(2, 3) =  0.0;
+     rotation(3, 3) =  1.0;
+
+     return rotation;
+  }
+
+  float ClampUnity( float x )
+  {
+     if ( x >  1.0f ) return  1.0f;
+     if ( x < -1.0f ) return -1.0f;
+     return x ;
+  }
+
+  //taken from delta3D
+  osg::Matrix MatrixToHpr( osg::Vec3& hpr )
+  {
+     //implementation converted from plib's sg.cxx
+     //PLIB - A Suite of Portable Game Libraries
+     //Copyright (C) 1998,2002  Steve Baker
+     //For further information visit http://plib.sourceforge.net
+
+     osg::Matrix rotation;
+
+     osg::Matrix mat;
+
+     osg::Vec3 col1(rotation(0, 0), rotation(0, 1), rotation(0, 2));
+     double s = col1.length();
+
+     const double magic_epsilon = 0.00001;
+     if ( s <= magic_epsilon )
+     {
+        hpr.set(0.0f, 0.0f, 0.0f);
+        return osg::Matrix();
+     }
+
+
+     double oneOverS = 1.0f / s;
+     for( int i = 0; i < 3; i++ )
+        for( int j = 0; j < 3; j++ )
+           mat(i, j) = rotation(i, j) * oneOverS;
+
+
+     double sin_pitch = ClampUnity(mat(1, 2));
+     double pitch = asin(sin_pitch);
+     hpr[1] = pitch;
+
+     double cp = cos(pitch);
+
+     if ( cp > -magic_epsilon && cp < magic_epsilon )
+     {
+        double cr = ClampUnity(-mat(2,1));
+        double sr = ClampUnity(mat(0,1));
+
+        hpr[0] = 0.0f;
+        hpr[2] = atan2(sr,cr);
+     }
+     else
+     {
+        double one_over_cp = 1.0 / cp ;
+        double sr = ClampUnity(-mat(0,2) * one_over_cp);
+        double cr = ClampUnity(mat(2,2) * one_over_cp);
+        double sh = ClampUnity(-mat(1,0) * one_over_cp);
+        double ch = ClampUnity(mat(1,1) * one_over_cp);
+
+        if ( ( osg::equivalent(sh,0.0,magic_epsilon) && osg::equivalent(ch,0.0,magic_epsilon) ) ||
+             ( osg::equivalent(sr,0.0,magic_epsilon) && osg::equivalent(cr,0.0,magic_epsilon) ) )
+        {
+           cr = ClampUnity(-mat(2,1));
+           sr = ClampUnity(mat(0,1));;
+
+           hpr[0] = 0.0f;
+        }
+        else
+        {
+          hpr[0] = atan2(sh, ch);
+        }
+
+        hpr[2] = atan2(sr, cr);
+     }
+     return rotation;
+  }
+
 }
 
 void init_OSGMatrix(void)
@@ -190,6 +346,11 @@ void init_OSGMatrix(void)
   def("make_perspective_mat", ::osg::Matrix::perspective);
   def("make_frustum_mat", ::osg::Matrix::frustum);
   def("make_ortho_mat", ::osg::Matrix::ortho);
+  def("hpr_to_matrix", HprToMatrix);
+  def("matrix_to_hpr", MatrixToHpr);
+
+
+
 
 
   // register as a field

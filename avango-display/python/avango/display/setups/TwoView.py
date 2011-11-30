@@ -36,6 +36,20 @@ class StatsViewer(avango.script.Script):
     def evaluate(self):
         for view in self.Views.value:
             view.StatsMode.value = self.StatsNum.value
+            
+class MatrixLeftTransformer(avango.script.Script):
+    
+    MatrixIn = avango.osg.SFMatrix()
+    MatrixOut = avango.osg.SFMatrix()
+    MatrixLeftMul = avango.osg.SFMatrix()
+    
+    def __init__(self):
+        self.super(MatrixLeftTransformer).__init__()
+        self.MatrixLeftMul.value = avango.osg.make_trans_mat(0,0,0);
+        
+    def evaluate(self):
+        self.MatrixOut.value = self.MatrixLeftMul.value * self.MatrixIn.value
+        
 
 class TwoView(avango.display.Display):
 
@@ -79,7 +93,10 @@ class TwoView(avango.display.Display):
         #view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
         view1_yellow_glasses = self.make_glasses("ve-dtrack-xpand1", avango.osg.Vec3(-0.0825, 0.0, -0.045))
         
-        user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
+        self.user1_matrix_mul = MatrixLeftTransformer()
+        self.user1_matrix_mul.MatrixIn.connect_from(view1_yellow_glasses.Matrix)
+        #user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
+        user1.Matrix.connect_from(self.user1_matrix_mul.MatrixOut)
         self.keep_alive(view1_yellow_glasses)
         #blue glasses do not work properly. Use purple glasses instead
         #view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
@@ -87,8 +104,11 @@ class TwoView(avango.display.Display):
         #self.keep_alive(view2_blue_glasses)
         #view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(-0.089, 0.015, -0.040))
         view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(0.12, 0.043, 0.0 ))
+        self.user2_matrix_mul = MatrixLeftTransformer()
+        self.user2_matrix_mul.MatrixIn.connect_from(view2_purple_glasses.Matrix)
         
-        user2.Matrix.connect_from(view2_purple_glasses.Matrix)
+        #user2.Matrix.connect_from(view2_purple_glasses.Matrix)
+        user2.Matrix.connect_from(self.user2_matrix_mul.MatrixOut)
         self.keep_alive(view2_purple_glasses)
 
         self._wiimote_config = {}
@@ -154,3 +174,10 @@ class TwoView(avango.display.Display):
             stats_viewer = StatsViewer()
             stats_viewer.Views.value = self._views
             return stats_viewer
+        
+        elif device == "MatrixUserMul":
+            if interface == "user1":
+                return self.user1_matrix_mul
+            elif interface == "user2":
+                return self.user1_matrix_mul
+            return None

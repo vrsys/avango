@@ -161,14 +161,14 @@ namespace
   }
 
   //taken from delta3D
-  osg::Matrix MatrixToHpr( osg::Vec3& hpr )
+  osg::Vec3 MatrixToHpr( osg::Matrix& rotation )
   {
      //implementation converted from plib's sg.cxx
      //PLIB - A Suite of Portable Game Libraries
      //Copyright (C) 1998,2002  Steve Baker
      //For further information visit http://plib.sourceforge.net
 
-     osg::Matrix rotation;
+     osg::Vec3 hpr;
 
      osg::Matrix mat;
 
@@ -179,7 +179,7 @@ namespace
      if ( s <= magic_epsilon )
      {
         hpr.set(0.0f, 0.0f, 0.0f);
-        return osg::Matrix();
+        return osg::Vec3();
      }
 
 
@@ -226,7 +226,7 @@ namespace
 
         hpr[2] = atan2(sr, cr);
      }
-     return rotation;
+     return hpr;
   }
 
 }

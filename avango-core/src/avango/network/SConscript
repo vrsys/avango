@@ -41,12 +41,6 @@ if avango_env['DISTRIBUTION_SUPPORT']:
         UpcallSerializer.cpp
         ''')
 
-    if avango_env['DISTRIBUTION_SUPPORT']:
-        source += Split('''
-            NetNodeClient.cpp
-            NetNodeServer.cpp
-            ''')
-
     objects = avango_env.SharedObject(sources)
 
 else:

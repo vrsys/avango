@@ -106,7 +106,7 @@ class iCone(avango.display.Display):
             pixel_size_sum_width.add_and_connect_float_field(window.ActualWidth)
             pixel_size_min_height.add_and_connect_float_field(window.ActualHeight)
 
-        return screenz
+        return screen
 
 
     def make_device(self, device, interface):

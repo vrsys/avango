@@ -36,6 +36,7 @@ import sys
 
 from avango import enable_logging
 #avango.enable_logging(5)
+# specify role, ip, and port
 nettrans = avango.osg.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
 
 avango.osg.simpleviewer.run(nettrans)

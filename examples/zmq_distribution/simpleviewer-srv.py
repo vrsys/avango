@@ -38,6 +38,7 @@ if len(sys.argv) < 2:
     print "Usage: "+sys.argv[0]+" <modelname>"
     sys.exit(1)
 
+# specify role, ip, and port
 nettrans = avango.osg.nodes.NetMatrixTransform(Groupname = "AVSERVER|127.0.0.1|7432")
 
 ###############################################################################

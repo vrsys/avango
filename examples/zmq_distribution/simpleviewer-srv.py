@@ -38,18 +38,12 @@ if len(sys.argv) < 2:
     print "Usage: "+sys.argv[0]+" <modelname>"
     sys.exit(1)
 
-
-
 nettrans = avango.osg.nodes.NetMatrixTransform(Groupname = "AVSERVER|127.0.0.1|7432")
-
-
 
 ###############################################################################
 # an example shader program
 vshaderfile = "vshader.vert"
 fshaderfile = "fshader.frag"
-
-
 
 vshader = avango.osg.nodes.Shader(Name="VertexShader",
                                   Type=avango.osg.shadertype.VERTEX,
@@ -67,25 +61,15 @@ ss = avango.osg.nodes.StateSet(Program = prog)
 nettrans.distribute_object(ss)
 
 u1 = avango.osg.nodes.Uniform(
-                                              Values=[2.0],
-                                              Type=avango.osg.uniformtype.FLOAT,
-                                              UniformName="NumLights"
-                                              )
+                              Values=[2.0],
+                              Type=avango.osg.uniformtype.FLOAT,
+                              UniformName="NumLights"
+                              )
 nettrans.distribute_object(u1)
 
 ss.Uniforms.value = [u1]
 
-
 ###############################################################################
-
-
-
-
-
-
-
-
-
 
 obj = avango.osg.nodes.LoadFile(Filename=sys.argv[1])
 
@@ -94,13 +78,7 @@ trans = avango.osg.nodes.MatrixTransform(StateSet = ss)
 nettrans.distribute_object(trans)
 trans.Children.value.append(obj)
 
-
-
-
-
-
-
-light0 = avango.osg.nodes.Light(Name="Fucking Light",LightNum=1,
+light0 = avango.osg.nodes.Light(Name="A Light",LightNum=1,
                                Ambient=avango.osg.Vec4(0.2,0.2,0.2,0.2),
                                Diffuse=avango.osg.Vec4(0.7,0.0,0.0,1.0),
                                Specular=avango.osg.Vec4(1.0,0.0,0.0,1.0),
@@ -111,13 +89,6 @@ lightsource0.Children.value.append(trans)
 nettrans.distribute_object(lightsource0)
 
 nettrans.Children.value.append(lightsource0)
-
-
-
-
-
-
-
 
 class RotateTransform(object):
     def __init__(self, trans, u):
@@ -140,11 +111,8 @@ class RotateTransform(object):
         else:
             self.u.Values.value = [1.0]
 
-
-
 rt = RotateTransform(trans,u1)
 update = avango.script.nodes.Update(Callback = rt.callback, Active = True)
 
 avango.osg.simpleviewer.run(nettrans)
-
 

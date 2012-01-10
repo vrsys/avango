@@ -37,9 +37,24 @@
 #include "Helper.h"
 #include "NetGroup.h"
 
+#include <avango/Config.h> 
+
+#if defined(ZMQ_DISTRIBUTION_SUPPORT)
+#include "NetNodeClient.h"
+#include "NetNodeServer.h"
+#include <boost/tokenizer.hpp>
+#endif
+
 namespace
 {
   av::Logger &logger(av::getLogger("av::NetNode"));
+
+#if defined(ZMQ_DISTRIBUTION_SUPPORT)
+  av::NetNodeClient* gClient = 0;
+  av::NetNodeServer* gServer = 0;
+  const std::string  gClientEndpoint("{Endpt:127.0.0.2:34818:215:0}");
+  const std::string  gServerEndpoint("{Endpt:127.0.0.2:34818:215:0}");
+#endif
 }
 
 /* static */ const unsigned int av::NetNode::sCreateMsg         = 42;
@@ -67,6 +82,63 @@ av::NetNode::join(const std::string& groupName)
   logger.debug() << "av::NetNode::NetNode: joining group: " << groupName;
 #endif
 
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  bool isServer;
+  std::string hostName;
+  std::string port;
+  uint64_t serverHWM = 2;
+  {
+    // from http://stackoverflow.com/questions/541561/using-boost-tokenizer-escaped-list-separator-with-different-parameters
+    std::string gn(groupName);
+    
+    typedef boost::tokenizer< boost::escaped_list_separator<char> > Tokenizer;
+    boost::escaped_list_separator<char> Separator( ' ', '|' );
+    Tokenizer tok( gn, Separator );
+    unsigned numTokens = 0;
+    for (Tokenizer::iterator iter = tok.begin(); iter != tok.end(); ++iter) {
+      ++numTokens;
+    }
+    if (3 == numTokens) {
+      Tokenizer::iterator iter = tok.begin();
+      isServer = ("AVSERVER" == *iter);
+      ++iter;
+      hostName = *iter;
+      ++iter;
+      port = *iter;
+    } else if (4 == numTokens) {
+      Tokenizer::iterator iter = tok.begin();
+      isServer = ("AVSERVER" == *iter);
+      ++iter;
+      hostName = *iter;
+      ++iter;
+      port = *iter;
+      serverHWM = atoi((*iter).c_str());
+    } else {
+      std::stringstream msg;
+      msg << "ERROR in av::NetNode::join(const std::string& groupName), could not join - invalid CONFIG";
+      throw (std::runtime_error(msg.str()));
+    }
+
+  }
+  
+  if (isServer) {
+    gServer = new NetNodeServer(hostName,port, this, gClientEndpoint, gServerEndpoint, serverHWM);
+    joined(gServerEndpoint);
+
+    av::Msg av_msg;
+    getStateFragment(gServerEndpoint,av_msg);
+    setStateFragment(gClientEndpoint,av_msg);
+  } else {
+    gClient = new NetNodeClient(hostName,port, this, gClientEndpoint, gServerEndpoint);
+    joined(gClientEndpoint);
+    gClient->start();
+  }
+  //handleNetworkSends();
+  //handleNetworkReceives();
+
+  mIdCounter = 0;
+
+#else
   leave();
 
   Maestro_CSX_Options ops;
@@ -128,6 +200,8 @@ av::NetNode::join(const std::string& groupName)
   logger.debug() << "av::NetNode::join: was called from: " << "  pid: " << getpid();
   logger.debug() << "av::NetNode::join: completed.";
 #endif
+
+#endif // #ifdef ZMQ_DISTRIBUTION_SUPPORT
 }
 
 void
@@ -147,14 +221,25 @@ av::NetID
 av::NetNode::generateUniqueId()
 {
   assert(onAir());
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  if(gServer)
+     return NetID(gServerEndpoint, ++mIdCounter);
+  else
+     return NetID(gClientEndpoint, ++mIdCounter);
+#else
   return NetID(netEID(), ++mIdCounter);
+#endif
   assert(mIdCounter > 0); // detect overflow
 }
 
 bool
 av::NetNode::onAir() const
 {
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  return true;
+#else
   return (mMember != 0);
+#endif
 }
 
 const std::string&
@@ -169,16 +254,27 @@ void
 av::NetNode::handleNetworkSends()
 {
   // consume_received_messages();
-
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  if (0 != gServer) {
+    notifyGroup();
+  }
+#else
   if (!mBlocked)
     notifyGroup();
+#endif
 }
 
 void
 av::NetNode::handleNetworkReceives()
 {
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  if (gClient) {
+    consumeReceivedMessages();
+  }
+#else
   while (mMember && mMember->upcallSerializer().handleNextUpcall(this))
     ;
+#endif
 }
 
 void
@@ -419,7 +515,11 @@ av::NetNode::notifyCreations()
   // p_msg << packed_msg;
   av_pushMsg(p_msg, sPackedMsg);
 
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  gServer->cast(p_msg);
+#else
   mMember->cast(p_msg);
+#endif
 }
 
 // announce changes to registered distributed objects
@@ -458,7 +558,11 @@ av::NetNode::notifyUpdates()
   av_pushMsg(p_msg,msg_count);
   av_pushMsg(p_msg, sPackedMsg);
 
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  gServer->cast(p_msg);
+#else
   mMember->cast(p_msg);
+#endif
 }
 
 // announce deletion of a distributed object
@@ -496,7 +600,11 @@ av::NetNode::notifyDeletes()
   av_pushMsg(p_msg,msg_count);
   av_pushMsg(p_msg, sPackedMsg);
 
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  gServer->cast(p_msg);
+#else
   mMember->cast(p_msg);
+#endif
 }
 
 // look for a distributed node which matches the specified id
@@ -713,12 +821,21 @@ av::NetNode::removeStateFragment(const std::string& fragment)
 }
 
 void
-  av::NetNode::receiveMessage(const std::string &/*origin*/, av::Msg& msg)
+av::NetNode::receiveMessage(const std::string &origin, av::Msg& msg)
 {
   // stack up the received messages in any case
   // the message needs to carry a reference to the NetNode
   // which received it.
   boost::mutex::scoped_lock lock(mMessageMutex);
+
+#ifdef ZMQ_DISTRIBUTION_SUPPORT
+  // we need to reset our old state fragment before we receive the new state fragment
+  if (!mObjectMap.slotExists(origin))
+  {
+    logger.debug() << "ALARM: in av::NetNode::receiveMessage !!!!!!!!!!!!!!!! slot was empty for origin " << origin;
+    mObjectMap.addSlot(origin);
+  }
+#endif
 
   Msg av_msg(msg);
   av_msg.setNetNode(this);

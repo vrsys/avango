@@ -61,6 +61,7 @@ class Monitor(avango.display.Display):
         self.add_user(user)
     
     def make_view(self, subdisplay):
+        print "Monitor._make_view"
         display_view = avango.display.nodes.MonitorView()
         if subdisplay == "":
             super(Monitor, self).make_view(subdisplay, display_view)

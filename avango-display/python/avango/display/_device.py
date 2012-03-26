@@ -27,6 +27,7 @@ from math import *
 class User(avango.script.Script):
     Active = avango.SFBool()
     Matrix = avango.osg.SFMatrix()
+    ViewerMatrix = avango.osg.SFMatrix()
 
     def __init__(self):
         self.super(User).__init__()

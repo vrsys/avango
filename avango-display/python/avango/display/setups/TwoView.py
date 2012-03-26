@@ -23,8 +23,11 @@
 
 import avango.display
 
+from avango.display import *
+
 import math
 import re
+
 
 class StatsViewer(avango.script.Script):
     Views = avango.osg.viewer.MFView()
@@ -55,7 +58,9 @@ class TwoView(avango.display.Display):
 
     def __init__(self, inspector, options):
         super(TwoView, self).__init__("TwoView", inspector)
-
+        
+        print str(options)
+        
         if "twopipe" in options:
             two_view_walls = [":0.0", ":0.1"]
             twopipe = True
@@ -92,33 +97,61 @@ class TwoView(avango.display.Display):
         # Connect head-tracking
         #view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
         view1_yellow_glasses = self.make_glasses("ve-dtrack-xpand1", avango.osg.Vec3(-0.0825, 0.0, -0.045))
-        
+        user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
         self.user1_matrix_mul = MatrixLeftTransformer()
-        self.user1_matrix_mul.MatrixIn.connect_from(view1_yellow_glasses.Matrix)
-        #user1.Matrix.connect_from(view1_yellow_glasses.Matrix)
-        user1.Matrix.connect_from(self.user1_matrix_mul.MatrixOut)
+        user1.ViewerMatrix.connect_from(self.user1_matrix_mul.MatrixOut)
         self.keep_alive(view1_yellow_glasses)
-        #blue glasses do not work properly. Use purple glasses instead
-        #view2_blue_glasses = self.make_glasses("ve-dtrack-head3", avango.osg.Vec3(-0.073, -0.016, 0.025))
-        #user2.Matrix.connect_from(view2_blue_glasses.Matrix)
-        #self.keep_alive(view2_blue_glasses)
-        #view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(-0.089, 0.015, -0.040))
-        view2_purple_glasses = self.make_glasses("ve-dtrack-head1", avango.osg.Vec3(0.12, 0.043, 0.0 ))
-        self.user2_matrix_mul = MatrixLeftTransformer()
-        self.user2_matrix_mul.MatrixIn.connect_from(view2_purple_glasses.Matrix)
         
-        #user2.Matrix.connect_from(view2_purple_glasses.Matrix)
-        user2.Matrix.connect_from(self.user2_matrix_mul.MatrixOut)
+        
+        #blue glasses do not work properly. Use purple glasses instead
+        view2_purple_glasses = self.make_glasses("ve-dtrack-xpand2", avango.osg.Vec3(0.12, 0.043, 0.0 ))
+        user2.Matrix.connect_from(view2_purple_glasses.Matrix)
+        self.user2_matrix_mul = MatrixLeftTransformer()
+        user2.ViewerMatrix.connect_from(self.user2_matrix_mul.MatrixOut)
         self.keep_alive(view2_purple_glasses)
+        
 
         self._wiimote_config = {}
         self._wiimote_config["wiimote1"] = ["ve-dtrack-atek",     avango.osg.Vec3( 0.045, 0.0,  0.022)]
         self._wiimote_config["wiimote2"] = ["ve-dtrack-reddot",   avango.osg.Vec3(-0.05 , 0.0,  0.031)]
         self._wiimote_config["wiimote3"] = ["ve-dtrack-logitech", avango.osg.Vec3(-0.04 , 0.0, -0.025)]
         self._wiimote_config["wiimote4"] = ["ve-dtrack-raytac",   avango.osg.Vec3( 0.068, 0.02, 0.035)]
+        
+    def make_view(self, subdisplay, display_view = None):
+        print "TwoView::make_view"
+        if not display_view:
+            display_view = avango.display.nodes.View()
 
-    def view_created(self, camera, view,subdisplay=""):
+        for window, transform, current_user in self._windows:
+            
+            eye_offset = 0.
+            if window.StereoMode.value != avango.osg.viewer.stereo_mode.STEREO_MODE_NONE:
+                eye_offset = 0.03
+
+            camera, view = self.make_camera_with_viewport(
+                display_view, eye_offset, transform, window)
+            camera.EyeTransform.connect_from(self._users[current_user].Matrix)
+
+            user_selector = ViewUserSelector(UserMatch=current_user+1)
+            user_selector.ViewIn.value = view
+            user_selector.UserSelector.connect_from(display_view.UserSelector)
+            self.keep_alive(user_selector)
+            self.connect_view_field(user_selector.ViewOut)
+
+            self.view_created(camera, view, subdisplay)
+
+        if self._inspector and len(self._inspector.Children.value) == 0:
+            # FIXME this should use a proper aggregation node
+            converter = avango.utils.nodes.SFNode2MFContainerConverter()
+            converter.Input.connect_from(display_view.Root)
+            self._inspector.Children.connect_from(converter.Output)
+
+        return display_view
+
+    def view_created(self, camera, view, subdisplay=""):
         self._views.append(view)
+        camera.ViewerTransform.connect_from(self._users[0].ViewerMatrix)
+        print "view_created"
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         pda_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = self.device_service,

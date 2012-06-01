@@ -26,6 +26,17 @@ import avango.utils
 import math
 import re
 
+class StatsViewer(avango.script.Script):
+    Views = avango.osg.viewer.MFView()
+    StatsNum = avango.SFInt()
+
+    def __init__(self):
+        self.super(StatsViewer).__init__()
+
+    def evaluate(self):
+        for view in self.Views.value:
+            view.StatsMode.value = self.StatsNum.value
+
 class iCone(avango.display.Display):
 
     def __init__(self, inspector, options):

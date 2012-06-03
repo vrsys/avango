@@ -105,6 +105,10 @@ av::osg::StateSet::StateSet(::osg::StateSet* osgstateset) :
                             boost::bind(&StateSet::getTextureCB, this, _1),
                             boost::bind(&StateSet::setTextureCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(Texture1,
+                              boost::bind(&StateSet::getTextureCB1, this, _1),
+                              boost::bind(&StateSet::setTextureCB1, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(DepthTestMode,
                             boost::bind(&StateSet::getDepthTestModeCB, this, _1),
                             boost::bind(&StateSet::setDepthTestModeCB, this, _1));
@@ -373,24 +377,48 @@ av::osg::StateSet::setNormalizeModeCB(const av::SFInt::SetValueEvent& event)
 /* virtual */ void
 av::osg::StateSet::getTextureCB(const av::osg::SFTexture::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Texture>(mOsgStateSet->getTextureAttribute(0, ::osg::StateAttribute::TEXTURE));
+	getTextureCBUnit(event,0);
 }
 
 /* virtual */ void
 av::osg::StateSet::setTextureCB(const av::osg::SFTexture::SetValueEvent& event)
 {
+	setTextureCBUnit(event,0);
+}
+
+/* virtual */ void
+av::osg::StateSet::getTextureCB1(const av::osg::SFTexture::GetValueEvent& event)
+{
+	getTextureCBUnit(event,1);
+}
+
+/* virtual */ void
+av::osg::StateSet::setTextureCB1(const av::osg::SFTexture::SetValueEvent& event)
+{
+	setTextureCBUnit(event,1);
+}
+
+/* virtual */ void
+av::osg::StateSet::setTextureCBUnit(const av::osg::SFTexture::SetValueEvent& event, int unit)
+{
   ::osg::Texture *osg_tex = (event.getValue().isValid() ? event.getValue()->getOsgTexture() : 0);
   if (osg_tex != 0)
-    mOsgStateSet->setTextureAttributeAndModes(0, osg_tex);
+    mOsgStateSet->setTextureAttributeAndModes(unit, osg_tex);
   else
   {
     ::osg::Texture *osg_old_tex = dynamic_cast< ::osg::Texture*>(mOsgStateSet->getTextureAttribute(0, ::osg::StateAttribute::TEXTURE));
     if (!osg_old_tex)
       return;
-    mOsgStateSet->removeTextureAttribute(0, osg_old_tex->getType());
+    mOsgStateSet->removeTextureAttribute(unit, osg_old_tex->getType());
   }
-
 }
+
+/* virtual */ void
+av::osg::StateSet::getTextureCBUnit(const av::osg::SFTexture::GetValueEvent& event, int unit)
+{
+  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Texture>(mOsgStateSet->getTextureAttribute(unit, ::osg::StateAttribute::TEXTURE));
+}
+
 
 /* virtual */ void
 av::osg::StateSet::getDepthTestModeCB(const av::SFInt::GetValueEvent& event)

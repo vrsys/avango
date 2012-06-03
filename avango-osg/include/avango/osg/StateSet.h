@@ -85,6 +85,7 @@ namespace av
       SFLineWidth LineWidth;
 
       SFTexture Texture0;
+      SFTexture Texture1;
       SFProgram Program;
       MFUniform Uniforms;
 
@@ -131,8 +132,12 @@ namespace av
       virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
       virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
+
       virtual void getTextureCB(const av::osg::SFTexture::GetValueEvent& event);
       virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
+      virtual void getTextureCB1(const av::osg::SFTexture::GetValueEvent& event);
+      virtual void setTextureCB1(const av::osg::SFTexture::SetValueEvent& event);
+
       virtual void getDepthTestModeCB(const av::SFInt::GetValueEvent& event);
       virtual void setDepthTestModeCB(const av::SFInt::SetValueEvent& event);
 
@@ -144,6 +149,9 @@ namespace av
 
       virtual void getLineWidthCB(const av::osg::SFLineWidth::GetValueEvent& event);
       virtual void setLineWidthCB(const av::osg::SFLineWidth::SetValueEvent& event);
+
+      virtual void getTextureCBUnit(const av::osg::SFTexture::GetValueEvent& event, int unit);
+      virtual void setTextureCBUnit(const av::osg::SFTexture::SetValueEvent& event, int unit);
 
     private:
 

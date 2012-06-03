@@ -27,6 +27,8 @@ from avango.build.oshelper import *
 avango.build.Environment.prepend_include_path(Dir('include').abspath)
 osg_env = avango.build.Environment()
 avango.build.add_library(osg_env, 'avango-core')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(osg_env, "boost_system")
 
 Alias('all', Alias('osg'))
 Alias('check', Alias('check-osg'))

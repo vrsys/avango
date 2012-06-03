@@ -27,6 +27,8 @@ from avango.build.oshelper import *
 avango.build.Environment.prepend_python_path(Dir('test_package').abspath)
 module_env = avango.build.PythonEnvironment()
 avango.build.add_library(module_env, 'boost_python')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(module_env, "boost_system")
 avango.build.add_library(module_env, 'avango-core')
 for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
     avango.build.add_library(module_env, lib)

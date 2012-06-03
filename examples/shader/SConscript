@@ -27,11 +27,16 @@ Import('examples_dir')
 
 files = Split('''
               shader.py
+              shader_lut.py
               ''')
 
 shadersources = Split('''
               vshader.vert
               fshader.frag
+              lut.vert
+              lut.frag
+              seismic.png
+              lut.png
               ''')
 
 Alias('install-examples', Install(examples_dir.abspath + '/shader', files))

@@ -61,30 +61,27 @@ class LShape(avango.display.Display):
         
         print str(options)
         
-#        if "twopipe" in options:
-#            two_view_walls = [":0.0", ":0.1"]
-#            twopipe = True
-#        else:
-#            two_view_walls = [":0.0", ":0.0"]
-#            twopipe = False
+        if "twopipe" in options:
+            two_view_walls = [":0.0", ":0.1"]
+            twopipe = True
+        else:
+            two_view_walls = [":0.0", ":0.0"]
+            twopipe = False
 
-        two_view_walls = [":0.0", ":0.0"]
-        
         # Viewer 1
         window1 = self.make_window(0, 0, 1280, 1024, 6, 2.4, True, two_view_walls[0])
         window1.Name.value = "1"
         self.add_window(window1, avango.osg.make_trans_mat(0., 1.2, -2.4), 0)
 
         # Viewer 2
-#        if not twopipe:
-#            xpos = 1280
-#        else:
-#            xpos = 0
-        
-        xpos = 0
+        if not twopipe:
+            xpos = 1280
+        else:
+            xpos = 0
         window2 = self.make_window(xpos, 0, 1280, 1024, 6, 2.4, True, two_view_walls[1])
         window2.Name.value = "2"
-        self.add_window(window2, avango.osg.make_rot_mat(90.0*(3.14/180.0),0,1,0) * avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
+        #self.add_window(window2, avango.osg.make_trans_mat(0., 1.2, -2.4), 1)
+	self.add_window(window2, avango.osg.make_rot_mat(math.radians(-90),1,0,0) * avango.osg.make_trans_mat(0, 0, -1.2), 0)
 
         #store the created views. Needed for the stats display
         self._views = []
@@ -95,8 +92,8 @@ class LShape(avango.display.Display):
         # Users
         user1 = avango.display.nodes.User()
         self.add_user(user1)
-        user2 = avango.display.nodes.User()
-        self.add_user(user2)
+        #user2 = avango.display.nodes.User()
+        #self.add_user(user2)
 
         # Connect head-tracking
         #view1_yellow_glasses = self.make_glasses("ve-dtrack-head4", avango.osg.Vec3(-0.074, -0.018, 0.025))
@@ -108,11 +105,11 @@ class LShape(avango.display.Display):
         
         
         #blue glasses do not work properly. Use purple glasses instead
-        view2_purple_glasses = self.make_glasses("ve-dtrack-xpand2", avango.osg.Vec3(0.12, 0.043, 0.0 ))
-        user2.Matrix.connect_from(view2_purple_glasses.Matrix)
-        self.user2_matrix_mul = MatrixLeftTransformer()
-        user2.ViewerMatrix.connect_from(self.user2_matrix_mul.MatrixOut)
-        self.keep_alive(view2_purple_glasses)
+        #view2_purple_glasses = self.make_glasses("ve-dtrack-xpand2", avango.osg.Vec3(0.12, 0.043, 0.0 ))
+        #user2.Matrix.connect_from(view2_purple_glasses.Matrix)
+        #self.user2_matrix_mul = MatrixLeftTransformer()
+        #user2.ViewerMatrix.connect_from(self.user2_matrix_mul.MatrixOut)
+        #self.keep_alive(view2_purple_glasses)
         
 
         self._wiimote_config = {}
@@ -122,7 +119,7 @@ class LShape(avango.display.Display):
         self._wiimote_config["wiimote4"] = ["ve-dtrack-raytac",   avango.osg.Vec3( 0.068, 0.02, 0.035)]
         
     def make_view(self, subdisplay, display_view = None):
-        print "TwoView::make_view"
+        print "LShape::make_view"
         if not display_view:
             display_view = avango.display.nodes.View()
 
@@ -215,6 +212,6 @@ class LShape(avango.display.Display):
         elif device == "MatrixUserMul":
             if interface == "user1":
                 return self.user1_matrix_mul
-            elif interface == "user2":
-                return self.user1_matrix_mul
+            #elif interface == "user2":
+            #    return self.user1_matrix_mul
             return None

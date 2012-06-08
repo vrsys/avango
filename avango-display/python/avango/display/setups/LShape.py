@@ -121,8 +121,8 @@ class LShape(avango.display.Display):
     def make_view(self, subdisplay, display_view = None):
         print "LShape::make_view"
         if not display_view:
-            display_view = avango.display.nodes.View()
-
+            display_view = avango.display.nodes.LShapeView()
+        num = 0
         for window, transform, current_user in self._windows:
             
             eye_offset = 0.
@@ -130,7 +130,7 @@ class LShape(avango.display.Display):
                 eye_offset = 0.03
 
             camera, view = self.make_camera_with_viewport(
-                display_view, eye_offset, transform, window)
+                display_view, eye_offset, transform, window, num)
             camera.EyeTransform.connect_from(self._users[current_user].Matrix)
 
             user_selector = ViewUserSelector(UserMatch=current_user+1)
@@ -138,9 +138,11 @@ class LShape(avango.display.Display):
             user_selector.UserSelector.connect_from(display_view.UserSelector)
             self.keep_alive(user_selector)
             self.connect_view_field(user_selector.ViewOut)
-
+            
+            num += 1
             self.view_created(camera, view, subdisplay)
-
+            
+            
         if self._inspector and len(self._inspector.Children.value) == 0:
             # FIXME this should use a proper aggregation node
             converter = avango.utils.nodes.SFNode2MFContainerConverter()
@@ -148,6 +150,41 @@ class LShape(avango.display.Display):
             self._inspector.Children.connect_from(converter.Output)
 
         return display_view
+    
+    def make_camera_with_viewport(self, display_view, eye_offset, screen_transform, window, num):
+        splitscreen_handling = ViewportConverter()
+        splitscreen_handling.ViewportIn.connect_from(display_view.Viewport)
+        splitscreen_handling.RealActualWidth.connect_from(window.RealActualWidth)
+        splitscreen_handling.RealActualHeight.connect_from(window.RealActualHeight)
+        splitscreen_handling.ScreenTransformIn.value = screen_transform
+        self.keep_alive(splitscreen_handling)
+
+        camera, view = self.make_camera(display_view, eye_offset, window, False, num)
+        camera.ScreenTransform.connect_from(splitscreen_handling.ScreenTransformOut)
+        camera.Viewport.connect_from(splitscreen_handling.ViewportOut)
+        return camera, view
+    
+    
+    def make_camera(self, display_view, eye_offset, window, connect_viewport = True, num):
+        camera = avango.osg.viewer.nodes.Camera()
+        camera.EyeOffset.value = eye_offset
+        if connect_viewport:
+            camera.Viewport.connect_from(display_view.Viewport)
+        camera.Near.connect_from(display_view.Near)
+        camera.Far.connect_from(display_view.Far)
+        camera.BackgroundColor.connect_from(display_view.BackgroundColor)
+        camera.ViewerTransform.connect_from(display_view.Camera)
+        camera.Window.value = window
+
+        view = avango.osg.viewer.nodes.View()
+        #depending on camera
+        if num == 0:
+            view.Scene.connect_from(display_view.RootCamera1)
+        else:
+            view.Scene.connect_from(display_view.RootCamera2)
+            
+        view.MasterCamera.value = camera
+        return camera, view
 
     def view_created(self, camera, view, subdisplay=""):
         self._views.append(view)

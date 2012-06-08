@@ -50,6 +50,44 @@ class View(avango.script.Script):
         pass
 
 
+
+
+
+class LShapeView(avango.script.Script):
+    
+    RootCamera1 = avango.osg.SFNode()
+    RootCamera2 = avango.osg.SFNode()
+        
+    Root = avango.osg.SFNode()
+    Camera = avango.osg.SFMatrix()
+    Viewport = avango.osg.SFVec4()
+    Depth = avango.SFFloat()
+    UserSelector = avango.SFInt()
+    Near = avango.SFFloat()
+    Far = avango.SFFloat()
+    BackgroundColor = avango.osg.SFVec4()
+
+    def __init__(self):
+        self.super(IConeView).__init__()
+        self.Viewport.value = avango.osg.Vec4(0, 0, 1, 1)
+        self.Depth.value = 0
+        self.Near.value = 0.1
+        self.Far.value = 500.
+        self.BackgroundColor.value = avango.osg.Vec4(0., 0., 0., 1.)
+        self.UserSelector.value = 0
+        
+        n = avango.osg.nodes.Group()
+        self.RootCamera1.Children.append(n)
+    
+        n = avango.osg.nodes.Group()
+        self.RootCamera2.Children.append(n)
+        
+    @field_has_changed(Root)
+    def root_has_changed(self):
+        self.RootCamera1.value.Children[0] = self.Root.value
+        self.RootCamera2.value.Children[0] = self.Root.value
+
+
 class MonitorView(avango.script.Script):
     
     BoundingSphereRoot = avango.osg.SFNode()

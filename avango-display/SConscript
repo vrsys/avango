@@ -40,6 +40,7 @@ av_display_setups_files = Split("""
     python/avango/display/setups/AutoStereoDisplay.py
     python/avango/display/setups/FakeTwoView.py
     python/avango/display/setups/iCone.py
+    python/avango/display/setups/LShape.py
     python/avango/display/setups/Monitor.py
     python/avango/display/setups/TwoView.py
     python/avango/display/setups/Wall.py
@@ -60,6 +61,9 @@ avango.build.Environment.prepend_include_path(Dir('include').abspath)
 avango.build.Environment.prepend_library_path(Dir('.').abspath)
 display_mt_env = avango.build.Environment()
 avango.build.add_library(display_mt_env, 'avango-core')
+
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(display_mt_env, "boost_system")
 
 # Substitutions
 display_mt_env['SUBST'] = {

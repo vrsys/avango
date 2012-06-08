@@ -33,6 +33,9 @@ avango.build.add_library(local_env, 'boost_python')
 for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
     avango.build.add_library(local_env, lib)
     
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(local_env, "boost_system")
+    
 
 #local_env['CPPPATH'] += [ Dir('../src/avango/devices/multitouch') ]
 #local_env['CPPPATH'] += [ Dir('../src/avango/devices/multitouch/oscpack') ]

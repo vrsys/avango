@@ -101,6 +101,11 @@ def get_display_type():
 
     return _selected_display.get_display_type()
 
+def get_display():
+    "Returns the used display"
+
+    return _selected_display
+
 def get_num_users(subdisplay=""):
     "Returns the number of users"
 

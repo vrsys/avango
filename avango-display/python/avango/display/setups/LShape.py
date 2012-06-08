@@ -21,6 +21,13 @@
 #                                                                        #
 ##########################################################################
 
+import avango.script
+import avango.osg
+import avango.display
+import avango.utils
+import os
+
+
 import avango.display
 
 from avango.display import *
@@ -118,10 +125,13 @@ class LShape(avango.display.Display):
         self._wiimote_config["wiimote3"] = ["ve-dtrack-logitech", avango.osg.Vec3(-0.04 , 0.0, -0.025)]
         self._wiimote_config["wiimote4"] = ["ve-dtrack-raytac",   avango.osg.Vec3( 0.068, 0.02, 0.035)]
         
+        self.icone_view = None
+        
     def make_view(self, subdisplay, display_view = None):
         print "LShape::make_view"
         if not display_view:
             display_view = avango.display.nodes.LShapeView()
+            self.icone_view = display_view
         num = 0
         for window, transform, current_user in self._windows:
             
@@ -165,7 +175,7 @@ class LShape(avango.display.Display):
         return camera, view
     
     
-    def make_camera(self, display_view, eye_offset, window, connect_viewport = True, num):
+    def make_camera(self, display_view, eye_offset, window, connect_viewport, num):
         camera = avango.osg.viewer.nodes.Camera()
         camera.EyeOffset.value = eye_offset
         if connect_viewport:
@@ -252,3 +262,80 @@ class LShape(avango.display.Display):
             #elif interface == "user2":
             #    return self.user1_matrix_mul
             return None
+        
+
+class ViewUserSelector(avango.script.Script):
+    'Activates or deactivates a viewport depending on the selected user'
+
+    UserSelector = avango.SFInt()
+    UserMatch = avango.SFInt()
+
+    ViewIn = avango.osg.viewer.SFView()
+    ViewOut = avango.osg.viewer.SFView()
+
+    def evaluate(self):
+        if self.UserSelector.value != 0 and self.UserSelector.value != self.UserMatch.value:
+            self.ViewOut.value = None
+            return
+
+        self.ViewOut.value = self.ViewIn.value
+
+
+class ViewMerger(avango.script.Script):
+    'Merge a list of input fields into an output list of views'
+
+    ViewsOut = avango.osg.viewer.MFView()
+
+    def __init__(self):
+        self.super(ViewMerger).__init__()
+        self._num_inputs = 0
+
+    def evaluate(self):
+        result = []
+        for i in xrange(0, self._num_inputs):
+            value = self.get_input(i).value
+            if value:
+                result.append(value)
+        self.ViewsOut.value = result
+
+    def get_input(self, index):
+        if index >= self._num_inputs:
+            return None
+        return getattr(self, self.get_input_name(index))
+
+    def get_input_name(self, index):
+        return 'ViewIn%i' % index
+
+    def add_input(self):
+        result = self._num_inputs
+        self._num_inputs += 1
+
+        self.add_field(avango.osg.viewer.SFView(), self.get_input_name(result))
+
+        return result
+
+
+class ViewportConverter(avango.script.Script):
+    """Given a (relative) Viewport (i.e. as rectangular section of a window)
+    as new Transformation and (camera) Viewport is calculated."""
+
+    ViewportIn = avango.osg.SFVec4()
+    ViewportOut = avango.osg.SFVec4()
+
+    RealActualWidth = avango.SFFloat()
+    RealActualHeight = avango.SFFloat()
+
+    ScreenTransformIn = avango.osg.SFMatrix()
+    ScreenTransformOut = avango.osg.SFMatrix()
+
+    def evaluate(self):
+        viewport_in = self.ViewportIn.value
+        self.ViewportOut.value = avango.osg.Vec4(viewport_in.x,
+                                                 viewport_in.y,
+                                                 viewport_in.z - viewport_in.x,
+                                                 viewport_in.w - viewport_in.y)
+
+        x_trans = 0.5 * (viewport_in.x + viewport_in.z - 1.) * self.RealActualWidth.value
+        y_trans = 0.5 * (viewport_in.y + viewport_in.w - 1.) * self.RealActualHeight.value
+        self.ScreenTransformOut.value = avango.osg.make_trans_mat(x_trans, y_trans, 0.) * self.ScreenTransformIn.value
+

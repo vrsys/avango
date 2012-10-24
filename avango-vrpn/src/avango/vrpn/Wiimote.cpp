@@ -5,6 +5,8 @@
 
 #include <avango/vrpn/Wiimote.h>
 
+#include <boost/bind.hpp>
+
 namespace {
 av::Logger& logger(av::getLogger("av::vrpn::Wiimote"));
 }

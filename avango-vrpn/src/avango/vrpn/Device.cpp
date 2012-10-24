@@ -10,6 +10,8 @@
 #include <avango/vrpn/Device.h>
 #include <avango/vrpn/Button.h>
 
+#include <boost/bind.hpp>
+
 #include "vrpn_Tracker.h"
 #include "vrpn_Button.h"
 #include "vrpn_Analog.h"

@@ -223,9 +223,13 @@ def _build_environment():
         result.Append(CPPDEFINES='TRACE_LOGGING')
 
     if result['BUILD_32']:
-        # FIXME does this work in Windows or Mac OS X?
-        result.Append(CCFLAGS='-m32')
-        result.Append(LINKFLAGS='-m32')
+        #linux or mac
+        if not oshelper.os_is_windows():
+            result.Append(CCFLAGS='-m32')
+            result.Append(LINKFLAGS='-m32')
+        #windows
+        else:
+            pass
 
     result.PrependENVPath('PATH', result['BINARY_PATH'])
     result.Prepend(CPPPATH=result['INCLUDE_PATH'].split(os.pathsep))

@@ -1,0 +1,45 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2009 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+
+import avango.build
+
+env = avango.build.Environment()
+avango.build.add_library(env, 'avango-core')
+avango.build.add_library(env, 'avango-osg')
+
+for lib in ['osg','osgUtil', 'GL', 'GLU', "vrpn"]:
+    avango.build.add_library(env, lib)
+
+env.Append(CPPDEFINES='AV_VRPN_LIBRARY')
+
+sources = Split('''
+    Service.cpp
+    Device.cpp
+    Button.cpp
+    Wiimote.cpp
+    ''')
+    
+lib = env.SharedLibrary('avangoVRPN', sources)
+
+if avango.build.oshelper.os_is_windows():
+    avango.build.add_library(vrpn_env, 'boost_signals')
+    avango.build.add_library(vrpn_env, 'boost_thread')
+    vrpn_env.Prepend(LIBS=['ws2_32', 'winmm'])
+Alias('vrpn', lib)
+Alias('install-vrpn', env.Install(avango.build.get_library_path(), lib))
+
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+

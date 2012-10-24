@@ -1,0 +1,46 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+#  Avango Software, Copyright 2001 - 2007 Fraunhofer Gesellschaft        #
+#  zur Foerderung der angewandten Forschung (FhG), Munich, Germany.      #
+#                                                                        #
+#  Avango Software (both binary and source code - if released) is        #
+#  intellectual property owned by FhG and copyrighted by FhG worldwide.  #
+#                                                                        #
+#  Avango is a trademark owned by FhG.                                   #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+local_env = avango.build.PythonEnvironment()
+
+avango.build.Environment.add_search_path('avango-python')
+
+avango.build.add_library(local_env, 'avango-python')
+avango.build.add_library(local_env, 'avango-core')
+avango.build.add_library(local_env, 'avango-osg')
+avango.build.add_library(local_env, 'boost_python')
+avango.build.add_library(local_env, 'osg')
+
+
+local_env.Prepend(LIBS=['avangoVRPN'])
+
+vrpn_files = Split("""
+    _vrpn.cpp
+    """)
+
+vrpn_python_files = Split("""
+    __init__.py
+    """)
+
+lib = local_env.SharedLibrary("_vrpn", vrpn_files)
+
+local_env.Depends(lib, vrpn_python_files)
+local_env.Install(avango.build.get_python_path('avango/vrpn'), vrpn_python_files)
+local_env.Install(avango.build.get_python_path('avango/vrpn'), lib)
+   
+Alias('vrpn', lib)
+Alias('install-vrpn', avango.build.get_python_path('avango/vrpn'))
+

@@ -63,6 +63,9 @@ opts.AddOptions(
     BoolOption('UTILS_SUPPORT',
                'Enable building utility module (REQUIRED)',
                True),
+    BoolOption('VRPN_SUPPORT',
+               'Enable building vrpn module (REQUIRED)',
+               True),
     )
 
 avango.build.setup()
@@ -130,6 +133,8 @@ if env['CONNECT_SUPPORT']:
     avango.build.SConscript('avango-connect/SConscript')
 if env['UTILS_SUPPORT']:
     avango.build.SConscript('avango-utils/SConscript')
+if env['VRPN_SUPPORT']:
+    avango.build.SConscript('avango-vrpn/SConscript')
 avango.build.SConscript('avango-inspector/SConscript')
 avango.build.SConscript('avango-doc/SConscript')
 avango.build.SConscript('examples/SConscript')

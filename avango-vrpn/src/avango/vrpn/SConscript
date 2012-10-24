@@ -28,6 +28,7 @@ sources = Split('''
     Service.cpp
     Device.cpp
     Button.cpp
+    TrackerInformation.cpp
     Wiimote.cpp
     ''')
     

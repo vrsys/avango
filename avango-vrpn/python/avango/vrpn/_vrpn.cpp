@@ -15,6 +15,7 @@
 #include <avango/vrpn/Device.h>
 #include <avango/vrpn/Service.h>
 #include <avango/vrpn/Button.h>
+#include <avango/vrpn/TrackerInformation.h>
 #include <avango/vrpn/Wiimote.h>
 
 #include <avango/python/register_field.h>
@@ -40,6 +41,7 @@ BOOST_PYTHON_MODULE(_vrpn)
   av::vrpn::Device::initClass();
   av::vrpn::Service::initClass();
   av::vrpn::Button::initClass();
+  av::vrpn::TrackerInformation::initClass();
   av::vrpn::Wiimote::initClass();
 
   class_<av::vrpn::Device, av::Link<av::vrpn::Device>, bases<av::FieldContainer>, boost::noncopyable >("Device",
@@ -56,6 +58,11 @@ BOOST_PYTHON_MODULE(_vrpn)
 			  "Docstring", no_init);
 		register_field<av::vrpn::SFButton>("SFButton");
 		register_multifield<av::vrpn::MFButton>("MFButton");
+
+		class_<av::vrpn::TrackerInformation, av::Link<av::vrpn::TrackerInformation>, bases<av::FieldContainer>, boost::noncopyable >("TrackerTrackerInformation",
+		        "Docstring", no_init);
+		    register_field<av::vrpn::SFTrackerInformation>("SFTrackerInformation");
+		    register_multifield<av::vrpn::MFTrackerInformation>("MFTrackerInformation");
 
 	class_<av::vrpn::Wiimote, av::Link<av::vrpn::Wiimote>, bases<av::FieldContainer>, boost::noncopyable >("Wiimote",
 			  "Docstring", no_init);

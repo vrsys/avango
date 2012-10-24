@@ -2,6 +2,7 @@
 #define AVANGO_DEVICE_H
 
 #include "Button.h"
+#include "TrackerInformation.h"
 
 #include <avango/FieldContainer.h>
 #include <avango/osg/Fields.h>
@@ -43,7 +44,8 @@ namespace av
       SFString VRPNID;
       MFButton Buttons;
       MFFloat Channels;
-      ::av::osg::SFMatrix Matrix;
+      MFTrackerInformation TrackerInfo;
+
 
 //      /* virtual */ void fieldHasChanged(const av::Field& field);
 //      /* virtual */ void evaluate();

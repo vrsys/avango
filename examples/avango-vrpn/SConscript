@@ -23,44 +23,12 @@
 
 import avango.build
 
-Alias('install', Alias('install-examples'))
+Import('examples_dir')
 
-examples_dir = avango.build.get_documentation_path('examples')
-Export('examples_dir')
+files = Split('''
+              wiimote.py
+              vrpn.cfg
+              vrpn_wiimote.cfg
+              ''')
 
-
-# basic examples
-
-if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
-    SConscript('3d-menu/SConscript')
-    SConscript('avango-tools/SConscript')
-    SConscript('billboard/SConscript')
-    SConscript('desktop-flyer/SConscript')
-    SConscript('display/SConscript')
-    SConscript('distribution/SConscript')
-    SConscript('embedded-viewer/SConscript')
-    SConscript('inspector/SConscript')
-    SConscript('layer/SConscript')
-    SConscript('low-level-display-setup/SConscript')
-    SConscript('shader/SConscript')
-    SConscript('simple/SConscript')
-    SConscript('snowland/SConscript')
-    SConscript('video/SConscript')
-    SConscript('wireframe/SConscript')
-
-
-# examples requiring specific avango modules
-
-if avango.build.Environment()['CONNECT_SUPPORT']:
-    SConscript('connect/SConscript')
-if avango.build.Environment()['OPENAL_SUPPORT']:
-    SConscript('sound/SConscript')
-if not avango.build.oshelper.os_is_windows() and \
-     not avango.build.oshelper.os_is_mac():
-    SConscript('daemon/SConscript')
-if avango.build.Environment()['UTILS_SUPPORT']:
-  SConscript('avango-utils/SConscript')
-if avango.build.Environment()['SHADE_SUPPORT']:
-  SConscript('shade/SConscript')
-if avango.build.Environment()['VRPN_SUPPORT']:
-  SConscript('avango-vrpn/SConscript')
+Alias('install-examples', Install(examples_dir.abspath + '/avango-vrpn', files))

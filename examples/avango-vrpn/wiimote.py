@@ -79,7 +79,8 @@ rootNode.Children.value.append(sphere)
 
 #create a wiimote
 wiimote = avango.vrpn.nodes.Wiimote()
-wiimote.VRPNID.value="WiiMote0@129.26.74.41"
+#wiimote.VRPNID.value="WiiMote0@129.26.74.41"
+wiimote.VRPNID.value="WiiMote0@localhost"
 
 #printer = avango.utils.ScriptFieldPrinter()
 #printer.Script.value = wiimote

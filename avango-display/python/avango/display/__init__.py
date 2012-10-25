@@ -111,6 +111,10 @@ def get_num_users(subdisplay=""):
 
     return _selected_display.get_num_users(subdisplay)
 
+def get_user(userIndex,subdisplay=""):
+    "Returns the user with the given index"
+    return _selected_display.get_user(userIndex, subdisplay)
+
 def get_camera(subdisplay):
     """
     Get the osg.Camera object of the selected subdisplay. If no camera for the

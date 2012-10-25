@@ -11,6 +11,9 @@ class DTrackTaregtIdName(avango.script.Script):
     Id = avango.SFLong()
     Name = avango.SFString()
     
+    def __str__(self):
+        return str(self.Id.value) + " " + self.Name.value
+    
 
 class DTrackDevice(avango.script.Script):
     
@@ -33,6 +36,7 @@ class DTrackDevice(avango.script.Script):
             assert(len(p)==2)
             
             self.TargetIdName.value.append(DTrackTaregtIdName(Id=p[0],Name=p[1]))
+        
     
     def get_name_from_id(self, id):
         for p in self.TargetIdName.value:

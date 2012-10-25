@@ -65,7 +65,7 @@ opts.AddOptions(
                True),
     BoolOption('VRPN_SUPPORT',
                'Enable building vrpn module (REQUIRED)',
-               True),
+               False),
     )
 
 avango.build.setup()

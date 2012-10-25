@@ -32,6 +32,8 @@ avango.build.Environment.prepend_library_path(Dir('src/avango/script').abspath)
 avango_env = avango.build.PythonEnvironment()
 avango_env.Append(LIBS=["avangoScript"])
 avango.build.add_library(avango_env, 'boost_python')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(avango_env, "boost_system")
 avango.build.add_library(avango_env, 'avango-core')
 
 Alias('all', Alias('python'))
@@ -47,6 +49,8 @@ avango_script_library_files = Split("""
 avango_lib_env = avango.build.Environment()
 avango_lib_env.Append(CPPDEFINES='AV_PYTHON_LIBRARY')
 avango.build.add_library(avango_lib_env, 'boost_python')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(avango_lib_env, "boost_system")
 avango.build.add_library(avango_lib_env, 'avango-core')
 avango_script_library = avango_lib_env.SharedLibrary("avangoScript", avango_script_library_files)
 Alias('install-python', Install(avango.build.get_library_path(), avango_script_library))

@@ -35,14 +35,29 @@ vrpn_python_files = Split("""
     __init__.py
     _nodes.py
     _dtrack_device.py
+    _dtrack_target.py
     """)
 
 lib = local_env.SharedLibrary("_vrpn", vrpn_files)
 
-local_env.Depends(lib, vrpn_python_files)
+
+
+Alias('install-vrpn', local_env.Install(avango.build.get_python_path('avango/vrpn/'), [lib]+vrpn_python_files))
+
+test_package_dir = '../test_package/'
+avango.build.Environment.prepend_python_path(Dir(test_package_dir).abspath)
+Install(test_package_dir+'avango/vrpn', lib)
+avango.build.install_python(test_package_dir+'avango/vrpn', vrpn_python_files)
+
 local_env.Install(avango.build.get_python_path('avango/vrpn'), vrpn_python_files)
-local_env.Install(avango.build.get_python_path('avango/vrpn'), lib)
-   
-Alias('vrpn', lib)
-Alias('install-vrpn', avango.build.get_python_path('avango/vrpn'))
+
+
+
+
+#local_env.Depends(lib, vrpn_python_files)
+local_env.Install(avango.build.get_python_path('avango/vrpn'), vrpn_python_files)
+#local_env.Install(avango.build.get_python_path('avango/vrpn'), vrpn_python_files)
+#local_env.Install(avango.build.get_python_path('avango/vrpn'), lib)   
+#Alias('vrpn', lib)
+#Alias('install-vrpn', avango.build.get_python_path('avango/vrpn'))
 

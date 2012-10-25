@@ -87,3 +87,4 @@ av::vrpn::TrackerInformation::setQUATCB(const av::osg::SFQuat::SetValueEvent& ev
   mQuat = (event.getValue());
   updateMatrix();
 }
+

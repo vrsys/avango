@@ -27,6 +27,7 @@ Import('examples_dir')
 
 files = Split('''
               wiimote.py
+              dtrack.py
               vrpn.cfg
               vrpn_wiimote.cfg
               ''')

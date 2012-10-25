@@ -26,7 +26,9 @@
 from _nodes import *
 
 from _vrpn import *
+
 from _dtrack_device import *
+from _dtrack_target import *
 
 #import avango.nodefactory
 #nodes = avango.nodefactory.NodeFactory('av::vrpn::')

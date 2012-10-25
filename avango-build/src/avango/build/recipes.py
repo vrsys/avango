@@ -51,6 +51,7 @@ def _setup_default():
     _config_store.set('boost_signals', BoostConfig('boost_signals'))
     _config_store.set('boost_filesystem', BoostConfig('boost_filesystem'))
     _config_store.set('boost_regex', BoostConfig('boost_regex'))
+    _config_store.set('boost_system', BoostConfig('boost_system'))
     _config_store.set('boost_date_time', BoostConfig('boost_date_time'))
     _config_store.set('boost_python', BoostConfig('boost_python', dependencies = ['python']))
 
@@ -84,6 +85,13 @@ def _setup_default():
       _config_store.set('osgUtil', PlainConfig(libraries = ['osgUtil']))
       _config_store.set('GL', PlainConfig(libraries = ['GL']))
       _config_store.set('GLU', PlainConfig(libraries = ['GLU']))
+      
+      # for avango extensions, there is no pkg-config
+      _config_store.set('avango-core', PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread", "boost_regex"]))
+      _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
+      _config_store.set('avango-utils', PlainConfig(libraries = ['avangoUtils']))
+      _config_store.set('avango-tools', PlainConfig(libraries = ['avangoTools']))
+      _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
 
     # Override some libraries for Windows
     if oshelper.os_is_windows():

@@ -50,6 +50,9 @@ Alias('install', Alias('install-moving'))
 
 for lib in ['avango-core', 'avango-osg', 'avango-python', 'osg']:
     avango.build.add_library(moving_env, lib)
+    
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(moving_env, "boost_system")
 
 # Subdirs
 Export('moving_env')

@@ -41,6 +41,9 @@ avango_env.Append(LDFLAGS='-export-dynamic') # FIXME does this work on Windows?
 avango_env.Append(CPPDEFINES=['AV_LIBRARY'])
 for lib in Split('dl boost_thread boost_signals'):
     avango.build.add_library(avango_env, lib)
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(avango_env, "boost_system")
+	
 if avango_env['DISTRIBUTION_SUPPORT']:
     avango.build.add_library(avango_env, 'avango-ensemble')
     if avango_env['ZMQ_DISTRIBUTION_SUPPORT']:

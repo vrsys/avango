@@ -191,8 +191,6 @@ void av::vrpn::Device::handleTracker(const vrpn_TRACKERCB t)
   ::osg::Vec3 pos = ::osg::Vec3(t.pos[0], t.pos[1], t.pos[2]);
   ::osg::Quat quat = ::osg::Quat(t.quat[0], t.quat[1], t.quat[2], t.quat[3]);
 
-  std::cout << "Device::handleTracker::Sensor num: " << sensorNumber
-      << std::endl;
   //check if the trackerInfo is already in the list
   bool sensorKnown = false;
   MFTrackerInformation::ContainerType::iterator iter;

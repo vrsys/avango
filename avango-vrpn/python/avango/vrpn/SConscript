@@ -33,6 +33,8 @@ vrpn_files = Split("""
 
 vrpn_python_files = Split("""
     __init__.py
+    _nodes.py
+    _dtrack_device.py
     """)
 
 lib = local_env.SharedLibrary("_vrpn", vrpn_files)

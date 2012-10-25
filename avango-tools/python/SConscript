@@ -29,6 +29,8 @@ module_env = avango.build.PythonEnvironment()
 avango.build.add_library(module_env, 'boost_python')
 avango.build.add_library(module_env, 'avango-core')
 avango.build.add_library(module_env, 'avango-python')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(module_env, "boost_system")
 
 module_env.Prepend(LIBS="avangoTools")
 

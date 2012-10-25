@@ -29,6 +29,9 @@ avango.build.add_library(env, 'avango-osg')
 
 for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
     avango.build.add_library(env, lib)
+    
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(env, "boost_system")
 
 env.Append(CPPDEFINES='AV_UTILS_LIBRARY')
 

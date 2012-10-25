@@ -43,6 +43,8 @@ sources = Split('''
     ''')
 
 avango.build.add_library(tools_env, 'boost_regex')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(tools_env, "boost_system")
 
 if avango.build.Environment()['OPENSCENEGRAPH_SUPPORT']:
     avango.build.add_library(tools_env, 'avango-osg')

@@ -50,6 +50,9 @@ def append_shade_core_options(env):
     env.Append(LIBS=['GLEW']) # TODO remove from AVANGO build
 
 shade_core_env = avango.build.Environment()
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(shade_core_env, "boost_system")
+	
 append_shade_core_options(shade_core_env)
 Export('shade_core_env')
 

@@ -44,6 +44,10 @@ sources = Split('''
 
 for lib in ['avango-core', 'avango-osg', 'osg']:
     avango.build.add_library(shade_env, lib)
+
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(shade_env, "boost_system")
+	
 shade_env.Append(CPPDEFINES='AV_SHADE_LIBRARY')
 lib = shade_env.SharedLibrary('avangoShade', sources)
 Depends(lib, Dir('../../include/avango/shade/impl')) # FIXME bug or bad behaviour in scons

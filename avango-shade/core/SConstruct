@@ -135,6 +135,8 @@ if not is_windows():
     # Boost libraries use auto-linking under Windows
     shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_signals')])
     shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_filesystem')])
+    shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_system')])
+
 shade_core_env.Append(LIBS=['GLEW'])
 if env['OPENSCENEGRAPH_SUPPORT']:
     shade_core_env.Append(LIBS=[get_osg_library_name(env, 'osg')])

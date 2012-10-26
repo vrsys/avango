@@ -8,6 +8,11 @@ import avango.vrpn
 import sys
 from math import *
 
+class ExitTrigger(avango.utils.EdgeTrigger):
+
+    def on_up_transition(self):
+        sys.exit()
+
 def get_two_view_dtrack_mapping():
     return [
     [1,"ve-dtrack-head1"] ,
@@ -37,17 +42,17 @@ view.EnableTrackball.value = False
 #create a dtrack vrpn device
 generic_vrpn_device, dtrack = avango.display.make_device("DTrackVRPN", ["DTrack@localhost", get_two_view_dtrack_mapping()])
 
+
 #get two user objects
 user1 = avango.display.get_user(0)
 user2 = avango.display.get_user(1)
 
 #set up a simple scenegraph
 rootNode = avango.osg.nodes.MatrixTransform();
-rootNode.Matrix.value = avango.osg.make_trans_mat(0,1.7,-20)
 view.Root.value = rootNode
 
 #add a sphere
-sphere = avango.osg.nodes.Sphere()
+sphere = avango.osg.nodes.Sphere(Radius=0.3, Matrix=avango.osg.make_trans_mat(0, 1.2, -3), Color=avango.osg.Vec4(1,1,0,1))
 rootNode.Children.value.append(sphere)
 
 #create a dTrack device
@@ -68,9 +73,14 @@ service.Devices.value.append(generic_vrpn_device)
 perf2osg = avango.osg.make_rot_mat(radians(-90), 1, 0, 0)
 user1Tracker = avango.vrpn.create_dtrack_target("ve-dtrack-xpand1", avango.osg.make_trans_mat(avango.osg.Vec3(-0.0825, 0.0, -0.045)), perf2osg)
 user2Tracker = avango.vrpn.create_dtrack_target("ve-dtrack-xpand2", avango.osg.make_trans_mat(avango.osg.Vec3(0.12, 0.043, 0.0 )), perf2osg)
-
+#connect the matrices to the users
 user1.Matrix.connect_from(user1Tracker.Matrix)
 user2.Matrix.connect_from(user2Tracker.Matrix)
+
+#create a wiimote sensor
+wiimote = avango.display.make_device("Wiimote","WiiMote0@localhost")
+exit_trigger = ExitTrigger()
+exit_trigger.Trigger.connect_from(wiimote.Button0)
 
 #run the avango mainloop
 avango.display.run()

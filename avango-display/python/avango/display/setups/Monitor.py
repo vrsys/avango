@@ -264,6 +264,14 @@ class Monitor(avango.display.Display):
             
             return generic_dtrack_device, dtrack_device
         
+        elif device == "Wiimote":
+            import avango.vrpn
+            #create a wiimote
+            wiimote = avango.vrpn.nodes.Wiimote()
+            wiimote.VRPNID.value=interface
+            
+            return wiimote
+        
             
         elif device == "GamePad":
             

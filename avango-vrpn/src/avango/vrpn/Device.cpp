@@ -62,6 +62,7 @@ av::vrpn::Device::Device() :
 
   AV_FC_ADD_FIELD(Buttons, MFButton::ContainerType());
   AV_FC_ADD_FIELD(Channels, MFFloat::ContainerType());
+  AV_FC_ADD_FIELD(VRPNPort, 3883);
   AV_FC_ADD_FIELD(TrackerInfo, MFTrackerInformation::ContainerType());
   AV_FC_ADD_ADAPTOR_FIELD(VRPNID, boost::bind(&av::vrpn::Device::getVRPNIDCB,
       this, _1), boost::bind(&av::vrpn::Device::setVRPNIDCB, this, _1));
@@ -109,6 +110,9 @@ void av::vrpn::Device::initClass()
 
 void av::vrpn::Device::openVRPNConnections()
 {
+
+  //mVRPNConnection = boost::shared_ptr<vrpn_Connection>(vrpn_create_server_connection(VRPNPort.getValue()));
+
   std::cout << "openVRPNConnections: " << mVRPNID << std::endl;
   mVRPNAnalog = boost::shared_ptr<vrpn_Analog_Remote>(
       new vrpn_Analog_Remote(mVRPNID.c_str()));

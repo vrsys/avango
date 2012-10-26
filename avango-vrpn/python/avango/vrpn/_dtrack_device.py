@@ -59,10 +59,11 @@ class DTrackDevice(avango.script.Script):
             targetFoundInDTrackConfig, targetName = self.get_name_from_id(trackerNum)
             if targetFoundInDTrackConfig :
                 #check if the target is in the subscription list
-                targetFound, target = get_target_by_name(targetName) 
-                if target_found:
+                targetFound, target = self.get_target_by_name(targetName)
+                if targetFound:
                     target.Id = trackerInfo.Number.value
-                    target.DTrackMatrix.value = trackerInfo.Matrix
+                    target.DTrackMatrix.value = trackerInfo.Matrix.value
+                    target.touch()
                 
             
         

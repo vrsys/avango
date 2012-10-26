@@ -166,8 +166,36 @@ class TwoView(avango.display.Display):
 
 
     def make_device(self, device, interface):
+        #check if super class already has support for such an device
+        created_device = super(TwoView, self).make_device(device, interface)
+        if created_device != None:
+            return created_device
+        
+        if device == "DTrackVRPN":
+            assert(len(interface)==2)
+            #interface must look like this ["DTrack@localhost",[[1,"ve-dtrack-head1"], ...]]
+            import avango.vrpn
+            #create a dTrack device
+            generic_dtrack_device = avango.vrpn.nodes.Device()
+            generic_dtrack_device.VRPNID.value=interface[0]
+            dtrack_device = avango.vrpn.nodes.DTrackDevice()
+            #connect the tracker output from the generic device
+            dtrack_device.TrackerInfo.connect_from(generic_dtrack_device.TrackerInfo)
+            #register some interested tracker ids and names
+            dtrack_device.populate_interested_target_ids(interface[1], False)
+            
+            return generic_dtrack_device, dtrack_device
+        
+        elif device == "WiimoteVRPN":
+            import avango.vrpn
+            #create a wiimote
+            wiimote = avango.vrpn.nodes.Wiimote()
+            wiimote.VRPNID.value=interface
+            
+            return wiimote
+        
         #check for wiimote
-        if "wiimote" in device:
+        elif "wiimote" in device:
             pattern = re.compile("wiimote(\d+)$")
             result = pattern.match(device)
             if not result:
@@ -212,5 +240,5 @@ class TwoView(avango.display.Display):
             if interface == "user1":
                 return self.user1_matrix_mul
             elif interface == "user2":
-                return self.user1_matrix_mul
+                return self.user2_matrix_mul
             return None

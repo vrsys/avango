@@ -12,6 +12,7 @@
 #include <vrpn_Analog.h>
 #include <vrpn_Button.h>
 #include <vrpn_Tracker.h>
+#include <vrpn_Connection.h>
 
 #include <boost/shared_ptr.hpp>
 
@@ -41,6 +42,9 @@ namespace av
 
     public:
 
+      //default port is 3883
+      SFInt VRPNPort;
+
       SFString VRPNID;
       MFButton Buttons;
       MFFloat Channels;
@@ -61,6 +65,8 @@ namespace av
       bool vrpnConnected;
 
       std::string mVRPNID;
+
+      //boost::shared_ptr<vrpn_Connection> mVRPNConnection;
       boost::shared_ptr<vrpn_Analog_Remote> mVRPNAnalog;
       boost::shared_ptr<vrpn_Button_Remote> mVRPNButton;
       boost::shared_ptr<vrpn_Tracker_Remote> mVRPNTracker;

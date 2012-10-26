@@ -61,12 +61,26 @@ class RadiusRumbler(avango.script.Script):
             self.Radius.value += delta
             self._enlarge = not self._enlarge
             
+class TrackerInfoPrinter(avango.script.Script):
+    
+    TrackerInfo = avango.vrpn.MFTrackerInformation()
+    
+    def __init__(self):
+        self.super(TrackerInfoPrinter).__init__()
+        
+    def evaluate(self):
+        print "#########"
+        for tInfo in self.TrackerInfo.value:
+            print str(tInfo.Number.value)
+            print str(tInfo.Matrix.value)
+            
                     
 #init avango.display
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
 view.EnableTrackball.value = False
 
+dev = avango.vrpn.nodes.DTrackDevice()
 
 #set up a simple scenegraph
 rootNode = avango.osg.nodes.MatrixTransform();
@@ -76,6 +90,17 @@ view.Root.value = rootNode
 #add a sphere
 sphere = avango.osg.nodes.Sphere()
 rootNode.Children.value.append(sphere)
+
+
+dtrack = avango.vrpn.nodes.Device()
+#wiimote.VRPNID.value="WiiMote0@129.26.74.41"
+dtrack.VRPNID.value="DTrack@localhost"
+
+#printer = avango.utils.ScriptFieldPrinter()
+#printer.Script.value = dtrack
+
+p = TrackerInfoPrinter()
+p.TrackerInfo.connect_from(dtrack.TrackerInfo)
 
 #create a wiimote
 wiimote = avango.vrpn.nodes.Wiimote()
@@ -89,6 +114,7 @@ wiimote.VRPNID.value="WiiMote0@localhost"
 service = avango.vrpn.nodes.Service()
 service.always_evaluate(True)
 service.Devices.value.append(wiimote)
+service.Devices.value.append(dtrack)
 
 #create a simple moving device
 mover = Mover()

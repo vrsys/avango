@@ -186,10 +186,6 @@ class Monitor(avango.display.Display):
         if self._subdisplay_window.has_key(subdisplay):
             return self._subdisplay_window[subdisplay]
         return None
-    
-    def get_user(self, userIndex, subdisplay):
-        assert(len(self._users)>userIndex)
-        return self._users[interface];
 
     def make_dominant_user_device(self, user, interface, subdisplay):
         if subdisplay not in self._subdisplay_camera:
@@ -250,6 +246,7 @@ class Monitor(avango.display.Display):
             return spacemouse
         
         elif device == "DTrackVRPN":
+            
             assert(len(interface)==2)
             #interface must look like this ["DTrack@localhost",[[1,"ve-dtrack-head1"], ...]]
             import avango.vrpn
@@ -262,7 +259,7 @@ class Monitor(avango.display.Display):
             #register some interested tracker ids and names
             dtrack_device.populate_interested_target_ids(interface[1], False)
             
-            return generic_dtrack_device, dtrack_device
+            return [generic_dtrack_device, dtrack_device]
         
         elif device == "Wiimote":
             import avango.vrpn

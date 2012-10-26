@@ -68,6 +68,10 @@ class Display(object):
         if user > len(self._users):
             return None
         return self._users[user]
+    
+    def get_user(self, userIndex, subdisplay):
+        assert(len(self._users)>userIndex)
+        return self._users[userIndex];
 
     def make_view(self, subdisplay, display_view = None):
         if not display_view:

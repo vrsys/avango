@@ -251,7 +251,7 @@ void av::vrpn::Wiimote::setLED3CB(const av::SFBool::SetValueEvent& event)
 {
   const bool ledOn = (event.getValue());
 //  std::cout << "LedOn: " << ledOn << std::endl;
-  setLeds(4,ledOn);
+  setLeds(3,ledOn);
 }
 
 bool av::vrpn::Wiimote::update_channel(const vrpn_int32 channel,

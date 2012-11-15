@@ -203,7 +203,10 @@ def _build_environment():
             result.Append(CXXFLAGS='/EHsc /W3 /MDd /wd4099 /wd4244 /wd4800 /wd4996 /wd4251 /wd4661') # FIXME remove deactivation of warnings
         else:
             result.Append(CXXFLAGS=['/EHsc', '/W3', '/MD', '/wd4099', '/wd4244', '/wd4800', '/wd4996', '/wd4251', '/wd4661']) # FIXME remove deactivation of warnings
-        result.Append(CPPDEFINES=['WIN32', 'AV_INSTANTIATE_FIELD_TEMPLATES'])
+        
+        result.Append(CPPDEFINES=['AV_INSTANTIATE_FIELD_TEMPLATES'])
+        result.Append(LINKFLAGS='/MACHINE:X64')
+		  
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
         result.Append(CCFLAGS='-ansi -Wall')
@@ -229,7 +232,8 @@ def _build_environment():
             result.Append(LINKFLAGS='-m32')
         #windows
         else:
-            pass
+            result.Append(CPPDEFINES=['WIN32'])
+		
 
     result.PrependENVPath('PATH', result['BINARY_PATH'])
     result.Prepend(CPPPATH=result['INCLUDE_PATH'].split(os.pathsep))

@@ -21,15 +21,15 @@
 #                                                                        #
 ##########################################################################
 
-CXX=''
+CXX='$CC'
 DEBUG=False
 TRACE_LOGGING=False
 LOG_LEVEL='DEBUG'
-BINARY_PATH=''
-INCLUDE_PATH=''
-LIBRARY_PATH=''
-PKG_CONFIG_PATH=''
-PYTHON_PATH=''
+BINARY_PATH='F:\\usr\\local\\bin;F:\\usr\\local\\bin;F:\\usr\\local\\bin'
+INCLUDE_PATH='F:\\usr\\local\\include;F:\\usr\\local\\include;F:\\usr\\local\\include'
+LIBRARY_PATH='F:\\usr\\local\\lib;F:\\usr\\local\\lib;F:\\usr\\local\\lib'
+PKG_CONFIG_PATH='F:\\usr\\local\\lib\\pkgconfig;F:\\usr\\local\\lib\\pkgconfig;F:\\usr\\local\\lib\\pkgconfig'
+PYTHON_PATH='F:\\usr\\local\\lib\\python2.7;F:\\usr\\local\\lib\\python2.7;F:\\usr\\local\\lib\\python2.7'
 BUILD_32=False
 BOOST_DEBUG=False
 BOOST_LAYOUT='system'

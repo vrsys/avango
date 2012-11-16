@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-CXX='$CC'
+CXX=''
 DEBUG=False
 TRACE_LOGGING=False
 LOG_LEVEL='DEBUG'

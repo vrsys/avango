@@ -29,7 +29,6 @@ files = Split('''
               wiimote.py
               dtrack.py
               vrpn.cfg
-              vrpn_wiimote.cfg
               ''')
 
 Alias('install-examples', Install(examples_dir.abspath + '/avango-vrpn', files))

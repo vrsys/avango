@@ -205,7 +205,6 @@ def _build_environment():
             result.Append(CXXFLAGS=['/EHsc', '/W3', '/MD', '/wd4099', '/wd4244', '/wd4800', '/wd4996', '/wd4251', '/wd4661']) # FIXME remove deactivation of warnings
         
         result.Append(CPPDEFINES=['AV_INSTANTIATE_FIELD_TEMPLATES'])
-        result.Append(LINKFLAGS='/MACHINE:X64')
 		  
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
@@ -233,6 +232,9 @@ def _build_environment():
         #windows
         else:
             result.Append(CPPDEFINES=['WIN32'])
+    else:
+        if oshelper.os_is_windows():
+            result.Append(LINKFLAGS='/MACHINE:X64')
 		
 
     result.PrependENVPath('PATH', result['BINARY_PATH'])

@@ -181,6 +181,11 @@ namespace av
         SFMatrix ViewMatrix;
 
         /**
+         * Autocompute near/far plane
+         */
+        SFBool EnableAutoComputeNearFarPlane;
+
+        /**
          * Get the wrapped ::osg::Camera.
          */
         ::osg::Camera* getOsgCamera() const;
@@ -200,6 +205,10 @@ namespace av
 
         virtual void windowChangedCB();
         virtual void sizeChangedCB();
+
+        virtual void getEnableAutoComputeNearFarPlaneCB(const av::SFBool::GetValueEvent& event);
+        virtual void setEnableAutoComputeNearFarPlaneCB(const av::SFBool::SetValueEvent& event);
+
 
       private:
 

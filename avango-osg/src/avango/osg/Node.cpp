@@ -50,6 +50,10 @@ av::osg::Node::Node(::osg::Node* osgnode) :
   AV_FC_ADD_ADAPTOR_FIELD(StateSet,
                             boost::bind(&Node::getStateSetCB, this, _1),
                             boost::bind(&Node::setStateSetCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(CullingActive,
+                              boost::bind(&Node::getCullingActiveCB, this, _1),
+                              boost::bind(&Node::setCullingActiveCB, this, _1));
 }
 
 av::osg::Node::~Node()
@@ -205,4 +209,13 @@ av::osg::Node::setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event)
   }
 
   mOsgNode->setStateSet(event.getValue()->getOsgStateSet());
+}
+
+/* virtual */ void
+av::osg::Node::getCullingActiveCB(const av::SFBool::GetValueEvent& event) {
+	*(event.getValuePtr()) = mOsgNode->getCullingActive();
+}
+/* virtual */ void
+av::osg::Node::setCullingActiveCB(const av::SFBool::SetValueEvent& event) {
+  mOsgNode->setCullingActive(event.getValue());
 }

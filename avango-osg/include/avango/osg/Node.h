@@ -77,6 +77,8 @@ namespace av
 
       SFStateSet StateSet;
 
+      SFBool CullingActive;
+
       /**
        * Get the wrapped ::osg::Node.
        */
@@ -100,6 +102,9 @@ namespace av
 
       virtual void getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event);
       virtual void setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event);
+
+      virtual void getCullingActiveCB(const av::SFBool::GetValueEvent& event);
+      virtual void setCullingActiveCB(const av::SFBool::SetValueEvent& event);
 
     private:
 

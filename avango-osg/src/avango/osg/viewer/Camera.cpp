@@ -143,9 +143,15 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_FIELD(ViewMatrix, ::osg::Matrix::identity());
 
 
+  AV_FC_ADD_ADAPTOR_FIELD(EnableAutoComputeNearFarPlane,
+                              boost::bind(&Camera::getEnableAutoComputeNearFarPlaneCB, this, _1),
+                              boost::bind(&Camera::setEnableAutoComputeNearFarPlaneCB, this, _1));
+
+
   mOsgCamera->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
   mOsgCamera->setDisplaySettings(new ::osg::DisplaySettings);
   mOsgCamera->setComputeNearFarMode(::osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
+
   alwaysEvaluate(true);
 }
 
@@ -448,4 +454,17 @@ av::osg::viewer::Camera::sizeChangedCB()
       touch();
     }
   }
+}
+
+/* virtual */ void
+av::osg::viewer::Camera::getEnableAutoComputeNearFarPlaneCB(const av::SFBool::GetValueEvent& event) {
+	*(event.getValuePtr()) = mOsgCamera->getComputeNearFarMode() == ::osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES;
+}
+/* virtual */ void
+av::osg::viewer::Camera::setEnableAutoComputeNearFarPlaneCB(const av::SFBool::SetValueEvent& event) {
+	if(event.getValue()) {
+		mOsgCamera->setComputeNearFarMode(::osg::CullSettings::COMPUTE_NEAR_FAR_USING_BOUNDING_VOLUMES);
+	} else {
+		mOsgCamera->setComputeNearFarMode(::osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+	}
 }

@@ -47,6 +47,13 @@ namespace boost
   }
 }
 
+namespace {
+  void DisableCulling(av::osg::viewer::Camera* camera)
+  {
+	  camera->getOsgCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
+  }
+}
+
 BOOST_PYTHON_MODULE(_viewer)
 {
   av::osg::viewer::Init::initClass();
@@ -89,4 +96,6 @@ BOOST_PYTHON_MODULE(_viewer)
     .value("STEREO_MODE_NONE", av::osg::viewer::GraphicsWindow::STEREO_MODE_NONE)
     .export_values()
     ;
+
+  def("disable_culling",DisableCulling);
 }

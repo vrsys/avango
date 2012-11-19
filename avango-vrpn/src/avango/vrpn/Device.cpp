@@ -19,30 +19,19 @@ using namespace std;
 namespace {
 av::Logger& logger(av::getLogger("av::vrpn::Device"));
 
-void handle_analog_cb(void *userdata, const vrpn_ANALOGCB a)
+void VRPN_CALLBACK handle_analog_cb(void *userdata, const vrpn_ANALOGCB a)
 {
-  int nbChannels = a.num_channel;
-
-  cout << "handle_analog_cb::Analog values : ";
-
-  for (int i = 0; i < a.num_channel; i++)
-  {
-    cout << i << " " << a.channel[i] << "\n";
-  }
-
-  cout << endl;
-
   av::vrpn::Device *device = static_cast<av::vrpn::Device*> (userdata);
   device->handleAnalog(a);
 }
 
-void handle_button_cb(void *userdata, const vrpn_BUTTONCB b)
+void VRPN_CALLBACK handle_button_cb(void *userdata, const vrpn_BUTTONCB b)
 {
   av::vrpn::Device *device = static_cast<av::vrpn::Device*> (userdata);
   device->handleButton(b);
 }
 
-void handle_tracker_cb(void *userdata, const vrpn_TRACKERCB t)
+void VRPN_CALLBACK handle_tracker_cb(void *userdata, const vrpn_TRACKERCB t)
 {
   av::vrpn::Device *device = static_cast<av::vrpn::Device*> (userdata);
   device->handleTracker(t);

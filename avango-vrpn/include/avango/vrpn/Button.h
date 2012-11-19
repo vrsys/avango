@@ -39,8 +39,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_VRPN_DLL SingleField<Link<av:vrpn::Button> >;
-  template class AV_VRPN_DLL MultiField<Link<av:vrpn::Button> >;
+  template class AV_VRPN_DLL SingleField< Link<av::vrpn::Button> >;
+  template class AV_VRPN_DLL MultiField< Link<av::vrpn::Button> >;
 #endif
 
 }

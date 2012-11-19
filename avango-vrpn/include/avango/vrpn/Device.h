@@ -95,8 +95,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_VRPN_DLL SingleField<Link<av:vrpn::Device> >;
-  template class AV_VRPN_DLL MultiField<Link<av:vrpn::Device> >;
+  template class AV_VRPN_DLL SingleField<Link<av::vrpn::Device> >;
+  template class AV_VRPN_DLL MultiField<Link<av::vrpn::Device> >;
 #endif
 
 }

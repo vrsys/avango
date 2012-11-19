@@ -28,7 +28,7 @@ import time
 class ServerTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.server = connect.Server()
+        self.server = connect.Server('', 2323)
         self.client = connect.Client('localhost', self.server.port)
 
     def assertReadLineEqual(self, content, stream):

@@ -32,6 +32,7 @@ avango.build.add_library(env, 'avango-core')
 avango.build.add_library(env, 'avango-osg')
 avango.build.add_library(env, 'avango-core')
 avango.build.add_library(env, 'avango-osgviewer')
+avango.build.add_library(env, 'osgGA')
 if avango.build.oshelper.os_is_mac():
 	avango.build.add_library(env, "boost_system")
 

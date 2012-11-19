@@ -35,9 +35,9 @@ sources = Split('''
 lib = env.SharedLibrary('avangoVRPN', sources)
 
 if avango.build.oshelper.os_is_windows():
-    avango.build.add_library(vrpn_env, 'boost_signals')
-    avango.build.add_library(vrpn_env, 'boost_thread')
-    vrpn_env.Prepend(LIBS=['ws2_32', 'winmm'])
+    avango.build.add_library(env, 'boost_signals')
+    avango.build.add_library(env, 'boost_thread')
+    env.Prepend(LIBS=['ws2_32', 'winmm'])
 Alias('vrpn', lib)
 Alias('install-vrpn', env.Install(avango.build.get_library_path(), lib))
 

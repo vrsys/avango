@@ -140,19 +140,22 @@ private:
 
   bool mRumbling;
 
-  const static int RUMBLE_CHANNEL = 0;
-  const static float RUMBLE_ON_VAL = 1.0f;
-  const static float RUMBLE_OFF_VAL = 0.0f;
+  static int const RUMBLE_CHANNEL = 0;
+  static float const RUMBLE_ON_VAL;
+  static float const RUMBLE_OFF_VAL;
 
 };
+
+float const  RUMBLE_ON_VAL = 1.0f;
+float const RUMBLE_OFF_VAL = 0.0f;
 
 typedef SingleField<Link<Wiimote> > SFWiimote;
 typedef MultiField<Link<Wiimote> > MFWiimote;
 }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-template class AV_VRPN_DLL SingleField<Link<av:vrpn::Wiimote> >;
-template class AV_VRPN_DLL MultiField<Link<av:vrpn::Wiimote> >;
+template class AV_VRPN_DLL SingleField<Link<av::vrpn::Wiimote> >;
+template class AV_VRPN_DLL MultiField<Link<av::vrpn::Wiimote> >;
 #endif
 
 }

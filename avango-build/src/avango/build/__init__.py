@@ -206,6 +206,7 @@ def _build_environment():
         
         result.Append(CPPDEFINES=['AV_INSTANTIATE_FIELD_TEMPLATES'])
 		  
+        result.Append(LINKFLAGS=['/MANIFEST'])
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
         result.Append(CCFLAGS='-ansi -Wall')

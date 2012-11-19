@@ -110,9 +110,9 @@ void av::vrpn::Device::openVRPNConnections()
   mVRPNTracker = boost::shared_ptr<vrpn_Tracker_Remote>(
       new vrpn_Tracker_Remote(mVRPNID.c_str()));
 
-  mVRPNAnalog->register_change_handler(this, ::handle_analog_cb);
-  mVRPNButton->register_change_handler(this, ::handle_button_cb);
-  mVRPNTracker->register_change_handler(this, ::handle_tracker_cb);
+  mVRPNAnalog->register_change_handler(this, static_cast<vrpn_ANALOGCHANGEHANDLER>(::handle_analog_cb));
+  mVRPNButton->register_change_handler(this, static_cast<vrpn_BUTTONCHANGEHANDLER>(::handle_button_cb));
+  mVRPNTracker->register_change_handler(this, static_cast<vrpn_TRACKERCHANGEHANDLER>(::handle_tracker_cb));
 
   vrpnConnected = true;
 
@@ -123,9 +123,9 @@ void av::vrpn::Device::closeVRPNConnections()
 {
   if (vrpnConnected)
   {
-    mVRPNAnalog->unregister_change_handler(this, ::handle_analog_cb);
-    mVRPNButton->unregister_change_handler(this, ::handle_button_cb);
-    mVRPNTracker->unregister_change_handler(this, ::handle_tracker_cb);
+    mVRPNAnalog->unregister_change_handler(this, static_cast<vrpn_ANALOGCHANGEHANDLER>(::handle_analog_cb));
+    mVRPNButton->unregister_change_handler(this, static_cast<vrpn_BUTTONCHANGEHANDLER>(::handle_button_cb));
+    mVRPNTracker->unregister_change_handler(this, static_cast<vrpn_TRACKERCHANGEHANDLER>(::handle_tracker_cb));
     vrpnConnected = false;
   }
 

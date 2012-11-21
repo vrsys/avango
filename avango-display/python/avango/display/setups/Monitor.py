@@ -45,9 +45,17 @@ class Monitor(avango.display.Display):
         self._enable_trackball=False
         if options.has_key(trackball_token) and self._bool_dict.has_key(options[trackball_token].lower()):
             self._enable_trackball=self._bool_dict[options[trackball_token].lower()]
+            
+        stereo_token = 'stereo'
+        self._stereo_mode = False
+        if options.has_key(stereo_token) and self._bool_dict.has_key(options[stereo_token].lower()):
+            self._stereo_mode=self._bool_dict[options[stereo_token].lower()]
+            
+            #DEBUG
+            print 'HELLO STEREO MODE ' + str(self._stereo_mode)
         
         if generate_window:
-            window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
+            window = self.make_window(0, 0,  1024, 768, 0.4, 0.3, self._stereo_mode, self._screen_identifier, 2)
             window.Name.value = "AVANGO"
             window.Decoration.value = True
             window.AutoHeight.value = True
@@ -62,13 +70,14 @@ class Monitor(avango.display.Display):
     
     def make_view(self, subdisplay):
         print "Monitor._make_view"
+        
         display_view = avango.display.nodes.MonitorView()
         if subdisplay == "":
             super(Monitor, self).make_view(subdisplay, display_view)
                 
         # In the Monitor setting each subdisplay simply get a new window
         else:
-            window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, False, self._screen_identifier, 2)
+            window = self.make_window(0, 0, 1024, 768, 0.4, 0.3, self._stereo_mode, self._screen_identifier, 2)
             window.Decoration.value = True
             window.AutoHeight.value = True
             window.ShowCursor.value = True

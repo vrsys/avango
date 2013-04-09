@@ -7,6 +7,8 @@ import avango.vrpn
 
 import sys
 
+
+
 class Mover(avango.script.Script):
     LeftTrigger = avango.SFBool()
     RightTrigger = avango.SFBool()
@@ -34,6 +36,7 @@ class Mover(avango.script.Script):
             self.Matrix.value *= avango.osg.make_trans_mat(self._dist,0,0)
         if self.ResetTrigger.value:
             self.ResetTrigger.value = avango.osg.make_ident_mat()
+            
             
 class RadiusRumbler(avango.script.Script):
     
@@ -69,7 +72,7 @@ class TrackerInfoPrinter(avango.script.Script):
         self.super(TrackerInfoPrinter).__init__()
         
     def evaluate(self):
-        print "#########"
+        print "###"
         for tInfo in self.TrackerInfo.value:
             print str(tInfo.Number.value)
             print str(tInfo.Matrix.value)

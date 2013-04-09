@@ -7,8 +7,6 @@ import avango.vrpn
 
 import sys
 
-
-
 class Mover(avango.script.Script):
     LeftTrigger = avango.SFBool()
     RightTrigger = avango.SFBool()

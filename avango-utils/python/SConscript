@@ -36,7 +36,19 @@ avango.build.add_library(env, 'osgGA')
 if avango.build.oshelper.os_is_mac():
 	avango.build.add_library(env, "boost_system")
 
-lib = env.SharedLibrary("_utils.cpp")
+cpp_files = Split("""
+    _utils.cpp
+    """)
+    
+if env['PCL_SUPPORT']:
+    avango.build.add_library(env, 'pcl')
+
+    cpp_files.append(Split("""
+        UTILSPcd.cpp
+        """))
+    
+#lib = env.SharedLibrary("_utils.cpp")
+lib = env.SharedLibrary(cpp_files)
 
 Alias('utils', lib)
 

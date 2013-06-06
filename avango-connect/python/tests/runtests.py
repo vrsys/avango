@@ -33,7 +33,7 @@ if __name__ == '__main__':
         TestField.Suite(),
         TestNodes.Suite(),
         TestPipe.Suite(),
-        TestServer.Suite(),
+        #TestServer.Suite(),
     ]
     alltests = unittest.TestSuite(suites)
     result = unittest.TextTestRunner(verbosity=2).run(alltests)

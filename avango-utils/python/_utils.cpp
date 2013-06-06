@@ -32,6 +32,10 @@
 #include <osgViewer/ViewerEventHandlers>
 #include <osg/Version>
 
+#ifdef PCL_SUPPORT
+  #include "UTILSPcd.h"
+#endif
+
 #include "../include/avango/utils/Init.h"
 #include "../include/avango/utils/Bool2Or.h"
 #include "../include/avango/utils/Bool2And.h"
@@ -201,4 +205,9 @@ BOOST_PYTHON_MODULE(_utils)
   av::utils::initMultiValueFields();
   av::utils::initMultiValueOSGFields();
   init_MultiValueFields();
+
+#ifdef PCL_SUPPORT
+  init_PCD();
+#endif
+
 }

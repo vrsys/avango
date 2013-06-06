@@ -30,7 +30,7 @@ sources = Split('''
     ''')
 
 local_test_env = avango.build.TestEnvironment()
-local_test_env.Append(LIBS = ['avangoDaemon'])
+local_test_env.Append(LIBS = ['avangoDaemon', 'avango'])
 
 local_test_env.Prepend(LIBPATH=['../../../..'])
 local_test_env.PrependENVPath(avango.build.get_library_search_path_env(), Dir('../../../..').abspath)

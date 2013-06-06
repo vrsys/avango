@@ -61,10 +61,13 @@ opts.AddOptions(
                'Enable VRPN support for the AvangoDaemon module',
                False),
     BoolOption('UTILS_SUPPORT',
-               'Enable building utility module (REQUIRED)',
+               'Enable building utility module (OPTIONAL)',
                True),
     BoolOption('VRPN_SUPPORT',
-               'Enable building vrpn module (REQUIRED)',
+               'Enable building vrpn module (OPTIONAL)',
+               False),
+    BoolOption('PCL_SUPPORT',
+               'Enable building a FieldContainer for loading PCL data (OPTIONAL)',
                False),
     )
 

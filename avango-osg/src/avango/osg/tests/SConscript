@@ -32,7 +32,7 @@ sources = Split('''
 local_test_env = avango.build.TestEnvironment()
 local_test_env.Append(LIBS = ['avangoOsg'])
 
-for lib in ['avango-core', 'osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+for lib in ['avango-core', 'osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'OpenThreads' ,'GL', 'GLU']:
     avango.build.add_library(local_test_env, lib)
 
 if local_test_env['DISTRIBUTION_SUPPORT']:

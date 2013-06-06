@@ -37,6 +37,7 @@ def _setup_default():
         osgUtil
         osgGA
         osgFX
+        OpenThreads
         alut
         openal
         vrpn
@@ -46,6 +47,9 @@ def _setup_default():
 
     for lib in _plain_libs.split():
         _config_store.set(lib, PlainConfig(libraries = [lib]))
+        
+    #add openthreads lib by default
+    _config_store.set('osg', PlainConfig(libraries = ['osg', 'OpenThreads']))
 
     _config_store.set('boost_thread', BoostConfig('boost_thread'))
     _config_store.set('boost_signals', BoostConfig('boost_signals'))
@@ -74,6 +78,8 @@ def _setup_default():
     _config_store.set('python', PythonConfig())
     
     _config_store.set('osgEarth', PlainConfig(libraries = ["osgEarth", "osgEarthUtil", "osgEarthFeatures"]))
+    _config_store.set('pcl', PlainConfig(libraries = ["pcl_io", "pcl_io_ply", "pcl_common"]))
+
 
     # Dummy packages
     _config_store.set('osgUtil', PlainConfig(libraries = ['']))

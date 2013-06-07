@@ -29,6 +29,7 @@ import avango.display
 import os
 import sys
 import getopt
+import sys
 
 #options
 short_options="h"
@@ -61,11 +62,11 @@ for opt, arg in opts:
 
 if filename == "":
     print "No pcd file given. Use --pcd=<filename>. Exit."
-    exit(0)
+    sys.exit()
 #check if the model exists
 elif not os.path.exists(filename):
     print "File: " + str(filename) + " does not exist. Exit."
-    exit(0)
+    sys.exit(0)
         
 
 #create mouse device

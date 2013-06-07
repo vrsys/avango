@@ -33,8 +33,9 @@ AV_FIELD_DEFINE(av::sound::MFSampleBuffer);
 
 
 av::sound::SampleBuffer::SampleBuffer()
-    : mBuffer(0), mNumSamples(0), mSampleRate(0)
+    : mBuffer(new SampleType[0]), mNumSamples(0), mSampleRate(0)
 {
+  
   throw std::logic_error("Default Constructor of av::sound::SampleBuffer::SampleBuffer called");
 }
 

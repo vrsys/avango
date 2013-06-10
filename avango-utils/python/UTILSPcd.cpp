@@ -1,3 +1,5 @@
+#include "../include/avango/utils/PCLPointCloud.h"
+
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
 
@@ -84,5 +86,7 @@ av::Link<av::osg::Geode> LoadPCDFile(std::string pcd_file)
 
 void init_PCD(void)
 {
+  class_<av::utils::PCLPointCloud, av::Link<av::utils::PCLPointCloud>, bases<av::FieldContainer>, boost::noncopyable >("PCLPointCloud", "docstring", no_init);
+
   def("load_pcd_file", LoadPCDFile);
 }

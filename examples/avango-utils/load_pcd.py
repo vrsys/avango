@@ -73,13 +73,24 @@ elif not os.path.exists(filename):
 mouse = avango.display.make_dominant_user_device(interface="Mouse")
 
 # set up scene graph
-obj_trans = avango.osg.nodes.MatrixTransform(Matrix=avango.osg.make_trans_mat(0,1.7,-1))
-view.Root.value = avango.osg.nodes.Group(Children = [obj_trans])
+view.Root.value = avango.osg.nodes.Group()
 
-#geode = avango.utils.load_pcd_file("table_scene_mug_stereo_textured.pcd")
-#geode = avango.utils.load_pcd_file("/tmp/frame-pc-33.0.pcd")
-geode = avango.utils.load_pcd_file(filename)
-obj_trans.Children.value.append(geode)
+#geode = avango.utils.load_pcd_file(filename)
+#obj_trans.Children.value.append(geode)
+
+#load the points
+pcd_cloud = avango.utils.nodes.PCLPointCloud(Filename=filename)
+
+#create a geometry and connect the points and colors
+geometry = avango.osg.nodes.Geometry()
+geometry.VertexArray.connect_from(pcd_cloud.Points)
+geometry.ColorArray.connect_from(pcd_cloud.Colors)
+geometry.ColorBinding.value = 4 # per vertex
+geometry.Mode.value = 0 # points
+
+#add the geometry into a geode and add it to the scenegraph
+geode = avango.osg.nodes.Geode(Drawables=[geometry])
+view.Root.value.Children.value.append(geode)
 
 
 # run evaluation and render loop

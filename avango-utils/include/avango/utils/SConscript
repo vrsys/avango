@@ -23,6 +23,7 @@
 
 import avango.build
 
+
 avango.build.Environment.prepend_include_path(Dir('../..').abspath)
 
 headers = Split('''
@@ -38,5 +39,13 @@ headers = Split('''
     register_multivaluefield.h
     windows_specific_utils.h
     ''')
+
+env = avango.build.Environment()    
+if env['PCL_SUPPORT']:
+    avango.build.add_library(env, 'pcl')
+
+    headers.append(Split("""
+        PCLPointCloud.h
+        """))
 
 Alias('install-utils', Install(avango.build.get_include_path('avango/utils'), headers))

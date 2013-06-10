@@ -45,6 +45,13 @@ sources = Split('''
     MultiValueField.cpp
     Init.cpp
     ''')
+    
+if env['PCL_SUPPORT']:
+    avango.build.add_library(env, 'pcl')
+
+    sources.append(Split("""
+        PCLPointCloud.cpp
+        """))
 
 lib = env.SharedLibrary('avangoUtils', sources)
 Alias('utils', lib)

@@ -30,6 +30,10 @@
 #include "../include/avango/utils/Trackball.h"
 #include "../include/avango/utils/MultiValueField.h"
 
+#ifdef PCL_SUPPORT
+  #include "../include/avango/utils/PCLPointCloud.h"
+#endif
+
 #include <avango/Logger.h>
 
 namespace
@@ -52,6 +56,10 @@ av::utils::Init::initClass()
     av::utils::Trackball::initClass();
     av::utils::initMultiValueFields();
     av::utils::initMultiValueOSGFields();
+
+    #ifdef PCL_SUPPORT
+      av::utils::PCLPointCloud::initClass();
+    #endif
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
   }

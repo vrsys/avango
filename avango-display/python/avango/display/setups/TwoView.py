@@ -21,6 +21,8 @@
 #                                                                        #
 ##########################################################################
 
+import avango
+import avango.osg
 import avango.display
 
 from avango.display import *
@@ -59,7 +61,8 @@ class TwoView(avango.display.Display):
     def __init__(self, inspector, options):
         super(TwoView, self).__init__("TwoView", inspector)
         
-        print str(options)
+        #print str(options)
+        osg2perf = avango.osg.make_rot_mat(1, 1, 0, 0)
         
         if "twopipe" in options:
             two_view_walls = [":0.0", ":0.1"]
@@ -205,7 +208,9 @@ class TwoView(avango.display.Display):
             if wiimote_num < 1 or wiimote_num > 4:
                 print "Wiimote device <" + device +"> does not exist. Currently wiimote 1-4 exists."
                 return None
-
+            
+            #TODO Check why the import is needed at this place
+            import avango
             osg2perf = avango.osg.make_rot_mat(math.radians(90), 1, 0, 0)
             perf2osg = avango.osg.make_rot_mat(math.radians(-90), 1, 0, 0)
 

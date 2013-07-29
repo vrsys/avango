@@ -71,6 +71,7 @@ avango_utils_python_files = Split("""
     _interpolators.py
     _node_optimizer.py
     _screen_capture.py
+    _leap_motion.py
     """)
 
 Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))

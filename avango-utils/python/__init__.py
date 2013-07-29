@@ -39,3 +39,12 @@ from _node_scalers import *
 from _interpolators import *
 from _node_optimizer import *
 from _screen_capture import *
+
+#check for leapMotion sdk
+leap_motion_sdk_found = False
+try:
+    import Leap
+    from _leap_motion import *
+except ImportError:
+    print "No LeapMotion SDK found. No driver support"
+

@@ -190,8 +190,19 @@ class AVLeapFrame(avango.script.Script):
     def __init__(self):
         self.super(AVLeapFrame).__init__()
         
-    def init_with_leap_data(self, leap_frame):
-        
+#     def init_with_leap_data(self, leap_frame):
+#         
+#         self.ID.value = leap_frame.id+0
+#         self.Timestamp.value = leap_frame.timestamp
+#         self.IsValid.value = leap_frame.is_valid
+#         
+#         self.Pointables.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapPointable)
+#         self.Fingers.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapFinger)
+#         self.Tools.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapTool)
+#         self.Hands.value = create_av_leap_data_factory(leap_frame.hands, AVLeapHand)
+#         self.Gestures.value = create_av_leap_data_factory(leap_frame.gestures, AVLeapGesture)
+#         
+    def update_with_leap_data(self, leap_frame):
         self.ID.value = leap_frame.id+0
         self.Timestamp.value = leap_frame.timestamp
         self.IsValid.value = leap_frame.is_valid
@@ -499,9 +510,15 @@ class AVLeapMotionFrameListener(avango.script.Script):
         
         while not self._message_queue.empty():
             frame = self._message_queue.get_nowait()
-            av_leap_frame = avango.utils.AVLeapFrame()
-            av_leap_frame.init_with_leap_data(frame)
-            self.AVLeapFrame.value = av_leap_frame        
+            
+            #update the fields
+            self.AVLeapFrame.value.update_with_leap_data(frame)
+            
+            self.AVLeapFrame.touch()
+            #completely override
+            #av_leap_frame = avango.utils.AVLeapFrame()
+            #av_leap_frame.init_with_leap_data(frame)
+            #self.AVLeapFrame.value = av_leap_frame        
 
 
 def create_leapmotion_listener(enable_gestures):

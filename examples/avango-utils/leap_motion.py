@@ -7,6 +7,7 @@ import time
 import signal
 import sys
 import datetime
+import random
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
@@ -54,21 +55,49 @@ def create_linestrip_node(points, width, color):
 def convert_leap_position(pos):
     return avango.osg.Vec3(pos.x/100, pos.y/100, pos.z/50) 
 
-class DrawingVisualizer(avango.script.Script):
-     
-    Pointables = avango.script.MFObject()
-    DeltaTime = avango.SFFloat()
-    TimeIn = avango.SFDouble()
-     
+
+class GestureProcessor(avango.script.Script):
+    
+    Enable = avango.SFBool()
+    GesturesIn = avango.script.MFObject()
+    ColorOutCircleGesture = avango.osg.SFVec4()
+    ColorOutSwipeGesture = avango.osg.SFVec4()
+    
     def __init__(self):
-        self.super(DrawingVisualizer).__init__()
-        self.DeltaTime.value = 1.0
+        self.super(GestureProcessor).__init__()
+        self.ColorOutCircleGesture.value = avango.osg.Vec4(1,0,0,0.7)
+        self.ColorOutSwipeGesture.value = avango.osg.Vec4(0,1,0,1)
+        
+    def evaluate(self):
+        if not self.Enable.value:
+            return
+        
+        for gesture in self.GesturesIn.value:
+            print "Gesture Type: " + str(gesture.Type.value) + " swipe type: "+ str(avango.utils.LeapGestureType.TYPE_SWIPE)
+            
+            r = random.random()
+            g = random.random()
+            b = random.random()
+            
+            #filter circle gestures
+            if gesture.Type.value == avango.utils.LeapGestureType.TYPE_CIRCLE \
+                and gesture.State.value == avango.utils.LeapGestureState.STATE_STOP :
+                    a = 0.7
+                    self.ColorOutCircleGesture.value = avango.osg.Vec4(r,g,b,a)
+            
+            elif gesture.Type.value == avango.utils.LeapGestureType.TYPE_SWIPE \
+                and gesture.State.value == avango.utils.LeapGestureState.STATE_STOP :
+                    a = 1
+                    self.ColorOutSwipeGesture.value = avango.osg.Vec4(r,g,b,a)
          
 
 class LeapMotionDebugVisualizer(avango.script.Script):
     
     Root = avango.osg.SFGroup()
     AVLeapFrame = avango.script.SFObject()
+    
+    PalmColor = avango.osg.SFVec4()
+    FingerColor = avango.osg.SFVec4()
     
     DetailVis = avango.SFBool()
     DrawingVis = avango.SFBool()
@@ -92,12 +121,9 @@ class LeapMotionDebugVisualizer(avango.script.Script):
         
         self.Root.value.Children.value = []
         
-        for gesture in av_leap_frame.Gestures.value:
-            print " " + str(gesture)
-        
         for hand in av_leap_frame.Hands.value:
             palm_pos = convert_leap_position(hand.PalmPosition.value)
-            self.Root.value.Children.value.append(create_sphere(palm_pos, 0.2, avango.osg.Vec4(1,0,0,0.5)))
+            self.Root.value.Children.value.append(create_sphere(palm_pos, 0.2, self.PalmColor.value))
 
             if self.DetailVis.value: 
                 palm_sphere = create_sphere(convert_leap_position(hand.SphereCenter.value), hand.SphereRadius.value / 100, avango.osg.Vec4(1,0,1,1))
@@ -107,7 +133,7 @@ class LeapMotionDebugVisualizer(avango.script.Script):
             for pointable in hand.Pointables.value:
                 pos = convert_leap_position(pointable.TipPositionStabilized.value)
                 
-                self.Root.value.Children.value.append(create_sphere(pos, 0.1, avango.osg.Vec4(0,1,0,0.5)))
+                self.Root.value.Children.value.append(create_sphere(pos, 0.1, self.FingerColor.value))
                 self.Root.value.Children.value.append(create_line_node(palm_pos, pos, 2, avango.osg.Vec4(1,1,0,1)))
                 
                 if pointable.ID.value in self.pointer_map:
@@ -142,6 +168,11 @@ leap_visualizer.DetailVis.connect_from(avango.utils.make_key_toggle_trigger_alte
 #drawing
 leap_visualizer.DrawingVis.connect_from(avango.utils.make_key_toggle_trigger_alternate(keyboard.KeyD, False))
 
+gesture_processor = GestureProcessor()
+gesture_processor.Enable.connect_from(avango.utils.make_key_toggle_trigger_alternate(keyboard.KeyG, False))
+gesture_processor.GesturesIn.connect_from(av_leapmotion_listener.AVLeapFrame.value.Gestures)
+leap_visualizer.PalmColor.connect_from(gesture_processor.ColorOutCircleGesture)
+leap_visualizer.FingerColor.connect_from(gesture_processor.ColorOutSwipeGesture)
 
 #HACK Otherwise the LeapMotion thread will get no CPU time.  
 class Breaker(avango.script.Script):

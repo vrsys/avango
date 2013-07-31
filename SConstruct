@@ -69,6 +69,9 @@ opts.AddOptions(
     BoolOption('PCL_SUPPORT',
                'Enable building a FieldContainer for loading PCL data (OPTIONAL)',
                False),
+    BoolOption('SOUND_SUPPORT',
+               'Enable building the avango-sound module(OPTIONAL)',
+               False),
     )
 
 avango.build.setup()
@@ -124,9 +127,14 @@ if env['OPENSCENEGRAPH_SUPPORT']:
     if not avango.build.oshelper.os_is_windows() and \
          not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
         avango.build.SConscript('avango-daemon/SConscript')
-if not avango.build.oshelper.os_is_windows() and \
-   not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
+        
+# if not avango.build.oshelper.os_is_windows() and \
+#    not avango.build.oshelper.os_is_mac(): #FIXME get module running under Windows/MAC
+#     avango.build.SConscript('avango-sound/SConscript')
+
+if env['SOUND_SUPPORT']:
     avango.build.SConscript('avango-sound/SConscript')
+
 if env['OPENAL_SUPPORT']:
     avango.build.SConscript('avango-openal/SConscript')
 avango.build.SConscript('avango-tools/SConscript')

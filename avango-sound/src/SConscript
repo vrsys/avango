@@ -4,7 +4,7 @@
 #                                                                        #
 # This file is part of AVANGO.                                           #
 #                                                                        #
-# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
 # angewandten Forschung (FhG), Munich, Germany.                          #
 #                                                                        #
 # AVANGO is free software: you can redistribute it and/or modify         #
@@ -22,44 +22,22 @@
 ##########################################################################
 
 import avango.build
-from avango.build.oshelper import *
+Import('sound_env')
 
-avango.build.Environment.prepend_include_path(Dir('include').abspath)
-sound_env = avango.build.Environment()
+sound_env.Append(CPPDEFINES='AV_SOUND_LIBRARY')
 
-avango.build.add_library(sound_env, 'avango-osg')
-avango.build.add_library(sound_env, 'avango-core')
-avango.build.add_library(sound_env, 'avango-python')
+sources = Split('''
+    SoundTraverser.cpp
+    SoundSource.cpp
+    SoundRenderer.cpp
+    SampleBuffer.cpp
+    ''')
     
-# Substitutions
-sound_env['SUBST'] = {
-    'PREFIX': avango.build.get_prefix().abspath,
-    'AVANGO_SOUND_DEBUG': int(sound_env['DEBUG']),
-#    'AVANGO_SOUND_OSG_SUPPORT': int(sound_env['SOUND_SUPPORT']),
-    'PKG_CONFIG_REQUIRES': 'avango-core, avango-osg',
-    'AVANGO_SOUND_VERSION': '1.90.0',
-    'AVANGO_SOUND_VERSION_MAJOR': '1',
-    'AVANGO_SOUND_VERSION_MINOR': '90',
-    'AVANGO_SOUND_VERSION_MAINT': '0',
-    }
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(sound_env, "boost_system")
+	
+lib = sound_env.SharedLibrary('avangoSound', sources)
+Alias('sound', lib)
+Alias('install-sound', Install(avango.build.get_library_path(), lib))
 
-avango_sound_pc = sound_env.Subst('dist/pkg-config/avango-sound.pc.in')
-Alias('sound', avango_sound_pc)
-Alias('install-sound', sound_env.Install(avango.build.get_pkgconfig_path(), avango_sound_pc))
-
-config_h = sound_env.Subst('include/avango/sound/Config.h.in')
-Alias('sound', config_h)
-Alias('install-sound', sound_env.Install(avango.build.get_include_path('avango/sound'), config_h))
-
-Alias('all', Alias('sound'))
-Alias('install', Alias('install-sound'))
-
-# Subdirs
-Export('sound_env')
-
-SConscript ([
-    'include/avango/sound/SConscript',
-    'src/SConscript',
-    'src/tests/SConscript',
-    'python/SConscript'
-])
+avango.build.Environment.prepend_library_path(Dir('.').abspath)

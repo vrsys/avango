@@ -24,6 +24,10 @@
 import avango.build
 
 local_env = avango.build.PythonEnvironment()
+avango.build.add_library(local_env, 'boost_python')
+avango.build.add_library(local_env, 'avango-core')
+avango.build.add_library(local_env, 'avango-python')
+avango.build.add_library(local_env, 'avango-osg')
 
 sound_files = Split("""
     _sound.cpp
@@ -36,7 +40,6 @@ sound_python_files = Split("""
 sound = local_env.SharedLibrary("_sound", sound_files)
 
 local_env.Append(LIBS=['avangoSound'])
-avango.build.add_library(local_env, 'avango-python')
 local_env.Depends(sound, sound_python_files)
 local_env.Install(avango.build.get_python_path('avango/sound'), sound_python_files)
 local_env.Install(avango.build.get_python_path('avango/sound'), sound)

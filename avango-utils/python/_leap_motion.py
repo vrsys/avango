@@ -6,6 +6,7 @@ import avango.osg
 
 #python 
 import Queue
+from types import *
 
 keep_alive = []
 
@@ -432,10 +433,6 @@ class LeapFrame(object):
         self.gestures = create_leap_data_factory(frame.gestures(), LeapGesture)
         self.is_valid = frame.is_valid
         
-        #print "num gestures: " + str(len(self.gestures))
-#        for gesture in self.gestures:
-#            print " " + str(gesture)
-        
     def __str__(self):
         buffer = ""
         buffer += "LeapFrame: " + str(self.id) + "\n"
@@ -466,28 +463,25 @@ class LeapMotionInputListener(Leap.Listener):
         self._message_queue = message_queue
 
     def on_init(self, controller):
-        print "Initialized"
+        pass
 
     def on_connect(self, controller):
-        print "Connected"
+        pass
 
     def on_disconnect(self, controller):
-        print "Disconnected"
+        pass
 
     def on_exit(self, controller):
-        print "Exited"
+        pass
 
     def on_frame(self, controller):
         
         #since the controller is removed before the script is closed (happens in the main thread
-        #this try/except will catch potential exceptions
-        #try:
-            raw_frame = controller.frame()
-            leap_frame = LeapFrame(raw_frame)
-            if self._message_queue!=None:
-                self._message_queue.put(leap_frame)
-        #except NoneType: 
-        #    pass
+        raw_frame = controller.frame()
+        leap_frame = LeapFrame(raw_frame)
+        if self._message_queue!=None:
+            self._message_queue.put(leap_frame)
+        
         
     
 class AVLeapMotionFrameListener(avango.script.Script):
@@ -544,6 +538,6 @@ def create_leapmotion_listener(enable_gestures):
     return av_leapmotion_listener
 
 def shutdown_leapmotion_listener():
-    self.keep_alive[1].remove_listener(self.keep_alive[0])
+    keep_alive[1].remove_listener(keep_alive[0])
     
     

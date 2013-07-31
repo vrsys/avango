@@ -8,17 +8,17 @@ import signal
 import sys
 import datetime
 import random
+import atexit
 
 argv = avango.display.init(sys.argv)
 view = avango.display.make_view()
 view.EnableTrackball.value = False
 keyboard = avango.display.make_dominant_user_device(interface="Keyboard")
 
-def signal_handler(signal, frame):
-    avango.utils.shutdown_leapmotion_listener()
-    
-signal.signal(signal.SIGINT, signal_handler)
 
+def exit_handler():
+    avango.utils.shutdown_leapmotion_listener()
+atexit.register(exit_handler)
 
 class Stroke(object):
     MAX_POINTS_PER_STROKE = 100

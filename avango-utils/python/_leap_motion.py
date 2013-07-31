@@ -27,7 +27,7 @@ class AVLeapPointable(avango.script.Script):
     def __init__(self):
         self.super(AVLeapPointable).__init__();
     
-    def init_with_leap_pointable(self, pointable):
+    def init_with_leap_data(self, pointable):
         self.ID.value = pointable.id
         self.TipPosition.value = leap_av_vec(pointable.tip_position)
         self.TipVelocity.value = leap_av_vec(pointable.tip_velocity)
@@ -64,7 +64,60 @@ class AVLeapFinger(AVLeapPointable):
 class AVLeapTool(AVLeapPointable):
     def __init__(self):
         self.super(AVLeapTool).__init__();    
+        
+        
+class AVLeapGesture(avango.script.Script):
     
+    ID = avango.SFInt()
+    State = avango.SFInt()
+    Type = avango.SFInt()
+    Duration = avango.SFInt()
+    DurationSeconds = avango.SFFloat()
+    Pointables = avango.script.MFObject()
+    Hands = avango.script.MFObject()
+
+    def __init__(self):
+        self.super(AVLeapGesture).__init__();
+    
+    def init_with_leap_data(self, gesture):
+        self.ID.value = gesture.id
+        self.State.value = gesture.state
+        self.Type.value = gesture.type
+        self.Duration.value = gesture.duration
+        self.DurationSeconds.value = gesture.duration_seconds
+        
+        self.Pointables.value = create_av_leap_data_factory(gesture.pointables, AVLeapPointable)
+        self.Hands.value = create_av_leap_data_factory(gesture.hands, AVLeapHand)
+    
+    def __str__(self):
+        buffer = ""
+        buffer += "id: " + str(self.ID.value) + "\n"
+        buffer += "type: "
+        if self.Type.value == LeapGestureType.TYPE_SWIPE:
+            buffer += "TYPE_SWIPE" + "\n"
+        elif self.Type.value == LeapGestureType.TYPE_CIRCLE:
+            buffer += "TYPE_CIRCLE" + "\n"
+        elif self.Type.value == LeapGestureType.TYPE_SCREEN_TAP:
+            buffer += "TYPE_SCREEN_TAP" + "\n"
+        elif self.Type.value == LeapGestureType.TYPE_KEY_TAP:
+            buffer += "TYPE_KEY_TAP" + "\n"
+        else:
+            buffer += "STATE_INVALID" + "\n"
+            
+        buffer += "state: "
+        if self.State.value == LeapGestureState.STATE_START:
+            buffer += "STATE_START" + "\n"
+        elif self.State.value == LeapGestureState.STATE_UPDATE:
+            buffer += "STATE_UPDATE" + "\n"
+        elif self.State.value == LeapGestureState.STATE_STOP:
+            buffer += "STATE_STOP" + "\n"
+        else:
+            buffer += "STATE_INVALID" + "\n"
+            
+        buffer += "duration: " + str(self.Duration.value) + "\n"
+        buffer += "duration_seconds: " + str(self.DurationSeconds.value) + "\n"
+        
+        return buffer
  
 class AVLeapHand(avango.script.Script):
     
@@ -84,11 +137,11 @@ class AVLeapHand(avango.script.Script):
     def __init__(self):
         self.super(AVLeapHand).__init__()
         
-    def init_with_leap_hand(self, hand):
+    def init_with_leap_data(self, hand):
         self.ID.value = hand.id
-        self.Pointables.value = create_av_leap_pointer_factory(hand.pointables, AVLeapPointable)
-        self.Fingers.value = create_av_leap_pointer_factory(hand.pointables, AVLeapFinger)
-        self.Tools.value = create_av_leap_pointer_factory(hand.pointables, AVLeapTool)
+        self.Pointables.value = create_av_leap_data_factory(hand.pointables, AVLeapPointable)
+        self.Fingers.value = create_av_leap_data_factory(hand.pointables, AVLeapFinger)
+        self.Tools.value = create_av_leap_data_factory(hand.pointables, AVLeapTool)
         self.PalmPosition.value = leap_av_vec(hand.palm_position)
         self.PalmVelocity.value = leap_av_vec(hand.palm_velocity)
         self.PalmNormal.value = leap_av_vec(hand.palm_normal)
@@ -132,23 +185,22 @@ class AVLeapFrame(avango.script.Script):
     Fingers = avango.script.MFObject()
     Pointables = avango.script.MFObject()
     Tools = avango.script.MFObject()
-    #Gestures = avango.script.MFObject()
+    Gestures = avango.script.MFObject()
     
     def __init__(self):
         self.super(AVLeapFrame).__init__()
         
-    def init_with_leap_frame(self, leap_frame):
+    def init_with_leap_data(self, leap_frame):
         
         self.ID.value = leap_frame.id+0
         self.Timestamp.value = leap_frame.timestamp
         self.IsValid.value = leap_frame.is_valid
         
-        self.Pointables.value = create_av_leap_pointer_factory(leap_frame.pointables, AVLeapPointable)
-        self.Fingers.value = create_av_leap_pointer_factory(leap_frame.pointables, AVLeapFinger)
-        self.Tools.value = create_av_leap_pointer_factory(leap_frame.pointables, AVLeapTool)
-        
-        self.Hands.value = create_av_leap_hands(leap_frame.hands)
-        
+        self.Pointables.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapPointable)
+        self.Fingers.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapFinger)
+        self.Tools.value = create_av_leap_data_factory(leap_frame.pointables, AVLeapTool)
+        self.Hands.value = create_av_leap_data_factory(leap_frame.hands, AVLeapHand)
+        self.Gestures.value = create_av_leap_data_factory(leap_frame.gestures, AVLeapGesture)
         
     def __str__(self):
         buffer = ""
@@ -170,22 +222,33 @@ class AVLeapFrame(avango.script.Script):
         
         return buffer
  
-def create_av_leap_hands(leap_hands):
-    av_hands = []
-    for i in range(0,len(leap_hands)):
-        av_hand = AVLeapHand()
-        av_hand.init_with_leap_hand(leap_hands[i])
-        av_hands.append(av_hand)
-    return av_hands
-        
-        
-def create_av_leap_pointer_factory(pointers_raw, pointer_type):
+# def create_av_leap_hands(leap_hands):
+#     av_hands = []
+#     for i in range(0,len(leap_hands)):
+#         av_hand = AVLeapHand()
+#         av_hand.init_with_leap_hand(leap_hands[i])
+#         av_hands.append(av_hand)
+#     return av_hands
+# 
+# def create_av_leap_gestures(leap_gestures):
+#     av_gestures = []
+#     for i in range(0,len(leap_gestures)):
+#         av_gesture = AVLeapGesture()
+#         av_gesture.init_with_leap_gesture(leap_gestures[i])
+#         av_gestures.append(av_gesture)
+#     return av_gestures
+# 
+#         
+#         
+
+def create_av_leap_data_factory(pointers_raw, pointer_type):
     pointers = []
     for i in range(0,len(pointers_raw)):
         p = pointer_type()
-        p.init_with_leap_pointable(pointers_raw[i])
+        p.init_with_leap_data(pointers_raw[i])
         pointers.append(p)
-    return pointers   
+    return pointers
+
 
 def leap_av_vec(leap_vec):
     return avango.osg.Vec3(leap_vec.x,leap_vec.y,leap_vec.z)
@@ -232,15 +295,77 @@ class LeapPointable(object):
         
 class LeapFinger(LeapPointable):
     def __init__(self, finger):
-        super(LeapFinger, self).__init__(finger)
         
+        super(LeapFinger, self).__init__(finger)
 
 class LeapTool(LeapPointable):
     def __init__(self, tool):
         super(LeapTool, self).__init__(tool)
 
+class LeapGestureType:
+    TYPE_INVALID    = -1#, /**< An invalid type. */
+    TYPE_SWIPE      = 1#,  /**< A straight line movement by the hand with fingers extended. */
+    TYPE_CIRCLE     = 4#,  /**< A circular movement by a finger. */
+    TYPE_SCREEN_TAP = 5#,  /**< A forward tapping movement by a finger. */
+    TYPE_KEY_TAP    = 6#   /**< A downward tapping movement by a finger. */
+
+class LeapGestureState:
+    STATE_INVALID = -1, #< An invalid state */
+    STATE_START   = 1 #< The gesture is starting. Just enough has happened to recognize it. */
+    STATE_UPDATE  = 2 #< The gesture is in progress. (Note: not all gestures have updates). */
+    STATE_STOP    = 3 
+
+class LeapGesture(object):
+    def __init__(self, gesture):
+        #print "LeapGesture: " + str(gesture.id) + " " + str(gesture.type)
+        self.id = gesture.id
+        self.type = int(gesture.type)
+        self.state = int(gesture.state)
+        self.duration = gesture.duration
+        self.duration_seconds = gesture.duration_seconds
+        self.pointables = create_leap_data_factory(gesture.pointables, LeapPointable)
+        self.hands = create_leap_data_factory(gesture.hands, LeapHand)
         
-def create_leap_pointer_factory(pointers_raw, pointer_type):
+    def __str__(self):
+        buffer = ""
+        buffer += "id: " + str(self.id) + "\n"
+        buffer += "type: "
+        if self.type == LeapGestureType.TYPE_SWIPE:
+            buffer += "TYPE_SWIPE" + "\n"
+        elif self.type == LeapGestureType.TYPE_CIRCLE:
+            buffer += "TYPE_CIRCLE" + "\n"
+        elif self.type == LeapGestureType.TYPE_SCREEN_TAP:
+            buffer += "TYPE_SCREEN_TAP" + "\n"
+        elif self.type == LeapGestureType.TYPE_KEY_TAP:
+            buffer += "TYPE_KEY_TAP" + "\n"
+        else:
+            buffer += "STATE_INVALID" + "\n"
+        buffer += "state: "
+        if self.state == LeapGestureState.STATE_START:
+            buffer += "STATE_START" + "\n"
+        elif self.state == LeapGestureState.STATE_UPDATE:
+            buffer += "STATE_UPDATE" + "\n"
+        elif self.state == LeapGestureState.STATE_STOP:
+            buffer += "STATE_STOP" + "\n"
+        else:
+            buffer += "STATE_INVALID" + "\n"
+            
+        buffer += "duration: " + str(self.duration) + "\n"
+        buffer += "duration_seconds: " + str(self.duration_seconds) + "\n"
+        
+        #pollutes the output
+#         buffer += "hands: " + "\n"
+#         for h in self.hands:
+#             buffer += str(h)  + "\n"
+#         
+#         buffer += "pointables: " + "\n"
+#         for p in self.pointables:
+#             buffer += str(p)  + "\n"
+            
+        return buffer
+    
+        
+def create_leap_data_factory(pointers_raw, pointer_type):
     pointers = []
     for i in range(0,len(pointers_raw)):
         pointers.append(pointer_type(pointers_raw[i]))
@@ -251,9 +376,9 @@ class LeapHand(object):
 
     def __init__(self, hand):
         self.id = hand.id
-        self.pointables = create_leap_pointer_factory(hand.pointables, LeapPointable)
-        self.fingers = create_leap_pointer_factory(hand.fingers, LeapFinger)
-        self.tools = create_leap_pointer_factory(hand.tools, LeapTool)
+        self.pointables = create_leap_data_factory(hand.pointables, LeapPointable)
+        self.fingers = create_leap_data_factory(hand.fingers, LeapFinger)
+        self.tools = create_leap_data_factory(hand.tools, LeapTool)
         self.palm_position = LeapVec3(hand.palm_position)
         self.palm_velocity = LeapVec3(hand.palm_velocity)
         self.palm_normal = LeapVec3(hand.palm_normal)
@@ -289,11 +414,16 @@ class LeapFrame(object):
     def __init__(self, frame):
         self.id = frame.id
         self.timestamp = frame.timestamp
-        self.pointables = create_leap_pointer_factory(frame.pointables, LeapPointable)
-        self.fingers = create_leap_pointer_factory(frame.fingers, LeapFinger)
-        self.tools = create_leap_pointer_factory(frame.tools, LeapTool)
-        self.hands = create_leap_pointer_factory(frame.hands, LeapHand)
+        self.pointables = create_leap_data_factory(frame.pointables, LeapPointable)
+        self.fingers = create_leap_data_factory(frame.fingers, LeapFinger)
+        self.tools = create_leap_data_factory(frame.tools, LeapTool)
+        self.hands = create_leap_data_factory(frame.hands, LeapHand)
+        self.gestures = create_leap_data_factory(frame.gestures(), LeapGesture)
         self.is_valid = frame.is_valid
+        
+        #print "num gestures: " + str(len(self.gestures))
+#        for gesture in self.gestures:
+#            print " " + str(gesture)
         
     def __str__(self):
         buffer = ""
@@ -340,13 +470,13 @@ class LeapMotionInputListener(Leap.Listener):
         
         #since the controller is removed before the script is closed (happens in the main thread
         #this try/except will catch potential exceptions
-        try:
+        #try:
             raw_frame = controller.frame()
             leap_frame = LeapFrame(raw_frame)
             if self._message_queue!=None:
                 self._message_queue.put(leap_frame)
-        except: 
-            pass
+        #except NoneType: 
+        #    pass
         
     
 class AVLeapMotionFrameListener(avango.script.Script):
@@ -370,16 +500,24 @@ class AVLeapMotionFrameListener(avango.script.Script):
         while not self._message_queue.empty():
             frame = self._message_queue.get_nowait()
             av_leap_frame = avango.utils.AVLeapFrame()
-            av_leap_frame.init_with_leap_frame(frame)
+            av_leap_frame.init_with_leap_data(frame)
             self.AVLeapFrame.value = av_leap_frame        
 
 
-def create_leapmotion_listener():
+def create_leapmotion_listener(enable_gestures):
     message_queue = Queue.Queue()
     listener = LeapMotionInputListener(message_queue)
     keep_alive.append(listener)
     
     controller = Leap.Controller()
+    
+    if enable_gestures:
+        controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE, True);
+        controller.enable_gesture(Leap.Gesture.TYPE_SWIPE, True);
+        controller.enable_gesture(Leap.Gesture.TYPE_KEY_TAP, True);
+        controller.enable_gesture(Leap.Gesture.TYPE_SCREEN_TAP, True);
+        
+    
     controller.add_listener(listener)
     keep_alive.append(controller)
     

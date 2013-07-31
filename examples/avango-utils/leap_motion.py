@@ -92,6 +92,9 @@ class LeapMotionDebugVisualizer(avango.script.Script):
         
         self.Root.value.Children.value = []
         
+        for gesture in av_leap_frame.Gestures.value:
+            print " " + str(gesture)
+        
         for hand in av_leap_frame.Hands.value:
             palm_pos = convert_leap_position(hand.PalmPosition.value)
             self.Root.value.Children.value.append(create_sphere(palm_pos, 0.2, avango.osg.Vec4(1,0,0,0.5)))
@@ -129,7 +132,7 @@ class LeapMotionDebugVisualizer(avango.script.Script):
             if id in self.pointer_map:
                 del self.pointer_map[id]
 
-av_leapmotion_listener = avango.utils.create_leapmotion_listener()
+av_leapmotion_listener = avango.utils.create_leapmotion_listener(enable_gestures=True)
 leap_visualizer = LeapMotionDebugVisualizer()
 leap_visualizer.AVLeapFrame.connect_weak_from(av_leapmotion_listener.AVLeapFrame)
 

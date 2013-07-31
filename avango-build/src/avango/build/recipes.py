@@ -97,6 +97,7 @@ def _setup_default():
       _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
       _config_store.set('avango-utils', PlainConfig(libraries = ['avangoUtils']))
       _config_store.set('avango-tools', PlainConfig(libraries = ['avangoTools']))
+      _config_store.set('avango-sound', PlainConfig(libraries = ['avangoSound']))
       _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
 
     # Override some libraries for Windows
@@ -120,6 +121,7 @@ def _setup_default():
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
         _config_store.set('avango-utils', PlainConfig(libraries = ['avangoUtils']))
         _config_store.set('avango-tools', PlainConfig(libraries = ['avangoTools']))
+        _config_store.set('avango-sound', PlainConfig(libraries = ['avangoSound']))
         _config_store.set('avango-osgviewer', PlainConfig(libraries = ['avangoOsgViewer']))
         # xerces
         _config_store.set('xerces', PlainConfig(libraries = ['xerces-c_2']))

@@ -59,7 +59,7 @@ Export('sound_env')
 
 SConscript ([
     'include/avango/sound/SConscript',
-    'src/SConscript',
+    'src/avango/sound/SConscript',
     'src/tests/SConscript',
     'python/SConscript'
 ])

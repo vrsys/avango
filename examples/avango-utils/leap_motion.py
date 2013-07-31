@@ -73,8 +73,6 @@ class GestureProcessor(avango.script.Script):
             return
         
         for gesture in self.GesturesIn.value:
-            print "Gesture Type: " + str(gesture.Type.value) + " swipe type: "+ str(avango.utils.LeapGestureType.TYPE_SWIPE)
-            
             r = random.random()
             g = random.random()
             b = random.random()

@@ -48,12 +48,14 @@ av::osg::Node::Node(::osg::Node* osgnode) :
                           boost::bind(&Node::getParentsCB, this, _1),
                           boost::bind(&Node::setParentsCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(StateSet,
-                            boost::bind(&Node::getStateSetCB, this, _1),
-                            boost::bind(&Node::setStateSetCB, this, _1));
-
+                          boost::bind(&Node::getStateSetCB, this, _1),
+                          boost::bind(&Node::setStateSetCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(CullingActive,
-                              boost::bind(&Node::getCullingActiveCB, this, _1),
-                              boost::bind(&Node::setCullingActiveCB, this, _1));
+                          boost::bind(&Node::getCullingActiveCB, this, _1),
+                          boost::bind(&Node::setCullingActiveCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(NodeMask,
+                          boost::bind(&Node::getNodeMaskCB, this, _1),
+                          boost::bind(&Node::setNodeMaskCB, this, _1));
 }
 
 av::osg::Node::~Node()
@@ -212,10 +214,25 @@ av::osg::Node::setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event)
 }
 
 /* virtual */ void
-av::osg::Node::getCullingActiveCB(const av::SFBool::GetValueEvent& event) {
+av::osg::Node::getCullingActiveCB(const av::SFBool::GetValueEvent& event)
+{
 	*(event.getValuePtr()) = mOsgNode->getCullingActive();
 }
+
 /* virtual */ void
-av::osg::Node::setCullingActiveCB(const av::SFBool::SetValueEvent& event) {
+av::osg::Node::setCullingActiveCB(const av::SFBool::SetValueEvent& event)
+{
   mOsgNode->setCullingActive(event.getValue());
+}
+
+/* virtual */ void
+av::osg::Node::getNodeMaskCB(const av::SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgNode->getNodeMask();
+}
+
+/* virtual */ void
+av::osg::Node::setNodeMaskCB(const av::SFUInt::SetValueEvent& event)
+{
+  mOsgNode->setNodeMask(event.getValue());
 }

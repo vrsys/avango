@@ -147,6 +147,12 @@ av::osg::viewer::Camera::Camera(::osg::Camera* osgcamera) :
                               boost::bind(&Camera::getEnableAutoComputeNearFarPlaneCB, this, _1),
                               boost::bind(&Camera::setEnableAutoComputeNearFarPlaneCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(CullMask,
+                          boost::bind(&Camera::getCullMaskCB, this, _1),
+                          boost::bind(&Camera::setCullMaskCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(InheritanceMask,
+                          boost::bind(&Camera::getInheritanceMaskCB, this, _1),
+                          boost::bind(&Camera::setInheritanceMaskCB, this, _1));
 
   mOsgCamera->setReferenceFrame(::osg::Transform::ABSOLUTE_RF);
   mOsgCamera->setDisplaySettings(new ::osg::DisplaySettings);
@@ -467,4 +473,28 @@ av::osg::viewer::Camera::setEnableAutoComputeNearFarPlaneCB(const av::SFBool::Se
 	} else {
 		mOsgCamera->setComputeNearFarMode(::osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
 	}
+}
+
+void
+av::osg::viewer::Camera::getCullMaskCB(const av::SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgCamera->getCullMask();
+}
+
+void
+av::osg::viewer::Camera::setCullMaskCB(const av::SFUInt::SetValueEvent& event)
+{
+  mOsgCamera->setCullMask(event.getValue());
+}
+
+void
+av::osg::viewer::Camera::getInheritanceMaskCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgCamera->getInheritanceMask();
+}
+
+void
+av::osg::viewer::Camera::setInheritanceMaskCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgCamera->setInheritanceMask(event.getValue());
 }

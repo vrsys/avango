@@ -95,6 +95,16 @@ namespace av
         SFDouble Far;
 
         /**
+         * Configure culling
+         */
+        SFUInt CullMask;
+
+        /**
+         * Configure inheritancemask
+         */
+        SFInt InheritanceMask;
+
+        /**
          * Defines the background color.
          * Default is Vec4(0,0,0,1).
          */
@@ -208,7 +218,10 @@ namespace av
 
         virtual void getEnableAutoComputeNearFarPlaneCB(const av::SFBool::GetValueEvent& event);
         virtual void setEnableAutoComputeNearFarPlaneCB(const av::SFBool::SetValueEvent& event);
-
+        void getCullMaskCB(const av::SFUInt::GetValueEvent& event);
+        void setCullMaskCB(const av::SFUInt::SetValueEvent& event);
+        void getInheritanceMaskCB(const av::SFInt::GetValueEvent& event);
+        void setInheritanceMaskCB(const av::SFInt::SetValueEvent& event);
 
       private:
 

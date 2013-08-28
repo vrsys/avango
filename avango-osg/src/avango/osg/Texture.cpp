@@ -63,6 +63,10 @@ av::osg::Texture::Texture(::osg::Texture* osgtexture) :
                           boost::bind(&Texture::getInternalFormatModeCB, this, _1),
                           boost::bind(&Texture::setInternalFormatModeCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(InternalFormat,
+                          boost::bind(&Texture::getInternalFormat, this, _1),
+                          boost::bind(&Texture::setInternalFormat, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MaxAnisotropy,
                           boost::bind(&Texture::getMaxAnisotropyCB, this, _1),
                           boost::bind(&Texture::setMaxAnisotropyCB, this, _1));
@@ -143,6 +147,18 @@ av::osg::Texture::getInternalFormatModeCB(const av::SFInt::GetValueEvent& event)
 av::osg::Texture::setInternalFormatModeCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgTexture->setInternalFormatMode((::osg::Texture::InternalFormatMode)(event.getValue()));
+}
+
+/* virtual */ void
+av::osg::Texture::getInternalFormat(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgTexture->getInternalFormat();
+}
+
+/* virtual */ void
+av::osg::Texture::setInternalFormat(const av::SFInt::SetValueEvent& event)
+{
+  mOsgTexture->setInternalFormat(event.getValue());
 }
 
 /* virtual */ void

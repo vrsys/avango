@@ -45,6 +45,12 @@ av::osg::Camera::Camera(::osg::Camera* osgcamera) :
   AV_FC_ADD_ADAPTOR_FIELD(ClearMask,
                           boost::bind(&Camera::getClearMaskCB, this, _1),
                           boost::bind(&Camera::setClearMaskCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(CullMask,
+                          boost::bind(&Camera::getCullMaskCB, this, _1),
+                          boost::bind(&Camera::setCullMaskCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(InheritanceMask,
+                          boost::bind(&Camera::getInheritanceMaskCB, this, _1),
+                          boost::bind(&Camera::setInheritanceMaskCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(ClearColor,
                           boost::bind(&Camera::getClearColorCB, this, _1),
                           boost::bind(&Camera::setClearColorCB, this, _1));
@@ -103,6 +109,30 @@ void
 av::osg::Camera::setClearMaskCB(const av::SFInt::SetValueEvent& event)
 {
   mOsgCamera->setClearMask(static_cast<GLbitfield>(event.getValue()));
+}
+
+void
+av::osg::Camera::getCullMaskCB(const av::SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgCamera->getCullMask();
+}
+
+void
+av::osg::Camera::setCullMaskCB(const av::SFUInt::SetValueEvent& event)
+{
+  mOsgCamera->setCullMask(event.getValue());
+}
+
+void
+av::osg::Camera::getInheritanceMaskCB(const av::SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = mOsgCamera->getInheritanceMask();
+}
+
+void
+av::osg::Camera::setInheritanceMaskCB(const av::SFInt::SetValueEvent& event)
+{
+  mOsgCamera->setInheritanceMask(event.getValue());
 }
 
 void

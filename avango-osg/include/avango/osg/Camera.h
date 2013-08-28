@@ -67,6 +67,16 @@ namespace av
       SFInt ClearMask;
 
       /**
+       * Configure culling
+       */
+      SFUInt CullMask;
+
+      /**
+       * Configure inheritancemask
+       */
+      SFInt InheritanceMask;
+
+      /**
        * Selects color to use for clearing color buffers
        */
       SFVec4 ClearColor;
@@ -119,6 +129,10 @@ namespace av
 
       void getClearMaskCB(const av::SFInt::GetValueEvent& event);
       void setClearMaskCB(const av::SFInt::SetValueEvent& event);
+      void getCullMaskCB(const av::SFUInt::GetValueEvent& event);
+      void setCullMaskCB(const av::SFUInt::SetValueEvent& event);
+      void getInheritanceMaskCB(const av::SFInt::GetValueEvent& event);
+      void setInheritanceMaskCB(const av::SFInt::SetValueEvent& event);
       void getClearColorCB(const av::osg::SFVec4::GetValueEvent& event);
       void setClearColorCB(const av::osg::SFVec4::SetValueEvent& event);
       void getViewMatrixCB(const av::osg::SFMatrix::GetValueEvent& event);

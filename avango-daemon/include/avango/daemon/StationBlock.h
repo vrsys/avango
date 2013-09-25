@@ -34,7 +34,7 @@
 
 #include <boost/thread/mutex.hpp>
 #include <avango/daemon/Station.h>
-
+#include <avango/daemon/windows_specific_daemon.h>
 
 namespace av
 {
@@ -45,7 +45,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class StationBlock {
+    class AV_DAEMON_DLL StationBlock {
 
     public:
 
@@ -59,7 +59,8 @@ namespace av
        */
       Station* getStation(const char* name);
 
-    protected:
+    // Boost managed_shared_memory requires public destructor
+    //protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.

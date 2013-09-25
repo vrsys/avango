@@ -31,9 +31,13 @@ headers = Split('''
     DeviceService.h
     DTrack.h
     Doxygen.h
+	EventMapping.win.h
     HIDInput.h
+	HIDInput.linux.h
+	HIDInput.win.h
     Init.h
     LinuxEvent.h
+	LinuxInput.win.h
     SharedMemorySegment.h
     Station.h
     StationBlock.h

@@ -118,6 +118,7 @@ def _setup_default():
         _config_store.set('GLU', PlainConfig(libraries = ['GLU32']))
         # for avango extensions, there is no pkg-config
         _config_store.set('avango-core', PlainConfig(libraries = ['avango'], dependencies = ["boost_signals", "boost_thread", "boost_regex"]))
+        _config_store.set('avango-daemon', PlainConfig(libraries = ['avangoDaemon']))
         _config_store.set('avango-osg', PlainConfig(libraries = ['avangoOsg'], dependencies = ['osg', 'osgDB', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil']))
         _config_store.set('avango-utils', PlainConfig(libraries = ['avangoUtils']))
         _config_store.set('avango-tools', PlainConfig(libraries = ['avangoTools']))

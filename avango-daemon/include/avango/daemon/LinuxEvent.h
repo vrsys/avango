@@ -28,6 +28,7 @@
 
 #include <string>
 #include <map>
+#include <avango/daemon/windows_specific_daemon.h>
 
 /**
  * \file
@@ -44,7 +45,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class LinuxEvent : public ::std::map<std::string, unsigned long>
+    class AV_DAEMON_DLL LinuxEvent : public ::std::map<std::string, unsigned long>
     {
     public:
       /**

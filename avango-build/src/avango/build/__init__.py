@@ -184,6 +184,9 @@ def build_default_options():
         scons.BoolOption('BOOST_DEBUG',
                    'Use debug build of Boost library',
                    defaults.BOOST_DEBUG),
+		scons.EnumOption('MSVC_VERSION',
+                   'Windows only: Prefered version of VC++ compiler. If not set, the latest available version will be used.',
+                   defaults.MSVC_VERSION, ['9.0', '10.0', '11.0', '12.0']),
         scons.EnumOption('BOOST_LAYOUT',
                    'Sets Boost library naming scheme',
                    defaults.BOOST_LAYOUT, ['versioned', 'tagged', 'system']),
@@ -206,6 +209,7 @@ def _build_environment():
         
         result.Append(CPPDEFINES=['AV_INSTANTIATE_FIELD_TEMPLATES'])
 		  
+        result.Append(CCFLAGS='/bigobj')
         result.Append(LINKFLAGS=['/MANIFEST'])
         result['SHLINKCOM'] = [result['SHLINKCOM'], 'mt.exe -nologo -manifest ${TARGET}.manifest -outputresource:$TARGET;2']
     else:
@@ -235,6 +239,7 @@ def _build_environment():
             result.Append(CPPDEFINES=['WIN32'])
     else:
         if oshelper.os_is_windows():
+            result.Append(CPPDEFINES=['WIN32'])
             result.Append(LINKFLAGS='/MACHINE:X64')
 		
 
@@ -288,7 +293,11 @@ int main(int argc, char **argv) {
 #ifdef __GNUC__
   std::cout << "gcc" << __GNUC__ << __GNUC_MINOR__;
 #else
-  std::cout << "unknown";
+  #ifdef _MSC_VER
+    std::cout << "VC++ " << _MSC_VER/100-6 << ".0";
+  #else
+    std::cout << "unknown";
+  #endif
 #endif
   return 0;
 }

@@ -61,7 +61,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class Device : public Base
+    class AV_DAEMON_DLL Device : public Base
     {
       AV_BASE_DECLARE_ABSTRACT();
 

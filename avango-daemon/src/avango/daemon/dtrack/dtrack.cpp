@@ -28,8 +28,14 @@
  *
  */
 
-#define OS_UNIX   1    // for Linux, Irix
-//#define OS_WIN    1    // for Windows NT 4.0, Windows 2000, Windows XP
+#ifndef WIN32
+#  define OS_UNIX   1    // for Linux, Irix
+#else
+#  define OS_WIN    1    // for Windows NT 4.0, Windows 2000, Windows XP
+#endif
+
+
+
 
 // --------------------------------------------------------------------------
 
@@ -38,14 +44,16 @@
 #include <cstring>
 
 #ifdef OS_UNIX
-	#include <sys/socket.h>
-	#include <sys/time.h>
-	#include <netinet/in.h>
-	#include <unistd.h>
+#  include <sys/socket.h>
+#  include <sys/time.h>
+#  include <netinet/in.h>
+#  include <unistd.h>
 #endif
+
 #ifdef OS_WIN
-	#include <windows.h>
-	#include <winsock.h>
+#  include <windows.h>
+#  include <winsock.h>
+#  pragma comment(lib, "wsock32.lib")
 #endif
 
 #include "dtrack.h"

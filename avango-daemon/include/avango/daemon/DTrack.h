@@ -48,7 +48,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class DTrack : public Device
+    class AV_DAEMON_DLL DTrack : public Device
     {
       AV_BASE_DECLARE();
 

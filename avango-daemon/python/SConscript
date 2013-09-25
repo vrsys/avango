@@ -24,6 +24,8 @@
 import avango.build
 
 local_env = avango.build.PythonEnvironment()
+avango.build.add_library(local_env, 'boost_python')
+avango.build.add_library(local_env, 'avango-core')
 
 daemon_files = Split("""
     _daemon.cpp

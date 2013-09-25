@@ -48,7 +48,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class VRPNClient : public Device
+    class AV_DAEMON_DLL VRPNClient : public Device
     {
       AV_BASE_DECLARE();
 
@@ -121,5 +121,3 @@ namespace av
 }
 
 #endif
-
-

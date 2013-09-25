@@ -51,7 +51,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class DeviceActuator : public FieldContainer
+    class AV_DAEMON_DLL DeviceActuator : public FieldContainer
     {
 
       AV_FC_DECLARE();

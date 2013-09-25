@@ -57,3 +57,5 @@ SConscript ([
     'src/avango/daemon/tests/SConscript',
     'python/SConscript',
 ])
+
+avango.build.make_vcproject(daemon_env, 'avango-daemon', 'daemon')

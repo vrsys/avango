@@ -79,6 +79,12 @@ av::daemon::Device::shutDown()
   if (!mRunning) return false;
 
   mKeepRunning = false;
+  
+#ifdef WIN32
+  // wait for thread to be closed
+  mThread->join();
+#endif
+
   stopDevice();
 
   return true;

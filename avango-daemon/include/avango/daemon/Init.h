@@ -32,6 +32,7 @@
  */
 
 #include <avango/Typed.h>
+#include <avango/daemon/windows_specific_daemon.h>
 
 namespace av
 {
@@ -43,7 +44,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class Init
+    class AV_DAEMON_DLL Init
     {
       AV_TYPED_DECLARE_ABSTRACT();
     };

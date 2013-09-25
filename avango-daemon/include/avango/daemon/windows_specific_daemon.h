@@ -23,76 +23,22 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AV_DAEMON_STATIONSEGMENT_H)
-#define AV_DAEMON_STATIONSEGMENT_H
+#if !defined(AV_WINDOWS_SPECIFIC_DAEMON_H)
+#define AV_WINDOWS_SPECIFIC_DAEMON_H
 
 /**
  * \file
  * \ingroup av_daemon
  */
 
-#include <string>
-#include <avango/daemon/windows_specific_daemon.h>
-
-#ifdef WIN32
-  #include <boost/interprocess/managed_windows_shared_memory.hpp>
-#endif
-
-namespace av
-{
-  namespace daemon
-  {
-    class Station;
-    class StationBlock;
-    class SharedMemorySegment;
-
-    /**
-     * Class for handling a shared memory segment.
-     *
-     * \ingroup av_daemon
-     */
-    class AV_DAEMON_DLL StationSegment {
-
-
-    public:
-
-      StationSegment();
-      virtual ~StationSegment();
-
-      /**
-       * Returns station of given name.
-       */
-      Station* getStation(const char*);
-
-      /**
-       * Returns station of given name.
-       */
-      Station* getStation(const ::std::string&);
-
-
-    private:
-
-      /**
-       * Made private to prevent copying construction.
-       */
-      StationSegment(const StationSegment&);
-
-      /**
-       * Made private to prevent assignment.
-       */
-      const StationSegment& operator=(const StationSegment&);
-
-#ifdef WIN32
-      boost::interprocess::managed_windows_shared_memory* mSegment;
-      std::string          mShmName;
+#if defined(_MSC_VER)
+  #if defined(AV_DAEMON_LIBRARY)
+    #define AV_DAEMON_DLL __declspec( dllexport )
+  #else
+    #define AV_DAEMON_DLL __declspec( dllimport )
+  #endif
 #else
-      SharedMemorySegment* mSharedMem;
-#endif
+  #define AV_DAEMON_DLL
+#endif // #if defined(_MSC_VER)
 
-      StationBlock*        mStationBlock;
-
-    };
-  }
-}
-
-#endif // #if !defined(AV_OSG_STATIONSEGMENT_H)
+#endif // #if !defined(AV_WINDOWS_SPECIFIC_DAEMON_H)

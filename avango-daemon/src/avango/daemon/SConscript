@@ -22,8 +22,10 @@
 ##########################################################################
 
 import avango.build
+import avango.build.oshelper
 
 daemon_env = avango.build.Environment()
+daemon_env.Append(CPPDEFINES='AV_DAEMON_LIBRARY')
 
 # Sources section
 lib_sources = Split('''
@@ -33,18 +35,28 @@ lib_sources = Split('''
     DeviceSensor.cpp
     DeviceService.cpp
     DTrack.cpp
-    HIDInput.cpp
     Init.cpp
     LinuxEvent.cpp
-    SharedMemorySegment.cpp
     Station.cpp
     StationBlock.cpp
     StationSegment.cpp
-    WacomTablet.cpp
-    Wiimote.cpp
-    WiimoteActuator.cpp
     ''')
 
+if avango.build.oshelper.os_is_windows():
+    lib_sources += Split('''
+        EventMapping.win.cpp
+        HIDInput.win.cpp
+        ''')
+else:
+    lib_sources += Split('''
+        HIDInput.linux.cpp
+		SharedMemorySegment.cpp
+        WacomTablet.cpp
+        Wiimote.cpp
+        WiimoteActuator.cpp
+        ''')
+
+    
 if daemon_env['VRPN_SUPPORT']:
     lib_sources += Split('''
         VRPNClient.cpp
@@ -63,14 +75,17 @@ if 'icpc' in daemon_env['CXX']:
 avango.build.add_library(daemon_env, 'avango-core')
 avango.build.add_library(daemon_env, 'avango-osg')
 
+if avango.build.oshelper.os_is_windows():
+    daemon_env.Prepend(LIBS = ['user32'])
+
 if daemon_env['VRPN_SUPPORT']:
     avango.build.add_library(daemon_env, 'vrpn')
 
 lib = daemon_env.SharedLibrary('avangoDaemon', lib_sources)
 
-avango.build.Environment.prepend_library_path(Dir('.').abspath)
-
 # Alias section
-Alias('daemon', [lib])
+Alias('daemon', lib)
 Alias('install-daemon', Install(avango.build.get_library_path(), lib))
 #Alias('install-daemon', Install(avango.build.get_binary_path(), bin))
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)

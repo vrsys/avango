@@ -34,7 +34,7 @@
 #include <vector>
 #include <osg/Matrixf>
 #include <avango/Base.h>
-
+#include <avango/daemon/windows_specific_daemon.h>
 
 namespace av
 {
@@ -45,7 +45,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class Station : public Base {
+    class AV_DAEMON_DLL Station : public Base {
 
       AV_BASE_DECLARE();
 

@@ -55,7 +55,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class DeviceSensor : public FieldContainer
+    class AV_DAEMON_DLL DeviceSensor : public FieldContainer
     {
 
       AV_FC_DECLARE();

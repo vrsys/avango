@@ -27,3 +27,6 @@ develop-eggs
 __pycache__
 
 .sconsign.dblite
+.sconf_temp
+config.log
+localdefs.py

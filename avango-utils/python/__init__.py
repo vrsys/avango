@@ -41,8 +41,8 @@ from _node_optimizer import *
 from _screen_capture import *
 
 
-import Leap
-from _leap_motion import *
+#import Leap
+#from _leap_motion import *
     
 #check for leapMotion sdk
 leap_motion_sdk_found = False

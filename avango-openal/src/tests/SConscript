@@ -29,6 +29,7 @@ sources = Split('''
     ''')
 
 local_test_env = avango.build.TestEnvironment()
+local_test_env.Append(LIBS = ['avango'])
 local_test_env.Append(LIBS = ['avangoOpenALSound'])
 
 local_test_env.Prepend(LIBPATH=['../..'])

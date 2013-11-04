@@ -1,0 +1,41 @@
+// -*- Mode:Outline -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+
+This example shows the compatibility of an Avango Classic fpHIDInput running
+in the device daemon (av-daemon) to an instances of DeviceService and
+DeviceSensor of the Avango NG framework.
+
+Usage:
+
+  1. Start Avango Classic Tracker:
+
+     ~/old-avango/bin/./av-daemon.sh -f devices.scm
+
+     NOTE: For parametrization look into the file.
+
+
+  2. Start TestDevice using Avango NG instances:
+
+     ./TestDevice
+

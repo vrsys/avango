@@ -56,15 +56,38 @@ ENDIF (${AVANGO_DISTRIBUTION_SUPPORT})
 
 LINK_DIRECTORIES(${LIB_PATHS})
 
-ADD_LIBRARY( avango_core SHARED
+ADD_LIBRARY( avango_core STATIC
     	     ${AVANGO_CORE_SRC}
 )
+
+LINK_LIBRARIES(avango_core debug avango_unittest optimized avango_unittest)
 
 INCLUDE_DIRECTORIES( avango_core 
 	${INCLUDE_PATHS} 
 	include
-	../avango-unittest/include
 )
+
+###############################################################################
+# set preprocessor configuration
+###############################################################################
+SET (BUILD_FLAGS 
+	"-D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG}
+	-D _AVANGO_DAEMON_VRPN_SUPPORT=${AVANGO_DAEMON_VRPN_SUPPORT}
+	-D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT}
+	-D _AVANGO_ZMQ_DISTRIBUTION_SUPPORT=${AVANGO_ZMQ_DISTRIBUTION_SUPPORT}
+	-D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT}
+	-D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL}
+        -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR}
+        -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR}
+        -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}"
+)
+
+IF (MSVC)
+	SET( BUILD_FLAGS "${BUILD_FLAGS} -D AV_LIBRARY")
+ENDIF (MSVC)
+
+set_target_properties(avango_core PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(avango_core PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 IF (NOT ${LIBRARIES} STREQUAL "")
     TARGET_LINK_LIBRARIES( avango_core debug ${LIBRARIES} optimized ${LIBRARIES})
@@ -74,43 +97,10 @@ ENDIF (NOT ${LIBRARIES} STREQUAL "")
 # targets for unittesting
 ###############################################################################
 IF (AVANGO_UNITTESTS)
-   # general tests
-   ADD_EXECUTABLE(unittest_mock_field_container "src/avango/nodes/tests/MockFieldContainer.cpp")
-   ADD_EXECUTABLE(unittest_abstract_node "src/avango/nodes/tests/TestAbstractNode.cpp")
-   ADD_EXECUTABLE(unittest_evaluation "src/avango/nodes/tests/TestEvaluation.cpp")
-   ADD_EXECUTABLE(unittest_evaluation_order "src/avango/nodes/tests/TestEvaluationOrder.cpp")
-   ADD_EXECUTABLE(unittest_field_connection "src/avango/nodes/tests/TestFieldConnectionChangeInNotify.cpp")
-   ADD_EXECUTABLE(unittest_nodes_field_container "src/avango/nodes/tests/TestFieldContainer.cpp")
-   ADD_EXECUTABLE(unittest_nodes "src/avango/nodes/tests/TestNodes.cpp")
-   ADD_EXECUTABLE(unittest_nodes_unref "src/avango/nodes/tests/TestUnref.cpp")
-   
-   #logging
-   ADD_EXECUTABLE(unittest_logging "src/avango/logging/tests/TestLogging.cpp")
-   
-   #interface
-   ADD_EXECUTABLE(unittest_application "src/avango/interface/tests/TestApplication.cpp")
-   ADD_EXECUTABLE(unittest_time_sensor "src/avango/interface/tests/TestTimeSensor.cpp")
-
-   # type tests
-   ADD_EXECUTABLE(unittest_container_pool "src/avango/types/tests/TestContainerPool.cpp")
-   ADD_EXECUTABLE(unittest_libtype "src/avango/types/tests/TestLibType.cpp")
-   ADD_EXECUTABLE(unittest_type "src/avango/types/tests/TestType.cpp")
-   
-   # fields
-   ADD_EXECUTABLE(unittest_fields "src/avango/fields/tests/TestFields.cpp")
-   IF (AVANGO_DISTRIBUTION_SUPPORT)
-       ADD_EXECUTABLE(unittest_clone_fields "src/avango/fields/tests/TestCloneFields.cpp")
-       ADD_EXECUTABLE(unittest_field_const "src/avango/fields/tests/TestFieldConst.cpp")
-       ADD_EXECUTABLE(unittest_field_multipush "src/avango/fields/tests/TestFieldMultiPush.cpp")
-       ADD_EXECUTABLE(unittest_field_referencing "src/avango/fields/tests/TestFieldReferencing.cpp")
-       ADD_EXECUTABLE(unittest_field_type_conversion "src/avango/fields/tests/TestFieldTypeConversion.cpp")
-       ADD_EXECUTABLE(unittest_field_value_callbacks "src/avango/fields/tests/TestFieldValueCallbacks.cpp")
-       ADD_EXECUTABLE(unittest_multifields "src/avango/fields/tests/TestMultiFields.cpp")
-       # network
-       ADD_EXECUTABLE(unittest_net_lock "src/avango/network/tests/TestNetLock.cpp")
-       ADD_EXECUTABLE(unittest_net_node "src/avango/network/tests/TestNetNode.cpp")
-       ADD_EXECUTABLE(unittest_network "src/avango/network/tests/TestNetwork.cpp")
-   ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
-   
-   TARGET_LINK_LIBRARIES( unittest_fields debug avango_core optimized avango_core)
+  add_subdirectory(src/avango/nodes/tests)
+  add_subdirectory(src/avango/interface/tests)
+  add_subdirectory(src/avango/types/tests)
+  add_subdirectory(src/avango/fields/tests)
+  add_subdirectory(src/avango/network/tests)
+  add_subdirectory(src/avango/logging/tests)
 ENDIF (AVANGO_UNITTESTS)

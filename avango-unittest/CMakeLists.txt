@@ -2,15 +2,33 @@
 # avango-unittests
 ################################################################
 
-# determine sources
-file(GLOB_RECURSE AVANGO_UNITTEST_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-  src/avango/*.cpp
-  include/avango/*.h
-  include/avango/logging/*.h
+SET(AVANGO_UNITTEST_SRC "")
+
+IF (UNIX)
+  FILE(GLOB AVANGO_UNITTEST_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    src/avango/*.cpp
+    src/avango/Posix/*.cpp
+    include/avango/UnitTest++/*.h
+    include/avango/UnitTest++/Posix/*.h
+  )
+
+ELSEIF (MSVC)
+  FILE(GLOB AVANGO_UNITTEST_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    src/avango/*.cpp
+    src/avango/Win32/*.cpp
+    include/avango/UnitTest++/*.h
+    include/avango/UnitTest++/Win32/*.h
+  )
+ENDIF (UNIX)
+
+ADD_LIBRARY( avango_unittest STATIC
+    	     ${AVANGO_UNITTEST_SRC}
 )
 
-ADD_LIBRARY( avango_unittest SHARED
-    	     ${AVANGO_UNITTEST_SRC}
+INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
+		    ${CMAKE_CURRENT_SOURCE_DIR}/include
+		    ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++
+	      ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++/tests
 )
 
 

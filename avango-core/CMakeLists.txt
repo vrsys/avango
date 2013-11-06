@@ -56,11 +56,9 @@ ENDIF (${AVANGO_DISTRIBUTION_SUPPORT})
 
 LINK_DIRECTORIES(${LIB_PATHS})
 
-ADD_LIBRARY( avango_core STATIC
+ADD_LIBRARY( avango_core SHARED
     	     ${AVANGO_CORE_SRC}
 )
-
-LINK_LIBRARIES(avango_core debug avango_unittest optimized avango_unittest)
 
 INCLUDE_DIRECTORIES( avango_core 
 	${INCLUDE_PATHS} 

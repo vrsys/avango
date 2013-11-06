@@ -34,6 +34,7 @@ endif (UNIX)
 
 include(find_compiler)
 include(find_boost)
+include(find_python)
 
 set(LIBRARIES
     ${BOOST_LIBRARIES}
@@ -70,6 +71,7 @@ IF (UNIX)
 ELSEIF(MSVC)
 	set(CMAKE_CXX_FLAGS_RELEASE "-D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
 	set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG /MDd /Zi")
+  add_definitions(-D AV_INSTANTIATE_FIELD_TEMPLATES)
 ENDIF(UNIX)
 
 ################################################################
@@ -83,7 +85,7 @@ SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
 SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable VRPN support")
 SET (AVANGO_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to enable distribution support.")
 SET (AVANGO_ZMQ_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to use ZMQ for distribution.")
-SET (AVANGO_PCL_SUPPORT "true" CACHE BOOL "Use PCL.")
+SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
 
@@ -91,13 +93,13 @@ SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
 # Create libraries
 ################################################################
 
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-add_subdirectory(avango-unittest)
-add_subdirectory(avango-core)
-add_subdirectory(avango-daemon)
-#add_subdirectory(avango-python)
+ADD_SUBDIRECTORY(avango-unittest)
+ADD_SUBDIRECTORY(avango-core)
+ADD_SUBDIRECTORY(avango-daemon)
+ADD_SUBDIRECTORY(avango-python)
 
 ################################################################
 # Summary
@@ -112,7 +114,13 @@ message( "   library: ${BOOST_LIBRARIES}" )
 message( "   library path: ${BOOST_LIBRARY_DIRS}" )
 message( "   include: ${BOOST_INCLUDE_DIRS}" )
 message( "" )
+message( " python:" )
+message( "   library: ${PYTHON_LIBRARIES}" )
+message( "   library path: ${PYTHON_LIBRARY_DIRS}" )
+message( "   include: ${PYTHON_INCLUDE_DIRS}" )
+message( "" )
 message( " gl:" )
 message( "   library: ${GL_LIBRARIES}" )
 message( "   include: ${GL_INCLUDE_DIRS}" )
 message( "" )
+

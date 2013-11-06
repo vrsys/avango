@@ -355,7 +355,6 @@ namespace av
   template<> AV_DLL void av::SingleField<uint32_t>::pullValueImpl(av::Field* fromField);
   template<> AV_DLL void av::SingleField<uint64_t>::pullValueImpl(av::Field* fromField);
   template<> AV_DLL void av::SingleField<bool>::pullValueImpl(av::Field* fromField);
-
 }
 
 #endif // #if !defined(AVANGO_SINGLEFIELD_H)

@@ -47,7 +47,7 @@ namespace
     std::copy(inVec.begin(), inVec.end(), outVec.begin());
     return outVec;
   }
-
+  
 }
 
 template<>

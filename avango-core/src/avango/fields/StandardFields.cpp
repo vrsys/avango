@@ -25,7 +25,6 @@
 
 #include <avango/StandardFields.h>
 
-
 AV_FIELD_DEFINE(av::SFBool)
 AV_FIELD_DEFINE(av::MFBool)
 
@@ -49,8 +48,6 @@ AV_FIELD_DEFINE(av::MFULong)
 
 AV_FIELD_DEFINE(av::SFString)
 AV_FIELD_DEFINE(av::MFString)
-
-
 
 void av::initStandardFields()
 {

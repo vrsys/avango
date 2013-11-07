@@ -50,4 +50,9 @@ IF (NOT ${LIBRARIES} STREQUAL "")
     TARGET_LINK_LIBRARIES( avango_daemon debug ${LIBRARIES} optimized ${LIBRARIES})
 ENDIF (NOT ${LIBRARIES} STREQUAL "")
 
+###############################################################################
+# python module
+###############################################################################
+add_subdirectory(python)
+
 

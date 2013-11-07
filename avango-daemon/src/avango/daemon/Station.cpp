@@ -25,7 +25,6 @@
 
 #include <avango/daemon/Station.h>
 
-#include <osg/Matrixf>
 #include <cstring>
 
 AV_BASE_DEFINE(av::daemon::Station);

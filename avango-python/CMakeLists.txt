@@ -40,17 +40,17 @@ ADD_LIBRARY( avango_script SHARED
     	     ${AVANGO_SCRIPT_SRC}
 )
 
-ADD_LIBRARY( py_avango SHARED
+ADD_LIBRARY( _avango SHARED
     	     ${AVANGO_PYTHON_AVANGO_SRC}
 )
 
-ADD_LIBRARY( py_script SHARED
+ADD_LIBRARY( _script SHARED
     	     ${AVANGO_PYTHON_SCRIPT_SRC}
 )
 
 ADD_DEPENDENCIES(avango_script avango_core)
-ADD_DEPENDENCIES(py_avango avango_core avango_script)
-ADD_DEPENDENCIES(py_script avango_core py_avango)
+ADD_DEPENDENCIES(_avango avango_core avango_script)
+ADD_DEPENDENCIES(_script avango_core _avango)
 
 INCLUDE_DIRECTORIES(BEFORE 
   include
@@ -82,11 +82,11 @@ ENDIF (MSVC)
 set_target_properties(avango_script PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 set_target_properties(avango_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
-set_target_properties(py_avango PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
-set_target_properties(py_avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
+set_target_properties(_avango PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(_avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
-set_target_properties(py_script PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
-set_target_properties(py_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
+set_target_properties(_script PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 TARGET_LINK_LIBRARIES( avango_script 
                        debug 
@@ -95,18 +95,18 @@ TARGET_LINK_LIBRARIES( avango_script
                        ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core
 )
 
-TARGET_LINK_LIBRARIES( py_avango 
+TARGET_LINK_LIBRARIES( _avango 
                        debug 
                        ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script
                        optimized 
                        ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script
 )
 
-TARGET_LINK_LIBRARIES( py_script 
+TARGET_LINK_LIBRARIES( _script 
                        debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script py_avango
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script _avango
                        optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script py_avango
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_script _avango
 )
 
 ###############################################################################

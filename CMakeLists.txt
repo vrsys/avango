@@ -1,6 +1,7 @@
 ################################################################
 # Avango
 ################################################################
+SET(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 PROJECT(AVANGO CXX)
 
 # version number
@@ -26,24 +27,31 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 ################################################################
 # Configure and find libraries
 ################################################################
-set(GLOBAL_EXT_DIR ${AVANGO_SOURCE_DIR}/externals)
+SET(GLOBAL_EXT_DIR ${AVANGO_SOURCE_DIR}/externals)
 
 if (UNIX)
 	pkg_check_modules(GL REQUIRED gl)
 endif (UNIX)
 
 include(find_compiler)
+
+include(find_guacamole)
+SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals/)
+
+include(find_schism)
 include(find_boost)
 include(find_python)
 
 set(LIBRARIES
     ${BOOST_LIBRARIES}
+    ${GUACAMOLE_LIBRARIES}
     ${GL_LIBRARIES}
 )
 
 set(LIB_PATHS
-    ${GL_LIBRARY_DIRS}
 	  ${BOOST_LIBRARY_DIRS}
+    ${GUACAMOLE_LIBRARY_DIRS}
+    ${GL_LIBRARY_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
@@ -51,6 +59,7 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/build
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${BOOST_INCLUDE_DIRS}
+    ${GUACAMOLE_INCLUDE_DIRS}
     ${GL_INCLUDE_DIRS}
 )
 
@@ -81,6 +90,7 @@ SET (AVANGO_VERSION_MAJOR "1" CACHE STRING "Major version of AvangoNG.")
 SET (AVANGO_VERSION_MINOR "90" CACHE STRING "Minor version of AvangoNG.")
 SET (AVANGO_VERSION_MAINT "0" CACHE STRING "Maintenance version of AvangoNG.")
 
+SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable using VRPN.")
 SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
 SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable VRPN support")
 SET (AVANGO_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to enable distribution support.")
@@ -113,6 +123,11 @@ message( " boost:" )
 message( "   library: ${BOOST_LIBRARIES}" )
 message( "   library path: ${BOOST_LIBRARY_DIRS}" )
 message( "   include: ${BOOST_INCLUDE_DIRS}" )
+message( "" )
+message( " guacamole:" )
+message( "   library: ${GUACAMOLE_LIBRARIES}" )
+message( "   library path: ${GUACAMOLE_LIBRARY_DIRS}" )
+message( "   include: ${GUACAMOLE_INCLUDE_DIRS}" )
 message( "" )
 message( " python:" )
 message( "   library: ${PYTHON_LIBRARIES}" )

@@ -32,7 +32,6 @@
  */
 
 #include <vector>
-#include <osg/Matrixf>
 #include <avango/Base.h>
 
 

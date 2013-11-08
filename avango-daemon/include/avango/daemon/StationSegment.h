@@ -32,7 +32,11 @@
  */
 
 #include <string>
+#include <avango/daemon/windows_specific_daemon.h>
 
+#ifdef WIN32
+  #include <boost/interprocess/managed_windows_shared_memory.hpp>
+#endif
 
 namespace av
 {
@@ -47,7 +51,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class StationSegment {
+    class AV_DAEMON_DLL StationSegment {
 
 
     public:
@@ -78,7 +82,13 @@ namespace av
        */
       const StationSegment& operator=(const StationSegment&);
 
+#ifdef WIN32
+      boost::interprocess::managed_windows_shared_memory* mSegment;
+      std::string          mShmName;
+#else
       SharedMemorySegment* mSharedMem;
+#endif
+
       StationBlock*        mStationBlock;
 
     };

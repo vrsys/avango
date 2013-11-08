@@ -27,12 +27,27 @@
 
 #include <avango/Assert.h>
 #include <avango/daemon/StationBlock.h>
-#include <avango/daemon/SharedMemorySegment.h>
 
+#ifdef WIN32
+#  include <boost/interprocess/managed_shared_memory.hpp>
+#  include <boost/interprocess/mapped_region.hpp>
+#  include <avango/Logger.h>
+
+  namespace
+  {
+    av::Logger& logger(av::getLogger("av::daemon::StationSegment"));
+  }
+
+#else
+#  include <avango/daemon/SharedMemorySegment.h>
+#endif
 
 av::daemon::StationSegment::StationSegment()
-  : mSharedMem(new SharedMemorySegment (0xc3, sizeof(StationBlock)))
 {
+
+#ifndef WIN32
+  mSharedMem = new SharedMemorySegment (0xc3, sizeof(StationBlock));
+
   AV_ASSERT(mSharedMem);
   AV_ASSERT(mSharedMem->segment());
 
@@ -41,11 +56,38 @@ av::daemon::StationSegment::StationSegment()
   } else {
     mStationBlock = static_cast<StationBlock*>(mSharedMem->segment());
   }
+#else
+  mShmName = "AvDaemon";
+  using namespace boost::interprocess;
+  
+  // a dirty trick to calculate required segment size
+  const std::size_t shmSize = sizeof(StationBlock) * 8;
+
+  // construct managed shared memory
+  mSegment = new managed_windows_shared_memory(open_or_create, mShmName.c_str(), shmSize);
+  
+  if (mSegment->get_size() < shmSize)
+  {
+    delete mSegment;
+    boost::interprocess::shared_memory_object::remove(mShmName.c_str());
+    mSegment = new managed_windows_shared_memory(create_only, mShmName.c_str(), shmSize);
+    logger.warn() << "StationSegment(): Shared memory segment has been rebuilt with new size "
+                  << "because the old size was less that required.";
+  }
+
+  mStationBlock = mSegment->find_or_construct<StationBlock>("StationBlock")();
+  AV_ASSERT(mStationBlock);
+#endif
+
 }
 
 av::daemon::StationSegment::~StationSegment()
 {
+#ifndef WIN32
   delete mSharedMem;
+#else
+  delete mSegment;
+#endif
 }
 
 av::daemon::Station*

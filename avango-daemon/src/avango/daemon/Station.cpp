@@ -25,6 +25,7 @@
 
 #include <avango/daemon/Station.h>
 
+#include <gua/math.hpp>
 #include <cstring>
 
 AV_BASE_DEFINE(av::daemon::Station);
@@ -73,7 +74,7 @@ av::daemon::Station::getName() const
   return mName;
 }
 
-const osg::Matrixf&
+const ::gua::math::mat4&
 av::daemon::Station::getMatrix() const
 {
   return mMatrix;
@@ -133,7 +134,7 @@ av::daemon::Station::setName(const char* name)
 }
 
 void
-av::daemon::Station::setMatrix(const osg::Matrixf& matrix)
+av::daemon::Station::setMatrix(const ::gua::math::mat4& matrix)
 {
   mMatrix = matrix;
 }

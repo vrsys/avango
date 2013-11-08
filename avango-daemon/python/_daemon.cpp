@@ -28,19 +28,24 @@
 #include <avango/daemon/DeviceDaemon.h>
 #include <avango/daemon/DeviceSensor.h>
 #include <avango/daemon/DeviceService.h>
+#include <avango/daemon/DeviceActuator.h>
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/Init.h>
 #include <avango/daemon/StationSegment.h>
-#include <avango/daemon/WacomTablet.h>
-#include <avango/daemon/Wiimote.h>
-#include <avango/daemon/WiimoteActuator.h>
+
+#ifndef WIN32
+#  include <avango/daemon/WacomTablet.h>
+#  include <avango/daemon/Wiimote.h>
+#  include <avango/daemon/WiimoteActuator.h>
+#endif
+
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
 
 #ifdef VRPN_SUPPORT
-#include <avango/daemon/VRPNClient.h>
+#  include <avango/daemon/VRPNClient.h>
 #endif
 
 using namespace boost::python;
@@ -161,9 +166,13 @@ BOOST_PYTHON_MODULE(_daemon)
   // Avango NG application instances
   class_<av::daemon::DeviceSensor, av::Link<av::daemon::DeviceSensor>, bases<av::FieldContainer>, boost::noncopyable >("DeviceSensor", "docstring", no_init);
   class_<av::daemon::DeviceActuator, av::Link<av::daemon::DeviceActuator>, bases<av::FieldContainer>, boost::noncopyable >("_DeviceActuator", "docstring", no_init);
+
+#ifndef WIN32
   class_<av::daemon::WiimoteActuator, av::Link<av::daemon::WiimoteActuator>, bases<av::daemon::DeviceActuator>, boost::noncopyable >("WiimoteActuator", "docstring", no_init)
     .def("reset", &av::daemon::WiimoteActuator::reset)
     ;
+#endif
+
   class_<av::daemon::DeviceService, av::Link<av::daemon::DeviceService>, bases<av::Base>, boost::noncopyable >("DeviceService", "docstring")
     .def("set_led", &av::daemon::DeviceService::setLED)
     ;
@@ -179,6 +188,7 @@ BOOST_PYTHON_MODULE(_daemon)
   class_<av::daemon::Station, av::Link<av::daemon::Station>, bases<av::Base>, boost::noncopyable >("_DeviceStation",
     "An Avango Daemon station", no_init);
 
+
   // Avango NG device: HIDInput
   class_<av::daemon::HIDInput, av::Link<av::daemon::HIDInput>, bases<av::daemon::Device>, boost::noncopyable >("_HIDHelper",
     "A helper class that provides some basic properties as well as some functions to configure a HIDInput device.")
@@ -193,7 +203,7 @@ BOOST_PYTHON_MODULE(_daemon)
     .def("set_led", &::setLED)
     .def("set_leds", &::setAllLEDs)
     ;
-
+#ifndef WIN32
   // Avango NG device: WacomTablet (derived from HIDInput)
   class_<av::daemon::WacomTablet, av::Link<av::daemon::WacomTablet>, bases<av::daemon::HIDInput>, boost::noncopyable >("_WacomTabletHelper",
     "A helper class that provides some basic properties and functions inherited from HIDInput.")
@@ -204,6 +214,7 @@ BOOST_PYTHON_MODULE(_daemon)
   class_<av::daemon::Wiimote, av::Link<av::daemon::Wiimote>, bases<av::daemon::HIDInput>, boost::noncopyable >("_WiimoteHelper",
     "A helper class that provides some basic properties and functions inherited from HIDInput.")
     ;
+#endif
 
   // Avango NG device: DTrack
   class_<av::daemon::DTrack, av::Link<av::daemon::DTrack>, bases<av::daemon::Device>, boost::noncopyable >("_DTrackHelper",

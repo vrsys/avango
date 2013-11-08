@@ -33,6 +33,7 @@
 
 #include <avango/FieldContainer.h>
 #include <avango/Singleton.h>
+#include <avango/daemon/windows_specific_daemon.h>
 
 /// @cond DOXYGEN_SHOULD_SKIP_THIS
 namespace osg {
@@ -54,7 +55,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class DeviceService : public Base/*, public Singleton<DeviceService>*/
+    class AV_DAEMON_DLL DeviceService : public Base/*, public Singleton<DeviceService>*/
     {
       AV_BASE_DECLARE();
 
@@ -136,6 +137,11 @@ namespace av
     typedef MultiField<Link<DeviceService> > MFDeviceService;
     typedef Singleton<DeviceService> DevService;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_DAEMON_DLL SingleField<Link<daemon::DeviceService> >;
+  template class AV_DAEMON_DLL MultiField<Link<daemon::DeviceService> >;
+#endif
 
 }
 

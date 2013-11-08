@@ -61,10 +61,14 @@ av::daemon::Init::initClass()
     av::daemon::DeviceSensor::initClass();
     av::daemon::DeviceService::initClass();
     av::daemon::DTrack::initClass();
+
+
     av::daemon::HIDInput::initClass();
+#ifndef WIN32
     av::daemon::WacomTablet::initClass();
     av::daemon::Wiimote::initClass();
     av::daemon::WiimoteActuator::initClass();
+#endif
 
 #ifdef VRPN_SUPPORT
     av::daemon::VRPNClient::initClass();

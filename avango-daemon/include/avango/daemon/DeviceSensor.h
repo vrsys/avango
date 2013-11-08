@@ -34,7 +34,7 @@
 
 #include <string>
 
-//#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.h>
 #include <avango/FieldContainer.h>
 #include <avango/daemon/DeviceService.h>
 
@@ -55,7 +55,7 @@ namespace av
      *
      * \ingroup av_daemon
      */
-    class DeviceSensor : public FieldContainer
+    class AV_DAEMON_DLL DeviceSensor : public FieldContainer
     {
 
       AV_FC_DECLARE();
@@ -83,7 +83,7 @@ namespace av
       /**
        * Transformation matrix provided by given station (read-only).
        */
-      av::osg::SFMatrix  Matrix;
+      av::gua::SFMatrix  Matrix;
 
       /**
        * Read-only fields: Button states of connected station.
@@ -164,22 +164,22 @@ namespace av
       /**
        * Tracker to world transformation.
        */
-      av::osg::SFMatrix TransmitterOffset;
+      av::gua::SFMatrix TransmitterOffset;
 
       /**
        * Sensor to device transformation.
        */
-      av::osg::SFMatrix ReceiverOffset;
+      av::gua::SFMatrix ReceiverOffset;
 
       /**
        * Device rotation (read-only).
        */
-      av::osg::SFQuat   Rotation;
+      av::gua::SFQuat   Rotation;
 
       /**
        * Device translation (read-only).
        */
-      av::osg::SFVec3   Translation;
+      av::gua::SFVec3   Translation;
 
       /* virtual */ void evaluate();
 
@@ -208,7 +208,7 @@ namespace av
       /**
        * Readout Matrix provided by a specific device.
        */
-      void getMatrix(::osg::Matrixf&);
+      void getMatrix(::gua::math::mat4&);
 
       /**
        * Readout state of a specified Button provided by a specific device station.

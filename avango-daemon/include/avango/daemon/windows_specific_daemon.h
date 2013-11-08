@@ -23,66 +23,22 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AV_DAEMON_DEVICEACTUATOR_H)
-#define AV_DAEMON_DEVICEACTUATOR_H
-
+#if !defined(AV_WINDOWS_SPECIFIC_DAEMON_H)
+#define AV_WINDOWS_SPECIFIC_DAEMON_H
 
 /**
  * \file
  * \ingroup av_daemon
  */
 
-#include <string>
+#if defined(_MSC_VER)
+  #if defined(AV_DAEMON_LIBRARY)
+    #define AV_DAEMON_DLL __declspec( dllexport )
+  #else
+    #define AV_DAEMON_DLL __declspec( dllimport )
+  #endif
+#else
+  #define AV_DAEMON_DLL
+#endif // #if defined(_MSC_VER)
 
-#include <avango/gua/Fields.h>
-#include <avango/FieldContainer.h>
-#include <avango/daemon/DeviceService.h>
-
-namespace av
-{
-  namespace daemon
-  {
-    /**
-     * Communicates with DeviceService and provides shared data
-     * of a device the associated DeviceService is connected with.
-     * This class should be the base class for specific actuator
-     * implementations used to send commands or set states of a
-     * specific device. (An example can be found in WiimoteActuator.)
-     *
-     * \ingroup av_daemon
-     */
-    class AV_DAEMON_DLL DeviceActuator : public FieldContainer
-    {
-
-      AV_FC_DECLARE();
-
-    public:
-
-      DeviceActuator();
-      ~DeviceActuator();
-
-      /**
-       * Name of device service to communicate with.
-       */
-      SFDeviceService DeviceService;
-
-      /**
-       * Name of station to connect with.
-       */
-      SFString Station;
-
-      /**
-       * Inherited from av::FieldContainer.
-       */
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-
-    protected:
-
-      std::string mStation;
-      av::Link<av::daemon::DeviceService> mService;
-
-    };
-  }
-}
-
-#endif
+#endif // #if !defined(AV_WINDOWS_SPECIFIC_DAEMON_H)

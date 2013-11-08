@@ -69,12 +69,16 @@ There are some basic examples within your Avango NG installation,
 that show the configuration and usage of these input devices.
 '''
 
+import sys
 from _daemon import *
 from _daemon import _Device
 from _daemon import _HIDHelper
-from _daemon import _WacomTabletHelper
-from _daemon import _WiimoteHelper
 from _daemon import _DTrackHelper
+
+# currently WacomTablet and Wiimote are not supported on Windows 
+if sys.platform != 'win32':
+    from _daemon import _WacomTabletHelper
+    from _daemon import _WiimoteHelper
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::daemon::')
@@ -156,23 +160,24 @@ class HIDInput(_DeviceMixIn, _HIDHelper):
     def __init__(self):
         super(HIDInput, self).__init__()
 
-class WacomTablet(_DeviceMixIn, _WacomTabletHelper):
-    """Communicates with a Wacom tablet device which is registered via Linux event
-    system. Required properties: station, device. Map incoming events like this:
-    mydev.value[0] = \'EV_REL::REL_X\'. All appearing value und button events of a tablet
-    are already set up in the constructor of this class. Optional properties: value, button,
-    led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout, toggle_reset."""
-    def __init__(self):
-        super(WacomTablet, self).__init__()
+if sys.platform != 'win32':
+    class WacomTablet(_DeviceMixIn, _WacomTabletHelper):
+        """Communicates with a Wacom tablet device which is registered via Linux event
+        system. Required properties: station, device. Map incoming events like this:
+        mydev.value[0] = \'EV_REL::REL_X\'. All appearing value und button events of a tablet
+        are already set up in the constructor of this class. Optional properties: value, button,
+        led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout, toggle_reset."""
+        def __init__(self):
+            super(WacomTablet, self).__init__()
 
-class Wiimote(_DeviceMixIn, _WiimoteHelper):
-    """Communicates with a Nintendo Wiimote device which is registered via Linux event
-    system. Required properties: station, device, button, value. Map incoming events like
-    this: mydev.value[0] = \'EV_REL::REL_X\'. All appearing LED and Rumble events of a
-    Wiimote are already set up in the constructor of this class. Optional properties:
-    led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout."""
-    def __init__(self):
-        super(Wiimote, self).__init__()
+    class Wiimote(_DeviceMixIn, _WiimoteHelper):
+        """Communicates with a Nintendo Wiimote device which is registered via Linux event
+        system. Required properties: station, device, button, value. Map incoming events like
+        this: mydev.value[0] = \'EV_REL::REL_X\'. All appearing LED and Rumble events of a
+        Wiimote are already set up in the constructor of this class. Optional properties:
+        led, norm_abs, accum_rel_events, reset_rel_values_cycle, timeout."""
+        def __init__(self):
+            super(Wiimote, self).__init__()
 
 class DTrack(_DTrackHelper):
     """Avango NG device for processing DTrack udp packets (ASCII protocol).

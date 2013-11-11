@@ -83,8 +83,7 @@ ADD_LIBRARY( avango_daemon SHARED
     	     ${AVANGO_DAEMON_SRC}
 )
 
-INCLUDE_DIRECTORIES( avango_daemon 
-										${INCLUDE_PATHS}
+INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
                     ${SCHISM_INCLUDE_DIRS}
 										include
 										../avango-core/include

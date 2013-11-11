@@ -173,10 +173,10 @@ av::daemon::VRPNClient::handleTracker(const vrpn_TRACKERCB t)
 
   for (ns=mStations.begin(); ns!=mStations.end(); ns++) 
   {
-    ::osg::Matrixf pos_mat;
+    ::gua::math::mat4 pos_mat;
     pos_mat.makeTranslate(t.pos[0], t.pos[1], t.pos[2]);
 
-    ::osg::Matrixf rot_mat(::osg::Quat(t.quat[0],t.quat[1],t.quat[2],t.quat[3]));
+    ::gua::math::mat4 rot_mat(::osg::Quat(t.quat[0],t.quat[1],t.quat[2],t.quat[3]));
     pos_mat.preMult(rot_mat);
 
     (*ns).second->setMatrix(pos_mat);

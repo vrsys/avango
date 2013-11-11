@@ -161,7 +161,7 @@ av::daemon::DTrack::readLoop()
 
         if (it != mStations.end())
         {
-          ::osg::Matrixf xform;
+          ::gua::math::mat4 xform;
 
           xform.set(body[i].rot[0], body[i].rot[1], body[i].rot[2], 0.0f,
                     body[i].rot[3], body[i].rot[4], body[i].rot[5], 0.0f,

@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_BOUNDING_BOX_HPP
+#define AV_PYTHON_GUA_BOUNDING_BOX_HPP
+
+void init_BoundingBox();
+
+#endif //AV_PYTHON_GUA_BOUNDING_BOX_HPP

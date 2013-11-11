@@ -2,18 +2,14 @@
 # search paths
 ##############################################################################
 SET(SCHISM_INCLUDE_SEARCH_DIRS
-	${GLOBAL_EXT_DIR}/inc/schism
-  ${GUACAMOLE_EXT_DIR}/inc/schism
-  ${SCHISM_INCLUDE_SEARCH_DIR}
   ${SCHISM_INCLUDE_DIRS}
+  ${SCHISM_INCLUDE_SEARCH_DIR}
   /opt/schism/current
 )
 
 SET(SCHISM_LIBRARY_SEARCH_DIRS
-	${GLOBAL_EXT_DIR}/lib	
-  ${GUACAMOLE_EXT_DIR}/lib
-  ${SCHISM_LIBRARY_SEARCH_DIR}
   ${SCHISM_LIBRARY_DIRS}
+  ${SCHISM_LIBRARY_SEARCH_DIR}
   ../
   /opt/schism/current/lib/linux_x86
 )
@@ -52,8 +48,6 @@ message("-- checking for schism")
 
 IF ( NOT SCHISM_INCLUDE_DIRS )
 
-    SET(_SCHISM_FOUND_INC_DIRS "")
-
     FOREACH(_SEARCH_DIR ${SCHISM_INCLUDE_SEARCH_DIRS})
         FIND_PATH(_CUR_SEARCH
                 NAMES scm_gl_core/src/scm/gl_core.h
@@ -83,10 +77,7 @@ IF ( NOT SCHISM_INCLUDE_DIRS )
 
 ENDIF ( NOT SCHISM_INCLUDE_DIRS )
 
-IF ( SCHISM_INCLUDE_DIRS AND NOT SCHISM_LIBRARY_DIRS )
-
-    SET(_SCHISM_FOUND_LIB_DIR "")
-    SET(_SCHISM_POSTFIX "")
+IF ( SCHISM_INCLUDE_DIRS AND ( NOT SCHISM_LIBRARY_DIRS OR NOT SCHISM_LIBRARIES))
 
     FOREACH(_SEARCH_DIR ${SCHISM_LIBRARY_SEARCH_DIRS})
 
@@ -136,14 +127,14 @@ IF ( SCHISM_INCLUDE_DIRS AND NOT SCHISM_LIBRARY_DIRS )
         SET(SCHISM_LIBRARIES ${_SCHISM_LIBRARIES} CACHE STRING "schism libraries.")
     ENDIF (_SCHISM_FOUND_LIB_DIR)
     
-ENDIF ( SCHISM_INCLUDE_DIRS AND NOT SCHISM_LIBRARY_DIRS )
+ENDIF ( SCHISM_INCLUDE_DIRS AND ( NOT SCHISM_LIBRARY_DIRS OR NOT SCHISM_LIBRARIES))
 
 ##############################################################################
 # verify
 ##############################################################################
 IF ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS )
     request_schism_search_directories()
-ELSE ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS ) 
+ELSE ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS )
     UNSET(SCHISM_INCLUDE_SEARCH_DIR CACHE)
     UNSET(SCHISM_LIBRARY_SEARCH_DIR CACHE)
     MESSAGE("--  found matching schism version")

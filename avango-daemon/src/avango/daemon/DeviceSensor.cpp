@@ -149,8 +149,8 @@ av::daemon::DeviceSensor::updateMatrix()
 
   if (Matrix.getValue() != mat)
   {
-    ::gua::math::quat rot = scm::math::get_rotate(mat);
-    ::gua::math::vec3 pos = getTrans();
+    ::gua::math::quat rot = scm::math::get_rotation(mat);
+    ::gua::math::vec3 pos = scm::math::get_translation(mat);
 
     Rotation.setValue(rot);
     Translation.setValue(pos);
@@ -204,10 +204,9 @@ void
 av::daemon::DeviceSensor::getMatrix(::gua::math::mat4& mat)
 {
   const char* stationstr = Station.getValue().c_str();
-  mat = DeviceService.getValue()->getMatrix(stationstr);
+  ::gua::math::mat4 station = DeviceService.getValue()->getMatrix(stationstr);
 
-  mat.preMult(ReceiverOffset.getValue());
-  mat.postMult(TransmitterOffset.getValue());
+  mat = ReceiverOffset.getValue() * station * TransmitterOffset.getValue();
 }
 
 float

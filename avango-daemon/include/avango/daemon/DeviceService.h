@@ -35,6 +35,8 @@
 #include <avango/Singleton.h>
 #include <avango/daemon/windows_specific_daemon.h>
 
+#include <gua/math.hpp>
+
 namespace av
 {
   namespace daemon

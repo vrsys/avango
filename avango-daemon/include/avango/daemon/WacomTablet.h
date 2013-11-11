@@ -32,10 +32,10 @@
  */
 
 #include <avango/daemon/HIDInput.h>
-#include <osg/Matrixf>
-#include <avango/osg/Object.h>
-#include <avango/osg/Fields.h>
-#include <avango/osg/MatrixTransform.h>
+//#include <gua/math.hpp>
+//#include <avango/gua/Object.h>
+#include <avango/gua/Fields.h>
+//#include <avango/gua/MatrixTransform.h>
 
 namespace av
 {

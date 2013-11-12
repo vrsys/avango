@@ -7,38 +7,38 @@ namespace
   av::Logger& logger(av::getLogger("av::gua::Types"));
 }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::mat4&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::mat4&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::mat4&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::mat4&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::mat3&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::mat3&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::mat3&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::mat3&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::quat&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::quat&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::quat&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::quat&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec4&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec4&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec4i&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec4i&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec4ui&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec4ui&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec4&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec4&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec4i&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec4i&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec4ui&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec4ui&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec3&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec3&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec3i&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec3i&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec3ui&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec3ui&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec3&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec3&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec3i&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec3i&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec3ui&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec3ui&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec2&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec2&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec2i&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec2i&) {}
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec2ui&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec2ui&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec2&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec2&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec2i&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec2i&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::math::vec2ui&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec2ui&) { throw std::runtime_error("not implemented."); }
 
-av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::utils::Color3f&) {}
-av::InputStream& av::operator>>(av::InputStream&, ::gua::utils::Color3f&) {}
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::utils::Color3f&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::utils::Color3f&) { throw std::runtime_error("not implemented."); }
 
 
 
@@ -47,38 +47,38 @@ av::InputStream& av::operator>>(av::InputStream&, ::gua::utils::Color3f&) {}
 #include <rpc/rpc.h>
 #include <avango/Msg.h>
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat4& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat4& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat3& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat3& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::quat& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::quat& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::quat& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::quat& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4i& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4i& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4ui& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4ui& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4ui& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4ui& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3i& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3i& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3ui& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3ui& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3ui& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec3ui& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2i& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2i& buf) {}
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2ui& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2ui& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2i& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2ui& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2ui& buf) { throw std::runtime_error("not implemented."); }
 
-void av::av_pushMsg(av::Msg& netMsg, const ::gua::utils::Color3f& buf) {}
-void av::av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f& buf) {}
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::utils::Color3f& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f& buf) { throw std::runtime_error("not implemented."); }
 
 #endif
 

@@ -41,6 +41,8 @@ SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 include(find_schism)
 include(find_boost)
 include(find_python)
+include(find_bullet)
+include(find_json)
 
 set(LIBRARIES
     ${BOOST_LIBRARIES}
@@ -110,6 +112,7 @@ ADD_SUBDIRECTORY(avango-unittest)
 ADD_SUBDIRECTORY(avango-core)
 ADD_SUBDIRECTORY(avango-daemon)
 ADD_SUBDIRECTORY(avango-python)
+ADD_SUBDIRECTORY(avango-gua)
 
 ################################################################
 # Summary

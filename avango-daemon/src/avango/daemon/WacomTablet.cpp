@@ -120,7 +120,7 @@ av::daemon::WacomTablet::retrieveAspectRatio()
 av::daemon::WacomTablet::readLoop()
 {
   float x,y;
-  ::osg::Matrixf matrix;
+  ::gua::math::mat4 matrix;
 
   if (!parse_features())
   {
@@ -172,7 +172,7 @@ av::daemon::WacomTablet::readLoop()
       ns = mStations.begin();
       x = (*ns).second->getValue(0);
       y = (*ns).second->getValue(1);
-      matrix.makeTranslate(::osg::Vec3f(x,y,0.0f));
+      matrix = ::scm::math::make_translation(::gua::math::vec3(x,y,0.0f));
       (*ns).second->setMatrix(matrix);
 
       //set Proximity Value and reset some buttons which else get wrong values with normalization

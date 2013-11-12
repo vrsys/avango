@@ -28,6 +28,7 @@
 #include <avango/SingleField.h>
 #include <avango/Logger.h>
 
+#include <scm/core/math.h>
 #include <gua/math.hpp>
 
 
@@ -149,8 +150,8 @@ av::daemon::DeviceSensor::updateMatrix()
 
   if (Matrix.getValue() != mat)
   {
-    ::gua::math::quat rot = scm::math::get_rotation(mat);
-    ::gua::math::vec3 pos = scm::math::get_translation(mat);
+    ::gua::math::quat rot = ::scm::math::quat<float>::from_matrix(mat);
+    ::gua::math::vec3 pos = ::gua::math::get_translation(mat);
 
     Rotation.setValue(rot);
     Translation.setValue(pos);

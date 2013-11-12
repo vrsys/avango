@@ -13,6 +13,8 @@ AV_FIELD_DEFINE(av::gua::SFMatrix4);
 AV_FIELD_DEFINE(av::gua::MFMatrix4);
 AV_FIELD_DEFINE(av::gua::SFMatrix3);
 AV_FIELD_DEFINE(av::gua::MFMatrix3);
+AV_FIELD_DEFINE(av::gua::SFQuat);
+AV_FIELD_DEFINE(av::gua::MFQuat);
 
 AV_FIELD_DEFINE(av::gua::SFVec4);
 AV_FIELD_DEFINE(av::gua::MFVec4);
@@ -46,6 +48,8 @@ av::gua::initFields()
     MFMatrix4::initClass("av::gua::MFMatrix4", "av::Field");
     SFMatrix3::initClass("av::gua::SFMatrix3", "av::Field");
     MFMatrix3::initClass("av::gua::MFMatrix3", "av::Field");
+    SFQuat::initClass("av::gua::SFQuat", "av::Field");
+    MFQuat::initClass("av::gua::MFQuat", "av::Field");
 
     SFVec4::initClass("av::gua::SFVec4", "av::Field");
     MFVec4::initClass("av::gua::MFVec4", "av::Field");

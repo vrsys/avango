@@ -13,6 +13,9 @@ av::InputStream& av::operator>>(av::InputStream&, ::gua::math::mat4&) {}
 av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::mat3&) {}
 av::InputStream& av::operator>>(av::InputStream&, ::gua::math::mat3&) {}
 
+av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::quat&) {}
+av::InputStream& av::operator>>(av::InputStream&, ::gua::math::quat&) {}
+
 av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec4&) {}
 av::InputStream& av::operator>>(av::InputStream&, ::gua::math::vec4&) {}
 av::OutputStream& av::operator<<(av::OutputStream&, const ::gua::math::vec4i&) {}
@@ -49,6 +52,9 @@ void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat4& buf) {}
 
 void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3& buf) {}
 void av::av_popMsg(av::Msg& netMsg, ::gua::math::mat3& buf) {}
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::quat& buf) {}
+void av::av_popMsg(av::Msg& netMsg, ::gua::math::quat& buf) {}
 
 void av::av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4& buf) {}
 void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec4& buf) {}

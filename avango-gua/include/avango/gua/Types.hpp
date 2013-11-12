@@ -21,6 +21,9 @@ namespace av
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat3&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat3&);
 
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::quat&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::quat&);
+
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4i&);
@@ -53,6 +56,9 @@ namespace av
 
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat3& buf);
+
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::quat& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::quat& buf);
 
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4& buf);

@@ -87,6 +87,8 @@ INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
                     ${SCHISM_INCLUDE_DIRS}
 										include
 										../avango-core/include
+										../avango-python/include
+                                                                                ${PYTHON_INCLUDE_DIRS}
                     ../avango-gua/include)
 
 ADD_DEPENDENCIES ( avango_daemon avango_core)

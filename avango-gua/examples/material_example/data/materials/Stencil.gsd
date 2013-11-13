@@ -1,0 +1,44 @@
+
+{
+	"final_shading_stage" : 
+	{
+		"body" : "gua_color = texture2D(color, texcoords).rgb;",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : 
+		{
+			"color" : "sampler2D"
+		}
+	},
+	"gbuffer_fragment_stage" : 
+	{
+		"body" : "float value = texture2D(stencil_map, my_texcoords).r;\n\nif (value > 0.5)\n    discard;\n    \ngua_normal = my_normal;\ntexcoords = my_texcoords;",
+		"functions" : "",
+		"outputs" : 
+		{
+			"texcoords" : "vec2"
+		},
+		"uniforms" : 
+		{
+			"stencil_map" : "sampler2D"
+		}
+	},
+	"gbuffer_vertex_stage" : 
+	{
+		"body" : "gua_position = gua_world_position;\nmy_normal = gua_world_normal;\nmy_texcoords = gua_texcoords;",
+		"functions" : "",
+		"outputs" : 
+		{
+			"my_normal" : "vec3",
+			"my_texcoords" : "vec2"
+		},
+		"uniforms" : null
+	},
+	"lbuffer_stage" : 
+	{
+		"body" : "",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : null
+	}
+}

@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "ComplexPhong",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/tiles_diffuse.jpg",
+		"emit" : "0.2",
+		"normal_map" : "data/textures/tiles_normal.jpg",
+		"shinyness" : "150",
+		"specular_map" : "data/textures/tiles_specular.jpg"
+	}
+}

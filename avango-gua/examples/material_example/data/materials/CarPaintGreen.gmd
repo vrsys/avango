@@ -1,0 +1,13 @@
+
+{
+	"shading_model" : "CarPaint",
+	"uniforms" : 
+	{
+		"fresnel" : "1",
+		"paint_color" : "(0.000  1.000  0.000)",
+		"reflectivity" : "0.5",
+		"shinyness" : "2",
+		"skymap" : "data/textures/sky.jpg",
+		"specularity_map" : "data/textures/carpaint_specular.jpg"
+	}
+}

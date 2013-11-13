@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "Water",
+	"uniforms" : 
+	{
+		"fresnel" : "0.2",
+		"paint_color" : "(0.000  0.000  0.000)",
+		"reflectivity" : "0.9",
+		"skymap" : "data/textures/sky.jpg",
+		"time" : "0"
+	}
+}

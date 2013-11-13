@@ -1,0 +1,8 @@
+
+{
+	"shading_model" : "Shadeless",
+	"uniforms" : 
+	{
+		"diffuse_color" : "(0.000  0.000  1.000)"
+	}
+}

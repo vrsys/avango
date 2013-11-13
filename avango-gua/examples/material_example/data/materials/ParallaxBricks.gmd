@@ -1,0 +1,14 @@
+
+{
+	"shading_model" : "Parallax",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/bricks_diffuse.jpg",
+		"emit" : "0",
+		"normal_map" : "data/textures/bricks_normal.jpg",
+		"offset_map" : "data/textures/bricks_offset.jpg",
+		"offset_scale" : "0.05",
+		"shinyness" : "50",
+		"specular_map" : "data/textures/bricks_specular.jpg"
+	}
+}

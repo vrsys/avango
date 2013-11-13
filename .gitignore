@@ -11,3 +11,10 @@
 *.lai
 *.la
 *.a
+
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+CMakeFiles
+
+*.pyc

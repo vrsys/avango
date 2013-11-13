@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "ComplexPhong",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/ivy_diffuse.jpg",
+		"emit" : "0.2",
+		"normal_map" : "data/textures/ivy_normal.jpg",
+		"shinyness" : "20",
+		"specular_map" : "data/textures/ivy_specular.jpg"
+	}
+}

@@ -1,0 +1,11 @@
+LINK_DIRECTORIES(${LIB_PATHS})
+
+ADD_LIBRARY( _oculus SHARED "./avango/oculus/OculusRift.cpp" )
+
+ADD_DEPENDENCIES ( _oculus avango_oculus )
+
+IF (NOT ${LIBRARIES} STREQUAL "")
+    TARGET_LINK_LIBRARIES( _oculus debug ${LIBRARIES} avango_oculus optimized ${LIBRARIES} avango_oculus)
+    SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
+ENDIF (NOT ${LIBRARIES} STREQUAL "")
+

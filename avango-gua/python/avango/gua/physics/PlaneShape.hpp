@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_PLANE_SHAPE_HPP
+#define AV_PYTHON_GUA_PLANE_SHAPE_HPP
+
+void init_PlaneShape();
+
+#endif //AV_PYTHON_GUA_PLANE_SHAPE_HPP

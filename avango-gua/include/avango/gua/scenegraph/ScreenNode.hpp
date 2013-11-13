@@ -30,8 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::ScreenNode is created.
        * Otherwise, the given ::gua::ScreenNode is used.
        */
-      ScreenNode(std::shared_ptr< ::gua::ScreenNode> guanode =
-                 std::make_shared< ::gua::ScreenNode> (""));
+      ScreenNode(std::shared_ptr<::gua::ScreenNode> guanode = std::shared_ptr<::gua::ScreenNode>(new ::gua::ScreenNode("")));
 
     protected:
 

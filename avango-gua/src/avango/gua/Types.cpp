@@ -40,7 +40,28 @@ av::InputStream& av::operator>>(av::InputStream& is, ::gua::math::vec2ui&) { thr
 av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::utils::Color3f&) { throw std::runtime_error("not implemented."); }
 av::InputStream& av::operator>>(av::InputStream& is, ::gua::utils::Color3f&) { throw std::runtime_error("not implemented."); }
 
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::physics::CollisionShape&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::physics::CollisionShape&) { throw std::runtime_error("not implemented."); }
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::physics::Constraint&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::physics::Constraint&) { throw std::runtime_error("not implemented."); }
 
+//av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::Camera&) { throw std::runtime_error("not implemented."); }
+//av::InputStream& av::operator>>(av::InputStream& is, ::gua::Camera&) { throw std::runtime_error("not implemented."); }
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::RayNode&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::RayNode&) { throw std::runtime_error("not implemented."); }
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::ScreenNode&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::ScreenNode&) { throw std::runtime_error("not implemented."); }
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::TexturedQuadNode&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::TexturedQuadNode&) { throw std::runtime_error("not implemented."); }
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::GeometryNode&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::GeometryNode&) { throw std::runtime_error("not implemented."); }
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::SceneGraph&) { throw std::runtime_error("not implemented."); }
+av::InputStream& av::operator>>(av::InputStream& is, ::gua::SceneGraph&) { throw std::runtime_error("not implemented."); }
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
@@ -79,6 +100,32 @@ void av::av_popMsg(av::Msg& netMsg, ::gua::math::vec2ui& buf) { throw std::runti
 
 void av::av_pushMsg(av::Msg& netMsg, const ::gua::utils::Color3f& buf) { throw std::runtime_error("not implemented."); }
 void av::av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::physics::CollisionShape& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::physics::CollisionShape& buf) { throw std::runtime_error("not implemented."); }
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::physics::Constraint& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::physics::Constraint& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::physics::Constraint& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::physics::Constraint& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::Camera& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::Camera& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::RayNode& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::RayNode& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::ScreenNode& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::ScreenNode& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::TexturedQuadNode& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::TexturedQuadNode& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::GeometryNode& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::GeometryNode& buf) { throw std::runtime_error("not implemented."); }
+
+void av::av_pushMsg(av::Msg& netMsg, const ::gua::SceneGraph& buf) { throw std::runtime_error("not implemented."); }
+void av::av_popMsg(av::Msg& netMsg, ::gua::SceneGraph& buf) { throw std::runtime_error("not implemented."); }
 
 #endif
 

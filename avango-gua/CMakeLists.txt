@@ -1,15 +1,13 @@
 ###############################################################################
 # determine source and header files
 ###############################################################################
-file(GLOB AVANGO_GUA_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	src/avango/gua/*.c  
+file(GLOB_RECURSE AVANGO_GUA_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
 	src/avango/gua/*.cpp 
-	include/avango/gua/*.h 
 	include/avango/gua/*.hpp
 )
 
 
-file(GLOB AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 	python/avango/gua/*.c  
 	python/avango/gua/*.cpp 
 	python/avango/gua/*.h 

@@ -59,8 +59,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<tools::DragTool> >;
-  template class AV_GUA_DLL MultiField<Link<tools::DragTool> >;
+  template class AV_GUA_DLL SingleField<Link<::av::gua::DragTool> >;
+  template class AV_GUA_DLL MultiField<Link<::av::gua::DragTool> >;
 #endif
 
 }

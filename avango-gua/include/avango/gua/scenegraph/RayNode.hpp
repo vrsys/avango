@@ -30,8 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::RayNode is created.
        * Otherwise, the given ::gua::RayNode is used.
        */
-      RayNode(std::shared_ptr< ::gua::RayNode> guanode =
-              std::make_shared< ::gua::RayNode>(""));
+      RayNode(std::shared_ptr<::gua::RayNode> guanode = std::shared_ptr<::gua::RayNode>(new ::gua::RayNode("")));
 
     protected:
 

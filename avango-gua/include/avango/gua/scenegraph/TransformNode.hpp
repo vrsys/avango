@@ -30,8 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TransformNode is created.
        * Otherwise, the given ::gua::TransformNode is used.
        */
-      TransformNode(std::shared_ptr< ::gua::TransformNode> guanode =
-                std::make_shared< ::gua::TransformNode>("")); // use defined type to circumvent compiler bug in VS8
+      TransformNode(std::shared_ptr< ::gua::TransformNode> guanode = std::shared_ptr<::gua::TransformNode>(new ::gua::TransformNode("")));
 
     protected:
 

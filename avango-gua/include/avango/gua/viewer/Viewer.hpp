@@ -11,6 +11,7 @@
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/physics/Physics.hpp>
 #include <avango/FieldContainer.h>
+#include <avango/gua/windows_specific_gua.hpp>
 
 namespace av
 {

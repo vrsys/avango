@@ -3,6 +3,7 @@
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
 #include <avango/gua/renderer/Renderer.hpp>
+#include <avango/gua/renderer/Pipeline.hpp>
 
 using namespace boost::python;
 using namespace av::python;

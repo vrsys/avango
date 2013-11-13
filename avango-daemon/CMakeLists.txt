@@ -79,7 +79,7 @@ ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS})
 
-ADD_LIBRARY( avango_daemon SHARED
+ADD_LIBRARY( avangoDaemon SHARED
     	     ${AVANGO_DAEMON_SRC}
 )
 
@@ -91,7 +91,7 @@ INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
                                                                                 ${PYTHON_INCLUDE_DIRS}
                     ../avango-gua/include)
 
-ADD_DEPENDENCIES ( avango_daemon avango_core)
+ADD_DEPENDENCIES ( avangoDaemon avango)
 
 ###############################################################################
 # set preprocessor configuration
@@ -110,10 +110,10 @@ IF (MSVC)
 	SET(BUILD_FLAGS "${BUILD_FLAGS} -D AV_DAEMON_LIBRARY")
 ENDIF (MSVC)
 
-set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(avangoDaemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 
 IF (NOT ${LIBRARIES} STREQUAL "")
-    TARGET_LINK_LIBRARIES( avango_daemon debug ${LIBRARIES} optimized ${LIBRARIES})
+  TARGET_LINK_LIBRARIES( avangoDaemon debug ${LIBRARIES} optimized ${LIBRARIES})
 ENDIF (NOT ${LIBRARIES} STREQUAL "")
 
 ###############################################################################

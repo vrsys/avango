@@ -8,7 +8,6 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning(disable:4251 4661)
   #if defined(AV_GUA_LIBRARY)
     #define AV_GUA_DLL __declspec( dllexport )
   #else

@@ -1,0 +1,9 @@
+*.so
+*.pyc
+build
+*.gv
+*.out
+examples/*/*.out
+examples/simple/simple.out
+avango-gua.sublime-workspace
+.nfs*

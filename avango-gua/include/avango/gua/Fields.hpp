@@ -11,6 +11,7 @@
 #include <avango/SingleField.h>
 #include <avango/MultiField.h>
 #include <gua/utils/Color3f.hpp>
+#include <gua/scenegraph/TransformNode.hpp>
 
 namespace av
 {
@@ -22,9 +23,6 @@ namespace av
     typedef MultiField< ::gua::math::mat4> MFMatrix4;
     typedef SingleField< ::gua::math::mat3> SFMatrix3;
     typedef MultiField< ::gua::math::mat3> MFMatrix3;
-
-    typedef MultiField< ::gua::math::quat> MFQuat;
-    typedef SingleField< ::gua::math::quat> SFQuat;
 
     typedef SingleField< ::gua::math::vec4> SFVec4;
     typedef MultiField< ::gua::math::vec4> MFVec4;
@@ -58,9 +56,6 @@ namespace av
   template class AV_GUA_DLL MultiField< ::gua::math::mat4>;
   template class AV_GUA_DLL SingleField< ::gua::math::mat3>;
   template class AV_GUA_DLL MultiField< ::gua::math::mat3>;
-
-  template class AV_GUA_DLL MultiField< ::gua::math::quat>;
-  template class AV_GUA_DLL SingleField< ::gua::math::quat>;
 
   template class AV_GUA_DLL SingleField< ::gua::math::vec4>;
   template class AV_GUA_DLL MultiField< ::gua::math::vec4>;

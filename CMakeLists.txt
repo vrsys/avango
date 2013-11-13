@@ -44,15 +44,10 @@ include(find_python)
 include(find_bullet)
 include(find_json)
 
-if (UNIX)
-    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
-endif (UNIX)
-
 set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GL_LIBRARIES}
-    ${SCHISM_LIBRARIES}
 )
 
 set(LIB_PATHS
@@ -82,10 +77,10 @@ endif()
 # preprocessor configuration
 ################################################################
 IF (UNIX)
-	set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x")
-	set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x")
+	set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x -fpermissive")
+	set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x -fpermissive")
 ELSEIF(MSVC)
-	set(CMAKE_CXX_FLAGS_RELEASE "-D NDEBUG -D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
+	set(CMAKE_CXX_FLAGS_RELEASE "-D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
 	set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG /MDd /Zi")
   add_definitions(-D AV_INSTANTIATE_FIELD_TEMPLATES -D NOMINMAX)
 ENDIF(UNIX)
@@ -113,11 +108,12 @@ SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
 FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-ADD_SUBDIRECTORY(avango-unittest)
+#ADD_SUBDIRECTORY(avango-unittest)
 ADD_SUBDIRECTORY(avango-core)
+#ADD_SUBDIRECTORY(avango-daemon)
 ADD_SUBDIRECTORY(avango-python)
-ADD_SUBDIRECTORY(avango-gua)
-ADD_SUBDIRECTORY(avango-daemon)
+#ADD_SUBDIRECTORY(avango-gua)
+ADD_SUBDIRECTORY(avango-oculus)
 
 ################################################################
 # Summary

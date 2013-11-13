@@ -30,7 +30,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TexturedQuadNode is created.
        * Otherwise, the given ::gua::TexturedQuadNode is used.
        */
-      TexturedQuadNode(std::shared_ptr< ::gua::TexturedQuadNode> guanode = std::shared_ptr< ::gua::TexturedQuadNode>(new ::gua::TexturedQuadNode("")));
+      TexturedQuadNode(std::shared_ptr< ::gua::TexturedQuadNode> guanode =
+                       std::make_shared< ::gua::TexturedQuadNode> (""));
 
     protected:
 

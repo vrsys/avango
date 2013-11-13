@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "Chrome",
+	"uniforms" : 
+	{
+		"fresnel" : "0.01",
+		"paint_color" : "(1.000  1.000  1.000)",
+		"reflectivity" : "1",
+		"shinyness" : "150",
+		"skymap" : "data/textures/sky.jpg"
+	}
+}

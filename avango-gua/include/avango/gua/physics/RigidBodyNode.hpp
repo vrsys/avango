@@ -40,7 +40,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::physics::RigidBodyNode is created.
        * Otherwise, the given ::gua::physics::RigidBodyNode is used.
        */
-      RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBodyNode> guanode = std::shared_ptr< ::gua::physics::RigidBodyNode>(new ::gua::physics::RigidBodyNode("")));
+      RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBodyNode> guanode =
+                    std::make_shared< ::gua::physics::RigidBodyNode>("")); // use defined type to circumvent compiler bug in VS8
 
     protected:
 

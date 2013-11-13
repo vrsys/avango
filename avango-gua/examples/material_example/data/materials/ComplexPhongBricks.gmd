@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "ComplexPhong",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/bricks_diffuse.jpg",
+		"emit" : "0.2",
+		"normal_map" : "data/textures/bricks_normal.jpg",
+		"shinyness" : "50",
+		"specular_map" : "data/textures/bricks_specular.jpg"
+	}
+}

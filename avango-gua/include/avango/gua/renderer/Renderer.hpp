@@ -6,21 +6,17 @@
  * \ingroup av_gua
  */
 
-#include <avango/FieldContainer.h>
 #include <gua/renderer/Renderer.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
 
-namespace gua {
-  class Pipeline;
-}
+#include <avango/gua/Fields.hpp>
+#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/scenegraph/SceneGraph.hpp>
+#include <avango/FieldContainer.h>
 
 namespace av
 {
   namespace gua
   {
-    class Pipeline;
-    class SceneGraph;
-
     /**
      * Wrapper for ::gua::Renderer
      *
@@ -36,7 +32,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Renderer is created.
        * Otherwise, the given ::gua::Renderer is used.
        */
-      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer(std::vector< ::gua::Pipeline*>()));
+      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer({}));
 
       Renderer(std::vector<av::gua::Pipeline const*> const& pipes);
 

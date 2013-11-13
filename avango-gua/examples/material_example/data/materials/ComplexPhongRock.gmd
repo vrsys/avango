@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "ComplexPhong",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/rock_diffuse.jpg",
+		"emit" : "0.2",
+		"normal_map" : "data/textures/rock_normal.jpg",
+		"shinyness" : "40",
+		"specular_map" : "data/textures/rock_specular.jpg"
+	}
+}

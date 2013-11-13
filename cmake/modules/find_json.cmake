@@ -1,12 +1,14 @@
 SET(JSON_INCLUDE_SEARCH_DIRS
 	${GLOBAL_EXT_DIR}/inc/json
 	${GUACAMOLE_EXT_DIR}/inc/json
+    /opt/json/current
     /usr/include
 )
 
 SET(JSON_LIBRARY_SEARCH_DIRS
 	${GLOBAL_EXT_DIR}/lib
 	${GUACAMOLE_EXT_DIR}/lib
+    /opt/json/current/json-build
     /usr/lib
 )
 

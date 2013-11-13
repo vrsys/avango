@@ -1,0 +1,10 @@
+
+{
+	"shading_model" : "SimplePhong",
+	"uniforms" : 
+	{
+		"diffuse_color" : "(1.000  1.000  1.000)",
+		"shinyness" : "10",
+		"spec_color" : "(0.000  0.000  0.000)"
+	}
+}

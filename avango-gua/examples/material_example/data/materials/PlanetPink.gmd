@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "Planet",
+	"uniforms" : 
+	{
+		"atmo_color" : "(1.000  0.500  0.700)",
+		"diffuse_map" : "data/textures/planet0_diffuse.jpg",
+		"normal_map" : "data/textures/planet0_normal.jpg",
+		"shinyness" : "50",
+		"specular_map" : "data/textures/planet0_specular.jpg"
+	}
+}

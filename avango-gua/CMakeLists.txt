@@ -1,92 +1,163 @@
-###############################################################################
-# determine source and header files
-###############################################################################
-file(GLOB_RECURSE AVANGO_GUA_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} 
-	src/avango/gua/*.cpp 
-	include/avango/gua/*.hpp
+################################################################
+# Project GUACAMOLE
+################################################################
+
+PROJECT(AVANGO-GUA CXX) 
+
+# We require at least version 2.8.0
+cmake_minimum_required(VERSION 2.8.0)
+
+find_package(PkgConfig)
+
+# Location where cmake first looks for modules.
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+
+################################################################
+# Configure and find libraries
+################################################################
+
+pkg_check_modules(ASSIMP REQUIRED assimp)
+pkg_check_modules(JSON REQUIRED jsoncpp)
+pkg_check_modules(GL REQUIRED gl)
+pkg_check_modules(GLEW REQUIRED glew)
+pkg_check_modules(PYTHON REQUIRED python)
+
+include(find_schism)
+include(find_boost)
+include(find_ev)
+include(find_zmq)
+include(find_protobuf)
+include(find_bullet)
+include(find_guacamole)
+include(find_avango)
+
+set(LIBS
+    ${SCHISM_LIBRARIES}
+    ${BOOST_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
+    ${JSON_LIBRARIES}
+    ${GL_LIBRARIES}
+    ${GLEW_LIBRARIES}
+    ${EV_LIBRARIES}
+    ${ZMQ_LIBRARIES}
+    ${PROTOBUF_LIBRARIES}
+    ${BULLET_LIBRARIES}
+    ${GUA_LIBRARIES}
+    ${AV_LIBRARIES}
+    ${PYTHON_LIBRARIES}
 )
+link_libraries(${LIBS})
 
-
-file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	python/avango/gua/*.c  
-	python/avango/gua/*.cpp 
-	python/avango/gua/*.h 
-	python/avango/gua/*.hpp
+set(LIB_PATHS
+    ${ASSIMP_LIBRARY_DIRS}
+    ${JSON_LIBRARY_DIRS}
+    ${GL_LIBRARY_DIRS}
+    ${GLEW_LIBRARY_DIRS}
+    ${PYTHON_LIBRARY_DIRS}
 )
+link_directories(${LIB_PATHS})
 
-###############################################################################
-# set link directories
-###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS} 
-                 ${PYTHON_LIBRARY_DIRS} 
-                 ${BOOST_LIBRARY_DIRS}
+set(INCLUDE_PATHS
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${SCHISM_INCLUDE_DIRS}
+    ${BOOST_INCLUDE_DIRS}
+    ${ASSIMP_INCLUDE_DIRS}
+    ${JSON_INCLUDE_DIRS}
+    ${GL_INCLUDE_DIRS}
+    ${GLEW_INCLUDE_DIRS}
+    ${EV_INCLUDE_DIRS}
+    ${ZMQ_INCLUDE_DIRS}
+    ${PROTOBUF_INCLUDE_DIRS}
+    ${BULLET_INCLUDE_DIRS}
+    ${GUA_INCLUDE_DIRS}
+    ${AV_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
 )
+include_directories(${INCLUDE_PATHS})
 
+################################################################
+# Create libraries
+################################################################
 
-###############################################################################
-# create libraries
-###############################################################################
-ADD_LIBRARY( avango_gua SHARED
-    	     ${AVANGO_GUA_SRC}
-)
+if (NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Release")
+endif()
 
-ADD_LIBRARY( _gua SHARED
-    	     ${AVANGO_GUA_PYTHON_SRC}
-)
+set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x")
+set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x")
 
-ADD_DEPENDENCIES(avango_gua avango)
-ADD_DEPENDENCIES(_gua avango avango_gua)
+# avango-gua
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+add_subdirectory(src)
 
-INCLUDE_DIRECTORIES(BEFORE 
-  include
-  include/avango/python/
-  ${INCLUDE_PATHS} 
-  ${PYTHON_INCLUDE_DIRS}
-  ${SCHISM_INCLUDE_DIRS}
-  ${BULLET_INCLUDE_DIRS}
-  ${JSON_INCLUDE_DIRS}
-  ${CMAKE_SOURCE_DIR}/avango-core/include
-  ${CMAKE_SOURCE_DIR}/avango-python/include
-)
+# avango-gua-python
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/avango/gua)
+add_subdirectory(python)
 
-MESSAGE(${BULLET_INCLUDE_DIRS})
+################################################################
+# Create examples
+################################################################
 
-###############################################################################
-# set preprocessor configuration
-###############################################################################
-SET (BUILD_FLAGS 
-	"-D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG} -D _AVANGO_DAEMON_VRPN_SUPPORT=${AVANGO_DAEMON_VRPN_SUPPORT} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT} -D _AVANGO_ZMQ_DISTRIBUTION_SUPPORT=${AVANGO_ZMQ_DISTRIBUTION_SUPPORT} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL} -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR} -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR} -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}"
-)
+file(GLOB _EXAMPLES ${CMAKE_CURRENT_SOURCE_DIR}/examples/*)
+FOREACH(_EXAMPLE ${_EXAMPLES})
+    if(EXISTS "${_EXAMPLE}/CMakeLists.txt")
+      add_subdirectory(${_EXAMPLE})
+    endif()
+ENDFOREACH(_EXAMPLE ${_EXAMPLES})
 
-IF (MSVC)
-	SET( BUILD_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY")
-ENDIF (MSVC)
+################################################################
+# Summary
+################################################################
 
-set_target_properties(avango_gua PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
-set_target_properties(avango_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
-
-set_target_properties(_gua PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
-set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
-
-TARGET_LINK_LIBRARIES( avango_gua 
-                       debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
-                       optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
-)
-
-TARGET_LINK_LIBRARIES( _gua
-                       debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
-                       optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
-)
-SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
-SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)
-
-###############################################################################
-# targets for unittesting
-###############################################################################
-IF (AVANGO_UNITTESTS)
-
-ENDIF (AVANGO_UNITTESTS)
+message( "" )
+message( "Summary:" )
+message( " build type: ${CMAKE_BUILD_TYPE}" )
+message( "" )
+message( " schism:" )
+message( "   library: ${SCHISM_LIBRARIES}" )
+message( "   include: ${SCHISM_INCLUDE_DIRS}" )
+message( "" )
+message( " boost:" )
+message( "   library: ${BOOST_LIBRARIES}" )
+message( "   include: ${BOOST_INCLUDE_DIRS}" )
+message( "" )
+message( " assimp:" )
+message( "   library: ${ASSIMP_LIBRARIES}" )
+message( "   include: ${ASSIMP_INCLUDE_DIRS}" )
+message( "" )
+message( " gl:" )
+message( "   library: ${GL_LIBRARIES}" )
+message( "   include: ${GL_INCLUDE_DIRS}" )
+message( "" )
+message( " glew:" )
+message( "   library: ${GLEW_LIBRARIES}" )
+message( "   include: ${GLEW_INCLUDE_DIRS}" )
+message( "" )
+message( " ev:" )
+message( "   library: ${EV_LIBRARIES}" )
+message( "   include: ${EV_INCLUDE_DIRS}" )
+message( "" )
+message( " zmq:" )
+message( "   library: ${ZMQ_LIBRARIES}" )
+message( "   include: ${ZMQ_INCLUDE_DIRS}" )
+message( "" )
+message( " protobuf:" )
+message( "   library: ${PROTOBUF_LIBRARIES}" )
+message( "   include: ${PROTOBUF_INCLUDE_DIRS}" )
+message( "" )
+message( " bullet:" )
+message( "   library: ${BULLET_LIBRARIES}" )
+message( "   include: ${BULLET_INCLUDE_DIRS}" )
+message( "" )
+message( " guacamole:" )
+message( "   library: ${GUA_LIBRARIES}" )
+message( "   include: ${GUA_INCLUDE_DIRS}" )
+message( "" )
+message( " avango:" )
+message( "   library: ${AV_LIBRARIES}" )
+message( "   include: ${AV_INCLUDE_DIRS}" )
+message( "" )
+message( " python:" )
+message( "   library: ${PYTHON_LIBRARIES}" )
+message( "   include: ${PYTHON_INCLUDE_DIRS}" )
+message( "" )

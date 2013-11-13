@@ -5,14 +5,14 @@ SET(PYTHON_INCLUDE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/inc/python
   ${PYTHON_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_SEARCH_DIR}
-  "C:/python27/include"
+  "/usr/include/"
 )
 
 SET(PYTHON_LIBRARY_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/lib
   ${PYTHON_LIBRARY_DIRS}
   ${PYTHON_LIBRARY_SEARCH_DIR}
-  "C:/Python27/libs"
+  "/usr/lib/"
 )
 
 ##############################################################################

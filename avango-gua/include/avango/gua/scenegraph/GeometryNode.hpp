@@ -30,7 +30,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::GeometryNode is created.
        * Otherwise, the given ::gua::GeometryNode is used.
        */
-      GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode = std::shared_ptr< ::gua::GeometryNode>(new ::gua::GeometryNode("")));
+      GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode =
+                   std::make_shared< ::gua::GeometryNode>(""));
 
     protected:
 

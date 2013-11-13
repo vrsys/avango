@@ -1,0 +1,12 @@
+
+{
+	"shading_model" : "ComplexPhong",
+	"uniforms" : 
+	{
+		"diffuse_map" : "data/textures/wood_diffuse.jpg",
+		"emit" : "0.2",
+		"normal_map" : "data/textures/wood_normal.jpg",
+		"shinyness" : "10",
+		"specular_map" : "data/textures/wood_specular.jpg"
+	}
+}

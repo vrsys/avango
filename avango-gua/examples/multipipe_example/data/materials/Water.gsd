@@ -1,0 +1,49 @@
+
+{
+	"final_shading_stage" :
+	{
+		"body" : "vec3 view = normalize(gua_position - gua_camera_position);\nvec3 reflection_dir = normalize(reflect(view, gua_normal));\n\nconst float pi = 3.14159265359;\nfloat x = 0.5 + 0.5*(2.0 * atan(reflection_dir.x/(sqrt(-reflection_dir.z*-reflection_dir.z + reflection_dir.x*reflection_dir.x) + -reflection_dir.z)))/pi;\n\nfloat y = 1.0 - acos(reflection_dir.y)/pi;\n\nvec2 texcoord = vec2(x, y);\n\nfloat final_reflectivity = reflectivity * pow(1.0 - dot(gua_normal, -view), fresnel);\n\nvec3 reflection = texture2D(skymap, texcoord).xyz;\ngua_color = ((final_reflectivity * reflection + (1.0 - final_reflectivity) * paint_color));",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" :
+		{
+			"fresnel" : "float",
+			"paint_color" : "vec3",
+			"reflectivity" : "float",
+			"skymap" : "sampler2D"
+		}
+	},
+	"gbuffer_fragment_stage" :
+	{
+		"body" : "vec3 ts_normal = vec3(0, 0, 1);\n\n\nfor (int i=1; i<50; ++i) {\n\n    vec2 pos = time*i*0.1 + my_texcoords * 100000 / i;\n    pos = vec2(pos.x*cos(i) - pos.y*sin(i), pos.y*cos(i) + pos.x*sin(i));\n    \n    ts_normal += vec3(sin(pos.x)*0.0002*i, cos(pos.x)*0.0002*i, 0);\n}\n\nts_normal = normalize(ts_normal);\n\ngua_normal = normalize( my_tangent * ts_normal.x + my_bitangent * ts_normal.y + my_normal * ts_normal.z);\ntexcoords = my_texcoords;",
+		"functions" : "",
+		"outputs" :
+		{
+			"texcoords" : "vec2"
+		},
+		"uniforms" :
+		{
+			"time" : "float"
+		}
+	},
+	"gbuffer_vertex_stage" :
+	{
+		"body" : "my_tangent = gua_world_tangent;\nmy_texcoords = gua_texcoords;\nmy_bitangent = gua_world_bitangent;\nmy_normal = gua_world_normal;\n\ngua_position = gua_world_position;",
+		"functions" : "",
+		"outputs" :
+		{
+			"my_bitangent" : "vec3",
+			"my_normal" : "vec3",
+			"my_tangent" : "vec3",
+			"my_texcoords" : "vec2"
+		},
+		"uniforms" : null
+	},
+	"lbuffer_stage" :
+	{
+		"body" : "",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : null
+	}
+}

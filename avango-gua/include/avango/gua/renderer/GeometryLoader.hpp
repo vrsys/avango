@@ -11,7 +11,6 @@
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/FieldContainer.h>
-#include <avango/gua/windows_specific_gua.hpp>
 
 namespace av
 {
@@ -39,7 +38,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::GeometryLoader is created.
        * Otherwise, the given ::gua::GeometryLoader is used.
        */
-      GeometryLoader(::gua::GeometryLoader* guaGeometryLoader = new ::gua::GeometryLoader());
+      GeometryLoader(::gua::GeometryLoader* guaGeometryLoader = new ::gua::GeometryLoader({}));
 
       av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
                                                              std::string const& fileName,

@@ -52,6 +52,7 @@ set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GL_LIBRARIES}
+    ${SCHISM_LIBRARIES}
 )
 
 set(LIB_PATHS
@@ -114,9 +115,9 @@ SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 ADD_SUBDIRECTORY(avango-unittest)
 ADD_SUBDIRECTORY(avango-core)
-ADD_SUBDIRECTORY(avango-daemon)
 ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
+ADD_SUBDIRECTORY(avango-daemon)
 
 ################################################################
 # Summary

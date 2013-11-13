@@ -81,6 +81,7 @@ TARGET_LINK_LIBRARIES( _gua
                        optimized 
                        ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_gua
 )
+SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 
 ###############################################################################
 # targets for unittesting

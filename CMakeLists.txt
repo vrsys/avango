@@ -44,6 +44,10 @@ include(find_python)
 include(find_bullet)
 include(find_json)
 
+if (UNIX)
+    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
+endif (UNIX)
+
 set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}

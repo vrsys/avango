@@ -112,9 +112,11 @@ ENDIF (MSVC)
 
 set_target_properties(avangoDaemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 
-IF (NOT ${LIBRARIES} STREQUAL "")
-  TARGET_LINK_LIBRARIES( avangoDaemon debug ${LIBRARIES} optimized ${LIBRARIES})
-ENDIF (NOT ${LIBRARIES} STREQUAL "")
+#IF (NOT ${LIBRARIES} STREQUAL "")
+  TARGET_LINK_LIBRARIES( avangoDaemon
+    debug avango_gua avangoScript avango ${LIBRARIES}
+    optimized avango_gua avangoScript avango ${LIBRARIES})
+#ENDIF (NOT ${LIBRARIES} STREQUAL "")
 
 ###############################################################################
 # python module

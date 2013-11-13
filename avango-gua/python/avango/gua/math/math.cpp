@@ -89,8 +89,7 @@ void init_Vec3() {
   register_multifield<av::gua::MFVec3>("MFVec3");
 }
 
-void init_Vec4()
-{
+void init_Vec4() {
   // wrapping gua::math::vec4 functionality
   class_< ::gua::math::vec4>("Vec4", no_init)
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec4>))
@@ -125,10 +124,7 @@ void init_Vec4()
   register_multifield<av::gua::MFVec4>("MFVec4");
 }
 
-
-
-void init_Mat3()
-{
+void init_Mat3() {
   // wrapping gua::math::mat3 functionality
   class_< ::gua::math::mat3>("Mat3", no_init)
     .def("__init__", make_constructor(&constructorMat< ::gua::math::mat3>))
@@ -179,8 +175,7 @@ void setTranslate2(::gua::math::mat4& mat,
   mat[14] = z;
 }
 
-void init_Mat4()
-{
+void init_Mat4() {
   void (*translate1)( ::gua::math::mat4&, ::gua::math::vec3 const&) =
       &scm::math::translate;
 
@@ -288,4 +283,45 @@ void init_Mat4()
   def("make_inverse_mat", inverse);
 }
 
+void init_Quat() {
+  class_< ::gua::math::quat>("Quat", no_init)
+    .def("__init__", make_constructor(&constructorQuat< ::gua::math::quat>))
+    .def(init< ::gua::math::quat::value_type,
+               ::gua::math::quat::value_type,
+               ::gua::math::quat::value_type,
+               ::gua::math::quat::value_type>())
+    .def(init< ::gua::math::quat::value_type, ::gua::math::vec3>())
+    .def(init< ::gua::math::quat>())
+    .def(self == other< ::gua::math::quat>())
+    .def("__repr__", &toString< ::gua::math::quat>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFQuat>("SFQuat");
+  register_multifield<av::gua::MFQuat>("MFQuat");
+
+  ::gua::math::quat const (*normalize)( ::gua::math::quat const&) =
+      &scm::math::normalize;
+
+  def("quat_normalize", normalize);
+
+  ::gua::math::quat const (*conjugate)( ::gua::math::quat const&) =
+      &scm::math::conjugate;
+
+  def("quat_conjugate", conjugate);
+
+  ::gua::math::quat::value_type const (*magnitude)( ::gua::math::quat const&) =
+      &scm::math::magnitude;
+
+  def("quat_magnitude", magnitude);
+
+  ::gua::math::quat const (*lerp)( ::gua::math::quat const&, ::gua::math::quat const&, const ::gua::math::quat::value_type) =
+      &scm::math::lerp;
+
+  def("quat_lerp", lerp);
+
+  ::gua::math::quat const (*slerp)( ::gua::math::quat const&, ::gua::math::quat const&, const ::gua::math::quat::value_type) =
+      &scm::math::slerp;
+
+  def("quat_slerp", slerp);
 }

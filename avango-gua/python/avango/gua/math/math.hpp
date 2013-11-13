@@ -72,6 +72,10 @@ template <class T> boost::shared_ptr<T> constructorVec() {
   return boost::shared_ptr<T>( new T(T::zero()));
 }
 
+template <class T> boost::shared_ptr<T> constructorQuat() {
+  return boost::shared_ptr<T>( new T(T::identity()));
+}
+
 void init_Vec2();
 void init_Vec2ui();
 void init_Vec3();

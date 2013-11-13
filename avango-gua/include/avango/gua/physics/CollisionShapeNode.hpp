@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::physics::CollisionShapeNode is created.
        * Otherwise, the given ::gua::physics::CollisionShapeNode is used.
        */
-      CollisionShapeNode(std::shared_ptr<::gua::physics::CollisionShapeNode> guanode = std::shared_ptr<::gua::physics::CollisionShapeNode>(new ::gua::physics::CollisionShapeNode("")));
+      CollisionShapeNode(std::shared_ptr< ::gua::physics::CollisionShapeNode> guanode = std::shared_ptr< ::gua::physics::CollisionShapeNode>(new ::gua::physics::CollisionShapeNode("")));
 
     protected:
 

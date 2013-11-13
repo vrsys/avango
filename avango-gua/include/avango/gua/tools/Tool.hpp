@@ -79,8 +79,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<::av::gua::Tool> >;
-  template class AV_GUA_DLL MultiField<Link<::av::gua::Tool> >;
+  template class AV_GUA_DLL SingleField<Link< ::av::gua::Tool> >;
+  template class AV_GUA_DLL MultiField<Link< ::av::gua::Tool> >;
 #endif
 
 }

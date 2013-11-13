@@ -1,4 +1,6 @@
 #include <avango/gua/renderer/Renderer.hpp>
+#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>

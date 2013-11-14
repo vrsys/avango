@@ -8,6 +8,7 @@
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
+#include <avango/gua/renderer/Pipeline.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/physics/Physics.hpp>
 #include <avango/FieldContainer.h>

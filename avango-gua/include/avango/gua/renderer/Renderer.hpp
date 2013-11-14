@@ -7,7 +7,6 @@
  */
 
 #include <avango/FieldContainer.h>
-
 #include <gua/renderer/Renderer.hpp>
 
 #include <avango/gua/windows_specific_gua.hpp>

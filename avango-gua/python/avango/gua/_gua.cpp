@@ -79,6 +79,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Vec2ui();
     init_Vec3();
     init_Vec4();
+    init_Quat();
 
     init_Mat3();
     init_Mat4();

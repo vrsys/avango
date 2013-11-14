@@ -56,7 +56,7 @@ ENDIF (${AVANGO_DISTRIBUTION_SUPPORT})
 
 LINK_DIRECTORIES(${LIB_PATHS})
 
-ADD_LIBRARY( avango_core SHARED
+ADD_LIBRARY( avango SHARED
     	     ${AVANGO_CORE_SRC}
 )
 
@@ -79,12 +79,13 @@ IF (MSVC)
 	SET( BUILD_FLAGS "${BUILD_FLAGS} -D AV_LIBRARY")
 ENDIF (MSVC)
 
-set_target_properties(avango_core PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
-set_target_properties(avango_core PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
+set_target_properties(avango PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
-IF (NOT ${LIBRARIES} STREQUAL "")
-    TARGET_LINK_LIBRARIES( avango_core debug ${LIBRARIES} optimized ${LIBRARIES})
-ENDIF (NOT ${LIBRARIES} STREQUAL "")
+#IF (NOT ${LIBRARIES} STREQUAL "")
+  #TARGET_LINK_LIBRARIES( avango debug ${LIBRARIES} boost_thread boost_signals boost_python optimized ${LIBRARIES} boost_thread boost_signals boost_python)
+    TARGET_LINK_LIBRARIES( avango debug ${LIBRARIES} optimized ${LIBRARIES} )
+#ENDIF (NOT ${LIBRARIES} STREQUAL "")
 
 ###############################################################################
 # targets for unittesting

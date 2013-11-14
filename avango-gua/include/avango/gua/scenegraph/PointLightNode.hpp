@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::PointLightNode is created.
        * Otherwise, the given ::gua::PointLightNode is used.
        */
-      PointLightNode(std::shared_ptr<::gua::PointLightNode> guanode = std::shared_ptr<::gua::PointLightNode>(new ::gua::PointLightNode("")));
+      PointLightNode(std::shared_ptr< ::gua::PointLightNode> guanode = std::shared_ptr< ::gua::PointLightNode>(new ::gua::PointLightNode("")));
 
     protected:
 

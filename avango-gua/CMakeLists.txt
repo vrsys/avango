@@ -34,8 +34,8 @@ ADD_LIBRARY( _gua SHARED
     	     ${AVANGO_GUA_PYTHON_SRC}
 )
 
-ADD_DEPENDENCIES(avango_gua avango_core)
-ADD_DEPENDENCIES(_gua avango_core avango_gua)
+ADD_DEPENDENCIES(avango_gua avango)
+ADD_DEPENDENCIES(_gua avango avango_gua)
 
 INCLUDE_DIRECTORIES(BEFORE 
   include
@@ -46,6 +46,7 @@ INCLUDE_DIRECTORIES(BEFORE
   ${BULLET_INCLUDE_DIRS}
   ${JSON_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/avango-core/include
+  ${CMAKE_SOURCE_DIR}/avango-python/include
 )
 
 MESSAGE(${BULLET_INCLUDE_DIRS})
@@ -69,17 +70,19 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 
 TARGET_LINK_LIBRARIES( avango_gua 
                        debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
                        optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
 )
 
 TARGET_LINK_LIBRARIES( _gua
                        debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_gua
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
                        optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_gua
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
 )
+SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
+SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)
 
 ###############################################################################
 # targets for unittesting

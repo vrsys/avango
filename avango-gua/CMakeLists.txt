@@ -55,7 +55,7 @@ MESSAGE(${BULLET_INCLUDE_DIRS})
 # set preprocessor configuration
 ###############################################################################
 SET (BUILD_FLAGS 
-	"-D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG} -D _AVANGO_DAEMON_VRPN_SUPPORT=${AVANGO_DAEMON_VRPN_SUPPORT} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT} -D _AVANGO_ZMQ_DISTRIBUTION_SUPPORT=${AVANGO_ZMQ_DISTRIBUTION_SUPPORT} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL} -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR} -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR} -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}"
+	"/bigobj -D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG} -D _AVANGO_DAEMON_VRPN_SUPPORT=${AVANGO_DAEMON_VRPN_SUPPORT} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT} -D _AVANGO_ZMQ_DISTRIBUTION_SUPPORT=${AVANGO_ZMQ_DISTRIBUTION_SUPPORT} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL} -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR} -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR} -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}"
 )
 
 IF (MSVC)
@@ -70,16 +70,16 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 
 TARGET_LINK_LIBRARIES( avango_gua 
                        debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core guacamole boost_program_options boost_regex
                        optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core guacamole boost_program_options boost_regex
 )
 
 TARGET_LINK_LIBRARIES( _gua
                        debug 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_gua avangoScript guacamole boost_program_options boost_regex
                        optimized 
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
+                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango_core avango_gua avangoScript guacamole boost_program_options boost_regex
 )
 SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)

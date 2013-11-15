@@ -105,6 +105,7 @@ SET (AVANGO_ZMQ_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to use ZMQ for dist
 SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
+SET (AVANGO_OCULUS_RIFT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 
 ################################################################
 # Create libraries
@@ -118,6 +119,10 @@ ADD_SUBDIRECTORY(avango-core)
 ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
 ADD_SUBDIRECTORY(avango-daemon)
+
+IF (AVANGO_OCULUS_RIFT)
+    ADD_SUBDIRECTORY(avango-oculus)
+ENDIF(AVANGO_OCULUS_RIFT)
 
 ################################################################
 # Summary

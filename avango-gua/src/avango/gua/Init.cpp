@@ -30,12 +30,13 @@
 #include <avango/gua/physics/Point2PointConstraint.hpp>
 #include <avango/gua/physics/SliderConstraint.hpp>
 #include <avango/gua/physics/Physics.hpp>
-#include <avango/gua/renderer/Renderer.hpp>
 
+#include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/GeometryLoader.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 #include <avango/gua/renderer/Camera.hpp>
+
 #include <avango/gua/viewer/Viewer.hpp>
 
 #include <avango/gua/tools/TargetHolder.hpp>

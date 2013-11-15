@@ -37,7 +37,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Renderer is created.
        * Otherwise, the given ::gua::Renderer is used.
        */
-      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer(std::vector< ::gua::Pipeline*>()));
+      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer((std::vector< ::gua::Pipeline*>())));
 
       Renderer(std::vector<av::gua::Pipeline const*> const& pipes);
 

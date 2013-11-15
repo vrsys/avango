@@ -67,7 +67,7 @@ av::gua::Viewer::run() const {
   ::gua::events::MainLoop loop;
 
   ::gua::events::Ticker ticker(loop, 1.f/60.f);
-  ticker.on_tick.connect([&]() {
+  ticker.on_tick.connect([&,this]() {
     PyEval_RestoreThread(save_state);
 
     av::ApplicationInstance::get().evaluate();
@@ -82,8 +82,8 @@ av::gua::Viewer::run() const {
       m_renderer->queue_draw(graphs);
     }
 
-    if (Physics.getValue().isValid()) {
-      Physics.getValue()->synchronize(true);
+    if (this->Physics.getValue().isValid()) {
+      this->Physics.getValue()->synchronize(true);
     }
 
     save_state = PyEval_SaveThread();

@@ -34,6 +34,7 @@ if (UNIX)
 endif (UNIX)
 
 include(find_compiler)
+include(file_copy_macro)
 
 include(find_guacamole)
 SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
@@ -112,6 +113,8 @@ SET (AVANGO_OCULUS_RIFT "false" CACHE BOOL "Compile Oculus Rift module for Avang
 ################################################################
 
 FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/avango)
+
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 ADD_SUBDIRECTORY(avango-unittest)

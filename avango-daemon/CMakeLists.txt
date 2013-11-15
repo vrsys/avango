@@ -8,10 +8,10 @@ SET(AVANGO_CONFIG_OUT ${AVANGO_CONFIG_IN})
 STRING(REGEX MATCHALL "%\\([^\\)]+\\)s" AVANGO_CONFIG_VARIABLES ${AVANGO_CONFIG_IN})
 
 FOREACH(_CUR_VARIABLE ${AVANGO_CONFIG_VARIABLES})
-	SET(_STRIPPED_VARIABLE "")
-	STRING(REGEX REPLACE "%\\(" "" _STRIPPED_VARIABLE ${_CUR_VARIABLE})
-	STRING(REGEX REPLACE "\\)s" "" _STRIPPED_VARIABLE ${_STRIPPED_VARIABLE})
-	STRING(REPLACE ${_CUR_VARIABLE} _${_STRIPPED_VARIABLE} AVANGO_CONFIG_OUT ${AVANGO_CONFIG_OUT})		
+    SET(_STRIPPED_VARIABLE "")
+    STRING(REGEX REPLACE "%\\(" "" _STRIPPED_VARIABLE ${_CUR_VARIABLE})
+    STRING(REGEX REPLACE "\\)s" "" _STRIPPED_VARIABLE ${_STRIPPED_VARIABLE})
+    STRING(REPLACE ${_CUR_VARIABLE} _${_STRIPPED_VARIABLE} AVANGO_CONFIG_OUT ${AVANGO_CONFIG_OUT})
 ENDFOREACH(_CUR_VARIABLE)
 
 FILE(WRITE include/avango/daemon/Config.h ${AVANGO_CONFIG_OUT})
@@ -40,11 +40,11 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/avango/daemon/DeviceService.h
     include/avango/daemon/DTrack.h
     include/avango/daemon/Doxygen.h
-	  include/avango/daemon/EventMapping.win.h
+    include/avango/daemon/EventMapping.win.h
     include/avango/daemon/HIDInput.h
     include/avango/daemon/Init.h
     include/avango/daemon/LinuxEvent.h
-	  include/avango/daemon/LinuxInput.win.h
+    include/avango/daemon/LinuxInput.win.h
     include/avango/daemon/SharedMemorySegment.h
     include/avango/daemon/Station.h
     include/avango/daemon/StationBlock.h
@@ -57,7 +57,7 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 
 IF (UNIX)
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.linux.cpp")
-		LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/SharedMemorySegment.cpp")
+        LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/SharedMemorySegment.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WacomTablet.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Wiimote.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WiimoteActuator.cpp")
@@ -79,17 +79,19 @@ ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS})
 
-ADD_LIBRARY( avangoDaemon SHARED
-    	     ${AVANGO_DAEMON_SRC}
+ADD_LIBRARY(avangoDaemon SHARED
+    ${AVANGO_DAEMON_SRC}
 )
 
-INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
-                    ${SCHISM_INCLUDE_DIRS}
-										include
-										../avango-core/include
-										../avango-python/include
-                                                                                ${PYTHON_INCLUDE_DIRS}
-                    ../avango-gua/include)
+INCLUDE_DIRECTORIES(
+    ${INCLUDE_PATHS}
+    ${SCHISM_INCLUDE_DIRS}
+    include
+    ../avango-core/include
+    ../avango-python/include
+    ${PYTHON_INCLUDE_DIRS}
+    ../avango-gua/include
+)
 
 ADD_DEPENDENCIES ( avangoDaemon avango)
 
@@ -107,7 +109,7 @@ SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MINOR=${AVANGO_VERSIO
 SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MAINT=${AVANGO_VERSION_MAINT}")
 
 IF (MSVC)
-	SET(BUILD_FLAGS "${BUILD_FLAGS} -D AV_DAEMON_LIBRARY")
+    SET(BUILD_FLAGS "${BUILD_FLAGS} -D AV_DAEMON_LIBRARY")
 ENDIF (MSVC)
 
 set_target_properties(avangoDaemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})

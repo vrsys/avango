@@ -1,0 +1,47 @@
+###############################################################################
+# determine source and header files
+###############################################################################
+file(GLOB AVANGO_OCULUS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    src/avango/oculus/OculusRift.cpp
+)
+
+# Location where cmake first looks for modules.
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)
+
+include(find_ovr)
+
+###############################################################################
+# set link directories and link dependencies
+###############################################################################
+LINK_DIRECTORIES(${LIB_PATHS})
+
+ADD_LIBRARY( avango_oculus SHARED
+    	     ${AVANGO_OCULUS_SRC}
+)
+
+INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
+                    ${SCHISM_INCLUDE_DIRS}
+		    ${PYTHON_INCLUDE_DIRS}
+		include
+		../avango-core/include
+		../avango-gua/include
+		../avango-python/include
+	        ../../guacamole-oculus/include
+                
+)
+
+ADD_DEPENDENCIES ( avango_oculus avango_core)
+
+###############################################################################
+# set preprocessor configuration
+###############################################################################
+IF (NOT ${LIBRARIES} STREQUAL "")
+    TARGET_LINK_LIBRARIES( avango_oculus debug ${LIBRARIES} optimized ${LIBRARIES})
+ENDIF (NOT ${LIBRARIES} STREQUAL "")
+
+###############################################################################
+# python module
+###############################################################################
+add_subdirectory(python)
+
+

@@ -21,13 +21,14 @@ ADD_LIBRARY( avango_oculus SHARED
 
 INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
                     ${SCHISM_INCLUDE_DIRS}
+                    ${BULLET_INCLUDE_DIRS}
 		    ${PYTHON_INCLUDE_DIRS}
 		include
 		../avango-core/include
 		../avango-gua/include
 		../avango-python/include
 	        ../../guacamole-oculus/include
-                
+
 )
 
 ADD_DEPENDENCIES ( avango_oculus avango_core)

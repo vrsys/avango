@@ -86,6 +86,7 @@ ADD_LIBRARY(avangoDaemon SHARED
 INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
+    ${BULLET_INCLUDE_DIRS}
     include
     ../avango-core/include
     ../avango-python/include

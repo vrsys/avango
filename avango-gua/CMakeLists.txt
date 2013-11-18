@@ -80,21 +80,34 @@ set_target_properties(avango_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_D
 set_target_properties(_gua PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
+###############################################################################
+# set dependencies
+###############################################################################
+SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} ${BULLET_LIBRARIES} ${JSON_LIBRARIES} ${ASSIMP_LIBRARIES} avango)
+
+IF (UNIX)
+	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)	
+ENDIF (UNIX)
+
 TARGET_LINK_LIBRARIES( avango_gua
                        debug
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
+                       ${_AVANGO_GUA_LIBRARIES}
                        optimized
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango guacamole boost_program_options boost_regex
+                       ${_AVANGO_GUA_LIBRARIES}
 )
 
 TARGET_LINK_LIBRARIES( _gua
                        debug
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
+                       ${_AVANGO_GUA_LIBRARIES}
                        optimized
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_gua avangoScript guacamole boost_program_options boost_regex
+                       ${_AVANGO_GUA_LIBRARIES}
 )
+
 SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
-SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)
+
+IF (UNIX)
+	SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)
+ENDIF (UNIX)
 
 ###############################################################################
 # targets for unittesting

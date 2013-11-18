@@ -39,11 +39,12 @@ include(file_copy_macro)
 include(find_guacamole)
 SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
-include(find_schism)
+include(find_assimp)
 include(find_boost)
-include(find_python)
 include(find_bullet)
 include(find_json)
+include(find_python)
+include(find_schism)
 
 if (UNIX)
     list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
@@ -106,7 +107,7 @@ SET (AVANGO_ZMQ_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to use ZMQ for dist
 SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
-SET (AVANGO_OCULUS_RIFT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
+SET (OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 
 ################################################################
 # Create libraries
@@ -123,9 +124,9 @@ ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
 ADD_SUBDIRECTORY(avango-daemon)
 
-IF (AVANGO_OCULUS_RIFT)
+IF (OCULUS_RIFT_SUPPORT)
     ADD_SUBDIRECTORY(avango-oculus)
-ENDIF(AVANGO_OCULUS_RIFT)
+ENDIF(OCULUS_RIFT_SUPPORT)
 
 ################################################################
 # Summary

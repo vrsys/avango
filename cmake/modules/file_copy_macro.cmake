@@ -12,6 +12,7 @@ ENDMACRO(COPY_FILE)
 
 # copies in_file to out_dir for target
 MACRO(COPY_FILE_INTO_DIRECTORY in_file out_dir target)
+    FILE(MAKE_DIRECTORY ${out_dir})
     GET_FILENAME_COMPONENT(file_name ${in_file} NAME)
     COPY_FILE(${in_file} ${out_dir}/${file_name}
 ${target})
@@ -20,6 +21,7 @@ ENDMACRO(COPY_FILE_INTO_DIRECTORY)
 # Copies all the files from in_file_list into the out_dir.
 # sub-trees are ignored (files are stored in same out_dir)
 MACRO(COPY_FILES_INTO_DIRECTORY in_file_list out_dir target)
+    FILE(MAKE_DIRECTORY ${out_dir})
     FOREACH(in_file ${in_file_list})
         COPY_FILE_INTO_DIRECTORY(
             ${in_file}
@@ -32,6 +34,7 @@ ENDMACRO(COPY_FILES_INTO_DIRECTORY)
 # Copies all python files from in_dir into the out_dir.
 # sub-trees are ignored (files are stored in same out_dir)
 MACRO(COPY_PYTHON_FILES_INTO_DIRECTORY in_dir out_dir target)
+    FILE(MAKE_DIRECTORY ${out_dir})
     FILE(GLOB PYTHON_FILES ${in_dir}/*.py)
     FOREACH(in_file ${PYTHON_FILES})
         COPY_FILE_INTO_DIRECTORY(
@@ -41,3 +44,4 @@ MACRO(COPY_PYTHON_FILES_INTO_DIRECTORY in_dir out_dir target)
         )
     ENDFOREACH(in_file)
 ENDMACRO(COPY_PYTHON_FILES_INTO_DIRECTORY)
+

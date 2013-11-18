@@ -1,6 +1,16 @@
 #ifndef AVANGO_OCULUS_OCULUSRIFT_HPP
 #define AVANGO_OCULUS_OCULUSRIFT_HPP
 
+#if defined (_MSC_VER)
+	#if defined (AV_OCULUS_LIBRARY)
+		#define AV_OCULUS_DLL __declspec( dllexport )
+	#else
+		#define AV_OCULUS_DLL __declspec( dllimport )
+	#endif
+	#else
+		#define AV_OCULUS_DLL
+#endif
+
 #include <gua/OculusRift.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -8,7 +18,6 @@
 
 #include <gua/math/math.hpp>
 #include <avango/FieldContainer.h>
-
 
 namespace av
 {
@@ -18,7 +27,7 @@ namespace av
 		* Wrapper for ::gua::OculusRift
 		*/
 		
-		class AV_GUA_DLL OculusRift : public av::gua::Window
+		class AV_OCULUS_DLL OculusRift : public av::gua::Window
 		{
 			AV_FC_DECLARE();
 			
@@ -28,8 +37,11 @@ namespace av
 				 * Constructor. When called without arguments, a new ::gua::OculusRift is created.
 				 * Otherwise, the given ::gua::OculusRift is used.
 				 */
-				 
+#if WIN32
+         OculusRift(::gua::OculusRift* guaOculusRift = new ::gua::OculusRift("\\\\.DISPLAY1"));
+#else
 				 OculusRift(::gua::OculusRift* guaOculusRift = new ::gua::OculusRift(":0.0"));
+#endif
 			 
 			 protected:
 			 
@@ -62,8 +74,8 @@ namespace av
 	}
 	
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-	template class AV_GUA_DLL SingleField<Link<gua::OculusRift> >;
-	template class AV_GUA_DLL MultiField<Link<gua::OculusRift> >;
+  template class AV_OCULUS_DLL SingleField<Link<av::oculus::OculusRift> >;
+  template class AV_OCULUS_DLL MultiField<Link<av::oculus::OculusRift> >;
 #endif
 }
 

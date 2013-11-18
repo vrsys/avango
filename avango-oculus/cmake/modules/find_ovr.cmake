@@ -73,8 +73,8 @@ ENDIF (NOT OVR_INCLUDE_DIRS)
 
 IF(UNIX)
 	SET(OVR_LIB_FILENAME "libovr.a")
-#ELSEIF(WIN32)
-#	SET(OVR_LIB_FILENAME "python27.lib")
+ELSEIF(WIN32)
+	SET(OVR_LIB_FILENAME "libovr64.lib")
 ENDIF(UNIX)
 
 IF ( NOT OVR_LIBRARY_DIRS )
@@ -100,9 +100,13 @@ IF ( NOT OVR_LIBRARY_DIRS )
     ENDIF (NOT _OVR_FOUND_LIB_DIR)
     
     FOREACH(_LIB_DIR ${_OVR_FOUND_LIB_DIR})
-        SET(OVR_LIBRARIES ${OVR_LIB_FILENAME} CACHE FILEPATH "The Oculus SDK library filename.")
+        LIST(APPEND _OVR_LIBRARIES ${OVR_LIB_FILENAME})
     ENDFOREACH(_LIB_DIR ${_OVR_FOUND_INC_DIRS})
 
+    IF (_OVR_FOUND_LIB_DIR)
+        SET(OVR_LIBRARIES ${_OVR_LIBRARIES} CACHE FILEPATH "The Oculus SDK library filename.")
+    ENDIF (_OVR_FOUND_LIB_DIR)
+    
 ENDIF ( NOT OVR_LIBRARY_DIRS )
 
 ##############################################################################

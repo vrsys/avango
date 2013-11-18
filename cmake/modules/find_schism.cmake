@@ -44,7 +44,7 @@ ENDMACRO (request_schism_search_directories)
 ##############################################################################
 # check for schism
 ##############################################################################
-message("-- checking for schism")
+message(STATUS "-- checking for schism")
 
 IF ( NOT SCHISM_INCLUDE_DIRS )
 
@@ -137,7 +137,7 @@ IF ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS )
 ELSE ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS )
     UNSET(SCHISM_INCLUDE_SEARCH_DIR CACHE)
     UNSET(SCHISM_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching schism version")
+    MESSAGE(STATUS "--  found matching schism version")
 ENDIF ( NOT SCHISM_INCLUDE_DIRS OR NOT SCHISM_LIBRARY_DIRS )
 
 

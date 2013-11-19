@@ -39,7 +39,7 @@ av::gua::Point2PointConstraint::initClass()
     {
         av::gua::Constraint::initClass();
 
-        AV_FC_INIT_ABSTRACT(av::gua::Constraint, av::gua::Point2PointConstraint, true);
+        AV_FC_INIT(av::gua::Constraint, av::gua::Point2PointConstraint, true);
 
         SFPoint2PointConstraint::initClass("av::gua::SFPoint2PointConstraint", "av::Field");
         MFPoint2PointConstraint::initClass("av::gua::MFPoint2PointConstraint", "av::Field");

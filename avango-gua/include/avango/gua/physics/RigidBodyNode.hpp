@@ -26,6 +26,7 @@ namespace av
 
     public:
       enum class CollisionFilterGroups {
+        NONE = -1,
         DEFAULT_FILTER = ::gua::physics::RigidBodyNode::CollisionFilterGroups::DEFAULT_FILTER,
         STATIC_FILTER = ::gua::physics::RigidBodyNode::CollisionFilterGroups::STATIC_FILTER,
         KINEMATIC_FILTER = ::gua::physics::RigidBodyNode::CollisionFilterGroups::KINEMATIC_FILTER,
@@ -42,11 +43,6 @@ namespace av
        */
       RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBodyNode> guanode = std::shared_ptr< ::gua::physics::RigidBodyNode>(new ::gua::physics::RigidBodyNode("")));
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
       virtual ~RigidBodyNode();
 
     public:

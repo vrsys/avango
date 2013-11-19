@@ -34,11 +34,6 @@ namespace av
        */
       Constraint(::gua::physics::Constraint* guaconstraint); // use defined type to circumvent compiler bug in VS8
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
       virtual ~Constraint();
 
     public:

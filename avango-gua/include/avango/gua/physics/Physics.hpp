@@ -42,11 +42,11 @@ namespace av
 
       void synchronize(bool autoStart);
 
-      void addRigidBody(Link<RigidBodyNode> const& rigidBody);
-      void removeRigidBody(Link<RigidBodyNode> const& rigidBody);
+      void addRigidBody(RigidBodyNode const& rigidBody);
+      void removeRigidBody(RigidBodyNode const& rigidBody);
 
-      void addConstraint(Link<Constraint> const& constraint);
-      void removeConstraint(Link<Constraint> const& constraint);
+      void addConstraint(Constraint const& constraint);
+      void removeConstraint(Constraint const& constraint);
 
       float getPhysicsFPS() const;
 

@@ -64,34 +64,43 @@ av::gua::Physics::synchronize(bool autoStart) {
 
 
 void
-av::gua::Physics::addRigidBody(Link<RigidBodyNode> const& rigidBody)
+av::gua::Physics::addRigidBody(RigidBodyNode const& rigidBody)
 {
-    m_guaPhysics->add_rigid_body(rigidBody->getGuaNode(),
+    auto group (static_cast<av::gua::RigidBodyNode::CollisionFilterGroups>(rigidBody.Group.getValue()));
+    auto mask (static_cast<av::gua::RigidBodyNode::CollisionFilterGroups>(rigidBody.Mask.getValue()));
+
+    if (group == av::gua::RigidBodyNode::CollisionFilterGroups::NONE ||
+        mask == av::gua::RigidBodyNode::CollisionFilterGroups::NONE) {
+        m_guaPhysics->add_rigid_body(rigidBody.getGuaNode());
+    } else {
+         m_guaPhysics->add_rigid_body(rigidBody.getGuaNode(),
                                  static_cast<
                                  ::gua::physics::RigidBodyNode::CollisionFilterGroups>
-                                    (rigidBody->Group.getValue()),
+                                    (group),
                                  static_cast<
                                  ::gua::physics::RigidBodyNode::CollisionFilterGroups>
-                                    (rigidBody->Mask.getValue()));
+                                    (mask));
+    }
+
 }
 
 void
-av::gua::Physics::removeRigidBody(Link<RigidBodyNode> const& rigidBody)
+av::gua::Physics::removeRigidBody(RigidBodyNode const& rigidBody)
 {
-    m_guaPhysics->remove_rigid_body(rigidBody->getGuaNode());
+    m_guaPhysics->remove_rigid_body(rigidBody.getGuaNode());
 }
 
 void
-av::gua::Physics::addConstraint(Link<Constraint> const& constraint)
+av::gua::Physics::addConstraint(Constraint const& constraint)
 {
-    m_guaPhysics->add_constraint(constraint->getGuaConstraint(),
-                                 constraint->DisableCollisionBetweenLinkedBodies.getValue());
+    m_guaPhysics->add_constraint(constraint.getGuaConstraint(),
+                                 constraint.DisableCollisionBetweenLinkedBodies.getValue());
 }
 
 void
-av::gua::Physics::removeConstraint(Link<Constraint> const& constraint)
+av::gua::Physics::removeConstraint(Constraint const& constraint)
 {
-    m_guaPhysics->remove_constraint(constraint->getGuaConstraint());
+    m_guaPhysics->remove_constraint(constraint.getGuaConstraint());
 }
 
 float

@@ -2,9 +2,10 @@
 # determine source and header files
 ###############################################################################
 file(GLOB AVANGO_OCULUS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    src/avango/oculus/OculusRift.cpp
-	include/avango/oculus/OculusRift.hpp
+    src/avango/oculus/*.cpp
+    include/avango/oculus/*.hpp
 )
+
 
 # Location where cmake first looks for modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)

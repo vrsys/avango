@@ -12,6 +12,9 @@
 *.la
 *.a
 
+# Temporary files
+*~
+
 # build directory
 lib
 

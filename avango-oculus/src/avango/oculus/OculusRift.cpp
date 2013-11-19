@@ -5,6 +5,8 @@
 
 #include <avango/gua/Types.hpp>
 
+#include <iostream>
+
 namespace
 {
 	av::Logger& logger(av::getLogger("av::oculus::OculusRift"));
@@ -27,9 +29,18 @@ av::oculus::OculusRift::OculusRift(::gua::OculusRift* guaOculusRift)
 av::oculus::OculusRift::~OculusRift()
 {}
 
+void 
+av::oculus::OculusRift::initOVR()
+{
+    std::cout << "Initializing Oculus Rift" << std::endl;
+    ::gua::OculusRift::init();
+}
+
+
 void
 av::oculus::OculusRift::initClass()
 {
+
 	if (!isTypeInitialized())
 	{
 		av::gua::Window::initClass();
@@ -40,6 +51,7 @@ av::oculus::OculusRift::initClass()
 		MFOculusRift::initClass("av::oculus::MFOculusRift", "av::Field");
 	}
 }
+
 
 
 ::gua::OculusRift*

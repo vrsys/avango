@@ -17,9 +17,11 @@ file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories
 ###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS}
-                 ${PYTHON_LIBRARY_DIRS}
-                 ${BOOST_LIBRARY_DIRS}
+LINK_DIRECTORIES(
+  ${LIB_PATHS}
+  ${PYTHON_LIBRARY_DIRS}
+  ${BOOST_LIBRARY_DIRS}
+  ${BULLET_LIBRARY_DIRS}
 )
 
 
@@ -61,8 +63,6 @@ INCLUDE_DIRECTORIES(BEFORE
   ${CMAKE_SOURCE_DIR}/avango-python/include
 )
 
-MESSAGE(${BULLET_INCLUDE_DIRS})
-
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -86,7 +86,7 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} ${BULLET_LIBRARIES} ${JSON_LIBRARIES} ${ASSIMP_LIBRARIES} avango)
 
 IF (UNIX)
-	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)	
+	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)
 ENDIF (UNIX)
 
 TARGET_LINK_LIBRARIES( avango_gua

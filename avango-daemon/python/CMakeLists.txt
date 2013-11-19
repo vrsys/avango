@@ -1,4 +1,8 @@
-LINK_DIRECTORIES(${LIB_PATHS})
+
+LINK_DIRECTORIES(
+    ${LIB_PATHS}
+    ${BULLET_LIBRARY_DIRS}
+)
 
 ADD_LIBRARY( _daemon SHARED "_daemon.cpp" )
 
@@ -14,8 +18,6 @@ COPY_PYTHON_FILES_INTO_DIRECTORY(
 )
 
 ADD_DEPENDENCIES ( _daemon avangoDaemon )
-
-message("#####################" ${LIBRARIES})
 
 #IF (NOT ${LIBRARIES} STREQUAL "")
     TARGET_LINK_LIBRARIES( _daemon debug ${LIBRARIES} avangoDaemon optimized ${LIBRARIES} avangoDaemon)

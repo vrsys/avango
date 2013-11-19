@@ -77,7 +77,11 @@ ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS} ${PYTHON_LIBRARY_DIRS})
+LINK_DIRECTORIES(
+    ${LIB_PATHS}
+    ${PYTHON_LIBRARY_DIRS}
+    ${BULLET_LIBRARY_DIRS}
+)
 
 ADD_LIBRARY(avango_daemon SHARED
     ${AVANGO_DAEMON_SRC}

@@ -62,6 +62,7 @@ class BallSpawner(avango.script.Script):
 
       if len(self.__spawned_balls) > self.MaxBallCount.value:
         to_remove = self.__spawned_balls.pop(0)
+        self.Physics.value.remove_rigid_body(to_remove)
         self.SceneGraph.value.Root.value.Children.value.remove(to_remove)
 
 

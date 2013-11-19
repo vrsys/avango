@@ -1,4 +1,8 @@
-LINK_DIRECTORIES(${LIB_PATHS})
+
+LINK_DIRECTORIES(
+    ${LIB_PATHS}
+    ${BULLET_LIBRARY_DIRS}
+)
 
 ADD_LIBRARY( _daemon SHARED "_daemon.cpp" )
 

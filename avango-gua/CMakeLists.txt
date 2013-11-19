@@ -94,7 +94,7 @@ SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
 )
 
 IF (UNIX)
-	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)	
+	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)
 ENDIF (UNIX)
 
 TARGET_LINK_LIBRARIES( avango_gua

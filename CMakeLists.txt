@@ -58,7 +58,7 @@ set(LIBRARIES
 )
 
 set(LIB_PATHS
-	  ${BOOST_LIBRARY_DIRS}
+    ${BOOST_LIBRARY_DIRS}
     ${GUACAMOLE_LIBRARY_DIRS}
     ${GL_LIBRARY_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
@@ -159,5 +159,10 @@ message( "" )
 message( " gl:" )
 message( "   library: ${GL_LIBRARIES}" )
 message( "   include: ${GL_INCLUDE_DIRS}" )
+message( "" )
+message( " bullet:" )
+message( "   library: ${BULLET_LIBRARIES}" )
+message( "   library path: ${BULLET_LIBRARY_DIRS}" )
+message( "   include: ${BULLET_INCLUDE_DIRS}" )
 message( "" )
 

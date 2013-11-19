@@ -1,3 +1,5 @@
+#include <Python.h> // has to be first in order to prevent warnings
+
 #include <avango/gua/viewer/Viewer.hpp>
 #include <avango/gua/Types.hpp>
 
@@ -8,7 +10,6 @@
 
 #include <gua/events.hpp>
 #include <chrono>
-#include <Python.h>
 
 namespace
 {

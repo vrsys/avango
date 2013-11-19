@@ -20,12 +20,26 @@ file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 LINK_DIRECTORIES(${LIB_PATHS}
                  ${PYTHON_LIBRARY_DIRS}
                  ${BOOST_LIBRARY_DIRS}
+                 ${SCHISM_LIBRARY_DIRS}
+                 ${BULLET_LIBRARY_DIRS}
 )
 
 
 ###############################################################################
 # create libraries
 ###############################################################################
+INCLUDE_DIRECTORIES(BEFORE
+  include
+  include/avango/python/
+  ${INCLUDE_PATHS}
+  ${PYTHON_INCLUDE_DIRS}
+  ${SCHISM_INCLUDE_DIRS}
+  ${BULLET_INCLUDE_DIRS}
+  ${JSON_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}/avango-core/include
+  ${CMAKE_SOURCE_DIR}/avango-python/include
+)
+
 ADD_LIBRARY( avango_gua SHARED
     	     ${AVANGO_GUA_SRC}
 )
@@ -45,23 +59,8 @@ COPY_PYTHON_FILES_INTO_DIRECTORY(
     _gua
 )
 
-
 ADD_DEPENDENCIES(avango_gua avango)
 ADD_DEPENDENCIES(_gua avango avango_gua)
-
-INCLUDE_DIRECTORIES(BEFORE
-  include
-  include/avango/python/
-  ${INCLUDE_PATHS}
-  ${PYTHON_INCLUDE_DIRS}
-  ${SCHISM_INCLUDE_DIRS}
-  ${BULLET_INCLUDE_DIRS}
-  ${JSON_INCLUDE_DIRS}
-  ${CMAKE_SOURCE_DIR}/avango-core/include
-  ${CMAKE_SOURCE_DIR}/avango-python/include
-)
-
-MESSAGE(${BULLET_INCLUDE_DIRS})
 
 ###############################################################################
 # set preprocessor configuration
@@ -71,10 +70,10 @@ SET (BUILD_FLAGS
 )
 
 IF (MSVC)
-	SET( BUILD_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY /bigobj ")
+	SET( BUILD_FLAGS "${BUILD_FLAGS} /bigobj ")
 ENDIF (MSVC)
 
-set_target_properties(avango_gua PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
+set_target_properties(avango_gua PROPERTIES COMPILE_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY")
 set_target_properties(avango_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 set_target_properties(_gua PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
@@ -83,7 +82,16 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 ###############################################################################
 # set dependencies
 ###############################################################################
-SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} ${BULLET_LIBRARIES} ${JSON_LIBRARIES} ${ASSIMP_LIBRARIES} avango)
+SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES} 
+                          ${PYTHON_LIBRARIES} 
+                          ${BOOST_LIBRARIES} 
+                          ${BULLET_LIBRARIES} 
+                          ${JSON_LIBRARIES} 
+                          ${ASSIMP_LIBRARIES} 
+                          ${SCHISM_LIBRARIES} 
+                          avango
+                          avango_gua
+)
 
 IF (UNIX)
 	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)	

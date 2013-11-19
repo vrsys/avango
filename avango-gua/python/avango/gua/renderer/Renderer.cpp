@@ -19,8 +19,9 @@ namespace boost
    }
  }
 
-av::Link<av::gua::Renderer> createRenderer (av::gua::Pipeline* pipe) {
-  return av::Link<av::gua::Renderer> (new av::gua::Renderer({pipe}));
+av::Link<av::gua::Renderer> createRenderer(av::gua::Pipeline* pipe) {
+  std::vector<av::gua::Pipeline const*> pipes {pipe};
+  return av::Link<av::gua::Renderer> (new av::gua::Renderer(pipes));
 }
 
 void init_Renderer()

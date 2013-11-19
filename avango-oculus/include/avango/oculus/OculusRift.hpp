@@ -9,6 +9,7 @@
 #include <gua/math/math.hpp>
 #include <avango/FieldContainer.h>
 
+#include <avango/oculus/windows_specific.hpp>
 
 namespace av
 {
@@ -18,7 +19,7 @@ namespace av
 		* Wrapper for ::gua::OculusRift
 		*/
 		
-		class AV_GUA_DLL OculusRift : public av::gua::Window
+    class AV_OCULUS_DLL OculusRift : public av::gua::Window
 		{
 			AV_FC_DECLARE();
 			
@@ -64,8 +65,8 @@ namespace av
 	}
 	
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-	template class AV_GUA_DLL SingleField<Link<oculus::OculusRift> >;
-	template class AV_GUA_DLL MultiField<Link<oculus::OculusRift> >;
+  template class AV_OCULUS_DLL SingleField<Link<oculus::OculusRift> >;
+  template class AV_OCULUS_DLL MultiField<Link<oculus::OculusRift> >;
 #endif
 }
 

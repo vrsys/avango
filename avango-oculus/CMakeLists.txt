@@ -43,7 +43,7 @@ ADD_DEPENDENCIES ( avango_oculus avango )
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-LIST(APPEND LIBRARIES avango avango_gua ${GUACAMOLE_OCULUS_LIBRARIES})
+LIST(APPEND LIBRARIES avango avango_script avango_gua ${GUACAMOLE_OCULUS_LIBRARIES})
 
 TARGET_LINK_LIBRARIES( avango_oculus debug ${LIBRARIES} optimized ${LIBRARIES} )
 

@@ -44,7 +44,7 @@ ENDMACRO (request_bullet_search_directories)
 ##############################################################################
 # search
 ##############################################################################
-message("-- checking for BULLET")
+message(STATUS "-- checking for BULLET")
 
 IF (NOT BULLET_INCLUDE_DIRS)
 
@@ -110,7 +110,6 @@ IF (        BULLET_INCLUDE_DIRS
                 PATHS ${_SEARCH_DIR}
                 PATH_SUFFIXES debug release ${BULLET_DYNAMICS_LIB_SUFFIX}
                 NO_DEFAULT_PATH)
-              message(${_SEARCH_DIR})
         IF (_CUR_SEARCH)
             LIST(APPEND _BULLET_FOUND_LIB_DIR ${_SEARCH_DIR})
         ENDIF(_CUR_SEARCH)
@@ -146,6 +145,6 @@ IF ( NOT BULLET_INCLUDE_DIRS OR NOT BULLET_LIBRARY_DIRS )
 ELSE ( NOT BULLET_INCLUDE_DIRS OR NOT BULLET_LIBRARY_DIRS )
     UNSET(BULLET_INCLUDE_SEARCH_DIR CACHE)
     UNSET(BULLET_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching bullet version")
+    MESSAGE(STATUS "--  found matching bullet version")
 ENDIF ( NOT BULLET_INCLUDE_DIRS OR NOT BULLET_LIBRARY_DIRS )
 

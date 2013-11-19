@@ -9,13 +9,8 @@ av::oculus::Init::initClass()
 {
     if (!isTypeInitialized())
     {
-        char** argv;
-        //::gua::init(0, argv);
+	    av::oculus::OculusRift::initClass();
 
-        //av::gua::initFields();
-
-	av::oculus::OculusRift::initClass();
-
-        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::oculus::Init", true);
+      AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::oculus::Init", true);
     }
 }

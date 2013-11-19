@@ -45,7 +45,7 @@ ENDMACRO (request_ovr_search_directories)
 ##############################################################################
 # search
 ##############################################################################
-message("-- checking for OVR")
+message(STATUS "-- checking for OVR")
 
 IF (NOT OVR_INCLUDE_DIRS)
 
@@ -117,5 +117,5 @@ IF ( NOT OVR_INCLUDE_DIRS OR NOT OVR_LIBRARY_DIRS )
 ELSE ( NOT OVR_INCLUDE_DIRS OR NOT OVR_LIBRARY_DIRS ) 
     UNSET(OVR_INCLUDE_SEARCH_DIR CACHE)
     UNSET(OVR_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching Oculus SDK version")
+    MESSAGE(STATUS "--  found matching Oculus SDK version")
 ENDIF ( NOT OVR_INCLUDE_DIRS OR NOT OVR_LIBRARY_DIRS )

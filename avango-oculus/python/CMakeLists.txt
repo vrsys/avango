@@ -1,10 +1,12 @@
 LINK_DIRECTORIES(${LIB_PATHS} ${GUACAMOLE_OCULUS_LIBRARY_DIRS})
 
-ADD_LIBRARY( _oculus SHARED ../src/avango/oculus/OculusRift.cpp ./avango/oculus/OculusRift.cpp ./avango/oculus/OculusRift.hpp ./avango/oculus/_oculus.cpp )
+ADD_LIBRARY( _oculus SHARED ./avango/oculus/OculusRift.cpp ./avango/oculus/OculusRift.hpp ./avango/oculus/_oculus.cpp )
 
 ADD_DEPENDENCIES ( _oculus avango_oculus )
 
-set_target_properties( _oculus
+FILE(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/avango/oculus)
+
+SET_TARGET_PROPERTIES( _oculus
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
   ${CMAKE_SOURCE_DIR}/lib/avango/oculus
 )

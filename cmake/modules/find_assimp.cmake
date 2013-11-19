@@ -43,7 +43,7 @@ ENDMACRO (request_assimp_search_directories)
 ##############################################################################
 # check for assimp
 ##############################################################################
-message("-- checking for ASSIMP")
+message(STATUS "-- checking for ASSIMP")
 
 IF (NOT ASSIMP_INCLUDE_DIRS)
 

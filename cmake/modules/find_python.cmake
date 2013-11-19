@@ -47,7 +47,7 @@ ENDMACRO (request_python_search_directories)
 ##############################################################################
 # search
 ##############################################################################
-message("-- checking for PYTHON")
+message(STATUS "-- checking for PYTHON")
 
 IF (NOT PYTHON_INCLUDE_DIRS)
 
@@ -115,5 +115,5 @@ IF ( NOT PYTHON_INCLUDE_DIRS OR NOT PYTHON_LIBRARY_DIRS )
 ELSE ( NOT PYTHON_INCLUDE_DIRS OR NOT PYTHON_LIBRARY_DIRS )
     UNSET(PYTHON_INCLUDE_SEARCH_DIR CACHE)
     UNSET(PYTHON_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching python version")
+    MESSAGE(STATUS "--  found matching python version")
 ENDIF ( NOT PYTHON_INCLUDE_DIRS OR NOT PYTHON_LIBRARY_DIRS )

@@ -31,6 +31,7 @@ void callback() {
   last_func();
 }
 
+/// TODO: Still not thread-safe
 void callOnce(av::gua::Physics& physics, boost::python::object const& function) {
   setLastFunc(function);
 

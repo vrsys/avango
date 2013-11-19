@@ -57,7 +57,7 @@ av::gua::SliderConstraint::initClass()
     {
         av::gua::Constraint::initClass();
 
-        AV_FC_INIT_ABSTRACT(av::gua::Constraint, av::gua::SliderConstraint, true);
+        AV_FC_INIT(av::gua::Constraint, av::gua::SliderConstraint, true);
 
         SFSliderConstraint::initClass("av::gua::SFSliderConstraint", "av::Field");
         MFSliderConstraint::initClass("av::gua::MFSliderConstraint", "av::Field");

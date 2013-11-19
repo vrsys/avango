@@ -15,6 +15,8 @@ COPY_PYTHON_FILES_INTO_DIRECTORY(
 
 ADD_DEPENDENCIES ( _daemon avangoDaemon )
 
+message("#####################" ${LIBRARIES})
+
 #IF (NOT ${LIBRARIES} STREQUAL "")
     TARGET_LINK_LIBRARIES( _daemon debug ${LIBRARIES} avangoDaemon optimized ${LIBRARIES} avangoDaemon)
     SET_TARGET_PROPERTIES( _daemon PROPERTIES PREFIX "")

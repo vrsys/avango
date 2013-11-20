@@ -4,20 +4,22 @@
 SET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
   ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR}
-  /opt/guacamole-oculus/guacamole-oculus-oculus/include
+  ${CMAKE_SOURCE_DIR}/../guacamole/include
+  /opt/guacamole/current/guacamole/include
 )
 
 SET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIRS
   ${GUACAMOLE_OCULUS_LIBRARY_DIRS}
   ${GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR}
-  /opt/guacamole-oculus/guacamole-oculus-oculus/lib
+  ${CMAKE_SOURCE_DIR}/../guacamole-oculus/lib
+  /opt/guacamole/current/guacamole-oculus/lib
 )
 
 ##############################################################################
 # feedback to provide user-defined paths to search for guacamole-oculus
 ##############################################################################
 MACRO (request_guacamole_oculus_search_directories)
-    
+
     IF ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS AND NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
         SET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR "Please provide guacamole-oculus include path." CACHE PATH "path to guacamole-oculus headers.")
         SET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR "Please provide guacamole-oculus library path." CACHE PATH "path to guacamole-oculus libraries.")
@@ -36,7 +38,7 @@ MACRO (request_guacamole_oculus_search_directories)
         MESSAGE(FATAL_ERROR "find_guacamole-oculus.cmake: unable to find guacamole-oculus libraries.")
     ELSE ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
         UNSET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR CACHE)
-    ENDIF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS ) 
+    ENDIF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
 
 ENDMACRO (request_guacamole_oculus_search_directories)
 
@@ -63,7 +65,7 @@ IF ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS )
     IF (NOT _GUACAMOLE_OCULUS_FOUND_INC_DIRS)
         request_guacamole_oculus_search_directories()
     ENDIF (NOT _GUACAMOLE_OCULUS_FOUND_INC_DIRS)
-    
+
     FOREACH(_INC_DIR ${_GUACAMOLE_OCULUS_FOUND_INC_DIRS})
         LIST(APPEND _GUACAMOLE_OCULUS_INCLUDE_DIRS ${_INC_DIR})
     ENDFOREACH(_INC_DIR ${_GUACAMOLE_OCULUS_FOUND_INC_DIRS})
@@ -104,7 +106,7 @@ IF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
     ELSE (NOT _GUACAMOLE_OCULUS_FOUND_LIB_DIR)
 		    SET(GUACAMOLE_OCULUS_LIBRARY_DIRS ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR} CACHE PATH "The guacamole-oculus library directory")
     ENDIF (NOT _GUACAMOLE_OCULUS_FOUND_LIB_DIR)
-    
+
     SET(_GUACAMOLE_OCULUS_LIBRARIES "")
 
     FOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
@@ -114,7 +116,7 @@ IF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
 			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/release/*.lib)
 		    ENDIF(UNIX)
     ENDFOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
-    
+
     IF (_GUACAMOLE_OCULUS_FOUND_LIB_DIR)
         FOREACH (_GUACAMOLE_OCULUS_LIB_PATH ${_GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE})
             GET_FILENAME_COMPONENT(_GUACAMOLE_OCULUS_LIB_FILENAME ${_GUACAMOLE_OCULUS_LIB_PATH} NAME)
@@ -130,7 +132,7 @@ ENDIF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
 ##############################################################################
 IF ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS OR NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
     request_GUACAMOLE_OCULUS_search_directories()
-ELSE ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS OR NOT GUACAMOLE_OCULUS_LIBRARY_DIRS ) 
+ELSE ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS OR NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
     UNSET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR CACHE)
     UNSET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR CACHE)
     SET(GLOBAL_EXT_DIR ${GUACAMOLE_OCULUS_INCLUDE_DIRS}/../externals)

@@ -1,0 +1,55 @@
+
+{
+	"final_shading_stage" : 
+	{
+		"body" : "vec3 diffuse = texture2D(diffuse_map, texcoords).rgb;\ngua_color = diffuse * emit + (1.0 - emit) * diffuse_color *  diffuse + specular_intensity;",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : 
+		{
+			"diffuse_map" : "sampler2D",
+			"emit" : "float"
+		}
+	},
+	"gbuffer_fragment_stage" : 
+	{
+		"body" : "vec3 ts_normal = normalize(texture2D(normal_map, my_texcoords).rgb * 2.0 - 1.0);\n\ngua_normal = normalize( my_tangent * ts_normal.x + my_bitangent * ts_normal.y + my_normal * ts_normal.z);\ntexcoords = my_texcoords;",
+		"functions" : "",
+		"outputs" : 
+		{
+			"texcoords" : "vec2"
+		},
+		"uniforms" : 
+		{
+			"normal_map" : "sampler2D"
+		}
+	},
+	"gbuffer_vertex_stage" : 
+	{
+		"body" : "my_tangent = gua_world_tangent;\nmy_texcoords = gua_texcoords;\nmy_bitangent = gua_world_bitangent;\nmy_normal = gua_world_normal;\n\ngua_position = gua_world_position;",
+		"functions" : "",
+		"outputs" : 
+		{
+			"my_bitangent" : "vec3",
+			"my_normal" : "vec3",
+			"my_tangent" : "vec3",
+			"my_texcoords" : "vec2"
+		},
+		"uniforms" : null
+	},
+	"lbuffer_stage" : 
+	{
+		"body" : "diffuse_color = dot(gua_normal, gua_light_direction) * gua_light_intensity * gua_light_color;\nfloat spec = texture2D(specular_map, texcoords).x;\nspecular_intensity = spec * pow(max(0, dot(reflect(gua_light_direction, gua_normal), normalize(gua_position - gua_camera_position))), shinyness) * gua_light_intensity;",
+		"functions" : "",
+		"outputs" : 
+		{
+			"diffuse_color" : "vec3",
+			"specular_intensity" : "float"
+		},
+		"uniforms" : 
+		{
+			"shinyness" : "float",
+			"specular_map" : "sampler2D"
+		}
+	}
+}

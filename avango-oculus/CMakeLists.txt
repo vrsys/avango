@@ -47,10 +47,15 @@ LIST(APPEND LIBRARIES avango avango_script avango_gua ${GUACAMOLE_OCULUS_LIBRARI
 
 TARGET_LINK_LIBRARIES( avango_oculus debug ${LIBRARIES} optimized ${LIBRARIES} )
 
-
 ###############################################################################
 # python module
 ###############################################################################
 add_subdirectory(python)
 
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(avango_oculus ${AVANGO_INSTALL_DIRECTORY}/avango/avango_oculus.dll)
+ENDIF (MSVC)
 

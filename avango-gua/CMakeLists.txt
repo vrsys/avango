@@ -55,7 +55,7 @@ set_target_properties( _gua
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-gua/lib/avango/gua
-    ${CMAKE_SOURCE_DIR}/lib/avango/gua
+    ${AVANGO_INSTALL_DIRECTORY}/avango/gua
     _gua
 )
 
@@ -116,6 +116,16 @@ SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 IF (UNIX)
 	SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)
 ENDIF (UNIX)
+
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/avango_gua.dll)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/avango/gua/_gua.pyd)
+ENDIF (MSVC)
+
+
 
 ###############################################################################
 # targets for unittesting

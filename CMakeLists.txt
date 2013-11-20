@@ -107,14 +107,16 @@ SET (AVANGO_ZMQ_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to use ZMQ for dist
 SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
-SET (OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
+SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Install path for avango.")
+
+SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 
 ################################################################
 # Create libraries
 ################################################################
-
-FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/avango)
+FILE(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
+FILE(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/lib)
+FILE(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/lib/avango)
 
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
@@ -124,9 +126,9 @@ ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
 ADD_SUBDIRECTORY(avango-daemon)
 
-IF (OCULUS_RIFT_SUPPORT)
+IF (AVANGO_OCULUS_RIFT_SUPPORT)
     ADD_SUBDIRECTORY(avango-oculus)
-ENDIF(OCULUS_RIFT_SUPPORT)
+ENDIF(AVANGO_OCULUS_RIFT_SUPPORT)
 
 ################################################################
 # Summary
@@ -147,13 +149,13 @@ message(STATUS "   library path: ${GUACAMOLE_LIBRARY_DIRS}" )
 message(STATUS "   include: ${GUACAMOLE_INCLUDE_DIRS}" )
 message(STATUS "" )
 
-IF (OCULUS_RIFT_SUPPORT)
+IF ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS " guacamole-oculus:" )
   message(STATUS "   library: ${GUACAMOLE_OCULUS_LIBRARIES}" )
   message(STATUS "   library path: ${GUACAMOLE_OCULUS_LIBRARY_DIRS}" )
   message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
   message(STATUS "" )
-ENDIF (OCULUS_RIFT_SUPPORT)
+ENDIF ( AVANGO_OCULUS_RIFT_SUPPORT )
 
 message(STATUS " schism:" )
 message(STATUS "   library: ${SCHISM_LIBRARIES}" )

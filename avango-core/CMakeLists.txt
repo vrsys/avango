@@ -82,10 +82,7 @@ ENDIF (MSVC)
 set_target_properties(avango PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 set_target_properties(avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
-#IF (NOT ${LIBRARIES} STREQUAL "")
-  #TARGET_LINK_LIBRARIES( avango debug ${LIBRARIES} boost_thread boost_signals boost_python optimized ${LIBRARIES} boost_thread boost_signals boost_python)
-    TARGET_LINK_LIBRARIES( avango debug ${LIBRARIES} optimized ${LIBRARIES} )
-#ENDIF (NOT ${LIBRARIES} STREQUAL "")
+TARGET_LINK_LIBRARIES( avango debug ${LIBRARIES} optimized ${LIBRARIES} )
 
 ###############################################################################
 # targets for unittesting
@@ -98,3 +95,10 @@ IF (AVANGO_UNITTESTS)
   add_subdirectory(src/avango/network/tests)
   add_subdirectory(src/avango/logging/tests)
 ENDIF (AVANGO_UNITTESTS)
+
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(avango ${AVANGO_INSTALL_DIRECTORY}/avango/avango.dll)
+ENDIF (MSVC)

@@ -66,7 +66,7 @@ set_target_properties( _script
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-python/src/avango/script
-    ${CMAKE_SOURCE_DIR}/lib/avango/script
+    ${AVANGO_INSTALL_DIRECTORY}/avango/script
     _script
 )
 
@@ -81,6 +81,14 @@ INCLUDE_DIRECTORIES(BEFORE
   ${PYTHON_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/avango-core/include
 )
+
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/avango/_script.pyd)
+  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/avango/_avango.pyd)
+ENDIF (MSVC)
 
 ###############################################################################
 # set preprocessor configuration

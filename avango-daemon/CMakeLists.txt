@@ -130,4 +130,10 @@ set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ###############################################################################
 add_subdirectory(python)
 
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(avango_daemon ${AVANGO_INSTALL_DIRECTORY}/avango/avango_daemon.dll)
+ENDIF (MSVC)
 

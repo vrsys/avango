@@ -16,4 +16,9 @@ TARGET_LINK_LIBRARIES( _oculus debug ${LIBRARIES} optimized ${LIBRARIES})
 
 SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
 
-
+###############################################################################
+# rename libaries in windows
+###############################################################################
+IF (MSVC)
+  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/avango/oculus/_oculus.pyd)
+ENDIF (MSVC)

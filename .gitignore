@@ -11,3 +11,17 @@
 *.lai
 *.la
 *.a
+
+# Temporary files
+*~
+.nfs*
+
+# build directory
+lib
+
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+CMakeFiles
+
+*.pyc

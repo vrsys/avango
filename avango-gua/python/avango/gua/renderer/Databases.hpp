@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_DATABASES_HPP
+#define AV_PYTHON_GUA_DATABASES_HPP
+
+void init_Databases();
+
+#endif //AV_PYTHON_GUA_DATABASES_HPP

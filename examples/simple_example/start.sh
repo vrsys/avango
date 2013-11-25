@@ -1,19 +1,39 @@
 #!/bin/bash
 
-#avango + python
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/avango/vr_application_lib:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/avango/current/lib:/opt/zmq/current/lib
-export PYTHONPATH=$PYTHONPATH:/opt/avango/vr_application_lib/:/opt/avango/current/lib/python2.7
+# get directory of script
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+# assuming a local guacmole version is located properly
+LOCAL_GUACAMOLE="$DIR/../../../guacamole"
+LOCAL_AVANGO="$DIR/../../../avango"
+
+# if not, this path will be used
+GUACAMOLE=/opt/guacamole/current/guacamole
+AVANGO=/opt/guacamole/current/avango
+
+# third party libs
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib
+
+# schism
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
+
+# avango
+export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
+export PYTHONPATH="$LOCAL_AVANGO/lib":"$LOCAL_AVANGO/examples":$AVANGO/lib:$AVANGO/examples:$PYTHONPATH
 
 # guacamole
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/guacamole/guacamole/lib:/opt/guacamole/avango-gua/lib/avango
-export PYTHONPATH=$PYTHONPATH:/opt/guacamole/avango-gua/lib:/opt/guacamole/avango-gua/examples
+export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
+# run daemon
+if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
+then
+    "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
+else
+    "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
+fi
 
-/opt/guacamole/avango-gua/examples/examples_common/daemon.py > /dev/null &
+# run program
+cd "$DIR" && ./main.py
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-cd $DIR
-
-./main.py
-
+# kill daemon
 kill %1

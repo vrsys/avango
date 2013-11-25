@@ -175,6 +175,23 @@ void setTranslate2(::gua::math::mat4& mat,
   mat[14] = z;
 }
 
+::gua::math::vec3 const getScale(::gua::math::mat4 const& mat) {
+    ::gua::math::vec3 x_vec(mat[0], mat[1], mat[2]);
+    ::gua::math::vec3 y_vec(mat[4], mat[5], mat[6]);
+    ::gua::math::vec3 z_vec(mat[8], mat[9], mat[10]);
+    return ::gua::math::vec3(scm::math::length(x_vec), scm::math::length(y_vec), scm::math::length(z_vec));
+}
+
+::gua::math::quat const getRotate1(::gua::math::mat4 const& mat) {
+  return ::gua::math::quat::from_matrix(mat);
+}
+
+::gua::math::quat const getRotate2(::gua::math::mat4 const& mat) {
+  ::gua::math::vec3 scale(getScale(mat));
+  auto un_scaled_mat(scm::math::make_scale(1.0f/scale.x, 1.0f/scale.y, 1.0f/scale.z) * mat);
+  return ::gua::math::quat::from_matrix(un_scaled_mat);
+}
+
 void init_Mat4() {
   void (*translate1)( ::gua::math::mat4&, ::gua::math::vec3 const&) =
       &scm::math::translate;
@@ -234,6 +251,9 @@ void init_Mat4() {
     .def("get_translate", getTranslate)
     .def("set_translate", setTranslate1)
     .def("set_translate", setTranslate2)
+    .def("get_rotate", getRotate1)
+    .def("get_rotate_scale_corrected", getRotate2)
+    .def("get_scale", getScale)
     .def("__repr__", &toString< ::gua::math::mat4>)
   ;
 
@@ -283,7 +303,33 @@ void init_Mat4() {
   def("make_inverse_mat", inverse);
 }
 
+void normalizeQuat(::gua::math::quat& quat) {
+  quat = scm::math::normalize(quat);
+}
+
+void conjugateQuat(::gua::math::quat& quat) {
+  quat = scm::math::conjugate(quat);
+}
+
+::gua::math::quat::value_type retrieveQuatAngle(::gua::math::quat const& quat) {
+    ::gua::math::quat::value_type angle;
+    ::gua::math::vec3 axis;
+    quat.retrieve_axis_angle(angle, axis);
+    return angle;
+}
+
+::gua::math::vec3 retrieveQuatAxis(::gua::math::quat const& quat) {
+    ::gua::math::quat::value_type angle;
+    ::gua::math::vec3 axis;
+    quat.retrieve_axis_angle(angle, axis);
+    return axis;
+}
+
 void init_Quat() {
+
+  ::gua::math::quat::value_type const (*magnitude)( ::gua::math::quat const&) =
+      &scm::math::magnitude;
+
   class_< ::gua::math::quat>("Quat", no_init)
     .def("__init__", make_constructor(&constructorQuat< ::gua::math::quat>))
     .def(init< ::gua::math::quat::value_type,
@@ -293,6 +339,17 @@ void init_Quat() {
     .def(init< ::gua::math::quat::value_type, ::gua::math::vec3>())
     .def(init< ::gua::math::quat>())
     .def(self == other< ::gua::math::quat>())
+    .def_readwrite("x", & ::gua::math::quat::x)
+    .def_readwrite("y", & ::gua::math::quat::y)
+    .def_readwrite("z", & ::gua::math::quat::z)
+    .def_readwrite("w", & ::gua::math::quat::w)
+    .def("lerp_to", &lerpTo< ::gua::math::quat>)
+    .def("slerp_to", &slerpTo< ::gua::math::quat>)
+    .def("magnitude", magnitude)
+    .def("normalize", &normalizeQuat)
+    .def("conjugate", &conjugateQuat)
+    .def("get_angle", &retrieveQuatAngle)
+    .def("get_axis", &retrieveQuatAxis)
     .def("__repr__", &toString< ::gua::math::quat>)
   ;
 
@@ -300,28 +357,4 @@ void init_Quat() {
   register_field<av::gua::SFQuat>("SFQuat");
   register_multifield<av::gua::MFQuat>("MFQuat");
 
-  ::gua::math::quat const (*normalize)( ::gua::math::quat const&) =
-      &scm::math::normalize;
-
-  def("quat_normalize", normalize);
-
-  ::gua::math::quat const (*conjugate)( ::gua::math::quat const&) =
-      &scm::math::conjugate;
-
-  def("quat_conjugate", conjugate);
-
-  ::gua::math::quat::value_type const (*magnitude)( ::gua::math::quat const&) =
-      &scm::math::magnitude;
-
-  def("quat_magnitude", magnitude);
-
-  ::gua::math::quat const (*lerp)( ::gua::math::quat const&, ::gua::math::quat const&, const ::gua::math::quat::value_type) =
-      &scm::math::lerp;
-
-  def("quat_lerp", lerp);
-
-  ::gua::math::quat const (*slerp)( ::gua::math::quat const&, ::gua::math::quat const&, const ::gua::math::quat::value_type) =
-      &scm::math::slerp;
-
-  def("quat_slerp", slerp);
 }

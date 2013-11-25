@@ -12,8 +12,7 @@ template <class T> typename T::value_type getVecElement(T* self, int index) {
   return (*self)[index];
 }
 
-// helper functions to get and set x, y, z, w properties on Vec2, Vec3, Vec4, 
-// Quat
+// helper functions to get and set x, y, z, w properties on Vec2, Vec3, Vec4,
 template <class T> typename T::value_type getX(T* self) { return (*self)[0]; }
 template <class T> typename T::value_type getY(T* self) { return (*self)[1]; }
 template <class T> typename T::value_type getZ(T* self) { return (*self)[2]; }
@@ -49,6 +48,10 @@ template <class T> typename T::value_type distanceTo (T* self, T* other) {
 
 template <class T> T lerpTo      (T* self, T* other, typename T::value_type a) {
   return scm::math::lerp(*self, *other, a);
+}
+
+template <class T> T slerpTo     (T* self, T* other, typename T::value_type a) {
+  return scm::math::slerp(*self, *other, a);
 }
 
 template <class T> typename T::value_type normalize(T* self) {

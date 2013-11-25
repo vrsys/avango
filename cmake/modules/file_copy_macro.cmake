@@ -1,3 +1,4 @@
+
 # copies in_file to out_file for target
 MACRO(COPY_FILE in_file out_file target)
     IF(${in_file} IS_NEWER_THAN ${out_file})
@@ -56,11 +57,20 @@ MACRO ( post_build_install_target cmake_target out_file )
   FILE ( TO_NATIVE_PATH ${_TARGET_DIRECTORY} _TARGET_DIRECTORY )
   FILE ( TO_NATIVE_PATH ${out_file} _TARGET_PATH )
 
-  ADD_CUSTOM_COMMAND(TARGET ${cmake_target}
-                     POST_BUILD 
-                     COMMAND IF exist ${_TARGET_DIRECTORY} (copy /Y ${_SOURCE_PATH} ${_TARGET_PATH}) ELSE ( mkdir ${_TARGET_DIRECTORY} && copy /Y ${_SOURCE_PATH} ${_TARGET_PATH})
-                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  )
+  IF (WIN32)
+    ADD_CUSTOM_COMMAND(TARGET ${cmake_target}
+                       POST_BUILD
+                       COMMAND IF exist ${_TARGET_DIRECTORY} ( copy /Y ${_SOURCE_PATH} ${_TARGET_PATH}) ELSE ( mkdir ${_TARGET_DIRECTORY} &&  copy /Y ${_SOURCE_PATH} ${_TARGET_PATH})
+                       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
+  ELSEIF (UNIX)
+    ADD_CUSTOM_COMMAND(TARGET ${cmake_target}
+                       POST_BUILD
+                       COMMAND mkdir -p ${_TARGET_DIRECTORY}
+                       COMMAND cp ${_SOURCE_PATH} ${_TARGET_PATH}
+                       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    )
+  ENDIF (WIN32)
 
 ENDMACRO (post_build_install_target cmake_target out_file)
 

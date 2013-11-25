@@ -48,10 +48,6 @@
 
 #include "viewer/Viewer.hpp"
 
-#include "tools/TargetHolders.hpp"
-#include "tools/Selectors.hpp"
-#include "tools/Tools.hpp"
-
 #include "utils/Color.hpp"
 
 using namespace boost::python;
@@ -125,9 +121,4 @@ BOOST_PYTHON_MODULE(_gua)
     init_Texture();
 
     init_Viewer();
-
-    init_TargetHolders();
-    init_Selectors();
-    init_Tools();
-
 }

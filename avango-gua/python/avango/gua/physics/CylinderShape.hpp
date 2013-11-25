@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_CYLINDER_SHAPE_HPP
+#define AV_PYTHON_GUA_CYLINDER_SHAPE_HPP
+
+void init_CylinderShape();
+
+#endif //AV_PYTHON_GUA_CYLINDER_SHAPE_HPP

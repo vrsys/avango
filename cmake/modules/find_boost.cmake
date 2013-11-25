@@ -60,7 +60,7 @@ ENDMACRO (request_boost_search_directories)
 # start search
 ##############################################################################
 
-message("-- checking for BOOST")
+message(STATUS "-- checking for BOOST")
 
 IF ( NOT BOOST_INCLUDE_DIRS )
 
@@ -203,5 +203,5 @@ IF ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS )
 ELSE ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS ) 
     UNSET(BOOST_INCLUDE_SEARCH_DIR CACHE)
     UNSET(BOOST_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching boost version")
+    MESSAGE(STATUS "--  found matching boost version")
 ENDIF ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS )

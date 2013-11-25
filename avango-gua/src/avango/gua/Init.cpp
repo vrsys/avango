@@ -36,6 +36,7 @@
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 #include <avango/gua/renderer/Camera.hpp>
+
 #include <avango/gua/viewer/Viewer.hpp>
 
 #include <avango/gua/tools/TargetHolder.hpp>

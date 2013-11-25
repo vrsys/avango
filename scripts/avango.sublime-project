@@ -11,7 +11,7 @@
 	"build_systems":
 	[
 	  {
-	    "name": "avango-gua",
+	    "name": "guacamole-project",
 	    "file_regex": "^(..[^:]*):(.*)$",
 	    "working_dir": "${project_path}/..",
 	    "cmd":  ["./scripts/make.sh"]

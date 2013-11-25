@@ -34,15 +34,17 @@ if (UNIX)
 endif (UNIX)
 
 include(find_compiler)
+include(file_copy_macro)
 
 include(find_guacamole)
 SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
-include(find_schism)
+include(find_assimp)
 include(find_boost)
-include(find_python)
 include(find_bullet)
 include(find_json)
+include(find_python)
+include(find_schism)
 
 if (UNIX)
     list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
@@ -56,7 +58,7 @@ set(LIBRARIES
 )
 
 set(LIB_PATHS
-	  ${BOOST_LIBRARY_DIRS}
+    ${BOOST_LIBRARY_DIRS}
     ${GUACAMOLE_LIBRARY_DIRS}
     ${GL_LIBRARY_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
@@ -105,12 +107,15 @@ SET (AVANGO_ZMQ_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to use ZMQ for dist
 SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
+SET (OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 
 ################################################################
 # Create libraries
 ################################################################
 
 FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+FILE(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib/avango)
+
 SET(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 ADD_SUBDIRECTORY(avango-unittest)
@@ -119,36 +124,64 @@ ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
 ADD_SUBDIRECTORY(avango-daemon)
 
+IF (OCULUS_RIFT_SUPPORT)
+    ADD_SUBDIRECTORY(avango-oculus)
+ENDIF(OCULUS_RIFT_SUPPORT)
+
 ################################################################
 # Summary
 ################################################################
 
-message( "" )
-message( "Summary:" )
-message( " build type: ${CMAKE_BUILD_TYPE}" )
-message( "" )
-message( " boost:" )
-message( "   library: ${BOOST_LIBRARIES}" )
-message( "   library path: ${BOOST_LIBRARY_DIRS}" )
-message( "   include: ${BOOST_INCLUDE_DIRS}" )
-message( "" )
-message( " guacamole:" )
-message( "   library: ${GUACAMOLE_LIBRARIES}" )
-message( "   library path: ${GUACAMOLE_LIBRARY_DIRS}" )
-message( "   include: ${GUACAMOLE_INCLUDE_DIRS}" )
-message( "" )
-message( " schism:" )
-message( "   library: ${SCHISM_LIBRARIES}" )
-message( "   library path: ${SCHISM_LIBRARY_DIRS}" )
-message( "   include: ${SCHISM_INCLUDE_DIRS}" )
-message( "" )
-message( " python:" )
-message( "   library: ${PYTHON_LIBRARIES}" )
-message( "   library path: ${PYTHON_LIBRARY_DIRS}" )
-message( "   include: ${PYTHON_INCLUDE_DIRS}" )
-message( "" )
-message( " gl:" )
-message( "   library: ${GL_LIBRARIES}" )
-message( "   include: ${GL_INCLUDE_DIRS}" )
-message( "" )
+message(STATUS "" )
+message(STATUS "Summary:" )
+message(STATUS " build type: ${CMAKE_BUILD_TYPE}" )
+message(STATUS "" )
+message(STATUS " boost:" )
+message(STATUS "   library: ${BOOST_LIBRARIES}" )
+message(STATUS "   library path: ${BOOST_LIBRARY_DIRS}" )
+message(STATUS "   include: ${BOOST_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " guacamole:" )
+message(STATUS "   library: ${GUACAMOLE_LIBRARIES}" )
+message(STATUS "   library path: ${GUACAMOLE_LIBRARY_DIRS}" )
+message(STATUS "   include: ${GUACAMOLE_INCLUDE_DIRS}" )
+message(STATUS "" )
+
+IF (OCULUS_RIFT_SUPPORT)
+  message(STATUS " guacamole-oculus:" )
+  message(STATUS "   library: ${GUACAMOLE_OCULUS_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_OCULUS_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
+  message(STATUS "" )
+ENDIF (OCULUS_RIFT_SUPPORT)
+
+message(STATUS " schism:" )
+message(STATUS "   library: ${SCHISM_LIBRARIES}" )
+message(STATUS "   library path: ${SCHISM_LIBRARY_DIRS}" )
+message(STATUS "   include: ${SCHISM_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " python:" )
+message(STATUS "   library: ${PYTHON_LIBRARIES}" )
+message(STATUS "   library path: ${PYTHON_LIBRARY_DIRS}" )
+message(STATUS "   include: ${PYTHON_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " gl:" )
+message(STATUS "   library: ${GL_LIBRARIES}" )
+message(STATUS "   include: ${GL_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " bullet:" )
+message(STATUS "   library: ${BULLET_LIBRARIES}" )
+message(STATUS "   library path: ${BULLET_LIBRARY_DIRS}" )
+message(STATUS "   include: ${BULLET_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " json:" )
+message(STATUS "   library: ${JSON_LIBRARIES}" )
+message(STATUS "   library path: ${JSON_LIBRARY_DIRS}" )
+message(STATUS "   include: ${JSON_INCLUDE_DIRS}" )
+message(STATUS "" )
+message(STATUS " assimp:" )
+message(STATUS "   library: ${ASSIMP_LIBRARIES}" )
+message(STATUS "   library path: ${ASSIMP_LIBRARY_DIRS}" )
+message(STATUS "   include: ${ASSIMP_INCLUDE_DIRS}" )
+message(STATUS "" )
 

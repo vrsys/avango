@@ -56,6 +56,9 @@ av::gua::RigidBodyNode::RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBody
 
     AV_FC_ADD_FIELD        (Group, static_cast<int>(RigidBodyNode::CollisionFilterGroups::STATIC_FILTER));
     AV_FC_ADD_FIELD        (Mask,  static_cast<int>(RigidBodyNode::CollisionFilterGroups::ALL_FILTER) ^ static_cast<int>(RigidBodyNode::CollisionFilterGroups::STATIC_FILTER));
+
+    Group.setValue(static_cast<int>(CollisionFilterGroups::NONE));
+    Mask.setValue(static_cast<int>(CollisionFilterGroups::NONE));
 }
 
 av::gua::RigidBodyNode::~RigidBodyNode()

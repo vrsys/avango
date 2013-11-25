@@ -47,7 +47,7 @@ av::gua::FixedConstraint::initClass()
     {
         av::gua::Constraint::initClass();
 
-        AV_FC_INIT_ABSTRACT(av::gua::Constraint, av::gua::FixedConstraint, true);
+        AV_FC_INIT(av::gua::Constraint, av::gua::FixedConstraint, true);
 
         SFFixedConstraint::initClass("av::gua::SFFixedConstraint", "av::Field");
         MFFixedConstraint::initClass("av::gua::MFFixedConstraint", "av::Field");

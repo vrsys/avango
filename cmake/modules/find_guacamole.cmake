@@ -4,13 +4,15 @@
 SET(GUACAMOLE_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_INCLUDE_DIRS}
   ${GUACAMOLE_INCLUDE_SEARCH_DIR}
-  /opt/guacamole/current  
+  ${CMAKE_SOURCE_DIR}/../guacamole/include
+  /opt/guacamole/current/guacamole/include
 )
 
 SET(GUACAMOLE_LIBRARY_SEARCH_DIRS
   ${GUACAMOLE_LIBRARY_DIRS}
   ${GUACAMOLE_LIBRARY_SEARCH_DIR}
-  /opt/guacamole/current/lib/linux_x86
+  ${CMAKE_SOURCE_DIR}/../guacamole/lib
+  /opt/guacamole/current/guacamole/lib
 )
 
 ##############################################################################
@@ -43,7 +45,7 @@ ENDMACRO (request_guacamole_search_directories)
 ##############################################################################
 # search
 ##############################################################################
-message("-- checking for guacamole")
+message(STATUS "-- checking for guacamole")
 
 IF ( NOT GUACAMOLE_INCLUDE_DIRS )
 
@@ -109,18 +111,17 @@ IF ( NOT GUACAMOLE_LIBRARY_DIRS )
 
     FOREACH(_LIB_DIR ${_GUACAMOLE_FOUND_LIB_DIR})
 		    IF (UNIX)
-			    file(GLOB GUACAMOLE_LIBRARIES ${_LIB_DIR}/*.so)
+			    file(GLOB_RECURSE _GUACAMOLE_LIBRARIES_ABSOLUTE ${_LIB_DIR}/*.so)
 		    ELSEIF(WIN32)
-			    file(GLOB _GUACAMOLE_LIBRARY_ABSOLUTE_PATHS ${_LIB_DIR}/release/*.lib)	
-			    FOREACH (_GUACAMOLE_LIB_PATH ${_GUACAMOLE_LIBRARY_ABSOLUTE_PATHS})
-				    SET(_GUACAMOLE_LIB_FILENAME, "")
-				    GET_FILENAME_COMPONENT(_GUACAMOLE_LIB_FILENAME ${_GUACAMOLE_LIB_PATH} NAME)
-				    LIST(APPEND _GUACAMOLE_LIBRARIES ${_GUACAMOLE_LIB_FILENAME})
-			    ENDFOREACH(_GUACAMOLE_LIB_PATH)
+			    file(GLOB_RECURSE _GUACAMOLE_LIBRARIES_ABSOLUTE ${_LIB_DIR}/*.lib)
 		    ENDIF(UNIX)
     ENDFOREACH(_LIB_DIR ${_GUACAMOLE_FOUND_LIB_DIR})
     
     IF (_GUACAMOLE_FOUND_LIB_DIR)
+        FOREACH (_GUACAMOLE_LIB_PATH ${_GUACAMOLE_LIBRARIES_ABSOLUTE})
+            GET_FILENAME_COMPONENT(_GUACAMOLE_LIB_FILENAME ${_GUACAMOLE_LIB_PATH} NAME)
+            LIST(APPEND _GUACAMOLE_LIBRARIES ${_GUACAMOLE_LIB_FILENAME})
+        ENDFOREACH(_GUACAMOLE_LIB_PATH)
         SET(GUACAMOLE_LIBRARIES ${_GUACAMOLE_LIBRARIES} CACHE STRING "guacamole libraries")
     ENDIF (_GUACAMOLE_FOUND_LIB_DIR)
 
@@ -134,6 +135,7 @@ IF ( NOT GUACAMOLE_INCLUDE_DIRS OR NOT GUACAMOLE_LIBRARY_DIRS )
 ELSE ( NOT GUACAMOLE_INCLUDE_DIRS OR NOT GUACAMOLE_LIBRARY_DIRS ) 
     UNSET(GUACAMOLE_INCLUDE_SEARCH_DIR CACHE)
     UNSET(GUACAMOLE_LIBRARY_SEARCH_DIR CACHE)
-    MESSAGE("--  found matching guacamole version")
+    SET(GLOBAL_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
+    MESSAGE(STATUS "--  found matching guacamole version")
 ENDIF ( NOT GUACAMOLE_INCLUDE_DIRS OR NOT GUACAMOLE_LIBRARY_DIRS )
 

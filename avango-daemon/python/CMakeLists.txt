@@ -1,11 +1,26 @@
-LINK_DIRECTORIES(${LIB_PATHS})
+
+LINK_DIRECTORIES(
+    ${LIB_PATHS}
+    ${BULLET_LIBRARY_DIRS}
+)
 
 ADD_LIBRARY( _daemon SHARED "_daemon.cpp" )
 
-ADD_DEPENDENCIES ( _daemon avangoDaemon )
+set_target_properties( _daemon
+  PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+  ${CMAKE_SOURCE_DIR}/lib/avango/daemon
+)
+
+COPY_PYTHON_FILES_INTO_DIRECTORY(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/lib/avango/daemon
+    _daemon
+)
+
+ADD_DEPENDENCIES ( _daemon avango_daemon )
 
 #IF (NOT ${LIBRARIES} STREQUAL "")
-    TARGET_LINK_LIBRARIES( _daemon debug ${LIBRARIES} avangoDaemon optimized ${LIBRARIES} avangoDaemon)
+    TARGET_LINK_LIBRARIES( _daemon debug ${LIBRARIES} avango_daemon optimized ${LIBRARIES} avango_daemon)
     SET_TARGET_PROPERTIES( _daemon PROPERTIES PREFIX "")
 #ENDIF (NOT ${LIBRARIES} STREQUAL "")
 

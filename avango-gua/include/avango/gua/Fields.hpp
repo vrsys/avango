@@ -6,11 +6,12 @@
  * \ingroup av_gua
  */
 
-//#include <avango/gua/Types.hpp>
+#include <avango/gua/Types.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
 #include <avango/SingleField.h>
 #include <avango/MultiField.h>
 #include <gua/utils/Color3f.hpp>
+#include <gua/math.hpp>
 
 namespace av
 {

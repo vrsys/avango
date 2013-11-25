@@ -53,12 +53,6 @@ set_target_properties( _gua
   ${CMAKE_SOURCE_DIR}/lib/avango/gua
 )
 
-COPY_PYTHON_FILES_INTO_DIRECTORY(
-    ${CMAKE_SOURCE_DIR}/avango-gua/lib/avango/gua
-    ${AVANGO_INSTALL_DIRECTORY}/avango/gua
-    _gua
-)
-
 ADD_DEPENDENCIES(avango_gua avango)
 ADD_DEPENDENCIES(_gua avango avango_gua)
 
@@ -118,14 +112,21 @@ IF (UNIX)
 ENDIF (UNIX)
 
 ###############################################################################
-# rename libaries in windows
+# install modules
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/avango_gua.dll)
   post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/avango/gua/_gua.pyd)
+ELSEIF (UNIX)
+  post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_gua.so)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/avango/gua/_gua.so)
 ENDIF (MSVC)
 
-
+COPY_PYTHON_FILES_INTO_DIRECTORY(
+    ${CMAKE_SOURCE_DIR}/avango-gua/lib/avango/gua
+    ${AVANGO_INSTALL_DIRECTORY}/avango/gua
+    _gua
+)
 
 ###############################################################################
 # targets for unittesting

@@ -119,11 +119,9 @@ ENDIF (MSVC)
 
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 
-#IF (NOT ${LIBRARIES} STREQUAL "")
-  TARGET_LINK_LIBRARIES( avango_daemon
-    debug avango_gua avango_script avango ${LIBRARIES}
-    optimized avango_gua avango_script avango ${LIBRARIES})
-#ENDIF (NOT ${LIBRARIES} STREQUAL "")
+TARGET_LINK_LIBRARIES( avango_daemon
+  debug avango_gua avango_script avango ${LIBRARIES}
+  optimized avango_gua avango_script avango ${LIBRARIES})
 
 ###############################################################################
 # python module
@@ -135,5 +133,7 @@ add_subdirectory(python)
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango_daemon ${AVANGO_INSTALL_DIRECTORY}/avango/avango_daemon.dll)
+ELSEIF (UNIX)
+  post_build_install_target(avango_daemon ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_daemon.so)
 ENDIF (MSVC)
 

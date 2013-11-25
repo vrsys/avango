@@ -101,4 +101,6 @@ ENDIF (AVANGO_UNITTESTS)
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango ${AVANGO_INSTALL_DIRECTORY}/avango/avango.dll)
+ELSEIF (UNIX)
+  post_build_install_target(avango ${AVANGO_INSTALL_DIRECTORY}/avango/libavango.so)
 ENDIF (MSVC)

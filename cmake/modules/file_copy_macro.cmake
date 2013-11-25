@@ -55,7 +55,7 @@ MACRO ( post_build_install_target cmake_target out_file )
 
   FILE ( TO_NATIVE_PATH ${_TARGET_DIRECTORY} _TARGET_DIRECTORY )
   FILE ( TO_NATIVE_PATH ${out_file} _TARGET_PATH )
-  
+
   ADD_CUSTOM_COMMAND(TARGET ${cmake_target}
                      POST_BUILD 
                      COMMAND IF exist ${_TARGET_DIRECTORY} (copy /Y ${_SOURCE_PATH} ${_TARGET_PATH}) ELSE ( mkdir ${_TARGET_DIRECTORY} && copy /Y ${_SOURCE_PATH} ${_TARGET_PATH})

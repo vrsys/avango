@@ -1,44 +1,44 @@
-#include <avango/gua/tools/InjectSelector.hpp>
+#include <avango/tools/InjectSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::InjectSelector"));
+  av::Logger& logger(av::getLogger("av::tools::InjectSelector"));
 }
 
-AV_FC_DEFINE(av::gua::InjectSelector);
+AV_FC_DEFINE(av::tools::InjectSelector);
 
-AV_FIELD_DEFINE(av::gua::SFInjectSelector);
-AV_FIELD_DEFINE(av::gua::MFInjectSelector);
+AV_FIELD_DEFINE(av::tools::SFInjectSelector);
+AV_FIELD_DEFINE(av::tools::MFInjectSelector);
 
-av::gua::InjectSelector::InjectSelector()
+av::tools::InjectSelector::InjectSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(InjectTargets, MFTargetHolder::ContainerType());
 }
 
-av::gua::InjectSelector::~InjectSelector()
+av::tools::InjectSelector::~InjectSelector()
 {}
 
 void
-av::gua::InjectSelector::initClass()
+av::tools::InjectSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::InjectSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::InjectSelector, true);
 
-    SFInjectSelector::initClass("av::gua::SFInjectSelector", "av::Field");
-    MFInjectSelector::initClass("av::gua::MFInjectSelector", "av::Field");
+    SFInjectSelector::initClass("av::tools::SFInjectSelector", "av::Field");
+    MFInjectSelector::initClass("av::tools::MFInjectSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::InjectSelector::evaluate()
+av::tools::InjectSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   MFTargetHolder::ContainerType selected_targets = Targets.getValue();
   const MFTargetHolder::ContainerType &inject_targets = InjectTargets.getValue();

@@ -1,45 +1,45 @@
-#include <avango/gua/tools/ObjectSelector.hpp>
+#include <avango/tools/ObjectSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::ObjectSelector"));
+  av::Logger& logger(av::getLogger("av::tools::ObjectSelector"));
 }
 
-AV_FC_DEFINE(av::gua::ObjectSelector);
+AV_FC_DEFINE(av::tools::ObjectSelector);
 
-AV_FIELD_DEFINE(av::gua::SFObjectSelector);
-AV_FIELD_DEFINE(av::gua::MFObjectSelector);
+AV_FIELD_DEFINE(av::tools::SFObjectSelector);
+AV_FIELD_DEFINE(av::tools::MFObjectSelector);
 
-av::gua::ObjectSelector::ObjectSelector()
+av::tools::ObjectSelector::ObjectSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(SelectableObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(SelectableTargets, MFTargetHolder::ContainerType());
 }
 
-av::gua::ObjectSelector::~ObjectSelector()
+av::tools::ObjectSelector::~ObjectSelector()
 {}
 
 void
-av::gua::ObjectSelector::initClass()
+av::tools::ObjectSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::ObjectSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::ObjectSelector, true);
 
-    SFObjectSelector::initClass("av::gua::SFObjectSelector", "av::Field");
-    MFObjectSelector::initClass("av::gua::MFObjectSelector", "av::Field");
+    SFObjectSelector::initClass("av::tools::SFObjectSelector", "av::Field");
+    MFObjectSelector::initClass("av::tools::MFObjectSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::ObjectSelector::evaluate()
+av::tools::ObjectSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
   const MFContainer::ContainerType &sel_objects = SelectableObjects.getValue();

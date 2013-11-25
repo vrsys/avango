@@ -1,5 +1,5 @@
-#ifndef AVANGO_GUA_TOOL_HPP
-#define AVANGO_GUA_TOOL_HPP
+#ifndef AVANGO_TOOLS_TOOL_HPP
+#define AVANGO_TOOLS_TOOL_HPP
 
 /**
  * \file
@@ -7,20 +7,20 @@
  */
 
 #include <avango/FieldContainer.h>
-#include <avango/gua/tools/TargetHolder.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/TargetHolder.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * Abstract tool base class
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL Tool : public av::FieldContainer
+    class AV_TOOLS_DLL Tool : public av::FieldContainer
     {
       AV_FC_DECLARE_ABSTRACT();
 
@@ -79,10 +79,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link< ::av::gua::Tool> >;
-  template class AV_GUA_DLL MultiField<Link< ::av::gua::Tool> >;
+  template class AV_TOOLS_DLL SingleField<Link< ::av::tools::Tool> >;
+  template class AV_TOOLS_DLL MultiField<Link< ::av::tools::Tool> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_TOOL_HPP
+#endif //AVANGO_TOOLS_TOOL_HPP

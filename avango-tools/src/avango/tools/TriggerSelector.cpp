@@ -1,18 +1,18 @@
-#include <avango/gua/tools/TriggerSelector.hpp>
+#include <avango/tools/TriggerSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TriggerSelector"));
+  av::Logger& logger(av::getLogger("av::tools::TriggerSelector"));
 }
 
-AV_FC_DEFINE(av::gua::TriggerSelector);
+AV_FC_DEFINE(av::tools::TriggerSelector);
 
-AV_FIELD_DEFINE(av::gua::SFTriggerSelector);
-AV_FIELD_DEFINE(av::gua::MFTriggerSelector);
+AV_FIELD_DEFINE(av::tools::SFTriggerSelector);
+AV_FIELD_DEFINE(av::tools::MFTriggerSelector);
 
-av::gua::TriggerSelector::TriggerSelector():
+av::tools::TriggerSelector::TriggerSelector():
   mLastTrigger(false)
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
@@ -20,27 +20,27 @@ av::gua::TriggerSelector::TriggerSelector():
   AV_FC_ADD_FIELD(TransitionOnly, false);
 }
 
-av::gua::TriggerSelector::~TriggerSelector()
+av::tools::TriggerSelector::~TriggerSelector()
 {}
 
 void
-av::gua::TriggerSelector::initClass()
+av::tools::TriggerSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::TriggerSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::TriggerSelector, true);
 
-    SFTriggerSelector::initClass("av::gua::SFTriggerSelector", "av::Field");
-    MFTriggerSelector::initClass("av::gua::MFTriggerSelector", "av::Field");
+    SFTriggerSelector::initClass("av::tools::SFTriggerSelector", "av::Field");
+    MFTriggerSelector::initClass("av::tools::MFTriggerSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::TriggerSelector::evaluate()
+av::tools::TriggerSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   if (Trigger.getValue() && (!mLastTrigger || !TransitionOnly.getValue()))
   {

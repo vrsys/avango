@@ -1,44 +1,44 @@
-#include <avango/gua/tools/SingleSelector.hpp>
+#include <avango/tools/SingleSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SingleSelector"));
+  av::Logger& logger(av::getLogger("av::tools::SingleSelector"));
 }
 
-AV_FC_DEFINE(av::gua::SingleSelector);
+AV_FC_DEFINE(av::tools::SingleSelector);
 
-AV_FIELD_DEFINE(av::gua::SFSingleSelector);
-AV_FIELD_DEFINE(av::gua::MFSingleSelector);
+AV_FIELD_DEFINE(av::tools::SFSingleSelector);
+AV_FIELD_DEFINE(av::tools::MFSingleSelector);
 
-av::gua::SingleSelector::SingleSelector()
+av::tools::SingleSelector::SingleSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(LastTarget, false);
 }
 
-av::gua::SingleSelector::~SingleSelector()
+av::tools::SingleSelector::~SingleSelector()
 {}
 
 void
-av::gua::SingleSelector::initClass()
+av::tools::SingleSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::SingleSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::SingleSelector, true);
 
-    SFSingleSelector::initClass("av::gua::SFSingleSelector", "av::Field");
-    MFSingleSelector::initClass("av::gua::MFSingleSelector", "av::Field");
+    SFSingleSelector::initClass("av::tools::SFSingleSelector", "av::Field");
+    MFSingleSelector::initClass("av::tools::MFSingleSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::SingleSelector::evaluate()
+av::tools::SingleSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   if (!Targets.isEmpty())
   {

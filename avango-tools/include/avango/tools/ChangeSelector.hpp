@@ -1,17 +1,17 @@
-#ifndef AVANGO_GUA_CHANGESELECTOR_HPP
-#define AVANGO_GUA_CHANGESELECTOR_HPP
+#ifndef AVANGO_TOOLS_CHANGESELECTOR_HPP
+#define AVANGO_TOOLS_CHANGESELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * ChangeSelector class passes targets which were added since the last evaluate
@@ -19,7 +19,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL ChangeSelector : public Selector
+    class AV_TOOLS_DLL ChangeSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -67,10 +67,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ChangeSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ChangeSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::ChangeSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ChangeSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_CHANGESELECTOR_HPP
+#endif //AVANGO_TOOLS_CHANGESELECTOR_HPP

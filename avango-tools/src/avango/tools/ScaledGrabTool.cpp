@@ -1,4 +1,4 @@
-#include <avango/gua/tools/ScaledGrabTool.hpp>
+#include <avango/tools/ScaledGrabTool.hpp>
 
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/Types.hpp>
@@ -7,40 +7,40 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::ScaledGrabTool"));
+  av::Logger& logger(av::getLogger("av::tools::ScaledGrabTool"));
 }
 
-AV_FC_DEFINE(av::gua::ScaledGrabTool);
+AV_FC_DEFINE(av::tools::ScaledGrabTool);
 
-AV_FIELD_DEFINE(av::gua::SFScaledGrabTool);
-AV_FIELD_DEFINE(av::gua::MFScaledGrabTool);
+AV_FIELD_DEFINE(av::tools::SFScaledGrabTool);
+AV_FIELD_DEFINE(av::tools::MFScaledGrabTool);
 
-av::gua::ScaledGrabTool::ScaledGrabTool() :
+av::tools::ScaledGrabTool::ScaledGrabTool() :
   mScale(1.0)
 {
   AV_FC_ADD_FIELD(DeviceTransform, ::gua::math::mat4::identity());
   AV_FC_ADD_FIELD(HeadTransform, ::gua::math::mat4::identity());
 }
 
-av::gua::ScaledGrabTool::~ScaledGrabTool()
+av::tools::ScaledGrabTool::~ScaledGrabTool()
 {}
 
 void
-av::gua::ScaledGrabTool::initClass()
+av::tools::ScaledGrabTool::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Tool::initClass();
+    av::tools::Tool::initClass();
 
-    AV_FC_INIT(av::gua::Tool, av::gua::ScaledGrabTool, true);
+    AV_FC_INIT(av::tools::Tool, av::tools::ScaledGrabTool, true);
 
-    SFScaledGrabTool::initClass("av::gua::SFScaledGrabTool", "av::Field");
-    MFScaledGrabTool::initClass("av::gua::MFScaledGrabTool", "av::Field");
+    SFScaledGrabTool::initClass("av::tools::SFScaledGrabTool", "av::Field");
+    MFScaledGrabTool::initClass("av::tools::MFScaledGrabTool", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::ScaledGrabTool::evaluateAddedTarget(TargetHolder& holder)
+av::tools::ScaledGrabTool::evaluateAddedTarget(TargetHolder& holder)
 {
   // const SFContainer::ValueType &target_obj = holder.Target.getValue();
 
@@ -106,7 +106,7 @@ av::gua::ScaledGrabTool::evaluateAddedTarget(TargetHolder& holder)
 }
 
 /* virtual */ void
-av::gua::ScaledGrabTool::evaluateKeptTarget(TargetHolder& holder)
+av::tools::ScaledGrabTool::evaluateKeptTarget(TargetHolder& holder)
 {
   // const SFContainer::ValueType &target_obj = holder.Target.getValue();
 

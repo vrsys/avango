@@ -1,42 +1,42 @@
-#include <avango/gua/tools/Tool.hpp>
+#include <avango/tools/Tool.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::Tool"));
+  av::Logger& logger(av::getLogger("av::tools::Tool"));
 }
 
-AV_FC_DEFINE_ABSTRACT(av::gua::Tool);
+AV_FC_DEFINE_ABSTRACT(av::tools::Tool);
 
-AV_FIELD_DEFINE(av::gua::SFTool);
-AV_FIELD_DEFINE(av::gua::MFTool);
+AV_FIELD_DEFINE(av::tools::SFTool);
+AV_FIELD_DEFINE(av::tools::MFTool);
 
-av::gua::Tool::Tool()
+av::tools::Tool::Tool()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
 }
 
-av::gua::Tool::~Tool()
+av::tools::Tool::~Tool()
 {}
 
 void
-av::gua::Tool::initClass()
+av::tools::Tool::initClass()
 {
   if (!isTypeInitialized())
   {
     av::FieldContainer::initClass();
-    av::gua::TargetHolder::initClass();
+    av::tools::TargetHolder::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::gua::Tool, true);
+    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Tool, true);
 
-    SFTool::initClass("av::gua::SFTool", "av::Field");
-    MFTool::initClass("av::gua::MFTool", "av::Field");
+    SFTool::initClass("av::tools::SFTool", "av::Field");
+    MFTool::initClass("av::tools::MFTool", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::Tool::evaluate()
+av::tools::Tool::evaluate()
 {
   av::FieldContainer::evaluate();
 
@@ -62,17 +62,17 @@ av::gua::Tool::evaluate()
 }
 
 /* virtual */ void
-av::gua::Tool::evaluateTarget(TargetHolder&)
+av::tools::Tool::evaluateTarget(TargetHolder&)
 {}
 
 /* virtual */ void
-av::gua::Tool::evaluateAddedTarget(TargetHolder&)
+av::tools::Tool::evaluateAddedTarget(TargetHolder&)
 {}
 
 /* virtual */ void
-av::gua::Tool::evaluateKeptTarget(TargetHolder& holder)
+av::tools::Tool::evaluateKeptTarget(TargetHolder& holder)
 {}
 
 /* virtual */ void
-av::gua::Tool::evaluateRemovedTarget(TargetHolder& holder)
+av::tools::Tool::evaluateRemovedTarget(TargetHolder& holder)
 {}

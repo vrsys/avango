@@ -1,24 +1,24 @@
-#ifndef AVANGO_GUA_FIELDSELECTOR_HPP
-#define AVANGO_GUA_FIELDSELECTOR_HPP
+#ifndef AVANGO_TOOLS_FIELDSELECTOR_HPP
+#define AVANGO_TOOLS_FIELDSELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * FieldSelector class selects targets containing given field.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL FieldSelector : public Selector
+    class AV_TOOLS_DLL FieldSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -76,10 +76,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::FieldSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::FieldSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::FieldSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::FieldSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_FIELDSELECTOR_HPP
+#endif //AVANGO_TOOLS_FIELDSELECTOR_HPP

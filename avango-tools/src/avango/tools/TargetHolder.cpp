@@ -1,18 +1,18 @@
-#include <avango/gua/tools/TargetHolder.hpp>
+#include <avango/tools/TargetHolder.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TargetHolder"));
+  av::Logger& logger(av::getLogger("av::tools::TargetHolder"));
 }
 
-AV_FC_DEFINE(av::gua::TargetHolder);
+AV_FC_DEFINE(av::tools::TargetHolder);
 
-AV_FIELD_DEFINE(av::gua::SFTargetHolder);
-AV_FIELD_DEFINE(av::gua::MFTargetHolder);
+AV_FIELD_DEFINE(av::tools::SFTargetHolder);
+AV_FIELD_DEFINE(av::tools::MFTargetHolder);
 
-av::gua::TargetHolder::TargetHolder()
+av::tools::TargetHolder::TargetHolder()
 {
   AV_FC_ADD_FIELD(Target, 0);
   AV_FC_ADD_FIELD(Creator, 0);
@@ -20,25 +20,25 @@ av::gua::TargetHolder::TargetHolder()
   AV_FC_ADD_FIELD(Keep, false);
 }
 
-av::gua::TargetHolder::~TargetHolder()
+av::tools::TargetHolder::~TargetHolder()
 {}
 
 void
-av::gua::TargetHolder::initClass()
+av::tools::TargetHolder::initClass()
 {
   if (!isTypeInitialized())
   {
     av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::gua::TargetHolder, true);
+    AV_FC_INIT(av::FieldContainer, av::tools::TargetHolder, true);
 
-    SFTargetHolder::initClass("av::gua::SFTargetHolder", "av::Field");
-    MFTargetHolder::initClass("av::gua::MFTargetHolder", "av::Field");
+    SFTargetHolder::initClass("av::tools::SFTargetHolder", "av::Field");
+    MFTargetHolder::initClass("av::tools::MFTargetHolder", "av::Field");
   }
 }
 
-av::gua::TargetHolder::FindList
-av::gua::TargetHolder::find(Type type)
+av::tools::TargetHolder::FindList
+av::tools::TargetHolder::find(Type type)
 {
   FindList found_holders;
   find(type, found_holders);
@@ -46,13 +46,13 @@ av::gua::TargetHolder::find(Type type)
 }
 
 /* virtual */ bool
-av::gua::TargetHolder::keep()
+av::tools::TargetHolder::keep()
 {
   return (Keep.getValue() || !ParentTargets.isEmpty());
 }
 
 void
-av::gua::TargetHolder::find(Type type, FindList& foundHolders)
+av::tools::TargetHolder::find(Type type, FindList& foundHolders)
 {
   if (getTypeId().isOfType(type))
     foundHolders.push_back(this);

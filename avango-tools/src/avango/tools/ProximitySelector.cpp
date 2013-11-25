@@ -1,11 +1,11 @@
-#include <avango/gua/tools/ProximitySelector.hpp>
+#include <avango/tools/ProximitySelector.hpp>
 #include <avango/gua/Types.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::ProximitySelector"));
+  av::Logger& logger(av::getLogger("av::tools::ProximitySelector"));
 
   float
   distance(::gua::math::vec3 const& pos1, ::gua::math::vec3 const& pos2)
@@ -14,12 +14,12 @@ namespace
   }
 }
 
-AV_FC_DEFINE(av::gua::ProximitySelector);
+AV_FC_DEFINE(av::tools::ProximitySelector);
 
-AV_FIELD_DEFINE(av::gua::SFProximitySelector);
-AV_FIELD_DEFINE(av::gua::MFProximitySelector);
+AV_FIELD_DEFINE(av::tools::SFProximitySelector);
+AV_FIELD_DEFINE(av::tools::MFProximitySelector);
 
-av::gua::ProximitySelector::ProximitySelector()
+av::tools::ProximitySelector::ProximitySelector()
 {
   AV_FC_ADD_FIELD(TargetObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
@@ -32,27 +32,27 @@ av::gua::ProximitySelector::ProximitySelector()
   AV_FC_ADD_FIELD(MaxNumberOfTargets, 0u);
 }
 
-av::gua::ProximitySelector::~ProximitySelector()
+av::tools::ProximitySelector::~ProximitySelector()
 {}
 
 void
-av::gua::ProximitySelector::initClass()
+av::tools::ProximitySelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::ProximitySelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::ProximitySelector, true);
 
-    SFProximitySelector::initClass("av::gua::SFProximitySelector", "av::Field");
-    MFProximitySelector::initClass("av::gua::MFProximitySelector", "av::Field");
+    SFProximitySelector::initClass("av::tools::SFProximitySelector", "av::Field");
+    MFProximitySelector::initClass("av::tools::MFProximitySelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::ProximitySelector::evaluate()
+av::tools::ProximitySelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   // get needed field values
   const MFContainer::ContainerType &target_objects = TargetObjects.getValue();
@@ -69,7 +69,7 @@ av::gua::ProximitySelector::evaluate()
     TargetTimeList_t::iterator cand = mProxCands.begin();
     while (cand != mProxCands.end())
     {
-      if (hasObject(target_objects, cand->first) || av::gua::hasTarget(targets, cand->first))
+      if (hasObject(target_objects, cand->first) || av::tools::hasTarget(targets, cand->first))
         ++cand;
       else
         cand = mProxCands.erase(cand);
@@ -81,11 +81,11 @@ av::gua::ProximitySelector::evaluate()
     TargetTimeList_t::iterator cand = mDistCands.begin();
     while (cand != mDistCands.end())
     {
-      if (hasObject(target_objects, cand->first) || av::gua::hasTarget(targets, cand->first))
+      if (hasObject(target_objects, cand->first) || av::tools::hasTarget(targets, cand->first))
         ++cand;
       else
       {
-        MFTargetHolder::ContainerType::iterator holder = av::gua::find(mSelTargets, cand->first);
+        MFTargetHolder::ContainerType::iterator holder = av::tools::find(mSelTargets, cand->first);
         if (holder != mSelTargets.end())
           mSelTargets.erase(holder);
         else
@@ -101,7 +101,7 @@ av::gua::ProximitySelector::evaluate()
     while (holder != mSelTargets.end())
     {
       const SFContainer::ValueType &target = (*holder)->Target.getValue();
-      if (hasObject(target_objects, target) || av::gua::hasTarget(targets, target))
+      if (hasObject(target_objects, target) || av::tools::hasTarget(targets, target))
         ++holder;
       else
         holder = mSelTargets.erase(holder);
@@ -115,7 +115,7 @@ av::gua::ProximitySelector::evaluate()
   for (MFContainer::ContainerType::const_iterator target = target_objects.begin();
        target != target_objects.end(); ++target)
   {
-    if (!hasTarget(mProxCands, *target) && !av::gua::hasTarget(mSelTargets, *target))
+    if (!hasTarget(mProxCands, *target) && !av::tools::hasTarget(mSelTargets, *target))
     {
       // we only accept gua nodes to get the absolute transform
       Link<av::gua::Node> node = dynamic_cast<av::gua::Node*>(target->getBasePtr());
@@ -144,7 +144,7 @@ av::gua::ProximitySelector::evaluate()
        holder != targets.end(); ++holder)
   {
     const SFContainer::ValueType &target = (*holder)->Target.getValue();
-    if (!hasTarget(mProxCands, target) && !av::gua::hasTarget(mSelTargets, target))
+    if (!hasTarget(mProxCands, target) && !av::tools::hasTarget(mSelTargets, target))
     {
       // we only accept gua nodes to get the absolute transform
       Link<av::gua::Node> node = dynamic_cast<av::gua::Node*>(target.getBasePtr());
@@ -178,7 +178,7 @@ av::gua::ProximitySelector::evaluate()
       else if (time - cand->second > lag)
       {
         MFTargetHolder::ContainerType::const_iterator holder =
-          av::gua::find(targets, cand->first);
+          av::tools::find(targets, cand->first);
         if (holder != targets.end())
           new_sel_targets.push_back(*holder);
         else
@@ -201,7 +201,7 @@ av::gua::ProximitySelector::evaluate()
     while (holder != mSelTargets.end())
     {
       const SFContainer::ValueType target = (*holder)->Target.getValue();
-      MFTargetHolder::ContainerType::const_iterator input_holder = av::gua::find(targets, target);
+      MFTargetHolder::ContainerType::const_iterator input_holder = av::tools::find(targets, target);
       if (input_holder != targets.end() && *holder != *input_holder)
         *holder = *input_holder;
 
@@ -252,7 +252,7 @@ av::gua::ProximitySelector::evaluate()
         cand = mDistCands.erase(cand);
       else if (time - cand->second > lag)
       {
-        MFTargetHolder::ContainerType::iterator holder = av::gua::find(mSelTargets, cand->first);
+        MFTargetHolder::ContainerType::iterator holder = av::tools::find(mSelTargets, cand->first);
         if (holder != mSelTargets.end())
           mSelTargets.erase(holder);
         else
@@ -275,7 +275,7 @@ av::gua::ProximitySelector::evaluate()
     while (mSelTargets.size() > max_targets && !mDistCands.empty())
     {
       MFTargetHolder::ContainerType::iterator holder =
-        av::gua::find(mSelTargets, mDistCands.front().first);
+        av::tools::find(mSelTargets, mDistCands.front().first);
       if (holder != mSelTargets.end())
         mSelTargets.erase(holder);
       else

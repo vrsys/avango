@@ -3,11 +3,9 @@
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
 
-#include <avango/gua/tools/Tool.hpp>
-#include <avango/gua/tools/DragTool.hpp>
-#include <avango/gua/tools/ScaledGrabTool.hpp>
-
-
+#include <avango/tools/Tool.hpp>
+#include <avango/tools/DragTool.hpp>
+#include <avango/tools/ScaledGrabTool.hpp>
 
 using namespace boost::python;
 using namespace av::python;
@@ -25,15 +23,14 @@ namespace boost
 
 void init_Tools()
 {
-  register_field<av::gua::SFTool>("SFTool");
-  register_multifield<av::gua::MFTool>("MFTool");
-  register_field<av::gua::SFDragTool>("SFDragTool");
-  register_multifield<av::gua::MFDragTool>("MFDragTool");
-  register_field<av::gua::SFScaledGrabTool>("SFScaledGrabTool");
-  register_multifield<av::gua::MFScaledGrabTool>("MFScaledGrabTool");
+  register_field<av::tools::SFTool>("SFTool");
+  register_multifield<av::tools::MFTool>("MFTool");
+  register_field<av::tools::SFDragTool>("SFDragTool");
+  register_multifield<av::tools::MFDragTool>("MFDragTool");
+  register_field<av::tools::SFScaledGrabTool>("SFScaledGrabTool");
+  register_multifield<av::tools::MFScaledGrabTool>("MFScaledGrabTool");
 
-
-  class_<av::gua::Tool, av::Link<av::gua::Tool>, bases<av::FieldContainer>, boost::noncopyable >("Tool", "Tool base class", no_init);
-  class_<av::gua::DragTool, av::Link<av::gua::DragTool>, bases<av::FieldContainer>, boost::noncopyable >("DragTool", "DragTool base class", no_init);
-  class_<av::gua::ScaledGrabTool, av::Link<av::gua::ScaledGrabTool>, bases<av::FieldContainer>, boost::noncopyable >("ScaledGrabTool", "ScaledGrabTool base class", no_init);
+  class_<av::tools::Tool, av::Link<av::tools::Tool>, bases<av::FieldContainer>, boost::noncopyable >("Tool", "Tool base class", no_init);
+  class_<av::tools::DragTool, av::Link<av::tools::DragTool>, bases<av::FieldContainer>, boost::noncopyable >("DragTool", "DragTool base class", no_init);
+  class_<av::tools::ScaledGrabTool, av::Link<av::tools::ScaledGrabTool>, bases<av::FieldContainer>, boost::noncopyable >("ScaledGrabTool", "ScaledGrabTool base class", no_init);
 }

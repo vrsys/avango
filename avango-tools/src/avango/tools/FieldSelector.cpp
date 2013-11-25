@@ -1,4 +1,4 @@
-#include <avango/gua/tools/FieldSelector.hpp>
+#include <avango/tools/FieldSelector.hpp>
 
 #include <avango/Logger.h>
 #include <boost/regex.hpp>
@@ -8,15 +8,15 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::FieldSelector"));
+  av::Logger& logger(av::getLogger("av::tools::FieldSelector"));
 }
 
-AV_FC_DEFINE(av::gua::FieldSelector);
+AV_FC_DEFINE(av::tools::FieldSelector);
 
-AV_FIELD_DEFINE(av::gua::SFFieldSelector);
-AV_FIELD_DEFINE(av::gua::MFFieldSelector);
+AV_FIELD_DEFINE(av::tools::SFFieldSelector);
+AV_FIELD_DEFINE(av::tools::MFFieldSelector);
 
-av::gua::FieldSelector::FieldSelector()
+av::tools::FieldSelector::FieldSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(SelectableFieldName, "");
@@ -24,27 +24,27 @@ av::gua::FieldSelector::FieldSelector()
   AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
 }
 
-av::gua::FieldSelector::~FieldSelector()
+av::tools::FieldSelector::~FieldSelector()
 {}
 
 void
-av::gua::FieldSelector::initClass()
+av::tools::FieldSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::FieldSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::FieldSelector, true);
 
-    SFFieldSelector::initClass("av::gua::SFFieldSelector", "av::Field");
-    MFFieldSelector::initClass("av::gua::MFFieldSelector", "av::Field");
+    SFFieldSelector::initClass("av::tools::SFFieldSelector", "av::Field");
+    MFFieldSelector::initClass("av::tools::MFFieldSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::FieldSelector::evaluate()
+av::tools::FieldSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   MFTargetHolder::ContainerType selected_targets;
 
@@ -67,7 +67,7 @@ av::gua::FieldSelector::evaluate()
 }
 
 bool
-av::gua::FieldSelector::isSelectable(av::FieldContainer& object)
+av::tools::FieldSelector::isSelectable(av::FieldContainer& object)
 {
   const std::string field_name = SelectableFieldName.getValue();
   const std::vector<Field*> &fields = object.getFields();

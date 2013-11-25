@@ -1,42 +1,42 @@
-#include <avango/gua/tools/Selector.hpp>
+#include <avango/tools/Selector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::Selector"));
+  av::Logger& logger(av::getLogger("av::tools::Selector"));
 }
 
-AV_FC_DEFINE_ABSTRACT(av::gua::Selector);
+AV_FC_DEFINE_ABSTRACT(av::tools::Selector);
 
-AV_FIELD_DEFINE(av::gua::SFSelector);
-AV_FIELD_DEFINE(av::gua::MFSelector);
+AV_FIELD_DEFINE(av::tools::SFSelector);
+AV_FIELD_DEFINE(av::tools::MFSelector);
 
-av::gua::Selector::Selector()
+av::tools::Selector::Selector()
 {
   AV_FC_ADD_FIELD(SelectedTargets, MFTargetHolder::ContainerType());
 }
 
-av::gua::Selector::~Selector()
+av::tools::Selector::~Selector()
 {}
 
 void
-av::gua::Selector::initClass()
+av::tools::Selector::initClass()
 {
   if (!isTypeInitialized())
   {
     av::FieldContainer::initClass();
-    av::gua::TargetHolder::initClass();
+    av::tools::TargetHolder::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::gua::Selector, true);
+    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Selector, true);
 
-    SFSelector::initClass("av::gua::SFSelector", "av::Field");
-    MFSelector::initClass("av::gua::MFSelector", "av::Field");
+    SFSelector::initClass("av::tools::SFSelector", "av::Field");
+    MFSelector::initClass("av::tools::MFSelector", "av::Field");
   }
 }
 
-av::Link<av::gua::TargetHolder>
-av::gua::Selector::combine(const Link<TargetHolder> holder1, const Link<TargetHolder> holder2)
+av::Link<av::tools::TargetHolder>
+av::tools::Selector::combine(const Link<TargetHolder> holder1, const Link<TargetHolder> holder2)
 {
   Link<TargetHolder> holder;
 

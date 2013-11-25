@@ -1,24 +1,24 @@
-#ifndef AVANGO_GUA_SCALED_GRAB_TOOL_HPP
-#define AVANGO_GUA_SCALED_GRAB_TOOL_HPP
+#ifndef AVANGO_TOOLS_SCALED_GRAB_TOOL_HPP
+#define AVANGO_TOOLS_SCALED_GRAB_TOOL_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Tool.hpp>
+#include <avango/tools/Tool.hpp>
 #include <avango/gua/Fields.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * ScaledGrabTool class
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL ScaledGrabTool : public Tool
+    class AV_TOOLS_DLL ScaledGrabTool : public Tool
     {
       AV_FC_DECLARE();
 
@@ -65,10 +65,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ScaledGrabTool> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ScaledGrabTool> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_SCALED_GRAB_TOOL_HPP
+#endif //AVANGO_TOOLS_SCALED_GRAB_TOOL_HPP

@@ -1,44 +1,44 @@
-#include <avango/gua/tools/UnionSelector.hpp>
+#include <avango/tools/UnionSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::UnionSelector"));
+  av::Logger& logger(av::getLogger("av::tools::UnionSelector"));
 }
 
-AV_FC_DEFINE(av::gua::UnionSelector);
+AV_FC_DEFINE(av::tools::UnionSelector);
 
-AV_FIELD_DEFINE(av::gua::SFUnionSelector);
-AV_FIELD_DEFINE(av::gua::MFUnionSelector);
+AV_FIELD_DEFINE(av::tools::SFUnionSelector);
+AV_FIELD_DEFINE(av::tools::MFUnionSelector);
 
-av::gua::UnionSelector::UnionSelector()
+av::tools::UnionSelector::UnionSelector()
 {
   AV_FC_ADD_FIELD(TargetSet1, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(TargetSet2, MFTargetHolder::ContainerType());
 }
 
-av::gua::UnionSelector::~UnionSelector()
+av::tools::UnionSelector::~UnionSelector()
 {}
 
 void
-av::gua::UnionSelector::initClass()
+av::tools::UnionSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::UnionSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::UnionSelector, true);
 
-    SFUnionSelector::initClass("av::gua::SFUnionSelector", "av::Field");
-    MFUnionSelector::initClass("av::gua::MFUnionSelector", "av::Field");
+    SFUnionSelector::initClass("av::tools::SFUnionSelector", "av::Field");
+    MFUnionSelector::initClass("av::tools::MFUnionSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::UnionSelector::evaluate()
+av::tools::UnionSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   if (TargetSet1.isEmpty())
   {

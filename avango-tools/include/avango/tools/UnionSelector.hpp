@@ -1,25 +1,25 @@
-#ifndef AVANGO_GUA_UNIONSELECTOR_HPP
-#define AVANGO_GUA_UNIONSELECTOR_HPP
+#ifndef AVANGO_TOOLS_UNIONSELECTOR_HPP
+#define AVANGO_TOOLS_UNIONSELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * UnionSelector class passes the union of two sets of targets.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL UnionSelector : public Selector
+    class AV_TOOLS_DLL UnionSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -54,10 +54,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::UnionSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::UnionSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::UnionSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::UnionSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_UNIONSELECTOR_HPP
+#endif //AVANGO_TOOLS_UNIONSELECTOR_HPP

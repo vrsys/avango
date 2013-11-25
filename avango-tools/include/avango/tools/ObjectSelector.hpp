@@ -1,25 +1,25 @@
-#ifndef AVANGO_GUA_OBJECTSELECTOR_HPP
-#define AVANGO_GUA_OBJECTSELECTOR_HPP
+#ifndef AVANGO_TOOLS_OBJECTSELECTOR_HPP
+#define AVANGO_TOOLS_OBJECTSELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * ObjectSelector class selects targets from given av::FieldContainers.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL ObjectSelector : public Selector
+    class AV_TOOLS_DLL ObjectSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -64,10 +64,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ObjectSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ObjectSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::ObjectSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ObjectSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_OBJECTSELECTOR_HPP
+#endif //AVANGO_TOOLS_OBJECTSELECTOR_HPP

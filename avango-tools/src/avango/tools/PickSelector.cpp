@@ -1,4 +1,4 @@
-#include <avango/gua/tools/PickSelector.hpp>
+#include <avango/tools/PickSelector.hpp>
 
 #include <avango/gua/scenegraph/PickResult.hpp>
 
@@ -6,15 +6,15 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::PickSelector"));
+  av::Logger& logger(av::getLogger("av::tools::PickSelector"));
 }
 
-AV_FC_DEFINE(av::gua::PickSelector);
+AV_FC_DEFINE(av::tools::PickSelector);
 
-AV_FIELD_DEFINE(av::gua::SFPickSelector);
-AV_FIELD_DEFINE(av::gua::MFPickSelector);
+AV_FIELD_DEFINE(av::tools::SFPickSelector);
+AV_FIELD_DEFINE(av::tools::MFPickSelector);
 
-av::gua::PickSelector::PickSelector():
+av::tools::PickSelector::PickSelector():
   mLastPickTrigger(false)
 {
   AV_FC_ADD_FIELD(PickTrigger, false);
@@ -27,25 +27,25 @@ av::gua::PickSelector::PickSelector():
   AV_FC_ADD_FIELD(PickMask, "");
 }
 
-av::gua::PickSelector::~PickSelector()
+av::tools::PickSelector::~PickSelector()
 {}
 
 void
-av::gua::PickSelector::initClass()
+av::tools::PickSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::PickSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::PickSelector, true);
 
-    SFPickSelector::initClass("av::gua::SFPickSelector", "av::Field");
-    MFPickSelector::initClass("av::gua::MFPickSelector", "av::Field");
+    SFPickSelector::initClass("av::tools::SFPickSelector", "av::Field");
+    MFPickSelector::initClass("av::tools::MFPickSelector", "av::Field");
   }
 }
 
-const av::gua::MFTargetHolder::ContainerType&
-av::gua::PickSelector::pick() {
+const av::tools::MFTargetHolder::ContainerType&
+av::tools::PickSelector::pick() {
   mSelectedTargets.clear();
 
   if (SceneGraph.getValue().isValid()) {
@@ -72,8 +72,8 @@ av::gua::PickSelector::pick() {
 }
 
 /* virtual */ void
-av::gua::PickSelector::evaluate() {
-  av::gua::Selector::evaluate();
+av::tools::PickSelector::evaluate() {
+  av::tools::Selector::evaluate();
 
   // try to pick if trigger changes to or stays true
   if (PickTrigger.getValue() && (!mLastPickTrigger || !TransitionOnly.getValue()))

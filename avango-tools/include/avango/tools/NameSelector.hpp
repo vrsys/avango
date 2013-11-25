@@ -1,24 +1,24 @@
-#ifndef AVANGO_GUA_NAMESELECTOR_HPP
-#define AVANGO_GUA_NAMESELECTOR_HPP
+#ifndef AVANGO_TOOLS_NAMESELECTOR_HPP
+#define AVANGO_TOOLS_NAMESELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * NameSelector class selects targets from given names.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL NameSelector : public Selector
+    class AV_TOOLS_DLL NameSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -83,10 +83,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::NameSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::NameSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::NameSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::NameSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_NAMESELECTOR_HPP
+#endif //AVANGO_TOOLS_NAMESELECTOR_HPP

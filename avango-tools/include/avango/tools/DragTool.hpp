@@ -1,25 +1,25 @@
-#ifndef AVANGO_GUA_DRAGTOOL_HPP
-#define AVANGO_GUA_DRAGTOOL_HPP
+#ifndef AVANGO_TOOLS_DRAGTOOL_HPP
+#define AVANGO_TOOLS_DRAGTOOL_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Tool.hpp>
+#include <avango/tools/Tool.hpp>
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * Drag tool class
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL DragTool : public Tool
+    class AV_TOOLS_DLL DragTool : public Tool
     {
       AV_FC_DECLARE();
 
@@ -59,10 +59,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link< ::av::gua::DragTool> >;
-  template class AV_GUA_DLL MultiField<Link< ::av::gua::DragTool> >;
+  template class AV_TOOLS_DLL SingleField<Link< ::av::tools::DragTool> >;
+  template class AV_TOOLS_DLL MultiField<Link< ::av::tools::DragTool> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_DRAGTOOL_HPP
+#endif //AVANGO_TOOLS_DRAGTOOL_HPP

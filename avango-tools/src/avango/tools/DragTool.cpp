@@ -1,4 +1,4 @@
-#include <avango/gua/tools/DragTool.hpp>
+#include <avango/tools/DragTool.hpp>
 
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/Types.hpp>
@@ -7,39 +7,39 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::DragTool"));
+  av::Logger& logger(av::getLogger("av::tools::DragTool"));
 }
 
-AV_FC_DEFINE(av::gua::DragTool);
+AV_FC_DEFINE(av::tools::DragTool);
 
-AV_FIELD_DEFINE(av::gua::SFDragTool);
-AV_FIELD_DEFINE(av::gua::MFDragTool);
+AV_FIELD_DEFINE(av::tools::SFDragTool);
+AV_FIELD_DEFINE(av::tools::MFDragTool);
 
-av::gua::DragTool::DragTool():
+av::tools::DragTool::DragTool():
   mDragged(false)
 {
   AV_FC_ADD_FIELD(DragTransform, ::gua::math::mat4::identity());
 }
 
-av::gua::DragTool::~DragTool()
+av::tools::DragTool::~DragTool()
 {}
 
 void
-av::gua::DragTool::initClass()
+av::tools::DragTool::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Tool::initClass();
+    av::tools::Tool::initClass();
 
-    AV_FC_INIT(av::gua::Tool, av::gua::DragTool, true);
+    AV_FC_INIT(av::tools::Tool, av::tools::DragTool, true);
 
-    SFDragTool::initClass("av::gua::SFDragTool", "av::Field");
-    MFDragTool::initClass("av::gua::MFDragTool", "av::Field");
+    SFDragTool::initClass("av::tools::SFDragTool", "av::Field");
+    MFDragTool::initClass("av::tools::MFDragTool", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::DragTool::evaluate()
+av::tools::DragTool::evaluate()
 {
   // drag transformation matrix changed?
   mDragged = (DragTransform.getValue() != mLastDragMat);
@@ -49,14 +49,14 @@ av::gua::DragTool::evaluate()
     mDragDiffMat = ::scm::math::inverse(mLastDragMat) * DragTransform.getValue();
 
   // call evaluateKeptTarget
-  av::gua::Tool::evaluate();
+  av::tools::Tool::evaluate();
 
   if (mDragged)
     mLastDragMat = DragTransform.getValue();
 }
 
 /* virtual */ void
-av::gua::DragTool::evaluateKeptTarget(TargetHolder& holder)
+av::tools::DragTool::evaluateKeptTarget(TargetHolder& holder)
 {
   // apply dragging only if drag transformation matrix was changed
   if (mDragged)

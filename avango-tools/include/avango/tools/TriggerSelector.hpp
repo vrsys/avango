@@ -1,25 +1,25 @@
-#ifndef AVANGO_GUA_TRIGGERSELECTOR_HPP
-#define AVANGO_GUA_TRIGGERSELECTOR_HPP
+#ifndef AVANGO_TOOLS_TRIGGERSELECTOR_HPP
+#define AVANGO_TOOLS_TRIGGERSELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * TriggerSelector class passes targets if triggered.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL TriggerSelector : public Selector
+    class AV_TOOLS_DLL TriggerSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -67,8 +67,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TriggerSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TriggerSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::TriggerSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::TriggerSelector> >;
 #endif
 
 }

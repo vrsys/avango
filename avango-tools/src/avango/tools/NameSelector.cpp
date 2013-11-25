@@ -1,4 +1,4 @@
-#include <avango/gua/tools/NameSelector.hpp>
+#include <avango/tools/NameSelector.hpp>
 
 #include <avango/Logger.h>
 #include <boost/regex.hpp>
@@ -8,15 +8,15 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::NameSelector"));
+  av::Logger& logger(av::getLogger("av::tools::NameSelector"));
 }
 
-AV_FC_DEFINE(av::gua::NameSelector);
+AV_FC_DEFINE(av::tools::NameSelector);
 
-AV_FIELD_DEFINE(av::gua::SFNameSelector);
-AV_FIELD_DEFINE(av::gua::MFNameSelector);
+AV_FIELD_DEFINE(av::tools::SFNameSelector);
+AV_FIELD_DEFINE(av::tools::MFNameSelector);
 
-av::gua::NameSelector::NameSelector():
+av::tools::NameSelector::NameSelector():
   mNamesDirty(true)
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
@@ -26,36 +26,36 @@ av::gua::NameSelector::NameSelector():
   AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
 }
 
-av::gua::NameSelector::~NameSelector()
+av::tools::NameSelector::~NameSelector()
 {}
 
 void
-av::gua::NameSelector::initClass()
+av::tools::NameSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::NameSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::NameSelector, true);
 
-    SFNameSelector::initClass("av::gua::SFNameSelector", "av::Field");
-    MFNameSelector::initClass("av::gua::MFNameSelector", "av::Field");
+    SFNameSelector::initClass("av::tools::SFNameSelector", "av::Field");
+    MFNameSelector::initClass("av::tools::MFNameSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::NameSelector::fieldHasChanged(const av::Field& field)
+av::tools::NameSelector::fieldHasChanged(const av::Field& field)
 {
-  av::gua::Selector::fieldHasChanged(field);
+  av::tools::Selector::fieldHasChanged(field);
 
   if (&field == &SelectableNames || &field == &SelectableTargetNames)
     mNamesDirty = true;
 }
 
 /* virtual */ void
-av::gua::NameSelector::evaluate()
+av::tools::NameSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   if (mNamesDirty)
   {
@@ -99,7 +99,7 @@ av::gua::NameSelector::evaluate()
 }
 
 bool
-av::gua::NameSelector::isSelectable(av::FieldContainer& object)
+av::tools::NameSelector::isSelectable(av::FieldContainer& object)
 {
   std::set<std::string>::const_iterator name = mNames.end();
   const std::string object_name = object.Name.getValue();

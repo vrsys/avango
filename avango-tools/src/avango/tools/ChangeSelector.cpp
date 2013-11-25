@@ -1,45 +1,45 @@
-#include <avango/gua/tools/ChangeSelector.hpp>
+#include <avango/tools/ChangeSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::ChangeSelector"));
+  av::Logger& logger(av::getLogger("av::tools::ChangeSelector"));
 }
 
-AV_FC_DEFINE(av::gua::ChangeSelector);
+AV_FC_DEFINE(av::tools::ChangeSelector);
 
-AV_FIELD_DEFINE(av::gua::SFChangeSelector);
-AV_FIELD_DEFINE(av::gua::MFChangeSelector);
+AV_FIELD_DEFINE(av::tools::SFChangeSelector);
+AV_FIELD_DEFINE(av::tools::MFChangeSelector);
 
-av::gua::ChangeSelector::ChangeSelector()
+av::tools::ChangeSelector::ChangeSelector()
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(KeptTargets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(RemovedTargets, MFTargetHolder::ContainerType());
 }
 
-av::gua::ChangeSelector::~ChangeSelector()
+av::tools::ChangeSelector::~ChangeSelector()
 {}
 
 void
-av::gua::ChangeSelector::initClass()
+av::tools::ChangeSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::ChangeSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::ChangeSelector, true);
 
-    SFChangeSelector::initClass("av::gua::SFChangeSelector", "av::Field");
-    MFChangeSelector::initClass("av::gua::MFChangeSelector", "av::Field");
+    SFChangeSelector::initClass("av::tools::SFChangeSelector", "av::Field");
+    MFChangeSelector::initClass("av::tools::MFChangeSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::ChangeSelector::evaluate()
+av::tools::ChangeSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
   MFTargetHolder::ContainerType added_targets, kept_targets, removed_targets;

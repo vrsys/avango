@@ -1,25 +1,25 @@
-#ifndef AVANGO_GUA_TYPESELECTOR_HPP
-#define AVANGO_GUA_TYPESELECTOR_HPP
+#ifndef AVANGO_TOOLS_TYPESELECTOR_HPP
+#define AVANGO_TOOLS_TYPESELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * TypeSelector class selects targets from the types of given av::FieldContainers.
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL TypeSelector : public Selector
+    class AV_TOOLS_DLL TypeSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -76,9 +76,9 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TypeSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TypeSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::TypeSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::TypeSelector> >;
 #endif
 }
 
-#endif //AVANGO_GUA_TYPESELECTOR_HPP
+#endif //AVANGO_TOOLS_TYPESELECTOR_HPP

@@ -1,5 +1,5 @@
-#ifndef AVANGO_GUA_SELECTOR_HPP
-#define AVANGO_GUA_SELECTOR_HPP
+#ifndef AVANGO_TOOLS_SELECTOR_HPP
+#define AVANGO_TOOLS_SELECTOR_HPP
 
 /**
  * \file
@@ -7,18 +7,18 @@
  */
 
 #include <avango/FieldContainer.h>
-#include <avango/gua/tools/TargetHolder.hpp>
+#include <avango/tools/TargetHolder.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * Abstract selector base class
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL Selector : public av::FieldContainer
+    class AV_TOOLS_DLL Selector : public av::FieldContainer
     {
       AV_FC_DECLARE_ABSTRACT();
 
@@ -51,10 +51,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Selector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Selector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::Selector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::Selector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_SELECTOR_HPP
+#endif //AVANGO_TOOLS_SELECTOR_HPP

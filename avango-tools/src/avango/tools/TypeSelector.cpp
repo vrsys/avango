@@ -1,18 +1,18 @@
-#include <avango/gua/tools/TypeSelector.hpp>
+#include <avango/tools/TypeSelector.hpp>
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TypeSelector"));
+  av::Logger& logger(av::getLogger("av::tools::TypeSelector"));
 }
 
-AV_FC_DEFINE(av::gua::TypeSelector);
+AV_FC_DEFINE(av::tools::TypeSelector);
 
-AV_FIELD_DEFINE(av::gua::SFTypeSelector);
-AV_FIELD_DEFINE(av::gua::MFTypeSelector);
+AV_FIELD_DEFINE(av::tools::SFTypeSelector);
+AV_FIELD_DEFINE(av::tools::MFTypeSelector);
 
-av::gua::TypeSelector::TypeSelector():
+av::tools::TypeSelector::TypeSelector():
   mTypesDirty(true)
 {
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
@@ -21,36 +21,36 @@ av::gua::TypeSelector::TypeSelector():
   AV_FC_ADD_FIELD(EqualTypeOnly, false);
 }
 
-av::gua::TypeSelector::~TypeSelector()
+av::tools::TypeSelector::~TypeSelector()
 {}
 
 void
-av::gua::TypeSelector::initClass()
+av::tools::TypeSelector::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Selector::initClass();
+    av::tools::Selector::initClass();
 
-    AV_FC_INIT(av::gua::Selector, av::gua::TypeSelector, true);
+    AV_FC_INIT(av::tools::Selector, av::tools::TypeSelector, true);
 
-    SFTypeSelector::initClass("av::gua::SFTypeSelector", "av::Field");
-    MFTypeSelector::initClass("av::gua::MFTypeSelector", "av::Field");
+    SFTypeSelector::initClass("av::tools::SFTypeSelector", "av::Field");
+    MFTypeSelector::initClass("av::tools::MFTypeSelector", "av::Field");
   }
 }
 
 /* virtual */ void
-av::gua::TypeSelector::fieldHasChanged(const av::Field& field)
+av::tools::TypeSelector::fieldHasChanged(const av::Field& field)
 {
-  av::gua::Selector::fieldHasChanged(field);
+  av::tools::Selector::fieldHasChanged(field);
 
   if (&field == &SelectableTypes || &field == &SelectableTargetTypes)
     mTypesDirty = true;
 }
 
 /* virtual */ void
-av::gua::TypeSelector::evaluate()
+av::tools::TypeSelector::evaluate()
 {
-  av::gua::Selector::evaluate();
+  av::tools::Selector::evaluate();
 
   if (mTypesDirty)
   {
@@ -93,7 +93,7 @@ av::gua::TypeSelector::evaluate()
 }
 
 bool
-av::gua::TypeSelector::isSelectable(const av::FieldContainer& object)
+av::tools::TypeSelector::isSelectable(const av::FieldContainer& object)
 {
   std::set<Type>::const_iterator type = mTypes.end();
   const Type object_type = object.getTypeId();

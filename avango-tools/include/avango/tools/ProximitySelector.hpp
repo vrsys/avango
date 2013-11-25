@@ -1,21 +1,21 @@
-#ifndef AVANGO_GUA_PROXIMITYSELECTOR_HPP
-#define AVANGO_GUA_PROXIMITYSELECTOR_HPP
+#ifndef AVANGO_TOOLS_PROXIMITYSELECTOR_HPP
+#define AVANGO_TOOLS_PROXIMITYSELECTOR_HPP
 
 /**
  * \file
  * \ingroup av_tools
  */
 
-#include <avango/gua/tools/Selector.hpp>
+#include <avango/tools/Selector.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/Node.hpp>
 
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * ProximitySelector class selects targets from given targets
@@ -23,7 +23,7 @@ namespace av
      *
      * \ingroup av_tools
      */
-    class AV_GUA_DLL ProximitySelector : public Selector
+    class AV_TOOLS_DLL ProximitySelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -124,10 +124,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ProximitySelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ProximitySelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::ProximitySelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::ProximitySelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_PROXIMITYSELECTOR_HPP
+#endif //AVANGO_TOOLS_PROXIMITYSELECTOR_HPP

@@ -1,20 +1,20 @@
-#ifndef AVANGO_GUA_SINGLE_SELECTOR_HPP
-#define AVANGO_GUA_SINGLE_SELECTOR_HPP
+#ifndef AVANGO_TOOLS_SINGLE_SELECTOR_HPP
+#define AVANGO_TOOLS_SINGLE_SELECTOR_HPP
 
 
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/windows_specific_gua.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/windows_specific_tools.hpp>
 
 namespace av
 {
-  namespace gua
+  namespace tools
   {
     /**
      * SingleSelector class passes one of multiple targets.
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL SingleSelector : public Selector
+    class AV_TOOLS_DLL SingleSelector : public Selector
     {
       AV_FC_DECLARE();
 
@@ -53,10 +53,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SingleSelector> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SingleSelector> >;
+  template class AV_TOOLS_DLL SingleField<Link<tools::SingleSelector> >;
+  template class AV_TOOLS_DLL MultiField<Link<tools::SingleSelector> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_SINGLE_SELECTOR_HPP
+#endif //AVANGO_TOOLS_SINGLE_SELECTOR_HPP

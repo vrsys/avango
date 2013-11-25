@@ -39,23 +39,6 @@
 
 #include <avango/gua/viewer/Viewer.hpp>
 
-#include <avango/gua/tools/TargetHolder.hpp>
-#include <avango/gua/tools/Selector.hpp>
-#include <avango/gua/tools/SingleSelector.hpp>
-#include <avango/gua/tools/PickSelector.hpp>
-#include <avango/gua/tools/ProximitySelector.hpp>
-#include <avango/gua/tools/ChangeSelector.hpp>
-#include <avango/gua/tools/FieldSelector.hpp>
-#include <avango/gua/tools/InjectSelector.hpp>
-#include <avango/gua/tools/NameSelector.hpp>
-#include <avango/gua/tools/ObjectSelector.hpp>
-#include <avango/gua/tools/TriggerSelector.hpp>
-#include <avango/gua/tools/TypeSelector.hpp>
-#include <avango/gua/tools/UnionSelector.hpp>
-#include <avango/gua/tools/Tool.hpp>
-#include <avango/gua/tools/DragTool.hpp>
-#include <avango/gua/tools/ScaledGrabTool.hpp>
-
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
 
@@ -112,23 +95,6 @@ av::gua::Init::initClass()
         av::gua::GeometryLoader::initClass();
 
         av::gua::Viewer::initClass();
-
-        av::gua::TargetHolder::initClass();
-        av::gua::Selector::initClass();
-        av::gua::SingleSelector::initClass();
-        av::gua::PickSelector::initClass();
-        av::gua::ProximitySelector::initClass();
-        av::gua::ChangeSelector::initClass();
-        av::gua::FieldSelector::initClass();
-        av::gua::InjectSelector::initClass();
-        av::gua::NameSelector::initClass();
-        av::gua::ObjectSelector::initClass();
-        av::gua::TriggerSelector::initClass();
-        av::gua::TypeSelector::initClass();
-        av::gua::UnionSelector::initClass();
-        av::gua::Tool::initClass();
-        av::gua::DragTool::initClass();
-        av::gua::ScaledGrabTool::initClass();
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

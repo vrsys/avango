@@ -4,8 +4,8 @@
 SET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
   ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR}
-  ${CMAKE_SOURCE_DIR}/../guacamole/include
-  /opt/guacamole/current/guacamole/include
+  ${CMAKE_SOURCE_DIR}/../guacamole-oculus/include
+  /opt/guacamole/current/guacamole-oculus/include
 )
 
 SET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIRS

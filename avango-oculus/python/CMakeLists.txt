@@ -20,5 +20,5 @@ SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
 # rename libaries in windows
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/avango/oculus/_oculus.pyd)
+  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/oculus/_oculus.pyd)
 ENDIF (MSVC)

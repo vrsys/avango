@@ -50,17 +50,20 @@ message(STATUS "-- checking for guacamole")
 IF ( NOT GUACAMOLE_INCLUDE_DIRS )
 
     SET(_GUACAMOLE_FOUND_INC_DIRS "")
+    SET(_NOT_FOUND true)
 
     FOREACH(_SEARCH_DIR ${GUACAMOLE_INCLUDE_SEARCH_DIRS})
-        FIND_PATH(_CUR_SEARCH
-                NAMES gua/guacamole.hpp
-                PATHS ${_SEARCH_DIR}
-                NO_DEFAULT_PATH)
-        IF (_CUR_SEARCH)
-            SET(_GUACAMOLE_FOUND_INC_DIRS ${_CUR_SEARCH})
-            BREAK()
-        ENDIF(_CUR_SEARCH)
-        SET(_CUR_SEARCH _CUR_SEARCH-NOTFOUND CACHE INTERNAL "internal use")
+        IF (${_NOT_FOUND})
+            FIND_PATH(_CUR_SEARCH
+                    NAMES gua/guacamole.hpp
+                    PATHS ${_SEARCH_DIR}
+                    NO_DEFAULT_PATH)
+            IF (_CUR_SEARCH)
+                SET(_GUACAMOLE_FOUND_INC_DIRS ${_CUR_SEARCH})
+                SET(_NOT_FOUND false)
+            ENDIF(_CUR_SEARCH)
+            SET(_CUR_SEARCH _CUR_SEARCH-NOTFOUND CACHE INTERNAL "internal use")
+        ENDIF (${_NOT_FOUND})
     ENDFOREACH(_SEARCH_DIR ${GUACAMOLE_INCLUDE_SEARCH_DIRS})
 
     IF (NOT _GUACAMOLE_FOUND_INC_DIRS)
@@ -78,25 +81,28 @@ IF ( NOT GUACAMOLE_LIBRARY_DIRS )
 
     SET(_GUACAMOLE_FOUND_LIB_DIR "")
     SET(_GUACAMOLE_POSTFIX "")
+    SET(_NOT_FOUND true)
 
     FOREACH(_SEARCH_DIR ${GUACAMOLE_LIBRARY_SEARCH_DIRS})
-        IF (UNIX)
-            FIND_PATH(_CUR_SEARCH
-                    NAMES libguacamole.so
-                    PATHS ${_SEARCH_DIR}
-                    NO_DEFAULT_PATH)
-        ELSEIF(WIN32)
-            FIND_PATH(_CUR_SEARCH
-                    NAMES guacamole.lib
-                    PATHS ${_SEARCH_DIR}
-                    PATH_SUFFIXES debug release
-                    NO_DEFAULT_PATH)
-        ENDIF(UNIX)
-        IF (_CUR_SEARCH)
-            SET(_GUACAMOLE_FOUND_LIB_DIR ${_SEARCH_DIR})
-            BREAK()
-        ENDIF(_CUR_SEARCH)
-        SET(_CUR_SEARCH _CUR_SEARCH-NOTFOUND CACHE INTERNAL "internal use")
+        IF (${_NOT_FOUND})
+            IF (UNIX)
+                FIND_PATH(_CUR_SEARCH
+                        NAMES libguacamole.so
+                        PATHS ${_SEARCH_DIR}
+                        NO_DEFAULT_PATH)
+            ELSEIF(WIN32)
+                FIND_PATH(_CUR_SEARCH
+                        NAMES guacamole.lib
+                        PATHS ${_SEARCH_DIR}
+                        PATH_SUFFIXES debug release
+                        NO_DEFAULT_PATH)
+            ENDIF(UNIX)
+            IF (_CUR_SEARCH)
+                SET(_GUACAMOLE_FOUND_LIB_DIR ${_SEARCH_DIR})
+                SET(_NOT_FOUND false)
+            ENDIF(_CUR_SEARCH)
+            SET(_CUR_SEARCH _CUR_SEARCH-NOTFOUND CACHE INTERNAL "internal use")
+        ENDIF (${_NOT_FOUND})
     ENDFOREACH(_SEARCH_DIR ${GUACAMOLE_LIBRARY_SEARCH_DIRS})
 
     IF (NOT _GUACAMOLE_FOUND_LIB_DIR)

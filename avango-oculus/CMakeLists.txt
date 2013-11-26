@@ -16,13 +16,19 @@ include(find_guacamole_oculus)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS} ${GUACAMOLE_OCULUS_LIBRARY_DIRS} ${PYTHON_LIBRARY_DIRS})
+LINK_DIRECTORIES(
+  ${LIB_PATHS} 
+  ${GUACAMOLE_OCULUS_LIBRARY_DIRS} 
+  ${PYTHON_LIBRARY_DIRS}
+  ${BULLET_LIBRARY_DIRS}
+)
 
 INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
                     ${SCHISM_INCLUDE_DIRS}
                     ${BULLET_INCLUDE_DIRS}
 					${PYTHON_INCLUDE_DIRS}
 					${GUACAMOLE_OCULUS_INCLUDE_DIRS}
+          ${BULLET_INCLUDE_DIRS}
 					include
 					../avango-core/include
 					../avango-gua/include

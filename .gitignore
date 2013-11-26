@@ -26,3 +26,5 @@ CMakeFiles
 
 *.pyc
 lib
+
+Session.vim

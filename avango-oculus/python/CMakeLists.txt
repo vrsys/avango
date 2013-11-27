@@ -1,6 +1,13 @@
-LINK_DIRECTORIES(${LIB_PATHS} ${GUACAMOLE_OCULUS_LIBRARY_DIRS})
+LINK_DIRECTORIES(
+    ${LIB_PATHS}
+    ${GUACAMOLE_OCULUS_LIBRARY_DIRS}
+)
 
-ADD_LIBRARY( _oculus SHARED ./avango/oculus/OculusRift.cpp ./avango/oculus/OculusRift.hpp ./avango/oculus/_oculus.cpp )
+ADD_LIBRARY( _oculus SHARED
+    ./avango/oculus/OculusRift.cpp
+    ./avango/oculus/OculusRift.hpp
+    ./avango/oculus/_oculus.cpp
+)
 
 ADD_DEPENDENCIES ( _oculus avango_oculus )
 
@@ -21,4 +28,12 @@ SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
 ###############################################################################
 IF (MSVC)
   post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/oculus/_oculus.pyd)
+ELSEIF (UNIX)
+  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/oculus/_oculus.so)
 ENDIF (MSVC)
+
+COPY_PYTHON_FILES_INTO_DIRECTORY(
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/oculus
+    _oculus
+)

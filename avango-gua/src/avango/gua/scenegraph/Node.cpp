@@ -16,8 +16,13 @@ AV_FIELD_DEFINE(av::gua::MFNode);
 
 av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
   : m_guaNode(guanode),
-    m_userDataHandle(0)
+    m_selfUserDataHandle(0),
+    m_childrenUserDataHandle(0)
 {
+
+  m_selfUserDataHandle = guanode->add_user_data(this);
+  m_childrenUserDataHandle = guanode->add_user_data(new av::MultiField<av::Link<Node>>::ContainerType());
+
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
                         boost::bind(&Node::setParentCB, this, _1));
@@ -46,7 +51,6 @@ av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
                         boost::bind(&Node::getPathCB, this, _1),
                         boost::bind(&Node::setPathCB, this, _1));
 
-  m_userDataHandle = guanode->add_user_data(this);
 }
 
 av::gua::Node::~Node()
@@ -75,15 +79,15 @@ av::gua::Node::getGuaNode() const
 unsigned
 av::gua::Node::getUserDataHandle() const
 {
-    return m_userDataHandle;
+    return m_selfUserDataHandle;
 }
 
 /* virtual */ void
 av::gua::Node::getParentCB(const av::gua::SFNode::GetValueEvent& event)
 {
   if (m_guaNode->get_parent()) {
-    if (m_guaNode->get_parent()->get_user_data(m_userDataHandle)) {
-      *(event.getValuePtr()) = static_cast<av::gua::Node*>(m_guaNode->get_parent()->get_user_data(m_userDataHandle));
+    if (m_guaNode->get_parent()->get_user_data(m_selfUserDataHandle)) {
+      *(event.getValuePtr()) = static_cast<av::gua::Node*>(m_guaNode->get_parent()->get_user_data(m_selfUserDataHandle));
     }
   }
 }
@@ -97,14 +101,14 @@ av::gua::Node::setParentCB(const av::gua::SFNode::SetValueEvent& event)
 /* virtual */ void
 av::gua::Node::getChildrenCB(const av::gua::MFNode::GetValueEvent& event)
 {
-    av::MultiField<av::Link<Node>>::ContainerType children;
-    for (auto gua_child: m_guaNode->get_children()) {
-      if (gua_child->get_user_data(m_userDataHandle)) {
-        children.push_back(av::Link<Node>(static_cast<av::gua::Node*>(gua_child->get_user_data(m_userDataHandle))));
-      }
-    }
+    // av::MultiField<av::Link<Node>>::ContainerType children;
+    // for (auto gua_child: m_guaNode->get_children()) {
+    //   if (gua_child->get_user_data(m_selfUserDataHandle)) {
+    //     children.push_back(av::Link<Node>(static_cast<av::gua::Node*>(gua_child->get_user_data(m_selfUserDataHandle))));
+    //   }
+    // }
 
-    *(event.getValuePtr()) = children;
+    *(event.getValuePtr()) = *static_cast<av::MultiField<av::Link<Node>>::ContainerType*>(m_guaNode->get_user_data(m_childrenUserDataHandle));
 }
 
 /* virtual */ void
@@ -113,12 +117,18 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
   if (m_guaNode) {
 
     m_guaNode->clear_children();
+    auto avGuaChildren(static_cast<av::MultiField<av::Link<Node>>::ContainerType*>(m_guaNode->get_user_data(m_childrenUserDataHandle)));
+
+    if (avGuaChildren) avGuaChildren->clear();
 
     const av::gua::MFNode::ContainerType &children(event.getValue());
 
     for (auto& child: children) {
       if (child->getGuaNode() != nullptr) {
         m_guaNode->add_child(child->getGuaNode());
+        if (avGuaChildren) {
+          avGuaChildren->push_back(child);
+        }
       }
     }
 

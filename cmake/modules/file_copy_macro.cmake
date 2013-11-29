@@ -1,3 +1,8 @@
+MACRO (ADD_PARAMETER parameter input)
+    SET(tmp "${parameter} ${input}")
+    MESSAGE(${parameter})
+    SET(${parameter} ${tmp})
+ENDMACRO(ADD_PARAMETER)
 
 # copies in_file to out_file for target
 MACRO(COPY_FILE in_file out_file target)

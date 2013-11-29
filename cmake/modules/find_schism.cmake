@@ -2,14 +2,14 @@
 # search paths
 ##############################################################################
 SET(SCHISM_INCLUDE_SEARCH_DIRS
-  ${SCHISM_INCLUDE_DIRS}
   ${SCHISM_INCLUDE_SEARCH_DIR}
+  ${GUACAMOLE_EXT_DIR}/inc/schism
   /opt/schism/current
 )
 
 SET(SCHISM_LIBRARY_SEARCH_DIRS
-  ${SCHISM_LIBRARY_DIRS}
   ${SCHISM_LIBRARY_SEARCH_DIR}
+  ${GUACAMOLE_EXT_DIR}/lib
   ../
   /opt/schism/current/lib/linux_x86
 )

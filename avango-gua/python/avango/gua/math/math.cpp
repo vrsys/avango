@@ -12,12 +12,31 @@
 using namespace boost::python;
 using namespace av::python;
 
+#define ADD_VECTOR_OPERATORS(TYPE) \
+  .def(self *  other< TYPE ::value_type>())\
+  .def(self /  other< TYPE ::value_type>())\
+  .def(self +  other< TYPE ::value_type>())\
+  .def(self -  other< TYPE ::value_type>())\
+  .def(self *= other< TYPE ::value_type>())\
+  .def(self /= other< TYPE ::value_type>())\
+  .def(self += other< TYPE ::value_type>())\
+  .def(self -= other< TYPE ::value_type>())\
+  .def(self *  other< TYPE >())\
+  .def(self /  other< TYPE >())\
+  .def(self +  other< TYPE >())\
+  .def(self -  other< TYPE >())\
+  .def(self *= other< TYPE >())\
+  .def(self /= other< TYPE >())\
+  .def(self += other< TYPE >())\
+  .def(self -= other< TYPE >())
+
 void init_Vec2() {
   // wrapping gua::math::vec2 functionality
   class_< ::gua::math::vec2>("Vec2", no_init)
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2>))
     .def(init< ::gua::math::vec2::value_type, ::gua::math::vec2::value_type>())
     .def(init< ::gua::math::vec2>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec2)
     .add_property("x", &getX< ::gua::math::vec2>, &setX< ::gua::math::vec2>)
     .add_property("y", &getY< ::gua::math::vec2>, &setY< ::gua::math::vec2>)
     .def("normalize", &normalize< ::gua::math::vec2>)
@@ -34,12 +53,36 @@ void init_Vec2() {
   register_multifield<av::gua::MFVec2>("MFVec2");
 }
 
+void init_Vec2i() {
+  // wrapping gua::math::vec2i functionality
+  class_< ::gua::math::vec2i>("Vec2i", no_init)
+    .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2i>))
+    .def(init< unsigned, unsigned>())
+    .def(init< ::gua::math::vec2i>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec2i)
+    .add_property("x", &getX< ::gua::math::vec2i>, &setX< ::gua::math::vec2i>)
+    .add_property("y", &getY< ::gua::math::vec2i>, &setY< ::gua::math::vec2i>)
+    .def("normalize", &normalize< ::gua::math::vec2i>)
+    .def("length", &length< ::gua::math::vec2i>)
+    .def("length2", &length2< ::gua::math::vec2i>)
+    .def("distance_to", &distanceTo< ::gua::math::vec2i>)
+    .def("lerp_to", &lerpTo< ::gua::math::vec2i>)
+    .def("__repr__", &toString< ::gua::math::vec2i>)
+    .def("__getitem__", &getVecElement< ::gua::math::vec2i>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFVec2i>("SFVec2i");
+  register_multifield<av::gua::MFVec2i>("MFVec2i");
+}
+
 void init_Vec2ui() {
   // wrapping gua::math::vec2ui functionality
   class_< ::gua::math::vec2ui>("Vec2ui", no_init)
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2ui>))
     .def(init< unsigned, unsigned>())
     .def(init< ::gua::math::vec2ui>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec2ui)
     .add_property("x", &getX< ::gua::math::vec2ui>, &setX< ::gua::math::vec2ui>)
     .add_property("y", &getY< ::gua::math::vec2ui>, &setY< ::gua::math::vec2ui>)
     .def("normalize", &normalize< ::gua::math::vec2ui>)
@@ -64,14 +107,7 @@ void init_Vec3() {
                ::gua::math::vec3::value_type,
                ::gua::math::vec3::value_type>())
     .def(init< ::gua::math::vec3>())
-    .def(self *  other< ::gua::math::vec3::value_type>())
-    .def(self /  other< ::gua::math::vec3::value_type>())
-    .def(self *= other< ::gua::math::vec3::value_type>())
-    .def(self /= other< ::gua::math::vec3::value_type>())
-    .def(self +  other< ::gua::math::vec3>())
-    .def(self -  other< ::gua::math::vec3>())
-    .def(self += other< ::gua::math::vec3>())
-    .def(self -= other< ::gua::math::vec3>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec3)
     .add_property("x", &getX< ::gua::math::vec3>, &setX< ::gua::math::vec3>)
     .add_property("y", &getY< ::gua::math::vec3>, &setY< ::gua::math::vec3>)
     .add_property("z", &getZ< ::gua::math::vec3>, &setZ< ::gua::math::vec3>)
@@ -89,6 +125,58 @@ void init_Vec3() {
   register_multifield<av::gua::MFVec3>("MFVec3");
 }
 
+void init_Vec3i() {
+  // wrapping gua::math::vec3i functionality
+  class_< ::gua::math::vec3i>("Vec3i", no_init)
+    .def("__init__", make_constructor(&constructorVec< ::gua::math::vec3i>))
+    .def(init< ::gua::math::vec3i::value_type,
+               ::gua::math::vec3i::value_type,
+               ::gua::math::vec3i::value_type>())
+    .def(init< ::gua::math::vec3i>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec3i)
+    .add_property("x", &getX< ::gua::math::vec3i>, &setX< ::gua::math::vec3i>)
+    .add_property("y", &getY< ::gua::math::vec3i>, &setY< ::gua::math::vec3i>)
+    .add_property("z", &getZ< ::gua::math::vec3i>, &setZ< ::gua::math::vec3i>)
+    .def("normalize", &normalize< ::gua::math::vec3i>)
+    .def("length", &length< ::gua::math::vec3i>)
+    .def("length2", &length2< ::gua::math::vec3i>)
+    .def("distance_to", &distanceTo< ::gua::math::vec3i>)
+    .def("lerp_to", &lerpTo< ::gua::math::vec3i>)
+    .def("__repr__", &toString< ::gua::math::vec3i>)
+    .def("__getitem__", &getVecElement< ::gua::math::vec3i>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFVec3i>("SFVec3i");
+  register_multifield<av::gua::MFVec3i>("MFVec3i");
+}
+
+void init_Vec3ui() {
+  // wrapping gua::math::vec3ui functionality
+  class_< ::gua::math::vec3ui>("Vec3ui", no_init)
+    .def("__init__", make_constructor(&constructorVec< ::gua::math::vec3ui>))
+    .def(init< ::gua::math::vec3ui::value_type,
+               ::gua::math::vec3ui::value_type,
+               ::gua::math::vec3ui::value_type>())
+    .def(init< ::gua::math::vec3ui>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec3ui)
+    .add_property("x", &getX< ::gua::math::vec3ui>, &setX< ::gua::math::vec3ui>)
+    .add_property("y", &getY< ::gua::math::vec3ui>, &setY< ::gua::math::vec3ui>)
+    .add_property("z", &getZ< ::gua::math::vec3ui>, &setZ< ::gua::math::vec3ui>)
+    .def("normalize", &normalize< ::gua::math::vec3ui>)
+    .def("length", &length< ::gua::math::vec3ui>)
+    .def("length2", &length2< ::gua::math::vec3ui>)
+    .def("distance_to", &distanceTo< ::gua::math::vec3ui>)
+    .def("lerp_to", &lerpTo< ::gua::math::vec3ui>)
+    .def("__repr__", &toString< ::gua::math::vec3ui>)
+    .def("__getitem__", &getVecElement< ::gua::math::vec3ui>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFVec3ui>("SFVec3ui");
+  register_multifield<av::gua::MFVec3ui>("MFVec3ui");
+}
+
 void init_Vec4() {
   // wrapping gua::math::vec4 functionality
   class_< ::gua::math::vec4>("Vec4", no_init)
@@ -98,14 +186,7 @@ void init_Vec4() {
                ::gua::math::vec4::value_type,
                ::gua::math::vec4::value_type>())
     .def(init< ::gua::math::vec4>())
-    .def(self *  other< ::gua::math::vec4::value_type>())
-    .def(self /  other< ::gua::math::vec4::value_type>())
-    .def(self *= other< ::gua::math::vec4::value_type>())
-    .def(self /= other< ::gua::math::vec4::value_type>())
-    .def(self +   other< ::gua::math::vec4::value_type>())
-    .def(self -   other< ::gua::math::vec4::value_type>())
-    .def(self +=  other< ::gua::math::vec4::value_type>())
-    .def(self -=  other< ::gua::math::vec4::value_type>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec4)
     .add_property("x", &getX< ::gua::math::vec4>, &setX< ::gua::math::vec4>)
     .add_property("y", &getY< ::gua::math::vec4>, &setY< ::gua::math::vec4>)
     .add_property("z", &getZ< ::gua::math::vec4>, &setZ< ::gua::math::vec4>)
@@ -122,6 +203,62 @@ void init_Vec4() {
   // register as a field
   register_field<av::gua::SFVec4>("SFVec4");
   register_multifield<av::gua::MFVec4>("MFVec4");
+}
+
+void init_Vec4i() {
+  // wrapping gua::math::vec4i functionality
+  class_< ::gua::math::vec4i>("Vec4i", no_init)
+    .def("__init__", make_constructor(&constructorVec< ::gua::math::vec4i>))
+    .def(init< ::gua::math::vec4i::value_type,
+               ::gua::math::vec4i::value_type,
+               ::gua::math::vec4i::value_type,
+               ::gua::math::vec4i::value_type>())
+    .def(init< ::gua::math::vec4i>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec4i)
+    .add_property("x", &getX< ::gua::math::vec4i>, &setX< ::gua::math::vec4i>)
+    .add_property("y", &getY< ::gua::math::vec4i>, &setY< ::gua::math::vec4i>)
+    .add_property("z", &getZ< ::gua::math::vec4i>, &setZ< ::gua::math::vec4i>)
+    .add_property("w", &getW< ::gua::math::vec4i>, &setW< ::gua::math::vec4i>)
+    .def("normalize", &normalize< ::gua::math::vec4i>)
+    .def("length", &length< ::gua::math::vec4i>)
+    .def("length2", &length2< ::gua::math::vec4i>)
+    .def("distance_to", &distanceTo< ::gua::math::vec4i>)
+    .def("lerp_to", &lerpTo< ::gua::math::vec4i>)
+    .def("__repr__", &toString< ::gua::math::vec4i>)
+    .def("__getitem__", &getVecElement< ::gua::math::vec4i>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFVec4i>("SFVec4i");
+  register_multifield<av::gua::MFVec4i>("MFVec4i");
+}
+
+void init_Vec4ui() {
+  // wrapping gua::math::vec4ui functionality
+  class_< ::gua::math::vec4ui>("Vec4ui", no_init)
+    .def("__init__", make_constructor(&constructorVec< ::gua::math::vec4ui>))
+    .def(init< ::gua::math::vec4ui::value_type,
+               ::gua::math::vec4ui::value_type,
+               ::gua::math::vec4ui::value_type,
+               ::gua::math::vec4ui::value_type>())
+    .def(init< ::gua::math::vec4ui>())
+    ADD_VECTOR_OPERATORS( ::gua::math::vec4ui)
+    .add_property("x", &getX< ::gua::math::vec4ui>, &setX< ::gua::math::vec4ui>)
+    .add_property("y", &getY< ::gua::math::vec4ui>, &setY< ::gua::math::vec4ui>)
+    .add_property("z", &getZ< ::gua::math::vec4ui>, &setZ< ::gua::math::vec4ui>)
+    .add_property("w", &getW< ::gua::math::vec4ui>, &setW< ::gua::math::vec4ui>)
+    .def("normalize", &normalize< ::gua::math::vec4ui>)
+    .def("length", &length< ::gua::math::vec4ui>)
+    .def("length2", &length2< ::gua::math::vec4ui>)
+    .def("distance_to", &distanceTo< ::gua::math::vec4ui>)
+    .def("lerp_to", &lerpTo< ::gua::math::vec4ui>)
+    .def("__repr__", &toString< ::gua::math::vec4ui>)
+    .def("__getitem__", &getVecElement< ::gua::math::vec4ui>)
+  ;
+
+  // register as a field
+  register_field<av::gua::SFVec4ui>("SFVec4ui");
+  register_multifield<av::gua::MFVec4ui>("MFVec4ui");
 }
 
 void init_Mat3() {

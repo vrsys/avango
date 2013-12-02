@@ -23,6 +23,14 @@ av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
   m_selfUserDataHandle = guanode->add_user_data(this);
   m_childrenUserDataHandle = guanode->add_user_data(new av::MultiField<av::Link<Node>>::ContainerType());
 
+  if (guanode->get_parent()) {
+    auto parent_children(static_cast<av::MultiField<
+                                      av::Link<Node>>::ContainerType*>(
+                                        guanode->get_parent()->get_user_data(m_childrenUserDataHandle)));
+
+    parent_children->push_back(this);
+  }
+
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
                         boost::bind(&Node::setParentCB, this, _1));

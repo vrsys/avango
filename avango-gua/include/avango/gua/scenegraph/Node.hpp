@@ -94,7 +94,8 @@ namespace av
     private:
 
       std::shared_ptr< ::gua::Node> m_guaNode;
-      unsigned m_userDataHandle;
+      unsigned m_selfUserDataHandle;
+      unsigned m_childrenUserDataHandle;
 
       Node(const Node&);
       Node& operator=(const Node&);

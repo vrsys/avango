@@ -207,7 +207,7 @@ av::daemon::DeviceSensor::getMatrix(::gua::math::mat4& mat)
   const char* stationstr = Station.getValue().c_str();
   ::gua::math::mat4 station = DeviceService.getValue()->getMatrix(stationstr);
 
-  mat = ReceiverOffset.getValue() * station * TransmitterOffset.getValue();
+  mat = TransmitterOffset.getValue() * station * ReceiverOffset.getValue();
 }
 
 float

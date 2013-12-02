@@ -2,15 +2,15 @@
 # search paths
 ##############################################################################
 SET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS
-  ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
   ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR}
-  ${CMAKE_SOURCE_DIR}/../guacamole/include
-  /opt/guacamole/current/guacamole/include
+  ${GUACAMOLE_INCLUDE_DIRS}/../plugins/guacamole-oculus/include
+  ${CMAKE_SOURCE_DIR}/../guacamole-oculus/include
+  /opt/guacamole/current/guacamole-oculus/include
 )
 
 SET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIRS
-  ${GUACAMOLE_OCULUS_LIBRARY_DIRS}
   ${GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR}
+  ${GUACAMOLE_LIBRARY_DIRS}
   ${CMAKE_SOURCE_DIR}/../guacamole-oculus/lib
   /opt/guacamole/current/guacamole-oculus/lib
 )
@@ -111,9 +111,9 @@ IF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
 
     FOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
 		    IF (UNIX)
-			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/*.so)
+			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/libguacamole-oculus.so)
 		    ELSEIF(WIN32)
-			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/release/*.lib)
+			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/release/guacamole-oculus.lib)
 		    ENDIF(UNIX)
     ENDFOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
 

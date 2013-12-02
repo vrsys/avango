@@ -6,7 +6,6 @@ file(GLOB AVANGO_OCULUS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/avango/oculus/*.hpp
 )
 
-
 # Location where cmake first looks for modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)
 
@@ -16,36 +15,45 @@ include(find_guacamole_oculus)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS} ${GUACAMOLE_OCULUS_LIBRARY_DIRS} ${PYTHON_LIBRARY_DIRS})
+LINK_DIRECTORIES(
+  ${LIB_PATHS}
+  ${GUACAMOLE_OCULUS_LIBRARY_DIRS}
+  ${PYTHON_LIBRARY_DIRS}
+  ${BULLET_LIBRARY_DIRS}
+)
 
-INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
-                    ${SCHISM_INCLUDE_DIRS}
-                    ${BULLET_INCLUDE_DIRS}
-					${PYTHON_INCLUDE_DIRS}
-					${GUACAMOLE_OCULUS_INCLUDE_DIRS}
-					include
-					../avango-core/include
-					../avango-gua/include
-					../avango-python/include
-					../../guacamole-oculus/include
+INCLUDE_DIRECTORIES(
+    ${INCLUDE_PATHS}
+    ${SCHISM_INCLUDE_DIRS}
+    ${BULLET_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
+    ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
+    ${BULLET_INCLUDE_DIRS}
+    include
+    ../avango-core/include
+    ../avango-gua/include
+    ../avango-python/include
+    ../../guacamole-oculus/include
 )
 
 ADD_LIBRARY( avango_oculus SHARED
-    	     ${AVANGO_OCULUS_SRC}
+    ${AVANGO_OCULUS_SRC}
 )
-
-IF (MSVC)
-	set_target_properties(avango_oculus PROPERTIES COMPILE_FLAGS "-D AV_OCULUS_LIBRARY")
-ENDIF (MSVC)
 
 ADD_DEPENDENCIES ( avango_oculus avango )
 
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
+SET(AVANGO_OCULUS_BUILD_FLAGS "${BUILD_FLAGS} -D AV_OCULUS_LIBRARY")
+
+set_target_properties(avango_oculus PROPERTIES COMPILE_FLAGS ${AVANGO_OCULUS_BUILD_FLAGS})
+
 LIST(APPEND LIBRARIES avango avango_script avango_gua ${GUACAMOLE_OCULUS_LIBRARIES})
 
-TARGET_LINK_LIBRARIES( avango_oculus debug ${LIBRARIES} optimized ${LIBRARIES} )
+TARGET_LINK_LIBRARIES( avango_oculus
+  debug ${LIBRARIES}
+  optimized ${LIBRARIES})
 
 ###############################################################################
 # python module
@@ -57,5 +65,6 @@ add_subdirectory(python)
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango_oculus ${AVANGO_INSTALL_DIRECTORY}/avango/avango_oculus.dll)
+ELSEIF (UNIX)
+  post_build_install_target(avango_oculus ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_oculus.so)
 ENDIF (MSVC)
-

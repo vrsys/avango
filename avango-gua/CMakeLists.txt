@@ -60,16 +60,16 @@ ADD_DEPENDENCIES(_gua avango avango_gua)
 # set preprocessor configuration
 ###############################################################################
 SET( AVANGO_GUA_BUILD_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY")
-SET( AVANGO_GUA_PYTHON_BUILD_FLAGS "${BUILD_FLAGS}")
+SET( AVANGO_GUA_PYTHON_BUILD_FLAGS "${BUILD_FLAGS} ")
 
 IF (MSVC)
 	SET( AVANGO_GUA_BUILD_FLAGS "${AVANGO_GUA_BUILD_FLAGS} /bigobj")
 ENDIF (MSVC)
 
-set_target_properties(avango_gua PROPERTIES COMPILE_FLAGS ${AVANGO_GUA_BUILD_FLAGS})
+set_target_properties(avango_gua PROPERTIES COMPILE_FLAGS "${AVANGO_GUA_BUILD_FLAGS}")
 set_target_properties(avango_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
-set_target_properties(_gua PROPERTIES COMPILE_FLAGS ${AVANGO_GUA_PYTHON_BUILD_FLAGS})
+set_target_properties(_gua PROPERTIES COMPILE_FLAGS "${AVANGO_GUA_PYTHON_BUILD_FLAGS}")
 set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 ###############################################################################

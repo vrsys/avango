@@ -8,7 +8,13 @@ import sys
 import signal
 import Queue
 import os
-import readline
+
+try:
+	import pyreadline as readline
+except ImportError:	
+	import readline	
+
+
 import rlcompleter
 
 print_green = '\033[1;32m'

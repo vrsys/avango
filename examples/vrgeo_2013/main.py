@@ -13,6 +13,8 @@ from SlideSwitcher import SlideSwitcher
 
 SLIDE_OFFSET = 4.0
 
+data_dir = '/opt/gua_vrgeo_2013/'
+
 # for avango example
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -45,9 +47,9 @@ def setup_pipe():
                                    LeftResolution = size)
 
 
-  avango.gua.create_texture("data/textures/sky.jpg")
-  avango.gua.create_texture("data/textures/sky2.jpg")
-  avango.gua.create_texture("data/textures/sky3.jpg")
+  avango.gua.create_texture(data_dir + "data/textures/sky.jpg")
+  avango.gua.create_texture(data_dir + "data/textures/sky2.jpg")
+  avango.gua.create_texture(data_dir + "data/textures/sky3.jpg")
 
   pipe.EnableFXAA.value = True
   pipe.EnableFrustumCulling.value = True
@@ -57,11 +59,11 @@ def setup_pipe():
   pipe.HDRKey.value = 3.0
 
   pipe.EnableFog.value = True
-  pipe.FogTexture.value = "data/textures/sky.jpg"
+  pipe.FogTexture.value = data_dir + "data/textures/sky.jpg"
   pipe.FogStart.value = 50.0
   pipe.FogEnd.value = 80.0
 
-  pipe.BackgroundTexture.value = "data/textures/sky.jpg"
+  pipe.BackgroundTexture.value = data_dir + "data/textures/sky.jpg"
 
   pipe.AmbientColor.value = avango.gua.Color(0.8, 0.8, 0.8)
 
@@ -78,14 +80,14 @@ def setup_pipe():
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
+  avango.gua.load_shading_models_from(data_dir + "data/materials")
+  avango.gua.load_materials_from(data_dir + "data/materials")
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.GeometryLoader()
 
   town = loader.create_geometry_from_file("town",
-          "data/objects/town.obj",
+          data_dir + "data/objects/town.obj",
           "White",
           avango.gua.LoaderFlags.LOAD_MATERIALS |
           avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY )
@@ -103,7 +105,7 @@ def start():
 
 
   slides = loader.create_geometry_from_file("slides",
-           "data/objects/test_slides.obj",
+           data_dir + "data/objects/test_slides.obj",
            "White",
            avango.gua.LoaderFlags.LOAD_MATERIALS)
 
@@ -164,7 +166,7 @@ def start():
   avango_example = avango.gua.nodes.TransformNode(Name = "avango_example")
   avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -4.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   monkey = loader.create_geometry_from_file("monkey",
-           "data/objects/monkey.obj",
+           data_dir + "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   avango_example.Children.value = [monkey]
 
@@ -174,14 +176,14 @@ def start():
 
   # python example
   def make_noon():
-    pipe.BackgroundTexture.value = "data/textures/sky2.jpg"
+    pipe.BackgroundTexture.value = data_dir + "data/textures/sky2.jpg"
     pipe.AmbientColor.value = avango.gua.Color(0.2, 0.4, 1.0)
     sun.Color.value = avango.gua.Color(1.2, 1.2, 1.5)
     sun.Transform.value = sun.Transform.value = avango.gua.make_trans_mat(-10.0, 40.0, 40.0) * avango.gua.make_scale_mat(80, 80, 80) * avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0)
     fake_sun.Color.value = avango.gua.Color(0, 0, 0)
 
   def make_evening():
-    pipe.BackgroundTexture.value = "data/textures/sky.jpg"
+    pipe.BackgroundTexture.value = data_dir + "data/textures/sky.jpg"
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
     sun.Color.value = avango.gua.Color(1.0, 0.8, 0.6)
     sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * \
@@ -190,7 +192,7 @@ def start():
     fake_sun.Color.value = avango.gua.Color(1.2, 0.5, 0.3)
 
   def make_night():
-    pipe.BackgroundTexture.value = "data/textures/sky3.jpg"
+    pipe.BackgroundTexture.value = data_dir + "data/textures/sky3.jpg"
     pipe.AmbientColor.value = avango.gua.Color(0.0, 0.0, 0.0)
     sun.Color.value = avango.gua.Color(0.5, 0.6, 1.5)
     sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * \
@@ -212,17 +214,17 @@ def start():
     row_width = 2.0
 
     sphere = loader.create_geometry_from_file(
-      name, "data/objects/sphere.obj", name,
+      name, data_dir + "data/objects/sphere.obj", name,
       avango.gua.LoaderFlags.DEFAULTS
     )
 
     plane = loader.create_geometry_from_file(
-      name, "data/objects/plane.obj", name,
+      name, data_dir + "data/objects/plane.obj", name,
       avango.gua.LoaderFlags.DEFAULTS
     )
 
     monkey = loader.create_geometry_from_file(
-      name, "data/objects/monkey.obj", name,
+      name, data_dir + "data/objects/monkey.obj", name,
       avango.gua.LoaderFlags.DEFAULTS
     )
 

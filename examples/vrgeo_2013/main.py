@@ -198,7 +198,8 @@ def start():
 
   # avango example
   avango_example = avango.gua.nodes.TransformNode(Name = "avango_example")
-  avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -4.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  #avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -4.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -12.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   monkey = loader.create_geometry_from_file("monkey",
            "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
@@ -237,7 +238,8 @@ def start():
 
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
-  material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  #material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -7*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
 
   material_example_group = avango.gua.nodes.TransformNode(Name = "material_example_group")
   material_example_group.Transform.connect_from(timed_rotate.MatrixOut)
@@ -403,7 +405,7 @@ def start():
   slide_switcher.LastSlide.value = 15
   slide_switcher.NextSlide.connect_from(navigator.Keyboard.KeyUp)
   slide_switcher.PreviousSlide.connect_from(navigator.Keyboard.KeyDown)
-  slide_switcher.LastSlide.value = 21
+  slide_switcher.LastSlide.value = 18
   slide_switcher.SlideLocation.value = slide_transform.Transform.value.get_translate()
   slide_switcher.SlideYRotation.value = -90
   slide_switcher.SlideOffset.value = SLIDE_OFFSET
@@ -439,6 +441,18 @@ def start():
     pipe.EnableBloom.value = True
     sun.EnableShadows.value = True
     fake_sun.EnableGodrays.value = True
+
+  def toggle_ssao():
+    pipe.EnableSsao.value = not (pipe.EnableSsao.value)
+
+  def toggle_bloom():
+    pipe.EnableBloom.value = not (pipe.EnableBloom.value)
+
+  def toggle_sun_shadows():
+    sun.EnableShadows.value = not (sun.EnableShadows.value)
+
+  def toggle_godrays():
+    fake_sun.EnableGodrays.value = not (fake_sun.EnableGodrays.value)
 
   def show_buffers():
     pipe.EnablePreviewDisplay.value = True

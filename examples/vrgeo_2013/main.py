@@ -6,12 +6,25 @@ from avango.script import field_has_changed
 import avango.gua
 
 import time
+import random
 
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 from SlideSwitcher import SlideSwitcher
 
 SLIDE_OFFSET = 4.0
+
+class TimedMaterialUniformUpdate(avango.script.Script):
+
+  TimeIn = avango.SFFloat()
+  MaterialName = avango.SFString()
+  UniformName = avango.SFString()
+
+  @field_has_changed(TimeIn)
+  def update(self):
+    avango.gua.set_material_uniform(self.MaterialName.value,
+                                    self.UniformName.value,
+                                    self.TimeIn.value)
 
 # for avango example
 class TimedRotate(avango.script.Script):
@@ -51,23 +64,23 @@ def setup_pipe():
 
   pipe.EnableFXAA.value = True
   pipe.EnableFrustumCulling.value = True
-  pipe.EnableBackfaceCulling.value = False
+  pipe.EnableBackfaceCulling.value = True
 
   pipe.EnableHDR.value = False
   pipe.HDRKey.value = 3.0
 
   pipe.EnableFog.value = True
-  pipe.FogTexture.value = "data/textures/sky.jpg"
-  pipe.FogStart.value = 50.0
-  pipe.FogEnd.value = 80.0
+  pipe.FogTexture.connect_from(pipe.BackgroundTexture)
+  pipe.FogStart.value = 250.0
+  pipe.FogEnd.value = 580.0
 
   pipe.BackgroundTexture.value = "data/textures/sky.jpg"
 
   pipe.AmbientColor.value = avango.gua.Color(0.8, 0.8, 0.8)
 
   pipe.EnableSsao.value = True
-  pipe.SsaoIntensity.value = 4.0
-  pipe.SsaoRadius.value = 3.0
+  pipe.SsaoIntensity.value = 3.0
+  pipe.SsaoRadius.value = 5.0
 
   pipe.EnableBloom.value = True
   pipe.BloomRadius.value = 10.0
@@ -84,30 +97,53 @@ def start():
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.GeometryLoader()
 
-  town = loader.create_geometry_from_file("town",
-          "data/objects/town.obj",
+  oilrig_cs = avango.gua.create_triangle_mesh_shape_from_geometry_file(
+    "oilrig_cs",
+    "data/objects/OIL_RIG_GUACAMOLE/oilrig.obj",
+    True,
+    False,
+    avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
+  )
+  oilrig_cs.Scaling.value = avango.gua.Vec3(0.1, 0.1, 0.1)
+
+
+  oilrig_csn = avango.gua.nodes.CollisionShapeNode(
+    Name = "oilrig_csn",
+    ShapeName = "oilrig_cs"
+  )
+
+  oilrig = loader.create_geometry_from_file("town",
+          "data/objects/OIL_RIG_GUACAMOLE/oilrig.obj",
           "White",
           avango.gua.LoaderFlags.LOAD_MATERIALS |
           avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY )
+  oilrig.Transform.value = avango.gua.make_scale_mat(0.1, 0.1, 0.1)
 
-  town.Transform.value = avango.gua.make_scale_mat(4.0, 4.0, 4.0)
+  oilrig_rb = avango.gua.nodes.RigidBodyNode(
+    Name = "oilrig_rb",
+    Mass = 0.0,
+    Restitution = 10.0,
+    Transform = avango.gua.make_rot_mat(-90, 1, 0, 0),
+    Children = [oilrig_csn]
+  )
 
-  ship = loader.create_geometry_from_file("ship",
-          "/opt/3d_models/vehicle/ships/suzannes_revenge/ship.dae",
-          "White",
-          avango.gua.LoaderFlags.LOAD_MATERIALS |
-          avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+  oilrig_csn.Children.value = [oilrig]
 
-  ship.Transform.value = avango.gua.make_trans_mat(-3.0, 1.0, 18.0) * \
-                         avango.gua.make_scale_mat(-3.0, 3.0, 3.0)
 
+
+  water = loader.create_geometry_from_file("water_geometry",
+          "data/objects/plane.obj",
+          "Water",
+          avango.gua.LoaderFlags.DEFAULTS)
+
+  water.Transform.value = avango.gua.make_scale_mat(1000, 1, 1000) * avango.gua.make_trans_mat(0, -10, 0)
 
   slides = loader.create_geometry_from_file("slides",
            "data/objects/test_slides.obj",
            "White",
+           # avango.gua.LoaderFlags.DEFAULTS)
            avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-  slides.Transform.value = avango.gua.make_trans_mat(0, -1.05, -0.1) * avango.gua.make_rot_mat(-90, 0, 1, 0)
 
   sun = avango.gua.nodes.SpotLightNode(Name = "sun",
                                        Color = avango.gua.Color(1.0, 0.8, 0.6),
@@ -120,7 +156,7 @@ def start():
                                        ShadowOffset = 0.0005)
 
   sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * \
-                        avango.gua.make_scale_mat(80, 80, 80) * \
+                        avango.gua.make_scale_mat(120, 120, 80) * \
                         avango.gua.make_rot_mat(-25.0, 1.0, 0.0, 0.0)
 
   head_light = avango.gua.nodes.PointLightNode(Name = "head",
@@ -142,13 +178,13 @@ def start():
   fake_sun.Transform.value = avango.gua.make_trans_mat(-100, 6, 200) * avango.gua.make_scale_mat(100, 100, 100)
 
   navigation = avango.gua.nodes.TransformNode(Name = "navigation")
-  navigation.Transform.value = avango.gua.make_trans_mat(0.7, 0.2, 4.6) * avango.gua.make_rot_mat(155, 0, 1, 0)
+  navigation.Transform.value = avango.gua.make_trans_mat(14.501, 7.142, -9.199)*avango.gua.make_rot_mat(155, 0, 1, 0)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",
                                        Width = 3.0,
                                        Height = 1.97)
   slide_transform = avango.gua.nodes.TransformNode(Name = "slideTransform")
-  slide_transform.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)
+  slide_transform.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)*avango.gua.make_trans_mat(0, -1.05, -0.1) * avango.gua.make_rot_mat(-90, 0, 1, 0)
 
   screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)
 
@@ -175,28 +211,29 @@ def start():
   # python example
   def make_noon():
     pipe.BackgroundTexture.value = "data/textures/sky2.jpg"
-    pipe.AmbientColor.value = avango.gua.Color(0.2, 0.4, 1.0)
-    sun.Color.value = avango.gua.Color(1.2, 1.2, 1.5)
-    sun.Transform.value = sun.Transform.value = avango.gua.make_trans_mat(-10.0, 40.0, 40.0) * avango.gua.make_scale_mat(80, 80, 80) * avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0)
+    pipe.AmbientColor.value = avango.gua.Color(0.8, 0.8, 1.0)
+    sun.Color.value = avango.gua.Color(2.0, 2.0, 2.5)
+    sun.Transform.value = sun.Transform.value = avango.gua.make_trans_mat(-10.0, 40.0, 40.0) * avango.gua.make_scale_mat(120, 120, 80) * avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0)
     fake_sun.Color.value = avango.gua.Color(0, 0, 0)
+    avango.gua.set_material_uniform("Water", "skymap", pipe.BackgroundTexture.value)
 
   def make_evening():
     pipe.BackgroundTexture.value = "data/textures/sky.jpg"
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
     sun.Color.value = avango.gua.Color(1.0, 0.8, 0.6)
     sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * \
-                          avango.gua.make_scale_mat(80, 80, 80) * \
+                          avango.gua.make_scale_mat(120, 120, 120) * \
                           avango.gua.make_rot_mat(-25.0, 1.0, 0.0, 0.0)
     fake_sun.Color.value = avango.gua.Color(1.2, 0.5, 0.3)
+    avango.gua.set_material_uniform("Water", "skymap", pipe.BackgroundTexture.value)
 
   def make_night():
     pipe.BackgroundTexture.value = "data/textures/sky3.jpg"
     pipe.AmbientColor.value = avango.gua.Color(0.0, 0.0, 0.0)
-    sun.Color.value = avango.gua.Color(0.5, 0.6, 1.5)
-    sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * \
-                          avango.gua.make_scale_mat(80, 80, 80) * \
-                          avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0)
+    sun.Color.value = avango.gua.Color(1.0, 1.0, 3.5)
+    sun.Transform.value = avango.gua.make_trans_mat(-10.0, 20.0, 40.0) * avango.gua.make_scale_mat(120, 120, 80) *avango.gua.make_rot_mat(-25.0, 1.0, 0.0, 0.0)
     fake_sun.Color.value = avango.gua.Color(0, 0, 0)
+    avango.gua.set_material_uniform("Water", "skymap", pipe.BackgroundTexture.value)
 
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
@@ -207,7 +244,7 @@ def start():
 
   material_example.Children.value = [material_example_group]
 
-  def display_material(parent, row, column, name):
+  def _display_material(parent, row, column, name):
     column_width = 2.0
     row_width = 2.0
 
@@ -230,15 +267,96 @@ def start():
                              avango.gua.make_scale_mat(0.4, 0.4, 0.4)
     plane.Transform.value =  avango.gua.make_trans_mat(row*row_width, -0.4, column*column_width) * \
                              avango.gua.make_scale_mat(2, 1, 2)
-    monkey.Transform.value =  avango.gua.make_trans_mat(row*row_width, 0.8, column*column_width) * \
+    monkey.Transform.value = avango.gua.make_trans_mat(row*row_width, 0.8, column*column_width) * \
                              avango.gua.make_scale_mat(0.3, 0.3, 0.3)
 
     parent.Children.value.append(sphere)
     parent.Children.value.append(plane)
     parent.Children.value.append(monkey)
 
+  # physics / lights example
+  physics = avango.gua.nodes.Physics()
+  physics.add_rigid_body(oilrig_rb)
 
-  def display_materials(parent):
+  light_proxy_size = 0.2
+  light_size = 2.0
+
+  avango.gua.create_sphere_shape("sphere", light_proxy_size*0.5)
+
+  def add_lights():
+
+    physics.State.value = avango.gua.PhysicsRunningState.STOPPED
+
+    physics.Gravity.value = avango.gua.Vec3(0, 0, 0)
+
+    loader = avango.gua.nodes.GeometryLoader()
+
+    count = 200
+
+    for x in range(0, count):
+
+      color = avango.gua.Color(1.0, 0.5, 0.5)
+      material = "Light3"
+
+      if x%3 == 0:
+        color = avango.gua.Color(0.5, 1.0, 0.5)
+        material = "Light2"
+      elif x%3 == 1:
+        color = avango.gua.Color(0.5, 0.5, 1.0)
+        material = "Light1"
+
+      light_csn = avango.gua.nodes.CollisionShapeNode(
+        Name = "light_csn",
+        ShapeName = "sphere",
+        Transform = avango.gua.make_identity_mat()
+      )
+
+      randdir = avango.gua.Vec3(
+        5*(random.random() * 2.0 - 1.0) + 8,
+        3*(random.random() * 2.0 - 1.0) + 6,
+        5*(random.random() * 2.0 - 1.0) + 0
+      )
+
+      sphere_geometry = loader.create_geometry_from_file(
+        "sphere",
+        "data/objects/light_sphere.obj",
+        material,
+        avango.gua.LoaderFlags.DEFAULTS
+      )
+      sphere_geometry.Transform.value = avango.gua.make_scale_mat(light_proxy_size, light_proxy_size, light_proxy_size)
+
+      point_light = avango.gua.nodes.PointLightNode(
+        Name = "light",
+        Color = color,
+        Transform = avango.gua.make_scale_mat(light_size, light_size, light_size)
+      )
+
+      light_rb = avango.gua.nodes.RigidBodyNode(
+        Name = "light_rb" + str(x),
+        Mass = 0.5,
+        Friction = 0.6,
+        RollingFriction = 0.03,
+        AngularDamping = 0.1,
+        LinearDamping = 0.1,
+        Restitution = 0.08,
+        Transform = avango.gua.make_trans_mat(randdir),
+        Children = [light_csn, point_light]
+      )
+
+      light_csn.Children.value = [sphere_geometry]
+
+
+      graph.Root.value.Children.value.append(light_rb)
+      physics.add_rigid_body(light_rb)
+
+    physics.State.value = avango.gua.PhysicsRunningState.RUNNING
+
+
+  def drop_lights():
+    physics.Gravity.value = avango.gua.Vec3(0, -1.7, 0)
+
+
+  def _display_materials(parent):
 
     mats = {
       "SimplePhong" : ["SimplePhongGreen", "SimplePhongRed", "SimplePhongWhite"],
@@ -251,22 +369,21 @@ def start():
 
     for materials in mats.values():
       for material in materials:
-        display_material(parent, x-1, y-1, material);
+        _display_material(parent, x-1, y-1, material);
         y += 1
       x += 1
       y = 0
 
-  display_materials(material_example_group);
+  _display_materials(material_example_group);
 
   ##############################################################################
   ## navigation
   ##############################################################################
 
-  #screen.Children.value = [slides]
   slide_transform.Children.value = [slides]
   navigation.Children.value = [screen, view, slide_transform]
 
-  graph.Root.value.Children.value = [town, ship, sun, fake_sun, navigation]
+  graph.Root.value.Children.value = [oilrig_rb, water, sun, fake_sun, navigation]
 
   pipe = setup_pipe()
 
@@ -279,26 +396,23 @@ def start():
   navigator.RotationSpeed.value = 0.2
   navigator.MotionSpeed.value = 0.04
 
+  # enable navigation
   # navigation.Transform.connect_from(navigator.OutTransform)
 
   slide_switcher = SlideSwitcher()
   slide_switcher.LastSlide.value = 15
   slide_switcher.NextSlide.connect_from(navigator.Keyboard.KeyUp)
   slide_switcher.PreviousSlide.connect_from(navigator.Keyboard.KeyDown)
-  #slide_switcher.NextSlide.connect_from(navigator.Mouse.ButtonLeft)
-  #slide_switcher.PreviousSlide.connect_from(navigator.Mouse.ButtonRight)
-
-  slide_switcher.LastSlide.value = 20
-
-  slide_switcher.SlideLocation.value = slides.Transform.value.get_translate()
+  slide_switcher.LastSlide.value = 21
+  slide_switcher.SlideLocation.value = slide_transform.Transform.value.get_translate()
   slide_switcher.SlideYRotation.value = -90
   slide_switcher.SlideOffset.value = SLIDE_OFFSET
 
-  slide_switcher.OutTransform.connect_from(slides.Transform)
-  slides.Transform.connect_from(slide_switcher.OutTransform)
+  slide_switcher.OutTransform.connect_from(slide_transform.Transform)
+  slide_transform.Transform.connect_from(slide_switcher.OutTransform)
 
-  slides.Children.value.append(avango_example)
-  slides.Children.value.append(material_example)
+  slide_transform.Children.value.append(avango_example)
+  slide_transform.Children.value.append(material_example)
 
   ##############################################################################
   ## fancy scene setup
@@ -308,11 +422,29 @@ def start():
     slide_switcher.increase_current_slide()
 
   def make_awesome():
-    slide_switcher.SlideLocation.value = avango.gua.Vec3(0, -1.38, -0.8)
+    slide_switcher.SlideLocation.value = avango.gua.Vec3(0, 0, -2.37)
     slide_switcher.TransitionSmoothness.value = 0.99
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
     view.Children.value = [head_light]
     slide_switcher.CurrentSlide.value = 2
+
+  def disable_effects():
+    pipe.EnableSsao.value = False
+    pipe.EnableBloom.value = False
+    sun.EnableShadows.value = False
+    fake_sun.EnableGodrays.value = False
+
+  def enable_effects():
+    pipe.EnableSsao.value = True
+    pipe.EnableBloom.value = True
+    sun.EnableShadows.value = True
+    fake_sun.EnableGodrays.value = True
+
+  def show_buffers():
+    pipe.EnablePreviewDisplay.value = True
+
+  def hide_buffers():
+    pipe.EnablePreviewDisplay.value = False
 
   def next_slide():
     slide_switcher.TransitionSmoothness.value = 0.9
@@ -326,12 +458,18 @@ def start():
     slide_switcher.goto_slide(i)
 
 
+  water_updater = TimedMaterialUniformUpdate()
+  water_updater.MaterialName.value = "Water"
+  water_updater.UniformName.value = "time"
+  water_updater.TimeIn.connect_from(timer.Time)
+
   guaVE = GuaVE()
   guaVE.start(locals(), globals())
 
   viewer = avango.gua.nodes.Viewer()
   viewer.Pipelines.value = [pipe]
   viewer.SceneGraphs.value = [graph]
+  viewer.Physics.value = physics
 
   viewer.run()
 

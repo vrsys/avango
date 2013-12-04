@@ -230,7 +230,7 @@ def start():
   dk_nurbs_tx.Children.value = [dk_nurbs]
 
   dk_vol = loader.create_geometry_from_file("dk_vol",
-           "data/objects/monkey.obj",
+           "data/objects/head_w256_h256_d225_c1_b8.raw",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_vol.Transform.connect_from(timed_rotate.MatrixOut)
   dk_vol_tx = avango.gua.nodes.TransformNode(Name = "dk_vol_tx")

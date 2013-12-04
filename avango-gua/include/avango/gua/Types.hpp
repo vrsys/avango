@@ -69,6 +69,9 @@ namespace av
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::GeometryNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::GeometryNode&);
 
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::VolumeNode&);
+
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SceneGraph&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SceneGraph&);
 

@@ -196,6 +196,10 @@ def start():
   ## examples
   ##############################################################################
 
+  timer = avango.nodes.TimeSensor()
+  timed_rotate = TimedRotate();
+  timed_rotate.TimeIn.connect_from(timer.Time)
+
   # avango example
   avango_example = avango.gua.nodes.TransformNode(Name = "avango_example")
   #avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -4.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
@@ -205,9 +209,35 @@ def start():
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   avango_example.Children.value = [monkey]
 
-  timer = avango.nodes.TimeSensor()
-  timed_rotate = TimedRotate();
-  timed_rotate.TimeIn.connect_from(timer.Time)
+  # different kinds of data
+  different_kinds_of_data = avango.gua.nodes.TransformNode(Name = "different_kinds_of_data")
+  different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(0, 1, -5.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
+
+  dk_mesh = loader.create_geometry_from_file("dk_mesh",
+           "data/objects/monkey.obj",
+           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
+  dk_mesh.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_mesh_tx = avango.gua.nodes.TransformNode(Name = "dk_mesh_tx")
+  dk_mesh_tx.Transform.value = avango.gua.make_trans_mat(0, 0, 2.5)
+  dk_mesh_tx.Children.value = [dk_mesh]
+
+  dk_nurbs = loader.create_geometry_from_file("dk_nurbs",
+           "data/objects/monkey.obj",
+           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
+  dk_nurbs.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_nurbs_tx = avango.gua.nodes.TransformNode(Name = "dk_nurbs_tx")
+  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+  dk_nurbs_tx.Children.value = [dk_nurbs]
+
+  dk_vol = loader.create_geometry_from_file("dk_vol",
+           "data/objects/monkey.obj",
+           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
+  dk_vol.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_vol_tx = avango.gua.nodes.TransformNode(Name = "dk_vol_tx")
+  dk_vol_tx.Transform.value = avango.gua.make_trans_mat(0, 0, -3.0)
+  dk_vol_tx.Children.value = [dk_vol]
+
+  different_kinds_of_data.Children.value = [dk_mesh_tx,dk_nurbs_tx,dk_vol_tx]
 
   # python example
   def make_noon():
@@ -414,6 +444,7 @@ def start():
   slide_transform.Transform.connect_from(slide_switcher.OutTransform)
 
   slide_transform.Children.value.append(avango_example)
+  slide_transform.Children.value.append(different_kinds_of_data)
   slide_transform.Children.value.append(material_example)
 
   ##############################################################################

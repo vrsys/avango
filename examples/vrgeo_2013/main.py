@@ -215,7 +215,7 @@ def start():
 
   # different kinds of data
   different_kinds_of_data = avango.gua.nodes.TransformNode(Name = "different_kinds_of_data")
-  different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(0, 1, -5.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
+  different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(-1, 1, -4.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
 
   dk_mesh = loader.create_geometry_from_file("dk_mesh",
            "data/objects/monkey.obj",
@@ -235,7 +235,8 @@ def start():
   dk_nurbs_tx.Children.value = [dk_nurbs]
 
   dk_vol = loader.create_geometry_from_file("dk_vol",
-           "data/objects/head_w256_h256_d225_c1_b8.raw",
+           # "data/objects/head_w256_h256_d225_c1_b8.raw",
+           "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_vol.Transform.connect_from(timed_rotate.MatrixOut)
   dk_vol_tx = avango.gua.nodes.TransformNode(Name = "dk_vol_tx")
@@ -274,7 +275,7 @@ def start():
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
   #material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  material_example.Transform.value = avango.gua.make_trans_mat(-0.4, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.3, 0.3, 0.3)
 
   material_example_group = avango.gua.nodes.TransformNode(Name = "material_example_group")
   #material_example_group.Transform.connect_from(timed_rotate.MatrixOut)

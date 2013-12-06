@@ -435,7 +435,7 @@ def start():
   slide_switcher.LastSlide.value = 15
   slide_switcher.NextSlide.connect_from(navigator.Keyboard.KeyUp)
   slide_switcher.PreviousSlide.connect_from(navigator.Keyboard.KeyDown)
-  slide_switcher.LastSlide.value = 18
+  slide_switcher.LastSlide.value = 20
   slide_switcher.SlideLocation.value = slide_transform.Transform.value.get_translate()
   slide_switcher.SlideYRotation.value = -90
   slide_switcher.SlideOffset.value = SLIDE_OFFSET
@@ -460,6 +460,9 @@ def start():
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
     view.Children.value = [head_light]
     slide_switcher.CurrentSlide.value = 2
+
+  def begin_guacamole():
+    make_awesome()
 
   def disable_effects():
     pipe.EnableSsao.value = False

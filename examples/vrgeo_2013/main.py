@@ -89,6 +89,10 @@ def setup_pipe():
 
   return pipe
 
+def reload():
+  avango.gua.load_shading_models_from("data/materials")
+  avango.gua.load_materials_from("data/materials")
+
 def start():
 
   avango.gua.load_shading_models_from("data/materials")
@@ -222,7 +226,8 @@ def start():
   dk_mesh_tx.Children.value = [dk_mesh]
 
   dk_nurbs = loader.create_geometry_from_file("dk_nurbs",
-           "data/objects/monkey.obj",
+           #"data/objects/monkey.obj",
+           "data/objects/heckscheibe.igs",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_nurbs.Transform.connect_from(timed_rotate.MatrixOut)
   dk_nurbs_tx = avango.gua.nodes.TransformNode(Name = "dk_nurbs_tx")
@@ -269,10 +274,10 @@ def start():
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
   #material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -7*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
 
   material_example_group = avango.gua.nodes.TransformNode(Name = "material_example_group")
-  material_example_group.Transform.connect_from(timed_rotate.MatrixOut)
+  #material_example_group.Transform.connect_from(timed_rotate.MatrixOut)
 
   material_example.Children.value = [material_example_group]
 
@@ -455,11 +460,11 @@ def start():
     slide_switcher.increase_current_slide()
 
   def make_awesome():
-    slide_switcher.SlideLocation.value = avango.gua.Vec3(0, 0, -2.37)
-    slide_switcher.TransitionSmoothness.value = 0.99
+    #slide_switcher.SlideLocation.value = avango.gua.Vec3(0, 0, -2.37)
+    slide_switcher.TransitionSmoothness.value = 0.7
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
     view.Children.value = [head_light]
-    slide_switcher.CurrentSlide.value = 2
+    slide_switcher.CurrentSlide.value = 3
 
   def begin_guacamole():
     make_awesome()
@@ -467,12 +472,14 @@ def start():
   def disable_effects():
     pipe.EnableSsao.value = False
     pipe.EnableBloom.value = False
+    pipe.EnableFog.value = False
     sun.EnableShadows.value = False
     fake_sun.EnableGodrays.value = False
 
   def enable_effects():
     pipe.EnableSsao.value = True
     pipe.EnableBloom.value = True
+    pipe.EnableFog.value = True
     sun.EnableShadows.value = True
     fake_sun.EnableGodrays.value = True
 
@@ -487,6 +494,9 @@ def start():
 
   def toggle_godrays():
     fake_sun.EnableGodrays.value = not (fake_sun.EnableGodrays.value)
+
+  def toggle_fog():
+    pipe.EnableFog.value = not (pipe.EnableFog.value)
 
   def show_buffers():
     pipe.EnablePreviewDisplay.value = True

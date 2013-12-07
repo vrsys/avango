@@ -227,11 +227,12 @@ def start():
 
   dk_nurbs = loader.create_geometry_from_file("dk_nurbs",
            #"data/objects/monkey.obj",
-           "data/objects/heckscheibe.igs",
+           #"data/objects/heckscheibe.igs",
+           "data/objects/rim.igs",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_nurbs.Transform.connect_from(timed_rotate.MatrixOut)
   dk_nurbs_tx = avango.gua.nodes.TransformNode(Name = "dk_nurbs_tx")
-  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.005, 0.005, 0.005)
   dk_nurbs_tx.Children.value = [dk_nurbs]
 
   dk_vol = loader.create_geometry_from_file("dk_vol",

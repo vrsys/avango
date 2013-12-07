@@ -8,14 +8,14 @@ LOCAL_GUACAMOLE="$DIR/../../../guacamole"
 LOCAL_AVANGO="$DIR/../../../avango"
 
 # if not, this path will be used
-GUACAMOLE=/opt/guacamole/current/guacamole
-AVANGO=/opt/guacamole/current/avango
+GUACAMOLE=/opt/guacamole/latest/guacamole
+AVANGO=/opt/guacamole/latest/avango
 
 # third party libs
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/latest/lib
 
 # schism
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/latest/lib/linux_x86
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH

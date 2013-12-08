@@ -76,7 +76,9 @@ def setup_pipe():
 
   window = avango.gua.nodes.Window(Size = size,
                                    Title = "final_presentation",
-                                   LeftResolution = size)
+                                   LeftResolution = size,
+                                   EnableVsync = True
+                                   )
 
   pipe = avango.gua.nodes.Pipeline(Camera = camera,
                                    Window = window,
@@ -87,7 +89,7 @@ def setup_pipe():
   avango.gua.create_texture("data/textures/sky2.jpg")
   avango.gua.create_texture("data/textures/sky3.jpg")
 
-  pipe.EnableFXAA.value = True
+  pipe.EnableFXAA.value = False
   pipe.EnableFrustumCulling.value = False
   pipe.EnableBackfaceCulling.value = False
 
@@ -234,7 +236,7 @@ def start():
   # avango example
   avango_example = avango.gua.nodes.TransformNode(Name = "avango_example")
   #avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -4.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -12.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  avango_example.Transform.value = avango.gua.make_trans_mat(0, 1, -17.2*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   monkey = loader.create_geometry_from_file("monkey",
            "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
@@ -242,24 +244,26 @@ def start():
 
   # different kinds of data
   different_kinds_of_data = avango.gua.nodes.TransformNode(Name = "different_kinds_of_data")
-  different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(-1, 1, -4.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
+  #different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(-1, 1, -4.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
+  different_kinds_of_data.Transform.value = avango.gua.make_trans_mat(-0.3, 1, -4.0*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.4, 0.4, 0.4)
 
   dk_mesh = loader.create_geometry_from_file("dk_mesh",
            "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_mesh.Transform.connect_from(timed_rotate.MatrixOut)
   dk_mesh_tx = avango.gua.nodes.TransformNode(Name = "dk_mesh_tx")
-  dk_mesh_tx.Transform.value = avango.gua.make_trans_mat(0, 0, 2.5)
+  dk_mesh_tx.Transform.value = avango.gua.make_trans_mat(0, 0, 3.0)
   dk_mesh_tx.Children.value = [dk_mesh]
 
   dk_nurbs = loader.create_geometry_from_file("dk_nurbs",
-           #"data/objects/monkey.obj",
+           "data/objects/monkey.obj",
            #"data/objects/heckscheibe.igs",
-           "data/objects/rim.igs",
+           #"data/objects/rim.igs",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
   dk_nurbs.Transform.connect_from(timed_rotate.MatrixOut)
   dk_nurbs_tx = avango.gua.nodes.TransformNode(Name = "dk_nurbs_tx")
-  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.005, 0.005, 0.005)
+  #dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.005, 0.005, 0.005)
+  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   dk_nurbs_tx.Children.value = [dk_nurbs]
 
   dk_vol = loader.create_geometry_from_file("dk_vol",
@@ -303,7 +307,7 @@ def start():
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
   #material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  material_example.Transform.value = avango.gua.make_trans_mat(-0.4, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  material_example.Transform.value = avango.gua.make_trans_mat(-0.4, 1, -5*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
 
   material_example_group = avango.gua.nodes.TransformNode(Name = "material_example_group")
   #material_example_group.Transform.connect_from(timed_rotate.MatrixOut)
@@ -334,6 +338,7 @@ def start():
     plane.Transform.value =  avango.gua.make_trans_mat(row*row_width, -0.4, column*column_width) * \
                              avango.gua.make_scale_mat(2, 1, 2)
     monkey.Transform.value = avango.gua.make_trans_mat(row*row_width, 0.8, column*column_width) * \
+                             avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0) * \
                              avango.gua.make_scale_mat(0.3, 0.3, 0.3)
 
     parent.Children.value.append(sphere)
@@ -469,7 +474,7 @@ def start():
   slide_switcher.LastSlide.value = 15
   slide_switcher.NextSlide.connect_from(navigator.Keyboard.KeyUp)
   slide_switcher.PreviousSlide.connect_from(navigator.Keyboard.KeyDown)
-  slide_switcher.LastSlide.value = 20
+  slide_switcher.LastSlide.value = 26
   slide_switcher.SlideLocation.value = slide_transform.Transform.value.get_translate()
   slide_switcher.SlideYRotation.value = -90
   slide_switcher.SlideOffset.value = SLIDE_OFFSET
@@ -523,6 +528,7 @@ def start():
     pipe.EnableSsao.value = True
     pipe.EnableBloom.value = True
     pipe.EnableFog.value = True
+    pipe.EnableFXAA.value = True
     sun.EnableShadows.value = True
     fake_sun.EnableGodrays.value = True
 
@@ -542,6 +548,9 @@ def start():
 
   def toggle_sun_shadows():
     sun.EnableShadows.value = not (sun.EnableShadows.value)
+
+  def toggle_volumetric_light():
+    toggle_godrays()
 
   def toggle_godrays():
     fake_sun.EnableGodrays.value = not (fake_sun.EnableGodrays.value)

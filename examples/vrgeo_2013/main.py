@@ -14,6 +14,29 @@ from SlideSwitcher import SlideSwitcher
 
 SLIDE_OFFSET = 5.0
 
+class Animation(avango.script.Script):
+  Duration = avango.SFFloat()
+
+  StartPos = avango.gua.SFVec3()
+  EndPos   = avango.gua.SFVec3()
+
+  StartRot = avango.gua.SFQuat()
+  EndRot   = avango.gua.SFQuat()
+
+  CurrentMatrix = avango.gua.SFMatrix4()
+
+  def __init__(self):
+    self.super(Animation).__init__()
+    self.always_evaluate(True)
+    self._start = int(round(time.time() * 1000))
+
+  def evaluate(self):
+    _now = int(round(time.time() * 1000))
+    if (_now - self._start < self.Duration.value):
+      _pos = self.StartPos.value.lerp_to(self.EndPos.value, (_now-self._start)/self.Duration.value)
+      _rot = self.StartRot.value.slerp_to(self.EndRot.value, (_now-self._start)/self.Duration.value)
+      self.CurrentMatrix.value = avango.gua.make_trans_mat(_pos) * avango.gua.make_rot_mat(_rot.get_angle(), _rot.get_axis())
+
 class TimedMaterialUniformUpdate(avango.script.Script):
 
   TimeIn = avango.SFFloat()
@@ -65,8 +88,8 @@ def setup_pipe():
   avango.gua.create_texture("data/textures/sky3.jpg")
 
   pipe.EnableFXAA.value = True
-  pipe.EnableFrustumCulling.value = True
-  pipe.EnableBackfaceCulling.value = True
+  pipe.EnableFrustumCulling.value = False
+  pipe.EnableBackfaceCulling.value = False
 
   pipe.EnableHDR.value = False
   pipe.HDRKey.value = 3.0
@@ -142,7 +165,7 @@ def start():
           "Water",
           avango.gua.LoaderFlags.DEFAULTS)
 
-  water.Transform.value = avango.gua.make_scale_mat(1000, 1, 1000) * avango.gua.make_trans_mat(0, -10, 0)
+  water.Transform.value = avango.gua.make_scale_mat(1000, 1, 1000) * avango.gua.make_trans_mat(0, -15, 0)
 
   slides = loader.create_geometry_from_file("slides",
            "data/objects/test_slides.obj",
@@ -280,7 +303,7 @@ def start():
   # material example
   material_example = avango.gua.nodes.TransformNode(Name = "material_example")
   #material_example.Transform.value = avango.gua.make_trans_mat(0, 1, -15*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  material_example.Transform.value = avango.gua.make_trans_mat(-0.4, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+  material_example.Transform.value = avango.gua.make_trans_mat(-0.4, 1, -6*SLIDE_OFFSET) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
 
   material_example_group = avango.gua.nodes.TransformNode(Name = "material_example_group")
   #material_example_group.Transform.connect_from(timed_rotate.MatrixOut)
@@ -466,6 +489,7 @@ def start():
     slide_switcher.increase_current_slide()
 
   def make_awesome():
+    pipe.EnableFrustumCulling.value = True
     #slide_switcher.SlideLocation.value = avango.gua.Vec3(0, 0, -2.37)
     slide_switcher.TransitionSmoothness.value = 0.7
     pipe.AmbientColor.value = avango.gua.Color(0.6, 0.6, 1.0)
@@ -474,6 +498,19 @@ def start():
 
   def begin_guacamole():
     make_awesome()
+
+  def fly_down():
+
+    final_pos = avango.gua.make_trans_mat(6, -28, -25) * avango.gua.make_rot_mat(150, -0.1, 0.9, 0.4)
+
+    anim = Animation(
+      Duration = 10000,
+      StartPos = navigation.Transform.value.get_translate(),
+      StartRot = navigation.Transform.value.get_rotate(),
+      EndPos = final_pos.get_translate(),
+      EndRot = final_pos.get_rotate()
+    )
+    navigation.Transform.connect_from(anim.CurrentMatrix)
 
   def disable_effects():
     pipe.EnableSsao.value = False
@@ -488,6 +525,11 @@ def start():
     pipe.EnableFog.value = True
     sun.EnableShadows.value = True
     fake_sun.EnableGodrays.value = True
+
+  def change_some_materials():
+    avango.gua.set_material_uniform("SimplePhongWhite", "diffuse_color", avango.gua.Vec3(1, 0, 0))
+    avango.gua.set_material_uniform("SimplePhongRed", "diffuse_color", avango.gua.Vec3(1, 1, 0))
+    avango.gua.set_material_uniform("SimplePhongGreen", "diffuse_color", avango.gua.Vec3(1, 0, 1))
 
   def toggle_ssao():
     pipe.EnableSsao.value = not (pipe.EnableSsao.value)

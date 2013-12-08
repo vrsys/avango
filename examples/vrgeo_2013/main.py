@@ -75,7 +75,7 @@ def setup_pipe():
   size = avango.gua.Vec2ui(width, height)
 
   window = avango.gua.nodes.Window(Size = size,
-                                   Title = "final_presentation",
+                                   Title = "vrgeo2013",
                                    LeftResolution = size,
                                    EnableVsync = True
                                    )
@@ -546,7 +546,7 @@ def start():
   def toggle_bloom():
     pipe.EnableBloom.value = not (pipe.EnableBloom.value)
 
-  def toggle_sun_shadows():
+  def toggle_shadows():
     sun.EnableShadows.value = not (sun.EnableShadows.value)
 
   def toggle_volumetric_light():

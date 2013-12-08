@@ -34,7 +34,10 @@ namespace av
         DEFAULTS = ::gua::GeometryLoader::DEFAULTS,
         LOAD_MATERIALS = ::gua::GeometryLoader::LOAD_MATERIALS,
         OPTIMIZE_GEOMETRY = ::gua::GeometryLoader::OPTIMIZE_GEOMETRY,
-        MAKE_PICKABLE = ::gua::GeometryLoader::MAKE_PICKABLE
+        MAKE_PICKABLE = ::gua::GeometryLoader::MAKE_PICKABLE,
+        NORMALIZE_POSITION = ::gua::GeometryLoader::NORMALIZE_POSITION,
+        NORMALIZE_SCALE = ::gua::GeometryLoader::NORMALIZE_SCALE
+
       };
 
       /**

@@ -42,6 +42,8 @@ void init_GeometryLoader()
         .value("LOAD_MATERIALS", av::gua::GeometryLoader::LOAD_MATERIALS)
         .value("OPTIMIZE_GEOMETRY", av::gua::GeometryLoader::OPTIMIZE_GEOMETRY)
         .value("MAKE_PICKABLE", av::gua::GeometryLoader::MAKE_PICKABLE)
+        .value("NORMALIZE_POSITION", av::gua::GeometryLoader::NORMALIZE_POSITION)
+        .value("NORMALIZE_SCALE", av::gua::GeometryLoader::NORMALIZE_SCALE)
         ;
 
   register_field<av::gua::SFGeometryLoader>("SFGeometryLoader");

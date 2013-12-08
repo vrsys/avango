@@ -492,6 +492,9 @@ def start():
   def toggle_ssao():
     pipe.EnableSsao.value = not (pipe.EnableSsao.value)
 
+  def toggle_fxaa():
+    pipe.EnableFXAA.value = not (pipe.EnableFXAA.value)
+
   def toggle_bloom():
     pipe.EnableBloom.value = not (pipe.EnableBloom.value)
 

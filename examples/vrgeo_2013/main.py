@@ -12,7 +12,7 @@ import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 from SlideSwitcher import SlideSwitcher
 
-SLIDE_OFFSET = 4.0
+SLIDE_OFFSET = 5.0
 
 class TimedMaterialUniformUpdate(avango.script.Script):
 
@@ -45,8 +45,10 @@ def setup_pipe():
                                    RightScreen = "/navigation/screen",
                                    SceneGraph = "scenegraph")
 
-  width = 1800
-  height = 1180
+  #width = 1800
+  #height = 1180
+  width = 1024
+  height = 768
   size = avango.gua.Vec2ui(width, height)
 
   window = avango.gua.nodes.Window(Size = size,
@@ -185,16 +187,18 @@ def start():
   navigation.Transform.value = avango.gua.make_trans_mat(14.501, 7.142, -9.199)*avango.gua.make_rot_mat(155, 0, 1, 0)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",
-                                       Width = 3.0,
-                                       Height = 1.97)
+                                       #Width = 3.0,
+                                       #Height = 1.97)
+                                       Width = 4.0, Height = 3)
   slide_transform = avango.gua.nodes.TransformNode(Name = "slideTransform")
-  slide_transform.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)*avango.gua.make_trans_mat(0, -1.05, -0.1) * avango.gua.make_rot_mat(-90, 0, 1, 0)
+  slide_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0) * avango.gua.make_rot_mat(-90, 0, 1, 0)
 
-  screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)
+  screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.5, 0.0)
+  #screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.38, -1.57)
 
   #view = avango.gua.nodes.ViewNode(Name = "view", StereoWidth = 0.3)
   view = avango.gua.nodes.TransformNode(Name = "view")
-  view.Transform.value = avango.gua.make_trans_mat(0.0, 1.57, 0.0)
+  view.Transform.value = avango.gua.make_trans_mat(0.0, 1.5, 2.0)
 
   ##############################################################################
   ## examples

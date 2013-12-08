@@ -250,32 +250,48 @@ def start():
   dk_mesh = loader.create_geometry_from_file("dk_mesh",
            "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
-  dk_mesh.Transform.connect_from(timed_rotate.MatrixOut)
-  dk_mesh_tx = avango.gua.nodes.TransformNode(Name = "dk_mesh_tx")
-  dk_mesh_tx.Transform.value = avango.gua.make_trans_mat(0, 0, 3.0)
-  dk_mesh_tx.Children.value = [dk_mesh]
+  #dk_mesh.Transform.value = avango.gua.make_scale_mat(1.5,1.5,1.5)
+
+  dk_mesh_rotation = avango.gua.nodes.TransformNode(Name = "dk_mesh_rotation")
+  dk_mesh_rotation.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_mesh_rotation.Children.value = [dk_mesh]
+
+  dk_mesh_translation = avango.gua.nodes.TransformNode(Name = "dk_mesh_translation")
+  dk_mesh_translation.Transform.value = avango.gua.make_trans_mat(0, 0, 3.0)
+  dk_mesh_translation.Children.value = [dk_mesh_rotation]
 
   dk_nurbs = loader.create_geometry_from_file("dk_nurbs",
-           "data/objects/monkey.obj",
+           #"data/objects/monkey.obj",
            #"data/objects/heckscheibe.igs",
-           #"data/objects/rim.igs",
-           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
-  dk_nurbs.Transform.connect_from(timed_rotate.MatrixOut)
-  dk_nurbs_tx = avango.gua.nodes.TransformNode(Name = "dk_nurbs_tx")
-  #dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.005, 0.005, 0.005)
-  dk_nurbs_tx.Transform.value = avango.gua.make_scale_mat(0.5, 0.5, 0.5)
-  dk_nurbs_tx.Children.value = [dk_nurbs]
+           "data/objects/rim.igs",
+           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  dk_nurbs.Transform.value = avango.gua.make_scale_mat(3,3,3) * dk_nurbs.Transform.value
+
+  dk_nurbs_rotation = avango.gua.nodes.TransformNode(Name = "dk_nurbs_rotation")
+  dk_nurbs_rotation.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_nurbs_rotation.Children.value = [dk_nurbs]
+
+  dk_nurbs_translate = avango.gua.nodes.TransformNode(Name = "dk_nurbs_translate")
+  #dk_nurbs_translate.Transform.value = avango.gua.make_scale_mat(0.005, 0.005, 0.005)
+  dk_nurbs_translate.Transform.value = avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+  dk_nurbs_translate.Children.value = [dk_nurbs_rotation]
 
   dk_vol = loader.create_geometry_from_file("dk_vol",
-           # "data/objects/head_w256_h256_d225_c1_b8.raw",
-           "data/objects/monkey.obj",
-           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS)
-  dk_vol.Transform.connect_from(timed_rotate.MatrixOut)
-  dk_vol_tx = avango.gua.nodes.TransformNode(Name = "dk_vol_tx")
-  dk_vol_tx.Transform.value = avango.gua.make_trans_mat(0, 0, -3.0)
-  dk_vol_tx.Children.value = [dk_vol]
+           "data/objects/head_w256_h256_d225_c1_b8.raw",
+           # "data/objects/monkey.obj",
+           "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  different_kinds_of_data.Children.value = [dk_mesh_tx,dk_nurbs_tx,dk_vol_tx]
+  dk_vol.Transform.value = avango.gua.make_scale_mat(2,2,2) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
+
+  dk_vol_rotation = avango.gua.nodes.TransformNode(Name = "dk_vol_rotation")
+  dk_vol_rotation.Transform.connect_from(timed_rotate.MatrixOut)
+  dk_vol_rotation.Children.value = [dk_vol]
+
+  dk_vol_translation = avango.gua.nodes.TransformNode(Name = "dk_vol_translation")
+  dk_vol_translation.Transform.value = avango.gua.make_trans_mat(0, 0, -3.0)
+  dk_vol_translation.Children.value = [dk_vol_rotation]
+
+  different_kinds_of_data.Children.value = [dk_mesh_translation,dk_nurbs_translate,dk_vol_translation]
 
   # python example
   def make_noon():

@@ -50,6 +50,12 @@ namespace av
                                                              std::string const& fileName,
                                                              std::string const& fallbackMaterial,
                                                              Flags flags = DEFAULTS) const;
+      av::Link<av::gua::Node> createVVolumeFromFile(std::string const& nodeName,
+                                                             std::string const& vfileName,
+                                                             Flags flags = DEFAULTS,
+                                                             scm::size_t vol_hdd_cache_size = 2147483648,
+                                                             scm::size_t vol_gpu_cache_size = 536870912
+                                                             ) const;
 
     protected:
 

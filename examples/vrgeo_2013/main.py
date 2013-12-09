@@ -278,10 +278,17 @@ def start():
 
   dk_vol = loader.create_geometry_from_file("dk_vol",
            "data/objects/head_w256_h256_d225_c1_b8.raw",
-           # "data/objects/monkey.obj",
            "CarPaintOrange", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  #dk_vol = loader.create_vvolume_from_file("dk_vol", 
+  #          # "data/objects/SuperGrid_Inlines777_17760_d2d2_4000_gauss.otree",
+  #          #"/home/bernste4/.gvfs/data_internal auf grandmother.medien.uni-weimar.de/volume_data/vrgeo/norway/volumes/SuperGrid_Inlines777_17760_d2d2_4000_gauss.otree",
+  #          "/home/bernste4/src/SuperGrid_Inlines777_17760_d2d2_4000_gauss.otree",
+  #          avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE,
+  #          2147483648,536870912)
 
-  dk_vol.Transform.value = avango.gua.make_scale_mat(2,2,2) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
+
+  dk_vol.Transform.value = avango.gua.make_scale_mat(3,3,3) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
+  #dk_vol.Transform.value = avango.gua.make_scale_mat(2,2,2) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
 
   dk_vol_rotation = avango.gua.nodes.TransformNode(Name = "dk_vol_rotation")
   dk_vol_rotation.Transform.connect_from(timed_rotate.MatrixOut)
@@ -463,6 +470,31 @@ def start():
 
   _display_materials(material_example_group);
 
+  # large_volume_example
+  large_volume = loader.create_vvolume_from_file("dk_vol", 
+            "/home/bernste4/src/SuperGrid_Inlines777_17760_d2d2_4000_gauss.otree",
+            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE,
+            2147483648, 536870912)
+
+  large_volume_scale = avango.gua.nodes.TransformNode(Name = "large_volume_scale")
+  large_volume_scale.Transform.value = avango.gua.make_scale_mat(2,2,2)
+  large_volume_scale.Children.value = [large_volume]
+
+  #dk_vol.Transform.value = avango.gua.make_scale_mat(3,3,3) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
+
+  large_volume_rotation = avango.gua.nodes.TransformNode(Name = "large_volume_rotation")
+  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0))
+
+  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(40.0, avango.gua.Vec3(0,0,1)) * large_volume_rotation.Transform.value
+  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(55.0, avango.gua.Vec3(0,1,0)) * large_volume_rotation.Transform.value
+
+  large_volume_rotation.Children.value = [large_volume_scale]
+
+  volume_pos = avango.gua.make_trans_mat(6, -27, -25)
+  large_volume_translation = avango.gua.nodes.TransformNode(Name = "large_volume_translation")
+  large_volume_translation.Transform.value = avango.gua.make_trans_mat(6.5,-26.5,-24)
+  large_volume_translation.Children.value = [large_volume_rotation]
+
   ##############################################################################
   ## navigation
   ##############################################################################
@@ -470,7 +502,7 @@ def start():
   slide_transform.Children.value = [slides]
   navigation.Children.value = [screen, view, slide_transform]
 
-  graph.Root.value.Children.value = [oilrig_rb, water, sun, fake_sun, navigation]
+  graph.Root.value.Children.value = [oilrig_rb, water, sun, fake_sun, navigation, large_volume_translation]
 
   pipe = setup_pipe()
 

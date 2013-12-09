@@ -11,6 +11,8 @@ LOCAL_AVANGO="$DIR/../../../avango"
 GUACAMOLE=/opt/guacamole/latest/guacamole
 AVANGO=/opt/guacamole/latest/avango
 
+export PATH=${PATH}:/usr/local/cuda/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/cuda/lib64:/usr/cuda/lib
 # third party libs
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/latest/lib
 

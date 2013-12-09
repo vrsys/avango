@@ -36,6 +36,21 @@ av::gua::GeometryLoader::createGeometryFromFile(std::string const& nodeName,
     return av::Link<av::gua::Node>(root);
 }
 
+av::Link<av::gua::Node>
+av::gua::GeometryLoader::createVVolumeFromFile(std::string const& nodeName,
+                                               std::string const& vfileName,
+                                               Flags flags,
+                                               scm::size_t vol_hdd_cache_size,
+                                               scm::size_t vol_gpu_cache_size
+                                               ) const
+{
+    auto gua_node(m_guaGeometryLoader->create_vvolume_from_file(
+          nodeName, vfileName, flags, vol_hdd_cache_size, vol_gpu_cache_size));
+    auto vol_cast(std::dynamic_pointer_cast< ::gua::VolumeNode>(gua_node));
+    Node* n = new av::gua::VolumeNode(vol_cast);
+    return av::Link<av::gua::Node>(n);
+}
+
 void
 av::gua::GeometryLoader::initClass()
 {

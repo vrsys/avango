@@ -29,12 +29,29 @@ av::Link<av::gua::Node> createGeometryFromFile(
                                 static_cast<av::gua::GeometryLoader::Flags>(flags));
 }
 
+av::Link<av::gua::Node> createVVolumeFromFile(
+                                          av::gua::GeometryLoader const& loader,
+                                          std::string const& nodeName,
+                                          std::string const& vfileName,
+                                          int flags,
+                                          std::size_t vol_hdd_cache_size,
+                                          std::size_t vol_gpu_cache_size
+                                          ) {
+
+   return loader.createVVolumeFromFile(nodeName, vfileName,
+                                static_cast<av::gua::GeometryLoader::Flags>(flags),
+                                vol_hdd_cache_size, vol_gpu_cache_size
+                                );
+}
+
+
 void init_GeometryLoader()
 {
   class_<av::gua::GeometryLoader,
          av::Link<av::gua::GeometryLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("GeometryLoader", "docstring", no_init)
          .def("create_geometry_from_file", &createGeometryFromFile)
+         .def("create_vvolume_from_file", &createVVolumeFromFile)
          ;
 
   enum_<av::gua::GeometryLoader::Flags>("LoaderFlags")

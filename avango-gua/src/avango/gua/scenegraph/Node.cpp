@@ -15,21 +15,16 @@ AV_FIELD_DEFINE(av::gua::SFNode);
 AV_FIELD_DEFINE(av::gua::MFNode);
 
 av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
-  : m_guaNode(guanode),
+  : av::FieldContainer(),
+    m_guaNode(guanode),
     m_selfUserDataHandle(0),
     m_childrenUserDataHandle(0)
 {
 
   m_selfUserDataHandle = guanode->add_user_data(this);
-  m_childrenUserDataHandle = guanode->add_user_data(new av::MultiField<av::Link<Node>>::ContainerType());
 
-  if (guanode->get_parent()) {
-    auto parent_children(static_cast<av::MultiField<
-                                      av::Link<Node>>::ContainerType*>(
-                                        guanode->get_parent()->get_user_data(m_childrenUserDataHandle)));
-
-    parent_children->push_back(this);
-  }
+  auto avGuaChildren(new av::MultiField<av::Link<av::gua::Node>>::ContainerType());
+  m_childrenUserDataHandle = guanode->add_user_data(avGuaChildren);
 
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
@@ -238,5 +233,19 @@ void
 av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 {
   std::cout << "A node's path cannot be set!" << std::endl;
+}
+
+void
+av::gua::Node::addToParentChildren() {
+
+  if (m_guaNode->get_parent()) {
+    auto parent_children(static_cast<av::MultiField<
+                                      av::Link<av::gua::Node>>::ContainerType*>(
+                                        m_guaNode->get_parent()->get_user_data(m_childrenUserDataHandle)));
+
+    auto link(av::Link<av::gua::Node>(this));
+    parent_children->push_back(link);
+  }
+
 }
 

@@ -8,9 +8,9 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-CUBE_COUNT_X = 10
-CUBE_COUNT_Y = 10
-CUBE_COUNT_Z = 10
+CUBE_COUNT_X = 1
+CUBE_COUNT_Y = 1
+CUBE_COUNT_Z = 1
 
 class Picker(avango.script.Script):
   SceneGraph = avango.gua.SFSceneGraph()
@@ -130,12 +130,12 @@ def start():
       for z in range(0, CUBE_COUNT_Z):
 
         new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
-                  "data/objects/sphere.obj",
+                  "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
                   "Stone",
-                  avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
+                  avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.MAKE_PICKABLE)
 
         new_cube.Transform.value = avango.gua.make_trans_mat(x, y, z) * \
-                                   avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+                                   avango.gua.make_scale_mat(0.03, 0.03, 0.03)
         graph.Root.value.Children.value.append(new_cube)
 
   light = avango.gua.nodes.SpotLightNode(Name = "spot_light",

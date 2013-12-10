@@ -57,16 +57,26 @@ av::gua::GeometryLoader::getGuaGeometryLoader() const
 
 av::gua::Node*
 av::gua::GeometryLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
+
+  av::gua::Node* av_node(nullptr);
+
+  auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
+  if (group_cast) {
+    av_node = new av::gua::TransformNode(group_cast);
+    av_node->addToParentChildren();
+  } else {
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::GeometryNode>(root));
+    if (geom_cast) {
+      av_node = new av::gua::GeometryNode(geom_cast);
+      av_node->addToParentChildren();
+    } else {
+      std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
+    }
+  }
+
   for (auto c : root->get_children()) {
     createChildren(c);
   }
 
-  auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
-  if (group_cast) {
-    return new av::gua::TransformNode(group_cast);
-  } else {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::GeometryNode>(root));
-    return new av::gua::GeometryNode(geom_cast);
-  }
-
+  return av_node;
 }

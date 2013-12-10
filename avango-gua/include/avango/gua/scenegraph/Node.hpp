@@ -90,6 +90,7 @@ namespace av
       virtual void getPathCB(const SFString::GetValueEvent& event);
       virtual void setPathCB(const SFString::SetValueEvent& event);
 
+      void addToParentChildren();
 
     private:
 

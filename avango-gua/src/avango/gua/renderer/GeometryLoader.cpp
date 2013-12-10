@@ -1,5 +1,6 @@
 #include <avango/gua/renderer/GeometryLoader.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -63,16 +64,28 @@ av::gua::GeometryLoader::createChildren(std::shared_ptr< ::gua::Node> root) cons
   auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
   if (group_cast) {
     av_node = new av::gua::TransformNode(group_cast);
-    av_node->addToParentChildren();
-  } else {
+  }
+
+  if (!av_node) {
+    auto vol_cast(std::dynamic_pointer_cast< ::gua::VolumeNode>(root));
+    if (vol_cast) {
+      av_node = new av::gua::VolumeNode(vol_cast);
+    }
+  }
+
+  if (!av_node) {
     auto geom_cast(std::dynamic_pointer_cast< ::gua::GeometryNode>(root));
     if (geom_cast) {
       av_node = new av::gua::GeometryNode(geom_cast);
-      av_node->addToParentChildren();
-    } else {
-      std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
     }
   }
+
+  if (av_node) {
+    av_node->addToParentChildren();
+  } else {
+    std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
+  }
+
 
   for (auto c : root->get_children()) {
     createChildren(c);

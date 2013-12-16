@@ -68,10 +68,12 @@ def setup_pipe():
                                    RightScreen = "/navigation/screen",
                                    SceneGraph = "scenegraph")
 
+  width = 1920
+  height = 1200
   #width = 1800
   #height = 1180
-  width = 1024
-  height = 768
+  #width = 1024
+  #height = 768
   size = avango.gua.Vec2ui(width, height)
 
   window = avango.gua.nodes.Window(Size = size,
@@ -96,7 +98,8 @@ def setup_pipe():
   pipe.EnableHDR.value = False
   pipe.HDRKey.value = 3.0
 
-  pipe.EnableFog.value = True
+  #pipe.EnableFog.value = True
+  pipe.EnableFog.value = False
   pipe.FogTexture.connect_from(pipe.BackgroundTexture)
   pipe.FogStart.value = 250.0
   pipe.FogEnd.value = 580.0
@@ -105,7 +108,7 @@ def setup_pipe():
 
   pipe.AmbientColor.value = avango.gua.Color(0.8, 0.8, 0.8)
 
-  pipe.EnableSsao.value = True
+  pipe.EnableSsao.value = False # True
   pipe.SsaoIntensity.value = 3.0
   pipe.SsaoRadius.value = 5.0
 
@@ -477,23 +480,58 @@ def start():
             2147483648, 536870912)
 
   large_volume_scale = avango.gua.nodes.TransformNode(Name = "large_volume_scale")
-  large_volume_scale.Transform.value = avango.gua.make_scale_mat(2,2,2)
+  large_volume_scale.Transform.value = avango.gua.make_scale_mat(305,305,305)
   large_volume_scale.Children.value = [large_volume]
 
   #dk_vol.Transform.value = avango.gua.make_scale_mat(3,3,3) * avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0)) * dk_vol.Transform.value
 
   large_volume_rotation = avango.gua.nodes.TransformNode(Name = "large_volume_rotation")
-  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(90.0, avango.gua.Vec3(1,0,0))
+  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(-90.0, avango.gua.Vec3(1,0,0))
 
-  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(40.0, avango.gua.Vec3(0,0,1)) * large_volume_rotation.Transform.value
-  large_volume_rotation.Transform.value = avango.gua.make_rot_mat(55.0, avango.gua.Vec3(0,1,0)) * large_volume_rotation.Transform.value
+  #large_volume_rotation.Transform.value = avango.gua.make_rot_mat(40.0, avango.gua.Vec3(0,0,1)) * large_volume_rotation.Transform.value
+  #large_volume_rotation.Transform.value = avango.gua.make_rot_mat(55.0, avango.gua.Vec3(0,1,0)) * large_volume_rotation.Transform.value
 
   large_volume_rotation.Children.value = [large_volume_scale]
 
   volume_pos = avango.gua.make_trans_mat(6, -27, -25)
   large_volume_translation = avango.gua.nodes.TransformNode(Name = "large_volume_translation")
-  large_volume_translation.Transform.value = avango.gua.make_trans_mat(6.5,-26.5,-24)
+  #large_volume_translation.Transform.value = avango.gua.make_trans_mat(6.5,-26.5,-24)
+  large_volume_translation.Transform.value = avango.gua.make_trans_mat(0,-100.0,0)
   large_volume_translation.Children.value = [large_volume_rotation]
+
+  horizon_geom = loader.create_geometry_from_file("horizon_geom",
+           "data/objects/cropped_height_field.obj",
+           "Red",
+            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  #dk_mesh.Transform.value = avango.gua.make_scale_mat(1.5,1.5,1.5)
+
+  horizon_scale = avango.gua.nodes.TransformNode(Name = "horizon_scale")
+  horizon_scale.Transform.value = avango.gua.make_scale_mat(310,310,310)
+  horizon_scale.Children.value = [horizon_geom]
+
+  horizon_rotation = avango.gua.nodes.TransformNode(Name = "horizon_rotation")
+  horizon_rotation.Transform.value = avango.gua.make_rot_mat(180.0, avango.gua.Vec3(0,1,0)) * avango.gua.make_rot_mat(180.0, avango.gua.Vec3(1,0,0))
+  horizon_rotation.Children.value = []
+
+  horizon_translation = avango.gua.nodes.TransformNode(Name = "horizon_translation")
+  horizon_translation.Transform.value = avango.gua.make_trans_mat(0, -100, 0)
+  horizon_translation.Children.value = [horizon_rotation]
+
+  horizon_spot_light = avango.gua.nodes.SpotLightNode(Name = "horizon_spot_light",
+                                       Color = avango.gua.Color(1.0, 1.0, 1.0),
+                                       Falloff = 0.009,
+                                       Softness = 0.003,
+                                       EnableDiffuseShading = True,
+                                       EnableSpecularShading = True,
+                                       EnableShadows = False)
+                                       #ShadowMapSize = 4096,
+                                       #ShadowOffset = 0.0005)
+
+  horizon_spot_light.Transform.value = avango.gua.make_trans_mat(0.0, 10.0, 200) * \
+                        avango.gua.make_scale_mat(350, 350, 350) * \
+                        avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0)
+
+
 
   ##############################################################################
   ## navigation
@@ -502,7 +540,16 @@ def start():
   slide_transform.Children.value = [slides]
   navigation.Children.value = [screen, view, slide_transform]
 
-  graph.Root.value.Children.value = [oilrig_rb, water, sun, fake_sun, navigation, large_volume_translation]
+  def remove_slides():
+    navigation.Children.value = [screen, view]
+
+  def add_slides():
+    navigation.Children.value = [screen, view, slide_transform]
+
+  graph.Root.value.Children.value = [oilrig_rb, water, sun, fake_sun, navigation, large_volume_translation, horizon_translation, horizon_spot_light]
+
+  def add_horizon():
+    horizon_rotation.Children.value = [horizon_scale]
 
   pipe = setup_pipe()
 
@@ -513,7 +560,7 @@ def start():
   navigator.OutTransform.connect_from(navigation.Transform)
 
   navigator.RotationSpeed.value = 0.2
-  navigator.MotionSpeed.value = 0.04
+  navigator.MotionSpeed.value = 0.4
 
   # enable navigation
   # navigation.Transform.connect_from(navigator.OutTransform)
@@ -522,7 +569,7 @@ def start():
   slide_switcher.LastSlide.value = 15
   slide_switcher.NextSlide.connect_from(navigator.Keyboard.KeyUp)
   slide_switcher.PreviousSlide.connect_from(navigator.Keyboard.KeyDown)
-  slide_switcher.LastSlide.value = 26
+  slide_switcher.LastSlide.value = 29
   slide_switcher.SlideLocation.value = slide_transform.Transform.value.get_translate()
   slide_switcher.SlideYRotation.value = -90
   slide_switcher.SlideOffset.value = SLIDE_OFFSET
@@ -623,6 +670,8 @@ def start():
   def goto_slide(i):
     slide_switcher.goto_slide(i)
 
+  def use_navigation():
+    navigation.Transform.connect_from(navigator.OutTransform)
 
   water_updater = TimedMaterialUniformUpdate()
   water_updater.MaterialName.value = "Water"

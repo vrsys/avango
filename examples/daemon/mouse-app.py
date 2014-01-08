@@ -26,18 +26,54 @@
 Learn how to setup and use DeviceDaemon and DeviceService to readout input data
 from a HIDInput device.
 
-This example manipulates the position of a displayed sphere
+This example manipulates the position of a displayed monkey
 based on the output the device specified in mouse-daemon.py generates.
 '''
 
 import avango.daemon
 import avango.script
-import avango.osg.simpleviewer
+import avango.gua
 
 # create a simple scene
-sphere = avango.osg.nodes.Sphere(Radius = 0.15)
-transform = avango.osg.nodes.MatrixTransform()
-transform.Children.value.append(sphere)
+avango.gua.load_shading_models_from("data/materials")
+avango.gua.load_materials_from("data/materials")
+
+# setup scenegraph
+graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+
+loader = avango.gua.nodes.GeometryLoader()
+monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+
+light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
+light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
+
+eye = avango.gua.nodes.TransformNode(Name = "eye")
+eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+
+screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
+screen.Children.value = [eye]
+
+# ------------------------------
+transform = avango.gua.nodes.TransformNode()
+transform.Children.value.append(monkey)
+
+graph.Root.value.Children.value = [transform, light, screen]
+
+# setup viewing
+size = avango.gua.Vec2ui(1024, 768)
+pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
+                                                                  RightEye = "/screen/eye",
+                                                                  LeftScreen = "/screen",
+                                                                  RightScreen = "/screen",
+                                                                  SceneGraph = "scenegraph"),
+                                 Window = avango.gua.nodes.Window(Size = size,
+                                                                  LeftResolution = size),
+                                 LeftResolution = size)
+
+#setup viewer
+viewer = avango.gua.nodes.Viewer()
+viewer.Pipelines.value = [pipe]
+viewer.SceneGraphs.value = [graph]
 
 # device service setup
 service = avango.daemon.DeviceService()
@@ -50,7 +86,7 @@ sensor = avango.daemon.nodes.DeviceSensor(DeviceService = service,
 class Move(avango.script.Script) :
     SensorX = avango.SFFloat()
     SensorY = avango.SFFloat()
-    MatrixOut = avango.osg.SFMatrix()
+    MatrixOut = avango.gua.SFMatrix4()
 
     def evaluate(self):
         values = self.get_values()
@@ -59,15 +95,15 @@ class Move(avango.script.Script) :
         trans_x /= -350.
         trans_y /= -350.
         old_pos = values.MatrixOut.get_translate()
-        matrix = avango.osg.make_trans_mat(old_pos.x + trans_x, old_pos.y, old_pos.z + trans_y)
+        matrix = avango.gua.make_trans_mat(old_pos.x + trans_x, old_pos.y, old_pos.z + trans_y)
         values.MatrixOut = matrix
 
 move = Move()
 
-# manipulate the position of the sphere
+# manipulate the position of the monkey
 move.SensorX.connect_from(sensor.Value0)
 move.SensorY.connect_from(sensor.Value1)
-transform.Matrix.connect_from(move.MatrixOut)
+#transform.Matrix.connect_from(move.MatrixOut)
+transform.Transform.connect_from(move.MatrixOut)
 
-# enter render loop
-avango.osg.simpleviewer.run(transform)
+viewer.run()

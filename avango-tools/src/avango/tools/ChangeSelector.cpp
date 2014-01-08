@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/ChangeSelector.h>
+#include <avango/tools/ChangeSelector.hpp>
 
 #include <avango/Logger.h>
 

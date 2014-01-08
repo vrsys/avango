@@ -26,42 +26,18 @@
 #include <avango/Config.h>
 
 #include <avango/tools/Config.h>
-#include <avango/tools/Init.h>
-#include <avango/tools/TargetHolder.h>
-#include <avango/tools/Tool.h>
+#include <avango/tools/Init.hpp>
+#include <avango/tools/TargetHolder.hpp>
+#include <avango/tools/Tool.hpp>
 
-#include "ScriptTool.h"
-#include "Selectors.h"
-
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
-#include "OSGTools.h"
-#endif
+#include "TargetHolders.hpp"
+#include "Selectors.hpp"
+#include "Tools.hpp"
 
 #include <avango/python/register_field.h>
 
 using namespace boost::python;
 using namespace av::python;
-
-namespace
-{
-  list
-  TargetHolderFind(av::tools::TargetHolder& holder, av::tools::TargetHolder* type)
-  {
-    list py_holders;
-
-    if (type != 0)
-    {
-      av::tools::TargetHolder::FindList found_holders = holder.find(type->getTypeId());
-      for (av::tools::TargetHolder::FindList::iterator found_holder = found_holders.begin();
-           found_holder != found_holders.end(); ++found_holder)
-      {
-        py_holders.append(*found_holder);
-      }
-    }
-
-    return py_holders;
-  }
-}
 
 namespace boost
 {
@@ -77,24 +53,8 @@ namespace boost
 BOOST_PYTHON_MODULE(_tools)
 {
   av::tools::Init::initClass();
-  av::tools::ScriptTool::initClass();
 
-  register_field<av::tools::SFScriptTool>("SFScriptTool");
-  register_multifield<av::tools::MFScriptTool>("MFScriptTool");
-  register_field<av::tools::SFTargetHolder>("SFTargetHolder");
-  register_multifield<av::tools::MFTargetHolder>("MFTargetHolder");
-  register_field<av::tools::SFTool>("SFTool");
-  register_multifield<av::tools::MFTool>("MFTool");
-
-  class_<av::tools::Tool, av::Link<av::tools::Tool>, bases<av::FieldContainer>, boost::noncopyable >("Tool", "Tool base class", no_init);
-  class_<av::tools::ScriptTool, av::Link<av::tools::ScriptTool>, bases<av::tools::Tool>, boost::noncopyable >("ScriptTool", "ScriptTool class", no_init);
-  class_<av::tools::TargetHolder, av::Link<av::tools::TargetHolder>, bases<av::FieldContainer>, boost::noncopyable >("TargetHolder", "TargetHolder base class", no_init)
-    .def("find", TargetHolderFind)
-    ;
-
+  init_TargetHolders();
   init_Selectors();
-
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
-  init_OSGTools();
-#endif
+  init_Tools();
 }

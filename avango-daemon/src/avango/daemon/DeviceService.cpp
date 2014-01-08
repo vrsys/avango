@@ -60,7 +60,7 @@ AV_FIELD_DEFINE(av::daemon::SFDeviceService);
 AV_FIELD_DEFINE(av::daemon::MFDeviceService);
 
 av::daemon::DeviceService::DeviceService()
-  : mIdentityMatrix(new ::osg::Matrixf()),
+  : mIdentityMatrix(new ::gua::math::mat4),
     mCachedStationName(0),
     mCachedStation(0),
     mStationSegment(0)
@@ -143,7 +143,7 @@ av::daemon::DeviceService::lookupCachedStation(const char* station_name)
   return 0;
 }
 
-const osg::Matrixf&
+const gua::math::mat4&
 av::daemon::DeviceService::getMatrix(const char* station_name)
 {
   if (mStationSegment)
@@ -202,7 +202,7 @@ av::daemon::DeviceService::getLED(const char* station_name, int which)
 }
 
 void
-av::daemon::DeviceService::setMatrix(const char* station_name, const ::osg::Matrixf& value)
+av::daemon::DeviceService::setMatrix(const char* station_name, const ::gua::math::mat4& value)
 {
   if (mStationSegment)
   {

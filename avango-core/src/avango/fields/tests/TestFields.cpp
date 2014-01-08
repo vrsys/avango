@@ -26,7 +26,8 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 
-#include <avango/UnitTest++/UnitTest++.h>
+//#include <avango/UnitTest++/UnitTest++.h>
+#include <UnitTest++/UnitTest++.h>
 
 int main()
 {

@@ -34,7 +34,7 @@
 
 #include <string>
 
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 #include <avango/daemon/DeviceService.h>
 

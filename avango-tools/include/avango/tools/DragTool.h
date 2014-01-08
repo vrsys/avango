@@ -32,7 +32,7 @@
  */
 
 #include <avango/tools/Tool.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include "windows_specific_tools.h"
 
 namespace av

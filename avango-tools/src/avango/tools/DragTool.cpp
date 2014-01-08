@@ -21,11 +21,12 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/DragTool.h>
+#include <avango/tools/DragTool.hpp>
 
-#include <avango/osg/MatrixTransform.h>
-
+#include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/Types.hpp>
 #include <avango/Logger.h>
+#include <scm/core/math.h>
 
 namespace
 {
@@ -40,7 +41,7 @@ AV_FIELD_DEFINE(av::tools::MFDragTool);
 av::tools::DragTool::DragTool():
   mDragged(false)
 {
-  AV_FC_ADD_FIELD(DragTransform, ::osg::Matrix());
+  AV_FC_ADD_FIELD(DragTransform, ::gua::math::mat4::identity());
 }
 
 av::tools::DragTool::~DragTool()
@@ -68,7 +69,7 @@ av::tools::DragTool::evaluate()
 
   // calculate difference of the dragging transformation matrix to the last evaluate
   if (mDragged)
-    mDragDiffMat = ::osg::Matrix::inverse(mLastDragMat) * DragTransform.getValue();
+    mDragDiffMat = ::scm::math::inverse(mLastDragMat) * DragTransform.getValue();
 
   // call evaluateKeptTarget
   av::tools::Tool::evaluate();
@@ -86,13 +87,16 @@ av::tools::DragTool::evaluateKeptTarget(TargetHolder& holder)
     const SFContainer::ValueType &target_obj = holder.Target.getValue();
 
     // apply dragging only to MatrixTransform nodes.
-    av::osg::MatrixTransform *target = dynamic_cast<av::osg::MatrixTransform*>(target_obj.getPtr());
-    if (target != 0)
+    av::gua::TransformNode *target = dynamic_cast<av::gua::TransformNode*>(target_obj.getPtr());
+    if (target != nullptr)
     {
-      //apply dragging
-      const ::osg::Matrix target_mat = target->getAbsoluteTransform(this);
-      target->Matrix.setValue(target_mat * mDragDiffMat * ::osg::Matrix::inverse(target_mat) *
-                              target->Matrix.getValue());
+      auto gua_node (target->getGuaNode());
+      if (gua_node) {
+        //apply dragging
+        const ::gua::math::mat4 target_mat = gua_node->get_world_transform();
+        gua_node->set_transform(target_mat * mDragDiffMat * ::scm::math::inverse(target_mat) *
+                              gua_node->get_transform());
+      }
     }
   }
 }

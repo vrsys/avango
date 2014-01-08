@@ -30,3 +30,21 @@ __pycache__
 .sconf_temp
 config.log
 localdefs.py
+# Temporary files
+*~
+.nfs*
+
+# build directory
+lib
+
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+CMakeFiles
+
+*.pyc
+lib
+
+Session.vim
+.vim.custom
+scripts/avango.sublime-workspace

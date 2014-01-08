@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_TOOLS_SELECTORS_HPP
+#define AV_PYTHON_TOOLS_SELECTORS_HPP
+
+void init_Selectors();
+
+#endif //AV_PYTHON_TOOLS_SELECTORS_HPP

@@ -21,11 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/ObjectSelector.h>
-
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
-#include <avango/tools/NodePathTargetHolder.h>
-#endif
+#include <avango/tools/ObjectSelector.hpp>
 
 #include <avango/Logger.h>
 
@@ -44,8 +40,6 @@ av::tools::ObjectSelector::ObjectSelector()
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(SelectableObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(SelectableTargets, MFTargetHolder::ContainerType());
-  AV_FC_ADD_FIELD(SearchTargetHolderNodePaths, false);
-  AV_FC_ADD_FIELD(SearchOSGNodePaths, false);
 }
 
 av::tools::ObjectSelector::~ObjectSelector()
@@ -96,7 +90,7 @@ av::tools::ObjectSelector::evaluate()
       }
     }
 
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
+#if 0 // defined(AVANGO_TOOLS_OSG_SUPPORT)
 
     if (!found && SearchTargetHolderNodePaths.getValue())
     {

@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/InjectSelector.h>
+#include <avango/tools/InjectSelector.hpp>
 
 #include <avango/Logger.h>
 

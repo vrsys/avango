@@ -23,7 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/TriggerSelector.h>
+#include <avango/tools/TriggerSelector.hpp>
 
 #include <avango/Logger.h>
 

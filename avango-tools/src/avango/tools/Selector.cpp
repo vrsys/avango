@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/Selector.h>
+#include <avango/tools/Selector.hpp>
 
 #include <avango/Logger.h>
 

@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/UnionSelector.h>
+#include <avango/tools/UnionSelector.hpp>
 
 #include <avango/Logger.h>
 

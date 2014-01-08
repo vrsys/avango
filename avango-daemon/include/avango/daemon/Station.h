@@ -32,7 +32,7 @@
  */
 
 #include <vector>
-#include <osg/Matrixf>
+#include <gua/math/math.hpp>
 #include <avango/Base.h>
 #include <avango/daemon/windows_specific_daemon.h>
 
@@ -64,7 +64,7 @@ namespace av
     public:
 
       const char* getName() const;
-      const ::osg::Matrixf& getMatrix() const;
+      const ::gua::math::mat4& getMatrix() const;
 
       int getButton(int which) const;
       const ::std::vector<int> getButtons() const;
@@ -76,7 +76,7 @@ namespace av
       const ::std::vector<bool> getLEDs() const;
 
       void setName(const char* name);
-      void setMatrix(const ::osg::Matrixf& matrix);
+      void setMatrix(const ::gua::math::mat4& matrix);
       void setButton(int which, int on);
       void setValue(int which, float val);
       void setLED(int which, bool on);
@@ -97,7 +97,7 @@ namespace av
       // retain static memory layout since it gets put into a shared
       // memory segment not autogrowable!
       char     mName[sMaxNameLength];
-      ::osg::Matrixf mMatrix;               // this should work since fpMatrix has the same memory layout float[4][4]
+      ::gua::math::mat4 mMatrix;               // this should work since fpMatrix has the same memory layout float[4][4]
       int      mButton[sMaxButtons];
       float    mValue[sMaxValues];
       bool     mLed[sMaxLeds];

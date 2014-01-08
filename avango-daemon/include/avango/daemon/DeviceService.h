@@ -35,11 +35,7 @@
 #include <avango/Singleton.h>
 #include <avango/daemon/windows_specific_daemon.h>
 
-/// @cond DOXYGEN_SHOULD_SKIP_THIS
-namespace osg {
-  class Matrixf;
-}
-/// @endcond
+#include <gua/math.hpp>
 
 namespace av
 {
@@ -80,7 +76,7 @@ namespace av
       /**
        * Get matrix of a specified station.
        */
-      const ::osg::Matrixf& getMatrix(const char* station);
+      const ::gua::math::mat4& getMatrix(const char* station);
 
       /**
        * Get button state by specified station and number.
@@ -100,7 +96,7 @@ namespace av
       /**
        * Set matrix of a specified station.
        */
-      void  setMatrix(const char* station, const ::osg::Matrixf& value);
+      void  setMatrix(const char* station, const ::gua::math::mat4& value);
 
       /**
        * Set a specific button of a specific station.
@@ -124,7 +120,7 @@ namespace av
 
     protected:
 
-      const ::osg::Matrixf* mIdentityMatrix;
+      const ::gua::math::mat4* mIdentityMatrix;
       const char*     mCachedStationName;
       Station*        mCachedStation;
       StationSegment* mStationSegment;

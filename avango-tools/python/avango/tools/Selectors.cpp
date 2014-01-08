@@ -21,26 +21,23 @@
 *                                                                        *
 \************************************************************************/
 
-#include "Selectors.h"
+#include "Selectors.hpp"
 
 #include <boost/python.hpp>
-
-#include <avango/Config.h>
-
-#include <avango/tools/Config.h>
-
-#include <avango/tools/ChangeSelector.h>
-#include <avango/tools/InjectSelector.h>
-#include <avango/tools/ObjectSelector.h>
-#include <avango/tools/NameSelector.h>
-#include <avango/tools/FieldSelector.h>
-#include <avango/tools/Selector.h>
-#include <avango/tools/SingleSelector.h>
-#include <avango/tools/TriggerSelector.h>
-#include <avango/tools/TypeSelector.h>
-#include <avango/tools/UnionSelector.h>
-
 #include <avango/python/register_field.h>
+
+#include <avango/tools/ChangeSelector.hpp>
+#include <avango/tools/InjectSelector.hpp>
+#include <avango/tools/ObjectSelector.hpp>
+#include <avango/tools/NameSelector.hpp>
+#include <avango/tools/FieldSelector.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/SingleSelector.hpp>
+#include <avango/tools/PickSelector.hpp>
+#include <avango/tools/ProximitySelector.hpp>
+#include <avango/tools/TriggerSelector.hpp>
+#include <avango/tools/TypeSelector.hpp>
+#include <avango/tools/UnionSelector.hpp>
 
 using namespace boost::python;
 using namespace av::python;
@@ -56,7 +53,7 @@ namespace boost
   }
 }
 
-void init_Selectors(void)
+void init_Selectors()
 {
   register_field<av::tools::SFChangeSelector>("SFChangeSelector");
   register_multifield<av::tools::MFChangeSelector>("MFChangeSelector");
@@ -72,6 +69,10 @@ void init_Selectors(void)
   register_multifield<av::tools::MFSelector>("MFSelector");
   register_field<av::tools::SFSingleSelector>("SFSingleSelector");
   register_multifield<av::tools::MFSingleSelector>("MFSingleSelector");
+  register_field<av::tools::SFPickSelector>("SFPickSelector");
+  register_multifield<av::tools::MFPickSelector>("MFPickSelector");
+  register_field<av::tools::SFProximitySelector>("SFProximitySelector");
+  register_multifield<av::tools::MFProximitySelector>("MFProximitySelector");
   register_field<av::tools::SFTriggerSelector>("SFTriggerSelector");
   register_multifield<av::tools::MFTriggerSelector>("MFTriggerSelector");
   register_field<av::tools::SFTypeSelector>("SFTypeSelector");
@@ -86,6 +87,8 @@ void init_Selectors(void)
   class_<av::tools::NameSelector, av::Link<av::tools::NameSelector>, bases<av::tools::Selector>, boost::noncopyable >("NameSelector", "NameSelector class", no_init);
   class_<av::tools::FieldSelector, av::Link<av::tools::FieldSelector>, bases<av::tools::Selector>, boost::noncopyable >("FieldSelector", "FieldSelector class", no_init);
   class_<av::tools::SingleSelector, av::Link<av::tools::SingleSelector>, bases<av::tools::Selector>, boost::noncopyable >("SingleSelector", "SingleSelector class", no_init);
+  class_<av::tools::PickSelector, av::Link<av::tools::PickSelector>, bases<av::tools::Selector>, boost::noncopyable >("PickSelector", "PickSelector class", no_init);
+  class_<av::tools::ProximitySelector, av::Link<av::tools::ProximitySelector>, bases<av::tools::Selector>, boost::noncopyable >("ProximitySelector", "ProximitySelector class", no_init);
   class_<av::tools::TriggerSelector, av::Link<av::tools::TriggerSelector>, bases<av::tools::Selector>, boost::noncopyable >("TriggerSelector", "TriggerSelector class", no_init);
   class_<av::tools::TypeSelector, av::Link<av::tools::TypeSelector>, bases<av::tools::Selector>, boost::noncopyable >("TypeSelector", "TypeSelector class", no_init);
   class_<av::tools::UnionSelector, av::Link<av::tools::UnionSelector>, bases<av::tools::Selector>, boost::noncopyable >("UnionSelector", "UnionSelector class", no_init);

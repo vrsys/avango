@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/Tool.h>
+#include <avango/tools/Tool.hpp>
 
 #include <avango/Logger.h>
 

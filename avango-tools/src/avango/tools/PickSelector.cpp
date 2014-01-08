@@ -21,9 +21,10 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/PickSelector.h>
+//#include <avango/tools/IntersectionTargetHolder.h>
+#include <avango/tools/PickSelector.hpp>
 
-#include <avango/tools/IntersectionTargetHolder.h>
+#include <avango/gua/scenegraph/PickResult.hpp>
 
 #include <avango/Logger.h>
 
@@ -42,22 +43,12 @@ av::tools::PickSelector::PickSelector():
 {
   AV_FC_ADD_FIELD(PickTrigger, false);
   AV_FC_ADD_FIELD(TransitionOnly, true);
-  AV_FC_ADD_FIELD(SetCreator, true);
   AV_FC_ADD_FIELD(EveryFrame, false);
-  AV_FC_ADD_FIELD(PickRayTransform, ::osg::Matrix::identity());
-  AV_FC_ADD_FIELD(PickRayDirection, ::osg::Vec3(0.0, 0.0, -1.0));
-  AV_FC_ADD_FIELD(PickRayLength, 1000.0);
-  AV_FC_ADD_FIELD(RootNode, 0);
-  AV_FC_ADD_FIELD(FirstHitOnly, true);
-  AV_FC_ADD_FIELD(NodePickMask, ~0u);
-  AV_FC_ADD_FIELD(SubtreePickMask, ~0u);
-  AV_FC_ADD_FIELD(PickNodesWithoutPickMask, true);
-  AV_FC_ADD_FIELD(CreateNodePaths, false);
-  AV_FC_ADD_FIELD(CreateIntersections, false);
-
-  mIntersector =
-    new ::osgUtil::LineSegmentIntersector(::osg::Vec3(0.0, 0.0, 0.0), ::osg::Vec3(0.0, 0.0, -1.0));
-  mVisitor = new ::osgUtil::IntersectionVisitor(mIntersector.get());
+  AV_FC_ADD_FIELD(PickRay, nullptr);
+  AV_FC_ADD_FIELD(SceneGraph, nullptr);
+  AV_FC_ADD_FIELD(Options, 0);
+  AV_FC_ADD_FIELD(SetCreator, true);
+  AV_FC_ADD_FIELD(PickMask, "");
 }
 
 av::tools::PickSelector::~PickSelector()
@@ -78,180 +69,50 @@ av::tools::PickSelector::initClass()
 }
 
 const av::tools::MFTargetHolder::ContainerType&
-av::tools::PickSelector::pick()
-{
+av::tools::PickSelector::pick() {
   mSelectedTargets.clear();
 
-  if (RootNode.getValue().isValid())
-  {
-    // initialize line segment
-    const ::osg::Vec3 start_pos = PickRayTransform.getValue().getTrans();
-    const ::osg::Vec3 end_pos =
-      (PickRayDirection.getValue() * PickRayLength.getValue()) * PickRayTransform.getValue();
-    const ::osg::Vec3 pick_dir = end_pos - start_pos;
-    mIntersector->setStart(start_pos);
-    mIntersector->setEnd(end_pos);
+  if (SceneGraph.getValue().isValid()) {
 
-    // compute intersections. check type of root node because apply is type dependent.
-    ::osg::Node *root = RootNode.getValue()->getOsgNode();
-    ::osg::Transform *root_transform = dynamic_cast< ::osg::Transform*>(root);
-    if (root_transform != 0)
-      mVisitor->apply(*root_transform);
-    else
-      mVisitor->apply(*root);
+    auto results(SceneGraph.getValue()->getGuaSceneGraph()->ray_test(*(
+                 PickRay.getValue()->getGuaNode()),
+                 static_cast< ::gua::PickResult::Options>(Options.getValue()),
+                 PickMask.getValue()));
 
-    if(mIntersector->containsIntersections())
-    {
-      MFContainer::ContainerType targets;
-      const bool create_node_paths = CreateNodePaths.getValue();
-      const bool create_intersections = CreateIntersections.getValue();
-      const ::osgUtil::LineSegmentIntersector::Intersections &intersections =
-        mIntersector->getIntersections();
-      const unsigned int node_mask = NodePickMask.getValue();
-      const unsigned int subtree_mask = SubtreePickMask.getValue();
-      const bool pick_no_mask = PickNodesWithoutPickMask.getValue();
+    for (auto result : results) {
+      Link<TargetHolder> holder (new TargetHolder());
+      holder->Target.setValue(new av::gua::PickResult(result));
 
-      for (::osgUtil::LineSegmentIntersector::Intersections::const_iterator intersection =
-           intersections.begin(); intersection != intersections.end(); ++intersection)
-      {
-        av::Link<av::FieldContainer> target;
-        std::list<av::Link<av::osg::Node> > node_path_list;
+      if (SetCreator.getValue())
+        holder->Creator.setValue(this);
 
-        // iterate over the node path from the intersected node to the root node,
-        // check the pick masks and find the first Avango node.
-        for (::osg::NodePath::const_reverse_iterator node = intersection->nodePath.rbegin();
-             node != intersection->nodePath.rend(); ++node)
-        {
-          av::Link<av::osg::Node> av_node = av::osg::get_from_osg_object<av::osg::Node>(*node);
-          if (av_node.isValid())
-          {
-            SFBool *ignore = dynamic_cast<SFBool*>(av_node->getField("PickIgnore"));
-            if (ignore == 0 || !ignore->getValue())
-            {
-              SFUInt *mask = dynamic_cast<SFUInt*>(av_node->getField("PickMask"));
-              if (!target.isValid())
-              {
-                if ((mask == 0 && pick_no_mask) ||
-                    (mask != 0 && (node_mask & mask->getValue()) != 0u))
-                {
-                  target = av_node;
-                  node_path_list.push_back(av_node);
-                }
-                else
-                  break;
-              }
-              else
-              {
-                if ((mask == 0 && pick_no_mask) ||
-                    (mask != 0 && (subtree_mask & mask->getValue()) != 0u))
-                {
-                  node_path_list.push_front(av_node);
-                }
-                else
-                {
-                  target.clear();
-                  break;
-                }
-              }
-            }
-			else
-				break;
-          }
-        }
+      mSelectedTargets.push_back(holder);
 
-        // check if we want to pick front or back face
-        if (target.isValid())
-        {
-          if (intersection->getWorldIntersectNormal() * pick_dir < 0.0)
-          {
-            SFBool *pick_front = dynamic_cast<SFBool*>(target->getField("PickFrontFace"));
-            if (pick_front != 0 && !pick_front->getValue())
-              target.clear();
-          }
-          else
-          {
-            SFBool *pick_back = dynamic_cast<SFBool*>(target->getField("PickBackFace"));
-            if (pick_back != 0 && !pick_back->getValue())
-              target.clear();
-          }
-        }
-
-        // add node to output list, if we don't have it already
-        if (target.isValid() && !hasObject(targets, target))
-        {
-          targets.push_back(target);
-          Link<TargetHolder> holder;
-
-          if (create_node_paths || create_intersections)
-          {
-            std::vector<av::Link<av::osg::Node> > node_path;
-            node_path.reserve(node_path_list.size());
-            node_path.insert(node_path.begin(), node_path_list.begin(), node_path_list.end());
-            Link<NodePathTargetHolder> path_holder;
-
-            if (create_intersections)
-            {
-              // create IntersectionTargetHolder
-              Link<av::osg::Intersection> av_intersection = new av::osg::Intersection;
-              av_intersection->NodePath.setValue(node_path);
-              av_intersection->Point.setValue(intersection->getWorldIntersectPoint());
-              av_intersection->Normal.setValue(intersection->getWorldIntersectNormal());
-
-              av_intersection->IndexList.setValue(intersection->indexList);
-              av_intersection->RatioList.setValue(intersection->ratioList);
-
-              Link<IntersectionTargetHolder> intersection_holder = new IntersectionTargetHolder;
-              intersection_holder->Intersection.setValue(av_intersection);
-              path_holder = intersection_holder;
-
-            }
-            else
-              path_holder = new NodePathTargetHolder;
-
-            path_holder->NodePath.setValue(node_path);
-            holder = path_holder;
-          }
-          else
-            holder = new TargetHolder;
-
-          holder->Target.setValue(target);
-
-          if (SetCreator.getValue())
-            holder->Creator.setValue(this);
-
-          mSelectedTargets.push_back(holder);
-        }
-
-        // stop if we only consider the first hit
-        if (!mSelectedTargets.empty() && FirstHitOnly.getValue())
-          break;
-      }
     }
 
-    mIntersector->reset();
   }
 
   return mSelectedTargets;
 }
 
 /* virtual */ void
-av::tools::PickSelector::evaluate()
-{
+av::tools::PickSelector::evaluate() {
   av::tools::Selector::evaluate();
 
   // try to pick if trigger changes to or stays true
   if (PickTrigger.getValue() && (!mLastPickTrigger || !TransitionOnly.getValue()))
   {
     pick();
-
-    if (!mSelectedTargets.empty() || !SelectedTargets.isEmpty())
+    if (!mSelectedTargets.empty() || !SelectedTargets.isEmpty()) {
       SelectedTargets.setValue(mSelectedTargets);
+    }
 
     if (!mLastPickTrigger)
     {
       mLastPickTrigger = true;
-      if (!TransitionOnly.getValue() && EveryFrame.getValue())
+      if (!TransitionOnly.getValue() && EveryFrame.getValue()) {
         alwaysEvaluate(true);
+      }
     }
   }
   else if (!PickTrigger.getValue() && mLastPickTrigger)

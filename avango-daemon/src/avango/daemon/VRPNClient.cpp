@@ -39,14 +39,14 @@ namespace
     av::daemon::VRPNClient *device = reinterpret_cast<av::daemon::VRPNClient*>(userdata);
     device->handleAnalog(a);
   }
-    
+
   void  handle_button(void *userdata, const vrpn_BUTTONCB b)
   {
-    logger.trace() << "handle_button: processing a VRPN button event..."; 
+    logger.trace() << "handle_button: processing a VRPN button event...";
     av::daemon::VRPNClient *device = reinterpret_cast<av::daemon::VRPNClient*>(userdata);
     device->handleButton(b);
   }
-    
+
   void  handle_tracker(void *userdata, const vrpn_TRACKERCB t)
   {
     logger.trace() << "handle_tracker: processing a VRPN tracker event...";
@@ -64,7 +64,7 @@ av::daemon::VRPNClient::VRPNClient()
   mVRPNTracker(0)
 
 {
-  mRequiredFeatures.push_back("server");  
+  mRequiredFeatures.push_back("server");
 }
 
 av::daemon::VRPNClient::~VRPNClient()
@@ -128,7 +128,7 @@ av::daemon::VRPNClient::readLoop()
 {
   while(mKeepRunning)
   {
-    if (!mStopped) 
+    if (!mStopped)
     {
       if (mVRPNAnalog) mVRPNAnalog->mainloop();
       if (mVRPNButton) mVRPNButton->mainloop();
@@ -150,9 +150,9 @@ av::daemon::VRPNClient::stopDevice()
 void
 av::daemon::VRPNClient::handleAnalog(const vrpn_ANALOGCB a)
 {
-  NumStationMap::iterator ns; 
+  NumStationMap::iterator ns;
 
-  for (ns=mStations.begin(); ns!=mStations.end(); ns++) 
+  for (ns=mStations.begin(); ns!=mStations.end(); ns++)
     for (int i=0; i<a.num_channel; i++)
       (*ns).second->setValue(i, a.channel[i]);
 }
@@ -162,7 +162,7 @@ av::daemon::VRPNClient::handleButton(const vrpn_BUTTONCB b)
 {
   NumStationMap::iterator ns;
 
-  for (ns=mStations.begin(); ns!=mStations.end(); ns++)
+  for (ns=mStations.begin(); ns!=mStations.end(); ++ns)
     (*ns).second->setButton(b.button, b.state);
 }
 
@@ -171,12 +171,12 @@ av::daemon::VRPNClient::handleTracker(const vrpn_TRACKERCB t)
 {
   NumStationMap::iterator ns;
 
-  for (ns=mStations.begin(); ns!=mStations.end(); ns++) 
+  for (ns=mStations.begin(); ns!=mStations.end(); ++ns)
   {
-    ::osg::Matrixf pos_mat;
+    ::gua::math::mat4 pos_mat;
     pos_mat.makeTranslate(t.pos[0], t.pos[1], t.pos[2]);
 
-    ::osg::Matrixf rot_mat(::osg::Quat(t.quat[0],t.quat[1],t.quat[2],t.quat[3]));
+    ::gua::math::mat4 rot_mat(::osg::Quat(t.quat[0],t.quat[1],t.quat[2],t.quat[3]));
     pos_mat.preMult(rot_mat);
 
     (*ns).second->setMatrix(pos_mat);

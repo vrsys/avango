@@ -23,7 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/SingleSelector.h>
+#include <avango/tools/SingleSelector.hpp>
 
 #include <avango/Logger.h>
 

@@ -21,11 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/NameSelector.h>
-
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
-#include <avango/tools/NodePathTargetHolder.h>
-#endif
+#include <avango/tools/NameSelector.hpp>
 
 #include <avango/Logger.h>
 #include <boost/regex.hpp>
@@ -50,8 +46,6 @@ av::tools::NameSelector::NameSelector():
   AV_FC_ADD_FIELD(SelectableNames, MFString::ContainerType());
   AV_FC_ADD_FIELD(SelectableTargetNames, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(EqualNameOnly, true);
-  AV_FC_ADD_FIELD(SearchTargetHolderNodePaths, false);
-  AV_FC_ADD_FIELD(SearchOSGNodePaths, false);
   AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
 }
 
@@ -121,7 +115,7 @@ av::tools::NameSelector::evaluate()
       found = true;
     }
 
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
+#if 0 // defined(AVANGO_TOOLS_OSG_SUPPORT)
 
     if (!found && SearchTargetHolderNodePaths.getValue())
     {

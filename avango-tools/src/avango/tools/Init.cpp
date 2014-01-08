@@ -23,32 +23,31 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/Init.h>
+#include <avango/tools/Init.hpp>
 
 #include <avango/Logger.h>
 
-#include <avango/tools/ChangeSelector.h>
-#include <avango/tools/InjectSelector.h>
-#include <avango/tools/ObjectSelector.h>
-#include <avango/tools/NameSelector.h>
-#include <avango/tools/FieldSelector.h>
-#include <avango/tools/Selector.h>
-#include <avango/tools/SingleSelector.h>
-#include <avango/tools/TargetHolder.h>
-#include <avango/tools/Tool.h>
-#include <avango/tools/TriggerSelector.h>
-#include <avango/tools/TypeSelector.h>
-#include <avango/tools/UnionSelector.h>
+#include <avango/tools/ChangeSelector.hpp>
+#include <avango/tools/InjectSelector.hpp>
+#include <avango/tools/ObjectSelector.hpp>
+#include <avango/tools/NameSelector.hpp>
+#include <avango/tools/FieldSelector.hpp>
+#include <avango/tools/Selector.hpp>
+#include <avango/tools/SingleSelector.hpp>
+#include <avango/tools/TargetHolder.hpp>
+#include <avango/tools/Tool.hpp>
+#include <avango/tools/TriggerSelector.hpp>
+#include <avango/tools/TypeSelector.hpp>
+#include <avango/tools/UnionSelector.hpp>
 
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
-#include <avango/tools/DragTool.h>
-#include <avango/tools/IntersectionTargetHolder.h>
-#include <avango/tools/NodePathTargetHolder.h>
-#include <avango/tools/PickSelector.h>
-#include <avango/tools/ProximitySelector.h>
-#include <avango/tools/ScaledGrabTool.h>
-#endif
-
+//#if defined(AVANGO_TOOLS_GUA_SUPPORT)
+#include <avango/tools/DragTool.hpp>
+//#include <avango/tools/IntersectionTargetHolder.hpp>
+//#include <avango/tools/NodePathTargetHolder.hpp>
+#include <avango/tools/PickSelector.hpp>
+#include <avango/tools/ProximitySelector.hpp>
+#include <avango/tools/ScaledGrabTool.hpp>
+//#endif
 
 namespace
 {
@@ -75,14 +74,14 @@ av::tools::Init::initClass()
     av::tools::TypeSelector::initClass();
     av::tools::UnionSelector::initClass();
 
-#if defined(AVANGO_TOOLS_OSG_SUPPORT)
+//#if defined(AVANGO_TOOLS_GUA_SUPPORT)
     av::tools::DragTool::initClass();
-    av::tools::IntersectionTargetHolder::initClass();
-    av::tools::NodePathTargetHolder::initClass();
+    //av::tools::IntersectionTargetHolder::initClass();
+    //av::tools::NodePathTargetHolder::initClass();
     av::tools::PickSelector::initClass();
     av::tools::ProximitySelector::initClass();
     av::tools::ScaledGrabTool::initClass();
-#endif
+//#endif
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::tools::Init", true);
   }

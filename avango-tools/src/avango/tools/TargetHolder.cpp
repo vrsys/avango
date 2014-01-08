@@ -21,7 +21,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/TargetHolder.h>
+#include <avango/tools/TargetHolder.hpp>
 
 #include <avango/Logger.h>
 

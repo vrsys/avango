@@ -394,7 +394,6 @@ namespace av
   template<> AV_DLL void av::MultiField<uint64_t>::pullValueImpl(av::Field* fromField);
   template<> AV_DLL void av::MultiField<bool>::pullValueImpl(av::Field* fromField);
 
-
   template <typename Value> bool
   operator==(const MultiField<Value>& a, const MultiField<Value>& b)
   {

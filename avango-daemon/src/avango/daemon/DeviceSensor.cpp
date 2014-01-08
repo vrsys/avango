@@ -28,6 +28,8 @@
 #include <avango/SingleField.h>
 #include <avango/Logger.h>
 
+#include <scm/core/math.h>
+#include <gua/math.hpp>
 
 namespace
 {
@@ -41,7 +43,7 @@ av::daemon::DeviceSensor::DeviceSensor()
   AV_FC_ADD_FIELD(DeviceService,            0);
   AV_FC_ADD_FIELD(Station,                  ::std::string());
   AV_FC_ADD_FIELD(ResetValuesOnRead,        false);
-  AV_FC_ADD_FIELD(Matrix,                   ::osg::Matrix());
+  AV_FC_ADD_FIELD(Matrix,                   ::gua::math::mat4());
   AV_FC_ADD_FIELD(Button0,                  false);
   AV_FC_ADD_FIELD(Button1,                  false);
   AV_FC_ADD_FIELD(Button2,                  false);
@@ -106,10 +108,10 @@ av::daemon::DeviceSensor::DeviceSensor()
   AV_FC_ADD_FIELD(LED13,                    false);
   AV_FC_ADD_FIELD(LED14,                    false);
   AV_FC_ADD_FIELD(LED15,                    false);
-  AV_FC_ADD_FIELD(TransmitterOffset,        ::osg::Matrix());
-  AV_FC_ADD_FIELD(ReceiverOffset,           ::osg::Matrix());
-  AV_FC_ADD_FIELD(Rotation,                 ::osg::Quat());
-  AV_FC_ADD_FIELD(Translation,              ::osg::Vec3());
+  AV_FC_ADD_FIELD(TransmitterOffset,        ::gua::math::mat4());
+  AV_FC_ADD_FIELD(ReceiverOffset,           ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Rotation,                 ::gua::math::quat());
+  AV_FC_ADD_FIELD(Translation,              ::gua::math::vec3());
 
   alwaysEvaluate(true);
 }
@@ -142,13 +144,13 @@ av::daemon::DeviceSensor::evaluate()
 void
 av::daemon::DeviceSensor::updateMatrix()
 {
-  ::osg::Matrixf mat;
+  ::gua::math::mat4 mat;
   getMatrix(mat);
 
   if (Matrix.getValue() != mat)
   {
-    ::osg::Quat rot = mat.getRotate();
-    ::osg::Vec3 pos = mat.getTrans();
+    ::gua::math::quat rot = ::scm::math::quat<float>::from_matrix(mat);
+    ::gua::math::vec3 pos = ::gua::math::get_translation(mat);
 
     Rotation.setValue(rot);
     Translation.setValue(pos);
@@ -199,13 +201,12 @@ av::daemon::DeviceSensor::updateLEDs()
 }
 
 void
-av::daemon::DeviceSensor::getMatrix(::osg::Matrixf& mat)
+av::daemon::DeviceSensor::getMatrix(::gua::math::mat4& mat)
 {
   const char* stationstr = Station.getValue().c_str();
-  mat = DeviceService.getValue()->getMatrix(stationstr);
+  ::gua::math::mat4 station = DeviceService.getValue()->getMatrix(stationstr);
 
-  mat.preMult(ReceiverOffset.getValue());
-  mat.postMult(TransmitterOffset.getValue());
+  mat = TransmitterOffset.getValue() * station * ReceiverOffset.getValue();
 }
 
 float

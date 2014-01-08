@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_SCENE_GRAPH_HPP
+#define AV_PYTHON_GUA_SCENE_GRAPH_HPP
+
+void init_SceneGraph();
+
+#endif //AV_PYTHON_GUA_SCENE_GRAPH_HPP

@@ -226,10 +226,12 @@ namespace av
 #if !defined(_WIN32)
       os << getValue();
 #else
+      os << getValue();
+      /*
       // cl of VS 8 apparently not able to resolve os << getValue().
       Value val;
       val = getValue();
-      av::operator<<( static_cast<av::OutputStream&>(os), static_cast< Value >( val ));
+      av::operator<<( static_cast<av::OutputStream&>(os), static_cast< Value >( val ));*/
 #endif
     }
 
@@ -355,7 +357,6 @@ namespace av
   template<> AV_DLL void av::SingleField<uint32_t>::pullValueImpl(av::Field* fromField);
   template<> AV_DLL void av::SingleField<uint64_t>::pullValueImpl(av::Field* fromField);
   template<> AV_DLL void av::SingleField<bool>::pullValueImpl(av::Field* fromField);
-
 }
 
 #endif // #if !defined(AVANGO_SINGLEFIELD_H)

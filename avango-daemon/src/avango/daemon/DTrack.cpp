@@ -25,7 +25,7 @@
 
 #include "dtrack/dtrack.h"
 #include <errno.h>
-#include <osg/Matrixf>
+#include <gua/math.hpp>
 #include <avango/Logger.h>
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/Station.h>
@@ -161,12 +161,10 @@ av::daemon::DTrack::readLoop()
 
         if (it != mStations.end())
         {
-          ::osg::Matrixf xform;
-
-          xform.set(body[i].rot[0], body[i].rot[1], body[i].rot[2], 0.0f,
-                    body[i].rot[3], body[i].rot[4], body[i].rot[5], 0.0f,
-                    body[i].rot[6], body[i].rot[7], body[i].rot[8], 0.0f,
-                    body[i].loc[0] * 0.001f, body[i].loc[1] * 0.001f, body[i].loc[2] * 0.001f, 1.0f);
+          ::gua::math::mat4 xform (body[i].rot[0], body[i].rot[1], body[i].rot[2], 0.0f,
+                                   body[i].rot[3], body[i].rot[4], body[i].rot[5], 0.0f,
+                                   body[i].rot[6], body[i].rot[7], body[i].rot[8], 0.0f,
+                                   body[i].loc[0] * 0.001f, body[i].loc[1] * 0.001f, body[i].loc[2] * 0.001f, 1.0f);
 
           (*it).second->setMatrix(xform);
           logger.trace() << "readLoop: set matrix of station number '%s'", body_idx + 1;

@@ -21,7 +21,8 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/tools/ProximitySelector.h>
+#include <avango/tools/ProximitySelector.hpp>
+#include <avango/gua/Types.hpp>
 
 #include <avango/Logger.h>
 
@@ -29,10 +30,10 @@ namespace
 {
   av::Logger& logger(av::getLogger("av::tools::ProximitySelector"));
 
-  osg::Vec3::value_type
-  distance(const osg::Vec3& pos1, const osg::Vec3& pos2)
+  float
+  distance(::gua::math::vec3 const& pos1, ::gua::math::vec3 const& pos2)
   {
-    return (pos1 - pos2).length();
+    return ::scm::math::length(pos1 - pos2);
   }
 }
 
@@ -45,8 +46,8 @@ av::tools::ProximitySelector::ProximitySelector()
 {
   AV_FC_ADD_FIELD(TargetObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
-  AV_FC_ADD_FIELD(Position, ::osg::Vec3(0.0, 0.0, 0.0));
-  AV_FC_ADD_FIELD(PositionTransform, ::osg::Matrix());
+  AV_FC_ADD_FIELD(Position, ::gua::math::vec3(0.0, 0.0, 0.0));
+  AV_FC_ADD_FIELD(PositionTransform, ::gua::math::mat4());
   AV_FC_ADD_FIELD(ProximityRadius, 1.0);
   AV_FC_ADD_FIELD(DistanceRadius, 2.0);
   AV_FC_ADD_FIELD(Time, 0.0);
@@ -79,7 +80,7 @@ av::tools::ProximitySelector::evaluate()
   // get needed field values
   const MFContainer::ContainerType &target_objects = TargetObjects.getValue();
   const MFTargetHolder::ContainerType &targets = Targets.getValue();
-  const ::osg::Vec3 pos = Position.getValue() * PositionTransform.getValue();
+  const ::gua::math::vec3 pos = PositionTransform.getValue() * Position.getValue();
   const double prox_radius = ProximityRadius.getValue();
   const double dist_radius = DistanceRadius.getValue();
   const double time = Time.getValue();
@@ -139,18 +140,23 @@ av::tools::ProximitySelector::evaluate()
   {
     if (!hasTarget(mProxCands, *target) && !av::tools::hasTarget(mSelTargets, *target))
     {
-      // we only accept osg nodes to get the absolute transform
-      Link<av::osg::Node> node = dynamic_cast<av::osg::Node*>(target->getPtr());
-      if (node.isValid() &&
-          distance(pos, node->getAbsoluteTransform(this).getTrans()) < prox_radius)
+      // we only accept gua nodes to get the absolute transform
+      Link<av::gua::Node> node = dynamic_cast<av::gua::Node*>(target->getBasePtr());
+      if (node.isValid())
       {
-        if (lag > 0.000001)
-          new_prox_cands.push_back(TargetTimePair_t(node, time));
-        else
-        {
-          new_sel_targets.push_back(new TargetHolder);
-          new_sel_targets.back()->Target.setValue(*target);
-          new_sel_targets.back()->Creator.setValue(this);
+        const ::gua::math::mat4 nodeTransform(node->getGuaNode()->get_world_transform());
+        const ::gua::math::vec3 nodeTranslation(nodeTransform[12],
+                                                nodeTransform[13],
+                                                nodeTransform[14]);
+        if (distance(pos,  nodeTranslation) < prox_radius) {
+          if (lag > 0.000001)
+            new_prox_cands.push_back(TargetTimePair_t(node, time));
+          else
+          {
+            new_sel_targets.push_back(new TargetHolder);
+            new_sel_targets.back()->Target.setValue(*target);
+            new_sel_targets.back()->Creator.setValue(this);
+          }
         }
       }
     }
@@ -163,15 +169,20 @@ av::tools::ProximitySelector::evaluate()
     const SFContainer::ValueType &target = (*holder)->Target.getValue();
     if (!hasTarget(mProxCands, target) && !av::tools::hasTarget(mSelTargets, target))
     {
-      // we only accept osg nodes to get the absolute transform
-      Link<av::osg::Node> node = dynamic_cast<av::osg::Node*>(target.getPtr());
-      if (node.isValid() &&
-          distance(pos, node->getAbsoluteTransform(this).getTrans()) < prox_radius)
+      // we only accept gua nodes to get the absolute transform
+      Link<av::gua::Node> node = dynamic_cast<av::gua::Node*>(target.getBasePtr());
+      if (node.isValid())
       {
-        if (lag > 0.000001)
-          new_prox_cands.push_back(TargetTimePair_t(node, time));
-        else
-          new_sel_targets.push_back(*holder);
+        const ::gua::math::mat4 nodeTransform(node->getGuaNode()->get_world_transform());
+        const ::gua::math::vec3 nodeTranslation(nodeTransform[12],
+                                                nodeTransform[13],
+                                                nodeTransform[14]);
+        if (distance(pos,  nodeTranslation) < prox_radius) {
+          if (lag > 0.000001)
+            new_prox_cands.push_back(TargetTimePair_t(node, time));
+          else
+            new_sel_targets.push_back(*holder);
+        }
       }
     }
   }
@@ -181,7 +192,11 @@ av::tools::ProximitySelector::evaluate()
     TargetTimeList_t::iterator cand = mProxCands.begin();
     while (cand != mProxCands.end())
     {
-      if (distance(pos, cand->first->getAbsoluteTransform(this).getTrans()) > prox_radius)
+      const ::gua::math::mat4 candTransform(cand->first->getGuaNode()->get_world_transform());
+      const ::gua::math::vec3 candTranslation(candTransform[12],
+                                              candTransform[13],
+                                              candTransform[14]);
+      if (distance(pos, candTranslation) > prox_radius)
         cand = mProxCands.erase(cand);
       else if (time - cand->second > lag)
       {
@@ -217,11 +232,15 @@ av::tools::ProximitySelector::evaluate()
         ++holder;
       else
       {
-        Link<av::osg::Node> node = dynamic_cast<av::osg::Node*>(target.getPtr());
+          // we only accept gua nodes to get the absolute transform
+        Link<av::gua::Node> node = dynamic_cast<av::gua::Node*>(target.getBasePtr());
         if (node.isValid())
         {
-          if (distance(pos, node->getAbsoluteTransform(this).getTrans()) > dist_radius)
-          {
+          const ::gua::math::mat4 nodeTransform(node->getGuaNode()->get_world_transform());
+          const ::gua::math::vec3 nodeTranslation(nodeTransform[12],
+                                                  nodeTransform[13],
+                                                  nodeTransform[14]);
+          if (distance(pos,  nodeTranslation) < prox_radius) {
             if (lag > 0.000001)
             {
               new_dist_cands.push_back(TargetTimePair_t(node, time));
@@ -247,7 +266,12 @@ av::tools::ProximitySelector::evaluate()
     TargetTimeList_t::iterator cand = mDistCands.begin();
     while (cand != mDistCands.end())
     {
-      if (distance(pos, cand->first->getAbsoluteTransform(this).getTrans()) < dist_radius)
+      const ::gua::math::mat4 candTransform(cand->first->getGuaNode()->get_world_transform());
+      const ::gua::math::vec3 candTranslation(candTransform[12],
+                                              candTransform[13],
+                                              candTransform[14]);
+
+      if (distance(pos, candTranslation) < dist_radius)
         cand = mDistCands.erase(cand);
       else if (time - cand->second > lag)
       {

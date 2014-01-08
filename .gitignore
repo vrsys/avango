@@ -48,3 +48,6 @@ lib
 Session.vim
 .vim.custom
 scripts/avango.sublime-workspace
+
+# generated files
+avango-sound/include/avango/sound/Config.h

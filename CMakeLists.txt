@@ -138,6 +138,7 @@ ADD_SUBDIRECTORY(avango-python)
 ADD_SUBDIRECTORY(avango-gua)
 ADD_SUBDIRECTORY(avango-daemon)
 ADD_SUBDIRECTORY(avango-tools)
+ADD_SUBDIRECTORY(avango-sound)
 
 IF (AVANGO_OCULUS_RIFT_SUPPORT)
     ADD_SUBDIRECTORY(avango-oculus)

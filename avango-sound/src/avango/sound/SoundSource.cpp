@@ -25,7 +25,7 @@
 
 #include "avango/sound/SoundSource.h"
 
-#include <avango/osg/Types.h>
+#include <avango/gua/Types.hpp>
 
 AV_FC_DEFINE(av::sound::SoundSource)
 
@@ -34,8 +34,8 @@ av::sound::SoundSource::SoundSource()
 {
   AV_FC_ADD_FIELD(URL, "");
   AV_FC_ADD_FIELD(Loop, false);
-  AV_FC_ADD_FIELD(Velocity, ::osg::Vec3f(0,0,0));
-  AV_FC_ADD_FIELD(Direction, ::osg::Vec3f(0,0,0));
+  AV_FC_ADD_FIELD(Velocity, ::gua::math::vec3(0,0,0));
+  AV_FC_ADD_FIELD(Direction, ::gua::math::vec3(0,0,0));
   AV_FC_ADD_FIELD(ConeInnerAngle, 360.0f);
   AV_FC_ADD_FIELD(ConeOuterAngle, 360.0f);
   AV_FC_ADD_FIELD(ConeOuterGain, 0.0);
@@ -63,9 +63,11 @@ av::sound::SoundSource::~SoundSource()
 av::sound::SoundSource::initClass()
 {
   if (!isTypeInitialized()) {
-    av::osg::Group::initClass();
+    av::gua::TransformNode::initClass();
+    //av::osg::Group::initClass();
 
-    AV_FC_INIT(av::osg::Group,
+    AV_FC_INIT(av::gua::TransformNode,
+    //AV_FC_INIT(av::osg::Group,
                av::sound::SoundSource,
                true);
   }
@@ -111,10 +113,10 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
     bool loop = Loop.getValue();
     for_each_local_source(&LocalSource::setLooping, loop);
   } else if (&field == &Velocity) {
-    ::osg::Vec3f velocity = Velocity.getValue();
+    ::gua::math::vec3 velocity = Velocity.getValue();
     for_each_local_source(&LocalSource::setVelocity, velocity);
   } else if (&field == &Direction) {
-    ::osg::Vec3f direction = Direction.getValue();
+    ::gua::math::vec3 direction = Direction.getValue();
     for_each_local_source(&LocalSource::setDirection, direction);
   } else if (&field == &ConeInnerAngle) {
     float angle = ConeInnerAngle.getValue();
@@ -152,7 +154,8 @@ av::sound::SoundSource::fieldHasChangedLocalSideEffect(const Field& field)
   } else   if (&field == &NewSampleBuffer) {
     for_each_local_source(&LocalSource::enqueueSampleBuffer, NewSampleBuffer.getValue());
   } else {
-    av::osg::Group::fieldHasChangedLocalSideEffect(field);
+    //av::osg::Group::fieldHasChangedLocalSideEffect(field);
+    av::gua::TransformNode::fieldHasChangedLocalSideEffect(field);
   }
 }
 

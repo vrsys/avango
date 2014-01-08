@@ -23,8 +23,8 @@
 
 #include <avango/sound/SoundTraverser.h>
 #include <avango/sound/SoundSource.h>
-#include <avango/osg/MatrixTransform.h>
-#include <avango/osg/Group.h>
+#include <avango/gua/scenegraph/TransformNode.hpp>
+//#include <avango/gua/scenegraph/Group.hpp>
 #include <avango/Application.h>
 #include <boost/bind.hpp>
 #include <iostream>
@@ -35,7 +35,7 @@ av::sound::SoundTraverser::SoundTraverser()
 : mCheckTraversal(false), mHaveCallbackHandle(false)
 {
   AV_FC_ADD_FIELD(Renderers, std::vector<Link<av::sound::SoundRenderer> >());
-  AV_FC_ADD_FIELD(RootNode, Link<av::osg::Node>());
+  AV_FC_ADD_FIELD(RootNode, Link<av::gua::Node>());
   AV_FC_ADD_FIELD(Traverse, false);
 
   getTypeId().setDistributable(false);
@@ -74,7 +74,7 @@ av::sound::SoundTraverser::initClass()
 
 
 void
-av::sound::SoundTraverser::traverse(av::Link<av::osg::Node> rootNode, ::osg::Matrix absolutTransform ) const
+av::sound::SoundTraverser::traverse(av::Link<av::gua::Node> rootNode, ::gua::math::mat4 absolutTransform ) const
 {
 
   if (rootNode->getTypeId().isOfType(::av::sound::SoundSource::getClassTypeId())) {
@@ -87,13 +87,15 @@ av::sound::SoundTraverser::traverse(av::Link<av::osg::Node> rootNode, ::osg::Mat
       (*each_renderer)->updateSoundSourcePosition(sound_source, absolutTransform);
     }
   }
-  if (rootNode->getTypeId().isOfType(::av::osg::MatrixTransform::getClassTypeId())) {
-    Link<av::osg::MatrixTransform> transform(dynamic_cast<av::osg::MatrixTransform*>(rootNode.getPtr()));
+  if (rootNode->getTypeId().isOfType(::av::gua::TransformNode::getClassTypeId())) {
+    Link<av::gua::TransformNode> transform(dynamic_cast<av::gua::TransformNode*>(rootNode.getPtr()));
     AV_ASSERT(transform.isValid());
-    absolutTransform *= transform->Matrix.getValue();
+    absolutTransform *= transform->Transform.getValue();
   }
-  if (rootNode->getTypeId().isOfType(::av::osg::Group::getClassTypeId())) {
-    Link<av::osg::Group> group(dynamic_cast<av::osg::Group*>(rootNode.getPtr()));
+  //if (rootNode->getTypeId().isOfType(::av::osg::Group::getClassTypeId())) {
+  //  Link<av::osg::Group> group(dynamic_cast<av::osg::Group*>(rootNode.getPtr()));
+  if (rootNode->getTypeId().isOfType(::av::gua::Node::getClassTypeId())) {
+    Link<av::gua::Node> group(dynamic_cast<av::gua::Node*>(rootNode.getPtr()));
     AV_ASSERT(group.isValid());
     const ChildNodes& children = group->Children.getValue();
     for (ChildNodes::const_iterator each_child = children.begin();
@@ -119,7 +121,7 @@ av::sound::SoundTraverser::render()
   {
     return;
   }
-  traverse(RootNode.getValue(), ::osg::Matrix::identity());
+  traverse(RootNode.getValue(), ::gua::math::mat4::identity());
 }
 
 void

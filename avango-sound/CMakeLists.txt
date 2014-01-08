@@ -20,10 +20,10 @@ FILE(WRITE include/avango/sound/Config.h ${AVANGO_CONFIG_OUT})
 # determine source and header files
 ###############################################################################
 file(GLOB AVANGO_SOUND_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    src/SampleBuffer.cpp
-    src/SoundRenderer.cpp
-    src/SoundSource.cpp
-    src/SoundTraverser.cpp
+    src/avango/sound/SampleBuffer.cpp
+    src/avango/sound/SoundRenderer.cpp
+    src/avango/sound/SoundSource.cpp
+    src/avango/sound/SoundTraverser.cpp
     include/avango/sound/Config.h
     include/avango/sound/Doxygen.h
     include/avango/sound/SampleBuffer.h

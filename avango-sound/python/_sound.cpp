@@ -56,7 +56,8 @@ BOOST_PYTHON_MODULE(_sound)
   class_<av::sound::SoundTraverser, av::Link<av::sound::SoundTraverser>, bases<av::FieldContainer>, boost::noncopyable >("SoundTraverser", "docstring");
   class_<av::sound::SoundRenderer, av::Link<av::sound::SoundRenderer>, bases<av::FieldContainer>, boost::noncopyable >("SoundRenderer", "docstring", no_init);
   class_<av::sound::SampleBuffer, av::Link<av::sound::SampleBuffer>, bases<av::FieldContainer>, boost::noncopyable >("SampleBuffer", "docstring", no_init);
-  class_<av::sound::SoundSource, av::Link<av::sound::SoundSource>, bases<av::osg::Group>, boost::noncopyable >("SoundSource", "docstring");
+  //class_<av::sound::SoundSource, av::Link<av::sound::SoundSource>, bases<av::osg::Group>, boost::noncopyable >("SoundSource", "docstring");
+  class_<av::sound::SoundSource, av::Link<av::sound::SoundSource>, bases<av::gua::TransformNode>, boost::noncopyable >("SoundSource", "docstring");
 
   register_field<av::sound::SFSoundRenderer>("SFSoundRenderer");
   register_multifield<av::sound::MFSoundRenderer>("MFSoundRenderer");

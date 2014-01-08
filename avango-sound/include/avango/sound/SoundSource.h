@@ -26,8 +26,9 @@
 #ifndef AV_SOUND_SOUNDSOURCE_H
 #define AV_SOUND_SOUNDSOURCE_H
 
-#include <avango/osg/Group.h>
-#include <avango/osg/Fields.h>
+//#include <avango/gua/Group.h>
+#include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/Fields.hpp>
 #include <avango/sound/SampleBuffer.h>
 #include <queue>
 
@@ -46,7 +47,8 @@ namespace av {
     * This class doesn't do the sound rendering itself, but holds a list of
     * LocalSources, which are implemented by the concrete SoundRenderers.
     */
-    class SoundSource : public av::osg::Group {
+    //class SoundSource : public av::osg::Group {
+    class SoundSource : public av::gua::TransformNode {
       AV_FC_DECLARE();
       public:
         SoundSource();
@@ -63,11 +65,11 @@ namespace av {
         /**
          * The velocity of the source.
          */
-        av::osg::SFVec3   Velocity;
+        av::gua::SFVec3   Velocity;
         /**
          * The direction of the source.
          */
-        av::osg::SFVec3   Direction;
+        av::gua::SFVec3   Direction;
         /**
          * The inner angle of the cone for a directional source (in deg)
          */
@@ -154,7 +156,7 @@ namespace av {
              * Sets the position of this source in world coordinates.
              * @param transform The matrix transform of this source.
              */
-            virtual void setWorldTransform(const ::osg::Matrixf& transform) = 0;
+            virtual void setWorldTransform(const ::gua::math::mat4& transform) = 0;
             /**
              * Should this source loop?
              * @param loop Enable/Disable looping
@@ -174,12 +176,12 @@ namespace av {
              * Set velocity of sound source ( in m/s )
              * @param velocity The velocity vector for this source
              */
-            virtual void setVelocity(const ::osg::Vec3f& velocity) {}
+            virtual void setVelocity(const ::gua::math::vec3& velocity) {}
             /**
              * Set direction of sound source
              * @param direction The direction vector for this source
              */
-            virtual void setDirection(const ::osg::Vec3f& direction) {}
+            virtual void setDirection(const ::gua::math::vec3& direction) {}
             /**
              * Set inner angle of the cone for a directional sound source
              * @param angle The inner angle for the cone

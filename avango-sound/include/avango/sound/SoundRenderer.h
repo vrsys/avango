@@ -26,7 +26,8 @@
 
 #include <avango/FieldContainer.h>
 #include <avango/sound/SoundSource.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
+#include <gua/math/math.hpp>
 #include <boost/shared_ptr.hpp>
 
 /**
@@ -46,25 +47,25 @@ namespace av {
       protected:
         /* virtual */~SoundRenderer();
       public:
-        av::osg::SFMatrix ListenerPosition;
-        av::osg::SFVec3 ListenerVelocity;
+        av::gua::SFMatrix ListenerPosition;
+        av::gua::SFVec3 ListenerVelocity;
 
         virtual boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
-        virtual void updateSoundSourcePosition(Link<SoundSource> source, const ::osg::Matrix& transform);
+        virtual void updateSoundSourcePosition(Link<SoundSource> source, const ::gua::math::mat4& transform);
         virtual void resetRenderer() {}
 
       protected:
-        virtual void setListenerPosition(const ::osg::Matrix& /* position */) {}
-        virtual ::osg::Matrix getListenerPosition() const {return ::osg::Matrix::identity();}
+        virtual void setListenerPosition(const ::gua::math::mat4& /* position */) {}
+        virtual ::gua::math::mat4 getListenerPosition() const {return ::gua::math::mat4::identity();}
 
-        virtual void setListenerVelocity(const ::osg::Vec3& /* velocity */) {}
-        virtual ::osg::Vec3 getListenerVelocity() const {return ::osg::Vec3f(0.0f, 0.0f, 0.0f);}
+        virtual void setListenerVelocity(const ::gua::math::vec3& /* velocity */) {}
+        virtual ::gua::math::vec3 getListenerVelocity() const {return ::gua::math::vec3(0.0f, 0.0f, 0.0f);}
       private:
-        void getListenerPosCB(const av::osg::SFMatrix::GetValueEvent& event);
-        void setListenerPosCB(const av::osg::SFMatrix::SetValueEvent& event);
+        void getListenerPosCB(const av::gua::SFMatrix::GetValueEvent& event);
+        void setListenerPosCB(const av::gua::SFMatrix::SetValueEvent& event);
         
-        void getListenerVeloCB(const av::osg::SFVec3::GetValueEvent& event);
-        void setListenerVeloCB(const av::osg::SFVec3::SetValueEvent& event);
+        void getListenerVeloCB(const av::gua::SFVec3::GetValueEvent& event);
+        void setListenerVeloCB(const av::gua::SFVec3::SetValueEvent& event);
 
     };
     typedef SingleField<Link<SoundRenderer> > SFSoundRenderer;

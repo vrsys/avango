@@ -24,6 +24,7 @@
 #include "avango/sound/SoundRenderer.h"
 
 #include <boost/bind.hpp>
+#include <avango/gua/Fields.hpp>
 
 AV_FC_DEFINE_ABSTRACT(av::sound::SoundRenderer)
 
@@ -70,35 +71,35 @@ av::sound::SoundRenderer::createLocalSource()
 }
 
 void
-av::sound::SoundRenderer::getListenerPosCB(const av::osg::SFMatrix::GetValueEvent& event)
+av::sound::SoundRenderer::getListenerPosCB(const av::gua::SFMatrix::GetValueEvent& event)
 {
-  av::osg::SFMatrix::ValueType &matrix(*event.getValuePtr());
+  av::gua::SFMatrix::ValueType &matrix(*event.getValuePtr());
   matrix = getListenerPosition();
 }
 
 void
-av::sound::SoundRenderer::setListenerPosCB(const av::osg::SFMatrix::SetValueEvent& event)
+av::sound::SoundRenderer::setListenerPosCB(const av::gua::SFMatrix::SetValueEvent& event)
 {
-  const av::osg::SFMatrix::ValueType &matrix(event.getValue());
+  const av::gua::SFMatrix::ValueType &matrix(event.getValue());
   setListenerPosition(matrix);
 }
 
 void
-av::sound::SoundRenderer::getListenerVeloCB(const av::osg::SFVec3::GetValueEvent& event)
+av::sound::SoundRenderer::getListenerVeloCB(const av::gua::SFVec3::GetValueEvent& event)
 {
-  av::osg::SFVec3f::ValueType &vector(*event.getValuePtr());
+  av::gua::SFVec3::ValueType &vector(*event.getValuePtr());
   vector = getListenerVelocity();
 }
 
 void
-av::sound::SoundRenderer::setListenerVeloCB(const av::osg::SFVec3::SetValueEvent& event)
+av::sound::SoundRenderer::setListenerVeloCB(const av::gua::SFVec3::SetValueEvent& event)
 {
-  const av::osg::SFVec3f::ValueType &vector(event.getValue());
+  const av::gua::SFVec3::ValueType &vector(event.getValue());
   setListenerVelocity(vector);
 }
 
 void
-av::sound::SoundRenderer::updateSoundSourcePosition(av::Link<av::sound::SoundSource> source, const ::osg::Matrix& transform)
+av::sound::SoundRenderer::updateSoundSourcePosition(av::Link<av::sound::SoundSource> source, const ::gua::math::mat4& transform)
 {
   const unsigned int num_local_sources = source->numLocalSources();
 

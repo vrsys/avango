@@ -25,8 +25,8 @@
 #define AV_SOUND_SOUNDTRAVERSER_H
 
 #include <avango/FieldContainer.h>
-#include <avango/osg/Fields.h>
-#include <avango/osg/Node.h>
+#include <avango/gua/Fields.hpp>
+#include <avango/gua/scenegraph/Node.hpp>
 #include <avango/sound/SoundRenderer.h>
 #include <avango/Application.h>
 #include <vector>
@@ -59,7 +59,7 @@ namespace av {
         /**
          * The rootnode of the subgraph that should be traversed by the SoundTraverser
          */
-        av::osg::SFNode     RootNode;
+        av::gua::SFNode     RootNode;
         /**
          * If true, traverses the node under RootNode every frame
          */
@@ -70,7 +70,7 @@ namespace av {
          * @param rootNode The root of the subgraph
          * @param absolutTransform The matrix transformation up to this point in the graph
          */
-        void traverse(Link<av::osg::Node> rootNode, ::osg::Matrix absolutTransform) const;
+        void traverse(Link<av::gua::Node> rootNode, ::gua::math::mat4 absolutTransform) const;
         void fieldHasChanged(const Field& field) ;
         void evaluate();
       private:
@@ -79,7 +79,7 @@ namespace av {
         bool mHaveCallbackHandle;
         av::Application::CallbackHandle mCallbackHandle;
         typedef std::vector<Link<SoundRenderer> > SoundRenderers;
-        typedef std::vector<Link<av::osg::Node> > ChildNodes;
+        typedef std::vector<Link<av::gua::Node> > ChildNodes;
     };
   }
 }

@@ -33,6 +33,8 @@
 #include <vector>
 #include <avango/sound/SampleBuffer.h>
 
+#include <gua/math/math.hpp>
+
 #include <iostream>
 
 using namespace std;
@@ -265,23 +267,23 @@ av::sound::openal::OpenALSoundRenderer::createLocalSource()
 
 /* virtual */
 void
-av::sound::openal::OpenALSoundRenderer::setListenerPosition(const ::osg::Matrix& position)
+av::sound::openal::OpenALSoundRenderer::setListenerPosition(const ::gua::math::mat4& position)
 {
-  ::osg::Vec3f translation;
-  ::osg::Quat rotation;
-  ::osg::Vec3f scale;
-  ::osg::Quat scaleOrientation;
+  ::gua::math::vec3 translation;
+  ::gua::math::quat rotation;
+  ::gua::math::vec3 scale;
+  ::gua::math::quat scaleOrientation;
 
   position.decompose(translation, rotation, scale, scaleOrientation);
 
   ::alListenerfv(AL_POSITION, translation.ptr());
-  ::osg::Matrix rotationMat;
+  ::gua::math::mat4 rotationMat;
   rotation.get(rotationMat);
 
-  ::osg::Vec3f atAndUpVec[2];
+  ::gua::math::vec3 atAndUpVec[2];
 
-  atAndUpVec[0] = rotationMat * ::osg::Vec3f(0.0f, 0.0f, -1.0f);
-  atAndUpVec[1] = rotationMat * ::osg::Vec3f(0.0f, 1.0f, 0.0f);
+  atAndUpVec[0] = rotationMat * ::gua::math::vec3(0.0f, 0.0f, -1.0f);
+  atAndUpVec[1] = rotationMat * ::gua::math::vec3(0.0f, 1.0f, 0.0f);
 
   ::alListenerfv(AL_ORIENTATION, atAndUpVec[0].ptr());
 
@@ -289,7 +291,7 @@ av::sound::openal::OpenALSoundRenderer::setListenerPosition(const ::osg::Matrix&
 }
 
 /* virtual */
-::osg::Matrix
+::gua::math::mat4
 av::sound::openal::OpenALSoundRenderer::getListenerPosition() const
 {
   return mPosition;
@@ -327,10 +329,10 @@ av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::~OpenALLocalSource()
 }
 
 void
-av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setWorldTransform(const ::osg::Matrixf& worldMatrix)
+av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setWorldTransform(const ::gua::math::mat4& worldMatrix)
 {
 
-  ::osg::Vec3f position = worldMatrix.getTrans();
+  ::gua::math::vec3 position = worldMatrix.getTrans();
   ::alSourcefv(mSource, AL_POSITION, position.ptr());
 }
 
@@ -400,7 +402,7 @@ av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setURL(const std::str
 }
 
 void
-av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setVelocity(const ::osg::Vec3f& velocity)
+av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setVelocity(const ::gua::math::vec3& velocity)
 {
   ::alSourcefv(mSource, AL_VELOCITY, velocity.ptr());
 }

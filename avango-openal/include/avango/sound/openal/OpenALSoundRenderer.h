@@ -31,6 +31,7 @@
 #include <AL/alc.h>
 #include <AL/al.h>
 #include <deque>
+#include <gua/math/math.hpp>
 
 /**
  * \namespace av::sound::openal
@@ -74,19 +75,19 @@ namespace av
 
         protected:
 
-          /* virtual */ void setListenerPosition(const ::osg::Matrix& position);
-          /* virtual */ ::osg::Matrix getListenerPosition() const;
+          /* virtual */ void setListenerPosition(const ::gua::math::mat4& position);
+          /* virtual */ ::gua::math::mat4 getListenerPosition() const;
 
           class OpenALLocalSource : public SoundSource::LocalSource {
             public:
               OpenALLocalSource(SoundRenderer* soundRenderer);
               ~OpenALLocalSource();
 
-              /* virtual */ void setWorldTransform(const ::osg::Matrixf& worldMatrix);
+              /* virtual */ void setWorldTransform(const ::gua::math::mat4& worldMatrix);
               /* virtual */ void setLooping(bool loop );
               /* virtual */ void setURL(const std::string& soundURL );
 
-              /* virtual */ void setVelocity( const ::osg::Vec3f& velocity);
+              /* virtual */ void setVelocity( const ::gua::math::vec3& velocity);
               /* virtual */ void setGain(float gain);
               /* virtual */ void setPitch(float pitch);
 
@@ -116,7 +117,7 @@ namespace av
           ALCdevice* mDevice;
           std::string mDeviceName;
           ALCcontext* mContext;
-          ::osg::Matrix mPosition;
+          ::gua::math::mat4 mPosition;
           static unsigned int gAlutOpenCount;
       };
     }

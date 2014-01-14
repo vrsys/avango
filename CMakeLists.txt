@@ -109,6 +109,8 @@ SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
 SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Install path for avango.")
 
 SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
+SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
+SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
 
 ################################################################
 # Create build flags

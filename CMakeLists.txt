@@ -146,6 +146,10 @@ IF (AVANGO_OCULUS_RIFT_SUPPORT)
     ADD_SUBDIRECTORY(avango-oculus)
 ENDIF(AVANGO_OCULUS_RIFT_SUPPORT)
 
+IF (AVANGO_OPENAL_SUPPORT)
+    ADD_SUBDIRECTORY(avango-openal)
+ENDIF(AVANGO_OPENAL_SUPPORT)
+
 ################################################################
 # Summary
 ################################################################

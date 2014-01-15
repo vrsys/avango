@@ -110,6 +110,10 @@ SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Instal
 
 SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include(find_zmq)
+ENDIF(AVANGO_DISTRIBUTION_SUPPORT)
+
 ################################################################
 # Create build flags
 ################################################################

@@ -26,6 +26,11 @@ namespace av
 
     public:
 
+      enum ProjectionMode {
+        PERSPECTIVE = ::gua::Camera::PERSPECTIVE,
+        ORTHOGRAPHIC = ::gua::Camera::ORTHOGRAPHIC
+      };
+
       /**
        * Constructor. When called without arguments, a new ::gua::Camera is created.
        * Otherwise, the given ::gua::Camera is used.
@@ -47,6 +52,7 @@ namespace av
       SFString RightScreen;
       SFString SceneGraph;
       SFString RenderMask;
+      SFUInt   Mode;
 
       virtual void getLeftEyeCB(const SFString::GetValueEvent& event);
       virtual void setLeftEyeCB(const SFString::SetValueEvent& event);
@@ -65,6 +71,9 @@ namespace av
 
       virtual void getRenderMaskCB(const SFString::GetValueEvent& event);
       virtual void setRenderMaskCB(const SFString::SetValueEvent& event);
+
+      virtual void getModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setModeCB(const SFUInt::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::Camera.

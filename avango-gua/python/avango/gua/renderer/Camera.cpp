@@ -26,4 +26,8 @@ void init_Camera()
   register_multifield<av::gua::MFCamera>("MFCamera");
   class_<av::gua::Camera, av::Link<av::gua::Camera>, bases<av::FieldContainer>, boost::noncopyable >("Camera", "docstring", no_init);
 
+  enum_<av::gua::Camera::ProjectionMode>("ProjectionMode")
+        .value("PERSPECTIVE", av::gua::Camera::PERSPECTIVE)
+        .value("ORTHOGRAPHIC", av::gua::Camera::ORTHOGRAPHIC)
+        ;
  }

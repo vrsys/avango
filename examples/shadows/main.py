@@ -39,6 +39,7 @@ def setup_pipe():
   pipe.SsaoRadius.value = 5
   pipe.SsaoIntensity.value = 0.7
 
+
   pipe.EnableFog.value = True
   pipe.FogTexture.value = "data/textures/skymap.jpg"
   pipe.FogStart.value = 20.0

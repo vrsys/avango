@@ -27,6 +27,10 @@ av::gua::Pipeline::Pipeline(::gua::Pipeline* guaPipeline)
                           boost::bind(&Pipeline::getCameraCB, this, _1),
                           boost::bind(&Pipeline::setCameraCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(Enabled,
+                          boost::bind(&Pipeline::getEnabledCB, this, _1),
+                          boost::bind(&Pipeline::setEnabledCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(Window,
                           boost::bind(&Pipeline::getWindowCB, this, _1),
                           boost::bind(&Pipeline::setWindowCB, this, _1));
@@ -237,6 +241,19 @@ av::gua::Pipeline::setCameraCB(const SFCamera::SetValueEvent& event)
   }
 
 }
+
+void
+av::gua::Pipeline::getEnabledCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPipeline->config.get_enabled();
+}
+
+void
+av::gua::Pipeline::setEnabledCB(const SFBool::SetValueEvent& event)
+{
+  m_guaPipeline->config.set_enabled(event.getValue());
+}
+
 
 void
 av::gua::Pipeline::getWindowCB(const SFWindow::GetValueEvent& event)

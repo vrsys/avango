@@ -40,6 +40,10 @@ av::gua::Camera::Camera(::gua::Camera* guaCamera)
   AV_FC_ADD_ADAPTOR_FIELD(RenderMask,
                       boost::bind(&Camera::getRenderMaskCB, this, _1),
                       boost::bind(&Camera::setRenderMaskCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Mode,
+                      boost::bind(&Camera::getModeCB, this, _1),
+                      boost::bind(&Camera::setModeCB, this, _1));
 }
 
 av::gua::Camera::~Camera()
@@ -135,4 +139,17 @@ void
 av::gua::Camera::setRenderMaskCB(const SFString::SetValueEvent& event)
 {
   m_guaCamera->render_mask = event.getValue();
+}
+
+
+void
+av::gua::Camera::getModeCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaCamera->mode);
+}
+
+void
+av::gua::Camera::setModeCB(const SFUInt::SetValueEvent& event)
+{
+  m_guaCamera->mode = static_cast< ::gua::Camera::ProjectionMode>(event.getValue());
 }

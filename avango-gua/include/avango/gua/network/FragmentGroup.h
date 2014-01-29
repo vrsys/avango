@@ -31,7 +31,7 @@
  * \ingroup av_gua
  */
 
-#include <avango/gua/Node.hpp>
+#include <avango/gua/scenegraph/TransformNode.hpp>
 
 namespace av
 {
@@ -40,19 +40,19 @@ namespace av
     class NetMatrixTransform;
 
     /**
-     * Wrapper for ::gua::Node
+     * Wrapper for ::gua::TransformNode
      *
      * \ingroup av_gua
      */
-    class FragmentGroup : public av::gua::Node
+    class FragmentGroup : public av::gua::TransformNode
     {
       AV_FC_DECLARE();
 
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::Node is created.
-       * Otherwise, the given ::gua::Node is used.
+       * Constructor. When called without arguments, a new ::gua::TransformNode is created.
+       * Otherwise, the given ::gua::TransformNode is used.
        */
       FragmentGroup();
 

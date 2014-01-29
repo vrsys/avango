@@ -53,9 +53,9 @@ av::gua::FragmentGroup::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::Node::initClass();
+    av::gua::TransformNode::initClass();
 
-    AV_FC_INIT(av::gua::Node, av::gua::FragmentGroup, false);
+    AV_FC_INIT(av::gua::TransformNode, av::gua::FragmentGroup, false);
 
     SFFragmentGroup::initClass("av::gua::SFFragmentGroup", "av::Field");
     MFFragmentGroup::initClass("av::gua::MFFragmentGroup", "av::Field");
@@ -65,7 +65,7 @@ av::gua::FragmentGroup::initClass()
 /* virtual */ void
 av::gua::FragmentGroup::fieldHasChangedLocalSideEffect(const Field& field)
 {
-  Node::fieldHasChangedLocalSideEffect(field);
+  TransformNode::fieldHasChangedLocalSideEffect(field);
 
   mChildrenChanged = (&field == &Children);
 }
@@ -73,7 +73,7 @@ av::gua::FragmentGroup::fieldHasChangedLocalSideEffect(const Field& field)
 void
 av::gua::FragmentGroup::evaluateLocalSideEffect()
 {
-  Node::evaluateLocalSideEffect();
+  TransformNode::evaluateLocalSideEffect();
 
   if (mChildrenChanged && mNetMatrixTransform) {
     mNetMatrixTransform->fragmentChildrenChanged();

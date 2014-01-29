@@ -38,6 +38,14 @@ template <class T> typename T::value_type length (T* self) {
   return scm::math::length(*self);
 }
 
+template <class T> typename T::value_type dot (T* self, T* other) {
+  return scm::math::dot(*self, *other);
+}
+
+template <class T> T cross (T* self, T* other) {
+  return scm::math::cross(*self, *other);
+}
+
 template <class T> typename T::value_type length2 (T* self) {
   return scm::math::length_sqr(*self);
 }

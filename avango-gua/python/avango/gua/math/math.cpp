@@ -12,7 +12,7 @@
 using namespace boost::python;
 using namespace av::python;
 
-#define ADD_VECTOR_OPERATORS(TYPE) \
+#define ADD_VECTOR_OPERATORS_2D(TYPE) \
   .def(self *  other< TYPE ::value_type>())\
   .def(self /  other< TYPE ::value_type>())\
   .def(self +  other< TYPE ::value_type>())\
@@ -28,7 +28,28 @@ using namespace av::python;
   .def(self *= other< TYPE >())\
   .def(self /= other< TYPE >())\
   .def(self += other< TYPE >())\
-  .def(self -= other< TYPE >())
+  .def(self -= other< TYPE >())\
+  .def("dot", &dot< TYPE>)
+
+#define ADD_VECTOR_OPERATORS_3D_4D(TYPE) \
+  .def(self *  other< TYPE ::value_type>())\
+  .def(self /  other< TYPE ::value_type>())\
+  .def(self +  other< TYPE ::value_type>())\
+  .def(self -  other< TYPE ::value_type>())\
+  .def(self *= other< TYPE ::value_type>())\
+  .def(self /= other< TYPE ::value_type>())\
+  .def(self += other< TYPE ::value_type>())\
+  .def(self -= other< TYPE ::value_type>())\
+  .def(self *  other< TYPE >())\
+  .def(self /  other< TYPE >())\
+  .def(self +  other< TYPE >())\
+  .def(self -  other< TYPE >())\
+  .def(self *= other< TYPE >())\
+  .def(self /= other< TYPE >())\
+  .def(self += other< TYPE >())\
+  .def(self -= other< TYPE >())\
+  .def("dot", &dot< TYPE>)\
+  .def("cross", &cross< TYPE>)
 
 void init_Vec2() {
   // wrapping gua::math::vec2 functionality
@@ -36,7 +57,7 @@ void init_Vec2() {
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2>))
     .def(init< ::gua::math::vec2::value_type, ::gua::math::vec2::value_type>())
     .def(init< ::gua::math::vec2>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec2)
+    ADD_VECTOR_OPERATORS_2D( ::gua::math::vec2)
     .add_property("x", &getX< ::gua::math::vec2>, &setX< ::gua::math::vec2>)
     .add_property("y", &getY< ::gua::math::vec2>, &setY< ::gua::math::vec2>)
     .def("normalize", &normalize< ::gua::math::vec2>)
@@ -59,7 +80,7 @@ void init_Vec2i() {
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2i>))
     .def(init< unsigned, unsigned>())
     .def(init< ::gua::math::vec2i>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec2i)
+    ADD_VECTOR_OPERATORS_2D( ::gua::math::vec2i)
     .add_property("x", &getX< ::gua::math::vec2i>, &setX< ::gua::math::vec2i>)
     .add_property("y", &getY< ::gua::math::vec2i>, &setY< ::gua::math::vec2i>)
     .def("normalize", &normalize< ::gua::math::vec2i>)
@@ -82,7 +103,7 @@ void init_Vec2ui() {
     .def("__init__", make_constructor(&constructorVec< ::gua::math::vec2ui>))
     .def(init< unsigned, unsigned>())
     .def(init< ::gua::math::vec2ui>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec2ui)
+    ADD_VECTOR_OPERATORS_2D( ::gua::math::vec2ui)
     .add_property("x", &getX< ::gua::math::vec2ui>, &setX< ::gua::math::vec2ui>)
     .add_property("y", &getY< ::gua::math::vec2ui>, &setY< ::gua::math::vec2ui>)
     .def("normalize", &normalize< ::gua::math::vec2ui>)
@@ -107,7 +128,7 @@ void init_Vec3() {
                ::gua::math::vec3::value_type,
                ::gua::math::vec3::value_type>())
     .def(init< ::gua::math::vec3>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec3)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec3)
     .add_property("x", &getX< ::gua::math::vec3>, &setX< ::gua::math::vec3>)
     .add_property("y", &getY< ::gua::math::vec3>, &setY< ::gua::math::vec3>)
     .add_property("z", &getZ< ::gua::math::vec3>, &setZ< ::gua::math::vec3>)
@@ -133,7 +154,7 @@ void init_Vec3i() {
                ::gua::math::vec3i::value_type,
                ::gua::math::vec3i::value_type>())
     .def(init< ::gua::math::vec3i>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec3i)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec3i)
     .add_property("x", &getX< ::gua::math::vec3i>, &setX< ::gua::math::vec3i>)
     .add_property("y", &getY< ::gua::math::vec3i>, &setY< ::gua::math::vec3i>)
     .add_property("z", &getZ< ::gua::math::vec3i>, &setZ< ::gua::math::vec3i>)
@@ -159,7 +180,7 @@ void init_Vec3ui() {
                ::gua::math::vec3ui::value_type,
                ::gua::math::vec3ui::value_type>())
     .def(init< ::gua::math::vec3ui>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec3ui)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec3ui)
     .add_property("x", &getX< ::gua::math::vec3ui>, &setX< ::gua::math::vec3ui>)
     .add_property("y", &getY< ::gua::math::vec3ui>, &setY< ::gua::math::vec3ui>)
     .add_property("z", &getZ< ::gua::math::vec3ui>, &setZ< ::gua::math::vec3ui>)
@@ -186,7 +207,7 @@ void init_Vec4() {
                ::gua::math::vec4::value_type,
                ::gua::math::vec4::value_type>())
     .def(init< ::gua::math::vec4>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec4)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec4)
     .add_property("x", &getX< ::gua::math::vec4>, &setX< ::gua::math::vec4>)
     .add_property("y", &getY< ::gua::math::vec4>, &setY< ::gua::math::vec4>)
     .add_property("z", &getZ< ::gua::math::vec4>, &setZ< ::gua::math::vec4>)
@@ -214,7 +235,7 @@ void init_Vec4i() {
                ::gua::math::vec4i::value_type,
                ::gua::math::vec4i::value_type>())
     .def(init< ::gua::math::vec4i>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec4i)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec4i)
     .add_property("x", &getX< ::gua::math::vec4i>, &setX< ::gua::math::vec4i>)
     .add_property("y", &getY< ::gua::math::vec4i>, &setY< ::gua::math::vec4i>)
     .add_property("z", &getZ< ::gua::math::vec4i>, &setZ< ::gua::math::vec4i>)
@@ -242,7 +263,7 @@ void init_Vec4ui() {
                ::gua::math::vec4ui::value_type,
                ::gua::math::vec4ui::value_type>())
     .def(init< ::gua::math::vec4ui>())
-    ADD_VECTOR_OPERATORS( ::gua::math::vec4ui)
+    ADD_VECTOR_OPERATORS_3D_4D( ::gua::math::vec4ui)
     .add_property("x", &getX< ::gua::math::vec4ui>, &setX< ::gua::math::vec4ui>)
     .add_property("y", &getY< ::gua::math::vec4ui>, &setY< ::gua::math::vec4ui>)
     .add_property("z", &getZ< ::gua::math::vec4ui>, &setZ< ::gua::math::vec4ui>)
@@ -327,6 +348,14 @@ void setTranslate2(::gua::math::mat4& mat,
   ::gua::math::vec3 scale(getScale(mat));
   auto un_scaled_mat(scm::math::make_scale(1.0f/scale.x, 1.0f/scale.y, 1.0f/scale.z) * mat);
   return ::gua::math::quat::from_matrix(un_scaled_mat);
+}
+
+::gua::math::mat4 const makeRot3(::gua::math::quat const& quat) {
+  return quat.to_matrix();
+}
+
+::gua::math::mat4 const makeScale3(::gua::math::mat4::value_type value) {
+  return scm::math::make_scale(value, value, value);
 }
 
 void init_Mat4() {
@@ -433,9 +462,11 @@ void init_Mat4() {
 
   def("make_rot_mat", makeRot1);
   def("make_rot_mat", makeRot2);
+  def("make_rot_mat", makeRot3);
 
   def("make_scale_mat", makeScale1);
   def("make_scale_mat", makeScale2);
+  def("make_scale_mat", makeScale3);
 
   def("make_inverse_mat", inverse);
 }

@@ -47,6 +47,8 @@ namespace av
       SFString OutputTextureName;
       SFCamera Camera;
 
+      SFBool  Enabled;
+
       SFWindow Window;
 
       MultiField<Link<Pipeline>> PreRenderPipelines;
@@ -106,6 +108,9 @@ namespace av
 
       virtual void getCameraCB(const SFCamera::GetValueEvent& event);
       virtual void setCameraCB(const SFCamera::SetValueEvent& event);
+
+      virtual void getEnabledCB(const SFBool::GetValueEvent& event);
+      virtual void setEnabledCB(const SFBool::SetValueEvent& event);
 
       virtual void getWindowCB(const SFWindow::GetValueEvent& event);
       virtual void setWindowCB(const SFWindow::SetValueEvent& event);

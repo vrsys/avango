@@ -6,6 +6,10 @@
 #include <avango/gua/Init.hpp>
 #include <avango/python/register_field.h>
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+#include <avango/gua/network/Init.h>
+#endif
+
 #include "math/math.hpp"
 
 #include "scenegraph/Node.hpp"
@@ -50,6 +54,10 @@
 
 #include "utils/Color.hpp"
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+#include "network/NetMatrixTransform.h"
+#endif
+
 using namespace boost::python;
 using namespace av::python;
 
@@ -68,6 +76,11 @@ namespace boost
 BOOST_PYTHON_MODULE(_gua)
 {
     PyEval_InitThreads();
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+    init_NetMatrixTransform();
+    av::gua::network::Init::initClass();
+#endif
 
     av::gua::Init::initClass();
 

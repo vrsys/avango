@@ -95,7 +95,10 @@ def start():
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 2048,
-                                         ShadowOffset = 0.01)
+                                         ShadowOffset = 0.01,
+                                         ShadowCascadedSplits = [0.01, 2, 7, 50, 1000],
+                                         ShadowNearClippingInSunDirection = 50
+                                         )
   sun_light.Transform.value = avango.gua.make_rot_mat(220, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
 

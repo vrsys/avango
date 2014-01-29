@@ -138,17 +138,14 @@ def start():
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
 
-  light = avango.gua.nodes.SpotLightNode(Name = "spot_light",
-                                         Color = avango.gua.Color(1.0, 1.0, 1.0),
-                                         Falloff = 0.009,
-                                         Softness = 0.003,
-                                         EnableShadows = True,
-                                         ShadowMapSize = 4096,
-                                         ShadowOffset = 0.0005)
+  light = avango.gua.nodes.SunLightNode(
+    Name = "sun",
+    Color = avango.gua.Color(1.0, 1.0, 0.7),
+    EnableGodrays = True,
+    EnableShadows = True
+  )
 
-  light.Transform.value = avango.gua.make_trans_mat(0.0, 40.0, 40.0) * \
-                          avango.gua.make_rot_mat(-45.0, 1.0, 0.0, 0.0) * \
-                          avango.gua.make_scale_mat(100, 100, 160)
+  light.Transform.value = avango.gua.make_rot_mat(120, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
 
 
   pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")

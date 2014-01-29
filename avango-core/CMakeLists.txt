@@ -1,23 +1,9 @@
-# read replacement text from file
-FILE(READ include/avango/Config.h.in AVANGO_CONFIG_IN)
-
 ###############################################################################
 # write Config.h
 ###############################################################################
-SET(AVANGO_CONFIG_OUT ${AVANGO_CONFIG_IN})
 
-STRING(REGEX MATCHALL "%\\([^\\)]+\\)s" AVANGO_CONFIG_VARIABLES ${AVANGO_CONFIG_IN})
-
-FOREACH(_CUR_VARIABLE ${AVANGO_CONFIG_VARIABLES})
-	  SET(_STRIPPED_VARIABLE "")
-	  STRING(REGEX REPLACE "%\\(" "" _STRIPPED_VARIABLE ${_CUR_VARIABLE})
-	  STRING(REGEX REPLACE "\\)s" "" _STRIPPED_VARIABLE ${_STRIPPED_VARIABLE})
-	  STRING(REPLACE ${_CUR_VARIABLE} _${_STRIPPED_VARIABLE} AVANGO_CONFIG_OUT ${AVANGO_CONFIG_OUT})		
-ENDFOREACH(_CUR_VARIABLE)
-
-STRING(REPLACE "av::logging::_AVANGO_LOG_LEVEL" "av::logging::${AVANGO_LOG_LEVEL}" AVANGO_CONFIG_OUT ${AVANGO_CONFIG_OUT})
-
-FILE(WRITE include/avango/Config.h ${AVANGO_CONFIG_OUT})
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/Config.h.in
+                ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/Config.h )
 
 ###############################################################################
 # determine source and header files

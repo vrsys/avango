@@ -53,8 +53,8 @@ def setup_pipe():
   pipe.VignetteSoftness.value = 0.6
   pipe.EnablePreviewDisplay.value = False
 
+  pipe.NearClip.value = 0.1
   pipe.FarClip.value = 1000
-  pipe.NearClip.value = 0.01
 
   pipe.EnableFXAA.value = True
   pipe.EnableFrustumCulling.value = True
@@ -90,14 +90,14 @@ def start():
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
 
-  sun_light = avango.gua.nodes.SunLightNode(Name = "spot_light",
+  sun_light = avango.gua.nodes.SunLightNode(Name = "sun_light",
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
                                          EnableGodrays = True,
                                          EnableShadows = True,
-                                         ShadowMapSize = 2048,
-                                         ShadowOffset = 0.01,
-                                         ShadowCascadedSplits = [0.01, 2, 7, 50, 1000],
-                                         ShadowNearClippingInSunDirection = 50
+                                         ShadowMapSize = 1024,
+                                         ShadowOffset = 0.001,
+                                         ShadowCascadedSplits = [0.1, 2, 10, 50, 100],
+                                         ShadowNearClippingInSunDirection = 100
                                          )
   sun_light.Transform.value = avango.gua.make_rot_mat(220, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
@@ -131,7 +131,7 @@ def start():
                   "data/objects/plane.obj",
                   "White",
                   avango.gua.LoaderFlags.DEFAULTS)
-  floor.Transform.value = avango.gua.make_scale_mat(30, 1, 30) * avango.gua.make_trans_mat(1, -0.5, 1)
+  floor.Transform.value = avango.gua.make_scale_mat(30, 1, 30) * avango.gua.make_trans_mat(1, -0.2, 1)
   graph.Root.value.Children.value.append(floor)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",

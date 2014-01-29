@@ -50,4 +50,5 @@ Session.vim
 scripts/avango.sublime-workspace
 
 # generated files
+avango-core/include/avango/Config.h
 avango-sound/include/avango/sound/Config.h

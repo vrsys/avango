@@ -28,7 +28,7 @@ loading some geometry under this node this model should also appear in the clien
 (see also simpleviewer-srv.py)
 '''
 
-import avango.osg.simpleviewer
+import avango.gua
 import avango.script
 import time
 import math
@@ -37,6 +37,14 @@ import sys
 from avango import enable_logging
 #avango.enable_logging(5)
 # specify role, ip, and port
-nettrans = avango.osg.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
 
-avango.osg.simpleviewer.run(nettrans)
+graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+graph.Root.value.Children.value = [nettrans]
+
+#setup viewer
+viewer = avango.gua.nodes.Viewer()
+viewer.Pipelines.value = [pipe]
+viewer.SceneGraphs.value = [graph]
+
+viewer.run()

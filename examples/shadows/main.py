@@ -8,9 +8,9 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-CUBE_COUNT_X = 20
+CUBE_COUNT_X = 30
 CUBE_COUNT_Y = 3
-CUBE_COUNT_Z = 20
+CUBE_COUNT_Z = 30
 
 def setup_pipe():
   camera = avango.gua.nodes.Camera(LeftEye = "/eye",
@@ -32,7 +32,7 @@ def setup_pipe():
                                    LeftResolution = size)
 
 
-  avango.gua.create_texture("data/textures/skymap2.jpg")
+  avango.gua.create_texture("data/textures/skymap.jpg")
 
   pipe.OutputTextureName.value = "weimar_pipe"
   pipe.EnableSsao.value = True
@@ -40,16 +40,20 @@ def setup_pipe():
   pipe.SsaoIntensity.value = 0.7
 
   pipe.EnableFog.value = True
-  pipe.FogTexture.value = "data/textures/skymap2.jpg"
+  pipe.FogTexture.value = "data/textures/skymap.jpg"
   pipe.FogStart.value = 20.0
   pipe.FogEnd.value = 50.0
 
-  pipe.BackgroundTexture.value = "data/textures/skymap2.jpg"
+  pipe.BackgroundTexture.value = "data/textures/skymap.jpg"
 
   pipe.EnableVignette.value = True
   pipe.VignetteColor.value = avango.gua.Color()
   pipe.VignetteCoverage.value = 0.5
   pipe.VignetteSoftness.value = 0.6
+  pipe.EnablePreviewDisplay.value = True
+
+  pipe.FarClip.value = 100
+  pipe.NearClip.value = 0.1
 
   pipe.EnableFXAA.value = True
   pipe.EnableFrustumCulling.value = True
@@ -85,14 +89,24 @@ def start():
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
 
-  light = avango.gua.nodes.SunLightNode(Name = "spot_light",
+  sun_light = avango.gua.nodes.SunLightNode(Name = "spot_light",
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
+                                         EnableGodrays = False,
+                                         EnableShadows = True,
+                                         ShadowMapSize = 2048,
+                                         ShadowOffset = 0.01)
+  sun_light.Transform.value = avango.gua.make_rot_mat(220, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
+  graph.Root.value.Children.value.append(sun_light)
+
+  spot_light = avango.gua.nodes.SpotLightNode(Name = "spot_light",
+                                         Color = avango.gua.Color(1.0, 0.0, 0.7),
                                          EnableGodrays = True,
                                          EnableShadows = True,
-                                         ShadowMapSize = 4096,
+                                         ShadowMapSize = 256,
                                          ShadowOffset = 0.0005)
-  light.Transform.value = avango.gua.make_rot_mat(220, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
-  graph.Root.value.Children.value.append(light)
+  spot_light.Transform.value = avango.gua.make_trans_mat(8.0, 3.0, 8.0) * avango.gua.make_rot_mat(-90, 1, 0, 0) * avango.gua.make_scale_mat(10, 10, 10)
+  graph.Root.value.Children.value.append(spot_light)
+
 
 
   top_light = avango.gua.nodes.SunLightNode(Name = "top_light",
@@ -113,7 +127,7 @@ def start():
                   "data/objects/plane.obj",
                   "White",
                   avango.gua.LoaderFlags.DEFAULTS)
-  floor.Transform.value = avango.gua.make_scale_mat(20, 1, 20) * avango.gua.make_trans_mat(1, -0.5, 1)
+  floor.Transform.value = avango.gua.make_scale_mat(30, 1, 30) * avango.gua.make_trans_mat(1, -0.5, 1)
   graph.Root.value.Children.value.append(floor)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",
@@ -124,7 +138,7 @@ def start():
   screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
 
   eye = avango.gua.nodes.TransformNode(Name = "eye")
-  eye.Transform.value = avango.gua.make_trans_mat(0.0, 2.8, 14.0)
+  eye.Transform.value = avango.gua.make_trans_mat(0.0, 1.35, 20.0)
   eye.Children.value = [screen]
 
   graph.Root.value.Children.value.append(eye)

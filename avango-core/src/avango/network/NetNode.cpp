@@ -29,13 +29,16 @@
 #include <sstream> // std::ostringstream
 #include <iterator>
 
+#ifndef ZMQ_DISTRIBUTION_SUPPORT
 #include <avango/ensemble/maestro/Maestro.h>
+#endif
+
 #include <avango/logging/Logger.h>
 #include <avango/Distributed.h>
 #include <avango/NetInfo.h>
 
 #include "Helper.h"
-#include "NetGroup.h"
+//#include "NetGroup.h"
 
 #include <avango/Config.h> 
 

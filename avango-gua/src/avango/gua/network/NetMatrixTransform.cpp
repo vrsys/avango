@@ -72,7 +72,7 @@ av::gua::NetMatrixTransform::NetMatrixTransform()
   mLocalGroups->reference();
   mLocalGroups->Name.setValue("local");
 
-  getOsgGroup()->addChild(mLocalGroups->getOsgGroup());
+  getGuaNode()->add_child(mLocalGroups->getGuaNode());
 
   mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkReceives, this));
   mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkSends, this));
@@ -155,7 +155,7 @@ av::gua::NetMatrixTransform::_join(const std::string& fragment)
   mGroupMap[fragment] = group;
   group->registerNetMatrixTransform(this);
 
-  getOsgGroup()->addChild(group->getOsgGroup());
+  getGuaNode()->add_child(group->getGuaNode());
   fragmentChildrenChanged();
 
   // register SharedContainerHolder
@@ -211,7 +211,7 @@ av::gua::NetMatrixTransform::_getStateFragment(const std::string& fragment, Msg&
 
     mGroupMap[fragment] = group;
     group->registerNetMatrixTransform(this);
-    getOsgGroup()->addChild(group->getOsgGroup());
+    getGuaNode()->add_child(group->getGuaNode());
     fragmentChildrenChanged();
   }
   stateMsg.setType(Msg::absolute);
@@ -262,7 +262,7 @@ av::gua::NetMatrixTransform::_setStateFragment(const std::string& fragment, Msg&
     mGroupMap[fragment] = group;
     group->registerNetMatrixTransform(this);
 
-    getOsgGroup()->addChild(group->getOsgGroup());
+    getGuaNode()->add_child(group->getGuaNode());
     fragmentChildrenChanged();
   }
 
@@ -293,7 +293,7 @@ av::gua::NetMatrixTransform::_removeStateFragment(const std::string& fragment)
     unregisterWellKnown(group.getPtr());
     group->registerNetMatrixTransform(0);
 
-    getOsgGroup()->removeChild(group->getOsgGroup());
+    getGuaNode()->remove_child(group->getGuaNode());
     mGroupMap.erase(i);
     fragmentChildrenChanged();
   }

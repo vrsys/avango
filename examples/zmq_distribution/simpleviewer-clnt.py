@@ -28,8 +28,9 @@ loading some geometry under this node this model should also appear in the clien
 (see also simpleviewer-srv.py)
 '''
 
-import avango.gua
+import avango
 import avango.script
+import avango.gua
 import time
 import math
 import sys

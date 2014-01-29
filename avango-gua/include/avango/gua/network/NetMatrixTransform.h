@@ -31,7 +31,7 @@
  * \ingroup av_gua
  */
 
-#include <avango/gua/scenegraph/TransformNode.h>
+#include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/NetNode.h>
 #include <avango/Application.h>
 

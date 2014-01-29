@@ -40,7 +40,7 @@
 
 #include <avango/Typed.h>
 
-#include <avango/gua/Types.h>
+#include <avango/gua/Types.hpp>
 
 namespace av
 {

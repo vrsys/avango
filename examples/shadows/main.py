@@ -50,10 +50,10 @@ def setup_pipe():
   pipe.VignetteColor.value = avango.gua.Color()
   pipe.VignetteCoverage.value = 0.5
   pipe.VignetteSoftness.value = 0.6
-  pipe.EnablePreviewDisplay.value = True
+  pipe.EnablePreviewDisplay.value = False
 
-  pipe.FarClip.value = 100
-  pipe.NearClip.value = 0.1
+  pipe.FarClip.value = 1000
+  pipe.NearClip.value = 0.01
 
   pipe.EnableFXAA.value = True
   pipe.EnableFrustumCulling.value = True
@@ -61,8 +61,8 @@ def setup_pipe():
   pipe.EnableFPSDisplay.value = True
   pipe.EnableRayDisplay.value = True
 
-  pipe.EnableBloom.value = True
-  pipe.EnableHDR.value = True
+  pipe.EnableBloom.value = False
+  pipe.EnableHDR.value = False
   pipe.HDRKey.value = 0.1
 
 
@@ -91,7 +91,7 @@ def start():
 
   sun_light = avango.gua.nodes.SunLightNode(Name = "spot_light",
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
-                                         EnableGodrays = False,
+                                         EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 2048,
                                          ShadowOffset = 0.01)

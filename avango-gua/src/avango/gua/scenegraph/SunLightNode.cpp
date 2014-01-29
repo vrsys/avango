@@ -40,6 +40,14 @@ av::gua::SunLightNode::SunLightNode(std::shared_ptr< ::gua::SunLightNode> guanod
     AV_FC_ADD_ADAPTOR_FIELD(ShadowMapSize,
                           boost::bind(&SunLightNode::getShadowMapSizeCB, this, _1),
                           boost::bind(&SunLightNode::setShadowMapSizeCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ShadowCascadedSplits,
+                          boost::bind(&SunLightNode::getShadowCascadedSplitsCB, this, _1),
+                          boost::bind(&SunLightNode::setShadowCascadedSplitsCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ShadowNearClippingInSunDirection,
+                          boost::bind(&SunLightNode::getShadowNearClippingInSunDirectionCB, this, _1),
+                          boost::bind(&SunLightNode::setShadowNearClippingInSunDirectionCB, this, _1));
 }
 
 av::gua::SunLightNode::~SunLightNode()
@@ -149,3 +157,26 @@ av::gua::SunLightNode::setShadowMapSizeCB(const SFUInt::SetValueEvent& event)
     m_guaNode->data.shadow_map_size() = event.getValue();
 }
 
+void
+av::gua::SunLightNode::getShadowCascadedSplitsCB(const MFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.shadow_cascaded_splits();
+}
+
+void
+av::gua::SunLightNode::setShadowCascadedSplitsCB(const MFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.shadow_cascaded_splits() = event.getValue();
+}
+
+void
+av::gua::SunLightNode::getShadowNearClippingInSunDirectionCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.shadow_near_clipping_in_sun_direction();
+}
+
+void
+av::gua::SunLightNode::setShadowNearClippingInSunDirectionCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.shadow_near_clipping_in_sun_direction() = event.getValue();
+}

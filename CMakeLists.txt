@@ -99,6 +99,7 @@ SET (AVANGO_VERSION_MAJOR "1" CACHE STRING "Major version of AvangoNG.")
 SET (AVANGO_VERSION_MINOR "90" CACHE STRING "Minor version of AvangoNG.")
 SET (AVANGO_VERSION_MAINT "0" CACHE STRING "Maintenance version of AvangoNG.")
 
+SET (AVANGO_DEBUG "false" CACHE BOOL "Set to enable avango debugging.")
 SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable using VRPN.")
 SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
 SET (AVANGO_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to enable distribution support.")

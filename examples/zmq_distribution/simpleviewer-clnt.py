@@ -36,9 +36,9 @@ import math
 import sys
 
 from avango import enable_logging
-#avango.enable_logging(5)
+avango.enable_logging(5)
 # specify role, ip, and port
-nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|127.0.0.1|7432")
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 eye = avango.gua.nodes.TransformNode(Name = "eye")

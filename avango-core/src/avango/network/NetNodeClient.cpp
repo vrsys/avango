@@ -73,13 +73,10 @@ av::NetNodeClient::start()
   mNetNode->getStateFragment(mClientEndpoint, dummy_msg);
   mNetNode->setStateFragment(mServerEndpoint, dummy_msg);
 
-  if(!mRunning && !mThread)
-  {
+  if(!mRunning && !mThread) {
     mRunning = true;
     mThread = new boost::thread(boost::bind(&NetNodeClient::loop, this));
-  }
-  else
-  {
+  } else {
     std::cerr << "ALARM in NetNodeClient::start() , thread already running!" << std::endl;
   }
 }

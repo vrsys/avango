@@ -42,6 +42,8 @@ av::gua::TexturedQuadNode::initClass()
 
         SFTexturedQuadNode::initClass("av::gua::SFTexturedQuadNode", "av::Field");
         MFTexturedQuadNode::initClass("av::gua::MFTexturedQuadNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

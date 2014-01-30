@@ -64,6 +64,8 @@ av::gua::SpotLightNode::initClass()
 
         SFSpotLightNode::initClass("av::gua::SFSpotLightNode", "av::Field");
         MFSpotLightNode::initClass("av::gua::MFSpotLightNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

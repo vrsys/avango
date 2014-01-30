@@ -36,7 +36,8 @@ import math
 import sys
 
 from avango import enable_logging
-avango.enable_logging(5)
+# avango.enable_logging(6,"client-log.txt")
+avango.enable_logging()
 # specify role, ip, and port
 nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|127.0.0.1|7432")
 
@@ -57,7 +58,8 @@ screen.Children.value = [eye]
 graph.Root.value.Children.value = [nettrans, screen]
 
 # setup viewing
-size = avango.gua.Vec2ui(1024, 768)
+#size = avango.gua.Vec2ui(1024, 768)
+size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
                                                                   RightEye = "/screen/eye",
                                                                   LeftScreen = "/screen",

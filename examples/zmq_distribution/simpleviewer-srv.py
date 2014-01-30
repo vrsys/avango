@@ -37,10 +37,10 @@ import sys
 from avango.script import field_has_changed
 
 from avango import enable_logging
-avango.enable_logging(5)
+avango.enable_logging(5,"server-log.txt")
 
 # specify role, ip, and port
-nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVSERVER|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVSERVER|127.0.0.1|7432")
 
 ###############################################################################
 # an example shader program
@@ -107,21 +107,32 @@ avango.gua.load_materials_from("data/materials")
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
 loader = avango.gua.nodes.GeometryLoader()
-monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
 
-nettrans.distribute_object(monkey)
+monkey1 = loader.create_geometry_from_file("monkey1", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+nettrans.distribute_object(monkey1)
+
+monkey2 = loader.create_geometry_from_file("monkey2", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+nettrans.distribute_object(monkey2)
 
 light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
 light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
 nettrans.distribute_object(light)
 
-if False :
-  group = avango.gua.nodes.TransformNode(Name = "group")
-  group.Children.value = [monkey, light]
-  nettrans.distribute_object(group)
-  nettrans.Children.value = [group]
-else:
-  nettrans.Children.value = [monkey, light]
+monkey_transform1 = avango.gua.nodes.TransformNode(Name = "monkey_transform1")
+monkey_transform1.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
+monkey_transform1.Children.value = [monkey1]
+nettrans.distribute_object(monkey_transform1)
+
+monkey_transform2 = avango.gua.nodes.TransformNode(Name = "monkey_transform2")
+monkey_transform2.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 0.0)
+monkey_transform2.Children.value = [monkey2]
+nettrans.distribute_object(monkey_transform2)
+
+group = avango.gua.nodes.TransformNode(Name = "group")
+group.Children.value = [monkey_transform1, monkey_transform2, light]
+nettrans.distribute_object(group)
+
+nettrans.Children.value = [group]
 
 eye = avango.gua.nodes.TransformNode(Name = "eye")
 eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
@@ -132,7 +143,8 @@ screen.Children.value = [eye]
 graph.Root.value.Children.value = [nettrans, screen]
 
 # setup viewing
-size = avango.gua.Vec2ui(1024, 768)
+#size = avango.gua.Vec2ui(1024, 768)
+size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
                                                                   RightEye = "/screen/eye",
                                                                   LeftScreen = "/screen",
@@ -152,7 +164,8 @@ monkey_updater = TimedRotate()
 timer = avango.nodes.TimeSensor()
 monkey_updater.TimeIn.connect_from(timer.Time)
 
-monkey.Transform.connect_from(monkey_updater.MatrixOut)
+monkey1.Transform.connect_from(monkey_updater.MatrixOut)
+monkey2.Transform.connect_from(monkey_updater.MatrixOut)
 
 viewer.run()
 

@@ -38,10 +38,29 @@ import sys
 from avango import enable_logging
 #avango.enable_logging(5)
 # specify role, ip, and port
-nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
+#nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVCLIENT|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform()
+nettrans.Groupname.value = "AVCLIENT|127.0.0.1|7432"
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-graph.Root.value.Children.value = [nettrans]
+eye = avango.gua.nodes.TransformNode(Name = "eye")
+eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+
+screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
+screen.Children.value = [eye]
+
+graph.Root.value.Children.value = [nettrans, screen]
+
+# setup viewing
+size = avango.gua.Vec2ui(1024, 768)
+pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
+                                                                  RightEye = "/screen/eye",
+                                                                  LeftScreen = "/screen",
+                                                                  RightScreen = "/screen",
+                                                                  SceneGraph = "scenegraph"),
+                                 Window = avango.gua.nodes.Window(Size = size,
+                                                                  LeftResolution = size),
+                                 LeftResolution = size)
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()

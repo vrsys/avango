@@ -40,15 +40,31 @@ namespace
 namespace av {
 
 void
-av_pushMsg(av::Msg& netMsg, const::gua::math::mat4 & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::mat4 & buf): not implemented yet.");
+av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4& buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4 & buf): not implemented yet.");
+  ::gua::math::mat4 b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, reinterpret_cast<caddr_t>( &b) , sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*)&buf , 16, sizeof(float), (xdrproc_t) xdr_float);
+  netMsg.push( &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::mat4 & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::mat4 & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::mat4& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::mat4 & buf): not implemented yet.");
+  ::gua::math::mat4 b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 16, sizeof(float), (xdrproc_t) xdr_float);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::mat3 & buf) {
+void av_pushMsg(av::Msg& netMsg, const::gua::math::mat3& buf) {
     throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::mat3 & buf): not implemented yet.");
 }
 

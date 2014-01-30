@@ -37,7 +37,6 @@ import sys
 
 from avango import enable_logging
 # avango.enable_logging(6,"client-log.txt")
-avango.enable_logging()
 # specify role, ip, and port
 nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|127.0.0.1|7432")
 

@@ -37,7 +37,7 @@ import sys
 from avango.script import field_has_changed
 
 from avango import enable_logging
-avango.enable_logging(5,"server-log.txt")
+#avango.enable_logging(5,"server-log.txt")
 
 # specify role, ip, and port
 nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVSERVER|127.0.0.1|7432")

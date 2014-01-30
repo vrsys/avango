@@ -40,7 +40,14 @@ avango.enable_logging(5)
 # specify role, ip, and port
 nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|127.0.0.1|7432")
 
+avango.gua.load_shading_models_from("data/materials")
+avango.gua.load_materials_from("data/materials")
+
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+
+loader = avango.gua.nodes.GeometryLoader()
+monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+
 eye = avango.gua.nodes.TransformNode(Name = "eye")
 eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
 

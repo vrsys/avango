@@ -64,23 +64,55 @@ void av_popMsg(av::Msg& netMsg,::gua::math::mat4& buf)
   xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::mat3& buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::mat3 & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::mat3& buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::mat3 & buf): not implemented yet.");
+  ::gua::math::mat3 b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, reinterpret_cast<caddr_t>( &b) , sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*)&buf , 9, sizeof(float), (xdrproc_t) xdr_float);
+  netMsg.push( &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::mat3 & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::mat3 & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::mat3& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::mat3 & buf): not implemented yet.");
+  ::gua::math::mat3 b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 9, sizeof(float), (xdrproc_t) xdr_float);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::quat & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::quat & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::quat& buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, const::gua::math::quat & buf): not implemented yet.");
+  ::gua::math::quat b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(float), (xdrproc_t) xdr_float);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::quat & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::quat & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::quat& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::quat & buf): not implemented yet.");
+  ::gua::math::quat b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(float), (xdrproc_t) xdr_float);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4 & buf)
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4& buf)
 {
   //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec4 & buf): not implemented yet.");
   ::gua::math::vec4 b;
@@ -92,7 +124,7 @@ void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4 & buf)
   xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec4 & buf)
+void av_popMsg(av::Msg& netMsg,::gua::math::vec4& buf)
 {
   //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec4 & buf): not implemented yet.");
   ::gua::math::vec4 b;
@@ -104,23 +136,55 @@ void av_popMsg(av::Msg& netMsg,::gua::math::vec4 & buf)
   xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4i & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec4i & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4i & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec4i & buf): not implemented yet.");
+  ::gua::math::vec4i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(int), (xdrproc_t) xdr_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec4i & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec4i & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec4i & buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec4i & buf): not implemented yet.");
+  ::gua::math::vec4i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(int), (xdrproc_t) xdr_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4ui & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec4ui & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec4ui & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec4ui & buf): not implemented yet.");
+  ::gua::math::vec4ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec4ui & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec4ui & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec4ui & buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec4ui & buf): not implemented yet.");
+  ::gua::math::vec4ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 4, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3 & buf)
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3& buf)
 {
   //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec3 & buf): not implemented yet.");
   ::gua::math::vec3 b;
@@ -132,7 +196,7 @@ void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3 & buf)
   xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec3 & buf)
+void av_popMsg(av::Msg& netMsg,::gua::math::vec3& buf)
 {
   //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec3 & buf): not implemented yet.");
   ::gua::math::vec3 b;
@@ -144,23 +208,56 @@ void av_popMsg(av::Msg& netMsg,::gua::math::vec3 & buf)
   xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3i & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec3i & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3i & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec3i & buf): not implemented yet.");
+  ::gua::math::vec3i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(int), (xdrproc_t) xdr_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec3i & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec3i & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec3i & buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec3i & buf): not implemented yet.");
+  ::gua::math::vec3i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(int), (xdrproc_t) xdr_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3ui & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec3ui & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec3ui & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec3ui & buf): not implemented yet.");
+  ::gua::math::vec3ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec3ui & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec3ui & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec3ui & buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec3ui & buf): not implemented yet.");
+  ::gua::math::vec3ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf) {
+void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf)
+{
   //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec2 & buf): not implemented yet.");
   ::gua::math::vec2 b;
   XDR xdr;
@@ -171,7 +268,8 @@ void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf) {
   xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf) {
+void av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf)
+{
   //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec2 & buf): not implemented yet.");
   ::gua::math::vec2 b;
   XDR xdr;
@@ -182,28 +280,76 @@ void av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf) {
   xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec2i & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec2i & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec2i & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec2i & buf): not implemented yet.");
+  ::gua::math::vec2i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 2, sizeof(int), (xdrproc_t) xdr_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec2i & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec2i & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec2i& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec2i & buf): not implemented yet.");
+  ::gua::math::vec2i b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 2, sizeof(int), (xdrproc_t) xdr_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::math::vec2ui & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec2ui & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::math::vec2ui & buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::math::vec2ui & buf): not implemented yet.");
+  ::gua::math::vec2ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 2, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::math::vec2ui & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec2ui & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::math::vec2ui& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::math::vec2ui & buf): not implemented yet.");
+  ::gua::math::vec2ui b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 2, sizeof(unsigned int), (xdrproc_t) xdr_u_int);
+  xdr_destroy(&xdr);
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::utils::Color3f & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::utils::Color3f & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::utils::Color3f& buf)
+{
+  //throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::utils::Color3f & buf): not implemented yet.");
+  ::gua::utils::Color3f b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(float), (xdrproc_t) xdr_float);
+  netMsg.push((void*) &b, sizeof(b));
+  xdr_destroy(&xdr);
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::utils::Color3f & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::utils::Color3f& buf)
+{
+  //throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f & buf): not implemented yet.");
+  ::gua::utils::Color3f b;
+  XDR xdr;
+
+  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
+  netMsg.pop((void*) &b, sizeof(b));
+  xdr_vector(&xdr, (char*) &buf, 3, sizeof(float), (xdrproc_t) xdr_float);
+  xdr_destroy(&xdr);
 }
 
 #if 0

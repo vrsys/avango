@@ -5,8 +5,8 @@ SET(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 PROJECT(AVANGO CXX)
 
 # version number
-set(AVANGO_MAJOR 1)
-set(AVANGO_MINOR 0)
+set(AVANGO_MAJOR 2)
+set(AVANGO_MINOR 9)
 set(AVANGO_PATCH 0)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
@@ -100,8 +100,8 @@ ENDIF(UNIX)
 ################################################################
 # Avango Configuration
 ################################################################
-SET (AVANGO_VERSION_MAJOR "1" CACHE STRING "Major version of AvangoNG.")
-SET (AVANGO_VERSION_MINOR "90" CACHE STRING "Minor version of AvangoNG.")
+SET (AVANGO_VERSION_MAJOR "2" CACHE STRING "Major version of AvangoNG.")
+SET (AVANGO_VERSION_MINOR "9" CACHE STRING "Minor version of AvangoNG.")
 SET (AVANGO_VERSION_MAINT "0" CACHE STRING "Maintenance version of AvangoNG.")
 
 SET (AVANGO_DEBUG "false" CACHE BOOL "Set to enable avango debugging.")

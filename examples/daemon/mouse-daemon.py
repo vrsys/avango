@@ -27,6 +27,7 @@ Learn how to configure a HIDInput device to collect input data based on
 the Linux input system.
 '''
 
+import sys
 import avango.daemon
 
 # enable logging for detailed information on device setup
@@ -38,7 +39,10 @@ station = avango.daemon.Station('mousestation')
 # configure a mouse device
 mouse = avango.daemon.HIDInput()
 mouse.station = station
-mouse.device = '/dev/input/event2'
+if sys.platform == 'win32':
+  mouse.device = '01::02::1'
+else:
+  mouse.device = '/dev/input/event2'
 
 # map incoming events to station values
 mouse.values[0] = "EV_REL::REL_X"

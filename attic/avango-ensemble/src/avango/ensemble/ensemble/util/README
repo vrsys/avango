@@ -1,0 +1,22 @@
+README: Utility Directory
+Author: Mark Hayden
+Last updated: 10/20/97
+
+arrayop		operations on arrays
+arraye		Ensemble arrays (optimized for non-floating point)
+arrayf		functional arrays
+fqueue		functional queues
+hashtble	Ensemble hash tables
+hsys		the very bottom the Ensemble
+lset		sorted list-sets
+marsh		marshalling support
+once            set-once boolean variables
+printe		modified printf routines that flush channels after printing
+priq		heap-based priority queues
+queuee		queues (adapted from Caml Light queues)
+queuea		array based queues
+request		used for ordering token requests (see TOTAL layer)
+sched		scheduling queues
+trace		debugging/tracing/configuration functions
+trans		common type definitions
+util		general utility functions

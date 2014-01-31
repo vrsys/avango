@@ -26,6 +26,8 @@
 #include "NetNodeServer.h"
 
 #include <avango/NetNode.h>
+#include <chrono>
+#include <thread>
 
 av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm)
   : mHost(host),
@@ -42,6 +44,8 @@ av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& por
   mSocket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
   std::string endpoint("tcp://" + mHost + ":" + mPort);
   mSocket.bind(endpoint.c_str());
+  std::chrono::milliseconds dura(200);
+  std::this_thread::sleep_for(dura);
 }
 
 av::NetNodeServer::~NetNodeServer()

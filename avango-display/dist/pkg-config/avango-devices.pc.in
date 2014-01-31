@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+
+Name: Avango Display MT
+Description: Avango Display MT Library
+Version: %(AVANGO_DISPLAY_MT_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoDisplayMT
+Cflags: -I${includedir}
+Requires: ${requires}

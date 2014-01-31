@@ -1,0 +1,99 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+Import('osg_env')
+
+local_env = osg_env.Clone()
+local_env.Append(CPPDEFINES='AV_OSG_LIBRARY')
+
+sources = Split('''
+    AbsoluteTransform.cpp
+    AutoTransform.cpp
+    Billboard.cpp
+    BlendFunc.cpp
+    BoundingBoxCalculator.cpp
+    BoundingSphere.cpp
+    Box.cpp
+    Camera.cpp
+    CameraAttachment.cpp
+    Capsule.cpp
+    ClipPlane.cpp
+    ClipNode.cpp
+    CullFace.cpp
+    Depth.cpp
+    Drawable.cpp
+    Fields.cpp
+    Fog.cpp
+    Uniform.cpp
+    Shader.cpp
+    Program.cpp
+    Light.cpp
+    LightSource.cpp
+    LineWidth.cpp
+    Geode.cpp
+    Geometry.cpp
+    Group.cpp
+    Image.cpp
+    ImageStream.cpp
+    Init.cpp
+    Intersection.cpp
+    LayerGeode.cpp
+    LayerGroup.cpp
+    LineSegmentIntersector.cpp
+    LoadFile.cpp
+    LoadImage.cpp
+    LoadImageStream.cpp
+    MatrixTransform.cpp
+    Node.cpp
+    Object.cpp
+    ObjectLink.cpp
+    Panel.cpp
+    PolygonOffset.cpp
+    Projection.cpp
+    Quad.cpp
+    Sphere.cpp
+    StateAttribute.cpp
+    StateSet.cpp
+    Switch.cpp
+    Text.cpp
+    Texture.cpp
+    Texture1D.cpp
+    Texture2D.cpp
+    Texture2DArray.cpp
+    TextureCubeMap.cpp
+    TexturedQuad.cpp
+    Transform.cpp
+    Types.cpp
+    TriangleContainer.cpp
+    ''')
+
+lib = local_env.SharedLibrary('avangoOsg', sources)
+Alias('osg', lib)
+Alias('install-osg', local_env.Install(avango.build.get_library_path(), lib))
+
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+
+osg_lib_env = osg_env.Clone()
+osg_lib_env.Append(LIBPATH=Dir('.').abspath)
+Export('osg_lib_env')

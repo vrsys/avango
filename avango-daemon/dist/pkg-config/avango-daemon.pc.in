@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+
+Name: Avango Daemon
+Description: Avango Daemon Library
+Version: %(AVANGO_DAEMON_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoDaemon
+Cflags: -I${includedir}
+Requires: ${requires}

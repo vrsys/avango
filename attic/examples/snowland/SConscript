@@ -1,0 +1,46 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+Import('examples_dir')
+
+files = Split('''
+              snowland.py
+              ''')
+
+images = Split('''
+              Images/lzsnow.jpg
+              Images/skymap.jpg
+              Images/tank.rgb
+              Images/treesnow.png
+              ''')
+
+models = Split('''
+              Models/lzsnow.osg
+              Models/skydome.osg
+              ''')
+
+Alias('install-examples', Install(examples_dir.abspath + '/snowland', files))
+Alias('install-examples', Install(examples_dir.abspath + '/snowland/Images', images))
+Alias('install-examples', Install(examples_dir.abspath + '/snowland/Models', models))

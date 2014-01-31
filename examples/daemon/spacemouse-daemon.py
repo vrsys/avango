@@ -27,6 +27,7 @@ Learn how to configure a HIDInput device to collect input data based on
 the Linux input system.
 '''
 
+import sys
 import avango.daemon
 
 # enable logging for detailed information on device setup
@@ -38,7 +39,10 @@ station = avango.daemon.Station('spacemousestation')
 # configure a mouse device
 spacemouse = avango.daemon.HIDInput()
 spacemouse.station = station
-spacemouse.device = '/dev/input/event3'
+if sys.platform == 'win32':
+  spacemouse.device = '01::08::1'
+else:
+  spacemouse.device = '/dev/input/event3'
 
 # map incoming Spacemouse events to station values
 spacemouse.values[0] = "EV_ABS::ABS_X"   # trans X

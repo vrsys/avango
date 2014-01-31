@@ -1,0 +1,73 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+# doxygen environment
+doxygen_env = avango.build.Environment()
+
+# doxygen sources
+doxygen_sources = Split("""
+    index.dox
+    """)
+
+
+# doxygen substitutions
+doxygen_env['SUBST'] = {
+    'AVANGO_INCLUDE_DIR': avango.build.get_include_path().abspath,
+    }
+
+
+# doxygen build
+doxygen_doxyfile = doxygen_env.Subst('Doxyfile.in')
+
+doxygen_html_latex = doxygen_env.Command(
+    ['html/index.html', 'latex/Makefile'],
+    [doxygen_sources, doxygen_doxyfile],
+    "cd .. && doxygen Doxyfile",
+    chdir = 1)
+
+doxygen_env.Clean(doxygen_html_latex, ['doxygen.log', 'html', 'latex'])
+
+doxygen_refman = doxygen_env.Command(
+    'latex/refman.pdf',
+    doxygen_html_latex,
+    "make refman.pdf",
+    chdir = 1)
+
+
+# doxygen install
+doxygen_install_html = doxygen_env.Install(
+    avango.build.get_documentation_path().abspath + '/doxygen',
+    source = 'html')
+
+doxygen_env.Clean(doxygen_install_html, avango.build.get_documentation_path().abspath + '/doxygen/html')
+
+doxygen_install_pdf = doxygen_env.InstallAs(
+    target = avango.build.get_documentation_path().abspath + '/doxygen/avango-cpp-reference.pdf',
+    source = 'latex/refman.pdf')
+
+
+# aliases
+Alias('doxygen', [doxygen_refman, doxygen_html_latex])
+Alias('install-doxygen', ['doxygen', doxygen_install_html, doxygen_install_pdf]);

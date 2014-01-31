@@ -29,13 +29,16 @@
 #include <sstream> // std::ostringstream
 #include <iterator>
 
+#ifndef ZMQ_DISTRIBUTION_SUPPORT
 #include <avango/ensemble/maestro/Maestro.h>
+#endif
+
 #include <avango/logging/Logger.h>
 #include <avango/Distributed.h>
 #include <avango/NetInfo.h>
 
 #include "Helper.h"
-#include "NetGroup.h"
+//#include "NetGroup.h"
 
 #include <avango/Config.h> 
 
@@ -846,7 +849,7 @@ av::NetNode::receiveMessage(const std::string &origin, av::Msg& msg)
 void
 av::NetNode::consumeReceivedMessages()
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   logger.debug() << "av::NetNode::consume_received_messages: "
                  << mReceivedMessages.size() << " messages";
 #endif
@@ -863,7 +866,7 @@ av::NetNode::consumeReceivedMessages()
 void
 av::NetNode::exitCompleted()
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   logger.debug() << "av::NetNode::exit_completed: ";
 #endif
 }
@@ -886,7 +889,7 @@ av::NetNode::acceptNewView(const std::vector<std::string>& members,
 void
 av::NetNode::distributeObject(av::Link<av::Distributed> obj)
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   logger.debug()<< "av::NetNode::distribute_object: '"
                     << getName (obj)
                     << "' w/ type id "
@@ -1101,7 +1104,7 @@ av::NetNode::consumeCreateMessage(av::Msg& msg)
   // create a new object of this type and register with the supplied id
   Link<Distributed> obj((Distributed*) obj_type.createInstance());
 
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   logger.debug()<< "av::NetNode::consume_create_message: "
                     << "about to register object ";
 #endif

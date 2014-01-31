@@ -31,6 +31,21 @@
 #include <avango/NetNode.h>
 #include <avango/Msg.h>
 
+namespace {
+
+::av::Msg av_Msg_recv(zmq::socket_t& socket)
+{
+  zmq::message_t zmq_message;
+  socket.recv(&zmq_message); // blocking
+
+  av::Msg av_msg;
+  av_msg.resize(zmq_message.size());
+  memcpy(av_msg.getBuffer(), zmq_message.data(), zmq_message.size());
+  return av_msg;
+}
+
+}
+
 av::NetNodeClient::NetNodeClient(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se)
   : mHost(host),
     mPort(port),
@@ -58,13 +73,10 @@ av::NetNodeClient::start()
   mNetNode->getStateFragment(mClientEndpoint, dummy_msg);
   mNetNode->setStateFragment(mServerEndpoint, dummy_msg);
 
-  if(!mRunning && !mThread)
-  {
+  if(!mRunning && !mThread) {
     mRunning = true;
     mThread = new boost::thread(boost::bind(&NetNodeClient::loop, this));
-  }
-  else
-  {
+  } else {
     std::cerr << "ALARM in NetNodeClient::start() , thread already running!" << std::endl;
   }
 }
@@ -87,16 +99,8 @@ av::NetNodeClient::loop()
   std::string endpoint("tcp://" + mHost + ":" + mPort);
   socket.connect(endpoint.c_str());
 
-  zmq::message_t zmq_message;
-
-  while (mRunning)
-  {
-    socket.recv(&zmq_message); // blocking
-
-    av::Msg av_msg;
-    av_msg.resize(zmq_message.size());
-    memcpy(av_msg.getBuffer(), zmq_message.data(), zmq_message.size());
-
+  while (mRunning) {
+    av::Msg av_msg = av_Msg_recv(socket);
     mNetNode->receiveMessage(mServerEndpoint, av_msg);
   }
 }

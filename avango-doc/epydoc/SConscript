@@ -1,0 +1,68 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+# epydoc environment
+epydoc_env = avango.build.Environment()
+
+
+# epydoc build
+epydoc_html = epydoc_env.Command(
+    'html/index.html',
+    '',
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --html'
+    + ' --graph="classtree" --src-code-tab-width="2"'
+    + ' --exclude-introspect="daemon" --exclude-introspect="display" -o . '
+    + avango.build.get_python_path().abspath + '/avango',
+    chdir = 1)
+
+epydoc_env.Clean(epydoc_html, 'html')
+
+epydoc_pdf = epydoc_env.Command(
+    'latex/api.pdf',
+    '',
+    'epydoc --name "AVANGO Python Bindings" --docformat="restructuredtext" --pdf'
+    + ' --no-private --graph="classtree" --src-code-tab-width="2"'
+    + '  --exclude-introspect="daemon" --exclude-introspect="display" -o . '
+    + avango.build.get_python_path().abspath + '/avango',
+    chdir = 1)
+
+epydoc_env.Clean(epydoc_pdf, 'latex')
+
+
+# epydoc install
+epydoc_install_html = epydoc_env.Install(
+    avango.build.get_documentation_path().abspath + '/epydoc',
+    source = 'html')
+
+epydoc_env.Clean(epydoc_install_html, avango.build.get_documentation_path().abspath + '/epydoc/html')
+
+epydoc_install_pdf = epydoc_env.InstallAs(
+    target = avango.build.get_documentation_path().abspath + '/epydoc/avango-python-reference.pdf',
+    source = 'latex/api.pdf')
+
+
+# aliases
+Alias('epydoc', [epydoc_html, epydoc_pdf])
+Alias('install-epydoc', ['epydoc', epydoc_install_html, epydoc_install_pdf]);

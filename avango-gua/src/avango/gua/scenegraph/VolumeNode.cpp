@@ -30,6 +30,8 @@ av::gua::VolumeNode::initClass()
 
         SFVolumeNode::initClass("av::gua::SFVolumeNode", "av::Field");
         MFVolumeNode::initClass("av::gua::MFVolumeNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

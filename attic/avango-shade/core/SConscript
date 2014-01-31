@@ -1,0 +1,281 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 2007 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+def build_shade(env):
+
+    shade_names = Split('''
+        Shader
+        Type
+        MethodAccessor
+        AttributeAccessor
+        Formatter
+        Component
+        FileResolver
+        FileAccumulator
+        Program
+        GLSLInstance
+        GLSLGL2Wrapper
+        GLSLARBWrapper
+        ShaderEnvironment
+        io
+        ObjectMap
+        PipelineState
+        types/const
+        types/get_pointer
+        types/local
+        types/sampler2D
+        types/sampler2DShadow
+        types/sampler2DArray
+        types/usampler2D
+        types/samplerCube
+        types/FloatAccessor
+        types/Vec4Accessor
+        types/Vec3Accessor
+        types/Vec2Accessor
+        types/Matrix4Accessor
+        types/IntAccessor
+        types/ObjrefAccessor
+        types/ListAccessor
+        types/TextureAccessor
+        types/uniform
+        UVWInstance
+        parser/SingleAssignmentString
+        parser/Segment
+        parser/ForeachSegment
+        parser/IdentifierSegment
+        parser/CallSegment
+        parser/Scope
+        parser/ScopeLayer
+        parser/MethodInstantiator
+        parser/Value
+        parser/ReferenceValue
+        parser/IntValue
+        parser/ListValue
+        parser/ValueList
+        parser/parse
+        parser/Element
+        formatter/GLSLFormatter
+        formatter/GL2Generator
+        formatter/FileMark
+        formatter/MarkBuffer
+        formatter/ElementGenerator
+        formatter/TraversalGenerator
+        formatter/SelfTranslator
+        GLSLWrapper
+        GLSLTexture
+        ''')
+    if env['OPENSCENEGRAPH_SUPPORT']:
+        shade_names.append('osg/Wrapper')
+        shade_names.append('osg/Texture')
+    shade_source_files = [ 'src/'+shader+'.cpp' for shader in shade_names ]
+
+    shade_shader_names = Split('''
+        Surface
+        DirectionalLight
+        PointLight
+        ShadowPointLight
+        UVPointLight
+        Plastic
+        UVPlastic
+        Constant
+        ObjectSpace
+        CameraSpace
+        TangentSpace
+        Checkboard
+        IlluminatedMaterial
+        Diffuse
+        Texture2D
+        Vec4ToVec2
+        Vec4ToVec3
+        TexCoord
+        GLLightPosition
+        UVCoord
+        XYCoord
+        Initializeable
+        Enterable
+        Geometry
+        ILight
+        IMaterial
+        ICoordinateSystem
+        ''')
+    shade_shader_source_files = [ 'src/shaders/'+shader+'.cpp' for shader in shade_shader_names ]
+
+    def write_shader_config(target, source, env):
+        hfile = open(target[0].abspath, 'w')
+        print >> hfile, "namespace shade { const char* shader_lib_path = \""+source[0].get_contents()+"\"; }"
+    shader_lib_path_file = env.Command('src/shader_lib_path.cpp',
+                                           Value(env['PREFIX_SHADER_LIB']),
+                                           write_shader_config)
+
+    shade_lib = env.SharedLibrary(shade_core_libname, shade_source_files+shade_shader_source_files+[shader_lib_path_file])
+    Alias("shade-core", shade_lib)
+
+    Alias("install-shade-core", env.Install(env['PREFIX_LIB'], shade_lib))
+    include_dirs = ['.', 'formatter', 'impl', 'shaders', 'shaders/impl', 'types', 'types/impl']
+    if env['OPENSCENEGRAPH_SUPPORT']:
+        include_dirs.append('osg')
+    for dir in include_dirs:
+        for ext in ['h', 'cpp']:
+            Alias("install-shade-core", env.Install(env['PREFIX_INCLUDE']+'/'+dir, Glob('include/shade/'+dir+'/*.'+ext, source=True)))
+    Alias("install-shade-core", env.Install(env['PREFIX_SHADER_LIB'], Glob('lib/shade/*.glsl', source=True)))
+
+    return shade_lib
+
+
+def build_example(env):
+    support_files = Split("""
+                          examples/example.cpp
+                          examples/Texture.cpp
+                          examples/teapot.cpp
+                          examples/ppm.cpp
+                          """)
+    plastic = env.Program(['examples/plastic.cpp']+support_files)
+    plastic_with_texture = env.Program(['examples/plastic-with-texture.cpp']+support_files)
+    constant = env.Program(['examples/constant.cpp']+support_files)
+    constant_with_pattern = env.Program(['examples/constant-with-pattern.cpp']+support_files)
+    plastic_with_complex_pattern = env.Program(['examples/plastic-with-complex-pattern.cpp']+support_files)
+    diffuse = env.Program(['examples/diffuse.cpp']+support_files)
+    bump = env.Program(['examples/bump.cpp']+support_files)
+    bump_with_texture = env.Program(['examples/bump-with-texture.cpp']+support_files)
+    uvlighting = env.Program(['examples/uvlighting.cpp']+support_files)
+    geometry = env.Program(Split('examples/geometry.cpp examples/Splitter.cpp')
+                                   +support_files)
+    displace = env.Program(Split('examples/displace.cpp examples/Displacement.cpp')
+                                   +support_files)
+    switch = env.Program(['examples/switch.cpp']+support_files)
+    array = env.Program(Split('examples/array.cpp examples/ArrayPlastic.cpp')
+                                   +support_files)
+    shadow = env.Program(['examples/shadow.cpp']+support_files)
+    raytrace = env.Program(Split('examples/raytrace.cpp examples/RaytracedSphereFrame.cpp')+support_files)
+    examples = [
+                plastic,
+                plastic_with_texture,
+                geometry,
+                displace,
+                constant,
+                constant_with_pattern,
+                plastic_with_complex_pattern,
+                diffuse,
+                bump,
+                bump_with_texture,
+                uvlighting,
+                switch,
+                array,
+                shadow,
+                raytrace,
+               ]
+    Alias('shade-core-examples', examples)
+
+def build_osg_example(env):
+    if not env['OPENSCENEGRAPH_SUPPORT']:
+        return
+
+    sphere = env.Program("examples/osg/sphere.cpp")
+    texture = env.Program("examples/osg/texture.cpp")
+    envmap = env.Program("examples/osg/envmap.cpp")
+    envmap = env.Program("examples/osg/shadow.cpp")
+
+    examples = [sphere, texture, envmap]
+    Alias('shade-core-examples', examples)
+
+def build_timing(env):
+    plain = env.Program('examples/timing/plain.cpp')
+    shade = env.Program('examples/timing/shade.cpp')
+    Alias('shade-core-timing', [plain, shade])
+
+def build_unittest(env):
+    env_test = env.Clone()
+    env_test.PrependENVPath('LD_LIBRARY_PATH', Dir('.').abspath)
+    testdata = Dir('.').srcnode().abspath+"/test/testdata/"
+    testdata2 = Dir('.').srcnode().abspath+"/test/testdata2/"
+    env_test['ENV']['SHADE_TEST_DATA'] = testdata
+    env_test['ENV']['SHADE_TEST_DATA2'] = testdata2
+    env_test['ENV']['SHADE_TEST_PATH'] = testdata2 + ':' + testdata
+    env_test['ENV']['SHADE_SHADER_PATH'] = Dir('lib/shade').srcnode().abspath
+    shade_test_files = Split('''
+                             test/unittest.cpp
+                             test/TestFileAccumulator.cpp
+                             test/TestFileResolver.cpp
+                             test/TestComponent.cpp
+                             test/TestListType.cpp
+                             test/TestCpp.cpp
+                             test/TestStorageFormatter.cpp
+                             test/TestType.cpp
+                             test/TestShader.cpp
+                             test/GLSLMockupWrapper.cpp
+                             test/TestShaderEnvironment.cpp
+                             test/StorageFormatter.cpp
+                             test/TestIO.cpp
+                             test/TestObjectMap.cpp
+                             test/TestValue.cpp
+                             test/TestValueReference.cpp
+                             test/TestVarying.cpp
+                             test/TestInterpolator.cpp
+                             test/TestIntrospection.cpp
+                             test/parser/TestSingleAssignmentString.cpp
+                             test/parser/TestSegment.cpp
+                             test/parser/TestParser.cpp
+                             test/parser/TestMethodInstantiator.cpp
+                             test/parser/TestValue.cpp
+                             test/parser/TestScope.cpp
+                             test/formatter/TestGLSLFormatter.cpp
+                             test/formatter/TestGL2Generator.cpp
+                             test/formatter/TestMarkBuffer.cpp
+                             test/formatter/TestElementGenerator.cpp
+                             test/formatter/TestTraversalGenerator.cpp
+                             test/formatter/TestSelfTranslator.cpp
+                             test/formatter/TestDiffDump.cpp
+                             test/formatter/DumpGenerator.cpp
+                             test/formatter/diff_dump.cpp
+                             test/TestGLSLWrapper.cpp
+                             ''')
+    if env['OPENSCENEGRAPH_SUPPORT']:
+        shade_test_files.append('test/TestOsg.cpp')
+
+    test = env_test.Program('test/unittest', shade_test_files)
+    test_alias = env_test.Alias('check-shade-core', test, '${SOURCE.abspath}')
+    AlwaysBuild(test_alias)
+
+def get_osg_libraries():
+    libraries = ["osg", "osgViewer"]
+    if env['OPENSCENEGRAPH_DEBUG']:
+        libraries = [ x+'d' for x in libraries ]
+    return libraries
+
+Import("shade_core_libname")
+Import("shade_core_env")
+Import("shade_core_example_env")
+Import("shade_core_unittest_env")
+
+shade_lib = build_shade(shade_core_env)
+
+shade_core_osg_example_env = shade_core_env.Clone()
+shade_core_osg_example_env.Prepend(LIBS=shade_lib)
+shade_core_example_env.Prepend(LIBS=shade_lib)
+shade_core_unittest_env.Prepend(LIBS=shade_lib)
+
+build_example(shade_core_example_env)
+build_osg_example(shade_core_example_env)
+build_timing(shade_core_example_env)
+
+build_unittest(shade_core_unittest_env)

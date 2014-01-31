@@ -1,0 +1,13 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+distributed=%(AVANGO_DISTRIBUTION_SUPPORT)s
+
+Name: Avango Core
+Description: Avango Core Library
+Version: %(AVANGO_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavango
+Cflags: -I${includedir}
+Requires: ${requires}

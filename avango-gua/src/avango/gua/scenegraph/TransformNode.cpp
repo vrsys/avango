@@ -33,6 +33,8 @@ av::gua::TransformNode::initClass()
 
         SFTransformNode::initClass("av::gua::SFTransformNode", "av::Field");
         MFTransformNode::initClass("av::gua::MFTransformNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

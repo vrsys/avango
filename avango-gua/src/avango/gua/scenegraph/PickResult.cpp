@@ -40,5 +40,7 @@ av::gua::PickResult::initClass()
 
         SFPickResult::initClass("av::gua::SFPickResult", "av::Field");
         MFPickResult::initClass("av::gua::MFPickResult", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }

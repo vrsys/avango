@@ -1,3 +1,26 @@
+// -*- Mode:C++ -*-
+
+/************************************************************************\
+*                                                                        *
+* This file is part of AVANGO.                                           *
+*                                                                        *
+* Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       *
+* angewandten Forschung (FhG), Munich, Germany.                          *
+*                                                                        *
+* AVANGO is free software: you can redistribute it and/or modify         *
+* it under the terms of the GNU Lesser General Public License as         *
+* published by the Free Software Foundation, version 3.                  *
+*                                                                        *
+* AVANGO is distributed in the hope that it will be useful,              *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
+* GNU General Public License for more details.                           *
+*                                                                        *
+* You should have received a copy of the GNU Lesser General Public       *
+* License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. *
+*                                                                        *
+\************************************************************************/
+
 #include <avango/tools/ObjectSelector.hpp>
 
 #include <avango/Logger.h>
@@ -66,6 +89,99 @@ av::tools::ObjectSelector::evaluate()
         found = true;
       }
     }
+
+#if 0 // defined(AVANGO_TOOLS_OSG_SUPPORT)
+
+    if (!found && SearchTargetHolderNodePaths.getValue())
+    {
+      TargetHolder::FindList found_holders = (*holder)->find(NodePathTargetHolder::getClassTypeId());
+      for (TargetHolder::FindList::const_iterator found_holder = found_holders.begin();
+           found_holder != found_holders.end() && !found; ++found_holder)
+      {
+        const Link<NodePathTargetHolder> path_holder =
+          dynamic_cast<NodePathTargetHolder*>(found_holder->getPtr());
+        const av::osg::MFNode::ContainerType &node_path = path_holder->NodePath.getValue();
+        for (av::osg::MFNode::ContainerType::const_reverse_iterator node = node_path.rbegin();
+             node != node_path.rend() && !found; ++node)
+        {
+          if (hasObject(sel_objects, *node))
+          {
+            selected_targets.push_back(new TargetHolder);
+            selected_targets.back()->Target.setValue(*node);
+            selected_targets.back()->Creator.setValue(this);
+            selected_targets.back()->ParentTargets.add1Value(*holder);
+            found = true;
+          }
+          else
+          {
+            MFTargetHolder::ContainerType::const_iterator sel_holder = find(sel_targets, *node);
+            if (sel_holder != sel_targets.end())
+            {
+              selected_targets.push_back(new TargetHolder);
+              selected_targets.back()->Target.setValue(*node);
+              selected_targets.back()->Creator.setValue(this);
+
+              const bool keep_sel_holder = (*sel_holder)->keep();
+              if ((*holder)->keep() || !keep_sel_holder)
+                selected_targets.back()->ParentTargets.add1Value(*holder);
+              if (keep_sel_holder)
+                selected_targets.back()->ParentTargets.add1Value(*sel_holder);
+
+              found = true;
+            }
+          }
+        }
+      }
+    }
+
+    if (!found && SearchOSGNodePaths.getValue())
+    {
+      Link<av::osg::Node> target_node = dynamic_cast<av::osg::Node*>(target.getPtr());
+      if (target_node.isValid())
+      {
+        const ::osg::NodePathList node_paths = target_node->getOsgNode()->getParentalNodePaths();
+        for (::osg::NodePathList::const_iterator node_path = node_paths.begin();
+             node_path != node_paths.end() && !found; ++node_path)
+        {
+          for (::osg::NodePath::const_reverse_iterator node = node_path->rbegin();
+               node != node_path->rend() && !found; ++node)
+          {
+            Link<av::osg::Node> av_node = av::osg::get_from_osg_object<av::osg::Node>(*node);
+            if (av_node.isValid())
+            {
+              if (hasObject(sel_objects, av_node))
+              {
+                selected_targets.push_back(new TargetHolder);
+                selected_targets.back()->Target.setValue(av_node);
+                selected_targets.back()->Creator.setValue(this);
+                selected_targets.back()->ParentTargets.add1Value(*holder);
+                found = true;
+              }
+              else
+              {
+                MFTargetHolder::ContainerType::const_iterator sel_holder = find(sel_targets, av_node);
+                if (sel_holder != sel_targets.end())
+                {
+                  selected_targets.push_back(new TargetHolder);
+                  selected_targets.back()->Target.setValue(av_node);
+                  selected_targets.back()->Creator.setValue(this);
+
+                  const bool keep_sel_holder = (*sel_holder)->keep();
+                  if ((*holder)->keep() || !keep_sel_holder)
+                    selected_targets.back()->ParentTargets.add1Value(*holder);
+                  if (keep_sel_holder)
+                    selected_targets.back()->ParentTargets.add1Value(*sel_holder);
+
+                  found = true;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+#endif
   }
 
   if (!selected_targets.empty() || !SelectedTargets.isEmpty())

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avango-core", "avango-core\avango-core.vcproj", "{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avango-python", "avango-python\avango-python.vcproj", "{C2D41471-12F5-6320-2191-61A31DCAE2F1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "avango-osg", "avango-osg\avango-osg.vcproj", "{9DE58DD8-1D68-CBFB-5075-0194BC598066}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Check|Win32 = Check|Win32
+		core|Win32 = core|Win32
+		core-check|Win32 = core-check|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.Check|Win32.ActiveCfg = Check|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.Check|Win32.Build.0 = Check|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.core|Win32.ActiveCfg = Check|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.core|Win32.Build.0 = Check|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.core-check|Win32.ActiveCfg = Release|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.core-check|Win32.Build.0 = Release|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.Release|Win32.ActiveCfg = Release|Win32
+		{506018F8-1E60-0E9B-BE7A-98A3CACE7CA9}.Release|Win32.Build.0 = Release|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.Check|Win32.ActiveCfg = Check|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.Check|Win32.Build.0 = Check|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.core|Win32.ActiveCfg = Check|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.core|Win32.Build.0 = Check|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.core-check|Win32.ActiveCfg = Release|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.core-check|Win32.Build.0 = Release|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.Release|Win32.ActiveCfg = Release|Win32
+		{C2D41471-12F5-6320-2191-61A31DCAE2F1}.Release|Win32.Build.0 = Release|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.Check|Win32.ActiveCfg = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.Check|Win32.Build.0 = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.core|Win32.ActiveCfg = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.core|Win32.Build.0 = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.core-check|Win32.ActiveCfg = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.core-check|Win32.Build.0 = Check|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.Release|Win32.ActiveCfg = Release|Win32
+		{9DE58DD8-1D68-CBFB-5075-0194BC598066}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

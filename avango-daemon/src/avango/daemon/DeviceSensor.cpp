@@ -31,7 +31,6 @@
 #include <scm/core/math.h>
 #include <gua/math.hpp>
 
-
 namespace
 {
   av::Logger& logger(av::getLogger("av::daemon::DeviceSensor"));

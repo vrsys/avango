@@ -75,7 +75,15 @@ namespace av
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SceneGraph&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SceneGraph&);
 
+} // namespace av
 
+namespace av {
+
+  // these functions need to be put into the ::gua namespace,
+  // as they are really a part of the interface for the corresponding GUA types.
+  // ADL (Argument Dependant Loopup) takes care that these functions are found in the right namespace
+  // This makes these functions visible to SIngleField<T> and MultiField<T> at the point of template instantiation,
+  // not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4& buf);
@@ -111,7 +119,7 @@ namespace av
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::utils::Color3f& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::utils::Color3f& buf);
 
-#endif // AVANGO_DISTRIBUTION_SUPPORT
+#endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 }
 
-#endif //AVANGO_GUA_TYPES_H
+#endif // AVANGO_GUA_TYPES_H

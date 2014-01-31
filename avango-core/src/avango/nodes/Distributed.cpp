@@ -36,7 +36,7 @@
 #include <avango/Assert.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-#include <avango/MaestroEID.h>
+// #include <avango/MaestroEID.h>
 #include <avango/NetID.h>
 #include <avango/NetInfo.h>
 #include <avango/Msg.h>

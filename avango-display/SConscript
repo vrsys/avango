@@ -1,0 +1,93 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+avango_env = avango.build.PythonEnvironment()
+
+Alias('all', Alias('display'))
+Alias('install', Alias('install-display'))
+
+av_display_python_files = Split("""
+    python/avango/display/__init__.py
+    python/avango/display/_device.py
+    python/avango/display/_display.py
+    python/avango/display/_view.py
+    python/avango/display/_screen_descriptor.py
+    """)
+av_display_setups_files = Split("""
+    python/avango/display/setups/__init__.py
+    python/avango/display/setups/AutoStereoDisplay.py
+    python/avango/display/setups/FakeTwoView.py
+    python/avango/display/setups/iCone.py
+    python/avango/display/setups/LShape.py
+    python/avango/display/setups/Monitor.py
+    python/avango/display/setups/TwoView.py
+    python/avango/display/setups/Wall.py
+    """)
+av_display = avango_env.Install(avango.build.get_python_path('avango/display'), av_display_python_files)
+av_display_setups = avango_env.Install(avango.build.get_python_path('avango/display/setups'), av_display_setups_files)
+av_display_daemon = avango_env.Install(avango.build.get_binary_path(), 'python/avango-display-daemon.py')
+
+
+Alias('display', [av_display, av_display_setups])
+Alias('install-display', [av_display, av_display_setups, av_display_daemon])
+
+
+
+
+#avango display multitouch TUIO support
+avango.build.Environment.prepend_include_path(Dir('include').abspath)
+avango.build.Environment.prepend_library_path(Dir('.').abspath)
+display_mt_env = avango.build.Environment()
+avango.build.add_library(display_mt_env, 'avango-core')
+
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(display_mt_env, "boost_system")
+
+# Substitutions
+display_mt_env['SUBST'] = {
+    'PREFIX': avango.build.get_prefix().abspath,
+    'AVANGO_DISPLAY_MT_DEBUG': int(display_mt_env['DEBUG']),
+    'PKG_CONFIG_REQUIRES': 'avango-core',
+    'AVANGO_DISPLAY_MT_VERSION': '0.1.0',
+    'AVANGO_DISPLAY_MT_VERSION_MAJOR': '0',
+    'AVANGO_DISPLAY_MT_VERSION_MINOR': '1',
+    'AVANGO_DISPLAY_MT_VERSION_MAINT': '0',
+    }
+
+
+display_mt_env.Append(CPPDEFINES='AV_DISPLAY_MT_LIBRARY')
+
+avango_display_mt_pc = display_mt_env.Subst('dist/pkg-config/avango-devices.pc.in')
+Alias('display', avango_display_mt_pc)
+Alias('install-display', display_mt_env.Install(avango.build.get_pkgconfig_path(), avango_display_mt_pc))
+
+Export('display_mt_env')
+
+SConscript ([
+    'include/avango/display/SConscript',
+    'include/avango/display/mt/SConscript',
+    'src/avango/display/mt/SConscript',
+    'wrapper/avango/display/mt/SConscript'
+])

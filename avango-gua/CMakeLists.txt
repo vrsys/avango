@@ -2,17 +2,36 @@
 # determine source and header files
 ###############################################################################
 file(GLOB_RECURSE AVANGO_GUA_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	src/avango/gua/*.cpp
-	include/avango/gua/*.hpp
+    src/avango/gua/*.cpp
+    include/avango/gua/*.hpp
 )
 
+IF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/network/FragmentGroup.cpp
+    src/avango/gua/network/Init.cpp
+    src/avango/gua/network/NetMatrixTransform.cpp
+    src/avango/gua/network/SharedContainerHolder.cpp
+    include/avango/gua/network/FragmentGroup.h
+    include/avango/gua/network/Init.h
+    include/avango/gua/network/NetMatrixTransform.h
+    include/avango/gua/network/SharedContainerHolder.h
+)
+ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 
 file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-	python/avango/gua/*.c
-	python/avango/gua/*.cpp
-	python/avango/gua/*.h
-	python/avango/gua/*.hpp
+    python/avango/gua/*.c
+    python/avango/gua/*.cpp
+    python/avango/gua/*.h
+    python/avango/gua/*.hpp
 )
+
+IF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+    python/avango/gua/network/NetMatrixTransform.h
+    python/avango/gua/network/NetMatrixTransform.cpp
+)
+ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 
 ###############################################################################
 # set link directories

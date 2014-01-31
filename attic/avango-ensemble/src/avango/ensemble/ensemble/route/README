@@ -1,0 +1,12 @@
+-*- Mode: indented-text -*- 
+README: Routing Directory
+Author: Mark Hayden
+Last updated: 12/10/96
+
+handler		1-to-many callback handlers
+route		intra-process routing
+signed		authentication router
+unsigned	normal router (no security)
+bypassr		fast router
+raw		generic router
+scale		scalable router

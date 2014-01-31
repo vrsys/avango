@@ -26,6 +26,8 @@ av::gua::RayNode::initClass()
 
         SFRayNode::initClass("av::gua::SFRayNode", "av::Field");
         MFRayNode::initClass("av::gua::MFRayNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

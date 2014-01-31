@@ -1,0 +1,25 @@
+-*- Mode: indented-text -*- 
+README: Ensemble Types
+Author: Mark Hayden
+Last updated: 3/10/97
+
+addr	        addresses
+alarm		alarm
+appl_intf	application interface description
+auth		prelimiary authentication support
+conn		connections
+domain		communication domains
+endpt		endpoints
+event		event implementation
+group		groups
+handle          object handles (incomplete)
+layer		layer types
+param		layer parameters
+proto		protocol identifiers
+property        properties -> protocols
+security	security support
+stack_id	protocol stack names
+time		abstract type for time values
+unique		unique identifiers
+version		version identifiers
+view		views, view id's, and view states

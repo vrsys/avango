@@ -33,6 +33,8 @@ av::gua::ScreenNode::initClass()
 
         SFScreenNode::initClass("av::gua::SFScreenNode", "av::Field");
         MFScreenNode::initClass("av::gua::MFScreenNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

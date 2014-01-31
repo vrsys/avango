@@ -1,0 +1,35 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+CXX=%(CXX)s
+DEBUG=%(DEBUG)s
+TRACE_LOGGING=%(TRACE_LOGGING)s
+LOG_LEVEL=%(LOG_LEVEL)s
+BINARY_PATH=%(BINARY_PATH)s
+INCLUDE_PATH=%(INCLUDE_PATH)s
+LIBRARY_PATH=%(LIBRARY_PATH)s
+PKG_CONFIG_PATH=%(PKG_CONFIG_PATH)s
+PYTHON_PATH=%(PYTHON_PATH)s
+BUILD_32=%(BUILD_32)s
+BOOST_DEBUG=%(BOOST_DEBUG)s
+BOOST_LAYOUT=%(BOOST_LAYOUT)s

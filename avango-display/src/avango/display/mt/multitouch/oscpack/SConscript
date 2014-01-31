@@ -1,0 +1,47 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build.oshelper
+
+avango.build.Environment.prepend_include_path(Dir('.').abspath)
+
+sources = Split('''
+    ip/IpEndpointName.cpp
+    osc/OscOutboundPacketStream.cpp
+    osc/OscPrintReceivedElements.cpp
+    osc/OscReceivedElements.cpp
+    osc/OscTypes.cpp
+    ''')
+
+if avango.build.oshelper.os_is_windows():
+    sources += Split('''
+        ip/win32/NetworkingUtils.cpp
+        ip/win32/UdpSocket.cpp
+        ''')
+else:
+    sources += Split('''
+        ip/posix/NetworkingUtils.cpp
+        ip/posix/UdpSocket.cpp
+        ''')
+
+Return('sources')

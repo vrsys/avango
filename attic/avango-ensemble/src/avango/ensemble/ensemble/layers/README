@@ -1,0 +1,92 @@
+-*- Mode: indented-text -*- 
+README: Protocol Layer Directory
+Author: Mark Hayden
+Last updated: 10/23/99
+
+This directory and its subdirectories contain source code for the
+Ensemble protocol layers.  Read the Ensemble reference manual for
+documentation on layers and their general structure.
+
+(+ denotes that a module has known or suspected bugs)
+
+DEBUGGING LAYERS
+  assert   	does basic tests on Horus layers
++ chk_merge   	tests merge layer
+  chk_fifo      tests for FIFO ordering
++ chk_stable   	tests for stability detection
+  chk_sync      tests for synchronization properties
+  chk_total	tests for totally ordered broadcasts
+  delay		inserts event delays to trigger bugs (Ohad Rodeh)
+  chk_causal	tests for causal delivery (Ohad Rodeh)
+
+
+VIRTUAL SYNCHRONY: these layers compose to provide group membership
+  leave         group leave protocol
+  sync          synchronization protocol for blocking group
+                during view changes
+  inter         inter-group merges
+  intra		intra-group failures, views
+  elect		leader election
+  merge   	reliable merge protocol
+  pt2pt   	reliable, FIFO point-to-point protocol
+  mnak          reliable, FIFO broadcast protocol
+  stable   	broadcast stability
+  suspect	failure detection
+  bottom        core communication
+  slander	suspicion sharing (Zhen Xiao)
+
+
+GOSSIP LAYERS
+  heal   	automatic partition healing
+  switch	protocol switching layer
+
+
+SCALABLE LAYERS
+  pr_stable	probabilistic stability protocol
+  pr_suspect	probabilistic failure detection
++ gcast		gossip-style broadcast  
++ asym		routes messages in asymmetric networks
+
+
+TRANSIS LAYERS
+  tcausal	Transis causal ordering layer (Ohad Rodeh)
+
+
+FLOW CONTROL
+  rate   	rate-based flow control (Takako Hickey)
+  credit   	credit-based flow control (Takako Hickey)
+  window   	window-based flow control (Takako Hickey)
+  pt2ptc        credit-based point-to-point flow control
+  mflow         credit-based flow control (with Zhen Xiao)
+
+
+TOTAL ORDERING PROTOCOLS
++ total   	original Horus total ordering protocol (requires local layer beneath)
+  totem   	Totem protocol (with Roy Friedman)
+  sequencer     sequencer-based protocol (with Roy Friedman)
+
+
+SECURITY
+  exchange	key exchange protocol
+  rekey		rekey the group (with Zhen Xiao)
+  encrypt	application data encryption
+
+
+OTHER LAYERS
+  top           usually the topmost layer in any stack
+  top_appl   	application layer
+  local         local delivery of broadcasts
+  subcast   	converts sends to broadcasts
+  migrate       support for migrating members
+  primary	primary partition support (with Zhen Xiao)
+
+BYPASS
++ bypass        bypass protocol
++ bypfifo       bypass protocol (just lower layers)
+
+
+
+OUT-OF-DATE (or not in distribution)
+  merge.karr
++ chk_acks      tests acknowledgement operations
+  typical

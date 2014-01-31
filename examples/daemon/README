@@ -1,0 +1,46 @@
+# -*- Mode:Outline -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2008 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+This examples should show how to use the AvangoDaemon to collect input data
+from an appropriate input device and use it within an Avango application.
+The daemon itself runs in an own process creating threads for each configured
+device.
+
+First, execute the AvangoDaemon like this:
+
+    python mouse-daemon.py
+
+(Note: Make sure that all config data in mouse-daemon.py file fits to your
+       local environment!)
+
+Then execute the Avango main application:
+
+    python mouse-app.py
+
+The Nintendo Wiimote example works the same way, but note that you additionally
+have to run a 'wminput' daemon in order to get the inputs of the Wiimote via
+Linux event system (i.e. /dev/input/something).
+
+The DTrack example should show how to configure a Avango NG DTrack device to
+receive data from a DTrack tracker instance running on a dedicated MS Windows
+PC collecting data from a set of ART tracking cameras.

@@ -75,7 +75,6 @@ viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]
 viewer.SceneGraphs.value = [graph]
 
-
 # device service setup
 service = avango.daemon.DeviceService()
 

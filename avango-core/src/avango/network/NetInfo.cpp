@@ -47,7 +47,7 @@ av::NetInfo::NetInfo(const NetID& a, const NetNode* b)
   : mId (a),
     mNode (const_cast<NetNode*> (b))
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   LOG_TRACE(logger) << "NetInfo::NetInfo: "
                  << " @" << this
                  << " id: " << mId
@@ -57,7 +57,7 @@ av::NetInfo::NetInfo(const NetID& a, const NetNode* b)
 
 av::NetInfo::~NetInfo()
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   LOG_TRACE(logger) << "NetInfo::~NetInfo: "
                  << " @" << this
                  << " id: " << mId
@@ -68,7 +68,7 @@ av::NetInfo::~NetInfo()
 const av::NetID&
 av::NetInfo::getId() const
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   LOG_TRACE(logger) << "NetInfo::get_id: "
                  << " @" << this
                  << " id: " << mId
@@ -81,7 +81,7 @@ av::NetInfo::getId() const
 const av::NetNode*
 av::NetInfo::getNode() const
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   LOG_TRACE(logger) << "NetInfo::get_node: "
                  << " @" << this
                  << " id: " << mId
@@ -93,7 +93,7 @@ av::NetInfo::getNode() const
 av::NetNode*
 av::NetInfo::getNode()
 {
-#if AVANGO_DEBUG
+#ifdef AVANGO_DEBUG
   LOG_TRACE(logger) << "NetInfo::get_node: "
                  << " @" << this
                  << " id: " << mId

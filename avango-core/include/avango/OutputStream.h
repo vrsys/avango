@@ -137,7 +137,7 @@ namespace av
   AV_DLL OutputStream& operator<<(OutputStream& os, const double& value);
   AV_DLL OutputStream& operator<<(OutputStream& os, const bool& value);
   AV_DLL OutputStream& operator<<(OutputStream& os, const std::string& value);
-  
+
   template <typename T1, typename T2> OutputStream&
   operator<<(OutputStream& os, const std::pair<T1, T2>& value)
   {

@@ -34,6 +34,8 @@ av::gua::GeometryNode::initClass()
 
         SFGeometryNode::initClass("av::gua::SFGeometryNode", "av::Field");
         MFGeometryNode::initClass("av::gua::MFGeometryNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

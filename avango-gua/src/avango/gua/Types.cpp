@@ -421,9 +421,9 @@ void av_popMsg(av::Msg& netMsg,::gua::SceneGraph & buf) {
 }
 #endif // #if 0
 
-#endif// #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-
 } // namespace gua
+
+#endif// #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 av::OutputStream & av::operator<<(av::OutputStream & os,
 				  const::gua::math::mat4 &)

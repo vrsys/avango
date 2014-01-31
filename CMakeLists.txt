@@ -113,6 +113,10 @@ SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module f
 SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
 SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
 
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include(find_zmq)
+ENDIF(AVANGO_DISTRIBUTION_SUPPORT)
+
 ################################################################
 # Create build flags
 ################################################################

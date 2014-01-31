@@ -10,6 +10,7 @@ PREFIX_LD_LIBRARY_PATH="$AVANGO_HOME/lib"
 
 # modify this
 BOOST_DIR=/usr/lib:/opt/boost/latest/lib
+ZMQ_DIR=/usr/lib:/opt/zmq/current/lib
 
 [[ $LD_LIBRARY_PATH != ${LD_LIBRARY_PATH}* ]] && export LD_LIBRARY_PATH=${PREFIX_LD_LIBRARY_PATH}:${BOOST_DIR}:${LD_LIBRARY_PATH}
 [[ $PYTHONPATH != ${PREFIX_PYTHONPATH}* ]] && export PYTHONPATH=${PREFIX_PYTHONPATH}:${PYTHONPATH}

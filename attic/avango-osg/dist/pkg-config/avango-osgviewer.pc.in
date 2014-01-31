@@ -1,0 +1,11 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: Avango OSG
+Description: Avango OpenSceneGraph Library
+Version: %(AVANGO_OSG_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoOsgViewer
+Cflags: -I${includedir}
+Requires: avango-core

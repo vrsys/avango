@@ -1,0 +1,13 @@
+-*- Mode: indented-text -*- 
+README: Application Support Directory
+Author: Mark Hayden
+Last updated: 11/22/97
+
+appl		application support module
+arge		command-line arguments (e because of Arg in stdlib)
+ensemble	exported modules
+debug		remote logging support
+reflect		body of the gossip server
+pgp		support for authentication via PGP
+partition	debugging support for testing partitioning scenarios
+timestamp	event time-stamping, used for profiling

@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_BOX_SHAPE_HPP
+#define AV_PYTHON_GUA_BOX_SHAPE_HPP
+
+void init_BoxShape();
+
+#endif //AV_PYTHON_GUA_BOX_SHAPE_HPP

@@ -1,0 +1,89 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+headers = Split('''
+    AbsoluteTransform.h
+    AutoTransform.h
+    Billboard.h
+    BlendFunc.h
+    BoundingBoxCalculator.h
+    BoundingSphere.h
+    Box.h
+    Camera.h
+    CameraAttachment.h
+    Capsule.h
+    ClipPlane.h
+    ClipNode.h
+    CullFace.h
+    Depth.h
+    Doxygen.h
+    Drawable.h
+    Fields.h
+    Fog.h
+    Shader.h
+    Program.h
+    Uniform.h
+    Light.h
+    LightSource.h
+    Geode.h
+    Geometry.h
+    Group.h
+    Image.h
+    ImageStream.h
+    Init.h
+    Intersection.h
+    LayerGeode.h
+    LayerGroup.h
+    LineSegmentIntersector.h
+    LineWidth.h
+    LoadFile.h
+    LoadImage.h
+    LoadImageStream.h
+    MatrixTransform.h
+    Node.h
+    Object.h
+    ObjectLink.h
+    Panel.h
+    PolygonOffset.h
+    Projection.h
+    Quad.h
+    Sphere.h
+    StateAttribute.h
+    StateSet.h
+    Switch.h
+    Text.h
+    Texture.h
+    Texture1D.h
+    Texture2D.h
+    Texture2DArray.h
+    TextureCubeMap.h
+    TexturedQuad.h
+    Transform.h
+    Types.h
+    TriangleContainer.h
+    windows_specific_osg.h
+    ''')
+
+Alias('install-osg', Install(avango.build.get_include_path('avango/osg'), headers))

@@ -1,0 +1,82 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+import glob
+
+env = avango.build.PythonEnvironment()
+env.Append(LIBS=["avangoUtils"])
+
+avango.build.add_library(env, 'boost_python')
+avango.build.add_library(env, 'avango-core')
+avango.build.add_library(env, 'avango-osg')
+avango.build.add_library(env, 'avango-core')
+avango.build.add_library(env, 'avango-osgviewer')
+avango.build.add_library(env, 'osgGA')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(env, "boost_system")
+
+cpp_files = Split("""
+    _utils.cpp
+    """)
+    
+if env['PCL_SUPPORT']:
+    avango.build.add_library(env, 'pcl')
+
+    cpp_files.append(Split("""
+        UTILSPcd.cpp
+        """))
+    
+#lib = env.SharedLibrary("_utils.cpp")
+lib = env.SharedLibrary(cpp_files)
+
+Alias('utils', lib)
+
+avango_utils_python_files = Split("""
+    __init__.py
+    _nodes.py
+    _bool_script_merge.py
+    _bool_scripts.py
+    _converter.py
+    _MFMerger.py
+    _property_modifier.py
+    _task_scheduler.py
+    _triggers.py
+    _normalization.py
+    _field_dump.py
+    _interconnect.py
+    _range_checks.py
+    _node_scalers.py
+    _interpolators.py
+    _interpolators.py
+    _node_optimizer.py
+    _screen_capture.py
+    _leap_motion.py
+    """)
+
+Alias('install-utils', env.Install(avango.build.get_python_path('avango/utils/'), [lib]+avango_utils_python_files))
+
+test_package_dir = '../test_package/'
+avango.build.Environment.prepend_python_path(Dir(test_package_dir).abspath)
+Install(test_package_dir+'avango/utils', lib)
+avango.build.install_python(test_package_dir+'avango/utils', avango_utils_python_files)

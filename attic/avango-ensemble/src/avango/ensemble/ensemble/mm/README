@@ -1,0 +1,6 @@
+README: Memory manager
+Author: Ohad Rodeh
+
+  This directory contains the memory management facitlities
+of the system. The code controls array of C-memory buffers,
+known in Unix as iovecs and on Windows as wsabufs.

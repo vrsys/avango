@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_SPHERE_SHAPE_HPP
+#define AV_PYTHON_GUA_SPHERE_SHAPE_HPP
+
+void init_SphereShape();
+
+#endif //AV_PYTHON_GUA_SPHERE_SHAPE_HPP

@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_PHYSICS_HPP
+#define AV_PYTHON_GUA_PHYSICS_HPP
+
+void init_Physics();
+
+#endif //AV_PYTHON_GUA_PHYSICS_HPP

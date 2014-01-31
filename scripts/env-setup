@@ -1,0 +1,29 @@
+#!/bin/bash
+# usage: source scripts/env-setup [-q]
+#          or
+#        . ./scripts/env-setup [q]
+#    modifies environment for running avango examples from checkout
+
+AVANGO_HOME=$PWD
+PREFIX_PYTHONPATH="$AVANGO_HOME/lib/python2.7:$AVANGO_HOME/examples"
+PREFIX_LD_LIBRARY_PATH="$AVANGO_HOME/lib"
+
+# modify this
+BOOST_DIR=/usr/lib:/opt/boost/latest/lib
+ZMQ_DIR=/usr/lib:/opt/zmq/current/lib
+
+[[ $LD_LIBRARY_PATH != ${LD_LIBRARY_PATH}* ]] && export LD_LIBRARY_PATH=${PREFIX_LD_LIBRARY_PATH}:${BOOST_DIR}:${LD_LIBRARY_PATH}
+[[ $PYTHONPATH != ${PREFIX_PYTHONPATH}* ]] && export PYTHONPATH=${PREFIX_PYTHONPATH}:${PYTHONPATH}
+
+# Print out values unless -q is set
+
+if [ $# -eq 0 -o "$1" != "-q" ] ; then
+    echo ""
+    echo "Setting up AVANGO to run out of checkout..."
+    echo ""
+    echo "PYTHONPATH=$PYTHONPATH"
+    echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+    echo ""
+    echo "Done!"
+    echo ""
+fi

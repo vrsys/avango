@@ -1,0 +1,166 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+from avango.build.oshelper import *
+
+avango.build.Environment.prepend_python_path(Dir('test_package').abspath)
+module_env = avango.build.PythonEnvironment()
+avango.build.add_library(module_env, 'boost_python')
+if avango.build.oshelper.os_is_mac():
+	avango.build.add_library(module_env, "boost_system")
+avango.build.add_library(module_env, 'avango-core')
+for lib in ['osg', 'osgDB', 'osgGA', 'osgViewer', 'osgParticle', 'osgText', 'osgUtil', 'GL', 'GLU']:
+    avango.build.add_library(module_env, lib)
+
+module_env.Prepend(LIBS=['avangoOsg'])
+
+Alias('install-osg', avango.build.get_python_path('avango/osg'))
+
+osg_files = Split("""
+    avango/osg/_osg.cpp
+    avango/osg/OSGAutoTransform.cpp
+    avango/osg/OSGMatrix.cpp
+    avango/osg/OSGVectors.cpp
+    avango/osg/OSGQuat.cpp
+    avango/osg/OSGBoundingBoxCalculator.cpp
+    avango/osg/OSGBoundingBox.cpp
+    avango/osg/OSGBoundingSphere.cpp
+    avango/osg/OSGNode.cpp
+    avango/osg/OSGGeode.cpp
+    avango/osg/OSGDrawable.cpp
+    avango/osg/OSGIntersection.cpp
+    avango/osg/OSGObject.cpp
+    avango/osg/OSGCamera.cpp
+    avango/osg/OSGCameraAttachment.cpp
+    avango/osg/OSGCullFace.cpp
+    avango/osg/OSGClipPlane.cpp
+    avango/osg/OSGClipNode.cpp
+    avango/osg/OSGDepth.cpp
+    avango/osg/OSGBlendFunc.cpp
+    avango/osg/OSGGeometry.cpp
+    avango/osg/OSGText.cpp
+    avango/osg/OSGPanel.cpp
+    avango/osg/OSGPlane.cpp
+    avango/osg/OSGTexturedQuad.cpp
+    avango/osg/OSGFog.cpp
+    avango/osg/OSGShader.cpp
+    avango/osg/OSGUniform.cpp
+    avango/osg/OSGProgram.cpp
+    avango/osg/OSGLight.cpp
+    avango/osg/OSGLightSource.cpp
+    avango/osg/OSGGroup.cpp
+    avango/osg/OSGPolygonOffset.cpp
+    avango/osg/OSGQuad.cpp
+    avango/osg/OSGStateAttribute.cpp
+    avango/osg/OSGStateSet.cpp
+    avango/osg/OSGLayerGeode.cpp
+    avango/osg/OSGLayerGroup.cpp
+    avango/osg/OSGLineWidth.cpp
+    avango/osg/OSGSwitch.cpp
+    avango/osg/OSGTransform.cpp
+    avango/osg/OSGMatrixTransform.cpp
+    avango/osg/OSGLoadFile.cpp
+    avango/osg/OSGSphere.cpp
+    avango/osg/OSGBox.cpp
+    avango/osg/OSGCapsule.cpp
+    avango/osg/OSGAbsoluteTransform.cpp
+    avango/osg/OSGTriangleContainer.cpp
+    avango/osg/OSGProjection.cpp
+    avango/osg/OSGImage.cpp
+    avango/osg/OSGImageStream.cpp
+    avango/osg/OSGLoadImage.cpp
+    avango/osg/OSGLoadImageStream.cpp
+    avango/osg/OSGTexture.cpp
+    avango/osg/OSGTexture1D.cpp
+    avango/osg/OSGTexture2D.cpp
+    avango/osg/OSGTexture2DArray.cpp
+    avango/osg/OSGTextureCubeMap.cpp
+    avango/osg/OSGLineSegmentIntersector.cpp
+    """)
+
+if module_env['DISTRIBUTION_SUPPORT']:
+    osg_files.append(Split("""
+        avango/osg/NetMatrixTransform.cpp
+        """))
+    module_env.Prepend(LIBS=Split("avangoOsgNetwork"))
+
+osg_lib = module_env.SharedLibrary("avango/osg/_osg", osg_files)
+module_env.Install(avango.build.get_python_path('avango/osg'), "avango/osg/__init__.py")
+module_env.Install(avango.build.get_python_path('avango/osg'), osg_lib)
+Alias('osg', osg_lib)
+
+osgviewer_files = Split("""
+    avango/osg/viewer/_osgviewer.cpp
+    """)
+osg_viewer_env = module_env.Clone()
+osg_viewer_env.Prepend(LIBS=['avangoOsgViewer'])
+osgviewer_lib = osg_viewer_env.SharedLibrary("avango/osg/viewer/_viewer", osgviewer_files)
+osg_viewer_env.Install(avango.build.get_python_path('avango/osg/viewer'), "avango/osg/viewer/__init__.py")
+osg_viewer_env.Install(avango.build.get_python_path('avango/osg/viewer'), osgviewer_lib)
+Alias('osg', osgviewer_lib)
+
+osgparticle_files = Split("""
+    avango/osg/particle/_osgparticle.cpp
+    """)
+osg_particle_env = module_env.Clone()
+osg_particle_env.Prepend(LIBS=['avangoOsgParticle'])
+osgparticle_lib = osg_particle_env.SharedLibrary("avango/osg/particle/_particle", osgparticle_files)
+osg_particle_env.Install(avango.build.get_python_path('/avango/osg/particle'),
+                         "avango/osg/particle/__init__.py")
+osg_particle_env.Install(avango.build.get_python_path('avango/osg/particle'), osgparticle_lib)
+Alias('osg', osgparticle_lib)
+
+osgsimpleviewer_files = Split("""
+    avango/osg/simpleviewer/_osgsimpleviewer.cpp
+    """)
+osg_simpleviewer_env = module_env.Clone()
+osgsimpleviewer_lib = osg_simpleviewer_env.SharedLibrary("avango/osg/simpleviewer/_simpleviewer",
+                                                         osgsimpleviewer_files)
+osg_simpleviewer_env.Install(avango.build.get_python_path('avango/osg/simpleviewer'),
+                             "avango/osg/simpleviewer/__init__.py")
+osg_simpleviewer_env.Install(avango.build.get_python_path('avango/osg/simpleviewer'),
+                             osgsimpleviewer_lib)
+Alias('osg', osgsimpleviewer_lib)
+
+test_package_dir = 'test_package/'
+Install(test_package_dir+'avango/osg/', osg_lib)
+Install(test_package_dir+'avango/osg/viewer', osgviewer_lib)
+Install(test_package_dir+'avango/osg/particle', osgparticle_lib)
+Install(test_package_dir+'avango/osg/simpleviewer', osgsimpleviewer_lib)
+avango.build.install_python(test_package_dir+'avango/osg/',
+                            ['avango/osg/__init__.py'])
+avango.build.install_python(test_package_dir+'avango/viewer/osg/',
+                            ['avango/osg/viewer/__init__.py'])
+avango.build.install_python(test_package_dir+'avango/particle/osg/',
+                            ['avango/osg/particle/__init__.py'])
+avango.build.install_python(test_package_dir+'avango/simpleviewer/osg/',
+                            ['avango/osg/simpleviewer/__init__.py'])
+avango.build.install_python(test_package_dir+'tests/',
+                            ["tests/TestOSG.py", "tests/TestOSGFields.py", "tests/runtests.py"])
+
+local_test_env = avango.build.Environment()
+check = local_test_env.Alias('test-osg-python', 'test_package/tests/runtests.pyc', 'python $SOURCE')
+AlwaysBuild(check)
+Alias('check-osg', Alias('check-osg-python', check))
+Depends(check, test_package_dir)

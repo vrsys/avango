@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+requires=%(PKG_CONFIG_REQUIRES)s
+
+Name: AVANGO SHADE
+Description: AVANGO SHADE Integration Library
+Version: %(AVANGO_SHADE_VERSION)s
+URL: http://www.avango.org
+Libs: -L${libdir} -lavangoShade
+Cflags: -I${includedir}
+Requires: ${requires}

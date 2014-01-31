@@ -1,0 +1,106 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import avango.build
+
+menu_python_files = Split("""
+    avango/menu/__init__.py
+    avango/menu/_Icon.py
+    avango/menu/_Label.py
+    avango/menu/_Panel.py
+    avango/menu/_PanelGroup.py
+    avango/menu/_PanelRotator.py
+    avango/menu/_PlacementBase.py
+    avango/menu/_PlacementWall.py
+    avango/menu/_PlacementMonitor.py
+    avango/menu/_RadioButtonGroup.py
+    avango/menu/_SliderMouseInteractor.py
+    avango/menu/_SliderStylusInteractor.py
+    avango/menu/_Tools.py
+    avango/menu/Preferences.py
+    """)
+
+menu_layout_python_files = Split("""
+    avango/menu/layout/__init__.py
+    avango/menu/layout/_CheckBoxLayouter.py
+    avango/menu/layout/_ContainerLayouter.py
+    avango/menu/layout/_DividerLayouter.py
+    avango/menu/layout/_ImageLayouter.py
+    avango/menu/layout/_LayoutBase.py
+    avango/menu/layout/_PanelDecorationLayouter.py
+    avango/menu/layout/_Proxy.py
+    avango/menu/layout/_PushButtonLayouter.py
+    avango/menu/layout/_SliderLayouter.py
+    avango/menu/layout/_SubMenuLayouter.py
+    """)
+
+menu_widget_python_files = Split("""
+    avango/menu/widget/__init__.py
+    avango/menu/widget/_CheckBox.py
+    avango/menu/widget/_Container.py
+    avango/menu/widget/_Divider.py
+    avango/menu/widget/_Image.py
+    avango/menu/widget/_PushButton.py
+    avango/menu/widget/_RadioButton.py
+    avango/menu/widget/_Slider.py
+    avango/menu/widget/_WidgetBase.py
+    """)
+
+menu_data_files = Split("""
+    avango/menu/data/arrow_right.png
+    avango/menu/data/audio.png
+    avango/menu/data/blue.png
+    avango/menu/data/checkbox_checked.png
+    avango/menu/data/checkbox_unchecked.png
+    avango/menu/data/colors.png
+    avango/menu/data/delete.png
+    avango/menu/data/green.png
+    avango/menu/data/menuQuit.png
+    avango/menu/data/panel-back-hl.png
+    avango/menu/data/panel-back.png
+    avango/menu/data/panel-close-hl.png
+    avango/menu/data/panel-close.png
+    avango/menu/data/plus.png
+    avango/menu/data/quit.png
+    avango/menu/data/radiobutton_checked.png
+    avango/menu/data/radiobutton_unchecked.png
+    avango/menu/data/red.png
+    avango/menu/data/refresh.png
+    avango/menu/data/slider.png
+    avango/menu/data/slider_background.png
+    avango/menu/data/slider_foreground.png
+    avango/menu/data/submenu_arrow.png
+    avango/menu/data/submenu.png
+    avango/menu/data/VeraBd.ttf
+    avango/menu/data/VeraBI.ttf
+    avango/menu/data/COPYRIGHT-BITSTREAM-VERA.TXT
+    """)
+
+avango.build.Environment.prepend_python_path(Dir('.').abspath)
+menu_env = avango.build.PythonEnvironment()
+menu_env.Install(avango.build.get_python_path('avango/menu'), menu_python_files)
+menu_env.Install(avango.build.get_python_path('avango/menu/layout'), menu_layout_python_files)
+menu_env.Install(avango.build.get_python_path('avango/menu/widget'), menu_widget_python_files)
+menu_env.Install(avango.build.get_python_path('avango/menu/data'), menu_data_files)
+
+Alias('install-menu', avango.build.get_python_path('avango/menu'))

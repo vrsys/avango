@@ -1,0 +1,959 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+
+<cproject>
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.304124518">
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration buildProperties="" description="" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.304124518" name="build" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+					<folderInfo id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.304124518." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1576205115" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1576205115.1432825245" name=""/>
+							<builder arguments="" autoBuildTarget="all" buildPath="${workspace_loc:/avango-ng}" cleanBuildTarget="-c " command="scons" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.1103342112" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.1777969928" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.177462562" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1026045729" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/home/ddangelo/apps/OpenSceneGraph-3.0.1_bin/include"/>
+									<listOptionValue builtIn="false" value="/home/ddangelo/apps/avango/avango_trunk_install/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/pcl-1.6/"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1205896190" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.1979758664" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1198715718" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.2069727908" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.119904312" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.304124518" moduleId="org.eclipse.cdt.core.settings" name="build">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="build" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ openal</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>check</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>install</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
+		</cconfiguration>
+		<cconfiguration id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1706918046">
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration buildProperties="" description="" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1706918046" name="check" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+					<folderInfo id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1706918046." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1880525005" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1880525005.445256854" name=""/>
+							<builder arguments="" autoBuildTarget="all" buildPath="${workspace_loc:/avango-ng}" cleanBuildTarget="-c " command="scons" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.1451001053" incrementalBuildTarget="check" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.1824225206" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.581662047" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.43412652" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/include/pcl-1.6/"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.209249977" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.1179866491" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.13404274" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.696186834" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1708637945" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1706918046" moduleId="org.eclipse.cdt.core.settings" name="check">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="build" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ openal</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>check</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>install</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
+		</cconfiguration>
+		<cconfiguration id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1037536698">
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration buildProperties="" description="" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1037536698" name="install" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+					<folderInfo id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1037536698." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.743482674" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.743482674.107198120" name=""/>
+							<builder arguments="" autoBuildTarget="all" buildPath="${workspace_loc:/avango-ng}" cleanBuildTarget="-c " command="scons" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.build.core.settings.default.builder.471331813" incrementalBuildTarget="install" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.680102926" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.56557566" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.808610321" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/include/pcl-1.6/"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.704458392" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.1069364377" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.315571255" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.59347863" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.939699449" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1037536698" moduleId="org.eclipse.cdt.core.settings" name="install">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="build" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ openal</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-openal" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-openal-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-python" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-python</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-core" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-core</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-rui" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-rui</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-unittest" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-unittest</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-daemon" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-daemon</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-osg" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-osg</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>check</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>install</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="build" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="check" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ check-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="install" path="avango-sound" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>-C ../ install-sound</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="avango-ng.null.912861930" name="avango-ng"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
+		<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="makefileGenerator">
+				<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+			<buildOutputProvider>
+				<openAction enabled="true" filePath=""/>
+				<parser enabled="true"/>
+			</buildOutputProvider>
+			<scannerInfoProvider id="specsFile">
+				<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+				<parser enabled="true"/>
+			</scannerInfoProvider>
+		</profile>
+		<scannerConfigBuildInfo instanceId="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1706918046">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.304124518">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="makefileGenerator">
+					<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCWinManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="preference.org.eclipse.cdt.managedbuilder.core.configurationDataProvider.146653667.1037536698">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+</cproject>

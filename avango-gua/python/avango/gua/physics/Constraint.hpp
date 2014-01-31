@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_CONSTRAINT_HPP
+#define AV_PYTHON_GUA_CONSTRAINT_HPP
+
+void init_Constraint();
+
+#endif //AV_PYTHON_GUA_CONSTRAINT_HPP

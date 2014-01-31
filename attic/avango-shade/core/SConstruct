@@ -1,0 +1,158 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+import os.path
+import sys
+
+EnsurePythonVersion(2,2)
+EnsureSConsVersion(0,97)
+
+def is_windows():
+    return sys.platform == 'win32'
+
+path_sep = ':'
+if is_windows():
+    path_sep = ';'
+
+def get_boost_library_name(env, library):
+    result = library
+    if env['BOOST_LAYOUT'] == 'versioned':
+        result += '-' + env['BOOST_TOOLSET']
+    if env['BOOST_LAYOUT'] in ['versioned', 'tagged'] and env['USE_THREADING']:
+        result += '-mt'
+    if env['BOOST_LAYOUT'] in ['versioned', 'tagged'] and env['USE_BOOST_DEBUG']:
+            result += '-d'
+    if env['BOOST_LAYOUT'] == 'versioned':
+        result += '-'+env['BOOST_LIB_VERSION']
+    return result
+
+def get_osg_library_name(env, library):
+    result = library
+    if env['OPENSCENEGRAPH_DEBUG']:
+        result += 'd'
+    return result
+
+opts = Options('localdefs.py')
+opts.Add('BUILD_DIR', 'Directory where temporary build files are put', 'build')
+opts.Add('PREFIX', 'Installation directory', '/usr/local')
+opts.Add('INCLUDE_PATH', 'Include search path (use '+path_sep+' to seperate mutliple directories)', '')
+opts.Add('LIBRARY_PATH', 'Library search path (use '+path_sep+' to seperate mutliple directories)', '')
+opts.Add(BoolOption('USE_THREADING', 'Enable building a thread-safe library\n  NOTE: at the moment this only forces the use of thread-safe support libraries', 1))
+opts.Add(BoolOption('OPENSCENEGRAPH_SUPPORT', 'Enable building of OpenSceneGraph binding', 0))
+opts.Add(BoolOption('OPENSCENEGRAPH_DEBUG', 'Use debug build of OpenSceneGraph library', 0))
+opts.Add(BoolOption('USE_BOOST_DEBUG', 'Use debug build of Boost library', 0))
+opts.Add(EnumOption('BOOST_LAYOUT', 'Sets Boost library naming scheme', 'system', ['versioned', 'tagged', 'system']))
+
+# Now setup environment
+env = Environment(options = opts)
+if is_windows():
+    env.Append(CPPFLAGS=['/EHsc', '/Z7'],
+               LINKFLAGS=['/DEBUG'])
+else:
+    env.Append(CPPFLAGS=['-g', '-Wall', '-Werror'])
+if len(env['INCLUDE_PATH']) > 0:
+    env.Append(CPPPATH=env['INCLUDE_PATH'].split(path_sep))
+if len(env['LIBRARY_PATH']) > 0:
+    env.Append(LIBPATH=env['LIBRARY_PATH'].split(path_sep))
+    if not is_windows():
+        env.AppendENVPath('LD_LIBRARY_PATH', env['LIBRARY_PATH'].split(path_sep))
+env.SConsignFile("${BUILD_DIR}/sconsign")
+
+# Checks some needed libraries, i.e. those that have special naming schemes
+def CheckBoost(context):
+    context.Message('Checking for boost library ... ')
+    ret = context.TryRun("""
+#include <iostream>
+#include <boost/version.hpp>
+int main(int argc, char **argv) {
+  std::cout << BOOST_LIB_VERSION;
+  return 0;
+}
+""", ".cpp")
+    context.Result(ret[0])
+    return ret[1]
+
+def CheckToolset(context):
+    context.Message('Checking for toolset ... ')
+    ret = context.TryRun("""
+#include <iostream>
+int main(int argc, char **argv) {
+#ifdef __GNUC__
+  std::cout << "gcc" << __GNUC__ << __GNUC_MINOR__;
+#else
+  std::cout << "unknown";
+#endif
+  return 0;
+}
+""", ".cpp")
+    context.Result(ret[1])
+    return ret[1]
+
+custom_tests = { 'CheckBoost':CheckBoost, 'CheckToolset':CheckToolset }
+conf_env = env.Clone()
+conf = Configure(conf_env, custom_tests = custom_tests,
+                 conf_dir = "${BUILD_DIR}/.sconf_temp",
+                 log_file = "${BUILD_DIR}/config.log",
+                 help=False)
+env['BOOST_LIB_VERSION'] = conf.CheckBoost()
+env['BOOST_TOOLSET'] = conf.CheckToolset()
+conf.Finish()
+
+# Define default install directories
+shade_core_libname = "shade"
+Export("shade_core_libname")
+env['PREFIX_LIB'] = os.path.join(env['PREFIX'], 'lib')
+env['PREFIX_SHADER_LIB'] = env['PREFIX_LIB']
+env['PREFIX_INCLUDE'] = os.path.join(env['PREFIX'], 'include')
+
+Default(Alias('check', Alias('check-shade-core')))
+Default(Alias('examples', Alias('shade-core-examples')))
+Alias('install', Alias('install-shade-core'))
+
+shade_core_env = env.Clone()
+shade_core_env.Prepend(CPPPATH=[Dir('include').abspath])
+if not is_windows():
+    # Boost libraries use auto-linking under Windows
+    shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_signals')])
+    shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_filesystem')])
+    shade_core_env.Append(LIBS=[get_boost_library_name(env, 'boost_system')])
+
+shade_core_env.Append(LIBS=['GLEW'])
+if env['OPENSCENEGRAPH_SUPPORT']:
+    shade_core_env.Append(LIBS=[get_osg_library_name(env, 'osg')])
+Export("shade_core_env")
+shade_core_example_env = shade_core_env.Clone()
+if is_windows():
+    shade_core_example_env.Append(LIBS=["glut32"])
+else:
+    shade_core_example_env.Append(LIBS=["glut"])
+if env['OPENSCENEGRAPH_SUPPORT']:
+    shade_core_example_env.Append(LIBS=[get_osg_library_name(env, 'osgViewer')])
+Export("shade_core_example_env")
+shade_core_unittest_env = shade_core_env.Clone()
+shade_core_unittest_env.Append(LIBS=['UnitTest++'])
+Export("shade_core_unittest_env")
+
+SConscript(dirs='.', build_dir=env['BUILD_DIR'])
+
+Help(opts.GenerateHelpText(env))

@@ -1,0 +1,14 @@
+-*- Mode: indented-text -*- 
+README: Ensemble Infrastructure
+Author: Mark Hayden
+Last updated: 3/10/97
+
+disp		display layer
+glue		layer management modules
+hsyssupp	additional support for Hsys modules
+stacke		exported protocol stacks (e because of Stack in stdlib)
+transport	transport management
+async           asynchronous application callbacks
+config_trans	more transport stuff
+
+panel		work-in-progress

@@ -29,6 +29,12 @@ namespace av
 
     public:
 
+      enum BackgroundModeEnum {
+        COLOR = ::gua::BackgroundMode::COLOR,
+        SKYMAP_TEXTURE = ::gua::BackgroundMode::SKYMAP_TEXTURE,
+        QUAD_TEXTURE = ::gua::BackgroundMode::QUAD_TEXTURE
+      };
+
       /**
        * Constructor. When called without arguments, a new ::gua::Pipeline is created.
        * Otherwise, the given ::gua::Pipeline is used.
@@ -72,6 +78,7 @@ namespace av
       SFString FogTexture;
       SFColor  FogColor;
 
+      SFUInt   BackgroundMode;
       SFString BackgroundTexture;
       SFColor  BackgroundColor;
 
@@ -162,6 +169,9 @@ namespace av
 
       virtual void getFogColorCB(const SFColor::GetValueEvent& event);
       virtual void setFogColorCB(const SFColor::SetValueEvent& event);
+
+      virtual void getBackgroundModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setBackgroundModeCB(const SFUInt::SetValueEvent& event);
 
       virtual void getBackgroundTextureCB(const SFString::GetValueEvent& event);
       virtual void setBackgroundTextureCB(const SFString::SetValueEvent& event);

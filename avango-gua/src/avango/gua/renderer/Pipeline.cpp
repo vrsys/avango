@@ -99,6 +99,10 @@ av::gua::Pipeline::Pipeline(::gua::Pipeline* guaPipeline)
                           boost::bind(&Pipeline::getFogColorCB, this, _1),
                           boost::bind(&Pipeline::setFogColorCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(BackgroundMode,
+                      boost::bind(&Pipeline::getBackgroundModeCB, this, _1),
+                      boost::bind(&Pipeline::setBackgroundModeCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(BackgroundTexture,
                           boost::bind(&Pipeline::getBackgroundTextureCB, this, _1),
                           boost::bind(&Pipeline::setBackgroundTextureCB, this, _1));
@@ -468,6 +472,19 @@ av::gua::Pipeline::setFogColorCB(const SFColor::SetValueEvent& event)
 {
   m_guaPipeline->config.set_fog_color(event.getValue());
 }
+
+void
+av::gua::Pipeline::getBackgroundModeCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaPipeline->config.background_mode());
+}
+
+void
+av::gua::Pipeline::setBackgroundModeCB(const SFUInt::SetValueEvent& event)
+{
+  m_guaPipeline->config.background_mode() = static_cast< ::gua::BackgroundMode>(event.getValue());
+}
+
 
 void
 av::gua::Pipeline::getBackgroundTextureCB(const SFString::GetValueEvent& event)

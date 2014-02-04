@@ -17,6 +17,7 @@ AV_FIELD_DEFINE(av::gua::MFBoundingBox);
 av::gua::BoundingBox::BoundingBox(::gua::math::BoundingBox< ::gua::math::vec3>* guaBoundingBox)
   : m_guaBoundingBox(guaBoundingBox)
 {
+
   AV_FC_ADD_ADAPTOR_FIELD(Min,
                         boost::bind(&BoundingBox::getMinCB, this, _1),
                         boost::bind(&BoundingBox::setMinCB, this, _1));
@@ -66,7 +67,6 @@ av::gua::BoundingBox::setMinCB(const av::gua::SFVec3::SetValueEvent& event)
 /* virtual */ void
 av::gua::BoundingBox::getMaxCB(const av::gua::SFVec3::GetValueEvent& event)
 {
-
   *(event.getValuePtr()) = m_guaBoundingBox->max;
 }
 

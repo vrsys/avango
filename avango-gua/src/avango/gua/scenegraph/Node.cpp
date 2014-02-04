@@ -200,8 +200,8 @@ av::gua::Node::setGroupNamesCB(const MFString::SetValueEvent& event)
 void
 av::gua::Node::getBoundingBoxCB(const SFBoundingBox::GetValueEvent& event)
 {
-    auto gua_box(m_guaNode->get_bounding_box());
-    av::Link<av::gua::BoundingBox> bbox(new av::gua::BoundingBox(&gua_box));
+    m_guaBbox = m_guaNode->get_bounding_box();
+    av::Link<av::gua::BoundingBox> bbox(new av::gua::BoundingBox(&m_guaBbox));
     *(event.getValuePtr()) = bbox;
 }
 

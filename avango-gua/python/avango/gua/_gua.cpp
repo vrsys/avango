@@ -78,10 +78,6 @@ BOOST_PYTHON_MODULE(_gua)
 {
     PyEval_InitThreads();
 
-#if defined(AVANGO_DISTRIBUTION_SUPPORT)
-    init_NetMatrixTransform();
-    av::gua::network::Init::initClass();
-#endif
 
     av::gua::Init::initClass();
 
@@ -98,6 +94,10 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_Node();
     init_TransformNode();
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+    init_NetMatrixTransform();
+    av::gua::network::Init::initClass();
+#endif
     init_GeometryNode();
     init_ScreenNode();
     init_PointLightNode();

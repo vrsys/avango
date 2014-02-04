@@ -36,11 +36,13 @@ import math
 import sys
 from avango.script import field_has_changed
 
+from examples_common.GuaVE import GuaVE
+
 from avango import enable_logging
 #avango.enable_logging(5,"server-log.txt")
 
 # specify role, ip, and port
-nettrans = avango.gua.nodes.NetMatrixTransform(Groupname = "AVSERVER|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVSERVER|141.54.147.23|7432")
 
 ###############################################################################
 # an example shader program
@@ -132,27 +134,30 @@ group = avango.gua.nodes.TransformNode(Name = "group")
 group.Children.value = [monkey_transform1, monkey_transform2, light]
 nettrans.distribute_object(group)
 
-nettrans.Children.value = [group]
 
 eye = avango.gua.nodes.TransformNode(Name = "eye")
 eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+nettrans.distribute_object(eye)
 
 screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
 screen.Children.value = [eye]
+nettrans.distribute_object(screen)
 
-graph.Root.value.Children.value = [nettrans, screen]
+nettrans.Children.value = [group, screen]
+graph.Root.value.Children.value = [nettrans]
 
 # setup viewing
 #size = avango.gua.Vec2ui(1024, 768)
 size = avango.gua.Vec2ui(800, 600)
-pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
-                                                                  RightEye = "/screen/eye",
-                                                                  LeftScreen = "/screen",
-                                                                  RightScreen = "/screen",
+pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/net/{Endpt:127.0.0.2:34818:215:0}/screen/eye",
+                                                                  LeftScreen = "/net/{Endpt:127.0.0.2:34818:215:0}/screen",
                                                                   SceneGraph = "scenegraph"),
                                  Window = avango.gua.nodes.Window(Size = size,
                                                                   LeftResolution = size),
-                                 LeftResolution = size)
+                                 LeftResolution = size,
+                                 BackgroundMode = avango.gua.BackgroundMode.COLOR)
+
+pipe.Enabled.value = True
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
@@ -166,6 +171,9 @@ monkey_updater.TimeIn.connect_from(timer.Time)
 
 monkey1.Transform.connect_from(monkey_updater.MatrixOut)
 monkey2.Transform.connect_from(monkey_updater.MatrixOut)
+
+guaVE = GuaVE()
+guaVE.start(locals(), globals())
 
 viewer.run()
 

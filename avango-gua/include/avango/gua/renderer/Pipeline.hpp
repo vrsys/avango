@@ -55,6 +55,9 @@ namespace av
 
       SFBool  Enabled;
 
+      SFBool  EnableGlobalClippingPlane;
+      SFVec4  GlobalClippingPlane;
+
       SFWindow Window;
 
       MultiField<Link<Pipeline>> PreRenderPipelines;
@@ -118,6 +121,12 @@ namespace av
 
       virtual void getEnabledCB(const SFBool::GetValueEvent& event);
       virtual void setEnabledCB(const SFBool::SetValueEvent& event);
+
+      virtual void getEnableGlobalClippingPlaneCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableGlobalClippingPlaneCB(const SFBool::SetValueEvent& event);
+
+      virtual void getGlobalClippingPlaneCB(const SFVec4::GetValueEvent& event);
+      virtual void setGlobalClippingPlaneCB(const SFVec4::SetValueEvent& event);
 
       virtual void getWindowCB(const SFWindow::GetValueEvent& event);
       virtual void setWindowCB(const SFWindow::SetValueEvent& event);

@@ -14,6 +14,7 @@
 
 #include "scenegraph/Node.hpp"
 #include "scenegraph/TransformNode.hpp"
+#include "scenegraph/LODNode.hpp"
 #include "scenegraph/GeometryNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
 #include "scenegraph/PointLightNode.hpp"
@@ -94,6 +95,7 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_Node();
     init_TransformNode();
+    init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
     init_NetMatrixTransform();
     av::gua::network::Init::initClass();

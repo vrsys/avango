@@ -4,6 +4,27 @@ import math
 
 from avango.script import field_has_changed
 
+class TouchDevice(avango.script.Script):
+
+  PosX = avango.SFFloat()
+  PosY = avango.SFFloat()
+
+  def __init__(self):
+    self.super(TouchDevice).__init__()
+
+    self.device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    self.device_sensor.Station.value = "finger0"
+
+    self.always_evaluate(True)
+
+  def evaluate(self):
+
+    self.PosX.value = self.device_sensor.Value0.value
+    self.PosY.value = self.device_sensor.Value1.value
+
+    print self.PosX.value, self.PosY.value
+
+
 class MouseDevice(avango.script.Script):
 
   RelX = avango.SFFloat()

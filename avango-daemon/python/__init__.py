@@ -74,8 +74,9 @@ from _daemon import *
 from _daemon import _Device
 from _daemon import _HIDHelper
 from _daemon import _DTrackHelper
+from _daemon import _TUIOInputHelper
 
-# currently WacomTablet and Wiimote are not supported on Windows 
+# currently WacomTablet and Wiimote are not supported on Windows
 if sys.platform != 'win32':
     from _daemon import _WacomTabletHelper
     from _daemon import _WiimoteHelper
@@ -198,6 +199,28 @@ class DTrack(_DTrackHelper):
         def __setitem__(self, key, st):
             self._dtrack._stations[key] = st
             return self._dtrack.add_station(key, st.name)
+
+    stations = property(StationProxy)
+
+class TUIOInput(_TUIOInputHelper):
+    """Avango NG device for processing TUIOInput udp packets (ASCII protocol).
+    Required properties: stations, port."""
+    def __init__(self):
+        super(TUIOInput, self).__init__()
+        self._stations = {}
+
+    class StationProxy(object):
+        """Proxy object to override the functions that are called on access of list
+        values via [] operator."""
+        def __init__(self, tuioinput):
+            self._tuioinput = tuioinput
+        def __getitem__(self, key):
+            if self._tuioinput._stations.has_key(key):
+                return self._tuioinput._stations[key]
+            else: return ''
+        def __setitem__(self, key, st):
+            self._tuioinput._stations[key] = st
+            return self._tuioinput.add_station(key, st.name)
 
     stations = property(StationProxy)
 

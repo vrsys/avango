@@ -32,6 +32,14 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/daemon/StationBlock.cpp
     src/avango/daemon/StationSegment.cpp
     src/avango/daemon/dtrack/dtrack.cpp
+    src/avango/daemon/tuio/TUIO/TuioClient.cpp
+    src/avango/daemon/tuio/TUIO/TuioServer.cpp
+    src/avango/daemon/tuio/TUIO/TuioTime.cpp
+    src/avango/daemon/tuio/oscpack/osc/OscTypes.cpp
+    src/avango/daemon/tuio/oscpack/osc/OscOutboundPacketStream.cpp
+    src/avango/daemon/tuio/oscpack/osc/OscReceivedElements.cpp
+    src/avango/daemon/tuio/oscpack/osc/OscPrintReceivedElements.cpp
+    src/avango/daemon/TUIOInput.cpp
     include/avango/daemon/Config.h
     include/avango/daemon/Device.h
     include/avango/daemon/DeviceActuator.h
@@ -52,7 +60,8 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/avango/daemon/WacomTablet.h
     include/avango/daemon/Wiimote.h
     include/avango/daemon/WiimoteActuator.h
-	include/avango/daemon/windows_specific_daemon.h
+    include/avango/daemon/TUIOInput.h
+    include/avango/daemon/windows_specific_daemon.h
     src/avango/daemon/dtrack/dtrack.h
 )
 
@@ -63,11 +72,15 @@ IF (UNIX)
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Wiimote.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WiimoteActuator.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.linux.h")
+    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/NetworkingUtils.cpp")
+    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/UdpSocket.cpp")
 
 ELSEIF (MSVC)
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/EventMapping.win.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.win.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.win.h")
+    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/NetworkingUtils.cpp")
+    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/UdpSocket.cpp")
 ENDIF (UNIX)
 
 IF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
@@ -97,6 +110,8 @@ INCLUDE_DIRECTORIES(
     ../avango-python/include
     ${PYTHON_INCLUDE_DIRS}
     ../avango-gua/include
+    src/avango/daemon/tuio/TUIO
+    src/avango/daemon/tuio/oscpack
 )
 
 ADD_DEPENDENCIES ( avango_daemon avango)

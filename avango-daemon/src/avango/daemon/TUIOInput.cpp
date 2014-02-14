@@ -71,7 +71,7 @@ av::daemon::TUIOInput::startDevice()
 
   mTUIOClient = boost::shared_ptr<TUIO::TuioClient>(new TUIO::TuioClient(mPort));
   mTUIOClient->addTuioListener(mTUIOInputListener.get());
-  mTUIOClient->connect(true);
+  mTUIOClient->connect();
 
   logger.info() << "startDevice: device initialized successfully";
 }
@@ -82,22 +82,31 @@ av::daemon::TUIOInput::readLoop()
 
   while (mKeepRunning)
   {
-    for (auto const& cursor : mTUIOInputListener->cursors) {
-      NumStationMap::iterator it = mStations.find(cursor.first);
+    for (auto const& station : mStations) {
+      auto cursor(mTUIOInputListener->cursors.find(station.first));
 
-      if (it != mStations.end())
+      if (cursor != mTUIOInputListener->cursors.end())
       {
-        it->second->setValue(0, cursor.second.x);
-        it->second->setValue(1, cursor.second.y);
-        it->second->setValue(2, cursor.second.x_speed);
-        it->second->setValue(3, cursor.second.y_speed);
-        it->second->setValue(4, cursor.second.motion_speed);
-        it->second->setValue(5, cursor.second.motion_acceleration);
-        it->second->setValue(6, cursor.second.is_moving);
-        it->second->setValue(7, cursor.second.state);
-        it->second->setValue(8, cursor.second.session_id);
+        station.second->setValue(0, cursor->second.x);
+        station.second->setValue(1, cursor->second.y);
+        station.second->setValue(2, cursor->second.x_speed);
+        station.second->setValue(3, cursor->second.y_speed);
+        station.second->setValue(4, cursor->second.motion_speed);
+        station.second->setValue(5, cursor->second.motion_acceleration);
+        station.second->setValue(6, cursor->second.is_moving);
+        station.second->setValue(7, cursor->second.state);
+        station.second->setValue(8, cursor->second.session_id);
+      } else {
+        station.second->setValue(0, -1.f);
+        station.second->setValue(1, -1.f);
+        station.second->setValue(2, 0.f);
+        station.second->setValue(3, 0.f);
+        station.second->setValue(4, 0.f);
+        station.second->setValue(5, 0.f);
+        station.second->setValue(6, false);
+        station.second->setValue(7, TUIOState::REMOVED);
+        station.second->setValue(8, -1.f);
       }
-      else logger.debug() << "readLoop: can't find touch cursor #%d (station not configured?)", cursor.first;
     }
   }
 }
@@ -105,6 +114,7 @@ av::daemon::TUIOInput::readLoop()
 /* virtual */ void
 av::daemon::TUIOInput::stopDevice()
 {
+  mTUIOClient->disconnect();
   logger.info() << "stopDevice: done.";
 }
 

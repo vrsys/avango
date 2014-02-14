@@ -4,25 +4,61 @@ import math
 
 from avango.script import field_has_changed
 
-class TouchDevice(avango.script.Script):
+class TouchCursor(avango.script.Script):
+
+  CursorID = avango.SFInt();
 
   PosX = avango.SFFloat()
   PosY = avango.SFFloat()
 
-  def __init__(self):
-    self.super(TouchDevice).__init__()
+  SpeedX = avango.SFFloat()
+  SpeedY = avango.SFFloat()
 
-    self.device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    self.device_sensor.Station.value = "finger0"
+  MotionSpeed = avango.SFFloat()
+  MotionAcceleration = avango.SFFloat()
+
+  IsMoving = avango.SFBool()
+  State = avango.SFInt()
+
+  SessionID = avango.SFInt()
+
+  def __init__(self):
+    self.super(TouchCursor).__init__()
+
+    self.__device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
 
     self.always_evaluate(True)
 
+  @field_has_changed(CursorID)
+  def set_station(self):
+    self.__device_sensor.Station.value = "gua-finger" + str(self.CursorID.value)
+
   def evaluate(self):
 
-    self.PosX.value = self.device_sensor.Value0.value
-    self.PosY.value = self.device_sensor.Value1.value
+    self.PosX.value = self.__device_sensor.Value0.value
+    self.PosY.value = self.__device_sensor.Value1.value
 
-    print self.PosX.value, self.PosY.value
+    self.SpeedX.value = self.__device_sensor.Value2.value
+    self.SpeedY.value = self.__device_sensor.Value3.value
+
+    self.MotionSpeed.value = self.__device_sensor.Value4.value
+    self.MotionAcceleration.value = self.__device_sensor.Value5.value
+
+    self.IsMoving.value = bool(self.__device_sensor.Value6.value)
+    self.State.value = int(self.__device_sensor.Value7.value)
+
+    self.SessionID.value = int(self.__device_sensor.Value8.value)
+
+
+class TouchDevice(avango.script.Script):
+
+  TouchCursors = []
+
+  def __init__(self):
+    self.super(TouchDevice).__init__()
+
+    for i in range(0, 1):
+      self.TouchCursors.append(TouchCursor(CursorID = i))
 
 
 class MouseDevice(avango.script.Script):

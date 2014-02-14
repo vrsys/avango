@@ -26,17 +26,15 @@ def init_pst_tracking():
 # functions
 def init_tuio_input():
 
-	# create instance of TUIOInput
-	pst = avango.daemon.TUIOInput()
-	pst.port = "3333" # PST port
-	# pst.port = "5020" # PST port
+	tuio = avango.daemon.TUIOInput()
+	tuio.port = "3333" # tuio port
 
-	pst.stations[0] = avango.daemon.Station('finger0')
-	pst.stations[1] = avango.daemon.Station('finger1')
-	pst.stations[2] = avango.daemon.Station('finger2')
-	pst.stations[3] = avango.daemon.Station('finger3')
+	tuio.stations[0] = avango.daemon.Station('gua-finger0')
+	tuio.stations[1] = avango.daemon.Station('gua-finger1')
+	tuio.stations[2] = avango.daemon.Station('gua-finger2')
+	tuio.stations[3] = avango.daemon.Station('gua-finger3')
 
-	device_list.append(pst)
+	device_list.append(tuio)
 	print "TUIO Input started!"
 
 

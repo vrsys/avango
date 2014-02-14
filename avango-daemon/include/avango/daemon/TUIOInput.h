@@ -51,6 +51,15 @@ namespace av
       AV_BASE_DECLARE();
 
     public:
+
+      enum TUIOState {
+        ADDED,
+        ACCELERATING,
+        DECELERATING,
+        STOPPED,
+        REMOVED
+      };
+
       /**
        * Constructor
        */

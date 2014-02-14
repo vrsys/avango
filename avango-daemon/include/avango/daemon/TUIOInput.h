@@ -23,59 +23,85 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/daemon/Init.h>
+#ifndef AV_DAEMON_TUIO_H
+#define AV_DAEMON_TUIO_H
 
-#include <avango/Logger.h>
-
-#include <avango/daemon/Config.h>
 #include <avango/daemon/Device.h>
-#include <avango/daemon/DeviceActuator.h>
-#include <avango/daemon/DeviceDaemon.h>
-#include <avango/daemon/DeviceSensor.h>
-#include <avango/daemon/DeviceService.h>
-#include <avango/daemon/DTrack.h>
-#include <avango/daemon/HIDInput.h>
-#include <avango/daemon/WacomTablet.h>
-#include <avango/daemon/Wiimote.h>
-#include <avango/daemon/WiimoteActuator.h>
-#include <avango/daemon/TUIOInput.h>
 
-#ifdef VRPN_SUPPORT
-#include <avango/daemon/VRPNClient.h>
-#endif
+/**
+ * \file
+ * \ingroup av_daemon
+ */
+namespace TUIO {
 
-namespace
-{
-  av::Logger& logger(av::getLogger("av::daemon::Init"));
+  class TuioClient;
 }
 
-AV_TYPED_DEFINE_ABSTRACT(av::daemon::Init);
-
-/* static */ void
-av::daemon::Init::initClass()
+namespace av
 {
-  if (!isTypeInitialized())
+  namespace daemon
   {
-    av::daemon::Device::initClass();
-    av::daemon::DeviceActuator::initClass();
-    av::daemon::DeviceDaemon::initClass();
-    av::daemon::DeviceSensor::initClass();
-    av::daemon::DeviceService::initClass();
-    av::daemon::DTrack::initClass();
-    av::daemon::TUIOInput::initClass();
 
+    class TUIOInputListener;
+    /**
+     * \ingroup av_daemon
+     */
+    class AV_DAEMON_DLL TUIOInput : public Device
+    {
+      AV_BASE_DECLARE();
 
-    av::daemon::HIDInput::initClass();
-#ifndef WIN32
-    av::daemon::WacomTablet::initClass();
-    av::daemon::Wiimote::initClass();
-    av::daemon::WiimoteActuator::initClass();
-#endif
+    public:
 
-#ifdef VRPN_SUPPORT
-    av::daemon::VRPNClient::initClass();
-#endif
+      enum TUIOState {
+        ADDED,
+        ACCELERATING,
+        DECELERATING,
+        STOPPED,
+        REMOVED
+      };
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
+      /**
+       * Constructor
+       */
+      TUIOInput();
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~TUIOInput();
+
+      /**
+       * Inherited from base class, implements the initialization of this device.
+       */
+      void startDevice();
+
+      /**
+       * Inherited from base class, implements the loop in which the device is read out.
+       */
+      void readLoop();
+
+      /**
+       * Inherited from base class, implements the closing operation of this device.
+       */
+      void stopDevice();
+
+      /**
+       * Inherited from base class, returns a list of settable features.
+       */
+      const std::vector<std::string>& queryFeatures();
+
+    private:
+
+      ::boost::shared_ptr< TUIO::TuioClient > mTUIOClient;
+      ::boost::shared_ptr< TUIOInputListener > mTUIOInputListener;
+      ::std::vector< ::std::string> mRequiredFeatures;
+      size_t  mPort;
+
+      bool parseFeatures();
+    };
   }
 }
+
+#endif

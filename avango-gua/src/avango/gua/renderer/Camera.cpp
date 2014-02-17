@@ -141,7 +141,6 @@ av::gua::Camera::setRenderMaskCB(const SFString::SetValueEvent& event)
   m_guaCamera->render_mask = event.getValue();
 }
 
-
 void
 av::gua::Camera::getModeCB(const SFUInt::GetValueEvent& event)
 {

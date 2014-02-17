@@ -54,5 +54,6 @@ void init_SceneGraph()
          .def("__getitem__", &getNode)
          .def("ray_test", &rayTest1, return_value_policy<manage_new_object>())
          .def("ray_test", &rayTest2, return_value_policy<manage_new_object>())
+         .def("update_cache", &av::gua::SceneGraph::updateCache)
          ;
 }

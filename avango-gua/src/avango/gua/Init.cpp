@@ -4,6 +4,7 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
@@ -63,6 +64,7 @@ av::gua::Init::initClass()
 
         av::gua::Node::initClass();
         av::gua::TransformNode::initClass();
+        av::gua::LODNode::initClass();
         av::gua::GeometryNode::initClass();
         av::gua::VolumeNode::initClass();
         av::gua::ScreenNode::initClass();

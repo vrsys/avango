@@ -95,6 +95,7 @@ namespace av
     private:
 
       std::shared_ptr< ::gua::Node> m_guaNode;
+      ::gua::math::BoundingBox< ::gua::math::vec3> m_guaBbox;
       unsigned m_selfUserDataHandle;
       unsigned m_childrenUserDataHandle;
 

@@ -35,42 +35,41 @@ import time
 import math
 import sys
 
+from examples_common.GuaVE import GuaVE
+
 from avango import enable_logging
 # avango.enable_logging(6,"client-log.txt")
 # specify role, ip, and port
-nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|127.0.0.1|7432")
+nettrans = avango.gua.nodes.NetMatrixTransform(Name = "net", Groupname = "AVCLIENT|141.54.147.23|7432")
 
 avango.gua.load_shading_models_from("data/materials")
 avango.gua.load_materials_from("data/materials")
 
-graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-
 loader = avango.gua.nodes.GeometryLoader()
-monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
 
-eye = avango.gua.nodes.TransformNode(Name = "eye")
-eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
-
-screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
-screen.Children.value = [eye]
-
-graph.Root.value.Children.value = [nettrans, screen]
+graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+graph.Root.value.Children.value = [nettrans]
 
 # setup viewing
 #size = avango.gua.Vec2ui(1024, 768)
 size = avango.gua.Vec2ui(800, 600)
-pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
-                                                                  RightEye = "/screen/eye",
-                                                                  LeftScreen = "/screen",
-                                                                  RightScreen = "/screen",
+pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/net/{Endpt:127.0.0.2:34818:215:0}/screen/eye",
+                                                                  LeftScreen = "/net/{Endpt:127.0.0.2:34818:215:0}/screen",
                                                                   SceneGraph = "scenegraph"),
                                  Window = avango.gua.nodes.Window(Size = size,
                                                                   LeftResolution = size),
-                                 LeftResolution = size)
+                                 LeftResolution = size,
+                                 BackgroundMode = avango.gua.BackgroundMode.COLOR)
+
+pipe.Enabled.value = True
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]
 viewer.SceneGraphs.value = [graph]
+
+guaVE = GuaVE()
+guaVE.start(locals(), globals())
 
 viewer.run()

@@ -24,16 +24,5 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python2.7":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-# run daemon
-if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
-then
-    "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
-else
-    "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
-fi
-
 # run program
 cd "$DIR" && python ./simpleviewer-clnt.py
-
-# kill daemon
-kill %1

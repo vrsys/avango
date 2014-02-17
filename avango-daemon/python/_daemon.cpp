@@ -31,6 +31,7 @@
 #include <avango/daemon/DeviceActuator.h>
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/HIDInput.h>
+#include <avango/daemon/TUIOInput.h>
 #include <avango/daemon/Init.h>
 #include <avango/daemon/StationSegment.h>
 
@@ -69,9 +70,9 @@ namespace
   bool
   doesTypeExist(std::string name)
   {
-    return (av::Type::getByName(name) != av::Type::badType())? true : false; 
+    return (av::Type::getByName(name) != av::Type::badType())? true : false;
   }
-  
+
   void
   addStation(av::daemon::Device* self, int number, std::string name)
   {
@@ -92,7 +93,7 @@ namespace
   std::string getPortFeature(av::daemon::Device* self) { return self->queryFeature("port"); }
   std::string getToggleResetFeature(av::daemon::Device* self) { return self->queryFeature("toggle-reset"); }
   std::string getServerFeature(av::daemon::Device* self) { return self->queryFeature("server"); }
-  
+
   // wrapper for specialized configureFeature calls, required by .add_property
   std::string parseBoolString(std::string value)
   {
@@ -109,7 +110,7 @@ namespace
   void setPortFeature(av::daemon::Device* self, std::string value) { self->configureFeature("port", value); }
   void setToggleResetFeature(av::daemon::Device* self, std::string value) { self->configureFeature("toggle-reset", parseBoolString(value)); }
   void setServerFeature(av::daemon::Device* self, std::string value) { self->configureFeature("server", value); }
-  
+
   // set LED states
   void setLED(av::daemon::HIDInput* self, int number, int value)
   {
@@ -223,6 +224,12 @@ BOOST_PYTHON_MODULE(_daemon)
     .add_property("port", &::getPortFeature, &::setPortFeature)
     ;
 
+  class_<av::daemon::TUIOInput, av::Link<av::daemon::TUIOInput>, bases<av::daemon::Device>, boost::noncopyable >("_TUIOInputHelper",
+    "A helper class that provides some basic properties and function inherited from TUIOInput,"
+    "used to construct a concrete Python device representation.")
+    .add_property("port", &::getPortFeature, &::setPortFeature)
+    ;
+
 #ifdef VRPN_SUPPORT
   // Avango NG device: VRPNClient
   class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable >("_VRPNClientHelper",
@@ -233,7 +240,7 @@ BOOST_PYTHON_MODULE(_daemon)
 
   // wrap helper function
   def("does_type_exist", &::doesTypeExist);
-  
+
   // start the daemon
   def("run", &::run);
 }

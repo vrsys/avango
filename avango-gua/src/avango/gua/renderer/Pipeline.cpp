@@ -31,6 +31,14 @@ av::gua::Pipeline::Pipeline(::gua::Pipeline* guaPipeline)
                           boost::bind(&Pipeline::getEnabledCB, this, _1),
                           boost::bind(&Pipeline::setEnabledCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(EnableGlobalClippingPlane,
+                          boost::bind(&Pipeline::getEnableGlobalClippingPlaneCB, this, _1),
+                          boost::bind(&Pipeline::setEnableGlobalClippingPlaneCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(GlobalClippingPlane,
+                          boost::bind(&Pipeline::getGlobalClippingPlaneCB, this, _1),
+                          boost::bind(&Pipeline::setGlobalClippingPlaneCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(Window,
                           boost::bind(&Pipeline::getWindowCB, this, _1),
                           boost::bind(&Pipeline::setWindowCB, this, _1));
@@ -98,6 +106,10 @@ av::gua::Pipeline::Pipeline(::gua::Pipeline* guaPipeline)
     AV_FC_ADD_ADAPTOR_FIELD(FogColor,
                           boost::bind(&Pipeline::getFogColorCB, this, _1),
                           boost::bind(&Pipeline::setFogColorCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(BackgroundMode,
+                      boost::bind(&Pipeline::getBackgroundModeCB, this, _1),
+                      boost::bind(&Pipeline::setBackgroundModeCB, this, _1));
 
     AV_FC_ADD_ADAPTOR_FIELD(BackgroundTexture,
                           boost::bind(&Pipeline::getBackgroundTextureCB, this, _1),
@@ -252,6 +264,31 @@ void
 av::gua::Pipeline::setEnabledCB(const SFBool::SetValueEvent& event)
 {
   m_guaPipeline->config.set_enabled(event.getValue());
+}
+
+
+void
+av::gua::Pipeline::getEnableGlobalClippingPlaneCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPipeline->config.get_enable_global_clipping_plane();
+}
+
+void
+av::gua::Pipeline::setEnableGlobalClippingPlaneCB(const SFBool::SetValueEvent& event)
+{
+  m_guaPipeline->config.set_enable_global_clipping_plane(event.getValue());
+}
+
+void
+av::gua::Pipeline::getGlobalClippingPlaneCB(const SFVec4::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPipeline->config.get_global_clipping_plane();
+}
+
+void
+av::gua::Pipeline::setGlobalClippingPlaneCB(const SFVec4::SetValueEvent& event)
+{
+  m_guaPipeline->config.set_global_clipping_plane(event.getValue());
 }
 
 
@@ -468,6 +505,19 @@ av::gua::Pipeline::setFogColorCB(const SFColor::SetValueEvent& event)
 {
   m_guaPipeline->config.set_fog_color(event.getValue());
 }
+
+void
+av::gua::Pipeline::getBackgroundModeCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaPipeline->config.background_mode());
+}
+
+void
+av::gua::Pipeline::setBackgroundModeCB(const SFUInt::SetValueEvent& event)
+{
+  m_guaPipeline->config.background_mode() = static_cast< ::gua::BackgroundMode>(event.getValue());
+}
+
 
 void
 av::gua::Pipeline::getBackgroundTextureCB(const SFString::GetValueEvent& event)

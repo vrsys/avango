@@ -38,6 +38,12 @@ av::gua::SceneGraph::initClass()
     }
 }
 
+void
+av::gua::SceneGraph::updateCache() const
+{
+    m_guaSceneGraph->update_cache();
+}
+
 ::gua::SceneGraph*
 av::gua::SceneGraph::getGuaSceneGraph() const
 {

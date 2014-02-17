@@ -23,6 +23,20 @@ def init_pst_tracking():
 	device_list.append(pst)
 	print "PST Tracking started!"
 
+# functions
+def init_tuio_input():
+
+	tuio = avango.daemon.TUIOInput()
+	tuio.port = "3333" # tuio port
+
+	tuio.stations[0] = avango.daemon.Station('gua-finger0')
+	tuio.stations[1] = avango.daemon.Station('gua-finger1')
+	tuio.stations[2] = avango.daemon.Station('gua-finger2')
+	tuio.stations[3] = avango.daemon.Station('gua-finger3')
+
+	device_list.append(tuio)
+	print "TUIO Input started!"
+
 
 
 def init_mouse():
@@ -133,6 +147,7 @@ def init_spheron():
 device_list = []
 
 init_pst_tracking()
+init_tuio_input()
 init_mouse()
 init_keyboard()
 init_spheron()

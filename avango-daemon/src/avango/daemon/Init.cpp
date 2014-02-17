@@ -38,6 +38,7 @@
 #include <avango/daemon/WacomTablet.h>
 #include <avango/daemon/Wiimote.h>
 #include <avango/daemon/WiimoteActuator.h>
+#include <avango/daemon/TUIOInput.h>
 
 #ifdef VRPN_SUPPORT
 #include <avango/daemon/VRPNClient.h>
@@ -61,6 +62,7 @@ av::daemon::Init::initClass()
     av::daemon::DeviceSensor::initClass();
     av::daemon::DeviceService::initClass();
     av::daemon::DTrack::initClass();
+    av::daemon::TUIOInput::initClass();
 
 
     av::daemon::HIDInput::initClass();

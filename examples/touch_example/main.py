@@ -4,6 +4,7 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
+from lib.voronoi_helpers import *
 from examples_common.GuaVE import GuaVE
 from examples_common.device import TouchDevice
 from examples_common.device import TouchCursor
@@ -65,7 +66,7 @@ def start():
   add_fingers(20, graph)
 
   # setup viewing
-  width = 1920*2
+  width = 1920
   size = avango.gua.Vec2ui(width, width * 9 /16)
   pipe = avango.gua.nodes.Pipeline(
     Camera = avango.gua.nodes.Camera(
@@ -86,6 +87,13 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   viewer.Pipelines.value = [pipe]
   viewer.SceneGraphs.value = [graph]
+
+  print get_cell_bbox(
+    min             = avango.gua.Vec2(0, 0),
+    max             = avango.gua.Vec2(16, 9),
+    centroid        = avango.gua.Vec2(10, 10),
+    other_centroids = [avango.gua.Vec2(21, 10), avango.gua.Vec2(31, 10), avango.gua.Vec2(10, 20)]
+  )
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

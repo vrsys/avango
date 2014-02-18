@@ -46,6 +46,10 @@ include(find_json)
 include(find_python)
 include(find_schism)
 
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include(find_zmq)
+ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
+
 if (UNIX)
     list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
 endif (UNIX)
@@ -116,10 +120,6 @@ SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Instal
 SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
 SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include(find_zmq)
-ENDIF(AVANGO_DISTRIBUTION_SUPPORT)
 
 ################################################################
 # Create build flags

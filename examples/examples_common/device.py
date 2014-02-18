@@ -57,7 +57,7 @@ class TouchDevice(avango.script.Script):
   def __init__(self):
     self.super(TouchDevice).__init__()
 
-    for i in range(0, 1):
+    for i in range(0, 20):
       self.TouchCursors.append(TouchCursor(CursorID = i))
 
 

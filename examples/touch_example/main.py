@@ -4,7 +4,7 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
-from lib.voronoi_helpers import *
+from modules.voronoi_helpers import *
 from examples_common.GuaVE import GuaVE
 from examples_common.device import TouchDevice
 from examples_common.device import TouchCursor

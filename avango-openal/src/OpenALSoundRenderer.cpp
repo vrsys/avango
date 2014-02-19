@@ -120,7 +120,7 @@ av::sound::openal::OpenALSoundRenderer::OpenALSoundRenderer()
     mDeviceName("none"),
     mContext(0)
 {
-  mPosition.makeIdentity();
+  mPosition = ::gua::math::mat4::identity();
 
   AV_FC_ADD_FIELD(Device, mDeviceName);
 
@@ -269,23 +269,18 @@ av::sound::openal::OpenALSoundRenderer::createLocalSource()
 void
 av::sound::openal::OpenALSoundRenderer::setListenerPosition(const ::gua::math::mat4& position)
 {
-  ::gua::math::vec3 translation;
-  ::gua::math::quat rotation;
-  ::gua::math::vec3 scale;
-  ::gua::math::quat scaleOrientation;
+  ::gua::math::quat rotation = ::scm::math::quat<float>::from_matrix(position);
+  ::gua::math::vec3 translation = ::gua::math::get_translation(position);
 
-  position.decompose(translation, rotation, scale, scaleOrientation);
-
-  ::alListenerfv(AL_POSITION, translation.ptr());
-  ::gua::math::mat4 rotationMat;
-  rotation.get(rotationMat);
+  ::alListenerfv(AL_POSITION, translation.data_array);
+  ::gua::math::mat4 rotationMat = rotation.to_matrix();
 
   ::gua::math::vec3 atAndUpVec[2];
 
   atAndUpVec[0] = rotationMat * ::gua::math::vec3(0.0f, 0.0f, -1.0f);
   atAndUpVec[1] = rotationMat * ::gua::math::vec3(0.0f, 1.0f, 0.0f);
 
-  ::alListenerfv(AL_ORIENTATION, atAndUpVec[0].ptr());
+  ::alListenerfv(AL_ORIENTATION, atAndUpVec[0].data_array);
 
   mPosition = position;
 }
@@ -332,8 +327,9 @@ void
 av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setWorldTransform(const ::gua::math::mat4& worldMatrix)
 {
 
-  ::gua::math::vec3 position = worldMatrix.getTrans();
-  ::alSourcefv(mSource, AL_POSITION, position.ptr());
+  ::gua::math::vec3 position = ::gua::math::get_translation(worldMatrix);
+  //::alSourcefv(mSource, AL_POSITION, position.ptr());
+  ::alSourcefv(mSource, AL_POSITION, position.data_array);
 }
 
 void
@@ -404,7 +400,8 @@ av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setURL(const std::str
 void
 av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setVelocity(const ::gua::math::vec3& velocity)
 {
-  ::alSourcefv(mSource, AL_VELOCITY, velocity.ptr());
+  //::alSourcefv(mSource, AL_VELOCITY, velocity.ptr());
+  ::alSourcefv(mSource, AL_VELOCITY, static_cast<const ALfloat*>(velocity.data_array));
 }
 
 void

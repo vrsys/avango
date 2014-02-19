@@ -57,9 +57,12 @@ ENDIF (MSVC)
 
 set_target_properties(avango_openal PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 
+SET(_AVANGO_OPENAL_LIBRARIES ${LIBRARIES})
+LIST(APPEND _AVANGO_OPENAL_LIBRARIES openal alut vorbisfile)
+
 TARGET_LINK_LIBRARIES( avango_openal
-  debug avango_gua avango_script avango ${LIBRARIES}
-  optimized avango_gua avango_script avango ${LIBRARIES})
+  debug avango_gua avango_script avango ${_AVANGO_OPENAL_LIBRARIES}
+  optimized avango_gua avango_script avango ${_AVANGO_OPENAL_LIBRARIES})
 
 ###############################################################################
 # python module

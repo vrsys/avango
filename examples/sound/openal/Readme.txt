@@ -1,5 +1,5 @@
 Create a link:
-ln -s ../simple_example/data data
+ln -s ../../simple_example/data data
 
 Start the app.
 

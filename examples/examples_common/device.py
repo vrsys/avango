@@ -27,6 +27,9 @@ class TouchCursor(avango.script.Script):
 
     self.__device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
 
+    self.PosX.value = -1
+    self.PosY.value = -1
+
     self.always_evaluate(True)
 
   @field_has_changed(CursorID)

@@ -1,0 +1,38 @@
+
+{
+	"final_shading_stage" : 
+	{
+		"body" : "gua_color = texture2D(in_texture, gua_get_quad_coords()).rgb * shade;\n",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : 
+		{
+			"in_texture" : "sampler2D",
+			"shade" : "vec3"
+		}
+	},
+	"gbuffer_fragment_stage" : 
+	{
+		"body" : "gua_normal = my_normal;\n",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : null
+	},
+	"gbuffer_vertex_stage" : 
+	{
+		"body" : "gua_position = gua_world_position;\nmy_normal = gua_world_normal;\n",
+		"functions" : "",
+		"outputs" : 
+		{
+			"my_normal" : "vec3"
+		},
+		"uniforms" : null
+	},
+	"lbuffer_stage" : 
+	{
+		"body" : "",
+		"functions" : "",
+		"outputs" : null,
+		"uniforms" : null
+	}
+}

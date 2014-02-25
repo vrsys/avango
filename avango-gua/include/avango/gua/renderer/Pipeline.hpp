@@ -30,9 +30,9 @@ namespace av
     public:
 
       enum BackgroundModeEnum {
-        COLOR = ::gua::BackgroundMode::COLOR,
-        SKYMAP_TEXTURE = ::gua::BackgroundMode::SKYMAP_TEXTURE,
-        QUAD_TEXTURE = ::gua::BackgroundMode::QUAD_TEXTURE
+        COLOR = ::gua::Pipeline::BackgroundMode::COLOR,
+        SKYMAP_TEXTURE = ::gua::Pipeline::BackgroundMode::SKYMAP_TEXTURE,
+        QUAD_TEXTURE = ::gua::Pipeline::BackgroundMode::QUAD_TEXTURE
       };
 
       /**

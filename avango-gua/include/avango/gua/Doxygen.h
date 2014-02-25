@@ -1,37 +1,44 @@
-// -*- Mode:C++ -*- 
+// -*- Mode:C++ -*-
 
 /************************************************************************\
 *                                                                        *
-* This file is part of Avango.                                           *
+* This file is part of AVANGO.                                           *
 *                                                                        *
-* Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       *
+* Copyright 1997 - 2010 Fraunhofer-Gesellschaft zur Foerderung der       *
 * angewandten Forschung (FhG), Munich, Germany.                          *
 *                                                                        *
-* Avango is free software: you can redistribute it and/or modify         *
+* AVANGO is free software: you can redistribute it and/or modify         *
 * it under the terms of the GNU Lesser General Public License as         *
 * published by the Free Software Foundation, version 3.                  *
 *                                                                        *
-* Avango is distributed in the hope that it will be useful,              *
+* AVANGO is distributed in the hope that it will be useful,              *
 * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           *
 * GNU General Public License for more details.                           *
 *                                                                        *
 * You should have received a copy of the GNU Lesser General Public       *
-* License along with Avango. If not, see <http://www.gnu.org/licenses/>. *
-*                                                                        *
-* Avango is a trademark owned by FhG.                                    *
+* License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. *
 *                                                                        *
 \************************************************************************/
 
+#if !defined(AVANGO_GUA_DOXYGEN_H)
+#define AVANGO_GUA_DOXYGEN_H
+
 /**
+ * \defgroup av_gua AVANGO guacamole Library
+ */
 
-\mainpage
+/**
+ * \file
+ * \ingroup av_gua
+ */
 
-<a target="_blank" href="http://www.avango.org">AVANGO</a> is a free software framework designed for interactive, distributed applications. It supports a large range of displays from standard desktop applications to large-scale immersive Virtual Reality installations. Its features include:
+/**
+ * \namespace av::gua
+ * Avango guacamole Library
+ *
+ * \ingroup av_gua
+ */
 
-- Support for distribution across multiple computers in a straightforward way
-- Integrated modules for running Virtual Reality displays (like device support, 3D menus and viewing setup)
-- Uses OpenSceneGraph and Python
-- Licensed under the LGPL 
+#endif // #if !defined(AVANGO_GUA_DOXYGEN_H)
 
-*/

@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$db/d13/classav_1_1logging_1_1_console_appender.html" title="av::logging::ConsoleAppender" alt="" coords="5,83,200,112"/>
+<area shape="rect" id="node5" href="$d0/d4f/classav_1_1logging_1_1_file_appender.html" title="av::logging::FileAppender" alt="" coords="224,83,392,112"/>
+<area shape="rect" id="node7" href="$d1/d00/classav_1_1logging_1_1_stream_appender.html" title="av::logging::StreamAppender" alt="" coords="416,83,605,112"/>
+</map>

@@ -1,0 +1,26 @@
+var class_t_u_i_o_1_1_tuio_point =
+[
+    [ "TuioPoint", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a8611528cf41b797c51d6a9bf324157a5", null ],
+    [ "TuioPoint", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a532785ad9572b0e04a0030eac0de99c0", null ],
+    [ "TuioPoint", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a816f61587a26fcc44aaa97f587599737", null ],
+    [ "~TuioPoint", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#acbfa3e1e22467fb1fb767dc5c0863057", null ],
+    [ "getAngle", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ad4ca45ad0fdccc6f55b5af79189e7872", null ],
+    [ "getAngle", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ac2598b8fe91f7417069a1c0e294bf6e4", null ],
+    [ "getAngleDegrees", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a96316f957c35019a21b0a1e4cc749ed7", null ],
+    [ "getAngleDegrees", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#af1ba5c843255cd17a1c2f4dc38cb519b", null ],
+    [ "getDistance", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ab73aa4898ec2db72bd64b029473a8069", null ],
+    [ "getDistance", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a2d1a0aa81271bbd2b1a43b0439706f4d", null ],
+    [ "getScreenX", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#aad89a76563d49f91412e7795ea7b02d0", null ],
+    [ "getScreenY", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#aa03a2aae797ad03d5ce272b80c4204bd", null ],
+    [ "getStartTime", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a8fc2e5a2536990cce218c8252b757aa0", null ],
+    [ "getTuioTime", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a0ad5b8a78622b5b2a92c8d1bb165cd45", null ],
+    [ "getX", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ad5bb767c0a7b151704b59a38793345f0", null ],
+    [ "getY", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a6c591de33c3c0f0d5e8df159ce643b7a", null ],
+    [ "update", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#aa1cc8711747080dd00eb50577d73d038", null ],
+    [ "update", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a469e531b2847c58aa77486c0ccc15ce6", null ],
+    [ "update", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ad6c108b1facf3972af52716f49b4aa3e", null ],
+    [ "currentTime", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ad04658d52ab78e3e0ddc21584ceaa2ff", null ],
+    [ "startTime", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#ac69cfb9784d5fdc966fba57459d1d8e5", null ],
+    [ "xpos", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a0021f8dfddd05f2a17e713a94f5457e6", null ],
+    [ "ypos", "d5/d42/class_t_u_i_o_1_1_tuio_point.html#a89a038775a681166168735dbc95c7779", null ]
+];

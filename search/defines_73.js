@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['sw_5fcamera_5flens_5fcover',['SW_CAMERA_LENS_COVER',['../d4/dc3/_linux_input_8win_8h.html#a4133e867c9e3b97d28045aca7f78034c',1,'LinuxInput.win.h']]],
+  ['sw_5fcnt',['SW_CNT',['../d4/dc3/_linux_input_8win_8h.html#a9dd3269dbcaaf8167fee428e96cc2714',1,'LinuxInput.win.h']]],
+  ['sw_5fdock',['SW_DOCK',['../d4/dc3/_linux_input_8win_8h.html#a9d6cc13716aae1d2454aaa9b60eeaa91',1,'LinuxInput.win.h']]],
+  ['sw_5ffront_5fproximity',['SW_FRONT_PROXIMITY',['../d4/dc3/_linux_input_8win_8h.html#ae4b945eb8ae198f9c8bc51bc39859535',1,'LinuxInput.win.h']]],
+  ['sw_5fheadphone_5finsert',['SW_HEADPHONE_INSERT',['../d4/dc3/_linux_input_8win_8h.html#a8c55895d723e72c6b6d37e6bd7b59cd4',1,'LinuxInput.win.h']]],
+  ['sw_5fjack_5fphysical_5finsert',['SW_JACK_PHYSICAL_INSERT',['../d4/dc3/_linux_input_8win_8h.html#ae1a9a88f0deeffe7223b2121affef419',1,'LinuxInput.win.h']]],
+  ['sw_5fkeypad_5fslide',['SW_KEYPAD_SLIDE',['../d4/dc3/_linux_input_8win_8h.html#a756e08dd8c6387f528c53f15d3f38b70',1,'LinuxInput.win.h']]],
+  ['sw_5flid',['SW_LID',['../d4/dc3/_linux_input_8win_8h.html#ac52871cb207123413f893b1665a1485a',1,'LinuxInput.win.h']]],
+  ['sw_5flinein_5finsert',['SW_LINEIN_INSERT',['../d4/dc3/_linux_input_8win_8h.html#abe56ace5e6fcd3aac091df78302f9d75',1,'LinuxInput.win.h']]],
+  ['sw_5flineout_5finsert',['SW_LINEOUT_INSERT',['../d4/dc3/_linux_input_8win_8h.html#a666209b4e88336d3806b6fe5a9a337cb',1,'LinuxInput.win.h']]],
+  ['sw_5fmicrophone_5finsert',['SW_MICROPHONE_INSERT',['../d4/dc3/_linux_input_8win_8h.html#a62c7d7c336561e275945c1babb7de9af',1,'LinuxInput.win.h']]],
+  ['sw_5fradio',['SW_RADIO',['../d4/dc3/_linux_input_8win_8h.html#a8aac3a56ff1a4f8474e902cd95eb24a6',1,'LinuxInput.win.h']]],
+  ['sw_5frfkill_5fall',['SW_RFKILL_ALL',['../d4/dc3/_linux_input_8win_8h.html#a9ea94c1c97996afaaeeb89326c2b1ff1',1,'LinuxInput.win.h']]],
+  ['sw_5frotate_5flock',['SW_ROTATE_LOCK',['../d4/dc3/_linux_input_8win_8h.html#acae12e741154e34a69140774f53396dd',1,'LinuxInput.win.h']]],
+  ['sw_5ftablet_5fmode',['SW_TABLET_MODE',['../d4/dc3/_linux_input_8win_8h.html#a9e3c6c25074df14744dcd6636089e470',1,'LinuxInput.win.h']]],
+  ['sw_5fvideoout_5finsert',['SW_VIDEOOUT_INSERT',['../d4/dc3/_linux_input_8win_8h.html#aa2934cf8ba0ddcd86f4dc3e4de4bd4a7',1,'LinuxInput.win.h']]]
+];

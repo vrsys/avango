@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$d1/d21/classosc_1_1_exception.html" title="osc::Exception" alt="" coords="5,219,115,248"/>
+<area shape="rect" id="node3" href="$d9/def/classosc_1_1_bundle_not_in_progress_exception.html" title="osc::BundleNotInProgressException" alt="" coords="171,5,403,35"/>
+<area shape="rect" id="node5" href="$d0/d92/classosc_1_1_excess_argument_exception.html" title="osc::ExcessArgumentException" alt="" coords="183,59,391,88"/>
+<area shape="rect" id="node7" href="$d0/d31/classosc_1_1_malformed_bundle_exception.html" title="osc::MalformedBundleException" alt="" coords="181,112,392,141"/>
+<area shape="rect" id="node9" href="$d1/d12/classosc_1_1_malformed_message_exception.html" title="osc::MalformedMessageException" alt="" coords="176,165,397,195"/>
+<area shape="rect" id="node11" href="$dc/dfc/classosc_1_1_message_in_progress_exception.html" title="osc::MessageInProgressException" alt="" coords="175,219,399,248"/>
+<area shape="rect" id="node13" href="$d3/d76/classosc_1_1_message_not_in_progress_exception.html" title="osc::MessageNotInProgressException" alt="" coords="164,272,409,301"/>
+<area shape="rect" id="node15" href="$da/d4d/classosc_1_1_missing_argument_exception.html" title="osc::MissingArgumentException" alt="" coords="181,325,392,355"/>
+<area shape="rect" id="node17" href="$d2/db6/classosc_1_1_out_of_buffer_memory_exception.html" title="osc::OutOfBufferMemoryException" alt="" coords="173,379,400,408"/>
+<area shape="rect" id="node19" href="$d7/dc1/classosc_1_1_wrong_argument_type_exception.html" title="osc::WrongArgumentTypeException" alt="" coords="171,432,403,461"/>
+</map>

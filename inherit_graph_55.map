@@ -1,0 +1,4 @@
+<map id="G" name="G">
+<area shape="rect" id="node1" href="$d4/d4c/classav_1_1sound_1_1_sound_source_1_1_local_source.html" title="av::sound::SoundSource::LocalSource" alt="" coords="5,5,251,35"/>
+<area shape="rect" id="node3" href="$d8/dc3/classav_1_1sound_1_1openal_1_1_open_a_l_sound_renderer_1_1_open_a_l_local_source.html" title="av::sound::openal::OpenALSoundRenderer::OpenALLocalSource" alt="" coords="299,5,696,35"/>
+</map>

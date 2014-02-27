@@ -23,6 +23,11 @@ class TapProcessor(GestureProcessor):
 
   def __init__(self):
     self.super(TapProcessor).__init__()
+    self.finger_taps = []
+    self.time_since_last_process = 0
 
   def process (self, gesture):
+    for finger in gesture.Fingers:
+      pass
+
     self.super(GestureProcessor).process(gesture)

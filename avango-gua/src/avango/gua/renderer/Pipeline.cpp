@@ -516,7 +516,7 @@ av::gua::Pipeline::getBackgroundModeCB(const SFUInt::GetValueEvent& event)
 void
 av::gua::Pipeline::setBackgroundModeCB(const SFUInt::SetValueEvent& event)
 {
-  m_guaPipeline->config.background_mode() = static_cast< ::gua::BackgroundMode>(event.getValue());
+  m_guaPipeline->config.background_mode() = static_cast< ::gua::Pipeline::BackgroundMode>(event.getValue());
 }
 
 

@@ -5,8 +5,8 @@ SET(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
 PROJECT(AVANGO CXX)
 
 # version number
-set(AVANGO_MAJOR 1)
-set(AVANGO_MINOR 0)
+set(AVANGO_MAJOR 2)
+set(AVANGO_MINOR 9)
 set(AVANGO_PATCH 0)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
@@ -45,6 +45,10 @@ include(find_bullet)
 include(find_json)
 include(find_python)
 include(find_schism)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include(find_zmq)
+ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (UNIX)
     list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
@@ -100,8 +104,8 @@ ENDIF(UNIX)
 ################################################################
 # Avango Configuration
 ################################################################
-SET (AVANGO_VERSION_MAJOR "1" CACHE STRING "Major version of AvangoNG.")
-SET (AVANGO_VERSION_MINOR "90" CACHE STRING "Minor version of AvangoNG.")
+SET (AVANGO_VERSION_MAJOR "2" CACHE STRING "Major version of AvangoNG.")
+SET (AVANGO_VERSION_MINOR "9" CACHE STRING "Minor version of AvangoNG.")
 SET (AVANGO_VERSION_MAINT "0" CACHE STRING "Maintenance version of AvangoNG.")
 
 SET (AVANGO_DEBUG "false" CACHE BOOL "Set to enable avango debugging.")
@@ -116,10 +120,6 @@ SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Instal
 SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
 SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include(find_zmq)
-ENDIF(AVANGO_DISTRIBUTION_SUPPORT)
 
 ################################################################
 # Create build flags

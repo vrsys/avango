@@ -21,13 +21,17 @@
 #                                                                        #
 ##########################################################################
 
-import avango.osg.viewer
+import avango
+import avango.gua
+import avango.daemon
+import avango.script
+
 from math import *
 
 class User(avango.script.Script):
     Active = avango.SFBool()
-    Matrix = avango.osg.SFMatrix()
-    ViewerMatrix = avango.osg.SFMatrix()
+    Matrix = avango.gua.SFMatrix4()
+    ViewerMatrix = avango.gua.SFMatrix4()
 
     def __init__(self):
         self.super(User).__init__()
@@ -35,7 +39,7 @@ class User(avango.script.Script):
 
 class Device(avango.script.Script):
     Active = avango.SFBool()
-    Matrix = avango.osg.SFMatrix()
+    Matrix = avango.gua.SFMatrix4()
     Button1 = avango.SFBool()
     Button2 = avango.SFBool()
     Button3 = avango.SFBool()
@@ -199,13 +203,13 @@ class KeyboardDevice(avango.script.Script):
         
 
 class MouseDevice(avango.script.Script):
-    MouseTransform = avango.osg.SFMatrix()
-    MouseViewerTransform = avango.osg.SFMatrix()
-    MouseNearTransform = avango.osg.SFMatrix()
+    MouseTransform = avango.gua.SFMatrix4()
+    MouseViewerTransform = avango.gua.SFMatrix4()
+    MouseNearTransform = avango.gua.SFMatrix4()
     
-    MousePosNorm = avango.osg.SFVec2()
-    MousePos = avango.osg.SFVec2()
-    MouseMovementNorm = avango.osg.SFVec2()
+    MousePosNorm = avango.gua.SFVec2()
+    MousePos = avango.gua.SFVec2()
+    MouseMovementNorm = avango.gua.SFVec2()
     
     MouseButtonLeft = avango.SFBool()
     MouseButtonRight = avango.SFBool()
@@ -262,7 +266,7 @@ class SpaceMouseDevice(avango.script.Script):
     TranslationScale = avango.SFFloat()
     RotationScale = avango.SFFloat()
 
-    MatrixOut = avango.osg.SFMatrix()
+    MatrixOut = avango.gua.SFMatrix4()
     Button0 = avango.SFBool()
     Button1 = avango.SFBool()
     Button2 = avango.SFBool()
@@ -288,19 +292,19 @@ class SpaceMouseDevice(avango.script.Script):
         trans_x = values.SensorAbsX + values.SensorRelX/500.
         trans_y = values.SensorAbsY - values.SensorRelZ/500.
         trans_z = values.SensorAbsZ + values.SensorRelY/500.
-        translation = avango.osg.Vec3(trans_x, trans_y, trans_z)
+        translation = avango.gua.Vec3(trans_x, trans_y, trans_z)
         rot_x = values.SensorAbsRX + values.SensorRelRX/500.
         rot_y = values.SensorAbsRY - values.SensorRelRZ/500.
         rot_z = values.SensorAbsRZ + values.SensorRelRY/500.
-        rotation = avango.osg.Vec3(rot_x, rot_y, rot_z)
+        rotation = avango.gua.Vec3(rot_x, rot_y, rot_z)
 
         translation *= time_delta * values.TranslationScale
         rotation *= time_delta * values.RotationScale
 
-        rot_mat_x = avango.osg.make_rot_mat(rotation.x, 1., 0., 0.)
-        rot_mat_y = avango.osg.make_rot_mat(rotation.y, 0., 1., 0.)
-        rot_mat_z = avango.osg.make_rot_mat(rotation.z, 0., 0., 1.)
-        values.MatrixOut = rot_mat_x * rot_mat_y * rot_mat_z * avango.osg.make_trans_mat(translation)
+        rot_mat_x = avango.gua.make_rot_mat(rotation.x, 1., 0., 0.)
+        rot_mat_y = avango.gua.make_rot_mat(rotation.y, 0., 1., 0.)
+        rot_mat_z = avango.gua.make_rot_mat(rotation.z, 0., 0., 1.)
+        values.MatrixOut = rot_mat_x * rot_mat_y * rot_mat_z * avango.gua.make_trans_mat(translation)
 
         values.Button0 = values.SensorBtnA0 | values.SensorBtnB0
         values.Button1 = values.SensorBtnA1 | values.SensorBtnB1
@@ -333,7 +337,7 @@ class WiimoteDevice(avango.script.Script):
     LED2 = avango.SFBool()
     LED3 = avango.SFBool()
 
-    Matrix = avango.osg.SFMatrix()
+    Matrix = avango.gua.SFMatrix4()
 
     def __init__(self):
         self.super(WiimoteDevice).__init__()
@@ -395,8 +399,8 @@ class WiimoteDevice(avango.script.Script):
 class GamePadDevice(avango.script.Script):
     TimeIn = avango.SFFloat()
     
-    CursorPad = avango.osg.SFVec2()
-    Stick = avango.osg.SFVec2()
+    CursorPad = avango.gua.SFVec2()
+    Stick = avango.gua.SFVec2()
     
     Button1 = avango.SFBool()
     Button2 = avango.SFBool()
@@ -460,12 +464,12 @@ class GamePadDevice(avango.script.Script):
         trans_x = values.SensorAbsX# + values.SensorRelX
         trans_y = values.SensorAbsY# - values.SensorRelZ
 
-        translation = avango.osg.Vec2(trans_x, -trans_y)
+        translation = avango.gua.Vec2(trans_x, -trans_y)
        
         stick_trans_x = values.SensorAbsZ
         stick_trans_y = values.SensorAbsRZ
             
-        stick_trans = avango.osg.Vec2(stick_trans_x, stick_trans_y)
+        stick_trans = avango.gua.Vec2(stick_trans_x, stick_trans_y)
     
         translation *= time_delta * values.TranslationScale       
         stick_trans *= time_delta * values.TranslationScale

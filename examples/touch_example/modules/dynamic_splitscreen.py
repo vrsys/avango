@@ -22,10 +22,10 @@ class FingerUpdater(avango.script.Script):
     enabled = self.Cursor.PosX.value > 0
 
     if (self.FingerEnabled.value != enabled):
-      print enabled
       self.FingerEnabled.value = enabled
 
       if (self.FingerEnabled.value):
+        print self.Cursor.State.value
         self.FingerGroupNames.value = [""]
       else:
         self.FingerGroupNames.value = ["invisible"]

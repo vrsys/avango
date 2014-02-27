@@ -14,6 +14,6 @@ def get_closest(target, centroids):
       dist = new_dist
       closest = i
 
-  return closest
+  return closest, dist
 
 

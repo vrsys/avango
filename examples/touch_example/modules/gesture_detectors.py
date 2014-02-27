@@ -76,8 +76,8 @@ class DoubleTapDetector(avango.script.Script):
           if self.__timer.Time.value - tap[0] <= self.DoubleTapTimeThreshold.value and \
              (detector.TapPosition.value - tap[1]).length() <= self.DoubleTapDistanceThreshold.value:
 
-             self.DoubleTapPositions.value.append((detector.TapPosition.value + tap[1])/2.0)
-             detector.reset()
+            self.DoubleTapPositions.value.append((detector.TapPosition.value + tap[1])/2.0)
+            detector.reset()
 
     for detector in self.__tap_detectors:
       if detector.TapDetected.value == True:

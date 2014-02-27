@@ -138,7 +138,9 @@ def start():
   #add_split_screen(split_screens, avango.gua.Vec2(0.3, 0.3))
 
   #setup viewer
-  viewer = avango.gua.nodes.Viewer()
+  viewer = avango.gua.nodes.Viewer(
+    DesiredFPS = 50
+  )
   viewer.Pipelines.value = [split_screens.PipelineOut.value]
   viewer.SceneGraphs.value = [split_screens.GraphOut.value, graph]
 

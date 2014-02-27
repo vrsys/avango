@@ -19,13 +19,12 @@ class FingerUpdater(avango.script.Script):
   def evaluate(self):
     self.MatrixOut.value = avango.gua.make_trans_mat((self.Cursor.PosX.value-0.5)*16, 0, (self.Cursor.PosY.value-0.5)*9) * avango.gua.make_scale_mat(20)
 
-    enabled = self.Cursor.PosX.value > 0
+    enabled = self.Cursor.State.value != 4
 
     if (self.FingerEnabled.value != enabled):
       self.FingerEnabled.value = enabled
 
       if (self.FingerEnabled.value):
-        print self.Cursor.State.value
         self.FingerGroupNames.value = [""]
       else:
         self.FingerGroupNames.value = ["invisible"]

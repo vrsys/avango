@@ -44,7 +44,6 @@ class TouchHandler(avango.script.Script):
 
         new_pos = position - 0.5
         closest_screen, distance = self.__get_clostes_screen(new_pos)
-
         if distance > 0.1:
           camera = closest_screen.Pipe.value.Camera.value
           self.SplitScreens.add_split_screen(camera, new_pos)
@@ -68,12 +67,13 @@ class TouchHandler(avango.script.Script):
         elif self.__last_cursor_states[i] != 4 and \
              self.__touch_device.TouchCursors[i].State.value == 4:
 
-          self.__dragged_split_screens.remove(self.__dragged_split_screens[i])
+          self.__dragged_split_screens[i] = (None, None)
 
         self.__last_cursor_states[i] = self.__touch_device.TouchCursors[i].State.value
 
       for pair in self.__dragged_split_screens:
-        pair[0].Location.value =  avango.gua.Vec2(pair[1].PosX.value, pair[1].PosY.value) - 0.5
+        if pair[0]:
+          pair[0].Location.value =  avango.gua.Vec2(pair[1].PosX.value, pair[1].PosY.value) - 0.5
 
   def __get_clostes_screen(self, position):
     current_split_locations = []

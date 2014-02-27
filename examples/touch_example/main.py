@@ -6,6 +6,7 @@ from avango.script import field_has_changed
 import avango.gua
 from modules.voronoi_helpers import *
 from modules.dynamic_splitscreen import *
+from modules.gesture_detectors import *
 from examples_common.GuaVE import GuaVE
 
 width = 1920
@@ -14,6 +15,22 @@ size = avango.gua.Vec2ui(width, width * 9 /16)
 CUBE_COUNT_X = 10
 CUBE_COUNT_Y = 3
 CUBE_COUNT_Z = 1
+
+class TouchTest(avango.script.Script):
+
+  def __init__(self):
+    self.super(TouchTest).__init__()
+    self.always_evaluate(True)
+    self.__touch_device = TouchDevice()
+    self.__double_tap_detector = DoubleTapDetector()
+
+    for cursor in self.__touch_device.TouchCursors:
+      self.__double_tap_detector.add_cursor(cursor)
+
+  # def evaluate(self):
+  #   if len(self.__double_tap_detector.DoubleTapPositions.value) > 0:
+  #     print self.__double_tap_detector.DoubleTapPositions.value
+
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -97,6 +114,8 @@ def start():
   split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
   split_screens.add_split_screen(camera, avango.gua.Vec2(0.5, 0.5))
   split_screens.add_split_screen(camera, avango.gua.Vec2(-0.5, -0.5))
+
+  touch_test = TouchTest()
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()

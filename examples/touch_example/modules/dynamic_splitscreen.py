@@ -4,36 +4,6 @@ from avango.script import field_has_changed
 from examples_common.device import TouchDevice
 from examples_common.device import TouchCursor
 
-# class FingerUpdater(avango.script.Script):
-#   Cursor = TouchCursor()
-#   MatrixOut = avango.gua.SFMatrix4()
-#   FingerEnabled = avango.SFBool()
-#   FingerGroupNames = avango.MFString()
-
-#   def __init__(self):
-#     self.super(FingerUpdater).__init__()
-#     self.always_evaluate(True)
-
-#     self.FingerGroupNames.value = ["invisible"]
-#     self.FingerEnabled.value = False
-
-#   def evaluate(self):
-#     self.MatrixOut.value = avango.gua.make_trans_mat((self.Cursor.PosX.value-0.5)*16, 0, (self.Cursor.PosY.value-0.5)*9) * avango.gua.make_scale_mat(20)
-
-#     enabled = self.Cursor.PosX.value > 0
-
-#     if (self.FingerEnabled.value != enabled):
-#       print enabled
-#       self.FingerEnabled.value = enabled
-
-#       if (self.FingerEnabled.value):
-#         self.FingerGroupNames.value = [""]
-#       else:
-#         self.FingerGroupNames.value = ["invisible"]
-
-
-
-
 class SplitScreen(avango.script.Script):
 
   Location = avango.gua.SFVec2()

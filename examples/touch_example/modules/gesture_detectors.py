@@ -23,19 +23,20 @@ class TapDetector(avango.script.Script):
     self.TapPosition.value = avango.gua.Vec2(-1.0, -1.0)
 
     self.__touch_start_time = 0
+    self.__touch_start_position = avango.gua.Vec2(-1.0, -1.0)
     self.__last_cursor_state = 4
 
   def evaluate(self):
     if self.__last_cursor_state == 4 and self.Cursor.State.value != 4:
       self.__touch_start_time = self.__timer.Time.value
+      self.__touch_start_position = avango.gua.Vec2(self.Cursor.PosX.value,
+                                                    self.Cursor.PosY.value)
 
     elif self.__last_cursor_state != 4 and self.Cursor.State.value == 4:
       if self.__timer.Time.value - self.__touch_start_time <= self.TapTimeThreshold.value:
 
-        print "TAP!"
         self.TapDetected.value = True
-        self.TapPosition.value = avango.gua.Vec2(self.Cursor.PosX.value,
-                                                 self.Cursor.PosY.value)
+        self.TapPosition.value = self.__touch_start_position
 
     self.__last_cursor_state = self.Cursor.State.value
 
@@ -63,20 +64,20 @@ class DoubleTapDetector(avango.script.Script):
 
   def add_cursor(self, touch_cursor):
     self.__cursors.append(touch_cursor)
-    self.__tap_detectors.append(TapDetector(Cursor=touch_cursor))
-    print "append"
+    tap_detector = TapDetector()
+    tap_detector.Cursor = touch_cursor
+    self.__tap_detectors.append(tap_detector)
 
   def evaluate(self):
+
     for tap in self.__first_taps:
       for detector in self.__tap_detectors:
         if detector.TapDetected.value == True:
           if self.__timer.Time.value - tap[0] <= self.DoubleTapTimeThreshold.value and \
              (detector.TapPosition.value - tap[1]).length() <= self.DoubleTapDistanceThreshold.value:
 
-             DoubleTapPositions.value.append((detector.TapPosition.value + tap[1])/2.0)
+             self.DoubleTapPositions.value.append((detector.TapPosition.value + tap[1])/2.0)
              detector.reset()
-             print "DOUBLE TAP!"
-
 
     for detector in self.__tap_detectors:
       if detector.TapDetected.value == True:

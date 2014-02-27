@@ -8,12 +8,12 @@ from modules.voronoi_helpers import *
 from modules.dynamic_splitscreen import *
 from examples_common.GuaVE import GuaVE
 
-width = 1920*2
+width = 1920
 size = avango.gua.Vec2ui(width, width * 9 /16)
 
 CUBE_COUNT_X = 10
 CUBE_COUNT_Y = 3
-CUBE_COUNT_Z = 10
+CUBE_COUNT_Z = 1
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -23,33 +23,13 @@ class TimedRotate(avango.script.Script):
   def update(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
-
-def create_pipeline(id, graph):
-  eye = avango.gua.nodes.TransformNode(Name = "eye")
-  eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.8)
-
-  screen = avango.gua.nodes.ScreenNode(
-    Name = "screen" + str(id),
-    Width = 1.6,
-    Height = 0.9,
-    Transform = avango.gua.make_trans_mat(id*0.2, 0, 10) * avango.gua.make_rot_mat(0, 1, 0, 0)
-  )
-  screen.Children.value = [eye]
-
-  graph.Root.value.Children.value.append(screen)
-
-  pipe = avango.gua.nodes.Pipeline(
-    Camera = avango.gua.nodes.Camera(
-      LeftEye = "/screen" + str(id) + "/eye",
-      LeftScreen = "/screen" + str(id),
-      SceneGraph = "scenegraph"
-    ),
+def create_pipeline():
+  return avango.gua.nodes.Pipeline(
     LeftResolution = size,
     BackgroundTexture = "data/textures/checker.png",
-    BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE
+    BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE,
+    AmbientColor = avango.gua.Color(1, 1, 1)
   )
-
-  return pipe
 
 def start():
 
@@ -86,12 +66,42 @@ def start():
   # monkey_updater.TimeIn.connect_from(timer.Time)
   # monkey.Transform.connect_from(monkey_updater.MatrixOut)
 
-  proxy_graph, proxy_pipe = add_dynamic_split_screens(5, create_pipeline, graph, size)
+  eye = avango.gua.nodes.TransformNode(
+    Name = "eye",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 4)
+  )
+
+  screen = avango.gua.nodes.ScreenNode(
+    Name = "screen",
+    Width = 8,
+    Height = 4.5,
+    Transform = avango.gua.make_trans_mat(0, 0, 3),
+    Children = [eye]
+  )
+
+  graph.Root.value.Children.value.append(screen)
+
+  camera = avango.gua.nodes.Camera(
+    LeftEye = "/screen/eye",
+    LeftScreen = "/screen",
+    SceneGraph = graph.Name.value
+  )
+
+  split_screens = DynamicSplitScreens(
+    GraphIn = graph,
+    WindowSize = size
+  )
+
+  split_screens.init(5, create_pipeline)
+
+  split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
+  split_screens.add_split_screen(camera, avango.gua.Vec2(0.5, 0.5))
+  split_screens.add_split_screen(camera, avango.gua.Vec2(-0.5, -0.5))
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [proxy_pipe]
-  viewer.SceneGraphs.value = [proxy_graph, graph]
+  viewer.Pipelines.value = [split_screens.PipelineOut.value]
+  viewer.SceneGraphs.value = [split_screens.GraphOut.value, graph]
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

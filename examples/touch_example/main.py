@@ -94,9 +94,9 @@ def start():
 
   split_screens.init(5, create_pipeline)
 
-  split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
-  split_screens.add_split_screen(camera, avango.gua.Vec2(0.5, 0.5))
-  split_screens.add_split_screen(camera, avango.gua.Vec2(-0.5, -0.5))
+  s = split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
+  r = split_screens.add_split_screen(camera, avango.gua.Vec2(0.5, 0.5))
+  t = split_screens.add_split_screen(camera, avango.gua.Vec2(-0.5, -0.5))
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()

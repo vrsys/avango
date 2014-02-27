@@ -51,7 +51,7 @@ class SplitScreen(avango.script.Script):
   def init(self, pipe_id, split_id, graph, screen_size):
 
     self.__screen_size = screen_size
-    self.__proxy_sphere_size = screen_size.length()
+    self.__proxy_sphere_size = screen_size.length()*2
     self.__poi_size = 0.2
 
     loader = avango.gua.nodes.GeometryLoader()
@@ -103,7 +103,7 @@ class DynamicSplitScreens(avango.script.Script):
     self.GraphOut.value = avango.gua.nodes.SceneGraph(Name = "proxy_scenegraph")
 
     eye = avango.gua.nodes.TransformNode(Name = "eye")
-    eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, self.__screen_size.length())
+    eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, self.__screen_size.length()*2)
 
     screen = avango.gua.nodes.ScreenNode(
       Name = "screen",

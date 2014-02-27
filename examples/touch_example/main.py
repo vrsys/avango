@@ -5,36 +5,51 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 from modules.voronoi_helpers import *
+from modules.dynamic_splitscreen import *
 from examples_common.GuaVE import GuaVE
-from examples_common.device import TouchDevice
-from examples_common.device import TouchCursor
 
-class FingerUpdater(avango.script.Script):
+width = 1920*2
+size = avango.gua.Vec2ui(width, width * 9 /16)
 
-  Cursor = TouchCursor()
+CUBE_COUNT_X = 10
+CUBE_COUNT_Y = 3
+CUBE_COUNT_Z = 10
+
+class TimedRotate(avango.script.Script):
+  TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()
 
-  def __init__(self):
-    self.super(FingerUpdater).__init__()
-    self.always_evaluate(True)
-
-  def evaluate(self):
-    self.MatrixOut.value = avango.gua.make_trans_mat((self.Cursor.PosX.value-0.5)*16, 0, (self.Cursor.PosY.value-0.5)*9) * avango.gua.make_scale_mat(20)
+  @field_has_changed(TimeIn)
+  def update(self):
+    self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
 
-def add_fingers(count, graph):
-  loader = avango.gua.nodes.GeometryLoader()
-  touch_device = TouchDevice()
+def create_pipeline(id, graph):
+  eye = avango.gua.nodes.TransformNode(Name = "eye")
+  eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.8)
 
-  for i in range(0, 20):
-    monkey = loader.create_geometry_from_file("monkey", "data/objects/sphere.obj", "Red", avango.gua.LoaderFlags.DEFAULTS)
+  screen = avango.gua.nodes.ScreenNode(
+    Name = "screen" + str(id),
+    Width = 1.6,
+    Height = 0.9,
+    Transform = avango.gua.make_trans_mat(id*0.2, 0, 10) * avango.gua.make_rot_mat(0, 1, 0, 0)
+  )
+  screen.Children.value = [eye]
 
-    updater = FingerUpdater()
-    updater.Cursor = touch_device.TouchCursors[i]
-    monkey.Transform.connect_from(updater.MatrixOut)
+  graph.Root.value.Children.value.append(screen)
 
-    graph.Root.value.Children.value.append(monkey)
+  pipe = avango.gua.nodes.Pipeline(
+    Camera = avango.gua.nodes.Camera(
+      LeftEye = "/screen" + str(id) + "/eye",
+      LeftScreen = "/screen" + str(id),
+      SceneGraph = "scenegraph"
+    ),
+    LeftResolution = size,
+    BackgroundTexture = "data/textures/checker.png",
+    BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE
+  )
 
+  return pipe
 
 def start():
 
@@ -49,51 +64,34 @@ def start():
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Transform = avango.gua.make_rot_mat(-90, 1, 0, 0)
   )
+  graph.Root.value.Children.value.append(light)
 
-  eye = avango.gua.nodes.TransformNode(Name = "eye")
-  eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 25)
+  loader = avango.gua.nodes.GeometryLoader()
+  # timer = avango.nodes.TimeSensor()
 
-  screen = avango.gua.nodes.ScreenNode(
-    Name = "screen",
-    Width = 16,
-    Height = 9,
-    Transform = avango.gua.make_rot_mat(-90, 1, 0, 0)
-  )
-  screen.Children.value = [eye]
+  for x in range(0, CUBE_COUNT_X):
+    for y in range(0, CUBE_COUNT_Y):
+      for z in range(0, CUBE_COUNT_Z):
 
-  graph.Root.value.Children.value = [light, screen]
+        new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
+                  "data/objects/monkey.obj",
+                  "White",
+                  avango.gua.LoaderFlags.DEFAULTS)
 
-  add_fingers(20, graph)
+        new_cube.Transform.value = avango.gua.make_trans_mat((x - CUBE_COUNT_X/2)*2, (y - CUBE_COUNT_Y/2)*2, z*2) * \
+                                   avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+        graph.Root.value.Children.value.append(new_cube)
 
-  # setup viewing
-  width = 1920
-  size = avango.gua.Vec2ui(width, width * 9 /16)
-  pipe = avango.gua.nodes.Pipeline(
-    Camera = avango.gua.nodes.Camera(
-      LeftEye = "/screen/eye",
-      LeftScreen = "/screen",
-      SceneGraph = "scenegraph",
-      Mode = avango.gua.ProjectionMode.ORTHOGRAPHIC
-    ),
-    Window = avango.gua.nodes.Window(
-      Size = size,
-      LeftResolution = size
-    ),
-    LeftResolution = size,
-    EnableSsao = True
-  )
+  # monkey_updater = TimedRotate()
+  # monkey_updater.TimeIn.connect_from(timer.Time)
+  # monkey.Transform.connect_from(monkey_updater.MatrixOut)
+
+  proxy_graph, proxy_pipe = add_dynamic_split_screens(5, create_pipeline, graph, size)
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [pipe]
-  viewer.SceneGraphs.value = [graph]
-
-  print get_cell_bbox(
-    min             = avango.gua.Vec2(0, 0),
-    max             = avango.gua.Vec2(16, 9),
-    centroid        = avango.gua.Vec2(10, 10),
-    other_centroids = [avango.gua.Vec2(21, 10), avango.gua.Vec2(31, 10), avango.gua.Vec2(10, 20)]
-  )
+  viewer.Pipelines.value = [proxy_pipe]
+  viewer.SceneGraphs.value = [proxy_graph, graph]
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

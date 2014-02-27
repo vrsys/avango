@@ -318,6 +318,7 @@ void
 av::gua::Pipeline::setPreRenderPipelinesCB(const MultiField<Link<Pipeline>>::SetValueEvent& event)
 {
   std::vector< ::gua::Pipeline*> gua_pipes;
+  m_preRenderPipelines.clear();
   for (auto pipe: event.getValue()) {
     m_preRenderPipelines.push_back(pipe);
     gua_pipes.push_back(pipe->getGuaPipeline());

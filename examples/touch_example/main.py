@@ -39,21 +39,29 @@ class TouchHandler(avango.script.Script):
 
   def evaluate(self):
 
+    # Check if any double tap occured
     if len(self.__double_tap_detector.DoubleTapPositions.value) > 0:
       for position in self.__double_tap_detector.DoubleTapPositions.value:
 
         new_pos = position - 0.5
         closest_screen, distance = self.__get_clostes_screen(new_pos)
+
+        # A new screen POI is inserted
         if distance > 0.1:
           camera = closest_screen.Pipe.value.Camera.value
           self.SplitScreens.add_split_screen(camera, new_pos)
+
+        # A screen POI has been hit and is therefore removed
         elif len(self.SplitScreens.SplitScreens) > 1:
           self.SplitScreens.remove_split_screen(closest_screen)
 
       self.__double_tap_detector.reset()
 
+    # Check for fingers moving on the surface
     else:
       for i in range(0, len(self.__touch_device.TouchCursors)):
+
+        # A finger recently touched the surface
         if self.__last_cursor_states[i] == 4 and \
            self.__touch_device.TouchCursors[i].State.value != 4:
 
@@ -61,9 +69,12 @@ class TouchHandler(avango.script.Script):
                                     self.__touch_device.TouchCursors[i].PosY.value) - 0.5
           closest_screen, distance = self.__get_clostes_screen(new_pos)
 
+          # A screen POI has been hit and will be dragged
           if distance < 0.01:
             self.__dragged_split_screens[i] = (closest_screen, self.__touch_device.TouchCursors[i])
 
+        # A finger recently left the surface and the according dragged screen
+        # shall not be dragged anymore
         elif self.__last_cursor_states[i] != 4 and \
              self.__touch_device.TouchCursors[i].State.value == 4:
 
@@ -71,6 +82,7 @@ class TouchHandler(avango.script.Script):
 
         self.__last_cursor_states[i] = self.__touch_device.TouchCursors[i].State.value
 
+      # Apply finger transformations to all dragged screens
       for pair in self.__dragged_split_screens:
         if pair[0]:
           pair[0].Location.value =  avango.gua.Vec2(pair[1].PosX.value, pair[1].PosY.value) - 0.5

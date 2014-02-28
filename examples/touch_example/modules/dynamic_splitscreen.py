@@ -8,6 +8,7 @@ class SplitScreen(avango.script.Script):
 
   Location = avango.gua.SFVec2()
   Pipe = avango.gua.SFPipeline()
+  POISize = avango.SFFloat()
 
   ID = avango.SFInt()
 
@@ -22,7 +23,7 @@ class SplitScreen(avango.script.Script):
 
     self.__screen_size = screen_size
     self.__proxy_sphere_size = screen_size.length()*2
-    self.__poi_size = 0.2
+    self.POISize.value = 0.2
 
     loader = avango.gua.nodes.GeometryLoader()
 
@@ -47,7 +48,7 @@ class SplitScreen(avango.script.Script):
                           avango.gua.make_scale_mat(self.__proxy_sphere_size/2)
       self.__poi.Transform.value = avango.gua.make_trans_mat(self.Location.value.x * self.__screen_size.x, -self.Location.value.y * self.__screen_size.y, self.__proxy_sphere_size*0.51) * \
                           avango.gua.make_rot_mat(90, 1, 0, 0) * \
-                          avango.gua.make_scale_mat(self.__poi_size)
+                          avango.gua.make_scale_mat(self.POISize.value)
 
 
 

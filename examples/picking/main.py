@@ -8,9 +8,9 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-CUBE_COUNT_X = 10
-CUBE_COUNT_Y = 10
-CUBE_COUNT_Z = 10
+CUBE_COUNT_X = 15
+CUBE_COUNT_Y = 15
+CUBE_COUNT_Z = 15
 
 class Picker(avango.script.Script):
   SceneGraph = avango.gua.SFSceneGraph()
@@ -114,6 +114,7 @@ def setup_pipe():
   pipe.EnableFPSDisplay.value = True
   pipe.EnableRayDisplay.value = True
 
+  pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 
   return pipe
 

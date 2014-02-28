@@ -66,6 +66,7 @@ def setup_pipe():
   pipe.EnableHDR.value = False
   pipe.HDRKey.value = 0.1
 
+  pipe.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 
   return pipe
 

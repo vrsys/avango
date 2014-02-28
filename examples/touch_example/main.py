@@ -18,6 +18,13 @@ class SplitScreenHandler(avango.script.Script):
 
   SplitScreens    = DynamicSplitScreens()
 
+  OnFingerDown    = None
+  OnFingerUp      = None
+  OnFingerMoved   = None
+
+  OnTap           = None
+  OnDoubleTap     = None
+
   def __init__(self):
     self.super(SplitScreenHandler).__init__()
     self.always_evaluate(True)
@@ -42,6 +49,9 @@ class SplitScreenHandler(avango.script.Script):
     elif len(self.SplitScreens.SplitScreens) > 1:
       self.SplitScreens.remove_split_screen(closest_screen)
 
+    elif self.OnDoubleTap:
+      self.OnDoubleTap(position, closest_screen)
+
   def on_finger_down(self, cursor):
     new_pos = avango.gua.Vec2(cursor.PosX.value,
                               cursor.PosY.value) - 0.5
@@ -51,16 +61,27 @@ class SplitScreenHandler(avango.script.Script):
     if distance < 0.01:
       self.__dragged_split_screens[cursor.CursorID.value] = closest_screen
 
-  def on_finger_up(self, cursor):
+    elif self.OnFingerDown:
+      self.OnFingerDown(cursor, closest_screen)
 
+  def on_finger_up(self, cursor):
     if cursor.CursorID.value in self.__dragged_split_screens:
       del self.__dragged_split_screens[cursor.CursorID.value]
+
+    elif self.OnFingerUp:
+      self.OnFingerUp(cursor)
 
   def on_finger_moved(self, cursor):
     # Apply finger transformations to all dragged screens
     if cursor.CursorID.value in self.__dragged_split_screens:
       self.__dragged_split_screens[cursor.CursorID.value].Location.value =  \
         avango.gua.Vec2(cursor.PosX.value, cursor.PosY.value) - 0.5
+
+    elif self.OnFingerMoved:
+      new_pos = avango.gua.Vec2(cursor.PosX.value,
+                                cursor.PosY.value) - 0.5
+      closest_screen, distance = self.__get_closest_screen(new_pos)
+      self.OnFingerMoved(cursor, closest_screen)
 
   def __get_closest_screen(self, position):
     current_split_locations = []

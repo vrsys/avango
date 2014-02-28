@@ -142,8 +142,7 @@ def start():
   light = avango.gua.nodes.SunLightNode(
     Name = "sun",
     Color = avango.gua.Color(1.0, 1.0, 0.7),
-    EnableGodrays = True,
-    EnableShadows = True
+    EnableGodrays = True
   )
 
   light.Transform.value = avango.gua.make_rot_mat(120, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)

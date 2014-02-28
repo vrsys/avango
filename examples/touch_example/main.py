@@ -6,17 +6,13 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import modules.voronoi_helpers
+import scene
 from modules.dynamic_splitscreen import *
 from modules.gesture_detectors import *
 from examples_common.GuaVE import GuaVE
 
 width = 1920*2
 size = avango.gua.Vec2ui(width, width * 9 /16)
-timer = avango.nodes.TimeSensor()
-
-CUBE_COUNT_X = 10
-CUBE_COUNT_Y = 3
-CUBE_COUNT_Z = 1
 
 class TouchHandler(avango.script.Script):
 
@@ -97,19 +93,6 @@ class TouchHandler(avango.script.Script):
 
     return self.SplitScreens.SplitScreens[closest], distance
 
-class CameraMover(avango.script.Script):
-  TimeIn = avango.SFFloat()
-  MatrixOut = avango.gua.SFMatrix4()
-
-  MatrixStart = avango.gua.SFMatrix4()
-
-  @field_has_changed(TimeIn)
-  def update(self):
-    self.MatrixOut.value = self.MatrixStart.value * \
-      avango.gua.make_rot_mat(math.sin(self.TimeIn.value*0.5)*2, 0, 1, 0) * \
-      avango.gua.make_trans_mat(math.sin(self.TimeIn.value*0.5)*2.0, 0.0, math.cos(self.TimeIn.value*0.5)*2.0 - 2.0)
-
-
 def add_camera(graph, parent):
   eye = avango.gua.nodes.TransformNode(
     Name = "eye",
@@ -123,12 +106,6 @@ def add_camera(graph, parent):
     Children = [eye]
   )
 
-  camera_mover = CameraMover(
-    MatrixStart = avango.gua.make_trans_mat(0, 0, 3)
-  )
-  camera_mover.TimeIn.connect_from(timer.Time)
-  screen.Transform.connect_from(camera_mover.MatrixOut)
-
   parent.Children.value.append(screen)
 
   camera = avango.gua.nodes.Camera(
@@ -139,42 +116,12 @@ def add_camera(graph, parent):
 
   return camera
 
-def create_pipeline():
-  return avango.gua.nodes.Pipeline(
-    LeftResolution = size,
-    BackgroundTexture = "data/textures/checker.png",
-    BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE,
-    AmbientColor = avango.gua.Color(1, 1, 1)
-  )
-
 def start():
 
   avango.gua.load_shading_models_from("data/materials")
   avango.gua.load_materials_from("data/materials")
 
-  # setup scenegraph
-  graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-
-  light = avango.gua.nodes.SunLightNode(
-    Name = "light",
-    Color = avango.gua.Color(1.0, 1.0, 1.0),
-    Transform = avango.gua.make_rot_mat(-90, 1, 0, 0)
-  )
-  graph.Root.value.Children.value.append(light)
-
-  loader = avango.gua.nodes.GeometryLoader()
-  for x in range(0, CUBE_COUNT_X):
-    for y in range(0, CUBE_COUNT_Y):
-      for z in range(0, CUBE_COUNT_Z):
-        new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
-                  "data/objects/monkey.obj",
-                  "White",
-                  avango.gua.LoaderFlags.DEFAULTS)
-
-        new_cube.Transform.value = avango.gua.make_trans_mat((x - CUBE_COUNT_X/2)*2, (y - CUBE_COUNT_Y/2)*2, z*2) * \
-                                   avango.gua.make_scale_mat(0.3, 0.3, 0.3)
-        graph.Root.value.Children.value.append(new_cube)
-
+  graph = scene.create()
 
   camera = add_camera(graph, graph.Root.value)
 
@@ -183,14 +130,19 @@ def start():
     WindowSize = size
   )
 
-  split_screens.init(5, create_pipeline)
-  root_split_screen = split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
+  split_screens.init(5, lambda:
+    avango.gua.nodes.Pipeline(
+      LeftResolution = size,
+      BackgroundTexture = "data/textures/checker.png",
+      BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE,
+      AmbientColor = avango.gua.Color(1, 1, 1)
+    )
+  )
 
-  #add_split_screen(split_screens, avango.gua.Vec2(0.3, 0.3))
+  root_split_screen = split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
 
   touch_handler = TouchHandler()
   touch_handler.SplitScreens = split_screens
-
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer(

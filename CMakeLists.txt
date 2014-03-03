@@ -47,7 +47,7 @@ include(find_python)
 include(find_schism)
 
 IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include(find_zmq)
+  include(FindZMQ)
 ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (UNIX)

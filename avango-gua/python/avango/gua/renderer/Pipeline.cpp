@@ -29,4 +29,9 @@ void init_Pipeline()
          bases<av::FieldContainer>,
          boost::noncopyable >("Pipeline", "docstring", no_init);
 
+  enum_<av::gua::Pipeline::BackgroundModeEnum>("BackgroundMode")
+        .value("COLOR", av::gua::Pipeline::COLOR)
+        .value("SKYMAP_TEXTURE", av::gua::Pipeline::SKYMAP_TEXTURE)
+        .value("QUAD_TEXTURE", av::gua::Pipeline::QUAD_TEXTURE)
+        ;
 }

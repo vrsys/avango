@@ -8,7 +8,6 @@
 #include <avango/Logger.h>
 #include <boost/bind.hpp>
 
-#include <gua/events.hpp>
 #include <chrono>
 
 namespace
@@ -22,12 +21,17 @@ AV_FIELD_DEFINE(av::gua::SFViewer);
 AV_FIELD_DEFINE(av::gua::MFViewer);
 
 av::gua::Viewer::Viewer()
-    : m_renderer(nullptr)
+    : m_renderer(nullptr),
+      m_loop(),
+      m_ticker(m_loop, 1.f/60.f)
 {
     AV_FC_ADD_FIELD(Pipelines, MFPipeline::ContainerType());
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
     AV_FC_ADD_FIELD(Physics, nullptr);
 
+    AV_FC_ADD_ADAPTOR_FIELD(DesiredFPS,
+                    boost::bind(&Viewer::getDesiredFPSCB, this, _1),
+                    boost::bind(&Viewer::setDesiredFPSCB, this, _1));
 }
 
 
@@ -49,6 +53,18 @@ av::gua::Viewer::initClass()
 }
 
 void
+av::gua::Viewer::getDesiredFPSCB(const av::SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = 1.f/m_ticker.get_tick_time();
+}
+
+void
+av::gua::Viewer::setDesiredFPSCB(const av::SFFloat::SetValueEvent& event)
+{
+  m_ticker.set_tick_time(1.f/event.getValue());
+}
+
+void
 av::gua::Viewer::run() const {
   if (!m_renderer) {
     std::vector< ::gua::Pipeline*> pipes;
@@ -65,10 +81,8 @@ av::gua::Viewer::run() const {
   }
 
   PyThreadState* save_state(PyEval_SaveThread());
-  ::gua::events::MainLoop loop;
 
-  ::gua::events::Ticker ticker(loop, 1.f/60.f);
-  ticker.on_tick.connect([&,this]() {
+  m_ticker.on_tick.connect([&,this]() {
     PyEval_RestoreThread(save_state);
 
     av::ApplicationInstance::get().evaluate();
@@ -91,6 +105,6 @@ av::gua::Viewer::run() const {
 
   });
 
-  loop.start();
+  m_loop.start();
 
 }

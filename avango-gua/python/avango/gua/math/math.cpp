@@ -308,14 +308,6 @@ void setElement(::gua::math::mat4& mat,
   mat[row + col * 4] = val;
 }
 
-::gua::math::vec3 const getTranslate(::gua::math::mat4 const& mat) {
-  ::gua::math::vec3 trans;
-  trans[0] = mat[12];
-  trans[1] = mat[13];
-  trans[2] = mat[14];
-  return trans;
-}
-
 void setTranslate1(::gua::math::mat4& mat,
                    ::gua::math::vec3 const& vec) {
 
@@ -414,7 +406,7 @@ void init_Mat4() {
     .def("scale", scale2)
     .def("get_element", getMatElement)
     .def("set_element", setElement)
-    .def("get_translate", getTranslate)
+    .def("get_translate", ::gua::math::get_translation)
     .def("set_translate", setTranslate1)
     .def("set_translate", setTranslate2)
     .def("get_rotate", getRotate1)

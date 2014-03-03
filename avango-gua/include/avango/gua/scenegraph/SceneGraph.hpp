@@ -50,6 +50,8 @@ namespace av
 
       SFString Name;
 
+      void updateCache() const;
+
       /**
        * Get the wrapped ::gua::Node.
        */

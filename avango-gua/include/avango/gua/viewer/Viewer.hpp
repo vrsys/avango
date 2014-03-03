@@ -6,6 +6,7 @@
  * \ingroup av_gua
  */
 
+#include <gua/events.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
@@ -34,6 +35,10 @@ namespace av
       MFPipeline   Pipelines;
       MFSceneGraph SceneGraphs;
       SFPhysics    Physics;
+      SFFloat      DesiredFPS;
+
+      virtual void getDesiredFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setDesiredFPSCB(const SFFloat::SetValueEvent& event);
 
       void run() const;
 
@@ -48,6 +53,9 @@ namespace av
     private:
 
       mutable av::gua::Renderer *m_renderer;
+
+      mutable ::gua::events::MainLoop m_loop;
+      mutable ::gua::events::Ticker m_ticker;
 
       Viewer(const Viewer&);
       Viewer& operator=(const Viewer&);

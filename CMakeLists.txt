@@ -7,7 +7,7 @@ PROJECT(AVANGO CXX)
 # version number
 set(AVANGO_MAJOR 2)
 set(AVANGO_MINOR 9)
-set(AVANGO_PATCH 0)
+set(AVANGO_PATCH 1)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
 set(AVANGO_HOMEPAGE "https://github.com/vrsys")
@@ -41,10 +41,15 @@ SET(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 include(find_assimp)
 include(find_boost)
-include(find_bullet)
+set (BULLET_ROOT "/opt/bullet/default" CACHE PATH "Set to your bullet install path.")
+find_package(Bullet)
 include(find_json)
 include(find_python)
 include(find_schism)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include(FindZMQ)
+ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (UNIX)
     list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
@@ -116,10 +121,6 @@ SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Instal
 SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
 SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
 SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include(find_zmq)
-ENDIF(AVANGO_DISTRIBUTION_SUPPORT)
 
 ################################################################
 # Create build flags

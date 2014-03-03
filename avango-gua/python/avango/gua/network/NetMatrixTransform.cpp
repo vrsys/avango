@@ -46,34 +46,34 @@ namespace boost
 namespace av
  {
   namespace python
-	{
-	 namespace detail
-	  {
+    {
+     namespace detail
+      {
 
-		void distributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
-		{
-		  av::Base* av_value = boost::python::extract<av::Base*>(obj);
-		 
-		  av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
-		  self.distributeFieldContainer(tmp);
-		}
+        void distributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
+        {
+          av::Base* av_value = boost::python::extract<av::Base*>(obj);
 
-		void undistributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
-		{
-		  av::Base* av_value = boost::python::extract<av::Base*>(obj);
-		 
-		  av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
-		  self.undistributeFieldContainer(tmp);
-		}
+          av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+          self.distributeFieldContainer(tmp);
+        }
 
-	  } // namespace detail
-	} // namespace python
+        void undistributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
+        {
+          av::Base* av_value = boost::python::extract<av::Base*>(obj);
+
+          av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+          self.undistributeFieldContainer(tmp);
+        }
+
+      } // namespace detail
+    } // namespace python
  } // namespace av
 
 
 void init_NetMatrixTransform(void)
 {
-  class_<av::gua::NetMatrixTransform, av::Link<av::gua::NetMatrixTransform>, bases<av::FieldContainer>, boost::noncopyable >("NetMatrixTransform", "docstring", no_init)
+  class_<av::gua::NetMatrixTransform, av::Link<av::gua::NetMatrixTransform>, bases<av::gua::TransformNode>, boost::noncopyable >("NetMatrixTransform", "docstring", no_init)
     //.def("distribute_object", &av::gua::NetMatrixTransform::distributeFieldContainer)
     .def("distribute_object", av::python::detail::distributeFieldContainerHelper)
     //.def("undistribute_object", &av::gua::NetMatrixTransform::undistributeFieldContainer)

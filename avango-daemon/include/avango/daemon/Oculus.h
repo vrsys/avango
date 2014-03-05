@@ -91,7 +91,7 @@ namespace av
       const std::vector<std::string>&     queryFeatures();
 
       ::OVR::DeviceManager*               device_manager_;
-      std::vector< ::OVR::SensorDevice*>  sensor_devices_;
+      ::OVR::DeviceEnumerator< ::OVR::SensorDevice > sensor_enumerator_;
       std::vector< ::OVR::SensorFusion*>  sensor_fusions_;
 
     private:

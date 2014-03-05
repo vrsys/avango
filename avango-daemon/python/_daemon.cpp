@@ -32,6 +32,7 @@
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/TUIOInput.h>
+#include <avango/daemon/Oculus.h>
 #include <avango/daemon/Init.h>
 #include <avango/daemon/StationSegment.h>
 
@@ -237,6 +238,14 @@ BOOST_PYTHON_MODULE(_daemon)
     .add_property("server", &::getServerFeature, &::setServerFeature)
     ;
 #endif
+
+// #ifdef OCULUS_SUPPORT
+  // Avango NG device: Oculus
+  class_<av::daemon::Oculus, av::Link<av::daemon::Oculus>, bases<av::daemon::Device>, boost::noncopyable >("_OculusHelper",
+    "A helper class that provides some basic properties and function inherited from Oculus,"
+    "used to construct a concrete Python device representation.")
+    ;
+// #endif
 
   // wrap helper function
   def("does_type_exist", &::doesTypeExist);

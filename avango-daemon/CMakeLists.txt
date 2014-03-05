@@ -90,6 +90,8 @@ IF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
     LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/VRPNClient.h")
 ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 
+include(find_ovr)
+
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
@@ -97,6 +99,7 @@ LINK_DIRECTORIES(
     ${LIB_PATHS}
     ${PYTHON_LIBRARY_DIRS}
     ${BULLET_LIBRARY_DIRS}
+    ${OVR_LIBRARY_DIRS}
 )
 
 ADD_LIBRARY(avango_daemon SHARED
@@ -107,6 +110,7 @@ INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
+    ${OVR_INCLUDE_DIRS}
     include
     ../avango-core/include
     ../avango-python/include
@@ -130,6 +134,12 @@ IF (MSVC)
 ENDIF (MSVC)
 
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUILD_FLAGS})
+
+IF (UNIX)
+  LIST(APPEND LIBRARIES avango avango_script avango_gua udev Xinerama ${OVR_LIBRARIES} )
+ELSEIF (MSVC)
+  LIST(APPEND LIBRARIES avango avango_script avango_gua winmm.lib guacamole ${OVR_LIBRARIES})
+ENDIF(UNIX)
 
 TARGET_LINK_LIBRARIES( avango_daemon
   debug avango_gua avango_script avango ${LIBRARIES}

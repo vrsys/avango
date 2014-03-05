@@ -31,6 +31,7 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/daemon/Station.cpp
     src/avango/daemon/StationBlock.cpp
     src/avango/daemon/StationSegment.cpp
+    src/avango/daemon/Oculus.cpp
     src/avango/daemon/dtrack/dtrack.cpp
     src/avango/daemon/tuio/TUIO/TuioClient.cpp
     src/avango/daemon/tuio/TUIO/TuioServer.cpp
@@ -47,6 +48,7 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/avango/daemon/DeviceSensor.h
     include/avango/daemon/DeviceService.h
     include/avango/daemon/DTrack.h
+    include/avango/daemon/Oculus.h
     include/avango/daemon/Doxygen.h
     include/avango/daemon/EventMapping.win.h
     include/avango/daemon/HIDInput.h

@@ -4,8 +4,8 @@ LINK_DIRECTORIES(
 )
 
 ADD_LIBRARY( _oculus SHARED
-    ./avango/oculus/OculusRift.cpp
-    ./avango/oculus/OculusRift.hpp
+    ./avango/oculus/OculusWindow.cpp
+    ./avango/oculus/OculusWindow.hpp
     ./avango/oculus/_oculus.cpp
 )
 

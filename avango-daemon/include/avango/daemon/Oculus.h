@@ -26,6 +26,7 @@
 #if !defined(AV_DAEMON_OCULUS_H)
 #define AV_DAEMON_OCULUS_H
 
+#include <OVR.h>
 #include <avango/daemon/Device.h>
 
 /**
@@ -34,9 +35,14 @@
  */
 
 /**
- * Foreward declaration of the Oculus class declarated in dtrack.h
+ * Foreward declaration of the OVR classes declarated in OVR.h
  */
-class Oculus;
+namespace OVR {
+  class SensorFusion;
+  class DeviceManager;
+  class HMDDevice;
+  class SensorDevice;
+}
 
 namespace av
 {
@@ -82,7 +88,11 @@ namespace av
       /**
        * Inherited from base class, returns a list of settable features.
        */
-      const std::vector<std::string>& queryFeatures();
+      const std::vector<std::string>&     queryFeatures();
+
+      ::OVR::DeviceManager*               device_manager_;
+      std::vector< ::OVR::SensorDevice*>  sensor_devices_;
+      std::vector< ::OVR::SensorFusion*>  sensor_fusions_;
 
     private:
 

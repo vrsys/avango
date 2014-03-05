@@ -40,9 +40,11 @@ AV_BASE_DEFINE(av::daemon::Oculus);
 
 av::daemon::Oculus::Oculus()
   // : mOculus(new ::Oculus)
+  : mRequiredFeatures()
+  , device_manager_(nullptr)
+  , sensor_devices_()
+  , sensor_fusions_()
 {
-  mRequiredFeatures.push_back("port");
-  mRequiredFeatures.push_back("timeout");
 }
 
 av::daemon::Oculus::~Oculus()
@@ -62,11 +64,13 @@ av::daemon::Oculus::startDevice()
 {
   if (!parseFeatures())
     return;
-  std::cerr << "av::daemon::Oculus::startDevice() : not implemented yet" << std::endl;
 
+  // configure
   logger.info() << "startDevice: device configured successfully";
 
   // initialize
+  ::OVR::System::Init(::OVR::Log::ConfigureDefaultLog(::OVR::LogMask_All));
+  device_manager_ = ::OVR::DeviceManager::Create();
   logger.info() << "startDevice: device initialized successfully";
 }
 
@@ -74,7 +78,7 @@ av::daemon::Oculus::startDevice()
 av::daemon::Oculus::readLoop()
 {
   while (mKeepRunning) {
-    std::cerr << "av::daemon::Oculus::readLoop() : not implemented yet" << std::endl;
+    //std::cerr << "av::daemon::Oculus::readLoop() : not implemented yet" << std::endl;
   }
 }
 

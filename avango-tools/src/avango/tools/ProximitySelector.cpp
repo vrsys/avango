@@ -47,7 +47,7 @@ av::tools::ProximitySelector::ProximitySelector()
   AV_FC_ADD_FIELD(TargetObjects, MFContainer::ContainerType());
   AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
   AV_FC_ADD_FIELD(Position, ::gua::math::vec3(0.0, 0.0, 0.0));
-  AV_FC_ADD_FIELD(PositionTransform, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(PositionTransform, ::gua::math::mat4::identity());
   AV_FC_ADD_FIELD(ProximityRadius, 1.0);
   AV_FC_ADD_FIELD(DistanceRadius, 2.0);
   AV_FC_ADD_FIELD(Time, 0.0);

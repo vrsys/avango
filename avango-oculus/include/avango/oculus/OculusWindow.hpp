@@ -1,7 +1,7 @@
-#ifndef AVANGO_OCULUS_OCULUSRIFT_HPP
-#define AVANGO_OCULUS_OCULUSRIFT_HPP
+#ifndef AVANGO_OCULUS_OCULUSWINDOW_HPP
+#define AVANGO_OCULUS_OCULUSWINDOW_HPP
 
-#include <gua/OculusRift.hpp>
+#include <gua/OculusWindow.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Window.hpp>
@@ -13,61 +13,55 @@
 
 namespace av
 {
-	namespace oculus
-	{
-		/**
-		* Wrapper for ::gua::OculusRift
-		*/
-		
-    class AV_OCULUS_DLL OculusRift : public av::gua::Window
-		{
-			AV_FC_DECLARE();
-			
-			public:
-			
-				/**
-				 * Constructor. When called without arguments, a new ::gua::OculusRift is created.
-				 * Otherwise, the given ::gua::OculusRift is used.
-				 */
-				 
-				 OculusRift(::gua::OculusRift* guaOculusRift = new ::gua::OculusRift(":0.0"));
-				 static void initOVR();
-			 
-			 protected:
-			 
-				 /**
-				  * Destructor made protected to prevent allocation on stack.
-				  */
-				  
-				 virtual ~OculusRift();
-			 
-			 public:
-				 av::gua::SFMatrix Transform;
-				 
-				 virtual void getTransformCB(const av::gua::SFMatrix::GetValueEvent& event);
-				 virtual void setTransformCB(const av::gua::SFMatrix::SetValueEvent& event);
-			
-				 /**
-				  * Get the wrapped ::gua::OculusRift
-				  */
-				 ::gua::OculusRift* getGuaOculusRift() const;
-			 
-			 private:
-				::gua::OculusRift* m_guaOculusRift;
-				
-				OculusRift(const OculusRift&);
-				OculusRift& operator=(const OculusRift&);
-		};
-		
-		typedef SingleField<Link<OculusRift> > SFOculusRift;
-		typedef MultiField<Link<OculusRift> > MFOculusRift;
+  namespace oculus
+  {
+    /**
+    * Wrapper for ::gua::OculusWindow
+    */
+    
+    class AV_OCULUS_DLL OculusWindow : public av::gua::Window
+    {
+      AV_FC_DECLARE();
+      
+      public:
+      
+        /**
+         * Constructor. When called without arguments, a new ::gua::OculusRift is created.
+         * Otherwise, the given ::gua::OculusRift is used.
+         */
+         
+         OculusWindow(::gua::OculusWindow* guaOculusWindow = new ::gua::OculusWindow(":0.0"));
+       
+       protected:
+       
+         /**
+          * Destructor made protected to prevent allocation on stack.
+          */
+          
+         virtual ~OculusWindow();
+       
+       public:      
+         /**
+          * Get the wrapped ::gua::OculusRift
+          */
+         ::gua::OculusWindow* getGuaOculusWindow() const;
+       
+       private:
+        ::gua::OculusWindow* m_guaOculusWindow;
+        
+        OculusWindow(const OculusWindow&);
+        OculusWindow& operator=(const OculusWindow&);
+    };
+    
+    typedef SingleField<Link<OculusWindow> > SFOculusWindow;
+    typedef MultiField<Link<OculusWindow> > MFOculusWindow;
 
-	}
-	
+  }
+  
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OCULUS_DLL SingleField<Link<oculus::OculusRift> >;
-  template class AV_OCULUS_DLL MultiField<Link<oculus::OculusRift> >;
+  template class AV_OCULUS_DLL SingleField<Link<oculus::OculusWindow> >;
+  template class AV_OCULUS_DLL MultiField<Link<oculus::OculusWindow> >;
 #endif
 }
 
-#endif //AVANGO_OCULUS_OCULUSRIFT_HPP
+#endif //AVANGO_OCULUS_OCULUSWINDOW_HPP

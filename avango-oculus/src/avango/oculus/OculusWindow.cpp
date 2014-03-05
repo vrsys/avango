@@ -1,4 +1,4 @@
-#include <avango/oculus/OculusRift.hpp>
+#include <avango/oculus/OculusWindow.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -9,65 +9,39 @@
 
 namespace
 {
-	av::Logger& logger(av::getLogger("av::oculus::OculusRift"));
+  av::Logger& logger(av::getLogger("av::oculus::OculusWindow"));
 }
 
-AV_FC_DEFINE(av::oculus::OculusRift);
+AV_FC_DEFINE(av::oculus::OculusWindow);
 
-AV_FIELD_DEFINE(av::oculus::SFOculusRift);
-AV_FIELD_DEFINE(av::oculus::MFOculusRift);
+AV_FIELD_DEFINE(av::oculus::SFOculusWindow);
+AV_FIELD_DEFINE(av::oculus::MFOculusWindow);
 
-av::oculus::OculusRift::OculusRift(::gua::OculusRift* guaOculusRift)
-	: av::gua::Window(guaOculusRift),
-	  m_guaOculusRift(reinterpret_cast< ::gua::OculusRift*>(av::gua::Window::getGuaWindow()))
+av::oculus::OculusWindow::OculusWindow(::gua::OculusWindow* guaOculusWindow)
+  : av::gua::Window(guaOculusWindow),
+    m_guaOculusWindow(reinterpret_cast< ::gua::OculusWindow*>(av::gua::Window::getGuaWindow()))
 {
-	AV_FC_ADD_ADAPTOR_FIELD(Transform,
-							boost::bind(&OculusRift::getTransformCB, this, _1),
-							boost::bind(&OculusRift::setTransformCB, this, _1));
 }
 
-av::oculus::OculusRift::~OculusRift()
+av::oculus::OculusWindow::~OculusWindow()
 {}
 
-void 
-av::oculus::OculusRift::initOVR()
-{
-    std::cout << "Initializing Oculus Rift" << std::endl;
-    ::gua::OculusRift::init();
-}
-
-
 void
-av::oculus::OculusRift::initClass()
+av::oculus::OculusWindow::initClass()
 {
 
-	if (!isTypeInitialized())
-	{
-		av::gua::Window::initClass();
-		
-		AV_FC_INIT(av::gua::Window, av::oculus::OculusRift, true);
-		
-		SFOculusRift::initClass("av::oculus::SFOculusRift", "av::Field");
-		MFOculusRift::initClass("av::oculus::MFOculusRift", "av::Field");
-	}
+  if (!isTypeInitialized())
+  {
+    av::gua::Window::initClass();
+    
+    AV_FC_INIT(av::gua::Window, av::oculus::OculusWindow, true);
+    
+    SFOculusWindow::initClass("av::oculus::SFOculusWindow", "av::Field");
+    MFOculusWindow::initClass("av::oculus::MFOculusWindow", "av::Field");
+  }
 }
 
-
-
-::gua::OculusRift*
-av::oculus::OculusRift::getGuaOculusRift() const {
-	return m_guaOculusRift;
-}
-
-void
-av::oculus::OculusRift::getTransformCB(const av::gua::SFMatrix::GetValueEvent& event)
-{	
-	*(event.getValuePtr()) = m_guaOculusRift->get_transform();	
-}
-
-void
-av::oculus::OculusRift::setTransformCB(const av::gua::SFMatrix::SetValueEvent& event)
-{
-	//Do nothing as the transformation cannot be set (sensor input)
-	return;
+::gua::OculusWindow*
+av::oculus::OculusWindow::getGuaOculusWindow() const {
+  return m_guaOculusWindow;
 }

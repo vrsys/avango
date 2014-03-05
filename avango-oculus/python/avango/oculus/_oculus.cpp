@@ -6,7 +6,7 @@
 #include <avango/oculus/Init.hpp>
 #include <avango/python/register_field.h>
 
-#include "OculusRift.hpp"
+#include "OculusWindow.hpp"
 
 using namespace boost::python;
 using namespace av::python;
@@ -29,6 +29,6 @@ BOOST_PYTHON_MODULE(_oculus)
 
     av::oculus::Init::initClass();
 
-    init_OculusRift();
+    init_OculusWindow();
 
 }

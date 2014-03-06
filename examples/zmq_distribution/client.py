@@ -33,7 +33,7 @@ import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
 
-nettrans = avango.gua.nodes.NetMatrixTransform(
+nettrans = avango.gua.nodes.NetTransform(
               Name = "net",
               # specify role, ip, and port
               Groupname = "AVCLIENT|127.0.0.1|7432"

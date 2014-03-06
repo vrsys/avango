@@ -9,7 +9,7 @@ av::oculus::Init::initClass()
 {
     if (!isTypeInitialized())
     {
-	    av::oculus::OculusRift::initClass();
+	    av::oculus::OculusWindow::initClass();
 
       AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::oculus::Init", true);
     }

@@ -3,6 +3,7 @@ import avango.gua
 from avango.script import field_has_changed
 from examples_common.device import TouchDevice
 from examples_common.device import TouchCursor
+import modules.voronoi_helpers
 
 class SplitScreen(avango.script.Script):
 
@@ -112,6 +113,18 @@ class DynamicSplitScreens(avango.script.Script):
 
     self.PipelineOut.value.OutputTextureName.value = "final_pipe"
 
+  def get_next_id(self):
+    return self.__last_id
+
+  def get_closest(self, position):
+    current_split_locations = []
+
+    for split in self.SplitScreens:
+      current_split_locations.append(split.Location.value)
+
+    closest, distance = modules.voronoi_helpers.get_closest(position, current_split_locations)
+
+    return self.SplitScreens[closest], distance
 
   def add_split_screen(self, camera, location):
 

@@ -9,9 +9,10 @@ import modules.voronoi_helpers
 import scene
 from modules.dynamic_splitscreen import *
 from modules.gesture_detectors import *
+from modules.animation import *
 from examples_common.GuaVE import GuaVE
 
-width = 1920*2
+width = 1920
 size = avango.gua.Vec2ui(width, width * 9 /16)
 
 class TouchHandler(avango.script.Script):
@@ -93,28 +94,84 @@ class TouchHandler(avango.script.Script):
 
     return self.SplitScreens.SplitScreens[closest], distance
 
-def add_camera(graph, parent):
-  eye = avango.gua.nodes.TransformNode(
-    Name = "eye",
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 4)
+
+
+def remove_split(graph, split_screen, split_screens):
+  split_screens.remove_split_screen(split_screen)
+  camera = split_screen.Pipe.value.Camera.value
+  screen = graph[camera.LeftScreen.value]
+
+  screen.Parent.value.Children.value.remove(screen)
+
+
+def create_split_screen(graph, position, split_screens, screen_size):
+
+  # find camera which is going to be splitted
+  closest, distance = split_screens.get_closest(position)
+
+  orig_camera = closest.Pipe.value.Camera.value
+  orig_screen = graph[orig_camera.LeftScreen.value]
+  orig_eye    = graph[orig_camera.LeftEye.value]
+
+  # calculate target position of new camera and create animation
+  split_camera_pos = avango.gua.Vec3(
+     position.x*screen_size.x,
+    -position.y*screen_size.y, 4
   )
 
+  anim = Animation(
+    Duration  = 1000.0,
+    StartPos  = orig_eye.Transform.value.get_translate(),
+    EndPos    = split_camera_pos,
+    StartRot  = orig_eye.Transform.value.get_rotate(),
+    EndRot    = orig_eye.Transform.value.get_rotate()
+  )
+
+  # create eye node
+  eye = avango.gua.nodes.TransformNode(Name = "eye")
+  eye.Transform.connect_from(anim.CurrentMatrix)
+
+  # create screen node
   screen = avango.gua.nodes.ScreenNode(
-    Name = "screen",
-    Width = 8,
-    Height = 4.5,
-    Children = [eye]
+    Name      = "screen" + str(split_screens.get_next_id()),
+    Width     = orig_screen.Width.value,
+    Height    = orig_screen.Height.value,
+    Children  = [eye],
+    Transform = orig_screen.Transform.value
   )
 
-  parent.Children.value.append(screen)
+  graph.Root.value.Children.value.append(screen)
 
+  # return the newly created camera
   camera = avango.gua.nodes.Camera(
-    LeftEye = eye.Path.value,
-    LeftScreen = screen.Path.value,
-    SceneGraph = graph.Name.value
+    LeftEye     = eye.Path.value,
+    LeftScreen  = screen.Path.value,
+    SceneGraph  = graph.Name.value
   )
 
-  return camera
+  split_screen = split_screens.add_split_screen(camera, position)
+
+  # class EyeTransformer(avango.script.Script):
+  #   TouchPos   = avango.gua.SFVec2()
+  #   EyePos     = avango.gua.SFVec3()
+  #   ScreenSize = avango.gua.SFVec2()
+
+  #   @field_has_changed(TouchPos)
+  #   def update(self):
+  #     self.EyePos.value = avango.gua.Vec3(
+  #        self.TouchPos.value.x*self.ScreenSize.value.x,
+  #       -self.TouchPos.value.y*self.ScreenSize.value.y, 4
+  #     )
+
+  # eye_transformer = EyeTransformer(
+  #   ScreenSize = screen_size
+  # )
+
+  # eye_transformer.TouchPos.connect_from(split_screen.Location)
+  # anim.EndPos.connect_from(eye_transformer.EyePos)
+
+  return split_screen
+
 
 def start():
 
@@ -123,7 +180,27 @@ def start():
 
   graph = scene.create()
 
-  camera = add_camera(graph, graph.Root.value)
+  eye = avango.gua.nodes.TransformNode(
+    Name = "eye",
+    Transform = avango.gua.make_trans_mat(0, 0, 4)
+  )
+
+  screen_size = avango.gua.Vec2(8, 4.5)
+
+  screen = avango.gua.nodes.ScreenNode(
+    Name = "screen",
+    Width = screen_size.x,
+    Height = screen_size.y,
+    Children = [eye]
+  )
+
+  graph.Root.value.Children.value.append(screen)
+
+  camera = avango.gua.nodes.Camera(
+    LeftEye = eye.Path.value,
+    LeftScreen = screen.Path.value,
+    SceneGraph = graph.Name.value
+  )
 
   split_screens = DynamicSplitScreens(
     GraphIn = graph,
@@ -139,7 +216,14 @@ def start():
     )
   )
 
-  root_split_screen = split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
+  split_screens.add_split_screen(camera, avango.gua.Vec2(0, 0))
+
+  def split(split_pos):
+    return create_split_screen(graph, split_pos, split_screens, screen_size)
+
+  def unsplit(split_screen):
+    remove_split(graph, split_screen, split_screens)
+
 
   touch_handler = TouchHandler()
   touch_handler.SplitScreens = split_screens

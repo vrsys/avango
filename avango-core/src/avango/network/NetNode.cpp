@@ -40,7 +40,7 @@
 #include "Helper.h"
 //#include "NetGroup.h"
 
-#include <avango/Config.h> 
+#include <avango/Config.h>
 
 #if defined(ZMQ_DISTRIBUTION_SUPPORT)
 #include "NetNodeClient.h"
@@ -93,7 +93,7 @@ av::NetNode::join(const std::string& groupName)
   {
     // from http://stackoverflow.com/questions/541561/using-boost-tokenizer-escaped-list-separator-with-different-parameters
     std::string gn(groupName);
-    
+
     typedef boost::tokenizer< boost::escaped_list_separator<char> > Tokenizer;
     boost::escaped_list_separator<char> Separator( ' ', '|' );
     Tokenizer tok( gn, Separator );
@@ -115,6 +115,7 @@ av::NetNode::join(const std::string& groupName)
       hostName = *iter;
       ++iter;
       port = *iter;
+      ++iter;
       serverHWM = atoi((*iter).c_str());
     } else {
       std::stringstream msg;
@@ -123,7 +124,7 @@ av::NetNode::join(const std::string& groupName)
     }
 
   }
-  
+
   if (isServer) {
     gServer = new NetNodeServer(hostName,port, this, gClientEndpoint, gServerEndpoint, serverHWM);
     joined(gServerEndpoint);

@@ -31,6 +31,7 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
+from examples_common.GuaVE import GuaVE
 
 nettrans = avango.gua.nodes.NetMatrixTransform(
               Name = "net",
@@ -51,8 +52,8 @@ graph.Root.value.Children.value = [nettrans]
 size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(
           Camera = avango.gua.nodes.Camera(
-            LeftEye = "/net/{Endpt:127.0.0.2:34818:215:0}/screen/eye",
-            LeftScreen = "/net/{Endpt:127.0.0.2:34818:215:0}/screen",
+            LeftEye = "/net/screen/eye",
+            LeftScreen = "/net/screen",
             SceneGraph = "scenegraph"
           ),
           Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
@@ -65,5 +66,8 @@ pipe.Enabled.value = True
 viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]
 viewer.SceneGraphs.value = [graph]
+
+guaVE = GuaVE()
+guaVE.start(locals(), globals())
 
 viewer.run()

@@ -101,8 +101,8 @@ graph.Root.value.Children.value = [nettrans]
 size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(
           Camera = avango.gua.nodes.Camera(
-            LeftEye = "/net/{Endpt:127.0.0.2:34818:215:0}/screen/eye",
-            LeftScreen = "/net/{Endpt:127.0.0.2:34818:215:0}/screen",
+            LeftEye = "/net/screen/eye",
+            LeftScreen = "/net/screen",
             SceneGraph = "scenegraph"
           ),
           Window = avango.gua.nodes.Window(Size = size,

@@ -23,9 +23,8 @@
 *                                                                        *
 \************************************************************************/
 
-#include "avango/gua/network/NetMatrixTransform.h"
+#include "avango/gua/network/NetTransform.h"
 
-#include <avango/gua/network/FragmentGroup.h>
 #include <avango/gua/network/SharedContainerHolder.h>
 
 #include <avango/Application.h>
@@ -35,15 +34,15 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::NetMatrixTransform"));
+  av::Logger& logger(av::getLogger("av::gua::NetTransform"));
 }
 
-AV_FC_DEFINE(av::gua::NetMatrixTransform);
+AV_FC_DEFINE(av::gua::NetTransform);
 
-AV_FIELD_DEFINE(av::gua::SFNetMatrixTransform);
-AV_FIELD_DEFINE(av::gua::MFNetMatrixTransform);
+AV_FIELD_DEFINE(av::gua::SFNetTransform);
+AV_FIELD_DEFINE(av::gua::MFNetTransform);
 
-av::gua::NetMatrixTransform::NetMatrixTransform()
+av::gua::NetTransform::NetTransform()
   : TransformNode(),
     NetNode()
 {
@@ -56,8 +55,8 @@ av::gua::NetMatrixTransform::NetMatrixTransform()
   AV_FC_ADD_FIELD(DepartedMembers, std::vector<std::string>());
   AV_FC_ADD_FIELD(NetId, std::string());
   AV_FC_ADD_ADAPTOR_FIELD(SharedContainers,
-      boost::bind(&NetMatrixTransform::getSharedContainersCB,   this, _1),
-      boost::bind(&NetMatrixTransform::setSharedContainersCB,   this, _1));
+      boost::bind(&NetTransform::getSharedContainersCB,   this, _1),
+      boost::bind(&NetTransform::setSharedContainersCB,   this, _1));
 
 
   Groupname.dontDistribute(true);
@@ -66,30 +65,29 @@ av::gua::NetMatrixTransform::NetMatrixTransform()
   DepartedMembers.dontDistribute(true);
   NetId.dontDistribute(true);
 
-  mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkReceives, this));
-  mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkSends, this));
+  mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(boost::bind(&NetTransform::handleNetworkReceives, this));
+  mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(boost::bind(&NetTransform::handleNetworkSends, this));
 
 }
 
 /* virtual */
-av::gua::NetMatrixTransform::~NetMatrixTransform()
+av::gua::NetTransform::~NetTransform()
 {
   ApplicationInstance::get().removeCallback(mPreEvalHandle);
   ApplicationInstance::get().removeCallback(mPostEvalHandle);
 }
 
 /* static */ void
-av::gua::NetMatrixTransform::initClass()
+av::gua::NetTransform::initClass()
 {
   if (!isTypeInitialized())
   {
     av::gua::TransformNode::initClass();
-    av::gua::FragmentGroup::initClass();
 
-    AV_FC_INIT(av::gua::TransformNode, av::gua::NetMatrixTransform, true);
+    AV_FC_INIT(av::gua::TransformNode, av::gua::NetTransform, true);
 
-    SFNetMatrixTransform::initClass("av::gua::SFNetMatrixTransform", "av::Field");
-    MFNetMatrixTransform::initClass("av::gua::MFNetMatrixTransform", "av::Field");
+    SFNetTransform::initClass("av::gua::SFNetTransform", "av::Field");
+    MFNetTransform::initClass("av::gua::MFNetTransform", "av::Field");
 
     sClassTypeId.setDistributable(true);
   }
@@ -97,7 +95,7 @@ av::gua::NetMatrixTransform::initClass()
 
 
 /* virtual */ void
-av::gua::NetMatrixTransform::fieldHasChangedLocalSideEffect(const Field& field)
+av::gua::NetTransform::fieldHasChangedLocalSideEffect(const Field& field)
 {
   TransformNode::fieldHasChangedLocalSideEffect(field);
 
@@ -115,27 +113,27 @@ av::gua::NetMatrixTransform::fieldHasChangedLocalSideEffect(const Field& field)
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::evaluate()
+av::gua::NetTransform::evaluate()
 {
   TransformNode::evaluate();
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::refImpl()
+av::gua::NetTransform::refImpl()
 {}
 
 /* virtual */ void
-av::gua::NetMatrixTransform::unrefImpl()
+av::gua::NetTransform::unrefImpl()
 {}
 
 /* virtual */ int
-av::gua::NetMatrixTransform::refCountImpl()
+av::gua::NetTransform::refCountImpl()
 {
   return 1;
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::_join(const std::string& fragment)
+av::gua::NetTransform::_join(const std::string& fragment)
 {
 
   NetID group_id(fragment, NetID::sNetGroupRootNode);
@@ -159,7 +157,7 @@ av::gua::NetMatrixTransform::_join(const std::string& fragment)
 
 // overloaded from fp_net_node to react to view changes
 /* virtual */ void
-av::gua::NetMatrixTransform::_acceptNewView(const std::vector<std::string>& members,
+av::gua::NetTransform::_acceptNewView(const std::vector<std::string>& members,
                                             const std::vector<std::string>& newMembers,
                                             const std::vector<std::string>& departedMembers)
 {
@@ -174,7 +172,7 @@ av::gua::NetMatrixTransform::_acceptNewView(const std::vector<std::string>& memb
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::_getStateFragment(const std::string& fragment, Msg& stateMsg)
+av::gua::NetTransform::_getStateFragment(const std::string& fragment, Msg& stateMsg)
 {
 
 
@@ -211,7 +209,7 @@ av::gua::NetMatrixTransform::_getStateFragment(const std::string& fragment, Msg&
      registerWellKnown(container_holder.getPtr(), container_holder_id);
 
      mSharedContainerMap[fragment] = container_holder;
-     container_holder->registerNetMatrixTransform(this);
+     container_holder->registerNetTransform(this);
      sharedContainersChanged();
    }
    stateMsg.setType(Msg::absolute);
@@ -220,7 +218,7 @@ av::gua::NetMatrixTransform::_getStateFragment(const std::string& fragment, Msg&
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::_setStateFragment(const std::string& fragment, Msg& stateMsg)
+av::gua::NetTransform::_setStateFragment(const std::string& fragment, Msg& stateMsg)
 {
   // created a new fpFragmentGroup node and register with the correct well-known id.
   // it consists of the endpoint-id of the server and a constant number.
@@ -252,7 +250,7 @@ av::gua::NetMatrixTransform::_setStateFragment(const std::string& fragment, Msg&
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::_removeStateFragment(const std::string& fragment)
+av::gua::NetTransform::_removeStateFragment(const std::string& fragment)
 {
   // remove the group node for this fragment
   EIDGrpMap::iterator i = mGroupMap.find(fragment);
@@ -275,19 +273,19 @@ av::gua::NetMatrixTransform::_removeStateFragment(const std::string& fragment)
 }
 
 void
-av::gua::NetMatrixTransform::fragmentChildrenChanged()
+av::gua::NetTransform::fragmentChildrenChanged()
 {
   Children.touch();
 }
 
 void
-av::gua::NetMatrixTransform::sharedContainersChanged()
+av::gua::NetTransform::sharedContainersChanged()
 {
   SharedContainers.touch();
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::getSharedContainersCB(const av::MFContainer::GetValueEvent& event)
+av::gua::NetTransform::getSharedContainersCB(const av::MFContainer::GetValueEvent& event)
 {
 
   av::MFContainer::ContainerType &shared_containers(*event.getValuePtr());
@@ -302,7 +300,7 @@ av::gua::NetMatrixTransform::getSharedContainersCB(const av::MFContainer::GetVal
 }
 
 /* virtual */ void
-av::gua::NetMatrixTransform::setSharedContainersCB(const MFContainer::SetValueEvent& event)
+av::gua::NetTransform::setSharedContainersCB(const MFContainer::SetValueEvent& event)
 {
   for ( SharedContainerMap::iterator shared_container_iter = mSharedContainerMap.begin();
         shared_container_iter != mSharedContainerMap.end();

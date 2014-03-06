@@ -8,13 +8,12 @@ file(GLOB_RECURSE AVANGO_GUA_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 
 IF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_SRC
-    src/avango/gua/network/FragmentGroup.cpp
     src/avango/gua/network/Init.cpp
-    src/avango/gua/network/NetMatrixTransform.cpp
+    src/avango/gua/network/NetTransform.cpp
     src/avango/gua/network/SharedContainerHolder.cpp
     include/avango/gua/network/FragmentGroup.h
     include/avango/gua/network/Init.h
-    include/avango/gua/network/NetMatrixTransform.h
+    include/avango/gua/network/NetTransform.h
     include/avango/gua/network/SharedContainerHolder.h
 )
 ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
@@ -28,8 +27,8 @@ file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 
 IF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
-    python/avango/gua/network/NetMatrixTransform.h
-    python/avango/gua/network/NetMatrixTransform.cpp
+    python/avango/gua/network/NetTransform.h
+    python/avango/gua/network/NetTransform.cpp
 )
 ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 
@@ -94,13 +93,13 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 ###############################################################################
 # set dependencies
 ###############################################################################
-SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES} 
-                          ${PYTHON_LIBRARIES} 
-                          ${BOOST_LIBRARIES} 
-                          ${BULLET_LIBRARIES} 
-                          ${JSON_LIBRARIES} 
-                          ${ASSIMP_LIBRARIES} 
-                          ${SCHISM_LIBRARIES} 
+SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
+                          ${PYTHON_LIBRARIES}
+                          ${BOOST_LIBRARIES}
+                          ${BULLET_LIBRARIES}
+                          ${JSON_LIBRARIES}
+                          ${ASSIMP_LIBRARIES}
+                          ${SCHISM_LIBRARIES}
                           avango
                           avango_gua
 )

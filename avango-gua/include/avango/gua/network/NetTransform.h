@@ -47,7 +47,6 @@ namespace av
   {
 
 
-    class FragmentGroup;
     class SharedContainerHolder;
     /**
      *  \container_doc
@@ -55,15 +54,15 @@ namespace av
      *   each creator has an own group node here which is well known.
      *  \end_container_doc
      */
-    class NetMatrixTransform : public TransformNode, public NetNode {
+    class NetTransform : public TransformNode, public NetNode {
 
       AV_FC_DECLARE();
 
     public:
 
       typedef std::tr1::unordered_set<std::string>           EIDGrpMap;
-      NetMatrixTransform();
-      virtual ~NetMatrixTransform();
+      NetTransform();
+      virtual ~NetTransform();
 
       // the fields for the network part
 
@@ -122,8 +121,6 @@ namespace av
       // the current view, meaning the current set of participants in this group
       EIDGrpMap mGroupMap;
 
-      // all nodes which are not distributed are added here
-      FragmentGroup* mLocalGroups;
       typedef std::tr1::unordered_map<std::string, Link<SharedContainerHolder> > SharedContainerMap;
       SharedContainerMap mSharedContainerMap;
 
@@ -131,8 +128,8 @@ namespace av
       Application::CallbackHandle mPostEvalHandle;
     };
 
-    typedef SingleField<Link<NetMatrixTransform> > SFNetMatrixTransform;
-    typedef MultiField<Link<NetMatrixTransform> > MFNetMatrixTransform;
+    typedef SingleField<Link<NetTransform> > SFNetTransform;
+    typedef MultiField<Link<NetTransform> > MFNetTransform;
 
   } // namespace gua
 

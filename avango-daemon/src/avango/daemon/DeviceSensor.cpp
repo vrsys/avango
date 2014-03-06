@@ -43,7 +43,7 @@ av::daemon::DeviceSensor::DeviceSensor()
   AV_FC_ADD_FIELD(DeviceService,            0);
   AV_FC_ADD_FIELD(Station,                  ::std::string());
   AV_FC_ADD_FIELD(ResetValuesOnRead,        false);
-  AV_FC_ADD_FIELD(Matrix,                   ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Matrix,                   ::gua::math::mat4::identity());
   AV_FC_ADD_FIELD(Button0,                  false);
   AV_FC_ADD_FIELD(Button1,                  false);
   AV_FC_ADD_FIELD(Button2,                  false);
@@ -108,8 +108,8 @@ av::daemon::DeviceSensor::DeviceSensor()
   AV_FC_ADD_FIELD(LED13,                    false);
   AV_FC_ADD_FIELD(LED14,                    false);
   AV_FC_ADD_FIELD(LED15,                    false);
-  AV_FC_ADD_FIELD(TransmitterOffset,        ::gua::math::mat4());
-  AV_FC_ADD_FIELD(ReceiverOffset,           ::gua::math::mat4());
+  AV_FC_ADD_FIELD(TransmitterOffset,        ::gua::math::mat4::identity());
+  AV_FC_ADD_FIELD(ReceiverOffset,           ::gua::math::mat4::identity());
   AV_FC_ADD_FIELD(Rotation,                 ::gua::math::quat());
   AV_FC_ADD_FIELD(Translation,              ::gua::math::vec3());
 

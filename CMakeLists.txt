@@ -7,7 +7,7 @@ PROJECT(AVANGO CXX)
 # version number
 set(AVANGO_MAJOR 2)
 set(AVANGO_MINOR 9)
-set(AVANGO_PATCH 1)
+set(AVANGO_PATCH 2)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
 set(AVANGO_HOMEPAGE "https://github.com/vrsys")
@@ -107,11 +107,9 @@ ENDIF(UNIX)
 ################################################################
 SET (AVANGO_VERSION_MAJOR "2" CACHE STRING "Major version of AvangoNG.")
 SET (AVANGO_VERSION_MINOR "9" CACHE STRING "Minor version of AvangoNG.")
-SET (AVANGO_VERSION_MAINT "0" CACHE STRING "Maintenance version of AvangoNG.")
+SET (AVANGO_VERSION_MAINT "2" CACHE STRING "Maintenance version of AvangoNG.")
 
 SET (AVANGO_DEBUG "false" CACHE BOOL "Set to enable avango debugging.")
-SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable using VRPN.")
-SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
 SET (AVANGO_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to enable distribution support.")
 SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
@@ -125,9 +123,6 @@ SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup mo
 ################################################################
 # Create build flags
 ################################################################
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_DEBUG=${AVANGO_DAEMON_DEBUG}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_VRPN_SUPPORT=${AVANGO_DAEMON_VRPN_SUPPORT}")
 SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT}")
 SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT}")
 SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL}")

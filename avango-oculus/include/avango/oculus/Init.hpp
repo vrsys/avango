@@ -4,7 +4,7 @@
 #include <avango/Typed.h>
 
 #include <avango/oculus/windows_specific.hpp>
-#include <avango/oculus/OculusRift.hpp>
+#include <avango/oculus/OculusWindow.hpp>
 
 #include <avango/gua/Fields.hpp>
 

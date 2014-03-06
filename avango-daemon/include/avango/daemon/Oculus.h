@@ -23,66 +23,85 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/daemon/Init.h>
+#if !defined(AV_DAEMON_OCULUS_H)
+#define AV_DAEMON_OCULUS_H
 
-#include <avango/Logger.h>
-
-#include <avango/daemon/Config.h>
+#include <OVR.h>
 #include <avango/daemon/Device.h>
-#include <avango/daemon/DeviceActuator.h>
-#include <avango/daemon/DeviceDaemon.h>
-#include <avango/daemon/DeviceSensor.h>
-#include <avango/daemon/DeviceService.h>
-#include <avango/daemon/DTrack.h>
-#ifdef OCULUS_SUPPORT
-#include <avango/daemon/Oculus.h>
-#endif
-#include <avango/daemon/HIDInput.h>
-#include <avango/daemon/WacomTablet.h>
-#include <avango/daemon/Wiimote.h>
-#include <avango/daemon/WiimoteActuator.h>
-#include <avango/daemon/TUIOInput.h>
 
-#ifdef VRPN_SUPPORT
-#include <avango/daemon/VRPNClient.h>
-#endif
+/**
+ * \file
+ * \ingroup av_daemon
+ */
 
-namespace
-{
-  av::Logger& logger(av::getLogger("av::daemon::Init"));
+/**
+ * Foreward declaration of the OVR classes declarated in OVR.h
+ */
+namespace OVR {
+  class SensorFusion;
+  class DeviceManager;
+  class HMDDevice;
+  class SensorDevice;
 }
 
-AV_TYPED_DEFINE_ABSTRACT(av::daemon::Init);
-
-/* static */ void
-av::daemon::Init::initClass()
+namespace av
 {
-  if (!isTypeInitialized())
+  namespace daemon
   {
-    av::daemon::Device::initClass();
-    av::daemon::DeviceActuator::initClass();
-    av::daemon::DeviceDaemon::initClass();
-    av::daemon::DeviceSensor::initClass();
-    av::daemon::DeviceService::initClass();
-    av::daemon::DTrack::initClass();
-    av::daemon::TUIOInput::initClass();
+    /**
+     * An Avango NG device for processing OVR sensor data.
+     *
+     * \ingroup av_daemon
+     */
+    class AV_DAEMON_DLL Oculus : public Device
+    {
+      AV_BASE_DECLARE();
 
+    public:
+      /**
+       * Constructor
+       */
+      Oculus();
 
-    av::daemon::HIDInput::initClass();
-#ifndef WIN32
-    av::daemon::WacomTablet::initClass();
-    av::daemon::Wiimote::initClass();
-    av::daemon::WiimoteActuator::initClass();
-#endif
+    protected:
 
-#ifdef VRPN_SUPPORT
-    av::daemon::VRPNClient::initClass();
-#endif
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~Oculus();
 
-#ifdef OCULUS_SUPPORT
-    av::daemon::Oculus::initClass();
-#endif
+      /**
+       * Inherited from base class, implements the initialization of this device.
+       */
+      void startDevice();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
+      /**
+       * Inherited from base class, implements the loop in which the device is read out.
+       */
+      void readLoop();
+
+      /**
+       * Inherited from base class, implements the closing operation of this device.
+       */
+      void stopDevice();
+
+      /**
+       * Inherited from base class, returns a list of settable features.
+       */
+      const std::vector<std::string>&     queryFeatures();
+
+      ::OVR::DeviceManager*               device_manager_;
+      ::OVR::DeviceEnumerator< ::OVR::SensorDevice > sensor_enumerator_;
+      std::vector< ::OVR::SensorFusion*>  sensor_fusions_;
+
+    private:
+
+      // ::boost::shared_ptr< ::Oculus> mOculus;
+      ::std::vector< ::std::string> mRequiredFeatures;
+
+      bool parseFeatures();
+    };
   }
 }
+
+#endif

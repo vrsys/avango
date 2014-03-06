@@ -53,7 +53,7 @@ IF ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS )
 
     FOREACH(_SEARCH_DIR ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS})
         FIND_PATH(_CUR_SEARCH
-                NAMES gua/OculusRift.hpp
+                NAMES gua/OculusWindow.hpp
                 PATHS ${_SEARCH_DIR}
                 NO_DEFAULT_PATH)
         IF (_CUR_SEARCH)

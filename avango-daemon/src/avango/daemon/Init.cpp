@@ -34,7 +34,9 @@
 #include <avango/daemon/DeviceSensor.h>
 #include <avango/daemon/DeviceService.h>
 #include <avango/daemon/DTrack.h>
+#ifdef OCULUS_SUPPORT
 #include <avango/daemon/Oculus.h>
+#endif
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/WacomTablet.h>
 #include <avango/daemon/Wiimote.h>
@@ -77,9 +79,9 @@ av::daemon::Init::initClass()
     av::daemon::VRPNClient::initClass();
 #endif
 
-//#ifdef OCULUS_SUPPORT
+#ifdef OCULUS_SUPPORT
     av::daemon::Oculus::initClass();
-//#endif
+#endif
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
   }

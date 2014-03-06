@@ -38,7 +38,7 @@
 #ifdef __GNUC__ // GNU C++ stores TR1 headers differently
 #include <tr1/unordered_map>
 #else
-#include <unordered_map>
+#include <unordered_set>
 #endif
 
 namespace av
@@ -61,8 +61,7 @@ namespace av
 
     public:
 
-      typedef std::tr1::unordered_map<std::string,
-                                      Link<FragmentGroup> >           EIDGrpMap;
+      typedef std::tr1::unordered_set<std::string>           EIDGrpMap;
       NetMatrixTransform();
       virtual ~NetMatrixTransform();
 
@@ -108,10 +107,6 @@ namespace av
 
       /// function description
       /* virtual */  void evaluate();
-
-      // virtual from av::gua::Group
-      /* virtual */ void getChildrenCB(const av::gua::MFNode::GetValueEvent& event);
-      /* virtual */ void setChildrenCB(const av::gua::MFNode::SetValueEvent& event);
 
     protected:
 

@@ -66,14 +66,6 @@ av::gua::NetMatrixTransform::NetMatrixTransform()
   DepartedMembers.dontDistribute(true);
   NetId.dontDistribute(true);
 
-  // for the local nodes, deletion is automatic
-  mLocalGroups = new FragmentGroup;
-  mLocalGroups->registerNetMatrixTransform(this);
-  mLocalGroups->reference();
-  mLocalGroups->Name.setValue("local");
-
-  getGuaNode()->add_child(mLocalGroups->getGuaNode());
-
   mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkReceives, this));
   mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(boost::bind(&NetMatrixTransform::handleNetworkSends, this));
 
@@ -114,7 +106,7 @@ av::gua::NetMatrixTransform::fieldHasChangedLocalSideEffect(const Field& field)
       AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fpNetDCS::fieldHasChangedLocalSideEffect: joining net-group '%1%'.") % Groupname.getValue().c_str()));
       // if the groupname is not empty try to join
       join(Groupname.getValue());
-      Name.setValue(Groupname.getValue());
+      // Name.setValue(Groupname.getValue());
     } else {
       // get the hell out of here
       leave();
@@ -145,18 +137,11 @@ av::gua::NetMatrixTransform::refCountImpl()
 /* virtual */ void
 av::gua::NetMatrixTransform::_join(const std::string& fragment)
 {
-  // a new node is needed
-  Link<FragmentGroup> group = new FragmentGroup;
-  group->Name.setValue(fragment);
 
   NetID group_id(fragment, NetID::sNetGroupRootNode);
-  registerWellKnown(group.getPtr(), group_id);
+  registerWellKnown(this, group_id);
 
-  mGroupMap[fragment] = group;
-  group->registerNetMatrixTransform(this);
-
-  getGuaNode()->add_child(group->getGuaNode());
-  fragmentChildrenChanged();
+  mGroupMap.insert(fragment);
 
   // register SharedContainerHolder
   Link<SharedContainerHolder> container_holder = new SharedContainerHolder;
@@ -193,29 +178,20 @@ av::gua::NetMatrixTransform::_getStateFragment(const std::string& fragment, Msg&
 {
 
 
-  Link<FragmentGroup> group;
   // send an update message for the well-known group node of this fragment
   EIDGrpMap::iterator i = mGroupMap.find(fragment);
+
   if (i != mGroupMap.end())
   {
-    group = (*i).second;
-  }
-  else
-  {
-    // a new node is needed
-    group = new FragmentGroup;
-    group->Name.setValue(fragment);
 
     NetID group_id(fragment, NetID::sNetGroupRootNode);
-    registerWellKnown(group.getPtr(), group_id);
+    registerWellKnown(this, group_id);
 
-    mGroupMap[fragment] = group;
-    group->registerNetMatrixTransform(this);
-    getGuaNode()->add_child(group->getGuaNode());
-    fragmentChildrenChanged();
+    mGroupMap.insert(fragment);
   }
+
   stateMsg.setType(Msg::absolute);
-  makeUpdateMessage(stateMsg, group.getPtr());
+  makeUpdateMessage(stateMsg, this);
 
 
   Link<SharedContainerHolder> container_holder;
@@ -252,18 +228,11 @@ av::gua::NetMatrixTransform::_setStateFragment(const std::string& fragment, Msg&
   EIDGrpMap::iterator found = mGroupMap.find(fragment);
   if (found == mGroupMap.end())
   {
-    // a new node is needed
-    Link<FragmentGroup> group = new FragmentGroup;
-    group->Name.setValue(fragment);
 
     NetID group_id(fragment, NetID::sNetGroupRootNode);
-    registerWellKnown(group.getPtr(), group_id);
+    registerWellKnown(this, group_id);
 
-    mGroupMap[fragment] = group;
-    group->registerNetMatrixTransform(this);
-
-    getGuaNode()->add_child(group->getGuaNode());
-    fragmentChildrenChanged();
+    mGroupMap.insert(fragment);
   }
 
   // send an update message for the well-known shared container  node of this fragment
@@ -289,13 +258,9 @@ av::gua::NetMatrixTransform::_removeStateFragment(const std::string& fragment)
   EIDGrpMap::iterator i = mGroupMap.find(fragment);
   if (i != mGroupMap.end())
   {
-    Link<FragmentGroup> group = (*i).second;
-    unregisterWellKnown(group.getPtr());
-    group->registerNetMatrixTransform(0);
+    unregisterWellKnown(this);
 
-    getGuaNode()->remove_child(group->getGuaNode());
     mGroupMap.erase(i);
-    fragmentChildrenChanged();
   }
 
   SharedContainerMap::iterator shared_container_iter = mSharedContainerMap.find(fragment);
@@ -319,63 +284,6 @@ void
 av::gua::NetMatrixTransform::sharedContainersChanged()
 {
   SharedContainers.touch();
-}
-
-/* virtual */
-void
-av::gua::NetMatrixTransform::getChildrenCB(const av::gua::MFNode::GetValueEvent& event)
-{
-  av::gua::MFNode::ContainerType &children(*event.getValuePtr());
-
-  children.clear();
-
-  children = mLocalGroups->Children.getValue();
-
-  for ( EIDGrpMap::iterator grpIter = mGroupMap.begin();
-        grpIter != mGroupMap.end();
-        ++grpIter) {
-    const av::gua::MFNode::ContainerType &grpChildren = grpIter->second->Children.getValue();
-    children.insert(children.end(), grpChildren.begin(), grpChildren.end());
-  }
-}
-
-/* virtual */
-void
-av::gua::NetMatrixTransform::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
-{
-
-  for ( EIDGrpMap::iterator grpIter = mGroupMap.begin();
-        grpIter != mGroupMap.end();
-        ++grpIter) {
-    if (!grpIter->second->Children.isEmpty()) {
-      grpIter->second->Children.clear();
-    }
-  }
-
-  mLocalGroups->Children.clear();
-
-
-  for (MFNode::ContainerType::const_iterator nodeIter = event.getValue().begin();
-       nodeIter != event.getValue().end();
-       ++nodeIter) {
-    Link<Node> node = *nodeIter;
-
-    AV_ASSERT(node.isValid());
-    if (node->isDistributed()) {
-      AV_ASSERT(node->netNode() == static_cast<NetNode*>(this));
-
-      EIDGrpMap::iterator distributor = mGroupMap.find(node->netCreator());
-
-      if (distributor != mGroupMap.end()) {
-        distributor->second->Children.add1Value(node);
-      } else {
-        AVANGO_LOG(logger, av::logging::WARN, boost::str(boost::format("cannot find node @0x%1% (created by '%2%') in group map")
-                  % node.getPtr() % node->netCreator()));
-      }
-    } else {
-      mLocalGroups->Children.add1Value(node);
-    }
-  }
 }
 
 /* virtual */ void

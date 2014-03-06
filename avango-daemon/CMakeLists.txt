@@ -1,20 +1,15 @@
+SET (AVANGO_DAEMON_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
+SET (AVANGO_DAEMON_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
+SET (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
+SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
+SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable using VRPN.")
+
 ###############################################################################
 # generate Config.h
 ###############################################################################
-FILE(READ include/avango/daemon/Config.h.in AVANGO_CONFIG_IN)
 
-SET(AVANGO_CONFIG_OUT ${AVANGO_CONFIG_IN})
-
-STRING(REGEX MATCHALL "%\\([^\\)]+\\)s" AVANGO_CONFIG_VARIABLES ${AVANGO_CONFIG_IN})
-
-FOREACH(_CUR_VARIABLE ${AVANGO_CONFIG_VARIABLES})
-    SET(_STRIPPED_VARIABLE "")
-    STRING(REGEX REPLACE "%\\(" "" _STRIPPED_VARIABLE ${_CUR_VARIABLE})
-    STRING(REGEX REPLACE "\\)s" "" _STRIPPED_VARIABLE ${_STRIPPED_VARIABLE})
-    STRING(REPLACE ${_CUR_VARIABLE} _${_STRIPPED_VARIABLE} AVANGO_CONFIG_OUT ${AVANGO_CONFIG_OUT})
-ENDFOREACH(_CUR_VARIABLE)
-
-FILE(WRITE include/avango/daemon/Config.h ${AVANGO_CONFIG_OUT})
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/daemon/Config.h.in
+                ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/daemon/Config.h )
 
 ###############################################################################
 # determine source and header files

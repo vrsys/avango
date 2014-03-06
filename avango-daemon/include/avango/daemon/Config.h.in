@@ -39,6 +39,8 @@
 #undef VRPN_SUPPORT
 #endif
 
+#cmakedefine AVANGO_OCULUS_RIFT_SUPPORT
+
 #ifdef AVANGO_OCULUS_RIFT_SUPPORT
 #define OCULUS_SUPPORT 1
 #else

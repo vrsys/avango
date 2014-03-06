@@ -26,4 +26,4 @@
 #include <avango/Link.h>
 
 
-void init_NetMatrixTransform(void);
+void init_NetTransform(void);

@@ -27,8 +27,7 @@
 
 #include <avango/Logger.h>
 
-#include <avango/gua/network/FragmentGroup.h>
-#include <avango/gua/network/NetMatrixTransform.h>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/gua/network/SharedContainerHolder.h>
 
 namespace
@@ -43,8 +42,7 @@ av::gua::network::Init::initClass()
 {
   if (!isTypeInitialized())
   {
-    av::gua::FragmentGroup::initClass();
-    av::gua::NetMatrixTransform::initClass();
+    av::gua::NetTransform::initClass();
     av::gua::SharedContainerHolder::initClass();
 
     AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::network::Init", true);

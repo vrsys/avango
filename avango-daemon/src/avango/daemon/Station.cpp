@@ -32,7 +32,7 @@ AV_BASE_DEFINE(av::daemon::Station);
 
 av::daemon::Station::Station()
   : mName(),
-    mMatrix(),
+    mMatrix(gua::math::mat4::identity()),
     mButton(),
     mValue(),
     mLed(),

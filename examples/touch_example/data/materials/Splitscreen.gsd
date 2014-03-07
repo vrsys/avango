@@ -2,28 +2,29 @@
 {
 	"final_shading_stage" : 
 	{
-		"body" : "gua_color = diffuse_color;",
+		"body" : "gua_color = texture2D(in_texture, gua_get_quad_coords()).rgb * shade;\n",
 		"functions" : "",
 		"outputs" : null,
 		"uniforms" : 
 		{
-			"diffuse_color" : "vec3"
+			"in_texture" : "sampler2D",
+			"shade" : "vec3"
 		}
 	},
 	"gbuffer_fragment_stage" : 
 	{
-		"body" : "gua_normal = varying_normal;\n",
+		"body" : "gua_normal = my_normal;\n",
 		"functions" : "",
 		"outputs" : null,
 		"uniforms" : null
 	},
 	"gbuffer_vertex_stage" : 
 	{
-		"body" : "gua_position = gua_world_position;\nvarying_normal = gua_world_normal;",
+		"body" : "gua_position = gua_world_position;\nmy_normal = gua_world_normal;\n",
 		"functions" : "",
 		"outputs" : 
 		{
-			"varying_normal" : "vec3"
+			"my_normal" : "vec3"
 		},
 		"uniforms" : null
 	},
@@ -31,11 +32,7 @@
 	{
 		"body" : "",
 		"functions" : "",
-		"outputs" : 
-		{
-			"diffuse" : "vec3",
-			"specular" : "float"
-		},
+		"outputs" : null,
 		"uniforms" : null
 	}
 }

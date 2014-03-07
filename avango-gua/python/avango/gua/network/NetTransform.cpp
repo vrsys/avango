@@ -24,7 +24,7 @@
 \************************************************************************/
 
 #include <boost/python.hpp>
-#include <avango/gua/network/NetMatrixTransform.h>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/NetNode.h>
 #include <avango/FieldContainer.h>
 #include <avango/Base.h>
@@ -50,7 +50,7 @@ namespace av
      namespace detail
       {
 
-        void distributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
+        void distributeFieldContainerHelper(av::gua::NetTransform& self, boost::python::object obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
 
@@ -58,7 +58,7 @@ namespace av
           self.distributeFieldContainer(tmp);
         }
 
-        void undistributeFieldContainerHelper(av::gua::NetMatrixTransform& self, boost::python::object obj)
+        void undistributeFieldContainerHelper(av::gua::NetTransform& self, boost::python::object obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
 
@@ -71,12 +71,12 @@ namespace av
  } // namespace av
 
 
-void init_NetMatrixTransform(void)
+void init_NetTransform(void)
 {
-  class_<av::gua::NetMatrixTransform, av::Link<av::gua::NetMatrixTransform>, bases<av::gua::TransformNode>, boost::noncopyable >("NetMatrixTransform", "docstring", no_init)
-    //.def("distribute_object", &av::gua::NetMatrixTransform::distributeFieldContainer)
+  class_<av::gua::NetTransform, av::Link<av::gua::NetTransform>, bases<av::gua::TransformNode>, boost::noncopyable >("NetTransform", "docstring", no_init)
+    //.def("distribute_object", &av::gua::NetTransform::distributeFieldContainer)
     .def("distribute_object", av::python::detail::distributeFieldContainerHelper)
-    //.def("undistribute_object", &av::gua::NetMatrixTransform::undistributeFieldContainer)
+    //.def("undistribute_object", &av::gua::NetTransform::undistributeFieldContainer)
     .def("undistribute_object", av::python::detail::undistributeFieldContainerHelper)
     ;
   def("set_ensemble_option", av::NetNode::setEnsOption);

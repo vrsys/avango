@@ -37,7 +37,7 @@ namespace av
 {
   namespace gua
   {
-    class NetMatrixTransform;
+    class NetTransform;
 
     class SharedContainerHolder : public av::FieldContainer {
 
@@ -52,9 +52,9 @@ namespace av
       void fieldHasChangedLocalSideEffect(const Field&);
       void evaluateLocalSideEffect();
 
-      void registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform);
+      void registerNetTransform(NetTransform* netMatrixTransform);
     private:
-      NetMatrixTransform* mNetMatrixTransform;
+      NetTransform* mNetTransform;
       bool      mContainersChanged;
     };
   } // namespace gua

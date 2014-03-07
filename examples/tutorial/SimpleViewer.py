@@ -32,6 +32,7 @@ class SimpleViewer(avango.script.Script):
                             LeftResolution = self.WindowSize.value,
                             EnableBackfaceCulling = False,
                             AmbientColor = avango.gua.Color(1, 1, 1),
+                            BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE,
                             SsaoIntensity = 3,
                             SsaoRadius = 5,
                             EnableSsao = True,

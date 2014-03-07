@@ -24,7 +24,7 @@
 \************************************************************************/
 
 #include <avango/gua/network/SharedContainerHolder.h>
-#include <avango/gua/network/NetMatrixTransform.h>
+#include <avango/gua/network/NetTransform.h>
 
 
 namespace
@@ -68,14 +68,14 @@ av::gua::SharedContainerHolder::evaluateLocalSideEffect()
 {
   FieldContainer::evaluateLocalSideEffect();
 
-  if (mContainersChanged && mNetMatrixTransform) {
-    mNetMatrixTransform->sharedContainersChanged();
+  if (mContainersChanged && mNetTransform) {
+    mNetTransform->sharedContainersChanged();
   }
 }
 
 void
-av::gua::SharedContainerHolder::registerNetMatrixTransform(av::gua::NetMatrixTransform* netMatrixTransform)
+av::gua::SharedContainerHolder::registerNetTransform(av::gua::NetTransform* netMatrixTransform)
 {
-  mNetMatrixTransform = netMatrixTransform;
+  mNetTransform = netMatrixTransform;
 }
 

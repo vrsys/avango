@@ -53,4 +53,4 @@ scripts/avango.sublime-workspace
 avango-core/include/avango/Config.h
 avango-sound/include/avango/sound/Config.h
 avango-tools/include/avango/tools/Config.h
-avango-tools/include/avango/daemon/Config.h
+avango-daemon/include/avango/daemon/Config.h

@@ -51,6 +51,8 @@ class SplitScreen(avango.script.Script):
                           avango.gua.make_rot_mat(90, 1, 0, 0) * \
                           avango.gua.make_scale_mat(self.POISize.value)
 
+  def get_screen_size(self):
+    return self.__screen_size
 
 
 class DynamicSplitScreens(avango.script.Script):

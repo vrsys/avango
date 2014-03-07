@@ -15,76 +15,76 @@ from examples_common.GuaVE import GuaVE
 width = 1920
 size = avango.gua.Vec2ui(width, width * 9 /16)
 
-class TouchHandler(avango.script.Script):
+class SplitScreenHandler(avango.script.Script):
 
-  SplitScreens = DynamicSplitScreens()
+  SplitScreens    = DynamicSplitScreens()
+
+  OnFingerDown    = None
+  OnFingerUp      = None
+  OnFingerMoved   = None
+
+  OnTap           = None
+  OnDoubleTap     = None
 
   def __init__(self):
-    self.super(TouchHandler).__init__()
+    self.super(SplitScreenHandler).__init__()
     self.always_evaluate(True)
 
-    self.__touch_device = TouchDevice()
-    self.__double_tap_detector = DoubleTapDetector()
+    self.__dragged_split_screens = dict()
+    self.__touch_handler = TouchHandler()
+    self.__touch_handler.OnDoubleTap = self.on_double_tap
+    self.__touch_handler.OnFingerDown = self.on_finger_down
+    self.__touch_handler.OnFingerUp = self.on_finger_up
+    self.__touch_handler.OnFingerMoved = self.on_finger_moved
 
-    self.__last_cursor_states = []
-    self.__dragged_split_screens = []
+  def on_double_tap(self, position):
+    new_pos = position - 0.5
+    closest_screen, distance = self.__get_closest_screen(new_pos)
 
-    for cursor in self.__touch_device.TouchCursors:
-      self.__last_cursor_states.append(cursor.State.value)
-      self.__dragged_split_screens.append((None, None))
-      self.__double_tap_detector.add_cursor(cursor)
+    # A new screen POI is inserted
+    if distance > 0.1:
+      camera = closest_screen.Pipe.value.Camera.value
+      self.SplitScreens.add_split_screen(camera, new_pos)
 
-  def evaluate(self):
+    # A screen POI has been hit and is therefore removed
+    elif len(self.SplitScreens.SplitScreens) > 1:
+      self.SplitScreens.remove_split_screen(closest_screen)
 
-    # Check if any double tap occured
-    if len(self.__double_tap_detector.DoubleTapPositions.value) > 0:
-      for position in self.__double_tap_detector.DoubleTapPositions.value:
+    elif self.OnDoubleTap:
+      self.OnDoubleTap(position, closest_screen)
 
-        new_pos = position - 0.5
-        closest_screen, distance = self.__get_clostes_screen(new_pos)
+  def on_finger_down(self, cursor):
+    new_pos = avango.gua.Vec2(cursor.PosX.value,
+                              cursor.PosY.value) - 0.5
+    closest_screen, distance = self.__get_closest_screen(new_pos)
 
-        # A new screen POI is inserted
-        if distance > 0.1:
-          camera = closest_screen.Pipe.value.Camera.value
-          self.SplitScreens.add_split_screen(camera, new_pos)
+    # A screen POI has been hit and will be dragged
+    if distance < 0.01:
+      self.__dragged_split_screens[cursor.CursorID.value] = closest_screen
 
-        # A screen POI has been hit and is therefore removed
-        elif len(self.SplitScreens.SplitScreens) > 1:
-          self.SplitScreens.remove_split_screen(closest_screen)
+    elif self.OnFingerDown:
+      self.OnFingerDown(cursor, closest_screen)
 
-      self.__double_tap_detector.reset()
+  def on_finger_up(self, cursor):
+    if cursor.CursorID.value in self.__dragged_split_screens:
+      del self.__dragged_split_screens[cursor.CursorID.value]
 
-    # Check for fingers moving on the surface
-    else:
-      for i in range(0, len(self.__touch_device.TouchCursors)):
+    elif self.OnFingerUp:
+      self.OnFingerUp(cursor)
 
-        # A finger recently touched the surface
-        if self.__last_cursor_states[i] == 4 and \
-           self.__touch_device.TouchCursors[i].State.value != 4:
+  def on_finger_moved(self, cursor):
+    # Apply finger transformations to all dragged screens
+    if cursor.CursorID.value in self.__dragged_split_screens:
+      self.__dragged_split_screens[cursor.CursorID.value].Location.value =  \
+        avango.gua.Vec2(cursor.PosX.value, cursor.PosY.value) - 0.5
 
-          new_pos = avango.gua.Vec2(self.__touch_device.TouchCursors[i].PosX.value,
-                                    self.__touch_device.TouchCursors[i].PosY.value) - 0.5
-          closest_screen, distance = self.__get_clostes_screen(new_pos)
+    elif self.OnFingerMoved:
+      new_pos = avango.gua.Vec2(cursor.PosX.value,
+                                cursor.PosY.value) - 0.5
+      closest_screen, distance = self.__get_closest_screen(new_pos)
+      self.OnFingerMoved(cursor, closest_screen)
 
-          # A screen POI has been hit and will be dragged
-          if distance < 0.01:
-            self.__dragged_split_screens[i] = (closest_screen, self.__touch_device.TouchCursors[i])
-
-        # A finger recently left the surface and the according dragged screen
-        # shall not be dragged anymore
-        elif self.__last_cursor_states[i] != 4 and \
-             self.__touch_device.TouchCursors[i].State.value == 4:
-
-          self.__dragged_split_screens[i] = (None, None)
-
-        self.__last_cursor_states[i] = self.__touch_device.TouchCursors[i].State.value
-
-      # Apply finger transformations to all dragged screens
-      for pair in self.__dragged_split_screens:
-        if pair[0]:
-          pair[0].Location.value =  avango.gua.Vec2(pair[1].PosX.value, pair[1].PosY.value) - 0.5
-
-  def __get_clostes_screen(self, position):
+  def __get_closest_screen(self, position):
     current_split_locations = []
 
     for split in self.SplitScreens.SplitScreens:
@@ -93,6 +93,77 @@ class TouchHandler(avango.script.Script):
     closest, distance = modules.voronoi_helpers.get_closest(position, current_split_locations)
 
     return self.SplitScreens.SplitScreens[closest], distance
+
+class TouchHandler(avango.script.Script):
+
+  # Callback functions
+  OnFingerDown    = None
+  OnFingerUp      = None
+  OnFingerMoved   = None
+
+  OnTap           = None
+  OnDoubleTap     = None
+
+  SplitScreens    = DynamicSplitScreens()
+
+  def __init__(self):
+    self.super(TouchHandler).__init__()
+    self.always_evaluate(True)
+
+    self.__touch_device = TouchDevice()
+    self.__tap_detectors = []
+    self.__double_tap_detector = DoubleTapDetector()
+
+    self.__last_cursor_states = []
+
+    for cursor in self.__touch_device.TouchCursors:
+      self.__last_cursor_states.append(cursor.State.value)
+      tap_detector = TapDetector()
+      tap_detector.Cursor = cursor
+      self.__tap_detectors.append(tap_detector)
+      self.__double_tap_detector.add_cursor(cursor)
+
+  def evaluate(self):
+
+    # Check for fingers moving on the surface
+    for i in range(0, len(self.__touch_device.TouchCursors)):
+
+      # A finger recently touched the surface
+      if self.__last_cursor_states[i] == 4 and \
+         self.__touch_device.TouchCursors[i].State.value != 4 and \
+         self.OnFingerDown:
+
+        self.OnFingerDown(self.__touch_device.TouchCursors[i])
+
+      # A finger recently left the surface
+      elif self.__last_cursor_states[i] != 4 and \
+           self.__touch_device.TouchCursors[i].State.value == 4 and \
+           self.OnFingerUp:
+
+          self.OnFingerUp(self.__touch_device.TouchCursors[i])
+
+      elif self.__touch_device.TouchCursors[i].State.value != 4 and \
+           self.OnFingerMoved:
+
+           self.OnFingerMoved(self.__touch_device.TouchCursors[i])
+
+      self.__last_cursor_states[i] = self.__touch_device.TouchCursors[i].State.value
+
+    # Check if any double tap occured
+    if len(self.__double_tap_detector.DoubleTapPositions.value) > 0:
+      for position in self.__double_tap_detector.DoubleTapPositions.value:
+        if self.OnDoubleTap:
+          self.OnDoubleTap(position)
+
+      self.__double_tap_detector.reset()
+
+    # Check if any tap occured
+    else:
+      for detector in self.__tap_detectors:
+        if detector.TapDetected.value == True and self.OnTap:
+          self.OnTap(detector.TapPosition.value)
+          detector.reset()
+
 
 
 
@@ -225,8 +296,8 @@ def start():
     remove_split(graph, split_screen, split_screens)
 
 
-  touch_handler = TouchHandler()
-  touch_handler.SplitScreens = split_screens
+  split_screen_handler = SplitScreenHandler()
+  split_screen_handler.SplitScreens = split_screens
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer(

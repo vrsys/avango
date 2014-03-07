@@ -45,7 +45,7 @@ class BallSpawner(avango.script.Script):
 
       light_geometry = self.__loader.create_geometry_from_file("light_geometry",
                                                                "data/objects/sphere.obj",
-                                                               "Red",
+                                                               "data/materials/Red.gmd",
                                                                avango.gua.LoaderFlags.DEFAULTS)
 
       light_geometry.Transform.value = avango.gua.make_scale_mat(0.1, 0.1, 0.1)
@@ -97,7 +97,7 @@ def start():
   loader = avango.gua.nodes.GeometryLoader()
   teapot_geometry = loader.create_geometry_from_file("teapot_geometry",
                                                      "data/objects/teapot.obj",
-                                                     "Red",
+                                                     "data/materials/Red.gmd",
                                                      avango.gua.LoaderFlags.DEFAULTS)
 
   teapot_geometry.Transform.value = avango.gua.make_scale_mat(0.5, 0.5, 0.5)

@@ -24,11 +24,7 @@ class TimedRotate(avango.script.Script):
 
 def start():
   # initialize oculus rift
-  avango.oculus.initOVR()  
-
-  # initialize materials
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
+  avango.oculus.initOVR()
 
   # create loader for geometries
   loader = avango.gua.nodes.GeometryLoader()
@@ -39,7 +35,7 @@ def start():
   )
 
   # create big monkey
-  monkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  monkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   graph.Root.value.Children.value.append(monkey_node)
 
   # create lamp
@@ -54,12 +50,12 @@ def start():
   graph.Root.value.Children.value.append(lamp_node)
 
   # create floor
-  plane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'Tiles', avango.gua.LoaderFlags.DEFAULTS)
+  plane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'data/materials/Tiles.gmd', avango.gua.LoaderFlags.DEFAULTS)
   plane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0) * avango.gua.make_scale_mat(5, 1, 5)
   graph.Root.value.Children.value.append(plane_node)
 
   # create little monkey
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
   monkey.Transform.value = avango.gua.make_trans_mat(2, 0, 0) * avango.gua.make_rot_mat(90, 0, 1, 0) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   graph.Root.value.Children.value.append(monkey)
 
@@ -74,9 +70,9 @@ def start():
   graph.Root.value.Children.value.append(tea_move_node)
   tea_move_node.Children.value.append(tea_rot_node)
 
-  pot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
-  pot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
-  pot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
+  pot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
+  pot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
+  pot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
 
   tea_rot_node.Children.value = [pot1, pot2, pot3]
 

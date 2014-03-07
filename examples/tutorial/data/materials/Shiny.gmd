@@ -1,6 +1,6 @@
 
 {
-	"shading_model" : "CarPaint",
+	"shading_model" : "CarPaint.gsd",
 	"uniforms" :
 	{
 		"fresnel" : "1",

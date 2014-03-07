@@ -21,9 +21,6 @@ class TimedRotate(avango.script.Script):
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
-
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 

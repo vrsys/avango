@@ -1,6 +1,6 @@
 
 {
-	"shading_model" : "Texcoords",
+	"shading_model" : "Texcoords.gsd",
 	"uniforms" : 
 	{
 		"color" : "(0.000  0.000  0.000)",

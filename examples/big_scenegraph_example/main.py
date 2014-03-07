@@ -110,7 +110,6 @@ def start():
   monkey_updater.TimeIn.connect_from(timer.Time)
   root_monkey.Transform.connect_from(monkey_updater.MatrixOut)
 
-
   add_lights(graph, 40)
 
   setup_scene(graph, root_monkey, 4)

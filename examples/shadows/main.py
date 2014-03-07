@@ -72,9 +72,6 @@ def setup_pipe():
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
-
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   loader = avango.gua.nodes.GeometryLoader()
 
@@ -84,7 +81,7 @@ def start():
 
         new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
                   "data/objects/monkey.obj",
-                  "White",
+                  "data/materials/White.gmd",
                   avango.gua.LoaderFlags.DEFAULTS)
 
         new_cube.Transform.value = avango.gua.make_trans_mat(x*2, y*2, z*2) * \
@@ -130,7 +127,7 @@ def start():
 
   floor = loader.create_geometry_from_file("floor",
                   "data/objects/plane.obj",
-                  "White",
+                  "data/materials/White.gmd",
                   avango.gua.LoaderFlags.DEFAULTS)
   floor.Transform.value = avango.gua.make_scale_mat(30, 1, 30) * avango.gua.make_trans_mat(1, -0.2, 1)
   graph.Root.value.Children.value.append(floor)

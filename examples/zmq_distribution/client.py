@@ -34,25 +34,25 @@ import avango.gua
 from examples_common.GuaVE import GuaVE
 
 nettrans = avango.gua.nodes.NetTransform(
-              Name = "net",
-              # specify role, ip, and port
-              Groupname = "AVCLIENT|127.0.0.1|7432"
-              )
+  Name = "net",
+  # specify role, ip, and port
+  Groupname = "AVCLIENT|127.0.0.1|7432"
+)
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
 size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(
-          Camera = avango.gua.nodes.Camera(
-            LeftEye = "/net/screen/eye",
-            LeftScreen = "/net/screen",
-            SceneGraph = "scenegraph"
-          ),
-          Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
-          LeftResolution = size,
-          BackgroundMode = avango.gua.BackgroundMode.COLOR
-          )
+  Camera = avango.gua.nodes.Camera(
+    LeftEye = "/net/screen/eye",
+    LeftScreen = "/net/screen",
+    SceneGraph = "scenegraph"
+  ),
+  Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
+  LeftResolution = size,
+  BackgroundMode = avango.gua.BackgroundMode.COLOR
+)
 
 pipe.Enabled.value = True
 

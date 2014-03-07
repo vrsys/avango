@@ -24,11 +24,7 @@ class TimedRotate(avango.script.Script):
 
 def start():
   # initialize oculus rift
-  avango.oculus.initOVR()  
-
-  # initialize materials
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
+  avango.oculus.initOVR()
 
   # create loader for geometries
   loader = avango.gua.nodes.GeometryLoader()
@@ -42,15 +38,15 @@ def start():
   monkey_transform = avango.gua.nodes.TransformNode(Name = 'MonkeyTransform')
   monkey_transform.Transform.value = avango.gua.make_trans_mat(0, 6, 0) * avango.gua.make_scale_mat(3, 3, 3)
 
-  monkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
-  monkey_transform.Children.value.append(monkey_node)  
+  monkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
+  monkey_transform.Children.value.append(monkey_node)
   graph.Root.value.Children.value.append(monkey_transform)
 
   # create airplane
   airplane_transform = avango.gua.nodes.TransformNode(Name = 'AirplaneTransform')
   airplane_transform.Transform.value = avango.gua.make_trans_mat(40, 6, -80) * avango.gua.make_rot_mat(55, 0, 1, 0.1)
 
-  airplane_node = loader.create_geometry_from_file('airplane', 'data/objects/cessna.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  airplane_node = loader.create_geometry_from_file('airplane', 'data/objects/cessna.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   airplane_transform.Children.value.append(airplane_node)
   graph.Root.value.Children.value.append(airplane_transform)
 
@@ -58,7 +54,7 @@ def start():
   frog1_transform = avango.gua.nodes.TransformNode(Name = 'Frog1Transform')
   frog1_transform.Transform.value = avango.gua.make_trans_mat(-12, 1, -12) * avango.gua.make_rot_mat(45, 0, 1, 0) * avango.gua.make_scale_mat(3, 3, 3)
 
-  frog1_node = loader.create_geometry_from_file('frog1', 'data/objects/frog.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  frog1_node = loader.create_geometry_from_file('frog1', 'data/objects/frog.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   frog1_transform.Children.value.append(frog1_node)
   graph.Root.value.Children.value.append(frog1_transform)
 
@@ -66,7 +62,7 @@ def start():
   frog2_transform = avango.gua.nodes.TransformNode(Name = 'Frog2Transform')
   frog2_transform.Transform.value = avango.gua.make_trans_mat(12, 1, -12) * avango.gua.make_rot_mat(-45, 0, 1, 0) * avango.gua.make_scale_mat(3, 3, 3)
 
-  frog2_node = loader.create_geometry_from_file('frog2', 'data/objects/frog.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  frog2_node = loader.create_geometry_from_file('frog2', 'data/objects/frog.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   frog2_transform.Children.value.append(frog2_node)
   graph.Root.value.Children.value.append(frog2_transform)
 
@@ -74,7 +70,7 @@ def start():
   frog3_transform = avango.gua.nodes.TransformNode(Name = 'Frog3Transform')
   frog3_transform.Transform.value = avango.gua.make_trans_mat(12, 1, 12) * avango.gua.make_rot_mat(-135, 0, 1, 0) * avango.gua.make_scale_mat(3, 3, 3)
 
-  frog3_node = loader.create_geometry_from_file('frog3', 'data/objects/frog.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  frog3_node = loader.create_geometry_from_file('frog3', 'data/objects/frog.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   frog3_transform.Children.value.append(frog3_node)
   graph.Root.value.Children.value.append(frog3_transform)
 
@@ -82,7 +78,7 @@ def start():
   frog4_transform = avango.gua.nodes.TransformNode(Name = 'Frog4Transform')
   frog4_transform.Transform.value = avango.gua.make_trans_mat(-12, 1, 12) * avango.gua.make_rot_mat(-225, 0, 1, 0) * avango.gua.make_scale_mat(3, 3, 3)
 
-  frog4_node = loader.create_geometry_from_file('frog4', 'data/objects/frog.obj', 'Stones', avango.gua.LoaderFlags.DEFAULTS)
+  frog4_node = loader.create_geometry_from_file('frog4', 'data/objects/frog.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)
   frog4_transform.Children.value.append(frog4_node)
   graph.Root.value.Children.value.append(frog4_transform)
 
@@ -98,7 +94,7 @@ def start():
   graph.Root.value.Children.value.append(lamp_node)
 
   # create floor
-  plane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'Tiles', avango.gua.LoaderFlags.DEFAULTS)
+  plane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'data/materials/Tiles.gmd', avango.gua.LoaderFlags.DEFAULTS)
   plane_node.Transform.value = avango.gua.make_scale_mat(15, 1, 15)
   graph.Root.value.Children.value.append(plane_node)
 
@@ -113,9 +109,9 @@ def start():
   graph.Root.value.Children.value.append(tea_move_node)
   tea_move_node.Children.value.append(tea_rot_node)
 
-  pot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
-  pot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
-  pot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'Shiny', avango.gua.LoaderFlags.DEFAULTS)
+  pot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
+  pot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
+  pot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)
 
   tea_rot_node.Children.value = [pot1, pot2, pot3]
 

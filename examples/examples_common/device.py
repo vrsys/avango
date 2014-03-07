@@ -27,6 +27,9 @@ class TouchCursor(avango.script.Script):
 
     self.__device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
 
+    self.PosX.value = -1
+    self.PosY.value = -1
+
     self.always_evaluate(True)
 
   @field_has_changed(CursorID)
@@ -57,7 +60,7 @@ class TouchDevice(avango.script.Script):
   def __init__(self):
     self.super(TouchDevice).__init__()
 
-    for i in range(0, 1):
+    for i in range(0, 20):
       self.TouchCursors.append(TouchCursor(CursorID = i))
 
 

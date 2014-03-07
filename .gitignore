@@ -35,7 +35,6 @@ localdefs.py
 .nfs*
 
 # build directory
-lib
 
 CMakeCache.txt
 cmake_install.cmake

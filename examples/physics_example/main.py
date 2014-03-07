@@ -68,9 +68,6 @@ class BallSpawner(avango.script.Script):
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
-
   physics = avango.gua.nodes.Physics()
 
   avango.gua.create_sphere_shape("sphere", 0.1)

@@ -54,9 +54,9 @@ class MaterialUpdater(avango.script.Script):
     for i in range(0, len(self.PickedNodes.value)):
       if isinstance(self.PickedNodes.value[i].Object.value, avango.gua.GeometryNode):
         self.PickedNodes.value[i].Object.value.Material.value = self.TargetMaterial.value
-        avango.gua.set_material_uniform("Bright", "pointer_pos",
+        avango.gua.set_material_uniform(self.TargetMaterial.value, "pointer_pos",
                                         self.PickedNodes.value[i].TextureCoords.value)
-        avango.gua.set_material_uniform("Bright", "color",
+        avango.gua.set_material_uniform(self.TargetMaterial.value, "color",
                                         self.PickedNodes.value[i].WorldNormal.value)
 
     self.OldNodes.value = self.PickedNodes.value
@@ -120,8 +120,7 @@ def setup_pipe():
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
+  avango.gua.load_material("data/materials/Bright.gmd")
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   loader = avango.gua.nodes.GeometryLoader()
@@ -132,7 +131,7 @@ def start():
 
         new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
                   "data/objects/sphere.obj",
-                  "Stone",
+                  "data/materials/Stone.gmd",
                   avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
 
         new_cube.Transform.value = avango.gua.make_trans_mat(x, y, z) * \
@@ -174,8 +173,8 @@ def start():
   picker.Ray.value = pick_ray
 
   material_updater = MaterialUpdater()
-  material_updater.DefaultMaterial.value = "Stone"
-  material_updater.TargetMaterial.value = "Bright"
+  material_updater.DefaultMaterial.value = "data/materials/Stone.gmd"
+  material_updater.TargetMaterial.value = "data/materials/Bright.gmd"
   material_updater.PickedNodes.connect_from(picker.Results)
 
   pipe = setup_pipe()

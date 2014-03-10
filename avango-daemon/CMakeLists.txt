@@ -1,8 +1,8 @@
 SET (AVANGO_DAEMON_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
 SET (AVANGO_DAEMON_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
 SET (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
-SET (AVANGO_DAEMON_DEBUG "false" CACHE BOOL "Enable Daemon debugging")
-SET (AVANGO_DAEMON_VRPN_SUPPORT "false" CACHE BOOL "Enable using VRPN.")
+option (AVANGO_DAEMON_DEBUG "Enable Daemon debugging")
+option (AVANGO_DAEMON_VRPN_SUPPORT "Enable using VRPN.")
 
 ###############################################################################
 # generate Config.h

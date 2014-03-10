@@ -1,7 +1,7 @@
 SET (AVANGO_SOUND_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
 SET (AVANGO_SOUND_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
 SET (AVANGO_SOUND_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
-SET (AVANGO_SOUND_DEBUG "false" CACHE BOOL "Enable avango-sound debugging")
+option (AVANGO_SOUND_DEBUG "Enable avango-sound debugging")
 
 ###############################################################################
 # generate Config.h

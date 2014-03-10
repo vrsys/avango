@@ -121,16 +121,6 @@ option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 
 ################################################################
-# Create build flags
-################################################################
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}")
-
-################################################################
 # Create libraries
 ################################################################
 FILE(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})

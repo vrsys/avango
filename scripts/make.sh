@@ -8,7 +8,7 @@ cd $DIR/..
 if [ ! -d "build" ]; then
     mkdir build
     cd build
-    cmake -DCMAKE_BUILD_TYPE=release ..
+    cmake -DCMAKE_BUILD_TYPE=release -DAVANGO_DISTRIBUTION_SUPPORT=true -DAVANGO_OCULUS_RIFT_SUPPORT=true ..
     cd ..
 fi
 

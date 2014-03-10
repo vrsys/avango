@@ -48,23 +48,23 @@ av::gua::GeometryNode::getGuaNode() const
 void
 av::gua::GeometryNode::getGeometryCB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.geometry();
+    *(event.getValuePtr()) = m_guaNode->get_geometry();
 }
 
 void
 av::gua::GeometryNode::setGeometryCB(const SFString::SetValueEvent& event)
 {
-    m_guaNode->data.geometry() = event.getValue();
+    m_guaNode->set_geometry(event.getValue());
 }
 
 void
 av::gua::GeometryNode::getMaterialCB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.material();
+    *(event.getValuePtr()) = m_guaNode->get_material();
 }
 
 void
 av::gua::GeometryNode::setMaterialCB(const SFString::SetValueEvent& event)
 {
-    m_guaNode->data.material() = event.getValue();
+    m_guaNode->set_material(event.getValue());
 }

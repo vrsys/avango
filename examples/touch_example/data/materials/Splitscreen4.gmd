@@ -1,0 +1,9 @@
+
+{
+	"shading_model" : "Splitscreen",
+	"uniforms" :
+	{
+		"in_texture" : "gua_default_texture",
+		"shade" : "(0.500  1.000  1.000)"
+	}
+}

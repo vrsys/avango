@@ -55,4 +55,4 @@ avango-tools/include/avango/tools/Config.h
 avango-daemon/include/avango/daemon/Config.h
 
 # example
-examples/zmq_distribution/data
+#examples/zmq_distribution/data

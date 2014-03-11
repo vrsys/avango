@@ -64,6 +64,8 @@ av::gua::SunLightNode::initClass()
 
         SFSunLightNode::initClass("av::gua::SFSunLightNode", "av::Field");
         MFSunLightNode::initClass("av::gua::MFSunLightNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

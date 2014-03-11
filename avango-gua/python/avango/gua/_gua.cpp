@@ -55,6 +55,7 @@
 #include "viewer/Viewer.hpp"
 
 #include "utils/Color.hpp"
+#include "utils/Logger.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -138,4 +139,6 @@ BOOST_PYTHON_MODULE(_gua)
     init_Texture();
 
     init_Viewer();
+
+    init_Logger();
 }

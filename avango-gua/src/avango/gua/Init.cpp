@@ -42,6 +42,8 @@
 
 #include <avango/gua/viewer/Viewer.hpp>
 
+#include <avango/gua/utils/Logger.hpp>
+
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
 
@@ -101,6 +103,8 @@ av::gua::Init::initClass()
         av::gua::GeometryLoader::initClass();
 
         av::gua::Viewer::initClass();
+
+        av::gua::Logger::initClass();
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

@@ -54,7 +54,9 @@ pipe = avango.gua.nodes.Pipeline(
   BackgroundMode = avango.gua.BackgroundMode.COLOR
 )
 
-pipe.Enabled.value = True
+logger = avango.gua.nodes.Logger(
+  EnableWarning = False
+)
 
 viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]

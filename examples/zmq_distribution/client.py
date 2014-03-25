@@ -31,7 +31,6 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
-from examples_common.GuaVE import GuaVE
 
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
@@ -61,8 +60,5 @@ logger = avango.gua.nodes.Logger(
 viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]
 viewer.SceneGraphs.value = [graph]
-
-guaVE = GuaVE()
-guaVE.start(locals(), globals())
 
 viewer.run()

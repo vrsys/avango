@@ -55,9 +55,10 @@
 #include "viewer/Viewer.hpp"
 
 #include "utils/Color.hpp"
+#include "utils/Logger.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-#include "network/NetMatrixTransform.h"
+#include "network/NetTransform.h"
 #endif
 
 using namespace boost::python;
@@ -97,7 +98,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TransformNode();
     init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-    init_NetMatrixTransform();
+    init_NetTransform();
     av::gua::network::Init::initClass();
 #endif
     init_GeometryNode();
@@ -138,4 +139,6 @@ BOOST_PYTHON_MODULE(_gua)
     init_Texture();
 
     init_Viewer();
+
+    init_Logger();
 }

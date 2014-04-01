@@ -16,14 +16,11 @@ class TimedRotate(avango.script.Script):
 
 def start():
 
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
-
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
   loader = avango.gua.nodes.GeometryLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
+  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)

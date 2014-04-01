@@ -32,35 +32,30 @@ import avango
 import avango.script
 import avango.gua
 
-nettrans = avango.gua.nodes.NetMatrixTransform(
-              Name = "net",
-              # specify role, ip, and port
-              Groupname = "AVCLIENT|127.0.0.1|7432"
-              )
-
-avango.gua.load_shading_models_from("data/materials")
-avango.gua.load_materials_from("data/materials")
-
-loader = avango.gua.nodes.GeometryLoader()
-loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones",
-                                  avango.gua.LoaderFlags.DEFAULTS)
+nettrans = avango.gua.nodes.NetTransform(
+  Name = "net",
+  # specify role, ip, and port
+  Groupname = "AVCLIENT|127.0.0.1|7432"
+)
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
 size = avango.gua.Vec2ui(800, 600)
 pipe = avango.gua.nodes.Pipeline(
-          Camera = avango.gua.nodes.Camera(
-            LeftEye = "/net/{Endpt:127.0.0.2:34818:215:0}/screen/eye",
-            LeftScreen = "/net/{Endpt:127.0.0.2:34818:215:0}/screen",
-            SceneGraph = "scenegraph"
-          ),
-          Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
-          LeftResolution = size,
-          BackgroundMode = avango.gua.BackgroundMode.COLOR
-          )
+  Camera = avango.gua.nodes.Camera(
+    LeftEye = "/net/screen/eye",
+    LeftScreen = "/net/screen",
+    SceneGraph = "scenegraph"
+  ),
+  Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
+  LeftResolution = size,
+  BackgroundMode = avango.gua.BackgroundMode.COLOR
+)
 
-pipe.Enabled.value = True
+logger = avango.gua.nodes.Logger(
+  EnableWarning = False
+)
 
 viewer = avango.gua.nodes.Viewer()
 viewer.Pipelines.value = [pipe]

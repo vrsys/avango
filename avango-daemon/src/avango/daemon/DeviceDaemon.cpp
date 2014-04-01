@@ -51,7 +51,7 @@ namespace
     std::cout << "AvangoDaemon Version "
               << AVANGO_DAEMON_VERSION_MAJOR
               << "." << AVANGO_DAEMON_VERSION_MINOR
-              << "." << AVANGO_DAEMON_VERSION_MAINT
+              //<< "." << AVANGO_DAEMON_VERSION_MAINT
               << std::endl;
   }
 }

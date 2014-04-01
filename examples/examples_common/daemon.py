@@ -33,11 +33,25 @@ def init_tuio_input():
 	tuio.stations[1] = avango.daemon.Station('gua-finger1')
 	tuio.stations[2] = avango.daemon.Station('gua-finger2')
 	tuio.stations[3] = avango.daemon.Station('gua-finger3')
+	tuio.stations[4] = avango.daemon.Station('gua-finger4')
+	tuio.stations[5] = avango.daemon.Station('gua-finger5')
+	tuio.stations[6] = avango.daemon.Station('gua-finger6')
+	tuio.stations[7] = avango.daemon.Station('gua-finger7')
+	tuio.stations[8] = avango.daemon.Station('gua-finger8')
+	tuio.stations[9] = avango.daemon.Station('gua-finger9')
+	tuio.stations[10] = avango.daemon.Station('gua-finger10')
+	tuio.stations[11] = avango.daemon.Station('gua-finger11')
+	tuio.stations[12] = avango.daemon.Station('gua-finger12')
+	tuio.stations[13] = avango.daemon.Station('gua-finger13')
+	tuio.stations[14] = avango.daemon.Station('gua-finger14')
+	tuio.stations[15] = avango.daemon.Station('gua-finger15')
+	tuio.stations[16] = avango.daemon.Station('gua-finger16')
+	tuio.stations[17] = avango.daemon.Station('gua-finger17')
+	tuio.stations[18] = avango.daemon.Station('gua-finger18')
+	tuio.stations[19] = avango.daemon.Station('gua-finger19')
 
 	device_list.append(tuio)
 	print "TUIO Input started!"
-
-
 
 def init_mouse():
 

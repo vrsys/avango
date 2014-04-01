@@ -1,7 +1,7 @@
 SET (AVANGO_TOOLS_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
 SET (AVANGO_TOOLS_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
 SET (AVANGO_TOOLS_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
-SET (AVANGO_TOOLS_DEBUG "false" CACHE BOOL "Enable avango-tools debugging")
+option (AVANGO_TOOLS_DEBUG "Enable avango-tools debugging")
 SET (AVANGO_TOOLS_GUA_SUPPORT "true")
 
 ###############################################################################

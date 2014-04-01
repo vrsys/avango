@@ -34,7 +34,7 @@ def add_lights(graph, count):
     sphere_geometry = loader.create_geometry_from_file(
       "sphere" + str(x),
       "data/objects/light_sphere.obj",
-      "White",
+      "data/materials/White.gmd",
       avango.gua.LoaderFlags.DEFAULTS
     )
 
@@ -73,7 +73,7 @@ def setup_scene(graph, root_monkey, depth_count):
       monkey_geometry = loader.create_geometry_from_file(
         "monkey",
         "data/objects/monkey.obj",
-        "Stones",
+        "data/materials/Stones.gmd",
         avango.gua.LoaderFlags.DEFAULTS
       )
 
@@ -83,9 +83,6 @@ def setup_scene(graph, root_monkey, depth_count):
       setup_scene(graph, monkey_geometry, depth_count - 1)
 
 def start():
-
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
 
   graph = avango.gua.nodes.SceneGraph(
     Name = "big_scenegraph"
@@ -101,7 +98,7 @@ def start():
   root_monkey = loader.create_geometry_from_file(
     "root_ape",
     "data/objects/monkey.obj",
-    "Stones",
+    "data/materials/Stones.gmd",
     avango.gua.LoaderFlags.DEFAULTS
   )
 
@@ -112,7 +109,6 @@ def start():
   timer = avango.nodes.TimeSensor()
   monkey_updater.TimeIn.connect_from(timer.Time)
   root_monkey.Transform.connect_from(monkey_updater.MatrixOut)
-
 
   add_lights(graph, 40)
 

@@ -6,8 +6,8 @@ PROJECT(AVANGO CXX)
 
 # version number
 set(AVANGO_MAJOR 2)
-set(AVANGO_MINOR 9)
-set(AVANGO_PATCH 2)
+set(AVANGO_MINOR 10)
+set(AVANGO_PATCH 1)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
 set(AVANGO_HOMEPAGE "https://github.com/vrsys")
@@ -106,29 +106,19 @@ ENDIF(UNIX)
 # Avango Configuration
 ################################################################
 SET (AVANGO_VERSION_MAJOR "2" CACHE STRING "Major version of AvangoNG.")
-SET (AVANGO_VERSION_MINOR "9" CACHE STRING "Minor version of AvangoNG.")
-SET (AVANGO_VERSION_MAINT "2" CACHE STRING "Maintenance version of AvangoNG.")
+SET (AVANGO_VERSION_MINOR "10" CACHE STRING "Minor version of AvangoNG.")
+SET (AVANGO_VERSION_MAINT "1" CACHE STRING "Maintenance version of AvangoNG.")
 
-SET (AVANGO_DEBUG "false" CACHE BOOL "Set to enable avango debugging.")
-SET (AVANGO_DISTRIBUTION_SUPPORT "false" CACHE BOOL "Set to enable distribution support.")
-SET (AVANGO_PCL_SUPPORT "false" CACHE BOOL "Use PCL.")
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
-SET (AVANGO_UNITTESTS "false" CACHE BOOL "Compile Unittests for Avango.")
 SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Install path for avango.")
 
-SET (AVANGO_OCULUS_RIFT_SUPPORT "false" CACHE BOOL "Compile Oculus Rift module for Avango.")
-SET (AVANGO_OPENAL_SUPPORT "false" CACHE BOOL "Enable building OpenAL sound module.")
-SET (AVANGO_DISPLAY_SUPPORT "false" CACHE BOOL "Enable building display setup module.")
-
-################################################################
-# Create build flags
-################################################################
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DISTRIBUTION_SUPPORT=${AVANGO_DISTRIBUTION_SUPPORT}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_PCL_SUPPORT=${AVANGO_PCL_SUPPORT}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_LOG_LEVEL=${AVANGO_LOG_LEVEL}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MAJOR=${AVANGO_VERSION_MAJOR}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MINOR=${AVANGO_VERSION_MINOR}")
-SET (BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_VERSION_MAINT=${AVANGO_VERSION_MAINT}")
+option (AVANGO_DEBUG "Set to enable avango debugging.")
+option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support.")
+option (AVANGO_PCL_SUPPORT "Use PCL.")
+option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
+option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
+option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
+option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 
 ################################################################
 # Create libraries

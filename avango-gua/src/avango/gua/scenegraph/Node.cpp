@@ -98,7 +98,7 @@ av::gua::Node::getParentCB(const av::gua::SFNode::GetValueEvent& event)
 /* virtual */ void
 av::gua::Node::setParentCB(const av::gua::SFNode::SetValueEvent& event)
 {
-    std::cout << "Error in av::gua::Node::setParentCB: Parent is read only" << std::endl;
+    // std::cout << "Error in av::gua::Node::setParentCB: Parent is read only" << std::endl;
 }
 
 /* virtual */ void
@@ -173,7 +173,7 @@ av::gua::Node::getWorldTransformCB(const SFMatrix::GetValueEvent& event)
 void
 av::gua::Node::setWorldTransformCB(const SFMatrix::SetValueEvent& event)
 {
-  std::cout << "A node's world transform cannot be set!" << std::endl;
+  // std::cout << "A node's world transform cannot be set!" << std::endl;
 }
 
 void
@@ -208,7 +208,7 @@ av::gua::Node::getBoundingBoxCB(const SFBoundingBox::GetValueEvent& event)
 void
 av::gua::Node::setBoundingBoxCB(const SFBoundingBox::SetValueEvent& event)
 {
-  std::cout << "A node's bounding box is calculated dependent on the scenegraph hierarchy and thus cannot be set!" << std::endl;
+  // std::cout << "A node's bounding box is calculated dependent on the scenegraph hierarchy and thus cannot be set!" << std::endl;
 }
 
 void
@@ -220,7 +220,7 @@ av::gua::Node::getDepthCB(const SFInt::GetValueEvent& event)
 void
 av::gua::Node::setDepthCB(const SFInt::SetValueEvent& event)
 {
-  std::cout << "A node's depth cannot be set!" << std::endl;
+  // std::cout << "A node's depth cannot be set!" << std::endl;
 }
 
 void
@@ -232,7 +232,7 @@ av::gua::Node::getPathCB(const SFString::GetValueEvent& event)
 void
 av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 {
-  std::cout << "A node's path cannot be set!" << std::endl;
+  // std::cout << "A node's path cannot be set!" << std::endl;
 }
 
 void

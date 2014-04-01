@@ -55,14 +55,13 @@ INCLUDE_DIRECTORIES( ${INCLUDE_PATHS} include)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-SET (AVANGO_BUILD_FLAGS ${BUILD_FLAGS})
 
 IF (MSVC)
   SET(AVANGO_BUILD_FLAGS "${AVANGO_BUILD_FLAGS} -D AV_LIBRARY")
-ENDIF (MSVC)
 
-set_target_properties( avango PROPERTIES COMPILE_FLAGS ${AVANGO_BUILD_FLAGS})
-set_target_properties( avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
+  set_target_properties( avango PROPERTIES COMPILE_FLAGS ${AVANGO_BUILD_FLAGS})
+  set_target_properties( avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
+ENDIF (MSVC)
 
 SET(_AVANGO_CORE_LIBRARIES ${LIBRARIES})
 

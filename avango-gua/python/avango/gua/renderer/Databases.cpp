@@ -31,7 +31,9 @@ void reload_materials() {
 void init_Databases()
 {
   def("load_shading_models_from", &gua::ShadingModelDatabase::load_shading_models_from);
+  def("load_shading_model", &gua::ShadingModelDatabase::load_shading_model);
   def("load_materials_from", &gua::MaterialDatabase::load_materials_from);
+  def("load_material", &gua::MaterialDatabase::load_material);
   def("set_material_uniform", &setMaterialUniform<float>);
   def("set_material_uniform", &setMaterialUniform<int>);
   def("set_material_uniform", &setMaterialUniform<unsigned>);

@@ -342,6 +342,8 @@ def start():
   timer = avango.nodes.TimeSensor()
   timed_rotate.TimeIn.connect_from(timer.Time)
 
+  logger = avango.gua.nodes.Logger(EnableWarning = False)
+
   viewer.run(locals(), globals(), False)
 
 if __name__ == '__main__':

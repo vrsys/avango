@@ -7,7 +7,7 @@ PROJECT(AVANGO CXX)
 # version number
 set(AVANGO_MAJOR 2)
 set(AVANGO_MINOR 10)
-set(AVANGO_PATCH 3)
+set(AVANGO_PATCH 4)
 set(AVANGO_VERSION ${AVANGO_MAJOR}.${AVANGO_MINOR}.${AVANGO_PATCH})
 set(AVANGO_DESCRIPTION "AVANGO")
 set(AVANGO_HOMEPAGE "https://github.com/vrsys")
@@ -107,7 +107,7 @@ ENDIF(UNIX)
 ################################################################
 SET (AVANGO_VERSION_MAJOR "2" CACHE STRING "Major version of AvangoNG.")
 SET (AVANGO_VERSION_MINOR "10" CACHE STRING "Minor version of AvangoNG.")
-SET (AVANGO_VERSION_MAINT "1" CACHE STRING "Maintenance version of AvangoNG.")
+SET (AVANGO_VERSION_MAINT "4" CACHE STRING "Maintenance version of AvangoNG.")
 
 SET (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
 SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Install path for avango.")

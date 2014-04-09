@@ -220,7 +220,7 @@ Move the monkey back to the origin and try to make \n\
 it a chameleon by setting its material to the one the \n\
 floor already has:\n\n\
 \033[93mmonkey_node.Transform.value = avango.gua.make_identity_mat()\033[0m\n\n\
-\033[93mmonkey_node.Material.value = \"Tiles\"\033[0m\n\n\
+\033[93mmonkey_node.Material.value = \"data/materials/Tiles.gmd\"\033[0m\n\n\
 Continue by typing 'tip(21)' or 'next_tip()'!\n",
 
   21:

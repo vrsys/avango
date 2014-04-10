@@ -135,9 +135,6 @@ Beautiful! Isn't it? You got a nice monkey! Let's add \n\
 a floor! First load it, then add it to the scenegraph! \n\n\
 \033[93mplane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'data/materials/Tiles.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
 \033[93mgraph.Root.value.Children.value.append(plane_node)\033[0m\n\n\
-We need to tell guacamole to reload its materials to\n\
-see our floor:\n\
-\033[93mavango.gua.reload_materials()\033[0m\n\n\
 Continue by typing 'tip(11)' or 'next_tip()'!\n",
 
   11:

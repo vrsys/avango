@@ -347,6 +347,9 @@ def start():
 
   logger = avango.gua.nodes.Logger(EnableWarning = False)
 
+  avango.gua.load_shading_models_from("data/materials")
+  avango.gua.load_materials_from("data/materials")
+
   viewer.run(locals(), globals(), False)
 
 if __name__ == '__main__':

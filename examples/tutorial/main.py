@@ -183,7 +183,7 @@ Continue by typing 'tip(16)' or 'next_tip()'!\n",
 
   16:
 "\n----------------------------------------------------------\n\n\
-Now we need some objects we can attache to this group:\n\n\
+Now we need some objects we can attach to this group:\n\n\
 \033[93mpot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
 \033[93mpot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
 \033[93mpot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\

@@ -22,7 +22,7 @@ def create():
       for z in range(0, CUBE_COUNT_Z):
         new_cube = loader.create_geometry_from_file("cube" + str(x) + str(y) + str(z),
                   "data/objects/monkey.obj",
-                  "White",
+                  "data/materials/White.gmd",
                   avango.gua.LoaderFlags.DEFAULTS)
 
         new_cube.Transform.value = avango.gua.make_trans_mat((x - CUBE_COUNT_X/2)*2, (y - CUBE_COUNT_Y/2)*2, z*2) * \

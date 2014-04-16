@@ -29,14 +29,14 @@ class SplitScreen(avango.script.Script):
     loader = avango.gua.nodes.GeometryLoader()
 
     # create proxy sphere ----------------------------------------------------
-    self.__proxy = loader.create_geometry_from_file("proxy" + str(split_id), "data/objects/sphere.obj", "Splitscreen" + str(pipe_id), avango.gua.LoaderFlags.DEFAULTS)
+    self.__proxy = loader.create_geometry_from_file("proxy" + str(split_id), "data/objects/sphere.obj", "data/materials/Splitscreen" + str(pipe_id) + ".gmd", avango.gua.LoaderFlags.DEFAULTS)
 
 
     graph.Root.value.Children.value.append(self.__proxy)
-    avango.gua.set_material_uniform("Splitscreen" + str(pipe_id), "in_texture", "splitscreen_pipe" + str(pipe_id))
+    avango.gua.set_material_uniform("data/materials/Splitscreen" + str(pipe_id) + ".gmd", "in_texture", "splitscreen_pipe" + str(pipe_id))
 
     # create POI marker ------------------------------------------------------
-    self.__poi = loader.create_geometry_from_file("poi" + str(split_id), "data/objects/poi.obj", "White", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    self.__poi = loader.create_geometry_from_file("poi" + str(split_id), "data/objects/poi.obj", "data/materials/White.gmd", avango.gua.LoaderFlags.LOAD_MATERIALS)
 
     graph["/screen"].Children.value.append(self.__poi)
 

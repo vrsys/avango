@@ -1,6 +1,6 @@
 
 {
-	"shading_model" : "Splitscreen",
+	"shading_model" : "Splitscreen.gsd",
 	"uniforms" : 
 	{
 		"in_texture" : "gua_default_texture",

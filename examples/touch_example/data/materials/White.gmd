@@ -1,6 +1,6 @@
 
 {
-	"shading_model" : "SimplePhong",
+	"shading_model" : "SimplePhong.gsd",
 	"uniforms" :
 	{
 		"diffuse_color" : "(1.000  1.000  1.000)",

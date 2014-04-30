@@ -27,7 +27,9 @@ void init_Pipeline()
   class_<av::gua::Pipeline,
          av::Link<av::gua::Pipeline>,
          bases<av::FieldContainer>,
-         boost::noncopyable >("Pipeline", "docstring", no_init);
+         boost::noncopyable >("Pipeline", "docstring", no_init)
+         .def("print_shaders", &av::gua::Pipeline::print_shaders)
+         ;
 
   enum_<av::gua::Pipeline::BackgroundModeEnum>("BackgroundMode")
         .value("COLOR", av::gua::Pipeline::COLOR)

@@ -41,6 +41,8 @@ namespace av
        */
       Pipeline(::gua::Pipeline* guaPipeline = new ::gua::Pipeline());
 
+      void print_shaders(std::string const& directory) const;
+
     protected:
 
       /**

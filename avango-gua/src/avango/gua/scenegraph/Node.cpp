@@ -26,6 +26,10 @@ av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
   auto avGuaChildren(new av::MultiField<av::Link<av::gua::Node>>::ContainerType());
   m_childrenUserDataHandle = guanode->add_user_data(avGuaChildren);
 
+  guanode->on_world_transform_changed.connect([&](::gua::math::mat4 const&){
+    WorldTransform.touch();
+  });
+
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
                         boost::bind(&Node::setParentCB, this, _1));
@@ -173,7 +177,7 @@ av::gua::Node::getWorldTransformCB(const SFMatrix::GetValueEvent& event)
 void
 av::gua::Node::setWorldTransformCB(const SFMatrix::SetValueEvent& event)
 {
-  // std::cout << "A node's world transform cannot be set!" << std::endl;
+  m_guaNode->set_world_transform(event.getValue());
 }
 
 void

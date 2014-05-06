@@ -26,6 +26,12 @@ namespace av
 
     public:
 
+      enum ShadowModeEnum {
+        OFF = static_cast<unsigned>(::gua::ShadowMode::OFF),
+        LOW_QUALITY = static_cast<unsigned>(::gua::ShadowMode::LOW_QUALITY),
+        HIGH_QUALITY = static_cast<unsigned>(::gua::ShadowMode::HIGH_QUALITY)
+      };
+
       /**
        * Constructor. When called without arguments, a new ::gua::GeometryNode is created.
        * Otherwise, the given ::gua::GeometryNode is used.
@@ -44,6 +50,7 @@ namespace av
 
       SFString Geometry;
       SFString Material;
+      SFUInt   ShadowMode;
 
 
       /**
@@ -58,6 +65,9 @@ namespace av
 
       virtual void getMaterialCB(const SFString::GetValueEvent& event);
       virtual void setMaterialCB(const SFString::SetValueEvent& event);
+
+      virtual void getShadowModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setShadowModeCB(const SFUInt::SetValueEvent& event);
 
     private:
 

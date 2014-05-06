@@ -45,6 +45,8 @@ av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(WorldTransform,
                         boost::bind(&Node::getWorldTransformCB, this, _1),
                         boost::bind(&Node::setWorldTransformCB, this, _1));
+  WorldTransform.dontDistribute(true);
+
   AV_FC_ADD_ADAPTOR_FIELD(GroupNames,
                         boost::bind(&Node::getGroupNamesCB, this, _1),
                         boost::bind(&Node::setGroupNamesCB, this, _1));

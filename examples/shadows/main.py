@@ -94,10 +94,10 @@ def start():
                                          EnableShadows = True,
                                          ShadowMapSize = 1024,
                                          ShadowOffset = 0.001,
-                                         ShadowCascadedSplits = [0.1, 2, 10, 50, 100],
+                                         ShadowCascadedSplits = [0.1, 3, 8, 15, 40],
                                          ShadowNearClippingInSunDirection = 100
                                          )
-  sun_light.Transform.value = avango.gua.make_rot_mat(220, 0, 1, 0) * avango.gua.make_rot_mat(-20.0, 1.0, 1.0, 0.0)
+  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-30.0, 1.0, 1.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
 
   spot_light = avango.gua.nodes.SpotLightNode(Name = "spot_light",

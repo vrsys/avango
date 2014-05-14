@@ -5,7 +5,7 @@
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
-#include <gua/scenegraph/GeometryNode.hpp>
+#include <gua/scenegraph/TriMeshNode.hpp>
 
 using namespace boost::python;
 using namespace av::python;

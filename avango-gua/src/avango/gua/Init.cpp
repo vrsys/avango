@@ -5,7 +5,7 @@
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
-#include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/scenegraph/TriMeshNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
 #include <avango/gua/scenegraph/PointLightNode.hpp>

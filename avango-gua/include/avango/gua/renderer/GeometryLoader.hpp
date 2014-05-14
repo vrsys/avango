@@ -9,7 +9,7 @@
 #include <gua/renderer/GeometryLoader.hpp>
 
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/scenegraph/TriMeshNode.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/gua/windows_specific_gua.hpp>

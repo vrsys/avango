@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/GeometryNode.hpp>
+#include <gua/scenegraph/TriMeshNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>

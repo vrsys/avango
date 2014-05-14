@@ -2,7 +2,7 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/scenegraph/TriMeshNode.hpp>
 
 using namespace boost::python;
 using namespace av::python;

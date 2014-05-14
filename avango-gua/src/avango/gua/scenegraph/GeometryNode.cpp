@@ -1,4 +1,4 @@
-#include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/scenegraph/TriMeshNode.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 

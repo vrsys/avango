@@ -1,4 +1,4 @@
-#include "GeometryNode.hpp"
+#include "TriMeshNode.hpp"
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>

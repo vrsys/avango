@@ -15,7 +15,7 @@
 #include "scenegraph/Node.hpp"
 #include "scenegraph/TransformNode.hpp"
 #include "scenegraph/LODNode.hpp"
-#include "scenegraph/GeometryNode.hpp"
+#include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
 #include "scenegraph/PointLightNode.hpp"
 #include "scenegraph/SpotLightNode.hpp"

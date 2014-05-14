@@ -16,11 +16,11 @@ namespace av
   namespace gua
   {
     /**
-     * Wrapper for ::gua::GeometryNode
+     * Wrapper for ::gua::TriMeshNode
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL GeometryNode : public av::gua::Node
+    class AV_GUA_DLL TriMeshNode : public av::gua::Node
     {
       AV_FC_DECLARE();
 
@@ -33,17 +33,17 @@ namespace av
       };
 
       /**
-       * Constructor. When called without arguments, a new ::gua::GeometryNode is created.
-       * Otherwise, the given ::gua::GeometryNode is used.
+       * Constructor. When called without arguments, a new ::gua::TriMeshNode is created.
+       * Otherwise, the given ::gua::TriMeshNode is used.
        */
-      GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode = std::shared_ptr< ::gua::GeometryNode>(new ::gua::GeometryNode("")));
+      TriMeshNode(std::shared_ptr< ::gua::TriMeshNode> guanode = std::shared_ptr< ::gua::TriMeshNode>(new ::gua::TriMeshNode("")));
 
     protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-//      virtual ~GeometryNode();
+//      virtual ~TriMeshNode();
 
     public:
 
@@ -54,9 +54,9 @@ namespace av
 
 
       /**
-       * Get the wrapped ::gua::GeometryNode.
+       * Get the wrapped ::gua::TriMeshNode.
        */
-      std::shared_ptr< ::gua::GeometryNode> getGuaNode() const;
+      std::shared_ptr< ::gua::TriMeshNode> getGuaNode() const;
 
     public:
 
@@ -71,20 +71,20 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::GeometryNode> m_guaNode;
+      std::shared_ptr< ::gua::TriMeshNode> m_guaNode;
 
-      GeometryNode(const GeometryNode&);
-      GeometryNode& operator=(const GeometryNode&);
+      TriMeshNode(const TriMeshNode&);
+      TriMeshNode& operator=(const TriMeshNode&);
     };
 
-    typedef SingleField<Link<GeometryNode> > SFGeometryNode;
-    typedef MultiField<Link<GeometryNode> > MFGeometryNode;
+    typedef SingleField<Link<TriMeshNode> > SFTriMeshNode;
+    typedef MultiField<Link<TriMeshNode> > MFTriMeshNode;
 
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::GeometryNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::GeometryNode> >;
+  template class AV_GUA_DLL SingleField<Link<gua::TriMeshNode> >;
+  template class AV_GUA_DLL MultiField<Link<gua::TriMeshNode> >;
 #endif
 
 }

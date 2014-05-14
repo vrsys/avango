@@ -18,15 +18,15 @@ namespace boost
    }
  }
 
-void init_GeometryNode()
+void init_TriMeshNode()
  {
-  register_field<av::gua::SFGeometryNode>("SFGeometryNode");
-  register_multifield<av::gua::MFGeometryNode>("MFGeometryNode");
-  class_<av::gua::GeometryNode, av::Link<av::gua::GeometryNode>, bases<av::gua::Node>, boost::noncopyable >("GeometryNode", "docstring", no_init);
+  register_field<av::gua::SFTriMeshNode>("SFTriMeshNode");
+  register_multifield<av::gua::MFTriMeshNode>("MFTriMeshNode");
+  class_<av::gua::TriMeshNode, av::Link<av::gua::TriMeshNode>, bases<av::gua::Node>, boost::noncopyable >("TriMeshNode", "docstring", no_init);
 
-  enum_<av::gua::GeometryNode::ShadowModeEnum>("ShadowMode")
-        .value("OFF", av::gua::GeometryNode::OFF)
-        .value("LOW_QUALITY", av::gua::GeometryNode::LOW_QUALITY)
-        .value("HIGH_QUALITY", av::gua::GeometryNode::HIGH_QUALITY)
+  enum_<av::gua::TriMeshNode::ShadowModeEnum>("ShadowMode")
+        .value("OFF", av::gua::TriMeshNode::OFF)
+        .value("LOW_QUALITY", av::gua::TriMeshNode::LOW_QUALITY)
+        .value("HIGH_QUALITY", av::gua::TriMeshNode::HIGH_QUALITY)
         ;
  }

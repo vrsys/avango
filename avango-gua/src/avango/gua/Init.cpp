@@ -67,7 +67,7 @@ av::gua::Init::initClass()
         av::gua::Node::initClass();
         av::gua::TransformNode::initClass();
         av::gua::LODNode::initClass();
-        av::gua::GeometryNode::initClass();
+        av::gua::TriMeshNode::initClass();
         av::gua::VolumeNode::initClass();
         av::gua::ScreenNode::initClass();
         av::gua::PointLightNode::initClass();

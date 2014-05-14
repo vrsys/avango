@@ -2,85 +2,85 @@
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 
-AV_FC_DEFINE(av::gua::GeometryNode);
+AV_FC_DEFINE(av::gua::TriMeshNode);
 
-AV_FIELD_DEFINE(av::gua::SFGeometryNode);
-AV_FIELD_DEFINE(av::gua::MFGeometryNode);
+AV_FIELD_DEFINE(av::gua::SFTriMeshNode);
+AV_FIELD_DEFINE(av::gua::MFTriMeshNode);
 
-av::gua::GeometryNode::GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode)
+av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::TriMeshNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::GeometryNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::TriMeshNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-                          boost::bind(&GeometryNode::getGeometryCB, this, _1),
-                          boost::bind(&GeometryNode::setGeometryCB, this, _1));
+                          boost::bind(&TriMeshNode::getGeometryCB, this, _1),
+                          boost::bind(&TriMeshNode::setGeometryCB, this, _1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Material,
-                          boost::bind(&GeometryNode::getMaterialCB, this, _1),
-                          boost::bind(&GeometryNode::setMaterialCB, this, _1));
+                          boost::bind(&TriMeshNode::getMaterialCB, this, _1),
+                          boost::bind(&TriMeshNode::setMaterialCB, this, _1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowMode,
-                          boost::bind(&GeometryNode::getShadowModeCB, this, _1),
-                          boost::bind(&GeometryNode::setShadowModeCB, this, _1));
+                          boost::bind(&TriMeshNode::getShadowModeCB, this, _1),
+                          boost::bind(&TriMeshNode::setShadowModeCB, this, _1));
 }
 
-//av::gua::GeometryNode::~GeometryNode()
+//av::gua::TriMeshNode::~TriMeshNode()
 //{}
 
 void
-av::gua::GeometryNode::initClass()
+av::gua::TriMeshNode::initClass()
 {
     if (!isTypeInitialized())
     {
         av::gua::Node::initClass();
 
-        AV_FC_INIT(av::gua::Node, av::gua::GeometryNode, true);
+        AV_FC_INIT(av::gua::Node, av::gua::TriMeshNode, true);
 
-        SFGeometryNode::initClass("av::gua::SFGeometryNode", "av::Field");
-        MFGeometryNode::initClass("av::gua::MFGeometryNode", "av::Field");
+        SFTriMeshNode::initClass("av::gua::SFTriMeshNode", "av::Field");
+        MFTriMeshNode::initClass("av::gua::MFTriMeshNode", "av::Field");
 
         sClassTypeId.setDistributable(true);
     }
 }
 
-std::shared_ptr< ::gua::GeometryNode>
-av::gua::GeometryNode::getGuaNode() const
+std::shared_ptr< ::gua::TriMeshNode>
+av::gua::TriMeshNode::getGuaNode() const
 {
     return m_guaNode;
 }
 
 void
-av::gua::GeometryNode::getGeometryCB(const SFString::GetValueEvent& event)
+av::gua::TriMeshNode::getGeometryCB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->get_geometry();
+    *(event.getValuePtr()) = m_guaNode->get_filename();
 }
 
 void
-av::gua::GeometryNode::setGeometryCB(const SFString::SetValueEvent& event)
+av::gua::TriMeshNode::setGeometryCB(const SFString::SetValueEvent& event)
 {
-    m_guaNode->set_geometry(event.getValue());
+    m_guaNode->set_filename(event.getValue());
 }
 
 void
-av::gua::GeometryNode::getMaterialCB(const SFString::GetValueEvent& event)
+av::gua::TriMeshNode::getMaterialCB(const SFString::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaNode->get_material();
 }
 
 void
-av::gua::GeometryNode::setMaterialCB(const SFString::SetValueEvent& event)
+av::gua::TriMeshNode::setMaterialCB(const SFString::SetValueEvent& event)
 {
     m_guaNode->set_material(event.getValue());
 }
 
 void
-av::gua::GeometryNode::getShadowModeCB(const SFUInt::GetValueEvent& event)
+av::gua::TriMeshNode::getShadowModeCB(const SFUInt::GetValueEvent& event)
 {
     *(event.getValuePtr()) = static_cast<unsigned>(m_guaNode->get_shadow_mode());
 }
 
 void
-av::gua::GeometryNode::setShadowModeCB(const SFUInt::SetValueEvent& event)
+av::gua::TriMeshNode::setShadowModeCB(const SFUInt::SetValueEvent& event)
 {
     m_guaNode->set_shadow_mode(static_cast< ::gua::ShadowMode>(event.getValue()));
 }

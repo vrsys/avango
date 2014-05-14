@@ -74,9 +74,9 @@ av::gua::GeometryLoader::createChildren(std::shared_ptr< ::gua::Node> root) cons
   }
 
   if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::GeometryNode>(root));
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::TriMeshNode>(root));
     if (geom_cast) {
-      av_node = new av::gua::GeometryNode(geom_cast);
+      av_node = new av::gua::TriMeshNode(geom_cast);
     }
   }
 

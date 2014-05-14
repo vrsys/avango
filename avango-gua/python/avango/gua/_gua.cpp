@@ -101,7 +101,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_NetTransform();
     av::gua::network::Init::initClass();
 #endif
-    init_GeometryNode();
+    init_TriMeshNode();
     init_ScreenNode();
     init_PointLightNode();
     init_SpotLightNode();

@@ -34,7 +34,7 @@ void init_Video3DLoader()
   class_<av::gua::Video3DLoader,
          av::Link<av::gua::Video3DLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("Video3DLoader", "docstring", no_init)
-         .def("create_geometry_from_file", &createVideo3DFromFile)
+         .def("load", &createVideo3DFromFile)
          ;
 
   enum_<av::gua::Video3DLoader::Flags>("LoaderFlags")

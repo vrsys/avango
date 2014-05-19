@@ -9,6 +9,10 @@ from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
 
+# create a simple scene
+avango.gua.load_shading_models_from("data/materials")
+avango.gua.load_materials_from("data/materials")
+
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()

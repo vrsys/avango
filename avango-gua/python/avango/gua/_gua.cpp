@@ -16,6 +16,7 @@
 #include "scenegraph/TransformNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
+#include "scenegraph/Video3DNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
 #include "scenegraph/PointLightNode.hpp"
 #include "scenegraph/SpotLightNode.hpp"
@@ -50,6 +51,7 @@
 #include "renderer/Databases.hpp"
 #include "renderer/Camera.hpp"
 #include "renderer/GeometryLoader.hpp"
+#include "renderer/Video3DLoader.hpp"
 #include "renderer/Texture.hpp"
 
 #include "viewer/Viewer.hpp"
@@ -102,6 +104,7 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
+    init_Video3DNode();
     init_ScreenNode();
     init_PointLightNode();
     init_SpotLightNode();
@@ -136,6 +139,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Databases();
     init_Camera();
     init_GeometryLoader();
+    init_Video3DLoader();
     init_Texture();
 
     init_Viewer();

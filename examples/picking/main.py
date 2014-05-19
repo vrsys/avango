@@ -8,6 +8,10 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+# create a simple scene
+avango.gua.load_shading_models_from("data/materials")
+avango.gua.load_materials_from("data/materials")
+
 CUBE_COUNT_X = 15
 CUBE_COUNT_Y = 15
 CUBE_COUNT_Z = 15

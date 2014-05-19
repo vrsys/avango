@@ -6,6 +6,7 @@
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/scenegraph/Video3DNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
 #include <avango/gua/scenegraph/PointLightNode.hpp>
@@ -36,6 +37,7 @@
 
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/GeometryLoader.hpp>
+#include <avango/gua/renderer/Video3DLoader.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 #include <avango/gua/renderer/Camera.hpp>
@@ -68,6 +70,7 @@ av::gua::Init::initClass()
         av::gua::TransformNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
+        av::gua::Video3DNode::initClass();
         av::gua::VolumeNode::initClass();
         av::gua::ScreenNode::initClass();
         av::gua::PointLightNode::initClass();
@@ -101,6 +104,7 @@ av::gua::Init::initClass()
         av::gua::Window::initClass();
         av::gua::Camera::initClass();
         av::gua::GeometryLoader::initClass();
+        av::gua::Video3DLoader::initClass();
 
         av::gua::Viewer::initClass();
 

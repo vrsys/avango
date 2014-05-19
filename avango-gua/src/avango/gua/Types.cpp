@@ -404,6 +404,15 @@ void av_popMsg(av::Msg& netMsg,::gua::TriMeshNode & buf) {
     throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::TriMeshNode & buf): not implemented yet.");
 }
 
+void av_pushMsg(av::Msg& netMsg, const::gua::Video3DNode & buf) {
+    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::Video3DNode & buf): not implemented yet.");
+}
+
+void av_popMsg(av::Msg& netMsg,::gua::Video3DNode & buf) {
+    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::Video3DNode & buf): not implemented yet.");
+}
+
+
 void av_pushMsg(av::Msg& netMsg, const::gua::VolumeNode & buf) {
     throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::VolumeNode & buf): not implemented yet.");
 }
@@ -644,6 +653,19 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::
 {
     throw std::runtime_error("not implemented yet.");
 }
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+				  const::gua::Video3DNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::
+				 Video3DNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
 
 av::OutputStream & av::operator<<(av::OutputStream & os,
 				  const::gua::VolumeNode &)

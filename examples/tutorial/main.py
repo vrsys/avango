@@ -94,7 +94,7 @@ Therefore you will need a GeometryLoader: \n\n\
 
   6:
 "\n----------------------------------------------------------\n\n\
-Now you have to load a 3D-model as GeometryNode. \n\
+Now you have to load a 3D-model as TriMeshNode. \n\
 This is done by: \n\n\
 \033[93mmonkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
 The first parameter ('monkey') is the new node's name. \n\
@@ -212,7 +212,7 @@ Continue by typing 'tip(20)' or 'next_tip()'!\n",
 Let's get our monkey some new looks!\n\
 In \033[92mguacamole\033[0m, materials are assigned to GeometryNodes. You told\n\
 the GeometryLoader to do so, rembember? As a matter of fact,\n\
-you can change a GeometryNode's material at runtime.\n\
+you can change a TriMeshNode's material at runtime.\n\
 Move the monkey back to the origin and try to make \n\
 it a chameleon by setting its material to the one the \n\
 floor already has:\n\n\

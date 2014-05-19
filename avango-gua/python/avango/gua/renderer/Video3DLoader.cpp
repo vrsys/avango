@@ -18,15 +18,12 @@ namespace boost
    }
  }
 
-av::Link<av::gua::Node> createVideo3DFromFile(
-                                          av::gua::Video3DLoader const& loader,
-                                          std::string const& nodeName,
-                                          std::string const& fileName,
-                                          std::string const& fallbackMaterial,
-                                          int flags) {
+av::Link<av::gua::Node> load( av::gua::Video3DLoader const& loader,
+                              std::string const& fileName,
+                              int flags) {
 
-   return loader.createVideo3DFromFile(nodeName, fileName, fallbackMaterial,
-                                static_cast<av::gua::Video3DLoader::Flags>(flags));
+   return loader.load(fileName,
+                      static_cast<av::gua::Video3DLoader::Flags>(flags));
 }
 
 void init_Video3DLoader()
@@ -34,10 +31,10 @@ void init_Video3DLoader()
   class_<av::gua::Video3DLoader,
          av::Link<av::gua::Video3DLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("Video3DLoader", "docstring", no_init)
-         .def("load", &createVideo3DFromFile)
+         .def("load", &load)
          ;
 
-  enum_<av::gua::Video3DLoader::Flags>("LoaderFlags")
+  enum_<av::gua::Video3DLoader::Flags>("Video3DLoaderFlags")
         .value("DEFAULTS", av::gua::Video3DLoader::DEFAULTS)
         .value("MAKE_PICKABLE", av::gua::Video3DLoader::MAKE_PICKABLE)
         .value("NORMALIZE_SCALE", av::gua::Video3DLoader::NORMALIZE_SCALE)

@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/Video3DLoader.hpp>
+#include <avango/gua/scenegraph/Video3DNode.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
-#include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -60,20 +60,6 @@ av::gua::Video3DLoader::createChildren(std::shared_ptr< ::gua::Node> root) const
   auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
   if (group_cast) {
     av_node = new av::gua::TransformNode(group_cast);
-  }
-
-  if (!av_node) {
-    auto vol_cast(std::dynamic_pointer_cast< ::gua::VolumeNode>(root));
-    if (vol_cast) {
-      av_node = new av::gua::VolumeNode(vol_cast);
-    }
-  }
-
-  if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::TriMeshNode>(root));
-    if (geom_cast) {
-      av_node = new av::gua::TriMeshNode(geom_cast);
-    }
   }
 
   if (!av_node) {

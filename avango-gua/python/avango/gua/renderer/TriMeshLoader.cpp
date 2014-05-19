@@ -1,8 +1,8 @@
-#include "GeometryLoader.hpp"
+#include "TriMeshLoader.hpp"
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/gua/renderer/GeometryLoader.hpp>
+#include <avango/gua/renderer/TriMeshLoader.hpp>
 
 using namespace boost::python;
 using namespace av::python;
@@ -19,34 +19,34 @@ namespace boost
  }
 
 av::Link<av::gua::Node> createGeometryFromFile(
-                                          av::gua::GeometryLoader const& loader,
+                                          av::gua::TriMeshLoader const& loader,
                                           std::string const& nodeName,
                                           std::string const& fileName,
                                           std::string const& fallbackMaterial,
                                           int flags) {
 
    return loader.createGeometryFromFile(nodeName, fileName, fallbackMaterial,
-                                static_cast<av::gua::GeometryLoader::Flags>(flags));
+                                static_cast<av::gua::TriMeshLoader::Flags>(flags));
 }
 
-void init_GeometryLoader()
+void init_TriMeshLoader()
 {
-  class_<av::gua::GeometryLoader,
-         av::Link<av::gua::GeometryLoader>,
-         bases<av::FieldContainer>, boost::noncopyable> ("GeometryLoader", "docstring", no_init)
+  class_<av::gua::TriMeshLoader,
+         av::Link<av::gua::TriMeshLoader>,
+         bases<av::FieldContainer>, boost::noncopyable> ("TriMeshLoader", "docstring", no_init)
          .def("create_geometry_from_file", &createGeometryFromFile)
          ;
 
-  enum_<av::gua::GeometryLoader::Flags>("LoaderFlags")
-        .value("DEFAULTS", av::gua::GeometryLoader::DEFAULTS)
-        .value("LOAD_MATERIALS", av::gua::GeometryLoader::LOAD_MATERIALS)
-        .value("OPTIMIZE_GEOMETRY", av::gua::GeometryLoader::OPTIMIZE_GEOMETRY)
-        .value("MAKE_PICKABLE", av::gua::GeometryLoader::MAKE_PICKABLE)
-        .value("NORMALIZE_SCALE", av::gua::GeometryLoader::NORMALIZE_SCALE)
-        .value("NORMALIZE_POSITION", av::gua::GeometryLoader::NORMALIZE_POSITION)
+  enum_<av::gua::TriMeshLoader::Flags>("LoaderFlags")
+        .value("DEFAULTS", av::gua::TriMeshLoader::DEFAULTS)
+        .value("LOAD_MATERIALS", av::gua::TriMeshLoader::LOAD_MATERIALS)
+        .value("OPTIMIZE_GEOMETRY", av::gua::TriMeshLoader::OPTIMIZE_GEOMETRY)
+        .value("MAKE_PICKABLE", av::gua::TriMeshLoader::MAKE_PICKABLE)
+        .value("NORMALIZE_SCALE", av::gua::TriMeshLoader::NORMALIZE_SCALE)
+        .value("NORMALIZE_POSITION", av::gua::TriMeshLoader::NORMALIZE_POSITION)
         ;
 
-  register_field<av::gua::SFGeometryLoader>("SFGeometryLoader");
-  register_multifield<av::gua::MFGeometryLoader>("MFGeometryLoader");
+  register_field<av::gua::SFTriMeshLoader>("SFTriMeshLoader");
+  register_multifield<av::gua::MFTriMeshLoader>("MFTriMeshLoader");
 
 }

@@ -73,7 +73,7 @@ def setup_pipe():
 def start():
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   for x in range(0, CUBE_COUNT_X):
     for y in range(0, CUBE_COUNT_Y):

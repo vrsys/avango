@@ -41,7 +41,7 @@ avango.gua.load_materials_from("data/materials")
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-loader = avango.gua.nodes.GeometryLoader()
+loader = avango.gua.nodes.TriMeshLoader()
 monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "Stones", avango.gua.LoaderFlags.DEFAULTS)
 
 light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))

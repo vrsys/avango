@@ -31,7 +31,7 @@ def start():
   avango.gua.load_materials_from("data/materials")
 
   # create loader for geometries
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   # create scenegraph
   graph = avango.gua.nodes.SceneGraph(

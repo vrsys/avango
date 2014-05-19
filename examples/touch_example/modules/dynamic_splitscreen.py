@@ -26,7 +26,7 @@ class SplitScreen(avango.script.Script):
     self.__proxy_sphere_size = screen_size.length()*2
     self.POISize.value = 0.2
 
-    loader = avango.gua.nodes.GeometryLoader()
+    loader = avango.gua.nodes.TriMeshLoader()
 
     # create proxy sphere ----------------------------------------------------
     self.__proxy = loader.create_geometry_from_file("proxy" + str(split_id), "data/objects/sphere.obj", "data/materials/Splitscreen" + str(pipe_id) + ".gmd", avango.gua.LoaderFlags.DEFAULTS)

@@ -37,7 +37,7 @@ avango.gua.load_shading_models_from("data/materials")
 avango.gua.load_materials_from("data/materials")
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-loader = avango.gua.nodes.GeometryLoader()
+loader = avango.gua.nodes.TriMeshLoader()
 obj = loader.create_geometry_from_file("monkey",
                                       "data/objects/monkey.obj",
                                       "Stones",

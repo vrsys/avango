@@ -36,7 +36,7 @@ createTriangleMeshShapeFromGeometryFile (std::string const& file_name,
                                          bool build_static,
                                          bool build_dynamic,
                                          unsigned flags =
-                                          ::gua::GeometryLoader::DEFAULTS) {
+                                          ::gua::TriMeshLoader::DEFAULTS) {
 
   return av::Link<av::gua::TriangleMeshShape> (
     new av::gua::TriangleMeshShape( ::gua::physics::TriangleMeshShape::FromGeometryFile(

@@ -23,7 +23,7 @@ class TimedRotate(avango.script.Script):
 
 def add_lights(graph, count):
 
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   for x in range(0, count):
 
@@ -60,7 +60,7 @@ def add_lights(graph, count):
 def setup_scene(graph, root_monkey, depth_count):
 
   if (depth_count > 0):
-    loader = avango.gua.nodes.GeometryLoader()
+    loader = avango.gua.nodes.TriMeshLoader()
 
     offset = 2.0
 
@@ -92,7 +92,7 @@ def start():
     Name = "big_scenegraph"
   )
 
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   root_node = avango.gua.nodes.TransformNode(
     Name = "Root",

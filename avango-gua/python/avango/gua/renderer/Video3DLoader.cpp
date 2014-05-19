@@ -19,11 +19,10 @@ namespace boost
  }
 
 av::Link<av::gua::Node> load( av::gua::Video3DLoader const& loader,
-                              std::string const& fileName,
-                              int flags) {
+                              std::string const& nodename,
+                              std::string const& fileName) {
 
-   return loader.load(fileName,
-                      static_cast<av::gua::Video3DLoader::Flags>(flags));
+   return loader.load(nodename, fileName);
 }
 
 void init_Video3DLoader()
@@ -33,13 +32,6 @@ void init_Video3DLoader()
          bases<av::FieldContainer>, boost::noncopyable> ("Video3DLoader", "docstring", no_init)
          .def("load", &load)
          ;
-
-  enum_<av::gua::Video3DLoader::Flags>("Video3DLoaderFlags")
-        .value("DEFAULTS", av::gua::Video3DLoader::DEFAULTS)
-        .value("MAKE_PICKABLE", av::gua::Video3DLoader::MAKE_PICKABLE)
-        .value("NORMALIZE_SCALE", av::gua::Video3DLoader::NORMALIZE_SCALE)
-        .value("NORMALIZE_POSITION", av::gua::Video3DLoader::NORMALIZE_POSITION)
-        ;
 
   register_field<av::gua::SFVideo3DLoader>("SFVideo3DLoader");
   register_multifield<av::gua::MFVideo3DLoader>("MFVideo3DLoader");

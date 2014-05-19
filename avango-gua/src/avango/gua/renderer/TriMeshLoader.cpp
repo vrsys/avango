@@ -1,4 +1,4 @@
-#include <avango/gua/renderer/GeometryLoader.hpp>
+#include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/Base.h>
@@ -7,29 +7,29 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::GeometryLoader"));
+  av::Logger& logger(av::getLogger("av::gua::TriMeshLoader"));
 }
 
-AV_FC_DEFINE(av::gua::GeometryLoader);
+AV_FC_DEFINE(av::gua::TriMeshLoader);
 
-AV_FIELD_DEFINE(av::gua::SFGeometryLoader);
-AV_FIELD_DEFINE(av::gua::MFGeometryLoader);
+AV_FIELD_DEFINE(av::gua::SFTriMeshLoader);
+AV_FIELD_DEFINE(av::gua::MFTriMeshLoader);
 
-av::gua::GeometryLoader::GeometryLoader(::gua::GeometryLoader* guaGeometryLoader)
-    : m_guaGeometryLoader(guaGeometryLoader)
+av::gua::TriMeshLoader::TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader)
+    : m_guaTriMeshLoader(guaTriMeshLoader)
 {}
 
-//av::gua::GeometryLoader::~GeometryLoader()
+//av::gua::TriMeshLoader::~TriMeshLoader()
 //{}
 
 av::Link<av::gua::Node>
-av::gua::GeometryLoader::createGeometryFromFile(std::string const& nodeName,
+av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
                                                 std::string const& fileName,
                                                 std::string const& fallbackMaterial,
                                                 Flags flags) const
 {
 
-    auto gua_node(m_guaGeometryLoader->create_geometry_from_file(
+    auto gua_node(m_guaTriMeshLoader->create_geometry_from_file(
                                             nodeName, fileName, fallbackMaterial, flags));
     auto root(createChildren(gua_node));
 
@@ -37,27 +37,27 @@ av::gua::GeometryLoader::createGeometryFromFile(std::string const& nodeName,
 }
 
 void
-av::gua::GeometryLoader::initClass()
+av::gua::TriMeshLoader::initClass()
 {
     if (!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::GeometryLoader, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::TriMeshLoader, true);
 
-        SFGeometryLoader::initClass("av::gua::SFGeometryLoader", "av::Field");
-        MFGeometryLoader::initClass("av::gua::MFGeometryLoader", "av::Field");
+        SFTriMeshLoader::initClass("av::gua::SFTriMeshLoader", "av::Field");
+        MFTriMeshLoader::initClass("av::gua::MFTriMeshLoader", "av::Field");
     }
 }
 
-::gua::GeometryLoader*
-av::gua::GeometryLoader::getGuaGeometryLoader() const
+::gua::TriMeshLoader*
+av::gua::TriMeshLoader::getGuaTriMeshLoader() const
 {
-    return m_guaGeometryLoader;
+    return m_guaTriMeshLoader;
 }
 
 av::gua::Node*
-av::gua::GeometryLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
+av::gua::TriMeshLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 

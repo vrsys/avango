@@ -36,7 +36,7 @@
 #include <avango/gua/physics/Physics.hpp>
 
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/GeometryLoader.hpp>
+#include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/renderer/Video3DLoader.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
@@ -103,7 +103,7 @@ av::gua::Init::initClass()
         av::gua::Renderer::initClass();
         av::gua::Window::initClass();
         av::gua::Camera::initClass();
-        av::gua::GeometryLoader::initClass();
+        av::gua::TriMeshLoader::initClass();
         av::gua::Video3DLoader::initClass();
 
         av::gua::Viewer::initClass();

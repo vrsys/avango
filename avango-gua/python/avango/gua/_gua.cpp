@@ -50,7 +50,7 @@
 #include "renderer/Renderer.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/Camera.hpp"
-#include "renderer/GeometryLoader.hpp"
+#include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
 #include "renderer/Texture.hpp"
 
@@ -138,7 +138,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Renderer();
     init_Databases();
     init_Camera();
-    init_GeometryLoader();
+    init_TriMeshLoader();
     init_Video3DLoader();
     init_Texture();
 

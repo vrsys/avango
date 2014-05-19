@@ -1,12 +1,12 @@
-#ifndef AVANGO_GUA_GEOMETRY_LOADER_HPP
-#define AVANGO_GUA_GEOMETRY_LOADER_HPP
+#ifndef AVANGO_GUA_TRI_MESH_LOADER_HPP
+#define AVANGO_GUA_TRI_MESH_LOADER_HPP
 
 /**
  * \file
  * \ingroup av_gua
  */
 
-#include <gua/renderer/GeometryLoader.hpp>
+#include <gua/renderer/TriMeshLoader.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
@@ -20,30 +20,30 @@ namespace av
   namespace gua
   {
     /**
-     * Wrapper for ::gua::GeometryLoader
+     * Wrapper for ::gua::TriMeshLoader
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL GeometryLoader : public av::FieldContainer
+    class AV_GUA_DLL TriMeshLoader : public av::FieldContainer
     {
       AV_FC_DECLARE();
 
     public:
 
       enum Flags {
-        DEFAULTS = ::gua::GeometryLoader::DEFAULTS,
-        LOAD_MATERIALS = ::gua::GeometryLoader::LOAD_MATERIALS,
-        OPTIMIZE_GEOMETRY = ::gua::GeometryLoader::OPTIMIZE_GEOMETRY,
-        MAKE_PICKABLE = ::gua::GeometryLoader::MAKE_PICKABLE,
-        NORMALIZE_SCALE = ::gua::GeometryLoader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::GeometryLoader::NORMALIZE_POSITION
+        DEFAULTS = ::gua::TriMeshLoader::DEFAULTS,
+        LOAD_MATERIALS = ::gua::TriMeshLoader::LOAD_MATERIALS,
+        OPTIMIZE_GEOMETRY = ::gua::TriMeshLoader::OPTIMIZE_GEOMETRY,
+        MAKE_PICKABLE = ::gua::TriMeshLoader::MAKE_PICKABLE,
+        NORMALIZE_SCALE = ::gua::TriMeshLoader::NORMALIZE_SCALE,
+        NORMALIZE_POSITION = ::gua::TriMeshLoader::NORMALIZE_POSITION
       };
 
       /**
-       * Constructor. When called without arguments, a new ::gua::GeometryLoader is created.
-       * Otherwise, the given ::gua::GeometryLoader is used.
+       * Constructor. When called without arguments, a new ::gua::TriMeshLoader is created.
+       * Otherwise, the given ::gua::TriMeshLoader is used.
        */
-      GeometryLoader(::gua::GeometryLoader* guaGeometryLoader = new ::gua::GeometryLoader());
+      TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader = new ::gua::TriMeshLoader());
 
       av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
                                                              std::string const& fileName,
@@ -55,36 +55,36 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-//      virtual ~GeometryLoader();
+//      virtual ~TriMeshLoader();
 
     public:
 
       /**
-       * Get the wrapped ::gua::GeometryLoader.
+       * Get the wrapped ::gua::TriMeshLoader.
        */
-      ::gua::GeometryLoader* getGuaGeometryLoader() const;
+      ::gua::TriMeshLoader* getGuaTriMeshLoader() const;
 
 
     private:
 
-      ::gua::GeometryLoader *m_guaGeometryLoader;
+      ::gua::TriMeshLoader *m_guaTriMeshLoader;
 
       av::gua::Node* createChildren(std::shared_ptr< ::gua::Node> root) const;
 
-      GeometryLoader(const GeometryLoader&);
-      GeometryLoader& operator=(const GeometryLoader&);
+      TriMeshLoader(const TriMeshLoader&);
+      TriMeshLoader& operator=(const TriMeshLoader&);
     };
 
-    typedef SingleField<Link<GeometryLoader> > SFGeometryLoader;
-    typedef MultiField<Link<GeometryLoader> > MFGeometryLoader;
+    typedef SingleField<Link<TriMeshLoader> > SFTriMeshLoader;
+    typedef MultiField<Link<TriMeshLoader> > MFTriMeshLoader;
 
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::GeometryLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::GeometryLoader> >;
+  template class AV_GUA_DLL SingleField<Link<gua::TriMeshLoader> >;
+  template class AV_GUA_DLL MultiField<Link<gua::TriMeshLoader> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_GEOMETRY_LOADER_HPP
+#endif //AVANGO_GUA_TRI_MESH_LOADER_HPP

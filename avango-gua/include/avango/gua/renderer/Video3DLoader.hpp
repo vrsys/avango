@@ -43,10 +43,8 @@ namespace av
        */
       Video3DLoader(::gua::Video3DLoader* guaVideo3DLoader = new ::gua::Video3DLoader());
 
-      av::Link<av::gua::Node> createVideo3DFromFile(std::string const& nodeName,
-                                                             std::string const& fileName,
-                                                             std::string const& fallbackMaterial,
-                                                             Flags flags = DEFAULTS) const;
+      av::Link<av::gua::Node> load(std::string const& fileName,
+                                   Flags flags = DEFAULTS) const;
 
     protected:
 

@@ -30,21 +30,14 @@ namespace av
 
     public:
 
-      enum Flags {
-        DEFAULTS = ::gua::Video3DLoader::DEFAULTS,
-        MAKE_PICKABLE = ::gua::Video3DLoader::MAKE_PICKABLE,
-        NORMALIZE_POSITION = ::gua::Video3DLoader::NORMALIZE_POSITION,
-        NORMALIZE_SCALE = ::gua::Video3DLoader::NORMALIZE_SCALE
-      };
-
       /**
        * Constructor. When called without arguments, a new ::gua::Video3DLoader is created.
        * Otherwise, the given ::gua::Video3DLoader is used.
        */
       Video3DLoader(::gua::Video3DLoader* guaVideo3DLoader = new ::gua::Video3DLoader());
 
-      av::Link<av::gua::Node> load(std::string const& fileName,
-                                   Flags flags = DEFAULTS) const;
+      av::Link<av::gua::Node> load( std::string const& nodename,
+                                    std::string const& fileName) const;
 
     protected:
 

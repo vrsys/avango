@@ -23,10 +23,11 @@ av::gua::Video3DLoader::Video3DLoader(::gua::Video3DLoader* guaVideo3DLoader)
 //{}
 
 av::Link<av::gua::Node>
-av::gua::Video3DLoader::load( std::string const& fileName, Flags flags) const
+av::gua::Video3DLoader::load( std::string const& nodename,
+                              std::string const& fileName) const
 {
 
-    auto gua_node(m_guaVideo3DLoader->load(fileName, flags));
+    auto gua_node(m_guaVideo3DLoader->create_geometry_from_file(nodename, fileName));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);

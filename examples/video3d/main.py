@@ -20,9 +20,7 @@ def start(filename):
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-  loader = avango.gua.nodes.TriMeshLoader()
   videoloader = avango.gua.nodes.Video3DLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
   video_geode = videoloader.load("kinect", filename)
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
@@ -34,7 +32,7 @@ def start(filename):
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
   screen.Children.value = [eye]
 
-  graph.Root.value.Children.value = [video_geode, monkey, light, screen]
+  graph.Root.value.Children.value = [video_geode, light, screen]
 
   # setup viewing
   size = avango.gua.Vec2ui(1024, 768)
@@ -53,12 +51,7 @@ def start(filename):
   viewer.Pipelines.value = [pipe]
   viewer.SceneGraphs.value = [graph]
 
-  monkey_updater = TimedRotate()
-
   timer = avango.nodes.TimeSensor()
-  monkey_updater.TimeIn.connect_from(timer.Time)
-
-  monkey.Transform.connect_from(monkey_updater.MatrixOut)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

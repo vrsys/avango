@@ -56,47 +56,51 @@ av::gua::TexturedQuadNode::getGuaNode() const
 void
 av::gua::TexturedQuadNode::getTextureCB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.texture();
+    *(event.getValuePtr()) = m_guaNode->get_texture();
 }
 
 void
 av::gua::TexturedQuadNode::setTextureCB(const SFString::SetValueEvent& event)
 {
-    m_guaNode->data.texture() = event.getValue();
+    m_guaNode->set_texture(event.getValue());
 }
 
 void
 av::gua::TexturedQuadNode::getWidthCB(const SFFloat::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.size()[0];
+    *(event.getValuePtr()) = m_guaNode->get_size()[0];
 }
 
 void
 av::gua::TexturedQuadNode::setWidthCB(const SFFloat::SetValueEvent& event)
 {
-    m_guaNode->data.size()[0] = event.getValue();
+  auto size = m_guaNode->get_size();
+  size[0] = event.getValue();
+  m_guaNode->get_size(size);
 }
 
 void
 av::gua::TexturedQuadNode::getHeightCB(const SFFloat::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.size()[1];
+    *(event.getValuePtr()) = m_guaNode->get_size()[1];
 }
 
 void
 av::gua::TexturedQuadNode::setHeightCB(const SFFloat::SetValueEvent& event)
 {
-    m_guaNode->data.size()[1] = event.getValue();
+  auto size = m_guaNode->get_size();
+  size[1] = event.getValue();
+  m_guaNode->get_size(size);
 }
 
 void
 av::gua::TexturedQuadNode::getIsStereoTextureCB(const SFBool::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.is_stereo_texture();
+    *(event.getValuePtr()) = m_guaNode->is_stereo_texture();
 }
 
 void
 av::gua::TexturedQuadNode::setIsStereoTextureCB(const SFBool::SetValueEvent& event)
 {
-    m_guaNode->data.is_stereo_texture() = event.getValue();
+    m_guaNode->is_stereo_texture(event.getValue());
 }

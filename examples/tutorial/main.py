@@ -88,13 +88,13 @@ a background texture:\n\n\
 "\n----------------------------------------------------------\n\n\
 Now your scenegraph is still empty! Let's \n\
 add some 3D-stuff! First you will need to load a 3D-model. \n\
-Therefore you will need a GeometryLoader: \n\n\
-\033[93mloader = avango.gua.nodes.GeometryLoader()\033[0m\n\n\
+Therefore you will need a TriMeshLoader: \n\n\
+\033[93mloader = avango.gua.nodes.TriMeshLoader()\033[0m\n\n\
 (afterwards: tip(6) or 'next_tip()'!)\n",
 
   6:
 "\n----------------------------------------------------------\n\n\
-Now you have to load a 3D-model as GeometryNode. \n\
+Now you have to load a 3D-model as TriMeshNode. \n\
 This is done by: \n\n\
 \033[93mmonkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
 The first parameter ('monkey') is the new node's name. \n\
@@ -211,8 +211,8 @@ Continue by typing 'tip(20)' or 'next_tip()'!\n",
 "\n----------------------------------------------------------\n\n\
 Let's get our monkey some new looks!\n\
 In \033[92mguacamole\033[0m, materials are assigned to GeometryNodes. You told\n\
-the GeometryLoader to do so, rembember? As a matter of fact,\n\
-you can change a GeometryNode's material at runtime.\n\
+the TriMeshLoader to do so, rembember? As a matter of fact,\n\
+you can change a TriMeshNode's material at runtime.\n\
 Move the monkey back to the origin and try to make \n\
 it a chameleon by setting its material to the one the \n\
 floor already has:\n\n\
@@ -315,7 +315,7 @@ viewer = SimpleViewer()
 timed_rotate = TimedRotate()
 
 def add_sample_monkey(graph):
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
   monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
   monkey.Transform.value = avango.gua.make_trans_mat(2, 1, 0) * avango.gua.make_rot_mat(90, 0, 1, 0) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   graph.Root.value.Children.value.append(monkey)

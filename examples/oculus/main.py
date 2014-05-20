@@ -7,7 +7,7 @@ import avango.oculus
 from examples_common.GuaVE import GuaVE
 
 def create_monkeys(PARENT_NODE):
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   num_monkeys = 6
 

@@ -106,7 +106,7 @@ createTriangleMeshShapeFromGeometryFile(std::string const& shape_name,
       file_name,
       build_static,
       build_dynamic,
-      static_cast< ::gua::GeometryLoader::Flags>(loader_flags)
+      static_cast< ::gua::TriMeshLoader::Flags>(loader_flags)
     )));
 
   addCollisionShape(shape_name, shape);

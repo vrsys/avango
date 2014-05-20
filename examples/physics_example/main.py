@@ -23,7 +23,7 @@ class BallSpawner(avango.script.Script):
     self.MaxBallCount.value = 50
 
     self.__last_spawn_time = -1
-    self.__loader = avango.gua.nodes.GeometryLoader()
+    self.__loader = avango.gua.nodes.TriMeshLoader()
 
     self.__spawned_balls = []
 
@@ -91,7 +91,7 @@ def start():
                                                    ShapeName = "teapot_cs")
 
 
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
   teapot_geometry = loader.create_geometry_from_file("teapot_geometry",
                                                      "data/objects/teapot.obj",
                                                      "data/materials/Red.gmd",

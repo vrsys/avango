@@ -396,12 +396,28 @@ void av_popMsg(av::Msg& netMsg,::gua::TexturedQuadNode & buf) {
     throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::TexturedQuadNode & buf): not implemented yet.");
 }
 
-void av_pushMsg(av::Msg& netMsg, const::gua::GeometryNode & buf) {
-    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::GeometryNode & buf): not implemented yet.");
+void av_pushMsg(av::Msg& netMsg, const::gua::TriMeshNode & buf) {
+    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::TriMeshNode & buf): not implemented yet.");
 }
 
-void av_popMsg(av::Msg& netMsg,::gua::GeometryNode & buf) {
-    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::GeometryNode & buf): not implemented yet.");
+void av_popMsg(av::Msg& netMsg,::gua::TriMeshNode & buf) {
+    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::TriMeshNode & buf): not implemented yet.");
+}
+
+void av_pushMsg(av::Msg& netMsg, const::gua::Video3DNode & buf) {
+    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::Video3DNode & buf): not implemented yet.");
+}
+
+void av_popMsg(av::Msg& netMsg,::gua::Video3DNode & buf) {
+    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::Video3DNode & buf): not implemented yet.");
+}
+
+void av_pushMsg(av::Msg& netMsg, const::gua::NURBSNode & buf) {
+    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::NURBSNode & buf): not implemented yet.");
+}
+
+void av_popMsg(av::Msg& netMsg,::gua::NURBSNode & buf) {
+    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::NURBSNode & buf): not implemented yet.");
 }
 
 void av_pushMsg(av::Msg& netMsg, const::gua::VolumeNode & buf) {
@@ -634,16 +650,39 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::
 }
 
 av::OutputStream & av::operator<<(av::OutputStream & os,
-				  const::gua::GeometryNode &)
+				  const::gua::TriMeshNode &)
 {
     throw std::runtime_error("not implemented yet.");
 }
 
 av::InputStream & av::operator>>(av::InputStream & is,::gua::
-				 GeometryNode &)
+				 TriMeshNode &)
 {
     throw std::runtime_error("not implemented yet.");
 }
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+				  const::gua::Video3DNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::Video3DNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+                                  const::gua::NURBSNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::NURBSNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
 
 av::OutputStream & av::operator<<(av::OutputStream & os,
 				  const::gua::VolumeNode &)

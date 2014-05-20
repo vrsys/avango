@@ -205,6 +205,12 @@ av::gua::Pipeline::Pipeline(::gua::Pipeline* guaPipeline)
 //{}
 
 void
+av::gua::Pipeline::print_shaders(std::string const& directory) const
+{
+    m_guaPipeline->print_shaders(directory);
+}
+
+void
 av::gua::Pipeline::initClass()
 {
     if (!isTypeInitialized())

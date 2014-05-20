@@ -5,6 +5,7 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 from examples_common.GuaVE import GuaVE
+import sys
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -14,13 +15,13 @@ class TimedRotate(avango.script.Script):
   def update(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
-def start():
+def start(filename):
 
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-  loader = avango.gua.nodes.TriMeshLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+  videoloader = avango.gua.nodes.Video3DLoader()
+  video_geode = videoloader.load("kinect", filename)
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
@@ -31,7 +32,7 @@ def start():
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
   screen.Children.value = [eye]
 
-  graph.Root.value.Children.value = [monkey, light, screen]
+  graph.Root.value.Children.value = [video_geode, light, screen]
 
   # setup viewing
   size = avango.gua.Vec2ui(1024, 768)
@@ -43,18 +44,14 @@ def start():
                                    Window = avango.gua.nodes.Window(Size = size,
                                                                     LeftResolution = size),
                                    LeftResolution = size)
+  pipe.EnableBackfaceCulling.value = False
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
   viewer.Pipelines.value = [pipe]
   viewer.SceneGraphs.value = [graph]
 
-  monkey_updater = TimedRotate()
-
   timer = avango.nodes.TimeSensor()
-  monkey_updater.TimeIn.connect_from(timer.Time)
-
-  monkey.Transform.connect_from(monkey_updater.MatrixOut)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())
@@ -63,5 +60,5 @@ def start():
 
 
 if __name__ == '__main__':
-  start()
+  start(sys.argv[1])
 

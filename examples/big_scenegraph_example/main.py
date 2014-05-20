@@ -9,6 +9,10 @@ from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
 
+# create a simple scene
+avango.gua.load_shading_models_from("data/materials")
+avango.gua.load_materials_from("data/materials")
+
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()
@@ -19,7 +23,7 @@ class TimedRotate(avango.script.Script):
 
 def add_lights(graph, count):
 
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   for x in range(0, count):
 
@@ -56,7 +60,7 @@ def add_lights(graph, count):
 def setup_scene(graph, root_monkey, depth_count):
 
   if (depth_count > 0):
-    loader = avango.gua.nodes.GeometryLoader()
+    loader = avango.gua.nodes.TriMeshLoader()
 
     offset = 2.0
 
@@ -88,7 +92,7 @@ def start():
     Name = "big_scenegraph"
   )
 
-  loader = avango.gua.nodes.GeometryLoader()
+  loader = avango.gua.nodes.TriMeshLoader()
 
   root_node = avango.gua.nodes.TransformNode(
     Name = "Root",

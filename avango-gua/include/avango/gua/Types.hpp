@@ -14,6 +14,13 @@
   #include <avango/Msg.h>
 #endif //#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
+namespace gua
+{
+  class TriMeshNode;
+  class Video3DNode;
+  class NURBSNode;
+}
+
 namespace av
 {
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat4&);
@@ -66,8 +73,12 @@ namespace av
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TexturedQuadNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TexturedQuadNode&);
 
-  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::GeometryNode&);
-  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::GeometryNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TriMeshNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TriMeshNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Video3DNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::NURBSNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::NURBSNode&);
 
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::VolumeNode&);

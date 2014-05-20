@@ -58,7 +58,7 @@ def make_distributable(node):
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-loader = avango.gua.nodes.GeometryLoader()
+loader = avango.gua.nodes.TriMeshLoader()
 
 
 monkey1 = loader.create_geometry_from_file("monkey1", "data/objects/monkey.obj",

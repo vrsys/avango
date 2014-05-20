@@ -34,7 +34,7 @@ av::Link<av::gua::ConvexHullShape>
 createConvexHullShapeFromGeometryFile (std::string const& file_name,
                                          bool compensate_collision_margin = true,
                                          unsigned flags =
-                                          ::gua::GeometryLoader::DEFAULTS) {
+                                          ::gua::TriMeshLoader::DEFAULTS) {
 
   return av::Link<av::gua::ConvexHullShape> (
     new av::gua::ConvexHullShape( ::gua::physics::ConvexHullShape::FromGeometryFile(

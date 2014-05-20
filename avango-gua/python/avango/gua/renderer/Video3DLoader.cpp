@@ -18,10 +18,10 @@ namespace boost
    }
  }
 
-av::Link<av::gua::Node> load( av::gua::Video3DLoader const& loader,
-                              std::string const& nodename,
-                              std::string const& fileName) {
-
+av::Link<av::gua::Node> load(
+    av::gua::Video3DLoader const& loader,
+    std::string const& nodename,
+    std::string const& fileName) {
    return loader.load(nodename, fileName);
 }
 
@@ -31,9 +31,9 @@ void init_Video3DLoader()
          av::Link<av::gua::Video3DLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("Video3DLoader", "docstring", no_init)
          .def("load", &load)
+         .def("create_geometry_from_file", &load)
          ;
 
   register_field<av::gua::SFVideo3DLoader>("SFVideo3DLoader");
   register_multifield<av::gua::MFVideo3DLoader>("MFVideo3DLoader");
-
 }

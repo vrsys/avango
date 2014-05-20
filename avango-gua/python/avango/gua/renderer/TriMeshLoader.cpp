@@ -48,5 +48,4 @@ void init_TriMeshLoader()
 
   register_field<av::gua::SFTriMeshLoader>("SFTriMeshLoader");
   register_multifield<av::gua::MFTriMeshLoader>("MFTriMeshLoader");
-
 }

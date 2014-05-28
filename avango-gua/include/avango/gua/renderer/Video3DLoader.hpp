@@ -9,7 +9,7 @@
 #include <gua/renderer/Video3DLoader.hpp>
 
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/scenegraph/Video3DNode.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/gua/windows_specific_gua.hpp>

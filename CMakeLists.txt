@@ -114,6 +114,7 @@ SET (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Instal
 
 option (AVANGO_DEBUG "Set to enable avango debugging.")
 option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support.")
+option (AVANGO_PBR_SUPPORT "Set to enable PBR (point based rendering) support.")
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")

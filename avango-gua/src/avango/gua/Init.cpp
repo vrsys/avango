@@ -7,6 +7,10 @@
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
 #include <avango/gua/scenegraph/Video3DNode.hpp>
+#if defined(AVANGO_PBR_SUPPORT)
+#include <avango/gua/scenegraph/PBRNode.hpp>
+#include <avango/gua/scenegraph/PLODNode.hpp>
+#endif
 #include <avango/gua/scenegraph/NURBSNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
@@ -39,6 +43,10 @@
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/renderer/Video3DLoader.hpp>
+#if defined(AVANGO_PBR_SUPPORT)
+#include <avango/gua/renderer/PBRLoader.hpp>
+#include <avango/gua/renderer/PLODLoader.hpp>
+#endif
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
@@ -73,6 +81,10 @@ av::gua::Init::initClass()
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
         av::gua::Video3DNode::initClass();
+#if defined(AVANGO_PBR_SUPPORT)
+        av::gua::PBRNode::initClass();
+        av::gua::PLODNode::initClass();
+#endif
         av::gua::NURBSNode::initClass();
         av::gua::VolumeNode::initClass();
         av::gua::ScreenNode::initClass();
@@ -108,6 +120,10 @@ av::gua::Init::initClass()
         av::gua::Camera::initClass();
         av::gua::TriMeshLoader::initClass();
         av::gua::Video3DLoader::initClass();
+#if defined(AVANGO_PBR_SUPPORT)
+        av::gua::PBRLoader::initClass();
+        av::gua::PLODLoader::initClass();
+#endif
         av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();

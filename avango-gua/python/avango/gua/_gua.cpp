@@ -17,6 +17,10 @@
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#if defined(AVANGO_PBR_SUPPORT)
+#include "scenegraph/PBRNode.hpp"
+#include "scenegraph/PLODNode.hpp"
+#endif
 #include "scenegraph/NURBSNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
 #include "scenegraph/PointLightNode.hpp"
@@ -53,6 +57,10 @@
 #include "renderer/Camera.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
+#if defined(AVANGO_PBR_SUPPORT)
+#include "renderer/PBRLoader.hpp"
+#include "renderer/PLODLoader.hpp"
+#endif
 #include "renderer/NURBSLoader.hpp"
 #include "renderer/Texture.hpp"
 
@@ -107,6 +115,10 @@ BOOST_PYTHON_MODULE(_gua)
 #endif
     init_TriMeshNode();
     init_Video3DNode();
+#if defined(AVANGO_PBR_SUPPORT)
+    init_PLODNode();
+    init_PBRNode();
+#endif
     init_NURBSNode();
     init_ScreenNode();
     init_PointLightNode();
@@ -143,6 +155,10 @@ BOOST_PYTHON_MODULE(_gua)
     init_Camera();
     init_TriMeshLoader();
     init_Video3DLoader();
+#if defined(AVANGO_PBR_SUPPORT)
+    init_PLODLoader();
+    init_PBRLoader();
+#endif
     init_NURBSLoader();
     init_Texture();
 

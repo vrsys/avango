@@ -18,6 +18,19 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
 
+IF (NOT ${AVANGO_PBR_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/scenegraph/PLODNode.cpp
+    src/avango/gua/scenegraph/PBRNode.cpp
+    src/avango/gua/renderer/PLODLoader.cpp
+    src/avango/gua/renderer/PBRLoader.cpp
+    include/avango/gua/scenegraph/PLODNode.h
+    include/avango/gua/scenegraph/PBRNode.h
+    include/avango/gua/renderer/PLODLoader.h
+    include/avango/gua/renderer/PBRLoader.h
+)
+ENDIF (NOT ${AVANGO_PBR_SUPPORT})
+
 file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     python/avango/gua/*.c
     python/avango/gua/*.cpp
@@ -31,6 +44,19 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
     python/avango/gua/network/NetTransform.cpp
 )
 ENDIF (NOT ${AVANGO_DISTRIBUTION_SUPPORT})
+
+IF (NOT ${AVANGO_PBR_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/scenegraph/PLODNode.hpp
+  python/avango/gua/scenegraph/PLODNode.cpp
+  python/avango/gua/scenegraph/PLODLoader.hpp
+  python/avango/gua/scenegraph/PLODLoader.cpp
+  python/avango/gua/scenegraph/PBRNode.hpp
+  python/avango/gua/scenegraph/PBRNode.cpp
+  python/avango/gua/scenegraph/PBRLoader.hpp
+  python/avango/gua/scenegraph/PBRLoader.cpp
+)
+ENDIF (NOT ${AVANGO_PBR_SUPPORT})
 
 ###############################################################################
 # set link directories

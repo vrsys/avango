@@ -42,6 +42,7 @@
 #endif
 
 #cmakedefine AVANGO_PCL_SUPPORT
+#cmakedefine AVANGO_PBR_SUPPORT
 
 #ifdef AVANGO_PCL_SUPPORT
 #define PCL_SUPPORT 1

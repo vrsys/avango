@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_PLOD_LOADER_HPP
+#define AV_PYTHON_GUA_PLOD_LOADER_HPP
+
+void init_PLODLoader();
+
+#endif //AV_PYTHON_GUA_PLOD_LOADER_HPP

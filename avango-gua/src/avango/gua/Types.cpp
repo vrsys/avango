@@ -672,6 +672,32 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::Video3DNode &)
     throw std::runtime_error("not implemented yet.");
 }
 
+#if defined(AVANGO_PBR_SUPPORT)
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+				  const::gua::PBRNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::PBRNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+				  const::gua::PLODNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::PLODNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+#endif
+
 av::OutputStream & av::operator<<(av::OutputStream & os,
                                   const::gua::NURBSNode &)
 {

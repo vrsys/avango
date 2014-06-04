@@ -9,7 +9,8 @@ set(AVANGO_VERSION_MAJOR 2)
 set(AVANGO_VERSION_MINOR 11)
 set(AVANGO_VERSION_MAINT 1)
 
-set(AVANGO_VERSION ${AVANGO_VERSION_MAJOR}.${AVANGO_VERSION_MINOR}.${AVANGO_VERSION_MAINT})
+set(AVANGO_VERSION
+    ${AVANGO_VERSION_MAJOR}.${AVANGO_VERSION_MINOR}.${AVANGO_VERSION_MAINT})
 set(AVANGO_DESCRIPTION "AVANGO")
 set(AVANGO_HOMEPAGE "https://github.com/vrsys")
 set(AVANGO_EXENAME "AVANGO")
@@ -19,7 +20,7 @@ set(AVANGO_PACKAGENAME "AVANGO")
 cmake_minimum_required(VERSION 2.8.0)
 
 if (UNIX)
-	find_package(PkgConfig)
+  find_package(PkgConfig)
 endif(UNIX)
 
 # Location where cmake first looks for modules.
@@ -31,7 +32,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 set(GLOBAL_EXT_DIR ${AVANGO_SOURCE_DIR}/externals)
 
 if (UNIX)
-	pkg_check_modules(GL REQUIRED gl)
+  pkg_check_modules(GL REQUIRED gl)
 endif (UNIX)
 
 include(find_compiler)
@@ -42,14 +43,15 @@ set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 include(find_assimp)
 include(find_boost)
-set (BULLET_ROOT "/opt/bullet/default" CACHE PATH "Set to your bullet install path.")
+set (BULLET_ROOT "/opt/bullet/default" CACHE PATH
+    "Set to your bullet install path.")
 find_package(Bullet)
 include(find_json)
 include(find_python)
 include(find_schism)
 
 if (AVANGO_DISTRIBUTION_SUPPORT)
-  include(FindZMQ)
+    include(FindZMQ)
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (UNIX)
@@ -79,8 +81,8 @@ set(INCLUDE_PATHS
 )
 
 if (AVANGO_DISTRIBUTION_SUPPORT)
-  list(APPEND LIB_PATHS ${ZMQ_LIBRARY_DIRS})
-  list(APPEND INCLUDE_PATHS ${ZMQ_INCLUDE_DIRS})
+    list(APPEND LIB_PATHS ${ZMQ_LIBRARY_DIRS})
+    list(APPEND INCLUDE_PATHS ${ZMQ_INCLUDE_DIRS})
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 include_directories(ALL
@@ -95,19 +97,21 @@ endif()
 # preprocessor configuration
 ################################################################
 if (UNIX)
-	set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x")
-	set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x")
+    set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x")
 elseif(MSVC)
-	set(CMAKE_CXX_FLAGS_RELEASE "-D NDEBUG -D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
-	set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG /MDd /Zi")
-  add_definitions(-D AV_INSTANTIATE_FIELD_TEMPLATES -D NOMINMAX)
+    set(CMAKE_CXX_FLAGS_RELEASE "-D NDEBUG -D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
+    set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG /MDd /Zi")
+    add_definitions(-D AV_INSTANTIATE_FIELD_TEMPLATES -D NOMINMAX)
 endif(UNIX)
 
 ################################################################
 # Avango Configuration
 ################################################################
-set (AVANGO_LOG_LEVEL "WARN" CACHE STRING "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
-set (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH "Install path for avango.")
+set (AVANGO_LOG_LEVEL "WARN" CACHE STRING
+    "Set AvangoNG log level: FATAL, ERROR, WARN, INFO, DEBUG, TRACE")
+set (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH
+    "Install path for avango.")
 
 option (AVANGO_DEBUG "Set to enable avango debugging.")
 option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support.")

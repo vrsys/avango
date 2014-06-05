@@ -13,6 +13,7 @@
 #include "math/math.hpp"
 
 #include "scenegraph/Node.hpp"
+#include "scenegraph/GeometryNode.hpp"
 #include "scenegraph/TransformNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
@@ -107,6 +108,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Color();
 
     init_Node();
+    init_GeometryNode();
     init_TransformNode();
     init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)

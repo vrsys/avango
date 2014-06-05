@@ -9,7 +9,7 @@
 #include <gua/scenegraph/PLODNode.hpp>
 #include <gua/math/math.hpp>
 
-#include <avango/gua/scenegraph/Node.hpp>
+#include <avango/gua/scenegraph/GeometryNode.hpp>
 
 namespace av
 {
@@ -20,17 +20,11 @@ namespace av
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL PLODNode : public av::gua::Node
+    class AV_GUA_DLL PLODNode : public av::gua::GeometryNode
     {
       AV_FC_DECLARE();
 
     public:
-
-      enum ShadowModeEnum {
-        OFF = static_cast<unsigned>(::gua::ShadowMode::OFF),
-        LOW_QUALITY = static_cast<unsigned>(::gua::ShadowMode::LOW_QUALITY),
-        HIGH_QUALITY = static_cast<unsigned>(::gua::ShadowMode::HIGH_QUALITY)
-      };
 
       /**
        * Constructor. When called without arguments, a new ::gua::PLODNode 
@@ -49,31 +43,12 @@ namespace av
 
     public:
 
-
-      SFString Geometry;
-      SFString Material;
-      SFUInt   ShadowMode;
-
-
       /**
        * Get the wrapped ::gua::PLODNode.
        */
-      std::shared_ptr< ::gua::PLODNode> getGuaNode() const;
-
-    public:
-
-      virtual void getGeometryCB(const SFString::GetValueEvent& event);
-      virtual void setGeometryCB(const SFString::SetValueEvent& event);
-
-      virtual void getMaterialCB(const SFString::GetValueEvent& event);
-      virtual void setMaterialCB(const SFString::SetValueEvent& event);
-
-      virtual void getShadowModeCB(const SFUInt::GetValueEvent& event);
-      virtual void setShadowModeCB(const SFUInt::SetValueEvent& event);
+      //std::shared_ptr< ::gua::PLODNode> getGuaNode() const;
 
     private:
-
-      std::shared_ptr< ::gua::PLODNode> m_guaNode;
 
       PLODNode(const PLODNode&);
       PLODNode& operator=(const PLODNode&);

@@ -49,12 +49,12 @@ IF (NOT ${AVANGO_PBR_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/scenegraph/PLODNode.hpp
   python/avango/gua/scenegraph/PLODNode.cpp
-  python/avango/gua/scenegraph/PLODLoader.hpp
-  python/avango/gua/scenegraph/PLODLoader.cpp
   python/avango/gua/scenegraph/PBRNode.hpp
   python/avango/gua/scenegraph/PBRNode.cpp
-  python/avango/gua/scenegraph/PBRLoader.hpp
-  python/avango/gua/scenegraph/PBRLoader.cpp
+  python/avango/gua/renderer/PLODLoader.hpp
+  python/avango/gua/renderer/PLODLoader.cpp
+  python/avango/gua/renderer/PBRLoader.hpp
+  python/avango/gua/renderer/PBRLoader.cpp
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
 

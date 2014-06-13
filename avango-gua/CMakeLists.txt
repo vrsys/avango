@@ -31,6 +31,41 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
 
+IF (NOT ${AVANGO_PHYSICS_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+  include/avango/gua/physics/BoxShape.hpp
+  include/avango/gua/physics/CollisionShape.hpp
+  include/avango/gua/physics/CollisionShapeNode.hpp
+  include/avango/gua/physics/Constraint.hpp
+  include/avango/gua/physics/ConvexHullShape.hpp
+  include/avango/gua/physics/CylinderShape.hpp
+  include/avango/gua/physics/FixedConstraint.hpp
+  include/avango/gua/physics/HingeConstraint.hpp
+  include/avango/gua/physics/Physics.hpp
+  include/avango/gua/physics/PlaneShape.hpp
+  include/avango/gua/physics/Point2PointConstraint.hpp
+  include/avango/gua/physics/RigidBodyNode.hpp
+  include/avango/gua/physics/SliderConstraint.hpp
+  include/avango/gua/physics/SphereShape.hpp
+  include/avango/gua/physics/TriangleMeshShape.hpp
+  src/avango/gua/physics/BoxShape.cpp
+  src/avango/gua/physics/CollisionShape.cpp
+  src/avango/gua/physics/CollisionShapeNode.cpp
+  src/avango/gua/physics/Constraint.cpp
+  src/avango/gua/physics/ConvexHullShape.cpp
+  src/avango/gua/physics/CylinderShape.cpp
+  src/avango/gua/physics/FixedConstraint.cpp
+  src/avango/gua/physics/HingeConstraint.cpp
+  src/avango/gua/physics/Physics.cpp
+  src/avango/gua/physics/PlaneShape.cpp
+  src/avango/gua/physics/Point2PointConstraint.cpp
+  src/avango/gua/physics/RigidBodyNode.cpp
+  src/avango/gua/physics/SliderConstraint.cpp
+  src/avango/gua/physics/SphereShape.cpp
+  src/avango/gua/physics/TriangleMeshShape.cpp
+  )
+ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
+
 file(GLOB_RECURSE AVANGO_GUA_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     python/avango/gua/*.c
     python/avango/gua/*.cpp
@@ -57,6 +92,43 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/renderer/PBRLoader.cpp
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
+
+IF (NOT ${AVANGO_PHYSICS_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/physics/BoxShape.cpp
+  python/avango/gua/physics/BoxShape.hpp
+  python/avango/gua/physics/CollisionShape.cpp
+  python/avango/gua/physics/CollisionShape.hpp
+  python/avango/gua/physics/CollisionShapeNode.cpp
+  python/avango/gua/physics/CollisionShapeNode.hpp
+  python/avango/gua/physics/Constraint.cpp
+  python/avango/gua/physics/Constraint.hpp
+  python/avango/gua/physics/ConvexHullShape.cpp
+  python/avango/gua/physics/ConvexHullShape.hpp
+  python/avango/gua/physics/CylinderShape.cpp
+  python/avango/gua/physics/CylinderShape.hpp
+  python/avango/gua/physics/FixedConstraint.cpp
+  python/avango/gua/physics/FixedConstraint.hpp
+  python/avango/gua/physics/HingeConstraint.cpp
+  python/avango/gua/physics/HingeConstraint.hpp
+  python/avango/gua/physics/Physics.cpp
+  python/avango/gua/physics/PhysicsDatabase.cpp
+  python/avango/gua/physics/PhysicsDatabase.hpp
+  python/avango/gua/physics/Physics.hpp
+  python/avango/gua/physics/PlaneShape.cpp
+  python/avango/gua/physics/PlaneShape.hpp
+  python/avango/gua/physics/Point2PointConstraint.cpp
+  python/avango/gua/physics/Point2PointConstraint.hpp
+  python/avango/gua/physics/RigidBodyNode.cpp
+  python/avango/gua/physics/RigidBodyNode.hpp
+  python/avango/gua/physics/SliderConstraint.cpp
+  python/avango/gua/physics/SliderConstraint.hpp
+  python/avango/gua/physics/SphereShape.cpp
+  python/avango/gua/physics/SphereShape.hpp
+  python/avango/gua/physics/TriangleMeshShape.cpp
+  python/avango/gua/physics/TriangleMeshShape.hpp
+  )
+ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
 
 ###############################################################################
 # set link directories

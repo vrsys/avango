@@ -34,6 +34,7 @@
 
 #include "math/BoundingBox.hpp"
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
 #include "physics/RigidBodyNode.hpp"
 #include "physics/CollisionShapeNode.hpp"
 #include "physics/CollisionShape.hpp"
@@ -50,6 +51,7 @@
 #include "physics/SliderConstraint.hpp"
 #include "physics/PhysicsDatabase.hpp"
 #include "physics/Physics.hpp"
+#endif
 
 #include "renderer/Pipeline.hpp"
 #include "renderer/Window.hpp"
@@ -133,6 +135,7 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_BoundingBox();
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
     init_RigidBodyNode();
     init_CollisionShapeNode();
     init_CollisionShape();
@@ -149,6 +152,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SliderConstraint();
     init_PhysicsDatabase();
     init_Physics();
+#endif
 
     init_Pipeline();
     init_Window();

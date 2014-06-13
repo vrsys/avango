@@ -27,7 +27,9 @@ av::gua::Viewer::Viewer()
 {
     AV_FC_ADD_FIELD(Pipelines, MFPipeline::ContainerType());
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
+#if defined(AVANGO_PHYSICS_SUPPORT)
     AV_FC_ADD_FIELD(Physics, nullptr);
+#endif
 
     AV_FC_ADD_ADAPTOR_FIELD(DesiredFPS,
                     boost::bind(&Viewer::getDesiredFPSCB, this, _1),
@@ -76,9 +78,11 @@ av::gua::Viewer::run() const {
   }
 
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
   if (Physics.getValue().isValid()) {
     Physics.getValue()->State.setValue(static_cast<int>(av::gua::Physics::RunningState::RUNNING));
   }
+#endif
 
   PyThreadState* save_state(PyEval_SaveThread());
 
@@ -97,9 +101,11 @@ av::gua::Viewer::run() const {
       m_renderer->queue_draw(graphs);
     }
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
     if (this->Physics.getValue().isValid()) {
       this->Physics.getValue()->synchronize(true);
     }
+#endif
 
     save_state = PyEval_SaveThread();
 

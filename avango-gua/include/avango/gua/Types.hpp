@@ -1,20 +1,20 @@
 #ifndef AVANGO_GUA_TYPES_H
 #define AVANGO_GUA_TYPES_H
 
-#include <gua/math/math.hpp>
-#include <gua/utils/Color3f.hpp>
-#if defined(AVANGO_PHYSICS_SUPPORT)
-#include <gua/physics.hpp>
-#endif
-
-#include <avango/gua/windows_specific_gua.hpp>
 #include <avango/Config.h>
+#include <avango/gua/windows_specific_gua.hpp>
 #include <avango/InputStream.h>
 #include <avango/OutputStream.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
   #include <avango/Msg.h>
 #endif //#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+
+#include <gua/math/math.hpp>
+#include <gua/utils/Color3f.hpp>
+#if defined(AVANGO_PHYSICS_SUPPORT)
+#include <gua/physics.hpp>
+#endif
 
 namespace gua
 {

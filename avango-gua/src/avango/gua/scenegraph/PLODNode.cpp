@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::PLODNode);
 AV_FIELD_DEFINE(av::gua::SFPLODNode);
 AV_FIELD_DEFINE(av::gua::MFPLODNode);
 
-av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::PLODNode> guanode)
+av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
     : GeometryNode(guanode)
 {
 }

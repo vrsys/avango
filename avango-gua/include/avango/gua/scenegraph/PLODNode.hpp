@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/PLODNode.hpp>
+#include <gua/node/PLODNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -27,12 +27,12 @@ namespace av
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::PLODNode 
+       * Constructor. When called without arguments, a new ::gua::PLODNode
        * is created.
        * Otherwise, the given ::gua::PLODNode is used.
        */
-      PLODNode(std::shared_ptr< ::gua::PLODNode> guanode = 
-          std::shared_ptr< ::gua::PLODNode>(new ::gua::PLODNode("")));
+      PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode =
+          std::shared_ptr< ::gua::node::PLODNode>(new ::gua::node::PLODNode("")));
 
     protected:
 

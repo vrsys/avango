@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/VolumeNode.hpp>
+#include <gua/node/VolumeNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::VolumeNode is created.
        * Otherwise, the given ::gua::VolumeNode is used.
        */
-      VolumeNode(std::shared_ptr< ::gua::VolumeNode> guanode = std::shared_ptr< ::gua::VolumeNode>(new ::gua::VolumeNode("")));
+      VolumeNode(std::shared_ptr< ::gua::node::VolumeNode> guanode = std::shared_ptr< ::gua::node::VolumeNode>(new ::gua::node::VolumeNode("")));
 
     protected:
 
@@ -47,7 +47,7 @@ namespace av
       /**
        * Get the wrapped ::gua::VolumeNode.
        */
-      std::shared_ptr< ::gua::VolumeNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::VolumeNode> getGuaNode() const;
 
     public:
 
@@ -56,7 +56,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::VolumeNode> m_guaNode;
+      std::shared_ptr< ::gua::node::VolumeNode> m_guaNode;
 
       VolumeNode(const VolumeNode&);
       VolumeNode& operator=(const VolumeNode&);

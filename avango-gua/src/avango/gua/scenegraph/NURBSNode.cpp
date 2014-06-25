@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::NURBSNode);
 AV_FIELD_DEFINE(av::gua::SFNURBSNode);
 AV_FIELD_DEFINE(av::gua::MFNURBSNode);
 
-av::gua::NURBSNode::NURBSNode(std::shared_ptr< ::gua::NURBSNode> guanode)
+av::gua::NURBSNode::NURBSNode(std::shared_ptr< ::gua::node::NURBSNode> guanode)
     : GeometryNode(guanode)
 {
 }

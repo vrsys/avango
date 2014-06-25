@@ -7,9 +7,9 @@ AV_FC_DEFINE_ABSTRACT(av::gua::GeometryNode);
 AV_FIELD_DEFINE(av::gua::SFGeometryNode);
 AV_FIELD_DEFINE(av::gua::MFGeometryNode);
 
-av::gua::GeometryNode::GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode)
+av::gua::GeometryNode::GeometryNode(std::shared_ptr< ::gua::node::GeometryNode> guanode)
   : Node(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::GeometryNode>(Node::getGuaNode()))
+    m_guaNode(std::dynamic_pointer_cast< ::gua::node::GeometryNode>(Node::getGuaNode()))
 {
   AV_FC_ADD_ADAPTOR_FIELD(Geometry,
                         boost::bind(&GeometryNode::getGeometryCB, this, _1),
@@ -39,7 +39,7 @@ av::gua::GeometryNode::initClass()
   }
 }
 
-std::shared_ptr< ::gua::GeometryNode>
+std::shared_ptr< ::gua::node::GeometryNode>
 av::gua::GeometryNode::getGuaNode() const
 {
   return m_guaNode;

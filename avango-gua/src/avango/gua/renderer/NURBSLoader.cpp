@@ -58,17 +58,17 @@ av::gua::NURBSLoader::getGuaNURBSLoader() const
 }
 
 av::gua::Node*
-av::gua::NURBSLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
+av::gua::NURBSLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 
-  auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
+  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
   if (group_cast) {
     av_node = new av::gua::TransformNode(group_cast);
   }
 
   if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::NURBSNode>(root));
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::NURBSNode>(root));
     if (geom_cast) {
       av_node = new av::gua::NURBSNode(geom_cast);
     }

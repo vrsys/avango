@@ -58,7 +58,7 @@ namespace av
 
       ::gua::Video3DLoader *m_guaVideo3DLoader;
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::Node> root) const;
+      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
 
       Video3DLoader(const Video3DLoader&);
       Video3DLoader& operator=(const Video3DLoader&);

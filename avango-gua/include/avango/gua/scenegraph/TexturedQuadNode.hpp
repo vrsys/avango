@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/TexturedQuadNode.hpp>
+#include <gua/node/TexturedQuadNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TexturedQuadNode is created.
        * Otherwise, the given ::gua::TexturedQuadNode is used.
        */
-      TexturedQuadNode(std::shared_ptr< ::gua::TexturedQuadNode> guanode = std::shared_ptr< ::gua::TexturedQuadNode>(new ::gua::TexturedQuadNode("")));
+      TexturedQuadNode(std::shared_ptr< ::gua::node::TexturedQuadNode> guanode = std::shared_ptr< ::gua::node::TexturedQuadNode>(new ::gua::node::TexturedQuadNode("")));
 
     protected:
 
@@ -50,7 +50,7 @@ namespace av
       /**
        * Get the wrapped ::gua::TexturedQuadNode.
        */
-      std::shared_ptr< ::gua::TexturedQuadNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::TexturedQuadNode> getGuaNode() const;
 
     public:
 
@@ -68,7 +68,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::TexturedQuadNode> m_guaNode;
+      std::shared_ptr< ::gua::node::TexturedQuadNode> m_guaNode;
 
       TexturedQuadNode(const TexturedQuadNode&);
       TexturedQuadNode& operator=(const TexturedQuadNode&);

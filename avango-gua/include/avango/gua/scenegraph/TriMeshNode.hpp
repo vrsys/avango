@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/TriMeshNode.hpp>
+#include <gua/node/TriMeshNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -30,8 +30,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TriMeshNode is created.
        * Otherwise, the given ::gua::TriMeshNode is used.
        */
-      TriMeshNode(std::shared_ptr< ::gua::TriMeshNode> guanode =
-          std::shared_ptr< ::gua::TriMeshNode>(new ::gua::TriMeshNode("")));
+      TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> guanode =
+          std::shared_ptr< ::gua::node::TriMeshNode>(new ::gua::node::TriMeshNode("")));
 
     protected:
 

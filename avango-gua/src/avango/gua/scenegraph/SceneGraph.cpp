@@ -10,7 +10,7 @@ AV_FIELD_DEFINE(av::gua::MFSceneGraph);
 
 av::gua::SceneGraph::SceneGraph(::gua::SceneGraph* guaSceneGraph)
     : m_guaSceneGraph(guaSceneGraph),
-      m_root(new av::gua::TransformNode(std::dynamic_pointer_cast< ::gua::TransformNode>((*m_guaSceneGraph)["/"])))
+      m_root(new av::gua::TransformNode(std::dynamic_pointer_cast< ::gua::node::TransformNode>((*m_guaSceneGraph)["/"])))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Root,
                           boost::bind(&SceneGraph::getRootCB, this, _1),

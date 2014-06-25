@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/PBRNode.hpp>
+#include <gua/node/PBRNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -27,12 +27,12 @@ namespace av
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::PBRNode 
+       * Constructor. When called without arguments, a new ::gua::PBRNode
        * is created.
        * Otherwise, the given ::gua::PBRNode is used.
        */
-      PBRNode(std::shared_ptr< ::gua::PBRNode> guanode = 
-          std::shared_ptr< ::gua::PBRNode>(new ::gua::PBRNode("")));
+      PBRNode(std::shared_ptr< ::gua::node::PBRNode> guanode =
+          std::shared_ptr< ::gua::node::PBRNode>(new ::gua::node::PBRNode("")));
 
     protected:
 

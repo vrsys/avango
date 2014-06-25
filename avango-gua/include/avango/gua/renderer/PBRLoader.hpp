@@ -59,7 +59,7 @@ namespace av
 
       ::gua::PBRLoader *m_guaPBRLoader;
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::Node> root) const;
+      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
 
       PBRLoader(const PBRLoader&);
       PBRLoader& operator=(const PBRLoader&);

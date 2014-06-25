@@ -14,9 +14,9 @@ AV_FC_DEFINE(av::gua::TransformNode);
 AV_FIELD_DEFINE(av::gua::SFTransformNode);
 AV_FIELD_DEFINE(av::gua::MFTransformNode);
 
-av::gua::TransformNode::TransformNode(std::shared_ptr< ::gua::TransformNode> guanode)
+av::gua::TransformNode::TransformNode(std::shared_ptr< ::gua::node::TransformNode> guanode)
   : Node(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::TransformNode> (Node::getGuaNode()))
+    m_guaNode(std::dynamic_pointer_cast< ::gua::node::TransformNode> (Node::getGuaNode()))
 {}
 
 av::gua::TransformNode::~TransformNode()
@@ -38,7 +38,7 @@ av::gua::TransformNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::TransformNode>
+std::shared_ptr< ::gua::node::TransformNode>
 av::gua::TransformNode::getGuaNode() const
 {
     return m_guaNode;

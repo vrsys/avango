@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/NURBSNode.hpp>
+#include <gua/node/NURBSNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -31,8 +31,8 @@ namespace av
        * is created.
        * Otherwise, the given ::gua::NURBSNode is used.
        */
-      NURBSNode(std::shared_ptr< ::gua::NURBSNode> guanode =
-          std::shared_ptr< ::gua::NURBSNode>(new ::gua::NURBSNode("")));
+      NURBSNode(std::shared_ptr< ::gua::node::NURBSNode> guanode =
+          std::shared_ptr< ::gua::node::NURBSNode>(new ::gua::node::NURBSNode("")));
 
     protected:
 

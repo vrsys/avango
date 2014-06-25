@@ -70,7 +70,7 @@ namespace av
 
       ::gua::NURBSLoader *m_guaNURBSLoader;
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::Node> root) const;
+      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
 
       NURBSLoader(const NURBSLoader&);
       NURBSLoader& operator=(const NURBSLoader&);

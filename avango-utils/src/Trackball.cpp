@@ -26,7 +26,7 @@
 #include <avango/utils/Trackball.h>
 #include <avango/Logger.h>
 #include <boost/bind.hpp>
-#include <osg/Quat>
+#include <gua/math.hpp>
 #include <cmath>
 
 namespace
@@ -35,12 +35,12 @@ namespace
 av::Logger& logger(av::getLogger("av::utils::Trackball"));
 
 ::gua::math::vec3 projectToSphere(::gua::math::vec2 const& position) {
-  const double distance = position.length();
+  const double distance = ::scm::math::length(position);
   const double z = distance < 0.7071
                   ? std::sqrt(1.0 - distance * distance)
                   : 0.5 / distance;
   ::gua::math::vec3 polarVec(position[0], position[1], z);
-  polarVec.normalize();
+  ::scm::math::normalize(polarVec);
   return polarVec;
 }
 
@@ -59,7 +59,7 @@ av::utils::Trackball::Trackball() :
   mSpinning(false),
   mReset(false)
 {
-  av::Link< ::av::osg::BoundingSphere > b = new ::av::osg::BoundingSphere();
+  av::Link< ::av::gua::BoundingSphere > b = new ::av::gua::BoundingSphere();
 
   AV_FC_ADD_FIELD(Matrix, ::gua::math::mat4::identity());
   AV_FC_ADD_FIELD(TimeIn, 0.0);
@@ -73,8 +73,7 @@ av::utils::Trackball::Trackball() :
   AV_FC_ADD_FIELD(EnableSpinning,true);
   AV_FC_ADD_FIELD(SpinningTimeThreshold, 0.3);
   AV_FC_ADD_FIELD(SpinningWeightingCoefficient,0.97);
-  AV_FC_ADD_FIELD(CenterTransform
-                  , ::scm::math::make_translation(0.0, 0.0, -0.6));
+  AV_FC_ADD_FIELD(CenterTransform, ::scm::math::make_translation(0.0f, 0.0f, -0.6f));
   AV_FC_ADD_FIELD(CenterToBoundingSphere, false);
   AV_FC_ADD_FIELD(BoundingSphere, b);
   AV_FC_ADD_FIELD(CenterTransformOffset, ::gua::math::vec3(0,-1.7,0));
@@ -113,11 +112,11 @@ av::utils::Trackball::reset()
     const ::gua::math::vec3 center = BoundingSphere.getValue()->Center.getValue();
     const float radius = BoundingSphere.getValue()->Radius.getValue();
     ::gua::math::vec3 offset = CenterTransformOffset.getValue();
-    offset.z()= offset.z() + radius*CenterTransformOffsetZCoefficient.getValue();
+    offset.z = offset.z + radius*CenterTransformOffsetZCoefficient.getValue();
 
-    ::gua::math::vec3 offset_inv = ::gua::math::vec3(-offset.x()
-                                                    ,-offset.y()
-                                                    ,-offset.z());
+    ::gua::math::vec3 offset_inv = ::gua::math::vec3(-offset.x
+                                                    ,-offset.y
+                                                    ,-offset.z);
     Matrix.setValue( ::scm::math::make_translation( center + offset ));
 
     CenterTransform.setValue(::scm::math::make_translation(offset_inv));
@@ -158,10 +157,11 @@ av::utils::Trackball::evaluate()
   {
     if (RotateTrigger.getValue())
     {
-      ::osg::Matrix rotMat = ::osg::Matrix::rotate(projected, mLastProjected);
+      auto quat = ::scm::math::quat<float>::from_arc(projected, mLastProjected);
+      ::gua::math::mat4 rotMat = quat.to_matrix();
 
       float fac = SpinningWeightingCoefficient.getValue();
-      mRotation = rotMat * ::osg::Matrix::scale(fac,fac,fac) * mRotation;
+      mRotation = rotMat * ::scm::math::make_scale(fac,fac,fac) * mRotation;
 
       Matrix.setValue(mCenterTransInv * rotMat *
                       CenterTransform.getValue() * Matrix.getValue());
@@ -169,18 +169,18 @@ av::utils::Trackball::evaluate()
     else if (ZoomTrigger.getValue())
     {
       const ::gua::math::vec2 offset = mLastDirection - Direction.getValue();
-      float zoomFactor = offset.y();
+      float zoomFactor = offset.y;
       zoomFactor *= BoundingSphere.getValue()->Radius.getValue()
                   * ZoomPanFactor.getValue();
 
       if(AutoAdjustCenterTransform.getValue()) {
         ::gua::math::mat4 mat = CenterTransform.getValue()
-                          * ::scm::math::make_translation(0.0, 0.0, zoomFactor);
+                          * ::scm::math::make_translation(0.0f, 0.0f, zoomFactor);
         CenterTransform.setValue(mat);
       }
 
       Matrix.setValue(mCenterTransInv
-                    * ::scm::math::make_translation(0.0, 0.0, -zoomFactor)
+                    * ::scm::math::make_translation(0.0f, 0.0f, -zoomFactor)
                     * CenterTransform.getValue()
                     * Matrix.getValue());
     }
@@ -188,15 +188,15 @@ av::utils::Trackball::evaluate()
     {
       const ::gua::math::vec2 offset = mLastDirection - Direction.getValue();
 
-      float xPanFactor = offset.x()
+      float xPanFactor = offset.x
                         * BoundingSphere.getValue()->Radius.getValue()
                         * ZoomPanFactor.getValue();
-      float yPanFactor = offset.y()
+      float yPanFactor = offset.y
                         * BoundingSphere.getValue()->Radius.getValue()
                         * ZoomPanFactor.getValue();
 
       Matrix.setValue(mCenterTransInv
-                    * ::scm::math::make_translation(xPanFactor, yPanFactor, 0.0)
+                    * ::scm::math::make_translation(xPanFactor, yPanFactor, 0.0f)
                     * CenterTransform.getValue()
                     * Matrix.getValue());
     }
@@ -217,7 +217,7 @@ av::utils::Trackball::evaluate()
   if (mSpinning) {
     ::gua::math::quat rot = ::scm::math::quat<float>::from_matrix(mRotation);
     Matrix.setValue(mCenterTransInv
-                    * ::osg::Matrix::rotate(rot)
+                    * rot.to_matrix()
                     * CenterTransform.getValue()
                     * Matrix.getValue());
   }

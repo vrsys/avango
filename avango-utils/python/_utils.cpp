@@ -41,7 +41,7 @@
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
-//#include "../include/avango/utils/Trackball.h"
+#include "../include/avango/utils/Trackball.h"
 #include "../include/avango/utils/MultiValueField.h"
 #include "../include/avango/utils/register_multivaluefield.h"
 
@@ -198,11 +198,11 @@ BOOST_PYTHON_MODULE(_utils)
       , boost::noncopyable
       >("Bool3And", "docstring", no_init);
 
-  //class_<av::utils::Trackball
-  //     , av::Link<av::utils::Trackball>
-  //     , bases<av::FieldContainer>
-  //     , boost::noncopyable
-  //     >("Trackball", "docstring", no_init);
+  class_<av::utils::Trackball
+       , av::Link<av::utils::Trackball>
+       , bases<av::FieldContainer>
+       , boost::noncopyable
+       >("Trackball", "docstring", no_init);
 
   def("calc_hpr", CalcHpr);
 

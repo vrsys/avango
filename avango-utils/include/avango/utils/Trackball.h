@@ -32,7 +32,7 @@
  */
 
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/BoundingSphere.h>
+#include <avango/gua/math/BoundingSphere.hpp>
 #include <avango/FieldContainer.h>
 #include "windows_specific_utils.h"
 
@@ -69,7 +69,7 @@ namespace av
        * The trackball rotation will be written into this field.
        * Connect this matrix to the Camera/Viewer Transform
        */
-      av::osg::SFMatrix Matrix;
+      av::gua::SFMatrix Matrix;
 
       /**
        * Connect this to a TimeSensor. Needed for the spinning calculation.
@@ -80,7 +80,7 @@ namespace av
        * Direction of trackball movement.
        * Typically connected from the MousePositionNorm field of a GraphicsWindow.
        */
-      av::osg::SFVec2 Direction;
+      av::gua::SFVec2 Direction;
 
       /**
        * Trigger for rotating and panning.
@@ -130,12 +130,12 @@ namespace av
        * Defines the orientation and translation of the rotation center relative
        * to the local coordinate system.
        */
-      av::osg::SFMatrix CenterTransform;
+      av::gua::SFMatrix CenterTransform;
 
       /**
        * BoundingSphere to which the Trackball should be centered.
        */
-      av::osg::SFBoundingSphere BoundingSphere;
+      av::gua::SFBoundingSphere BoundingSphere;
 
       /**
        * Flag indicating if the Trackball should be centered to the given BoundingSphere.
@@ -149,7 +149,7 @@ namespace av
        * and the CenterTransformOffsetZCoefficient will be added.
        * Default is: (0.0, -1.7, 0.0)
        */
-      av::osg::SFVec3 CenterTransformOffset;
+      av::gua::SFVec3 CenterTransformOffset;
 
       /**
        * Factor that will be multiplied with the radius of the BoundingSphere and added to the z center offset.
@@ -170,14 +170,14 @@ namespace av
     private:
 
       float mTimeLastMovement;
-      ::osg::Matrix mRotation;
+      ::gua::math::mat4 mRotation;
 
-      ::osg::Vec2 mLastDirection;
-      ::osg::Vec3 mLastProjected;
+      ::gua::math::vec2 mLastDirection;
+      ::gua::math::vec3 mLastProjected;
       bool mDragging;
       bool mSpinning;
       bool mReset;
-      ::osg::Matrix mCenterTransInv;
+      ::gua::math::mat4 mCenterTransInv;
 
       /**
        * Reset the trackball to the default state

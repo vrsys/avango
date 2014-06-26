@@ -22,7 +22,7 @@
 \************************************************************************/
 
 #include <avango/StandardFields.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include "../include/avango/utils/MultiValueField.h"
 
 /**
@@ -38,17 +38,17 @@ AV_FIELD_DEFINE(av::utils::MVFULong)
 AV_FIELD_DEFINE(av::utils::MVFString)
 
 /*
- * OSG type fields. Should be moved to av::osg::Field.h
+ * OSG type fields. Should be moved to <av/gua/Field.hpp>
  * as soon as this class is factored into avango-core (if ever)
  */
 AV_FIELD_DEFINE(av::utils::MVFMatrixf);
-AV_FIELD_DEFINE(av::utils::MVFMatrixd);
+//AV_FIELD_DEFINE(av::utils::MVFMatrixd);
 AV_FIELD_DEFINE(av::utils::MVFVec2f);
-AV_FIELD_DEFINE(av::utils::MVFVec2d);
+//AV_FIELD_DEFINE(av::utils::MVFVec2d);
 AV_FIELD_DEFINE(av::utils::MVFVec3f);
-AV_FIELD_DEFINE(av::utils::MVFVec3d);
+//AV_FIELD_DEFINE(av::utils::MVFVec3d);
 AV_FIELD_DEFINE(av::utils::MVFVec4f);
-AV_FIELD_DEFINE(av::utils::MVFVec4d);
+//AV_FIELD_DEFINE(av::utils::MVFVec4d);
 AV_FIELD_DEFINE(av::utils::MVFQuat);
 
 
@@ -70,17 +70,17 @@ av::utils::initMultiValueFields()
 void
 av::utils::initMultiValueOSGFields()
 {
-  av::osg::initFields();
+  av::gua::initFields();
 
-  MVFMatrixf::initClass("av::utils::MVFMatrixf", "av::osg::MFMatrixf");
-  MVFMatrixd::initClass("av::utils::MVFMatrixd", "av::osg::MFMatrixd");
-  MVFVec2f::initClass("av::utils::MVFVec2f", "av::osg::MFVec2f");
-  MVFVec2d::initClass("av::utils::MVFVec2d", "av::osg::MFVec2d");
-  MVFVec3f::initClass("av::utils::MVFVec3f", "av::osg::MFVec3f");
-  MVFVec3d::initClass("av::utils::MVFVec3d", "av::osg::MFVec3d");
-  MVFVec4f::initClass("av::utils::MVFVec4f", "av::osg::MFVec4f");
-  MVFVec4d::initClass("av::utils::MVFVec4d", "av::osg::MFVec4d");
-  MVFQuat::initClass("av::utils::MVFQuat", "av::osg::MFQuat");
+  MVFMatrixf::initClass("av::utils::MVFMatrixf", "av::gua::MFMatrixf");
+  //MVFMatrixd::initClass("av::utils::MVFMatrixd", "av::gua::MFMatrixd");
+  MVFVec2f::initClass("av::utils::MVFVec2f", "av::gua::MFVec2f");
+  //MVFVec2d::initClass("av::utils::MVFVec2d", "av::gua::MFVec2d");
+  MVFVec3f::initClass("av::utils::MVFVec3f", "av::gua::MFVec3f");
+  //MVFVec3d::initClass("av::utils::MVFVec3d", "av::gua::MFVec3d");
+  MVFVec4f::initClass("av::utils::MVFVec4f", "av::gua::MFVec4f");
+  //MVFVec4d::initClass("av::utils::MVFVec4d", "av::gua::MFVec4d");
+  MVFQuat::initClass("av::utils::MVFQuat", "av::gua::MFQuat");
 }
 
 

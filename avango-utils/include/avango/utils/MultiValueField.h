@@ -25,7 +25,9 @@
 #define AVANGO_UTILS_MULTIVALUEFIELD_H
 
 #include <avango/Field.h>
-#include <avango/osg/Types.h>
+#include <avango/gua/Types.hpp>
+//#include <scm/core/math.h>
+//#include <scm/gl_core/math.h>
 #include "windows_specific_utils.h"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -496,34 +498,34 @@ namespace av
     typedef MultiValueField<std::string>         MVFString;
 
     /*
-     * OSG type fields. Should be moved to av::osg::Field.h
+     * OSG type fields. Should be moved to <av/gua/Field.hpp>
      * as soon as this class is factored into avango-core (if ever)
      */
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_UTILS_DLL MultiValueField< ::osg::Matrixf>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Matrixd>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec2f>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec2d>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec3f>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec3d>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec4f>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Vec4d>;
-  template class AV_UTILS_DLL MultiValueField< ::osg::Quat>;
+  template class AV_UTILS_DLL MultiValueField< ::gua::math::mat4>;
+  //template class AV_UTILS_DLL MultiValueField< ::scm::math::mat<double, 4, 4> >;
+  template class AV_UTILS_DLL MultiValueField< ::gua::math::vec2>;
+  //template class AV_UTILS_DLL MultiValueField< ::scm::math::vec<double, 2> >;
+  template class AV_UTILS_DLL MultiValueField< ::gua::math::vec3>;
+  //template class AV_UTILS_DLL MultiValueField< ::scm::math::vec<double, 3> >;
+  template class AV_UTILS_DLL MultiValueField< ::gua::math::vec4>;
+  //template class AV_UTILS_DLL MultiValueField< ::scm::math::vec<double, 4> >;
+  template class AV_UTILS_DLL MultiValueField< ::gua::math::quat>;
 #endif
 
-    typedef MultiValueField< ::osg::Matrixf> MVFMatrixf;
-    typedef MultiValueField< ::osg::Matrixd> MVFMatrixd;
-    typedef MultiValueField< ::osg::Matrix> MVFMatrix;
-    typedef MultiValueField< ::osg::Vec2f> MVFVec2f;
-    typedef MultiValueField< ::osg::Vec2d> MVFVec2d;
-    typedef MultiValueField< ::osg::Vec2> MVFVec2;
-    typedef MultiValueField< ::osg::Vec3f> MVFVec3f;
-    typedef MultiValueField< ::osg::Vec3d> MVFVec3d;
-    typedef MultiValueField< ::osg::Vec3> MVFVec3;
-    typedef MultiValueField< ::osg::Vec4f> MVFVec4f;
-    typedef MultiValueField< ::osg::Vec4d> MVFVec4d;
-    typedef MultiValueField< ::osg::Vec4> MVFVec4;
-    typedef MultiValueField< ::osg::Quat> MVFQuat;
+    typedef MultiValueField< ::gua::math::mat4> MVFMatrixf;
+    //typedef MultiValueField< ::scm::math::mat<double, 4, 4> > MVFMatrixd;
+    typedef MultiValueField< ::gua::math::mat4> MVFMatrix;
+    typedef MultiValueField< ::gua::math::vec2> MVFVec2f;
+    //typedef MultiValueField< ::scm::math::vec<double, 2> > MVFVec2d;
+    typedef MultiValueField< ::gua::math::vec2> MVFVec2;
+    typedef MultiValueField< ::gua::math::vec3> MVFVec3f;
+    //typedef MultiValueField< ::scm::math::vec<double, 3> > MVFVec3d;
+    typedef MultiValueField< ::gua::math::vec3> MVFVec3;
+    typedef MultiValueField< ::gua::math::vec4> MVFVec4f;
+    //typedef MultiValueField< ::scm::math::vec<double, 4> > MVFVec4d;
+    typedef MultiValueField< ::gua::math::vec4> MVFVec4;
+    typedef MultiValueField< ::gua::math::quat> MVFQuat;
 
     void AV_UTILS_DLL initMultiValueFields();
     void AV_UTILS_DLL initMultiValueOSGFields();

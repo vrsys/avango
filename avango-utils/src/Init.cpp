@@ -27,7 +27,7 @@
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
-#include "../include/avango/utils/Trackball.h"
+//#include "../include/avango/utils/Trackball.h"
 #include "../include/avango/utils/MultiValueField.h"
 
 #ifdef PCL_SUPPORT
@@ -53,7 +53,7 @@ av::utils::Init::initClass()
     av::utils::Bool2And::initClass();
     av::utils::Bool3Or::initClass();
     av::utils::Bool3And::initClass();
-    av::utils::Trackball::initClass();
+    //av::utils::Trackball::initClass();
     av::utils::initMultiValueFields();
     av::utils::initMultiValueOSGFields();
 

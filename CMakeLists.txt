@@ -138,6 +138,7 @@ add_subdirectory(avango-gua)
 add_subdirectory(avango-daemon)
 add_subdirectory(avango-tools)
 add_subdirectory(avango-sound)
+add_subdirectory(avango-utils)
 
 if (AVANGO_OCULUS_RIFT_SUPPORT)
     add_subdirectory(avango-oculus)

@@ -25,12 +25,12 @@
 
 #include <avango/Link.h>
 #include <avango/ContainerPool.h>
-#include <avango/osg/viewer/View.h>
+//#include <avango/osg/viewer/View.h>
 
-#include <osg/Matrix>
-#include <osgViewer/View>
-#include <osgViewer/ViewerEventHandlers>
-#include <osg/Version>
+#include <gua/math.hpp>
+//#include <osgViewer/View>
+//#include <osgViewer/ViewerEventHandlers>
+//#include <osg/Version>
 
 #ifdef PCL_SUPPORT
   #include "UTILSPcd.h"
@@ -41,7 +41,7 @@
 #include "../include/avango/utils/Bool2And.h"
 #include "../include/avango/utils/Bool3Or.h"
 #include "../include/avango/utils/Bool3And.h"
-#include "../include/avango/utils/Trackball.h"
+//#include "../include/avango/utils/Trackball.h"
 #include "../include/avango/utils/MultiValueField.h"
 #include "../include/avango/utils/register_multivaluefield.h"
 
@@ -64,79 +64,71 @@ namespace boost
   }
 }
 
-template < typename T, typename U >
-std::multimap< U, T > converseMap( const std::map< T, U >& o )
+template <typename A, typename B>
+std::pair<B, A> flip(std::pair<A, B> const& p)
 {
-  std::multimap< U, T > result;
-  for ( typename std::map< T, U >::const_iterator begin( o.begin() ); begin != o.end(); ++begin )
-    result.insert( make_pair( begin->second, begin->first ) );
+  return std::make_pair(p.second, p.first);
+}
+
+template <typename T, typename U>
+std::multimap<U, T> converseMap(const std::map<T, U>& o)
+{
+  std::multimap<U, T> result;
+  for (auto const& pair : o)
+    result.insert(flip(pair));
   return result;
 }
 
-osg::Vec3 CalcHpr(const osg::Matrix& mat)
+gua::math::vec3 CalcHpr(const gua::math::mat4& mat)
 {
-  osg::Vec3 hpr;
-  if(mat(1,0)>0.998) {
-    float heading = atan2(mat(0,2),mat(2,2));
-    float attitude = 3.14/2.0;
-    float bank =0;
-    hpr = osg::Vec3(heading,attitude,bank);
-    return hpr;
+  //if(mat(1,0)>0.998) { // (row, column)
+  if (mat.row(1)[0] > 0.998f) {
+    float heading = atan2(mat.row(0)[2],mat.row(2)[2]);
+    float attitude = 3.14f/2.0f;
+    float bank = 0;
+    return gua::math::vec3(heading,attitude,bank);
   }
 
-  if(mat(1,0)<-0.998) {
-    float heading = atan2(mat(0,2),mat(2,2));
-    float attitude = -3.14/2.0;
-    float bank =0;
-    hpr = osg::Vec3(heading,attitude,bank);
-    return hpr;
+  if (mat.row(1)[0] < -0.998f) {
+    float heading = atan2(mat.row(0)[2],mat.row(2)[2]);
+    float attitude = -3.14f/2.0f;
+    float bank = 0;
+    return gua::math::vec3(heading,attitude,bank);
   }
 
-  float heading = atan2(-mat(2,0),mat(0,0));
-  float attitude = atan2(-mat(1,2),mat(1,1));
-  float bank = sin(mat(1,0));
-  hpr = osg::Vec3(heading,attitude,bank);
-  return hpr;
+  float heading = atan2(-mat.row(2)[0], mat.row(0)[0]);
+  float attitude = atan2(-mat.row(1)[2], mat.row(1)[1]);
+  float bank = sin(mat.row(1)[0]);
+  return gua::math::vec3(heading,attitude,bank);
 }
 
 void print_actual_registered_field_containers()
 {
-  const std::map< av::FieldContainer::IDType, av::FieldContainer* > & containers = av::ContainerPool::getContainerPool();
-  std::map< av::FieldContainer::IDType, av::FieldContainer* >::const_iterator iter;
-  std::map< std::string,int> m;
+  const std::map<av::FieldContainer::IDType, av::FieldContainer*>& containers =
+    av::ContainerPool::getContainerPool();
+  std::map<std::string,int> m;
   int maxLength = 0;
-  for(iter=containers.begin();iter!=containers.end();++iter)
-  {
+  for (auto const& c : containers) {
 //    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
 //    std::string type = iter->second->Name.getValue();
-    std::string type = iter->second->getTypeId().getName();
+    std::string type = c.second->getTypeId().getName();
 
     int l = type.length();
-    if(l>maxLength)
+    if (l > maxLength)
       maxLength = l;
-    std::map< std::string,int >::const_iterator find_iter = m.find(type);
-    if(find_iter==m.end())
-    {
-      m[type] = 1;
-    }
-    else
-    {
-      m[type]++;
-    }
+    m[type]++;
   }
 
   std::ostringstream ss;
-  std::multimap< int, std::string > conversedMap = converseMap( m );
-  std::multimap< int, std::string >::iterator i;
-  for(i=conversedMap.begin();i!=conversedMap.end();++i)
-  {
-    int l = maxLength - i->second.length();
-    ss <<"\""<< i->second << "\" ";
+  std::multimap<int, std::string> conversedMap = converseMap(m);
+  for (auto const& pair : conversedMap) {
+    int l = maxLength - pair.second.length();
+    ss <<"\""<< pair.second << "\" ";
     for(int n=0;n<l;++n)
       ss << " ";
-    ss<< i->first << std::endl;
+    ss << pair.first << std::endl;
   }
-  for(int n=0;n<maxLength+2;++n)
+  for (int n=0; n<maxLength+2; ++n)
       ss << " ";
   ss << "-------"<<std::endl;
   std::string total_desc = "Total number of containers:";
@@ -159,7 +151,7 @@ void init_MultiValueFields()
   av::python::register_multivaluefield<av::utils::MVFULong>("MVFULong");
   av::python::register_multivaluefield<av::utils::MVFString>("MVFString");
 
-  // osg related multi value fields
+  // gua related multi value fields
   av::python::register_multivaluefield<av::utils::MVFMatrix>("MVFMatrix");
   av::python::register_multivaluefield<av::utils::MVFVec2>("MVFVec2");
   av::python::register_multivaluefield<av::utils::MVFVec3>("MVFVec3");
@@ -167,40 +159,57 @@ void init_MultiValueFields()
   av::python::register_multivaluefield<av::utils::MVFQuat>("MVFQuat");
 }
 
-
-#if OSG_VERSION_MAJOR == 3
-void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
-  ::osgViewer::View * view = avView->getOsgView();
-  osgViewer::ScreenCaptureHandler* scnsvr = new osgViewer::ScreenCaptureHandler(new osgViewer::ScreenCaptureHandler::WriteToFile(folder+"/"+filename,"png"));
-  scnsvr->setFramesToCapture(numFrames);
-  scnsvr->startCapture();
-  view->addEventHandler(scnsvr);
-}
-#elif OSG_VERSION_MAJOR == 2
-void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
-  std::cerr << "addScreenCaptureHandler::ERROR Screen capture functionality is currently only supported with osg3.x" << std::endl;
-}
-#endif
-
-
-
+// #if OSG_VERSION_MAJOR == 3
+// void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
+//   ::osgViewer::View * view = avView->getOsgView();
+//   osgViewer::ScreenCaptureHandler* scnsvr = new osgViewer::ScreenCaptureHandler(new osgViewer::ScreenCaptureHandler::WriteToFile(folder+"/"+filename,"png"));
+//   scnsvr->setFramesToCapture(numFrames);
+//   scnsvr->startCapture();
+//   view->addEventHandler(scnsvr);
+// }
+//elif OSG_VERSION_MAJOR == 2
+// void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
+//   std::cerr << "addScreenCaptureHandler::ERROR Screen capture functionality is currently only supported with osg3.x" << std::endl;
+// }
+// #endif
 
 BOOST_PYTHON_MODULE(_utils)
 {
   av::utils::Init::initClass();
 
-  class_<av::utils::Bool2Or, av::Link<av::utils::Bool2Or>, bases<av::FieldContainer>, boost::noncopyable >("Bool2Or", "docstring", no_init);
-  class_<av::utils::Bool2And, av::Link<av::utils::Bool2And>, bases<av::FieldContainer>, boost::noncopyable >("Bool2And", "docstring", no_init);
-  class_<av::utils::Bool3Or, av::Link<av::utils::Bool3Or>, bases<av::FieldContainer>, boost::noncopyable >("Bool3Or", "docstring", no_init);
-  class_<av::utils::Bool3And, av::Link<av::utils::Bool3And>, bases<av::FieldContainer>, boost::noncopyable >("Bool3And", "docstring", no_init);
+  class_<av::utils::Bool2Or
+      , av::Link<av::utils::Bool2Or>
+      , bases<av::FieldContainer>
+      , boost::noncopyable
+      >("Bool2Or", "docstring", no_init);
+  class_<av::utils::Bool2And
+      , av::Link<av::utils::Bool2And>
+      , bases<av::FieldContainer>
+      , boost::noncopyable
+      >("Bool2And", "docstring", no_init);
+  class_<av::utils::Bool3Or
+      , av::Link<av::utils::Bool3Or>
+      , bases<av::FieldContainer>
+      , boost::noncopyable
+      >("Bool3Or", "docstring", no_init);
+  class_<av::utils::Bool3And
+      , av::Link<av::utils::Bool3And>
+      , bases<av::FieldContainer>
+      , boost::noncopyable
+      >("Bool3And", "docstring", no_init);
 
-  class_<av::utils::Trackball, av::Link<av::utils::Trackball>, bases<av::FieldContainer>, boost::noncopyable >("Trackball", "docstring", no_init);
+  //class_<av::utils::Trackball
+  //     , av::Link<av::utils::Trackball>
+  //     , bases<av::FieldContainer>
+  //     , boost::noncopyable
+  //     >("Trackball", "docstring", no_init);
 
   def("calc_hpr", CalcHpr);
 
-  def("print_registered_field_containers",print_actual_registered_field_containers);
+  def("print_registered_field_containers"
+      ,print_actual_registered_field_containers);
 
-  def("add_screen_capture_handler",addScreenCaptureHandler);
+  //def("add_screen_capture_handler",addScreenCaptureHandler);
 
   av::utils::initMultiValueFields();
   av::utils::initMultiValueOSGFields();

@@ -31,7 +31,7 @@
 
 #include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include "windows_specific_utils.h"
 
 namespace av

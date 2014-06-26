@@ -31,8 +31,8 @@
  * \ingroup av_utils
  */
 
-#include <avango/osg/Fields.h>
-#include <avango/osg/BoundingSphere.h>
+#include <avango/gua/Fields.hpp>
+#include <avango/gua/BoundingSphere.h>
 #include <avango/FieldContainer.h>
 #include "windows_specific_utils.h"
 

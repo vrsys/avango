@@ -33,6 +33,7 @@
 #include "scenegraph/PickResult.hpp"
 
 #include "math/BoundingBox.hpp"
+#include "math/BoundingSphere.hpp"
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include "physics/RigidBodyNode.hpp"
@@ -134,6 +135,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PickResult();
 
     init_BoundingBox();
+    init_BoundingSphere();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
     init_RigidBodyNode();

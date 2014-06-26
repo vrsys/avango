@@ -24,6 +24,7 @@
 #include <avango/gua/scenegraph/PickResult.hpp>
 
 #include <avango/gua/math/BoundingBox.hpp>
+#include <avango/gua/math/BoundingSphere.hpp>
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/RigidBodyNode.hpp>
@@ -101,6 +102,7 @@ av::gua::Init::initClass()
         av::gua::PickResult::initClass();
 
         av::gua::BoundingBox::initClass();
+        av::gua::BoundingSphere::initClass();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
         av::gua::RigidBodyNode::initClass();

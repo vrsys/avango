@@ -24,7 +24,7 @@
 import avango
 import avango.script
 from avango.script import field_has_changed
-import avango.osg
+import avango.gua
 
 class FloatXBase(avango.script.Script):
     "Base for sequential operations on floats"
@@ -128,7 +128,7 @@ class Float4AddVec2Converter(avango.script.Script):
     Value10 = avango.SFFloat()
     Value11 = avango.SFFloat()
 
-    Output = avango.osg.SFVec2()
+    Output = avango.gua.SFVec2()
     
     def __init__(self):
         self.super(Float4AddVec2Converter).__init__()
@@ -136,13 +136,13 @@ class Float4AddVec2Converter(avango.script.Script):
         self.Name.value = "Float4AddVec2Converter"
 
     def evaluate(self):
-        self.Output.value = avango.osg.Vec2(self.Value00.value+self.Value01.value, self.Value10.value+self.Value11.value)
+        self.Output.value = avango.gua.Vec2(self.Value00.value+self.Value01.value, self.Value10.value+self.Value11.value)
 
 
 class SFNode2MFContainerConverter(avango.script.Script):
     "Converts a SFNode to a MFNode"
 
-    Input = avango.osg.SFNode()
+    Input = avango.gua.SFNode()
     Output = avango.MFContainer()
     
     def __init__(self):
@@ -160,7 +160,7 @@ class Float2Vec2Converter(avango.script.Script):
 
     Value0 = avango.SFFloat()
     Value1 = avango.SFFloat()
-    Output = avango.osg.SFVec2()
+    Output = avango.gua.SFVec2()
     
     def __init__(self):
         self.super(Float2Vec2Converter).__init__()
@@ -169,13 +169,13 @@ class Float2Vec2Converter(avango.script.Script):
         
 
     def evaluate(self):
-        self.Output.value = avango.osg.Vec2(self.Value0.value, self.Value1.value)
+        self.Output.value = avango.gua.Vec2(self.Value0.value, self.Value1.value)
         
         
 class Vec3ToTransMatrix(avango.script.Script):
-    TransVec = avango.osg.SFVec3()
-    TransOffset = avango.osg.SFVec3()
-    Matrix = avango.osg.SFMatrix()
+    TransVec = avango.gua.SFVec3()
+    TransOffset = avango.gua.SFVec3()
+    Matrix = avango.gua.SFMatrix()
     
     def __init__(self):
         self.super(Vec3ToTransMatrix).__init__()
@@ -184,9 +184,9 @@ class Vec3ToTransMatrix(avango.script.Script):
     
     
     def evaluate(self):
-        self.Matrix.value = avango.osg.make_trans_mat(self.TransVec.value + self.TransOffset.value)
+        self.Matrix.value = avango.gua.make_trans_mat(self.TransVec.value + self.TransOffset.value)
         
-def make_vec3_to_trans_matrix(vec3_field, trans_offset=avango.osg.Vec3(0,0,0)):
+def make_vec3_to_trans_matrix(vec3_field, trans_offset=avango.gua.Vec3(0,0,0)):
     converter = Vec3ToTransMatrix()
     converter.TransVec.connect_from(vec3_field)
     converter.TransOffset.value = trans_offset
@@ -195,9 +195,9 @@ def make_vec3_to_trans_matrix(vec3_field, trans_offset=avango.osg.Vec3(0,0,0)):
 
 
 class TranslationMatrixCalculator(avango.script.Script):
-    MatrixFrom = avango.osg.SFMatrix()
-    MatrixTo = avango.osg.SFMatrix()
-    MatrixTransDif = avango.osg.SFMatrix()
+    MatrixFrom = avango.gua.SFMatrix()
+    MatrixTo = avango.gua.SFMatrix()
+    MatrixTransDif = avango.gua.SFMatrix()
     
     def __init__(self):
         self.super(TranslationMatrixCalculator).__init__()
@@ -208,18 +208,18 @@ class TranslationMatrixCalculator(avango.script.Script):
     def evaluate(self):
         if not self.MatrixFrom.value or not self.MatrixTo.value:
             return
-        self.MatrixTransDif.value = avango.osg.make_trans_mat( self.MatrixFrom.value.get_translate() - self.MatrixTo.value.get_translate() )
+        self.MatrixTransDif.value = avango.gua.make_trans_mat( self.MatrixFrom.value.get_translate() - self.MatrixTo.value.get_translate() )
         
 
 class FloatToAlphaConverter(avango.script.Script):
-    ColorIn = avango.osg.SFVec4()
+    ColorIn = avango.gua.SFVec4()
     Alpha = avango.SFFloat()
-    Color = avango.osg.SFVec4()
+    Color = avango.gua.SFVec4()
     
     def __init__(self):
         self.super(FloatToAlphaConverter).__init__()
         self.__alpha_changed = False
-        self.__color_in = avango.osg.Vec4(1,1,1,1)
+        self.__color_in = avango.gua.Vec4(1,1,1,1)
         self.Name.value = "FloatToAlphaConverter"
         
     @field_has_changed(ColorIn)
@@ -234,6 +234,6 @@ class FloatToAlphaConverter(avango.script.Script):
         print "eval: " + str(self.Alpha.value)
         if self.__alpha_changed:
             
-            self.Color.value = avango.osg.Vec4(self.__color_in.x, self.__color_in.y, self.__color_in.z, self.Alpha.value)
+            self.Color.value = avango.gua.Vec4(self.__color_in.x, self.__color_in.y, self.__color_in.z, self.Alpha.value)
             self.__alpha_changed = False
             

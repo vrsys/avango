@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::PBRNode);
 AV_FIELD_DEFINE(av::gua::SFPBRNode);
 AV_FIELD_DEFINE(av::gua::MFPBRNode);
 
-av::gua::PBRNode::PBRNode(std::shared_ptr< ::gua::PBRNode> guanode)
+av::gua::PBRNode::PBRNode(std::shared_ptr< ::gua::node::PBRNode> guanode)
     : GeometryNode(guanode)
 {
 }

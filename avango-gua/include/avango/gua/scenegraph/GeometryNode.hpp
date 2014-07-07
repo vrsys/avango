@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/GeometryNode.hpp>
+#include <gua/node/GeometryNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -36,7 +36,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::GeometryNode
        * is created. Otherwise, the given ::gua::GeometryNode is used.
        */
-      GeometryNode(std::shared_ptr< ::gua::GeometryNode> guanode);
+      GeometryNode(std::shared_ptr< ::gua::node::GeometryNode> guanode);
 
     protected:
 
@@ -54,7 +54,7 @@ namespace av
       /**
        * Get the wrapped ::gua::GeometryNode.
        */
-      std::shared_ptr< ::gua::GeometryNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::GeometryNode> getGuaNode() const;
 
     public:
 
@@ -69,7 +69,7 @@ namespace av
 
     protected:
 
-      std::shared_ptr< ::gua::GeometryNode> m_guaNode;
+      std::shared_ptr< ::gua::node::GeometryNode> m_guaNode;
 
     private:
 

@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::Video3DNode);
 AV_FIELD_DEFINE(av::gua::SFVideo3DNode);
 AV_FIELD_DEFINE(av::gua::MFVideo3DNode);
 
-av::gua::Video3DNode::Video3DNode(std::shared_ptr< ::gua::Video3DNode> guanode)
+av::gua::Video3DNode::Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode)
   : GeometryNode(guanode)
 {
 }

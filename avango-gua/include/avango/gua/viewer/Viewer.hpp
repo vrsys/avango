@@ -11,7 +11,9 @@
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
+#if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/Physics.hpp>
+#endif
 #include <avango/FieldContainer.h>
 #include <avango/gua/windows_specific_gua.hpp>
 
@@ -34,7 +36,9 @@ namespace av
 
       MFPipeline   Pipelines;
       MFSceneGraph SceneGraphs;
+#if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;
+#endif
       SFFloat      DesiredFPS;
 
       virtual void getDesiredFPSCB(const SFFloat::GetValueEvent& event);

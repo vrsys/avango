@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/PointLightNode.hpp>
+#include <gua/node/PointLightNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::PointLightNode is created.
        * Otherwise, the given ::gua::PointLightNode is used.
        */
-      PointLightNode(std::shared_ptr< ::gua::PointLightNode> guanode = std::shared_ptr< ::gua::PointLightNode>(new ::gua::PointLightNode("")));
+      PointLightNode(std::shared_ptr< ::gua::node::PointLightNode> guanode = std::shared_ptr< ::gua::node::PointLightNode>(new ::gua::node::PointLightNode("")));
 
     protected:
 
@@ -52,7 +52,7 @@ namespace av
       /**
        * Get the wrapped ::gua::PointLightNode.
        */
-      std::shared_ptr< ::gua::PointLightNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::PointLightNode> getGuaNode() const;
 
     public:
 
@@ -79,7 +79,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::PointLightNode> m_guaNode;
+      std::shared_ptr< ::gua::node::PointLightNode> m_guaNode;
 
       PointLightNode(const PointLightNode&);
       PointLightNode& operator=(const PointLightNode&);

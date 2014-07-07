@@ -14,7 +14,7 @@ AV_FC_DEFINE_ABSTRACT(av::gua::Node);
 AV_FIELD_DEFINE(av::gua::SFNode);
 AV_FIELD_DEFINE(av::gua::MFNode);
 
-av::gua::Node::Node(std::shared_ptr< ::gua::Node> guanode)
+av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
   : av::FieldContainer(),
     m_guaNode(guanode),
     m_selfUserDataHandle(0),
@@ -79,7 +79,7 @@ av::gua::Node::initClass()
     }
 }
 
-std::shared_ptr< ::gua::Node>
+std::shared_ptr< ::gua::node::Node>
 av::gua::Node::getGuaNode() const
 {
     return m_guaNode;

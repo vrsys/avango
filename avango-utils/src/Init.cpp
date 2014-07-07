@@ -21,50 +21,46 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AV_UTILS_BOOL3OR_H)
-#define AV_UTILS_BOOL3OR_H
+#include "../include/avango/utils/Init.h"
+#include "../include/avango/utils/ProximitySensor.h"
+#include "../include/avango/utils/Bool2Or.h"
+#include "../include/avango/utils/Bool2And.h"
+#include "../include/avango/utils/Bool3Or.h"
+#include "../include/avango/utils/Bool3And.h"
+//#include "../include/avango/utils/Trackball.h"
+#include "../include/avango/utils/MultiValueField.h"
 
-/**
- * \file
- * \ingroup av_utils
- */
+#ifdef PCL_SUPPORT
+  #include "../include/avango/utils/PCLPointCloud.h"
+#endif
 
-#include <avango/FieldContainer.h>
-#include <avango/StandardFields.h>
-#include <avango/osg/Fields.h>
-#include "windows_specific_utils.h"
+#include <avango/Logger.h>
 
-namespace av
+namespace
 {
-  namespace utils
-  {
-
-    class AV_UTILS_DLL Bool3Or : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
-
-    public:
-
-      Bool3Or();
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Bool3Or();
-
-      /* virtual */ void evaluate();
-
-    public:
-
-      av::SFBool Input1;
-      av::SFBool Input2;
-      av::SFBool Input3;
-      av::SFBool Output;
-    };
-
-  }
+  av::Logger& logger(av::getLogger("av::utils::Init"));
 }
 
-#endif
+AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
+
+/* static */ void
+av::utils::Init::initClass()
+{
+  if (!isTypeInitialized())
+  {
+    av::utils::ProximitySensor::initClass();
+    av::utils::Bool2Or::initClass();
+    av::utils::Bool2And::initClass();
+    av::utils::Bool3Or::initClass();
+    av::utils::Bool3And::initClass();
+    //av::utils::Trackball::initClass();
+    av::utils::initMultiValueFields();
+    av::utils::initMultiValueOSGFields();
+
+    #ifdef PCL_SUPPORT
+      av::utils::PCLPointCloud::initClass();
+    #endif
+
+    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
+  }
+}

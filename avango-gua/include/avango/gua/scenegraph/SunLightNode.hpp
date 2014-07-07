@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/SunLightNode.hpp>
+#include <gua/node/SunLightNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::SunLightNode is created.
        * Otherwise, the given ::gua::SunLightNode is used.
        */
-      SunLightNode(std::shared_ptr< ::gua::SunLightNode> guanode = std::shared_ptr< ::gua::SunLightNode>(new ::gua::SunLightNode("")));
+      SunLightNode(std::shared_ptr< ::gua::node::SunLightNode> guanode = std::shared_ptr< ::gua::node::SunLightNode>(new ::gua::node::SunLightNode("")));
 
     protected:
 
@@ -54,7 +54,7 @@ namespace av
       /**
        * Get the wrapped ::gua::SunLightNode.
        */
-      std::shared_ptr< ::gua::SunLightNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::SunLightNode> getGuaNode() const;
 
     public:
 
@@ -88,7 +88,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::SunLightNode> m_guaNode;
+      std::shared_ptr< ::gua::node::SunLightNode> m_guaNode;
 
       SunLightNode(const SunLightNode&);
       SunLightNode& operator=(const SunLightNode&);

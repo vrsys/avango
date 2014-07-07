@@ -7,7 +7,7 @@ project(AVANGO CXX)
 # version number
 set(AVANGO_VERSION_MAJOR 2)
 set(AVANGO_VERSION_MINOR 11)
-set(AVANGO_VERSION_MAINT 2)
+set(AVANGO_VERSION_MAINT 3)
 
 set(AVANGO_VERSION
     ${AVANGO_VERSION_MAJOR}.${AVANGO_VERSION_MINOR}.${AVANGO_VERSION_MAINT})
@@ -121,6 +121,7 @@ option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
+option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 
 ################################################################
 # Create libraries
@@ -137,6 +138,7 @@ add_subdirectory(avango-gua)
 add_subdirectory(avango-daemon)
 add_subdirectory(avango-tools)
 add_subdirectory(avango-sound)
+add_subdirectory(avango-utils)
 
 if (AVANGO_OCULUS_RIFT_SUPPORT)
     add_subdirectory(avango-oculus)

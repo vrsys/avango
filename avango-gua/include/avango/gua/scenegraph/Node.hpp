@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/Node.hpp>
+#include <gua/node/Node.hpp>
 #include <gua/math/math.hpp>
 #include <avango/gua/math/BoundingBox.hpp>
 
@@ -32,7 +32,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Node is created.
        * Otherwise, the given ::gua::Node is used.
        */
-      Node(std::shared_ptr< ::gua::Node> guanode); // use defined type to circumvent compiler bug in VS8
+      Node(std::shared_ptr< ::gua::node::Node> guanode); // use defined type to circumvent compiler bug in VS8
 
     protected:
 
@@ -57,7 +57,7 @@ namespace av
       /**
        * Get the wrapped ::gua::Node.
        */
-      std::shared_ptr< ::gua::Node> getGuaNode() const;
+      std::shared_ptr< ::gua::node::Node> getGuaNode() const;
       unsigned     getUserDataHandle() const;
 
 
@@ -94,7 +94,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::Node> m_guaNode;
+      std::shared_ptr< ::gua::node::Node> m_guaNode;
       ::gua::math::BoundingBox< ::gua::math::vec3> m_guaBbox;
       unsigned m_selfUserDataHandle;
       unsigned m_childrenUserDataHandle;

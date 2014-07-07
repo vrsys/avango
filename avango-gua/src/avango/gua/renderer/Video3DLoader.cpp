@@ -54,17 +54,17 @@ av::gua::Video3DLoader::getGuaVideo3DLoader() const
 }
 
 av::gua::Node*
-av::gua::Video3DLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
+av::gua::Video3DLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 
-  auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
+  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
   if (group_cast) {
     av_node = new av::gua::TransformNode(group_cast);
   }
 
   if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::Video3DNode>(root));
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::Video3DNode>(root));
     if (geom_cast) {
       av_node = new av::gua::Video3DNode(geom_cast);
     }

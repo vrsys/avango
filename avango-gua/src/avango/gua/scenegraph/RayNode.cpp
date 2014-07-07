@@ -7,9 +7,9 @@ AV_FC_DEFINE(av::gua::RayNode);
 AV_FIELD_DEFINE(av::gua::SFRayNode);
 AV_FIELD_DEFINE(av::gua::MFRayNode);
 
-av::gua::RayNode::RayNode(std::shared_ptr< ::gua::RayNode> guanode)
+av::gua::RayNode::RayNode(std::shared_ptr< ::gua::node::RayNode> guanode)
     : av::gua::Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::RayNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::node::RayNode>(Node::getGuaNode()))
 {}
 
 //av::gua::RayNode::~RayNode()
@@ -31,7 +31,7 @@ av::gua::RayNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::RayNode>
+std::shared_ptr< ::gua::node::RayNode>
 av::gua::RayNode::getGuaNode() const
 {
     return m_guaNode;

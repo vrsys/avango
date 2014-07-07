@@ -1,12 +1,8 @@
 #ifndef AVANGO_GUA_TYPES_H
 #define AVANGO_GUA_TYPES_H
 
-#include <gua/math/math.hpp>
-#include <gua/utils/Color3f.hpp>
-#include <gua/physics.hpp>
-
-#include <avango/gua/windows_specific_gua.hpp>
 #include <avango/Config.h>
+#include <avango/gua/windows_specific_gua.hpp>
 #include <avango/InputStream.h>
 #include <avango/OutputStream.h>
 
@@ -14,11 +10,22 @@
   #include <avango/Msg.h>
 #endif //#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
+#include <gua/math/math.hpp>
+#include <gua/utils/Color3f.hpp>
+#if defined(AVANGO_PHYSICS_SUPPORT)
+#include <gua/physics.hpp>
+#endif
+
 namespace gua
 {
   class TriMeshNode;
   class Video3DNode;
   class NURBSNode;
+  class SceneGraph;
+  class VolumeNode;
+  class TexturedQuadNode;
+  class RayNode;
+  class ScreenNode;
 #if defined(AVANGO_PBR_SUPPORT)
   class PBRNode;
   class PLODNode;
@@ -60,10 +67,12 @@ namespace av
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::utils::Color3f&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::utils::Color3f&);
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::physics::CollisionShape&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::physics::CollisionShape&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::physics::Constraint&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::physics::Constraint&);
+#endif
 
   //AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Camera&);
   //AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Camera&);

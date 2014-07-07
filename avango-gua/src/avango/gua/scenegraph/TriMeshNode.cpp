@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::TriMeshNode);
 AV_FIELD_DEFINE(av::gua::SFTriMeshNode);
 AV_FIELD_DEFINE(av::gua::MFTriMeshNode);
 
-av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::TriMeshNode> guanode)
+av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> guanode)
     : GeometryNode(guanode)
 {
 }

@@ -31,7 +31,7 @@
 
 #include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include "windows_specific_utils.h"
 
 namespace av
@@ -63,10 +63,10 @@ namespace av
       av::SFDouble MaxDistance;
 
       /** Center of Sensor */
-      av::osg::SFMatrix ReferencePosition;
+      av::gua::SFMatrix ReferencePosition;
 
       /** Current postion of target */
-      av::osg::SFMatrix CurrentPosition;
+      av::gua::SFMatrix CurrentPosition;
 
       /** Proximity of target expressed in intervall [0, 1] */
       av::SFDouble Proximity;

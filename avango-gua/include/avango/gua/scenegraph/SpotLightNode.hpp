@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/SpotLightNode.hpp>
+#include <gua/node/SpotLightNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::SpotLightNode is created.
        * Otherwise, the given ::gua::SpotLightNode is used.
        */
-      SpotLightNode(std::shared_ptr< ::gua::SpotLightNode> guanode = std::shared_ptr< ::gua::SpotLightNode>(new ::gua::SpotLightNode("")));
+      SpotLightNode(std::shared_ptr< ::gua::node::SpotLightNode> guanode = std::shared_ptr< ::gua::node::SpotLightNode>(new ::gua::node::SpotLightNode("")));
 
     protected:
 
@@ -54,7 +54,7 @@ namespace av
       /**
        * Get the wrapped ::gua::SpotLightNode.
        */
-      std::shared_ptr< ::gua::SpotLightNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::SpotLightNode> getGuaNode() const;
 
     public:
 
@@ -87,7 +87,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::SpotLightNode> m_guaNode;
+      std::shared_ptr< ::gua::node::SpotLightNode> m_guaNode;
 
       SpotLightNode(const SpotLightNode&);
       SpotLightNode& operator=(const SpotLightNode&);

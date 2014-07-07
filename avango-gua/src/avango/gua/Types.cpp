@@ -588,6 +588,7 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::utils::
     throw std::runtime_error("not implemented yet.");
 }
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
 av::OutputStream & av::operator<<(av::OutputStream & os,
 				  const::gua::physics::CollisionShape &)
 {
@@ -611,6 +612,7 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::physics::
 {
     throw std::runtime_error("not implemented yet.");
 }
+#endif
 
 //av::OutputStream& av::operator<<(av::OutputStream& os, const ::gua::Camera&) { throw std::runtime_error("not implemented yet."); }
 //av::InputStream& av::operator>>(av::InputStream& is, ::gua::Camera&) { throw std::runtime_error("not implemented yet."); }

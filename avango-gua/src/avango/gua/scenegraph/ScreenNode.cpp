@@ -7,9 +7,9 @@ AV_FC_DEFINE(av::gua::ScreenNode);
 AV_FIELD_DEFINE(av::gua::SFScreenNode);
 AV_FIELD_DEFINE(av::gua::MFScreenNode);
 
-av::gua::ScreenNode::ScreenNode(std::shared_ptr< ::gua::ScreenNode> guanode)
+av::gua::ScreenNode::ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::ScreenNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::node::ScreenNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Width,
                           boost::bind(&ScreenNode::getWidthCB, this, _1),
@@ -38,7 +38,7 @@ av::gua::ScreenNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::ScreenNode>
+std::shared_ptr< ::gua::node::ScreenNode>
 av::gua::ScreenNode::getGuaNode() const
 {
     return m_guaNode;

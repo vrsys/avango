@@ -22,8 +22,8 @@
 \************************************************************************/
 
 #include "../include/avango/utils/ProximitySensor.h"
-#include <osg/Vec3>
-#include <osg/Quat>
+#include <gua/math.hpp>
+#include <gua/math.hpp>
 
 namespace
 {
@@ -36,8 +36,8 @@ av::utils::ProximitySensor::ProximitySensor()
 {
     AV_FC_ADD_FIELD(MinDistance,       0.);
     AV_FC_ADD_FIELD(MaxDistance,       1.);
-    AV_FC_ADD_FIELD(ReferencePosition, ::osg::Matrix());
-    AV_FC_ADD_FIELD(CurrentPosition,   ::osg::Matrix());
+    AV_FC_ADD_FIELD(ReferencePosition, ::gua::math::mat4());
+    AV_FC_ADD_FIELD(CurrentPosition,   ::gua::math::mat4());
     AV_FC_ADD_FIELD(Proximity,         0.);
     AV_FC_ADD_FIELD(Switch,            0);
 
@@ -62,7 +62,8 @@ av::utils::ProximitySensor::evaluate()
 {
   av::FieldContainer::evaluate();
 
-  double distance = (ReferencePosition.getValue().getTrans() - CurrentPosition.getValue().getTrans()).length();
+  double distance = scm::math::length(::gua::math::get_translation(ReferencePosition.getValue())
+      - ::gua::math::get_translation(CurrentPosition.getValue()));
   double normalized_distance = (distance - MinDistance.getValue()) / (MaxDistance.getValue() - MinDistance.getValue());
   double proximity = smooth(1. - normalized_distance);
 

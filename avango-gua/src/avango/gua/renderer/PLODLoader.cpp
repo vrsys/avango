@@ -70,17 +70,17 @@ av::gua::PLODLoader::getGuaPLODLoader() const
 }
 
 av::gua::Node*
-av::gua::PLODLoader::createChildren(std::shared_ptr< ::gua::Node> root) const {
+av::gua::PLODLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 
-  auto group_cast(std::dynamic_pointer_cast< ::gua::TransformNode>(root));
+  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
   if (group_cast) {
     av_node = new av::gua::TransformNode(group_cast);
   }
 
   if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::PLODNode>(root));
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::PLODNode>(root));
     if (geom_cast) {
       av_node = new av::gua::PLODNode(geom_cast);
     }

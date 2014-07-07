@@ -21,8 +21,8 @@
 *                                                                        *
 \************************************************************************/
 
-#if !defined(AV_UTILS_BOOL2OR_H)
-#define AV_UTILS_BOOL2OR_H
+#if !defined(AV_UTILS_BOOL3OR_H)
+#define AV_UTILS_BOOL3OR_H
 
 /**
  * \file
@@ -31,7 +31,7 @@
 
 #include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
-#include <avango/osg/Fields.h>
+#include <avango/gua/Fields.hpp>
 #include "windows_specific_utils.h"
 
 namespace av
@@ -39,20 +39,20 @@ namespace av
   namespace utils
   {
 
-    class AV_UTILS_DLL Bool2Or : public av::FieldContainer
+    class AV_UTILS_DLL Bool3Or : public av::FieldContainer
     {
       AV_FC_DECLARE();
 
     public:
 
-      Bool2Or();
+      Bool3Or();
 
     protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~Bool2Or();
+      virtual ~Bool3Or();
 
       /* virtual */ void evaluate();
 
@@ -60,6 +60,7 @@ namespace av
 
       av::SFBool Input1;
       av::SFBool Input2;
+      av::SFBool Input3;
       av::SFBool Output;
     };
 

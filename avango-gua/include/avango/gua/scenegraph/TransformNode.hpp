@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/TransformNode.hpp>
+#include <gua/node/TransformNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TransformNode is created.
        * Otherwise, the given ::gua::TransformNode is used.
        */
-      TransformNode(std::shared_ptr< ::gua::TransformNode> guanode = std::shared_ptr< ::gua::TransformNode>(new ::gua::TransformNode("")));
+      TransformNode(std::shared_ptr< ::gua::node::TransformNode> guanode = std::shared_ptr< ::gua::node::TransformNode>(new ::gua::node::TransformNode("")));
 
     protected:
 
@@ -44,14 +44,14 @@ namespace av
       /**
        * Get the wrapped ::gua::TransformNode.
        */
-      std::shared_ptr< ::gua::TransformNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::TransformNode> getGuaNode() const;
 
     public:
 
 
     private:
 
-      std::shared_ptr< ::gua::TransformNode> m_guaNode;
+      std::shared_ptr< ::gua::node::TransformNode> m_guaNode;
 
       TransformNode(const TransformNode&);
       TransformNode& operator=(const TransformNode&);

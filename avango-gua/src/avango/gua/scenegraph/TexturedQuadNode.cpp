@@ -7,9 +7,9 @@ AV_FC_DEFINE(av::gua::TexturedQuadNode);
 AV_FIELD_DEFINE(av::gua::SFTexturedQuadNode);
 AV_FIELD_DEFINE(av::gua::MFTexturedQuadNode);
 
-av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::TexturedQuadNode> guanode)
+av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::TexturedQuadNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::TexturedQuadNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::node::TexturedQuadNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Texture,
                           boost::bind(&TexturedQuadNode::getTextureCB, this, _1),
@@ -47,7 +47,7 @@ av::gua::TexturedQuadNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::TexturedQuadNode>
+std::shared_ptr< ::gua::node::TexturedQuadNode>
 av::gua::TexturedQuadNode::getGuaNode() const
 {
     return m_guaNode;

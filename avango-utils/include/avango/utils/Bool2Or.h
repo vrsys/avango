@@ -21,46 +21,49 @@
 *                                                                        *
 \************************************************************************/
 
-#include "../include/avango/utils/Init.h"
-#include "../include/avango/utils/ProximitySensor.h"
-#include "../include/avango/utils/Bool2Or.h"
-#include "../include/avango/utils/Bool2And.h"
-#include "../include/avango/utils/Bool3Or.h"
-#include "../include/avango/utils/Bool3And.h"
-#include "../include/avango/utils/Trackball.h"
-#include "../include/avango/utils/MultiValueField.h"
+#if !defined(AV_UTILS_BOOL2OR_H)
+#define AV_UTILS_BOOL2OR_H
 
-#ifdef PCL_SUPPORT
-  #include "../include/avango/utils/PCLPointCloud.h"
-#endif
+/**
+ * \file
+ * \ingroup av_utils
+ */
 
-#include <avango/Logger.h>
+#include <avango/FieldContainer.h>
+#include <avango/StandardFields.h>
+#include <avango/gua/Fields.hpp>
+#include "windows_specific_utils.h"
 
-namespace
+namespace av
 {
-  av::Logger& logger(av::getLogger("av::utils::Init"));
-}
-
-AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
-
-/* static */ void
-av::utils::Init::initClass()
-{
-  if (!isTypeInitialized())
+  namespace utils
   {
-    av::utils::ProximitySensor::initClass();
-    av::utils::Bool2Or::initClass();
-    av::utils::Bool2And::initClass();
-    av::utils::Bool3Or::initClass();
-    av::utils::Bool3And::initClass();
-    av::utils::Trackball::initClass();
-    av::utils::initMultiValueFields();
-    av::utils::initMultiValueOSGFields();
 
-    #ifdef PCL_SUPPORT
-      av::utils::PCLPointCloud::initClass();
-    #endif
+    class AV_UTILS_DLL Bool2Or : public av::FieldContainer
+    {
+      AV_FC_DECLARE();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
+    public:
+
+      Bool2Or();
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~Bool2Or();
+
+      /* virtual */ void evaluate();
+
+    public:
+
+      av::SFBool Input1;
+      av::SFBool Input2;
+      av::SFBool Output;
+    };
+
   }
 }
+
+#endif

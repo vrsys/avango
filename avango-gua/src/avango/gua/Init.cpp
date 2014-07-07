@@ -24,7 +24,9 @@
 #include <avango/gua/scenegraph/PickResult.hpp>
 
 #include <avango/gua/math/BoundingBox.hpp>
+#include <avango/gua/math/BoundingSphere.hpp>
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/RigidBodyNode.hpp>
 #include <avango/gua/physics/CollisionShapeNode.hpp>
 #include <avango/gua/physics/CollisionShape.hpp>
@@ -40,6 +42,7 @@
 #include <avango/gua/physics/Point2PointConstraint.hpp>
 #include <avango/gua/physics/SliderConstraint.hpp>
 #include <avango/gua/physics/Physics.hpp>
+#endif
 
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
@@ -99,7 +102,9 @@ av::gua::Init::initClass()
         av::gua::PickResult::initClass();
 
         av::gua::BoundingBox::initClass();
+        av::gua::BoundingSphere::initClass();
 
+#if defined(AVANGO_PHYSICS_SUPPORT)
         av::gua::RigidBodyNode::initClass();
         av::gua::CollisionShapeNode::initClass();
         av::gua::CollisionShape::initClass();
@@ -115,6 +120,7 @@ av::gua::Init::initClass()
         av::gua::Point2PointConstraint::initClass();
         av::gua::SliderConstraint::initClass();
         av::gua::Physics::initClass();
+#endif
 
         av::gua::Pipeline::initClass();
         av::gua::Renderer::initClass();

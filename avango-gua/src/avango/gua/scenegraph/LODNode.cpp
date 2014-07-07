@@ -14,9 +14,9 @@ AV_FC_DEFINE(av::gua::LODNode);
 AV_FIELD_DEFINE(av::gua::SFLODNode);
 AV_FIELD_DEFINE(av::gua::MFLODNode);
 
-av::gua::LODNode::LODNode(std::shared_ptr< ::gua::LODNode> guanode)
+av::gua::LODNode::LODNode(std::shared_ptr< ::gua::node::LODNode> guanode)
   : TransformNode(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::LODNode> (Node::getGuaNode()))
+    m_guaNode(std::dynamic_pointer_cast< ::gua::node::LODNode> (Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(LODDistances,
                           boost::bind(&LODNode::getLODDistancesCB, this, _1),
@@ -43,7 +43,7 @@ av::gua::LODNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::LODNode>
+std::shared_ptr< ::gua::node::LODNode>
 av::gua::LODNode::getGuaNode() const
 {
     return m_guaNode;

@@ -9,9 +9,9 @@ AV_FC_DEFINE(av::gua::SpotLightNode);
 AV_FIELD_DEFINE(av::gua::SFSpotLightNode);
 AV_FIELD_DEFINE(av::gua::MFSpotLightNode);
 
-av::gua::SpotLightNode::SpotLightNode(std::shared_ptr< ::gua::SpotLightNode> guanode)
+av::gua::SpotLightNode::SpotLightNode(std::shared_ptr< ::gua::node::SpotLightNode> guanode)
     : av::gua::Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::SpotLightNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::node::SpotLightNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Color,
                           boost::bind(&SpotLightNode::getColorCB, this, _1),
@@ -69,7 +69,7 @@ av::gua::SpotLightNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::SpotLightNode>
+std::shared_ptr< ::gua::node::SpotLightNode>
 av::gua::SpotLightNode::getGuaNode() const
 {
     return m_guaNode;

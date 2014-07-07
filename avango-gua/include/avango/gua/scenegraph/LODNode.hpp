@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/LODNode.hpp>
+#include <gua/node/LODNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/TransformNode.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::LODNode is created.
        * Otherwise, the given ::gua::LODNode is used.
        */
-      LODNode(std::shared_ptr< ::gua::LODNode> guanode = std::shared_ptr< ::gua::LODNode>(new ::gua::LODNode("")));
+      LODNode(std::shared_ptr< ::gua::node::LODNode> guanode = std::shared_ptr< ::gua::node::LODNode>(new ::gua::node::LODNode("")));
 
     protected:
 
@@ -46,7 +46,7 @@ namespace av
       /**
        * Get the wrapped ::gua::LODNode.
        */
-      std::shared_ptr< ::gua::LODNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::LODNode> getGuaNode() const;
 
     public:
 
@@ -56,7 +56,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::LODNode> m_guaNode;
+      std::shared_ptr< ::gua::node::LODNode> m_guaNode;
 
       LODNode(const LODNode&);
       LODNode& operator=(const LODNode&);

@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/ScreenNode.hpp>
+#include <gua/node/ScreenNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -30,7 +30,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::ScreenNode is created.
        * Otherwise, the given ::gua::ScreenNode is used.
        */
-      ScreenNode(std::shared_ptr< ::gua::ScreenNode> guanode = std::shared_ptr< ::gua::ScreenNode>(new ::gua::ScreenNode("")));
+      ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanode = std::shared_ptr< ::gua::node::ScreenNode>(new ::gua::node::ScreenNode("")));
 
     protected:
 
@@ -51,7 +51,7 @@ namespace av
       /**
        * Get the wrapped ::gua::ScreenNode.
        */
-      std::shared_ptr< ::gua::ScreenNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::ScreenNode> getGuaNode() const;
 
     public:
 
@@ -63,7 +63,7 @@ namespace av
 
     private:
 
-      std::shared_ptr< ::gua::ScreenNode> m_guaNode;
+      std::shared_ptr< ::gua::node::ScreenNode> m_guaNode;
 
       ScreenNode(const ScreenNode&);
       ScreenNode& operator=(const ScreenNode&);

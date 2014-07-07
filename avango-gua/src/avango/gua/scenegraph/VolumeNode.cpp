@@ -7,9 +7,9 @@ AV_FC_DEFINE(av::gua::VolumeNode);
 AV_FIELD_DEFINE(av::gua::SFVolumeNode);
 AV_FIELD_DEFINE(av::gua::MFVolumeNode);
 
-av::gua::VolumeNode::VolumeNode(std::shared_ptr< ::gua::VolumeNode> guanode)
+av::gua::VolumeNode::VolumeNode(std::shared_ptr< ::gua::node::VolumeNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::VolumeNode>(Node::getGuaNode()))
+      m_guaNode(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(Node::getGuaNode()))
 {
 //    AV_FC_ADD_ADAPTOR_FIELD(Geometry,
 //                          boost::bind(&VolumeNode::getGeometryCB, this, _1),
@@ -35,7 +35,7 @@ av::gua::VolumeNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::VolumeNode>
+std::shared_ptr< ::gua::node::VolumeNode>
 av::gua::VolumeNode::getGuaNode() const
 {
     return m_guaNode;

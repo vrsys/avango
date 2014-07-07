@@ -69,7 +69,7 @@ namespace av
 
       ::gua::TriMeshLoader *m_guaTriMeshLoader;
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::Node> root) const;
+      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
 
       TriMeshLoader(const TriMeshLoader&);
       TriMeshLoader& operator=(const TriMeshLoader&);

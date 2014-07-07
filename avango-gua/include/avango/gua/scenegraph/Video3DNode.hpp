@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/scenegraph/Video3DNode.hpp>
+#include <gua/node/Video3DNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -27,12 +27,12 @@ namespace av
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::Video3DNode 
+       * Constructor. When called without arguments, a new ::gua::Video3DNode
        * is created.
        * Otherwise, the given ::gua::Video3DNode is used.
        */
-      Video3DNode(std::shared_ptr< ::gua::Video3DNode> guanode = 
-          std::shared_ptr< ::gua::Video3DNode>(new ::gua::Video3DNode("")));
+      Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode =
+          std::shared_ptr< ::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
 
     protected:
 

@@ -39,6 +39,7 @@ from _node_scalers import *
 from _interpolators import *
 from _node_optimizer import *
 from _screen_capture import *
+from _guajacum import *
 
 
 #import Leap

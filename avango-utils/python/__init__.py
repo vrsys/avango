@@ -35,12 +35,11 @@ from _normalization import *
 from _field_dump import *
 from _interconnect import *
 from _range_checks import *
-from _node_scalers import *
+#from _node_scalers import *
 from _interpolators import *
 from _node_optimizer import *
-from _screen_capture import *
-from _guajacum import *
-
+#from _screen_capture import *
+import _guajacum
 
 #import Leap
 #from _leap_motion import *

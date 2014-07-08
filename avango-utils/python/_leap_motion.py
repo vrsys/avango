@@ -2,7 +2,7 @@
 import Leap
 
 #avango 
-import avango.osg
+import avango.gua
 
 #python 
 import Queue
@@ -13,9 +13,9 @@ keep_alive = []
 class AVLeapPointable(avango.script.Script):
     
     ID = avango.SFInt()
-    TipPosition = avango.osg.SFVec3()
-    TipVelocity = avango.osg.SFVec3()
-    Direction = avango.osg.SFVec3()
+    TipPosition = avango.gua.SFVec3()
+    TipVelocity = avango.gua.SFVec3()
+    Direction = avango.gua.SFVec3()
     Width = avango.SFFloat()
     Length = avango.SFFloat()
     IsTool = avango.SFBool()
@@ -23,7 +23,7 @@ class AVLeapPointable(avango.script.Script):
     IsValid = avango.SFBool()
     TouchZone = avango.SFBool()
     TouchDistance = avango.SFFloat()
-    TipPositionStabilized = avango.osg.SFVec3()
+    TipPositionStabilized = avango.gua.SFVec3()
     
     def __init__(self):
         self.super(AVLeapPointable).__init__();
@@ -126,12 +126,12 @@ class AVLeapHand(avango.script.Script):
     Pointables = avango.script.MFObject()
     Fingers = avango.script.MFObject()
     Tools = avango.script.MFObject()
-    PalmPosition = avango.osg.SFVec3()
-    PalmVelocity = avango.osg.SFVec3()
-    PalmNormal = avango.osg.SFVec3()
-    Direction = avango.osg.SFVec3()
+    PalmPosition = avango.gua.SFVec3()
+    PalmVelocity = avango.gua.SFVec3()
+    PalmNormal = avango.gua.SFVec3()
+    Direction = avango.gua.SFVec3()
     IsValid = avango.SFBool()
-    SphereCenter = avango.osg.SFVec3()
+    SphereCenter = avango.gua.SFVec3()
     SphereRadius = avango.SFFloat()
     
     
@@ -263,7 +263,7 @@ def create_av_leap_data_factory(pointers_raw, pointer_type):
 
 
 def leap_av_vec(leap_vec):
-    return avango.osg.Vec3(leap_vec.x,leap_vec.y,leap_vec.z)
+    return avango.gua.Vec3(leap_vec.x,leap_vec.y,leap_vec.z)
 
 class LeapVec3(object):
     def __init__(self, v):

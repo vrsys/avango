@@ -30,6 +30,13 @@ namespace av
 
     public:
 
+      enum Flags {
+        DEFAULTS = ::gua::PLODLoader::DEFAULTS,
+        MAKE_PICKABLE = ::gua::PLODLoader::MAKE_PICKABLE,
+        NORMALIZE_SCALE = ::gua::PLODLoader::NORMALIZE_SCALE,
+        NORMALIZE_POSITION = ::gua::PLODLoader::NORMALIZE_POSITION
+      };
+
       /**
        * Constructor. When called without arguments, a new ::gua::PLODLoader is created.
        * Otherwise, the given ::gua::PLODLoader is used.

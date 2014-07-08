@@ -39,6 +39,14 @@ void init_PLODLoader()
          .def("is_supported", &is_supported)
          ;
 
+  enum_<av::gua::PLODLoader::Flags>("LoaderFlags")
+    .value("DEFAULTS", av::gua::PLODLoader::DEFAULTS)
+    .value("MAKE_PICKABLE", av::gua::PLODLoader::MAKE_PICKABLE)
+    .value("NORMALIZE_POSITION", av::gua::PLODLoader::NORMALIZE_POSITION)
+    .value("NORMALIZE_SCALE", av::gua::PLODLoader::NORMALIZE_SCALE)
+    ;
+
+
   register_field<av::gua::SFPLODLoader>("SFPLODLoader");
   register_multifield<av::gua::MFPLODLoader>("MFPLODLoader");
 }

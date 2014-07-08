@@ -25,7 +25,7 @@ def start(filename):
   plodloader.RenderBudget.value = 2048
   plodloader.OutOfCoreBudget.value = 4096
   plod_geode = plodloader.create_geometry_from_file("point_cloud",
-                  filename)
+                  filename, avango.gua.LoaderFlags.DEFAULTS)
 
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))

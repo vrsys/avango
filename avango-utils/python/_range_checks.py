@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-import avango.osg
+import avango.gua
 
 def in_range_float(ref_value,test_value,range):
     if test_value > ref_value - range and test_value < ref_value + range:

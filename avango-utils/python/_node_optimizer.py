@@ -23,10 +23,10 @@
 
 import avango.script
 from avango.script import field_has_changed
-import avango.osg
+import avango.gua
 
 class NodeOptimizer(avango.script.Script):
-    Node = avango.osg.SFNode()
+    Node = avango.gua.SFNode()
     Trigger = avango.SFBool()
 
     def __init__(self):
@@ -42,5 +42,5 @@ class NodeOptimizer(avango.script.Script):
 
     def evaluate(self):
         if self.__triggered and self.Node.value:
-            avango.osg.optimize_scene_graph(self.Node.value)
+            avango.gua.optimize_scene_graph(self.Node.value)
 

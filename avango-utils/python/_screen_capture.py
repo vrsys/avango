@@ -24,7 +24,7 @@
 import avango.script
 from avango.script import field_has_changed
 
-import avango.osg
+import avango.gua
 import avango.utils
 
 class ScreenCapture(avango.script.Script):

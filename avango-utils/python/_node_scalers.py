@@ -23,7 +23,7 @@
 
 import avango.script
 from avango.script import field_has_changed
-import avango.osg
+import avango.gua
 
 class LoadFileScaler(avango.script.Script):
     LoadFile = avango.osg.SFLoadFile()

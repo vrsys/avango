@@ -112,22 +112,22 @@ def make_color_fading(start_color, end_color, duration):
     
 class ColorFader(avango.script.Script):
     
-    StartColor = avango.osg.SFVec4()
-    EndColor = avango.osg.SFVec4()
+    StartColor = avango.gua.SFVec4()
+    EndColor = avango.gua.SFVec4()
     Duration = avango.SFFloat()
     
     StartFade = avango.SFBool()
     FadeFinished = avango.SFBool()
     
     RawInterpolatedValue = avango.SFFloat()
-    Color = avango.osg.SFVec4()
+    Color = avango.gua.SFVec4()
     
     def __init__(self):
         self.super(ColorFader).__init__()
         
         self.StartFade.value = False
         self.FadeFinished.value = False
-        self.Color.value = avango.osg.Vec4(1,1,1,1)
+        self.Color.value = avango.gua.Vec4(1,1,1,1)
         self.__interpolator_running = True
         
         self.__interpolator = Interpolator()

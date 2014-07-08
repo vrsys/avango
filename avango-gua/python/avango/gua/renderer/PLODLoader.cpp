@@ -21,8 +21,12 @@ namespace boost
 av::Link<av::gua::Node> load(
     av::gua::PLODLoader const& loader,
     std::string const& nodename,
-    std::string const& fileName) {
-   return loader.load(nodename, fileName);
+    std::string const& fileName,
+    int flags
+    ) {
+   return loader.load( nodename
+                     , fileName
+                     , static_cast<av::gua::PLODLoader::Flags>(flags));
 }
 
 bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {

@@ -44,7 +44,8 @@ namespace av
       PLODLoader(::gua::PLODLoader* guaPLODLoader = new ::gua::PLODLoader());
 
       av::Link<av::gua::Node> load( std::string const& nodename,
-                                    std::string const& fileName) const;
+                                    std::string const& fileName,
+                                    Flags flags = DEFAULTS) const;
       bool is_supported(std::string const& fileName) const;
 
     protected:

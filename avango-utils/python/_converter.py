@@ -175,7 +175,7 @@ class Float2Vec2Converter(avango.script.Script):
 class Vec3ToTransMatrix(avango.script.Script):
     TransVec = avango.gua.SFVec3()
     TransOffset = avango.gua.SFVec3()
-    Matrix = avango.gua.SFMatrix()
+    Matrix = avango.gua.SFMatrix4()
     
     def __init__(self):
         self.super(Vec3ToTransMatrix).__init__()
@@ -195,9 +195,9 @@ def make_vec3_to_trans_matrix(vec3_field, trans_offset=avango.gua.Vec3(0,0,0)):
 
 
 class TranslationMatrixCalculator(avango.script.Script):
-    MatrixFrom = avango.gua.SFMatrix()
-    MatrixTo = avango.gua.SFMatrix()
-    MatrixTransDif = avango.gua.SFMatrix()
+    MatrixFrom = avango.gua.SFMatrix4()
+    MatrixTo = avango.gua.SFMatrix4()
+    MatrixTransDif = avango.gua.SFMatrix4()
     
     def __init__(self):
         self.super(TranslationMatrixCalculator).__init__()

@@ -33,11 +33,12 @@ av::gua::PLODLoader::PLODLoader(::gua::PLODLoader* guaPLODLoader)
 //{}
 
 av::Link<av::gua::Node>
-av::gua::PLODLoader::load( std::string const& nodename,
-                              std::string const& fileName) const
+av::gua::PLODLoader::load(std::string const& nodename,
+                          std::string const& fileName,
+                          av::gua::PLODLoader::Flags flags) const
 {
 
-    auto gua_node(m_guaPLODLoader->create_geometry_from_file(nodename, fileName));
+    auto gua_node(m_guaPLODLoader->create_geometry_from_file(nodename, fileName, flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);

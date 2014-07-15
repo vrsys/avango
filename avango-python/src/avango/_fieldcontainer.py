@@ -21,13 +21,13 @@
 #                                                                        #
 ##########################################################################
 
-from _avango import *
+from ._avango import *
 
 
 def FieldContainer_getattr(self, name):
     field = self._get_field(name)
     if field is None:
-        raise AttributeError, 'Unknown field %s' % name
+        raise AttributeError('Unknown field %s' % name)
     return field
 
 def FieldContainer_setattr(self, name, value):

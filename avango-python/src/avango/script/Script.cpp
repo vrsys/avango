@@ -213,9 +213,11 @@ namespace
   int num_py_references(av::script::Script* self)
   {
     PyObject * sys = PyImport_ImportModule("sys");
-    PyObject * method = PyString_FromString("getrefcount");
+    //PyObject * method = PyString_FromString("getrefcount");
+    PyObject * method = PyUnicode_FromString("getrefcount");
     PyObject * result = PyObject_CallMethodObjArgs(sys, method, self->getSelf(), NULL);
-    int res = (int)PyInt_AsLong(result);
+    //int res = (int)PyInt_AsLong(result);
+    int res = (int)PyLong_AsLong(result);
     if(PyErr_Occurred())
       return -1;
     else

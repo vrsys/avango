@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.script
 from avango.script import field_has_changed

@@ -1,12 +1,9 @@
-#!/usr/bin/python
-
 import avango.daemon
 import os
 import sys
 
 # functions
 def init_pst_tracking():
-
 	# create instance of DTrack
 	pst = avango.daemon.DTrack()
 	pst.port = "5000" # PST port
@@ -21,7 +18,7 @@ def init_pst_tracking():
 	pst.stations[13] = avango.daemon.Station('lens')
 
 	device_list.append(pst)
-	print "PST Tracking started!"
+	print("PST Tracking started!")
 
 # functions
 def init_tuio_input():
@@ -51,7 +48,7 @@ def init_tuio_input():
 	tuio.stations[19] = avango.daemon.Station('gua-finger19')
 
 	device_list.append(tuio)
-	print "TUIO Input started!"
+	print("TUIO Input started!")
 
 def init_mouse():
 
@@ -73,10 +70,10 @@ def init_mouse():
 		mouse.buttons[1] = "EV_KEY::BTN_RIGHT"
 
 		device_list.append(mouse)
-		print "Mouse started at:", mouse_name
+		print("Mouse started at:", mouse_name)
 
 	else:
-		print "Mouse NOT found !"
+		print("Mouse NOT found !")
 
 
 def init_keyboard():
@@ -129,7 +126,7 @@ def init_keyboard():
 
 
 		device_list.append(keyboard)
-		print "Keyboard " + str(i) + " started at:", name
+		print("Keyboard " + str(i) + " started at:", name)
 
 
 def init_spheron():
@@ -153,10 +150,10 @@ def init_spheron():
 		spheron.values[5] = "EV_ABS::ABS_RZ"  # rotate Z
 
 		device_list.append(spheron)
-		print 'Spheron started at:', name
+		print('Spheron started at:', name)
 
 	else:
-		print "Spheron NOT found !"
+		print("Spheron NOT found !")
 
 device_list = []
 

@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _oculus import *
+from ._oculus import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)

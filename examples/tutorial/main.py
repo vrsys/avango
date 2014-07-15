@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.gua
 import avango.script

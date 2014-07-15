@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _sound import *
+from ._sound import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::sound::')

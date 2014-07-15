@@ -25,7 +25,7 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 
-from _nodes import *
+from ._nodes import *
 
 class ImmediateEdgeTrigger(avango.script.Script):
     """

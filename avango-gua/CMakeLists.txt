@@ -231,15 +231,15 @@ ENDIF (UNIX)
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/avango_gua.dll)
-  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua/_gua.pyd)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/gua/_gua.pyd)
 ELSEIF (UNIX)
   post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_gua.so)
-  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua/_gua.so)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/gua/_gua.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-gua/lib/avango/gua
-    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua
+    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/gua
     _gua
 )
 

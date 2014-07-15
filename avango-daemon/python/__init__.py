@@ -73,17 +73,17 @@ that show the configuration and usage of these input devices.
 '''
 
 import sys
-from _daemon import *
-from _daemon import _Device
-from _daemon import _HIDHelper
-from _daemon import _DTrackHelper
-from _daemon import _OculusHelper
-from _daemon import _TUIOInputHelper
+from ._daemon import *
+from ._daemon import _Device
+from ._daemon import _HIDHelper
+from ._daemon import _DTrackHelper
+from ._daemon import _OculusHelper
+from ._daemon import _TUIOInputHelper
 
 # currently WacomTablet and Wiimote are not supported on Windows
 if sys.platform != 'win32':
-    from _daemon import _WacomTabletHelper
-    from _daemon import _WiimoteHelper
+    from ._daemon import _WacomTabletHelper
+    from ._daemon import _WiimoteHelper
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::daemon::')
@@ -251,7 +251,7 @@ class Oculus(_OculusHelper):
     stations = property(StationProxy)
 
 if does_type_exist("av::daemon::VRPNClient"):
-    from _daemon import _VRPNClientHelper
+    from ._daemon import _VRPNClientHelper
 
     class VRPNClient(_VRPNClientHelper):
         """Avango NG device for processing data sent by a VRPN server. This

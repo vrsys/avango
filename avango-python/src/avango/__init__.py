@@ -43,9 +43,9 @@ def showwarning_buffer(message, category, filename, lineno, file = None, line = 
 warnings.showwarning = showwarning_buffer
 
 # Import all public members of C++ export
-from _avango import *
+from ._avango import *
 # Explicitly import hidden members
-from _avango import _make_instance_by_name
+from ._avango import _make_instance_by_name
 
 # Now register proper avango logging warnings hook
 def showwarning_logging(message, category, filename, lineno, file = None, line = None):
@@ -55,11 +55,11 @@ for w in warning_buffer:
     showwarning_logging(*w)
 
 # Now import additional setup code
-import _fieldcontainer
-from _utility import *
+from . import _fieldcontainer
+from ._utility import *
 
-import nodefactory
-nodes = nodefactory.NodeFactory(module=__name__)
+import avango.nodefactory
+nodes = avango.nodefactory.NodeFactory(module=__name__)
 
 # Use of these fields is deprecated. Use SFContainer instead.
 # TODO Remove at a later time

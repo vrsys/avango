@@ -23,7 +23,7 @@
 
 import avango
 import avango.nodefactory
-import _script
+from . import _script
 
 def field_has_changed(field):
     class container(object):
@@ -58,7 +58,7 @@ class ScriptMetaclass(type):
             wrapped_bases.append(base)
         wrapped_code = "class %s(%s): pass" % (classname, ','.join([ 'wrapped_bases[%i]'%i for i in xrange(len(wrapped_bases)) ]))
         wrapped_locals = { 'wrapped_bases': wrapped_bases }
-        exec wrapped_code in wrapped_locals
+        exec(wrapped_code, wrapped_locals)
         Wrapper = wrapped_locals[classname]
         cls._Script__wrapper = Wrapper
 

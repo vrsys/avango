@@ -1,12 +1,10 @@
-#!/usr/bin/python
-
 import avango
 import avango.script
 import code
 import threading
 import sys
 import signal
-import Queue
+import queue
 import os
 
 try:
@@ -29,7 +27,7 @@ class GuaVE(avango.script.Script):
     self.super(GuaVE).__init__()
     self.always_evaluate(True)
 
-    self.__input_queue = Queue.Queue()
+    self.__input_queue = queue.Queue()
     self.__input_lock = threading.Lock()
     self.__vars = {}
     self.Prompt.value = "gua> "
@@ -42,26 +40,27 @@ class GuaVE(avango.script.Script):
 
     self.__shell = code.InteractiveConsole(self.__vars)
 
-    print ""
+    print("")
 
     if show_banner:
-      print ""
-      print "                                             _       "
-      print "                                            | |      "
-      print "  __ _ _   _  __ _  ___ __ _ _ __ ___   ___ | | ___  "
-      print " / _` | | | |/ _` |/ __/ _` | '_ ` _ \ / _ \| |/ _ \ "
-      print "| (_| | |_| | (_| | (_| (_| | | | | | | (_) | |  __/ "
-      print " \__, |\__,_|\__,_|\___\__,_|_| |_| |_|\___/|_|\___| "
-      print "  __/ |                                              "
-      print " |___/                                               "
-      print ""
-      print ""
-      print ""
-      print print_green + "Welcome to GuaVE, the guacamole virtual environment!" + print_reset
-      print ""
-      print "Press Ctrl-D to exit to exit GuaVE."
-      print "Press Ctrl-C to kill guacamole."
-      print "----------------------------------------------------"
+      print("")
+      print("                                             _       ")
+      print("                                            | |      ")
+      print("  __ _ _   _  __ _  ___ __ _ _ __ ___   ___ | | ___  ")
+      print(" / _` | | | |/ _` |/ __/ _` | '_ ` _ \ / _ \| |/ _ \ ")
+      print("| (_| | |_| | (_| | (_| (_| | | | | | | (_) | |  __/ ")
+      print(" \__, |\__,_|\__,_|\___\__,_|_| |_| |_|\___/|_|\___| ")
+      print("  __/ |                                              ")
+      print(" |___/                                               ")
+      print("")
+      print("")
+      print("")
+      print(print_green 
+          + "Welcome to GuaVE, the guacamole virtual environment!"
+          + print_reset)
+      print("")
+      print("Press Ctrl-D to exit to exit GuaVE.")
+      print("----------------------------------------------------")
 
     self.__input_thread = threading.Thread(target=self.__read_input)
     self.__input_thread.daemon = True
@@ -73,7 +72,7 @@ class GuaVE(avango.script.Script):
     vars = self.__vars.keys()
     vars.sort()
     for v in vars:
-      print v
+      print(v)
 
   def evaluate(self):
     while (not self.__input_queue.empty()):
@@ -90,7 +89,7 @@ class GuaVE(avango.script.Script):
       readline.write_history_file(self.HistoryFile.value)
 
   def __signal_handler(self, signal, frame):
-    print "Bye!"
+    print("Bye!")
     sys.exit(0)
 
   def __read_input(self):
@@ -103,9 +102,16 @@ class GuaVE(avango.script.Script):
 
     while (True):
       try:
-        line = raw_input('\001' + print_green + '\002' + self.Prompt.value + '\001' + print_reset + '\002')
+        line = input('\001' + print_green 
+                        + '\002' + self.Prompt.value 
+                        + '\001' + print_reset + '\002')
         self.__input_queue.put(line)
+      except EOFError:
+        print("Bye") #, press Ctrl-C to kill guacamole...")
+        os._exit(0)
+      except IOError as err:
+        print("I/O error: {0}".format(err))
+        os._exit(1)
       except:
-        print "Exiting GuaVe, press Ctrl-C to kill guacamole..."
-        #sys.exit(0)
-        break
+        print("Unexpected error:", sys.exc_info()[0])
+        os._exit(1)

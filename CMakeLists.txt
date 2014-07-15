@@ -62,7 +62,7 @@ if (AVANGO_DISTRIBUTION_SUPPORT)
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (UNIX)
-    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
+    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python3)
 endif (UNIX)
 
 set(LIBRARIES
@@ -134,7 +134,7 @@ option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 # Create libraries
 ################################################################
 file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
-file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python2.7)
+file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.2)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 

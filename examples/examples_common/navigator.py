@@ -3,7 +3,7 @@ from avango.script import field_has_changed
 
 import avango.gua
 
-import device
+from . import device
 import time
 
 class Navigator(avango.script.Script):

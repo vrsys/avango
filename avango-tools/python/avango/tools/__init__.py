@@ -22,7 +22,7 @@
 ##########################################################################
 
 import avango.script
-from _tools import *
+from ._tools import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)

@@ -22,13 +22,13 @@ SET_TARGET_PROPERTIES( _utils PROPERTIES PREFIX "")
 ###############################################################################
 IF (MSVC)
   post_build_install_target(_utils
-    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/utils/_utils.pyd)
+    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/utils/_utils.pyd)
 ELSEIF (UNIX)
-  post_build_install_target(_utils ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/utils/_utils.so)
+  post_build_install_target(_utils ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/utils/_utils.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/utils
+    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/utils
     _utils
 )

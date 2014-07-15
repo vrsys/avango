@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _openal import *
+from ._openal import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory('av::sound::openal::')

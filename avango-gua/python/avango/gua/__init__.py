@@ -21,9 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _gua import *
+from ._gua import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)
-
-GeometryNode = TriMeshNode

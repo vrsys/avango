@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _nodes import *
+from ._nodes import *
 
 import avango
 import avango.script

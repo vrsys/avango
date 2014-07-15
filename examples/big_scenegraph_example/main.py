@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.gua
 import time
@@ -143,7 +141,7 @@ def start():
     SceneGraph = "big_scenegraph"
   )
 
-  size = avango.gua.Vec2ui(1500, 1500*9/16)
+  size = avango.gua.Vec2ui(1500, int(1500*9/16))
 
   window = avango.gua.nodes.Window(
     Size = size,

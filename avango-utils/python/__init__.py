@@ -21,34 +21,34 @@
 #                                                                        #
 ##########################################################################
 
-from _nodes import *
+from ._nodes import *
 
-from _utils import *
-from _MFMerger import *
-from _bool_script_merge import *
-from _bool_scripts import *
-from _converter import *
-from _property_modifier import *
-from _task_scheduler import *
-from _triggers import *
-from _normalization import *
-from _field_dump import *
-from _interconnect import *
-from _range_checks import *
-#from _node_scalers import *
-from _interpolators import *
-from _node_optimizer import *
-#from _screen_capture import *
-import _guajacum
+from ._utils import *
+from ._MFMerger import *
+from ._bool_script_merge import *
+from ._bool_scripts import *
+from ._converter import *
+from ._property_modifier import *
+from ._task_scheduler import *
+from ._triggers import *
+from ._normalization import *
+from ._field_dump import *
+from ._interconnect import *
+from ._range_checks import *
+#from . _node_scalers import *
+from ._interpolators import *
+from ._node_optimizer import *
+#from ._screen_capture import *
+import ._guajacum
 
 #import Leap
-#from _leap_motion import *
+#from ._leap_motion import *
     
 #check for leapMotion sdk
 leap_motion_sdk_found = False
 try:
     import Leap
-    from _leap_motion import *
+    from ._leap_motion import *
 except ImportError:
     print "#############################################"
     print "#No LeapMotion SDK found. No driver support.#"

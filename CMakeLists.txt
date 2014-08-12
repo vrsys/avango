@@ -41,13 +41,20 @@ include(file_copy_macro)
 include(find_guacamole)
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
-include(find_assimp)
+if (UNIX)
+  pkg_check_modules(ASSIMP REQUIRED assimp)
+  pkg_check_modules(JSON REQUIRED jsoncpp)
+  pkg_check_modules(PYTHON REQUIRED python)
+elseif (WIN32)
+  include(find_assimp)
+  include(find_json)
+  include(find_python)
+endif (UNIX)
+
 include(find_boost)
 set (BULLET_ROOT "/opt/bullet/default" CACHE PATH
     "Set to your bullet install path.")
 find_package(Bullet)
-include(find_json)
-include(find_python)
 include(find_schism)
 
 if (AVANGO_DISTRIBUTION_SUPPORT)

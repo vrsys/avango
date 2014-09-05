@@ -20,6 +20,7 @@ namespace gua
 {
   class TriMeshNode;
   class Video3DNode;
+  class VolumeNode;
   class NURBSNode;
   class SceneGraph;
   class VolumeNode;
@@ -90,6 +91,8 @@ namespace av
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TriMeshNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Video3DNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::VolumeNode&);
 
 #if defined(AVANGO_PBR_SUPPORT)
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::PBRNode&);

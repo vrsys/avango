@@ -25,13 +25,13 @@ SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/oculus/_oculus.pyd)
+  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/oculus/_oculus.pyd)
 ELSEIF (UNIX)
-  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/oculus/_oculus.so)
+  post_build_install_target(_oculus ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/oculus/_oculus.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}/avango/oculus
-    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/oculus
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/oculus
     _oculus
 )

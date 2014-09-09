@@ -19,7 +19,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
-export PYTHONPATH="$LOCAL_AVANGO/lib/python3.2":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.2:$AVANGO/examples:$PYTHONPATH
+export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.4:$AVANGO/examples:$PYTHONPATH
 
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
@@ -27,13 +27,13 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    python3.2 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
+    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
 else
-    python3.2 $AVANGO/examples/examples_common/daemon.py > /dev/null &
+    python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
 
 # run program
-cd "$DIR" && python3.2 main.py
+cd "$DIR" && python3 main.py
 
 # kill daemon
 kill %1

@@ -134,7 +134,7 @@ option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 # Create libraries
 ################################################################
 file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
-file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.2)
+file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.4)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 

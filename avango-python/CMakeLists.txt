@@ -108,24 +108,24 @@ ENDIF (AVANGO_UNITTESTS)
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/script/_script.pyd)
-  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/_avango.pyd)
+  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script/_script.pyd)
+  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/_avango.pyd)
   post_build_install_target(avango_script ${AVANGO_INSTALL_DIRECTORY}/avango/avango_script.dll)
 ELSEIF (UNIX)
-  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/script/_script.so)
-  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/_avango.so)
+  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script/_script.so)
+  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/_avango.so)
   post_build_install_target(avango_script ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_script.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-python/src/avango
-    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango
     _avango
 )
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-python/src/avango/script
-    ${AVANGO_INSTALL_DIRECTORY}/python3.2/avango/script
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script
     _script
 )
 

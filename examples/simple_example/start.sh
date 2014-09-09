@@ -27,9 +27,9 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    python3.4 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
+    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
 else
-    python3.4 $AVANGO/examples/examples_common/daemon.py > /dev/null &
+    python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
 
 # run program

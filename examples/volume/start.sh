@@ -27,13 +27,13 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
 else
-    "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
 fi
 
 # run program
-cd "$DIR" && ./main.py $1 #/opt/kinect-resources/shot_steppo_animation_01.ks
+cd "$DIR" && python3 ./main.py $1 #/opt/kinect-resources/shot_steppo_animation_01.ks
 
 # kill daemon
 kill %1

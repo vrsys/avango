@@ -322,7 +322,7 @@ def tip(which):
   global current_tip
   global tips
   current_tip = max(min(which, tip_count - 2),-1)
-  print tips[current_tip]
+  print(tips[current_tip])
 
 def next_tip():
   global current_tip

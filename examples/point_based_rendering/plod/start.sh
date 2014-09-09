@@ -27,9 +27,9 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
 else
-    "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
 fi
 
 filename="/mnt/pitoti/KDN_LOD/PITOTI_KDN_LOD/Spacemonkey_new.kdn"
@@ -38,7 +38,7 @@ if [ $# -eq 1 ]; then
 fi
 
 # run program
-cd "$DIR" && ./main.py $filename
+cd "$DIR" && python3 ./main.py $filename
 
 # kill daemon
 kill %1

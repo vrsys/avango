@@ -70,6 +70,42 @@ void TuioClient::unlockCursorList() {
 #endif		
 }
 
+void TuioClient::lockHandList() {
+    if(!connected) return;
+#ifndef WIN32
+    pthread_mutex_lock(&handMutex);
+#else
+    WaitForSingleObject(handMutex, INFINITE);
+#endif
+}
+
+void TuioClient::unlockHandList() {
+    if(!connected) return;
+#ifndef WIN32
+    pthread_mutex_unlock(&handMutex);
+#else
+    ReleaseMutex(handMutex);
+#endif
+}
+
+void TuioClient::lockFingerList() {
+    if(!connected) return;
+#ifndef WIN32
+    pthread_mutex_lock(&fingerMutex);
+#else
+    WaitForSingleObject(fingerMutex, INFINITE);
+#endif
+}
+
+void TuioClient::unlockFingerList() {
+    if(!connected) return;
+#ifndef WIN32
+    pthread_mutex_unlock(&fingerMutex);
+#else
+    ReleaseMutex(fingerMutex);
+#endif
+}
+
 TuioClient::TuioClient(int port)
 : socket      (NULL)
 , currentFrame(-1)
@@ -113,7 +149,7 @@ void TuioClient::ProcessBundle( const ReceivedBundle& b, const IpEndpointName& r
 }
 
 void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointName& remoteEndpoint) {
-	try {
+    try {
 		ReceivedMessageArgumentStream args = msg.ArgumentStream();
 		ReceivedMessage::const_iterator arg = msg.ArgumentsBegin();
 		
@@ -204,7 +240,6 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 								unlockObjectList();
 								break;
 							case TUIO_ADDED:
-								
 								lockObjectList();
 								frameObject = new TuioObject(currentTime,tobj->getSessionID(),tobj->getSymbolID(),tobj->getX(),tobj->getY(),tobj->getAngle());
 								objectList.push_back(frameObject);
@@ -432,10 +467,105 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 				
 				frameCursors.clear();
 			}
-		}
-	} catch( Exception& e ){
+        } else if ( strcmp( msg.AddressPattern(), "/tuio/_Finger" ) == 0 ) {
+            const char* cmd;
+            args >> cmd;
+
+            if ( strcmp( cmd, "set" ) == 0 ) {
+                int32 s_id;
+                float xpos, ypos, xspeed, yspeed, xellipse,yellipse, minoraxis, majoraxis, incl;
+                args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> xellipse >> yellipse >> minoraxis >> majoraxis >> incl;
+
+                lockFingerList();
+                std::list<TuioFinger*>::iterator tfinger;
+                for ( tfinger = fingerList.begin(); tfinger != fingerList.end(); ++tfinger) {
+                    if (( *tfinger)->getSessionID() == (long)s_id) break;
+                }
+
+                if ( tfinger == fingerList.end()) {
+                    TuioFinger* addFinger = new TuioFinger(
+                                                (long)s_id,
+                                                xpos, ypos,
+                                                xspeed, yspeed,
+                                                xellipse, yellipse,
+                                                minoraxis, majoraxis,
+                                                incl
+                    );
+                    fingerList.push_back(addFinger);
+                }
+                unlockFingerList();
+            } else if ( strcmp( cmd, "alive" ) == 0) {
+                int32 s_id;
+
+                aliveFingerList.clear();
+                while ( !args.Eos() ) {
+                    args >> s_id;
+                    aliveFingerList.push_back( (long)s_id );
+                }
+
+                lockFingerList();
+                fingerList.remove_if([&](TuioFinger* finger) {
+                    if  (std::find(aliveFingerList.begin(), aliveFingerList.end(), finger->getSessionID()) == aliveFingerList.end()) {
+                        delete finger;
+                        return true;
+                    }
+                    return false;
+                });
+                unlockFingerList();
+            }
+        } else if ( strcmp( msg.AddressPattern(), "/tuio/_Hand" ) == 0 ) {
+            const char* cmd;
+            args >> cmd;
+
+            if ( strcmp( cmd, "set" ) == 0 ) {
+                int32 s_id, hand_class, f1, f2, f3, f4, f5;
+                args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
+
+                lockHandList();
+                std::list<TuioHand*>::iterator thand;
+                for ( thand = handList.begin(); thand != handList.end(); ++thand) {
+                    if (( *thand)->getSessionID() == (long)s_id) break;
+                }
+
+                if ( thand == handList.end()) {
+                    TuioHand* addHand = new TuioHand(
+                                                (long)s_id, (TuioHand::Class)hand_class,
+                                                (long)f1, (long)f2, (long)f3, (long)f4, (long)f5
+                    );
+                    handList.push_back(addHand);
+                }
+                unlockHandList();
+            } else if ( strcmp( cmd, "alive" ) == 0) {
+                int32 s_id;
+
+                aliveHandList.clear();
+                while ( !args.Eos() ) {
+                    args >> s_id;
+                    aliveHandList.push_back( (long)s_id );
+                }
+
+                lockHandList();
+                handList.remove_if([&](TuioHand* hand) {
+                    if  (std::find(aliveHandList.begin(), aliveHandList.end(), hand->getSessionID()) == aliveHandList.end()) {
+                        delete hand;
+                        return true;
+                    }
+                    return false;
+                });
+                unlockHandList();
+            }
+
+            if (0 < handList.size()) {
+                std::cout << "Alive hands: ";
+                for (auto i : handList){
+                    std::cout << i->getHandID() <<" ";
+                }
+                std::cout << std::endl;
+            }
+        }
+    } catch( Exception& e ){
 		std::cerr << "error parsing TUIO message: "<< msg.AddressPattern() <<  " - " << e.what() << std::endl;
-	}
+    }
 }
 
 void TuioClient::ProcessPacket( const char *data, int size, const IpEndpointName& remoteEndpoint ) {
@@ -455,10 +585,14 @@ void TuioClient::connect(bool lk) {
 	pthread_mutex_init(&cursorMutex,&attr_p);
 	pthread_mutex_init(&objectMutex,&attr_p);*/
 	pthread_mutex_init(&cursorMutex,NULL);
-	pthread_mutex_init(&objectMutex,NULL);	
+    pthread_mutex_init(&objectMutex,NULL);
+    pthread_mutex_init(&fingerMutex,NULL);
+    pthread_mutex_init(&handMutex,NULL);
 #else
 	cursorMutex = CreateMutex(NULL,FALSE,"cursorMutex");
 	objectMutex = CreateMutex(NULL,FALSE,"objectMutex");
+    fingerMutex = CreateMutex(NULL,FALSE,"fingerMutex");
+    handMutex   = CreateMutex(NULL,FALSE,"handMutex");
 #endif		
 		
 	if (socket==NULL) return;
@@ -478,6 +612,8 @@ void TuioClient::connect(bool lk) {
 	connected = true;
 	unlockCursorList();
 	unlockObjectList();
+    unlockFingerList();
+    unlockHandList();
 }
 
 void TuioClient::disconnect() {
@@ -496,13 +632,19 @@ void TuioClient::disconnect() {
 #ifndef WIN32	
 	pthread_mutex_destroy(&cursorMutex);
 	pthread_mutex_destroy(&objectMutex);
+    pthread_mutex_destroy(&fingerMutex);
+    pthread_mutex_destroy(&handMutex);
 #else
 	CloseHandle(cursorMutex);
 	CloseHandle(objectMutex);
+    CloseHandle(fingerMutex);
+    CloseHandle(handMutex);
 #endif
 
 	aliveObjectList.clear();
 	aliveCursorList.clear();
+    aliveFingerList.clear();
+    aliveHandList.clear();
 
 	for (std::list<TuioObject*>::iterator iter=objectList.begin(); iter != objectList.end(); iter++)
 		delete (*iter);
@@ -511,6 +653,14 @@ void TuioClient::disconnect() {
 	for (std::list<TuioCursor*>::iterator iter=cursorList.begin(); iter != cursorList.end(); iter++)
 		delete (*iter);
 	cursorList.clear();
+
+    for (std::list<TuioFinger*>::iterator iter=fingerList.begin(); iter != fingerList.end(); iter++)
+        delete (*iter);
+    fingerList.clear();
+
+    for (std::list<TuioHand*>::iterator iter=handList.begin(); iter != handList.end(); iter++)
+        delete (*iter);
+    handList.clear();
 	
 	for (std::list<TuioCursor*>::iterator iter=freeCursorList.begin(); iter != freeCursorList.end(); iter++)
 		delete(*iter);

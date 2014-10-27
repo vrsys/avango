@@ -43,6 +43,8 @@
 #include "TuioListener.h"
 #include "TuioObject.h"
 #include "TuioCursor.h"
+#include "TuioHand.h"
+#include "TuioFinger.h"
 
 namespace TUIO {
 	
@@ -164,7 +166,27 @@ namespace TUIO {
 		 */
 		void unlockCursorList();
 
-		void ProcessPacket( const char *data, int size, const IpEndpointName &remoteEndpoint );
+        /**
+         * Locks the TuioHand list in order to avoid updates during access
+         */
+        void lockHandList();
+
+        /**
+         * Releases the lock of the TuioHand list
+         */
+        void unlockHandList();
+
+        /**
+         * Locks the TuioFinger list in order to avoid updates during access
+         */
+        void lockFingerList();
+
+        /**
+         * Releases the lock of the TuioFinger list
+         */
+        void unlockFingerList();
+
+        void ProcessPacket( const char *data, int size, const IpEndpointName &remoteEndpoint );
 		UdpListeningReceiveSocket *socket;
 				
 	protected:
@@ -186,6 +208,10 @@ namespace TUIO {
 		std::list<long> aliveObjectList;
 		std::list<TuioCursor*> cursorList, frameCursors;
 		std::list<long> aliveCursorList;
+        std::list<TuioFinger*> fingerList, frameFingers;
+        std::list<long> aliveFingerList;
+        std::list<TuioHand*> handList, frameHands;
+        std::list<long> aliveHandList;
 		
 		osc::int32 currentFrame;
 		TuioTime currentTime;
@@ -197,11 +223,15 @@ namespace TUIO {
 		pthread_t thread;
 		pthread_mutex_t objectMutex;
 		pthread_mutex_t cursorMutex;
-		//pthread_mutexattr_t attr_p;
+        pthread_mutex_t handMutex;
+        pthread_mutex_t fingerMutex;
+        //pthread_mutexattr_t attr_p;
 #else
 		HANDLE thread;
 		HANDLE objectMutex;
-		HANDLE cursorMutex;
+        HANDLE cursorMutex;
+        HANDLE handMutex;
+        HANDLE fingerMutex;
 #endif	
 				
 		bool locked;

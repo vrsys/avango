@@ -28,8 +28,17 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/daemon/StationSegment.cpp
     src/avango/daemon/dtrack/dtrack.cpp
     src/avango/daemon/tuio/TUIO/TuioClient.cpp
+    src/avango/daemon/tuio/TUIO/TuioContainer.h
+    src/avango/daemon/tuio/TUIO/TuioCursor.h
+    src/avango/daemon/tuio/TUIO/TuioFinger.h
+    src/avango/daemon/tuio/TUIO/TuioHand.h
+    src/avango/daemon/tuio/TUIO/TuioListener.h
+    src/avango/daemon/tuio/TUIO/TuioObject.h
+    src/avango/daemon/tuio/TUIO/TuioPoint.h
     src/avango/daemon/tuio/TUIO/TuioServer.cpp
+    src/avango/daemon/tuio/TUIO/TuioServer.h
     src/avango/daemon/tuio/TUIO/TuioTime.cpp
+    src/avango/daemon/tuio/TUIO/TuioTime.h
     src/avango/daemon/tuio/oscpack/osc/OscTypes.cpp
     src/avango/daemon/tuio/oscpack/osc/OscOutboundPacketStream.cpp
     src/avango/daemon/tuio/oscpack/osc/OscReceivedElements.cpp

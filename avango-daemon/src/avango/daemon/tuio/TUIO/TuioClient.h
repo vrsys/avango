@@ -130,6 +130,20 @@ namespace TUIO {
 		 */
 		std::list<TuioCursor*> getTuioCursors();
 
+        /**
+         * Returns a List of all currently active TuioFingers
+         *
+         * @return  a List of all currently active TuioFingers
+         */
+        std::list<TuioFinger*> getTuioFingers();
+
+        /**
+         * Returns a List of all currently active TuioHands
+         *
+         * @return  a List of all currently active TuioHands
+         */
+        std::list<TuioHand*> getTuioHands();
+
 		/**
 		 * Returns the TuioObject corresponding to the provided Session ID
 		 * or NULL if the Session ID does not refer to an active TuioObject
@@ -145,6 +159,22 @@ namespace TUIO {
 		 * @return  an active TuioCursor corresponding to the provided Session ID or NULL
 		 */
 		TuioCursor* getTuioCursor(long s_id);
+
+        /**
+         * Returns the TuioFinger corresponding to the provided Session ID
+         * or NULL if the Session ID does not refer to an active TuioFinger
+         *
+         * @return  an active TuioFinger corresponding to the provided Session ID or NULL
+         */
+        TuioFinger* getTuioFinger(long s_id);
+
+        /**
+         * Returns the TuioHand corresponding to the provided Session ID
+         * or NULL if the Session ID does not refer to an active TuioHand
+         *
+         * @return  an active TuioFinger corresponding to the provided Session ID or NULL
+         */
+        TuioHand* getTuioHand(long s_id);
 
 		/**
 		 * Locks the TuioObject list in order to avoid updates during access

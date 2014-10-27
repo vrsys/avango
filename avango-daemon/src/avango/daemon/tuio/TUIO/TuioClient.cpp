@@ -702,6 +702,30 @@ TuioCursor* TuioClient::getTuioCursor(long s_id) {
 	return NULL;
 }
 
+TuioFinger* TuioClient::getTuioFinger(long s_id) {
+    lockFingerList();
+    for (std::list<TuioFinger*>::iterator iter=fingerList.begin(); iter != fingerList.end(); iter++) {
+        if((*iter)->getSessionID()==s_id) {
+            unlockFingerList();
+            return (*iter);
+        }
+    }
+    unlockFingerList();
+    return NULL;
+}
+
+TuioHand* TuioClient::getTuioHand(long s_id) {
+    lockHandList();
+    for (std::list<TuioHand*>::iterator iter=handList.begin(); iter != handList.end(); iter++) {
+        if((*iter)->getSessionID()==s_id) {
+            unlockHandList();
+            return (*iter);
+        }
+    }
+    unlockHandList();
+    return NULL;
+}
+
 std::list<TuioObject*> TuioClient::getTuioObjects() {
 	lockObjectList();
 	std::list<TuioObject*> listBuffer = objectList;
@@ -714,4 +738,18 @@ std::list<TuioCursor*> TuioClient::getTuioCursors() {
 	std::list<TuioCursor*> listBuffer = cursorList;
 	unlockCursorList();
 	return listBuffer;
+}
+
+std::list<TuioFinger*> TuioClient::getTuioFingers() {
+    lockFingerList();
+    std::list<TuioFinger*> listBuffer = fingerList;
+    unlockFingerList();
+    return listBuffer;
+}
+
+std::list<TuioHand*> TuioClient::getTuioHands() {
+    lockHandList();
+    std::list<TuioHand*> listBuffer = handList;
+    unlockHandList();
+    return listBuffer;
 }

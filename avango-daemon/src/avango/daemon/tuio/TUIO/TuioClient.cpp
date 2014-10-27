@@ -468,6 +468,8 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 				frameCursors.clear();
 			}
         } else if ( strcmp( msg.AddressPattern(), "/tuio/_Finger" ) == 0 ) {
+            // TODO: implement fseq
+
             const char* cmd;
             args >> cmd;
 
@@ -514,6 +516,8 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
                 unlockFingerList();
             }
         } else if ( strcmp( msg.AddressPattern(), "/tuio/_Hand" ) == 0 ) {
+            // TODO: implement fseq
+
             const char* cmd;
             args >> cmd;
 

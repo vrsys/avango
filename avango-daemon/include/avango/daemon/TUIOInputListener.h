@@ -81,6 +81,14 @@ namespace av
           cursors.erase(tcur->getCursorID());
         }
 
+        void addTuioFinger(TUIO::TuioFinger* tfinger) {}
+        void updateTuioFinger(TUIO::TuioFinger* tfinger) {}
+        void removeTuioFinger(TUIO::TuioFinger* tfinger) {}
+
+        void addTuioHand(TUIO::TuioHand* thand) {}
+        void updateTuioHand(TUIO::TuioHand* thand) {}
+        void removeTuioHand(TUIO::TuioHand* thand) {}
+
         void refresh(TUIO::TuioTime frameTime) {}
     };
   }

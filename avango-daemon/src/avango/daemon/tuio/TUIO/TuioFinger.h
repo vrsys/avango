@@ -102,6 +102,35 @@ namespace TUIO {
         }
 
         /**
+          * Update finger and corresponding 2DCursors.
+          *
+          * @param  xp	the X coordinate to assign
+          * @param  yp	the Y coordinate to assign
+          * @param  xv  the X velocity to assign
+          * @param  yv  the Y velocity to assign
+          * @param  xe  the bounding ellipse center X coordinate
+          * @param  ye  the bounding ellipse center Y coordinate
+          * @param  mi  the bounding ellipse minor axis
+          * @param  ma  the bounding ellipse major axis
+          * @param  in  the bounding ellipse inclination
+          */
+        void update(float xp, float yp,
+                    float xv, float yv,
+                    float xe, float ye,
+                    float mi, float ma,
+                    float in)
+        {
+            TuioContainer::update(TuioTime::getSessionTime(), xp, yp);
+            x_velocity = xv;
+            y_velocity = yv;
+            x_ellipse_center = xe;
+            y_ellipse_center = ye;
+            ellipse_minor_axis = mi;
+            ellipse_major_axis = ma;
+            ellipse_inclination = in;
+        }
+
+        /**
          * Returns the Finger ID of this TuioFinger.
          * @return	the Finger ID of this TuioFinger
          */

@@ -467,97 +467,68 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 				
 				frameCursors.clear();
 			}
-        } else if ( strcmp( msg.AddressPattern(), "/tuio/_Finger" ) == 0 ) {
-            // TODO: implement fseq
+        } else if ( strcmp( msg.AddressPattern(), "/tuiox/finger" ) == 0 ) {
+            int32 s_id;
+            float xpos, ypos, xspeed, yspeed, xellipse,yellipse, minoraxis, majoraxis, incl;
+            args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> xellipse >> yellipse >> minoraxis >> majoraxis >> incl;
 
-            const char* cmd;
-            args >> cmd;
-
-            if ( strcmp( cmd, "set" ) == 0 ) {
-                int32 s_id;
-                float xpos, ypos, xspeed, yspeed, xellipse,yellipse, minoraxis, majoraxis, incl;
-                args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> xellipse >> yellipse >> minoraxis >> majoraxis >> incl;
-
-                lockFingerList();
-                std::list<TuioFinger*>::iterator tfinger;
-                for ( tfinger = fingerList.begin(); tfinger != fingerList.end(); ++tfinger) {
-                    if (( *tfinger)->getSessionID() == (long)s_id) break;
-                }
-
-                if ( tfinger == fingerList.end()) {
-                    TuioFinger* addFinger = new TuioFinger(
-                                                (long)s_id,
-                                                xpos, ypos,
-                                                xspeed, yspeed,
-                                                xellipse, yellipse,
-                                                minoraxis, majoraxis,
-                                                incl
-                    );
-                    fingerList.push_back(addFinger);
-                }
-                unlockFingerList();
-            } else if ( strcmp( cmd, "alive" ) == 0) {
-                int32 s_id;
-
-                aliveFingerList.clear();
-                while ( !args.Eos() ) {
-                    args >> s_id;
-                    aliveFingerList.push_back( (long)s_id );
-                }
-
-                lockFingerList();
-                fingerList.remove_if([&](TuioFinger* finger) {
-                    if  (std::find(aliveFingerList.begin(), aliveFingerList.end(), finger->getSessionID()) == aliveFingerList.end()) {
-                        delete finger;
-                        return true;
-                    }
-                    return false;
-                });
-                unlockFingerList();
+            lockFingerList();
+            std::list<TuioFinger*>::iterator tfinger;
+            for ( tfinger = fingerList.begin(); tfinger != fingerList.end(); ++tfinger) {
+                if (( *tfinger)->getSessionID() == (long)s_id) break;
             }
-        } else if ( strcmp( msg.AddressPattern(), "/tuio/_Hand" ) == 0 ) {
-            // TODO: implement fseq
 
-            const char* cmd;
-            args >> cmd;
-
-            if ( strcmp( cmd, "set" ) == 0 ) {
-                int32 s_id, hand_class, f1, f2, f3, f4, f5;
-                args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
-
-                lockHandList();
-                std::list<TuioHand*>::iterator thand;
-                for ( thand = handList.begin(); thand != handList.end(); ++thand) {
-                    if (( *thand)->getSessionID() == (long)s_id) break;
-                }
-
-                if ( thand == handList.end()) {
-                    TuioHand* addHand = new TuioHand(
-                                                (long)s_id, (TuioHand::Class)hand_class,
-                                                (long)f1, (long)f2, (long)f3, (long)f4, (long)f5
-                    );
-                    handList.push_back(addHand);
-                }
-                unlockHandList();
-            } else if ( strcmp( cmd, "alive" ) == 0) {
-                int32 s_id;
-
-                aliveHandList.clear();
-                while ( !args.Eos() ) {
-                    args >> s_id;
-                    aliveHandList.push_back( (long)s_id );
-                }
-
-                lockHandList();
-                handList.remove_if([&](TuioHand* hand) {
-                    if  (std::find(aliveHandList.begin(), aliveHandList.end(), hand->getSessionID()) == aliveHandList.end()) {
-                        delete hand;
-                        return true;
-                    }
-                    return false;
-                });
-                unlockHandList();
+            if ( tfinger == fingerList.end()) {
+                TuioFinger* addFinger = new TuioFinger(
+                                            (long)s_id,
+                                            xpos, ypos,
+                                            xspeed, yspeed,
+                                            xellipse, yellipse,
+                                            minoraxis, majoraxis,
+                                            incl
+                );
+                fingerList.push_back(addFinger);
+            } else {
+                (*tfinger)->update(xpos, ypos, xspeed, yspeed, xellipse, yellipse, minoraxis, majoraxis, incl);
             }
+
+            // remove stall fingers
+            fingerList.remove_if([&](TuioFinger* finger) {
+                return (std::find(aliveCursorList.begin(), aliveCursorList.end(), finger->getSessionID()) == aliveCursorList.end());
+            });
+
+            unlockFingerList();
+        } else if ( strcmp( msg.AddressPattern(), "/tuiox/hand" ) == 0 ) {
+            int32 s_id, hand_class, f1, f2, f3, f4, f5;
+            args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
+
+            lockHandList();
+            std::list<TuioHand*>::iterator thand;
+            for ( thand = handList.begin(); thand != handList.end(); ++thand) {
+                if (( *thand)->getSessionID() == (long)s_id) break;
+            }
+
+            if ( thand == handList.end()) {
+                TuioHand* addHand = new TuioHand(
+                                            (long)s_id, (TuioHand::Class)hand_class,
+                                            (long)f1, (long)f2, (long)f3, (long)f4, (long)f5
+                );
+                handList.push_back(addHand);
+            } else {
+                (*thand)->update((long)f1, (long)f2, (long)f3, (long)f4, (long)f5);
+            }
+
+            // remove stall hands
+            handList.remove_if([&](TuioHand* hand) {
+                auto fingerIDs = hand->getFingerIDs();
+                bool stall = true;
+                for (auto i : fingerIDs) {
+                    stall &= (std::find(aliveCursorList.begin(), aliveCursorList.end(), i) == aliveCursorList.end());
+                }
+                return stall;
+            });
+
+            unlockHandList();
 
             if (0 < handList.size()) {
                 std::cout << "Alive hands: ";
@@ -646,9 +617,7 @@ void TuioClient::disconnect() {
 #endif
 
 	aliveObjectList.clear();
-	aliveCursorList.clear();
-    aliveFingerList.clear();
-    aliveHandList.clear();
+    aliveCursorList.clear();
 
 	for (std::list<TuioObject*>::iterator iter=objectList.begin(); iter != objectList.end(); iter++)
 		delete (*iter);

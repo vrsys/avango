@@ -238,10 +238,8 @@ namespace TUIO {
 		std::list<long> aliveObjectList;
 		std::list<TuioCursor*> cursorList, frameCursors;
 		std::list<long> aliveCursorList;
-        std::list<TuioFinger*> fingerList, frameFingers;
-        std::list<long> aliveFingerList;
-        std::list<TuioHand*> handList, frameHands;
-        std::list<long> aliveHandList;
+        std::list<TuioFinger*> fingerList;
+        std::list<TuioHand*> handList;
 		
 		osc::int32 currentFrame;
 		TuioTime currentTime;

@@ -88,6 +88,23 @@ namespace TUIO {
         }
 
         /**
+          * Update finger IDs of the hand.
+          *
+          * @param f1   Session ID of the first finger
+          * @param f2   Session ID of the second finger
+          * @param f3   Session ID of the third finger
+          * @param f4   Session ID of the fourth finge
+          * @param f5   Session ID of the fifth finger
+          */
+        void update(long f1, long f2, long f3, long f4, long f5) {
+            fingers[0] = f1;
+            fingers[1] = f2;
+            fingers[2] = f3;
+            fingers[3] = f4;
+            fingers[4] = f5;
+        }
+
+        /**
           * Get the class  of this hand.
           * @return the hand class
           */

@@ -64,7 +64,7 @@ namespace TUIO {
                     float in) :
             TuioContainer(ttime,si,xp,yp),
             finger_id(si),
-            x_velocity(xv), y_velocity(yv),
+            x_speed(xv), y_speed(yv),
             x_ellipse_center(xe), y_ellipse_center(ye),
             ellipse_minor_axis(mi), ellipse_major_axis(ma),
             ellipse_inclination(in)
@@ -78,8 +78,8 @@ namespace TUIO {
          * @param	si	the Session ID  to assign
          * @param	xp	the X coordinate to assign
          * @param	yp	the Y coordinate to assign
-         * @param   xv  the X velocity to assign
-         * @param   yv  the Y velocity to assign
+         * @param   xs  the X velocity to assign
+         * @param   ys  the Y velocity to assign
          * @param   xe  the bounding ellipse center X coordinate
          * @param   ye  the bounding ellipse center Y coordinate
          * @param   mi  the bounding ellipse minor axis
@@ -88,13 +88,13 @@ namespace TUIO {
          */
         TuioFinger (long si,
                     float xp, float yp,
-                    float xv, float yv,
+                    float xs, float ys,
                     float xe, float ye,
                     float mi, float ma,
                     float in) :
             TuioContainer(si,xp,yp),
             finger_id(si),
-            x_velocity(xv), y_velocity(yv),
+            x_speed(xs), y_speed(ys),
             x_ellipse_center(xe), y_ellipse_center(ye),
             ellipse_minor_axis(mi), ellipse_major_axis(ma),
             ellipse_inclination(in)
@@ -106,8 +106,8 @@ namespace TUIO {
           *
           * @param  xp	the X coordinate to assign
           * @param  yp	the Y coordinate to assign
-          * @param  xv  the X velocity to assign
-          * @param  yv  the Y velocity to assign
+          * @param  xs  the X velocity to assign
+          * @param  ys  the Y velocity to assign
           * @param  xe  the bounding ellipse center X coordinate
           * @param  ye  the bounding ellipse center Y coordinate
           * @param  mi  the bounding ellipse minor axis
@@ -115,14 +115,14 @@ namespace TUIO {
           * @param  in  the bounding ellipse inclination
           */
         void update(float xp, float yp,
-                    float xv, float yv,
+                    float xs, float ys,
                     float xe, float ye,
                     float mi, float ma,
                     float in)
         {
             TuioContainer::update(TuioTime::getSessionTime(), xp, yp);
-            x_velocity = xv;
-            y_velocity = yv;
+            x_speed = xs;
+            y_speed = ys;
             x_ellipse_center = xe;
             y_ellipse_center = ye;
             ellipse_minor_axis = mi;
@@ -138,14 +138,70 @@ namespace TUIO {
             return finger_id;
         }
 
+        /**
+         * Returns the X velocity of this TuioFinger.
+         * @return	the X velocity of this TuioFinger
+         */
+        float getXSpeed() {
+            return x_speed;
+        }
+
+        /**
+         * Returns the Y velocity of this TuioFinger.
+         * @return	the Y velocity of this TuioFinger
+         */
+        float getYSpeed() {
+            return y_speed;
+        }
+
+        /**
+          * Return the finger ellipse center X ccordinate.
+          * @return the finger ellipse center X ccordinate
+          */
+        float getEllipseX() {
+            return x_ellipse_center;
+        }
+
+        /**
+          * Return the finger ellipse center Y ccordinate.
+          * @return the finger ellipse center Y ccordinate
+          */
+        float getEllipseY() {
+            return y_ellipse_center;
+        }
+
+        /**
+          * Return the finger ellipse center major axis.
+          * @return the finger ellipse center major axis
+          */
+        float getEllipseMajor() {
+            return ellipse_major_axis;
+        }
+
+        /**
+          * Return the finger ellipse center minor axis.
+          * @return the finger ellipse center minor axis
+          */
+        float getEllipseMinor() {
+            return ellipse_minor_axis;
+        }
+
+        /**
+          * Return the finger ellipse inclination.
+          * @return the finger ellipse inclination
+          */
+        float getEllipseInclination() {
+            return ellipse_inclination;
+        }
+
+
     protected:
         /**
          * The individual finger ID number that is assigned to each TuioFinger.
          */
         int finger_id;
-
-        float x_velocity;
-        float y_velocity;
+        float x_speed;
+        float y_speed;
         float x_ellipse_center;
         float y_ellipse_center;
         float ellipse_minor_axis;

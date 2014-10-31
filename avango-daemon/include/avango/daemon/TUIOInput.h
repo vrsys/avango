@@ -110,28 +110,35 @@ namespace av
        * @param objectMap   A map with int keys and TUIOCursor|TUIOFinger|TUIOHand objects
        * @return the session ID for this station or -1 if no mapping could be found
        */
-      template<typename T>
-      int getSessionIDForStation(::std::pair<int, Station*> const& station, ::std::map<int, T> const& objectMap)
-      {
-          auto it(mStationToSessionID.left.find(station.first));
-          int sessionId = -1;
+        template<typename T>
+        int getSessionIDForStation(::std::pair<int, Station*> const& station, ::std::map<int, T> const& objectMap)
+        {
+            auto it(mStationToSessionID.left.find(station.first));
 
-         if (it == mStationToSessionID.left.end()) {
-              for (auto const& i : objectMap) {
-                  if (mStationToSessionID.right.find(i.second.session_id) == mStationToSessionID.right.end()) {
-                      mStationToSessionID.insert(::boost::bimap<int, int>::value_type(station.first, i.second.session_id));
-                      sessionId = i.second.session_id;
-                      break;
-                  }
-              }
-          } else {
-              sessionId = it->second;
-          }
+            // remove mapping if session ID has expired
+            if (it != mStationToSessionID.left.end() && objectMap.find(it->second) == objectMap.end()) {
+                mStationToSessionID.left.erase(it);
+                it = mStationToSessionID.left.end();
+            }
 
-          return sessionId;
-      }
-    };
-  }
+            int sessionId = -1;
+
+            if (it == mStationToSessionID.left.end()) {
+                for (auto const& i : objectMap) {
+                    if (mStationToSessionID.right.find(i.second.session_id) == mStationToSessionID.right.end()) {
+                        mStationToSessionID.insert(::boost::bimap<int, int>::value_type(station.first, i.second.session_id));
+                        sessionId = i.second.session_id;
+                        break;
+                    }
+                }
+            } else {
+                sessionId = it->second;
+                }
+
+                return sessionId;
+            }
+        };
+    }
 }
 
 #endif

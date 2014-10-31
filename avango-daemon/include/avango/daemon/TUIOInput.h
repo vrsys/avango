@@ -27,6 +27,7 @@
 #define AV_DAEMON_TUIO_H
 
 #include <avango/daemon/Device.h>
+#include <boost/bimap.hpp>
 
 /**
  * \file
@@ -97,9 +98,38 @@ namespace av
       ::boost::shared_ptr< TUIO::TuioClient > mTUIOClient;
       ::boost::shared_ptr< TUIOInputListener > mTUIOInputListener;
       ::std::vector< ::std::string> mRequiredFeatures;
+      ::boost::bimap<int, int> mStationToSessionID;
       size_t  mPort;
 
       bool parseFeatures();
+
+      /**
+       * Assign a session ID to a station.
+       *
+       * @param station:    The station for which to query the session ID
+       * @param objectMap   A map with int keys and TUIOCursor|TUIOFinger|TUIOHand objects
+       * @return the session ID for this station or -1 if no mapping could be found
+       */
+      template<typename T>
+      int getSessionIDForStation(::std::pair<int, Station*> const& station, ::std::map<int, T> const& objectMap)
+      {
+          auto it(mStationToSessionID.left.find(station.first));
+          int sessionId = -1;
+
+         if (it == mStationToSessionID.left.end()) {
+              for (auto const& i : objectMap) {
+                  if (mStationToSessionID.right.find(i.second.session_id) == mStationToSessionID.right.end()) {
+                      mStationToSessionID.insert(::boost::bimap<int, int>::value_type(station.first, i.second.session_id));
+                      sessionId = i.second.session_id;
+                      break;
+                  }
+              }
+          } else {
+              sessionId = it->second;
+          }
+
+          return sessionId;
+      }
     };
   }
 }

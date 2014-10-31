@@ -133,12 +133,12 @@ namespace av
                 }
             } else {
                 sessionId = it->second;
-                }
-
-                return sessionId;
             }
-        };
-    }
+
+            return sessionId;
+        }
+    };
+  }
 }
 
 #endif

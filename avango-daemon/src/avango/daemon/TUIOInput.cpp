@@ -95,7 +95,6 @@ av::daemon::TUIOInput::readLoop()
             auto cursor(mTUIOInputListener->cursors.find(sessionID));
             if (cursor != mTUIOInputListener->cursors.end())
             {
-                //std::cout << "Set values for station " << name << std::endl;
                 station.second->setValue(0, cursor->second.x);
                 station.second->setValue(1, cursor->second.y);
                 station.second->setValue(2, cursor->second.x_speed);

@@ -91,7 +91,7 @@ av::daemon::TUIOInput::readLoop()
         std::string name = station.second->getName();
 
         if (boost::algorithm::ends_with(name, "#cursor") || name.find("#") == std::string::npos) {
-            int sessionID = getSessionIDForStation(station, mTUIOInputListener->cursors);
+            int sessionID = getSessionIDForStation(station, 0, mTUIOInputListener->cursors);
             auto cursor(mTUIOInputListener->cursors.find(sessionID));
             if (cursor != mTUIOInputListener->cursors.end())
             {
@@ -116,7 +116,7 @@ av::daemon::TUIOInput::readLoop()
                 station.second->setValue(8, -1.f);
             }
         } else if (boost::algorithm::ends_with(name, "#finger")) {
-            int sessionID = getSessionIDForStation(station, mTUIOInputListener->fingers);
+            int sessionID = getSessionIDForStation(station, 1, mTUIOInputListener->fingers);
             auto finger(mTUIOInputListener->fingers.find(sessionID));
             if (finger != mTUIOInputListener->fingers.end()) {
                 station.second->setValue(0, finger->second.x);
@@ -142,7 +142,7 @@ av::daemon::TUIOInput::readLoop()
                 station.second->setValue(9, -1.f);
             }
         } else if (boost::algorithm::ends_with(name, "#hand")) {
-            int sessionID = getSessionIDForStation(station, mTUIOInputListener->hands);
+            int sessionID = getSessionIDForStation(station, 2, mTUIOInputListener->hands);
             auto hand(mTUIOInputListener->hands.find(sessionID));
             if (hand != mTUIOInputListener->hands.end()) {
                 station.second->setValue(0, hand->second.hand_class);

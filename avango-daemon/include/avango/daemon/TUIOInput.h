@@ -98,7 +98,7 @@ namespace av
       ::boost::shared_ptr< TUIO::TuioClient > mTUIOClient;
       ::boost::shared_ptr< TUIOInputListener > mTUIOInputListener;
       ::std::vector< ::std::string> mRequiredFeatures;
-      ::boost::bimap<int, int> mStationToSessionID;
+      ::std::map<int, ::boost::bimap<int, int>> mStationToSessionID;
       size_t  mPort;
 
       bool parseFeatures();
@@ -107,32 +107,34 @@ namespace av
        * Assign a session ID to a station.
        *
        * @param station:    The station for which to query the session ID
+       * @param groupID      Group ID for objectMap, needs to be different for different input multiplexes
        * @param objectMap   A map with int keys and TUIOCursor|TUIOFinger|TUIOHand objects
        * @return the session ID for this station or -1 if no mapping could be found
        */
         template<typename T>
-        int getSessionIDForStation(::std::pair<int, Station*> const& station, ::std::map<int, T> const& objectMap)
+        int getSessionIDForStation(::std::pair<int, Station*> const& station, int groupID, ::std::map<int, T> const& objectMap)
         {
-            auto it(mStationToSessionID.left.find(station.first));
+            auto left_it(mStationToSessionID[groupID].left.find(station.first));
 
             // remove mapping if session ID has expired
-            if (it != mStationToSessionID.left.end() && objectMap.find(it->second) == objectMap.end()) {
-                mStationToSessionID.left.erase(it);
-                it = mStationToSessionID.left.end();
+            if (left_it != mStationToSessionID[groupID].left.end() && objectMap.find(left_it->second) == objectMap.end()) {
+                mStationToSessionID[groupID].left.erase(left_it);
+                left_it = mStationToSessionID[groupID].left.end();
             }
 
             int sessionId = -1;
 
-            if (it == mStationToSessionID.left.end()) {
+            if (left_it == mStationToSessionID[groupID].left.end()) {
                 for (auto const& i : objectMap) {
-                    if (mStationToSessionID.right.find(i.second.session_id) == mStationToSessionID.right.end()) {
-                        mStationToSessionID.insert(::boost::bimap<int, int>::value_type(station.first, i.second.session_id));
+                    auto right_it(mStationToSessionID[groupID].right.find(i.second.session_id));
+                    if (right_it == mStationToSessionID[groupID].right.end()) {
+                        mStationToSessionID[groupID].insert(::boost::bimap<int, int>::value_type(station.first, i.second.session_id));
                         sessionId = i.second.session_id;
                         break;
                     }
                 }
             } else {
-                sessionId = it->second;
+                sessionId = left_it->second;
             }
 
             return sessionId;

@@ -24,6 +24,8 @@
 
 #include "TuioObject.h"
 #include "TuioCursor.h"
+#include "TuioFinger.h"
+#include "TuioHand.h"
 
 namespace TUIO {
 	
@@ -93,6 +95,48 @@ namespace TUIO {
 		 * @param  tcur  the TuioCursor reference associated to the removeTuioCursor event
 		 */
 		virtual void removeTuioCursor(TuioCursor *tcur)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when a new TuioFinger is added to the session.
+         *
+         * @param  tfinger  the TuioFinger reference associated to the addTuioFinger event
+         */
+        virtual void addTuioFinger(TuioFinger *tfinger)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when an existing TuioFinger is updated during the session.
+         *
+         * @param  tfinger  the TuioFinger reference associated to the updateTuioFinger event
+         */
+        virtual void updateTuioFinger(TuioFinger *tfinger)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when an existing TuioFinger is removed from the session.
+         *
+         * @param  tfinger  the TuioFinger reference associated to the removeTuioFinger event
+         */
+        virtual void removeTuioFinger(TuioFinger *tfinger)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when a new TuioHand is added to the session.
+         *
+         * @param  thand  the TuioHand reference associated to the addTuioHand event
+         */
+        virtual void addTuioHand(TuioHand *thand)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when an existing TuioHand is updated during the session.
+         *
+         * @param  thand  the TuioHand reference associated to the updateTuioHand event
+         */
+        virtual void updateTuioHand(TuioHand *thand)=0;
+
+        /**
+         * This callback method is invoked by the TuioClient when an existing TuioHand is removed from the session.
+         *
+         * @param  thand  the TuioHand reference associated to the removeTuioHand event
+         */
+        virtual void removeTuioHand(TuioHand *thand)=0;
 		
 		/**
 		 * This callback method is invoked by the TuioClient to mark the end of a received TUIO message bundle.   

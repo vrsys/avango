@@ -272,7 +272,7 @@ namespace TUIO {
 		 */
 		virtual long getSessionID() { 
 			return session_id;
-		};
+        };
 		
 		/**
 		 * Returns the X velocity of this TuioContainer.

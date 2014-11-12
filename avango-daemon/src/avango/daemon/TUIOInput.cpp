@@ -150,7 +150,7 @@ av::daemon::TUIOInput::readLoop()
                 station.second->setValue(2, hand->second.fingers[1]);
                 station.second->setValue(3, hand->second.fingers[2]);
                 station.second->setValue(4, hand->second.fingers[3]);
-                station.second->setValue(5, hand->second.fingers[7]);
+                station.second->setValue(5, hand->second.fingers[4]);
                 station.second->setValue(6, hand->second.session_id);
             } else {
                 station.second->setValue(0, TUIO::TuioHand::Class::UNKNOWN);

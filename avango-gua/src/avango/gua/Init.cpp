@@ -23,6 +23,7 @@
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/PickResult.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 
 #include <avango/gua/math/BoundingBox.hpp>
 #include <avango/gua/math/BoundingSphere.hpp>
@@ -56,7 +57,6 @@
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
-#include <avango/gua/renderer/Camera.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
 
@@ -87,14 +87,14 @@ av::gua::Init::initClass()
         av::gua::TransformNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
-        av::gua::Video3DNode::initClass();
-        av::gua::VolumeNode::initClass();
+        // av::gua::Video3DNode::initClass();
+        // av::gua::VolumeNode::initClass();
+        av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
-        av::gua::PBRNode::initClass();
-        av::gua::PLODNode::initClass();
+        // av::gua::PBRNode::initClass();
+        // av::gua::PLODNode::initClass();
 #endif
-        av::gua::NURBSNode::initClass();
-        av::gua::VolumeNode::initClass();
+        // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();
         av::gua::PointLightNode::initClass();
         av::gua::SpotLightNode::initClass();
@@ -125,18 +125,17 @@ av::gua::Init::initClass()
         av::gua::Physics::initClass();
 #endif
 
-        av::gua::Pipeline::initClass();
+        // av::gua::Pipeline::initClass();
         av::gua::Renderer::initClass();
         av::gua::Window::initClass();
-        av::gua::Camera::initClass();
         av::gua::TriMeshLoader::initClass();
-        av::gua::Video3DLoader::initClass();
-        av::gua::VolumeLoader::initClass();
+        // av::gua::Video3DLoader::initClass();
+        // av::gua::VolumeLoader::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
-        av::gua::PBRLoader::initClass();
-        av::gua::PLODLoader::initClass();
+        // av::gua::PBRLoader::initClass();
+        // av::gua::PLODLoader::initClass();
 #endif
-        av::gua::NURBSLoader::initClass();
+        // av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();
 

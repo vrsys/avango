@@ -49,7 +49,6 @@ namespace av
       SFString                  Name;
       SFMatrix                  Transform;
       SFMatrix                  WorldTransform;
-      MFString                  GroupNames;
       SFBoundingBox             BoundingBox;
       SFInt                     Depth;
       SFString                  Path;
@@ -77,9 +76,6 @@ namespace av
 
       virtual void getWorldTransformCB(const SFMatrix::GetValueEvent& event);
       virtual void setWorldTransformCB(const SFMatrix::SetValueEvent& event);
-
-      virtual void getGroupNamesCB(const MFString::GetValueEvent& event);
-      virtual void setGroupNamesCB(const MFString::SetValueEvent& event);
 
       virtual void getBoundingBoxCB(const SFBoundingBox::GetValueEvent& event);
       virtual void setBoundingBoxCB(const SFBoundingBox::SetValueEvent& event);

@@ -21,32 +21,32 @@
 *                                                                        *
 \************************************************************************/
 
-#include <shade/PipelineState.h>
-#include <shade/Shader.h>
+// #include <shade/PipelineState.h>
+// #include <shade/Shader.h>
 
 
-shade::PipelineState::PipelineState(void) :
-  m_has_geometry_shader(false)
-{
-}
+// shade::PipelineState::PipelineState(void) :
+//   m_has_geometry_shader(false)
+// {
+// }
 
-void shade::PipelineState::set_geometry_shader(bool enable)
-{
-  m_has_geometry_shader = enable;
-}
+// void shade::PipelineState::set_geometry_shader(bool enable)
+// {
+//   m_has_geometry_shader = enable;
+// }
 
-bool shade::PipelineState::has_geometry_shader(void) const
-{
-  return m_has_geometry_shader;
-}
+// bool shade::PipelineState::has_geometry_shader(void) const
+// {
+//   return m_has_geometry_shader;
+// }
 
-void shade::PipelineState::set_root_shader(boost::shared_ptr<shade::Shader> root)
-{
-  m_root_object = root;
-}
+// void shade::PipelineState::set_root_shader(boost::shared_ptr<shade::Shader> root)
+// {
+//   m_root_object = root;
+// }
 
-boost::shared_ptr<shade::Shader> shade::PipelineState::get_root_shader(void) const
-{
-  return m_root_object;
-}
+// boost::shared_ptr<shade::Shader> shade::PipelineState::get_root_shader(void) const
+// {
+//   return m_root_object;
+// }
 

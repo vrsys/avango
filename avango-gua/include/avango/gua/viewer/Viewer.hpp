@@ -9,7 +9,7 @@
 #include <gua/events.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/Physics.hpp>
@@ -34,7 +34,7 @@ namespace av
 
       Viewer();
 
-      MFPipeline   Pipelines;
+      MFCameraNode CameraNodes;
       MFSceneGraph SceneGraphs;
 #if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;

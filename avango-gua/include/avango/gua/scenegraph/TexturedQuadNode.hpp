@@ -45,7 +45,6 @@ namespace av
       SFString Texture;
       SFFloat  Width;
       SFFloat  Height;
-      SFBool   IsStereoTexture;
 
       /**
        * Get the wrapped ::gua::TexturedQuadNode.
@@ -63,8 +62,6 @@ namespace av
       virtual void getHeightCB(const SFFloat::GetValueEvent& event);
       virtual void setHeightCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getIsStereoTextureCB(const SFBool::GetValueEvent& event);
-      virtual void setIsStereoTextureCB(const SFBool::SetValueEvent& event);
 
     private:
 

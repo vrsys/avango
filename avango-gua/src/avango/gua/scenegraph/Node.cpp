@@ -47,9 +47,6 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
                         boost::bind(&Node::setWorldTransformCB, this, _1));
   WorldTransform.dontDistribute(true);
 
-  AV_FC_ADD_ADAPTOR_FIELD(GroupNames,
-                        boost::bind(&Node::getGroupNamesCB, this, _1),
-                        boost::bind(&Node::setGroupNamesCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(BoundingBox,
                         boost::bind(&Node::getBoundingBoxCB, this, _1),
                         boost::bind(&Node::setBoundingBoxCB, this, _1));
@@ -180,27 +177,6 @@ void
 av::gua::Node::setWorldTransformCB(const SFMatrix::SetValueEvent& event)
 {
   m_guaNode->set_world_transform(event.getValue());
-}
-
-void
-av::gua::Node::getGroupNamesCB(const MFString::GetValueEvent& event)
-{
-    std::vector <std::string> v(m_guaNode->get_groups().begin(), m_guaNode->get_groups().end());
-    *(event.getValuePtr()) = v;
-}
-
-void
-av::gua::Node::setGroupNamesCB(const MFString::SetValueEvent& event)
-{
-  auto old_groups(m_guaNode->get_groups());
-  for (auto group : old_groups) {
-    m_guaNode->remove_from_group(group);
-  }
-
-  auto new_groups(event.getValue());
-  for (auto group : new_groups) {
-    m_guaNode->add_to_group(group);
-  }
 }
 
 void

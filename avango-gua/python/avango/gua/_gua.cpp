@@ -31,6 +31,7 @@
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
 #include "scenegraph/SceneGraph.hpp"
+#include "scenegraph/CameraNode.hpp"
 #include "scenegraph/PickResult.hpp"
 
 #include "math/BoundingBox.hpp"
@@ -57,9 +58,7 @@
 
 #include "renderer/Pipeline.hpp"
 #include "renderer/Window.hpp"
-#include "renderer/Renderer.hpp"
 #include "renderer/Databases.hpp"
-#include "renderer/Camera.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
 #include "renderer/VolumeLoader.hpp"
@@ -115,19 +114,20 @@ BOOST_PYTHON_MODULE(_gua)
     init_Node();
     init_GeometryNode();
     init_TransformNode();
+    init_CameraNode();
     init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
     init_NetTransform();
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
-    init_Video3DNode();
-    init_VolumeNode();
+    // init_Video3DNode();
+    // init_VolumeNode();
 #if defined(AVANGO_PBR_SUPPORT)
-    init_PLODNode();
-    init_PBRNode();
+    // init_PLODNode();
+    // init_PBRNode();
 #endif
-    init_NURBSNode();
+    // init_NURBSNode();
     init_ScreenNode();
     init_PointLightNode();
     init_SpotLightNode();
@@ -159,19 +159,16 @@ BOOST_PYTHON_MODULE(_gua)
     init_Physics();
 #endif
 
-    init_Pipeline();
     init_Window();
-    init_Renderer();
     init_Databases();
-    init_Camera();
     init_TriMeshLoader();
-    init_Video3DLoader();
-    init_VolumeLoader();
+    // init_Video3DLoader();
+    // init_VolumeLoader();
 #if defined(AVANGO_PBR_SUPPORT)
-    init_PLODLoader();
-    init_PBRLoader();
+    // init_PLODLoader();
+    // init_PBRLoader();
 #endif
-    init_NURBSLoader();
+    // init_NURBSLoader();
     init_Texture();
 
     init_Viewer();

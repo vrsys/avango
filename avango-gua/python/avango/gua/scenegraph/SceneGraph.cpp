@@ -21,19 +21,19 @@ namespace boost
   }
 }
 
-av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph, av::gua::RayNode const& ray, int options, std::string const& mask) {
-  auto gua_results(graph.getGuaSceneGraph()->ray_test(*(ray.getGuaNode()), static_cast< ::gua::PickResult::Options>(options), mask));
-  auto results(new av::gua::MFPickResult());
-  for (auto result : gua_results) {
-    results->add1Value(new av::gua::PickResult(result));
-  }
+// av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph, av::gua::RayNode const& ray, int options, std::string const& mask) {
+//   auto gua_results(graph.getGuaSceneGraph()->ray_test(*(ray.getGuaNode()), static_cast< ::gua::PickResult::Options>(options), mask));
+//   auto results(new av::gua::MFPickResult());
+//   for (auto result : gua_results) {
+//     results->add1Value(new av::gua::PickResult(result));
+//   }
 
-  return results;
-}
+//   return results;
+// }
 
-av::gua::MFPickResult* rayTest2(av::gua::SceneGraph const& graph, av::gua::RayNode const& ray, int options) {
-  return rayTest1(graph, ray, options, "");
-}
+// av::gua::MFPickResult* rayTest2(av::gua::SceneGraph const& graph, av::gua::RayNode const& ray, int options) {
+//   return rayTest1(graph, ray, options, "");
+// }
 
 av::Link<av::gua::Node> getNode(av::gua::SceneGraph const& graph, std::string const& path) {
     auto guaNode((*graph.getGuaSceneGraph())[path]);
@@ -52,8 +52,8 @@ void init_SceneGraph()
          bases<av::FieldContainer>, boost::noncopyable >("SceneGraph", "docstring", no_init)
          .def("get_node", &getNode)
          .def("__getitem__", &getNode)
-         .def("ray_test", &rayTest1, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayTest2, return_value_policy<manage_new_object>())
+         // .def("ray_test", &rayTest1, return_value_policy<manage_new_object>())
+         // .def("ray_test", &rayTest2, return_value_policy<manage_new_object>())
          .def("update_cache", &av::gua::SceneGraph::updateCache)
          ;
 }

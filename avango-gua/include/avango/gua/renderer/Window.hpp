@@ -68,6 +68,9 @@ namespace av
       SFString WarpMatrixGreenLeft;
       SFString WarpMatrixBlueLeft;
 
+      void open();
+      void close();
+
       virtual void getSizeCB(const SFVec2ui::GetValueEvent& event);
       virtual void setSizeCB(const SFVec2ui::SetValueEvent& event);
 

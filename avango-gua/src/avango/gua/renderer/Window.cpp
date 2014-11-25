@@ -15,8 +15,8 @@ AV_FC_DEFINE(av::gua::Window);
 AV_FIELD_DEFINE(av::gua::SFWindow);
 AV_FIELD_DEFINE(av::gua::MFWindow);
 
-av::gua::Window::Window(::gua::Window* guaCamera)
-    : m_guaWindow(guaCamera)
+av::gua::Window::Window(::gua::Window* guaWindow)
+    : m_guaWindow(guaWindow)
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Size,
@@ -83,6 +83,16 @@ av::gua::Window::Window(::gua::Window* guaCamera)
 
 av::gua::Window::~Window()
 {}
+
+void
+av::gua::Window::open() {
+  m_guaWindow->open();
+}
+
+void
+av::gua::Window::close() {
+  m_guaWindow->close();
+}
 
 void
 av::gua::Window::initClass()

@@ -33,18 +33,14 @@ def start():
 
   # setup viewing
   size = avango.gua.Vec2ui(1024, 768)
-  pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
-                                                                    RightEye = "/screen/eye",
-                                                                    LeftScreen = "/screen",
-                                                                    RightScreen = "/screen",
-                                                                    SceneGraph = "scenegraph"),
-                                   Window = avango.gua.nodes.Window(Size = size,
-                                                                    LeftResolution = size),
-                                   LeftResolution = size)
+  cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
+                                    SceneGraph = "scenegraph",
+                                    Resolution = size,
+                                    OutputWindowName = "window")
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [pipe]
+  viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
 
   monkey_updater = TimedRotate()

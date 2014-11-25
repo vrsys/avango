@@ -24,7 +24,12 @@ void init_Window()
 
   register_field<av::gua::SFWindow>("SFWindow");
   register_multifield<av::gua::MFWindow>("MFWindow");
-  class_<av::gua::Window, av::Link<av::gua::Window>, bases<av::FieldContainer>, boost::noncopyable >("Window", "docstring", no_init);
+  class_<av::gua::Window,
+         av::Link<av::gua::Window>,
+         bases<av::FieldContainer>, boost::noncopyable >("Window", "docstring", no_init)
+         .def("open", &av::gua::Window::open)
+         .def("close", &av::gua::Window::close)
+         ;
 
   enum_<av::gua::Window::Mode>("StereoMode")
         .value("MONO", av::gua::Window::MONO)

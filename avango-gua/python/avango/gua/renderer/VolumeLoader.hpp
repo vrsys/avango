@@ -1,6 +1,6 @@
-#ifndef AV_PYTHON_GUA_VOLUME_LOADER_HPP
-#define AV_PYTHON_GUA_VOLUME_LOADER_HPP
+// #ifndef AV_PYTHON_GUA_VOLUME_LOADER_HPP
+// #define AV_PYTHON_GUA_VOLUME_LOADER_HPP
 
-void init_VolumeLoader();
+// void init_VolumeLoader();
 
-#endif //AV_PYTHON_GUA_VOLUME_LOADER_HPP
+// #endif //AV_PYTHON_GUA_VOLUME_LOADER_HPP

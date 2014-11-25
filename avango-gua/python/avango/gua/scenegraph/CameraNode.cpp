@@ -19,7 +19,7 @@ namespace boost
  }
 
 
-void init_Camera()
+void init_CameraNode()
  {
 
   register_field<av::gua::SFCameraNode>("SFCameraNode");

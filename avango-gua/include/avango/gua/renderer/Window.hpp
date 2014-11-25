@@ -38,14 +38,9 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Window is created.
        * Otherwise, the given ::gua::Window is used.
        */
-      Window(::gua::Window* guaWindow = new ::gua::Window());
+      Window(std::shared_ptr< ::gua::Window> const& guaWindow =
+             std::shared_ptr< ::gua::Window> (new ::gua::Window()));
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Window();
 
     public:
 
@@ -69,6 +64,7 @@ namespace av
       SFString WarpMatrixBlueLeft;
 
       void open();
+      bool is_open();
       void close();
 
       virtual void getSizeCB(const SFVec2ui::GetValueEvent& event);
@@ -119,7 +115,7 @@ namespace av
       /**
        * Get the wrapped ::gua::Window.
        */
-      ::gua::Window* getGuaWindow() const;
+      std::shared_ptr< ::gua::Window> const& getGuaWindow() const;
 
     public:
 
@@ -127,7 +123,7 @@ namespace av
 
     private:
 
-      ::gua::Window *m_guaWindow;
+      std::shared_ptr< ::gua::Window> m_guaWindow;
 
       Window(const Window&);
       Window& operator=(const Window&);

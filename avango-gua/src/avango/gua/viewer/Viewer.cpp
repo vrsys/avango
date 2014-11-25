@@ -27,6 +27,7 @@ av::gua::Viewer::Viewer()
 {
     AV_FC_ADD_FIELD(CameraNodes, MFCameraNode::ContainerType());
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
+    AV_FC_ADD_FIELD(Window, nullptr);
 #if defined(AVANGO_PHYSICS_SUPPORT)
     AV_FC_ADD_FIELD(Physics, nullptr);
 #endif
@@ -84,6 +85,10 @@ av::gua::Viewer::run() const {
   m_ticker.on_tick.connect([&,this]() {
     PyEval_RestoreThread(save_state);
 
+    if (Window.getValue().isValid() && !Window.getValue()->is_open()) {
+      Window.getValue()->open();
+    }
+
     av::ApplicationInstance::get().evaluate();
 
     if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
@@ -114,5 +119,9 @@ av::gua::Viewer::run() const {
   });
 
   m_loop.start();
+
+ if (Window.getValue().isValid()) {
+    Window.getValue()->close();
+ }
 
 }

@@ -15,7 +15,7 @@ AV_FC_DEFINE(av::gua::Window);
 AV_FIELD_DEFINE(av::gua::SFWindow);
 AV_FIELD_DEFINE(av::gua::MFWindow);
 
-av::gua::Window::Window(::gua::Window* guaWindow)
+av::gua::Window::Window(std::shared_ptr< ::gua::Window> const& guaWindow)
     : m_guaWindow(guaWindow)
 {
 
@@ -81,12 +81,14 @@ av::gua::Window::Window(::gua::Window* guaWindow)
 
 }
 
-av::gua::Window::~Window()
-{}
-
 void
 av::gua::Window::open() {
   m_guaWindow->open();
+}
+
+bool
+av::gua::Window::is_open() {
+  return m_guaWindow->get_is_open();
 }
 
 void
@@ -108,7 +110,7 @@ av::gua::Window::initClass()
     }
 }
 
-::gua::Window*
+std::shared_ptr< ::gua::Window> const&
 av::gua::Window::getGuaWindow() const
 {
     return m_guaWindow;

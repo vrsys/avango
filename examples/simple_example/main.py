@@ -33,6 +33,14 @@ def start():
 
   # setup viewing
   size = avango.gua.Vec2ui(1024, 768)
+
+  window = avango.gua.nodes.Window(
+    Size = size,
+    LeftResolution = size
+  )
+
+  avango.gua.register_window("window", window)
+
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",
                                     Resolution = size,
@@ -42,6 +50,7 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
+  viewer.Window.value = window
 
   monkey_updater = TimedRotate()
 

@@ -19,6 +19,8 @@ def start():
 
   loader = avango.gua.nodes.TriMeshLoader()
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+
+
   monkey = loader.create_geometry_from_file("monkey",
                                             "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
                                             "",
@@ -26,6 +28,8 @@ def start():
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
                                             | avango.gua.LoaderFlags.LOAD_MATERIALS
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+
+  transform = avango.gua.nodes.TransformNode(Children = [monkey])
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
@@ -44,11 +48,11 @@ def start():
                                     OutputWindowName = "window")
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
 
-  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
+  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 2, Height = 1.5)
   screen.Children.value = [cam]
 
 
-  graph.Root.value.Children.value = [monkey, light, screen]
+  graph.Root.value.Children.value = [transform, light, screen]
 
 
   avango.gua.register_window("window", window)
@@ -65,7 +69,7 @@ def start():
   timer = avango.nodes.TimeSensor()
   monkey_updater.TimeIn.connect_from(timer.Time)
 
-  monkey.Transform.connect_from(monkey_updater.MatrixOut)
+  transform.Transform.connect_from(monkey_updater.MatrixOut)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

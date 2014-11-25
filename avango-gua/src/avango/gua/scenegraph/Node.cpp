@@ -130,6 +130,7 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
     const av::gua::MFNode::ContainerType &children(event.getValue());
 
     for (auto& child: children) {
+
       if (child->getGuaNode() != nullptr) {
         m_guaNode->add_child(child->getGuaNode());
         if (avGuaChildren) {

@@ -86,9 +86,9 @@ av::gua::CameraNode::initClass()
 {
     if (!isTypeInitialized())
     {
-        av::FieldContainer::initClass();
+        av::gua::Node::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::CameraNode, true);
+        AV_FC_INIT(av::gua::Node, av::gua::CameraNode, true);
 
         SFCameraNode::initClass("av::gua::SFCameraNode", "av::Field");
         MFCameraNode::initClass("av::gua::MFCameraNode", "av::Field");

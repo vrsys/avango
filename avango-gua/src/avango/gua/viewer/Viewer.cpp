@@ -116,11 +116,19 @@ av::gua::Viewer::run() const {
 
     save_state = PyEval_SaveThread();
 
+    if (Window.getValue().isValid()) {
+      Window.getValue()->process_events();
+
+      if (Window.getValue()->should_close()) {
+        Window.getValue()->close();
+      }
+    }
+
   });
 
   m_loop.start();
 
- if (Window.getValue().isValid()) {
+ if (Window.getValue().isValid() && Window.getValue()->is_open()) {
     Window.getValue()->close();
  }
 

@@ -26,17 +26,6 @@ void init_Window()
   register_multifield<av::gua::MFWindow>("MFWindow");
   class_<av::gua::Window,
          av::Link<av::gua::Window>,
-         bases<av::FieldContainer>, boost::noncopyable >("Window", "docstring", no_init)
-         .def("open", &av::gua::Window::open)
-         .def("close", &av::gua::Window::close)
+         bases<av::gua::WindowBase>, boost::noncopyable >("Window", "docstring", no_init)
          ;
-
-  enum_<av::gua::Window::Mode>("StereoMode")
-        .value("MONO", av::gua::Window::MONO)
-        .value("SIDE_BY_SIDE", av::gua::Window::SIDE_BY_SIDE)
-        .value("ANAGLYPH_RED_GREEN", av::gua::Window::ANAGLYPH_RED_GREEN)
-        .value("ANAGLYPH_RED_CYAN", av::gua::Window::ANAGLYPH_RED_CYAN)
-        .value("CHECKERBOARD", av::gua::Window::CHECKERBOARD)
-        ;
-
  }

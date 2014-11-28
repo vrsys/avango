@@ -9,7 +9,7 @@
 #include <gua/events.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -37,7 +37,7 @@ namespace av
 
       MFCameraNode CameraNodes;
       MFSceneGraph SceneGraphs;
-      SFWindow     Window;
+      SFWindowBase Window;
 #if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;
 #endif

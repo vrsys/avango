@@ -57,6 +57,7 @@
 #endif
 
 #include "renderer/Pipeline.hpp"
+#include "renderer/WindowBase.hpp"
 #include "renderer/Window.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
@@ -159,6 +160,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Physics();
 #endif
 
+    init_WindowBase();
     init_Window();
     init_Databases();
     init_TriMeshLoader();

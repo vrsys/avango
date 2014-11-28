@@ -55,6 +55,7 @@
 #include <avango/gua/renderer/PLODLoader.hpp>
 #endif
 #include <avango/gua/renderer/NURBSLoader.hpp>
+#include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 
@@ -127,6 +128,7 @@ av::gua::Init::initClass()
 
         // av::gua::Pipeline::initClass();
         av::gua::Renderer::initClass();
+        av::gua::WindowBase::initClass();
         av::gua::Window::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();

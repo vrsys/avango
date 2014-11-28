@@ -37,7 +37,7 @@ def start():
   size = avango.gua.Vec2ui(1024, 768)
   # setup viewing
 
-  window = avango.gua.nodes.Window(
+  window = avango.gua.nodes.GlfwWindow(
     Size = size,
     LeftResolution = size
   )

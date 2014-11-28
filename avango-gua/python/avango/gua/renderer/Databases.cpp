@@ -2,7 +2,7 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/WindowBase.hpp>
 #include <gua/guacamole.hpp>
 
 using namespace boost::python;
@@ -29,8 +29,8 @@ void reload_materials() {
   // ::gua::ShadingModelDatabase::instance()->reload_all();
 }
 
-void register_window(std::string const& name, av::gua::Window const& window) {
-  ::gua::WindowDatabase::instance()->add(name, window.getGuaWindow());
+void register_window(std::string const& name, av::gua::WindowBase const& window) {
+  ::gua::WindowDatabase::instance()->add(name, window.getGuaWindowBase());
 }
 
 void init_Databases()

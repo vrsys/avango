@@ -57,6 +57,7 @@
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/GlfwWindow.hpp>
 #include <avango/gua/renderer/Pipeline.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
@@ -130,6 +131,7 @@ av::gua::Init::initClass()
         av::gua::Renderer::initClass();
         av::gua::WindowBase::initClass();
         av::gua::Window::initClass();
+        av::gua::GlfwWindow::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();
         // av::gua::VolumeLoader::initClass();

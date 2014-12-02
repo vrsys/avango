@@ -71,6 +71,8 @@ def start():
   window.on_scroll(on_scroll)
   window.on_enter(on_enter)
 
+  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "hugo")
+
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",
                                     Resolution = size,

@@ -39,3 +39,33 @@ av::gua::GlfwWindow::getGuaGlfwWindow() const
 {
     return m_guaGlfwWindow;
 }
+
+void av::gua::GlfwWindow::on_resize(std::function<void( ::gua::math::vec2ui const&)> const& callback) const {
+    m_guaGlfwWindow->on_resize.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_key_press(std::function<void(int, int, int, int)> const& callback) const {
+    m_guaGlfwWindow->on_key_press.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_char(std::function<void(unsigned)> const& callback) const {
+    m_guaGlfwWindow->on_char.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_button_press(std::function<void(int, int, int)> const& callback) const {
+    m_guaGlfwWindow->on_button_press.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_move_cursor(std::function<void( ::gua::math::vec2 const&)> const& callback) const {
+    m_guaGlfwWindow->on_move_cursor.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_scroll(std::function<void( ::gua::math::vec2 const&)> const& callback) const {
+    m_guaGlfwWindow->on_scroll.connect(callback);
+}
+
+void av::gua::GlfwWindow::on_enter(std::function<void(bool)> const& callback) const {
+    m_guaGlfwWindow->on_enter.connect(callback);
+}
+
+

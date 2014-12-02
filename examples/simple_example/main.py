@@ -12,6 +12,27 @@ class TimedRotate(avango.script.Script):
   def update(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
+def on_resize(size):
+  print("on_resize " + str(size))
+
+def on_key_press(key, scancode, action, mods):
+  print("on_key_press " + str(key) + " " + str(scancode) + " " + str(action) + " " + str(mods))
+
+def on_char(char):
+  print("on_char " + str(char))
+
+def on_button_press(key, action, mods):
+  print("on_button_press " + str(key) + " " + str(action) + " " + str(mods))
+
+def on_move_cursor(position):
+  print("on_move_cursor " + str(position))
+
+def on_scroll(scroll):
+  print("on_scroll " + str(scroll))
+
+def on_enter(enter):
+  print("on_enter " + str(enter))
+
 def start():
 
   # setup scenegraph
@@ -41,6 +62,14 @@ def start():
     Size = size,
     LeftResolution = size
   )
+
+  window.on_resize(on_resize)
+  window.on_key_press(on_key_press)
+  window.on_char(on_char)
+  window.on_button_press(on_button_press)
+  window.on_move_cursor(on_move_cursor)
+  window.on_scroll(on_scroll)
+  window.on_enter(on_enter)
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",

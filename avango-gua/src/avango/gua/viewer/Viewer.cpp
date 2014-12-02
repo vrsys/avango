@@ -114,8 +114,6 @@ av::gua::Viewer::run() const {
     }
 #endif
 
-    save_state = PyEval_SaveThread();
-
     if (Window.getValue().isValid()) {
       Window.getValue()->process_events();
 
@@ -123,6 +121,8 @@ av::gua::Viewer::run() const {
         Window.getValue()->close();
       }
     }
+
+    save_state = PyEval_SaveThread();
 
   });
 

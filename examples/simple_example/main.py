@@ -42,8 +42,9 @@ def start():
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
   desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
-  meth = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
+  # meth = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
   mat  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
+  mat.set_uniform("color", avango.gua.Vec3(0.0, 0.1, 0.5))
 
 
   # monkey = loader.create_geometry_from_file("monkey",

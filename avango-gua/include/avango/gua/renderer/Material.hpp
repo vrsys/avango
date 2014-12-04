@@ -33,8 +33,17 @@ namespace av
       Material(::gua::Material const& guaMaterial = ::gua::Material());
 
 
-
     public:
+
+      template <typename T>
+      void set_uniform(std::string const& name, T const& value) {
+        m_guaMaterial.set_uniform(name, value);
+      }
+
+      template <typename T>
+      void set_view_uniform(std::string const& name, T const& value, int view_id) {
+        m_guaMaterial.set_uniform(name, value, view_id);
+      }
 
       /**
        * Get the wrapped ::gua::Material.

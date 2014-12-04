@@ -10,6 +10,7 @@
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/gua/windows_specific_gua.hpp>
@@ -46,9 +47,9 @@ namespace av
       TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader = new ::gua::TriMeshLoader());
 
       av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                             std::string const& fileName,
-                                                             std::string const& fallbackMaterial,
-                                                             Flags flags = DEFAULTS) const;
+                                                     std::string const& fileName,
+                                                     av::Link<av::gua::Material> const& fallbackMaterial,
+                                                     Flags flags = DEFAULTS) const;
 
     protected:
 

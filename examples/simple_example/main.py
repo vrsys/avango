@@ -41,14 +41,26 @@ def start():
   loader = avango.gua.nodes.TriMeshLoader()
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
+  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
+  meth = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
+  mat  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
+
+
+  # monkey = loader.create_geometry_from_file("monkey",
+  #                                           "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
+  #                                           mat,
+  #                                           avango.gua.LoaderFlags.NORMALIZE_POSITION
+  #                                           | avango.gua.LoaderFlags.NORMALIZE_SCALE
+  #                                           | avango.gua.LoaderFlags.LOAD_MATERIALS
+  #                                           | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
   monkey = loader.create_geometry_from_file("monkey",
-                                            "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
-                                            "",
+                                            "data/objects/monkey.obj",
+                                            mat,
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.LOAD_MATERIALS
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+
 
   transform = avango.gua.nodes.TransformNode(Children = [monkey])
 
@@ -71,7 +83,6 @@ def start():
   window.on_scroll(on_scroll)
   window.on_enter(on_enter)
 
-  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "hugo")
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",

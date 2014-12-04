@@ -30,8 +30,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::MaterialShaderDescription is created.
        * Otherwise, the given ::gua::MaterialShaderDescription is used.
        */
-      MaterialShaderDescription(std::shared_ptr< ::gua::MaterialShaderDescription> const& guaMaterialShaderDescription =
-             std::shared_ptr< ::gua::MaterialShaderDescription> (new ::gua::MaterialShaderDescription()));
+      MaterialShaderDescription(::gua::MaterialShaderDescription const& guaMaterialShaderDescription =
+                                ::gua::MaterialShaderDescription());
 
 
 
@@ -44,11 +44,11 @@ namespace av
       /**
        * Get the wrapped ::gua::MaterialShaderDescription.
        */
-      std::shared_ptr< ::gua::MaterialShaderDescription> const& getGuaMaterialShaderDescription() const;
+      ::gua::MaterialShaderDescription const& getGuaMaterialShaderDescription() const;
 
     private:
 
-      std::shared_ptr< ::gua::MaterialShaderDescription> m_guaMaterialShaderDescription;
+      ::gua::MaterialShaderDescription m_guaMaterialShaderDescription;
 
       MaterialShaderDescription(const MaterialShaderDescription&);
       MaterialShaderDescription& operator=(const MaterialShaderDescription&);

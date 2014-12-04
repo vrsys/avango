@@ -3,6 +3,8 @@
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
 #include <avango/gua/renderer/WindowBase.hpp>
+#include <avango/gua/renderer/MaterialShaderDescription.hpp>
+#include <avango/gua/renderer/Material.hpp>
 #include <gua/guacamole.hpp>
 
 using namespace boost::python;
@@ -29,6 +31,13 @@ void reload_materials() {
   // ::gua::ShadingModelDatabase::instance()->reload_all();
 }
 
+av::Link<av::gua::Material> create_material_from_description(av::gua::MaterialShaderDescription const& desc, std::string const& materialName) {
+
+  auto shader(std::make_shared<gua::MaterialShader>(materialName, desc.getGuaMaterialShaderDescription()));
+  ::gua::MaterialShaderDatabase::instance()->add(shader);
+  return av::Link<av::gua::Material>(new av::gua::Material(shader->get_default_material()));
+}
+
 void register_window(std::string const& name, av::gua::WindowBase const& window) {
   ::gua::WindowDatabase::instance()->add(name, window.getGuaWindowBase());
 }
@@ -49,5 +58,6 @@ void init_Databases()
   // def("set_material_uniform", &setMaterialUniform< ::gua::math::vec4>);
   // def("set_material_uniform", &setMaterialUniform< ::gua::math::mat4>);
   // def("reload_materials", &reload_materials);
+  def("create_material_from_description", &create_material_from_description);
   def("register_window", &register_window);
 }

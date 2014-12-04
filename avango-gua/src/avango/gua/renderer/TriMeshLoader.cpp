@@ -24,13 +24,13 @@ av::gua::TriMeshLoader::TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader)
 
 av::Link<av::gua::Node>
 av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
-                                                std::string const& fileName,
-                                                std::string const& fallbackMaterial,
-                                                Flags flags) const
+                                               std::string const& fileName,
+                                               av::Link<av::gua::Material> const& fallbackMaterial,
+                                               Flags flags) const
 {
 
     auto gua_node(m_guaTriMeshLoader->create_geometry_from_file(
-                                            nodeName, fileName, fallbackMaterial, flags));
+                                            nodeName, fileName, fallbackMaterial->getGuaMaterial(), flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);

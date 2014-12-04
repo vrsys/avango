@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_MATERIAL_HPP
+#define AV_PYTHON_GUA_MATERIAL_HPP
+
+void init_Material();
+
+#endif //AV_PYTHON_GUA_MATERIAL_HPP

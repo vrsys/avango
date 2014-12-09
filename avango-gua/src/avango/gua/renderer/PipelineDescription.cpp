@@ -35,6 +35,15 @@ av::gua::PipelineDescription::initClass()
 }
 
 
+av::gua::TriMeshPassDescription*
+av::gua::PipelineDescription::add_tri_mesh_pass() const
+{
+    auto triMeshPass(m_guaPipelineDescription->add_pass<::gua::TriMeshPassDescription>());
+
+    return new av::gua::TriMeshPassDescription(std::shared_ptr<::gua::TriMeshPassDescription>(&triMeshPass));
+}
+
+
 std::shared_ptr< ::gua::PipelineDescription> const&
 av::gua::PipelineDescription::getGuaPipelineDescription() const
 {

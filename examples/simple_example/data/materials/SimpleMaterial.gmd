@@ -2,7 +2,7 @@
   "vertex_methods" :
   [
     {
-      "file_name" : "data/materials/VertexDiscard.gpd"
+      "file_name" : "data/materials/VertexOffset.gpd"
     }
   ],
 

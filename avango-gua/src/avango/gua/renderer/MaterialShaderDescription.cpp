@@ -69,8 +69,6 @@ av::gua::MaterialShaderDescription::getVertexMethodsCB(const MFMaterialShaderMet
 void
 av::gua::MaterialShaderDescription::setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
 {
-  m_guaMaterialShaderDescription.clear_vertex_methods();
-  m_vertexMethods.clear();
 
   for (auto& method : event.getValue()) {
     m_vertexMethods.push_back(method);
@@ -87,8 +85,6 @@ av::gua::MaterialShaderDescription::getFragmentMethodsCB(const MFMaterialShaderM
 void
 av::gua::MaterialShaderDescription::setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
 {
-  m_guaMaterialShaderDescription.clear_fragment_methods();
-  m_fragmentMethods.clear();
 
   for (auto& method : event.getValue()) {
     m_fragmentMethods.push_back(method);

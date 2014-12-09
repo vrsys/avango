@@ -38,13 +38,29 @@ namespace av
     public:
 
       SFString FileName;
+      SFString Source;
+      SFString Name;
 
       virtual void getFileNameCB(const SFString::GetValueEvent& event);
       virtual void setFileNameCB(const SFString::SetValueEvent& event);
 
+      virtual void getNameCB(const SFString::GetValueEvent& event);
+      virtual void setNameCB(const SFString::SetValueEvent& event);
+
+      virtual void getSourceCB(const SFString::GetValueEvent& event);
+      virtual void setSourceCB(const SFString::SetValueEvent& event);
+
+
+
       /**
        * Get the wrapped ::gua::MaterialShaderMethod.
        */
+
+      template <typename T>
+      void set_uniform(std::string const& name, T const& value) {
+        m_guaMaterialShaderMethod.set_uniform(name, value);
+      }
+
       ::gua::MaterialShaderMethod const& getGuaMaterialShaderMethod() const;
 
     private:

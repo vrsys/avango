@@ -27,5 +27,14 @@ void init_MaterialShaderMethod()
   class_<av::gua::MaterialShaderMethod,
          av::Link<av::gua::MaterialShaderMethod>,
          bases<av::FieldContainer>, boost::noncopyable >("MaterialShaderMethod", "docstring", no_init)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform<float>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform<int>)
+         // .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform<unsigned>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform<bool>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform<std::string>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::vec2>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::vec3>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::vec4>)
+         .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::mat4>)
          ;
  }

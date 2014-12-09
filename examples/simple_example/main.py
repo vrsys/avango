@@ -41,15 +41,22 @@ def start():
   loader = avango.gua.nodes.TriMeshLoader()
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
-  # desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
-  vertex_method = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/VertexOffset.gpd")
-  fragment_method = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
+  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
+  # vertex_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/VertexOffset.gpd")
+  # fragment_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/FragmentColor.gpd")
+  # fragment_method.set_uniform("color", avango.gua.Vec3(0.4, .1, 0.5))
 
-  desc = avango.gua.nodes.MaterialShaderDescription(VertexMethods = [vertex_method],
-                                                    FragmentMethods = [fragment_method])
+  fragment_method2 = avango.gua.nodes.MaterialShaderMethod(
+    Name = "DiscardFragment",
+    Source = "void DiscardFragment() {if (gua_position.y > 0.2) { discard; }}"
+  )
+
+  desc.FragmentMethods.value.append(fragment_method2)
+
+  # desc = avango.gua.nodes.MaterialShaderDescription(VertexMethods = [vertex_method],
+  #                                                   FragmentMethods = [fragment_method, fragment_method2])
 
   material  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
-  material.set_uniform("color", avango.gua.Vec3(0.0, .1, 0.5))
 
 
   # monkey = loader.create_geometry_from_file("monkey",

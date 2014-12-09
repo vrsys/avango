@@ -17,9 +17,19 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     : Node(guaCameraNode)
     , m_guaNode(guaCameraNode)
 {
+  m_pipelineDescription = av::Link<av::gua::PipelineDescription>(
+                            new av::gua::PipelineDescription(
+                              std::make_shared<::gua::PipelineDescription>(m_guaNode->config.pipeline_description())
+                            )
+                          );
+
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
                       boost::bind(&CameraNode::getEnabledCB, this, _1),
                       boost::bind(&CameraNode::setEnabledCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(PipelineDescription,
+                      boost::bind(&CameraNode::getPipelineDescriptionCB, this, _1),
+                      boost::bind(&CameraNode::setPipelineDescriptionCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SceneGraph,
                       boost::bind(&CameraNode::getSceneGraphCB, this, _1),
@@ -111,6 +121,19 @@ void
 av::gua::CameraNode::setEnabledCB(const SFBool::SetValueEvent& event)
 {
   m_guaNode->config.enabled() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getPipelineDescriptionCB(const SFPipelineDescription::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_pipelineDescription;
+}
+
+void
+av::gua::CameraNode::setPipelineDescriptionCB(const SFPipelineDescription::SetValueEvent& event)
+{
+  m_pipelineDescription = event.getValue();
+  m_guaNode->config.pipeline_description() = *m_pipelineDescription->getGuaPipelineDescription().get();
 }
 
 void

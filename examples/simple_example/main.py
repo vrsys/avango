@@ -101,11 +101,13 @@ def start():
   # window.on_scroll(on_scroll)
   # window.on_enter(on_enter)
 
+  pipe_desc = avango.gua.nodes.PipelineDescription()
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",
                                     Resolution = size,
                                     OutputWindowName = "window")
+
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 2, Height = 1.5)

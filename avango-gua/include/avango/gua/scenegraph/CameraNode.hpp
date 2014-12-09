@@ -9,6 +9,7 @@
 #include <gua/node/CameraNode.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
+#include <avango/gua/renderer/PipelineDescription.hpp>
 
 namespace av
 {
@@ -53,32 +54,37 @@ namespace av
 
     public:
 
-      SFBool   Enabled;
+      SFBool                Enabled;
 
-      SFString SceneGraph;
+      SFPipelineDescription PipelineDescription;
 
-      SFInt    ViewID;
+      SFString              SceneGraph;
 
-      SFUInt   Mode;
+      SFInt                 ViewID;
 
-      SFBool   EnableStereo;
-      SFFloat  EyeDistance;
-      SFFloat  EyeOffset;
-      SFString LeftScreenPath;
-      SFString RightScreenPath;
-      SFUInt   MonoMode;
+      SFUInt                Mode;
 
-      SFVec2ui Resolution;
+      SFBool                EnableStereo;
+      SFFloat               EyeDistance;
+      SFFloat               EyeOffset;
+      SFString              LeftScreenPath;
+      SFString              RightScreenPath;
+      SFUInt                MonoMode;
 
-      SFString OutputTextureName;
-      SFString OutputWindowName;
+      SFVec2ui              Resolution;
 
-      SFBool   EnableFrustumCulling;
+      SFString              OutputTextureName;
+      SFString              OutputWindowName;
+
+      SFBool                EnableFrustumCulling;
 
       MultiField<Link<CameraNode>> PreRenderCameras;
 
       virtual void getEnabledCB(const SFBool::GetValueEvent& event);
       virtual void setEnabledCB(const SFBool::SetValueEvent& event);
+
+      virtual void getPipelineDescriptionCB(const SFPipelineDescription::GetValueEvent& event);
+      virtual void setPipelineDescriptionCB(const SFPipelineDescription::SetValueEvent& event);
 
       virtual void getSceneGraphCB(const SFString::GetValueEvent& event);
       virtual void setSceneGraphCB(const SFString::SetValueEvent& event);
@@ -133,7 +139,9 @@ namespace av
 
     private:
 
-       std::shared_ptr< ::gua::node::CameraNode> m_guaNode;
+      std::shared_ptr< ::gua::node::CameraNode> m_guaNode;
+      av::Link<av::gua::PipelineDescription>    m_pipelineDescription;
+
 
       MultiField<Link<CameraNode>>::ContainerType m_preRenderCameraNodes;
 

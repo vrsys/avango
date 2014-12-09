@@ -61,6 +61,8 @@
 #include <avango/gua/renderer/MaterialShaderMethod.hpp>
 #include <avango/gua/renderer/MaterialShaderDescription.hpp>
 #include <avango/gua/renderer/Material.hpp>
+#include <avango/gua/renderer/PipelinePassDescription.hpp>
+#include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
 
@@ -137,6 +139,8 @@ av::gua::Init::initClass()
         av::gua::MaterialShaderMethod::initClass();
         av::gua::MaterialShaderDescription::initClass();
         av::gua::Material::initClass();
+        av::gua::PipelinePassDescription::initClass();
+        av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();
         // av::gua::VolumeLoader::initClass();

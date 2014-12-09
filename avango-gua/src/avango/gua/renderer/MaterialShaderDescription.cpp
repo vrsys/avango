@@ -24,6 +24,13 @@ av::gua::MaterialShaderDescription::MaterialShaderDescription(
                       boost::bind(&MaterialShaderDescription::getFileNameCB, this, _1),
                       boost::bind(&MaterialShaderDescription::setFileNameCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(VertexMethods,
+                      boost::bind(&MaterialShaderDescription::getVertexMethodsCB, this, _1),
+                      boost::bind(&MaterialShaderDescription::setVertexMethodsCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(FragmentMethods,
+                      boost::bind(&MaterialShaderDescription::getFragmentMethodsCB, this, _1),
+                      boost::bind(&MaterialShaderDescription::setFragmentMethodsCB, this, _1));
 }
 
 void
@@ -52,6 +59,43 @@ av::gua::MaterialShaderDescription::setFileNameCB(const SFString::SetValueEvent&
 {
   m_guaMaterialShaderDescription.load_from_file(event.getValue());
 }
+
+void
+av::gua::MaterialShaderDescription::getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_vertexMethods;
+}
+
+void
+av::gua::MaterialShaderDescription::setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
+{
+  m_guaMaterialShaderDescription.clear_vertex_methods();
+  m_vertexMethods.clear();
+
+  for (auto& method : event.getValue()) {
+    m_vertexMethods.push_back(method);
+    m_guaMaterialShaderDescription.add_vertex_method(method->getGuaMaterialShaderMethod());
+  }
+}
+
+void
+av::gua::MaterialShaderDescription::getFragmentMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_fragmentMethods;
+}
+
+void
+av::gua::MaterialShaderDescription::setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
+{
+  m_guaMaterialShaderDescription.clear_fragment_methods();
+  m_fragmentMethods.clear();
+
+  for (auto& method : event.getValue()) {
+    m_fragmentMethods.push_back(method);
+    m_guaMaterialShaderDescription.add_fragment_method(method->getGuaMaterialShaderMethod());
+  }
+}
+
 
 ::gua::MaterialShaderDescription const&
 av::gua::MaterialShaderDescription::getGuaMaterialShaderDescription() const

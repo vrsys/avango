@@ -15,7 +15,7 @@ AV_FC_DEFINE(av::gua::MaterialShaderMethod);
 AV_FIELD_DEFINE(av::gua::SFMaterialShaderMethod);
 AV_FIELD_DEFINE(av::gua::MFMaterialShaderMethod);
 
-av::gua::MaterialShaderMethod::MaterialShaderMethod(std::shared_ptr< ::gua::MaterialShaderMethod> const& guaMaterialShaderMethod)
+av::gua::MaterialShaderMethod::MaterialShaderMethod(::gua::MaterialShaderMethod const& guaMaterialShaderMethod)
     : m_guaMaterialShaderMethod(guaMaterialShaderMethod)
 {
 
@@ -43,16 +43,16 @@ av::gua::MaterialShaderMethod::initClass()
 void
 av::gua::MaterialShaderMethod::getFileNameCB(const SFString::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaMaterialShaderMethod->get_file_name();
+  *(event.getValuePtr()) = m_guaMaterialShaderMethod.get_file_name();
 }
 
 void
 av::gua::MaterialShaderMethod::setFileNameCB(const SFString::SetValueEvent& event)
 {
-  m_guaMaterialShaderMethod->load_from_file(event.getValue());
+  m_guaMaterialShaderMethod.load_from_file(event.getValue());
 }
 
-std::shared_ptr< ::gua::MaterialShaderMethod> const&
+::gua::MaterialShaderMethod const&
 av::gua::MaterialShaderMethod::getGuaMaterialShaderMethod() const
 {
     return m_guaMaterialShaderMethod;

@@ -9,6 +9,7 @@
 #include <gua/renderer/MaterialShaderDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
+#include <avango/gua/renderer/MaterialShaderMethod.hpp>
 #include <avango/FieldContainer.h>
 
 namespace av
@@ -38,9 +39,18 @@ namespace av
     public:
 
       SFString FileName;
+      MFMaterialShaderMethod VertexMethods;
+      MFMaterialShaderMethod FragmentMethods;
 
       virtual void getFileNameCB(const SFString::GetValueEvent& event);
       virtual void setFileNameCB(const SFString::SetValueEvent& event);
+
+      virtual void getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
+      virtual void setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
+
+      virtual void getFragmentMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
+      virtual void setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::MaterialShaderDescription.
        */
@@ -49,6 +59,10 @@ namespace av
     private:
 
       ::gua::MaterialShaderDescription m_guaMaterialShaderDescription;
+
+      MFMaterialShaderMethod::ContainerType m_vertexMethods;
+      MFMaterialShaderMethod::ContainerType m_fragmentMethods;
+
 
       MaterialShaderDescription(const MaterialShaderDescription&);
       MaterialShaderDescription& operator=(const MaterialShaderDescription&);

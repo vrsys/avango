@@ -1,6 +1,10 @@
 {
   "vertex_methods" :
-  [],
+  [
+    {
+      "file_name" : "data/materials/VertexDiscard.gpd"
+    }
+  ],
 
   "fragment_methods" :
   [

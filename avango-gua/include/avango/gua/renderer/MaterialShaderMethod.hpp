@@ -30,8 +30,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::MaterialShaderMethod is created.
        * Otherwise, the given ::gua::MaterialShaderMethod is used.
        */
-      MaterialShaderMethod(std::shared_ptr< ::gua::MaterialShaderMethod> const& guaMaterialShaderMethod =
-             std::shared_ptr< ::gua::MaterialShaderMethod> (new ::gua::MaterialShaderMethod()));
+      MaterialShaderMethod(::gua::MaterialShaderMethod const& guaMaterialShaderMethod =
+                           ::gua::MaterialShaderMethod());
 
 
 
@@ -41,14 +41,15 @@ namespace av
 
       virtual void getFileNameCB(const SFString::GetValueEvent& event);
       virtual void setFileNameCB(const SFString::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::MaterialShaderMethod.
        */
-      std::shared_ptr< ::gua::MaterialShaderMethod> const& getGuaMaterialShaderMethod() const;
+      ::gua::MaterialShaderMethod const& getGuaMaterialShaderMethod() const;
 
     private:
 
-      std::shared_ptr< ::gua::MaterialShaderMethod> m_guaMaterialShaderMethod;
+      ::gua::MaterialShaderMethod m_guaMaterialShaderMethod;
 
       MaterialShaderMethod(const MaterialShaderMethod&);
       MaterialShaderMethod& operator=(const MaterialShaderMethod&);

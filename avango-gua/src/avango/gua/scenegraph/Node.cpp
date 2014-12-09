@@ -140,7 +140,7 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
     }
 
   } else {
-      std::cout << "Cannot set children of null node!" << std::endl;
+    std::cout << "Cannot set children of null node!" << std::endl;
   }
 }
 

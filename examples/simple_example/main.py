@@ -41,10 +41,15 @@ def start():
   loader = avango.gua.nodes.TriMeshLoader()
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
-  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
-  # meth = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
+  # desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
+  vertex_method = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/VertexOffset.gpd")
+  fragment_method = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
+
+  desc = avango.gua.nodes.MaterialShaderDescription(VertexMethods = [vertex_method],
+                                                    FragmentMethods = [fragment_method])
+
   material  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
-  material.set_uniform("color", avango.gua.Vec3(0.0, 0.1, 0.5))
+  material.set_uniform("color", avango.gua.Vec3(0.0, .1, 0.5))
 
 
   # monkey = loader.create_geometry_from_file("monkey",
@@ -88,13 +93,13 @@ def start():
     LeftResolution = size
   )
 
-  window.on_resize(on_resize)
-  window.on_key_press(on_key_press)
-  window.on_char(on_char)
-  window.on_button_press(on_button_press)
-  window.on_move_cursor(on_move_cursor)
-  window.on_scroll(on_scroll)
-  window.on_enter(on_enter)
+  # window.on_resize(on_resize)
+  # window.on_key_press(on_key_press)
+  # window.on_char(on_char)
+  # window.on_button_press(on_button_press)
+  # window.on_move_cursor(on_move_cursor)
+  # window.on_scroll(on_scroll)
+  # window.on_enter(on_enter)
 
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",

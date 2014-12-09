@@ -46,8 +46,6 @@ av::gua::TriMeshNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
 {
   if (m_Material.isValid()) {
     *(event.getValuePtr()) = m_Material;
-  } else {
-    std::cout << "Cannot access TriMeshNode's material because it is invalid!" << std::endl;
   }
 }
 

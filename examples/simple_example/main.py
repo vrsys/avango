@@ -59,14 +59,6 @@ def start():
   material  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
 
 
-  # monkey = loader.create_geometry_from_file("monkey",
-  #                                           "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
-  #                                           material,
-  #                                           avango.gua.LoaderFlags.NORMALIZE_POSITION
-  #                                           | avango.gua.LoaderFlags.NORMALIZE_SCALE
-  #                                           | avango.gua.LoaderFlags.LOAD_MATERIALS
-  #                                           | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
-
   monkey = loader.create_geometry_from_file("monkey",
                                             "data/objects/monkey.obj",
                                             material,
@@ -76,12 +68,13 @@ def start():
 
   monkey2 = loader.create_geometry_from_file("monkey",
                                             "data/objects/monkey.obj",
-                                            material,
+                                            avango.gua.create_default_material(),
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 
+  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(0.2, 1.0, 0.5, 1.0))
 
   transform = avango.gua.nodes.TransformNode(Children = [monkey])
   transform2 = avango.gua.nodes.TransformNode(

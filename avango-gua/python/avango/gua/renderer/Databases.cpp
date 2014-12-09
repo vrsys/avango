@@ -21,21 +21,16 @@ namespace boost
    }
  }
 
-template <typename T>
-void setMaterialUniform(std::string const& materialName, std::string const& uniformName, T const& value) {
-  // ::gua::MaterialDatabase::instance()->lookup(materialName)->set_uniform(uniformName, value);
-}
-
-void reload_materials() {
-  // ::gua::MaterialDatabase::instance()->reload_all();
-  // ::gua::ShadingModelDatabase::instance()->reload_all();
-}
-
 av::Link<av::gua::Material> create_material_from_description(av::gua::MaterialShaderDescription const& desc, std::string const& materialName) {
 
   auto shader(std::make_shared<gua::MaterialShader>(materialName, desc.getGuaMaterialShaderDescription()));
   ::gua::MaterialShaderDatabase::instance()->add(shader);
   return av::Link<av::gua::Material>(new av::gua::Material(shader->get_default_material()));
+}
+
+av::Link<av::gua::Material> create_default_material() {
+  auto shader(gua::MaterialShaderDatabase::instance()->lookup("gua_default_material"));
+  return av::Link<av::gua::Material>(new av::gua::Material(shader->make_new_material()));
 }
 
 void register_window(std::string const& name, av::gua::WindowBase const& window) {
@@ -44,20 +39,8 @@ void register_window(std::string const& name, av::gua::WindowBase const& window)
 
 void init_Databases()
 {
-  // def("load_shading_models_from", &gua::ShadingModelDatabase::load_shading_models_from);
-  // def("load_shading_model", &gua::ShadingModelDatabase::load_shading_model);
-  // def("load_materials_from", &gua::MaterialDatabase::load_materials_from);
-  // def("load_material", &gua::MaterialDatabase::load_material);
-  // def("set_material_uniform", &setMaterialUniform<float>);
-  // def("set_material_uniform", &setMaterialUniform<int>);
-  // def("set_material_uniform", &setMaterialUniform<unsigned>);
-  // def("set_material_uniform", &setMaterialUniform<bool>);
-  // def("set_material_uniform", &setMaterialUniform<std::string>);
-  // def("set_material_uniform", &setMaterialUniform< ::gua::math::vec2>);
-  // def("set_material_uniform", &setMaterialUniform< ::gua::math::vec3>);
-  // def("set_material_uniform", &setMaterialUniform< ::gua::math::vec4>);
-  // def("set_material_uniform", &setMaterialUniform< ::gua::math::mat4>);
-  // def("reload_materials", &reload_materials);
+
   def("create_material_from_description", &create_material_from_description);
+  def("create_default_material", &create_default_material);
   def("register_window", &register_window);
 }

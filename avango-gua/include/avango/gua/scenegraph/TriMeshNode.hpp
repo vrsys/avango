@@ -10,6 +10,7 @@
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 
 namespace av
 {
@@ -42,12 +43,20 @@ namespace av
 
     public:
 
+      SFMaterial Material;
+
+      virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+      virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::TriMeshNode.
        */
-      //std::shared_ptr< ::gua::TriMeshNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::TriMeshNode> getGuaTriMeshNode() const;
 
     private:
+
+      std::shared_ptr< ::gua::node::TriMeshNode> m_guaTriMeshNode;
+      av::Link< av::gua::Material> m_Material;
 
       TriMeshNode(const TriMeshNode&);
       TriMeshNode& operator=(const TriMeshNode&);

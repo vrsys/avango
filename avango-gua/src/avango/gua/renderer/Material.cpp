@@ -15,7 +15,7 @@ AV_FC_DEFINE(av::gua::Material);
 AV_FIELD_DEFINE(av::gua::SFMaterial);
 AV_FIELD_DEFINE(av::gua::MFMaterial);
 
-av::gua::Material::Material(::gua::Material const& guaMaterial)
+av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial)
     : m_guaMaterial(guaMaterial)
 {}
 
@@ -33,7 +33,7 @@ av::gua::Material::initClass()
     }
 }
 
-::gua::Material const&
+std::shared_ptr< ::gua::Material> const&
 av::gua::Material::getGuaMaterial() const
 {
     return m_guaMaterial;

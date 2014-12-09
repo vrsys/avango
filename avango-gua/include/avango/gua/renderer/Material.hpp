@@ -30,29 +30,30 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Material is created.
        * Otherwise, the given ::gua::Material is used.
        */
-      Material(::gua::Material const& guaMaterial = ::gua::Material());
+      Material(std::shared_ptr< ::gua::Material> const& guaMaterial =
+               std::shared_ptr< ::gua::Material> (new ::gua::Material()));
 
 
     public:
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
-        m_guaMaterial.set_uniform(name, value);
+        m_guaMaterial->set_uniform(name, value);
       }
 
       template <typename T>
       void set_view_uniform(std::string const& name, T const& value, int view_id) {
-        m_guaMaterial.set_uniform(name, value, view_id);
+        m_guaMaterial->set_uniform(name, value, view_id);
       }
 
       /**
        * Get the wrapped ::gua::Material.
        */
-      ::gua::Material const& getGuaMaterial() const;
+      std::shared_ptr< ::gua::Material> const& getGuaMaterial() const;
 
     private:
 
-      ::gua::Material m_guaMaterial;
+      std::shared_ptr< ::gua::Material> m_guaMaterial;
 
       Material(const Material&);
       Material& operator=(const Material&);

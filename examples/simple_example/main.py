@@ -43,13 +43,13 @@ def start():
 
   desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
   # meth = avango.gua.nodes.MaterialShaderMethod(FileName= "data/materials/FragmentColor.gpd")
-  mat  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
-  mat.set_uniform("color", avango.gua.Vec3(0.0, 0.1, 0.5))
+  material  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
+  material.set_uniform("color", avango.gua.Vec3(0.0, 0.1, 0.5))
 
 
   # monkey = loader.create_geometry_from_file("monkey",
   #                                           "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
-  #                                           mat,
+  #                                           material,
   #                                           avango.gua.LoaderFlags.NORMALIZE_POSITION
   #                                           | avango.gua.LoaderFlags.NORMALIZE_SCALE
   #                                           | avango.gua.LoaderFlags.LOAD_MATERIALS
@@ -57,13 +57,25 @@ def start():
 
   monkey = loader.create_geometry_from_file("monkey",
                                             "data/objects/monkey.obj",
-                                            mat,
+                                            material,
+                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
+                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
+                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+
+  monkey2 = loader.create_geometry_from_file("monkey",
+                                            "data/objects/monkey.obj",
+                                            material,
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 
+
   transform = avango.gua.nodes.TransformNode(Children = [monkey])
+  transform2 = avango.gua.nodes.TransformNode(
+                                              Transform = avango.gua.make_trans_mat(-0.5, 0,0),
+                                              Children = [monkey2]
+                                             )
 
   light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
@@ -95,7 +107,7 @@ def start():
   screen.Children.value = [cam]
 
 
-  graph.Root.value.Children.value = [transform, light, screen]
+  graph.Root.value.Children.value = [transform, transform2, light, screen]
 
 
   avango.gua.register_window("window", window)

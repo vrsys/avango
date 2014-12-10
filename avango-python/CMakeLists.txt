@@ -28,7 +28,7 @@ file(GLOB AVANGO_PYTHON_SCRIPT_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 # set link directories
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS}
-                 ${PYTHON_LIBRARY_DIRS}
+                 ${PYTHON3_LIBRARY_DIRS}
                  ${BOOST_LIBRARY_DIRS}
 )
 
@@ -56,7 +56,7 @@ INCLUDE_DIRECTORIES(BEFORE
   include
   include/avango/python/
 	${INCLUDE_PATHS}
-  ${PYTHON_INCLUDE_DIRS}
+  ${PYTHON3_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/avango-core/include
 )
 
@@ -76,24 +76,24 @@ set_target_properties(_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBU
 
 TARGET_LINK_LIBRARIES( avango_script
                        debug
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango
                        optimized
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango
 )
 
 TARGET_LINK_LIBRARIES( _avango
                        debug
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script
                        optimized
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script
 )
 SET_TARGET_PROPERTIES( _avango PROPERTIES PREFIX "")
 
 TARGET_LINK_LIBRARIES( _script
                        debug
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script _avango
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script _avango
                        optimized
-                       ${LIBRARIES} ${PYTHON_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script _avango
+                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${BOOST_LIBRARIES} avango avango_script _avango
 )
 SET_TARGET_PROPERTIES( _script PROPERTIES PREFIX "")
 

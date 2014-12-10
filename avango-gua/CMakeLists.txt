@@ -134,7 +134,7 @@ ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
 # set link directories
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS}
-                 ${PYTHON_LIBRARY_DIRS}
+                 ${PYTHON3_LIBRARY_DIRS}
                  ${BOOST_LIBRARY_DIRS}
                  ${SCHISM_LIBRARY_DIRS}
                  ${BULLET_LIBRARY_DIRS}
@@ -148,7 +148,7 @@ INCLUDE_DIRECTORIES(BEFORE
   include
   include/avango/python/
   ${INCLUDE_PATHS}
-  ${PYTHON_INCLUDE_DIRS}
+  ${PYTHON3_INCLUDE_DIRS}
   ${SCHISM_INCLUDE_DIRS}
   ${BULLET_INCLUDE_DIRS}
   ${JSON_INCLUDE_DIRS}
@@ -192,7 +192,7 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 # set dependencies
 ###############################################################################
 SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
-                          ${PYTHON_LIBRARIES}
+                          ${PYTHON3_LIBRARIES}
                           ${BOOST_LIBRARIES}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}

@@ -75,7 +75,7 @@ def start():
 
 
   monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
-  monkey2.Material.value.set_uniform("Roughness", 0.2)
+  monkey2.Material.value.set_uniform("Roughness", 0.3)
   monkey2.Material.value.set_uniform("Metalness", 1.0)
 
   transform = avango.gua.nodes.TransformNode(Children = [monkey])

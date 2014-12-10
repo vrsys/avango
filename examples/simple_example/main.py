@@ -74,16 +74,21 @@ def start():
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 
-  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(0.2, 1.0, 0.5, 1.0))
+  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+  monkey2.Material.value.set_uniform("Roughness", 0.2)
+  monkey2.Material.value.set_uniform("Metalness", 1.0)
 
   transform = avango.gua.nodes.TransformNode(Children = [monkey])
   transform2 = avango.gua.nodes.TransformNode(
-                                              Transform = avango.gua.make_trans_mat(-0.5, 0,0),
-                                              Children = [monkey2]
-                                             )
+                Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
+                Children = [monkey2]
+                )
 
-  light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
-  light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
+  light = avango.gua.nodes.PointLightNode(
+                Name = "light",
+                Color = avango.gua.Color(1.0, 1.0, 1.0),
+                Brightness = 50.0)
+  light.Transform.value = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
 
   size = avango.gua.Vec2ui(1024, 768)
   # setup viewing

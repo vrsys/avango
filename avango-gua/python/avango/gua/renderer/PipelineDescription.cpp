@@ -36,6 +36,8 @@ void init_PipelineDescription()
          bases<av::FieldContainer>, boost::noncopyable >("PipelineDescription", "docstring", no_init)
          .def("add_tri_mesh_pass", &av::gua::PipelineDescription::add_tri_mesh_pass,
               return_value_policy<reference_existing_object>())
+         .def("add_background_pass", &av::gua::PipelineDescription::add_background_pass,
+              return_value_policy<reference_existing_object>())
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

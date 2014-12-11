@@ -9,6 +9,7 @@
 #include <gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
+#include <avango/gua/renderer/BackgroundPassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -39,7 +40,8 @@ namespace av
     public:
 
 
-      av::gua::TriMeshPassDescription* add_tri_mesh_pass() const;
+      av::gua::TriMeshPassDescription*    add_tri_mesh_pass() const;
+      av::gua::BackgroundPassDescription* add_background_pass() const;
 
 
       /**

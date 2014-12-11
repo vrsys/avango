@@ -66,6 +66,7 @@
 #include "renderer/PipelineDescription.hpp"
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/BackgroundPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -176,6 +177,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelineDescription();
     init_PipelinePassDescription();
     init_TriMeshPassDescription();
+    init_BackgroundPassDescription();
     init_Databases();
     init_TriMeshLoader();
     // init_Video3DLoader();

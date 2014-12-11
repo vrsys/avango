@@ -30,7 +30,7 @@ av::gua::TriMeshPassDescription::initClass()
     {
         av::gua::PipelinePassDescription::initClass();
 
-        AV_FC_INIT(av::PipelinePassDescription, av::gua::TriMeshPassDescription, true);
+        AV_FC_INIT(av::gua::PipelinePassDescription, av::gua::TriMeshPassDescription, true);
 
         SFTriMeshPassDescription::initClass("av::gua::SFTriMeshPassDescription", "av::Field");
         MFTriMeshPassDescription::initClass("av::gua::MFTriMeshPassDescription", "av::Field");

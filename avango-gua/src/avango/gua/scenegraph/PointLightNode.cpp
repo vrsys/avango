@@ -17,6 +17,10 @@ av::gua::PointLightNode::PointLightNode(std::shared_ptr< ::gua::node::PointLight
                           boost::bind(&PointLightNode::getColorCB, this, _1),
                           boost::bind(&PointLightNode::setColorCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(Brightness,
+                          boost::bind(&PointLightNode::getBrightnessCB, this, _1),
+                          boost::bind(&PointLightNode::setBrightnessCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(Falloff,
                           boost::bind(&PointLightNode::getFallofCB, this, _1),
                           boost::bind(&PointLightNode::setFallofCB, this, _1));
@@ -77,6 +81,18 @@ void
 av::gua::PointLightNode::setColorCB(const SFColor::SetValueEvent& event)
 {
     m_guaNode->data.color() = event.getValue();
+}
+
+void
+av::gua::PointLightNode::getBrightnessCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.brightness();
+}
+
+void
+av::gua::PointLightNode::setBrightnessCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.brightness = event.getValue();
 }
 
 void

@@ -8,6 +8,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/gua/scenegraph/Video3DNode.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
@@ -47,6 +48,7 @@
 
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
+#include <avango/gua/renderer/SkeletalAnimationLoader.hpp>
 #include <avango/gua/renderer/Video3DLoader.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/renderer/PBRLoader.hpp>
@@ -110,6 +112,7 @@ av::gua::Init::initClass()
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
+        av::gua::SkeletalAnimationNode::initClass();
         // av::gua::Video3DNode::initClass();
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
@@ -172,6 +175,7 @@ av::gua::Init::initClass()
         av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
+        av::gua::SkeletalAnimationLoader::initClass();
         // av::gua::Video3DLoader::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();

@@ -18,6 +18,7 @@
 #include "scenegraph/ClippingPlaneNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
+#include "scenegraph/SkeletalAnimationNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
@@ -82,6 +83,7 @@
 #include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
+#include "renderer/SkeletalAnimationLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "renderer/PBRLoader.hpp"
@@ -146,6 +148,7 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
+    init_SkeletalAnimationNode();
     // init_Video3DNode();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
@@ -209,6 +212,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_LightVisibilityPassDescription();
     init_Databases();
     init_TriMeshLoader();
+    init_SkeletalAnimationLoader();
     // init_Video3DLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();

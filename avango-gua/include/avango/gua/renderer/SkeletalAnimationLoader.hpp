@@ -51,6 +51,10 @@ namespace av
                                                      av::Link<av::gua::Material> const& fallbackMaterial,
                                                      Flags flags = DEFAULTS) const;
 
+      void load_animation(av::Link<av::gua::Node>& node,
+                          std::string const& file_name,
+                          Flags flags = DEFAULTS) const;
+
     protected:
 
       /**

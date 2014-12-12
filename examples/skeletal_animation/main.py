@@ -9,18 +9,20 @@ def start():
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-  loader = avango.gua.nodes.TriMeshLoader()
+  loader = avango.gua.nodes.SkeletalAnimationLoader()
 
-  monkey = loader.create_geometry_from_file("monkey",
-                                            "data/objects/monkey.obj",
-                                            avango.gua.create_default_material(),
-                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
-                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+  bob = loader.create_geometry_from_file("bob", "data/objects/marine/spplayer.md5mesh" ,
+         avango.gua.create_default_material(),
+         avango.gua.LoaderFlags.NORMALIZE_POSITION
+         | avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  loader.load_animation(bob, "data/objects/marine/run.md5anim",
+          avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/objects/marine/fists_idle.md5anim", avango.gua.LoaderFlags.DEFAULTS)
 
-  monkey.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
-  monkey.Material.value.set_uniform("Roughness", 0.3)
-  monkey.Material.value.set_uniform("Metalness", 1.0)
+  #monkey.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+  #monkey.Material.value.set_uniform("Roughness", 0.3)
+  #monkey.Material.value.set_uniform("Metalness", 1.0)
 
   light = avango.gua.nodes.PointLightNode(
                 Name = "light",
@@ -45,7 +47,7 @@ def start():
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 2, Height = 1.5)
   screen.Children.value = [cam]
 
-  graph.Root.value.Children.value = [monkey, light, screen]
+  graph.Root.value.Children.value = [bob, light, screen]
 
 
   avango.gua.register_window("window", window)

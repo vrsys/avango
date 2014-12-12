@@ -552,6 +552,14 @@ void av_popMsg(av::Msg& netMsg,::gua::TriMeshNode & buf) {
     throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::TriMeshNode & buf): not implemented yet.");
 }
 
+void av_pushMsg(av::Msg& netMsg, const::gua::SkeletalAnimationNode & buf) {
+    throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::SkeletalAnimationNode & buf): not implemented yet.");
+}
+
+void av_popMsg(av::Msg& netMsg,::gua::SkeletalAnimationNode & buf) {
+    throw std::runtime_error("av_popMsg(av::Msg& netMsg, ::gua::SkeletalAnimationNode & buf): not implemented yet.");
+}
+
 void av_pushMsg(av::Msg& netMsg, const::gua::Video3DNode & buf) {
     throw std::runtime_error("av_pushMsg(av::Msg& netMsg, ::gua::Video3DNode & buf): not implemented yet.");
 }
@@ -871,8 +879,18 @@ av::OutputStream & av::operator<<(av::OutputStream & os,
     throw std::runtime_error("not implemented yet.");
 }
 
-av::InputStream & av::operator>>(av::InputStream & is,::gua::
-				 TriMeshNode &)
+av::InputStream & av::operator>>(av::InputStream & is,::gua::TriMeshNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+				  const ::gua::SkeletalAnimationNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::SkeletalAnimationNode &)
 {
     throw std::runtime_error("not implemented yet.");
 }

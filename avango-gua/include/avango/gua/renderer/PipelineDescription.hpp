@@ -40,8 +40,13 @@ namespace av
     public:
 
 
-      av::gua::TriMeshPassDescription*    add_tri_mesh_pass() const;
-      av::gua::BackgroundPassDescription* add_background_pass() const;
+      av::Link<av::gua::TriMeshPassDescription>                 add_tri_mesh_pass();
+      av::Link<av::gua::TriMeshPassDescription>                 get_tri_mesh_pass();
+      std::vector<av::Link<av::gua::TriMeshPassDescription>>    get_tri_mesh_passes();
+
+      av::Link<av::gua::BackgroundPassDescription>              add_background_pass();
+      av::Link<av::gua::BackgroundPassDescription>              get_background_pass();
+      std::vector<av::Link<av::gua::BackgroundPassDescription>> get_background_passes();
 
 
       /**
@@ -52,7 +57,6 @@ namespace av
     private:
 
       std::shared_ptr< ::gua::PipelineDescription> m_guaPipelineDescription;
-
 
       PipelineDescription(const PipelineDescription&);
       PipelineDescription& operator=(const PipelineDescription&);

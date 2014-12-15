@@ -107,9 +107,9 @@ def start():
   # window.on_scroll(on_scroll)
   # window.on_enter(on_enter)
 
-  # pipe_desc = avango.gua.nodes.PipelineDescription()
-  # pipe_desc.add_tri_mesh_pass()
-  # background = pipe_desc.add_background_pass()
+  pipe_desc = avango.gua.nodes.PipelineDescription()
+  pipe_desc.add_tri_mesh_pass()
+  pipe_desc.add_background_pass()
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",

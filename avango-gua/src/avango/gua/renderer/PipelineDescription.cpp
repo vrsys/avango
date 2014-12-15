@@ -35,22 +35,113 @@ av::gua::PipelineDescription::initClass()
 }
 
 
-av::gua::TriMeshPassDescription*
-av::gua::PipelineDescription::add_tri_mesh_pass() const
+av::Link<av::gua::TriMeshPassDescription>
+av::gua::PipelineDescription::add_tri_mesh_pass()
 {
-    auto pass(m_guaPipelineDescription->add_pass<::gua::TriMeshPassDescription>());
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::TriMeshPassDescription>());
 
-    return new av::gua::TriMeshPassDescription(std::shared_ptr<::gua::TriMeshPassDescription>(&pass));
+    auto desc(new av::Link<av::gua::TriMeshPassDescription>(
+                        new av::gua::TriMeshPassDescription(
+                            std::shared_ptr<::gua::TriMeshPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
 }
 
-av::gua::BackgroundPassDescription*
-av::gua::PipelineDescription::add_background_pass() const
+av::Link<av::gua::TriMeshPassDescription>
+av::gua::PipelineDescription::get_tri_mesh_pass()
 {
-    auto pass(m_guaPipelineDescription->add_pass<::gua::BackgroundPassDescription>());
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::TriMeshPassDescription>());
 
-    return new av::gua::BackgroundPassDescription(std::shared_ptr<::gua::BackgroundPassDescription>(&pass));
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::TriMeshPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::TriMeshPassDescription>(
+                        new av::gua::TriMeshPassDescription(
+                            std::shared_ptr<::gua::TriMeshPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
 }
 
+std::vector<av::Link<av::gua::TriMeshPassDescription>>
+av::gua::PipelineDescription::get_tri_mesh_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::TriMeshPassDescription>());
+    std::vector<av::Link<av::gua::TriMeshPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::TriMeshPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::TriMeshPassDescription>(
+                        new av::gua::TriMeshPassDescription(
+                            std::shared_ptr<::gua::TriMeshPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+av::Link<av::gua::BackgroundPassDescription>
+av::gua::PipelineDescription::add_background_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::BackgroundPassDescription>());
+
+    auto desc(new av::Link<av::gua::BackgroundPassDescription>(
+                        new av::gua::BackgroundPassDescription(
+                            std::shared_ptr<::gua::BackgroundPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::BackgroundPassDescription>
+av::gua::PipelineDescription::get_background_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::BackgroundPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::BackgroundPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::BackgroundPassDescription>(
+                        new av::gua::BackgroundPassDescription(
+                            std::shared_ptr<::gua::BackgroundPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::BackgroundPassDescription>>
+av::gua::PipelineDescription::get_background_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::BackgroundPassDescription>());
+    std::vector<av::Link<av::gua::BackgroundPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::BackgroundPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::BackgroundPassDescription>(
+                        new av::gua::BackgroundPassDescription(
+                            std::shared_ptr<::gua::BackgroundPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
 
 
 std::shared_ptr< ::gua::PipelineDescription> const&

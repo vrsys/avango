@@ -42,7 +42,6 @@ namespace av
                                 std::shared_ptr< ::gua::BackgroundPassDescription>(new ::gua::BackgroundPassDescription()) );
 
 
-
     public:
 
       SFColor  Color;

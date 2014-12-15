@@ -18,7 +18,9 @@ AV_FIELD_DEFINE(av::gua::MFPipelinePassDescription);
 av::gua::PipelinePassDescription::PipelinePassDescription(
   std::shared_ptr< ::gua::PipelinePassDescription> const& guaPipelinePassDescription)
     : m_guaPipelinePassDescription(guaPipelinePassDescription)
-{}
+{
+
+}
 
 void
 av::gua::PipelinePassDescription::initClass()

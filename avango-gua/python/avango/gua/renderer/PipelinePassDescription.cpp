@@ -25,7 +25,7 @@ void init_PipelinePassDescription()
   register_multifield<av::gua::MFPipelinePassDescription>("MFPipelinePassDescription");
   class_<av::gua::PipelinePassDescription,
          av::Link<av::gua::PipelinePassDescription>,
-         bases<av::Field>, boost::noncopyable >("PipelinePassDescription", "docstring", no_init)
+         bases<av::FieldContainer>, boost::noncopyable >("PipelinePassDescription", "docstring", no_init)
          ;
  }
 

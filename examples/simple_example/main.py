@@ -42,7 +42,7 @@ def start():
   # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
   desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
-  # a = avango.gua.nodes.TriMeshPassDescription()
+
   # vertex_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/VertexOffset.gpd")
   # fragment_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/FragmentColor.gpd")
   # fragment_method.set_uniform("color", avango.gua.Vec3(0.4, .1, 0.5))

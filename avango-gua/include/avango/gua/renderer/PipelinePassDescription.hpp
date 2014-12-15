@@ -32,7 +32,7 @@ namespace av
        */
       PipelinePassDescription(std::shared_ptr< ::gua::PipelinePassDescription> const& PipelinePassDescription);
 
-      virtual ~PipelinePassDescription() {}
+      // virtual ~PipelinePassDescription() {}
 
     public:
 

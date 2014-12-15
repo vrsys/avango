@@ -27,17 +27,17 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
 void
 av::gua::TriMeshNode::initClass()
 {
-    if (!isTypeInitialized())
-    {
-        av::gua::GeometryNode::initClass();
+  if (!isTypeInitialized())
+  {
+      av::gua::GeometryNode::initClass();
 
-        AV_FC_INIT(av::gua::GeometryNode, av::gua::TriMeshNode, true);
+      AV_FC_INIT(av::gua::GeometryNode, av::gua::TriMeshNode, true);
 
-        SFTriMeshNode::initClass("av::gua::SFTriMeshNode", "av::Field");
-        MFTriMeshNode::initClass("av::gua::MFTriMeshNode", "av::Field");
+      SFTriMeshNode::initClass("av::gua::SFTriMeshNode", "av::Field");
+      MFTriMeshNode::initClass("av::gua::MFTriMeshNode", "av::Field");
 
-        sClassTypeId.setDistributable(true);
-    }
+      sClassTypeId.setDistributable(true);
+  }
 }
 
 

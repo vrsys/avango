@@ -40,6 +40,9 @@ void init_PipelineDescription()
          .def("add_background_pass", &av::gua::PipelineDescription::add_background_pass)
          .def("get_background_pass", &av::gua::PipelineDescription::get_background_pass)
          .def("get_background_passes", &av::gua::PipelineDescription::get_background_passes)
+         .def("add_fullscreen_pass", &av::gua::PipelineDescription::add_fullscreen_pass)
+         .def("get_fullscreen_pass", &av::gua::PipelineDescription::get_fullscreen_pass)
+         .def("get_fullscreen_passes", &av::gua::PipelineDescription::get_fullscreen_passes)
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

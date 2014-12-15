@@ -143,6 +143,61 @@ av::gua::PipelineDescription::get_background_passes()
     return result;
 }
 
+av::Link<av::gua::FullscreenPassDescription>
+av::gua::PipelineDescription::add_fullscreen_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::FullscreenPassDescription>());
+
+    auto desc(new av::Link<av::gua::FullscreenPassDescription>(
+                        new av::gua::FullscreenPassDescription(
+                            std::shared_ptr<::gua::FullscreenPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::FullscreenPassDescription>
+av::gua::PipelineDescription::get_fullscreen_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::FullscreenPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::FullscreenPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::FullscreenPassDescription>(
+                        new av::gua::FullscreenPassDescription(
+                            std::shared_ptr<::gua::FullscreenPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::FullscreenPassDescription>>
+av::gua::PipelineDescription::get_fullscreen_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::FullscreenPassDescription>());
+    std::vector<av::Link<av::gua::FullscreenPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::FullscreenPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::FullscreenPassDescription>(
+                        new av::gua::FullscreenPassDescription(
+                            std::shared_ptr<::gua::FullscreenPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+
 
 std::shared_ptr< ::gua::PipelineDescription> const&
 av::gua::PipelineDescription::getGuaPipelineDescription() const

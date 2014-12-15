@@ -17,9 +17,10 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     : Node(guaCameraNode)
     , m_guaNode(guaCameraNode)
 {
+  auto& desc(m_guaNode->config.pipeline_description());
   m_pipelineDescription = av::Link<av::gua::PipelineDescription>(
                             new av::gua::PipelineDescription(
-                              std::make_shared<::gua::PipelineDescription>(m_guaNode->config.pipeline_description())
+                              std::shared_ptr<::gua::PipelineDescription>(&desc)
                             )
                           );
 

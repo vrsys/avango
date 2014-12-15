@@ -89,6 +89,60 @@ av::gua::PipelineDescription::get_tri_mesh_passes()
     return result;
 }
 
+av::Link<av::gua::TexturedQuadPassDescription>
+av::gua::PipelineDescription::add_textured_quad_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::TexturedQuadPassDescription>());
+
+    auto desc(new av::Link<av::gua::TexturedQuadPassDescription>(
+                        new av::gua::TexturedQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedQuadPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::TexturedQuadPassDescription>
+av::gua::PipelineDescription::get_textured_quad_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::TexturedQuadPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::TexturedQuadPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::TexturedQuadPassDescription>(
+                        new av::gua::TexturedQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedQuadPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::TexturedQuadPassDescription>>
+av::gua::PipelineDescription::get_textured_quad_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::TexturedQuadPassDescription>());
+    std::vector<av::Link<av::gua::TexturedQuadPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::TexturedQuadPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::TexturedQuadPassDescription>(
+                        new av::gua::TexturedQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedQuadPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
 av::Link<av::gua::BackgroundPassDescription>
 av::gua::PipelineDescription::add_background_pass()
 {

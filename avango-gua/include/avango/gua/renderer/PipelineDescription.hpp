@@ -9,6 +9,7 @@
 #include <gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
+#include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -40,13 +41,17 @@ namespace av
     public:
 
 
-      av::Link<av::gua::TriMeshPassDescription>                 add_tri_mesh_pass();
-      av::Link<av::gua::TriMeshPassDescription>                 get_tri_mesh_pass();
-      std::vector<av::Link<av::gua::TriMeshPassDescription>>    get_tri_mesh_passes();
+      av::Link<av::gua::TriMeshPassDescription>                   add_tri_mesh_pass();
+      av::Link<av::gua::TriMeshPassDescription>                   get_tri_mesh_pass();
+      std::vector<av::Link<av::gua::TriMeshPassDescription>>      get_tri_mesh_passes();
 
-      av::Link<av::gua::BackgroundPassDescription>              add_background_pass();
-      av::Link<av::gua::BackgroundPassDescription>              get_background_pass();
-      std::vector<av::Link<av::gua::BackgroundPassDescription>> get_background_passes();
+      av::Link<av::gua::TexturedQuadPassDescription>              add_textured_quad_pass();
+      av::Link<av::gua::TexturedQuadPassDescription>              get_textured_quad_pass();
+      std::vector<av::Link<av::gua::TexturedQuadPassDescription>> get_textured_quad_passes();
+
+      av::Link<av::gua::BackgroundPassDescription>                add_background_pass();
+      av::Link<av::gua::BackgroundPassDescription>                get_background_pass();
+      std::vector<av::Link<av::gua::BackgroundPassDescription>>   get_background_passes();
 
 
       /**

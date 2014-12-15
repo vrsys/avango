@@ -65,6 +65,7 @@
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
+#include <avango/gua/renderer/FullscreenPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
@@ -146,6 +147,7 @@ av::gua::Init::initClass()
         av::gua::TriMeshPassDescription::initClass();
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
+        av::gua::FullscreenPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();

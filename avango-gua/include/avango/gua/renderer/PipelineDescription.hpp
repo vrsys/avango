@@ -11,6 +11,7 @@
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
+#include <avango/gua/renderer/FullscreenPassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -53,6 +54,9 @@ namespace av
       av::Link<av::gua::BackgroundPassDescription>                get_background_pass();
       std::vector<av::Link<av::gua::BackgroundPassDescription>>   get_background_passes();
 
+      av::Link<av::gua::FullscreenPassDescription>              add_fullscreen_pass();
+      av::Link<av::gua::FullscreenPassDescription>              get_fullscreen_pass();
+      std::vector<av::Link<av::gua::FullscreenPassDescription>> get_fullscreen_passes();
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

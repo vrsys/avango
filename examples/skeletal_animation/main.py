@@ -28,7 +28,8 @@ def start():
 
   bob.Transform.value =  bob.Transform.value  * avango.gua.make_trans_mat(0.0,-50.0,0.0)
 
-  #bob.setAnimationMode(1)
+  bob.AnimationMode.value = 1
+  #bob.AnimationMode.value = 1
 
   #monkey.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
   #monkey.Material.value.set_uniform("Roughness", 0.3)

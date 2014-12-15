@@ -25,5 +25,6 @@ void init_SkeletalAnimationNode()
   register_multifield<av::gua::MFSkeletalAnimationNode>("MFSkeletalAnimationNode");
   class_<av::gua::SkeletalAnimationNode, av::Link<av::gua::SkeletalAnimationNode>,
     bases<av::gua::GeometryNode>,
-    boost::noncopyable >("SkeletalAnimationNode", "docstring", no_init);
+    boost::noncopyable >("SkeletalAnimationNode", "docstring", no_init)
+    ;
 }

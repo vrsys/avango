@@ -48,6 +48,11 @@ namespace av
       virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
       virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
+      SFInt AnimationMode;
+
+      virtual void getAnimationModeCB(const SFInt::GetValueEvent& event);
+      virtual void setAnimationModeCB(const SFInt::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::SkeletalAnimationNode.
        */

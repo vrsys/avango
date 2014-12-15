@@ -15,6 +15,10 @@ av::gua::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr< ::gua::no
                       boost::bind(&SkeletalAnimationNode::getMaterialCB, this, _1),
                       boost::bind(&SkeletalAnimationNode::setMaterialCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(AnimationMode,
+                      boost::bind(&SkeletalAnimationNode::getAnimationModeCB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setAnimationModeCB, this, _1));
+
 //  if (guanode->get_material()) {
 //    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
 //  }
@@ -56,7 +60,14 @@ av::gua::SkeletalAnimationNode::setMaterialCB(const SFMaterial::SetValueEvent& e
 //  m_guaSkeletalAnimationNode->set_material(m_Material->getGuaMaterial());
 }
 
-std::shared_ptr< ::gua::node::SkeletalAnimationNode>
-av::gua::SkeletalAnimationNode::getGuaSkeletalAnimationNode() const {
-  return m_guaSkeletalAnimationNode;
+void
+av::gua::SkeletalAnimationNode::getAnimationModeCB(const SFInt::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = 1; //m_guaSkeletalAnimationNode->get_animation_mode();
+}
+
+void
+av::gua::SkeletalAnimationNode::setAnimationModeCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSkeletalAnimationNode->set_animation_mode(event.getValue());
 }

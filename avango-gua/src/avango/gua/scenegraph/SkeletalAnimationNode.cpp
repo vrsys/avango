@@ -9,6 +9,7 @@ AV_FIELD_DEFINE(av::gua::MFSkeletalAnimationNode);
 
 av::gua::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode)
     : GeometryNode(guanode)
+    , m_guaSkeletalAnimationNode(std::dynamic_pointer_cast< ::gua::node::SkeletalAnimationNode>(GeometryNode::getGuaNode()))
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Material,

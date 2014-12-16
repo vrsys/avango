@@ -70,6 +70,7 @@
 #include "renderer/BackgroundPassDescription.hpp"
 #include "renderer/BBoxPassDescription.hpp"
 #include "renderer/EmissivePassDescription.hpp"
+#include "renderer/PhysicallyBasedShadingPassDescription.hpp"
 #include "renderer/TexturedScreenSpaceQuadPassDescription.hpp"
 #include "renderer/FullscreenPassDescription.hpp"
 #include "renderer/Databases.hpp"
@@ -186,6 +187,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_BackgroundPassDescription();
     init_BBoxPassDescription();
     init_EmissivePassDescription();
+    init_PhysicallyBasedShadingPassDescription();
     init_TexturedScreenSpaceQuadPassDescription();
     init_FullscreenPassDescription();
     init_Databases();

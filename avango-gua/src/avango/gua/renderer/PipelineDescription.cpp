@@ -307,6 +307,61 @@ av::gua::PipelineDescription::get_emissive_passes()
 }
 
 
+av::Link<av::gua::PhysicallyBasedShadingPassDescription>
+av::gua::PipelineDescription::add_physically_based_shading_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::PhysicallyBasedShadingPassDescription>());
+
+    auto desc(new av::Link<av::gua::PhysicallyBasedShadingPassDescription>(
+                        new av::gua::PhysicallyBasedShadingPassDescription(
+                            std::shared_ptr<::gua::PhysicallyBasedShadingPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::PhysicallyBasedShadingPassDescription>
+av::gua::PipelineDescription::get_physically_based_shading_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::PhysicallyBasedShadingPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::PhysicallyBasedShadingPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::PhysicallyBasedShadingPassDescription>(
+                        new av::gua::PhysicallyBasedShadingPassDescription(
+                            std::shared_ptr<::gua::PhysicallyBasedShadingPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::PhysicallyBasedShadingPassDescription>>
+av::gua::PipelineDescription::get_physically_based_shading_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::PhysicallyBasedShadingPassDescription>());
+    std::vector<av::Link<av::gua::PhysicallyBasedShadingPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::PhysicallyBasedShadingPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::PhysicallyBasedShadingPassDescription>(
+                        new av::gua::PhysicallyBasedShadingPassDescription(
+                            std::shared_ptr<::gua::PhysicallyBasedShadingPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+
 av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>
 av::gua::PipelineDescription::add_textured_screen_space_quad_pass()
 {

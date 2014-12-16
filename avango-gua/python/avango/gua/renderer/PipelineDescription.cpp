@@ -66,6 +66,16 @@ list get_emissive_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+list get_physically_based_shading_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_physically_based_shading_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
 list get_textured_screen_space_quad_passes(av::gua::PipelineDescription& desc) {
     list result;
     auto passes = desc.get_textured_screen_space_quad_passes();
@@ -119,6 +129,9 @@ void init_PipelineDescription()
          .def("add_emissive_pass", &av::gua::PipelineDescription::add_emissive_pass)
          .def("get_emissive_pass", &av::gua::PipelineDescription::get_emissive_pass)
          .def("get_emissive_passes", get_emissive_passes)
+         .def("add_physically_based_shading_pass", &av::gua::PipelineDescription::add_physically_based_shading_pass)
+         .def("get_physically_based_shading_pass", &av::gua::PipelineDescription::get_physically_based_shading_pass)
+         .def("get_physically_based_shading_passes", get_physically_based_shading_passes)
          .def("add_textured_screen_space_quad_pass", &av::gua::PipelineDescription::add_textured_screen_space_quad_pass)
          .def("get_textured_screen_space_quad_pass", &av::gua::PipelineDescription::get_textured_screen_space_quad_pass)
          .def("get_textured_screen_space_quad_passes", get_textured_screen_space_quad_passes)

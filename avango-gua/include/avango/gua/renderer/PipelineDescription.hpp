@@ -14,6 +14,9 @@
 #include <avango/gua/renderer/FullscreenPassDescription.hpp>
 #include <avango/gua/renderer/BBoxPassDescription.hpp>
 #include <avango/gua/renderer/EmissivePassDescription.hpp>
+#include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
+#include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
+#include <avango/gua/renderer/SSAOPassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -64,9 +67,21 @@ namespace av
       av::Link<av::gua::EmissivePassDescription>                  get_emissive_pass();
       std::vector<av::Link<av::gua::EmissivePassDescription>>     get_emissive_passes();
 
+      av::Link<av::gua::PhysicallyBasedShadingPassDescription>                   add_physically_based_shading_pass();
+      av::Link<av::gua::PhysicallyBasedShadingPassDescription>                   get_physically_based_shading_pass();
+      std::vector<av::Link<av::gua::PhysicallyBasedShadingPassDescription>>      get_physically_based_shading_passes();
+
+      av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>                  add_textured_screen_space_quad_pass();
+      av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>                  get_textured_screen_space_quad_pass();
+      std::vector<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>>     get_textured_screen_space_quad_passes();
+
       av::Link<av::gua::FullscreenPassDescription>                add_fullscreen_pass();
       av::Link<av::gua::FullscreenPassDescription>                get_fullscreen_pass();
       std::vector<av::Link<av::gua::FullscreenPassDescription>>   get_fullscreen_passes();
+
+      av::Link<av::gua::SSAOPassDescription>                      add_ssao_pass();
+      av::Link<av::gua::SSAOPassDescription>                      get_ssao_pass();
+      std::vector<av::Link<av::gua::SSAOPassDescription>>         get_ssao_passes();
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

@@ -66,6 +66,26 @@ list get_emissive_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+list get_physically_based_shading_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_physically_based_shading_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
+list get_textured_screen_space_quad_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_textured_screen_space_quad_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
 list get_textured_quad_passes(av::gua::PipelineDescription& desc) {
     list result;
     auto passes = desc.get_textured_quad_passes();
@@ -79,6 +99,16 @@ list get_textured_quad_passes(av::gua::PipelineDescription& desc) {
 list get_fullscreen_passes(av::gua::PipelineDescription& desc) {
     list result;
     auto passes = desc.get_fullscreen_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
+list get_ssao_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_ssao_passes();
 
     for (auto& pass : passes){
       result.append(pass);
@@ -109,9 +139,18 @@ void init_PipelineDescription()
          .def("add_emissive_pass", &av::gua::PipelineDescription::add_emissive_pass)
          .def("get_emissive_pass", &av::gua::PipelineDescription::get_emissive_pass)
          .def("get_emissive_passes", get_emissive_passes)
+         .def("add_physically_based_shading_pass", &av::gua::PipelineDescription::add_physically_based_shading_pass)
+         .def("get_physically_based_shading_pass", &av::gua::PipelineDescription::get_physically_based_shading_pass)
+         .def("get_physically_based_shading_passes", get_physically_based_shading_passes)
+         .def("add_textured_screen_space_quad_pass", &av::gua::PipelineDescription::add_textured_screen_space_quad_pass)
+         .def("get_textured_screen_space_quad_pass", &av::gua::PipelineDescription::get_textured_screen_space_quad_pass)
+         .def("get_textured_screen_space_quad_passes", get_textured_screen_space_quad_passes)
          .def("add_fullscreen_pass", &av::gua::PipelineDescription::add_fullscreen_pass)
          .def("get_fullscreen_pass", &av::gua::PipelineDescription::get_fullscreen_pass)
          .def("get_fullscreen_passes", get_fullscreen_passes)
+         .def("add_ssao_pass", &av::gua::PipelineDescription::add_ssao_pass)
+         .def("get_ssao_pass", &av::gua::PipelineDescription::get_ssao_pass)
+         .def("get_ssao_passes", get_ssao_passes)
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

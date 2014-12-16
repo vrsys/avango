@@ -35,6 +35,8 @@ def on_enter(enter):
 
 def start():
 
+  mask = avango.gua.nodes.Mask()
+
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 

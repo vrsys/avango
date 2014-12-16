@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_TAG_LIST_HPP
+#define AV_PYTHON_GUA_TAG_LIST_HPP
+
+void init_TagList();
+
+#endif //AV_PYTHON_GUA_TAG_LIST_HPP

@@ -86,6 +86,8 @@
 
 #include "utils/Color.hpp"
 #include "utils/Logger.hpp"
+#include "utils/TagList.hpp"
+#include "utils/Mask.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -200,4 +202,6 @@ BOOST_PYTHON_MODULE(_gua)
     init_Viewer();
 
     init_Logger();
+    init_TagList();
+    init_Mask();
 }

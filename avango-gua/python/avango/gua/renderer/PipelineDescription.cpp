@@ -56,6 +56,16 @@ list get_bbox_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+list get_emissive_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_emissive_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
 list get_textured_quad_passes(av::gua::PipelineDescription& desc) {
     list result;
     auto passes = desc.get_textured_quad_passes();
@@ -96,6 +106,9 @@ void init_PipelineDescription()
          .def("add_bbox_pass", &av::gua::PipelineDescription::add_bbox_pass)
          .def("get_bbox_pass", &av::gua::PipelineDescription::get_bbox_pass)
          .def("get_bbox_passes", get_bbox_passes)
+         .def("add_emissive_pass", &av::gua::PipelineDescription::add_emissive_pass)
+         .def("get_emissive_pass", &av::gua::PipelineDescription::get_emissive_pass)
+         .def("get_emissive_passes", get_emissive_passes)
          .def("add_fullscreen_pass", &av::gua::PipelineDescription::add_fullscreen_pass)
          .def("get_fullscreen_pass", &av::gua::PipelineDescription::get_fullscreen_pass)
          .def("get_fullscreen_passes", get_fullscreen_passes)

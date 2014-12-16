@@ -24,5 +24,7 @@ void init_TagList()
   register_multifield<av::gua::MFTagList>("MFTagList");
   class_<av::gua::TagList, av::Link<av::gua::TagList>,
     bases<av::FieldContainer>,
-    boost::noncopyable >("TagList", "docstring", no_init);
+    boost::noncopyable >("TagList", "docstring", no_init)
+    .def("print", &av::gua::TagList::print)
+    ;
 }

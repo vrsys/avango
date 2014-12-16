@@ -30,6 +30,12 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
     WorldTransform.touch();
   });
 
+  m_guaNode->get_tags().set_user_data(new av::Link<av::gua::TagList>(
+    new av::gua::TagList(
+      std::shared_ptr< ::gua::utils::TagList>(&m_guaNode->get_tags())
+    )
+  ));
+
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
                         boost::bind(&Node::setParentCB, this, _1));
@@ -59,6 +65,10 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(Path,
                         boost::bind(&Node::getPathCB, this, _1),
                         boost::bind(&Node::setPathCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(TagList,
+                        boost::bind(&Node::getTagListCB, this, _1),
+                        boost::bind(&Node::setTagListCB, this, _1));
 
 }
 
@@ -231,6 +241,25 @@ void
 av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 {
   // std::cout << "A node's path cannot be set!" << std::endl;
+}
+
+void
+av::gua::Node::getTagListCB(const SFTagList::GetValueEvent& event)
+{
+  if (m_guaNode->get_tags().get_user_data()) {
+    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::TagList>*>(m_guaNode->get_tags().get_user_data());
+  }
+}
+
+void
+av::gua::Node::setTagListCB(const SFTagList::SetValueEvent& event)
+{
+  m_guaNode->get_tags() = *event.getValue()->getGuaTagList();
+  m_guaNode->get_tags().set_user_data(new av::Link<av::gua::TagList>(
+    new av::gua::TagList(
+      std::shared_ptr< ::gua::utils::TagList>(&m_guaNode->get_tags())
+    )
+  ));
 }
 
 void

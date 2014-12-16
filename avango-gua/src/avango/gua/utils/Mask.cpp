@@ -11,6 +11,18 @@ av::gua::Mask::Mask(std::shared_ptr< ::gua::Mask> guaMask)
   : m_guaMask(guaMask)
 {
 
+  m_guaMask->whitelist.set_user_data(new av::Link<av::gua::TagList>(
+    new av::gua::TagList(
+      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->whitelist)
+    )
+  ));
+
+  m_guaMask->blacklist.set_user_data(new av::Link<av::gua::TagList>(
+    new av::gua::TagList(
+      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->blacklist)
+    )
+  ));
+
   AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
                       boost::bind(&Mask::getWhiteListCB, this, _1),
                       boost::bind(&Mask::setWhiteListCB, this, _1));

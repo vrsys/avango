@@ -25,6 +25,12 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                           )
                         ));
 
+  m_guaNode->config.mask().set_user_data(new av::Link<av::gua::Mask>(
+    new av::gua::Mask(
+      std::shared_ptr< ::gua::Mask>(&m_guaNode->config.mask())
+    )
+  ));
+
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
                       boost::bind(&CameraNode::getEnabledCB, this, _1),
                       boost::bind(&CameraNode::setEnabledCB, this, _1));
@@ -84,6 +90,10 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
   AV_FC_ADD_ADAPTOR_FIELD(EnableFrustumCulling,
                       boost::bind(&CameraNode::getEnableFrustumCullingCB, this, _1),
                       boost::bind(&CameraNode::setEnableFrustumCullingCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Mask,
+                      boost::bind(&CameraNode::getMaskCB, this, _1),
+                      boost::bind(&CameraNode::setMaskCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(PreRenderCameras,
                       boost::bind(&CameraNode::getPreRenderCamerasCB, this, _1),
@@ -300,6 +310,25 @@ void
 av::gua::CameraNode::setEnableFrustumCullingCB(const SFBool::SetValueEvent& event)
 {
   m_guaNode->config.enable_frustum_culling() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getMaskCB(const SFMask::GetValueEvent& event)
+{
+  if (m_guaNode->config.mask().get_user_data()) {
+    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::Mask>*>(m_guaNode->config.mask().get_user_data());
+  }
+}
+
+void
+av::gua::CameraNode::setMaskCB(const SFMask::SetValueEvent& event)
+{
+  m_guaNode->config.mask() = *event.getValue()->getGuaMask();
+  m_guaNode->config.mask().set_user_data(new av::Link<av::gua::Mask>(
+    new av::gua::Mask(
+      std::shared_ptr< ::gua::Mask>(&m_guaNode->config.mask())
+    )
+  ));
 }
 
 void

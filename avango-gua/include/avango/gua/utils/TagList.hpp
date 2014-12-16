@@ -47,6 +47,8 @@ namespace av
       virtual void getTagsCB(const MFString::GetValueEvent& event);
       virtual void setTagsCB(const MFString::SetValueEvent& event);
 
+      void print() const;
+
       /**
        * Get the wrapped ::gua::TagList.
        */

@@ -10,6 +10,7 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
+#include <avango/gua/utils/Mask.hpp>
 
 namespace av
 {
@@ -78,6 +79,8 @@ namespace av
 
       SFBool                EnableFrustumCulling;
 
+      SFMask                Mask;
+
       MultiField<Link<CameraNode>> PreRenderCameras;
 
       virtual void getEnabledCB(const SFBool::GetValueEvent& event);
@@ -124,6 +127,9 @@ namespace av
 
       virtual void getEnableFrustumCullingCB(const SFBool::GetValueEvent& event);
       virtual void setEnableFrustumCullingCB(const SFBool::SetValueEvent& event);
+
+      virtual void getMaskCB(const SFMask::GetValueEvent& event);
+      virtual void setMaskCB(const SFMask::SetValueEvent& event);
 
       virtual void getPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::GetValueEvent& event);
       virtual void setPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::SetValueEvent& event);

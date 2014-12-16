@@ -45,7 +45,15 @@ av::gua::TagList::getTagsCB(const MFString::GetValueEvent& event)
 void
 av::gua::TagList::setTagsCB(const MFString::SetValueEvent& event)
 {
+  m_guaTagList->clear_tags();
   m_guaTagList->add_tags(event.getValue());
+}
+
+void
+av::gua::TagList::print() const {
+  for (auto s : m_guaTagList->get_strings()) {
+    std::cout << s << std::endl;
+  }
 }
 
 std::shared_ptr< ::gua::utils::TagList>

@@ -68,6 +68,7 @@
 #include "renderer/TriMeshPassDescription.hpp"
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/BackgroundPassDescription.hpp"
+#include "renderer/BBoxPassDescription.hpp"
 #include "renderer/FullscreenPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
@@ -181,6 +182,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TriMeshPassDescription();
     init_TexturedQuadPassDescription();
     init_BackgroundPassDescription();
+    init_BBoxPassDescription();
     init_FullscreenPassDescription();
     init_Databases();
     init_TriMeshLoader();

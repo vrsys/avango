@@ -197,6 +197,60 @@ av::gua::PipelineDescription::get_background_passes()
     return result;
 }
 
+av::Link<av::gua::BBoxPassDescription>
+av::gua::PipelineDescription::add_bbox_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::BBoxPassDescription>());
+
+    auto desc(new av::Link<av::gua::BBoxPassDescription>(
+                        new av::gua::BBoxPassDescription(
+                            std::shared_ptr<::gua::BBoxPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::BBoxPassDescription>
+av::gua::PipelineDescription::get_bbox_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::BBoxPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::BBoxPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::BBoxPassDescription>(
+                        new av::gua::BBoxPassDescription(
+                            std::shared_ptr<::gua::BBoxPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::BBoxPassDescription>>
+av::gua::PipelineDescription::get_bbox_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::BBoxPassDescription>());
+    std::vector<av::Link<av::gua::BBoxPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::BBoxPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::BBoxPassDescription>(
+                        new av::gua::BBoxPassDescription(
+                            std::shared_ptr<::gua::BBoxPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
 av::Link<av::gua::FullscreenPassDescription>
 av::gua::PipelineDescription::add_fullscreen_pass()
 {

@@ -50,6 +50,7 @@ namespace av
       SFMatrix                  Transform;
       SFMatrix                  WorldTransform;
       SFBoundingBox             BoundingBox;
+      SFBool                    DisplayBoundingBox;
       SFInt                     Depth;
       SFString                  Path;
 
@@ -79,6 +80,9 @@ namespace av
 
       virtual void getBoundingBoxCB(const SFBoundingBox::GetValueEvent& event);
       virtual void setBoundingBoxCB(const SFBoundingBox::SetValueEvent& event);
+
+      virtual void getDisplayBoundingBoxCB(const SFBool::GetValueEvent& event);
+      virtual void setDisplayBoundingBoxCB(const SFBool::SetValueEvent& event);
 
       virtual void getDepthCB(const SFInt::GetValueEvent& event);
       virtual void setDepthCB(const SFInt::SetValueEvent& event);

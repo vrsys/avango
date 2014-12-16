@@ -36,54 +36,27 @@ def on_enter(enter):
 def start():
 
   # setup scenegraph
-  graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-
+  graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.TriMeshLoader()
-  # monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
-  desc = avango.gua.nodes.MaterialShaderDescription(FileName= "data/materials/SimpleMaterial.gmd")
+  monkey1 = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  monkey2 = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  # vertex_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/VertexOffset.gpd")
-  # fragment_method = avango.gua.nodes.MaterialShaderMethod(FileName = "data/materials/FragmentColor.gpd")
-  # fragment_method.set_uniform("color", avango.gua.Vec3(0.4, .1, 0.5))
+  monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+  monkey1.Material.value.set_uniform("Roughness", 0.3)
+  monkey1.Material.value.set_uniform("Metalness", 1.0)
 
-  fragment_method2 = avango.gua.nodes.MaterialShaderMethod(
-    Name = "DiscardFragment",
-    Source = "void DiscardFragment() {if (gua_position.y > 0.2) { discard; }}"
+  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
+  monkey2.Material.value.set_uniform("Roughness", 0.6)
+  monkey2.Material.value.set_uniform("Metalness", 0.1)
+
+  transform1 = avango.gua.nodes.TransformNode(
+    Children = [monkey1]
   )
-
-  desc.FragmentMethods.value.append(fragment_method2)
-
-  # desc = avango.gua.nodes.MaterialShaderDescription(VertexMethods = [vertex_method],
-  #                                                   FragmentMethods = [fragment_method, fragment_method2])
-
-  # material  = avango.gua.create_material_from_description(desc, "SimpleMaterial")
-
-
-  monkey = loader.create_geometry_from_file("monkey",
-                                            "data/objects/monkey.obj",
-                                            avango.gua.create_default_material(),
-                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
-                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
-
-  monkey2 = loader.create_geometry_from_file("monkey",
-                                            "data/objects/monkey.obj",
-                                            avango.gua.create_default_material(),
-                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
-                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
-
-
-  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
-  monkey2.Material.value.set_uniform("Roughness", 0.3)
-  monkey2.Material.value.set_uniform("Metalness", 1.0)
-
-  transform = avango.gua.nodes.TransformNode(Children = [monkey])
   transform2 = avango.gua.nodes.TransformNode(
-                Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
-                Children = [monkey2]
-                )
+    Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
+    Children = [monkey2]
+  )
 
   light = avango.gua.nodes.PointLightNode(
                 Name = "light",
@@ -117,12 +90,9 @@ def start():
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 2, Height = 1.5)
   screen.Children.value = [cam]
 
-
-  graph.Root.value.Children.value = [transform, transform2, light, screen]
-
+  graph.Root.value.Children.value = [transform1, transform2, light, screen]
 
   avango.gua.register_window("window", window)
-
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
@@ -135,7 +105,7 @@ def start():
   timer = avango.nodes.TimeSensor()
   monkey_updater.TimeIn.connect_from(timer.Time)
 
-  transform.Transform.connect_from(monkey_updater.MatrixOut)
+  transform1.Transform.connect_from(monkey_updater.MatrixOut)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

@@ -51,6 +51,10 @@ namespace av
                                                      av::Link<av::gua::Material> const& fallbackMaterial,
                                                      Flags flags = DEFAULTS) const;
 
+      av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
+                                                     std::string const& fileName,
+                                                     Flags flags = DEFAULTS) const;
+
     protected:
 
       /**

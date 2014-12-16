@@ -36,6 +36,18 @@ av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
     return av::Link<av::gua::Node>(root);
 }
 
+av::Link<av::gua::Node>
+av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
+                                               std::string const& fileName,
+                                               Flags flags) const
+{
+
+    auto gua_node(m_guaTriMeshLoader->create_geometry_from_file(nodeName, fileName, flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
 void
 av::gua::TriMeshLoader::initClass()
 {

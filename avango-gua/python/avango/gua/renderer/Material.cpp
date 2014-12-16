@@ -18,6 +18,15 @@ namespace boost
    }
  }
 
+list list_uniforms(av::gua::Material& mat) {
+    list result;
+    auto const& uniforms = mat.getGuaMaterial()->get_uniforms();
+
+    for (auto& uniform : uniforms){
+      result.append(uniform.first);
+    }
+    return result;
+}
 
 void init_Material()
  {
@@ -27,6 +36,7 @@ void init_Material()
   class_<av::gua::Material,
          av::Link<av::gua::Material>,
          bases<av::FieldContainer>, boost::noncopyable >("Material", "docstring", no_init)
+         .def("list_uniforms", list_uniforms)
          .def("set_uniform", &av::gua::Material::set_uniform<float>)
          .def("set_uniform", &av::gua::Material::set_uniform<int>)
          // .def("set_uniform", &av::gua::Material::set_uniform<unsigned>)

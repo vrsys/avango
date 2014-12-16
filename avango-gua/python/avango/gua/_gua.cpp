@@ -73,6 +73,7 @@
 #include "renderer/PhysicallyBasedShadingPassDescription.hpp"
 #include "renderer/TexturedScreenSpaceQuadPassDescription.hpp"
 #include "renderer/FullscreenPassDescription.hpp"
+#include "renderer/SSAOPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -190,6 +191,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PhysicallyBasedShadingPassDescription();
     init_TexturedScreenSpaceQuadPassDescription();
     init_FullscreenPassDescription();
+    init_SSAOPassDescription();
     init_Databases();
     init_TriMeshLoader();
     // init_Video3DLoader();

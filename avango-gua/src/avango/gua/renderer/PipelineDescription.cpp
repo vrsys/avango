@@ -472,6 +472,60 @@ av::gua::PipelineDescription::get_fullscreen_passes()
 }
 
 
+av::Link<av::gua::SSAOPassDescription>
+av::gua::PipelineDescription::add_ssao_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::SSAOPassDescription>());
+
+    auto desc(new av::Link<av::gua::SSAOPassDescription>(
+                        new av::gua::SSAOPassDescription(
+                            std::shared_ptr<::gua::SSAOPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::SSAOPassDescription>
+av::gua::PipelineDescription::get_ssao_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::SSAOPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::SSAOPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::SSAOPassDescription>(
+                        new av::gua::SSAOPassDescription(
+                            std::shared_ptr<::gua::SSAOPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::SSAOPassDescription>>
+av::gua::PipelineDescription::get_ssao_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::SSAOPassDescription>());
+    std::vector<av::Link<av::gua::SSAOPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::SSAOPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::SSAOPassDescription>(
+                        new av::gua::SSAOPassDescription(
+                            std::shared_ptr<::gua::SSAOPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
 
 std::shared_ptr< ::gua::PipelineDescription> const&
 av::gua::PipelineDescription::getGuaPipelineDescription() const

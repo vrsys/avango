@@ -16,6 +16,7 @@
 #include <avango/gua/renderer/EmissivePassDescription.hpp>
 #include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
 #include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
+#include <avango/gua/renderer/SSAOPassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -77,6 +78,10 @@ namespace av
       av::Link<av::gua::FullscreenPassDescription>                add_fullscreen_pass();
       av::Link<av::gua::FullscreenPassDescription>                get_fullscreen_pass();
       std::vector<av::Link<av::gua::FullscreenPassDescription>>   get_fullscreen_passes();
+
+      av::Link<av::gua::SSAOPassDescription>                      add_ssao_pass();
+      av::Link<av::gua::SSAOPassDescription>                      get_ssao_pass();
+      std::vector<av::Link<av::gua::SSAOPassDescription>>         get_ssao_passes();
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

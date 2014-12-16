@@ -106,6 +106,16 @@ list get_fullscreen_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+list get_ssao_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_ssao_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
 void init_PipelineDescription()
  {
 
@@ -138,6 +148,9 @@ void init_PipelineDescription()
          .def("add_fullscreen_pass", &av::gua::PipelineDescription::add_fullscreen_pass)
          .def("get_fullscreen_pass", &av::gua::PipelineDescription::get_fullscreen_pass)
          .def("get_fullscreen_passes", get_fullscreen_passes)
+         .def("add_ssao_pass", &av::gua::PipelineDescription::add_ssao_pass)
+         .def("get_ssao_pass", &av::gua::PipelineDescription::get_ssao_pass)
+         .def("get_ssao_passes", get_ssao_passes)
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

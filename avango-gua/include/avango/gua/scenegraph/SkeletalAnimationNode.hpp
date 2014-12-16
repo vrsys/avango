@@ -53,6 +53,11 @@ namespace av
       virtual void getAnimationModeCB(const SFInt::GetValueEvent& event);
       virtual void setAnimationModeCB(const SFInt::SetValueEvent& event);
 
+      SFInt BlendingMode;
+
+      virtual void getBlendingModeCB(const SFInt::GetValueEvent& event);
+      virtual void setBlendingModeCB(const SFInt::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::SkeletalAnimationNode.
        */

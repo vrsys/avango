@@ -18,11 +18,12 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     , m_guaNode(guaCameraNode)
 {
   auto& desc(m_guaNode->config.pipeline_description());
-  m_pipelineDescription = av::Link<av::gua::PipelineDescription>(
-                            new av::gua::PipelineDescription(
-                              std::shared_ptr<::gua::PipelineDescription>(&desc)
-                            )
-                          );
+  m_guaNode->config.pipeline_description().set_user_data(
+                        new av::Link<av::gua::PipelineDescription>(
+                          new av::gua::PipelineDescription(
+                            std::shared_ptr<::gua::PipelineDescription>(&desc)
+                          )
+                        ));
 
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
                       boost::bind(&CameraNode::getEnabledCB, this, _1),
@@ -127,14 +128,22 @@ av::gua::CameraNode::setEnabledCB(const SFBool::SetValueEvent& event)
 void
 av::gua::CameraNode::getPipelineDescriptionCB(const SFPipelineDescription::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_pipelineDescription;
+  *(event.getValuePtr()) = *static_cast<av::Link<av::gua::PipelineDescription>*>
+                                          (m_guaNode->config.pipeline_description().get_user_data());
 }
 
 void
 av::gua::CameraNode::setPipelineDescriptionCB(const SFPipelineDescription::SetValueEvent& event)
 {
-  m_pipelineDescription = event.getValue();
-  m_guaNode->config.pipeline_description() = *m_pipelineDescription->getGuaPipelineDescription().get();
+  m_guaNode->config.pipeline_description() = *event.getValue()->getGuaPipelineDescription().get();
+
+  auto& desc(m_guaNode->config.pipeline_description());
+  m_guaNode->config.pipeline_description().set_user_data(
+                        new av::Link<av::gua::PipelineDescription>(
+                          new av::gua::PipelineDescription(
+                            std::shared_ptr<::gua::PipelineDescription>(&desc)
+                          )
+                        ));
 }
 
 void

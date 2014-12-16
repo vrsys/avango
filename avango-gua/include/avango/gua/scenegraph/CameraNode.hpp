@@ -140,8 +140,6 @@ namespace av
     private:
 
       std::shared_ptr< ::gua::node::CameraNode> m_guaNode;
-      av::Link<av::gua::PipelineDescription>    m_pipelineDescription;
-
 
       MultiField<Link<CameraNode>>::ContainerType m_preRenderCameraNodes;
 

@@ -50,6 +50,9 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(BoundingBox,
                         boost::bind(&Node::getBoundingBoxCB, this, _1),
                         boost::bind(&Node::setBoundingBoxCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(DisplayBoundingBox,
+                        boost::bind(&Node::getDisplayBoundingBoxCB, this, _1),
+                        boost::bind(&Node::setDisplayBoundingBoxCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(Depth,
                         boost::bind(&Node::getDepthCB, this, _1),
                         boost::bind(&Node::setDepthCB, this, _1));
@@ -192,6 +195,18 @@ void
 av::gua::Node::setBoundingBoxCB(const SFBoundingBox::SetValueEvent& event)
 {
   // std::cout << "A node's bounding box is calculated dependent on the scenegraph hierarchy and thus cannot be set!" << std::endl;
+}
+
+void
+av::gua::Node::getDisplayBoundingBoxCB(const SFBool::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_draw_bounding_box();
+}
+
+void
+av::gua::Node::setDisplayBoundingBoxCB(const SFBool::SetValueEvent& event)
+{
+    m_guaNode->set_draw_bounding_box(event.getValue());
 }
 
 void

@@ -306,6 +306,62 @@ av::gua::PipelineDescription::get_emissive_passes()
     return result;
 }
 
+
+av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>
+av::gua::PipelineDescription::add_textured_screen_space_quad_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::TexturedScreenSpaceQuadPassDescription>());
+
+    auto desc(new av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>(
+                        new av::gua::TexturedScreenSpaceQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>
+av::gua::PipelineDescription::get_textured_screen_space_quad_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::TexturedScreenSpaceQuadPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>(
+                        new av::gua::TexturedScreenSpaceQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>>
+av::gua::PipelineDescription::get_textured_screen_space_quad_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::TexturedScreenSpaceQuadPassDescription>());
+    std::vector<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::TexturedScreenSpaceQuadPassDescription>(
+                        new av::gua::TexturedScreenSpaceQuadPassDescription(
+                            std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+
 av::Link<av::gua::FullscreenPassDescription>
 av::gua::PipelineDescription::add_fullscreen_pass()
 {

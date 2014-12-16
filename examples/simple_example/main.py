@@ -12,27 +12,6 @@ class TimedRotate(avango.script.Script):
   def update(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
-def on_resize(size):
-  print("on_resize " + str(size))
-
-def on_key_press(key, scancode, action, mods):
-  print("on_key_press " + str(key) + " " + str(scancode) + " " + str(action) + " " + str(mods))
-
-def on_char(char):
-  print("on_char " + str(char))
-
-def on_button_press(key, action, mods):
-  print("on_button_press " + str(key) + " " + str(action) + " " + str(mods))
-
-def on_move_cursor(position):
-  print("on_move_cursor " + str(position))
-
-def on_scroll(scroll):
-  print("on_scroll " + str(scroll))
-
-def on_enter(enter):
-  print("on_enter " + str(enter))
-
 def start():
 
   # setup scenegraph
@@ -65,34 +44,30 @@ def start():
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
 
   size = avango.gua.Vec2ui(1024, 768)
-  # setup viewing
 
   window = avango.gua.nodes.GlfwWindow(
     Size = size,
     LeftResolution = size
   )
 
-  # window.on_resize(on_resize)
-  # window.on_key_press(on_key_press)
-  # window.on_char(on_char)
-  # window.on_button_press(on_button_press)
-  # window.on_move_cursor(on_move_cursor)
-  # window.on_scroll(on_scroll)
-  # window.on_enter(on_enter)
+  avango.gua.register_window("window", window)
 
-  cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
-                                    SceneGraph = "scenegraph",
-                                    Resolution = size,
-                                    OutputWindowName = "window")
+  cam = avango.gua.nodes.CameraNode(
+    LeftScreenPath = "/screen",
+    SceneGraph = "scenegraph",
+    Resolution = size,
+    OutputWindowName = "window",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  )
 
-  cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
-
-  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 2, Height = 1.5)
-  screen.Children.value = [cam]
+  screen = avango.gua.nodes.ScreenNode(
+    Name = "screen", 
+    Width = 2, 
+    Height = 1.5,
+    Children = [cam]
+  )
 
   graph.Root.value.Children.value = [transform1, transform2, light, screen]
-
-  avango.gua.register_window("window", window)
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()

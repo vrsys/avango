@@ -29,7 +29,7 @@ av::gua::GuiResource::initClass()
     {
         av::FieldContainer::initClass();
 
-        AV_FC_INIT_ABSTRACT(av::FieldContainer, av::gua::GuiResource, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::GuiResource, true);
 
         SFGuiResource::initClass("av::gua::SFGuiResource", "av::Field");
         MFGuiResource::initClass("av::gua::MFGuiResource", "av::Field");

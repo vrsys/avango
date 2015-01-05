@@ -92,6 +92,8 @@
 #include "utils/TagList.hpp"
 #include "utils/Mask.hpp"
 
+#include "gui/GuiResource.hpp"
+
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
 #endif
@@ -210,4 +212,6 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_TagList();
     init_Mask();
+
+    init_GuiResource();
 }

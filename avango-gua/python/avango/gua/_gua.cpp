@@ -91,6 +91,7 @@
 #include "utils/Logger.hpp"
 #include "utils/TagList.hpp"
 #include "utils/Mask.hpp"
+#include "utils/Ray.hpp"
 
 #include "gui/GuiResource.hpp"
 
@@ -212,6 +213,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_TagList();
     init_Mask();
+    init_Ray();
 
     init_GuiResource();
 }

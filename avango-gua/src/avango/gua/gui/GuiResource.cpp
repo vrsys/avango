@@ -4,6 +4,8 @@
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
 
+#include <gua/gui.hpp>
+
 namespace
 {
   av::Logger& logger(av::getLogger("av::gua::GuiResource"));
@@ -21,6 +23,10 @@ av::gua::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiRes
   AV_FC_ADD_ADAPTOR_FIELD(URL,
                           boost::bind(&GuiResource::getURLCB, this, _1),
                           boost::bind(&GuiResource::setURLCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Interactive,
+                          boost::bind(&GuiResource::getInteractiveCB, this, _1),
+                          boost::bind(&GuiResource::setInteractiveCB, this, _1));
 
 }
 
@@ -61,6 +67,18 @@ av::gua::GuiResource::setURLCB(const SFString::SetValueEvent& event)
 }
 
 void
+av::gua::GuiResource::getInteractiveCB(const SFBool::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaGuiResource->is_interactive();
+}
+
+void
+av::gua::GuiResource::setInteractiveCB(const SFBool::SetValueEvent& event)
+{
+    m_guaGuiResource->set_interactive(event.getValue());
+}
+
+void
 av::gua::GuiResource::init(std::string const& name, std::string const& url,
                            ::gua::math::vec2 const& size) {
   m_guaGuiResource->init(name, url, size);
@@ -79,4 +97,44 @@ av::gua::GuiResource::go_back() {
 void
 av::gua::GuiResource::go_to_history_offset(int offset) {
   m_guaGuiResource->go_to_history_offset(offset);
+}
+
+void
+av::gua::GuiResource::reload() {
+  m_guaGuiResource->reload();
+}
+
+void
+av::gua::GuiResource::focus() {
+  m_guaGuiResource->focus();
+}
+
+void
+av::gua::GuiResource::inject_keyboard_event(int key, int scancode, int action, int mods) const {
+  m_guaGuiResource->inject_keyboard_event(::gua::Key(key), scancode, action, mods);
+}
+
+void
+av::gua::GuiResource::inject_char_event(unsigned c) const {
+  m_guaGuiResource->inject_char_event(c);
+}
+
+void
+av::gua::GuiResource::inject_mouse_position_relative(::gua::math::vec2 const& position) const {
+  m_guaGuiResource->inject_mouse_position_relative(position);
+}
+
+void
+av::gua::GuiResource::inject_mouse_position(::gua::math::vec2 const& position) const {
+  m_guaGuiResource->inject_mouse_position(position);
+}
+
+void
+av::gua::GuiResource::inject_mouse_button(int button, int action, int mods) const {
+  m_guaGuiResource->inject_mouse_button(::gua::Button(button), action, mods);
+}
+
+void
+av::gua::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction) const {
+  m_guaGuiResource->inject_mouse_wheel(direction);
 }

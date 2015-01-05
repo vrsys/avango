@@ -44,6 +44,7 @@ namespace av
     public:
 
       SFString URL;
+      SFBool   Interactive;
 
       /**
        * Get the wrapped ::gua::GuiResource.
@@ -57,12 +58,26 @@ namespace av
       virtual void getURLCB(const SFString::GetValueEvent& event);
       virtual void setURLCB(const SFString::SetValueEvent& event);
 
+      virtual void getInteractiveCB(const SFBool::GetValueEvent& event);
+      virtual void setInteractiveCB(const SFBool::SetValueEvent& event);
+
       void init(std::string const& name, std::string const& url,
                 ::gua::math::vec2 const& size);
 
       void go_forward();
       void go_back();
       void go_to_history_offset(int offset);
+
+      void reload();
+      void focus();
+
+      void inject_keyboard_event(int key, int scancode, int action, int mods) const;
+      void inject_char_event(unsigned c) const;
+
+      void inject_mouse_position_relative(::gua::math::vec2 const& position) const;
+      void inject_mouse_position(::gua::math::vec2 const& position) const;
+      void inject_mouse_button(int button, int action, int mods) const;
+      void inject_mouse_wheel(::gua::math::vec2 const& direction) const;
 
     private:
 

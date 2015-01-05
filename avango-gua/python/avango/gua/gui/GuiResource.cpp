@@ -29,5 +29,13 @@ void init_GuiResource()
     .def("go_forward", &av::gua::GuiResource::go_forward)
     .def("go_back", &av::gua::GuiResource::go_back)
     .def("go_to_history_offset", &av::gua::GuiResource::go_to_history_offset)
+    .def("reload", &av::gua::GuiResource::reload)
+    .def("focus", &av::gua::GuiResource::focus)
+    .def("inject_keyboard_event", &av::gua::GuiResource::inject_keyboard_event)
+    .def("inject_char_event", &av::gua::GuiResource::inject_char_event)
+    .def("inject_mouse_position_relative", &av::gua::GuiResource::inject_mouse_position_relative)
+    .def("inject_mouse_position", &av::gua::GuiResource::inject_mouse_position)
+    .def("inject_mouse_button", &av::gua::GuiResource::inject_mouse_button)
+    .def("inject_mouse_wheel", &av::gua::GuiResource::inject_mouse_wheel)
     ;
 }

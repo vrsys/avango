@@ -16,7 +16,7 @@ AV_FIELD_DEFINE(av::gua::MFCollisionShapeNode);
 
 av::gua::CollisionShapeNode::CollisionShapeNode(std::shared_ptr< ::gua::physics::CollisionShapeNode> guanode)
   : Node(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::physics::CollisionShapeNode> (Node::getGuaNode()))
+    m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(ShapeName,
                         boost::bind(&CollisionShapeNode::getShapeNameCB, this, _1),

@@ -40,10 +40,11 @@ def start():
   )
 
   light = avango.gua.nodes.PointLightNode(
-                Name = "light",
-                Color = avango.gua.Color(1.0, 1.0, 1.0),
-                Brightness = 50.0)
-  light.Transform.value = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
+    Name = "light",
+    Color = avango.gua.Color(1.0, 1.0, 1.0),
+    Brightness = 50.0,
+    Transform = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
+  )
 
   size = avango.gua.Vec2ui(1024, 768)
 

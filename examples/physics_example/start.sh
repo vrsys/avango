@@ -33,7 +33,12 @@ else
 fi
 
 # run program
-cd "$DIR" && python3 ./main.py
+if [[ $* == *-d* ]]
+then
+cd "$DIR" && gdb --args python3.4 ./main.py
+else
+cd "$DIR" && python3.4 ./main.py
+fi
 
 # kill daemon
 kill %1

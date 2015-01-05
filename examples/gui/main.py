@@ -10,14 +10,13 @@ def start():
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
   gui = avango.gua.nodes.GuiResource()
-  gui.init("google", "https://www.google.com", avango.gua.Vec2(512, 512))
+  gui.init("google", "https://www.google.com", avango.gua.Vec2(1024, 1024))
 
   quad = avango.gua.nodes.TexturedQuadNode(
     Name = "gui",
     Texture = "google",
     Width = 1,
-    Height = 1,
-    Transform = avango.gua.make_trans_mat(0, 0, -2)
+    Height = 1
   )
 
   light = avango.gua.nodes.PointLightNode(

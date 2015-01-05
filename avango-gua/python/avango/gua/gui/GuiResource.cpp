@@ -26,5 +26,8 @@ void init_GuiResource()
     bases<av::FieldContainer>,
     boost::noncopyable >("GuiResource", "docstring", no_init)
     .def("init", &av::gua::GuiResource::init)
+    .def("go_forward", &av::gua::GuiResource::go_forward)
+    .def("go_back", &av::gua::GuiResource::go_back)
+    .def("go_to_history_offset", &av::gua::GuiResource::go_to_history_offset)
     ;
 }

@@ -17,7 +17,12 @@ AV_FIELD_DEFINE(av::gua::MFGuiResource);
 av::gua::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiResource)
   : av::FieldContainer(),
     m_guaGuiResource(guaGuiResource)
-{}
+{
+  AV_FC_ADD_ADAPTOR_FIELD(URL,
+                          boost::bind(&GuiResource::getURLCB, this, _1),
+                          boost::bind(&GuiResource::setURLCB, this, _1));
+
+}
 
 av::gua::GuiResource::~GuiResource()
 {}
@@ -44,7 +49,34 @@ av::gua::GuiResource::getGuaGuiResource() const
 
 
 void
+av::gua::GuiResource::getURLCB(const SFString::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaGuiResource->get_url();
+}
+
+void
+av::gua::GuiResource::setURLCB(const SFString::SetValueEvent& event)
+{
+    m_guaGuiResource->set_url(event.getValue());
+}
+
+void
 av::gua::GuiResource::init(std::string const& name, std::string const& url,
                            ::gua::math::vec2 const& size) {
   m_guaGuiResource->init(name, url, size);
+}
+
+void
+av::gua::GuiResource::go_forward() {
+  m_guaGuiResource->go_forward();
+}
+
+void
+av::gua::GuiResource::go_back() {
+  m_guaGuiResource->go_back();
+}
+
+void
+av::gua::GuiResource::go_to_history_offset(int offset) {
+  m_guaGuiResource->go_to_history_offset(offset);
 }

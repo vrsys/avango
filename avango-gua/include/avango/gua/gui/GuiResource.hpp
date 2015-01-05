@@ -43,6 +43,8 @@ namespace av
 
     public:
 
+      SFString URL;
+
       /**
        * Get the wrapped ::gua::GuiResource.
        */
@@ -52,8 +54,15 @@ namespace av
 
     public:
 
+      virtual void getURLCB(const SFString::GetValueEvent& event);
+      virtual void setURLCB(const SFString::SetValueEvent& event);
+
       void init(std::string const& name, std::string const& url,
                 ::gua::math::vec2 const& size);
+
+      void go_forward();
+      void go_back();
+      void go_to_history_offset(int offset);
 
     private:
 

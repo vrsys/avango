@@ -39,6 +39,7 @@ include(find_compiler)
 include(file_copy_macro)
 
 include(find_guacamole)
+include(find_guacamole_gui)
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)
@@ -68,6 +69,7 @@ endif (UNIX)
 set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
+    ${GUACAMOLE_GUI_LIBRARIES}
     ${GL_LIBRARIES}
     ${SCHISM_LIBRARIES}
 )
@@ -84,6 +86,7 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${BOOST_INCLUDE_DIRS}
     ${GUACAMOLE_INCLUDE_DIRS}
+    ${GUACAMOLE_GUI_INCLUDE_DIRS}
     ${GL_INCLUDE_DIRS}
 )
 
@@ -181,6 +184,12 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
+
+message(STATUS " guacamole-gui:" )
+message(STATUS "   library: ${GUACAMOLE_GUI_LIBRARIES}" )
+message(STATUS "   library path: ${GUACAMOLE_GUI_LIBRARY_DIRS}" )
+message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
+message(STATUS "" )
 
 message(STATUS " schism:" )
 message(STATUS "   library: ${SCHISM_LIBRARIES}" )

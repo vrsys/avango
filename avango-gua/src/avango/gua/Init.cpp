@@ -73,6 +73,8 @@
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
+#include <avango/gua/gui/GuiResource.hpp>
+
 #include <avango/gua/viewer/Viewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
@@ -169,6 +171,8 @@ av::gua::Init::initClass()
         // av::gua::PLODLoader::initClass();
 #endif
         // av::gua::NURBSLoader::initClass();
+
+        av::gua::GuiResource::initClass();
 
         av::gua::Viewer::initClass();
 

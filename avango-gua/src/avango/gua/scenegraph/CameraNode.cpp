@@ -17,13 +17,11 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     : Node(guaCameraNode)
     , m_guaNode(guaCameraNode)
 {
-  auto& desc(m_guaNode->config.pipeline_description());
-  m_guaNode->config.pipeline_description().set_user_data(
+  auto desc(m_guaNode->get_pipeline_description());
+  m_guaNode->get_pipeline_description()->set_user_data(
                         new av::Link<av::gua::PipelineDescription>(
-                          new av::gua::PipelineDescription(
-                            std::shared_ptr<::gua::PipelineDescription>(&desc)
-                          )
-                        ));
+                          new av::gua::PipelineDescription(desc))
+                        );
 
   m_guaNode->config.mask().set_user_data(new av::Link<av::gua::Mask>(
     new av::gua::Mask(
@@ -139,21 +137,19 @@ void
 av::gua::CameraNode::getPipelineDescriptionCB(const SFPipelineDescription::GetValueEvent& event)
 {
   *(event.getValuePtr()) = *static_cast<av::Link<av::gua::PipelineDescription>*>
-                                          (m_guaNode->config.pipeline_description().get_user_data());
+                                          (m_guaNode->get_pipeline_description()->get_user_data());
 }
 
 void
 av::gua::CameraNode::setPipelineDescriptionCB(const SFPipelineDescription::SetValueEvent& event)
 {
-  m_guaNode->config.pipeline_description() = *event.getValue()->getGuaPipelineDescription().get();
+  m_guaNode->set_pipeline_description(event.getValue()->getGuaPipelineDescription());
 
-  auto& desc(m_guaNode->config.pipeline_description());
-  m_guaNode->config.pipeline_description().set_user_data(
+  auto desc(m_guaNode->get_pipeline_description());
+  m_guaNode->get_pipeline_description()->set_user_data(
                         new av::Link<av::gua::PipelineDescription>(
-                          new av::gua::PipelineDescription(
-                            std::shared_ptr<::gua::PipelineDescription>(&desc)
-                          )
-                        ));
+                          new av::gua::PipelineDescription(desc))
+                        );
 }
 
 void

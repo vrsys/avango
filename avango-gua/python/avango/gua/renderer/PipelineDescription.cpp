@@ -21,7 +21,7 @@ namespace boost
 av::Link<av::gua::PipelineDescription> create_default_pipeline_description() {
   return av::Link<av::gua::PipelineDescription>(
           new av::gua::PipelineDescription(
-            std::make_shared<::gua::PipelineDescription>(::gua::PipelineDescription::make_default())
+            ::gua::PipelineDescription::make_default()
           )
         );
 }

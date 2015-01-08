@@ -9,7 +9,7 @@ AV_FIELD_DEFINE(av::gua::MFTexturedQuadNode);
 
 av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::TexturedQuadNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::node::TexturedQuadNode>(Node::getGuaNode()))
+      m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Texture,
                           boost::bind(&TexturedQuadNode::getTextureCB, this, _1),
@@ -22,6 +22,10 @@ av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::Textur
     AV_FC_ADD_ADAPTOR_FIELD(Height,
                           boost::bind(&TexturedQuadNode::getHeightCB, this, _1),
                           boost::bind(&TexturedQuadNode::setHeightCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ScaledWorldTransform,
+                          boost::bind(&TexturedQuadNode::getScaledWorldTransformCB, this, _1),
+                          boost::bind(&TexturedQuadNode::setScaledWorldTransformCB, this, _1));
 
 }
 
@@ -89,4 +93,14 @@ av::gua::TexturedQuadNode::setHeightCB(const SFFloat::SetValueEvent& event)
   size[1] = event.getValue();
   m_guaNode->data.set_size(size);
 }
+
+void
+av::gua::TexturedQuadNode::getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_scaled_world_transform();
+}
+
+void
+av::gua::TexturedQuadNode::setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event)
+{}
 

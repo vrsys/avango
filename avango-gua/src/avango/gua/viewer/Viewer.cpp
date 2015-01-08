@@ -73,7 +73,7 @@ av::gua::Viewer::setDesiredFPSCB(const av::SFFloat::SetValueEvent& event)
 void
 av::gua::Viewer::run() const {
 
-  // ::gua::Logger::enable_debug = false;
+  ::gua::Logger::enable_debug = false;
 
   if (!m_renderer) {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());

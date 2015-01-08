@@ -44,7 +44,7 @@ av::gua::MFPickResult* rayTest2(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options) {
 
-  rayTest1(graph, ray, options, av::gua::Mask());
+  return rayTest1(graph, ray, options, av::gua::Mask());
 }
 
 
@@ -69,7 +69,7 @@ av::gua::MFPickResult* rayTest4(av::gua::SceneGraph const& graph,
                                 av::gua::RayNode const& ray,
                                 int options) {
 
-  rayTest3(graph, ray, options, av::gua::Mask());
+  return rayTest3(graph, ray, options, av::gua::Mask());
 }
 
 av::Link<av::gua::Node> getNode(av::gua::SceneGraph const& graph, std::string const& path) {

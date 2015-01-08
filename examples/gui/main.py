@@ -12,20 +12,20 @@ def start():
   gui = avango.gua.nodes.GuiResource()
   gui.init("google", "https://www.google.com", avango.gua.Vec2(1024, 1024))
 
-  size = avango.gua.Vec2ui(1024, 768)
+  size = avango.gua.Vec2ui(800, 600) * 2
 
   quad = avango.gua.nodes.TexturedQuadNode(
     Name = "gui",
     Texture = "google",
     Width = 1,
     Height = 1,
-    Transform = avango.gua.make_trans_mat(0,0,1.0)
+    DisplayBoundingBox = True
   )
 
   light = avango.gua.nodes.PointLightNode(
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
-    Brightness = 30.0
+    Brightness = 10.0
   )
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
 
@@ -34,17 +34,21 @@ def start():
     SceneGraph = "scenegraph",
     Resolution = size,
     OutputWindowName = "window",
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
   )
 
   screen = avango.gua.nodes.ScreenNode(
     Name = "screen",
-    Width = 2,
-    Height = 1.5,
+    Width = 0.5,
+    Height = 0.375,
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0),
     Children = [cam]
   )
 
-  graph.Root.value.Children.value = [quad, light, screen]
+  loader = avango.gua.nodes.TriMeshLoader()
+  cube = loader.create_geometry_from_file("cube", "data/objects/cube.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.MAKE_PICKABLE)
+
+  graph.Root.value.Children.value = [light, screen, quad]
 
 
   window = avango.gua.nodes.GlfwWindow(
@@ -67,26 +71,23 @@ def start():
     resolution = avango.gua.Vec2(size.x, size.y)
     screen_space_pos = pos/resolution - 0.5
 
-
-    origin = screen.WorldTransform.value * avango.gua.Vec4(screen_space_pos.x, screen_space_pos.y, 0, 1)
-    direction = origin - cam.WorldTransform.value * avango.gua.Vec3(0,0,0)
+    origin = screen.ScaledWorldTransform.value * avango.gua.Vec4(screen_space_pos.x, screen_space_pos.y, 0, 1)
+    direction = origin - cam.WorldTransform.value * avango.gua.Vec4(0,0,0,1)
 
     ray = avango.gua.nodes.Ray(
       Origin = avango.gua.Vec3(origin.x, origin.y, origin.z),
-      Direction = avango.gua.Vec3(direction.x, direction.y, direction.z)*100,
-      TMax = 1
+      Direction = avango.gua.Vec3(direction.x, direction.y, direction.z),
+      TMax = 1.0
     )
 
-    graph.update_cache()
-    print(screen.BoundingBox.value.Min.value, screen.BoundingBox.value.Max.value)
     result = graph.ray_test(ray, avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT
                                  | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE
                                  | avango.gua.PickingOptions.GET_TEXTURE_COORDS)
 
     if result != None:
       for i in range(0, len(result.value)):
-        if result.value[i].Object.value == gui:
-          gui.inject_mouse_position_relative(result.value[i].Object.value.TextureCoords.value);
+        if result.value[i].Object.value == quad:
+          gui.inject_mouse_position_relative(result.value[i].TextureCoords.value);
 
   window.on_char(handle_char)
   window.on_key_press(handle_key)

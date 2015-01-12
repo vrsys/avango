@@ -22,5 +22,9 @@ void init_TexturedScreenSpaceQuadNode()
  {
   register_field<av::gua::SFTexturedScreenSpaceQuadNode>("SFTexturedScreenSpaceQuadNode");
   register_multifield<av::gua::MFTexturedScreenSpaceQuadNode>("MFTexturedScreenSpaceQuadNode");
-  class_<av::gua::TexturedScreenSpaceQuadNode, av::Link<av::gua::TexturedScreenSpaceQuadNode>, bases<av::gua::Node>, boost::noncopyable >("TexturedScreenSpaceQuadNode", "docstring", no_init);
+  class_<av::gua::TexturedScreenSpaceQuadNode,
+        av::Link<av::gua::TexturedScreenSpaceQuadNode>,
+        bases<av::gua::Node>, boost::noncopyable >("TexturedScreenSpaceQuadNode", "docstring", no_init)
+        .def("pixel_to_texcoords", &av::gua::TexturedScreenSpaceQuadNode::pixel_to_texcoords)
+        ;
  }

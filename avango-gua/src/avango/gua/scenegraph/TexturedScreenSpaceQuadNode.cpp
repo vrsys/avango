@@ -170,3 +170,10 @@ av::gua::TexturedScreenSpaceQuadNode::setFlipYCB(const SFBool::SetValueEvent& ev
   m_guaNode->data.flip_y() = event.getValue();
 }
 
+bool
+av::gua::TexturedScreenSpaceQuadNode::pixel_to_texcoords(::gua::math::vec2 const& pixel,
+                                                         ::gua::math::vec2ui const& screen_size,
+                                                         ::gua::math::vec2& result) const {
+
+  return m_guaNode->pixel_to_texcoords(pixel, screen_size, result);
+}

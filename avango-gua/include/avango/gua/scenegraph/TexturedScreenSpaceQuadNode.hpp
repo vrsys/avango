@@ -86,6 +86,10 @@ namespace av
       virtual void getFlipYCB(const SFBool::GetValueEvent& event);
       virtual void setFlipYCB(const SFBool::SetValueEvent& event);
 
+      bool pixel_to_texcoords(::gua::math::vec2 const& pixel,
+                              ::gua::math::vec2ui const& screen_size,
+                              ::gua::math::vec2& result) const;
+
 
     private:
 

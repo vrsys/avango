@@ -81,6 +81,9 @@ namespace av
 
       SFMask                Mask;
 
+      SFFloat               ApplicationFPS;
+      SFFloat               RenderingFPS;
+
       MultiField<Link<CameraNode>> PreRenderCameras;
 
       virtual void getEnabledCB(const SFBool::GetValueEvent& event);
@@ -130,6 +133,12 @@ namespace av
 
       virtual void getMaskCB(const SFMask::GetValueEvent& event);
       virtual void setMaskCB(const SFMask::SetValueEvent& event);
+
+      virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getRenderingFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setRenderingFPSCB(const SFFloat::SetValueEvent& event);
 
       virtual void getPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::GetValueEvent& event);
       virtual void setPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::SetValueEvent& event);

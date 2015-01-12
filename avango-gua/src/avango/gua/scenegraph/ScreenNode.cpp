@@ -9,7 +9,7 @@ AV_FIELD_DEFINE(av::gua::MFScreenNode);
 
 av::gua::ScreenNode::ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::node::ScreenNode>(Node::getGuaNode()))
+      m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Width,
                           boost::bind(&ScreenNode::getWidthCB, this, _1),
@@ -17,6 +17,9 @@ av::gua::ScreenNode::ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanod
     AV_FC_ADD_ADAPTOR_FIELD(Height,
                           boost::bind(&ScreenNode::getHeightCB, this, _1),
                           boost::bind(&ScreenNode::setHeightCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(ScaledWorldTransform,
+                          boost::bind(&ScreenNode::getScaledWorldTransformCB, this, _1),
+                          boost::bind(&ScreenNode::setScaledWorldTransformCB, this, _1));
 }
 
 av::gua::ScreenNode::~ScreenNode()
@@ -67,3 +70,13 @@ av::gua::ScreenNode::setHeightCB(const SFFloat::SetValueEvent& event)
 {
     m_guaNode->data.size()[1] = event.getValue();
 }
+
+void
+av::gua::ScreenNode::getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_scaled_world_transform();
+}
+
+void
+av::gua::ScreenNode::setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event)
+{}

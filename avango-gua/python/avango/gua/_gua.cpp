@@ -30,6 +30,7 @@
 #include "scenegraph/SunLightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
+#include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
 #include "scenegraph/SceneGraph.hpp"
 #include "scenegraph/CameraNode.hpp"
 #include "scenegraph/PickResult.hpp"
@@ -91,6 +92,9 @@
 #include "utils/Logger.hpp"
 #include "utils/TagList.hpp"
 #include "utils/Mask.hpp"
+#include "utils/Ray.hpp"
+
+#include "gui/GuiResource.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -152,6 +156,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SunLightNode();
     init_RayNode();
     init_TexturedQuadNode();
+    init_TexturedScreenSpaceQuadNode();
     init_SceneGraph();
     init_PickResult();
 
@@ -210,4 +215,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_TagList();
     init_Mask();
+    init_Ray();
+
+    init_GuiResource();
 }

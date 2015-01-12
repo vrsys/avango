@@ -47,6 +47,8 @@ namespace av
       SFFloat Width;
       SFFloat Height;
 
+      SFMatrix ScaledWorldTransform;
+
 
       /**
        * Get the wrapped ::gua::ScreenNode.
@@ -60,6 +62,9 @@ namespace av
 
       virtual void getHeightCB(const SFFloat::GetValueEvent& event);
       virtual void setHeightCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
+      virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
 
     private:
 

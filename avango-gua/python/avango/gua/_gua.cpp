@@ -30,6 +30,7 @@
 #include "scenegraph/SunLightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
+#include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
 #include "scenegraph/SceneGraph.hpp"
 #include "scenegraph/CameraNode.hpp"
 #include "scenegraph/PickResult.hpp"
@@ -155,6 +156,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SunLightNode();
     init_RayNode();
     init_TexturedQuadNode();
+    init_TexturedScreenSpaceQuadNode();
     init_SceneGraph();
     init_PickResult();
 

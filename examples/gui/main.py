@@ -30,7 +30,17 @@ def start():
 
   transform.Children.value.append(google_geom)
 
-  graph.Root.value.Children.value.append(transform)
+  fps_size = avango.gua.Vec2(170, 55)
+
+  fps = avango.gua.nodes.GuiResource()
+  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+
+  fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
+    Name = "fps_quad",
+    Width = int(fps_size.x),
+    Height = int(fps_size.y),
+    Anchor = avango.gua.Vec2(1.0, 1.0)
+  )
 
   light = avango.gua.nodes.PointLightNode(
     Name = "light",
@@ -54,7 +64,7 @@ def start():
     Children = [cam]
   )
 
-  graph.Root.value.Children.value = [transform, light, screen]
+  graph.Root.value.Children.value = [transform, light, screen, fps_quad]
 
 
   window = avango.gua.nodes.GlfwWindow(

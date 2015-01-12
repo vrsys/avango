@@ -21,6 +21,7 @@
 #include <avango/gua/scenegraph/SunLightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
+#include <avango/gua/scenegraph/TexturedScreenSpaceQuadNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/scenegraph/CameraNode.hpp>
@@ -121,6 +122,7 @@ av::gua::Init::initClass()
         av::gua::SunLightNode::initClass();
         av::gua::RayNode::initClass();
         av::gua::TexturedQuadNode::initClass();
+        av::gua::TexturedScreenSpaceQuadNode::initClass();
         av::gua::SceneGraph::initClass();
         av::gua::PickResult::initClass();
 

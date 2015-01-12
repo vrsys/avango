@@ -85,6 +85,28 @@ av::gua::GuiResource::init(std::string const& name, std::string const& url,
 }
 
 void
+av::gua::GuiResource::on_loaded(std::function<void()> const& callback) const {
+  m_guaGuiResource->on_loaded.connect(callback);
+}
+
+void
+av::gua::GuiResource::on_javascript_callback(std::function<void(
+                                              std::string const&,
+                                              std::vector<std::string> const& )> const& callback) const {
+  m_guaGuiResource->on_javascript_callback.connect(callback);
+}
+
+void
+av::gua::GuiResource::add_javascript_callback(std::string const& name) {
+  m_guaGuiResource->add_javascript_callback(name);
+}
+
+void
+av::gua::GuiResource::add_javascript_getter(std::string const& name, std::function<std::string()> callback) {
+  m_guaGuiResource->add_javascript_getter(name, callback);
+}
+
+void
 av::gua::GuiResource::go_forward() {
   m_guaGuiResource->go_forward();
 }
@@ -137,4 +159,9 @@ av::gua::GuiResource::inject_mouse_button(int button, int action, int mods) cons
 void
 av::gua::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction) const {
   m_guaGuiResource->inject_mouse_wheel(direction);
+}
+
+void
+av::gua::GuiResource::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
+  m_guaGuiResource->call_javascript(method, args);
 }

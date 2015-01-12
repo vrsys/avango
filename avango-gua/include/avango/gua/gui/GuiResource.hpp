@@ -64,6 +64,15 @@ namespace av
       void init(std::string const& name, std::string const& url,
                 ::gua::math::vec2 const& size);
 
+      void on_loaded(std::function<void()> const& callback) const;
+
+      void on_javascript_callback(std::function<void(
+                                    std::string const&,
+                                    std::vector<std::string> const& )> const& callback) const;
+
+      void add_javascript_callback(std::string const& name);
+      void add_javascript_getter(std::string const& name, std::function<std::string()> callback);
+
       void go_forward();
       void go_back();
       void go_to_history_offset(int offset);
@@ -78,6 +87,8 @@ namespace av
       void inject_mouse_position(::gua::math::vec2 const& position) const;
       void inject_mouse_button(int button, int action, int mods) const;
       void inject_mouse_wheel(::gua::math::vec2 const& direction) const;
+
+      void call_javascript(std::string const& method, std::vector<std::string> const& args) const;
 
     private:
 

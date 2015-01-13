@@ -8,6 +8,7 @@
 
 #include <gua/renderer/Material.hpp>
 
+#include <avango/gua/renderer/MaterialShaderDescription.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 
@@ -15,6 +16,7 @@ namespace av
 {
   namespace gua
   {
+    class NetTransform;
     /**
      * Wrapper for ::gua::Material
      *
@@ -46,14 +48,22 @@ namespace av
         m_guaMaterial->set_uniform(name, value, view_id);
       }
 
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
       /**
        * Get the wrapped ::gua::Material.
        */
       std::shared_ptr< ::gua::Material> const& getGuaMaterial() const;
 
     private:
+      /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
 
       std::shared_ptr< ::gua::Material> m_guaMaterial;
+
+      // for remote material construction
+      SFString                    m_materialShaderName;
+      SFMaterialShaderDescription m_materialShaderDescription;
 
       Material(const Material&);
       Material& operator=(const Material&);

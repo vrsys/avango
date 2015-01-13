@@ -35,10 +35,10 @@ from avango.script import field_has_changed
 from examples_common.GuaVE import GuaVE
 
 nettrans = avango.gua.nodes.NetTransform(
-              Name = "net",
-              # specify role, ip, and port
-              Groupname = "AVSERVER|127.0.0.1|7432"
-              )
+  Name = "net",
+  # specify role, ip, and port
+  Groupname = "AVSERVER|127.0.0.1|7432"
+)
 
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
@@ -57,21 +57,33 @@ def make_distributable(node):
 
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-
 loader = avango.gua.nodes.TriMeshLoader()
 
+monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
+monkey2 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
 
-monkey1 = loader.create_geometry_from_file("monkey1", "data/objects/monkey.obj",
-                                      "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+monkey1.Material.value.set_uniform("Roughness", 0.3)
+monkey1.Material.value.set_uniform("Metalness", 1.0)
 
-monkey2 = loader.create_geometry_from_file("monkey2", "data/objects/monkey.obj",
-                                      "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
+monkey2.Material.value.set_uniform("Roughness", 0.6)
+monkey2.Material.value.set_uniform("Metalness", 0.1)
+
+transform1 = avango.gua.nodes.TransformNode(
+  Children = [monkey1]
+)
+transform2 = avango.gua.nodes.TransformNode(
+  Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
+  Children = [monkey2]
+)
 
 light = avango.gua.nodes.PointLightNode(
   Name = "light",
-  Color = avango.gua.Color(1.0, 1.0, 1.0)
+  Color = avango.gua.Color(1.0, 1.0, 1.0),
+  Brightness = 50.0,
+  Transform = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
 )
-light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
 
 monkey_transform1 = avango.gua.nodes.TransformNode(Name = "monkey_transform1")
 monkey_transform1.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
@@ -84,12 +96,26 @@ monkey_transform2.Children.value = [monkey2]
 group = avango.gua.nodes.TransformNode(Name = "group")
 group.Children.value = [monkey_transform1, monkey_transform2, light]
 
-eye = avango.gua.nodes.TransformNode(Name = "eye")
-eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
-
 screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
-screen.Children.value = [eye]
 
+size = avango.gua.Vec2ui(800, 600)
+server_cam = avango.gua.nodes.CameraNode(
+  LeftScreenPath = "/net/screen",
+  SceneGraph = "scenegraph",
+  Resolution = size,
+  OutputWindowName = "server_window",
+  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+)
+
+client_cam = avango.gua.nodes.CameraNode(
+  LeftScreenPath = "/net/screen",
+  SceneGraph = "scenegraph",
+  Resolution = size,
+  OutputWindowName = "client_window",
+  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+)
+
+screen.Children.value = [client_cam, server_cam]
 nettrans.Children.value = [group, screen]
 
 graph.Root.value.Children.value = [nettrans]
@@ -98,26 +124,18 @@ make_distributable(group)
 make_distributable(screen)
 
 # setup viewing
-#size = avango.gua.Vec2ui(1024, 768)
-size = avango.gua.Vec2ui(800, 600)
-pipe = avango.gua.nodes.Pipeline(
-  Camera = avango.gua.nodes.Camera(
-    LeftEye = "/net/screen/eye",
-    LeftScreen = "/net/screen",
-    SceneGraph = "scenegraph"
-  ),
-  Window = avango.gua.nodes.Window(Size = size,
-                                   LeftResolution = size),
-  LeftResolution = size,
-  BackgroundMode = avango.gua.BackgroundMode.COLOR
+window = avango.gua.nodes.GlfwWindow(
+  Size = size,
+  LeftResolution = size
 )
 
-pipe.Enabled.value = True
+avango.gua.register_window("server_window", window)
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
-viewer.Pipelines.value = [pipe]
+viewer.CameraNodes.value = [server_cam]
 viewer.SceneGraphs.value = [graph]
+viewer.Window.value = window
 
 monkey_updater = TimedRotate()
 

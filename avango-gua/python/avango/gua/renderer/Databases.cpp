@@ -25,7 +25,7 @@ av::Link<av::gua::Material> create_material_from_description(av::gua::MaterialSh
 
   auto shader(std::make_shared<gua::MaterialShader>(materialName, desc.getGuaMaterialShaderDescription()));
   ::gua::MaterialShaderDatabase::instance()->add(shader);
-  return av::Link<av::gua::Material>(new av::gua::Material(shader->get_default_material()));
+  return av::Link<av::gua::Material>(new av::gua::Material(shader->make_new_material()));
 }
 
 av::Link<av::gua::Material> create_default_material() {

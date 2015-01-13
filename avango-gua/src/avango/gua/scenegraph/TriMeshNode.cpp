@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 
@@ -9,7 +10,11 @@ AV_FIELD_DEFINE(av::gua::MFTriMeshNode);
 
 av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> guanode)
     : GeometryNode(guanode)
+    , m_guaTriMeshNode(guanode)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(Geometry,
+                        boost::bind(&TriMeshNode::getGeometryCB, this, _1),
+                        boost::bind(&TriMeshNode::setGeometryCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Material,
                       boost::bind(&TriMeshNode::getMaterialCB, this, _1),
@@ -23,6 +28,19 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
 
 //av::gua::TriMeshNode::~TriMeshNode()
 //{}
+
+void av::gua::TriMeshNode::on_distribute(av::gua::NetTransform& netNode) 
+{
+    GeometryNode::on_distribute(netNode);
+    netNode.distributeFieldContainer(m_Material);
+}
+
+void av::gua::TriMeshNode::on_undistribute(av::gua::NetTransform& netNode) 
+{
+    GeometryNode::on_undistribute(netNode);
+    netNode.undistributeFieldContainer(m_Material);
+}
+
 
 void
 av::gua::TriMeshNode::initClass()
@@ -40,6 +58,17 @@ av::gua::TriMeshNode::initClass()
   }
 }
 
+void
+av::gua::TriMeshNode::getGeometryCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTriMeshNode->get_geometry_description();
+}
+
+void
+av::gua::TriMeshNode::setGeometryCB(const SFString::SetValueEvent& event)
+{
+  m_guaTriMeshNode->set_geometry_description(event.getValue());
+}
 
 void
 av::gua::TriMeshNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
@@ -52,8 +81,13 @@ av::gua::TriMeshNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
 void
 av::gua::TriMeshNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
 {
-  m_Material = event.getValue();
-  m_guaTriMeshNode->set_material(m_Material->getGuaMaterial());
+  if (event.getValue().isValid()) {
+    std::cout << "#### +++" << std::endl;
+    m_Material = event.getValue();
+    m_guaTriMeshNode->set_material(m_Material->getGuaMaterial());
+  } else {
+    std::cout << "#### ---" << std::endl;
+  }
 }
 
 std::shared_ptr< ::gua::node::TriMeshNode>

@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/Node.hpp>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -30,11 +31,7 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
     WorldTransform.touch();
   });
 
-  m_guaNode->get_tags().set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaNode->get_tags())
-    )
-  ));
+  m_tagList = av::Link<av::gua::TagList>(new av::gua::TagList(&m_guaNode->get_tags()));
 
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
@@ -74,6 +71,16 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
 
 av::gua::Node::~Node()
 {}
+
+void av::gua::Node::on_distribute(av::gua::NetTransform& netNode) 
+{
+    netNode.distributeFieldContainer(m_tagList);
+}
+
+void av::gua::Node::on_undistribute(av::gua::NetTransform& netNode) 
+{
+    netNode.undistributeFieldContainer(m_tagList);
+}
 
 void
 av::gua::Node::initClass()
@@ -246,20 +253,18 @@ av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 void
 av::gua::Node::getTagListCB(const SFTagList::GetValueEvent& event)
 {
-  if (m_guaNode->get_tags().get_user_data()) {
-    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::TagList>*>(m_guaNode->get_tags().get_user_data());
+  if (m_tagList.isValid()) {
+    *(event.getValuePtr()) = m_tagList;
   }
 }
 
 void
 av::gua::Node::setTagListCB(const SFTagList::SetValueEvent& event)
 {
-  m_guaNode->get_tags() = *event.getValue()->getGuaTagList();
-  m_guaNode->get_tags().set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaNode->get_tags())
-    )
-  ));
+  if (event.getValue().isValid()) {
+    m_tagList = event.getValue();
+    m_guaNode->get_tags() = *m_tagList->getGuaTagList();
+  }
 }
 
 void

@@ -30,15 +30,14 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::TagList is created.
        * Otherwise, the given ::gua::TagList is used.
        */
-      TagList(std::shared_ptr< ::gua::utils::TagList> guaTagList =
-              std::shared_ptr< ::gua::utils::TagList>(new ::gua::utils::TagList()));
+      TagList( ::gua::utils::TagList* guaTagList = new ::gua::utils::TagList());
 
     protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-//      virtual ~TagList();
+     // virtual ~TagList();
 
     public:
 
@@ -52,11 +51,11 @@ namespace av
       /**
        * Get the wrapped ::gua::TagList.
        */
-      std::shared_ptr< ::gua::utils::TagList> getGuaTagList() const;
+      ::gua::utils::TagList* getGuaTagList() const;
 
     private:
 
-      std::shared_ptr< ::gua::utils::TagList> m_guaTagList;
+      ::gua::utils::TagList* m_guaTagList;
 
       TagList(const TagList&);
       TagList& operator=(const TagList&);

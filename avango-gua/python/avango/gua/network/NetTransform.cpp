@@ -50,19 +50,19 @@ namespace av
      namespace detail
       {
 
-        void distributeFieldContainerHelper(av::gua::NetTransform& self, boost::python::object obj)
+        void distributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
-
-          av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+          av::Link<av::gua::Node> tmp = dynamic_cast<gua::Node*>(av_value);
+          tmp->on_distribute(self);
           self.distributeFieldContainer(tmp);
         }
 
-        void undistributeFieldContainerHelper(av::gua::NetTransform& self, boost::python::object obj)
+        void undistributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
-
-          av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+          av::Link<av::gua::Node> tmp = dynamic_cast<gua::Node*>(av_value);
+          tmp->on_undistribute(self);
           self.undistributeFieldContainer(tmp);
         }
 

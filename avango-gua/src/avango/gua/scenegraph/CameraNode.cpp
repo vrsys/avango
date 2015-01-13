@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/CameraNode.hpp>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -17,17 +18,8 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     : Node(guaCameraNode)
     , m_guaNode(guaCameraNode)
 {
-  auto desc(m_guaNode->get_pipeline_description());
-  m_guaNode->get_pipeline_description()->set_user_data(
-                        new av::Link<av::gua::PipelineDescription>(
-                          new av::gua::PipelineDescription(desc))
-                        );
-
-  m_guaNode->config.mask().set_user_data(new av::Link<av::gua::Mask>(
-    new av::gua::Mask(
-      std::shared_ptr< ::gua::Mask>(&m_guaNode->config.mask())
-    )
-  ));
+  m_Mask = av::Link<av::gua::Mask>(new av::gua::Mask(&m_guaNode->config.mask()));
+  m_PipelineDescription = av::Link<av::gua::PipelineDescription>(new av::gua::PipelineDescription(m_guaNode->get_pipeline_description()));
 
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
                       boost::bind(&CameraNode::getEnabledCB, this, _1),
@@ -101,6 +93,19 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
 av::gua::CameraNode::~CameraNode()
 {}
 
+void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode) 
+{
+    Node::on_distribute(netNode);
+    netNode.distributeFieldContainer(m_Mask);
+}
+
+void av::gua::CameraNode::on_undistribute(av::gua::NetTransform& netNode) 
+{
+    Node::on_undistribute(netNode);
+    netNode.undistributeFieldContainer(m_Mask);
+}
+
+
 void
 av::gua::CameraNode::initClass()
 {
@@ -112,6 +117,8 @@ av::gua::CameraNode::initClass()
 
         SFCameraNode::initClass("av::gua::SFCameraNode", "av::Field");
         MFCameraNode::initClass("av::gua::MFCameraNode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 
@@ -136,20 +143,18 @@ av::gua::CameraNode::setEnabledCB(const SFBool::SetValueEvent& event)
 void
 av::gua::CameraNode::getPipelineDescriptionCB(const SFPipelineDescription::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = *static_cast<av::Link<av::gua::PipelineDescription>*>
-                                          (m_guaNode->get_pipeline_description()->get_user_data());
+  if (m_PipelineDescription.isValid()) {
+    *(event.getValuePtr()) = m_PipelineDescription;
+  }
 }
 
 void
 av::gua::CameraNode::setPipelineDescriptionCB(const SFPipelineDescription::SetValueEvent& event)
 {
-  m_guaNode->set_pipeline_description(event.getValue()->getGuaPipelineDescription());
-
-  auto desc(m_guaNode->get_pipeline_description());
-  m_guaNode->get_pipeline_description()->set_user_data(
-                        new av::Link<av::gua::PipelineDescription>(
-                          new av::gua::PipelineDescription(desc))
-                        );
+  if (event.getValue().isValid()) {
+    m_PipelineDescription = event.getValue();
+    m_guaNode->set_pipeline_description(m_PipelineDescription->getGuaPipelineDescription());
+  }
 }
 
 void
@@ -311,26 +316,23 @@ av::gua::CameraNode::setEnableFrustumCullingCB(const SFBool::SetValueEvent& even
 void
 av::gua::CameraNode::getMaskCB(const SFMask::GetValueEvent& event)
 {
-  if (m_guaNode->config.mask().get_user_data()) {
-    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::Mask>*>(m_guaNode->config.mask().get_user_data());
+  if (m_Mask.isValid()) {
+    *(event.getValuePtr()) = m_Mask;
   }
 }
 
 void
 av::gua::CameraNode::setMaskCB(const SFMask::SetValueEvent& event)
 {
-  m_guaNode->config.mask() = *event.getValue()->getGuaMask();
-  m_guaNode->config.mask().set_user_data(new av::Link<av::gua::Mask>(
-    new av::gua::Mask(
-      std::shared_ptr< ::gua::Mask>(&m_guaNode->config.mask())
-    )
-  ));
+  if (event.getValue().isValid()) {
+    m_Mask = event.getValue();
+    m_guaNode->config.set_mask(*m_Mask->getGuaMask());
+  }
 }
 
 void
 av::gua::CameraNode::getPreRenderCamerasCB(const MultiField<Link<CameraNode>>::GetValueEvent& event)
 {
-
   *(event.getValuePtr()) = m_preRenderCameraNodes;
 }
 

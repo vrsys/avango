@@ -46,6 +46,14 @@ namespace av
 
     public:
 
+      SFBool EnableABuffer;
+      SFInt  ABufferSize;
+
+      virtual void getEnableABufferCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableABufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getABufferSizeCB(const SFInt::GetValueEvent& event);
+      virtual void setABufferSizeCB(const SFInt::SetValueEvent& event);
 
       av::Link<av::gua::TriMeshPassDescription>                   add_tri_mesh_pass();
       av::Link<av::gua::TriMeshPassDescription>                   get_tri_mesh_pass();

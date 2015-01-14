@@ -35,6 +35,10 @@ namespace av
       Material(std::shared_ptr< ::gua::Material> const& guaMaterial =
                std::shared_ptr< ::gua::Material> (new ::gua::Material()));
 
+      SFString ShaderName;
+
+      virtual void getShaderNameCB(const SFString::GetValueEvent& event);
+      virtual void setShaderNameCB(const SFString::SetValueEvent& event);
 
     public:
 
@@ -62,7 +66,6 @@ namespace av
       std::shared_ptr< ::gua::Material> m_guaMaterial;
 
       // for remote material construction
-      SFString                    m_materialShaderName;
       SFMaterialShaderDescription m_materialShaderDescription;
 
       Material(const Material&);

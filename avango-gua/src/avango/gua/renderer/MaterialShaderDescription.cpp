@@ -44,6 +44,8 @@ av::gua::MaterialShaderDescription::initClass()
 
         SFMaterialShaderDescription::initClass("av::gua::SFMaterialShaderDescription", "av::Field");
         MFMaterialShaderDescription::initClass("av::gua::MFMaterialShaderDescription", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

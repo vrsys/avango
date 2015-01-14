@@ -32,12 +32,20 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
 void av::gua::TriMeshNode::on_distribute(av::gua::NetTransform& netNode) 
 {
     GeometryNode::on_distribute(netNode);
+
+    if (m_Material.isValid()) {
+      m_Material->on_distribute(netNode);
+    }
     netNode.distributeFieldContainer(m_Material);
 }
 
 void av::gua::TriMeshNode::on_undistribute(av::gua::NetTransform& netNode) 
 {
     GeometryNode::on_undistribute(netNode);
+
+    if (m_Material.isValid()) {
+      m_Material->on_undistribute(netNode);
+    }
     netNode.undistributeFieldContainer(m_Material);
 }
 
@@ -82,9 +90,10 @@ void
 av::gua::TriMeshNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
 {
   if (event.getValue().isValid()) {
-    std::cout << "#### +++" << std::endl;
+    std::cout << "#### +++ " << event.getValue()->getGuaMaterial()->get_shader_name() << std::endl;
     m_Material = event.getValue();
     m_guaTriMeshNode->set_material(m_Material->getGuaMaterial());
+    std::cout << "++ " << m_guaTriMeshNode->get_material()->get_shader_name() << std::endl;
   } else {
     std::cout << "#### ---" << std::endl;
   }

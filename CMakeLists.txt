@@ -103,6 +103,8 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
+
+
 ################################################################
 # preprocessor configuration
 ################################################################
@@ -132,6 +134,11 @@ option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
+option (AVANGO_RUNTIME_PROGRAM_COMPILATION "Set to enable runtime program compilation." ON)
+
+IF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGUACAMOLE_RUNTIME_PROGRAM_COMPILATION")
+ENDIF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
 
 ################################################################
 # Create libraries

@@ -30,6 +30,7 @@
 #include "scenegraph/SunLightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
+#include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
 #include "scenegraph/SceneGraph.hpp"
 #include "scenegraph/CameraNode.hpp"
 #include "scenegraph/PickResult.hpp"
@@ -74,6 +75,7 @@
 #include "renderer/TexturedScreenSpaceQuadPassDescription.hpp"
 #include "renderer/FullscreenPassDescription.hpp"
 #include "renderer/SSAOPassDescription.hpp"
+#include "renderer/ResolvePassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -91,6 +93,9 @@
 #include "utils/Logger.hpp"
 #include "utils/TagList.hpp"
 #include "utils/Mask.hpp"
+#include "utils/Ray.hpp"
+
+#include "gui/GuiResource.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -152,6 +157,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SunLightNode();
     init_RayNode();
     init_TexturedQuadNode();
+    init_TexturedScreenSpaceQuadNode();
     init_SceneGraph();
     init_PickResult();
 
@@ -194,6 +200,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TexturedScreenSpaceQuadPassDescription();
     init_FullscreenPassDescription();
     init_SSAOPassDescription();
+    init_ResolvePassDescription();
     init_Databases();
     init_TriMeshLoader();
     // init_Video3DLoader();
@@ -210,4 +217,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_TagList();
     init_Mask();
+    init_Ray();
+
+    init_GuiResource();
 }

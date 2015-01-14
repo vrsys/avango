@@ -6,6 +6,9 @@
 #include <avango/Base.h>
 #include <avango/Application.h>
 #include <avango/Logger.h>
+
+#include <gua/gui/Interface.hpp>
+
 #include <boost/bind.hpp>
 
 #include <chrono>
@@ -69,6 +72,9 @@ av::gua::Viewer::setDesiredFPSCB(const av::SFFloat::SetValueEvent& event)
 
 void
 av::gua::Viewer::run() const {
+
+  ::gua::Logger::enable_debug = false;
+
   if (!m_renderer) {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
@@ -90,6 +96,8 @@ av::gua::Viewer::run() const {
     }
 
     av::ApplicationInstance::get().evaluate();
+
+    ::gua::Interface::instance()->update();
 
     if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
 

@@ -18,7 +18,15 @@ AV_FIELD_DEFINE(av::gua::MFPipelineDescription);
 av::gua::PipelineDescription::PipelineDescription(
   std::shared_ptr< ::gua::PipelineDescription> const& guaPipelineDescription)
     : m_guaPipelineDescription(guaPipelineDescription)
-{}
+{
+
+  AV_FC_ADD_ADAPTOR_FIELD(EnableABuffer,
+                      boost::bind(&PipelineDescription::getEnableABufferCB, this, _1),
+                      boost::bind(&PipelineDescription::setEnableABufferCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(ABufferSize,
+                      boost::bind(&PipelineDescription::getABufferSizeCB, this, _1),
+                      boost::bind(&PipelineDescription::setABufferSizeCB, this, _1));
+}
 
 void
 av::gua::PipelineDescription::initClass()
@@ -34,6 +42,29 @@ av::gua::PipelineDescription::initClass()
     }
 }
 
+void
+av::gua::PipelineDescription::getEnableABufferCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPipelineDescription->get_enable_abuffer();
+}
+
+void
+av::gua::PipelineDescription::setEnableABufferCB(const SFBool::SetValueEvent& event)
+{
+  m_guaPipelineDescription->set_enable_abuffer(event.getValue());
+}
+
+void
+av::gua::PipelineDescription::getABufferSizeCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPipelineDescription->get_abuffer_size();
+}
+
+void
+av::gua::PipelineDescription::setABufferSizeCB(const SFInt::SetValueEvent& event)
+{
+  m_guaPipelineDescription->set_abuffer_size(event.getValue());
+}
 
 av::Link<av::gua::TriMeshPassDescription>
 av::gua::PipelineDescription::add_tri_mesh_pass()
@@ -517,6 +548,60 @@ av::gua::PipelineDescription::get_ssao_passes()
         auto desc(new av::Link<av::gua::SSAOPassDescription>(
                         new av::gua::SSAOPassDescription(
                             std::shared_ptr<::gua::SSAOPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+av::Link<av::gua::ResolvePassDescription>
+av::gua::PipelineDescription::add_resolve_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::ResolvePassDescription>());
+
+    auto desc(new av::Link<av::gua::ResolvePassDescription>(
+                        new av::gua::ResolvePassDescription(
+                            std::shared_ptr<::gua::ResolvePassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::ResolvePassDescription>
+av::gua::PipelineDescription::get_resolve_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::ResolvePassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::ResolvePassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::ResolvePassDescription>(
+                        new av::gua::ResolvePassDescription(
+                            std::shared_ptr<::gua::ResolvePassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::ResolvePassDescription>>
+av::gua::PipelineDescription::get_resolve_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::ResolvePassDescription>());
+    std::vector<av::Link<av::gua::ResolvePassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::ResolvePassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::ResolvePassDescription>(
+                        new av::gua::ResolvePassDescription(
+                            std::shared_ptr<::gua::ResolvePassDescription>(pass))));
 
         pass->set_user_data(desc);
         result.push_back(*desc);

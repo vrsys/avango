@@ -17,6 +17,7 @@
 #include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
 #include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
+#include <avango/gua/renderer/ResolvePassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -46,6 +47,14 @@ namespace av
 
     public:
 
+      SFBool EnableABuffer;
+      SFInt  ABufferSize;
+
+      virtual void getEnableABufferCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableABufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getABufferSizeCB(const SFInt::GetValueEvent& event);
+      virtual void setABufferSizeCB(const SFInt::SetValueEvent& event);
 
       av::Link<av::gua::TriMeshPassDescription>                   add_tri_mesh_pass();
       av::Link<av::gua::TriMeshPassDescription>                   get_tri_mesh_pass();
@@ -82,6 +91,10 @@ namespace av
       av::Link<av::gua::SSAOPassDescription>                      add_ssao_pass();
       av::Link<av::gua::SSAOPassDescription>                      get_ssao_pass();
       std::vector<av::Link<av::gua::SSAOPassDescription>>         get_ssao_passes();
+
+      av::Link<av::gua::ResolvePassDescription>                   add_resolve_pass();
+      av::Link<av::gua::ResolvePassDescription>                   get_resolve_pass();
+      std::vector<av::Link<av::gua::ResolvePassDescription>>      get_resolve_passes();
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

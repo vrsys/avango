@@ -21,6 +21,7 @@
 #include <avango/gua/scenegraph/SunLightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
+#include <avango/gua/scenegraph/TexturedScreenSpaceQuadNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/scenegraph/CameraNode.hpp>
@@ -71,13 +72,17 @@
 #include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
 #include <avango/gua/renderer/FullscreenPassDescription.hpp>
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
+#include <avango/gua/renderer/ResolvePassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
+
+#include <avango/gua/gui/GuiResource.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/gua/utils/TagList.hpp>
 #include <avango/gua/utils/Mask.hpp>
+#include <avango/gua/utils/Ray.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
@@ -118,6 +123,7 @@ av::gua::Init::initClass()
         av::gua::SunLightNode::initClass();
         av::gua::RayNode::initClass();
         av::gua::TexturedQuadNode::initClass();
+        av::gua::TexturedScreenSpaceQuadNode::initClass();
         av::gua::SceneGraph::initClass();
         av::gua::PickResult::initClass();
 
@@ -160,6 +166,7 @@ av::gua::Init::initClass()
         av::gua::TexturedScreenSpaceQuadPassDescription::initClass();
         av::gua::FullscreenPassDescription::initClass();
         av::gua::SSAOPassDescription::initClass();
+        av::gua::ResolvePassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();
@@ -170,11 +177,14 @@ av::gua::Init::initClass()
 #endif
         // av::gua::NURBSLoader::initClass();
 
+        av::gua::GuiResource::initClass();
+
         av::gua::Viewer::initClass();
 
         av::gua::Logger::initClass();
         av::gua::TagList::initClass();
         av::gua::Mask::initClass();
+        av::gua::Ray::initClass();
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

@@ -17,6 +17,7 @@
 #include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
 #include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
+#include <avango/gua/renderer/ResolvePassDescription.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -90,6 +91,10 @@ namespace av
       av::Link<av::gua::SSAOPassDescription>                      add_ssao_pass();
       av::Link<av::gua::SSAOPassDescription>                      get_ssao_pass();
       std::vector<av::Link<av::gua::SSAOPassDescription>>         get_ssao_passes();
+
+      av::Link<av::gua::ResolvePassDescription>                   add_resolve_pass();
+      av::Link<av::gua::ResolvePassDescription>                   get_resolve_pass();
+      std::vector<av::Link<av::gua::ResolvePassDescription>>      get_resolve_passes();
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

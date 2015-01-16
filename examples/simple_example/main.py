@@ -31,12 +31,6 @@ def start():
   monkey2.Material.value.set_uniform("Roughness", 0.6)
   monkey2.Material.value.set_uniform("Metalness", 0.1)
 
-  mat_desc = avango.gua.nodes.MaterialShaderDescription(
-    FileName = "data/materials/SimpleMaterial.gmd"
-  )
-  mat = avango.gua.create_material_from_description(mat_desc, "mat")
-  monkey2.Material.value = mat
-
   transform1 = avango.gua.nodes.TransformNode(
     Children = [monkey1]
   )

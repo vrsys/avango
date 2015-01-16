@@ -49,11 +49,13 @@ class TimedRotate(avango.script.Script):
         self.MatrixOut.value = avango.gua.make_rot_mat(
                                 self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
-def make_distributable(node):
+def make_node_distributable(node):
   for child in node.Children.value:
-    make_distributable(child)
+    make_node_distributable(child)
   nettrans.distribute_object(node)
 
+def make_material_distributable(mat):
+  nettrans.distribute_object(mat)
 
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
@@ -61,6 +63,11 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
 monkey2 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
+# rig = loader.create_geometry_from_file("oilrig", "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
+#       avango.gua.LoaderFlags.NORMALIZE_POSITION |
+#       avango.gua.LoaderFlags.NORMALIZE_SCALE |
+#       avango.gua.LoaderFlags.LOAD_MATERIALS |
+#       avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
 monkey1.Material.value.set_uniform("Roughness", 0.3)
@@ -69,6 +76,14 @@ monkey1.Material.value.set_uniform("Metalness", 1.0)
 monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
 monkey2.Material.value.set_uniform("Roughness", 0.6)
 monkey2.Material.value.set_uniform("Metalness", 0.1)
+
+mat_desc = avango.gua.nodes.MaterialShaderDescription()
+mat_desc.load_from_file("data/materials/SimpleMaterial.gmd")
+avango.gua.register_material_shader(mat_desc, "mat")
+
+mat = avango.gua.nodes.Material(
+  ShaderName = "mat"
+)
 
 transform1 = avango.gua.nodes.TransformNode(
   Children = [monkey1]
@@ -120,8 +135,8 @@ nettrans.Children.value = [group, screen]
 
 graph.Root.value.Children.value = [nettrans]
 
-make_distributable(group)
-make_distributable(screen)
+make_node_distributable(group)
+make_node_distributable(screen)
 
 # setup viewing
 window = avango.gua.nodes.GlfwWindow(

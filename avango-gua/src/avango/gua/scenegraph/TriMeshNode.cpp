@@ -90,12 +90,8 @@ void
 av::gua::TriMeshNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
 {
   if (event.getValue().isValid()) {
-    std::cout << "#### +++ " << event.getValue()->getGuaMaterial()->get_shader_name() << std::endl;
     m_Material = event.getValue();
     m_guaTriMeshNode->set_material(m_Material->getGuaMaterial());
-    std::cout << "++ " << m_guaTriMeshNode->get_material()->get_shader_name() << std::endl;
-  } else {
-    std::cout << "#### ---" << std::endl;
   }
 }
 

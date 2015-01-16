@@ -45,11 +45,13 @@ namespace av
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
         m_guaMaterial->set_uniform(name, value);
+        m_uniformsDirty.setValue(true);
       }
 
       template <typename T>
       void set_view_uniform(std::string const& name, T const& value, int view_id) {
         m_guaMaterial->set_uniform(name, value, view_id);
+        m_uniformsDirty.setValue(true);
       }
 
       virtual void on_distribute(av::gua::NetTransform& netNode);
@@ -62,14 +64,19 @@ namespace av
 
     private:
       /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
+      /*virtual*/ void evaluateLocalSideEffect();
 
       std::shared_ptr< ::gua::Material> m_guaMaterial;
 
       // for remote material construction
       SFMaterialShaderDescription m_materialShaderDescription;
+      SFString                    m_serializedUniforms;
 
       Material(const Material&);
       Material& operator=(const Material&);
+
+      bool m_distributed;
+      SFBool m_uniformsDirty;
     };
 
     typedef SingleField<Link<Material> > SFMaterial;

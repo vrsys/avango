@@ -36,5 +36,7 @@ void init_MaterialShaderMethod()
          .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::vec3>)
          .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::vec4>)
          .def("set_uniform", &av::gua::MaterialShaderMethod::set_uniform< ::gua::math::mat4>)
+         .def("load_from_file", &av::gua::MaterialShaderMethod::load_from_file)
+         .def("load_from_json", &av::gua::MaterialShaderMethod::load_from_json)
          ;
  }

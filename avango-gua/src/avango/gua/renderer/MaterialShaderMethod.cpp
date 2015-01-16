@@ -19,10 +19,6 @@ av::gua::MaterialShaderMethod::MaterialShaderMethod(::gua::MaterialShaderMethod 
     : m_guaMaterialShaderMethod(guaMaterialShaderMethod)
 {
 
-  AV_FC_ADD_ADAPTOR_FIELD(FileName,
-                      boost::bind(&MaterialShaderMethod::getFileNameCB, this, _1),
-                      boost::bind(&MaterialShaderMethod::setFileNameCB, this, _1));
-
   AV_FC_ADD_ADAPTOR_FIELD(Name,
                       boost::bind(&MaterialShaderMethod::getNameCB, this, _1),
                       boost::bind(&MaterialShaderMethod::setNameCB, this, _1));
@@ -43,20 +39,9 @@ av::gua::MaterialShaderMethod::initClass()
 
         SFMaterialShaderMethod::initClass("av::gua::SFMaterialShaderMethod", "av::Field");
         MFMaterialShaderMethod::initClass("av::gua::MFMaterialShaderMethod", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
-}
-
-
-void
-av::gua::MaterialShaderMethod::getFileNameCB(const SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaMaterialShaderMethod.get_file_name();
-}
-
-void
-av::gua::MaterialShaderMethod::setFileNameCB(const SFString::SetValueEvent& event)
-{
-  m_guaMaterialShaderMethod.load_from_file(event.getValue());
 }
 
 void

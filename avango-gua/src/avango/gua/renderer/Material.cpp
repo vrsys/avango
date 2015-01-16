@@ -20,31 +20,42 @@ AV_FIELD_DEFINE(av::gua::MFMaterial);
 
 av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial)
     : m_guaMaterial(guaMaterial)
+    , m_distributed(false)
 {
     AV_FC_ADD_ADAPTOR_FIELD(ShaderName,
                       boost::bind(&Material::getShaderNameCB, this, _1),
                       boost::bind(&Material::setShaderNameCB, this, _1));
 
     AV_FC_ADD_FIELD(m_materialShaderDescription, SFMaterialShaderDescription::ValueType());
-
-    
-
-    // if (name != "") {
-    //     auto shader(::gua::MaterialShaderDatabase::instance()->lookup(name));
-    //     if (shader) {
-    //         m_materialShaderDescription.setValue(new av::gua::MaterialShaderDescription(shader->get_description()));
-    //     }
-    // }
+    AV_FC_ADD_FIELD(m_serializedUniforms, "");
+    AV_FC_ADD_FIELD(m_uniformsDirty, "");
+    m_uniformsDirty.dontDistribute(true);    
 }
 
 void av::gua::Material::on_distribute(av::gua::NetTransform& netNode) 
 {
+  // if (ShaderName.getValue() != "") {
+  //   auto shader(::gua::MaterialShaderDatabase::instance()->lookup(ShaderName.getValue()));
+  //   if (shader) {
+  //     m_materialShaderDescription.setValue(new av::gua::MaterialShaderDescription(shader->get_description()));
+  //   }
+  // }
+  if (m_materialShaderDescription.getValue().isValid()) {
+    m_materialShaderDescription.getValue()->on_distribute(netNode);
     netNode.distributeFieldContainer(m_materialShaderDescription.getValue());
+  }
+  m_distributed = true;
+  m_uniformsDirty.setValue(true);
+
 }
 
 void av::gua::Material::on_undistribute(av::gua::NetTransform& netNode) 
-{
-    netNode.undistributeFieldContainer(m_materialShaderDescription.getValue());
+{   
+  if (m_materialShaderDescription.getValue().isValid()) {
+    m_materialShaderDescription.getValue()->on_undistribute(netNode);
+  }
+  netNode.undistributeFieldContainer(m_materialShaderDescription.getValue());
+  m_distributed = false;
 }
 
 void
@@ -64,24 +75,36 @@ av::gua::Material::initClass()
 }
 
 void av::gua::Material::fieldHasChangedLocalSideEffect(Field const& field) {
-    // std::cout << "ä##- " << field.getName() << std::endl;
-    // if (field.getName() == "m_materialShaderName" || field.getName() == "m_materialShaderDescription") {
-    //     if (m_materialShaderName.getValue() != "" && 
-    //         m_materialShaderDescription.getValue().isValid() && 
-    //         m_materialShaderName.getValue() != m_guaMaterial->get_shader_name()) {
-    //         if (::gua::MaterialShaderDatabase::instance()->contains(m_materialShaderName.getValue())) {
-    //             // auto mat = ::gua::MaterialShaderDatabase::instance()->lookup(m_materialShaderName.getValue())->get_default_material();
-    //             // for (auto& u: mat->get_uniforms())
-    //             //     m_guaMaterial->add_uniform(u.first, u.second);
-    //             // m_guaMaterial->set_shader_name(m_materialShaderName.getValue());
-    //             // std::cout << " -- " << m_guaMaterial->get_shader_name() << std::endl;
-    //         } else {
-    //             auto shader(std::make_shared<::gua::MaterialShader>(m_materialShaderName.getValue(), m_materialShaderDescription.getValue()->getGuaMaterialShaderDescription()));
-    //             ::gua::MaterialShaderDatabase::instance()->add(shader);
-    //             m_guaMaterial = shader->make_new_material();
-    //         }
-    //     }
-    // }
+    if (field.getName() == "m_serializedUniforms") {
+        if (!m_distributed) {
+            m_guaMaterial->set_uniforms_from_serialized_string(m_serializedUniforms.getValue());
+        }
+    } else if (field.getName() == "m_uniformsDirty") {
+        if (m_distributed) {
+            std::stringstream sstr;
+            m_guaMaterial->serialize_uniforms_to_stream(sstr);
+            m_serializedUniforms.setValue(sstr.str());
+        }
+    } else if (field.getName() == "ShaderName") {
+        // load shader on client side
+        if (!m_distributed) {
+            // std::cout << "ShaderName: " << ShaderName.getValue() << std::endl;
+            if (ShaderName.getValue() != "" &&  m_materialShaderDescription.getValue().isValid()) {
+                // std::cout << "VertexMethods: " << m_materialShaderDescription.getValue()->VertexMethods.getValue().size() << std::endl;
+                // std::cout << "FragmentMethods: " << m_materialShaderDescription.getValue()->FragmentMethods.getValue().size() << std::endl;
+                if (!::gua::MaterialShaderDatabase::instance()->contains(ShaderName.getValue())) {
+                    auto shader(std::make_shared<::gua::MaterialShader>(ShaderName.getValue(), m_materialShaderDescription.getValue()->getGuaMaterialShaderDescription()));
+                    ::gua::MaterialShaderDatabase::instance()->add(shader);
+                }
+            }
+        }
+    } else if (field.getName() == "m_materialShaderDescription") {
+        // std::cout << "new ShaderDescription: " << m_materialShaderDescription.getValue().isValid() << std::endl;
+    }
+}
+
+void av::gua::Material::evaluateLocalSideEffect() {
+
 }
 
 void
@@ -94,6 +117,14 @@ void
 av::gua::Material::setShaderNameCB(const SFString::SetValueEvent& event)
 {
   m_guaMaterial->set_shader_name(event.getValue());
+  m_uniformsDirty.setValue(true);
+
+  // if (event.getValue() != "" && m_distributed) {
+  //   auto shader(::gua::MaterialShaderDatabase::instance()->lookup(event.getValue()));
+  //   if (shader) {
+  //     m_materialShaderDescription.setValue(new av::gua::MaterialShaderDescription(shader->get_description()));
+  //   }
+  // }
 }
 
 std::shared_ptr< ::gua::Material> const&

@@ -50,7 +50,7 @@ def add_lights(graph, count):
     ))
 
 def get_random_material():
-  mat = avango.gua.create_default_material()
+  mat = avango.gua.nodes.Material()
 
   rand_color = avango.gua.Vec4(
     random.random(),
@@ -61,7 +61,7 @@ def get_random_material():
 
   mat.set_uniform("Color", rand_color)
   mat.set_uniform("Roughness", random.random())
-  mat.set_uniform("Metalness", random.random()*0.5)
+  mat.set_uniform("Metalness", random.random())
 
   return mat
 

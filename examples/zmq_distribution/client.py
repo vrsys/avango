@@ -56,8 +56,6 @@ nettrans = avango.gua.nodes.NetTransform(
 
 loader = avango.gua.nodes.TriMeshLoader()
 
-monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
-
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 graph.Root.value.Children.value = [nettrans]
 

@@ -18,6 +18,7 @@ namespace av
 {
   namespace gua
   {
+    class NetTransform;
     /**
      * Wrapper for ::gua::Node
      *
@@ -34,6 +35,12 @@ namespace av
        * Otherwise, the given ::gua::Node is used.
        */
       Node(std::shared_ptr< ::gua::node::Node> guanode); // use defined type to circumvent compiler bug in VS8
+
+      /**
+       * Override these to distribute embedded field containers.
+       */
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
 
     protected:
 
@@ -101,6 +108,7 @@ namespace av
 
       std::shared_ptr< ::gua::node::Node> m_guaNode;
       ::gua::math::BoundingBox< ::gua::math::vec3> m_guaBbox;
+      av::Link< av::gua::TagList> m_tagList;
       unsigned m_selfUserDataHandle;
       unsigned m_childrenUserDataHandle;
 

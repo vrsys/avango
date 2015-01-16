@@ -46,6 +46,9 @@ namespace av
       CameraNode( std::shared_ptr< ::gua::node::CameraNode> guaCameraNode =
           std::shared_ptr< ::gua::node::CameraNode>(new ::gua::node::CameraNode("")));
 
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
     protected:
 
       /**
@@ -157,6 +160,8 @@ namespace av
       std::shared_ptr< ::gua::node::CameraNode> m_guaNode;
 
       MultiField<Link<CameraNode>>::ContainerType m_preRenderCameraNodes;
+      av::Link< av::gua::Mask> m_Mask;
+      av::Link< av::gua::PipelineDescription> m_PipelineDescription;
 
       CameraNode(const CameraNode&);
       CameraNode& operator=(const CameraNode&);

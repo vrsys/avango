@@ -22,7 +22,7 @@ av::Link<av::gua::Node> createGeometryFromFile1(
                                           av::gua::TriMeshLoader const& loader,
                                           std::string const& nodeName,
                                           std::string const& fileName,
-                                          av::Link<av::gua::Material> const& fallbackMaterial,
+                                          av::gua::Material const& fallbackMaterial,
                                           int flags) {
 
    return loader.createGeometryFromFile(nodeName, fileName, fallbackMaterial,
@@ -43,7 +43,7 @@ av::Link<av::gua::Node> createGeometryFromFile3(
                                           av::gua::TriMeshLoader const& loader,
                                           std::string const& nodeName,
                                           std::string const& fileName,
-                                          av::Link<av::gua::Material> const& fallbackMaterial) {
+                                          av::gua::Material const& fallbackMaterial) {
 
    return loader.createGeometryFromFile(nodeName, fileName, fallbackMaterial,
                                 static_cast<av::gua::TriMeshLoader::Flags>(0));

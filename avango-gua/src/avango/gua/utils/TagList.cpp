@@ -7,7 +7,7 @@ AV_FC_DEFINE(av::gua::TagList);
 AV_FIELD_DEFINE(av::gua::SFTagList);
 AV_FIELD_DEFINE(av::gua::MFTagList);
 
-av::gua::TagList::TagList(std::shared_ptr< ::gua::utils::TagList> guaTagList)
+av::gua::TagList::TagList(::gua::utils::TagList* guaTagList)
   : m_guaTagList(guaTagList)
 {
 
@@ -16,8 +16,8 @@ av::gua::TagList::TagList(std::shared_ptr< ::gua::utils::TagList> guaTagList)
                       boost::bind(&TagList::setTagsCB, this, _1));
 }
 
-//av::gua::TagList::~TagList()
-//{}
+// av::gua::TagList::~TagList()
+// {}
 
 void
 av::gua::TagList::initClass()
@@ -56,7 +56,7 @@ av::gua::TagList::print() const {
   }
 }
 
-std::shared_ptr< ::gua::utils::TagList>
+::gua::utils::TagList*
 av::gua::TagList::getGuaTagList() const {
   return m_guaTagList;
 }

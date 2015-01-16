@@ -8,6 +8,7 @@
 
 #include <gua/renderer/Material.hpp>
 
+#include <avango/gua/renderer/MaterialShaderDescription.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 
@@ -15,6 +16,7 @@ namespace av
 {
   namespace gua
   {
+    class NetTransform;
     /**
      * Wrapper for ::gua::Material
      *
@@ -33,18 +35,27 @@ namespace av
       Material(std::shared_ptr< ::gua::Material> const& guaMaterial =
                std::shared_ptr< ::gua::Material> (new ::gua::Material()));
 
+      SFString ShaderName;
+
+      virtual void getShaderNameCB(const SFString::GetValueEvent& event);
+      virtual void setShaderNameCB(const SFString::SetValueEvent& event);
 
     public:
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
         m_guaMaterial->set_uniform(name, value);
+        m_uniformsDirty.setValue(true);
       }
 
       template <typename T>
       void set_view_uniform(std::string const& name, T const& value, int view_id) {
         m_guaMaterial->set_uniform(name, value, view_id);
+        m_uniformsDirty.setValue(true);
       }
+
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
 
       /**
        * Get the wrapped ::gua::Material.
@@ -52,11 +63,20 @@ namespace av
       std::shared_ptr< ::gua::Material> const& getGuaMaterial() const;
 
     private:
+      /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
+      /*virtual*/ void evaluateLocalSideEffect();
 
       std::shared_ptr< ::gua::Material> m_guaMaterial;
 
+      // for remote material construction
+      SFMaterialShaderDescription m_materialShaderDescription;
+      SFString                    m_serializedUniforms;
+
       Material(const Material&);
       Material& operator=(const Material&);
+
+      bool m_distributed;
+      SFBool m_uniformsDirty;
     };
 
     typedef SingleField<Link<Material> > SFMaterial;

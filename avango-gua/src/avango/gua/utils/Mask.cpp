@@ -7,21 +7,12 @@ AV_FC_DEFINE(av::gua::Mask);
 AV_FIELD_DEFINE(av::gua::SFMask);
 AV_FIELD_DEFINE(av::gua::MFMask);
 
-av::gua::Mask::Mask(std::shared_ptr< ::gua::Mask> guaMask)
+av::gua::Mask::Mask( ::gua::Mask* guaMask)
   : m_guaMask(guaMask)
 {
 
-  m_guaMask->whitelist.set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->whitelist)
-    )
-  ));
-
-  m_guaMask->blacklist.set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->blacklist)
-    )
-  ));
+  m_whiteList = av::Link<av::gua::TagList>(new av::gua::TagList(&m_guaMask->whitelist));
+  m_blackList = av::Link<av::gua::TagList>(new av::gua::TagList(&m_guaMask->blacklist));
 
   AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
                       boost::bind(&Mask::getWhiteListCB, this, _1),
@@ -57,42 +48,38 @@ av::gua::Mask::initClass()
 void
 av::gua::Mask::getWhiteListCB(const SFTagList::GetValueEvent& event)
 {
-  if (m_guaMask->whitelist.get_user_data()) {
-    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::TagList>*>(m_guaMask->whitelist.get_user_data());
+  if (m_whiteList.isValid()) {
+    *(event.getValuePtr()) = m_whiteList;
   }
 }
 
 void
 av::gua::Mask::setWhiteListCB(const SFTagList::SetValueEvent& event)
 {
-  m_guaMask->whitelist = *event.getValue()->getGuaTagList();
-  m_guaMask->whitelist.set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->whitelist)
-    )
-  ));
+  if (event.getValue().isValid()) {
+    m_whiteList = event.getValue();
+    m_guaMask->whitelist = *m_whiteList->getGuaTagList();
+  }
 }
 
 void
 av::gua::Mask::getBlackListCB(const SFTagList::GetValueEvent& event)
 {
-  if (m_guaMask->blacklist.get_user_data()) {
-    *(event.getValuePtr()) = *static_cast<av::Link<av::gua::TagList>*>(m_guaMask->blacklist.get_user_data());
+  if (m_blackList.isValid()) {
+    *(event.getValuePtr()) = m_blackList;
   }
 }
 
 void
 av::gua::Mask::setBlackListCB(const SFTagList::SetValueEvent& event)
 {
-  m_guaMask->blacklist = *event.getValue()->getGuaTagList();
-  m_guaMask->blacklist.set_user_data(new av::Link<av::gua::TagList>(
-    new av::gua::TagList(
-      std::shared_ptr< ::gua::utils::TagList>(&m_guaMask->blacklist)
-    )
-  ));
+  if (event.getValue().isValid()) {
+    m_blackList = event.getValue();
+    m_guaMask->blacklist = *m_blackList->getGuaTagList();
+  }
 }
 
-std::shared_ptr< ::gua::Mask>
+::gua::Mask*
 av::gua::Mask::getGuaMask() const {
   return m_guaMask;
 }

@@ -28,11 +28,8 @@ def start():
 
   focused_element = web
 
-  web_mat_desc = avango.gua.nodes.MaterialShaderDescription(
-    FileName = "data/materials/SimpleMaterial.gmd"
-  )
-  web_mat = avango.gua.create_material_from_description(web_mat_desc, "web_mat");
-  web_mat.set_uniform("tex", "google")
+  web_mat = avango.gua.nodes.Material()
+  web_mat.set_uniform("ColorMap", "google")
 
   transform = avango.gua.nodes.TransformNode()
 

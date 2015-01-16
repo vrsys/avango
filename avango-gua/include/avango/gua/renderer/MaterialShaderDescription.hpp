@@ -16,6 +16,7 @@ namespace av
 {
   namespace gua
   {
+    class NetTransform;
     /**
      * Wrapper for ::gua::MaterialShaderDescription
      *
@@ -34,16 +35,13 @@ namespace av
       MaterialShaderDescription(::gua::MaterialShaderDescription const& guaMaterialShaderDescription =
                                 ::gua::MaterialShaderDescription());
 
-
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
 
     public:
 
-      SFString FileName;
       MFMaterialShaderMethod VertexMethods;
       MFMaterialShaderMethod FragmentMethods;
-
-      virtual void getFileNameCB(const SFString::GetValueEvent& event);
-      virtual void setFileNameCB(const SFString::SetValueEvent& event);
 
       virtual void getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
       virtual void setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
@@ -51,6 +49,8 @@ namespace av
       virtual void getFragmentMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
       virtual void setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
 
+      void load_from_file(std::string const& file);
+      void load_from_json(std::string const& json);
       /**
        * Get the wrapped ::gua::MaterialShaderDescription.
        */

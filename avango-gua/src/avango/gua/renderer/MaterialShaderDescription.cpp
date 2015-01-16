@@ -4,6 +4,7 @@
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
+#include <avango/gua/network/NetTransform.h>
 
 namespace
 {
@@ -19,10 +20,6 @@ av::gua::MaterialShaderDescription::MaterialShaderDescription(
   ::gua::MaterialShaderDescription const& guaMaterialShaderDescription)
     : m_guaMaterialShaderDescription(guaMaterialShaderDescription)
 {
-
-  AV_FC_ADD_ADAPTOR_FIELD(FileName,
-                      boost::bind(&MaterialShaderDescription::getFileNameCB, this, _1),
-                      boost::bind(&MaterialShaderDescription::setFileNameCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(VertexMethods,
                       boost::bind(&MaterialShaderDescription::getVertexMethodsCB, this, _1),
@@ -44,20 +41,30 @@ av::gua::MaterialShaderDescription::initClass()
 
         SFMaterialShaderDescription::initClass("av::gua::SFMaterialShaderDescription", "av::Field");
         MFMaterialShaderDescription::initClass("av::gua::MFMaterialShaderDescription", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 
-
-void
-av::gua::MaterialShaderDescription::getFileNameCB(const SFString::GetValueEvent& event)
+void av::gua::MaterialShaderDescription::on_distribute(av::gua::NetTransform& netNode) 
 {
-  *(event.getValuePtr()) = m_guaMaterialShaderDescription.get_file_name();
+  // std::cout << "blub "<< VertexMethods.getValue().size() << std::endl;
+  for (auto& method : VertexMethods.getValue()) {
+    netNode.distributeFieldContainer(method);
+  }
+  for (auto& method : FragmentMethods.getValue()) {
+    netNode.distributeFieldContainer(method);
+  }
 }
 
-void
-av::gua::MaterialShaderDescription::setFileNameCB(const SFString::SetValueEvent& event)
+void av::gua::MaterialShaderDescription::on_undistribute(av::gua::NetTransform& netNode) 
 {
-  m_guaMaterialShaderDescription.load_from_file(event.getValue());
+  for (auto& method : VertexMethods.getValue()) {
+    netNode.undistributeFieldContainer(method);
+  }
+  for (auto& method : FragmentMethods.getValue()) {
+    netNode.undistributeFieldContainer(method);
+  }
 }
 
 void
@@ -69,6 +76,8 @@ av::gua::MaterialShaderDescription::getVertexMethodsCB(const MFMaterialShaderMet
 void
 av::gua::MaterialShaderDescription::setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
 {
+  // std::cout << "got VertexMethods: " << event.getValue().size() << std::endl;
+  m_vertexMethods.clear();
 
   for (auto& method : event.getValue()) {
     m_vertexMethods.push_back(method);
@@ -85,6 +94,8 @@ av::gua::MaterialShaderDescription::getFragmentMethodsCB(const MFMaterialShaderM
 void
 av::gua::MaterialShaderDescription::setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event)
 {
+  // std::cout << "got FragmentMethods: " << event.getValue().size() << std::endl;
+  m_fragmentMethods.clear();
 
   for (auto& method : event.getValue()) {
     m_fragmentMethods.push_back(method);
@@ -92,6 +103,17 @@ av::gua::MaterialShaderDescription::setFragmentMethodsCB(const MFMaterialShaderM
   }
 }
 
+void 
+av::gua::MaterialShaderDescription::load_from_file(std::string const& file) {
+  m_guaMaterialShaderDescription.load_from_file(file);
+
+  // m_fragmentMethods
+}
+
+void 
+av::gua::MaterialShaderDescription::load_from_json(std::string const& json) {
+  m_guaMaterialShaderDescription.load_from_json(json);
+}
 
 ::gua::MaterialShaderDescription const&
 av::gua::MaterialShaderDescription::getGuaMaterialShaderDescription() const

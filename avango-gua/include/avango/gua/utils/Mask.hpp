@@ -29,8 +29,7 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Mask is created.
        * Otherwise, the given ::gua::Mask is used.
        */
-      Mask(std::shared_ptr< ::gua::Mask> guaMask =
-           std::shared_ptr< ::gua::Mask>(new ::gua::Mask()));
+      Mask( ::gua::Mask* guaMask = new ::gua::Mask());
 
     protected:
 
@@ -53,11 +52,13 @@ namespace av
       /**
        * Get the wrapped ::gua::Mask.
        */
-      std::shared_ptr< ::gua::Mask> getGuaMask() const;
+      ::gua::Mask* getGuaMask() const;
 
     private:
 
-      std::shared_ptr< ::gua::Mask> m_guaMask;
+      ::gua::Mask* m_guaMask;
+      av::Link< av::gua::TagList> m_whiteList;
+      av::Link< av::gua::TagList> m_blackList;
 
       Mask(const Mask&);
       Mask& operator=(const Mask&);

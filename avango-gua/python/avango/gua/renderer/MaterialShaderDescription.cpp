@@ -27,5 +27,7 @@ void init_MaterialShaderDescription()
   class_<av::gua::MaterialShaderDescription,
          av::Link<av::gua::MaterialShaderDescription>,
          bases<av::FieldContainer>, boost::noncopyable >("MaterialShaderDescription", "docstring", no_init)
+         .def("load_from_file", &av::gua::MaterialShaderDescription::load_from_file)
+         .def("load_from_json", &av::gua::MaterialShaderDescription::load_from_json)
          ;
  }

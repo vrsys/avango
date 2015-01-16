@@ -25,5 +25,10 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
 # run program
-cd "$DIR" && python3 ./server.py
+if [[ $* == *-d* ]]
+then
+cd "$DIR" && gdb --args python3.4 ./server.py
+else
+cd "$DIR" && python3.4 ./server.py
+fi
 

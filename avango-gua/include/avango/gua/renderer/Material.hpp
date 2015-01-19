@@ -36,9 +36,13 @@ namespace av
                std::shared_ptr< ::gua::Material> (new ::gua::Material()));
 
       SFString ShaderName;
+      SFBool   EnableBackfaceCulling;
 
       virtual void getShaderNameCB(const SFString::GetValueEvent& event);
       virtual void setShaderNameCB(const SFString::SetValueEvent& event);
+
+      virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event); 
 
     public:
 

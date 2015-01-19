@@ -57,7 +57,6 @@
 #include "physics/Physics.hpp"
 #endif
 
-#include "renderer/Pipeline.hpp"
 #include "renderer/WindowBase.hpp"
 #include "renderer/Window.hpp"
 #include "renderer/GlfwWindow.hpp"

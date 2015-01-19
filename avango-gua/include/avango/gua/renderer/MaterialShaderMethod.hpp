@@ -15,6 +15,7 @@ namespace av
 {
   namespace gua
   {
+    class NetTransform;
     /**
      * Wrapper for ::gua::MaterialShaderMethod
      *
@@ -30,8 +31,8 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::MaterialShaderMethod is created.
        * Otherwise, the given ::gua::MaterialShaderMethod is used.
        */
-      MaterialShaderMethod(::gua::MaterialShaderMethod const& guaMaterialShaderMethod =
-                           ::gua::MaterialShaderMethod());
+      MaterialShaderMethod(std::shared_ptr< ::gua::MaterialShaderMethod> const& guaMaterialShaderMethod =
+                           std::shared_ptr< ::gua::MaterialShaderMethod>(new ::gua::MaterialShaderMethod()));
 
 
 
@@ -54,22 +55,31 @@ namespace av
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
-        m_guaMaterialShaderMethod.set_uniform(name, value);
+        m_guaMaterialShaderMethod->set_uniform(name, value);
+        m_uniformsDirty.setValue(true);
       }
 
       void load_from_file(std::string const& file) {
-        m_guaMaterialShaderMethod.load_from_file(file);
+        m_guaMaterialShaderMethod->load_from_file(file);
       }
 
       void load_from_json(std::string const& json) {
-        m_guaMaterialShaderMethod.load_from_json(json);
+        m_guaMaterialShaderMethod->load_from_json(json);
       }
 
-      ::gua::MaterialShaderMethod const& getGuaMaterialShaderMethod() const;
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
+      std::shared_ptr< ::gua::MaterialShaderMethod> const& getGuaMaterialShaderMethod() const;
 
     private:
+      /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
 
-      ::gua::MaterialShaderMethod m_guaMaterialShaderMethod;
+      std::shared_ptr< ::gua::MaterialShaderMethod> m_guaMaterialShaderMethod;
+
+      SFString m_serializedUniforms;
+      bool m_distributed;
+      SFBool m_uniformsDirty;
 
       MaterialShaderMethod(const MaterialShaderMethod&);
       MaterialShaderMethod& operator=(const MaterialShaderMethod&);

@@ -14,8 +14,6 @@ class TimedRotate(avango.script.Script):
 
 def start():
 
-  mask = avango.gua.nodes.Mask()
-
   # setup scenegraph
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.TriMeshLoader()
@@ -64,8 +62,8 @@ def start():
   )
 
   screen = avango.gua.nodes.ScreenNode(
-    Name = "screen", 
-    Width = 2, 
+    Name = "screen",
+    Width = 2,
     Height = 1.5,
     Children = [cam]
   )

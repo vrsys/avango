@@ -6,7 +6,6 @@
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/utils/Ray.hpp>
-#include <avango/gua/utils/Mask.hpp>
 #include <gua/node/TriMeshNode.hpp>
 
 using namespace boost::python;
@@ -26,12 +25,22 @@ namespace boost
 av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options,
-                                av::gua::Mask const& mask) {
+                                list const& whitelist,
+                                list const& blacklist) {
+
+  ::gua::Mask mask;
+  for (int i(0); i < len(whitelist); ++i) {
+    mask.whitelist.add_tag(extract<std::string>(whitelist[i]));
+  }
+
+  for (int i(0); i < len(blacklist); ++i) {
+    mask.blacklist.add_tag(extract<std::string>(blacklist[i]));
+  }
 
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaRay()),
                                     static_cast< ::gua::PickResult::Options>(options),
-                                    *mask.getGuaMask()));
+                                    mask));
   auto results(new av::gua::MFPickResult());
   for (auto result : gua_results) {
     results->add1Value(new av::gua::PickResult(result));
@@ -44,19 +53,29 @@ av::gua::MFPickResult* rayTest2(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options) {
 
-  return rayTest1(graph, ray, options, av::gua::Mask());
+  return rayTest1(graph, ray, options, list(), list());
 }
 
 
 av::gua::MFPickResult* rayTest3(av::gua::SceneGraph const& graph,
                                 av::gua::RayNode const& ray,
                                 int options,
-                                av::gua::Mask const& mask) {
+                                list const& whitelist,
+                                list const& blacklist) {
+
+  ::gua::Mask mask;
+  for (int i(0); i < len(whitelist); ++i) {
+    mask.whitelist.add_tag(extract<std::string>(whitelist[i]));
+  }
+
+  for (int i(0); i < len(blacklist); ++i) {
+    mask.blacklist.add_tag(extract<std::string>(blacklist[i]));
+  }
 
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaNode()),
                                     static_cast< ::gua::PickResult::Options>(options),
-                                    *mask.getGuaMask()));
+                                    mask));
   auto results(new av::gua::MFPickResult());
   for (auto result : gua_results) {
     results->add1Value(new av::gua::PickResult(result));
@@ -69,7 +88,7 @@ av::gua::MFPickResult* rayTest4(av::gua::SceneGraph const& graph,
                                 av::gua::RayNode const& ray,
                                 int options) {
 
-  return rayTest3(graph, ray, options, av::gua::Mask());
+  return rayTest3(graph, ray, options, list(), list());
 }
 
 av::Link<av::gua::Node> getNode(av::gua::SceneGraph const& graph, std::string const& path) {

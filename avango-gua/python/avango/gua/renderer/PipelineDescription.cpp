@@ -126,6 +126,16 @@ list get_resolve_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+list get_light_visibility_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_light_visibility_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
 void init_PipelineDescription()
  {
 
@@ -164,6 +174,9 @@ void init_PipelineDescription()
          .def("add_resolve_pass", &av::gua::PipelineDescription::add_resolve_pass)
          .def("get_resolve_pass", &av::gua::PipelineDescription::get_resolve_pass)
          .def("get_resolve_passes", get_resolve_passes)
+         .def("add_light_visibility_pass", &av::gua::PipelineDescription::add_light_visibility_pass)
+         .def("get_light_visibility_pass", &av::gua::PipelineDescription::get_light_visibility_pass)
+         .def("get_light_visibility_passes", get_light_visibility_passes)
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

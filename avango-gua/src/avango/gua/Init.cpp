@@ -73,6 +73,7 @@
 #include <avango/gua/renderer/FullscreenPassDescription.hpp>
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
+#include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/gui/GuiResource.hpp>
@@ -167,6 +168,7 @@ av::gua::Init::initClass()
         av::gua::FullscreenPassDescription::initClass();
         av::gua::SSAOPassDescription::initClass();
         av::gua::ResolvePassDescription::initClass();
+        av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();

@@ -65,6 +65,14 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       boost::bind(&CameraNode::getMonoModeCB, this, _1),
                       boost::bind(&CameraNode::setMonoModeCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(FarClip,
+                      boost::bind(&CameraNode::getFarClipCB, this, _1),
+                      boost::bind(&CameraNode::setFarClipCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(NearClip,
+                      boost::bind(&CameraNode::getNearClipCB, this, _1),
+                      boost::bind(&CameraNode::setNearClipCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(Resolution,
                       boost::bind(&CameraNode::getResolutionCB, this, _1),
                       boost::bind(&CameraNode::setResolutionCB, this, _1));
@@ -271,6 +279,30 @@ void
 av::gua::CameraNode::setMonoModeCB(const SFUInt::SetValueEvent& event)
 {
   m_guaNode->config.mono_mode() = static_cast< ::gua::CameraMode>(event.getValue());
+}
+
+void
+av::gua::CameraNode::getFarClipCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->config.far_clip();
+}
+
+void
+av::gua::CameraNode::setFarClipCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaNode->config.far_clip() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getNearClipCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->config.near_clip();
+}
+
+void
+av::gua::CameraNode::setNearClipCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaNode->config.near_clip() = event.getValue();
 }
 
 void

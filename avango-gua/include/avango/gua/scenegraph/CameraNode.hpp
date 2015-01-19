@@ -75,6 +75,9 @@ namespace av
       SFString              RightScreenPath;
       SFUInt                MonoMode;
 
+      SFFloat               FarClip;
+      SFFloat               NearClip;
+
       SFVec2ui              Resolution;
 
       SFString              OutputTextureName;
@@ -121,6 +124,12 @@ namespace av
 
       virtual void getMonoModeCB(const SFUInt::GetValueEvent& event);
       virtual void setMonoModeCB(const SFUInt::SetValueEvent& event);
+
+      virtual void getFarClipCB(const SFFloat::GetValueEvent& event);
+      virtual void setFarClipCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getNearClipCB(const SFFloat::GetValueEvent& event);
+      virtual void setNearClipCB(const SFFloat::SetValueEvent& event);
 
       virtual void getResolutionCB(const SFVec2ui::GetValueEvent& event);
       virtual void setResolutionCB(const SFVec2ui::SetValueEvent& event);

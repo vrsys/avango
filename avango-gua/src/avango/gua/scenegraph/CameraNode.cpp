@@ -18,7 +18,6 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
     : Node(guaCameraNode)
     , m_guaNode(guaCameraNode)
 {
-  m_Mask = av::Link<av::gua::Mask>(new av::gua::Mask(&m_guaNode->config.mask()));
   m_PipelineDescription = av::Link<av::gua::PipelineDescription>(new av::gua::PipelineDescription(m_guaNode->get_pipeline_description()));
 
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
@@ -89,9 +88,13 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       boost::bind(&CameraNode::getEnableFrustumCullingCB, this, _1),
                       boost::bind(&CameraNode::setEnableFrustumCullingCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Mask,
-                      boost::bind(&CameraNode::getMaskCB, this, _1),
-                      boost::bind(&CameraNode::setMaskCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
+                      boost::bind(&CameraNode::getWhiteListCB, this, _1),
+                      boost::bind(&CameraNode::setWhiteListCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(BlackList,
+                      boost::bind(&CameraNode::getBlackListCB, this, _1),
+                      boost::bind(&CameraNode::setBlackListCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
                       boost::bind(&CameraNode::getApplicationFPSCB, this, _1),
@@ -109,17 +112,15 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
 av::gua::CameraNode::~CameraNode()
 {}
 
-void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode) 
+void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode)
 {
     Node::on_distribute(netNode);
-    netNode.distributeFieldContainer(m_Mask);
     // netNode.distributeFieldContainer(m_PipelineDescription);
 }
 
-void av::gua::CameraNode::on_undistribute(av::gua::NetTransform& netNode) 
+void av::gua::CameraNode::on_undistribute(av::gua::NetTransform& netNode)
 {
     Node::on_undistribute(netNode);
-    netNode.undistributeFieldContainer(m_Mask);
     // netNode.undistributeFieldContainer(m_PipelineDescription);
 }
 
@@ -356,19 +357,32 @@ av::gua::CameraNode::setEnableFrustumCullingCB(const SFBool::SetValueEvent& even
 }
 
 void
-av::gua::CameraNode::getMaskCB(const SFMask::GetValueEvent& event)
+av::gua::CameraNode::getWhiteListCB(const MFString::GetValueEvent& event)
 {
-  if (m_Mask.isValid()) {
-    *(event.getValuePtr()) = m_Mask;
+  *(event.getValuePtr()) = m_guaNode->config.mask().whitelist.get_strings();
+}
+
+void
+av::gua::CameraNode::setWhiteListCB(const MFString::SetValueEvent& event)
+{
+  m_guaNode->config.mask().whitelist.clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaNode->config.mask().whitelist.add_tag(tag);
   }
 }
 
 void
-av::gua::CameraNode::setMaskCB(const SFMask::SetValueEvent& event)
+av::gua::CameraNode::getBlackListCB(const MFString::GetValueEvent& event)
 {
-  if (event.getValue().isValid()) {
-    m_Mask = event.getValue();
-    m_guaNode->config.set_mask(*m_Mask->getGuaMask());
+  *(event.getValuePtr()) = m_guaNode->config.mask().blacklist.get_strings();
+}
+
+void
+av::gua::CameraNode::setBlackListCB(const MFString::SetValueEvent& event)
+{
+  m_guaNode->config.mask().blacklist.clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaNode->config.mask().blacklist.add_tag(tag);
   }
 }
 

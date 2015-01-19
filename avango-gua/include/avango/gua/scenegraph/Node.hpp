@@ -9,7 +9,6 @@
 #include <gua/node/Node.hpp>
 #include <gua/math/math.hpp>
 #include <avango/gua/math/BoundingBox.hpp>
-#include <avango/gua/utils/TagList.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -61,7 +60,7 @@ namespace av
       SFBool                    DisplayBoundingBox;
       SFInt                     Depth;
       SFString                  Path;
-      SFTagList                 TagList;
+      MFString                  Tags;
 
       /**
        * Get the wrapped ::gua::Node.
@@ -99,8 +98,8 @@ namespace av
       virtual void getPathCB(const SFString::GetValueEvent& event);
       virtual void setPathCB(const SFString::SetValueEvent& event);
 
-      virtual void getTagListCB(const SFTagList::GetValueEvent& event);
-      virtual void setTagListCB(const SFTagList::SetValueEvent& event);
+      virtual void getTagsCB(const MFString::GetValueEvent& event);
+      virtual void setTagsCB(const MFString::SetValueEvent& event);
 
       void addToParentChildren();
 
@@ -108,7 +107,6 @@ namespace av
 
       std::shared_ptr< ::gua::node::Node> m_guaNode;
       ::gua::math::BoundingBox< ::gua::math::vec3> m_guaBbox;
-      av::Link< av::gua::TagList> m_tagList;
       unsigned m_selfUserDataHandle;
       unsigned m_childrenUserDataHandle;
 

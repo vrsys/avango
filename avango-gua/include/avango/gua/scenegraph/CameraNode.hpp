@@ -10,7 +10,6 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
-#include <avango/gua/utils/Mask.hpp>
 
 namespace av
 {
@@ -85,10 +84,12 @@ namespace av
 
       SFBool                EnableFrustumCulling;
 
-      SFMask                Mask;
+      MFString              WhiteList;
+      MFString              BlackList;
 
       SFFloat               ApplicationFPS;
       SFFloat               RenderingFPS;
+
 
       MultiField<Link<CameraNode>> PreRenderCameras;
 
@@ -143,8 +144,11 @@ namespace av
       virtual void getEnableFrustumCullingCB(const SFBool::GetValueEvent& event);
       virtual void setEnableFrustumCullingCB(const SFBool::SetValueEvent& event);
 
-      virtual void getMaskCB(const SFMask::GetValueEvent& event);
-      virtual void setMaskCB(const SFMask::SetValueEvent& event);
+      virtual void getWhiteListCB(const MFString::GetValueEvent& event);
+      virtual void setWhiteListCB(const MFString::SetValueEvent& event);
+
+      virtual void getBlackListCB(const MFString::GetValueEvent& event);
+      virtual void setBlackListCB(const MFString::SetValueEvent& event);
 
       virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
       virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
@@ -169,7 +173,6 @@ namespace av
       std::shared_ptr< ::gua::node::CameraNode> m_guaNode;
 
       MultiField<Link<CameraNode>>::ContainerType m_preRenderCameraNodes;
-      av::Link< av::gua::Mask> m_Mask;
       av::Link< av::gua::PipelineDescription> m_PipelineDescription;
 
       CameraNode(const CameraNode&);

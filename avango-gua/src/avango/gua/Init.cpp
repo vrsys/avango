@@ -81,8 +81,6 @@
 #include <avango/gua/viewer/Viewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
-#include <avango/gua/utils/TagList.hpp>
-#include <avango/gua/utils/Mask.hpp>
 #include <avango/gua/utils/Ray.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -184,8 +182,6 @@ av::gua::Init::initClass()
         av::gua::Viewer::initClass();
 
         av::gua::Logger::initClass();
-        av::gua::TagList::initClass();
-        av::gua::Mask::initClass();
         av::gua::Ray::initClass();
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);

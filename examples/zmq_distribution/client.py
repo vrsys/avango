@@ -63,7 +63,8 @@ size = avango.gua.Vec2ui(800, 600)
 
 window = avango.gua.nodes.GlfwWindow(
   Size = size,
-  LeftResolution = size
+  LeftResolution = size,
+  Title = "client_window"
 )
 avango.gua.register_window("client_window", window)
 

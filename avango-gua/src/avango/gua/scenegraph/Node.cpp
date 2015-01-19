@@ -31,8 +31,6 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
     WorldTransform.touch();
   });
 
-  m_tagList = av::Link<av::gua::TagList>(new av::gua::TagList(&m_guaNode->get_tags()));
-
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
                         boost::bind(&Node::getParentCB, this, _1),
                         boost::bind(&Node::setParentCB, this, _1));
@@ -63,23 +61,21 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
                         boost::bind(&Node::getPathCB, this, _1),
                         boost::bind(&Node::setPathCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(TagList,
-                        boost::bind(&Node::getTagListCB, this, _1),
-                        boost::bind(&Node::setTagListCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Tags,
+                        boost::bind(&Node::getTagsCB, this, _1),
+                        boost::bind(&Node::setTagsCB, this, _1));
 
 }
 
 av::gua::Node::~Node()
 {}
 
-void av::gua::Node::on_distribute(av::gua::NetTransform& netNode) 
+void av::gua::Node::on_distribute(av::gua::NetTransform& netNode)
 {
-    netNode.distributeFieldContainer(m_tagList);
 }
 
-void av::gua::Node::on_undistribute(av::gua::NetTransform& netNode) 
+void av::gua::Node::on_undistribute(av::gua::NetTransform& netNode)
 {
-    netNode.undistributeFieldContainer(m_tagList);
 }
 
 void
@@ -251,21 +247,20 @@ av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 }
 
 void
-av::gua::Node::getTagListCB(const SFTagList::GetValueEvent& event)
+av::gua::Node::getTagsCB(const MFString::GetValueEvent& event)
 {
-  if (m_tagList.isValid()) {
-    *(event.getValuePtr()) = m_tagList;
-  }
+  *(event.getValuePtr()) = m_guaNode->get_tags().get_strings();
 }
 
 void
-av::gua::Node::setTagListCB(const SFTagList::SetValueEvent& event)
+av::gua::Node::setTagsCB(const MFString::SetValueEvent& event)
 {
-  if (event.getValue().isValid()) {
-    m_tagList = event.getValue();
-    m_guaNode->get_tags() = *m_tagList->getGuaTagList();
+  m_guaNode->get_tags().clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaNode->get_tags().add_tag(tag);
   }
 }
+
 
 void
 av::gua::Node::addToParentChildren() {

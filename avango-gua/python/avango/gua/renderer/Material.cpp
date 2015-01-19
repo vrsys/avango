@@ -37,6 +37,7 @@ void init_Material()
          av::Link<av::gua::Material>,
          bases<av::FieldContainer>, boost::noncopyable >("Material", "docstring", no_init)
          .def("list_uniforms", list_uniforms)
+         .def("reset_view_uniform", &av::gua::Material::reset_view_uniform)
          .def("set_uniform", &av::gua::Material::set_uniform<float>)
          .def("set_uniform", &av::gua::Material::set_uniform<int>)
          // .def("set_uniform", &av::gua::Material::set_uniform<unsigned>)

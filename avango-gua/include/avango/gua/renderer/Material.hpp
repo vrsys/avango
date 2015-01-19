@@ -58,6 +58,11 @@ namespace av
         m_uniformsDirty.setValue(true);
       }
 
+      void reset_view_uniform(std::string const& name, int view_id) {
+        m_guaMaterial->reset_uniform(name, view_id);
+        m_uniformsDirty.setValue(true);
+      }
+
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
 

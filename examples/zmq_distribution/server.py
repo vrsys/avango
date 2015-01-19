@@ -141,7 +141,8 @@ make_node_distributable(screen)
 # setup viewing
 window = avango.gua.nodes.GlfwWindow(
   Size = size,
-  LeftResolution = size
+  LeftResolution = size,
+  Title = "server_window"
 )
 
 avango.gua.register_window("server_window", window)

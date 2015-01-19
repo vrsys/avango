@@ -26,6 +26,10 @@ av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial
                       boost::bind(&Material::getShaderNameCB, this, _1),
                       boost::bind(&Material::setShaderNameCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
+                      boost::bind(&Material::getEnableBackfaceCullingCB, this, _1),
+                      boost::bind(&Material::setEnableBackfaceCullingCB, this, _1));
+
     AV_FC_ADD_FIELD(m_materialShaderDescription, SFMaterialShaderDescription::ValueType());
     AV_FC_ADD_FIELD(m_serializedUniforms, "");
     AV_FC_ADD_FIELD(m_uniformsDirty, false);
@@ -124,6 +128,19 @@ av::gua::Material::setShaderNameCB(const SFString::SetValueEvent& event)
     }
   }
 }
+
+void
+av::gua::Material::getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = !m_guaMaterial->get_show_back_faces();
+}
+
+void
+av::gua::Material::setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event)
+{
+  m_guaMaterial->set_show_back_faces(!event.getValue());
+}
+
 
 std::shared_ptr< ::gua::Material> const&
 av::gua::Material::getGuaMaterial() const

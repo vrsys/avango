@@ -39,6 +39,8 @@ av::gua::PipelineDescription::initClass()
 
         SFPipelineDescription::initClass("av::gua::SFPipelineDescription", "av::Field");
         MFPipelineDescription::initClass("av::gua::MFPipelineDescription", "av::Field");
+
+        // sClassTypeId.setDistributable(true);
     }
 }
 
@@ -602,6 +604,60 @@ av::gua::PipelineDescription::get_resolve_passes()
         auto desc(new av::Link<av::gua::ResolvePassDescription>(
                         new av::gua::ResolvePassDescription(
                             std::shared_ptr<::gua::ResolvePassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+av::Link<av::gua::LightVisibilityPassDescription>
+av::gua::PipelineDescription::add_light_visibility_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::LightVisibilityPassDescription>());
+
+    auto desc(new av::Link<av::gua::LightVisibilityPassDescription>(
+                        new av::gua::LightVisibilityPassDescription(
+                            std::shared_ptr<::gua::LightVisibilityPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::LightVisibilityPassDescription>
+av::gua::PipelineDescription::get_light_visibility_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::LightVisibilityPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::LightVisibilityPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::LightVisibilityPassDescription>(
+                        new av::gua::LightVisibilityPassDescription(
+                            std::shared_ptr<::gua::LightVisibilityPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::LightVisibilityPassDescription>>
+av::gua::PipelineDescription::get_light_visibility_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::LightVisibilityPassDescription>());
+    std::vector<av::Link<av::gua::LightVisibilityPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::LightVisibilityPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::LightVisibilityPassDescription>(
+                        new av::gua::LightVisibilityPassDescription(
+                            std::shared_ptr<::gua::LightVisibilityPassDescription>(pass))));
 
         pass->set_user_data(desc);
         result.push_back(*desc);

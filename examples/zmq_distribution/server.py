@@ -115,6 +115,7 @@ screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
 
 size = avango.gua.Vec2ui(800, 600)
 server_cam = avango.gua.nodes.CameraNode(
+  ViewID = 1,
   LeftScreenPath = "/net/screen",
   SceneGraph = "scenegraph",
   Resolution = size,
@@ -123,6 +124,7 @@ server_cam = avango.gua.nodes.CameraNode(
 )
 
 client_cam = avango.gua.nodes.CameraNode(
+  ViewID = 2,
   LeftScreenPath = "/net/screen",
   SceneGraph = "scenegraph",
   Resolution = size,

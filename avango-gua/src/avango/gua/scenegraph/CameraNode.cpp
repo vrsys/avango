@@ -115,11 +115,13 @@ av::gua::CameraNode::~CameraNode()
 void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode)
 {
     Node::on_distribute(netNode);
+    // netNode.distributeFieldContainer(m_PipelineDescription);
 }
 
 void av::gua::CameraNode::on_undistribute(av::gua::NetTransform& netNode)
 {
     Node::on_undistribute(netNode);
+    // netNode.undistributeFieldContainer(m_PipelineDescription);
 }
 
 

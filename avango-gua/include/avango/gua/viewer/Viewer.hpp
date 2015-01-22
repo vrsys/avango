@@ -37,7 +37,7 @@ namespace av
 
       MFCameraNode CameraNodes;
       MFSceneGraph SceneGraphs;
-      SFWindowBase Window;
+      MFWindowBase Windows;
 #if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;
 #endif

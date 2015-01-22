@@ -44,7 +44,7 @@ class BallSpawner(avango.script.Script):
 
       light_geometry = self.__loader.create_geometry_from_file(
         "light_geometry", "data/objects/sphere.obj"
-      ) 
+      )
 
       light_geometry.Transform.value = avango.gua.make_scale_mat(0.1, 0.1, 0.1)
 
@@ -88,7 +88,7 @@ def start():
     False,
     avango.gua.LoaderFlags.DEFAULTS
   )
-  
+
   teapot_cs.Scaling.value = avango.gua.Vec3(0.5, 0.5, 0.5)
 
   teapot_csn = avango.gua.nodes.CollisionShapeNode(
@@ -112,12 +112,12 @@ def start():
   teapot_rb.Children.value.append(teapot_csn)
 
   light = avango.gua.nodes.PointLightNode(
-    Name = "light", 
+    Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Brightness = 50.0,
     Transform = avango.gua.make_trans_mat(2, 1, 3) * avango.gua.make_scale_mat(5, 5, 5)
   )
-  
+
   size = avango.gua.Vec2ui(1920, 1080)
 
   window = avango.gua.nodes.GlfwWindow(
@@ -136,8 +136,8 @@ def start():
   )
 
   screen = avango.gua.nodes.ScreenNode(
-    Name = "screen", 
-    Width = 1.6, 
+    Name = "screen",
+    Width = 1.6,
     Height = 0.9,
     Transform = avango.gua.make_trans_mat(0.0, 0.5, 2.0),
     Children = [cam]
@@ -150,7 +150,7 @@ def start():
   viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
   viewer.Physics.value = physics
-  viewer.Window.value = window
+  viewer.Windows.value = [window]
 
   timer = avango.nodes.TimeSensor()
   spawner = BallSpawner()

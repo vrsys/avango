@@ -27,6 +27,17 @@ av::Link<av::gua::Node> load(
                      , static_cast<av::gua::PLODLoader::Flags>(flags));
 }
 
+av::Link<av::gua::Node> load2(
+    av::gua::PLODLoader const& loader,
+    std::string const& nodeName,
+    std::string const& fileName,
+    av::gua::Material const& fallbackMaterial,
+    int flags
+    ) {
+   return loader.load( nodeName, fileName, fallbackMaterial
+                     , static_cast<av::gua::PLODLoader::Flags>(flags));
+}
+
 bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {
    return loader.is_supported(file);
 }
@@ -37,7 +48,9 @@ void init_PLODLoader()
          av::Link<av::gua::PLODLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("PLODLoader", "docstring", no_init)
          .def("load", &load)
+         .def("load", &load2)
          .def("create_geometry_from_file", &load)
+         .def("create_geometry_from_file", &load2)
          .def("is_supported", &is_supported)
          ;
 

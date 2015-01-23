@@ -10,6 +10,7 @@
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/gua/windows_specific_gua.hpp>
@@ -44,6 +45,10 @@ namespace av
     PLODLoader(::gua::PLODLoader* guaPLODLoader = new ::gua::PLODLoader());
 
     av::Link<av::gua::Node> load( std::string const& fileName,
+                                  Flags flags = DEFAULTS) const;
+    av::Link<av::gua::Node> load( std::string const& nodeName,
+                                  std::string const& fileName,
+                                  av::gua::Material const& fallbackMaterial,
                                   Flags flags = DEFAULTS) const;
     bool is_supported(std::string const& fileName) const;
 

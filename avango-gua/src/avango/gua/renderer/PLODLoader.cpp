@@ -43,6 +43,23 @@ av::gua::PLODLoader::load(std::string const& fileName,
     return av::Link<av::gua::Node>(root);
 }
 
+av::Link<av::gua::Node>
+av::gua::PLODLoader::load( std::string const& nodeName,
+                           std::string const& fileName,
+                           av::gua::Material const& fallbackMaterial,
+                           Flags flags) const
+{
+
+    auto gua_node(m_guaPLODLoader->load_geometry(
+                                          nodeName, fileName,
+                                          fallbackMaterial.getGuaMaterial(),
+                                          flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
+
 bool
 av::gua::PLODLoader::is_supported(std::string const& fileName) const
 {

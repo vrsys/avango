@@ -173,7 +173,7 @@ av::gua::Init::initClass()
         // av::gua::VolumeLoader::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();
-        // av::gua::PLODLoader::initClass();
+        av::gua::PLODLoader::initClass();
 #endif
         // av::gua::NURBSLoader::initClass();
 

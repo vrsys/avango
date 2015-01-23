@@ -40,6 +40,7 @@ include(file_copy_macro)
 
 include(find_guacamole)
 include(find_guacamole_gui)
+include(FindGuacamolePLOD)
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)
@@ -70,6 +71,7 @@ set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GUACAMOLE_GUI_LIBRARIES}
+    ${GUACAMOLE_PLOD_LIBRARIES}
     ${GL_LIBRARIES}
     ${SCHISM_LIBRARIES}
 )
@@ -87,6 +89,7 @@ set(INCLUDE_PATHS
     ${BOOST_INCLUDE_DIRS}
     ${GUACAMOLE_INCLUDE_DIRS}
     ${GUACAMOLE_GUI_INCLUDE_DIRS}
+    ${GUACAMOLE_PLOD_INCLUDE_DIRS}
     ${GL_INCLUDE_DIRS}
 )
 

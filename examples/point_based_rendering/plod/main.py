@@ -24,7 +24,7 @@ def start(filename):
   plodloader.UploadBudget.value = 32
   plodloader.RenderBudget.value = 2048
   plodloader.OutOfCoreBudget.value = 4096
-  plod_geode = plodloader.create_geometry_from_file("point_cloud",
+  plod_geode = plodloader.create_geometry_from_file(
                   filename, avango.gua.LoaderFlags.DEFAULTS)
 
 

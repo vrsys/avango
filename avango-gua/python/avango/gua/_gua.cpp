@@ -145,7 +145,7 @@ BOOST_PYTHON_MODULE(_gua)
     // init_Video3DNode();
     // init_VolumeNode();
 #if defined(AVANGO_PBR_SUPPORT)
-    // init_PLODNode();
+    init_PLODNode();
     // init_PBRNode();
 #endif
     // init_NURBSNode();
@@ -205,7 +205,7 @@ BOOST_PYTHON_MODULE(_gua)
     // init_Video3DLoader();
     // init_VolumeLoader();
 #if defined(AVANGO_PBR_SUPPORT)
-    // init_PLODLoader();
+    //init_PLODLoader();
     // init_PBRLoader();
 #endif
     // init_NURBSLoader();

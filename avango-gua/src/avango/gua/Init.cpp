@@ -113,7 +113,7 @@ av::gua::Init::initClass()
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRNode::initClass();
-        // av::gua::PLODNode::initClass();
+        av::gua::PLODNode::initClass();
 #endif
         // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();

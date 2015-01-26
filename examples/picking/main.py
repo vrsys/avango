@@ -26,8 +26,7 @@ class Picker(avango.script.Script):
 
     self.SceneGraph.value = avango.gua.nodes.SceneGraph()
     self.Ray.value  = avango.gua.nodes.RayNode()
-    self.Options.value = avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT \
-                         | avango.gua.PickingOptions.GET_TEXTURE_COORDS \
+    self.Options.value = avango.gua.PickingOptions.GET_TEXTURE_COORDS \
                          | avango.gua.PickingOptions.GET_WORLD_NORMALS \
                          | avango.gua.PickingOptions.INTERPOLATE_NORMALS \
                          | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE
@@ -42,23 +41,16 @@ class Picker(avango.script.Script):
 class MaterialUpdater(avango.script.Script):
   PickedNodes     = avango.gua.MFPickResult()
   OldNodes        = avango.gua.MFPickResult()
-  DefaultMaterial = avango.SFString()
-  TargetMaterial  = avango.SFString()
 
   @field_has_changed(PickedNodes)
   def update_materials(self):
-
     for i in range(0, len(self.OldNodes.value)):
-      if isinstance(self.OldNodes.value[i].Object.value, avango.gua.GeometryNode):
-        self.OldNodes.value[i].Object.value.Material.value = self.DefaultMaterial.value
+      if isinstance(self.OldNodes.value[i].Object.value, avango.gua.TriMeshNode):
+        self.OldNodes.value[i].Object.value.Material.value.set_uniform("Color", avango.gua.Vec4(1,1,1,1))
 
     for i in range(0, len(self.PickedNodes.value)):
-      if isinstance(self.PickedNodes.value[i].Object.value, avango.gua.GeometryNode):
-        self.PickedNodes.value[i].Object.value.Material.value = self.TargetMaterial.value
-        avango.gua.set_material_uniform(self.TargetMaterial.value, "pointer_pos",
-                                        self.PickedNodes.value[i].TextureCoords.value)
-        avango.gua.set_material_uniform(self.TargetMaterial.value, "color",
-                                        self.PickedNodes.value[i].WorldNormal.value)
+      if isinstance(self.PickedNodes.value[i].Object.value, avango.gua.TriMeshNode):
+        self.PickedNodes.value[i].Object.value.Material.value.set_uniform("Color", avango.gua.Vec4(1,0,0,0.5))
 
     self.OldNodes.value = self.PickedNodes.value
 
@@ -75,6 +67,9 @@ def start():
                   "data/objects/sphere.obj",
                   avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
 
+        if isinstance(new_cube, avango.gua.TriMeshNode):
+          new_cube.Material.value.set_uniform("Emissivity", 0.5)
+
         new_cube.Transform.value = avango.gua.make_trans_mat(x, y, z) * \
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
@@ -85,7 +80,11 @@ def start():
     Brightness = 10
   )
 
-  light.Transform.value = avango.gua.make_scale_mat(100)
+  print(CUBE_COUNT_X * 0.5)
+
+  light.Transform.value = avango.gua.make_trans_mat((CUBE_COUNT_X - 1.0) * 0.5, (CUBE_COUNT_Y - 1.0) * 0.5, (CUBE_COUNT_Z - 1.0) * 0.5) * \
+                          avango.gua.make_scale_mat(100)
+
 
 
   pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
@@ -115,10 +114,8 @@ def start():
   picker.SceneGraph.value = graph
   picker.Ray.value = pick_ray
 
-  # material_updater = MaterialUpdater()
-  # material_updater.DefaultMaterial.value = "data/materials/Stone.gmd"
-  # material_updater.TargetMaterial.value = "data/materials/Bright.gmd"
-  # material_updater.PickedNodes.connect_from(picker.Results)
+  material_updater = MaterialUpdater()
+  material_updater.PickedNodes.connect_from(picker.Results)
 
   width = 1920;
   height = int(width * 9.0 / 16.0)
@@ -130,8 +127,11 @@ def start():
     SceneGraph = "scene",
     Resolution = size,
     OutputWindowName = "window",
-    Children = [screen, pick_ray]
+    Children = [screen, pick_ray],
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
+
+  camera.PipelineDescription.value.EnableABuffer.value = True
 
   graph.Root.value.Children.value.append(camera)
 

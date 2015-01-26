@@ -80,8 +80,6 @@ def start():
     Brightness = 10
   )
 
-  print(CUBE_COUNT_X * 0.5)
-
   light.Transform.value = avango.gua.make_trans_mat((CUBE_COUNT_X - 1.0) * 0.5, (CUBE_COUNT_Y - 1.0) * 0.5, (CUBE_COUNT_Z - 1.0) * 0.5) * \
                           avango.gua.make_scale_mat(100)
 

@@ -36,6 +36,19 @@ av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& node
     return av::Link<av::gua::Node>(root);
 }
 
+av::Link<av::gua::Node>
+av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
+                                               std::string const& fileName,
+                                               Flags flags) const
+{
+
+    auto gua_node(m_guaSkeletalAnimationLoader->create_geometry_from_file(
+                                            nodeName, fileName, flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
 void
 av::gua::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
                                                  std::string const& file_name,

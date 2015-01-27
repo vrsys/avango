@@ -40,7 +40,11 @@ include(file_copy_macro)
 
 include(find_guacamole)
 include(find_guacamole_gui)
-include(FindGuacamolePLOD)
+
+if (AVANGO_PBR_SUPPORT)
+  include(FindGuacamolePLOD)
+endif (AVANGO_PBR_SUPPORT)
+
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)

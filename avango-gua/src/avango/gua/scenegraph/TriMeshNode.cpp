@@ -53,16 +53,15 @@ void av::gua::TriMeshNode::on_undistribute(av::gua::NetTransform& netNode)
 void
 av::gua::TriMeshNode::initClass()
 {
-  if (!isTypeInitialized())
-  {
-      av::gua::GeometryNode::initClass();
+  if (!isTypeInitialized()) {
+    av::gua::GeometryNode::initClass();
 
-      AV_FC_INIT(av::gua::GeometryNode, av::gua::TriMeshNode, true);
+    AV_FC_INIT(av::gua::GeometryNode, av::gua::TriMeshNode, true);
 
-      SFTriMeshNode::initClass("av::gua::SFTriMeshNode", "av::Field");
-      MFTriMeshNode::initClass("av::gua::MFTriMeshNode", "av::Field");
+    SFTriMeshNode::initClass("av::gua::SFTriMeshNode", "av::Field");
+    MFTriMeshNode::initClass("av::gua::MFTriMeshNode", "av::Field");
 
-      sClassTypeId.setDistributable(true);
+    sClassTypeId.setDistributable(true);
   }
 }
 

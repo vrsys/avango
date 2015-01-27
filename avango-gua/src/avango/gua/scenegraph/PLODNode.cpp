@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/PLODNode.hpp>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 
@@ -9,11 +10,45 @@ AV_FIELD_DEFINE(av::gua::MFPLODNode);
 
 av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
     : GeometryNode(guanode)
+    , m_guaPLODNode(guanode)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(Geometry,
+                        boost::bind(&PLODNode::getGeometryCB, this, _1),
+                        boost::bind(&PLODNode::setGeometryCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Material,
+                      boost::bind(&PLODNode::getMaterialCB, this, _1),
+                      boost::bind(&PLODNode::setMaterialCB, this, _1));
+
+  if (guanode->get_material()) {
+    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
+  }
 }
 
 //av::gua::PLODNode::~PLODNode()
 //{}
+
+void
+av::gua::PLODNode::on_distribute(av::gua::NetTransform& netNode) 
+{
+  GeometryNode::on_distribute(netNode);
+
+  if (m_Material.isValid()) {
+    m_Material->on_distribute(netNode);
+  }
+  netNode.distributeFieldContainer(m_Material);
+}
+
+void
+av::gua::PLODNode::on_undistribute(av::gua::NetTransform& netNode) 
+{
+  GeometryNode::on_undistribute(netNode);
+
+  if (m_Material.isValid()) {
+    m_Material->on_undistribute(netNode);
+  }
+  netNode.undistributeFieldContainer(m_Material);
+}
 
 void
 av::gua::PLODNode::initClass()
@@ -28,4 +63,38 @@ av::gua::PLODNode::initClass()
 
     sClassTypeId.setDistributable(true);
   }
+}
+
+void
+av::gua::PLODNode::getGeometryCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPLODNode->get_geometry_description();
+}
+
+void
+av::gua::PLODNode::setGeometryCB(const SFString::SetValueEvent& event)
+{
+  m_guaPLODNode->set_geometry_description(event.getValue());
+}
+
+void
+av::gua::PLODNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
+{
+  if (m_Material.isValid()) {
+    *(event.getValuePtr()) = m_Material;
+  }
+}
+
+void
+av::gua::PLODNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
+{
+  if (event.getValue().isValid()) {
+    m_Material = event.getValue();
+    m_guaPLODNode->set_material(m_Material->getGuaMaterial());
+  }
+}
+
+std::shared_ptr< ::gua::node::PLODNode>
+av::gua::PLODNode::getGuaPLODNode() const {
+  return m_guaPLODNode;
 }

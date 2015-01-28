@@ -27,6 +27,9 @@ av::gua::PLODLoader::PLODLoader(::gua::PLODLoader* guaPLODLoader)
   AV_FC_ADD_ADAPTOR_FIELD(OutOfCoreBudget,
                       boost::bind(&PLODLoader::getOutOfCoreBudgetCB, this, _1),
                       boost::bind(&PLODLoader::setOutOfCoreBudgetCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(ErrorThreshold,
+                      boost::bind(&PLODLoader::getErrorThresholdCB, this, _1),
+                      boost::bind(&PLODLoader::setErrorThresholdCB, this, _1));
 }
 
 //av::gua::PLODLoader::~PLODLoader()
@@ -150,4 +153,16 @@ void
 av::gua::PLODLoader::setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event)
 {
   m_guaPLODLoader->set_out_of_core_budget_in_mb(event.getValue());
+}
+
+void
+av::gua::PLODLoader::getErrorThresholdCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPLODLoader->get_error_treshold();
+}
+
+void
+av::gua::PLODLoader::setErrorThresholdCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaPLODLoader->set_error_threshold(event.getValue());
 }

@@ -667,6 +667,63 @@ av::gua::PipelineDescription::get_light_visibility_passes()
     return result;
 }
 
+#if defined(AVANGO_PBR_SUPPORT)
+
+av::Link<av::gua::PLODPassDescription>
+av::gua::PipelineDescription::add_plod_pass()
+{
+    auto& pass(m_guaPipelineDescription->add_pass<::gua::PLODPassDescription>());
+
+    auto desc(new av::Link<av::gua::PLODPassDescription>(
+                        new av::gua::PLODPassDescription(
+                            std::shared_ptr<::gua::PLODPassDescription>(&pass))));
+
+    pass.set_user_data(desc);
+
+    return *desc;
+}
+
+av::Link<av::gua::PLODPassDescription>
+av::gua::PipelineDescription::get_plod_pass()
+{
+    auto& pass(m_guaPipelineDescription->get_pass<::gua::PLODPassDescription>());
+
+    if (pass.get_user_data()) {
+      auto desc = *static_cast<av::Link<av::gua::PLODPassDescription>*>(pass.get_user_data());
+      return desc;
+    } else {
+      auto desc(new av::Link<av::gua::PLODPassDescription>(
+                        new av::gua::PLODPassDescription(
+                            std::shared_ptr<::gua::PLODPassDescription>(&pass))));
+
+      pass.set_user_data(desc);
+
+      return *desc;
+    }
+}
+
+std::vector<av::Link<av::gua::PLODPassDescription>>
+av::gua::PipelineDescription::get_plod_passes()
+{
+    auto passes(m_guaPipelineDescription->get_passes<::gua::PLODPassDescription>());
+    std::vector<av::Link<av::gua::PLODPassDescription>> result;
+    for (auto pass : passes) {
+      if (pass->get_user_data()) {
+        result.push_back(*static_cast<av::Link<av::gua::PLODPassDescription>*>(pass->get_user_data()));
+      } else {
+        auto desc(new av::Link<av::gua::PLODPassDescription>(
+                        new av::gua::PLODPassDescription(
+                            std::shared_ptr<::gua::PLODPassDescription>(pass))));
+
+        pass->set_user_data(desc);
+        result.push_back(*desc);
+      }
+    }
+
+    return result;
+}
+
+#endif
 
 std::shared_ptr< ::gua::PipelineDescription> const&
 av::gua::PipelineDescription::getGuaPipelineDescription() const

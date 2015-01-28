@@ -20,6 +20,10 @@
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
 #include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
 
+#if defined(AVANGO_PBR_SUPPORT)
+#include <avango/gua/renderer/PLODPassDescription.hpp>
+#endif
+
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 
@@ -100,6 +104,14 @@ namespace av
       av::Link<av::gua::LightVisibilityPassDescription>              add_light_visibility_pass();
       av::Link<av::gua::LightVisibilityPassDescription>              get_light_visibility_pass();
       std::vector<av::Link<av::gua::LightVisibilityPassDescription>> get_light_visibility_passes();
+
+      #if defined(AVANGO_PBR_SUPPORT)
+
+      av::Link<av::gua::PLODPassDescription>                         add_plod_pass();
+      av::Link<av::gua::PLODPassDescription>                         get_plod_pass();
+      std::vector<av::Link<av::gua::PLODPassDescription>>            get_plod_passes();
+
+      #endif
 
       /**
        * Get the wrapped ::gua::PipelineDescription.

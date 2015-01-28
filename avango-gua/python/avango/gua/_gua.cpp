@@ -83,6 +83,7 @@
 #if defined(AVANGO_PBR_SUPPORT)
 #include "renderer/PBRLoader.hpp"
 #include "renderer/PLODLoader.hpp"
+#include "renderer/PLODPassDescription.hpp"
 #endif
 #include "renderer/NURBSLoader.hpp"
 #include "renderer/Texture.hpp"
@@ -206,6 +207,7 @@ BOOST_PYTHON_MODULE(_gua)
     // init_VolumeLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
+    init_PLODPassDescription();
     // init_PBRLoader();
 #endif
     // init_NURBSLoader();

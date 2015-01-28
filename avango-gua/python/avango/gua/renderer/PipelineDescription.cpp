@@ -136,6 +136,20 @@ list get_light_visibility_passes(av::gua::PipelineDescription& desc) {
     return result;
 }
 
+#if defined(AVANGO_PBR_SUPPORT)
+
+list get_plod_passes(av::gua::PipelineDescription& desc) {
+    list result;
+    auto passes = desc.get_plod_passes();
+
+    for (auto& pass : passes){
+      result.append(pass);
+    }
+    return result;
+}
+
+#endif
+
 void init_PipelineDescription()
  {
 
@@ -177,6 +191,11 @@ void init_PipelineDescription()
          .def("add_light_visibility_pass", &av::gua::PipelineDescription::add_light_visibility_pass)
          .def("get_light_visibility_pass", &av::gua::PipelineDescription::get_light_visibility_pass)
          .def("get_light_visibility_passes", get_light_visibility_passes)
+         #if defined(AVANGO_PBR_SUPPORT)
+         .def("add_plod_pass", &av::gua::PipelineDescription::add_plod_pass)
+         .def("get_plod_pass", &av::gua::PipelineDescription::get_plod_pass)
+         .def("get_plod_passes", get_plod_passes)
+         #endif
          ;
 
   def("create_default_pipeline_description", &create_default_pipeline_description);

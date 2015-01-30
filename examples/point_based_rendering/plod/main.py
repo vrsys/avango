@@ -59,8 +59,13 @@ def start(filename):
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
   )
 
-  cam.PipelineDescription.value.add_plod_pass()
+  pipeline_description = avango.gua.nodes.PipelineDescription()
+  pipeline_description.add_tri_mesh_pass()
+  pipeline_description.add_plod_pass()
+  pipeline_description.add_light_visibility_pass()
+  pipeline_description.add_resolve_pass()
 
+  cam.PipelineDescription.value = pipeline_description
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
   screen = avango.gua.nodes.ScreenNode(

@@ -49,12 +49,16 @@ namespace av
 
       SFString   Geometry;
       SFMaterial Material;
+      SFFloat    Importance;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
       virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
       virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
+      virtual void getImportanceCB(const SFFloat::GetValueEvent& event);
+      virtual void setImportanceCB(const SFFloat::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::PLODNode.

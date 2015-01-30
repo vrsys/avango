@@ -20,6 +20,10 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
                       boost::bind(&PLODNode::getMaterialCB, this, _1),
                       boost::bind(&PLODNode::setMaterialCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(Importance,
+                      boost::bind(&PLODNode::getImportanceCB, this, _1),
+                      boost::bind(&PLODNode::setImportanceCB, this, _1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -93,6 +97,19 @@ av::gua::PLODNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
     m_guaPLODNode->set_material(m_Material->getGuaMaterial());
   }
 }
+
+void
+av::gua::PLODNode::getImportanceCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPLODNode->get_importance();
+}
+
+void
+av::gua::PLODNode::setImportanceCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaPLODNode->set_importance(event.getValue());
+}
+
 
 std::shared_ptr< ::gua::node::PLODNode>
 av::gua::PLODNode::getGuaPLODNode() const {

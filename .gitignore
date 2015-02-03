@@ -56,3 +56,4 @@ avango-daemon/include/avango/daemon/Config.h
 
 # example
 #examples/zmq_distribution/data
+examples/skeletal_animation/data/medieval_harbour/

@@ -28,6 +28,10 @@ av::gua::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr< ::gua::no
                       boost::bind(&SkeletalAnimationNode::getAnimationCB, this, _1),
                       boost::bind(&SkeletalAnimationNode::setAnimationCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(BlendingFactor,
+                      boost::bind(&SkeletalAnimationNode::getBlendingFactorCB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setBlendingFactorCB, this, _1));
+
 //  if (guanode->get_material()) {
 //    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
 //  }
@@ -103,4 +107,16 @@ void
 av::gua::SkeletalAnimationNode::setAnimationCB(const SFString::SetValueEvent& event)
 {
   m_guaSkeletalAnimationNode->set_animation(event.getValue());
+}
+
+void
+av::gua::SkeletalAnimationNode::getBlendingFactorCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_blending_factor();
+}
+
+void
+av::gua::SkeletalAnimationNode::setBlendingFactorCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaSkeletalAnimationNode->set_blending_factor(event.getValue());
 }

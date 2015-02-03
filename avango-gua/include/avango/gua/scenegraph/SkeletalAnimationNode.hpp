@@ -63,6 +63,11 @@ namespace av
       virtual void getAnimationCB(const SFString::GetValueEvent& event);
       virtual void setAnimationCB(const SFString::SetValueEvent& event);
 
+      SFFloat BlendingFactor;
+
+      virtual void getBlendingFactorCB(const SFFloat::GetValueEvent& event);
+      virtual void setBlendingFactorCB(const SFFloat::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::SkeletalAnimationNode.
        */

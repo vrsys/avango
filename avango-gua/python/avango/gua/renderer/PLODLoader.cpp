@@ -2,7 +2,11 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
+#include <gua/renderer/PLOD.hpp>
 #include <avango/gua/renderer/PLODLoader.hpp>
+#include <avango/gua/scenegraph/SceneGraph.hpp>
+#include <avango/gua/scenegraph/PickResult.hpp>
+#include <avango/gua/utils/Ray.hpp>
 
 using namespace boost::python;
 using namespace av::python;
@@ -42,6 +46,25 @@ bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {
    return loader.is_supported(file);
 }
 
+av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
+                                 av::gua::SFVec3 const& bundle_origin,
+                                 av::gua::SFVec3 const& bundle_forward,
+                                 av::gua::SFVec3 const& bundle_up,
+                                 float bundle_radius,
+                                 float max_distance,
+                                 unsigned int max_depth,
+                                 unsigned int surfel_skip) {
+
+  return loader.pick_plod_interpolate(bundle_origin, 
+                                      bundle_forward, 
+                                      bundle_up, 
+                                      bundle_radius, 
+                                      max_distance, 
+                                      max_depth, 
+                                      surfel_skip);
+
+}
+
 void init_PLODLoader()
 {
   class_<av::gua::PLODLoader,
@@ -52,6 +75,7 @@ void init_PLODLoader()
          .def("create_geometry_from_file", &load)
          .def("create_geometry_from_file", &load2)
          .def("is_supported", &is_supported)
+         .def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
          ;
 
   enum_<av::gua::PLODLoader::Flags>("PLODLoaderFlags")

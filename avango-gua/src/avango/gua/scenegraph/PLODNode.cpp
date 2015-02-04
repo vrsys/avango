@@ -23,6 +23,10 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(Importance,
                       boost::bind(&PLODNode::getImportanceCB, this, _1),
                       boost::bind(&PLODNode::setImportanceCB, this, _1));
+  
+  AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
+                      boost::bind(&PLODNode::getEnableBackfaceCullingCB, this, _1),
+                      boost::bind(&PLODNode::setEnableBackfaceCullingCB, this, _1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -110,6 +114,17 @@ av::gua::PLODNode::setImportanceCB(const SFFloat::SetValueEvent& event)
   m_guaPLODNode->set_importance(event.getValue());
 }
 
+void
+av::gua::PLODNode::getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPLODNode->get_enable_backface_culling_by_normal();
+}
+
+void
+av::gua::PLODNode::setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event)
+{
+  m_guaPLODNode->set_enable_backface_culling_by_normal(event.getValue());
+}
 
 std::shared_ptr< ::gua::node::PLODNode>
 av::gua::PLODNode::getGuaPLODNode() const {

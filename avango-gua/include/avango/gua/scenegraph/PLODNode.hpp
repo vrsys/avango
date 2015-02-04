@@ -50,6 +50,7 @@ namespace av
       SFString   Geometry;
       SFMaterial Material;
       SFFloat    Importance;
+      SFBool     EnableBackfaceCulling;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -59,6 +60,9 @@ namespace av
 
       virtual void getImportanceCB(const SFFloat::GetValueEvent& event);
       virtual void setImportanceCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::PLODNode.

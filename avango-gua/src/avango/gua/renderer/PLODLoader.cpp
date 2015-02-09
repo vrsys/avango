@@ -69,6 +69,45 @@ av::gua::PLODLoader::is_supported(std::string const& fileName) const
   return m_guaPLODLoader->is_supported(fileName);
 }
 
+
+av::gua::MFPickResult* 
+av::gua::PLODLoader::pick_plod_interpolate(av::gua::SFVec3 const& bundle_origin,
+                                           av::gua::SFVec3 const& bundle_forward,
+                                           av::gua::SFVec3 const& bundle_up,
+                                           float bundle_radius,
+                                           float max_distance,
+                                           unsigned int max_depth,
+                                           unsigned int surfel_skip) const {
+
+  ::gua::math::vec3 ray_pos(bundle_origin.getValue().x, 
+                            bundle_origin.getValue().y, 
+                            bundle_origin.getValue().z);
+
+  ::gua::math::vec3 ray_fwd(bundle_forward.getValue().x,
+                            bundle_forward.getValue().y,
+                            bundle_forward.getValue().z);
+
+  ::gua::math::vec3 ray_up(bundle_up.getValue().x,
+                           bundle_up.getValue().y,
+                           bundle_up.getValue().z);
+
+  auto gua_results = m_guaPLODLoader->pick_plod_interpolate(ray_pos,
+                                                ray_fwd,
+                                                ray_up,
+                                                bundle_radius,
+                                                max_distance,
+                                                max_depth,
+                                                surfel_skip);
+
+  auto results(new av::gua::MFPickResult());
+  for (auto result : gua_results) {
+    results->add1Value(new av::gua::PickResult(result));
+  }
+
+  return results;
+}
+
+
 void
 av::gua::PLODLoader::initClass()
 {

@@ -25,7 +25,9 @@ def start(filename):
   plodloader.RenderBudget.value = 2048
   plodloader.OutOfCoreBudget.value = 4096
   plod_geode = plodloader.create_geometry_from_file(
-                  filename, avango.gua.LoaderFlags.DEFAULTS)
+                  filename, avango.gua.PLODLoaderFlags.NORMALIZE_SCALE |
+                            avango.gua.PLODLoaderFlags.NORMALIZE_POSITION )
+                  #filename, avango.gua.PLODLoaderFlags.DEFAULTS)
 
 
   #light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
@@ -61,9 +63,12 @@ def start(filename):
 
   pipeline_description = avango.gua.nodes.PipelineDescription()
   pipeline_description.add_tri_mesh_pass()
+  pipeline_description.add_textured_quad_pass()
   pipeline_description.add_plod_pass()
   pipeline_description.add_light_visibility_pass()
+  pipeline_description.add_bbox_pass()
   pipeline_description.add_resolve_pass()
+  pipeline_description.add_textured_screen_space_quad_pass()
 
   cam.PipelineDescription.value = pipeline_description
 

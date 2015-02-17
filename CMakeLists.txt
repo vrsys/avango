@@ -39,7 +39,6 @@ include(find_compiler)
 include(file_copy_macro)
 
 include(find_guacamole)
-include(find_guacamole_gui)
 
 if (AVANGO_PBR_SUPPORT)
   include(FindGuacamolePLOD)
@@ -174,6 +173,7 @@ if (AVANGO_OPENAL_SUPPORT)
 endif(AVANGO_OPENAL_SUPPORT)
 
 if (AVANGO_AWESOMIUM_SUPPORT)
+    include(find_guacamole_gui)
     add_subdirectory(avango-awesomium)
 endif(AVANGO_AWESOMIUM_SUPPORT)
 

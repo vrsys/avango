@@ -1,77 +1,77 @@
-#ifndef AVANGO_GUA_VOLUME_NODE_HPP
-#define AVANGO_GUA_VOLUME_NODE_HPP
+// #ifndef AVANGO_GUA_VOLUME_NODE_HPP
+// #define AVANGO_GUA_VOLUME_NODE_HPP
 
-/**
- * \file
- * \ingroup av_gua
- */
+// /**
+//  * \file
+//  * \ingroup av_gua
+//  */
 
-#include <gua/node/VolumeNode.hpp>
-#include <gua/math/math.hpp>
+// #include <gua/node/VolumeNode.hpp>
+// #include <gua/math/math.hpp>
 
-#include <avango/gua/scenegraph/Node.hpp>
+// #include <avango/gua/scenegraph/Node.hpp>
 
-namespace av
-{
-  namespace gua
-  {
-    /**
-     * Wrapper for ::gua::VolumeNode
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL VolumeNode : public av::gua::Node
-    {
-      AV_FC_DECLARE();
+// namespace av
+// {
+//   namespace gua
+//   {
+//     /**
+//      * Wrapper for ::gua::VolumeNode
+//      *
+//      * \ingroup av_gua
+//      */
+//     class AV_GUA_DLL VolumeNode : public av::gua::Node
+//     {
+//       AV_FC_DECLARE();
 
-    public:
+//     public:
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::VolumeNode is created.
-       * Otherwise, the given ::gua::VolumeNode is used.
-       */
-      VolumeNode(std::shared_ptr< ::gua::node::VolumeNode> guanode = std::shared_ptr< ::gua::node::VolumeNode>(new ::gua::node::VolumeNode("")));
+//       /**
+//        * Constructor. When called without arguments, a new ::gua::VolumeNode is created.
+//        * Otherwise, the given ::gua::VolumeNode is used.
+//        */
+//       VolumeNode(std::shared_ptr< ::gua::node::VolumeNode> guanode = std::shared_ptr< ::gua::node::VolumeNode>(new ::gua::node::VolumeNode("")));
 
-    protected:
+//     protected:
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~VolumeNode();
+//       /**
+//        * Destructor made protected to prevent allocation on stack.
+//        */
+// //      virtual ~VolumeNode();
 
-    public:
+//     public:
 
 
-      //SFString Geometry;
+//       //SFString Geometry;
 
-      /**
-       * Get the wrapped ::gua::VolumeNode.
-       */
-      std::shared_ptr< ::gua::node::VolumeNode> getGuaNode() const;
+//       /**
+//        * Get the wrapped ::gua::VolumeNode.
+//        */
+//       std::shared_ptr< ::gua::node::VolumeNode> getGuaNode() const;
 
-    public:
+//     public:
 
-      //virtual void getGeometryCB(const SFString::GetValueEvent& event);
-      //virtual void setGeometryCB(const SFString::SetValueEvent& event);
+//       //virtual void getGeometryCB(const SFString::GetValueEvent& event);
+//       //virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
-    private:
+//     private:
 
-      std::shared_ptr< ::gua::node::VolumeNode> m_guaNode;
+//       std::shared_ptr< ::gua::node::VolumeNode> m_guaNode;
 
-      VolumeNode(const VolumeNode&);
-      VolumeNode& operator=(const VolumeNode&);
-    };
+//       VolumeNode(const VolumeNode&);
+//       VolumeNode& operator=(const VolumeNode&);
+//     };
 
-    typedef SingleField<Link<VolumeNode> > SFVolumeNode;
-    typedef MultiField<Link<VolumeNode> > MFVolumeNode;
+//     typedef SingleField<Link<VolumeNode> > SFVolumeNode;
+//     typedef MultiField<Link<VolumeNode> > MFVolumeNode;
 
-  }
+//   }
 
-#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::VolumeNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::VolumeNode> >;
-#endif
+// #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+//   template class AV_GUA_DLL SingleField<Link<gua::VolumeNode> >;
+//   template class AV_GUA_DLL MultiField<Link<gua::VolumeNode> >;
+// #endif
 
-}
+// }
 
-#endif //AVANGO_GUA_VOLUME_NODE_HPP
+// #endif //AVANGO_GUA_VOLUME_NODE_HPP

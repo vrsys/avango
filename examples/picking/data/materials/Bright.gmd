@@ -1,9 +1,0 @@
-
-{
-	"shading_model" : "Texcoords.gsd",
-	"uniforms" : 
-	{
-		"color" : "(0.000  0.000  0.000)",
-		"pointer_pos" : "(0.000  0.000)"
-	}
-}

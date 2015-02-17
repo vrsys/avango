@@ -15,44 +15,73 @@ class TimedRotate(avango.script.Script):
 def start():
 
   # setup scenegraph
-  graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-
+  graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.TriMeshLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
 
-  light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
-  light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
+  monkey1 = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  monkey2 = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  eye = avango.gua.nodes.TransformNode(Name = "eye")
-  eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+  monkey1.Material.value.set_uniform("Roughness", 0.3)
+  monkey1.Material.value.set_uniform("Metalness", 1.0)
 
-  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
-  screen.Children.value = [eye]
+  monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
+  monkey2.Material.value.set_uniform("Roughness", 0.6)
+  monkey2.Material.value.set_uniform("Metalness", 0.1)
 
-  graph.Root.value.Children.value = [monkey, light, screen]
+  transform1 = avango.gua.nodes.TransformNode(
+    Children = [monkey1]
+  )
+  transform2 = avango.gua.nodes.TransformNode(
+    Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
+    Children = [monkey2]
+  )
 
-  # setup viewing
+  light = avango.gua.nodes.PointLightNode(
+    Name = "light",
+    Color = avango.gua.Color(1.0, 1.0, 1.0),
+    Brightness = 50.0,
+    Transform = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
+  )
+
   size = avango.gua.Vec2ui(1024, 768)
-  pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/eye",
-                                                                    RightEye = "/screen/eye",
-                                                                    LeftScreen = "/screen",
-                                                                    RightScreen = "/screen",
-                                                                    SceneGraph = "scenegraph"),
-                                   Window = avango.gua.nodes.Window(Size = size,
-                                                                    LeftResolution = size),
-                                   LeftResolution = size)
+
+  window = avango.gua.nodes.GlfwWindow(
+    Size = size,
+    LeftResolution = size
+  )
+
+  avango.gua.register_window("window", window)
+
+  cam = avango.gua.nodes.CameraNode(
+    LeftScreenPath = "/screen",
+    SceneGraph = "scenegraph",
+    Resolution = size,
+    OutputWindowName = "window",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  )
+
+  screen = avango.gua.nodes.ScreenNode(
+    Name = "screen",
+    Width = 2,
+    Height = 1.5,
+    Children = [cam]
+  )
+
+  graph.Root.value.Children.value = [transform1, transform2, light, screen]
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [pipe]
+  viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
+  viewer.Windows.value = [window]
 
   monkey_updater = TimedRotate()
 
   timer = avango.nodes.TimeSensor()
   monkey_updater.TimeIn.connect_from(timer.Time)
 
-  monkey.Transform.connect_from(monkey_updater.MatrixOut)
+  transform1.Transform.connect_from(monkey_updater.MatrixOut)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/Node.hpp>
+#include <avango/gua/network/NetTransform.h>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -47,12 +48,12 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
                         boost::bind(&Node::setWorldTransformCB, this, _1));
   WorldTransform.dontDistribute(true);
 
-  AV_FC_ADD_ADAPTOR_FIELD(GroupNames,
-                        boost::bind(&Node::getGroupNamesCB, this, _1),
-                        boost::bind(&Node::setGroupNamesCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(BoundingBox,
                         boost::bind(&Node::getBoundingBoxCB, this, _1),
                         boost::bind(&Node::setBoundingBoxCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(DisplayBoundingBox,
+                        boost::bind(&Node::getDisplayBoundingBoxCB, this, _1),
+                        boost::bind(&Node::setDisplayBoundingBoxCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(Depth,
                         boost::bind(&Node::getDepthCB, this, _1),
                         boost::bind(&Node::setDepthCB, this, _1));
@@ -60,10 +61,22 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
                         boost::bind(&Node::getPathCB, this, _1),
                         boost::bind(&Node::setPathCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(Tags,
+                        boost::bind(&Node::getTagsCB, this, _1),
+                        boost::bind(&Node::setTagsCB, this, _1));
+
 }
 
 av::gua::Node::~Node()
 {}
+
+void av::gua::Node::on_distribute(av::gua::NetTransform& netNode)
+{
+}
+
+void av::gua::Node::on_undistribute(av::gua::NetTransform& netNode)
+{
+}
 
 void
 av::gua::Node::initClass()
@@ -133,6 +146,7 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
     const av::gua::MFNode::ContainerType &children(event.getValue());
 
     for (auto& child: children) {
+
       if (child->getGuaNode() != nullptr) {
         m_guaNode->add_child(child->getGuaNode());
         if (avGuaChildren) {
@@ -142,7 +156,7 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
     }
 
   } else {
-      std::cout << "Cannot set children of null node!" << std::endl;
+    std::cout << "Cannot set children of null node!" << std::endl;
   }
 }
 
@@ -183,27 +197,6 @@ av::gua::Node::setWorldTransformCB(const SFMatrix::SetValueEvent& event)
 }
 
 void
-av::gua::Node::getGroupNamesCB(const MFString::GetValueEvent& event)
-{
-    std::vector <std::string> v(m_guaNode->get_groups().begin(), m_guaNode->get_groups().end());
-    *(event.getValuePtr()) = v;
-}
-
-void
-av::gua::Node::setGroupNamesCB(const MFString::SetValueEvent& event)
-{
-  auto old_groups(m_guaNode->get_groups());
-  for (auto group : old_groups) {
-    m_guaNode->remove_from_group(group);
-  }
-
-  auto new_groups(event.getValue());
-  for (auto group : new_groups) {
-    m_guaNode->add_to_group(group);
-  }
-}
-
-void
 av::gua::Node::getBoundingBoxCB(const SFBoundingBox::GetValueEvent& event)
 {
     m_guaBbox = m_guaNode->get_bounding_box();
@@ -215,6 +208,18 @@ void
 av::gua::Node::setBoundingBoxCB(const SFBoundingBox::SetValueEvent& event)
 {
   // std::cout << "A node's bounding box is calculated dependent on the scenegraph hierarchy and thus cannot be set!" << std::endl;
+}
+
+void
+av::gua::Node::getDisplayBoundingBoxCB(const SFBool::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_draw_bounding_box();
+}
+
+void
+av::gua::Node::setDisplayBoundingBoxCB(const SFBool::SetValueEvent& event)
+{
+    m_guaNode->set_draw_bounding_box(event.getValue());
 }
 
 void
@@ -240,6 +245,22 @@ av::gua::Node::setPathCB(const SFString::SetValueEvent& event)
 {
   // std::cout << "A node's path cannot be set!" << std::endl;
 }
+
+void
+av::gua::Node::getTagsCB(const MFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->get_tags().get_strings();
+}
+
+void
+av::gua::Node::setTagsCB(const MFString::SetValueEvent& event)
+{
+  m_guaNode->get_tags().clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaNode->get_tags().add_tag(tag);
+  }
+}
+
 
 void
 av::gua::Node::addToParentChildren() {

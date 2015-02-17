@@ -12,14 +12,16 @@
 #include <avango/gua/windows_specific_gua.hpp>
 
 namespace gua {
-  class Pipeline;
+  namespace node {
+    class CameraNode;
+  }
 }
 
 namespace av
 {
   namespace gua
   {
-    class Pipeline;
+    class CameraNode;
     class SceneGraph;
 
     /**
@@ -37,11 +39,11 @@ namespace av
        * Constructor. When called without arguments, a new ::gua::Renderer is created.
        * Otherwise, the given ::gua::Renderer is used.
        */
-      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer((std::vector< ::gua::Pipeline*>())));
+      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer());
 
-      Renderer(std::vector<av::gua::Pipeline const*> const& pipes);
 
-      void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const;
+      void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs,
+                      std::vector<av::gua::CameraNode const*> const& cams) const;
 
     protected:
 

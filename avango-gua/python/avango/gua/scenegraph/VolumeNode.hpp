@@ -1,6 +1,6 @@
-#ifndef AV_PYTHON_GUA_VOLUME_NODE_HPP
-#define AV_PYTHON_GUA_VOLUME_NODE_HPP
+// #ifndef AV_PYTHON_GUA_VOLUME_NODE_HPP
+// #define AV_PYTHON_GUA_VOLUME_NODE_HPP
 
-void init_VolumeNode();
+// void init_VolumeNode();
 
-#endif //AV_PYTHON_GUA_VOLUME_NODE_HPP
+// #endif //AV_PYTHON_GUA_VOLUME_NODE_HPP

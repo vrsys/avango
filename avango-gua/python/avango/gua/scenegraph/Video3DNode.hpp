@@ -1,6 +1,6 @@
-#ifndef AV_PYTHON_GUA_VIDEO3D_NODE_HPP
-#define AV_PYTHON_GUA_VIDEO3D_NODE_HPP
+// #ifndef AV_PYTHON_GUA_VIDEO3D_NODE_HPP
+// #define AV_PYTHON_GUA_VIDEO3D_NODE_HPP
 
-void init_Video3DNode();
+// void init_Video3DNode();
 
-#endif //AV_PYTHON_GUA_VIDEO3D_NODE_HPP
+// #endif //AV_PYTHON_GUA_VIDEO3D_NODE_HPP

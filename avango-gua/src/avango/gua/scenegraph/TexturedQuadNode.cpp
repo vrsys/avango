@@ -9,7 +9,7 @@ AV_FIELD_DEFINE(av::gua::MFTexturedQuadNode);
 
 av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::TexturedQuadNode> guanode)
     : Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::node::TexturedQuadNode>(Node::getGuaNode()))
+      m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Texture,
                           boost::bind(&TexturedQuadNode::getTextureCB, this, _1),
@@ -23,9 +23,22 @@ av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::Textur
                           boost::bind(&TexturedQuadNode::getHeightCB, this, _1),
                           boost::bind(&TexturedQuadNode::setHeightCB, this, _1));
 
-    AV_FC_ADD_ADAPTOR_FIELD(IsStereoTexture,
-                          boost::bind(&TexturedQuadNode::getIsStereoTextureCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setIsStereoTextureCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(FlipX,
+                          boost::bind(&TexturedQuadNode::getFlipXCB, this, _1),
+                          boost::bind(&TexturedQuadNode::setFlipXCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(FlipY,
+                          boost::bind(&TexturedQuadNode::getFlipYCB, this, _1),
+                          boost::bind(&TexturedQuadNode::setFlipYCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ScaledTransform,
+                          boost::bind(&TexturedQuadNode::getScaledTransformCB, this, _1),
+                          boost::bind(&TexturedQuadNode::setScaledTransformCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ScaledWorldTransform,
+                          boost::bind(&TexturedQuadNode::getScaledWorldTransformCB, this, _1),
+                          boost::bind(&TexturedQuadNode::setScaledWorldTransformCB, this, _1));
+
 }
 
 //av::gua::TexturedQuadNode::~TexturedQuadNode()
@@ -56,51 +69,84 @@ av::gua::TexturedQuadNode::getGuaNode() const
 void
 av::gua::TexturedQuadNode::getTextureCB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->get_texture();
+    *(event.getValuePtr()) = m_guaNode->data.get_texture();
 }
 
 void
 av::gua::TexturedQuadNode::setTextureCB(const SFString::SetValueEvent& event)
 {
-    m_guaNode->set_texture(event.getValue());
+    m_guaNode->data.set_texture(event.getValue());
 }
 
 void
 av::gua::TexturedQuadNode::getWidthCB(const SFFloat::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->get_size()[0];
+    *(event.getValuePtr()) = m_guaNode->data.get_size()[0];
 }
 
 void
 av::gua::TexturedQuadNode::setWidthCB(const SFFloat::SetValueEvent& event)
 {
-  auto size = m_guaNode->get_size();
+  auto size = m_guaNode->data.get_size();
   size[0] = event.getValue();
-  m_guaNode->get_size(size);
+  m_guaNode->data.set_size(size);
 }
 
 void
 av::gua::TexturedQuadNode::getHeightCB(const SFFloat::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->get_size()[1];
+    *(event.getValuePtr()) = m_guaNode->data.get_size()[1];
 }
 
 void
 av::gua::TexturedQuadNode::setHeightCB(const SFFloat::SetValueEvent& event)
 {
-  auto size = m_guaNode->get_size();
+  auto size = m_guaNode->data.get_size();
   size[1] = event.getValue();
-  m_guaNode->get_size(size);
+  m_guaNode->data.set_size(size);
 }
 
 void
-av::gua::TexturedQuadNode::getIsStereoTextureCB(const SFBool::GetValueEvent& event)
+av::gua::TexturedQuadNode::getFlipXCB(const SFBool::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->is_stereo_texture();
+    *(event.getValuePtr()) = m_guaNode->data.flip_x();
 }
 
 void
-av::gua::TexturedQuadNode::setIsStereoTextureCB(const SFBool::SetValueEvent& event)
+av::gua::TexturedQuadNode::setFlipXCB(const SFBool::SetValueEvent& event)
 {
-    m_guaNode->is_stereo_texture(event.getValue());
+  m_guaNode->data.flip_x() = event.getValue();
 }
+
+void
+av::gua::TexturedQuadNode::getFlipYCB(const SFBool::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.flip_y();
+}
+
+void
+av::gua::TexturedQuadNode::setFlipYCB(const SFBool::SetValueEvent& event)
+{
+  m_guaNode->data.flip_y() = event.getValue();
+}
+
+void
+av::gua::TexturedQuadNode::getScaledTransformCB(const SFMatrix::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_scaled_transform();
+}
+
+void
+av::gua::TexturedQuadNode::setScaledTransformCB(const SFMatrix::SetValueEvent& event)
+{}
+
+void
+av::gua::TexturedQuadNode::getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->get_scaled_world_transform();
+}
+
+void
+av::gua::TexturedQuadNode::setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event)
+{}
+

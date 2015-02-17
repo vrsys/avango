@@ -33,7 +33,6 @@
 #include <avango/tools/FieldSelector.hpp>
 #include <avango/tools/Selector.hpp>
 #include <avango/tools/SingleSelector.hpp>
-#include <avango/tools/PickSelector.hpp>
 #include <avango/tools/ProximitySelector.hpp>
 #include <avango/tools/TriggerSelector.hpp>
 #include <avango/tools/TypeSelector.hpp>
@@ -69,8 +68,6 @@ void init_Selectors()
   register_multifield<av::tools::MFSelector>("MFSelector");
   register_field<av::tools::SFSingleSelector>("SFSingleSelector");
   register_multifield<av::tools::MFSingleSelector>("MFSingleSelector");
-  register_field<av::tools::SFPickSelector>("SFPickSelector");
-  register_multifield<av::tools::MFPickSelector>("MFPickSelector");
   register_field<av::tools::SFProximitySelector>("SFProximitySelector");
   register_multifield<av::tools::MFProximitySelector>("MFProximitySelector");
   register_field<av::tools::SFTriggerSelector>("SFTriggerSelector");
@@ -87,7 +84,6 @@ void init_Selectors()
   class_<av::tools::NameSelector, av::Link<av::tools::NameSelector>, bases<av::tools::Selector>, boost::noncopyable >("NameSelector", "NameSelector class", no_init);
   class_<av::tools::FieldSelector, av::Link<av::tools::FieldSelector>, bases<av::tools::Selector>, boost::noncopyable >("FieldSelector", "FieldSelector class", no_init);
   class_<av::tools::SingleSelector, av::Link<av::tools::SingleSelector>, bases<av::tools::Selector>, boost::noncopyable >("SingleSelector", "SingleSelector class", no_init);
-  class_<av::tools::PickSelector, av::Link<av::tools::PickSelector>, bases<av::tools::Selector>, boost::noncopyable >("PickSelector", "PickSelector class", no_init);
   class_<av::tools::ProximitySelector, av::Link<av::tools::ProximitySelector>, bases<av::tools::Selector>, boost::noncopyable >("ProximitySelector", "ProximitySelector class", no_init);
   class_<av::tools::TriggerSelector, av::Link<av::tools::TriggerSelector>, bases<av::tools::Selector>, boost::noncopyable >("TriggerSelector", "TriggerSelector class", no_init);
   class_<av::tools::TypeSelector, av::Link<av::tools::TypeSelector>, bases<av::tools::Selector>, boost::noncopyable >("TypeSelector", "TypeSelector class", no_init);

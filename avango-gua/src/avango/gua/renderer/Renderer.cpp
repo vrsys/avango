@@ -1,5 +1,5 @@
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -19,27 +19,24 @@ av::gua::Renderer::Renderer(::gua::Renderer* guaRenderer)
     : m_guaRenderer(guaRenderer)
 {}
 
-av::gua::Renderer::Renderer(std::vector<av::gua::Pipeline const*> const& pipes)
-    : m_guaRenderer(nullptr) {
-        std::vector< ::gua::Pipeline*> gua_pipes;
-        for (auto pipe : pipes) {
-            gua_pipes.push_back(pipe->getGuaPipeline());
-        }
-        m_guaRenderer = new ::gua::Renderer(gua_pipes);
-    }
-
 //av::gua::Renderer::~Renderer()
 //{}
 
 void
-av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const
+av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs,
+                              std::vector<av::gua::CameraNode const*> const& cams) const
 {
   std::vector< ::gua::SceneGraph const*> gua_graphs;
   for (auto graph : graphs) {
     gua_graphs.push_back(graph->getGuaSceneGraph());
   }
 
-  m_guaRenderer->queue_draw(gua_graphs);
+  std::vector< std::shared_ptr< ::gua::node::CameraNode> > gua_cams;
+  for (auto cam : cams) {
+    gua_cams.push_back(cam->getGuaNode());
+  }
+
+  m_guaRenderer->queue_draw(gua_graphs, gua_cams);
 }
 
 void

@@ -44,7 +44,6 @@
 #include <avango/tools/DragTool.hpp>
 //#include <avango/tools/IntersectionTargetHolder.hpp>
 //#include <avango/tools/NodePathTargetHolder.hpp>
-#include <avango/tools/PickSelector.hpp>
 #include <avango/tools/ProximitySelector.hpp>
 #include <avango/tools/ScaledGrabTool.hpp>
 //#endif
@@ -78,7 +77,6 @@ av::tools::Init::initClass()
     av::tools::DragTool::initClass();
     //av::tools::IntersectionTargetHolder::initClass();
     //av::tools::NodePathTargetHolder::initClass();
-    av::tools::PickSelector::initClass();
     av::tools::ProximitySelector::initClass();
     av::tools::ScaledGrabTool::initClass();
 //#endif

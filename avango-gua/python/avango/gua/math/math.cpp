@@ -385,6 +385,11 @@ void init_Mat4() {
   ::gua::math::mat4 const (*inverse)( ::gua::math::mat4 const&) =
       &scm::math::inverse;
 
+  ::gua::math::mat4 const (*makeLookAt)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =
+      &scm::math::make_look_at_matrix;
+  ::gua::math::mat4 const (*makeLookAtInv)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =
+      &scm::math::make_look_at_matrix_inv;
+
   // wrapping gua::math::mat4 functionality
   class_< ::gua::math::mat4>("Mat4", no_init)
     .def("__init__", make_constructor(&constructorMat< ::gua::math::mat4>))
@@ -456,11 +461,14 @@ void init_Mat4() {
   def("make_rot_mat", makeRot2);
   def("make_rot_mat", makeRot3);
 
+
   def("make_scale_mat", makeScale1);
   def("make_scale_mat", makeScale2);
   def("make_scale_mat", makeScale3);
 
   def("make_inverse_mat", inverse);
+  def("make_look_at_mat", makeLookAt);
+  def("make_look_at_mat_inv", makeLookAtInv);
 }
 
 void normalizeQuat(::gua::math::quat& quat) {

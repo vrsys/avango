@@ -16,7 +16,7 @@ AV_FIELD_DEFINE(av::gua::MFTransformNode);
 
 av::gua::TransformNode::TransformNode(std::shared_ptr< ::gua::node::TransformNode> guanode)
   : Node(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::node::TransformNode> (Node::getGuaNode()))
+    m_guaNode(guanode)
 {}
 
 av::gua::TransformNode::~TransformNode()

@@ -1,87 +1,87 @@
-#ifndef AVANGO_GUA_VOLUME_LOADER_HPP
-#define AVANGO_GUA_VOLUME_LOADER_HPP
+// #ifndef AVANGO_GUA_VOLUME_LOADER_HPP
+// #define AVANGO_GUA_VOLUME_LOADER_HPP
 
-/**
- * \file
- * \ingroup av_gua
- */
+// /**
+//  * \file
+//  * \ingroup av_gua
+//  */
 
-#include <gua/renderer/VolumeLoader.hpp>
+// #include <gua/renderer/VolumeLoader.hpp>
 
-#include <avango/gua/Fields.hpp>
-#include <avango/gua/scenegraph/VolumeNode.hpp>
-#include <avango/FieldContainer.h>
+// #include <avango/gua/Fields.hpp>
+// #include <avango/gua/scenegraph/VolumeNode.hpp>
+// #include <avango/FieldContainer.h>
 
-#include <avango/gua/windows_specific_gua.hpp>
-
-
-namespace av
-{
-  namespace gua
-  {
-    /**
-     * Wrapper for ::gua::VolumeLoader
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL VolumeLoader : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
-
-    public:
-
-      enum Flags {
-        DEFAULTS = ::gua::VolumeLoader::DEFAULTS,
-        MAKE_PICKABLE = ::gua::VolumeLoader::MAKE_PICKABLE,
-        NORMALIZE_POSITION = ::gua::VolumeLoader::NORMALIZE_POSITION,
-        NORMALIZE_SCALE = ::gua::VolumeLoader::NORMALIZE_SCALE
-      };
-
-      /**
-       * Constructor. When called without arguments, a new ::gua::VolumeLoader is created.
-       * Otherwise, the given ::gua::VolumeLoader is used.
-       */
-      VolumeLoader(::gua::VolumeLoader* guaVolumeLoader = new ::gua::VolumeLoader());
-
-      av::Link<av::gua::Node> load( std::string const& nodename,
-                                    std::string const& fileName,
-                                    Flags flags = DEFAULTS) const;
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~VolumeLoader();
-
-    public:
-
-      /**
-       * Get the wrapped ::gua::VolumeLoader.
-       */
-      ::gua::VolumeLoader* getGuaVolumeLoader() const;
+// #include <avango/gua/windows_specific_gua.hpp>
 
 
-    private:
+// namespace av
+// {
+//   namespace gua
+//   {
+//     /**
+//      * Wrapper for ::gua::VolumeLoader
+//      *
+//      * \ingroup av_gua
+//      */
+//     class AV_GUA_DLL VolumeLoader : public av::FieldContainer
+//     {
+//       AV_FC_DECLARE();
 
-      ::gua::VolumeLoader *m_guaVolumeLoader;
+//     public:
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
+//       enum Flags {
+//         DEFAULTS = ::gua::VolumeLoader::DEFAULTS,
+//         MAKE_PICKABLE = ::gua::VolumeLoader::MAKE_PICKABLE,
+//         NORMALIZE_POSITION = ::gua::VolumeLoader::NORMALIZE_POSITION,
+//         NORMALIZE_SCALE = ::gua::VolumeLoader::NORMALIZE_SCALE
+//       };
 
-      VolumeLoader(const VolumeLoader&);
-      VolumeLoader& operator=(const VolumeLoader&);
-    };
+//       /**
+//        * Constructor. When called without arguments, a new ::gua::VolumeLoader is created.
+//        * Otherwise, the given ::gua::VolumeLoader is used.
+//        */
+//       VolumeLoader(::gua::VolumeLoader* guaVolumeLoader = new ::gua::VolumeLoader());
 
-    typedef SingleField<Link<VolumeLoader> > SFVolumeLoader;
-    typedef MultiField<Link<VolumeLoader> > MFVolumeLoader;
+//       av::Link<av::gua::Node> load( std::string const& nodename,
+//                                     std::string const& fileName,
+//                                     Flags flags = DEFAULTS) const;
 
-  }
+//     protected:
 
-#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::VolumeLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::VolumeLoader> >;
-#endif
+//       /**
+//        * Destructor made protected to prevent allocation on stack.
+//        */
+// //      virtual ~VolumeLoader();
 
-}
+//     public:
 
-#endif //AVANGO_GUA_VOLUME_LOADER_HPP
+//       /**
+//        * Get the wrapped ::gua::VolumeLoader.
+//        */
+//       ::gua::VolumeLoader* getGuaVolumeLoader() const;
+
+
+//     private:
+
+//       ::gua::VolumeLoader *m_guaVolumeLoader;
+
+//       av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
+
+//       VolumeLoader(const VolumeLoader&);
+//       VolumeLoader& operator=(const VolumeLoader&);
+//     };
+
+//     typedef SingleField<Link<VolumeLoader> > SFVolumeLoader;
+//     typedef MultiField<Link<VolumeLoader> > MFVolumeLoader;
+
+//   }
+
+// #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+//   template class AV_GUA_DLL SingleField<Link<gua::VolumeLoader> >;
+//   template class AV_GUA_DLL MultiField<Link<gua::VolumeLoader> >;
+// #endif
+
+// }
+
+// #endif //AVANGO_GUA_VOLUME_LOADER_HPP

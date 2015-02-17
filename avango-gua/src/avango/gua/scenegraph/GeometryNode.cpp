@@ -11,13 +11,6 @@ av::gua::GeometryNode::GeometryNode(std::shared_ptr< ::gua::node::GeometryNode> 
   : Node(guanode),
     m_guaNode(std::dynamic_pointer_cast< ::gua::node::GeometryNode>(Node::getGuaNode()))
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-                        boost::bind(&GeometryNode::getGeometryCB, this, _1),
-                        boost::bind(&GeometryNode::setGeometryCB, this, _1));
-
-  AV_FC_ADD_ADAPTOR_FIELD(Material,
-                        boost::bind(&GeometryNode::getMaterialCB, this, _1),
-                        boost::bind(&GeometryNode::setMaterialCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ShadowMode,
                         boost::bind(&GeometryNode::getShadowModeCB, this, _1),
@@ -43,30 +36,6 @@ std::shared_ptr< ::gua::node::GeometryNode>
 av::gua::GeometryNode::getGuaNode() const
 {
   return m_guaNode;
-}
-
-void
-av::gua::GeometryNode::getGeometryCB(const SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaNode->get_filename();
-}
-
-void
-av::gua::GeometryNode::setGeometryCB(const SFString::SetValueEvent& event)
-{
-  m_guaNode->set_filename(event.getValue());
-}
-
-void
-av::gua::GeometryNode::getMaterialCB(const SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaNode->get_material();
-}
-
-void
-av::gua::GeometryNode::setMaterialCB(const SFString::SetValueEvent& event)
-{
-  m_guaNode->set_material(event.getValue());
 }
 
 void

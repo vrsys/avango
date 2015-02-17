@@ -15,7 +15,7 @@ AVANGO=/opt/avango/master
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib
 
 # schism
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86:/opt/Awesomium/lib:/opt/pbr/inst_cb/lib
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
@@ -32,7 +32,7 @@ else
     python3 "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
 fi
 
-filename="/mnt/pitoti/KDN_LOD/PITOTI_KDN_LOD/Spacemonkey_new.kdn"
+filename="/opt/guacamole/new_renderer/examples/plod/data/objects/pig.kdn"
 if [ $# -eq 1 ]; then
   filename=$1
 fi

@@ -17,9 +17,9 @@ AV_FC_DEFINE(av::oculus::OculusWindow);
 AV_FIELD_DEFINE(av::oculus::SFOculusWindow);
 AV_FIELD_DEFINE(av::oculus::MFOculusWindow);
 
-av::oculus::OculusWindow::OculusWindow(::gua::OculusWindow* guaOculusWindow)
+av::oculus::OculusWindow::OculusWindow(std::shared_ptr< ::gua::OculusWindow> const& guaOculusWindow)
   : av::gua::Window(guaOculusWindow),
-    m_guaOculusWindow(reinterpret_cast< ::gua::OculusWindow*>(av::gua::Window::getGuaWindow()))
+    m_guaOculusWindow(guaOculusWindow)
 {
 }
 
@@ -33,15 +33,15 @@ av::oculus::OculusWindow::initClass()
   if (!isTypeInitialized())
   {
     av::gua::Window::initClass();
-    
+
     AV_FC_INIT(av::gua::Window, av::oculus::OculusWindow, true);
-    
+
     SFOculusWindow::initClass("av::oculus::SFOculusWindow", "av::Field");
     MFOculusWindow::initClass("av::oculus::MFOculusWindow", "av::Field");
   }
 }
 
-::gua::OculusWindow*
+std::shared_ptr< ::gua::OculusWindow> const&
 av::oculus::OculusWindow::getGuaOculusWindow() const {
   return m_guaOculusWindow;
 }

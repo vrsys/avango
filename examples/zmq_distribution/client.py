@@ -31,6 +31,22 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
+from avango.script import field_has_changed
+
+from examples_common.GuaVE import GuaVE
+
+class NetInit(avango.script.Script):
+  NetChildren = avango.gua.MFNode()
+  WindowName  = avango.SFString()
+  Viewer      = avango.gua.nodes.Viewer()
+
+  @field_has_changed(NetChildren)
+  def update(self):
+    for tmp in self.NetChildren.value:
+      for child in tmp.Children.value:
+        if isinstance(child, avango.gua.CameraNode):
+          if child.OutputWindowName.value == self.WindowName.value:
+            self.Viewer.CameraNodes.value = [child]
 
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
@@ -38,27 +54,35 @@ nettrans = avango.gua.nodes.NetTransform(
   Groupname = "AVCLIENT|127.0.0.1|7432"
 )
 
+loader = avango.gua.nodes.TriMeshLoader()
+
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
 size = avango.gua.Vec2ui(800, 600)
-pipe = avango.gua.nodes.Pipeline(
-  Camera = avango.gua.nodes.Camera(
-    LeftEye = "/net/screen/eye",
-    LeftScreen = "/net/screen",
-    SceneGraph = "scenegraph"
-  ),
-  Window = avango.gua.nodes.Window(Size = size, LeftResolution = size),
+
+window = avango.gua.nodes.GlfwWindow(
+  Size = size,
   LeftResolution = size,
-  BackgroundMode = avango.gua.BackgroundMode.COLOR
+  Title = "client_window"
 )
+avango.gua.register_window("client_window", window)
 
 logger = avango.gua.nodes.Logger(
   EnableWarning = False
 )
 
 viewer = avango.gua.nodes.Viewer()
-viewer.Pipelines.value = [pipe]
+# viewer.CameraNodes.value = [cam]
 viewer.SceneGraphs.value = [graph]
+viewer.Window.value = window
+
+init = NetInit()
+init.WindowName.value = "client_window"
+init.Viewer = viewer
+init.NetChildren.connect_from(nettrans.Children)
+
+guaVE = GuaVE()
+guaVE.start(locals(), globals())
 
 viewer.run()

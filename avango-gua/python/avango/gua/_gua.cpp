@@ -30,7 +30,9 @@
 #include "scenegraph/SunLightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
+#include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
 #include "scenegraph/SceneGraph.hpp"
+#include "scenegraph/CameraNode.hpp"
 #include "scenegraph/PickResult.hpp"
 
 #include "math/BoundingBox.hpp"
@@ -55,17 +57,33 @@
 #include "physics/Physics.hpp"
 #endif
 
-#include "renderer/Pipeline.hpp"
+#include "renderer/WindowBase.hpp"
 #include "renderer/Window.hpp"
-#include "renderer/Renderer.hpp"
+#include "renderer/GlfwWindow.hpp"
+#include "renderer/MaterialShaderMethod.hpp"
+#include "renderer/MaterialShaderDescription.hpp"
+#include "renderer/Material.hpp"
+#include "renderer/PipelineDescription.hpp"
+#include "renderer/PipelinePassDescription.hpp"
+#include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/TexturedQuadPassDescription.hpp"
+#include "renderer/BackgroundPassDescription.hpp"
+#include "renderer/BBoxPassDescription.hpp"
+#include "renderer/EmissivePassDescription.hpp"
+#include "renderer/PhysicallyBasedShadingPassDescription.hpp"
+#include "renderer/TexturedScreenSpaceQuadPassDescription.hpp"
+#include "renderer/FullscreenPassDescription.hpp"
+#include "renderer/SSAOPassDescription.hpp"
+#include "renderer/ResolvePassDescription.hpp"
+#include "renderer/LightVisibilityPassDescription.hpp"
 #include "renderer/Databases.hpp"
-#include "renderer/Camera.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
 #include "renderer/VolumeLoader.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "renderer/PBRLoader.hpp"
 #include "renderer/PLODLoader.hpp"
+#include "renderer/PLODPassDescription.hpp"
 #endif
 #include "renderer/NURBSLoader.hpp"
 #include "renderer/Texture.hpp"
@@ -74,6 +92,9 @@
 
 #include "utils/Color.hpp"
 #include "utils/Logger.hpp"
+#include "utils/Ray.hpp"
+
+#include "gui/GuiResource.hpp"
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -115,25 +136,27 @@ BOOST_PYTHON_MODULE(_gua)
     init_Node();
     init_GeometryNode();
     init_TransformNode();
+    init_CameraNode();
     init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
     init_NetTransform();
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
-    init_Video3DNode();
-    init_VolumeNode();
+    // init_Video3DNode();
+    // init_VolumeNode();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
-    init_PBRNode();
+    // init_PBRNode();
 #endif
-    init_NURBSNode();
+    // init_NURBSNode();
     init_ScreenNode();
     init_PointLightNode();
     init_SpotLightNode();
     init_SunLightNode();
     init_RayNode();
     init_TexturedQuadNode();
+    init_TexturedScreenSpaceQuadNode();
     init_SceneGraph();
     init_PickResult();
 
@@ -159,22 +182,41 @@ BOOST_PYTHON_MODULE(_gua)
     init_Physics();
 #endif
 
-    init_Pipeline();
+    init_WindowBase();
     init_Window();
-    init_Renderer();
+    init_GlfwWindow();
+    init_MaterialShaderMethod();
+    init_MaterialShaderDescription();
+    init_Material();
+    init_PipelineDescription();
+    init_PipelinePassDescription();
+    init_TriMeshPassDescription();
+    init_TexturedQuadPassDescription();
+    init_BackgroundPassDescription();
+    init_BBoxPassDescription();
+    init_EmissivePassDescription();
+    init_PhysicallyBasedShadingPassDescription();
+    init_TexturedScreenSpaceQuadPassDescription();
+    init_FullscreenPassDescription();
+    init_SSAOPassDescription();
+    init_ResolvePassDescription();
+    init_LightVisibilityPassDescription();
     init_Databases();
-    init_Camera();
     init_TriMeshLoader();
-    init_Video3DLoader();
-    init_VolumeLoader();
+    // init_Video3DLoader();
+    // init_VolumeLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
-    init_PBRLoader();
+    init_PLODPassDescription();
+    // init_PBRLoader();
 #endif
-    init_NURBSLoader();
+    // init_NURBSLoader();
     init_Texture();
 
     init_Viewer();
 
     init_Logger();
+    init_Ray();
+
+    init_GuiResource();
 }

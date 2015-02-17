@@ -45,7 +45,12 @@ namespace av
       SFString Texture;
       SFFloat  Width;
       SFFloat  Height;
-      SFBool   IsStereoTexture;
+
+      SFBool   FlipX;
+      SFBool   FlipY;
+
+      SFMatrix ScaledTransform;
+      SFMatrix ScaledWorldTransform;
 
       /**
        * Get the wrapped ::gua::TexturedQuadNode.
@@ -63,8 +68,18 @@ namespace av
       virtual void getHeightCB(const SFFloat::GetValueEvent& event);
       virtual void setHeightCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getIsStereoTextureCB(const SFBool::GetValueEvent& event);
-      virtual void setIsStereoTextureCB(const SFBool::SetValueEvent& event);
+      virtual void getFlipXCB(const SFBool::GetValueEvent& event);
+      virtual void setFlipXCB(const SFBool::SetValueEvent& event);
+
+      virtual void getFlipYCB(const SFBool::GetValueEvent& event);
+      virtual void setFlipYCB(const SFBool::SetValueEvent& event);
+
+      virtual void getScaledTransformCB(const SFMatrix::GetValueEvent& event);
+      virtual void setScaledTransformCB(const SFMatrix::SetValueEvent& event);
+
+      virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
+      virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
+
 
     private:
 

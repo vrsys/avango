@@ -6,6 +6,9 @@
 #include <avango/Base.h>
 #include <avango/Application.h>
 #include <avango/Logger.h>
+
+#include <gua/gui/Interface.hpp>
+
 #include <boost/bind.hpp>
 
 #include <chrono>
@@ -25,8 +28,9 @@ av::gua::Viewer::Viewer()
       m_loop(),
       m_ticker(m_loop, 1.f/60.f)
 {
-    AV_FC_ADD_FIELD(Pipelines, MFPipeline::ContainerType());
+    AV_FC_ADD_FIELD(CameraNodes, MFCameraNode::ContainerType());
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
+    AV_FC_ADD_FIELD(Windows,     MFWindowBase::ContainerType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
     AV_FC_ADD_FIELD(Physics, nullptr);
 #endif
@@ -68,13 +72,11 @@ av::gua::Viewer::setDesiredFPSCB(const av::SFFloat::SetValueEvent& event)
 
 void
 av::gua::Viewer::run() const {
-  if (!m_renderer) {
-    std::vector< ::gua::Pipeline*> pipes;
 
-    for (auto pipe : Pipelines.getValue()) {
-      pipes.push_back(pipe->getGuaPipeline());
-    }
-    m_renderer = new av::gua::Renderer(new ::gua::Renderer(pipes));
+  ::gua::Logger::enable_debug = false;
+
+  if (!m_renderer) {
+    m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
 
 
@@ -89,16 +91,31 @@ av::gua::Viewer::run() const {
   m_ticker.on_tick.connect([&,this]() {
     PyEval_RestoreThread(save_state);
 
+    for (auto& window: Windows.getValue()) {
+      if(!window->is_open()) {
+        window->open();
+      }
+    }
+
     av::ApplicationInstance::get().evaluate();
 
-    if (SceneGraphs.getValue().size() > 0) {
+    ::gua::Interface::instance()->update();
+
+    if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
+
+      std::vector<av::gua::CameraNode const*> cams;
+
+      for (auto cam : CameraNodes.getValue()) {
+        cams.push_back(reinterpret_cast<av::gua::CameraNode*> (cam.getBasePtr()));
+      }
+
       std::vector<av::gua::SceneGraph const*> graphs;
 
       for (auto graph : SceneGraphs.getValue()) {
-        graphs.push_back(reinterpret_cast<gua::SceneGraph*> (graph.getBasePtr()));
+        graphs.push_back(reinterpret_cast<av::gua::SceneGraph*> (graph.getBasePtr()));
       }
 
-      m_renderer->queue_draw(graphs);
+      m_renderer->queue_draw(graphs, cams);
     }
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -107,10 +124,22 @@ av::gua::Viewer::run() const {
     }
 #endif
 
+    for (auto& window: Windows.getValue()) {
+      window->process_events();
+
+      if(window->should_close()) {
+        window->close();
+      }
+    }
+
     save_state = PyEval_SaveThread();
 
   });
 
   m_loop.start();
+
+  for (auto& window: Windows.getValue()) {
+    window->close();
+  }
 
 }

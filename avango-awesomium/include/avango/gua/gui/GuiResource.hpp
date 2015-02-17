@@ -14,7 +14,11 @@
 
 namespace av
 {
-  namespace gua
+
+namespace gua
+{
+
+  namespace gui
   {
     /**
      * Wrapper for ::gua::GuiResource
@@ -101,13 +105,15 @@ namespace av
     typedef SingleField<Link<GuiResource> > SFGuiResource;
     typedef MultiField<Link<GuiResource> > MFGuiResource;
 
-  }
+  } // namespace gui
+
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::GuiResource> >;
-  template class AV_GUA_DLL MultiField<Link<gua::GuiResource> >;
+  template class AV_GUA_DLL SingleField<Link<gua::gui::GuiResource> >;
+  template class AV_GUA_DLL MultiField<Link<gua::gui::GuiResource> >;
 #endif
 
-}
+} // namespace av
 
 #endif //AVANGO_GUA_GUI_RESOURCE_HPP

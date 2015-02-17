@@ -94,8 +94,6 @@
 #include "utils/Logger.hpp"
 #include "utils/Ray.hpp"
 
-#include "gui/GuiResource.hpp"
-
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
 #endif
@@ -217,6 +215,4 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_Logger();
     init_Ray();
-
-    init_GuiResource();
 }

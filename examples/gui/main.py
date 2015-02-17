@@ -2,11 +2,12 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
+import avango.gua.gui
 from examples_common.GuaVE import GuaVE
 
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.SFGuiResource()
+  FPSResource = avango.gua.gui.SFGuiResource()
   Camera = avango.gua.SFCameraNode()
 
   @field_has_changed(TimeIn)
@@ -23,7 +24,7 @@ def start():
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
 
-  web = avango.gua.nodes.GuiResource()
+  web = avango.gua.gui.nodes.GuiResource()
   web.init("google", "https://www.google.com", avango.gua.Vec2(1024, 1024))
 
   focused_element = web
@@ -45,7 +46,7 @@ def start():
 
   fps_size = avango.gua.Vec2(170, 55)
 
-  fps = avango.gua.nodes.GuiResource()
+  fps = avango.gua.gui.nodes.GuiResource()
   fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
 
   fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
@@ -60,7 +61,7 @@ def start():
 
   address_bar_size = avango.gua.Vec2(340, 55)
 
-  address_bar = avango.gua.nodes.GuiResource()
+  address_bar = avango.gua.gui.nodes.GuiResource()
   address_bar.init("address_bar", "asset://gua/data/html/address_bar.html", address_bar_size)
 
   def address_bar_loaded():

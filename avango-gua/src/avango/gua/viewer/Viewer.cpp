@@ -7,7 +7,9 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 
-//#include <gua/gui/Interface.hpp>
+#ifdef AVANGO_AWESOMIUM_SUPPORT
+#include <gua/gui/Interface.hpp>
+#endif
 
 #include <boost/bind.hpp>
 
@@ -99,7 +101,9 @@ av::gua::Viewer::run() const {
 
     av::ApplicationInstance::get().evaluate();
 
-    // ::gua::Interface::instance()->update();
+#ifdef AVANGO_AWESOMIUM_SUPPORT
+    ::gua::Interface::instance()->update();
+#endif
 
     if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
 

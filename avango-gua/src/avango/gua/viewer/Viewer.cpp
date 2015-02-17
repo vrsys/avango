@@ -7,7 +7,7 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 
-#include <gua/gui/Interface.hpp>
+//#include <gua/gui/Interface.hpp>
 
 #include <boost/bind.hpp>
 
@@ -99,7 +99,7 @@ av::gua::Viewer::run() const {
 
     av::ApplicationInstance::get().evaluate();
 
-    ::gua::Interface::instance()->update();
+    // ::gua::Interface::instance()->update();
 
     if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
 

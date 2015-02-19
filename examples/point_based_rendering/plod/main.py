@@ -61,6 +61,11 @@ def start(filename):
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
   )
 
+  resolve_pass = avango.gua.nodes.ResolvePassDescription()
+  resolve_pass.BackgroundMode.value = avango.gua.BackgroundMode.COLOR
+  resolve_pass.BackgroundColor.value = avango.gua.Color(1,0,0)
+  resolve_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.LINEAR
+
   pipeline_description = avango.gua.nodes.PipelineDescription()
   pipeline_description.Passes.value = [
         avango.gua.nodes.TriMeshPassDescription()
@@ -68,7 +73,7 @@ def start(filename):
       , avango.gua.nodes.PLODPassDescription()
       , avango.gua.nodes.LightVisibilityPassDescription()
       , avango.gua.nodes.BBoxPassDescription()
-      , avango.gua.nodes.ResolvePassDescription()
+      , resolve_pass
       , avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
       ]
 

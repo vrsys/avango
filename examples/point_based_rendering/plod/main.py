@@ -62,13 +62,15 @@ def start(filename):
   )
 
   pipeline_description = avango.gua.nodes.PipelineDescription()
-  pipeline_description.add_tri_mesh_pass()
-  pipeline_description.add_textured_quad_pass()
-  pipeline_description.add_plod_pass()
-  pipeline_description.add_light_visibility_pass()
-  pipeline_description.add_bbox_pass()
-  pipeline_description.add_resolve_pass()
-  pipeline_description.add_textured_screen_space_quad_pass()
+  pipeline_description.Passes.value = [
+        avango.gua.nodes.TriMeshPassDescription()
+      , avango.gua.nodes.TexturedQuadPassDescription()
+      , avango.gua.nodes.PLODPassDescription()
+      , avango.gua.nodes.LightVisibilityPassDescription()
+      , avango.gua.nodes.BBoxPassDescription()
+      , avango.gua.nodes.ResolvePassDescription()
+      , avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
+      ]
 
   cam.PipelineDescription.value = pipeline_description
 

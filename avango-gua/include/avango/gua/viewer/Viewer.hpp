@@ -43,8 +43,13 @@ namespace av
 #endif
       SFFloat      DesiredFPS;
 
+      SFFloat      ApplicationFPS;
+
       virtual void getDesiredFPSCB(const SFFloat::GetValueEvent& event);
       virtual void setDesiredFPSCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
 
       void run() const;
 

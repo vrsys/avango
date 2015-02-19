@@ -2,6 +2,7 @@
 
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
+#include <gua/math.hpp>
 #include <gua/renderer/PLOD.hpp>
 #include <avango/gua/renderer/PLODLoader.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
@@ -47,20 +48,20 @@ bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {
 }
 
 av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
-                                 av::gua::SFVec3 const& bundle_origin,
-                                 av::gua::SFVec3 const& bundle_forward,
-                                 av::gua::SFVec3 const& bundle_up,
+                                 ::gua::math::vec3 const& bundle_origin,
+                                 ::gua::math::vec3 const& bundle_forward,
+                                 ::gua::math::vec3 const& bundle_up,
                                  float bundle_radius,
                                  float max_distance,
                                  unsigned int max_depth,
                                  unsigned int surfel_skip) {
 
-  return loader.pick_plod_interpolate(bundle_origin, 
-                                      bundle_forward, 
-                                      bundle_up, 
-                                      bundle_radius, 
-                                      max_distance, 
-                                      max_depth, 
+  return loader.pick_plod_interpolate(bundle_origin,
+                                      bundle_forward,
+                                      bundle_up,
+                                      bundle_radius,
+                                      max_distance,
+                                      max_depth,
                                       surfel_skip);
 
 }

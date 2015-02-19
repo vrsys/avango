@@ -7,6 +7,7 @@
  */
 
 #include <gua/renderer/PLODLoader.hpp>
+#include <gua/math.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
@@ -52,9 +53,10 @@ namespace av
                                   Flags flags = DEFAULTS) const;
     bool is_supported(std::string const& fileName) const;
 
-    av::gua::MFPickResult* pick_plod_interpolate(av::gua::SFVec3 const& bundle_origin,
-                                     av::gua::SFVec3 const& bundle_forward,
-                                     av::gua::SFVec3 const& bundle_up,
+    av::gua::MFPickResult* pick_plod_interpolate(
+                                     ::gua::math::vec3 const& bundle_origin,
+                                     ::gua::math::vec3 const& bundle_forward,
+                                     ::gua::math::vec3 const& bundle_up,
                                      float bundle_radius,
                                      float max_distance,
                                      unsigned int max_depth,

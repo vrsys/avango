@@ -61,6 +61,15 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
   )
 
+  pipeline_description = avango.gua.nodes.PipelineDescription(
+      Passes = [
+            avango.gua.nodes.TriMeshPassDescription(),
+            avango.gua.nodes.LightVisibilityPassDescription(),
+            avango.gua.nodes.ResolvePassDescription()
+          ])
+
+  cam.PipelineDescription.value = pipeline_description
+
   screen = avango.gua.nodes.ScreenNode(
     Name = "screen",
     Width = 2,

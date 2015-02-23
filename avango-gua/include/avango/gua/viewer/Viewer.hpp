@@ -53,6 +53,8 @@ namespace av
 
       void run() const;
 
+      void frame();
+
     protected:
 
       /**

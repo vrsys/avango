@@ -88,6 +88,52 @@ av::gua::Viewer::setApplicationFPSCB(const SFFloat::SetValueEvent& event)
 {}
 
 void
+av::gua::Viewer::frame() {
+  for (auto& window: Windows.getValue()) {
+    if(!window->is_open()) {
+      window->open();
+    }
+  }
+
+  av::ApplicationInstance::get().evaluate();
+
+#ifdef AVANGO_AWESOMIUM_SUPPORT
+  ::gua::Interface::instance()->update();
+#endif
+
+  if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
+
+    std::vector<av::gua::CameraNode const*> cams;
+
+    for (auto cam : CameraNodes.getValue()) {
+      cams.push_back(reinterpret_cast<av::gua::CameraNode*> (cam.getBasePtr()));
+    }
+
+    std::vector<av::gua::SceneGraph const*> graphs;
+
+    for (auto graph : SceneGraphs.getValue()) {
+      graphs.push_back(reinterpret_cast<av::gua::SceneGraph*> (graph.getBasePtr()));
+    }
+
+    m_renderer->queue_draw(graphs, cams);
+  }
+
+#if defined(AVANGO_PHYSICS_SUPPORT)
+  if (this->Physics.getValue().isValid()) {
+    this->Physics.getValue()->synchronize(true);
+  }
+#endif
+
+  for (auto& window: Windows.getValue()) {
+    window->process_events();
+
+    if(window->should_close()) {
+      window->close();
+    }
+  }
+}
+
+void
 av::gua::Viewer::run() const {
 
   ::gua::Logger::enable_debug = false;
@@ -108,51 +154,9 @@ av::gua::Viewer::run() const {
   m_ticker.on_tick.connect([&,this]() {
     PyEval_RestoreThread(save_state);
 
-    for (auto& window: Windows.getValue()) {
-      if(!window->is_open()) {
-        window->open();
-      }
-    }
-
-    av::ApplicationInstance::get().evaluate();
-
-#ifdef AVANGO_AWESOMIUM_SUPPORT
-    ::gua::Interface::instance()->update();
-#endif
-
-    if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
-
-      std::vector<av::gua::CameraNode const*> cams;
-
-      for (auto cam : CameraNodes.getValue()) {
-        cams.push_back(reinterpret_cast<av::gua::CameraNode*> (cam.getBasePtr()));
-      }
-
-      std::vector<av::gua::SceneGraph const*> graphs;
-
-      for (auto graph : SceneGraphs.getValue()) {
-        graphs.push_back(reinterpret_cast<av::gua::SceneGraph*> (graph.getBasePtr()));
-      }
-
-      m_renderer->queue_draw(graphs, cams);
-    }
-
-#if defined(AVANGO_PHYSICS_SUPPORT)
-    if (this->Physics.getValue().isValid()) {
-      this->Physics.getValue()->synchronize(true);
-    }
-#endif
-
-    for (auto& window: Windows.getValue()) {
-      window->process_events();
-
-      if(window->should_close()) {
-        window->close();
-      }
-    }
+    frame();
 
     save_state = PyEval_SaveThread();
-
   });
 
   m_loop.start();

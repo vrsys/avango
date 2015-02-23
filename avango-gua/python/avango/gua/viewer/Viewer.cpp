@@ -25,6 +25,7 @@ void init_Viewer()
          av::Link<av::gua::Viewer>,
          bases<av::FieldContainer>, boost::noncopyable> ("Viewer", "docstring", no_init)
          .def("run", &av::gua::Viewer::run)
+         .def("frame", &av::gua::Viewer::frame)
          ;
 
     // register as a field

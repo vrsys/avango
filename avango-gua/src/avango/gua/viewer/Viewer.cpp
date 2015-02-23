@@ -43,6 +43,9 @@ av::gua::Viewer::Viewer()
     AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
                     boost::bind(&Viewer::getApplicationFPSCB, this, _1),
                     boost::bind(&Viewer::setApplicationFPSCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Renderer,
+                    boost::bind(&Viewer::getRendererCB, this, _1),
+                    boost::bind(&Viewer::setRendererCB, this, _1));
 }
 
 
@@ -89,6 +92,11 @@ av::gua::Viewer::setApplicationFPSCB(const SFFloat::SetValueEvent& event)
 
 void
 av::gua::Viewer::frame() {
+
+  if (!m_renderer) {
+    m_renderer = new av::gua::Renderer(new ::gua::Renderer());
+  }
+
   for (auto& window: Windows.getValue()) {
     if(!window->is_open()) {
       window->open();

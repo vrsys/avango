@@ -66,7 +66,6 @@ namespace av
       SFInt   UploadBudget;
       SFInt   RenderBudget;
       SFInt   OutOfCoreBudget;
-      SFFloat ErrorThreshold;
 
       /**
        * Get the wrapped ::gua::PLODLoader.
@@ -79,8 +78,6 @@ namespace av
       virtual void setRenderBudgetCB(const SFInt::SetValueEvent& event);
       virtual void getOutOfCoreBudgetCB(const SFInt::GetValueEvent& event);
       virtual void setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event);
-      virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
-      virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
 
     private:
 

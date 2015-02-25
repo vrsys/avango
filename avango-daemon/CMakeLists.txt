@@ -4,6 +4,10 @@ SET (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
 option (AVANGO_DAEMON_DEBUG "Enable Daemon debugging")
 option (AVANGO_DAEMON_VRPN_SUPPORT "Enable using VRPN.")
 
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  include(find_ovr)
+endif(AVANGO_OCULUS_RIFT_SUPPORT)
+
 ###############################################################################
 # generate Config.h
 ###############################################################################
@@ -92,12 +96,10 @@ IF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
     LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/VRPNClient.h")
 ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 
-IF (${AVANGO_OCULUS_RIFT_SUPPORT})
+IF (AVANGO_OCULUS_RIFT_SUPPORT)
     LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Oculus.cpp")
     LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/Oculus.h")
 ENDIF ()
-
-include(find_ovr)
 
 ###############################################################################
 # set link directories and link dependencies
@@ -106,8 +108,10 @@ LINK_DIRECTORIES(
     ${LIB_PATHS}
     ${PYTHON3_LIBRARY_DIRS}
     ${BULLET_LIBRARY_DIRS}
-    ${OVR_LIBRARY_DIRS}
 )
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  LIST(APPEND LINK_DIRECTORIES ${OVR_LIBRARY_DIRS} )
+endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
 ADD_LIBRARY(avango_daemon SHARED
     ${AVANGO_DAEMON_SRC}
@@ -117,7 +121,6 @@ INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
-    ${OVR_INCLUDE_DIRS}
     include
     ../avango-core/include
     ../avango-python/include
@@ -126,6 +129,9 @@ INCLUDE_DIRECTORIES(
     src/avango/daemon/tuio/TUIO
     src/avango/daemon/tuio/oscpack
 )
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  LIST(APPEND LINK_DIRECTORIES ${OVR_INCLUDE_DIRS} )
+endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
 ADD_DEPENDENCIES ( avango_daemon avango)
 
@@ -144,7 +150,7 @@ set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUI
 
 LIST(APPEND LIBRARIES avango avango_script avango_gua)
 
-IF (${AVANGO_OCULUS_RIFT_SUPPORT})
+IF (AVANGO_OCULUS_RIFT_SUPPORT)
 IF (UNIX)
   LIST(APPEND LIBRARIES udev Xinerama ${OVR_LIBRARIES} )
 ELSEIF (MSVC)

@@ -23,6 +23,10 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(Importance,
                       boost::bind(&PLODNode::getImportanceCB, this, _1),
                       boost::bind(&PLODNode::setImportanceCB, this, _1));
+ 
+  AV_FC_ADD_ADAPTOR_FIELD(Threshold,
+                      boost::bind(&PLODNode::getThresholdCB, this, _1),
+                      boost::bind(&PLODNode::setThresholdCB, this, _1));
   
   AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
                       boost::bind(&PLODNode::getEnableBackfaceCullingCB, this, _1),
@@ -112,6 +116,18 @@ void
 av::gua::PLODNode::setImportanceCB(const SFFloat::SetValueEvent& event)
 {
   m_guaPLODNode->set_importance(event.getValue());
+}
+
+void
+av::gua::PLODNode::getThresholdCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaPLODNode->get_threshold();
+}
+
+void
+av::gua::PLODNode::setThresholdCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaPLODNode->set_threshold(event.getValue());
 }
 
 void

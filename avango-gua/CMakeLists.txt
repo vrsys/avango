@@ -23,10 +23,12 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
     src/avango/gua/scenegraph/PLODNode.cpp
     src/avango/gua/scenegraph/PBRNode.cpp
     src/avango/gua/renderer/PLODLoader.cpp
+    src/avango/gua/renderer/PLODPassDescription.cpp
     src/avango/gua/renderer/PBRLoader.cpp
     include/avango/gua/scenegraph/PLODNode.h
     include/avango/gua/scenegraph/PBRNode.h
     include/avango/gua/renderer/PLODLoader.h
+    include/avango/gua/renderer/PLODPassDescription.h
     include/avango/gua/renderer/PBRLoader.h
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
@@ -88,6 +90,8 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/scenegraph/PBRNode.cpp
   python/avango/gua/renderer/PLODLoader.hpp
   python/avango/gua/renderer/PLODLoader.cpp
+  python/avango/gua/renderer/PLODPassDescription.hpp
+  python/avango/gua/renderer/PLODPassDescription.cpp
   python/avango/gua/renderer/PBRLoader.hpp
   python/avango/gua/renderer/PBRLoader.cpp
 )

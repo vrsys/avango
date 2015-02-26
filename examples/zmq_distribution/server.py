@@ -63,11 +63,6 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
 monkey2 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
-# rig = loader.create_geometry_from_file("oilrig", "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
-#       avango.gua.LoaderFlags.NORMALIZE_POSITION |
-#       avango.gua.LoaderFlags.NORMALIZE_SCALE |
-#       avango.gua.LoaderFlags.LOAD_MATERIALS |
-#       avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
 monkey1.Material.value.set_uniform("Roughness", 0.3)
@@ -153,7 +148,7 @@ avango.gua.register_window("server_window", window)
 viewer = avango.gua.nodes.Viewer()
 viewer.CameraNodes.value = [server_cam]
 viewer.SceneGraphs.value = [graph]
-viewer.Window.value = window
+viewer.Windows.value = [window]
 
 monkey_updater = TimedRotate()
 

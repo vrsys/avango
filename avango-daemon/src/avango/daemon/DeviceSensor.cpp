@@ -149,7 +149,7 @@ av::daemon::DeviceSensor::updateMatrix()
 
   if (Matrix.getValue() != mat)
   {
-    ::gua::math::quat rot = ::scm::math::quat<float>::from_matrix(mat);
+    ::gua::math::quat rot = ::scm::math::quat<double>::from_matrix(mat);
     ::gua::math::vec3 pos = ::gua::math::get_translation(mat);
 
     Rotation.setValue(rot);

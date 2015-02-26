@@ -71,37 +71,37 @@ av::gua::ResolvePassDescription::initClass()
 void
 av::gua::ResolvePassDescription::getBackgroundColorCB(const SFColor::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaResolvePassDescription->color();
+  *(event.getValuePtr()) = m_guaResolvePassDescription->background_color();
 }
 
 void
 av::gua::ResolvePassDescription::setBackgroundColorCB(const SFColor::SetValueEvent& event)
 {
-  m_guaResolvePassDescription->color(event.getValue());
+  m_guaResolvePassDescription->background_color(event.getValue());
 }
 
 void
 av::gua::ResolvePassDescription::getBackgroundTextureCB(const SFString::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaResolvePassDescription->texture();
+  *(event.getValuePtr()) = m_guaResolvePassDescription->background_texture();
 }
 
 void
 av::gua::ResolvePassDescription::setBackgroundTextureCB(const SFString::SetValueEvent& event)
 {
-  m_guaResolvePassDescription->texture(event.getValue());
+  m_guaResolvePassDescription->background_texture(event.getValue());
 }
 
 void
 av::gua::ResolvePassDescription::getBackgroundModeCB(const SFUInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = static_cast<unsigned>(m_guaResolvePassDescription->mode());
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaResolvePassDescription->background_mode());
 }
 
 void
 av::gua::ResolvePassDescription::setBackgroundModeCB(const SFUInt::SetValueEvent& event)
 {
-  m_guaResolvePassDescription->mode(static_cast< ::gua::ResolvePassDescription::BackgroundMode>(event.getValue()));
+  m_guaResolvePassDescription->background_mode(static_cast< ::gua::ResolvePassDescription::BackgroundMode>(event.getValue()));
 }
 
 void

@@ -48,7 +48,7 @@ namespace av
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
-        m_guaMaterial->set_uniform(name, value);
+        m_guaMaterial->set_uniform(name, ::gua::uniform_compatible_type(value));
         m_uniformsDirty.setValue(true);
       }
 

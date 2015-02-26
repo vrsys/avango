@@ -31,10 +31,10 @@ void init_FullscreenPassDescription()
          // .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform<unsigned>)
          .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform<bool>)
          .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform<std::string>)
-         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec2f>)
-         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec3f>)
-         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec4f>)
-         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::mat4f>)
+         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec2>)
+         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec3>)
+         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::vec4>)
+         .def("set_uniform", &av::gua::FullscreenPassDescription::set_uniform< ::gua::math::mat4>)
          ;
  }
 

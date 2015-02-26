@@ -60,7 +60,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-//      virtual ~Viewer();
+      virtual ~Viewer();
 
 
     private:

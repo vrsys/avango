@@ -153,7 +153,7 @@ avango.gua.register_window("server_window", window)
 viewer = avango.gua.nodes.Viewer()
 viewer.CameraNodes.value = [server_cam]
 viewer.SceneGraphs.value = [graph]
-viewer.Window.value = window
+viewer.Windows.value = [window]
 
 monkey_updater = TimedRotate()
 

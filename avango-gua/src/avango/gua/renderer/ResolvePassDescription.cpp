@@ -52,6 +52,10 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getExposureCB, this, _1),
                     boost::bind(&ResolvePassDescription::setExposureCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(EnableSSAO,
+                    boost::bind(&ResolvePassDescription::getEnableSSAOCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnableSSAOCB, this, _1));
+
 }
 
 void
@@ -65,6 +69,7 @@ av::gua::ResolvePassDescription::initClass()
 
         SFResolvePassDescription::initClass("av::gua::SFResolvePassDescription", "av::Field");
         MFResolvePassDescription::initClass("av::gua::MFResolvePassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 
@@ -169,5 +174,18 @@ av::gua::ResolvePassDescription::getGuaResolvePassDescription() const
 {
     return m_guaResolvePassDescription;
 }
+
+void
+av::gua::ResolvePassDescription::getEnableSSAOCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_enable();
+}
+
+void
+av::gua::ResolvePassDescription::setEnableSSAOCB(const SFBool::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->ssao_enable(event.getValue());
+}
+
 
 

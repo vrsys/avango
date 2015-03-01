@@ -41,6 +41,7 @@ av::gua::LightVisibilityPassDescription::initClass()
 
         SFLightVisibilityPassDescription::initClass("av::gua::SFLightVisibilityPassDescription", "av::Field");
         MFLightVisibilityPassDescription::initClass("av::gua::MFLightVisibilityPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

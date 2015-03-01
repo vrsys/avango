@@ -32,6 +32,7 @@ av::gua::BBoxPassDescription::initClass()
 
         SFBBoxPassDescription::initClass("av::gua::SFBBoxPassDescription", "av::Field");
         MFBBoxPassDescription::initClass("av::gua::MFBBoxPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

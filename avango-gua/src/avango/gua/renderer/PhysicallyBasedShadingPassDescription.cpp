@@ -32,6 +32,7 @@ av::gua::PhysicallyBasedShadingPassDescription::initClass()
 
         SFPhysicallyBasedShadingPassDescription::initClass("av::gua::SFPhysicallyBasedShadingPassDescription", "av::Field");
         MFPhysicallyBasedShadingPassDescription::initClass("av::gua::MFPhysicallyBasedShadingPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

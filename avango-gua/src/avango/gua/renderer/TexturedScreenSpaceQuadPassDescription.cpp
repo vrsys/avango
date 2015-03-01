@@ -32,6 +32,7 @@ av::gua::TexturedScreenSpaceQuadPassDescription::initClass()
 
         SFTexturedScreenSpaceQuadPassDescription::initClass("av::gua::SFTexturedScreenSpaceQuadPassDescription", "av::Field");
         MFTexturedScreenSpaceQuadPassDescription::initClass("av::gua::MFTexturedScreenSpaceQuadPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

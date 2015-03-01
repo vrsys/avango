@@ -33,6 +33,7 @@ av::gua::PipelinePassDescription::initClass()
 
         SFPipelinePassDescription::initClass("av::gua::SFPipelinePassDescription", "av::Field");
         MFPipelinePassDescription::initClass("av::gua::MFPipelinePassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

@@ -41,6 +41,7 @@ av::gua::FullscreenPassDescription::initClass()
 
         SFFullscreenPassDescription::initClass("av::gua::SFFullscreenPassDescription", "av::Field");
         MFFullscreenPassDescription::initClass("av::gua::MFFullscreenPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

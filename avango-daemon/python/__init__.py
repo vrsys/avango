@@ -77,7 +77,6 @@ from ._daemon import *
 from ._daemon import _Device
 from ._daemon import _HIDHelper
 from ._daemon import _DTrackHelper
-from ._daemon import _OculusHelper
 from ._daemon import _TUIOInputHelper
 
 # currently WacomTablet and Wiimote are not supported on Windows
@@ -228,27 +227,30 @@ class TUIOInput(_TUIOInputHelper):
 
     stations = property(StationProxy)
 
-class Oculus(_OculusHelper):
-    """Avango NG device for processing Oculus HMDs.
-    Required properties: stations."""
-    def __init__(self):
-        super(Oculus, self).__init__()
-        self._stations = {}
+if does_type_exist("av::daemon::Oculus"):
+    from ._daemon import _OculusHelper
 
-    class StationProxy(object):
-        """Proxy object to override the functions that are called on access of list
-        values via [] operator."""
-        def __init__(self, dtrack):
-            self._oculus = dtrack
-        def __getitem__(self, key):
-            if self._oculus._stations.has_key(key):
-                return self._oculus._stations[key]
-            else: return ''
-        def __setitem__(self, key, st):
-            self._oculus._stations[key] = st
-            return self._oculus.add_station(key, st.name)
+    class Oculus(_OculusHelper):
+        """Avango NG device for processing Oculus HMDs.
+        Required properties: stations."""
+        def __init__(self):
+            super(Oculus, self).__init__()
+            self._stations = {}
 
-    stations = property(StationProxy)
+        class StationProxy(object):
+            """Proxy object to override the functions that are called on access of list
+            values via [] operator."""
+            def __init__(self, dtrack):
+                self._oculus = dtrack
+            def __getitem__(self, key):
+                if self._oculus._stations.has_key(key):
+                    return self._oculus._stations[key]
+                else: return ''
+            def __setitem__(self, key, st):
+                self._oculus._stations[key] = st
+                return self._oculus.add_station(key, st.name)
+
+        stations = property(StationProxy)
 
 if does_type_exist("av::daemon::VRPNClient"):
     from ._daemon import _VRPNClientHelper

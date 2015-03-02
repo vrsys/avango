@@ -7,6 +7,7 @@
  */
 
 #include <gua/renderer/MaterialShaderMethod.hpp>
+#include <gua/renderer/Uniform.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
@@ -55,7 +56,7 @@ namespace av
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
-        m_guaMaterialShaderMethod->set_uniform(name, value);
+        m_guaMaterialShaderMethod->set_uniform(name, ::gua::uniform_compatible_type(value));
         m_uniformsDirty.setValue(true);
       }
 

@@ -7,6 +7,7 @@
  */
 
 #include <gua/renderer/FullscreenPass.hpp>
+#include <gua/renderer/Uniform.hpp>
 
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 
@@ -49,7 +50,7 @@ namespace av
 
       template <typename T>
       void set_uniform(std::string const& name, T const& value) {
-        m_guaFullscreenPassDescription->uniform(name, value);
+        m_guaFullscreenPassDescription->uniform(name, ::gua::uniform_compatible_type(value));
       }
 
       /**

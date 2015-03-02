@@ -45,9 +45,14 @@ av::gua::Viewer::Viewer()
                     boost::bind(&Viewer::setApplicationFPSCB, this, _1));
 }
 
-
-//av::gua::Viewer::~Viewer()
-//{}
+av::gua::Viewer::~Viewer()
+{
+  if (m_renderer) {
+    m_renderer->getGuaRenderer()->stop();
+    delete m_renderer;
+    m_renderer = nullptr;
+  }
+}
 
 void
 av::gua::Viewer::initClass()

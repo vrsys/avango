@@ -1,6 +1,6 @@
-SET (AVANGO_DAEMON_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
-SET (AVANGO_DAEMON_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
-SET (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
+set (AVANGO_DAEMON_VERSION_MAJOR "${AVANGO_VERSION_MAJOR}")
+set (AVANGO_DAEMON_VERSION_MINOR "${AVANGO_VERSION_MINOR}")
+set (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
 option (AVANGO_DAEMON_DEBUG "Enable Daemon debugging")
 option (AVANGO_DAEMON_VRPN_SUPPORT "Enable using VRPN.")
 
@@ -69,51 +69,56 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/daemon/dtrack/dtrack.h
 )
 
-IF (UNIX)
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.linux.cpp")
-        LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/SharedMemorySegment.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WacomTablet.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Wiimote.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WiimoteActuator.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.linux.h")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/NetworkingUtils.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/UdpSocket.cpp")
+if (UNIX)
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.linux.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/SharedMemorySegment.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WacomTablet.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Wiimote.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/WiimoteActuator.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.linux.h")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/NetworkingUtils.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/posix/UdpSocket.cpp")
+elseif (MSVC)
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/EventMapping.win.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.win.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.win.h")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/NetworkingUtils.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/UdpSocket.cpp")
+endif (UNIX)
 
-ELSEIF (MSVC)
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/EventMapping.win.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/HIDInput.win.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/HIDInput.win.h")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/NetworkingUtils.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/tuio/oscpack/ip/win32/UdpSocket.cpp")
-ENDIF (UNIX)
+if (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/VRPNClient.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/VRPNClient.h")
+endif (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 
-IF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/VRPNClient.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/VRPNClient.h")
-ENDIF (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
-
-IF (AVANGO_OCULUS_RIFT_SUPPORT)
-    LIST(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Oculus.cpp")
-    LIST(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/Oculus.h")
-ENDIF ()
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Oculus.cpp")
+    list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/Oculus.h")
+endif ()
 
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
+
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  list(APPEND LIB_PATHS ${OVR_LIBRARY_DIRS} )
+endif (AVANGO_OCULUS_RIFT_SUPPORT)
+
+link_directories(
     ${LIB_PATHS}
     ${PYTHON3_LIBRARY_DIRS}
     ${BULLET_LIBRARY_DIRS}
 )
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  LIST(APPEND LINK_DIRECTORIES ${OVR_LIBRARY_DIRS} )
-endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
 ADD_LIBRARY(avango_daemon SHARED
     ${AVANGO_DAEMON_SRC}
 )
 
-INCLUDE_DIRECTORIES(
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  list(APPEND INCLUDE_PATHS ${OVR_INCLUDE_DIRS} )
+endif (AVANGO_OCULUS_RIFT_SUPPORT)
+
+include_directories(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
@@ -125,36 +130,33 @@ INCLUDE_DIRECTORIES(
     src/avango/daemon/tuio/TUIO
     src/avango/daemon/tuio/oscpack
 )
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  LIST(APPEND LINK_DIRECTORIES ${OVR_INCLUDE_DIRS} )
-endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
-ADD_DEPENDENCIES ( avango_daemon avango)
+add_dependencies ( avango_daemon avango)
 
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-SET (AVANGO_DAEMON_BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MAJOR=${AVANGO_VERSION_MAJOR}")
-SET (AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MINOR=${AVANGO_VERSION_MINOR}")
-SET (AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MAINT=${AVANGO_VERSION_MAINT}")
+set (AVANGO_DAEMON_BUILD_FLAGS "${BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MAJOR=${AVANGO_VERSION_MAJOR}")
+set (AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MINOR=${AVANGO_VERSION_MINOR}")
+set (AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D _AVANGO_DAEMON_VERSION_MAINT=${AVANGO_VERSION_MAINT}")
 
-IF (MSVC)
-    SET(AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D AV_DAEMON_LIBRARY")
-ENDIF (MSVC)
+if (MSVC)
+    set(AVANGO_DAEMON_BUILD_FLAGS "${AVANGO_DAEMON_BUILD_FLAGS} -D AV_DAEMON_LIBRARY")
+endif (MSVC)
 
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUILD_FLAGS})
 
-LIST(APPEND LIBRARIES avango avango_script avango_gua)
+list(APPEND LIBRARIES avango avango_script avango_gua)
 
-IF (AVANGO_OCULUS_RIFT_SUPPORT)
-IF (UNIX)
-  LIST(APPEND LIBRARIES udev Xinerama ${OVR_LIBRARIES} )
-ELSEIF (MSVC)
-  LIST(APPEND LIBRARIES winmm.lib guacamole ${OVR_LIBRARIES})
-ENDIF(UNIX)
-ENDIF()
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+if (UNIX)
+  list(APPEND LIBRARIES udev Xinerama ${OVR_LIBRARIES} )
+elseif (MSVC)
+  list(APPEND LIBRARIES winmm.lib guacamole ${OVR_LIBRARIES})
+endif(UNIX)
+endif()
 
-TARGET_LINK_LIBRARIES( avango_daemon
+target_link_libraries( avango_daemon
   debug avango_gua avango_script avango ${LIBRARIES}
   optimized avango_gua avango_script avango ${LIBRARIES})
 
@@ -166,9 +168,9 @@ add_subdirectory(python)
 ###############################################################################
 # rename libaries in windows
 ###############################################################################
-IF (MSVC)
+if (MSVC)
   post_build_install_target(avango_daemon ${AVANGO_INSTALL_DIRECTORY}/avango/avango_daemon.dll)
-ELSEIF (UNIX)
+elseif (UNIX)
   post_build_install_target(avango_daemon ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_daemon.so)
-ENDIF (MSVC)
+endif (MSVC)
 

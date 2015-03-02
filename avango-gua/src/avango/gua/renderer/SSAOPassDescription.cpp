@@ -46,6 +46,7 @@ av::gua::SSAOPassDescription::initClass()
 
         SFSSAOPassDescription::initClass("av::gua::SFSSAOPassDescription", "av::Field");
         MFSSAOPassDescription::initClass("av::gua::MFSSAOPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

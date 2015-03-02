@@ -32,6 +32,7 @@ av::gua::EmissivePassDescription::initClass()
 
         SFEmissivePassDescription::initClass("av::gua::SFEmissivePassDescription", "av::Field");
         MFEmissivePassDescription::initClass("av::gua::MFEmissivePassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

@@ -57,6 +57,7 @@ av::gua::BackgroundPassDescription::initClass()
 
         SFBackgroundPassDescription::initClass("av::gua::SFBackgroundPassDescription", "av::Field");
         MFBackgroundPassDescription::initClass("av::gua::MFBackgroundPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

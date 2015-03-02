@@ -73,7 +73,7 @@ av::utils::Trackball::Trackball() :
   AV_FC_ADD_FIELD(EnableSpinning,true);
   AV_FC_ADD_FIELD(SpinningTimeThreshold, 0.3);
   AV_FC_ADD_FIELD(SpinningWeightingCoefficient,0.97);
-  AV_FC_ADD_FIELD(CenterTransform, ::scm::math::make_translation(0.0f, 0.0f, -0.6f));
+  AV_FC_ADD_FIELD(CenterTransform, ::scm::math::make_translation(0.0, 0.0, -0.6));
   AV_FC_ADD_FIELD(CenterToBoundingSphere, false);
   AV_FC_ADD_FIELD(BoundingSphere, b);
   AV_FC_ADD_FIELD(CenterTransformOffset, ::gua::math::vec3(0,-1.7,0));
@@ -157,10 +157,10 @@ av::utils::Trackball::evaluate()
   {
     if (RotateTrigger.getValue())
     {
-      auto quat = ::scm::math::quat<float>::from_arc(projected, mLastProjected);
+      auto quat = ::scm::math::quat<double>::from_arc(projected, mLastProjected);
       ::gua::math::mat4 rotMat = quat.to_matrix();
 
-      float fac = SpinningWeightingCoefficient.getValue();
+      double fac = double(SpinningWeightingCoefficient.getValue());
       mRotation = rotMat * ::scm::math::make_scale(fac,fac,fac) * mRotation;
 
       Matrix.setValue(mCenterTransInv * rotMat *
@@ -175,12 +175,12 @@ av::utils::Trackball::evaluate()
 
       if(AutoAdjustCenterTransform.getValue()) {
         ::gua::math::mat4 mat = CenterTransform.getValue()
-                          * ::scm::math::make_translation(0.0f, 0.0f, zoomFactor);
+                          * ::scm::math::make_translation(double(0.0), double(0.0), double(zoomFactor));
         CenterTransform.setValue(mat);
       }
 
       Matrix.setValue(mCenterTransInv
-                    * ::scm::math::make_translation(0.0f, 0.0f, -zoomFactor)
+                    * ::scm::math::make_translation(double(0.0), double(0.0), double(-zoomFactor))
                     * CenterTransform.getValue()
                     * Matrix.getValue());
     }
@@ -196,7 +196,7 @@ av::utils::Trackball::evaluate()
                         * ZoomPanFactor.getValue();
 
       Matrix.setValue(mCenterTransInv
-                    * ::scm::math::make_translation(xPanFactor, yPanFactor, 0.0f)
+                    * ::scm::math::make_translation(double(xPanFactor), double(yPanFactor), double(0.0))
                     * CenterTransform.getValue()
                     * Matrix.getValue());
     }
@@ -215,7 +215,7 @@ av::utils::Trackball::evaluate()
   }
 
   if (mSpinning) {
-    ::gua::math::quat rot = ::scm::math::quat<float>::from_matrix(mRotation);
+    ::gua::math::quat rot = ::scm::math::quat<double>::from_matrix(mRotation);
     Matrix.setValue(mCenterTransInv
                     * rot.to_matrix()
                     * CenterTransform.getValue()

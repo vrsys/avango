@@ -34,6 +34,7 @@ av::gua::TriMeshPassDescription::initClass()
 
         SFTriMeshPassDescription::initClass("av::gua::SFTriMeshPassDescription", "av::Field");
         MFTriMeshPassDescription::initClass("av::gua::MFTriMeshPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

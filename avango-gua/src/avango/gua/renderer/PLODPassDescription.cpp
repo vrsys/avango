@@ -34,6 +34,7 @@ av::gua::PLODPassDescription::initClass()
 
         SFPLODPassDescription::initClass("av::gua::SFPLODPassDescription", "av::Field");
         MFPLODPassDescription::initClass("av::gua::MFPLODPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

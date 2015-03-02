@@ -34,6 +34,7 @@ av::gua::TexturedQuadPassDescription::initClass()
 
         SFTexturedQuadPassDescription::initClass("av::gua::SFTexturedQuadPassDescription", "av::Field");
         MFTexturedQuadPassDescription::initClass("av::gua::MFTexturedQuadPassDescription", "av::Field");
+        sClassTypeId.setDistributable(true);
     }
 }
 

@@ -3,28 +3,45 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 from examples_common.GuaVE import GuaVE
+import math
+
+graph = None
 
 bob = None
 bob_nav = None
 LAST_ANIMATION = ""
 light2 = None
+screen = None
+mouse_pos = None
+mouse_scroll = None
+
+#cubes = []
+
+
 
 class TimedRun(avango.script.Script):
   TimeIn = avango.SFFloat()
-  MatrixOut = avango.gua.SFMatrix4()
 
   @field_has_changed(TimeIn)
   def update(self):
     global bob
     global bob_nav
     global LAST_ANIMATION
-    #self.MatrixOut.value = avango.gua.make_trans_mat(0.0, 0.0,-self.TimeIn.value*2.0,)
+    global screen
+    global mouse_pos
+    global mouse_scroll
+
     if bob != None:
       blendFact = bob.BlendingFactor.value
       if bob.Animation.value == "data/objects/marine/run.md5anim":
         bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,blendFact * 0.05)
       if LAST_ANIMATION == "data/objects/marine/run.md5anim":
         bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,(1-blendFact) * 0.05)
+
+    # camera steering:
+    if mouse_pos != None and screen != None and mouse_scroll != None:
+      bob_trans = bob.WorldTransform.value.get_translate()
+      screen.Transform.value = avango.gua.make_trans_mat(bob_trans+avango.gua.Vec3(0.0,0.04,0.0)) * avango.gua.make_rot_mat(mouse_pos.x/2.0,0.0,1.0,0.0) * avango.gua.make_rot_mat(mouse_pos.y/2.0,1.0,0.0,0.0) * avango.gua.make_trans_mat(0,0.003*mouse_scroll.y,0.05*mouse_scroll.y) * avango.gua.make_scale_mat(0.04,0.04,0.04)# * avango.gua.make_rot_mat(180.0,0.0,1.0,0.0)
 
 class GroundFollowing(avango.script.Script):
   InTransform = avango.gua.SFMatrix4()
@@ -46,10 +63,12 @@ class GroundFollowing(avango.script.Script):
   # @field_has_changed(InTransform)
   def evaluate(self):
     global light2
+    #global graph
+    #global cubes
+
     in_translation = self.InTransform.value.get_translate()
-    #temp_trans = avango.gua.Vec3(in_translation.x,in_translation.y,in_translation.z)
-    #temp_trans.y += 0.51
-    in_translation.y += self.OffsetToGround.value * 2.0
+
+    in_translation.y += (self.OffsetToGround.value * 2.0)+0.03 #0.03 as animation offset
 
     self.__ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
                                  avango.gua.make_rot_mat(-90, 1, 0, 0) *\
@@ -70,21 +89,36 @@ class GroundFollowing(avango.script.Script):
 
       #hit_world = avango.gua.make_trans_mat(first_hit.WorldPosition.value) * first_hit.Object.value.Transform.value
       if light2 != None:
-        #light2.Transform.value = avango.gua.make_trans_mat(temp_trans)
         light2.Transform.value = avango.gua.make_trans_mat(first_hit.WorldPosition.value)
         #light2.Transform.value = hit_world
 
+        #intersection test geometry:
+        '''tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
+        cube = tri_mesh_loader.create_geometry_from_file("cube",
+                                            "data/objects/cube.obj",
+                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
+                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE)
+        cube.Transform.value = avango.gua.make_trans_mat(first_hit.WorldPosition.value) * avango.gua.make_scale_mat(0.01,0.01,0.01)
+        if graph != None:
+          graph.Root.value.Children.value.append(cube)
+          cubes.append(cube)
+        while len(cubes)>300:
+          tmp_cube = cubes.pop(0)
+          graph.Root.value.Children.value.remove(tmp_cube)'''
+
+
       new_pos = first_hit.WorldPosition.value
-      #new_pos = hit_world.get_translate()
       new_pos.y += self.OffsetToGround.value
 
-      result = (new_pos - in_translation)#/100
+      result = (new_pos - in_translation)
 
     self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(result)
 
 
 def start():
 
+  #global graph
+  
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
@@ -93,6 +127,7 @@ def start():
   global bob
   global bob_nav
   global LAST_ANIMATION
+  global screen
 
   bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
   bob_ground = avango.gua.nodes.TransformNode(Name = "bob_ground")
@@ -123,7 +158,7 @@ def start():
   #environment:
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/medieval_harbour/town.obj",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
                                             | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
@@ -140,12 +175,6 @@ def start():
 
   plane.Transform.value *= avango.gua.make_scale_mat(3.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
 
-  plane2 = tri_mesh_loader.create_geometry_from_file("cube2",
-                                            "data/objects/cube.obj",
-                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
-                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
-                                            | avango.gua.LoaderFlags.MAKE_PICKABLE)
 
   plane.Transform.value *= avango.gua.make_scale_mat(1.0,1.0,1.0) *  avango.gua.make_trans_mat(0, 0, 0)
 
@@ -188,9 +217,23 @@ def start():
       if c == 99 and bob.Animation.value != "data/objects/marine/crouch.md5anim":
         LAST_ANIMATION = bob.Animation.value
         bob.Animation.value = "data/objects/marine/crouch.md5anim"
-      if c == 99:
-        bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.5,0.0)
+      #if c == 99:
+      #  bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.5,0.0)
   window.on_char(handle_char)
+
+
+  def handle_mouse(m):
+    global mouse_pos
+    mouse_pos = m
+  window.on_move_cursor(handle_mouse)
+
+  def handle_scroll(s):
+    global mouse_scroll
+    if mouse_scroll == None:
+      mouse_scroll = s
+    else:
+      mouse_scroll+=s
+  window.on_scroll(handle_scroll)
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",

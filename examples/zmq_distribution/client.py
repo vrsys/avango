@@ -35,6 +35,8 @@ from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
 
+#avango.enable_logging(4, "client.log")
+
 class NetInit(avango.script.Script):
   NetChildren = avango.gua.MFNode()
   WindowName  = avango.SFString()

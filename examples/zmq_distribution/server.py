@@ -31,8 +31,11 @@ import avango
 import avango.script
 import avango.gua
 from avango.script import field_has_changed
+import time
 
 from examples_common.GuaVE import GuaVE
+
+#avango.enable_logging(4, "server.log")
 
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
@@ -63,11 +66,6 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
 monkey2 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
-# rig = loader.create_geometry_from_file("oilrig", "/opt/3d_models/OIL_RIG_GUACAMOLE/oilrig.obj",
-#       avango.gua.LoaderFlags.NORMALIZE_POSITION |
-#       avango.gua.LoaderFlags.NORMALIZE_SCALE |
-#       avango.gua.LoaderFlags.LOAD_MATERIALS |
-#       avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
 
 monkey1.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
 monkey1.Material.value.set_uniform("Roughness", 0.3)
@@ -114,13 +112,24 @@ group.Children.value = [monkey_transform1, monkey_transform2, light]
 screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
 
 size = avango.gua.Vec2ui(800, 600)
+
+
+tri_pass = avango.gua.nodes.TriMeshPassDescription()
+lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
+res_pass = avango.gua.nodes.ResolvePassDescription()
+
+pipeline_description = avango.gua.nodes.PipelineDescription(
+  EnableABuffer = True,
+  Passes = [ tri_pass, lvis_pass, res_pass ])
+
 server_cam = avango.gua.nodes.CameraNode(
   ViewID = 1,
   LeftScreenPath = "/net/screen",
   SceneGraph = "scenegraph",
   Resolution = size,
   OutputWindowName = "server_window",
-  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+  PipelineDescription = pipeline_description
 )
 
 client_cam = avango.gua.nodes.CameraNode(
@@ -129,7 +138,8 @@ client_cam = avango.gua.nodes.CameraNode(
   SceneGraph = "scenegraph",
   Resolution = size,
   OutputWindowName = "client_window",
-  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+  PipelineDescription = pipeline_description
 )
 
 screen.Children.value = [client_cam, server_cam]
@@ -139,6 +149,14 @@ graph.Root.value.Children.value = [nettrans]
 
 make_node_distributable(group)
 make_node_distributable(screen)
+
+nettrans.distribute_object(tri_pass)
+nettrans.distribute_object(res_pass)
+nettrans.distribute_object(lvis_pass)
+
+for p in pipeline_description.Passes.value:
+  nettrans.distribute_object(p)
+nettrans.distribute_object(pipeline_description)
 
 # setup viewing
 window = avango.gua.nodes.GlfwWindow(

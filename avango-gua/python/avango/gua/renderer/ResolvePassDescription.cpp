@@ -37,7 +37,15 @@ void init_ResolvePassDescription()
     enum_<av::gua::ResolvePassDescription::ToneMappingModeEnum>("ToneMappingMode")
         .value("LINEAR", av::gua::ResolvePassDescription::LINEAR)
         .value("HEJL", av::gua::ResolvePassDescription::HEJL)
+        .value("REINHARD", av::gua::ResolvePassDescription::REINHARD)
         ;
+
+    enum_<av::gua::ResolvePassDescription::EnvironmentLightingModeEnum>("EnvironmentLightingMode")
+        .value("SPHEREMAP", av::gua::ResolvePassDescription::SPHEREMAP)
+        .value("CUBEMAP", av::gua::ResolvePassDescription::CUBEMAP)
+        .value("AMBIENT_COLOR", av::gua::ResolvePassDescription::AMBIENT_COLOR)
+        ;
+
 
  }
 

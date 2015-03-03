@@ -37,6 +37,13 @@ namespace av
       enum ToneMappingModeEnum {
         LINEAR = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::LINEAR),
         HEJL = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::HEJL),
+        REINHARD = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::REINHARD)
+      };
+
+      enum EnvironmentLightingModeEnum {
+        SPHEREMAP = static_cast<unsigned>(::gua::ResolvePassDescription::EnvironmentLightingMode::SPHEREMAP),
+        CUBEMAP = static_cast<unsigned>(::gua::ResolvePassDescription::EnvironmentLightingMode::CUBEMAP),
+        AMBIENT_COLOR = static_cast<unsigned>(::gua::ResolvePassDescription::EnvironmentLightingMode::AMBIENT_COLOR)
       };
 
       /**
@@ -61,15 +68,15 @@ namespace av
       SFFloat  Exposure;
 
       SFColor  EnvironmentLightingColor;
-      //SFUInt   EnvironmentLightingMode;
-      //SFUInt   EnvironmentLightingSphereMap;
+      SFUInt   EnvironmentLightingMode;
+      SFString EnvironmentLightingSphereMap;
 
       SFBool   EnableSSAO;
-      //SFFloat  SSAOradius
-      //SFFloat  SSAOintensity
-      //SFFloat  SSAOfalloff
+      SFFloat  SSAORadius;
+      SFFloat  SSAOIntensity;
+      SFFloat  SSAOFalloff;
 
-      //SFBool   ShowDebugTiles;
+      SFBool   DebugTiles;
 
       virtual void getBackgroundColorCB(const SFColor::GetValueEvent& event);
       virtual void setBackgroundColorCB(const SFColor::SetValueEvent& event);
@@ -98,8 +105,26 @@ namespace av
       virtual void getEnableSSAOCB(const SFBool::GetValueEvent& event);
       virtual void setEnableSSAOCB(const SFBool::SetValueEvent& event);
 
+      virtual void getSSAORadiusCB(const SFFloat::GetValueEvent& event);
+      virtual void setSSAORadiusCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getSSAOIntensityCB(const SFFloat::GetValueEvent& event);
+      virtual void setSSAOIntensityCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getSSAOFalloffCB(const SFFloat::GetValueEvent& event);
+      virtual void setSSAOFalloffCB(const SFFloat::SetValueEvent& event);
+
       virtual void getEnvironmentLightingColorCB(const SFColor::GetValueEvent& event);
       virtual void setEnvironmentLightingColorCB(const SFColor::SetValueEvent& event);
+
+      virtual void getEnvironmentLightingModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setEnvironmentLightingModeCB(const SFUInt::SetValueEvent& event);
+
+      virtual void getEnvironmentLightingSphereMapCB(const SFString::GetValueEvent& event);
+      virtual void setEnvironmentLightingSphereMapCB(const SFString::SetValueEvent& event);
+
+      virtual void getDebugTilesCB(const SFBool::GetValueEvent& event);
+      virtual void setDebugTilesCB(const SFBool::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::ResolvePassDescription.

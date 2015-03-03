@@ -52,6 +52,10 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getExposureCB, this, _1),
                     boost::bind(&ResolvePassDescription::setExposureCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingColor,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingColorCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingColorCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(EnableSSAO,
                     boost::bind(&ResolvePassDescription::getEnableSSAOCB, this, _1),
                     boost::bind(&ResolvePassDescription::setEnableSSAOCB, this, _1));
@@ -176,6 +180,18 @@ av::gua::ResolvePassDescription::getGuaResolvePassDescription() const
 }
 
 void
+av::gua::ResolvePassDescription::getEnvironmentLightingColorCB(const SFColor::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting();
+}
+
+void
+av::gua::ResolvePassDescription::setEnvironmentLightingColorCB(const SFColor::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->environment_lighting(event.getValue());
+}
+
+void
 av::gua::ResolvePassDescription::getEnableSSAOCB(const SFBool::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_enable();
@@ -186,6 +202,4 @@ av::gua::ResolvePassDescription::setEnableSSAOCB(const SFBool::SetValueEvent& ev
 {
   m_guaResolvePassDescription->ssao_enable(event.getValue());
 }
-
-
 

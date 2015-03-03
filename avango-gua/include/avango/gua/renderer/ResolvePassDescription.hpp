@@ -60,7 +60,16 @@ namespace av
       SFUInt   ToneMappingMode;
       SFFloat  Exposure;
 
+      SFColor  EnvironmentLightingColor;
+      //SFUInt   EnvironmentLightingMode;
+      //SFUInt   EnvironmentLightingSphereMap;
+
       SFBool   EnableSSAO;
+      //SFFloat  SSAOradius
+      //SFFloat  SSAOintensity
+      //SFFloat  SSAOfalloff
+
+      //SFBool   ShowDebugTiles;
 
       virtual void getBackgroundColorCB(const SFColor::GetValueEvent& event);
       virtual void setBackgroundColorCB(const SFColor::SetValueEvent& event);
@@ -88,6 +97,9 @@ namespace av
 
       virtual void getEnableSSAOCB(const SFBool::GetValueEvent& event);
       virtual void setEnableSSAOCB(const SFBool::SetValueEvent& event);
+
+      virtual void getEnvironmentLightingColorCB(const SFColor::GetValueEvent& event);
+      virtual void setEnvironmentLightingColorCB(const SFColor::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::ResolvePassDescription.

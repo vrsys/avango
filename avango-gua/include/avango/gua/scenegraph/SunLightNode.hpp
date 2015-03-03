@@ -42,6 +42,7 @@ namespace av
     public:
 
       SFColor Color;
+      SFFloat Brightness;
       SFBool  EnableShadows;
       SFBool  EnableGodrays;
       SFBool  EnableDiffuseShading;
@@ -60,6 +61,9 @@ namespace av
 
       virtual void getColorCB(const SFColor::GetValueEvent& event);
       virtual void setColorCB(const SFColor::SetValueEvent& event);
+
+      virtual void getBrightnessCB(const SFFloat::GetValueEvent& event);
+      virtual void setBrightnessCB(const SFFloat::SetValueEvent& event);
 
       virtual void getEnableShadowsCB(const SFBool::GetValueEvent& event);
       virtual void setEnableShadowsCB(const SFBool::SetValueEvent& event);

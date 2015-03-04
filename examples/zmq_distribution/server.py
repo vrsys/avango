@@ -169,7 +169,6 @@ avango.gua.register_window("server_window", window)
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
-viewer.CameraNodes.value = [server_cam]
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 

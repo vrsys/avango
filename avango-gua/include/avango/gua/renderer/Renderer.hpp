@@ -42,8 +42,7 @@ namespace av
       Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer());
 
 
-      void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs,
-                      std::vector<av::gua::CameraNode const*> const& cams) const;
+      void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const;
 
     protected:
 

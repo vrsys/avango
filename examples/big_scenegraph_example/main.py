@@ -153,7 +153,6 @@ def start():
   guaVE.start(locals(), globals())
 
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [camera]
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 

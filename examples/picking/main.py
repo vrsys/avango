@@ -151,7 +151,6 @@ def start():
   camera.Transform.connect_from(navigator.OutTransform)
 
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [camera]
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 

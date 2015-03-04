@@ -83,6 +83,9 @@ mat = avango.gua.nodes.Material(
   ShaderName = "mat"
 )
 
+#monkey1.Material.value = mat
+nettrans.distribute_object(mat)
+
 transform1 = avango.gua.nodes.TransformNode(
   Children = [monkey1]
 )
@@ -94,8 +97,9 @@ transform2 = avango.gua.nodes.TransformNode(
 light = avango.gua.nodes.PointLightNode(
   Name = "light",
   Color = avango.gua.Color(1.0, 1.0, 1.0),
-  Brightness = 50.0,
-  Transform = avango.gua.make_trans_mat(1, 1, 5) * avango.gua.make_scale_mat(15, 15, 15)
+  Brightness = 100.0,
+  Transform = avango.gua.make_trans_mat(1, 1, 5) *
+                    avango.gua.make_scale_mat(30, 30, 30)
 )
 
 monkey_transform1 = avango.gua.nodes.TransformNode(Name = "monkey_transform1")
@@ -115,12 +119,15 @@ size = avango.gua.Vec2ui(800, 600)
 
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
+tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
 lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
 res_pass = avango.gua.nodes.ResolvePassDescription()
+res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
+tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 
 pipeline_description = avango.gua.nodes.PipelineDescription(
   EnableABuffer = True,
-  Passes = [ tri_pass, lvis_pass, res_pass ])
+  Passes = [ tri_pass, tquad_pass, lvis_pass, res_pass, tscreenspace_pass ])
 
 server_cam = avango.gua.nodes.CameraNode(
   ViewID = 1,
@@ -151,8 +158,10 @@ make_node_distributable(group)
 make_node_distributable(screen)
 
 nettrans.distribute_object(tri_pass)
-nettrans.distribute_object(res_pass)
+nettrans.distribute_object(tquad_pass)
 nettrans.distribute_object(lvis_pass)
+nettrans.distribute_object(res_pass)
+nettrans.distribute_object(tscreenspace_pass)
 
 for p in pipeline_description.Passes.value:
   nettrans.distribute_object(p)

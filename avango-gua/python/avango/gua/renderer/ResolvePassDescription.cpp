@@ -38,6 +38,7 @@ void init_ResolvePassDescription()
         .value("LINEAR", av::gua::ResolvePassDescription::LINEAR)
         .value("HEJL", av::gua::ResolvePassDescription::HEJL)
         .value("REINHARD", av::gua::ResolvePassDescription::REINHARD)
+        .value("UNCHARTED", av::gua::ResolvePassDescription::UNCHARTED)
         ;
 
     enum_<av::gua::ResolvePassDescription::EnvironmentLightingModeEnum>("EnvironmentLightingMode")

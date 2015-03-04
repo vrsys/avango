@@ -17,6 +17,10 @@ av::gua::SunLightNode::SunLightNode(std::shared_ptr< ::gua::node::SunLightNode> 
                           boost::bind(&SunLightNode::getColorCB, this, _1),
                           boost::bind(&SunLightNode::setColorCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(Brightness,
+                          boost::bind(&SunLightNode::getBrightnessCB, this, _1),
+                          boost::bind(&SunLightNode::setBrightnessCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(EnableShadows,
                           boost::bind(&SunLightNode::getEnableShadowsCB, this, _1),
                           boost::bind(&SunLightNode::setEnableShadowsCB, this, _1));
@@ -85,6 +89,18 @@ void
 av::gua::SunLightNode::setColorCB(const SFColor::SetValueEvent& event)
 {
     m_guaNode->data.color() = event.getValue();
+}
+
+void
+av::gua::SunLightNode::getBrightnessCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.brightness();
+}
+
+void
+av::gua::SunLightNode::setBrightnessCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.brightness = event.getValue();
 }
 
 void

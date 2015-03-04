@@ -57,6 +57,10 @@ nettrans = avango.gua.nodes.NetTransform(
 )
 
 loader = avango.gua.nodes.TriMeshLoader()
+plodloader = avango.gua.nodes.PLODLoader()
+plodloader.UploadBudget.value = 32
+plodloader.RenderBudget.value = 2048
+plodloader.OutOfCoreBudget.value = 4096
 
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 graph.Root.value.Children.value = [nettrans]
@@ -75,6 +79,7 @@ logger = avango.gua.nodes.Logger(
 )
 
 viewer = avango.gua.nodes.Viewer()
+# viewer.CameraNodes.value = [cam]
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 

@@ -73,12 +73,18 @@ namespace av
             }
           }
 
+          // default
+          {
+            av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+            self.distributeFieldContainer(tmp);
+            return;
+          }
         }
 
         void undistributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
-          
+
           {
             av::Link<av::gua::Node> tmp = dynamic_cast<av::gua::Node*>(av_value);
             if (tmp.isValid()) {
@@ -95,6 +101,14 @@ namespace av
               self.undistributeFieldContainer(tmp);
               return;
             }
+          }
+
+          // default
+
+          {
+            av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+            self.undistributeFieldContainer(tmp);
+            av::Base* av_value = boost::python::extract<av::Base*>(obj);
           }
         }
 

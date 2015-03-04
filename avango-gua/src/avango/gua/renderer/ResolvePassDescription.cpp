@@ -52,10 +52,37 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getExposureCB, this, _1),
                     boost::bind(&ResolvePassDescription::setExposureCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingColor,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingColorCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingColorCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingMode,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingModeCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingModeCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingSphereMap,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingSphereMapCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingSphereMapCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(EnableSSAO,
                     boost::bind(&ResolvePassDescription::getEnableSSAOCB, this, _1),
                     boost::bind(&ResolvePassDescription::setEnableSSAOCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(SSAORadius,
+                    boost::bind(&ResolvePassDescription::getSSAORadiusCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setSSAORadiusCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(SSAOIntensity,
+                    boost::bind(&ResolvePassDescription::getSSAOIntensityCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setSSAOIntensityCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(SSAOFalloff,
+                    boost::bind(&ResolvePassDescription::getSSAOFalloffCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setSSAOFalloffCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(DebugTiles,
+                    boost::bind(&ResolvePassDescription::getDebugTilesCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setDebugTilesCB, this, _1));
 }
 
 void
@@ -176,6 +203,42 @@ av::gua::ResolvePassDescription::getGuaResolvePassDescription() const
 }
 
 void
+av::gua::ResolvePassDescription::getEnvironmentLightingColorCB(const SFColor::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting();
+}
+
+void
+av::gua::ResolvePassDescription::setEnvironmentLightingColorCB(const SFColor::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->environment_lighting(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getEnvironmentLightingModeCB(const SFUInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaResolvePassDescription->environment_lighting_mode());
+}
+
+void
+av::gua::ResolvePassDescription::setEnvironmentLightingModeCB(const SFUInt::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->environment_lighting_mode(static_cast< ::gua::ResolvePassDescription::EnvironmentLightingMode>(event.getValue()));
+}
+
+void
+av::gua::ResolvePassDescription::getEnvironmentLightingSphereMapCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting_spheremap();
+}
+
+void
+av::gua::ResolvePassDescription::setEnvironmentLightingSphereMapCB(const SFString::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->environment_lighting_spheremap(event.getValue());
+}
+
+void
 av::gua::ResolvePassDescription::getEnableSSAOCB(const SFBool::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_enable();
@@ -187,5 +250,51 @@ av::gua::ResolvePassDescription::setEnableSSAOCB(const SFBool::SetValueEvent& ev
   m_guaResolvePassDescription->ssao_enable(event.getValue());
 }
 
+void
+av::gua::ResolvePassDescription::getSSAORadiusCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_radius();
+}
 
+void
+av::gua::ResolvePassDescription::setSSAORadiusCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->ssao_radius(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getSSAOIntensityCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_intensity();
+}
+
+void
+av::gua::ResolvePassDescription::setSSAOIntensityCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->ssao_intensity(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getSSAOFalloffCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->ssao_falloff();
+}
+
+void
+av::gua::ResolvePassDescription::setSSAOFalloffCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->ssao_falloff(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getDebugTilesCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->debug_tiles();
+}
+
+void
+av::gua::ResolvePassDescription::setDebugTilesCB(const SFBool::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->debug_tiles(event.getValue());
+}
 

@@ -35,7 +35,7 @@ import time
 
 from examples_common.GuaVE import GuaVE
 
-#avango.enable_logging(4, "server.log")
+avango.enable_logging(4, "server.log")
 
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
@@ -62,6 +62,17 @@ def make_material_distributable(mat):
 
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+
+filename = "/opt/guacamole/new_renderer/examples/plod/data/objects/pig.kdn"
+plodloader = avango.gua.nodes.PLODLoader()
+plodloader.UploadBudget.value = 32
+plodloader.RenderBudget.value = 2048
+plodloader.OutOfCoreBudget.value = 4096
+plod_geode = plodloader.create_geometry_from_file(
+              filename, avango.gua.PLODLoaderFlags.NORMALIZE_SCALE |
+                        avango.gua.PLODLoaderFlags.NORMALIZE_POSITION )
+              #filename, avango.gua.PLODLoaderFlags.DEFAULTS)
+
 loader = avango.gua.nodes.TriMeshLoader()
 
 monkey1 = loader.create_geometry_from_file("monkey", "../simple_example/data/objects/monkey.obj")
@@ -83,13 +94,8 @@ mat = avango.gua.nodes.Material(
   ShaderName = "mat"
 )
 
-transform1 = avango.gua.nodes.TransformNode(
-  Children = [monkey1]
-)
-transform2 = avango.gua.nodes.TransformNode(
-  Transform = avango.gua.make_trans_mat(-0.5, 0.0,0),
-  Children = [monkey2]
-)
+#monkey1.Material.value = mat
+nettrans.distribute_object(mat)
 
 light = avango.gua.nodes.PointLightNode(
   Name = "light",
@@ -107,7 +113,7 @@ monkey_transform2.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 0.0)
 monkey_transform2.Children.value = [monkey2]
 
 group = avango.gua.nodes.TransformNode(Name = "group")
-group.Children.value = [monkey_transform1, monkey_transform2, light]
+group.Children.value = [plod_geode, monkey_transform1, monkey_transform2, light]
 
 screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
 
@@ -115,12 +121,18 @@ size = avango.gua.Vec2ui(800, 600)
 
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
+tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
+plod_pass = avango.gua.nodes.PLODPassDescription()
 lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
 res_pass = avango.gua.nodes.ResolvePassDescription()
+res_pass.BackgroundMode.value = avango.gua.BackgroundMode.COLOR
+res_pass.BackgroundColor.value = avango.gua.Color(0.2,0.2,0.2)
+res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.REINHARD
+tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 
 pipeline_description = avango.gua.nodes.PipelineDescription(
   EnableABuffer = True,
-  Passes = [ tri_pass, lvis_pass, res_pass ])
+  Passes = [ tri_pass, tquad_pass, plod_pass, lvis_pass, res_pass, tscreenspace_pass ])
 
 server_cam = avango.gua.nodes.CameraNode(
   ViewID = 1,
@@ -151,8 +163,11 @@ make_node_distributable(group)
 make_node_distributable(screen)
 
 nettrans.distribute_object(tri_pass)
-nettrans.distribute_object(res_pass)
+nettrans.distribute_object(tquad_pass)
+nettrans.distribute_object(plod_pass)
 nettrans.distribute_object(lvis_pass)
+nettrans.distribute_object(res_pass)
+nettrans.distribute_object(tscreenspace_pass)
 
 for p in pipeline_description.Passes.value:
   nettrans.distribute_object(p)

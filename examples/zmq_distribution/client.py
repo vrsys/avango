@@ -75,7 +75,6 @@ logger = avango.gua.nodes.Logger(
 )
 
 viewer = avango.gua.nodes.Viewer()
-# viewer.CameraNodes.value = [cam]
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 

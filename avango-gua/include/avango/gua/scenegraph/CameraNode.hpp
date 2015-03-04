@@ -10,11 +10,14 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
+#include <avango/gua/math/Frustum.hpp>
 
 namespace av
 {
   namespace gua
   {
+    class SceneGraph;
+
     /**
      * Wrapper for ::gua::CameraNode
      *
@@ -37,13 +40,14 @@ namespace av
         RIGHT   = static_cast<unsigned int>(::gua::CameraMode::RIGHT)
       };
 
-
       /**
        * Constructor. When called without arguments, a new ::gua::CameraNode is created.
        * Otherwise, the given ::gua::CameraNode is used.
        */
       CameraNode( std::shared_ptr< ::gua::node::CameraNode> guaCameraNode =
           std::shared_ptr< ::gua::node::CameraNode>(new ::gua::node::CameraNode("")));
+
+      av::Link<Frustum> get_frustum(SceneGraph const& graph, CameraMode mode);
 
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);

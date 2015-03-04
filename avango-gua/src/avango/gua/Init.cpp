@@ -27,6 +27,7 @@
 #include <avango/gua/scenegraph/CameraNode.hpp>
 
 #include <avango/gua/math/BoundingBox.hpp>
+#include <avango/gua/math/Frustum.hpp>
 #include <avango/gua/math/BoundingSphere.hpp>
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -126,6 +127,7 @@ av::gua::Init::initClass()
         av::gua::PickResult::initClass();
 
         av::gua::BoundingBox::initClass();
+        av::gua::Frustum::initClass();
         av::gua::BoundingSphere::initClass();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)

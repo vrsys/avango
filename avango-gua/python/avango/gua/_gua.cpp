@@ -36,6 +36,7 @@
 #include "scenegraph/PickResult.hpp"
 
 #include "math/BoundingBox.hpp"
+#include "math/Frustum.hpp"
 #include "math/BoundingSphere.hpp"
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -159,6 +160,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PickResult();
 
     init_BoundingBox();
+    init_Frustum();
     init_BoundingSphere();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)

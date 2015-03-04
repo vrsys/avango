@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_FRUSTUM_HPP
+#define AV_PYTHON_GUA_FRUSTUM_HPP
+
+void init_Frustum();
+
+#endif //AV_PYTHON_GUA_FRUSTUM_HPP

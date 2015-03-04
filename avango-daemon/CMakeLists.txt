@@ -4,10 +4,6 @@ set (AVANGO_DAEMON_VERSION_MAINT "${AVANGO_VERSION_MAINT}")
 option (AVANGO_DAEMON_DEBUG "Enable Daemon debugging")
 option (AVANGO_DAEMON_VRPN_SUPPORT "Enable using VRPN.")
 
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  include(find_ovr)
-endif(AVANGO_OCULUS_RIFT_SUPPORT)
-
 ###############################################################################
 # generate Config.h
 ###############################################################################

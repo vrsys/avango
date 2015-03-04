@@ -1,4 +1,5 @@
 #include <avango/gua/scenegraph/CameraNode.hpp>
+#include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -111,6 +112,10 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
 
 av::gua::CameraNode::~CameraNode()
 {}
+
+av::Link<av::gua::Frustum> av::gua::CameraNode::get_frustum(av::gua::SceneGraph const& graph, av::gua::CameraNode::CameraMode mode) {
+  return av::Link<av::gua::Frustum>(new av::gua::Frustum(new ::gua::Frustum(m_guaNode->get_frustum(*graph.getGuaSceneGraph(), static_cast< ::gua::CameraMode >(mode)))));
+}
 
 void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode)
 {
@@ -424,4 +429,3 @@ av::gua::CameraNode::setPreRenderCamerasCB(const MultiField<Link<CameraNode>>::S
 
   m_guaNode->set_pre_render_cameras(gua_cams);
 }
-

@@ -17,6 +17,10 @@ av::gua::SpotLightNode::SpotLightNode(std::shared_ptr< ::gua::node::SpotLightNod
                           boost::bind(&SpotLightNode::getColorCB, this, _1),
                           boost::bind(&SpotLightNode::setColorCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(Brightness,
+                          boost::bind(&SpotLightNode::getBrightnessCB, this, _1),
+                          boost::bind(&SpotLightNode::setBrightnessCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(Falloff,
                           boost::bind(&SpotLightNode::getFallofCB, this, _1),
                           boost::bind(&SpotLightNode::setFallofCB, this, _1));
@@ -88,6 +92,18 @@ av::gua::SpotLightNode::setColorCB(const SFColor::SetValueEvent& event)
 }
 
 void
+av::gua::SpotLightNode::getBrightnessCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.brightness();
+}
+
+void
+av::gua::SpotLightNode::setBrightnessCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.brightness = event.getValue();
+}
+
+void
 av::gua::SpotLightNode::getFallofCB(const SFFloat::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaNode->data.falloff();
@@ -102,13 +118,13 @@ av::gua::SpotLightNode::setFallofCB(const SFFloat::SetValueEvent& event)
 void
 av::gua::SpotLightNode::getSoftnessCB(const SFFloat::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaNode->data.falloff();
+    *(event.getValuePtr()) = m_guaNode->data.softness();
 }
 
 void
 av::gua::SpotLightNode::setSoftnessCB(const SFFloat::SetValueEvent& event)
 {
-    m_guaNode->data.falloff() = event.getValue();
+    m_guaNode->data.softness() = event.getValue();
 }
 
 void

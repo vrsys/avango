@@ -5,43 +5,14 @@ import avango.gua
 from examples_common.GuaVE import GuaVE
 import math
 
+from CharacterControl import *
+from CameraControl import *
+
 graph = None
-
-bob = None
-bob_nav = None
-LAST_ANIMATION = ""
 light2 = None
-screen = None
-mouse_pos = None
-mouse_scroll = None
-
-#cubes = []
+cubes = []
 
 
-
-class TimedRun(avango.script.Script):
-  TimeIn = avango.SFFloat()
-
-  @field_has_changed(TimeIn)
-  def update(self):
-    global bob
-    global bob_nav
-    global LAST_ANIMATION
-    global screen
-    global mouse_pos
-    global mouse_scroll
-
-    if bob != None:
-      blendFact = bob.BlendingFactor.value
-      if bob.Animation.value == "data/objects/marine/run.md5anim":
-        bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,blendFact * 0.05)
-      if LAST_ANIMATION == "data/objects/marine/run.md5anim":
-        bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,(1-blendFact) * 0.05)
-
-    # camera steering:
-    if mouse_pos != None and screen != None and mouse_scroll != None:
-      bob_trans = bob.WorldTransform.value.get_translate()
-      screen.Transform.value = avango.gua.make_trans_mat(bob_trans+avango.gua.Vec3(0.0,0.04,0.0)) * avango.gua.make_rot_mat(mouse_pos.x/2.0,0.0,1.0,0.0) * avango.gua.make_rot_mat(mouse_pos.y/2.0,1.0,0.0,0.0) * avango.gua.make_trans_mat(0,0.003*mouse_scroll.y,0.05*mouse_scroll.y) * avango.gua.make_scale_mat(0.04,0.04,0.04)# * avango.gua.make_rot_mat(180.0,0.0,1.0,0.0)
 
 class GroundFollowing(avango.script.Script):
   InTransform = avango.gua.SFMatrix4()
@@ -63,8 +34,8 @@ class GroundFollowing(avango.script.Script):
   # @field_has_changed(InTransform)
   def evaluate(self):
     global light2
-    #global graph
-    #global cubes
+    global graph
+    global cubes
 
     in_translation = self.InTransform.value.get_translate()
 
@@ -74,7 +45,7 @@ class GroundFollowing(avango.script.Script):
                                  avango.gua.make_rot_mat(-90, 1, 0, 0) *\
                                  avango.gua.make_scale_mat(1.0, 1.0, self.MaxDistanceToGround.value + self.OffsetToGround.value * 2.0)
 
-    results = self.SceneGraph.value.ray_test(
+    results = graph.ray_test(
                                      self.__ray,
                                      avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
                                      #avango.gua.PickingOptions.GET_POSITIONS)
@@ -93,7 +64,7 @@ class GroundFollowing(avango.script.Script):
         #light2.Transform.value = hit_world
 
         #intersection test geometry:
-        '''tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
+        tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
         cube = tri_mesh_loader.create_geometry_from_file("cube",
                                             "data/objects/cube.obj",
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
@@ -104,7 +75,7 @@ class GroundFollowing(avango.script.Script):
           cubes.append(cube)
         while len(cubes)>300:
           tmp_cube = cubes.pop(0)
-          graph.Root.value.Children.value.remove(tmp_cube)'''
+          graph.Root.value.Children.value.remove(tmp_cube)
 
 
       new_pos = first_hit.WorldPosition.value
@@ -117,17 +88,12 @@ class GroundFollowing(avango.script.Script):
 
 def start():
 
-  #global graph
+  global graph
   
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
   loader = avango.gua.nodes.SkeletalAnimationLoader()
-
-  global bob
-  global bob_nav
-  global LAST_ANIMATION
-  global screen
 
   bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
   bob_ground = avango.gua.nodes.TransformNode(Name = "bob_ground")
@@ -201,40 +167,6 @@ def start():
     LeftResolution = size
   )
 
-
-  def handle_char(c):
-      global LAST_ANIMATION
-      if c == 119 and bob.Animation.value != "data/objects/marine/run.md5anim":
-        LAST_ANIMATION = bob.Animation.value
-        bob.Animation.value = "data/objects/marine/run.md5anim"
-      if c == 115 and bob.Animation.value != "data/objects/marine/fists_idle.md5anim":
-        LAST_ANIMATION = bob.Animation.value
-        bob.Animation.value = "data/objects/marine/fists_idle.md5anim"
-      if c == 100:
-        bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0) 
-      if c == 97:
-        bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0) 
-      if c == 99 and bob.Animation.value != "data/objects/marine/crouch.md5anim":
-        LAST_ANIMATION = bob.Animation.value
-        bob.Animation.value = "data/objects/marine/crouch.md5anim"
-      #if c == 99:
-      #  bob_nav.Transform.value = bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.5,0.0)
-  window.on_char(handle_char)
-
-
-  def handle_mouse(m):
-    global mouse_pos
-    mouse_pos = m
-  window.on_move_cursor(handle_mouse)
-
-  def handle_scroll(s):
-    global mouse_scroll
-    if mouse_scroll == None:
-      mouse_scroll = s
-    else:
-      mouse_scroll+=s
-  window.on_scroll(handle_scroll)
-
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",
                                     Resolution = size,
@@ -257,6 +189,20 @@ def start():
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 
+  # setup character control
+  character_control = CharacterControl()
+  character_control.my_constructor(bob,bob_nav,window)
+
+  character_control.bind_transformation(97, avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(100, avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_animation(119, "data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim")
+  character_control.bind_animation(115, "data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim")
+
+  # setup camera control
+  camera_control = CameraControl()
+  camera_control.my_constructor(screen,bob,window)
+
+  # setup ground following
   ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.0,
@@ -267,10 +213,9 @@ def start():
 
   bob_ground.Transform.connect_from(ground_following.OutTransform)
 
-  run_updater = TimedRun()
-
   timer = avango.nodes.TimeSensor()
-  run_updater.TimeIn.connect_from(timer.Time)
+  character_control.TimeIn.connect_from(timer.Time)
+  camera_control.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

@@ -13,12 +13,11 @@ class TimedRotate(avango.script.Script):
 
   @field_has_changed(TimeIn)
   def update(self):
-    time = 6.0
-    # time = self.TimeIn.value
+    time = self.TimeIn.value
     self.MatrixOut.value = avango.gua.make_rot_mat(time*5.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(0.5)
 
-def start():
 
+def start():
   # setup scenegraph
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
   loader = avango.gua.nodes.TriMeshLoader()
@@ -27,7 +26,7 @@ def start():
   projector.Graph.value = graph
   projector.Texture.value = "data/textures/smiley.jpg"
 
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/cube.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
   monkey.Material.connect_from(projector.Material)
 
   light = avango.gua.nodes.PointLightNode(
@@ -87,7 +86,7 @@ def start():
   #projector movement
   navigator = Navigator()
   navigator.OutTransform.value = avango.gua.make_identity_mat()
-  navigator.StartLocation.value = avango.gua.Vec3(0.0, 0.0, 0.0)
+  navigator.StartLocation.value = avango.gua.Vec3(0.0, 0.0, 1.0)
 
   navigator.RotationSpeed.value = 0.2
   navigator.MotionSpeed.value = 0.04

@@ -8,10 +8,12 @@ class CharacterControl(avango.script.Script):
   
   _last_animation = None
 
-  _animations = []
+  _animations_kd = []
+  _animations_ku = []
   _transformations = []
-  #_ease_in = []
-  #_ease_out = []
+  _ease_in_translations = []
+  _ease_out_translations = []
+
 
   def __init__(self):
 
@@ -26,66 +28,53 @@ class CharacterControl(avango.script.Script):
     #self._window = application_window
 
 
-
-    def handle_char(c):
-      '''if c == 119 and self._character.Animation.value != "data/objects/marine/run.md5anim":
-        self._last_animation = self._character.Animation.value
-        self._character.Animation.value = "data/objects/marine/run.md5anim"
-      if c == 115 and self._character.Animation.value != "data/objects/marine/fists_idle.md5anim":
-        self._last_animation = self._character.Animation.value
-        self._character.Animation.value = "data/objects/marine/fists_idle.md5anim"
-      if c == 100:
-        self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0) 
-      if c == 97:
-        self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0) 
-      if c == 99 and self._character.Animation.value != "data/objects/marine/crouch.md5anim":
-        self._last_animation = self._character.Animation.value
-        self._character.Animation.value = "data/objects/marine/crouch.md5anim"'''
-      #if c == 99:
-      #  self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(0.0,0.5,0.0)
+    def handle_key(ascii, unknown , event , unknown2):
 
       # animation trigger
-      for a in self._animations:
-        if c == a[0] and self._character.Animation.value == a[1]:
+      for a in self._animations_kd:
+        if ascii == a[0] and event == 1 and self._character.Animation.value == a[1]:
+          self._last_animation = self._character.Animation.value
+          self._character.Animation.value = a[2]
+
+      for a in self._animations_ku:
+        if ascii == a[0] and event == 0 and self._character.Animation.value == a[1]:
           self._last_animation = self._character.Animation.value
           self._character.Animation.value = a[2]
       
       # transformation trigger
       for t in self._transformations:
-      	if c == t[0]:
-      	  self._navigation.Transform.value = self._navigation.Transform.value * t[1]
+        if ascii == t[0]:
+          self._navigation.Transform.value = self._navigation.Transform.value * t[1]
 
-
-
-    application_window.on_char(handle_char)
+    application_window.on_key_press(handle_key)
 		
-
-
-  def bind_animation(self, key_nr, path_to_current_animation, path_to_next_animation):
-  	self._animations.append((key_nr, path_to_current_animation,path_to_next_animation))
 
   def bind_transformation(self, key_nr, transform_matrix):
   	self._transformations.append((key_nr, transform_matrix))
 
-  '''def ease_in(self, path_to_current_animation, path_to_next_animation, transform_matrix):
-    self._ease_in.append((path_to_current_animation, path_to_next_animation, transform_matrix))
+  def key_down(self, key_nr, path_to_current_animation, path_to_next_animation):
+    self._animations_kd.append((key_nr, path_to_current_animation,path_to_next_animation))
 
-  def ease_out(self, path_to_current_animation, path_to_next_animation, transform_matrix):
-    self._ease_out.append((path_to_current_animation, path_to_next_animation, transform_matrix))'''
+  def key_up(self, key_nr, path_to_current_animation, path_to_next_animation):
+    self._animations_ku.append((key_nr, path_to_current_animation,path_to_next_animation))
+
+  def ease_in_translation(self, path_to_current_animation, path_to_next_animation, translation_vec):
+    self._ease_in_translations.append((path_to_current_animation, path_to_next_animation, translation_vec))
+
+  def ease_out_translation(self, path_to_current_animation, path_to_next_animation, translation_vec):
+    self._ease_out_translations.append((path_to_current_animation, path_to_next_animation, translation_vec))
+
 
   @field_has_changed(TimeIn)
   def update(self):
 
-
     blendFact = self._character.BlendingFactor.value
 
-    if self._character.Animation.value == "data/objects/marine/run.md5anim":
-      self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,blendFact * 0.05)
-    if self._last_animation == "data/objects/marine/run.md5anim":
-      self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(0.0, 0.0,(1-blendFact) * 0.05)
+    for trans in self._ease_in_translations:
+      if self._character.Animation.value == trans[1] and self._last_animation == trans[0]:
+        self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans[2] * blendFact)
 
-    # WIP: scaling unique transformation matrix by blending factor not correct
-    ''''for ei in self._ease_in:
-    	if self._character.Animation.value == ei[1] and self._last_animation == ei[0]:
-    	  self._navigation.Transform.value = self._navigation.Transform.value * ei[2] * blendFact
-    	  print(self._navigation.Transform.value)'''	
+    for trans in self._ease_out_translations:
+      if self._character.Animation.value == trans[1] and self._last_animation == trans[0]:
+        self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans[2] * (1 - blendFact))
+

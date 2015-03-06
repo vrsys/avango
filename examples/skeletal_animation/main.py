@@ -8,7 +8,6 @@ import math
 from CharacterControl import *
 from CameraControl import *
 
-graph = None
 light2 = None
 cubes = []
 
@@ -34,7 +33,6 @@ class GroundFollowing(avango.script.Script):
   # @field_has_changed(InTransform)
   def evaluate(self):
     global light2
-    global graph
     global cubes
 
     in_translation = self.InTransform.value.get_translate()
@@ -45,7 +43,7 @@ class GroundFollowing(avango.script.Script):
                                  avango.gua.make_rot_mat(-90, 1, 0, 0) *\
                                  avango.gua.make_scale_mat(1.0, 1.0, self.MaxDistanceToGround.value + self.OffsetToGround.value * 2.0)
 
-    results = graph.ray_test(
+    results = self.SceneGraph.value.ray_test(
                                      self.__ray,
                                      avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
                                      #avango.gua.PickingOptions.GET_POSITIONS)
@@ -70,12 +68,12 @@ class GroundFollowing(avango.script.Script):
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE)
         cube.Transform.value = avango.gua.make_trans_mat(first_hit.WorldPosition.value) * avango.gua.make_scale_mat(0.01,0.01,0.01)
-        if graph != None:
-          graph.Root.value.Children.value.append(cube)
+        if self.SceneGraph.value != None:
+          self.SceneGraph.value.Root.value.Children.value.append(cube)
           cubes.append(cube)
         while len(cubes)>300:
           tmp_cube = cubes.pop(0)
-          graph.Root.value.Children.value.remove(tmp_cube)
+          self.SceneGraph.value.Root.value.Children.value.remove(tmp_cube)
 
 
       new_pos = first_hit.WorldPosition.value
@@ -88,7 +86,6 @@ class GroundFollowing(avango.script.Script):
 
 def start():
 
-  global graph
   
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
@@ -189,14 +186,22 @@ def start():
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 
+
   # setup character control
   character_control = CharacterControl()
   character_control.my_constructor(bob,bob_nav,window)
 
-  character_control.bind_transformation(97, avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(100, avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.bind_animation(119, "data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim")
-  character_control.bind_animation(115, "data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim")
+  character_control.bind_transformation(65, avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
+  character_control.key_down(87, "data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim")
+  character_control.key_up(87, "data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim")
+
+  character_control.key_down(67, "data/objects/marine/fists_idle.md5anim","data/objects/marine/crouch.md5anim")
+  character_control.key_up(67, "data/objects/marine/crouch.md5anim","data/objects/marine/fists_idle.md5anim")
+
+  character_control.ease_in_translation("data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim",avango.gua.Vec3(0.0,0.0,0.05))
+  character_control.ease_out_translation("data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim",avango.gua.Vec3(0.0,0.0,0.05))
+
 
   # setup camera control
   camera_control = CameraControl()

@@ -63,9 +63,13 @@ def start():
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
   res_pass.EnableSSAO.value = True
+  res_pass.SSAOIntensity.value = 4.0
+  res_pass.SSAOFalloff.value = 10.0
+  res_pass.SSAORadius.value = 7.0
   res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
   res_pass.Exposure.value = 1.0
+  res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
 
   pipeline_description = avango.gua.nodes.PipelineDescription(
       Passes = [

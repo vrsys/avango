@@ -77,6 +77,14 @@ class Navigator(avango.script.Script):
       if self.Keyboard.KeyD.value:
         self.__location += (rotation * \
                            avango.gua.make_trans_mat(self.MotionSpeed.value, 0.0, 0.0)).get_translate()      
+
+      if self.Keyboard.KeyQ.value:
+        self.__location += (rotation * \
+                           avango.gua.make_trans_mat(0.0, -self.MotionSpeed.value, 0.0)).get_translate()
+                           
+      if self.Keyboard.KeyE.value:
+        self.__location += (rotation * \
+                           avango.gua.make_trans_mat(0.0, self.MotionSpeed.value, 0.0)).get_translate()      
       
       target = avango.gua.make_trans_mat(self.__location) * rotation
                  

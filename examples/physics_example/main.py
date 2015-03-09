@@ -147,7 +147,6 @@ def start():
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
   viewer.Physics.value = physics
   viewer.Windows.value = [window]

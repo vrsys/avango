@@ -23,20 +23,14 @@ av::gua::Renderer::Renderer(::gua::Renderer* guaRenderer)
 //{}
 
 void
-av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs,
-                              std::vector<av::gua::CameraNode const*> const& cams) const
+av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const
 {
   std::vector< ::gua::SceneGraph const*> gua_graphs;
   for (auto graph : graphs) {
     gua_graphs.push_back(graph->getGuaSceneGraph());
   }
 
-  std::vector< std::shared_ptr< ::gua::node::CameraNode> > gua_cams;
-  for (auto cam : cams) {
-    gua_cams.push_back(cam->getGuaNode());
-  }
-
-  m_guaRenderer->queue_draw(gua_graphs, gua_cams);
+  m_guaRenderer->queue_draw(gua_graphs);
 }
 
 void

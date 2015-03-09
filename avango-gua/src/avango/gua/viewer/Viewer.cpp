@@ -30,7 +30,6 @@ av::gua::Viewer::Viewer()
       m_loop(),
       m_ticker(m_loop, 1.f/60.f)
 {
-    AV_FC_ADD_FIELD(CameraNodes, MFCameraNode::ContainerType());
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
     AV_FC_ADD_FIELD(Windows,     MFWindowBase::ContainerType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -113,13 +112,7 @@ av::gua::Viewer::frame() {
   ::gua::Interface::instance()->update();
 #endif
 
-  if (SceneGraphs.getValue().size() > 0 && CameraNodes.getValue().size() > 0) {
-
-    std::vector<av::gua::CameraNode const*> cams;
-
-    for (auto cam : CameraNodes.getValue()) {
-      cams.push_back(reinterpret_cast<av::gua::CameraNode*> (cam.getBasePtr()));
-    }
+  if (SceneGraphs.getValue().size() > 0) {
 
     std::vector<av::gua::SceneGraph const*> graphs;
 
@@ -127,7 +120,7 @@ av::gua::Viewer::frame() {
       graphs.push_back(reinterpret_cast<av::gua::SceneGraph*> (graph.getBasePtr()));
     }
 
-    m_renderer->queue_draw(graphs, cams);
+    m_renderer->queue_draw(graphs);
   }
 
 #if defined(AVANGO_PHYSICS_SUPPORT)

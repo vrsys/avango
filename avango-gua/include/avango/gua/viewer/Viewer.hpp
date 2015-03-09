@@ -35,7 +35,6 @@ namespace av
 
       Viewer();
 
-      MFCameraNode CameraNodes;
       MFSceneGraph SceneGraphs;
       MFWindowBase Windows;
 #if defined(AVANGO_PHYSICS_SUPPORT)

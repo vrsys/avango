@@ -23,9 +23,9 @@
       }
 
       gua_color = vec3(0.2, 0.2, 0.2) + 0.5 * c.rgb;
-      gua_roughness = 1.0;
-      gua_metalness = 1.0;
-      gua_emissivity = 1.0;
+      gua_roughness = 0.5;
+      gua_metalness = 0.0;
+      gua_emissivity = 0.0;
       gua_flags_passthrough = false;
       gua_alpha = c.a;
     }

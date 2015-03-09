@@ -37,7 +37,8 @@ namespace av
         OPTIMIZE_GEOMETRY = ::gua::TriMeshLoader::OPTIMIZE_GEOMETRY,
         MAKE_PICKABLE = ::gua::TriMeshLoader::MAKE_PICKABLE,
         NORMALIZE_SCALE = ::gua::TriMeshLoader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::TriMeshLoader::NORMALIZE_POSITION
+        NORMALIZE_POSITION = ::gua::TriMeshLoader::NORMALIZE_POSITION,
+        NO_SHARED_MATERIALS = ::gua::TriMeshLoader::NO_SHARED_MATERIALS
       };
 
       /**

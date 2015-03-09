@@ -1,0 +1,28 @@
+{
+  "vertex_methods" :
+  [],
+
+  "fragment_methods" :
+  [
+    {
+      "name" : "FragmentTeture",
+      "source" : "
+        void FragmentTeture() {
+          gua_color = texture(sampler2D(tex), gua_get_quad_coords()).rgb;
+          gua_emissivity = 0.3;
+          gua_metalness = 0.0;
+          gua_roughness = 0.8;
+        }
+      ",
+      "uniforms" :
+      [
+        {
+          "name" : "tex",
+          "type" : "sampler2D",
+          "value" : "portal"
+        }
+      ]
+    }
+  ]
+
+}

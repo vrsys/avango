@@ -37,7 +37,8 @@ namespace av
       enum ToneMappingModeEnum {
         LINEAR = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::LINEAR),
         HEJL = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::HEJL),
-        REINHARD = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::REINHARD)
+        REINHARD = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::REINHARD),
+        UNCHARTED = static_cast<unsigned>(::gua::ResolvePassDescription::ToneMappingMethod::UNCHARTED)
       };
 
       enum EnvironmentLightingModeEnum {

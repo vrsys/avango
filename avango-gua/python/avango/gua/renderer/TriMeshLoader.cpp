@@ -76,6 +76,7 @@ void init_TriMeshLoader()
         .value("MAKE_PICKABLE", av::gua::TriMeshLoader::MAKE_PICKABLE)
         .value("NORMALIZE_SCALE", av::gua::TriMeshLoader::NORMALIZE_SCALE)
         .value("NORMALIZE_POSITION", av::gua::TriMeshLoader::NORMALIZE_POSITION)
+        .value("NO_SHARED_MATERIALS", av::gua::TriMeshLoader::NO_SHARED_MATERIALS)
         ;
 
   register_field<av::gua::SFTriMeshLoader>("SFTriMeshLoader");

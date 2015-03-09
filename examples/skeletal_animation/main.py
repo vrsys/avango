@@ -100,13 +100,11 @@ def start():
          |avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
   loader.load_animation(bob,
-          "data/objects/marine/fists_idle.md5anim", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob, "data/objects/marine/run.md5anim",
+          "data/objects/marine/fists_idle.md5anim","idle", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/objects/marine/run.md5anim","run",
           avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
-          "data/objects/marine/fists_idle.md5anim", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/objects/marine/crouch.md5anim", avango.gua.LoaderFlags.DEFAULTS)
+          "data/objects/marine/crouch.md5anim","crouch", avango.gua.LoaderFlags.DEFAULTS)
 
   LAST_ANIMATION = bob.Animation.value
 
@@ -169,6 +167,16 @@ def start():
                                     Resolution = size,
                                     OutputWindowName = "window")
 
+  pipeline_description = avango.gua.nodes.PipelineDescription(
+      Passes = [
+            avango.gua.nodes.TriMeshPassDescription(),
+            avango.gua.nodes.LightVisibilityPassDescription(),
+            avango.gua.nodes.SkeletalAnimationPassDescription(),
+            avango.gua.nodes.ResolvePassDescription()
+          ])
+
+  cam.PipelineDescription.value = pipeline_description
+
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 5.0)
   cam.FarClip.value = 10000
 
@@ -193,14 +201,15 @@ def start():
 
   character_control.bind_transformation(65, avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(68, avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.key_down(87, "data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim")
-  character_control.key_up(87, "data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim")
 
-  character_control.key_down(67, "data/objects/marine/fists_idle.md5anim","data/objects/marine/crouch.md5anim")
-  character_control.key_up(67, "data/objects/marine/crouch.md5anim","data/objects/marine/fists_idle.md5anim")
+  character_control.key_down(87, "idle","run")
+  character_control.key_up(87, "run","idle")
 
-  character_control.ease_in_translation("data/objects/marine/fists_idle.md5anim","data/objects/marine/run.md5anim",avango.gua.Vec3(0.0,0.0,0.05))
-  character_control.ease_out_translation("data/objects/marine/run.md5anim","data/objects/marine/fists_idle.md5anim",avango.gua.Vec3(0.0,0.0,0.05))
+  character_control.key_down(67, "idle","crouch")
+  character_control.key_up(67, "crouch","idle")
+
+  character_control.ease_in_translation("idle","run",avango.gua.Vec3(0.0,0.0,0.05))
+  character_control.ease_out_translation("run","idle",avango.gua.Vec3(0.0,0.0,0.05))
 
 
   # setup camera control

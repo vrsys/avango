@@ -80,6 +80,7 @@
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
+#include <avango/gua/viewer/BlenderViewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/gua/utils/Ray.hpp>
@@ -182,6 +183,7 @@ av::gua::Init::initClass()
         // av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();
+        av::gua::BlenderViewer::initClass();
 
         av::gua::Logger::initClass();
         av::gua::Ray::initClass();

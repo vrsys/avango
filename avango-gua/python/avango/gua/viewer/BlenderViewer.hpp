@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_BLENDER_VIEWER_HPP
+#define AV_PYTHON_GUA_BLENDER_VIEWER_HPP
+
+void init_BlenderViewer();
+
+#endif //AV_PYTHON_GUA_BLENDER_VIEWER_HPP

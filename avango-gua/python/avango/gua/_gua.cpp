@@ -91,6 +91,7 @@
 #include "renderer/Texture.hpp"
 
 #include "viewer/Viewer.hpp"
+#include "viewer/BlenderViewer.hpp"
 
 #include "utils/Color.hpp"
 #include "utils/Logger.hpp"
@@ -216,6 +217,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Texture();
 
     init_Viewer();
+    init_BlenderViewer();
 
     init_Logger();
     init_Ray();

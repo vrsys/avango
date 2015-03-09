@@ -109,7 +109,26 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
 
-  camera.PipelineDescription.value.EnableABuffer.value = True
+  res_pass = avango.gua.nodes.ResolvePassDescription()
+  res_pass.EnableSSAO.value = True
+  res_pass.SSAOIntensity.value = 3.0
+  res_pass.SSAOFalloff.value = 20.0
+  res_pass.SSAORadius.value = 10.0
+  res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
+  res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
+  res_pass.Exposure.value = 1.0
+  res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+
+  pipeline_description = avango.gua.nodes.PipelineDescription(
+    Passes = [
+      avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.LightVisibilityPassDescription(),
+      res_pass
+    ],
+    EnableABuffer = True
+  )
+
+  camera.PipelineDescription.value = pipeline_description
 
   graph.Root.value.Children.value.append(camera)
 
@@ -131,7 +150,6 @@ def start():
   camera.Transform.connect_from(navigator.OutTransform)
 
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [camera]
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 

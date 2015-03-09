@@ -22,30 +22,15 @@ def start():
   desc.load_from_file("data/materials/portal.gmd")
   avango.gua.register_material_shader(desc, "portal_mat")
 
-  # portals
-  cylinder = loader.create_geometry_from_file(
-    "cylinder",
-    "data/objects/cylinder.obj",
-  )
-  cylinder.Material.value.ShaderName.value = "portal_mat"
-  cylinder.Transform.value = avango.gua.make_trans_mat(2.5, 0, 0)
-
-  plane = loader.create_geometry_from_file(
-    "plane",
-    "data/objects/plane.obj",
-  )
-  plane.Material.value.ShaderName.value = "portal_mat"
-  plane.Transform.value = avango.gua.make_trans_mat(-2.5, 0, 0) * avango.gua.make_rot_mat(90, 1, 0, 0)
-
   cube = loader.create_geometry_from_file(
     "cube",
     "data/objects/cube.obj",
   )
+  cube.Transform.value = avango.gua.make_scale_mat(2, 1.5, 1.5)
   cube.Material.value.ShaderName.value = "portal_mat"
+  cube.Material.value.EnableBackfaceCulling.value = False
 
   main_scene.Root.value.Children.value.append(cube)
-  main_scene.Root.value.Children.value.append(cylinder)
-  main_scene.Root.value.Children.value.append(plane)
 
   light = avango.gua.nodes.PointLightNode(
     Name = "sun",
@@ -72,15 +57,20 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
 
-  main_scene.Root.value.Children.value.append(camera)
-
-  floor = loader.create_geometry_from_file(
-    "floor",
-    "data/objects/plane.obj",
-    avango.gua.LoaderFlags.DEFAULTS
+  res_pass = avango.gua.nodes.ResolvePassDescription()
+  res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
+  res_pass.BackgroundMode.value = 1
+  res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/water_painted_noon.jpg"
+  pipeline_description = avango.gua.nodes.PipelineDescription(
+    Passes = [
+      avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.LightVisibilityPassDescription(),
+      res_pass
+    ]
   )
-  floor.Transform.value = avango.gua.make_scale_mat(6, 1, 2) * avango.gua.make_trans_mat(0, -1, 0)
-  main_scene.Root.value.Children.value.append(floor)
+  camera.PipelineDescription.value = pipeline_description
+
+  main_scene.Root.value.Children.value.append(camera)
 
   # portal scene -----------------------------------------------------------------
   sponza = loader.create_geometry_from_file(
@@ -88,7 +78,7 @@ def start():
     "/opt/3d_models/Sponza/sponza.obj",
     avango.gua.LoaderFlags.LOAD_MATERIALS
   )
-  sponza.Transform.value = avango.gua.make_scale_mat(0.05) * avango.gua.make_trans_mat(0, -50, 0)
+  sponza.Transform.value = avango.gua.make_trans_mat(0, -0.5, 0) * avango.gua.make_scale_mat(0.0008)
 
   portal_scene.Root.value.Children.value.append(sponza)
 
@@ -117,6 +107,35 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
 
+  portal_res_pass = avango.gua.nodes.ResolvePassDescription()
+  portal_res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.01,0.01,0.01)
+  portal_res_pass.BackgroundMode.value = 1
+  portal_res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/sunrise.jpg"
+  portal_pipeline_description = avango.gua.nodes.PipelineDescription(
+    Passes = [
+      avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.LightVisibilityPassDescription(),
+      portal_res_pass
+    ]
+  )
+  portal_camera.PipelineDescription.value = portal_pipeline_description
+
+  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.75)
+  ));
+
+  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.75) * avango.gua.make_rot_mat(180, 0, 1, 0)
+  ));
+
+  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
+    Transform = avango.gua.make_trans_mat(1.0, 0.0, 0.0) * avango.gua.make_rot_mat(90, 0, 1, 0)
+  ));
+
+  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
+    Transform = avango.gua.make_trans_mat(-1.0, 0.0, 0.0) * avango.gua.make_rot_mat(-90, 0, 1, 0)
+  ));
+
   portal_scene.Root.value.Children.value.append(camera)
 
   # window setup ---------------------------------------------------------------
@@ -141,7 +160,6 @@ def start():
   portal_camera.Transform.connect_from(navigator.OutTransform)
 
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [camera]
   viewer.SceneGraphs.value = [main_scene, portal_scene]
   viewer.Windows.value = [window]
 

@@ -15,6 +15,7 @@
 #include "scenegraph/Node.hpp"
 #include "scenegraph/GeometryNode.hpp"
 #include "scenegraph/TransformNode.hpp"
+#include "scenegraph/ClippingPlaneNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
@@ -135,6 +136,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Node();
     init_GeometryNode();
     init_TransformNode();
+    init_ClippingPlaneNode();
     init_CameraNode();
     init_LODNode();
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)

@@ -4,6 +4,7 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/scenegraph/ClippingPlaneNode.hpp>
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
@@ -106,6 +107,7 @@ av::gua::Init::initClass()
         av::gua::Node::initClass();
         av::gua::GeometryNode::initClass();
         av::gua::TransformNode::initClass();
+        av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
         // av::gua::Video3DNode::initClass();

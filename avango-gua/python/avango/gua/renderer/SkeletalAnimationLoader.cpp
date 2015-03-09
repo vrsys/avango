@@ -43,8 +43,9 @@ void loadAnimation(
     av::gua::SkeletalAnimationLoader const& loader,
     av::Link<av::gua::Node>& node,
     std::string const& fileName,
+    std::string const& animation_name,
     int flags) {
-  loader.load_animation(node, fileName,
+  loader.load_animation(node, fileName, animation_name,
       static_cast<av::gua::SkeletalAnimationLoader::Flags>(flags));
 }
 

@@ -52,11 +52,12 @@ av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& node
 void
 av::gua::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
                                                  std::string const& file_name,
+                                                 std::string const& animation_name,
                                                  Flags flags) const
 {
   auto gua_node(node->getGuaNode());
 
-  m_guaSkeletalAnimationLoader->load_animation(gua_node, file_name, flags);
+  m_guaSkeletalAnimationLoader->load_animation(gua_node, file_name, animation_name, flags);
 }
 
 void

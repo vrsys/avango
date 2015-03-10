@@ -55,8 +55,8 @@ namespace av
 
       av::gua::Renderer m_renderer;
 
-      BlenderViewer(const BlenderViewer&);
-      BlenderViewer& operator=(const BlenderViewer&);
+      BlenderViewer(const BlenderViewer&) = delete;
+      BlenderViewer& operator=(const BlenderViewer&) = delete;
     };
 
     typedef SingleField<Link<BlenderViewer> > SFBlenderViewer;

@@ -26,25 +26,13 @@ AV_FIELD_DEFINE(av::gua::SFBlenderViewer);
 AV_FIELD_DEFINE(av::gua::MFBlenderViewer);
 
 av::gua::BlenderViewer::BlenderViewer()
-    : m_renderer(nullptr)
+    : m_renderer(new ::gua::Renderer)
 {
     AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
     AV_FC_ADD_FIELD(Windows,     MFWindowBase::ContainerType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
     AV_FC_ADD_FIELD(Physics, nullptr);
 #endif
-    AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
-                    boost::bind(&BlenderViewer::getApplicationFPSCB, this, _1),
-                    boost::bind(&BlenderViewer::setApplicationFPSCB, this, _1));
-}
-
-av::gua::BlenderViewer::~BlenderViewer()
-{
-  if (m_renderer) {
-    m_renderer->getGuaRenderer()->stop();
-    delete m_renderer;
-    m_renderer = nullptr;
-  }
 }
 
 void
@@ -62,23 +50,7 @@ av::gua::BlenderViewer::initClass()
 }
 
 void
-av::gua::BlenderViewer::getApplicationFPSCB(const SFFloat::GetValueEvent& event)
-{
-  if (m_renderer) {
-    *(event.getValuePtr()) = m_renderer->getGuaRenderer()->get_application_fps();
-  }
-}
-
-void
-av::gua::BlenderViewer::setApplicationFPSCB(const SFFloat::SetValueEvent& event)
-{}
-
-void
 av::gua::BlenderViewer::frame() {
-
-  if (!m_renderer) {
-    m_renderer = new av::gua::Renderer(new ::gua::Renderer());
-  }
 
   av::ApplicationInstance::get().evaluate();
 
@@ -94,7 +66,7 @@ av::gua::BlenderViewer::frame() {
       graphs.push_back(reinterpret_cast<av::gua::SceneGraph*> (graph.getBasePtr()));
     }
 
-    m_renderer->queue_draw(graphs);
+    m_renderer.queue_draw(graphs);
   }
 
 #if defined(AVANGO_PHYSICS_SUPPORT)

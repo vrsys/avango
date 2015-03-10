@@ -41,11 +41,6 @@ namespace av
       SFPhysics    Physics;
 #endif
 
-      SFFloat      ApplicationFPS;
-
-      virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
-      virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
-
       void frame();
 
     protected:
@@ -53,12 +48,12 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~BlenderViewer();
+      virtual ~BlenderViewer() {}
 
 
     private:
 
-      av::gua::Renderer *m_renderer;
+      av::gua::Renderer m_renderer;
 
       BlenderViewer(const BlenderViewer&);
       BlenderViewer& operator=(const BlenderViewer&);

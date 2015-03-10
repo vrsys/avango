@@ -29,7 +29,7 @@
 #define AV_APPLICATION_H
 
 #include <boost/shared_ptr.hpp>
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <boost/thread.hpp>
 
 #include <avango/Singleton.h>
@@ -106,9 +106,9 @@ namespace av
      */
     void exit(bool realExit = true);
 
-    typedef boost::signal<void ()> VoidCallbackSignal;
+    typedef boost::signals2::signal<void ()> VoidCallbackSignal;
     typedef VoidCallbackSignal::slot_type VoidCallback;
-    typedef boost::signals::connection CallbackHandle;
+    typedef boost::signals2::connection CallbackHandle;
 
     /**
      * add a callback which is called before the evaluation of Avango FieldContainers

@@ -61,6 +61,7 @@
 
 #include "renderer/WindowBase.hpp"
 #include "renderer/Window.hpp"
+#include "renderer/HeadlessSurface.hpp"
 #include "renderer/GlfwWindow.hpp"
 #include "renderer/MaterialShaderMethod.hpp"
 #include "renderer/MaterialShaderDescription.hpp"
@@ -78,6 +79,7 @@
 #include "renderer/SSAOPassDescription.hpp"
 #include "renderer/ResolvePassDescription.hpp"
 #include "renderer/LightVisibilityPassDescription.hpp"
+#include "renderer/ScreenshotPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -187,6 +189,7 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_WindowBase();
     init_Window();
+    init_HeadlessSurface();
     init_GlfwWindow();
     init_MaterialShaderMethod();
     init_MaterialShaderDescription();
@@ -204,6 +207,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SSAOPassDescription();
     init_ResolvePassDescription();
     init_LightVisibilityPassDescription();
+    init_ScreenshotPassDescription();
     init_Databases();
     init_TriMeshLoader();
     // init_Video3DLoader();

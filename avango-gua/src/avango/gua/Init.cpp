@@ -61,6 +61,7 @@
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/HeadlessSurface.hpp>
 #include <avango/gua/renderer/GlfwWindow.hpp>
 #include <avango/gua/renderer/MaterialShaderMethod.hpp>
 #include <avango/gua/renderer/MaterialShaderDescription.hpp>
@@ -77,6 +78,7 @@
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
 #include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
+#include <avango/gua/renderer/ScreenshotPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
@@ -155,6 +157,7 @@ av::gua::Init::initClass()
         av::gua::Renderer::initClass();
         av::gua::WindowBase::initClass();
         av::gua::Window::initClass();
+        av::gua::HeadlessSurface::initClass();
         av::gua::GlfwWindow::initClass();
         av::gua::MaterialShaderMethod::initClass();
         av::gua::MaterialShaderDescription::initClass();
@@ -171,6 +174,7 @@ av::gua::Init::initClass()
         av::gua::SSAOPassDescription::initClass();
         av::gua::ResolvePassDescription::initClass();
         av::gua::LightVisibilityPassDescription::initClass();
+        av::gua::ScreenshotPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         // av::gua::Video3DLoader::initClass();

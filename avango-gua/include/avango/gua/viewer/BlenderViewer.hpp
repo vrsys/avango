@@ -9,7 +9,7 @@
 #include <gua/events.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/WindowBase.hpp>
+#include <avango/gua/renderer/HeadlessSurface.hpp>
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -36,7 +36,7 @@ namespace av
       BlenderViewer();
 
       MFSceneGraph SceneGraphs;
-      MFWindowBase Windows;
+      MFHeadlessSurface Windows;
 #if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;
 #endif
@@ -54,6 +54,7 @@ namespace av
     private:
 
       av::gua::Renderer m_renderer;
+      void draw_image(::gua::HeadlessSurface::Image const&);
 
       BlenderViewer(const BlenderViewer&) = delete;
       BlenderViewer& operator=(const BlenderViewer&) = delete;

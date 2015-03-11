@@ -31,9 +31,10 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
 
-av::gua::BlenderViewer::Image screenshot(::gua::Pipeline& pipe) {
+av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
+
+av::gua::BlenderViewer::Image screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
   auto color = pipe.get_gbuffer().get_current_color_buffer();
@@ -64,6 +65,54 @@ av::gua::BlenderViewer::Image screenshot(::gua::Pipeline& pipe) {
   ctx.render_context->retrieve_texture_data(_color_buffer_resolved, 0, img.data.data());
 
   return img;
+}
+
+void draw_image(av::gua::BlenderViewer::Image const& im)
+{
+  glColor3f(1.0f, 1.0f, 1.0f);
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+  GLuint texid;
+  glGenTextures(1, &texid);
+  glBindTexture(GL_TEXTURE_2D, texid);
+  //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, w, h, 0, GL_RGBA, GL_HALF_FLOAT, data_pointer);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im.width, im.height, 0,
+                GL_RGBA, GL_UNSIGNED_BYTE, im.data.data());
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  glEnable(GL_TEXTURE_2D);
+
+  //if(draw_params.bind_display_space_shader_cb) {
+  //        draw_params.bind_display_space_shader_cb();
+  //}
+
+  auto width(im.width);
+  auto height(im.height);
+
+  glPushMatrix();
+
+  glBegin(GL_QUADS);
+
+  glTexCoord2f(0.0f, 0.0f);
+  glVertex2f(0.0f, 0.0f);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex2f(float(width), 0.0f);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex2f(float(width), float(height));
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex2f(0.0f, float(height));
+
+  glEnd();
+
+  glPopMatrix();
+
+  //if(draw_params.unbind_display_space_shader_cb) {
+  //        draw_params.unbind_display_space_shader_cb();
+  //}
+
+  glBindTexture(GL_TEXTURE_2D, 0);
+  glDisable(GL_TEXTURE_2D);
+  glDeleteTextures(1, &texid);
 }
 
 }
@@ -164,55 +213,6 @@ av::gua::BlenderViewer::frame() {
 #endif
 
   draw_image(m_image);
-}
-
-void
-av::gua::BlenderViewer::draw_image(av::gua::BlenderViewer::Image const& im)
-{
-  glColor3f(1.0f, 1.0f, 1.0f);
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  GLuint texid;
-  glGenTextures(1, &texid);
-  glBindTexture(GL_TEXTURE_2D, texid);
-  //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, w, h, 0, GL_RGBA, GL_HALF_FLOAT, data_pointer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im.width, im.height, 0,
-                GL_RGBA, GL_UNSIGNED_BYTE, im.data.data());
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-  glEnable(GL_TEXTURE_2D);
-
-  //if(draw_params.bind_display_space_shader_cb) {
-  //        draw_params.bind_display_space_shader_cb();
-  //}
-
-  auto width(im.width);
-  auto height(im.height);
-
-  glPushMatrix();
-
-  glBegin(GL_QUADS);
-
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(0.0f, 0.0f);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(float(width), 0.0f);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex2f(float(width), float(height));
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex2f(0.0f, float(height));
-
-  glEnd();
-
-  glPopMatrix();
-
-  //if(draw_params.unbind_display_space_shader_cb) {
-  //        draw_params.unbind_display_space_shader_cb();
-  //}
-
-  glBindTexture(GL_TEXTURE_2D, 0);
-  glDisable(GL_TEXTURE_2D);
-  glDeleteTextures(1, &texid);
 }
 
 void

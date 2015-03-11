@@ -77,7 +77,6 @@ namespace av
       BlenderViewer(const BlenderViewer&) = delete;
       BlenderViewer& operator=(const BlenderViewer&) = delete;
 
-      void draw_image(Image const&);
       void render_thread();
 
       std::mutex m_mutex;

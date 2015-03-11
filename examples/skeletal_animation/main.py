@@ -8,6 +8,7 @@ import math
 from CharacterControl import *
 from CameraControl import *
 
+bob = None
 light2 = None
 cubes = []
 
@@ -32,6 +33,7 @@ class GroundFollowing(avango.script.Script):
 
   # @field_has_changed(InTransform)
   def evaluate(self):
+    global bob
     global light2
     global cubes
 
@@ -78,6 +80,10 @@ class GroundFollowing(avango.script.Script):
 
     if len(results.value) > 0:
 
+
+      if bob and bob.Animation.value == "swim":
+       bob.Animation.value = "run_fwd"
+
       first_hit = results.value[0]
 
       hit_world = first_hit.Object.value.Transform.value * avango.gua.make_trans_mat(first_hit.Position.value)
@@ -92,11 +98,16 @@ class GroundFollowing(avango.script.Script):
 
       delta_trans = (new_pos.get_translate() - self.InTransform.value.get_translate())
 
+    else:
+      if bob and bob.Animation.value == "run_fwd":
+       bob.Animation.value = "swim"
+
     self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans/3.0)#/3.0 smoothing(???)
 
 
 def start():
 
+  global bob
   
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
@@ -106,18 +117,39 @@ def start():
   bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
   bob_ground = avango.gua.nodes.TransformNode(Name = "bob_ground")
 
-  bob = loader.create_geometry_from_file("bob", "data/objects/marine/mpplayer.md5mesh" ,
+  #bob = loader.create_geometry_from_file("bob", "data/objects/marine/mpplayer.md5mesh" ,
+  bob = loader.create_geometry_from_file("bob", "data/objects/Necris/necris_male_ut4_SKELMESH.FBX" ,
          avango.gua.LoaderFlags.LOAD_MATERIALS
          |avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  loader.load_animation(bob,
+  bob.Transform.value = bob.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0)
+
+  '''loader.load_animation(bob,
           "data/objects/marine/fists_idle.md5anim","idle", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob, "data/objects/marine/run.md5anim","run",
+  loader.load_animation(bob, "data/objects/marine/run.md5anim","run_fwd",
           avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
-          "data/objects/marine/crouch.md5anim","crouch", avango.gua.LoaderFlags.DEFAULTS)
+          "data/objects/marine/crouch.md5anim","crouch", avango.gua.LoaderFlags.DEFAULTS)'''
 
-  LAST_ANIMATION = bob.Animation.value
+  loader.load_animation(bob,
+          "data/animations/Idle_Ready_Rif.FBX","idle", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+         "data/animations/Run_Fwd_Rif.FBX","run_fwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+         "data/animations/Run_Bwd_Rif.FBX","run_bwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Taunt_PelvicThrust.FBX","taunt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Swim_Fwd_Rif.FBX","swim", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Idle_Rif_Start.FBX","jump", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch", avango.gua.LoaderFlags.DEFAULTS)
+
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.2,0.2,0.2)
 
@@ -208,18 +240,44 @@ def start():
   character_control = CharacterControl()
   character_control.my_constructor(bob,bob_nav,window)
 
+  # A
   character_control.bind_transformation(65, avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  # D
   character_control.bind_transformation(68, avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
 
-  character_control.key_down(87, "idle","run")
-  character_control.key_up(87, "run","idle")
+  # W
+  character_control.key_down(87, "idle","run_fwd")
+  character_control.key_up(87, "run_fwd","idle")
+  character_control.key_down(87, "crouch","crouch_fwd")
+  character_control.key_up(87, "crouch_fwd","crouch")
 
-  character_control.key_down(67, "idle","crouch")
-  character_control.key_up(67, "crouch","idle")
+  # S
+  character_control.key_down(83, "idle","run_bwd")
+  character_control.key_up(83, "run_bwd","idle")
+  character_control.key_down(83, "crouch","crouch_bwd")
+  character_control.key_up(83, "crouch_bwd","crouch")
 
-  character_control.ease_in_translation("idle","run",avango.gua.Vec3(0.0,0.0,0.05))
-  character_control.ease_out_translation("run","idle",avango.gua.Vec3(0.0,0.0,0.05))
+  # C
+  character_control.key_down(67, "idle","crouch",0.2)
+  character_control.key_up(67, "crouch","idle",0.4)
+  character_control.key_down(67, "run_fwd","crouch_fwd")
+  character_control.key_up(67, "crouch_fwd","run_fwd")
+  character_control.key_down(67, "run_bwd","crouch_bwd")
+  character_control.key_up(67, "crouch_bwd","run_bwd")
 
+  # K
+  character_control.key_down(75, "idle","taunt")
+  character_control.key_up(75, "taunt","idle")
+
+  # SPACE BAR
+  character_control.key_down(32, "idle","jump",0.01)
+  character_control.key_up(32, "jump","idle")
+
+  character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
+  character_control.bind_translation("run_bwd",avango.gua.Vec3(0.0,0.0,-0.05))
+  character_control.bind_translation("swim",avango.gua.Vec3(0.0,0.0,0.05))
+  character_control.bind_translation("crouch_fwd",avango.gua.Vec3(0.0,0.0,0.02))
+  character_control.bind_translation("crouch_bwd",avango.gua.Vec3(0.0,0.0,-0.02))
 
   # setup camera control
   camera_control = CameraControl()

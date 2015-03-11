@@ -43,15 +43,6 @@ namespace av
        */
       std::shared_ptr< ::gua::HeadlessSurface> const& getGuaWindow() const;
 
-    public:
-
-      inline ::gua::HeadlessSurface::Image get_image() const {
-        if (m_guaWindow)
-          return m_guaWindow->get_image();
-        else
-          return ::gua::HeadlessSurface::Image();
-      }
-
     private:
 
       std::shared_ptr< ::gua::HeadlessSurface> m_guaWindow;

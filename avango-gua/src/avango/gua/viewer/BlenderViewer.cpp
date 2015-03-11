@@ -76,7 +76,7 @@ void draw_image(av::gua::BlenderViewer::Image const& im)
   glBindTexture(GL_TEXTURE_2D, texid);
   //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, w, h, 0, GL_RGBA, GL_HALF_FLOAT, data_pointer);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, im.width, im.height, 0,
-                GL_RGBA, GL_UNSIGNED_BYTE, im.data.data());
+                im.gl_base_format, im.gl_type, im.data.data());
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 

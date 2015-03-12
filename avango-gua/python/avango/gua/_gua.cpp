@@ -61,6 +61,7 @@
 
 #include "renderer/WindowBase.hpp"
 #include "renderer/Window.hpp"
+#include "renderer/HeadlessSurface.hpp"
 #include "renderer/GlfwWindow.hpp"
 #include "renderer/MaterialShaderMethod.hpp"
 #include "renderer/MaterialShaderDescription.hpp"
@@ -92,6 +93,7 @@
 #include "renderer/Texture.hpp"
 
 #include "viewer/Viewer.hpp"
+#include "viewer/BlenderViewer.hpp"
 
 #include "utils/Color.hpp"
 #include "utils/Logger.hpp"
@@ -187,6 +189,7 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_WindowBase();
     init_Window();
+    init_HeadlessSurface();
     init_GlfwWindow();
     init_MaterialShaderMethod();
     init_MaterialShaderDescription();
@@ -218,6 +221,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Texture();
 
     init_Viewer();
+    init_BlenderViewer();
 
     init_Logger();
     init_Ray();

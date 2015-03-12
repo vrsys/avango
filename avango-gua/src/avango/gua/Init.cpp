@@ -61,6 +61,7 @@
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/HeadlessSurface.hpp>
 #include <avango/gua/renderer/GlfwWindow.hpp>
 #include <avango/gua/renderer/MaterialShaderMethod.hpp>
 #include <avango/gua/renderer/MaterialShaderDescription.hpp>
@@ -81,6 +82,7 @@
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
+#include <avango/gua/viewer/BlenderViewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/gua/utils/Ray.hpp>
@@ -155,6 +157,7 @@ av::gua::Init::initClass()
         av::gua::Renderer::initClass();
         av::gua::WindowBase::initClass();
         av::gua::Window::initClass();
+        av::gua::HeadlessSurface::initClass();
         av::gua::GlfwWindow::initClass();
         av::gua::MaterialShaderMethod::initClass();
         av::gua::MaterialShaderDescription::initClass();
@@ -184,6 +187,7 @@ av::gua::Init::initClass()
         // av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();
+        av::gua::BlenderViewer::initClass();
 
         av::gua::Logger::initClass();
         av::gua::Ray::initClass();

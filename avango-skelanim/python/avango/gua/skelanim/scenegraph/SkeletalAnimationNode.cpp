@@ -3,7 +3,7 @@
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
 #include <avango/gua/scenegraph/GeometryNode.hpp>
-#include <avango/gua/scenegraph/SkeletalAnimationNode.hpp>
+#include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 
 using namespace boost::python;
 using namespace av::python;

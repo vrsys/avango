@@ -9,7 +9,7 @@
 #include <gua/renderer/SkeletalAnimationLoader.hpp>
 
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/scenegraph/SkeletalAnimationNode.hpp>
+#include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
 

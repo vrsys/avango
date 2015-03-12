@@ -1,8 +1,6 @@
-#include "SkeletalAnimationLoader.hpp"
-
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/gua/renderer/SkeletalAnimationLoader.hpp>
+#include <avango/gua/skelanim/renderer/SkeletalAnimationLoader.hpp>
 
 using namespace boost::python;
 using namespace av::python;

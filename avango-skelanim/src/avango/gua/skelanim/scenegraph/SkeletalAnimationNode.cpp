@@ -1,4 +1,4 @@
-#include <avango/gua/scenegraph/SkeletalAnimationNode.hpp>
+#include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 

@@ -8,7 +8,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
-#include <avango/gua/scenegraph/SkeletalAnimationNode.hpp>
+
 #include <avango/gua/scenegraph/Video3DNode.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
@@ -48,7 +48,6 @@
 
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
-#include <avango/gua/renderer/SkeletalAnimationLoader.hpp>
 #include <avango/gua/renderer/Video3DLoader.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/renderer/PBRLoader.hpp>
@@ -66,7 +65,6 @@
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 #include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
-#include <avango/gua/renderer/SkeletalAnimationPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
@@ -112,8 +110,7 @@ av::gua::Init::initClass()
         av::gua::TransformNode::initClass();
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
-        av::gua::TriMeshNode::initClass();
-        av::gua::SkeletalAnimationNode::initClass();
+        av::gua::TriMeshNode::initClass();        
         // av::gua::Video3DNode::initClass();
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
@@ -162,7 +159,6 @@ av::gua::Init::initClass()
         av::gua::PipelinePassDescription::initClass();
         av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
-        av::gua::SkeletalAnimationPassDescription::initClass();
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
@@ -177,7 +173,6 @@ av::gua::Init::initClass()
         av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
-        av::gua::SkeletalAnimationLoader::initClass();
         // av::gua::Video3DLoader::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();

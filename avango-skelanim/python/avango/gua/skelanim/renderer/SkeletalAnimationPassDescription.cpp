@@ -1,8 +1,6 @@
-#include "SkeletalAnimationPassDescription.hpp"
-
 #include <boost/python.hpp>
 #include <avango/python/register_field.h>
-#include <avango/gua/renderer/SkeletalAnimationPassDescription.hpp>
+#include <avango/gua/skelanim/renderer/SkeletalAnimationPassDescription.hpp>
 
 using namespace boost::python;
 using namespace av::python;

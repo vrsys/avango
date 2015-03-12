@@ -1,4 +1,4 @@
-#include <avango/gua/renderer/SkeletalAnimationPassDescription.hpp>
+#include <avango/gua/skelanim/renderer/SkeletalAnimationPassDescription.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>

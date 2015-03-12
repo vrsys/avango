@@ -364,6 +364,10 @@ void setTranslate2(::gua::math::mat4& mat,
   return quat.to_matrix();
 }
 
+::gua::math::mat4 const makeRot4(::gua::math::vec4 const& rotation_axis) {
+  return scm::math::make_rotation(rotation_axis.x, rotation_axis.y, rotation_axis.z, rotation_axis.w);
+}
+
 ::gua::math::mat4 const makeScale3(::gua::math::mat4::value_type value) {
   return scm::math::make_scale(value, value, value);
 }
@@ -482,6 +486,7 @@ void init_Mat4() {
   def("make_rot_mat", makeRot1);
   def("make_rot_mat", makeRot2);
   def("make_rot_mat", makeRot3);
+  def("make_rot_mat", makeRot4);
 
 
   def("make_scale_mat", makeScale1);

@@ -68,6 +68,7 @@
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
+#include <avango/gua/renderer/DebugViewPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
 #include <avango/gua/renderer/BBoxPassDescription.hpp>
 #include <avango/gua/renderer/EmissivePassDescription.hpp>
@@ -161,6 +162,7 @@ av::gua::Init::initClass()
         av::gua::PipelinePassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
         av::gua::TexturedQuadPassDescription::initClass();
+        av::gua::DebugViewPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
         av::gua::BBoxPassDescription::initClass();
         av::gua::EmissivePassDescription::initClass();

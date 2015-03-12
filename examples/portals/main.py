@@ -6,6 +6,21 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+class ClippingControl(avango.script.Script):
+  CameraNode = avango.gua.SFCameraNode()
+  ClippingPlaneNode = avango.gua.SFClippingPlaneNode()
+
+  def __init__(self):
+    self.super(ClippingControl).__init__()
+    self.always_evaluate(True)
+
+  def evaluate(self):
+    direction = self.CameraNode.value.WorldTransform.value.get_translate() - self.ClippingPlaneNode.value.get_center()
+    if self.ClippingPlaneNode.value.get_normal().dot(direction) > 0:
+      self.ClippingPlaneNode.value.Tags.value = ["invisible"]
+    else:
+      self.ClippingPlaneNode.value.Tags.value = []
+
 def start():
 
   width = 1920;
@@ -26,19 +41,11 @@ def start():
     "cube",
     "data/objects/cube.obj",
   )
-  cube.Transform.value = avango.gua.make_scale_mat(2, 1.5, 1.5)
+  cube.Transform.value = avango.gua.make_scale_mat(2)
   cube.Material.value.ShaderName.value = "portal_mat"
   cube.Material.value.EnableBackfaceCulling.value = False
 
   main_scene.Root.value.Children.value.append(cube)
-
-  light = avango.gua.nodes.PointLightNode(
-    Name = "sun",
-    Color = avango.gua.Color(1.0, 1.0, 0.7),
-    Brightness = 10,
-    Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(100)
-  )
-  main_scene.Root.value.Children.value.append(light)
 
   screen = avango.gua.nodes.ScreenNode(
     Name = "screen",
@@ -58,7 +65,6 @@ def start():
   )
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.BackgroundMode.value = 1
   res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/water_painted_noon.jpg"
   pipeline_description = avango.gua.nodes.PipelineDescription(
@@ -73,20 +79,34 @@ def start():
   main_scene.Root.value.Children.value.append(camera)
 
   # portal scene -----------------------------------------------------------------
-  sponza = loader.create_geometry_from_file(
-    "sponza",
-    "/opt/3d_models/Sponza/sponza.obj",
-    avango.gua.LoaderFlags.LOAD_MATERIALS
+  geometry = loader.create_geometry_from_file(
+    "geometry",
+    "/opt/3d_models/architecture/weimar_geometry/weimar_stadtmodell_latest_version/weimar_stadtmodell_final.obj",
+    avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
   )
-  sponza.Transform.value = avango.gua.make_trans_mat(0, -0.5, 0) * avango.gua.make_scale_mat(0.0008)
+  geometry.Material.value.set_uniform("Roughness", 0.6)
+  geometry.Material.value.set_uniform("Metalness", 0.0)
+  geometry.Transform.value = avango.gua.make_trans_mat(0, -0.99, 0) * avango.gua.make_scale_mat(0.03)
+  portal_scene.Root.value.Children.value.append(geometry)
 
-  portal_scene.Root.value.Children.value.append(sponza)
+  box = loader.create_geometry_from_file(
+    "box",
+    "data/objects/box.obj",
+    avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
+  )
+  box.Material.value.EnableBackfaceCulling.value = False
+  box.Material.value.set_uniform("Color", avango.gua.Vec4(1, 0, 0, 0.5))
+  box.Material.value.set_uniform("Roughness", 0.6)
+  box.Material.value.set_uniform("Metalness", 0.0)
+  box.Transform.value = avango.gua.make_scale_mat(0.999)
+  portal_scene.Root.value.Children.value.append(box)
 
-  light = avango.gua.nodes.PointLightNode(
+
+  light = avango.gua.nodes.SunLightNode(
     Name = "sun",
-    Color = avango.gua.Color(1.0, 1.0, 0.7),
-    Brightness = 10,
-    Transform = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_scale_mat(100)
+    Color = avango.gua.Color(1.0, 1.0, 0.5),
+    Brightness = 3,
+    Transform = avango.gua.make_rot_mat(-150, 1, 0, 0)
   )
   portal_scene.Root.value.Children.value.append(light)
 
@@ -104,12 +124,16 @@ def start():
     Resolution = size,
     OutputTextureName = "portal",
     Children = [screen],
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0),
+    BlackList = ["invisible"]
   )
 
   portal_res_pass = avango.gua.nodes.ResolvePassDescription()
-  portal_res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.01,0.01,0.01)
+  portal_res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.2,0.2,0.1)
   portal_res_pass.BackgroundMode.value = 1
+  portal_res_pass.EnableSSAO.value = True
+  portal_res_pass.SSAORadius.value = 5
+  portal_res_pass.SSAOIntensity.value = 2
   portal_res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/sunrise.jpg"
   portal_pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
@@ -119,22 +143,22 @@ def start():
     ]
   )
   portal_camera.PipelineDescription.value = portal_pipeline_description
+  portal_camera.PipelineDescription.value.EnableABuffer.value = True
 
-  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.75)
-  ));
+  def add_clipping_plane(translation, rotation):
+    n = avango.gua.nodes.ClippingPlaneNode(
+      Transform = avango.gua.make_trans_mat(translation) * avango.gua.make_rot_mat(rotation)
+    )
+    portal_scene.Root.value.Children.value.append(n);
+    c = ClippingControl(
+      CameraNode = portal_camera,
+      ClippingPlaneNode = n
+    )
 
-  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.75) * avango.gua.make_rot_mat(180, 0, 1, 0)
-  ));
-
-  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
-    Transform = avango.gua.make_trans_mat(1.0, 0.0, 0.0) * avango.gua.make_rot_mat(90, 0, 1, 0)
-  ));
-
-  portal_scene.Root.value.Children.value.append(avango.gua.nodes.ClippingPlaneNode(
-    Transform = avango.gua.make_trans_mat(-1.0, 0.0, 0.0) * avango.gua.make_rot_mat(-90, 0, 1, 0)
-  ));
+  add_clipping_plane(avango.gua.Vec3(0.0, 0.0, 1.0), avango.gua.Vec4(0, 0, 0, 0))
+  add_clipping_plane(avango.gua.Vec3(0.0, 0.0, -1.0), avango.gua.Vec4(180, 0, 1, 0))
+  add_clipping_plane(avango.gua.Vec3(1.0, 0.0, 0.0), avango.gua.Vec4(90, 0, 1, 0))
+  add_clipping_plane(avango.gua.Vec3(-1.0, 0.0, 0.0), avango.gua.Vec4(-90, 0, 1, 0))
 
   portal_scene.Root.value.Children.value.append(camera)
 

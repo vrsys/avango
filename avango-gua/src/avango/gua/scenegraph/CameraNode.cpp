@@ -97,10 +97,6 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       boost::bind(&CameraNode::getBlackListCB, this, _1),
                       boost::bind(&CameraNode::setBlackListCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
-                      boost::bind(&CameraNode::getApplicationFPSCB, this, _1),
-                      boost::bind(&CameraNode::setApplicationFPSCB, this, _1));
-
   AV_FC_ADD_ADAPTOR_FIELD(PreRenderCameras,
                       boost::bind(&CameraNode::getPreRenderCamerasCB, this, _1),
                       boost::bind(&CameraNode::setPreRenderCamerasCB, this, _1));
@@ -386,16 +382,6 @@ av::gua::CameraNode::setBlackListCB(const MFString::SetValueEvent& event)
     m_guaNode->config.mask().blacklist.add_tag(tag);
   }
 }
-
-void
-av::gua::CameraNode::getApplicationFPSCB(const SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaNode->get_application_fps();
-}
-
-void
-av::gua::CameraNode::setApplicationFPSCB(const SFFloat::SetValueEvent& event)
-{}
 
 void
 av::gua::CameraNode::getPreRenderCamerasCB(const MultiField<Link<CameraNode>>::GetValueEvent& event)

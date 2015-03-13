@@ -92,7 +92,6 @@ namespace av
       MFString              BlackList;
 
       SFFloat               ApplicationFPS;
-      SFFloat               RenderingFPS;
 
 
       MultiField<Link<CameraNode>> PreRenderCameras;
@@ -156,9 +155,6 @@ namespace av
 
       virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
       virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getRenderingFPSCB(const SFFloat::GetValueEvent& event);
-      virtual void setRenderingFPSCB(const SFFloat::SetValueEvent& event);
 
       virtual void getPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::GetValueEvent& event);
       virtual void setPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::SetValueEvent& event);

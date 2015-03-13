@@ -8,12 +8,13 @@ from examples_common.GuaVE import GuaVE
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
   FPSResource = avango.gua.gui.SFGuiResource()
-  Camera = avango.gua.SFCameraNode()
+  Window = avango.gua.SFWindowBase()
+  Viewer = avango.gua.SFViewer()
 
   @field_has_changed(TimeIn)
   def update_fps(self):
-    application_string = "{:5.2f}".format(self.Camera.value.ApplicationFPS.value)
-    rendering_string = "{:5.2f}".format(self.Camera.value.RenderingFPS.value)
+    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
+    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
     fps_string = "FPS: " + application_string + " " + rendering_string
     self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
@@ -174,18 +175,19 @@ def start():
   window.on_move_cursor(handle_cursor)
   window.on_scroll(handle_scroll)
 
-  timer = avango.nodes.TimeSensor()
-
-  fps_updater = FPSUpdater(
-    FPSResource = fps,
-    Camera = cam
-  )
-  fps_updater.TimeIn.connect_from(timer.Time)
-
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+
+  timer = avango.nodes.TimeSensor()
+
+  fps_updater = FPSUpdater(
+    FPSResource=fps,
+    Window=window,
+    Viewer=viewer
+  )
+  fps_updater.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

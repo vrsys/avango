@@ -6,8 +6,8 @@ class CameraControl(avango.script.Script):
 
   TimeIn = avango.SFFloat()
 
-  _mouse_pos = None
-  _mouse_scroll = None
+  _mouse_pos = avango.gua.Vec2(0.0,0.0)
+  _mouse_scroll = avango.gua.Vec2(0.0,14.0)
 
   def __init__(self):
 
@@ -20,14 +20,11 @@ class CameraControl(avango.script.Script):
     self._target = target_node
 
     def handle_mouse(m):
-      self._mouse_pos = m
+      self._mouse_pos += m - self._mouse_pos
     application_window.on_move_cursor(handle_mouse)
 
     def handle_scroll(s):
-      if self._mouse_scroll == None:
-        self._mouse_scroll = s
-      else:
-        self._mouse_scroll+=s
+      self._mouse_scroll+=s
     application_window.on_scroll(handle_scroll)
 		
 

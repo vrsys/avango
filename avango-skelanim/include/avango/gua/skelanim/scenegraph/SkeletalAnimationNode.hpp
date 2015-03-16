@@ -16,79 +16,82 @@ namespace av
 {
   namespace gua
   {
-    /**
-     * Wrapper for ::gua::SkeletalAnimationNode
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL SkeletalAnimationNode : public av::gua::GeometryNode
-    {
-      AV_FC_DECLARE();
 
-    public:
-
+    namespace skelanim {
       /**
-       * Constructor. When called without arguments, a new ::gua::SkeletalAnimationNode is created.
-       * Otherwise, the given ::gua::SkeletalAnimationNode is used.
+       * Wrapper for ::gua::SkeletalAnimationNode
+       *
+       * \ingroup av_gua
        */
-      SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
-          std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
+      class AV_GUA_DLL SkeletalAnimationNode : public av::gua::GeometryNode
+      {
+        AV_FC_DECLARE();
 
-    protected:
+      public:
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~SkeletalAnimationNode();
+        /**
+         * Constructor. When called without arguments, a new ::gua::SkeletalAnimationNode is created.
+         * Otherwise, the given ::gua::SkeletalAnimationNode is used.
+         */
+        SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
+            std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
 
-    public:
+      protected:
 
-      SFMaterial Material;
+        /**
+         * Destructor made protected to prevent allocation on stack.
+         */
+  //      virtual ~SkeletalAnimationNode();
 
-      virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
-      virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+      public:
 
-      SFInt AnimationMode;
+        SFMaterial Material;
 
-      virtual void getAnimationModeCB(const SFInt::GetValueEvent& event);
-      virtual void setAnimationModeCB(const SFInt::SetValueEvent& event);
+        virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+        virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-      SFInt BlendingMode;
+        SFInt AnimationMode;
 
-      virtual void getBlendingModeCB(const SFInt::GetValueEvent& event);
-      virtual void setBlendingModeCB(const SFInt::SetValueEvent& event);
+        virtual void getAnimationModeCB(const SFInt::GetValueEvent& event);
+        virtual void setAnimationModeCB(const SFInt::SetValueEvent& event);
 
-      SFString Animation;
+        SFInt BlendingMode;
 
-      virtual void getAnimationCB(const SFString::GetValueEvent& event);
-      virtual void setAnimationCB(const SFString::SetValueEvent& event);
+        virtual void getBlendingModeCB(const SFInt::GetValueEvent& event);
+        virtual void setBlendingModeCB(const SFInt::SetValueEvent& event);
 
-      SFFloat BlendingFactor;
+        SFString Animation;
 
-      virtual void getBlendingFactorCB(const SFFloat::GetValueEvent& event);
-      virtual void setBlendingFactorCB(const SFFloat::SetValueEvent& event);
+        virtual void getAnimationCB(const SFString::GetValueEvent& event);
+        virtual void setAnimationCB(const SFString::SetValueEvent& event);
 
-      SFFloat BlendingDuration;
+        SFFloat BlendingFactor;
 
-      virtual void getBlendingDurationCB(const SFFloat::GetValueEvent& event);
-      virtual void setBlendingDurationCB(const SFFloat::SetValueEvent& event);
+        virtual void getBlendingFactorCB(const SFFloat::GetValueEvent& event);
+        virtual void setBlendingFactorCB(const SFFloat::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::SkeletalAnimationNode.
-       */
-      std::shared_ptr< ::gua::node::SkeletalAnimationNode> getGuaSkeletalAnimationNode() const;
+        SFFloat BlendingDuration;
 
-    private:
+        virtual void getBlendingDurationCB(const SFFloat::GetValueEvent& event);
+        virtual void setBlendingDurationCB(const SFFloat::SetValueEvent& event);
 
-      std::shared_ptr< ::gua::node::SkeletalAnimationNode> m_guaSkeletalAnimationNode;
-      av::Link< av::gua::Material> m_Material;
+        /**
+         * Get the wrapped ::gua::SkeletalAnimationNode.
+         */
+        std::shared_ptr< ::gua::node::SkeletalAnimationNode> getGuaSkeletalAnimationNode() const;
 
-      SkeletalAnimationNode(const SkeletalAnimationNode&);
-      SkeletalAnimationNode& operator=(const SkeletalAnimationNode&);
-    };
+      private:
 
-    typedef SingleField<Link<SkeletalAnimationNode> > SFSkeletalAnimationNode;
-    typedef MultiField<Link<SkeletalAnimationNode> > MFSkeletalAnimationNode;
+        std::shared_ptr< ::gua::node::SkeletalAnimationNode> m_guaSkeletalAnimationNode;
+        av::Link< av::gua::Material> m_Material;
+
+        SkeletalAnimationNode(const SkeletalAnimationNode&);
+        SkeletalAnimationNode& operator=(const SkeletalAnimationNode&);
+      };
+
+      typedef SingleField<Link<SkeletalAnimationNode> > SFSkeletalAnimationNode;
+      typedef MultiField<Link<SkeletalAnimationNode> > MFSkeletalAnimationNode;
+    }
 
   }
 

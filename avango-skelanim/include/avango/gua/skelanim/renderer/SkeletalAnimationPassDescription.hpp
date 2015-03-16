@@ -17,45 +17,47 @@ namespace av
 {
   namespace gua
   {
-    /**
-     * Wrapper for ::gua::SkeletalAnimationPassDescription
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL SkeletalAnimationPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
-
-    public:
-
+    namespace skelanim {
       /**
-       * Constructor. When called without arguments, a new ::gua::SkeletalAnimationPassDescription is created.
-       * Otherwise, the given ::gua::SkeletalAnimationPassDescription is used.
+       * Wrapper for ::gua::SkeletalAnimationPassDescription
+       *
+       * \ingroup av_gua
        */
-      SkeletalAnimationPassDescription(std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const& SkeletalAnimationPassDescription =
-                             std::shared_ptr< ::gua::SkeletalAnimationPassDescription>(new ::gua::SkeletalAnimationPassDescription()) );
+      class AV_GUA_DLL SkeletalAnimationPassDescription : public av::gua::PipelinePassDescription
+      {
+        AV_FC_DECLARE();
+
+      public:
+
+        /**
+         * Constructor. When called without arguments, a new ::gua::SkeletalAnimationPassDescription is created.
+         * Otherwise, the given ::gua::SkeletalAnimationPassDescription is used.
+         */
+        SkeletalAnimationPassDescription(std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const& SkeletalAnimationPassDescription =
+                               std::shared_ptr< ::gua::SkeletalAnimationPassDescription>(new ::gua::SkeletalAnimationPassDescription()) );
 
 
 
-    public:
+      public:
 
-      /**
-       * Get the wrapped ::gua::SkeletalAnimationPassDescription.
-       */
-      std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const& getGuaSkeletalAnimationPassDescription() const;
+        /**
+         * Get the wrapped ::gua::SkeletalAnimationPassDescription.
+         */
+        std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const& getGuaSkeletalAnimationPassDescription() const;
 
-    private:
+      private:
 
-      std::shared_ptr< ::gua::SkeletalAnimationPassDescription> m_guaSkeletalAnimationPassDescription;
+        std::shared_ptr< ::gua::SkeletalAnimationPassDescription> m_guaSkeletalAnimationPassDescription;
 
 
-      SkeletalAnimationPassDescription(const SkeletalAnimationPassDescription&);
-      SkeletalAnimationPassDescription& operator=(const SkeletalAnimationPassDescription&);
-    };
+        SkeletalAnimationPassDescription(const SkeletalAnimationPassDescription&);
+        SkeletalAnimationPassDescription& operator=(const SkeletalAnimationPassDescription&);
+      };
 
-    typedef SingleField<Link<SkeletalAnimationPassDescription> > SFSkeletalAnimationPassDescription;
-    typedef MultiField<Link<SkeletalAnimationPassDescription> > MFSkeletalAnimationPassDescription;
-
+      typedef SingleField<Link<SkeletalAnimationPassDescription> > SFSkeletalAnimationPassDescription;
+      typedef MultiField<Link<SkeletalAnimationPassDescription> > MFSkeletalAnimationPassDescription;
+        
+    }
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

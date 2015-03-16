@@ -19,10 +19,10 @@ namespace boost
 
 void init_SkeletalAnimationPassDescription()
  {
-  register_field<av::gua::SFSkeletalAnimationPassDescription>("SFSkeletalAnimationPassDescription");
-  register_multifield<av::gua::MFSkeletalAnimationPassDescription>("MFSkeletalAnimationPassDescription");
-  class_<av::gua::SkeletalAnimationPassDescription,
-         av::Link<av::gua::SkeletalAnimationPassDescription>,
+  register_field<av::gua::skelanim::SFSkeletalAnimationPassDescription>("SFSkeletalAnimationPassDescription");
+  register_multifield<av::gua::skelanim::MFSkeletalAnimationPassDescription>("MFSkeletalAnimationPassDescription");
+  class_<av::gua::skelanim::SkeletalAnimationPassDescription,
+         av::Link<av::gua::skelanim::SkeletalAnimationPassDescription>,
          bases<av::gua::PipelinePassDescription>, boost::noncopyable >("SkeletalAnimationPassDescription", "docstring", no_init)
          ;
  }

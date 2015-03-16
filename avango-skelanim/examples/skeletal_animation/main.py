@@ -1,9 +1,8 @@
 import avango
 import avango.script
 from avango.script import field_has_changed
-import avango.gua
-# import avango.gua.skelanim
-import skelanim
+# import avango.gua
+import avango.gua.skelanim
 from examples_common.GuaVE import GuaVE
 import math
 

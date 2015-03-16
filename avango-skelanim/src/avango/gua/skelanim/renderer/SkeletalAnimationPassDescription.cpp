@@ -7,15 +7,15 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SkeletalAnimationPassDescription"));
+  av::Logger& logger(av::getLogger("av::gua::skelanim::SkeletalAnimationPassDescription"));
 }
 
-AV_FC_DEFINE(av::gua::SkeletalAnimationPassDescription);
+AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationPassDescription);
 
-AV_FIELD_DEFINE(av::gua::SFSkeletalAnimationPassDescription);
-AV_FIELD_DEFINE(av::gua::MFSkeletalAnimationPassDescription);
+AV_FIELD_DEFINE(av::gua::skelanim::SFSkeletalAnimationPassDescription);
+AV_FIELD_DEFINE(av::gua::skelanim::MFSkeletalAnimationPassDescription);
 
-av::gua::SkeletalAnimationPassDescription::SkeletalAnimationPassDescription(
+av::gua::skelanim::SkeletalAnimationPassDescription::SkeletalAnimationPassDescription(
   std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const& guaSkeletalAnimationPassDescription)
     : PipelinePassDescription(guaSkeletalAnimationPassDescription)
     , m_guaSkeletalAnimationPassDescription(guaSkeletalAnimationPassDescription)
@@ -24,22 +24,22 @@ av::gua::SkeletalAnimationPassDescription::SkeletalAnimationPassDescription(
 }
 
 void
-av::gua::SkeletalAnimationPassDescription::initClass()
+av::gua::skelanim::SkeletalAnimationPassDescription::initClass()
 {
     if (!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
-        AV_FC_INIT(av::gua::PipelinePassDescription, av::gua::SkeletalAnimationPassDescription, true);
+        AV_FC_INIT(av::gua::PipelinePassDescription, av::gua::skelanim::SkeletalAnimationPassDescription, true);
 
-        SFSkeletalAnimationPassDescription::initClass("av::gua::SFSkeletalAnimationPassDescription", "av::Field");
-        MFSkeletalAnimationPassDescription::initClass("av::gua::MFSkeletalAnimationPassDescription", "av::Field");
+        SFSkeletalAnimationPassDescription::initClass("av::gua::skelanim::SFSkeletalAnimationPassDescription", "av::Field");
+        MFSkeletalAnimationPassDescription::initClass("av::gua::skelanim::MFSkeletalAnimationPassDescription", "av::Field");
     }
 }
 
 
 std::shared_ptr< ::gua::SkeletalAnimationPassDescription> const&
-av::gua::SkeletalAnimationPassDescription::getGuaSkeletalAnimationPassDescription() const
+av::gua::skelanim::SkeletalAnimationPassDescription::getGuaSkeletalAnimationPassDescription() const
 {
     return m_guaSkeletalAnimationPassDescription;
 }

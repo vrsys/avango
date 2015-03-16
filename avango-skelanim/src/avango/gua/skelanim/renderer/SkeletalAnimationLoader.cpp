@@ -7,23 +7,23 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SkeletalAnimationLoader"));
+  av::Logger& logger(av::getLogger("av::gua::skelanim::SkeletalAnimationLoader"));
 }
 
-AV_FC_DEFINE(av::gua::SkeletalAnimationLoader);
+AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationLoader);
 
-AV_FIELD_DEFINE(av::gua::SFSkeletalAnimationLoader);
-AV_FIELD_DEFINE(av::gua::MFSkeletalAnimationLoader);
+AV_FIELD_DEFINE(av::gua::skelanim::SFSkeletalAnimationLoader);
+AV_FIELD_DEFINE(av::gua::skelanim::MFSkeletalAnimationLoader);
 
-av::gua::SkeletalAnimationLoader::SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader)
+av::gua::skelanim::SkeletalAnimationLoader::SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader)
     : m_guaSkeletalAnimationLoader(guaSkeletalAnimationLoader)
 {}
 
-//av::gua::SkeletalAnimationLoader::~SkeletalAnimationLoader()
+//av::gua::skelanim::SkeletalAnimationLoader::~SkeletalAnimationLoader()
 //{}
 
 av::Link<av::gua::Node>
-av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
+av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
                                                std::string const& fileName,
                                                av::Link<av::gua::Material> const& fallbackMaterial,
                                                Flags flags) const
@@ -37,7 +37,7 @@ av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& node
 }
 
 av::Link<av::gua::Node>
-av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
+av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
                                                std::string const& fileName,
                                                Flags flags) const
 {
@@ -50,7 +50,7 @@ av::gua::SkeletalAnimationLoader::createGeometryFromFile(std::string const& node
 }
 
 void
-av::gua::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
+av::gua::skelanim::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
                                                  std::string const& file_name,
                                                  std::string const& animation_name,
                                                  Flags flags) const
@@ -61,13 +61,13 @@ av::gua::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
 }
 
 void
-av::gua::SkeletalAnimationLoader::initClass()
+av::gua::skelanim::SkeletalAnimationLoader::initClass()
 {
     if (!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::SkeletalAnimationLoader, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::skelanim::SkeletalAnimationLoader, true);
 
         SFSkeletalAnimationLoader::initClass("av::gua::SFSkeletalAnimationLoader", "av::Field");
         MFSkeletalAnimationLoader::initClass("av::gua::MFSkeletalAnimationLoader", "av::Field");
@@ -75,13 +75,13 @@ av::gua::SkeletalAnimationLoader::initClass()
 }
 
 ::gua::SkeletalAnimationLoader*
-av::gua::SkeletalAnimationLoader::getGuaSkeletalAnimationLoader() const
+av::gua::skelanim::SkeletalAnimationLoader::getGuaSkeletalAnimationLoader() const
 {
     return m_guaSkeletalAnimationLoader;
 }
 
 av::gua::Node*
-av::gua::SkeletalAnimationLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
+av::gua::skelanim::SkeletalAnimationLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 
@@ -100,7 +100,7 @@ av::gua::SkeletalAnimationLoader::createChildren(std::shared_ptr< ::gua::node::N
   if (!av_node) {
     auto geom_cast(std::dynamic_pointer_cast< ::gua::node::SkeletalAnimationNode>(root));
     if (geom_cast) {
-      av_node = new av::gua::SkeletalAnimationNode(geom_cast);
+      av_node = new av::gua::skelanim::SkeletalAnimationNode(geom_cast);
     }
   }
 

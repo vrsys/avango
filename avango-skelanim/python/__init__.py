@@ -24,5 +24,5 @@
 from ._skelanim import *
 
 import avango.nodefactory
-nodes = avango.nodefactory.NodeFactory(module=__name__)
-# nodes = avango.nodefactory.NodeFactory('av::gua::skelanim::')
+# nodes = avango.nodefactory.NodeFactory(module=__name__)
+nodes = avango.nodefactory.NodeFactory('av::gua::skelanim::')

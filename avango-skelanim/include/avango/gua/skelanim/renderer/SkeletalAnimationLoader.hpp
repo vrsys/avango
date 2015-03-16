@@ -20,74 +20,77 @@ namespace av
 {
   namespace gua
   {
-    /**
-     * Wrapper for ::gua::SkeletalAnimationLoader
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL SkeletalAnimationLoader : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
 
-    public:
+    namespace skelanim {
+      /**
+       * Wrapper for ::gua::SkeletalAnimationLoader
+       *
+       * \ingroup av_gua
+       */
+      class AV_GUA_DLL SkeletalAnimationLoader : public av::FieldContainer
+      {
+        AV_FC_DECLARE();
 
-      enum Flags {
-        DEFAULTS = ::gua::SkeletalAnimationLoader::DEFAULTS,
-        LOAD_MATERIALS = ::gua::SkeletalAnimationLoader::LOAD_MATERIALS,
-        OPTIMIZE_GEOMETRY = ::gua::SkeletalAnimationLoader::OPTIMIZE_GEOMETRY,
-        MAKE_PICKABLE = ::gua::SkeletalAnimationLoader::MAKE_PICKABLE,
-        NORMALIZE_SCALE = ::gua::SkeletalAnimationLoader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::SkeletalAnimationLoader::NORMALIZE_POSITION
+      public:
+
+        enum Flags {
+          DEFAULTS = ::gua::SkeletalAnimationLoader::DEFAULTS,
+          LOAD_MATERIALS = ::gua::SkeletalAnimationLoader::LOAD_MATERIALS,
+          OPTIMIZE_GEOMETRY = ::gua::SkeletalAnimationLoader::OPTIMIZE_GEOMETRY,
+          MAKE_PICKABLE = ::gua::SkeletalAnimationLoader::MAKE_PICKABLE,
+          NORMALIZE_SCALE = ::gua::SkeletalAnimationLoader::NORMALIZE_SCALE,
+          NORMALIZE_POSITION = ::gua::SkeletalAnimationLoader::NORMALIZE_POSITION
+        };
+
+        /**
+         * Constructor. When called without arguments, a new ::gua::SkeletalAnimationLoader is created.
+         * Otherwise, the given ::gua::SkeletalAnimationLoader is used.
+         */
+        SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader = new ::gua::SkeletalAnimationLoader());
+
+        av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
+                                                       std::string const& fileName,
+                                                       av::Link<av::gua::Material> const& fallbackMaterial,
+                                                       Flags flags = DEFAULTS) const;
+
+        av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
+                                                       std::string const& fileName,
+                                                       Flags flags = DEFAULTS) const;
+
+        void load_animation(av::Link<av::gua::Node>& node,
+                            std::string const& file_name,
+                            std::string const& animation_name,
+                            Flags flags = DEFAULTS) const;
+
+      protected:
+
+        /**
+         * Destructor made protected to prevent allocation on stack.
+         */
+  //      virtual ~SkeletalAnimationLoader();
+
+      public:
+
+        /**
+         * Get the wrapped ::gua::SkeletalAnimationLoader.
+         */
+        ::gua::SkeletalAnimationLoader* getGuaSkeletalAnimationLoader() const;
+
+
+      private:
+
+        ::gua::SkeletalAnimationLoader *m_guaSkeletalAnimationLoader;
+
+        av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
+
+        SkeletalAnimationLoader(const SkeletalAnimationLoader&);
+        SkeletalAnimationLoader& operator=(const SkeletalAnimationLoader&);
       };
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::SkeletalAnimationLoader is created.
-       * Otherwise, the given ::gua::SkeletalAnimationLoader is used.
-       */
-      SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader = new ::gua::SkeletalAnimationLoader());
-
-      av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                     std::string const& fileName,
-                                                     av::Link<av::gua::Material> const& fallbackMaterial,
-                                                     Flags flags = DEFAULTS) const;
-
-      av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                     std::string const& fileName,
-                                                     Flags flags = DEFAULTS) const;
-
-      void load_animation(av::Link<av::gua::Node>& node,
-                          std::string const& file_name,
-                          std::string const& animation_name,
-                          Flags flags = DEFAULTS) const;
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~SkeletalAnimationLoader();
-
-    public:
-
-      /**
-       * Get the wrapped ::gua::SkeletalAnimationLoader.
-       */
-      ::gua::SkeletalAnimationLoader* getGuaSkeletalAnimationLoader() const;
-
-
-    private:
-
-      ::gua::SkeletalAnimationLoader *m_guaSkeletalAnimationLoader;
-
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
-
-      SkeletalAnimationLoader(const SkeletalAnimationLoader&);
-      SkeletalAnimationLoader& operator=(const SkeletalAnimationLoader&);
-    };
-
-    typedef SingleField<Link<SkeletalAnimationLoader> > SFSkeletalAnimationLoader;
-    typedef MultiField<Link<SkeletalAnimationLoader> > MFSkeletalAnimationLoader;
-
+      typedef SingleField<Link<SkeletalAnimationLoader> > SFSkeletalAnimationLoader;
+      typedef MultiField<Link<SkeletalAnimationLoader> > MFSkeletalAnimationLoader;
+        
+    }
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

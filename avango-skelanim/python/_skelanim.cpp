@@ -45,9 +45,9 @@ namespace boost
 
 BOOST_PYTHON_MODULE(_skelanim)
 {
-  av::gua::SkeletalAnimationLoader::initClass();
-  av::gua::SkeletalAnimationPassDescription::initClass();
-  av::gua::SkeletalAnimationNode::initClass();
+  av::gua::skelanim::SkeletalAnimationLoader::initClass();
+  av::gua::skelanim::SkeletalAnimationPassDescription::initClass();
+  av::gua::skelanim::SkeletalAnimationNode::initClass();
   init_SkeletalAnimationNode();
   init_SkeletalAnimationPassDescription();
   init_SkeletalAnimationLoader();

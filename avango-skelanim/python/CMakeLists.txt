@@ -36,7 +36,7 @@ ELSEIF (UNIX)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
-    ${CMAKE_CURRENT_SOURCE_DIR}/avango/skelanim
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/skelanim
-    _oculus
+    _skelanim
 )

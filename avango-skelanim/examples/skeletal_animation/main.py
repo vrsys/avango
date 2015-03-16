@@ -165,7 +165,8 @@ def start():
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
   medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
-                                            avango.gua.LoaderFlags.MAKE_PICKABLE)
+                                            avango.gua.LoaderFlags.MAKE_PICKABLE|
+                                            avango.gua.LoaderFlags.LOAD_MATERIALS)
 
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
@@ -233,7 +234,7 @@ def start():
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.CameraNodes.value = [cam]
+  #viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
 

@@ -40,6 +40,6 @@ ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/skelanim
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/skelanim
     _skelanim
 )

@@ -19,6 +19,14 @@ class CharacterControl(avango.script.Script):
   _current_translation = avango.gua.Vec3(0.0,0.0,0.0)
   _last_translation = avango.gua.Vec3(0.0,0.0,0.0)
 
+  # wall detection
+  _scene_graph = None
+  _ray = avango.gua.nodes.RayNode() 
+  _wall_detected_height = 0.0
+  _wall_detected_front = False
+  _wall_detected_back = False
+  _wall_detect_idle = None
+
 
   def __init__(self):
 
@@ -31,7 +39,6 @@ class CharacterControl(avango.script.Script):
     self._navigation = navigation_node
     # window (for key evaluations)
     #self._window = application_window
-
 
 
     def handle_key(ascii, unknown , event , unknown2):
@@ -82,14 +89,19 @@ class CharacterControl(avango.script.Script):
   def bind_transformation(self, key_nr, transform_matrix):
   	self._transformations.append((key_nr, transform_matrix))
 
-  def key_down(self, key_nr, path_to_current_animation, path_to_next_animation, blend_duration = 0.5):
-    self._animations_kd.append((key_nr, path_to_current_animation,path_to_next_animation, blend_duration))
+  def key_down(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
+    self._animations_kd.append((key_nr, current_animation,next_animation, blend_duration))
 
-  def key_up(self, key_nr, path_to_current_animation, path_to_next_animation, blend_duration = 0.5):
-    self._animations_ku.append((key_nr, path_to_current_animation,path_to_next_animation, blend_duration))
+  def key_up(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
+    self._animations_ku.append((key_nr, current_animation,next_animation, blend_duration))
 
-  def bind_translation(self, path_to_animation, translation_vec):
-    self._translations[path_to_animation] = translation_vec 
+  def bind_translation(self, animation, translation_vec):
+    self._translations[animation] = translation_vec
+
+  def activate_wall_detection(self, height, idle_animation, scene_graph):
+    self._wall_detected_height = height
+    self._wall_detect_idle = idle_animation
+    self._scene_graph = scene_graph
 
 
   @field_has_changed(TimeIn)
@@ -99,6 +111,15 @@ class CharacterControl(avango.script.Script):
     if self._current_animation != self._character.Animation.value:
       self._last_animation = self._current_animation
       self._current_animation = self._character.Animation.value
+      if self._last_animation in self._translations:
+        self._last_translation = self._translations[self._last_animation]
+      else:
+       self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
+
+      if self._current_animation in self._translations:
+        self._current_translation = self._translations[self._current_animation]
+      else:
+       self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
     # add transformation delta from keys
     self._navigation.Transform.value = self._navigation.Transform.value * self._delta_transformation
@@ -108,5 +129,45 @@ class CharacterControl(avango.script.Script):
 
     trans_vec = (self._last_translation * (1-blendFact) ) + (self._current_translation * blendFact)
 
-    self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
+    if (trans_vec.z >= 0.0 and not self._wall_detected_front) or (trans_vec.z <= 0.0 and not self._wall_detected_back):
+      self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
+    elif self._character.Animation.value != self._wall_detect_idle:
+      self._character.Animation.value = self._wall_detect_idle
+
+    
+
+    #wall detection
+    if self._scene_graph:
+      #wall detection forwards:
+      in_translation = self._character.WorldTransform.value.get_translate()
+      in_translation.y += self._wall_detected_height
+      char_rot = self._character.WorldTransform.value.get_rotate_scale_corrected()
+      self._ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
+                                   avango.gua.make_rot_mat(char_rot) *\
+                                   avango.gua.make_rot_mat(-90, 1, 0, 0) *\
+                                   avango.gua.make_scale_mat(1.0, 1.0, 0.075)
+
+      results = self._scene_graph.ray_test(
+                                       self._ray,
+                                       avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
+                                       avango.gua.PickingOptions.GET_POSITIONS)
+
+      self._wall_detected_front = len(results.value) > 0
+
+      #wall detection backwards:
+      self._ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
+                                   avango.gua.make_rot_mat(char_rot) *\
+                                   avango.gua.make_rot_mat(90, 1, 0, 0) *\
+                                   avango.gua.make_scale_mat(1.0, 1.0, 0.075)
+
+      results = self._scene_graph.ray_test(
+                                       self._ray,
+                                       avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
+                                       avango.gua.PickingOptions.GET_POSITIONS)
+
+      self._wall_detected_back = len(results.value) > 0
+
+
+
+    
 

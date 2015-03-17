@@ -103,7 +103,20 @@ class GroundFollowing(avango.script.Script):
       if bob and bob.Animation.value == "run_fwd":
        bob.Animation.value = "swim"
 
-    self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans/3.0)#/3.0 smoothing(???)
+    delta_norm = avango.gua.Vec3(delta_trans.x,delta_trans.y,delta_trans.z)
+    length = delta_norm.normalize()
+
+    #self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans/3.0)#/3.0 smoothing(???)
+    if length > 0.01:
+      self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_norm*0.01)
+    else:
+      self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans)
+
+
+    if math.fabs(delta_trans.y)<0.05 and bob.Animation.value == "land":
+      bob.BlendingDuration.value = 0.25
+      bob.Animation.value = "idle"
+
 
 
 def start():
@@ -143,13 +156,17 @@ def start():
   loader.load_animation(bob,
           "data/animations/Swim_Fwd_Rif.FBX","swim", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
+          "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
           "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
           "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
           "data/animations/Jump_Idle_Rif_Start.FBX","jump", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
-          "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch", avango.gua.LoaderFlags.DEFAULTS)
+          "data/animations/Jump_Idle_Rif_Loop.FBX","land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Fwd_Rif.FBX","jump_fwd", avango.gua.LoaderFlags.DEFAULTS)
 
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.2,0.2,0.2)
@@ -166,6 +183,7 @@ def start():
   medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
+
 
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
@@ -252,6 +270,7 @@ def start():
   character_control.key_up(87, "run_fwd","idle")
   character_control.key_down(87, "crouch","crouch_fwd")
   character_control.key_up(87, "crouch_fwd","crouch")
+  character_control.key_up(87, "jump_fwd","idle")
 
   # S
   character_control.key_down(83, "idle","run_bwd")
@@ -273,13 +292,22 @@ def start():
 
   # SPACE BAR
   character_control.key_down(32, "idle","jump",0.01)
-  character_control.key_up(32, "jump","idle")
+  character_control.key_down(32, "run_fwd","jump_fwd",0.01)
+  character_control.key_up(32, "jump","land",0.25)
+  character_control.key_up(32, "jump","idle",0.01)
+  character_control.key_up(32, "jump_fwd","run_fwd")
+  #character_control.bind_transformation(32, avango.gua.make_trans_mat(0.0, 0.1, 0.0))
 
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
   character_control.bind_translation("run_bwd",avango.gua.Vec3(0.0,0.0,-0.05))
   character_control.bind_translation("swim",avango.gua.Vec3(0.0,0.0,0.05))
   character_control.bind_translation("crouch_fwd",avango.gua.Vec3(0.0,0.0,0.02))
   character_control.bind_translation("crouch_bwd",avango.gua.Vec3(0.0,0.0,-0.02))
+  character_control.bind_translation("jump",avango.gua.Vec3(0.0, 0.08, 0.0))
+  character_control.bind_translation("jump_fwd",avango.gua.Vec3(0.0, 0.08, 0.04))
+
+  #wall detection:
+  character_control.activate_wall_detection(0.13,"idle",graph)
 
   # setup camera control
   camera_control = CameraControl()
@@ -288,7 +316,7 @@ def start():
   # setup ground following
   ground_following = GroundFollowing(
     SceneGraph = graph,
-    OffsetToGround = 0.2,
+    OffsetToGround = 0.1,
     MaxDistanceToGround = 1.0
   )
 

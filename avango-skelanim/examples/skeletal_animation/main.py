@@ -214,7 +214,7 @@ def start():
       Passes = [
             avango.gua.nodes.TriMeshPassDescription(),
             avango.gua.nodes.LightVisibilityPassDescription(),
-            avango.gua.nodes.SkeletalAnimationPassDescription(),
+            avango.gua.skelanim.nodes.SkeletalAnimationPassDescription(),
             avango.gua.nodes.ResolvePassDescription()
           ])
 

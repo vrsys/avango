@@ -22,7 +22,9 @@
 * Avango is a trademark owned by FhG.                                    *
 *                                                                        *
 \************************************************************************/
-
+#include "SkeletalAnimationLoader.hpp"
+#include "SkeletalAnimationPassDescription.hpp"
+#include "SkeletalAnimationNode.hpp"
 #include <avango/gua/skelanim/renderer/SkeletalAnimationLoader.hpp>
 #include <avango/gua/skelanim/renderer/SkeletalAnimationPassDescription.hpp>
 #include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>

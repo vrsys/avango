@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # assuming a local guacmole version is located properly
-LOCAL_GUACAMOLE="$DIR/../../../guacamole"
-LOCAL_AVANGO="$DIR/../../../avango"
+LOCAL_GUACAMOLE=/home/jisi4780/documents/guacamole_install
+LOCAL_AVANGO=/home/jisi4780/documents/avango
 
 # if not, this path will be used
 GUACAMOLE=/opt/guacamole/new_renderer

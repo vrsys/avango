@@ -4,10 +4,13 @@ LINK_DIRECTORIES(
 )
 
 file(GLOB_RECURSE AVANGO_SKELANIM_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    avango/gua/skelanim/*.cpp
-    avango/gua/skelanim/*.hpp
+    *.cpp
+    *.hpp
 )
-
+message(STATUS "//////////////////////////////////////////////////")
+message(STATUS "//////////////////////////////////////////////////")
+message(STATUS "//////////////////////////////////////////////////")
+message(STATUS "${AVANGO_SKELANIM_PYTHON_SRC}" )
 ADD_LIBRARY( _skelanim SHARED 
     ${AVANGO_SKELANIM_PYTHON_SRC}
 )

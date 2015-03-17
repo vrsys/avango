@@ -123,9 +123,10 @@ def start():
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
-      res_pass
+      res_pass,
+      avango.gua.nodes.DebugViewPassDescription()
     ],
-    EnableABuffer = True
+    EnableABuffer = False
   )
 
   camera.PipelineDescription.value = pipeline_description

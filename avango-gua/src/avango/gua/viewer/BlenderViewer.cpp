@@ -37,7 +37,7 @@ av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
 av::gua::BlenderViewer::Image screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
-  auto color = pipe.get_gbuffer().get_current_color_buffer();
+  auto color = ((::gua::GBuffer&)pipe.get_current_target()).get_color_buffer();
   av::gua::BlenderViewer::Image img;
 
   if (!color)
@@ -260,10 +260,10 @@ av::gua::BlenderViewer::render_thread()
           }
 
           if (serialized_cam.config.get_enable_stereo()) {
-            pipe->process(::gua::CameraMode::LEFT,  serialized_cam, m_gua_graphs);
-            pipe->process(::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::LEFT,  serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
           } else {
-            pipe->process(serialized_cam.config.get_mono_mode(),
+            pipe->render_scene(serialized_cam.config.get_mono_mode(),
                 serialized_cam, m_gua_graphs);
           }
           m_image = screenshot(*pipe);

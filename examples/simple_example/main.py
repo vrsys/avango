@@ -8,8 +8,7 @@ class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()
 
-  @field_has_changed(TimeIn)
-  def update(self):
+  def evaluate(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
 def start():

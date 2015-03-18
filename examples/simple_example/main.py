@@ -66,7 +66,7 @@ def start():
   res_pass.SSAOFalloff.value = 10.0
   res_pass.SSAORadius.value = 7.0
 
-  res_pass.EnableScreenSpaceShadow.value = True
+  #res_pass.EnableScreenSpaceShadow.value = True
 
   res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED

@@ -24,9 +24,9 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
                       boost::bind(&PLODNode::getImportanceCB, this, _1),
                       boost::bind(&PLODNode::setImportanceCB, this, _1));
  
-  AV_FC_ADD_ADAPTOR_FIELD(Threshold,
-                      boost::bind(&PLODNode::getThresholdCB, this, _1),
-                      boost::bind(&PLODNode::setThresholdCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(ErrorThreshold,
+                      boost::bind(&PLODNode::getErrorThresholdCB, this, _1),
+                      boost::bind(&PLODNode::setErrorThresholdCB, this, _1));
   
   AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
                       boost::bind(&PLODNode::getEnableBackfaceCullingCB, this, _1),
@@ -119,15 +119,15 @@ av::gua::PLODNode::setImportanceCB(const SFFloat::SetValueEvent& event)
 }
 
 void
-av::gua::PLODNode::getThresholdCB(const SFFloat::GetValueEvent& event)
+av::gua::PLODNode::getErrorThresholdCB(const SFFloat::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaPLODNode->get_threshold();
+  *(event.getValuePtr()) = m_guaPLODNode->get_error_threshold();
 }
 
 void
-av::gua::PLODNode::setThresholdCB(const SFFloat::SetValueEvent& event)
+av::gua::PLODNode::setErrorThresholdCB(const SFFloat::SetValueEvent& event)
 {
-  m_guaPLODNode->set_threshold(event.getValue());
+  m_guaPLODNode->set_error_threshold(event.getValue());
 }
 
 void

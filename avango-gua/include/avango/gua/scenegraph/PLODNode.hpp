@@ -49,7 +49,7 @@ namespace av
 
       SFString   Geometry;
       SFMaterial Material;
-      SFFloat    Importance;
+      SFFloat    RadiusScale;
       SFFloat    ErrorThreshold;
       SFBool     EnableBackfaceCulling;
 
@@ -59,8 +59,8 @@ namespace av
       virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
       virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-      virtual void getImportanceCB(const SFFloat::GetValueEvent& event);
-      virtual void setImportanceCB(const SFFloat::SetValueEvent& event);
+      virtual void getRadiusScaleCB(const SFFloat::GetValueEvent& event);
+      virtual void setRadiusScaleCB(const SFFloat::SetValueEvent& event);
 
       virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
       virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);

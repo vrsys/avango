@@ -20,9 +20,9 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
                       boost::bind(&PLODNode::getMaterialCB, this, _1),
                       boost::bind(&PLODNode::setMaterialCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Importance,
-                      boost::bind(&PLODNode::getImportanceCB, this, _1),
-                      boost::bind(&PLODNode::setImportanceCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(RadiusScale,
+                      boost::bind(&PLODNode::getRadiusScaleCB, this, _1),
+                      boost::bind(&PLODNode::setRadiusScaleCB, this, _1));
  
   AV_FC_ADD_ADAPTOR_FIELD(ErrorThreshold,
                       boost::bind(&PLODNode::getErrorThresholdCB, this, _1),
@@ -107,15 +107,15 @@ av::gua::PLODNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
 }
 
 void
-av::gua::PLODNode::getImportanceCB(const SFFloat::GetValueEvent& event)
+av::gua::PLODNode::getRadiusScaleCB(const SFFloat::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaPLODNode->get_importance();
+  *(event.getValuePtr()) = m_guaPLODNode->get_radius_scale();
 }
 
 void
-av::gua::PLODNode::setImportanceCB(const SFFloat::SetValueEvent& event)
+av::gua::PLODNode::setRadiusScaleCB(const SFFloat::SetValueEvent& event)
 {
-  m_guaPLODNode->set_importance(event.getValue());
+  m_guaPLODNode->set_radius_scale(event.getValue());
 }
 
 void

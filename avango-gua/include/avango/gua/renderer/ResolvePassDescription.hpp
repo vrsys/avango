@@ -71,13 +71,21 @@ namespace av
       SFColor  EnvironmentLightingColor;
       SFUInt   EnvironmentLightingMode;
       SFString EnvironmentLightingSphereMap;
+      // MFString EnvironmentLightingCubeMap;
+      SFFloat  HorizonFade;
 
       SFBool   EnableSSAO;
       SFFloat  SSAORadius;
       SFFloat  SSAOIntensity;
       SFFloat  SSAOFalloff;
+      SFString SSAONoiseTexture;
 
       SFBool   DebugTiles;
+
+      SFBool   EnableScreenSpaceShadow;
+      SFFloat  ScreenSpaceShadowRadius;
+      SFFloat  ScreenSpaceShadowMaxRadiusPX;
+      SFFloat  ScreenSpaceShadowIntensity;
 
       virtual void getBackgroundColorCB(const SFColor::GetValueEvent& event);
       virtual void setBackgroundColorCB(const SFColor::SetValueEvent& event);
@@ -115,6 +123,9 @@ namespace av
       virtual void getSSAOFalloffCB(const SFFloat::GetValueEvent& event);
       virtual void setSSAOFalloffCB(const SFFloat::SetValueEvent& event);
 
+      virtual void getSSAONoiseTextureCB(const SFString::GetValueEvent& event);
+      virtual void setSSAONoiseTextureCB(const SFString::SetValueEvent& event);
+
       virtual void getEnvironmentLightingColorCB(const SFColor::GetValueEvent& event);
       virtual void setEnvironmentLightingColorCB(const SFColor::SetValueEvent& event);
 
@@ -123,6 +134,21 @@ namespace av
 
       virtual void getEnvironmentLightingSphereMapCB(const SFString::GetValueEvent& event);
       virtual void setEnvironmentLightingSphereMapCB(const SFString::SetValueEvent& event);
+
+      virtual void getHorizonFadeCB(const SFFloat::GetValueEvent& event);
+      virtual void setHorizonFadeCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getEnableScreenSpaceShadowCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableScreenSpaceShadowCB(const SFBool::SetValueEvent& event);
+
+      virtual void getScreenSpaceShadowRadiusCB(const SFFloat::GetValueEvent& event);
+      virtual void setScreenSpaceShadowRadiusCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getScreenSpaceShadowMaxRadiusPXCB(const SFFloat::GetValueEvent& event);
+      virtual void setScreenSpaceShadowMaxRadiusPXCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getScreenSpaceShadowIntensityCB(const SFFloat::GetValueEvent& event);
+      virtual void setScreenSpaceShadowIntensityCB(const SFFloat::SetValueEvent& event);
 
       virtual void getDebugTilesCB(const SFBool::GetValueEvent& event);
       virtual void setDebugTilesCB(const SFBool::SetValueEvent& event);

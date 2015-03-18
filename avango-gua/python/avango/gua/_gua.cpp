@@ -80,6 +80,7 @@
 #include "renderer/SSAOPassDescription.hpp"
 #include "renderer/ResolvePassDescription.hpp"
 #include "renderer/LightVisibilityPassDescription.hpp"
+#include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -206,6 +207,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TexturedScreenSpaceQuadPassDescription();
     init_FullscreenPassDescription();
     init_SSAOPassDescription();
+    init_SSAAPassDescription();
     init_ResolvePassDescription();
     init_LightVisibilityPassDescription();
     init_Databases();

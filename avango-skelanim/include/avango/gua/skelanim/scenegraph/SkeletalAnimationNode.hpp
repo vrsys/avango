@@ -69,8 +69,13 @@ namespace av
         virtual void getTime2CB(const SFFloat::GetValueEvent& event);
         virtual void setTime2CB(const SFFloat::SetValueEvent& event);
 
-
         float getAnimDuration(std::string const& name) const;
+
+        /*SFInt LoopNr;
+
+        virtual void getLoopNrCB(const SFInt::GetValueEvent& event);
+        virtual void setLoopNrCB(const SFInt::SetValueEvent& event);*/
+
         /**
          * Get the wrapped ::gua::SkeletalAnimationNode.
          */

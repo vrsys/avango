@@ -36,6 +36,10 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
                       boost::bind(&SkeletalAnimationNode::getTime2CB, this, _1),
                       boost::bind(&SkeletalAnimationNode::setTime2CB, this, _1));
 
+  /*AV_FC_ADD_ADAPTOR_FIELD(LoopNr,
+                      boost::bind(&SkeletalAnimationNode::getLoopNrCB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setLoopNrCB, this, _1));*/
+
 //  if (guanode->get_material()) {
 //    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
 //  }
@@ -139,3 +143,15 @@ av::gua::skelanim::SkeletalAnimationNode::setTime2CB(const SFFloat::SetValueEven
 {
   m_guaSkeletalAnimationNode->set_time_2(event.getValue());
 }
+
+/*void
+av::gua::skelanim::SkeletalAnimationNode::getLoopNrCB(const SFInt::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_loop_nr();
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setLoopNrCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSkeletalAnimationNode->set_loop_nr(event.getValue());
+}*/

@@ -1,12 +1,17 @@
 import avango
 import avango.script
-from avango.script import field_has_changed
 from AnimationControl import *
 
 class CharacterControl(avango.script.Script):
 
   _animation_control = AnimationControl()
   
+
+  '''_queued_animations = []
+  _play_once = {}
+
+  _animation_loop = 0'''
+
   _animations_kd = []
   _animations_ku = []
   _transformations = []
@@ -44,34 +49,18 @@ class CharacterControl(avango.script.Script):
 
 
     def handle_key(ascii, unknown , event , unknown2):
-      
-      def switch_animation(animation, blending_duration):
-
-        self._animation_control.blend_to(animation, blending_duration)
-
-        if self._animation_control.get_last_animation() in self._translations:
-          self._last_translation = self._translations[self._animation_control.get_last_animation()]
-        else:
-         self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
-
-        if self._animation_control.get_current_animation() in self._translations:
-          self._current_translation = self._translations[self._animation_control.get_current_animation()]
-        else:
-         self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
-
 
       # animation trigger key down
       for a in self._animations_kd:
         if ascii == a[0] and event == 1 and self._animation_control.get_current_animation() == a[1]:
 
-          switch_animation(a[2],a[3])
-
+          self._switch_animation(a[2],a[3])
 
       # animation trigger key up
       for a in self._animations_ku:
         if ascii == a[0] and event == 0 and self._animation_control.get_current_animation() == a[1]:
           
-          switch_animation(a[2],a[3])
+          self._switch_animation(a[2],a[3])
       
 
       # transformation trigger
@@ -102,10 +91,60 @@ class CharacterControl(avango.script.Script):
     self._wall_detect_idle = idle_animation
     self._scene_graph = scene_graph
 
+  '''def queue_animation(self, animation, blend_duration = 0.5):
+    self._queued_animations.append((animation,blend_duration))
+
+  def play_once(self, animation, next_animation, blend_duration = 0.5):
+    self._play_once[animation] = (next_animation,blend_duration)'''
+
+  def get_current_animation(self):
+    return self._animation_control.get_current_animation()
+
   def evaluate(self):
 
+    #self._check_animation_loop()
+    
+    #self._check_animation_changes()
+
+    # add transformation delta from keys
+    self._navigation.Transform.value = self._navigation.Transform.value * self._delta_transformation
+    
+    self._blend_translations()
+    
+    self._wall_detection()
+
+  def _switch_animation(self, animation, blending_duration = 0.5):
+
+    print("switch to animation: "+animation)
+
+    #self._character.BlendingDuration.value = blending_duration
+    #self._last_animation = self._character.Animation.value
+    #self._character.Animation.value = animation
+    #self._current_animation = animation
+    self._animation_control.blend_to(animation, blending_duration)
+
+    '''self._animation_loop = 0'''
+    
+    if self._animation_control.get_last_animation() in self._translations:
+      self._last_translation = self._translations[self._animation_control.get_last_animation()]
+    else:
+     self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
+
+    if self._animation_control.get_current_animation() in self._translations:
+      self._current_translation = self._translations[self._animation_control.get_current_animation()]
+    else:
+     self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
+
+
+    # check play once:
+    '''if self._current_animation in self._play_once:
+      obj = self._play_once[self._current_animation]
+      self.queue_animation(obj[0],obj[1])'''
+
+  '''def _check_animation_changes(self):
+
     # adapt to changes from outside
-    '''if self._current_animation != self._character.Animation.value:
+    if self._current_animation != self._character.Animation.value:
       self._animation_control._last_animation = self._current_animation
       self._current_animation = self._character.Animation.value
       if self._animation_control._last_animation in self._translations:
@@ -118,9 +157,8 @@ class CharacterControl(avango.script.Script):
       else:
        self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)'''
 
-    # add transformation delta from keys
-    self._navigation.Transform.value = self._navigation.Transform.value * self._delta_transformation
-    
+  def _blend_translations(self):
+
     # blend transformations binded to animations
     blendFact = self._animation_control.get_blending_factor()
 
@@ -129,9 +167,12 @@ class CharacterControl(avango.script.Script):
     if (trans_vec.z >= 0.0 and not self._wall_detected_front) or (trans_vec.z <= 0.0 and not self._wall_detected_back):
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
     elif self._animation_control.get_current_animation() != self._wall_detect_idle:
-      self._animation_control.blend_to(self._wall_detect_idle)
+      #self._animation_control.blend_to(self._wall_detect_idle)
+      self._switch_animation(self._wall_detect_idle)
 
     
+
+  def _wall_detection(self):
 
     #wall detection
     if self._scene_graph:
@@ -164,7 +205,15 @@ class CharacterControl(avango.script.Script):
 
       self._wall_detected_back = len(results.value) > 0
 
+  '''def _check_animation_loop(self):
 
+    if self._animation_loop != self._character.LoopNr.value:
 
-    
+      self._animation_loop = self._character.LoopNr.value
+
+      if len(self._queued_animations)>0:
+
+        queued = self._queued_animations.pop(0)
+
+        self._switch_animation(queued[0],queued[1])'''
 

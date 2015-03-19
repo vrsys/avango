@@ -1,14 +1,12 @@
 import avango
 import avango.script
 from avango.script import field_has_changed
+from AnimationControl import *
 
 class CharacterControl(avango.script.Script):
 
-  TimeIn = avango.SFFloat()
+  _animation_control = AnimationControl()
   
-  _last_animation = None
-  _current_animation = None
-
   _animations_kd = []
   _animations_ku = []
   _transformations = []
@@ -40,37 +38,38 @@ class CharacterControl(avango.script.Script):
     # window (for key evaluations)
     #self._window = application_window
 
+    self._animation_control.my_constructor(character_node)
+
+    self.always_evaluate(True)
+
 
     def handle_key(ascii, unknown , event , unknown2):
       
       def switch_animation(animation, blending_duration):
 
-        self._character.BlendingDuration.value = blending_duration
-        self._last_animation = self._character.Animation.value
-        self._character.Animation.value = animation
-        self._current_animation = animation
+        self._animation_control.blend_to(animation, blending_duration)
 
-        if self._last_animation in self._translations:
-          self._last_translation = self._translations[self._last_animation]
+        if self._animation_control.get_last_animation() in self._translations:
+          self._last_translation = self._translations[self._animation_control.get_last_animation()]
         else:
          self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
-        if self._current_animation in self._translations:
-          self._current_translation = self._translations[self._current_animation]
+        if self._animation_control.get_current_animation() in self._translations:
+          self._current_translation = self._translations[self._animation_control.get_current_animation()]
         else:
          self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
 
       # animation trigger key down
       for a in self._animations_kd:
-        if ascii == a[0] and event == 1 and self._character.Animation.value == a[1]:
+        if ascii == a[0] and event == 1 and self._animation_control.get_current_animation() == a[1]:
 
           switch_animation(a[2],a[3])
 
 
       # animation trigger key up
       for a in self._animations_ku:
-        if ascii == a[0] and event == 0 and self._character.Animation.value == a[1]:
+        if ascii == a[0] and event == 0 and self._animation_control.get_current_animation() == a[1]:
           
           switch_animation(a[2],a[3])
       
@@ -103,36 +102,34 @@ class CharacterControl(avango.script.Script):
     self._wall_detect_idle = idle_animation
     self._scene_graph = scene_graph
 
-
-  @field_has_changed(TimeIn)
-  def update(self):
+  def evaluate(self):
 
     # adapt to changes from outside
-    if self._current_animation != self._character.Animation.value:
-      self._last_animation = self._current_animation
+    '''if self._current_animation != self._character.Animation.value:
+      self._animation_control._last_animation = self._current_animation
       self._current_animation = self._character.Animation.value
-      if self._last_animation in self._translations:
-        self._last_translation = self._translations[self._last_animation]
+      if self._animation_control._last_animation in self._translations:
+        self._last_translation = self._translations[self._animation_control._last_animation]
       else:
        self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
       if self._current_animation in self._translations:
         self._current_translation = self._translations[self._current_animation]
       else:
-       self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
+       self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)'''
 
     # add transformation delta from keys
     self._navigation.Transform.value = self._navigation.Transform.value * self._delta_transformation
     
     # blend transformations binded to animations
-    blendFact = self._character.BlendingFactor.value
+    blendFact = self._animation_control.get_blending_factor()
 
     trans_vec = (self._last_translation * (1-blendFact) ) + (self._current_translation * blendFact)
 
     if (trans_vec.z >= 0.0 and not self._wall_detected_front) or (trans_vec.z <= 0.0 and not self._wall_detected_back):
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
-    elif self._character.Animation.value != self._wall_detect_idle:
-      self._character.Animation.value = self._wall_detect_idle
+    elif self._animation_control.get_current_animation() != self._wall_detect_idle:
+      self._animation_control.blend_to(self._wall_detect_idle)
 
     
 

@@ -4,7 +4,6 @@ from avango.script import field_has_changed
 
 class CameraControl(avango.script.Script):
 
-  TimeIn = avango.SFFloat()
 
   _mouse_pos = avango.gua.Vec2(0.0,0.0)
   _mouse_scroll = avango.gua.Vec2(0.0,14.0)
@@ -26,10 +25,11 @@ class CameraControl(avango.script.Script):
     def handle_scroll(s):
       self._mouse_scroll+=s
     application_window.on_scroll(handle_scroll)
+
+    self.always_evaluate(True)
 		
 
-  @field_has_changed(TimeIn)
-  def update(self):
+  def evaluate(self):
 
     # camera steering:
     if self._mouse_pos != None and self._mouse_scroll != None:

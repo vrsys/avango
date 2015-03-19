@@ -82,8 +82,8 @@ class GroundFollowing(avango.script.Script):
     if len(results.value) > 0:
 
 
-      if bob and bob.Animation.value == "swim":
-       bob.Animation.value = "run_fwd"
+      '''if bob and bob.Animation.value == "swim":
+       bob.Animation.value = "run_fwd"'''
 
       first_hit = results.value[0]
 
@@ -99,9 +99,9 @@ class GroundFollowing(avango.script.Script):
 
       delta_trans = (new_pos.get_translate() - self.InTransform.value.get_translate())
 
-    else:
+    '''else:
       if bob and bob.Animation.value == "run_fwd":
-       bob.Animation.value = "swim"
+       bob.Animation.value = "swim"'''
 
     delta_norm = avango.gua.Vec3(delta_trans.x,delta_trans.y,delta_trans.z)
     length = delta_norm.normalize()
@@ -113,9 +113,9 @@ class GroundFollowing(avango.script.Script):
       self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans)
 
 
-    if math.fabs(delta_trans.y)<0.05 and bob.Animation.value == "land":
+    '''if math.fabs(delta_trans.y)<0.05 and bob.Animation.value == "land":
       bob.BlendingDuration.value = 0.25
-      bob.Animation.value = "idle"
+      bob.Animation.value = "idle"'''
 
 
 
@@ -171,7 +171,7 @@ def start():
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.2,0.2,0.2)
 
-  bob.AnimationMode.value = 1
+  ##bob.AnimationMode.value = 1
 
   bob_ground.Children.value = [bob_nav]
   bob_nav.Children.value = [bob]
@@ -188,7 +188,7 @@ def start():
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
 
-  plane = tri_mesh_loader.create_geometry_from_file("cube",
+  '''plane = tri_mesh_loader.create_geometry_from_file("cube",
                                             "data/objects/cube.obj",
                                             avango.gua.LoaderFlags.NORMALIZE_POSITION
                                             | avango.gua.LoaderFlags.NORMALIZE_SCALE
@@ -198,7 +198,7 @@ def start():
   plane.Transform.value *= avango.gua.make_scale_mat(3.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
 
 
-  plane.Transform.value *= avango.gua.make_scale_mat(1.0,1.0,1.0) *  avango.gua.make_trans_mat(0, 0, 0)
+  plane.Transform.value *= avango.gua.make_scale_mat(1.0,1.0,1.0) *  avango.gua.make_trans_mat(0, 0, 0)'''
 
   light = avango.gua.nodes.PointLightNode(
                 Name = "light",
@@ -325,8 +325,8 @@ def start():
   bob_ground.Transform.connect_from(ground_following.OutTransform)
 
   timer = avango.nodes.TimeSensor()
-  character_control.TimeIn.connect_from(timer.Time)
-  camera_control.TimeIn.connect_from(timer.Time)
+  #character_control.TimeIn.connect_from(timer.Time)
+  #camera_control.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

@@ -61,10 +61,6 @@ namespace av
         virtual void getBlendFactorCB(const SFFloat::GetValueEvent& event);
         virtual void setBlendFactorCB(const SFFloat::SetValueEvent& event);
 
-        SFFloat BlendDuration;
-        virtual void getBlendDurationCB(const SFFloat::GetValueEvent& event);
-        virtual void setBlendDurationCB(const SFFloat::SetValueEvent& event);
-
         SFFloat Time1;
         virtual void getTime1CB(const SFFloat::GetValueEvent& event);
         virtual void setTime1CB(const SFFloat::SetValueEvent& event);

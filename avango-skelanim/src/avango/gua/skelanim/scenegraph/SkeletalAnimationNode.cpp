@@ -16,25 +16,25 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
                       boost::bind(&SkeletalAnimationNode::getMaterialCB, this, _1),
                       boost::bind(&SkeletalAnimationNode::setMaterialCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(AnimationMode,
-                      boost::bind(&SkeletalAnimationNode::getAnimationModeCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setAnimationModeCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Animation1,
+                      boost::bind(&SkeletalAnimationNode::getAnimation1CB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setAnimation1CB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(BlendingMode,
-                      boost::bind(&SkeletalAnimationNode::getBlendingModeCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setBlendingModeCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Animation2,
+                      boost::bind(&SkeletalAnimationNode::getAnimation2CB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setAnimation2CB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Animation,
-                      boost::bind(&SkeletalAnimationNode::getAnimationCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setAnimationCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(BlendFactor,
+                      boost::bind(&SkeletalAnimationNode::getBlendFactorCB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setBlendFactorCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(BlendingFactor,
-                      boost::bind(&SkeletalAnimationNode::getBlendingFactorCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setBlendingFactorCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Time1,
+                      boost::bind(&SkeletalAnimationNode::getTime1CB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setTime1CB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(BlendingDuration,
-                      boost::bind(&SkeletalAnimationNode::getBlendingDurationCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setBlendingDurationCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Time2,
+                      boost::bind(&SkeletalAnimationNode::getTime2CB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setTime2CB, this, _1));
 
 //  if (guanode->get_material()) {
 //    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -61,6 +61,11 @@ av::gua::skelanim::SkeletalAnimationNode::initClass()
     }
 }
 
+float
+av::gua::skelanim::SkeletalAnimationNode::getAnimDuration(std::string const& name) const
+{
+    return m_guaSkeletalAnimationNode->get_duration(name);
+}
 
 void
 av::gua::skelanim::SkeletalAnimationNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
@@ -78,61 +83,59 @@ av::gua::skelanim::SkeletalAnimationNode::setMaterialCB(const SFMaterial::SetVal
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::getAnimationModeCB(const SFInt::GetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::getAnimation1CB(const SFString::GetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_animation_mode();
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_animation_1();
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::setAnimationModeCB(const SFInt::SetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::setAnimation1CB(const SFString::SetValueEvent& event)
 {
-  m_guaSkeletalAnimationNode->set_animation_mode(event.getValue());
+  m_guaSkeletalAnimationNode->set_animation_1(event.getValue());
+}
+void
+av::gua::skelanim::SkeletalAnimationNode::getAnimation2CB(const SFString::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_animation_2();
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::getBlendingModeCB(const SFInt::GetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::setAnimation2CB(const SFString::SetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_blending_mode();
+  m_guaSkeletalAnimationNode->set_animation_2(event.getValue());
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::setBlendingModeCB(const SFInt::SetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::getBlendFactorCB(const SFFloat::GetValueEvent& event)
 {
-  m_guaSkeletalAnimationNode->set_blending_mode(event.getValue());
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_blend_factor();
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::getAnimationCB(const SFString::GetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::setBlendFactorCB(const SFFloat::SetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_animation();
+  m_guaSkeletalAnimationNode->set_blend_factor(event.getValue());
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::setAnimationCB(const SFString::SetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::getTime1CB(const SFFloat::GetValueEvent& event)
 {
-  m_guaSkeletalAnimationNode->set_animation(event.getValue());
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_time_1();
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::getBlendingFactorCB(const SFFloat::GetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::setTime1CB(const SFFloat::SetValueEvent& event)
 {
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_blending_factor();
+  m_guaSkeletalAnimationNode->set_time_1(event.getValue());
+}
+void
+av::gua::skelanim::SkeletalAnimationNode::getTime2CB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_time_2();
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::setBlendingFactorCB(const SFFloat::SetValueEvent& event)
+av::gua::skelanim::SkeletalAnimationNode::setTime2CB(const SFFloat::SetValueEvent& event)
 {
-  m_guaSkeletalAnimationNode->set_blending_factor(event.getValue());
-}
-
-void
-av::gua::skelanim::SkeletalAnimationNode::getBlendingDurationCB(const SFFloat::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_blending_duration();
-}
-
-void
-av::gua::skelanim::SkeletalAnimationNode::setBlendingDurationCB(const SFFloat::SetValueEvent& event)
-{
-  m_guaSkeletalAnimationNode->set_blending_duration(event.getValue());
+  m_guaSkeletalAnimationNode->set_time_2(event.getValue());
 }

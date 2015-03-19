@@ -46,35 +46,35 @@ namespace av
       public:
 
         SFMaterial Material;
-
         virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
         virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-        SFInt AnimationMode;
+        SFString Animation1;
+        virtual void getAnimation1CB(const SFString::GetValueEvent& event);
+        virtual void setAnimation1CB(const SFString::SetValueEvent& event);
 
-        virtual void getAnimationModeCB(const SFInt::GetValueEvent& event);
-        virtual void setAnimationModeCB(const SFInt::SetValueEvent& event);
+        SFString Animation2;
+        virtual void getAnimation2CB(const SFString::GetValueEvent& event);
+        virtual void setAnimation2CB(const SFString::SetValueEvent& event);
 
-        SFInt BlendingMode;
+        SFFloat BlendFactor;
+        virtual void getBlendFactorCB(const SFFloat::GetValueEvent& event);
+        virtual void setBlendFactorCB(const SFFloat::SetValueEvent& event);
 
-        virtual void getBlendingModeCB(const SFInt::GetValueEvent& event);
-        virtual void setBlendingModeCB(const SFInt::SetValueEvent& event);
+        SFFloat BlendDuration;
+        virtual void getBlendDurationCB(const SFFloat::GetValueEvent& event);
+        virtual void setBlendDurationCB(const SFFloat::SetValueEvent& event);
 
-        SFString Animation;
+        SFFloat Time1;
+        virtual void getTime1CB(const SFFloat::GetValueEvent& event);
+        virtual void setTime1CB(const SFFloat::SetValueEvent& event);
 
-        virtual void getAnimationCB(const SFString::GetValueEvent& event);
-        virtual void setAnimationCB(const SFString::SetValueEvent& event);
+        SFFloat Time2;
+        virtual void getTime2CB(const SFFloat::GetValueEvent& event);
+        virtual void setTime2CB(const SFFloat::SetValueEvent& event);
 
-        SFFloat BlendingFactor;
 
-        virtual void getBlendingFactorCB(const SFFloat::GetValueEvent& event);
-        virtual void setBlendingFactorCB(const SFFloat::SetValueEvent& event);
-
-        SFFloat BlendingDuration;
-
-        virtual void getBlendingDurationCB(const SFFloat::GetValueEvent& event);
-        virtual void setBlendingDurationCB(const SFFloat::SetValueEvent& event);
-
+        float getAnimDuration(std::string const& name) const;
         /**
          * Get the wrapped ::gua::SkeletalAnimationNode.
          */

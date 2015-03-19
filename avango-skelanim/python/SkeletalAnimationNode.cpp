@@ -19,6 +19,10 @@ namespace boost
   }
 }
 
+float getAnimDuration(av::gua::skelanim::SkeletalAnimationNode const& node, std::string const& name) {
+   return node.getAnimDuration(name);
+}
+
 void init_SkeletalAnimationNode()
 {
   register_field<av::gua::skelanim::SFSkeletalAnimationNode>("SFSkeletalAnimationNode");
@@ -27,5 +31,6 @@ void init_SkeletalAnimationNode()
           av::Link<av::gua::skelanim::SkeletalAnimationNode>,
           bases<av::gua::GeometryNode>, boost::noncopyable 
     >("SkeletalAnimationNode", "docstring", no_init)
+    .def("get_duration", &getAnimDuration)
     ;
 }

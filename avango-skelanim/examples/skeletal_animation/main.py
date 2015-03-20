@@ -91,7 +91,10 @@ class GroundFollowing(avango.script.Script):
       #self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_norm*0.01)
       self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_norm*self._velocity_y)
     else:
-      self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans)
+      if delta_trans.y < 0.0:
+        self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans)
+      else:
+        self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans/4.0)#smooth walking stairs
 
       self._velocity_y = 0.0
 
@@ -119,7 +122,7 @@ class GroundFollowing(avango.script.Script):
       '''character_control.queue_animation("idle", 0.25)'''
 
     #if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_fwd_loop" and character_control != None:
-    if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_fwd" and character_control != None:
+    if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_fwd_loop" and character_control != None:
       character_control._switch_animation("jump_fwd_preland",0.01)
 
     if math.fabs(delta_trans.y)<0.05 and character_control.get_current_animation() == "jump_land":
@@ -221,13 +224,14 @@ def start():
   #environment:
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
+  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise.fbx",
   medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-  for child in medieval_harbour.Children.value:
+  '''for child in medieval_harbour.Children.value:
     child.Material.value.EnableBackfaceCulling.value = False
-    child.Material.value.set_uniform("Roughness",0.8)
+    child.Material.value.set_uniform("Roughness",0.8)'''
 
 
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
@@ -269,10 +273,12 @@ def start():
             avango.gua.nodes.ResolvePassDescription()
           ])
 
+  #pipeline_description.EnableABuffer.value = True
   cam.PipelineDescription.value = pipeline_description
 
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.4)
   cam.FarClip.value = 10000
+  #cam.FarClip.value = 1000000
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 0.8, Height = 0.45)
   screen.Children.value = [cam, light]
@@ -348,6 +354,7 @@ def start():
   character_control.key_down(32, "idle","jump",0.01)
   character_control.key_down(32, "run_fwd","jump_fwd",0.25)
   character_control.key_up(32, "jump","jump_loop",0.25)
+  character_control.key_up(32, "jump_fwd","jump_fwd_loop",0.25)
   #character_control.bind_transformation(32, avango.gua.make_trans_mat(0.0, 0.1, 0.0))
 
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
@@ -359,13 +366,13 @@ def start():
   character_control.bind_translation("jump_loop",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_fwd",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_loop",avango.gua.Vec3(0.0, 0.08, 0.04))
-  character_control.bind_translation("jump_fwd_preland",avango.gua.Vec3(0.0, 0.00, 0.04))
+  character_control.bind_translation("jump_fwd_preland",avango.gua.Vec3(0.0, 0.08, 0.04))
 
   #character_control.play_once("jump","jump_loop",0.0)
   #character_control.play_once("jump_fwd","jump_fwd_loop",0.0)
 
   #wall detection:
-  character_control.activate_wall_detection(0.13,"idle",graph)
+  character_control.activate_wall_detection(0.075,0.13,"idle",graph)
 
   # setup camera control
   camera_control = CameraControl()

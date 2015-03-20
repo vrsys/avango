@@ -22,12 +22,13 @@ class CharacterControl(avango.script.Script):
   _current_translation = avango.gua.Vec3(0.0,0.0,0.0)
   _last_translation = avango.gua.Vec3(0.0,0.0,0.0)
 
+
   # wall detection
   _scene_graph = None
-  _ray = avango.gua.nodes.RayNode() 
-  _wall_detected_height = 0.0
-  _wall_detected_front = False
-  _wall_detected_back = False
+  _ray = avango.gua.nodes.Ray()
+  _wall_detect_height = 0.0
+  _wall_detect_offset = 0.0
+  _wall_detected = False
   _wall_detect_idle = None
 
 
@@ -46,6 +47,7 @@ class CharacterControl(avango.script.Script):
     self._animation_control.my_constructor(character_node)
 
     self.always_evaluate(True)
+
 
 
     def handle_key(ascii, unknown , event , unknown2):
@@ -86,10 +88,12 @@ class CharacterControl(avango.script.Script):
   def bind_translation(self, animation, translation_vec):
     self._translations[animation] = translation_vec
 
-  def activate_wall_detection(self, height, idle_animation, scene_graph):
-    self._wall_detected_height = height
+  def activate_wall_detection(self, dir_offset, height_offset, idle_animation, scene_graph):
+    self._wall_detect_offset = dir_offset
+    self._wall_detect_height = height_offset
     self._wall_detect_idle = idle_animation
     self._scene_graph = scene_graph
+
 
   '''def queue_animation(self, animation, blend_duration = 0.5):
     self._queued_animations.append((animation,blend_duration))
@@ -111,7 +115,6 @@ class CharacterControl(avango.script.Script):
     
     self._blend_translations()
     
-    self._wall_detection()
 
   def _switch_animation(self, animation, blending_duration = 0.5):
 
@@ -163,47 +166,46 @@ class CharacterControl(avango.script.Script):
     blendFact = self._animation_control.get_blending_factor()
 
     trans_vec = (self._last_translation * (1-blendFact) ) + (self._current_translation * blendFact)
+    
+    # translation delta in world coordinate system:
+    before_trans = self._navigation.WorldTransform.value.get_translate()
+    new_navigation_transform = self._navigation.WorldTransform.value * avango.gua.make_trans_mat(trans_vec)
+    after_trans = new_navigation_transform.get_translate()
+    delta_trans = after_trans - before_trans
 
-    if (trans_vec.z >= 0.0 and not self._wall_detected_front) or (trans_vec.z <= 0.0 and not self._wall_detected_back):
+    if not self._wall_detection(delta_trans):
+
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
+
     elif self._animation_control.get_current_animation() != self._wall_detect_idle:
-      #self._animation_control.blend_to(self._wall_detect_idle)
+
+      ##self._animation_control.blend_to(self._wall_detect_idle)
       self._switch_animation(self._wall_detect_idle)
 
     
 
-  def _wall_detection(self):
+  def _wall_detection(self, delta_translation):
 
     #wall detection
-    if self._scene_graph:
-      #wall detection forwards:
-      in_translation = self._character.WorldTransform.value.get_translate()
-      in_translation.y += self._wall_detected_height
-      char_rot = self._character.WorldTransform.value.get_rotate_scale_corrected()
-      self._ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
-                                   avango.gua.make_rot_mat(char_rot) *\
-                                   avango.gua.make_rot_mat(-90, 1, 0, 0) *\
-                                   avango.gua.make_scale_mat(1.0, 1.0, 0.075)
+    if self._scene_graph and delta_translation.length() > 0.00001:
 
-      results = self._scene_graph.ray_test(
-                                       self._ray,
-                                       avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
-                                       avango.gua.PickingOptions.GET_POSITIONS)
+      delta_norm = avango.gua.Vec3(delta_translation)
+      delta_norm.normalize()
 
-      self._wall_detected_front = len(results.value) > 0
+      in_translation = self._character.WorldTransform.value.get_translate() + (delta_norm * self._wall_detect_offset)
+      in_translation.y += self._wall_detect_height
+      self._ray.Origin.value = in_translation
+      self._ray.Direction.value = delta_translation
 
-      #wall detection backwards:
-      self._ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
-                                   avango.gua.make_rot_mat(char_rot) *\
-                                   avango.gua.make_rot_mat(90, 1, 0, 0) *\
-                                   avango.gua.make_scale_mat(1.0, 1.0, 0.075)
+      results = self._scene_graph.ray_test(self._ray,0)
 
-      results = self._scene_graph.ray_test(
-                                       self._ray,
-                                       avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
-                                       avango.gua.PickingOptions.GET_POSITIONS)
+      return len(results.value)>0
+   
+    else:
 
-      self._wall_detected_back = len(results.value) > 0
+      return False
+
+
 
   '''def _check_animation_loop(self):
 

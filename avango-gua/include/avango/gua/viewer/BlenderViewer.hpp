@@ -46,7 +46,7 @@ namespace av
       SFPhysics    Physics;
 #endif
 
-      void frame();
+      void frame(std::string const& camera);
 
       struct Image {
         int32_t width = 0;
@@ -82,6 +82,7 @@ namespace av
       std::mutex m_mutex;
       std::condition_variable m_condition;
       std::vector<std::unique_ptr<const ::gua::SceneGraph> > m_gua_graphs;
+      std::string m_camera_name = "";
       Image m_image;
       bool m_ready = false;
       bool m_processed = false;

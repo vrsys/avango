@@ -134,6 +134,7 @@ av::gua::BlenderViewer::BlenderViewer()
     : m_mutex(),
       m_condition(),
       m_gua_graphs(),
+      m_camera_name(""),
       m_image(),
       m_ready(false),
       m_processed(false),
@@ -179,7 +180,7 @@ void av::gua::BlenderViewer::initClass() {
   }
 }
 
-void av::gua::BlenderViewer::frame() {
+void av::gua::BlenderViewer::frame(std::string const& camera) {
 
   av::ApplicationInstance::get().evaluate();
 
@@ -187,6 +188,7 @@ void av::gua::BlenderViewer::frame() {
   ::gua::Interface::instance()->update();
 #endif
 
+  m_camera_name = camera;
   if (SceneGraphs.getValue().size() > 0) {
     m_gua_graphs.clear();
     for (auto graph : SceneGraphs.getValue()) {

@@ -10,7 +10,7 @@ from CharacterControl import *
 from CameraControl import *
 
 bob = None
-light2 = None
+#light2 = None
 cubes = []
 character_control = None
 
@@ -26,7 +26,7 @@ class GroundFollowing(avango.script.Script):
   SceneGraph = avango.gua.nodes.SceneGraph()
 
   _velocity_y = 0.0
-  _gravity = -0.0005
+  _gravity = -0.00005
 
   def __init__(self):
     self.super(GroundFollowing).__init__()
@@ -38,7 +38,7 @@ class GroundFollowing(avango.script.Script):
 
   def evaluate(self):
     global bob
-    global light2
+    #global light2
     global cubes
     global character_control
 
@@ -72,8 +72,8 @@ class GroundFollowing(avango.script.Script):
 
       new_pos = avango.gua.make_trans_mat(hit_world_trans)# * avango.gua.make_trans_mat(0.0,self.OffsetToGround.value, 0.0)
 
-      if light2 != None:
-        light2.Transform.value = new_pos * avango.gua.make_trans_mat(0.0,0.2,0.0)
+      '''if light2 != None:
+        light2.Transform.value = new_pos * avango.gua.make_trans_mat(0.0,0.2,0.0)'''
 
       delta_trans = (new_pos.get_translate() - self.InTransform.value.get_translate())
 
@@ -145,6 +145,7 @@ def start():
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
+
   loader = avango.gua.skelanim.nodes.SkeletalAnimationLoader()
 
   bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
@@ -213,7 +214,7 @@ def start():
           "data/animations/Jump_Idle_Rif_Land.FBX","jump_fwd_land", avango.gua.LoaderFlags.DEFAULTS)
 
 
-  bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.2,0.2,0.2)
+  bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
 
   ##bob.AnimationMode.value = 1
 
@@ -224,8 +225,8 @@ def start():
   #environment:
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
-  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
+  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
@@ -237,7 +238,7 @@ def start():
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
 
-  light = avango.gua.nodes.PointLightNode(
+  '''light = avango.gua.nodes.PointLightNode(
                 Name = "light",
                 Color = avango.gua.Color(0.1, 0.1, 0.1),
                 Brightness = 1.0,
@@ -250,8 +251,14 @@ def start():
                 Name = "light2",
                 Color = avango.gua.Color(1.0, 1.0, 1.0),
                 Brightness = 1.0,
-                EnableShadows = True)
+                EnableShadows = True)'''
 
+
+  sunlight = avango.gua.nodes.SunLightNode()
+  sunlight.Color.value = avango.gua.Color(0.8,0.6,0.45)
+  sunlight.Brightness.value = 3
+  sunlight.Transform.value = avango.gua.make_rot_mat(-80, 1.0, 0.0, 0.0)
+  graph.Root.value.Children.value.append(sunlight)
 
   size = avango.gua.Vec2ui(2560, 1440)
 
@@ -273,18 +280,28 @@ def start():
             avango.gua.nodes.ResolvePassDescription()
           ])
 
+  pipeline_description.Passes.value[3].EnableSSAO.value = True
+  pipeline_description.Passes.value[3].SSAORadius.value = 2.0
+  pipeline_description.Passes.value[3].SSAOIntensity.value = 2.0
+  pipeline_description.Passes.value[3].BackgroundMode.value = 1
+  #pipeline_description.Passes.value[3].BackgroundTexture.value = "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
+  pipeline_description.Passes.value[3].BackgroundTexture.value = "data/objects/highrise/skydome_space.jpg"
+
   #pipeline_description.EnableABuffer.value = True
   cam.PipelineDescription.value = pipeline_description
 
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.4)
-  cam.FarClip.value = 10000
-  #cam.FarClip.value = 1000000
+  #cam.FarClip.value = 10000
+  cam.FarClip.value = 300
+  cam.NearClip.value = 0.01
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 0.8, Height = 0.45)
-  screen.Children.value = [cam, light]
+  #screen.Children.value = [cam, light]
+  screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
-  graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen,light2]
+  #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen,light2]
+  graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen, sunlight]
 
   avango.gua.register_window("window", window)
 
@@ -372,7 +389,7 @@ def start():
   #character_control.play_once("jump_fwd","jump_fwd_loop",0.0)
 
   #wall detection:
-  character_control.activate_wall_detection(0.075,0.13,"idle",graph)
+  character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
 
   # setup camera control
   camera_control = CameraControl()
@@ -381,7 +398,7 @@ def start():
   # setup ground following
   ground_following = GroundFollowing(
     SceneGraph = graph,
-    OffsetToGround = 0.1,
+    OffsetToGround = 0.01,
     MaxDistanceToGround = 1.0
   )
 

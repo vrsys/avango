@@ -56,20 +56,6 @@ av::gua::BlenderViewer::Image screenshot(
   return img;
 }
 
-av::gua::BlenderViewer::Image screenshot(::gua::Pipeline const& pipe) {
-  auto const& ctx(pipe.get_context());
-
-  auto color = pipe.get_gbuffer().get_current_color_buffer();
-
-  if (!color)
-    return av::gua::BlenderViewer::Image{};
-
-  auto texture_ptr = color->get_buffer(ctx);
-  auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
-
-  return screenshot(ctx.render_context, tex);
-}
-
 void draw_image(av::gua::BlenderViewer::Image const& im) {
   glColor3f(1.0f, 1.0f, 1.0f);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -136,12 +122,13 @@ av::gua::BlenderViewer::BlenderViewer()
     : m_mutex(),
       m_condition(),
       m_gua_graphs(),
-      m_camera_name(""),
+      m_current_engine_uuid(""),
       m_image(),
       m_ready(false),
       m_processed(false),
       m_done(false),
-      m_worker(std::bind(&av::gua::BlenderViewer::render_thread, this)) {
+      m_worker(std::bind(&av::gua::BlenderViewer::render_thread, this)),
+      m_engines() {
   AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
   AV_FC_ADD_FIELD(Window, SFHeadlessSurface::ValueType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -182,7 +169,7 @@ void av::gua::BlenderViewer::initClass() {
   }
 }
 
-void av::gua::BlenderViewer::frame(std::string const& camera) {
+void av::gua::BlenderViewer::frame(std::string const& uuid) {
 
   av::ApplicationInstance::get().evaluate();
 
@@ -190,7 +177,7 @@ void av::gua::BlenderViewer::frame(std::string const& camera) {
   ::gua::Interface::instance()->update();
 #endif
 
-  m_camera_name = camera;
+  m_current_engine_uuid = uuid;
   if (SceneGraphs.getValue().size() > 0) {
     m_gua_graphs.clear();
     for (auto graph : SceneGraphs.getValue()) {
@@ -245,10 +232,10 @@ void av::gua::BlenderViewer::render_thread() {
     auto window = av_win->getGuaWindow();
     if (window && !window->get_is_open()) {
       window->open();
+      window->set_active(true);
     }
 
     if (window && window->get_is_open()) {
-      window->set_active(true);
 
       if (!m_gua_graphs.empty()) {
         auto& graph = m_gua_graphs.front();
@@ -311,4 +298,34 @@ void av::gua::BlenderViewer::render_thread() {
     m_condition.notify_one();
 
   }
+}
+
+av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline const& pipe) {
+  auto const& ctx(pipe.get_context());
+
+  auto color = pipe.get_gbuffer().get_current_color_buffer();
+
+  if (!color)
+    return av::gua::BlenderViewer::Image{};
+
+  auto texture_ptr = color->get_buffer(ctx);
+  auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
+
+  if (!tmp_rgba8_texture || tmp_rgba8_texture->descriptor()._size != tex->descriptor()._size) {
+    tmp_rgba8_texture = ctx.render_device->create_texture_2d(
+        tex->descriptor()._size, scm::gl::FORMAT_RGBA_8);
+    tmp_fbo = ctx.render_device->create_frame_buffer();
+    tmp_fbo->attach_color_buffer(0, tmp_rgba8_texture, 0, 0);
+  }
+
+  ctx.render_context->copy_color_buffer(pipe.get_gbuffer().get_fbo_read() , tmp_fbo, 0);
+  return ::screenshot(ctx.render_context, tmp_rgba8_texture);
+}
+
+void av::gua::BlenderViewer::register_engine(std::string const& uuid) {
+  std::cout << "av::gua::BlenderViewer::register_engine(" << uuid << "\n";
+}
+
+void av::gua::BlenderViewer::unregister_engine(std::string const& uuid) {
+  std::cout << "av::gua::BlenderViewer::unregister_engine(" << uuid << "\n";
 }

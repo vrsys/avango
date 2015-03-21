@@ -33,39 +33,41 @@ namespace {
 
 av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
 
+av::gua::BlenderViewer::Image screenshot(
+    scm::gl::render_context_ptr const& ctx,
+    scm::gl::texture_2d_ptr const& tex ) {
+  av::gua::BlenderViewer::Image img;
+
+  if (!tex)
+    return img;
+
+  img.width = tex->descriptor()._size.x;
+  img.height = tex->descriptor()._size.y;
+  img.bpp = scm::gl::bit_per_pixel(tex->format());
+  img.gl_type = scm::gl::util::gl_base_type(tex->format());
+  img.gl_internal_format = scm::gl::util::gl_internal_format(tex->format());
+  img.gl_base_format = scm::gl::util::gl_base_format(tex->format());
+
+  int n = img.width * img.height * scm::gl::size_of_format(tex->format());
+  img.data = std::vector<char>(n);
+
+  ctx->retrieve_texture_data(tex, 0, img.data.data());
+
+  return img;
+}
+
 av::gua::BlenderViewer::Image screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
   auto color = pipe.get_gbuffer().get_current_color_buffer();
-  av::gua::BlenderViewer::Image img;
 
   if (!color)
-    return img;
+    return av::gua::BlenderViewer::Image{};
 
   auto texture_ptr = color->get_buffer(ctx);
-  scm::gl::texture_2d_ptr _color_buffer_resolved =
-      boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
+  auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
 
-  if (!_color_buffer_resolved)
-    return img;
-
-  img.width = _color_buffer_resolved->descriptor()._size.x;
-  img.height = _color_buffer_resolved->descriptor()._size.y;
-  img.bpp = scm::gl::bit_per_pixel(_color_buffer_resolved->format());
-  img.gl_type = scm::gl::util::gl_base_type(_color_buffer_resolved->format());
-  img.gl_internal_format =
-      scm::gl::util::gl_internal_format(_color_buffer_resolved->format());
-  img.gl_base_format =
-      scm::gl::util::gl_base_format(_color_buffer_resolved->format());
-
-  int img_size = img.width * img.height *
-                 scm::gl::size_of_format(_color_buffer_resolved->format());
-  img.data = std::vector<char>(img_size);
-
-  ctx.render_context
-      ->retrieve_texture_data(_color_buffer_resolved, 0, img.data.data());
-
-  return img;
+  return screenshot(ctx.render_context, tex);
 }
 
 void draw_image(av::gua::BlenderViewer::Image const& im) {

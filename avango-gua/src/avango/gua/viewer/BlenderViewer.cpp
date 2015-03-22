@@ -244,8 +244,9 @@ void av::gua::BlenderViewer::render_thread() {
         auto& cams = graph->get_camera_nodes();
         auto it = std::find_if(cams.begin(),
                                cams.end(),
-                               [](::gua::node::CameraNode * const & c)->bool {
-          return "blender_window" == c->config.get_output_window_name();
+                               [this](::gua::node::CameraNode * const & c)->bool {
+          return "blender_window" == c->config.get_output_window_name()
+              && m_current_engine_uuid == c->get_name();
         });
         if (it != cams.end()) {
           auto& cam = *it;

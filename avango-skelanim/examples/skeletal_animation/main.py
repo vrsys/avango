@@ -98,42 +98,17 @@ class GroundFollowing(avango.script.Script):
 
       self._velocity_y = 0.0
 
-      if character_control.get_current_animation() == "jump_loop" and character_control != None:
-        character_control._switch_animation("jump_land",0.001)
+      if character_control.get_current_animation() == "jump_loop":
+        character_control._switch_animation("jump_land",0.01, False)
+        character_control.queue_animation("idle", 0.25)
 
-      if character_control.get_current_animation() == "jump_fwd_land" and character_control != None:
-        character_control._switch_animation("idle",0.001)
+      if character_control.get_current_animation() == "jump_fwd_preland":
+        character_control._switch_animation("jump_fwd_land", 0.1, False)
+        character_control.queue_animation("idle", 0.25)
 
-    '''character_control.queue_animation("idle", 0.25)'''
-
-    '''if character_control.get_current_animation() == "jump_fwd_loop" and character_control != None:
-        #bob.BlendingDuration.value = 0.0
-        #character_control.get_current_animation() = "jump_fwd_preland"
-        character_control._switch_animation("jump_fwd_preland", 0.0)'''
-
-    '''character_control.queue_animation("jump_fwd_land", 0.0)
-        character_control.queue_animation("idle", 0.25)'''
-
-    if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_loop" and character_control != None:
-      character_control._switch_animation("jump_land",0.1)
-
-      '''character_control._switch_animation("jump_land")'''
-
-      '''character_control.queue_animation("idle", 0.25)'''
-
-    #if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_fwd_loop" and character_control != None:
-    if math.fabs(delta_trans.y)<0.09 and character_control.get_current_animation() == "jump_fwd_loop" and character_control != None:
-      character_control._switch_animation("jump_fwd_preland",0.01)
-
-    if math.fabs(delta_trans.y)<0.05 and character_control.get_current_animation() == "jump_land":
-      character_control._switch_animation("idle",0.25)
-
-    if math.fabs(delta_trans.y)<0.05 and character_control.get_current_animation() == "jump_fwd_preland":
-      character_control._switch_animation("jump_fwd_land",0.25)
-
-
-    '''character_control.queue_animation("jump_fwd_land", 0.0)
-      character_control.queue_animation("idle", 0.25)'''
+    if math.fabs(delta_trans.y)<0.09 and character_control != None:
+      if character_control.get_current_animation() == "jump_fwd_loop":
+        character_control._switch_animation("jump_fwd_preland",0.01, False)
 
 
 
@@ -225,6 +200,7 @@ def start():
   #environment:
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
+  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
   medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
@@ -284,8 +260,9 @@ def start():
   pipeline_description.Passes.value[3].SSAORadius.value = 2.0
   pipeline_description.Passes.value[3].SSAOIntensity.value = 2.0
   pipeline_description.Passes.value[3].BackgroundMode.value = 1
-  #pipeline_description.Passes.value[3].BackgroundTexture.value = "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
-  pipeline_description.Passes.value[3].BackgroundTexture.value = "data/objects/highrise/skydome_space.jpg"
+  pipeline_description.Passes.value[3].BackgroundTexture.value = "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
+  #pipeline_description.Passes.value[3].Background  Texture.value = "data/objects/highrise/skydome_space.jpg"
+  pipeline_description.Passes.value[3].ToneMappingMode.value = 3
 
   #pipeline_description.EnableABuffer.value = True
   cam.PipelineDescription.value = pipeline_description
@@ -370,8 +347,8 @@ def start():
   # SPACE BAR
   character_control.key_down(32, "idle","jump",0.01)
   character_control.key_down(32, "run_fwd","jump_fwd",0.25)
-  character_control.key_up(32, "jump","jump_loop",0.25)
-  character_control.key_up(32, "jump_fwd","jump_fwd_loop",0.25)
+  #character_control.key_up(32, "jump","jump_loop",0.25)
+  #character_control.key_up(32, "jump_fwd","jump_fwd_loop",0.25)
   #character_control.bind_transformation(32, avango.gua.make_trans_mat(0.0, 0.1, 0.0))
 
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
@@ -385,8 +362,8 @@ def start():
   character_control.bind_translation("jump_fwd_loop",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_preland",avango.gua.Vec3(0.0, 0.08, 0.04))
 
-  #character_control.play_once("jump","jump_loop",0.0)
-  #character_control.play_once("jump_fwd","jump_fwd_loop",0.0)
+  character_control.play_once("jump","jump_loop",0.01)
+  character_control.play_once("jump_fwd","jump_fwd_loop",0.01)
 
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.013,"idle",graph)

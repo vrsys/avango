@@ -5,12 +5,9 @@ from AnimationControl import *
 class CharacterControl(avango.script.Script):
 
   _animation_control = AnimationControl()
-  
 
-  '''_queued_animations = []
+  _queued_animations = []
   _play_once = {}
-
-  _animation_loop = 0'''
 
   _animations_kd = []
   _animations_ku = []
@@ -95,18 +92,18 @@ class CharacterControl(avango.script.Script):
     self._scene_graph = scene_graph
 
 
-  '''def queue_animation(self, animation, blend_duration = 0.5):
+  def queue_animation(self, animation, blend_duration = 0.5):
     self._queued_animations.append((animation,blend_duration))
 
   def play_once(self, animation, next_animation, blend_duration = 0.5):
-    self._play_once[animation] = (next_animation,blend_duration)'''
+    self._play_once[animation] = (next_animation,blend_duration)
 
   def get_current_animation(self):
     return self._animation_control.get_current_animation()
 
   def evaluate(self):
 
-    #self._check_animation_loop()
+    self._check_animation_loop()
     
     #self._check_animation_changes()
 
@@ -116,17 +113,16 @@ class CharacterControl(avango.script.Script):
     self._blend_translations()
     
 
-  def _switch_animation(self, animation, blending_duration = 0.5):
+  def _switch_animation(self, animation, blending_duration = 0.5, loop_mode = True):
 
-    print("switch to animation: "+animation)
-
-    #self._character.BlendingDuration.value = blending_duration
-    #self._last_animation = self._character.Animation.value
-    #self._character.Animation.value = animation
-    #self._current_animation = animation
-    self._animation_control.blend_to(animation, blending_duration)
-
-    '''self._animation_loop = 0'''
+    loop_mode_tmp = loop_mode
+    next_animation = None
+    # check play once:
+    if animation in self._play_once:
+      loop_mode_tmp = False
+      next_animation = self._play_once[animation]
+    
+    self._animation_control.blend_to(animation, blending_duration, loop_mode_tmp)
     
     if self._animation_control.get_last_animation() in self._translations:
       self._last_translation = self._translations[self._animation_control.get_last_animation()]
@@ -139,10 +135,14 @@ class CharacterControl(avango.script.Script):
      self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
 
-    # check play once:
-    '''if self._current_animation in self._play_once:
-      obj = self._play_once[self._current_animation]
-      self.queue_animation(obj[0],obj[1])'''
+    # queue next animation if play once
+    if next_animation != None:
+      self.queue_animation(next_animation[0],next_animation[1])
+    
+    # clear queue when looped animation is triggered
+    if loop_mode_tmp:
+      self._queued_animations = []
+
 
   '''def _check_animation_changes(self):
 
@@ -159,6 +159,7 @@ class CharacterControl(avango.script.Script):
         self._current_translation = self._translations[self._current_animation]
       else:
        self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)'''
+
 
   def _blend_translations(self):
 
@@ -207,15 +208,11 @@ class CharacterControl(avango.script.Script):
 
 
 
-  '''def _check_animation_loop(self):
+  def _check_animation_loop(self):
 
-    if self._animation_loop != self._character.LoopNr.value:
+    if not self._animation_control.is_looping() and len(self._queued_animations)>0:
 
-      self._animation_loop = self._character.LoopNr.value
+      queued = self._queued_animations.pop(0)
 
-      if len(self._queued_animations)>0:
-
-        queued = self._queued_animations.pop(0)
-
-        self._switch_animation(queued[0],queued[1])'''
+      self._switch_animation(queued[0],queued[1],False)
 

@@ -14,6 +14,7 @@ class AnimationControl(avango.script.Script):
     _last_looping = False
     _current_blending_start = 0.0
     _current_looping = False
+    _is_looping = False
     
     _blending_factor = 1.0
     _blending_duration = 0.5
@@ -45,6 +46,9 @@ class AnimationControl(avango.script.Script):
     def get_blending_factor(self):
         return self._blending_factor
 
+    def is_looping(self):
+        return self._is_looping
+
     def play(self, animation_name, loop_mode = True):
         self._last_animation = self._current_animation
         self._current_animation = animation_name
@@ -75,6 +79,7 @@ class AnimationControl(avango.script.Script):
 
         self._last_looping = self._current_looping
         self._current_looping = loop_mode
+        self._is_looping = True
 
         self._animation_node.Animation1.value = self._animation_node.Animation2.value
         self._animation_node.Animation2.value = animation_name
@@ -93,13 +98,13 @@ class AnimationControl(avango.script.Script):
 
         if not self._current_looping and self._timer.Time.value > self._current_blending_start + self._animation_node.get_duration(self._current_animation):
             self._animation_node.Time2.value = self._animation_node.get_duration(self._current_animation) * 0.999999
+            self._is_looping = False
         else:
             self._animation_node.Time2.value = self._timer.Time.value - self._current_blending_start
 
         if self._state == 2:
 
             self._blending_factor = 1.0 - (self._blending_end - self._timer.Time.value) / self._blending_duration
-            print(self._blending_factor)
             if self._blending_factor >= 1.0:
 
                 self._state = 1

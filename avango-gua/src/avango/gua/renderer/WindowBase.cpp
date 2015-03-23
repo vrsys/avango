@@ -79,6 +79,9 @@ av::gua::WindowBase::WindowBase(std::shared_ptr< ::gua::WindowBase> const& guaWi
                       boost::bind(&WindowBase::getWarpMatrixBlueLeft, this, _1),
                       boost::bind(&WindowBase::setWarpMatrixBlueLeft, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(RenderingFPS,
+                      boost::bind(&WindowBase::getRenderingFPSCB, this, _1),
+                      boost::bind(&WindowBase::setRenderingFPSCB, this, _1));
 }
 
 void
@@ -305,3 +308,13 @@ av::gua::WindowBase::setWarpMatrixBlueLeft(const SFString::SetValueEvent& event)
 {
   m_guaWindowBase->config.set_warp_matrix_blue_left(event.getValue());
 }
+
+void
+av::gua::WindowBase::getRenderingFPSCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaWindowBase->get_rendering_fps();
+}
+
+void
+av::gua::WindowBase::setRenderingFPSCB(const SFFloat::SetValueEvent& event)
+{}

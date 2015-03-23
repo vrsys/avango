@@ -8,8 +8,7 @@ class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()
 
-  @field_has_changed(TimeIn)
-  def update(self):
+  def evaluate(self):
     self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
 def start():
@@ -66,16 +65,22 @@ def start():
   res_pass.SSAOIntensity.value = 4.0
   res_pass.SSAOFalloff.value = 10.0
   res_pass.SSAORadius.value = 7.0
+
+  #res_pass.EnableScreenSpaceShadow.value = True
+
   res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
   res_pass.Exposure.value = 1.0
   res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
 
+  anti_aliasing = avango.gua.nodes.SSAAPassDescription()
+
   pipeline_description = avango.gua.nodes.PipelineDescription(
       Passes = [
             avango.gua.nodes.TriMeshPassDescription(),
             avango.gua.nodes.LightVisibilityPassDescription(),
-            res_pass
+            res_pass,
+            anti_aliasing,
           ])
 
   cam.PipelineDescription.value = pipeline_description

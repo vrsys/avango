@@ -312,21 +312,21 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
   auto texture_ptr = color->get_buffer(ctx);
   auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
 
-  if (!tmp_rgba8_texture || tmp_rgba8_texture->descriptor()._size != tex->descriptor()._size) {
-    tmp_rgba8_texture = ctx.render_device->create_texture_2d(
+  auto& tmp = m_engines[m_current_engine_uuid];
+
+  if (!tmp.fbo)
+    tmp.fbo = ctx.render_device->create_frame_buffer();
+
+  if (!tmp.rgba8_texture || tmp.rgba8_texture->descriptor()._size != tex->descriptor()._size) {
+    tmp.rgba8_texture = ctx.render_device->create_texture_2d(
         tex->descriptor()._size, scm::gl::FORMAT_RGBA_8);
-    tmp_fbo = ctx.render_device->create_frame_buffer();
-    tmp_fbo->attach_color_buffer(0, tmp_rgba8_texture, 0, 0);
+    tmp.fbo->attach_color_buffer(0, tmp.rgba8_texture, 0, 0);
   }
 
-  ctx.render_context->copy_color_buffer(pipe.get_gbuffer().get_fbo_read() , tmp_fbo, 0);
-  return ::screenshot(ctx.render_context, tmp_rgba8_texture);
-}
-
-void av::gua::BlenderViewer::register_engine(std::string const& uuid) {
-  std::cout << "av::gua::BlenderViewer::register_engine(" << uuid << "\n";
+  ctx.render_context->copy_color_buffer(pipe.get_gbuffer().get_fbo_read() , tmp.fbo, 0);
+  return ::screenshot(ctx.render_context, tmp.rgba8_texture);
 }
 
 void av::gua::BlenderViewer::unregister_engine(std::string const& uuid) {
-  std::cout << "av::gua::BlenderViewer::unregister_engine(" << uuid << "\n";
+  //m_engines.erase(uuid); // has to happen in worker thread.
 }

@@ -65,7 +65,6 @@ namespace av
         size_t size() const { return size_header() + data.size(); }
       };
 
-      void register_engine(std::string const& uuid);
       void unregister_engine(std::string const& uuid);
 
     protected:
@@ -100,8 +99,8 @@ namespace av
       };
       std::map<std::string, EngineData> m_engines;
 
-      scm::gl::frame_buffer_ptr tmp_fbo = nullptr;
-      scm::gl::texture_2d_ptr tmp_rgba8_texture = nullptr;
+      //scm::gl::frame_buffer_ptr tmp_fbo = nullptr;
+      //scm::gl::texture_2d_ptr tmp_rgba8_texture = nullptr;
     };
 
     typedef SingleField<Link<BlenderViewer> > SFBlenderViewer;

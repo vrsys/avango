@@ -129,7 +129,8 @@ av::gua::BlenderViewer::BlenderViewer()
       m_processed(false),
       m_done(false),
       m_worker(std::bind(&av::gua::BlenderViewer::render_thread, this)),
-      m_engines() {
+      m_engines(),
+      m_unregister_queue() {
   AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
   AV_FC_ADD_FIELD(Window, SFHeadlessSurface::ValueType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -287,6 +288,15 @@ void av::gua::BlenderViewer::render_thread() {
       }
     }
 
+    // garbage collection of old engine data
+
+    {
+      std::string engine;
+      while (m_unregister_queue.pop(engine)) {
+        m_engines.erase(engine);
+      }
+    }
+
     if (m_done)
       keep_running = false;
 
@@ -330,6 +340,6 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
   return ::screenshot(ctx.render_context, tmp.rgba8_texture);
 }
 
-void av::gua::BlenderViewer::unregister_engine(std::string const& uuid) {
-  //m_engines.erase(uuid); // has to happen in worker thread.
+void av::gua::BlenderViewer::unregister_engine(std::string const& engine) {
+  m_unregister_queue.push(engine);
 }

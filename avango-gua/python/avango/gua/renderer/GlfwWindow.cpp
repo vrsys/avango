@@ -80,4 +80,10 @@ void init_GlfwWindow()
          .def("on_scroll", register_on_scroll)
          .def("on_enter", register_on_enter)
          ;
+
+  enum_<av::gua::GlfwWindow::CursorModeEnum>("CursorMode")
+          .value("NORMAL", av::gua::GlfwWindow::NORMAL)
+          .value("HIDDEN", av::gua::GlfwWindow::HIDDEN)
+          .value("DISABLED", av::gua::GlfwWindow::DISABLED)
+          ;
  }

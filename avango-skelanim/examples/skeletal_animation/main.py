@@ -202,7 +202,8 @@ def start():
 
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
+  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_obj_separated.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
@@ -253,7 +254,8 @@ def start():
             avango.gua.nodes.TriMeshPassDescription(),
             avango.gua.nodes.LightVisibilityPassDescription(),
             avango.gua.skelanim.nodes.SkeletalAnimationPassDescription(),
-            avango.gua.nodes.ResolvePassDescription()
+            avango.gua.nodes.ResolvePassDescription(),
+            avango.gua.nodes.SSAAPassDescription(),
           ])
 
   pipeline_description.Passes.value[3].EnableSSAO.value = True
@@ -265,8 +267,8 @@ def start():
   pipeline_description.Passes.value[3].ToneMappingMode.value = 3
 
   #pipeline_description.EnableABuffer.value = True
-  cam.PipelineDescription.value = pipeline_description
 
+  cam.PipelineDescription.value = pipeline_description
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.4)
   #cam.FarClip.value = 10000
   cam.FarClip.value = 300

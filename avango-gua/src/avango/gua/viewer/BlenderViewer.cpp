@@ -122,7 +122,8 @@ av::gua::BlenderViewer::BlenderViewer()
     : m_mutex(),
       m_condition(),
       m_gua_graphs(),
-      m_current_engine_uuid(""),
+      m_current_engine(""),
+      m_camera_name(""),
       m_image(),
       m_ready(false),
       m_processed(false),
@@ -169,7 +170,7 @@ void av::gua::BlenderViewer::initClass() {
   }
 }
 
-void av::gua::BlenderViewer::frame(std::string const& uuid) {
+void av::gua::BlenderViewer::frame(std::string const& engine, std::string const& camera_name) {
 
   av::ApplicationInstance::get().evaluate();
 
@@ -177,7 +178,8 @@ void av::gua::BlenderViewer::frame(std::string const& uuid) {
   ::gua::Interface::instance()->update();
 #endif
 
-  m_current_engine_uuid = uuid;
+  m_current_engine = engine;
+  m_camera_name = camera_name;
   if (SceneGraphs.getValue().size() > 0) {
     m_gua_graphs.clear();
     for (auto graph : SceneGraphs.getValue()) {
@@ -246,7 +248,7 @@ void av::gua::BlenderViewer::render_thread() {
                                cams.end(),
                                [this](::gua::node::CameraNode * const & c)->bool {
           return "blender_window" == c->config.get_output_window_name()
-              && m_current_engine_uuid == c->get_name();
+              && m_camera_name == c->get_name();
         });
         if (it != cams.end()) {
           auto& cam = *it;
@@ -312,12 +314,13 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
   auto texture_ptr = color->get_buffer(ctx);
   auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
 
-  auto& tmp = m_engines[m_current_engine_uuid];
+  auto& tmp = m_engines[m_current_engine];
 
   if (!tmp.fbo)
     tmp.fbo = ctx.render_device->create_frame_buffer();
 
   if (!tmp.rgba8_texture || tmp.rgba8_texture->descriptor()._size != tex->descriptor()._size) {
+    tmp.fbo->clear_attachments();
     tmp.rgba8_texture = ctx.render_device->create_texture_2d(
         tex->descriptor()._size, scm::gl::FORMAT_RGBA_8);
     tmp.fbo->attach_color_buffer(0, tmp.rgba8_texture, 0, 0);

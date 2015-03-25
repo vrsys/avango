@@ -1,128 +1,15 @@
 import avango
 import avango.script
 from avango.script import field_has_changed
-# import avango.gua
 import avango.gua.skelanim
 from examples_common.GuaVE import GuaVE
-import math
 
+from GroundFollowing import *
 from CharacterControl import *
 from CameraControl import *
-
-character_control = None
-
-class GroundFollowing(avango.script.Script):
-  InTransform = avango.gua.SFMatrix4()
-  OutTransform = avango.gua.SFMatrix4()
-  OutTransform.value = avango.gua.make_identity_mat()
-
-  OffsetToGround = avango.SFFloat()
-  MaxDistanceToGround = avango.SFFloat()
-  SceneGraph = avango.gua.nodes.SceneGraph()
-
-  _velocity_y = 0.0
-  _gravity = -0.00005
-
-  def __init__(self):
-    self.super(GroundFollowing).__init__()
-
-    self.OffsetToGround.value = 0.0
-    self.MaxDistanceToGround.value = 1000.0
-    self.__ray = avango.gua.nodes.RayNode()
-
-
-  def evaluate(self):
-    global character_control
-
-    in_translation = self.InTransform.value.get_translate()
-    in_translation.y += self.OffsetToGround.value
-
-    self.__ray.Transform.value = avango.gua.make_trans_mat(in_translation) *\
-                                 avango.gua.make_rot_mat(-90, 1, 0, 0) *\
-                                 avango.gua.make_scale_mat(1.0, 1.0, self.MaxDistanceToGround.value)
-
-    results = self.SceneGraph.value.ray_test(
-                                     self.__ray,
-                                     avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
-                                     avango.gua.PickingOptions.GET_POSITIONS)
-
-
-    delta_trans = avango.gua.Vec3(0.0,0.0,0.0)
-
-    if len(results.value) > 0:
-
-
-      if character_control.get_current_animation() == "swim":
-       character_control._switch_animation("run_fwd")
-
-      first_hit = results.value[0]
-
-      hit_world = first_hit.Object.value.Transform.value * avango.gua.make_trans_mat(first_hit.Position.value)
-      
-      hit_world_trans = hit_world.get_translate()
-      #hit_world_trans = first_hit.WorldPosition.value
-
-      new_pos = avango.gua.make_trans_mat(hit_world_trans)# * avango.gua.make_trans_mat(0.0,self.OffsetToGround.value, 0.0)
-
-      delta_trans = (new_pos.get_translate() - self.InTransform.value.get_translate())
-
-    else:
-      if character_control.get_current_animation() == "run_fwd":
-       character_control._switch_animation("swim")
-
-    delta_norm = avango.gua.Vec3(delta_trans.x,delta_trans.y,delta_trans.z)
-    length = delta_norm.normalize()
-
-    if length > self._velocity_y and delta_trans.y < 0.0:
-
-      self._velocity_y -= self._gravity
-
-      #self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_norm*0.01)
-      self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_norm*self._velocity_y)
-    else:
-      if delta_trans.y < 0.0:
-        self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans)
-      else:
-        self.OutTransform.value = self.OutTransform.value * avango.gua.make_trans_mat(delta_trans/4.0)#smooth walking stairs
-
-      self._velocity_y = 0.0
-
-      if character_control.get_current_animation() == "jump_loop":
-        character_control._switch_animation("jump_land",0.01, False)
-        character_control.queue_animation("idle", 0.25)
-
-      if character_control.get_current_animation() == "jump_fwd_preland":
-        character_control._switch_animation("jump_fwd_land", 0.1, False)
-        #character_control.queue_animation("idle", 0.25)
-        character_control.queue_animation("run_fwd", 0.25)
-      if character_control.get_current_animation() == "jump_bwd_preland":
-        character_control._switch_animation("jump_bwd_land", 0.1, False)
-        #character_control.queue_animation("idle", 0.25)
-        character_control.queue_animation("run_bwd", 0.25)
-      if character_control.get_current_animation() == "jump_lt_preland":
-        character_control._switch_animation("jump_lt_land", 0.1, False)
-        #character_control.queue_animation("idle", 0.25)
-        character_control.queue_animation("run_lt", 0.25)
-      if character_control.get_current_animation() == "jump_rt_preland":
-        character_control._switch_animation("jump_rt_land", 0.1, False)
-        #character_control.queue_animation("idle", 0.25)
-        character_control.queue_animation("run_rt", 0.25)
-
-    if math.fabs(delta_trans.y)<0.09 and character_control != None:
-      if character_control.get_current_animation() == "jump_fwd_loop":
-        character_control._switch_animation("jump_fwd_preland",0.01, False)
-      if character_control.get_current_animation() == "jump_bwd_loop":
-        character_control._switch_animation("jump_bwd_preland",0.01, False)
-      if character_control.get_current_animation() == "jump_lt_loop":
-        character_control._switch_animation("jump_lt_preland",0.01, False)
-      if character_control.get_current_animation() == "jump_rt_loop":
-        character_control._switch_animation("jump_rt_preland",0.01, False)
-
-
+from DistanceEvents import *
 
 def start():
-
-  global character_control
   
   # setup scenegraph
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
@@ -234,8 +121,6 @@ def start():
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
 
-  ##bob.AnimationMode.value = 1
-
   bob_ground.Children.value = [bob_nav]
   bob_nav.Children.value = [bob]
 
@@ -267,23 +152,6 @@ def start():
   plane.Transform.value *= avango.gua.make_scale_mat(10.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
 
   plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
-
-
-  '''light = avango.gua.nodes.PointLightNode(
-                Name = "light",
-                Color = avango.gua.Color(0.1, 0.1, 0.1),
-                Brightness = 1.0,
-                EnableShadows = True)
-
-  light.Transform.value = avango.gua.make_trans_mat(0.0, 2.0, 2.0) * avango.gua.make_scale_mat(2100, 2100, 2100)
-
-  global light2
-  light2 = avango.gua.nodes.PointLightNode(
-                Name = "light2",
-                Color = avango.gua.Color(1.0, 1.0, 1.0),
-                Brightness = 1.0,
-                EnableShadows = True)'''
-
 
   sunlight = avango.gua.nodes.SunLightNode()
   #sunlight.Color.value = avango.gua.Color(0.8,0.6,0.45)
@@ -320,33 +188,28 @@ def start():
   pipeline_description.Passes.value[3].SSAOIntensity.value = 2.0
   pipeline_description.Passes.value[3].BackgroundMode.value = 1
   pipeline_description.Passes.value[3].BackgroundTexture.value = "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
-  #pipeline_description.Passes.value[3].Background  Texture.value = "data/objects/highrise/skydome_space.jpg"
   pipeline_description.Passes.value[3].ToneMappingMode.value = avango.gua.ToneMappingMode.LINEAR
-
-
   #pipeline_description.EnableABuffer.value = True
 
   cam.PipelineDescription.value = pipeline_description
   cam.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.4)
-  #cam.FarClip.value = 10000
   cam.FarClip.value = 300
   cam.NearClip.value = 0.01
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 0.8, Height = 0.45)
-  #screen.Children.value = [cam, light]
   screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
-  #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen,light2]
+  #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen]
   graph.Root.value.Children.value = [bob_ground,screen, sunlight, plane]
 
   avango.gua.register_window("window", window)
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  #viewer.CameraNodes.value = [cam]
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+  #window.CursorMode.value = avango.gua.CursorMode.DISABLED
 
 
   # setup character control
@@ -358,6 +221,7 @@ def start():
   character_control.bind_transformation(65, "run_bwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(65, "crouch_fwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(65, "crouch_bwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(65, "swim", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
   character_control.key_down(65, "idle","run_lt")
   character_control.key_up(65, "run_lt","idle")
   character_control.key_down(65, "crouch","crouch_lt")
@@ -368,6 +232,7 @@ def start():
   character_control.bind_transformation(68, "run_bwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(68, "crouch_fwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(68, "crouch_bwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, "swim", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
   character_control.key_down(68, "idle","run_rt")
   character_control.key_up(68, "run_rt","idle")
   character_control.key_down(68, "crouch","crouch_rt")
@@ -473,6 +338,11 @@ def start():
   character_control.play_once("jump_bwd","jump_bwd_loop",0.01)
   character_control.play_once("jump_lt","jump_lt_loop",0.01)
   character_control.play_once("jump_rt","jump_rt_loop",0.01)
+  character_control.play_once("jump_land","idle",0.25)
+  character_control.play_once("jump_fwd_land","run_fwd",0.25)
+  character_control.play_once("jump_bwd_land","run_bwd",0.25)
+  character_control.play_once("jump_lt_land","run_lt",0.25)
+  character_control.play_once("jump_rt_land","run_rt",0.25)
 
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
@@ -487,10 +357,24 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 1.0
   )
-
   ground_following.InTransform.connect_from(bob.WorldTransform)
 
   bob_ground.Transform.connect_from(ground_following.OutTransform)
+
+  distance_events = DistanceEvents()
+  distance_events.my_constructor(character_control)
+  distance_events.DistanceToGround.connect_from(ground_following.DistanceToGround)
+  distance_events.smaller_than(0.09, "jump_fwd_loop", "jump_fwd_preland", 0.01, False)
+  distance_events.smaller_than(0.09, "jump_bwd_loop", "jump_bwd_preland", 0.01, False)
+  distance_events.smaller_than(0.09, "jump_lt_loop", "jump_lt_preland", 0.01, False)
+  distance_events.smaller_than(0.09, "jump_rt_loop", "jump_rt_preland", 0.01, False)
+  distance_events.smaller_than(0.01, "jump_loop", "jump_land", 0.01, False)
+  distance_events.smaller_than(0.01, "jump_fwd_preland", "jump_fwd_land", 0.1, False)
+  distance_events.smaller_than(0.01, "jump_bwd_preland", "jump_bwd_land", 0.1, False)
+  distance_events.smaller_than(0.01, "jump_lt_preland", "jump_lt_land", 0.1, False)
+  distance_events.smaller_than(0.01, "jump_rt_preland", "jump_rt_land", 0.1, False)
+  distance_events.smaller_than(ground_following.MaxDistanceToGround.value, "swim", "run_fwd", 0.5, True)
+  distance_events.bigger_than(ground_following.MaxDistanceToGround.value, "run_fwd", "swim", 0.5, True)
 
   timer = avango.nodes.TimeSensor()
 

@@ -53,13 +53,13 @@ class CharacterControl(avango.script.Script):
       for a in self._animations_kd:
         if ascii == a[0] and event == 1 and self._animation_control.get_current_animation() == a[1]:
 
-          self._switch_animation(a[2],a[3])
+          self.switch_animation(a[2],a[3])
 
       # animation trigger key up
       for a in self._animations_ku:
         if ascii == a[0] and event == 0 and self._animation_control.get_current_animation() == a[1]:
           
-          self._switch_animation(a[2],a[3])
+          self.switch_animation(a[2],a[3])
       
 
       # transformation trigger
@@ -114,7 +114,7 @@ class CharacterControl(avango.script.Script):
     self._blend_translations()
     
 
-  def _switch_animation(self, animation, blending_duration = 0.5, loop_mode = True):
+  def switch_animation(self, animation, blending_duration = 0.5, loop_mode = True):
 
     loop_mode_tmp = loop_mode
     next_animation = None
@@ -184,7 +184,7 @@ class CharacterControl(avango.script.Script):
     elif self._animation_control.get_current_animation() != self._wall_detect_idle:
 
       ##self._animation_control.blend_to(self._wall_detect_idle)
-      self._switch_animation(self._wall_detect_idle)
+      self.switch_animation(self._wall_detect_idle)
 
     
 
@@ -217,5 +217,5 @@ class CharacterControl(avango.script.Script):
 
       queued = self._queued_animations.pop(0)
 
-      self._switch_animation(queued[0],queued[1],len(self._queued_animations)==0)
+      self.switch_animation(queued[0],queued[1],len(self._queued_animations)==0)
 

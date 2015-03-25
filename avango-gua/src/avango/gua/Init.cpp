@@ -17,9 +17,7 @@
 #include <avango/gua/scenegraph/NURBSNode.hpp>
 #include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
-#include <avango/gua/scenegraph/PointLightNode.hpp>
-#include <avango/gua/scenegraph/SpotLightNode.hpp>
-#include <avango/gua/scenegraph/SunLightNode.hpp>
+#include <avango/gua/scenegraph/LightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
 #include <avango/gua/scenegraph/TexturedScreenSpaceQuadNode.hpp>
@@ -123,9 +121,7 @@ av::gua::Init::initClass()
 #endif
         // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();
-        av::gua::PointLightNode::initClass();
-        av::gua::SpotLightNode::initClass();
-        av::gua::SunLightNode::initClass();
+        av::gua::LightNode::initClass();
         av::gua::RayNode::initClass();
         av::gua::TexturedQuadNode::initClass();
         av::gua::TexturedScreenSpaceQuadNode::initClass();

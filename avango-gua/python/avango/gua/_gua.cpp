@@ -26,9 +26,7 @@
 #endif
 #include "scenegraph/NURBSNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
-#include "scenegraph/PointLightNode.hpp"
-#include "scenegraph/SpotLightNode.hpp"
-#include "scenegraph/SunLightNode.hpp"
+#include "scenegraph/LightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
 #include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
@@ -156,9 +154,7 @@ BOOST_PYTHON_MODULE(_gua)
 #endif
     // init_NURBSNode();
     init_ScreenNode();
-    init_PointLightNode();
-    init_SpotLightNode();
-    init_SunLightNode();
+    init_LightNode();
     init_RayNode();
     init_TexturedQuadNode();
     init_TexturedScreenSpaceQuadNode();

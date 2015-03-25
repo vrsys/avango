@@ -9,12 +9,20 @@ AV_FIELD_DEFINE(av::gua::skelanim::MFSkeletalAnimationNode);
 
 av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode)
     : GeometryNode(guanode)
+    , m_materialsUserDataHandle{0}
     , m_guaSkeletalAnimationNode(std::dynamic_pointer_cast< ::gua::node::SkeletalAnimationNode>(GeometryNode::getGuaNode()))
 {
+  //crate user data for avango material links
+  auto avGuaMaterials(new av::MultiField<av::Link<av::gua::Material>>::ContainerType());
+  m_materialsUserDataHandle = m_guaSkeletalAnimationNode->add_user_data(avGuaMaterials);
+  //fill field with gua materials
+  for (auto const& material: m_guaSkeletalAnimationNode->get_materials()) {
+        avGuaMaterials->push_back(av::Link<av::gua::Material>(new av::gua::Material(material)));
+  }
 
-  AV_FC_ADD_ADAPTOR_FIELD(Material,
-                      boost::bind(&SkeletalAnimationNode::getMaterialCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setMaterialCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(Materials,
+                      boost::bind(&SkeletalAnimationNode::getMaterialsCB, this, _1),
+                      boost::bind(&SkeletalAnimationNode::setMaterialsCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Animation1,
                       boost::bind(&SkeletalAnimationNode::getAnimation1CB, this, _1),
@@ -35,15 +43,6 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
   AV_FC_ADD_ADAPTOR_FIELD(Time2,
                       boost::bind(&SkeletalAnimationNode::getTime2CB, this, _1),
                       boost::bind(&SkeletalAnimationNode::setTime2CB, this, _1));
-
-  /*AV_FC_ADD_ADAPTOR_FIELD(LoopNr,
-                      boost::bind(&SkeletalAnimationNode::getLoopNrCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setLoopNrCB, this, _1));*/
-
-//  if (guanode->get_material()) {
-//    m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
-//  }
-
 }
 
 //av::gua::skelanim::SkeletalAnimationNode::~SkeletalAnimationNode()
@@ -71,20 +70,38 @@ av::gua::skelanim::SkeletalAnimationNode::getAnimDuration(std::string const& nam
     return m_guaSkeletalAnimationNode->get_duration(name);
 }
 
-void
-av::gua::skelanim::SkeletalAnimationNode::getMaterialCB(const SFMaterial::GetValueEvent& event)
+/* virtual */ void
+av::gua::skelanim::SkeletalAnimationNode::getMaterialsCB(const av::gua::MFMaterial::GetValueEvent& event)
 {
-  if (m_Material.isValid()) {
-    *(event.getValuePtr()) = m_Material;
+  *(event.getValuePtr()) = *static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle));
+}
+
+/* virtual */ void
+av::gua::skelanim::SkeletalAnimationNode::setMaterialsCB(const av::gua::MFMaterial::SetValueEvent& event)
+{
+  if (m_guaSkeletalAnimationNode) {
+
+    m_guaSkeletalAnimationNode->clear_materials();
+    auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
+
+    if (avGuaMaterials) avGuaMaterials->clear();
+
+    const av::gua::MFMaterial::ContainerType &materials(event.getValue());
+
+    for (auto& material: materials) {
+      if (material->getGuaMaterial() != nullptr) {
+        m_guaSkeletalAnimationNode->add_material(material->getGuaMaterial());
+        if (avGuaMaterials) {
+          avGuaMaterials->push_back(material);
+        }
+      }
+    }
+
+  } else {
+    std::cout << "Cannot set materials of null node!" << std::endl;
   }
 }
 
-void
-av::gua::skelanim::SkeletalAnimationNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
-{
-  m_Material = event.getValue();
-//  m_guaSkeletalAnimationNode->set_material(m_Material->getGuaMaterial());
-}
 
 void
 av::gua::skelanim::SkeletalAnimationNode::getAnimation1CB(const SFString::GetValueEvent& event)
@@ -143,15 +160,3 @@ av::gua::skelanim::SkeletalAnimationNode::setTime2CB(const SFFloat::SetValueEven
 {
   m_guaSkeletalAnimationNode->set_time_2(event.getValue());
 }
-
-/*void
-av::gua::skelanim::SkeletalAnimationNode::getLoopNrCB(const SFInt::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_loop_nr();
-}
-
-void
-av::gua::skelanim::SkeletalAnimationNode::setLoopNrCB(const SFInt::SetValueEvent& event)
-{
-  m_guaSkeletalAnimationNode->set_loop_nr(event.getValue());
-}*/

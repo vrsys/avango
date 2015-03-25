@@ -44,10 +44,9 @@ namespace av
   //      virtual ~SkeletalAnimationNode();
 
       public:
-
-        SFMaterial Material;
-        virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
-        virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+        MultiField<Link<Material>> Materials;
+        virtual void getMaterialsCB(const MultiField<Link<Material>>::GetValueEvent& event);
+        virtual void setMaterialsCB(const MultiField<Link<Material>>::SetValueEvent& event);
 
         SFString Animation1;
         virtual void getAnimation1CB(const SFString::GetValueEvent& event);
@@ -84,7 +83,7 @@ namespace av
       private:
 
         std::shared_ptr< ::gua::node::SkeletalAnimationNode> m_guaSkeletalAnimationNode;
-        av::Link< av::gua::Material> m_Material;
+          unsigned m_materialsUserDataHandle;
 
         SkeletalAnimationNode(const SkeletalAnimationNode&);
         SkeletalAnimationNode& operator=(const SkeletalAnimationNode&);

@@ -9,12 +9,7 @@ import math
 from CharacterControl import *
 from CameraControl import *
 
-bob = None
-#light2 = None
-cubes = []
 character_control = None
-
-
 
 class GroundFollowing(avango.script.Script):
   InTransform = avango.gua.SFMatrix4()
@@ -37,9 +32,6 @@ class GroundFollowing(avango.script.Script):
 
 
   def evaluate(self):
-    global bob
-    #global light2
-    global cubes
     global character_control
 
     in_translation = self.InTransform.value.get_translate()
@@ -60,7 +52,7 @@ class GroundFollowing(avango.script.Script):
     if len(results.value) > 0:
 
 
-      if bob and character_control.get_current_animation() == "swim":
+      if character_control.get_current_animation() == "swim":
        character_control._switch_animation("run_fwd")
 
       first_hit = results.value[0]
@@ -72,13 +64,10 @@ class GroundFollowing(avango.script.Script):
 
       new_pos = avango.gua.make_trans_mat(hit_world_trans)# * avango.gua.make_trans_mat(0.0,self.OffsetToGround.value, 0.0)
 
-      '''if light2 != None:
-        light2.Transform.value = new_pos * avango.gua.make_trans_mat(0.0,0.2,0.0)'''
-
       delta_trans = (new_pos.get_translate() - self.InTransform.value.get_translate())
 
     else:
-      if bob and character_control.get_current_animation() == "run_fwd":
+      if character_control.get_current_animation() == "run_fwd":
        character_control._switch_animation("swim")
 
     delta_norm = avango.gua.Vec3(delta_trans.x,delta_trans.y,delta_trans.z)
@@ -104,17 +93,35 @@ class GroundFollowing(avango.script.Script):
 
       if character_control.get_current_animation() == "jump_fwd_preland":
         character_control._switch_animation("jump_fwd_land", 0.1, False)
-        character_control.queue_animation("idle", 0.25)
+        #character_control.queue_animation("idle", 0.25)
+        character_control.queue_animation("run_fwd", 0.25)
+      if character_control.get_current_animation() == "jump_bwd_preland":
+        character_control._switch_animation("jump_bwd_land", 0.1, False)
+        #character_control.queue_animation("idle", 0.25)
+        character_control.queue_animation("run_bwd", 0.25)
+      if character_control.get_current_animation() == "jump_lt_preland":
+        character_control._switch_animation("jump_lt_land", 0.1, False)
+        #character_control.queue_animation("idle", 0.25)
+        character_control.queue_animation("run_lt", 0.25)
+      if character_control.get_current_animation() == "jump_rt_preland":
+        character_control._switch_animation("jump_rt_land", 0.1, False)
+        #character_control.queue_animation("idle", 0.25)
+        character_control.queue_animation("run_rt", 0.25)
 
     if math.fabs(delta_trans.y)<0.09 and character_control != None:
       if character_control.get_current_animation() == "jump_fwd_loop":
         character_control._switch_animation("jump_fwd_preland",0.01, False)
+      if character_control.get_current_animation() == "jump_bwd_loop":
+        character_control._switch_animation("jump_bwd_preland",0.01, False)
+      if character_control.get_current_animation() == "jump_lt_loop":
+        character_control._switch_animation("jump_lt_preland",0.01, False)
+      if character_control.get_current_animation() == "jump_rt_loop":
+        character_control._switch_animation("jump_rt_preland",0.01, False)
 
 
 
 def start():
 
-  global bob
   global character_control
   
   # setup scenegraph
@@ -141,6 +148,10 @@ def start():
          "data/animations/Run_Fwd_Rif.FBX","run_fwd", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
          "data/animations/Run_Bwd_Rif.FBX","run_bwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+         "data/animations/Run_Lt_Rif.FBX","run_lt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+         "data/animations/Run_Rt_Rif.FBX","run_rt", avango.gua.LoaderFlags.DEFAULTS)
   
   # taunts:
   loader.load_animation(bob,
@@ -167,6 +178,10 @@ def start():
           "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
           "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Crouch_Lt_Rif.FBX","crouch_lt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Crouch_Rt_Rif.FBX","crouch_rt", avango.gua.LoaderFlags.DEFAULTS)
   
   # jump idle:
   loader.load_animation(bob,
@@ -177,8 +192,6 @@ def start():
           "data/animations/Jump_Idle_Rif_Land.FBX","jump_land", avango.gua.LoaderFlags.DEFAULTS)
   
   # jump forward: 
-  '''loader.load_animation(bob,
-          "data/animations/Jump_Fwd_Rif.FBX","jump_fwd", avango.gua.LoaderFlags.DEFAULTS)'''
   loader.load_animation(bob,
           "data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
@@ -186,7 +199,37 @@ def start():
   loader.load_animation(bob,
           "data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
-          "data/animations/Jump_Idle_Rif_Land.FBX","jump_fwd_land", avango.gua.LoaderFlags.DEFAULTS)
+          "data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land", avango.gua.LoaderFlags.DEFAULTS)
+
+  # jump backward: 
+  loader.load_animation(bob,
+          "data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land", avango.gua.LoaderFlags.DEFAULTS)
+
+  # jump left: 
+  loader.load_animation(bob,
+          "data/animations/Jump_Lt_Rif_Start.FBX","jump_lt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land", avango.gua.LoaderFlags.DEFAULTS)
+
+  # jump right: 
+  loader.load_animation(bob,
+          "data/animations/Jump_Rt_Rif_Start.FBX","jump_rt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
+          "data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land", avango.gua.LoaderFlags.DEFAULTS)
 
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
@@ -211,9 +254,20 @@ def start():
     child.Material.value.EnableBackfaceCulling.value = False
     child.Material.value.set_uniform("Roughness",0.8)'''
 
-
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
+
+  plane = tri_mesh_loader.create_geometry_from_file("cube",
+                                            "data/objects/cube2.obj",
+                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
+                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
+                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
+                                            | avango.gua.LoaderFlags.MAKE_PICKABLE
+                                            | avango.gua.LoaderFlags.LOAD_MATERIALS)
+  plane.Transform.value *= avango.gua.make_scale_mat(10.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
+
+  plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
+
 
   '''light = avango.gua.nodes.PointLightNode(
                 Name = "light",
@@ -232,9 +286,11 @@ def start():
 
 
   sunlight = avango.gua.nodes.SunLightNode()
-  sunlight.Color.value = avango.gua.Color(0.8,0.6,0.45)
-  sunlight.Brightness.value = 3
-  sunlight.Transform.value = avango.gua.make_rot_mat(-80, 1.0, 0.0, 0.0)
+  #sunlight.Color.value = avango.gua.Color(0.8,0.6,0.45)
+  sunlight.Brightness.value = 5
+  #sunlight.Transform.value = avango.gua.make_rot_mat(-80, 1.0, 0.0, 0.0)
+  sunlight.Transform.value = avango.gua.make_rot_mat(119.5, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0)
+  sunlight.Color.value = avango.gua.Color(245.0/255.0 , 246.0/255.0, 178.0/255.0)
   graph.Root.value.Children.value.append(sunlight)
 
   size = avango.gua.Vec2ui(2560, 1440)
@@ -256,6 +312,7 @@ def start():
             avango.gua.skelanim.nodes.SkeletalAnimationPassDescription(),
             avango.gua.nodes.ResolvePassDescription(),
             avango.gua.nodes.SSAAPassDescription(),
+            avango.gua.nodes.DebugViewPassDescription(),
           ])
 
   pipeline_description.Passes.value[3].EnableSSAO.value = True
@@ -264,7 +321,8 @@ def start():
   pipeline_description.Passes.value[3].BackgroundMode.value = 1
   pipeline_description.Passes.value[3].BackgroundTexture.value = "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
   #pipeline_description.Passes.value[3].Background  Texture.value = "data/objects/highrise/skydome_space.jpg"
-  pipeline_description.Passes.value[3].ToneMappingMode.value = 3
+  pipeline_description.Passes.value[3].ToneMappingMode.value = avango.gua.ToneMappingMode.LINEAR
+
 
   #pipeline_description.EnableABuffer.value = True
 
@@ -280,7 +338,7 @@ def start():
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
   #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen,light2]
-  graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen, sunlight]
+  graph.Root.value.Children.value = [bob_ground,screen, sunlight, plane]
 
   avango.gua.register_window("window", window)
 
@@ -296,22 +354,45 @@ def start():
   character_control.my_constructor(bob,bob_nav,window)
 
   # A
-  character_control.bind_transformation(65, avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(65, "run_fwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(65, "run_bwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(65, "crouch_fwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(65, "crouch_bwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
+  character_control.key_down(65, "idle","run_lt")
+  character_control.key_up(65, "run_lt","idle")
+  character_control.key_down(65, "crouch","crouch_lt")
+  character_control.key_up(65, "crouch_lt","crouch")
+
   # D
-  character_control.bind_transformation(68, avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, "run_fwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, "run_bwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, "crouch_fwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_transformation(68, "crouch_bwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
+  character_control.key_down(68, "idle","run_rt")
+  character_control.key_up(68, "run_rt","idle")
+  character_control.key_down(68, "crouch","crouch_rt")
+  character_control.key_up(68, "crouch_rt","crouch")
+
 
   # W
   character_control.key_down(87, "idle","run_fwd")
   character_control.key_up(87, "run_fwd","idle")
   character_control.key_down(87, "crouch","crouch_fwd")
   character_control.key_up(87, "crouch_fwd","crouch")
-  #character_control.key_up(87, "jump_fwd","idle")
+  character_control.bind_transformation(87, "run_rt", avango.gua.make_trans_mat(0.0,0.0,0.025))
+  character_control.bind_transformation(87, "run_lt", avango.gua.make_trans_mat(0.0,0.0,0.025))
+  character_control.bind_transformation(87, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
+  character_control.bind_transformation(87, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
 
   # S
   character_control.key_down(83, "idle","run_bwd")
   character_control.key_up(83, "run_bwd","idle")
   character_control.key_down(83, "crouch","crouch_bwd")
   character_control.key_up(83, "crouch_bwd","crouch")
+  character_control.bind_transformation(83, "run_rt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
+  character_control.bind_transformation(83, "run_lt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
+  character_control.bind_transformation(83, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
+  character_control.bind_transformation(83, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
 
   # C
   character_control.key_down(67, "idle","crouch",0.2)
@@ -320,6 +401,10 @@ def start():
   character_control.key_up(67, "crouch_fwd","run_fwd")
   character_control.key_down(67, "run_bwd","crouch_bwd")
   character_control.key_up(67, "crouch_bwd","run_bwd")
+  character_control.key_down(67, "run_lt","crouch_lt")
+  character_control.key_up(67, "crouch_lt","run_lt")
+  character_control.key_down(67, "run_rt","crouch_rt")
+  character_control.key_up(67, "crouch_rt","run_rt")
 
   # F
   character_control.key_down(70, "idle","taunt1")
@@ -349,23 +434,45 @@ def start():
   # SPACE BAR
   character_control.key_down(32, "idle","jump",0.01)
   character_control.key_down(32, "run_fwd","jump_fwd",0.25)
-  #character_control.key_up(32, "jump","jump_loop",0.25)
-  #character_control.key_up(32, "jump_fwd","jump_fwd_loop",0.25)
-  #character_control.bind_transformation(32, avango.gua.make_trans_mat(0.0, 0.1, 0.0))
+  character_control.key_down(32, "run_bwd","jump_bwd",0.25)
+  character_control.key_down(32, "run_lt","jump_lt",0.25)
+  character_control.key_down(32, "run_rt","jump_rt",0.25)
 
+  # animation dependend translations:
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
   character_control.bind_translation("run_bwd",avango.gua.Vec3(0.0,0.0,-0.05))
+  character_control.bind_translation("run_lt",avango.gua.Vec3(0.05,0.0,0.0))
+  character_control.bind_translation("run_rt",avango.gua.Vec3(-0.05,0.0,0.0))
   character_control.bind_translation("swim",avango.gua.Vec3(0.0,0.0,0.05))
-  character_control.bind_translation("crouch_fwd",avango.gua.Vec3(0.0,0.0,0.02))
-  character_control.bind_translation("crouch_bwd",avango.gua.Vec3(0.0,0.0,-0.02))
+  character_control.bind_translation("crouch_fwd",avango.gua.Vec3(0.0,0.0,0.035))
+  character_control.bind_translation("crouch_bwd",avango.gua.Vec3(0.0,0.0,-0.035))
+  character_control.bind_translation("crouch_lt",avango.gua.Vec3(0.035,0.0,0.0))
+  character_control.bind_translation("crouch_rt",avango.gua.Vec3(-0.035,0.0,0.0))
   character_control.bind_translation("jump",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_loop",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_fwd",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_loop",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_preland",avango.gua.Vec3(0.0, 0.08, 0.04))
+  character_control.bind_translation("jump_fwd_land",avango.gua.Vec3(0.0, 0.0, 0.04))
+  character_control.bind_translation("jump_bwd",avango.gua.Vec3(0.0, 0.08, -0.04))
+  character_control.bind_translation("jump_bwd_loop",avango.gua.Vec3(0.0, 0.08, -0.04))
+  character_control.bind_translation("jump_bwd_preland",avango.gua.Vec3(0.0, 0.08, -0.04))
+  character_control.bind_translation("jump_bwd_land",avango.gua.Vec3(0.0, 0.0, -0.04))
+  character_control.bind_translation("jump_lt",avango.gua.Vec3(0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_lt_loop",avango.gua.Vec3(0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_lt_preland",avango.gua.Vec3(0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_lt_land",avango.gua.Vec3(0.04, 0.0, 0.0))
+  character_control.bind_translation("jump_rt",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_rt_loop",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_rt_preland",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  character_control.bind_translation("jump_rt_land",avango.gua.Vec3(-0.04, 0.0, 0.0))
 
+  # animations only played once and followed by another one
   character_control.play_once("jump","jump_loop",0.01)
   character_control.play_once("jump_fwd","jump_fwd_loop",0.01)
+  character_control.play_once("jump_bwd","jump_bwd_loop",0.01)
+  character_control.play_once("jump_lt","jump_lt_loop",0.01)
+  character_control.play_once("jump_rt","jump_rt_loop",0.01)
 
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
@@ -386,8 +493,6 @@ def start():
   bob_ground.Transform.connect_from(ground_following.OutTransform)
 
   timer = avango.nodes.TimeSensor()
-  #character_control.TimeIn.connect_from(timer.Time)
-  #camera_control.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

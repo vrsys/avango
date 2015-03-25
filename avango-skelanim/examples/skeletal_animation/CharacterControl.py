@@ -64,17 +64,18 @@ class CharacterControl(avango.script.Script):
 
       # transformation trigger
       for t in self._transformations:
-        if ascii == t[0] and event == 1:
-          self._delta_transformation = self._delta_transformation * t[1]
-        if ascii == t[0] and event == 0:
-          self._delta_transformation = self._delta_transformation * avango.gua.make_inverse_mat(t[1])
+        if ascii == t[0] and event == 1 and self._animation_control.get_current_animation() == t[1]:
+          self._delta_transformation = self._delta_transformation * t[2]
+        if ascii == t[0] and event == 0 and self._animation_control.get_current_animation() == t[1]:
+          if self._delta_transformation != avango.gua.make_identity_mat():
+            self._delta_transformation = self._delta_transformation * avango.gua.make_inverse_mat(t[2])
 
 
     application_window.on_key_press(handle_key)
 		
 
-  def bind_transformation(self, key_nr, transform_matrix):
-  	self._transformations.append((key_nr, transform_matrix))
+  def bind_transformation(self, key_nr, current_animation, transform_matrix):
+  	self._transformations.append((key_nr, current_animation, transform_matrix))
 
   def key_down(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
     self._animations_kd.append((key_nr, current_animation,next_animation, blend_duration))
@@ -142,6 +143,8 @@ class CharacterControl(avango.script.Script):
     # clear queue when looped animation is triggered
     if loop_mode_tmp:
       self._queued_animations = []
+
+    self._delta_transformation = avango.gua.make_identity_mat()
 
 
   '''def _check_animation_changes(self):
@@ -214,5 +217,5 @@ class CharacterControl(avango.script.Script):
 
       queued = self._queued_animations.pop(0)
 
-      self._switch_animation(queued[0],queued[1],False)
+      self._switch_animation(queued[0],queued[1],len(self._queued_animations)==0)
 

@@ -131,9 +131,14 @@ def start():
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_obj_separated.fbx",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower_separated.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
+
+  environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment_separated.fbx",
+                                            avango.gua.LoaderFlags.MAKE_PICKABLE|
+                                            avango.gua.LoaderFlags.LOAD_MATERIALS)
+  environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(100.0)
 
   '''for child in medieval_harbour.Children.value:
     child.Material.value.EnableBackfaceCulling.value = False
@@ -201,7 +206,7 @@ def start():
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
   #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen]
-  graph.Root.value.Children.value = [bob_ground,screen, sunlight, plane]
+  graph.Root.value.Children.value = [bob_ground,screen, sunlight, medieval_harbour, environment]
 
   avango.gua.register_window("window", window)
 
@@ -349,7 +354,8 @@ def start():
 
   # setup camera control
   camera_control = CameraControl()
-  camera_control.my_constructor(screen,bob,window)
+  camera_control.my_constructor(bob,window)
+  screen.Transform.connect_from(camera_control.OutTransform)
 
   # setup ground following
   ground_following = GroundFollowing(

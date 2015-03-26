@@ -6,6 +6,10 @@ def clamp(minimum, x, maximum):
   return max(minimum, min(x, maximum))
 
 class CameraControl(avango.script.Script):
+
+  OutTransform = avango.gua.SFMatrix4()
+  OutTransform.value = avango.gua.make_identity_mat()
+
   _mouse_delta = avango.gua.Vec2(0.0,.0)     # how much mouse was moved since last frame
   _camera_offset = 0.01
   _camera_rotation = avango.gua.Vec2(0.0,180.0)
@@ -17,9 +21,8 @@ class CameraControl(avango.script.Script):
 
     self.super(CameraControl).__init__()
 
-  def my_constructor(self, screen_node, target_node, application_window):
+  def my_constructor(self, target_node, application_window):
 
-    self._screen = screen_node
     self._target = target_node
 
     def handle_mouse(m): 
@@ -47,7 +50,7 @@ class CameraControl(avango.script.Script):
     self._camera_rotation.x = clamp(-90, self._camera_rotation.x, 10)
     self._camera_rotation.y -= self._rotation_speed * self._mouse_delta.x
 
-    self._screen.Transform.value = avango.gua.make_trans_mat(target_trans + avango.gua.Vec3(0.0,target_height,0.0)) * \
+    self.OutTransform.value = avango.gua.make_trans_mat(target_trans + avango.gua.Vec3(0.0,target_height,0.0)) * \
       avango.gua.make_rot_mat(self._camera_rotation.y, 0.0,1.0,0.0) * \
       avango.gua.make_rot_mat(self._camera_rotation.x, 1.0,0.0,0.0) * \
       avango.gua.make_trans_mat(0,0, self._camera_offset * target_height)

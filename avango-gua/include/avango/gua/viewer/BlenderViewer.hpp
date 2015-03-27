@@ -98,13 +98,11 @@ namespace av
       {
         scm::gl::frame_buffer_ptr fbo = nullptr;
         scm::gl::texture_2d_ptr rgba8_texture = nullptr;
+        unsigned blendertex_id = 0;
+        bool resize = true;
       };
       std::map<std::string, EngineData> m_engines;
-      //boost::lockfree::spsc_queue<std::string> m_unregister_queue;
       boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128> > m_unregister_queue;
-
-      //scm::gl::frame_buffer_ptr tmp_fbo = nullptr;
-      //scm::gl::texture_2d_ptr tmp_rgba8_texture = nullptr;
     };
 
     typedef SingleField<Link<BlenderViewer> > SFBlenderViewer;

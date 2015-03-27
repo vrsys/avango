@@ -56,25 +56,33 @@ av::gua::BlenderViewer::Image screenshot(
   return img;
 }
 
-void draw_image(av::gua::BlenderViewer::Image const& im) {
+void draw_image(av::gua::BlenderViewer::Image const& im, GLuint texid, bool resize) {
   glColor3f(1.0f, 1.0f, 1.0f);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  GLuint texid;
-  glGenTextures(1, &texid);
   glBindTexture(GL_TEXTURE_2D, texid);
   //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, w, h, 0, GL_RGBA,
   //GL_HALF_FLOAT, data_pointer);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               GL_RGBA,
-               im.width,
-               im.height,
-               0,
-               im.gl_base_format,
-               im.gl_type,
-               im.data.data());
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  if (resize) {
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 im.width,
+                 im.height,
+                 0,
+                 im.gl_base_format,
+                 im.gl_type,
+                 im.data.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  } else {
+    glTexSubImage2D(GL_TEXTURE_2D,
+      0, 0, 0,
+      im.width,
+      im.height,
+      im.gl_base_format,
+      im.gl_type,
+      im.data.data());
+  }
 
   glEnable(GL_TEXTURE_2D);
 
@@ -108,7 +116,6 @@ void draw_image(av::gua::BlenderViewer::Image const& im) {
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisable(GL_TEXTURE_2D);
-  glDeleteTextures(1, &texid);
 }
 
 }
@@ -216,7 +223,13 @@ void av::gua::BlenderViewer::frame(std::string const& engine, std::string const&
   }
 #endif
 
-  draw_image(m_image);
+  auto& engine_data = m_engines[m_current_engine];
+  if (!engine_data.blendertex_id) {
+    glGenTextures(1, &engine_data.blendertex_id);
+  }
+
+  draw_image(m_image, engine_data.blendertex_id, engine_data.resize);
+  engine_data.resize = false;
 }
 
 void av::gua::BlenderViewer::render_thread() {
@@ -334,6 +347,7 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
     tmp.rgba8_texture = ctx.render_device->create_texture_2d(
         tex->descriptor()._size, scm::gl::FORMAT_RGBA_8);
     tmp.fbo->attach_color_buffer(0, tmp.rgba8_texture, 0, 0);
+    tmp.resize = true;
   }
 
   ctx.render_context->copy_color_buffer(pipe.get_gbuffer().get_fbo_read() , tmp.fbo, 0);
@@ -341,5 +355,8 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
 }
 
 void av::gua::BlenderViewer::unregister_engine(std::string const& engine) {
+  auto& engine_data = m_engines[engine];
+  glDeleteTextures(1, &engine_data.blendertex_id);
+  engine_data.blendertex_id = 0;
   m_unregister_queue.push(engine);
 }

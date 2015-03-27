@@ -94,7 +94,8 @@ transform2 = avango.gua.nodes.TransformNode(
   Children = [monkey2]
 )
 
-light = avango.gua.nodes.PointLightNode(
+light = avango.gua.nodes.LightNode(
+  Type=avango.gua.LightType.POINT,
   Name = "light",
   Color = avango.gua.Color(1.0, 1.0, 1.0),
   Brightness = 100.0,

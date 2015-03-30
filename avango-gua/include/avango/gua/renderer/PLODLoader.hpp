@@ -60,7 +60,8 @@ namespace av
                                      float bundle_radius,
                                      float max_distance,
                                      unsigned int max_depth,
-                                     unsigned int surfel_skip) const;
+                                     unsigned int surfel_skip,
+                                     float aabb_scale) const;
   public:
 
       SFInt   UploadBudget;

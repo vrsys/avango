@@ -12,13 +12,11 @@ class CharacterControl(avango.script.Script):
   _animations_kd = []
   _animations_ku = []
   _transformations = []
+  _delta_transformations = []
   _translations = {}
-
-  _delta_transformation = avango.gua.make_identity_mat()
 
   _current_translation = avango.gua.Vec3(0.0,0.0,0.0)
   _last_translation = avango.gua.Vec3(0.0,0.0,0.0)
-
 
   # wall detection
   _scene_graph = None
@@ -65,17 +63,18 @@ class CharacterControl(avango.script.Script):
       # transformation trigger
       for t in self._transformations:
         if ascii == t[0] and event == 1 and self._animation_control.get_current_animation() == t[1]:
-          self._delta_transformation = self._delta_transformation * t[2]
+          self._delta_transformations[t[2]] = t[3]
         if ascii == t[0] and event == 0 and self._animation_control.get_current_animation() == t[1]:
-          if self._delta_transformation != avango.gua.make_identity_mat():
-            self._delta_transformation = self._delta_transformation * avango.gua.make_inverse_mat(t[2])
+          self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
 
 
     application_window.on_key_press(handle_key)
 		
 
   def bind_transformation(self, key_nr, current_animation, transform_matrix):
-  	self._transformations.append((key_nr, current_animation, transform_matrix))
+    delta_list_id = len(self._delta_transformations)
+    self._delta_transformations.append(avango.gua.make_identity_mat())
+    self._transformations.append((key_nr, current_animation, delta_list_id, transform_matrix))
 
   def key_down(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
     self._animations_kd.append((key_nr, current_animation,next_animation, blend_duration))
@@ -109,7 +108,8 @@ class CharacterControl(avango.script.Script):
     #self._check_animation_changes()
 
     # add transformation delta from keys
-    self._navigation.Transform.value = self._navigation.Transform.value * self._delta_transformation
+    for mat in self._delta_transformations:
+      self._navigation.Transform.value = self._navigation.Transform.value * mat
     
     self._blend_translations()
     
@@ -144,7 +144,8 @@ class CharacterControl(avango.script.Script):
     if loop_mode_tmp:
       self._queued_animations = []
 
-    self._delta_transformation = avango.gua.make_identity_mat()
+    for index in range(0,len(self._delta_transformations)):
+      self._delta_transformations[index] = avango.gua.make_identity_mat()
 
 
   '''def _check_animation_changes(self):

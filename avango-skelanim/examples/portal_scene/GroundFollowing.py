@@ -23,6 +23,7 @@ class GroundFollowing(avango.script.Script):
     self.MaxDistanceToGround.value = 1000.0
     self.__ray = avango.gua.nodes.RayNode()
 
+    self.always_evaluate(True)
 
   def evaluate(self):
 

@@ -99,6 +99,7 @@ class AnimationControl(avango.script.Script):
         
         self._state = State.blending
 
+        self.evaluate()
 
     def evaluate(self):
 

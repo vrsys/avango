@@ -158,13 +158,13 @@ def start():
 
   plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
 
-  sunlight = avango.gua.nodes.SunLightNode()
-  #sunlight.Color.value = avango.gua.Color(0.8,0.6,0.45)
-  sunlight.Brightness.value = 5
-  #sunlight.Transform.value = avango.gua.make_rot_mat(-80, 1.0, 0.0, 0.0)
-  sunlight.Transform.value = avango.gua.make_rot_mat(119.5, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0)
-  sunlight.Color.value = avango.gua.Color(245.0/255.0 , 246.0/255.0, 178.0/255.0)
-  graph.Root.value.Children.value.append(sunlight)
+  sunlight = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.SUN,
+      Name="light",
+      Color=avango.gua.Color(245.0/255.0 , 246.0/255.0, 178.0/255.0),
+      Brightness=5.0,
+      Transform=(avango.gua.make_rot_mat(119.5, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0))
+  )
 
   size = avango.gua.Vec2ui(2560, 1440)
 
@@ -172,6 +172,7 @@ def start():
     Size = size,
     LeftResolution = size
   )
+  window.CursorMode.value = 2
 
   cam = avango.gua.nodes.CameraNode(LeftScreenPath = "/screen",
                                     SceneGraph = "scenegraph",
@@ -206,7 +207,7 @@ def start():
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
   #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen]
-  graph.Root.value.Children.value = [bob_ground,screen, sunlight, medieval_harbour, environment]
+  graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, environment, sunlight]
 
   avango.gua.register_window("window", window)
 

@@ -61,6 +61,7 @@ namespace av
       SFString WarpMatrixRedLeft;
       SFString WarpMatrixGreenLeft;
       SFString WarpMatrixBlueLeft;
+      SFFloat  RenderingFPS;
 
       virtual void open();
       virtual bool is_open() const;
@@ -112,6 +113,9 @@ namespace av
 
       virtual void getWarpMatrixBlueLeft(const SFString::GetValueEvent& event);
       virtual void setWarpMatrixBlueLeft(const SFString::SetValueEvent& event);
+
+      virtual void getRenderingFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setRenderingFPSCB(const SFFloat::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::WindowBase.

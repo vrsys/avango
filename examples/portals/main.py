@@ -102,7 +102,8 @@ def start():
   portal_scene.Root.value.Children.value.append(box)
 
 
-  light = avango.gua.nodes.SunLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.SUN,
     Name = "sun",
     Color = avango.gua.Color(1.0, 1.0, 0.5),
     Brightness = 3,

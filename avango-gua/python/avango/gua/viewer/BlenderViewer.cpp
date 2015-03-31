@@ -25,6 +25,7 @@ void init_BlenderViewer()
          av::Link<av::gua::BlenderViewer>,
          bases<av::FieldContainer>, boost::noncopyable> ("BlenderViewer", "docstring", no_init)
          .def("frame", &av::gua::BlenderViewer::frame)
+         .def("unregister_engine", &av::gua::BlenderViewer::unregister_engine)
          ;
 
     // register as a field

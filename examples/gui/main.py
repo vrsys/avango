@@ -8,12 +8,13 @@ from examples_common.GuaVE import GuaVE
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
   FPSResource = avango.gua.gui.SFGuiResource()
-  Camera = avango.gua.SFCameraNode()
+  Window = avango.gua.SFWindowBase()
+  Viewer = avango.gua.SFViewer()
 
   @field_has_changed(TimeIn)
   def update_fps(self):
-    application_string = "{:5.2f}".format(self.Camera.value.ApplicationFPS.value)
-    rendering_string = "{:5.2f}".format(self.Camera.value.RenderingFPS.value)
+    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
+    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
     fps_string = "FPS: " + application_string + " " + rendering_string
     self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
@@ -31,6 +32,7 @@ def start():
 
   web_mat = avango.gua.nodes.Material()
   web_mat.set_uniform("ColorMap", "google")
+  web_mat.set_uniform("Emissivity", 1.0)
 
   transform = avango.gua.nodes.TransformNode()
 
@@ -91,7 +93,8 @@ def start():
   google_geom.Children.value.append(address_bar_quad)
 
 
-  light = avango.gua.nodes.PointLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Transform = avango.gua.make_trans_mat(-2, 3, 5) * avango.gua.make_scale_mat(10)
@@ -174,18 +177,19 @@ def start():
   window.on_move_cursor(handle_cursor)
   window.on_scroll(handle_scroll)
 
-  timer = avango.nodes.TimeSensor()
-
-  fps_updater = FPSUpdater(
-    FPSResource = fps,
-    Camera = cam
-  )
-  fps_updater.TimeIn.connect_from(timer.Time)
-
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+
+  timer = avango.nodes.TimeSensor()
+
+  fps_updater = FPSUpdater(
+    FPSResource=fps,
+    Window=window,
+    Viewer=viewer
+  )
+  fps_updater.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

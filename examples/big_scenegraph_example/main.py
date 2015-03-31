@@ -36,7 +36,8 @@ def add_lights(graph, count):
 
     sphere_geometry.Transform.value = avango.gua.make_scale_mat(0.04, 0.04, 0.04)
 
-    point_light = avango.gua.nodes.PointLightNode(
+    point_light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.POINT,
       Name = "light",
       Color = avango.gua.Color(1, 1, 1),
       Brightness = 1,

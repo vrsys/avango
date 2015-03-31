@@ -1,12 +1,12 @@
-#ifndef AVANGO_GUA_SPOT_LIGHT_NODE_HPP
-#define AVANGO_GUA_SPOT_LIGHT_NODE_HPP
+#ifndef AVANGO_GUA_LIGHT_NODE_HPP
+#define AVANGO_GUA_LIGHT_NODE_HPP
 
 /**
  * \file
  * \ingroup av_gua
  */
 
-#include <gua/node/SpotLightNode.hpp>
+#include <gua/node/LightNode.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/Node.hpp>
@@ -16,31 +16,38 @@ namespace av
   namespace gua
   {
     /**
-     * Wrapper for ::gua::SpotLightNode
+     * Wrapper for ::gua::LightNode
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL SpotLightNode : public av::gua::Node
+    class AV_GUA_DLL LightNode : public av::gua::Node
     {
       AV_FC_DECLARE();
 
     public:
 
+      enum LightTypeEnum {
+        POINT = static_cast<unsigned>(::gua::node::LightNode::Type::POINT),
+        SPOT = static_cast<unsigned>(::gua::node::LightNode::Type::SPOT),
+        SUN = static_cast<unsigned>(::gua::node::LightNode::Type::SUN)
+      };
+
       /**
-       * Constructor. When called without arguments, a new ::gua::SpotLightNode is created.
-       * Otherwise, the given ::gua::SpotLightNode is used.
+       * Constructor. When called without arguments, a new ::gua::LightNode is created.
+       * Otherwise, the given ::gua::LightNode is used.
        */
-      SpotLightNode(std::shared_ptr< ::gua::node::SpotLightNode> guanode = std::shared_ptr< ::gua::node::SpotLightNode>(new ::gua::node::SpotLightNode("")));
+      LightNode(std::shared_ptr< ::gua::node::LightNode> guanode = std::shared_ptr< ::gua::node::LightNode>(new ::gua::node::LightNode("")));
 
     protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~SpotLightNode();
+      virtual ~LightNode() {}
 
     public:
 
+      SFUInt  Type;
       SFColor Color;
       SFFloat Brightness;
       SFFloat Falloff;
@@ -52,12 +59,19 @@ namespace av
       SFFloat ShadowOffset;
       SFUInt  ShadowMapSize;
 
+      // new
+      MFFloat ShadowCascadedSplits;
+      SFFloat ShadowNearClippingInSunDirection;
+
       /**
-       * Get the wrapped ::gua::SpotLightNode.
+       * Get the wrapped ::gua::LightNode.
        */
-      std::shared_ptr< ::gua::node::SpotLightNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::LightNode> getGuaNode() const;
 
     public:
+
+      virtual void getTypeCB(const SFUInt::GetValueEvent& event);
+      virtual void setTypeCB(const SFUInt::SetValueEvent& event);
 
       virtual void getColorCB(const SFColor::GetValueEvent& event);
       virtual void setColorCB(const SFColor::SetValueEvent& event);
@@ -89,24 +103,30 @@ namespace av
       virtual void getShadowMapSizeCB(const SFUInt::GetValueEvent& event);
       virtual void setShadowMapSizeCB(const SFUInt::SetValueEvent& event);
 
+      virtual void getShadowCascadedSplitsCB(const MFFloat::GetValueEvent& event);
+      virtual void setShadowCascadedSplitsCB(const MFFloat::SetValueEvent& event);
+
+      virtual void getShadowNearClippingInSunDirectionCB(const SFFloat::GetValueEvent& event);
+      virtual void setShadowNearClippingInSunDirectionCB(const SFFloat::SetValueEvent& event);
+
     private:
 
-      std::shared_ptr< ::gua::node::SpotLightNode> m_guaNode;
+      std::shared_ptr< ::gua::node::LightNode> m_guaNode;
 
-      SpotLightNode(const SpotLightNode&);
-      SpotLightNode& operator=(const SpotLightNode&);
+      LightNode(const LightNode&);
+      LightNode& operator=(const LightNode&);
     };
 
-    typedef SingleField<Link<SpotLightNode> > SFSpotLightNode;
-    typedef MultiField<Link<SpotLightNode> > MFSpotLightNode;
+    typedef SingleField<Link<LightNode> > SFLightNode;
+    typedef MultiField<Link<LightNode> > MFLightNode;
 
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SpotLightNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SpotLightNode> >;
+  template class AV_GUA_DLL SingleField<Link<gua::LightNode> >;
+  template class AV_GUA_DLL MultiField<Link<gua::LightNode> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_SPOT_LIGHT_NODE_HPP
+#endif //AVANGO_GUA_LIGHT_NODE_HPP

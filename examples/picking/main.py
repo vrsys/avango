@@ -71,7 +71,8 @@ def start():
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
 
-  light = avango.gua.nodes.PointLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
     Name = "sun",
     Color = avango.gua.Color(1.0, 1.0, 0.7),
     Brightness = 10

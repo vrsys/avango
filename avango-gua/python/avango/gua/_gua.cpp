@@ -26,9 +26,7 @@
 #endif
 #include "scenegraph/NURBSNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
-#include "scenegraph/PointLightNode.hpp"
-#include "scenegraph/SpotLightNode.hpp"
-#include "scenegraph/SunLightNode.hpp"
+#include "scenegraph/LightNode.hpp"
 #include "scenegraph/RayNode.hpp"
 #include "scenegraph/TexturedQuadNode.hpp"
 #include "scenegraph/TexturedScreenSpaceQuadNode.hpp"
@@ -80,6 +78,7 @@
 #include "renderer/SSAOPassDescription.hpp"
 #include "renderer/ResolvePassDescription.hpp"
 #include "renderer/LightVisibilityPassDescription.hpp"
+#include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -155,9 +154,7 @@ BOOST_PYTHON_MODULE(_gua)
 #endif
     // init_NURBSNode();
     init_ScreenNode();
-    init_PointLightNode();
-    init_SpotLightNode();
-    init_SunLightNode();
+    init_LightNode();
     init_RayNode();
     init_TexturedQuadNode();
     init_TexturedScreenSpaceQuadNode();
@@ -206,6 +203,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TexturedScreenSpaceQuadPassDescription();
     init_FullscreenPassDescription();
     init_SSAOPassDescription();
+    init_SSAAPassDescription();
     init_ResolvePassDescription();
     init_LightVisibilityPassDescription();
     init_Databases();

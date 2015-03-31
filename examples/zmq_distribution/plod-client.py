@@ -42,6 +42,7 @@ class NetInit(avango.script.Script):
   WindowName  = avango.SFString()
   Viewer      = avango.gua.nodes.Viewer()
 
+  """
   @field_has_changed(NetChildren)
   def update(self):
     for tmp in self.NetChildren.value:
@@ -49,6 +50,7 @@ class NetInit(avango.script.Script):
         if isinstance(child, avango.gua.CameraNode):
           if child.OutputWindowName.value == self.WindowName.value:
             self.Viewer.CameraNodes.value = [child]
+  """
 
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",

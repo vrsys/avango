@@ -22,6 +22,7 @@
 #include <mutex>
 #include <memory>
 #include <condition_variable>
+#include <boost/lockfree/spsc_queue.hpp>
 
 namespace av
 {
@@ -46,7 +47,7 @@ namespace av
       SFPhysics    Physics;
 #endif
 
-      void frame();
+      void frame(std::string const& engine, std::string const& camera);
 
       struct Image {
         int32_t width = 0;
@@ -65,6 +66,8 @@ namespace av
         size_t size() const { return size_header() + data.size(); }
       };
 
+      void unregister_engine(std::string const& uuid);
+
     protected:
 
       /**
@@ -78,15 +81,28 @@ namespace av
       BlenderViewer& operator=(const BlenderViewer&) = delete;
 
       void render_thread();
+      Image screenshot(::gua::Pipeline const& pipe);
 
       std::mutex m_mutex;
       std::condition_variable m_condition;
       std::vector<std::unique_ptr<const ::gua::SceneGraph> > m_gua_graphs;
+      std::string m_current_engine = "";
+      std::string m_camera_name = "";
       Image m_image;
       bool m_ready = false;
       bool m_processed = false;
       bool m_done = false;
       std::thread m_worker;
+
+      struct EngineData
+      {
+        scm::gl::frame_buffer_ptr fbo = nullptr;
+        scm::gl::texture_2d_ptr rgba8_texture = nullptr;
+        unsigned blendertex_id = 0;
+        bool resize = true;
+      };
+      std::map<std::string, EngineData> m_engines;
+      boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128> > m_unregister_queue;
     };
 
     typedef SingleField<Link<BlenderViewer> > SFBlenderViewer;

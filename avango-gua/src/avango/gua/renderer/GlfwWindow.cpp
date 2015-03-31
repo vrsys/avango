@@ -18,7 +18,11 @@ AV_FIELD_DEFINE(av::gua::MFGlfwWindow);
 av::gua::GlfwWindow::GlfwWindow(std::shared_ptr< ::gua::GlfwWindow> const& guaGlfwWindow)
     : av::gua::WindowBase(guaGlfwWindow)
     , m_guaGlfwWindow(guaGlfwWindow)
-{}
+{
+  AV_FC_ADD_ADAPTOR_FIELD(CursorMode,
+                    boost::bind(&GlfwWindow::getCursorModeCB, this, _1),
+                    boost::bind(&GlfwWindow::setCursorModeCB, this, _1)); 
+}
 
 void
 av::gua::GlfwWindow::initClass()
@@ -68,4 +72,10 @@ void av::gua::GlfwWindow::on_enter(std::function<void(bool)> const& callback) co
     m_guaGlfwWindow->on_enter.connect(callback);
 }
 
+void av::gua::GlfwWindow::getCursorModeCB(const SFUInt::GetValueEvent& event) {
+  *(event.getValuePtr()) = static_cast<unsigned>(m_guaGlfwWindow->cursor_mode());
+}
 
+void av::gua::GlfwWindow::setCursorModeCB(const SFUInt::SetValueEvent& event) {
+  m_guaGlfwWindow->cursor_mode(static_cast< ::gua::GlfwWindow::CursorMode>(event.getValue()));
+}

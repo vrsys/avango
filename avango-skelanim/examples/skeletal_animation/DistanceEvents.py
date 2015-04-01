@@ -7,9 +7,13 @@ class DistanceEvents(avango.script.Script):
 
   DistanceToGround = avango.SFFloat()
   
-  _character_control = None
-  _smaller_than = []
-  _bigger_than = []
+  def __init__(self):
+
+    self.super(DistanceEvents).__init__()
+
+    self._character_control = None
+    self._smaller_than = []
+    self._bigger_than = []
 
   def my_constructor(self, character_control):
     self._character_control = character_control

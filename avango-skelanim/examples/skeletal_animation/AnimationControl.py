@@ -8,28 +8,27 @@ class State(Enum):
 
 class AnimationControl(avango.script.Script):
 
-    _animation_node = None
-    _timer = avango.nodes.TimeSensor()
-
-    _state = State.play
-
-    _last_animation = None
-    _current_animation = None
-
-    _last_blending_start = 0.0
-    _last_looping = False
-    _current_blending_start = 0.0
-    _current_looping = False
-    _first_play = False
-    
-    _blending_factor = 1.0
-    _blending_duration = 0.5
-    _blending_end = 0.0
-
-
     def __init__(self):
 
         self.super(AnimationControl).__init__()
+
+        self._animation_node = None
+        self._timer = avango.nodes.TimeSensor()
+
+        self._state = State.play
+
+        self._last_animation = None
+        self._current_animation = None
+
+        self._last_blending_start = 0.0
+        self._last_looping = False
+        self._current_blending_start = 0.0
+        self._current_looping = False
+        self._first_play = False
+        
+        self._blending_factor = 1.0
+        self._blending_duration = 0.5
+        self._blending_end = 0.0
 
     def my_constructor(self, animation_node):
         self._timer.ReferenceTime.value = self._timer.RealTime.value

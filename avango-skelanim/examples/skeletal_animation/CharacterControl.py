@@ -4,32 +4,31 @@ from AnimationControl import *
 
 class CharacterControl(avango.script.Script):
 
-  _animation_control = AnimationControl()
-
-  _queued_animations = []
-  _play_once = {}
-
-  _animations_kd = []
-  _animations_ku = []
-  _transformations = []
-  _delta_transformations = []
-  _translations = {}
-
-  _current_translation = avango.gua.Vec3(0.0,0.0,0.0)
-  _last_translation = avango.gua.Vec3(0.0,0.0,0.0)
-
-  # wall detection
-  _scene_graph = None
-  _ray = avango.gua.nodes.Ray()
-  _wall_detect_height = 0.0
-  _wall_detect_offset = 0.0
-  _wall_detected = False
-  _wall_detect_idle = None
-
-
   def __init__(self):
 
     self.super(CharacterControl).__init__()
+
+    self._animation_control = AnimationControl()
+
+    self._queued_animations = []
+    self._play_once = {}
+
+    self._animations_kd = []
+    self._animations_ku = []
+    self._transformations = []
+    self._delta_transformations = []
+    self._translations = {}
+
+    self._current_translation = avango.gua.Vec3(0.0,0.0,0.0)
+    self._last_translation = avango.gua.Vec3(0.0,0.0,0.0)
+
+    # wall detection
+    self._scene_graph = None
+    self._ray = avango.gua.nodes.Ray()
+    self._wall_detect_height = 0.0
+    self._wall_detect_offset = 0.0
+    self._wall_detected = False
+    self._wall_detect_idle = None
 
   def my_constructor(self, character_node, navigation_node, application_window):
     # character node (bob)
@@ -65,7 +64,7 @@ class CharacterControl(avango.script.Script):
           self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
 
     application_window.on_key_press(handle_key)
-		
+    
   def bind_transformation(self, key_nr, current_animation, transform_matrix):
     delta_list_id = len(self._delta_transformations)
     self._delta_transformations.append(avango.gua.make_identity_mat())

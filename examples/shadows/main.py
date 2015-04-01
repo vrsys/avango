@@ -24,6 +24,7 @@ def start():
           "data/objects/monkey.obj",
           avango.gua.LoaderFlags.DEFAULTS
         )
+        # new_cube.Material.value.set_uniform("Color", avango.gua.Vec4(1, 1, 1, 0.6))
 
         new_cube.Transform.value = avango.gua.make_trans_mat(x*2, y*2, z*2) * \
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
@@ -130,7 +131,7 @@ def start():
   )
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.EnableSSAO.value = False
+  res_pass.EnableSSAO.value = True
   res_pass.SSAOIntensity.value = 3.0
   res_pass.SSAOFalloff.value = 20.0
   res_pass.SSAORadius.value = 10.0
@@ -142,12 +143,13 @@ def start():
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.TexturedQuadPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
-      avango.gua.nodes.BBoxPassDescription(),
-      avango.gua.nodes.DebugViewPassDescription()
+      avango.gua.nodes.BBoxPassDescription()
+      # avango.gua.nodes.DebugViewPassDescription()
     ],
-    EnableABuffer = False
+    EnableABuffer = True
   )
 
   camera.PipelineDescription.value = pipeline_description

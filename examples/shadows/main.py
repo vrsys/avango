@@ -96,7 +96,6 @@ def start():
   sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-30.0, 1.0, 1.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
 
-
   top_light = avango.gua.nodes.LightNode(Name = "top_light",
                                          Type=avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(0.1, 0.2, 0.4),
@@ -145,7 +144,7 @@ def start():
   )
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.EnableSSAO.value = True
+  res_pass.EnableSSAO.value = False
   res_pass.SSAOIntensity.value = 3.0
   res_pass.SSAOFalloff.value = 20.0
   res_pass.SSAORadius.value = 10.0

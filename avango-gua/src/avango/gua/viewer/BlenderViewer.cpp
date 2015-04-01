@@ -33,7 +33,6 @@ namespace {
 
 av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
 
-
 av::gua::BlenderViewer::Image screenshot(
     scm::gl::render_context_ptr const& ctx,
     scm::gl::texture_2d_ptr const& tex ) {
@@ -328,7 +327,13 @@ void av::gua::BlenderViewer::render_thread() {
 av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
-  auto color = ((::gua::GBuffer&)pipe.get_current_target()).get_color_buffer();
+  auto target(&pipe.get_current_target());
+  auto gbuffer(dynamic_cast<::gua::GBuffer*>(target));
+
+  if (!gbuffer)
+    return av::gua::BlenderViewer::Image{};
+
+  auto color = gbuffer->get_color_buffer();
 
   if (!color)
     return av::gua::BlenderViewer::Image{};

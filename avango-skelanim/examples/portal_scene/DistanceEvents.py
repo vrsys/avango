@@ -25,7 +25,7 @@ class DistanceEvents(avango.script.Script):
     
     for st in self._smaller_than:
       if math.fabs(self.DistanceToGround.value) < st[0] and self._character_control.get_current_animation() == st[1]:
-        self._character_control.switch_animation(st[2],st[3],st[4])
+        self._character_control.blend_animation(st[2],st[3],st[4])
     for st in self._bigger_than:
       if math.fabs(self.DistanceToGround.value) > st[0] and self._character_control.get_current_animation() == st[1]:
-        self._character_control.switch_animation(st[2],st[3],st[4])
+        self._character_control.blend_animation(st[2],st[3],st[4])

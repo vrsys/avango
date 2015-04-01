@@ -29,23 +29,11 @@ def start():
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
 
-  sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
-                                         Type=avango.gua.LightType.SUN,
-                                         Color = avango.gua.Color(1.0, 1.0, 0.7),
-                                         EnableGodrays = True,
-                                         EnableShadows = True,
-                                         ShadowMapSize = 1024,
-                                         ShadowOffset = 0.001,
-                                         ShadowCascadedSplits = [0.1, 3, 8, 15, 40],
-                                         ShadowNearClippingInSunDirection = 100,
-                                         Brightness = 2
-                                         )
-  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-30.0, 1.0, 1.0, 0.0)
-  graph.Root.value.Children.value.append(sun_light)
 
-  spot_light = avango.gua.nodes.LightNode(Name = "spot_light",
+  spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
                                          Type=avango.gua.LightType.SPOT,
                                          Color = avango.gua.Color(1.0, 0.0, 0.7),
+                                         DisplayBoundingBox = True,
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 256,
@@ -53,8 +41,36 @@ def start():
                                          Falloff = 1.5,
                                          Softness = 2,
                                          Brightness = 10)
-  spot_light.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 18.0) * avango.gua.make_rot_mat(-20, 1, 0, 0) * avango.gua.make_scale_mat(30)
-  graph.Root.value.Children.value.append(spot_light)
+  spot_light_1.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 18.0) * avango.gua.make_rot_mat(-20, 1, 0, 0) * avango.gua.make_scale_mat(20)
+  graph.Root.value.Children.value.append(spot_light_1)
+
+  spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
+                                         Type=avango.gua.LightType.SPOT,
+                                         Color = avango.gua.Color(0.0, 1.0, 0.7),
+                                         DisplayBoundingBox = True,
+                                         EnableGodrays = True,
+                                         EnableShadows = True,
+                                         ShadowMapSize = 256,
+                                         ShadowOffset = 0.0005,
+                                         Falloff = 1,
+                                         Softness = 1,
+                                         Brightness = 10)
+  spot_light_2.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 20.0) * avango.gua.make_rot_mat(40, 1, 0, 0) * avango.gua.make_rot_mat(-170, 0, 1, 0) * avango.gua.make_scale_mat(10)
+  graph.Root.value.Children.value.append(spot_light_2)
+
+  spot_light_3 = avango.gua.nodes.LightNode(Name = "spot_light_3",
+                                         Type=avango.gua.LightType.SPOT,
+                                         Color = avango.gua.Color(1.0, 1.0, 0.2),
+                                         DisplayBoundingBox = True,
+                                         EnableGodrays = True,
+                                         EnableShadows = True,
+                                         ShadowMapSize = 256,
+                                         ShadowOffset = 0.0005,
+                                         Falloff = 1,
+                                         Softness = 1,
+                                         Brightness = 10)
+  spot_light_3.Transform.value = avango.gua.make_trans_mat(24.0, 3.0, 10.0) * avango.gua.make_rot_mat(70, 1, 0, 0) * avango.gua.make_rot_mat(-90, 0, 1, 0) * avango.gua.make_scale_mat(7)
+  graph.Root.value.Children.value.append(spot_light_3)
 
 
   point_light = avango.gua.nodes.LightNode(
@@ -66,6 +82,19 @@ def start():
   point_light.Transform.value = avango.gua.make_trans_mat(4.0, 1.0, 4.0) * avango.gua.make_scale_mat(10)
   graph.Root.value.Children.value.append(point_light)
 
+  sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
+                                         Type=avango.gua.LightType.SUN,
+                                         Color = avango.gua.Color(1.0, 1.0, 0.7),
+                                         EnableGodrays = True,
+                                         EnableShadows = False,
+                                         ShadowMapSize = 1024,
+                                         ShadowOffset = 0.001,
+                                         ShadowCascadedSplits = [0.1, 3, 8, 15, 40],
+                                         ShadowNearClippingInSunDirection = 100,
+                                         Brightness = 2
+                                         )
+  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-30.0, 1.0, 1.0, 0.0)
+  graph.Root.value.Children.value.append(sun_light)
 
 
   top_light = avango.gua.nodes.LightNode(Name = "top_light",
@@ -130,6 +159,7 @@ def start():
       avango.gua.nodes.TriMeshPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
+      avango.gua.nodes.BBoxPassDescription(),
       avango.gua.nodes.DebugViewPassDescription()
     ],
     EnableABuffer = False

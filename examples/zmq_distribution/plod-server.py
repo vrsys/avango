@@ -97,7 +97,8 @@ mat = avango.gua.nodes.Material(
 #monkey1.Material.value = mat
 nettrans.distribute_object(mat)
 
-light = avango.gua.nodes.PointLightNode(
+light = avango.gua.nodes.LightNode(
+  Type=avango.gua.LightType.POINT,
   Name = "light",
   Color = avango.gua.Color(1.0, 1.0, 1.0),
   Brightness = 50.0,
@@ -184,7 +185,7 @@ avango.gua.register_window("server_window", window)
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
-viewer.CameraNodes.value = [server_cam]
+#viewer.CameraNodes.value = [server_cam]
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 

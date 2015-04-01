@@ -25,7 +25,8 @@ def start():
   loader = avango.gua.nodes.TriMeshLoader()
   monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.DEFAULTS)
 
-  light = avango.gua.nodes.PointLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Brightness = 10

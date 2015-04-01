@@ -54,7 +54,8 @@ av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
                                  float bundle_radius,
                                  float max_distance,
                                  unsigned int max_depth,
-                                 unsigned int surfel_skip) {
+                                 unsigned int surfel_skip,
+                                 float aabb_scale) {
 
   return loader.pick_plod_interpolate(bundle_origin,
                                       bundle_forward,
@@ -62,7 +63,8 @@ av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
                                       bundle_radius,
                                       max_distance,
                                       max_depth,
-                                      surfel_skip);
+                                      surfel_skip,
+                                      aabb_scale);
 
 }
 

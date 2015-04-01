@@ -33,9 +33,13 @@ namespace av
       GlfwWindow(std::shared_ptr< ::gua::GlfwWindow> const& guaGlfwWindow =
              std::shared_ptr< ::gua::GlfwWindow> (new ::gua::GlfwWindow()));
 
-
-
     public:
+
+      enum CursorModeEnum {
+        NORMAL = static_cast<unsigned>(::gua::GlfwWindow::CursorMode::NORMAL),
+        HIDDEN = static_cast<unsigned>(::gua::GlfwWindow::CursorMode::HIDDEN),
+        DISABLED = static_cast<unsigned>(::gua::GlfwWindow::CursorMode::DISABLED)
+      };
 
       /**
        * Get the wrapped ::gua::GlfwWindow.
@@ -49,6 +53,12 @@ namespace av
       void on_move_cursor(std::function<void(::gua::math::vec2 const&)> const& callback) const;
       void on_scroll(std::function<void(::gua::math::vec2 const&)> const& callback) const;
       void on_enter(std::function<void(bool)> const& callback) const;
+
+
+      SFUInt   CursorMode;
+
+      virtual void getCursorModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setCursorModeCB(const SFUInt::SetValueEvent& event);
 
     private:
 

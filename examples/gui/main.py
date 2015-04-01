@@ -32,6 +32,7 @@ def start():
 
   web_mat = avango.gua.nodes.Material()
   web_mat.set_uniform("ColorMap", "google")
+  web_mat.set_uniform("Emissivity", 1.0)
 
   transform = avango.gua.nodes.TransformNode()
 
@@ -92,7 +93,8 @@ def start():
   google_geom.Children.value.append(address_bar_quad)
 
 
-  light = avango.gua.nodes.PointLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Transform = avango.gua.make_trans_mat(-2, 3, 5) * avango.gua.make_scale_mat(10)

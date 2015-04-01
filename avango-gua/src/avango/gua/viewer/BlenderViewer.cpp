@@ -57,25 +57,33 @@ av::gua::BlenderViewer::Image screenshot(
   return img;
 }
 
-void draw_image(av::gua::BlenderViewer::Image const& im) {
+void draw_image(av::gua::BlenderViewer::Image const& im, GLuint texid, bool resize) {
   glColor3f(1.0f, 1.0f, 1.0f);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-  GLuint texid;
-  glGenTextures(1, &texid);
   glBindTexture(GL_TEXTURE_2D, texid);
   //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F_ARB, w, h, 0, GL_RGBA,
   //GL_HALF_FLOAT, data_pointer);
-  glTexImage2D(GL_TEXTURE_2D,
-               0,
-               GL_RGBA,
-               im.width,
-               im.height,
-               0,
-               im.gl_base_format,
-               im.gl_type,
-               im.data.data());
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  if (resize) {
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 im.width,
+                 im.height,
+                 0,
+                 im.gl_base_format,
+                 im.gl_type,
+                 im.data.data());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  } else {
+    glTexSubImage2D(GL_TEXTURE_2D,
+      0, 0, 0,
+      im.width,
+      im.height,
+      im.gl_base_format,
+      im.gl_type,
+      im.data.data());
+  }
 
   glEnable(GL_TEXTURE_2D);
 
@@ -109,7 +117,6 @@ void draw_image(av::gua::BlenderViewer::Image const& im) {
 
   glBindTexture(GL_TEXTURE_2D, 0);
   glDisable(GL_TEXTURE_2D);
-  glDeleteTextures(1, &texid);
 }
 
 }
@@ -123,13 +130,15 @@ av::gua::BlenderViewer::BlenderViewer()
     : m_mutex(),
       m_condition(),
       m_gua_graphs(),
-      m_current_engine_uuid(""),
+      m_current_engine(""),
+      m_camera_name(""),
       m_image(),
       m_ready(false),
       m_processed(false),
       m_done(false),
       m_worker(std::bind(&av::gua::BlenderViewer::render_thread, this)),
-      m_engines() {
+      m_engines(),
+      m_unregister_queue() {
   AV_FC_ADD_FIELD(SceneGraphs, MFSceneGraph::ContainerType());
   AV_FC_ADD_FIELD(Window, SFHeadlessSurface::ValueType());
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -170,7 +179,7 @@ void av::gua::BlenderViewer::initClass() {
   }
 }
 
-void av::gua::BlenderViewer::frame(std::string const& uuid) {
+void av::gua::BlenderViewer::frame(std::string const& engine, std::string const& camera_name) {
 
   av::ApplicationInstance::get().evaluate();
 
@@ -178,7 +187,8 @@ void av::gua::BlenderViewer::frame(std::string const& uuid) {
   ::gua::Interface::instance()->update();
 #endif
 
-  m_current_engine_uuid = uuid;
+  m_current_engine = engine;
+  m_camera_name = camera_name;
   if (SceneGraphs.getValue().size() > 0) {
     m_gua_graphs.clear();
     for (auto graph : SceneGraphs.getValue()) {
@@ -214,7 +224,13 @@ void av::gua::BlenderViewer::frame(std::string const& uuid) {
   }
 #endif
 
-  draw_image(m_image);
+  auto& engine_data = m_engines[m_current_engine];
+  if (!engine_data.blendertex_id) {
+    glGenTextures(1, &engine_data.blendertex_id);
+  }
+
+  draw_image(m_image, engine_data.blendertex_id, engine_data.resize);
+  engine_data.resize = false;
 }
 
 void av::gua::BlenderViewer::render_thread() {
@@ -247,7 +263,7 @@ void av::gua::BlenderViewer::render_thread() {
                                cams.end(),
                                [this](::gua::node::CameraNode * const & c)->bool {
           return "blender_window" == c->config.get_output_window_name()
-              && m_current_engine_uuid == c->get_name();
+              && m_camera_name == c->get_name();
         });
         if (it != cams.end()) {
           auto& cam = *it;
@@ -268,15 +284,11 @@ void av::gua::BlenderViewer::render_thread() {
           }
 
           if (serialized_cam.config.get_enable_stereo()) {
-
-            pipe->render_scene(
-                ::gua::CameraMode::LEFT, serialized_cam, m_gua_graphs);
-            pipe->render_scene(
-                ::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::LEFT,  serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
           } else {
             pipe->render_scene(serialized_cam.config.get_mono_mode(),
-                          serialized_cam,
-                          m_gua_graphs);
+                serialized_cam, m_gua_graphs);
           }
           m_image = screenshot(*pipe);
 
@@ -284,6 +296,15 @@ void av::gua::BlenderViewer::render_thread() {
           window->finish_frame();
           ++(window->get_context()->framecount);
         }
+      }
+    }
+
+    // garbage collection of old engine data
+
+    {
+      std::string engine;
+      while (m_unregister_queue.pop(engine)) {
+        m_engines.erase(engine);
       }
     }
 
@@ -320,21 +341,26 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
   auto texture_ptr = color->get_buffer(ctx);
   auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
 
-  if (!tmp_rgba8_texture || tmp_rgba8_texture->descriptor()._size != tex->descriptor()._size) {
-    tmp_rgba8_texture = ctx.render_device->create_texture_2d(
+  auto& tmp = m_engines[m_current_engine];
+
+  if (!tmp.fbo)
+    tmp.fbo = ctx.render_device->create_frame_buffer();
+
+  if (!tmp.rgba8_texture || tmp.rgba8_texture->descriptor()._size != tex->descriptor()._size) {
+    tmp.fbo->clear_attachments();
+    tmp.rgba8_texture = ctx.render_device->create_texture_2d(
         tex->descriptor()._size, scm::gl::FORMAT_RGBA_8);
-    tmp_fbo = ctx.render_device->create_frame_buffer();
-    tmp_fbo->attach_color_buffer(0, tmp_rgba8_texture, 0, 0);
+    tmp.fbo->attach_color_buffer(0, tmp.rgba8_texture, 0, 0);
+    tmp.resize = true;
   }
 
-  ctx.render_context->copy_color_buffer(gbuffer->get_fbo_read() , tmp_fbo, 0);
-  return ::screenshot(ctx.render_context, tmp_rgba8_texture);
+  ctx.render_context->copy_color_buffer(((::gua::GBuffer&)pipe.get_current_target()).get_fbo_read(), tmp.fbo, 0);
+  return ::screenshot(ctx.render_context, tmp.rgba8_texture);
 }
 
-void av::gua::BlenderViewer::register_engine(std::string const& uuid) {
-  std::cout << "av::gua::BlenderViewer::register_engine(" << uuid << "\n";
-}
-
-void av::gua::BlenderViewer::unregister_engine(std::string const& uuid) {
-  std::cout << "av::gua::BlenderViewer::unregister_engine(" << uuid << "\n";
+void av::gua::BlenderViewer::unregister_engine(std::string const& engine) {
+  auto& engine_data = m_engines[engine];
+  glDeleteTextures(1, &engine_data.blendertex_id);
+  engine_data.blendertex_id = 0;
+  m_unregister_queue.push(engine);
 }

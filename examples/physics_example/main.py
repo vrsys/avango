@@ -111,7 +111,8 @@ def start():
   teapot_csn.Children.value.append(teapot_geometry)
   teapot_rb.Children.value.append(teapot_csn)
 
-  light = avango.gua.nodes.PointLightNode(
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
     Brightness = 50.0,

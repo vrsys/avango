@@ -36,7 +36,7 @@ def start():
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 256,
-                                         ShadowOffset = 0.0005,
+                                         ShadowOffset = 0.005,
                                          Falloff = 1.5,
                                          Softness = 2,
                                          Brightness = 10)
@@ -51,7 +51,7 @@ def start():
                                          EnableGodrays = True,
                                          Brightness = 10)
   point_light.Transform.value = avango.gua.make_trans_mat(4.0, 1.0, 4.0) * avango.gua.make_scale_mat(10)
-  # graph.Root.value.Children.value.append(point_light)
+  graph.Root.value.Children.value.append(point_light)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
                                          Type=avango.gua.LightType.SUN,
@@ -65,7 +65,7 @@ def start():
                                          Brightness = 2
                                          )
   sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-30.0, 1.0, 1.0, 0.0)
-  # graph.Root.value.Children.value.append(sun_light)
+  graph.Root.value.Children.value.append(sun_light)
 
 
   top_light = avango.gua.nodes.LightNode(Name = "top_light",
@@ -74,7 +74,7 @@ def start():
                                          EnableSpecularShading = False,
                                          Brightness = 1)
   top_light.Transform.value = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-  # graph.Root.value.Children.value.append(top_light)
+  graph.Root.value.Children.value.append(top_light)
 
 
 
@@ -84,7 +84,7 @@ def start():
                                          EnableSpecularShading = False,
                                          Brightness = 1)
   fill_light.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
-  # graph.Root.value.Children.value.append(fill_light)
+  graph.Root.value.Children.value.append(fill_light)
 
 
   floor = loader.create_geometry_from_file(

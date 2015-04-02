@@ -13,6 +13,8 @@ class CharacterControl(avango.script.Script):
     self._queued_animations = []
     self._play_once = {}
 
+    self._pressed_keys = []
+
     self._animations_kd = []
     self._animations_ku = []
     self._transformations = []
@@ -42,28 +44,7 @@ class CharacterControl(avango.script.Script):
 
     self.always_evaluate(True)
 
-    def handle_key(ascii, unknown , event , unknown2):
-
-      # animation trigger key down
-      for a in self._animations_kd:
-        if ascii == a[0] and event == 1 and self._animation_control.get_current_animation() == a[1]:
-
-          self.blend_animation(a[2],a[3])
-
-      # animation trigger key up
-      for a in self._animations_ku:
-        if ascii == a[0] and event == 0 and self._animation_control.get_current_animation() == a[1]:
-          
-          self.blend_animation(a[2],a[3])
-      
-      # transformation trigger
-      for t in self._transformations:
-        if ascii == t[0] and event == 1 and self._animation_control.get_current_animation() == t[1]:
-          self._delta_transformations[t[2]] = t[3]
-        if ascii == t[0] and event == 0 and self._animation_control.get_current_animation() == t[1]:
-          self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
-
-    application_window.on_key_press(handle_key)
+    application_window.on_key_press(self._handle_key)
     
   def bind_transformation(self, key_nr, current_animation, transform_matrix):
     delta_list_id = len(self._delta_transformations)
@@ -107,6 +88,11 @@ class CharacterControl(avango.script.Script):
     
   def switch_animation(self, animation, loop_mode = True):
 
+    # look for already pressed keys with propreitary current animation
+    # abort blending if already pressed key changed state
+    if self._check_pressed_keys(animation):
+        return
+
     loop_mode_tmp = loop_mode
     next_animation = self._check_play_once(animation)
     if next_animation != None:
@@ -117,6 +103,11 @@ class CharacterControl(avango.script.Script):
     self._apply_animation_changes(next_animation,loop_mode_tmp)
 
   def blend_animation(self, animation, blending_duration = 0.5, loop_mode = True):
+
+    # look for already pressed keys with propreitary current animation
+    # abort blending if already pressed key changed state
+    if self._check_pressed_keys(animation):
+        return
 
     if blending_duration < 0.001:
       self.switch_animation(animation, loop_mode)
@@ -130,6 +121,38 @@ class CharacterControl(avango.script.Script):
     self._animation_control.blend_to(animation, blending_duration, loop_mode_tmp)
     
     self._apply_animation_changes(next_animation,loop_mode_tmp)
+
+
+  def _handle_key(self, ascii, unknown , event , unknown2, animation = None):
+
+    # additional animation parameter for proprietary animation states
+    if animation is None:
+      animation = self._animation_control.get_current_animation()
+
+    # animation trigger key down
+    if event == 1:
+      if ascii not in self._pressed_keys:
+        self._pressed_keys.append(ascii)
+      for a in self._animations_kd:
+        if ascii == a[0] and animation == a[1]:
+
+          self.blend_animation(a[2],a[3])
+
+    # animation trigger key up
+    if event == 0:
+      if ascii in self._pressed_keys:
+        self._pressed_keys.remove(ascii)
+      for a in self._animations_ku:
+        if ascii == a[0] and animation == a[1]:
+
+          self.blend_animation(a[2],a[3])
+
+    # transformation trigger
+    for t in self._transformations:
+      if ascii == t[0] and event == 1 and animation == t[1]:
+        self._delta_transformations[t[2]] = t[3]
+      if ascii == t[0] and event == 0 and animation== t[1]:
+        self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
 
   def _blend_translations(self):
 
@@ -184,6 +207,15 @@ class CharacterControl(avango.script.Script):
     if animation in self._play_once:
       next_animation = self._play_once[animation]
     return next_animation
+
+  def _check_pressed_keys(self, next_animation):
+
+    current_animation = self._animation_control.get_current_animation()
+    for ascii in self._pressed_keys:
+      self._handle_key(ascii,None,1,None,next_animation)
+      if current_animation != self._animation_control.get_current_animation():
+        return True
+    return False
 
   def _apply_animation_changes(self, next_animation, loop_mode):
 

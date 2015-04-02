@@ -98,7 +98,7 @@ class CharacterControl(avango.script.Script):
     if next_animation != None:
       loop_mode_tmp = False
     
-    self._animation_control.switch_to(animation, loop_mode_tmp)
+    self._animation_control.switch_to(AnimationConfig(animation, loop_mode_tmp))
     
     self._apply_animation_changes(next_animation,loop_mode_tmp)
 
@@ -118,7 +118,8 @@ class CharacterControl(avango.script.Script):
     if next_animation != None:
       loop_mode_tmp = False
     
-    self._animation_control.blend_to(animation, blending_duration, loop_mode_tmp)
+    self._animation_control.blend_to(AnimationConfig(animation, loop_mode_tmp), blending_duration)
+    # self._animation_control.blend_to(animation, blending_duration, loop_mode_tmp)
     
     self._apply_animation_changes(next_animation,loop_mode_tmp)
 

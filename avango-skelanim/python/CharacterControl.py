@@ -1,6 +1,6 @@
 import avango
 import avango.script
-from AnimationControl import *
+from avango.gua.skelanim.AnimationControl import *
 
 class CharacterControl(avango.script.Script):
 
@@ -117,6 +117,10 @@ class CharacterControl(avango.script.Script):
     self._apply_animation_changes(next_animation,loop_mode_tmp)
 
   def blend_animation(self, animation, blending_duration = 0.5, loop_mode = True):
+
+    if blending_duration < 0.001:
+      self.switch_animation(animation, loop_mode)
+      return
 
     loop_mode_tmp = loop_mode
     next_animation = self._check_play_once(animation)

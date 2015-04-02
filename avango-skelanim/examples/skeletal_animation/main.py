@@ -4,10 +4,10 @@ from avango.script import field_has_changed
 import avango.gua.skelanim
 from examples_common.GuaVE import GuaVE
 
-from GroundFollowing import *
-from CharacterControl import *
-from CameraControl import *
-from DistanceEvents import *
+from avango.gua.skelanim.GroundFollowing import *
+from avango.gua.skelanim.CharacterControl import *
+from avango.gua.skelanim.CameraControl import *
+from avango.gua.skelanim.DistanceEvents import *
 
 def start():
   
@@ -76,6 +76,8 @@ def start():
   loader.load_animation(bob,
           "data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop", avango.gua.LoaderFlags.DEFAULTS)
   loader.load_animation(bob,
+          "data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob,
           "data/animations/Jump_Idle_Rif_Land.FBX","jump_land", avango.gua.LoaderFlags.DEFAULTS)
   
   # jump forward: 
@@ -131,14 +133,14 @@ def start():
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower_separated.fbx",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-  environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment_separated.fbx",
+  environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
-  environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(100.0)
+  environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(0.1)
 
   '''for child in medieval_harbour.Children.value:
     child.Material.value.EnableBackfaceCulling.value = False
@@ -303,7 +305,7 @@ def start():
 
 
   # SPACE BAR
-  character_control.key_down(32, "idle","jump",0.01)
+  character_control.key_down(32, "idle","jump",0.1)
   character_control.key_down(32, "run_fwd","jump_fwd",0.25)
   character_control.key_down(32, "run_bwd","jump_bwd",0.25)
   character_control.key_down(32, "run_lt","jump_lt",0.25)
@@ -321,6 +323,7 @@ def start():
   character_control.bind_translation("crouch_rt",avango.gua.Vec3(-0.035,0.0,0.0))
   character_control.bind_translation("jump",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_loop",avango.gua.Vec3(0.0, 0.08, 0.0))
+  character_control.bind_translation("jump_preland",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_fwd",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_loop",avango.gua.Vec3(0.0, 0.08, 0.04))
   character_control.bind_translation("jump_fwd_preland",avango.gua.Vec3(0.0, 0.08, 0.04))
@@ -339,16 +342,16 @@ def start():
   character_control.bind_translation("jump_rt_land",avango.gua.Vec3(-0.04, 0.0, 0.0))
 
   # animations only played once and followed by another one
-  character_control.play_once("jump","jump_loop",0.01)
+  character_control.play_once("jump","jump_loop",0.1)
   character_control.play_once("jump_fwd","jump_fwd_loop",0.01)
   character_control.play_once("jump_bwd","jump_bwd_loop",0.01)
   character_control.play_once("jump_lt","jump_lt_loop",0.01)
   character_control.play_once("jump_rt","jump_rt_loop",0.01)
   character_control.play_once("jump_land","idle",0.25)
-  character_control.play_once("jump_fwd_land","run_fwd",0.25)
-  character_control.play_once("jump_bwd_land","run_bwd",0.25)
-  character_control.play_once("jump_lt_land","run_lt",0.25)
-  character_control.play_once("jump_rt_land","run_rt",0.25)
+  character_control.play_once("jump_fwd_land","idle",0.25)
+  character_control.play_once("jump_bwd_land","idle",0.25)
+  character_control.play_once("jump_lt_land","idle",0.25)
+  character_control.play_once("jump_rt_land","idle",0.25)
 
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
@@ -375,7 +378,8 @@ def start():
   distance_events.smaller_than(0.09, "jump_bwd_loop", "jump_bwd_preland", 0.01, False)
   distance_events.smaller_than(0.09, "jump_lt_loop", "jump_lt_preland", 0.01, False)
   distance_events.smaller_than(0.09, "jump_rt_loop", "jump_rt_preland", 0.01, False)
-  distance_events.smaller_than(0.01, "jump_loop", "jump_land", 0.01, False)
+  distance_events.smaller_than(0.09, "jump_loop", "jump_preland", 0.1, False)
+  distance_events.smaller_than(0.01, "jump_preland", "jump_land", 0.1, False)
   distance_events.smaller_than(0.01, "jump_fwd_preland", "jump_fwd_land", 0.1, False)
   distance_events.smaller_than(0.01, "jump_bwd_preland", "jump_bwd_land", 0.1, False)
   distance_events.smaller_than(0.01, "jump_lt_preland", "jump_lt_land", 0.1, False)

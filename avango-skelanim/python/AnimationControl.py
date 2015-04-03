@@ -40,8 +40,8 @@ class AnimationControl(avango.script.Script):
     def my_constructor(self, animation_node):
         self._timer.ReferenceTime.value = self._timer.RealTime.value
         self._animation_node = animation_node
-        # set some anim because evaluate is called before anim can be set from outside
-        self.switch_to(AnimationConfig("idle"))
+
+        # start with idle or character controller wont work
         self.switch_to(AnimationConfig("idle"))
 
         self.always_evaluate(True)
@@ -50,10 +50,16 @@ class AnimationControl(avango.script.Script):
         self._animation_node.Time2.value = 0.5
 
     def get_current_animation(self):
-        return self._current_animation.name
+        if self._current_animation != None:
+            return self._current_animation.name
+        else:
+            return "none"
 
     def get_last_animation(self):
-        return self._last_animation.name
+        if self._current_animation != None:
+            return self._last_animation.name
+        else:
+            return "none"
 
     def get_blending_factor(self):
         return self._blending_factor
@@ -62,6 +68,11 @@ class AnimationControl(avango.script.Script):
         return self._first_play
 
     def switch_to(self, anim_config):
+        
+        if self._current_animation != None:
+            self._animation_node.Animation1.value = self._animation_node.Animation2.value
+        self._animation_node.Animation2.value = anim_config.name
+        
         self._last_animation = self._current_animation
         self._current_animation = anim_config
 
@@ -69,8 +80,6 @@ class AnimationControl(avango.script.Script):
         self._current_blending_start = self._timer.Time.value
         self._blending_end = self._current_blending_start
 
-        self._animation_node.Animation1.value = self._animation_node.Animation2.value
-        self._animation_node.Animation2.value = anim_config.name
 
         # reset time
         self._timer.ReferenceTime.value = self._current_blending_start + self._timer.ReferenceTime.value
@@ -103,6 +112,8 @@ class AnimationControl(avango.script.Script):
         self.evaluate()
 
     def evaluate(self):
+        if self._current_animation == None:
+            return
 
         # always update time of current anim
         if not self._current_animation.loop and self._timer.Time.value > self._current_blending_start + self._animation_node.get_duration(self._current_animation.name) / self._current_animation.speed:

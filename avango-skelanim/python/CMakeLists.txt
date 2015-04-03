@@ -7,10 +7,7 @@ file(GLOB_RECURSE AVANGO_SKELANIM_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR
     *.cpp
     *.hpp
 )
-message(STATUS "//////////////////////////////////////////////////")
-message(STATUS "//////////////////////////////////////////////////")
-message(STATUS "//////////////////////////////////////////////////")
-message(STATUS "${AVANGO_SKELANIM_PYTHON_SRC}" )
+
 ADD_LIBRARY( _skelanim SHARED 
     ${AVANGO_SKELANIM_PYTHON_SRC}
 )
@@ -38,8 +35,21 @@ ELSEIF (UNIX)
     ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/skelanim/_skelanim.so)
 ENDIF (MSVC)
 
-COPY_PYTHON_FILES_INTO_DIRECTORY(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/skelanim
-    _skelanim
+###############################################################################
+# install utilities
+###############################################################################
+# list python scripts in directory
+file(GLOB PYTHON_FILES ABSOLUTE ${CMAKE_CURRENT_SOURCE_DIR}
+    *.py
 )
+# target to trigger copying, All -> built by default
+add_custom_target(copy_skelanim_utils ALL)
+# copy them over if modified
+foreach(PythonFile ${PYTHON_FILES})
+  add_custom_command(TARGET copy_skelanim_utils
+                    # run cmake command module 
+                    COMMAND ${CMAKE_COMMAND} -E
+                    # with following command
+                    copy_if_different ${PythonFile}
+                                      ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/skelanim)
+endforeach()

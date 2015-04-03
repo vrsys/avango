@@ -59,8 +59,7 @@ namespace av
 
         void load_animation(av::Link<av::gua::Node>& node,
                             std::string const& file_name,
-                            std::string const& animation_name,
-                            Flags flags = DEFAULTS) const;
+                            std::string const& animation_name) const;
 
       protected:
 

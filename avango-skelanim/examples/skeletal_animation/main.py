@@ -27,98 +27,61 @@ def start():
   bob.Transform.value = bob.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0)
 
   # idle:
-  loader.load_animation(bob,
-          "data/animations/Idle_Ready_Rif.FBX","idle", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Idle_Ready_Rif.FBX","idle")
   
   # run:
-  loader.load_animation(bob,
-         "data/animations/Run_Fwd_Rif.FBX","run_fwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-         "data/animations/Run_Bwd_Rif.FBX","run_bwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-         "data/animations/Run_Lt_Rif.FBX","run_lt", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-         "data/animations/Run_Rt_Rif.FBX","run_rt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Run_Fwd_Rif.FBX","run_fwd")
+  loader.load_animation(bob, "data/animations/Run_Bwd_Rif.FBX","run_bwd")
+  loader.load_animation(bob, "data/animations/Run_Lt_Rif.FBX","run_lt")
+  loader.load_animation(bob, "data/animations/Run_Rt_Rif.FBX","run_rt")
   
   # taunts:
-  loader.load_animation(bob,
-          "data/animations/Taunt_BringItOn.FBX","taunt1", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Taunt_ComeHear.FBX","taunt2", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Taunt_Hoolahoop.FBX","taunt3", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Taunt_NoNo.FBX","taunt4", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Taunt_PelvicThrust.FBX","taunt5", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Taunt_SlitThroat.FBX","taunt6", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Taunt_BringItOn.FBX","taunt1")
+  loader.load_animation(bob, "data/animations/Taunt_ComeHear.FBX","taunt2")
+  loader.load_animation(bob, "data/animations/Taunt_Hoolahoop.FBX","taunt3")
+  loader.load_animation(bob, "data/animations/Taunt_NoNo.FBX","taunt4")
+  loader.load_animation(bob, "data/animations/Taunt_PelvicThrust.FBX","taunt5")
+  loader.load_animation(bob, "data/animations/Taunt_SlitThroat.FBX","taunt6")
   
   # swim forward: 
-  loader.load_animation(bob,
-          "data/animations/Swim_Fwd_Rif.FBX","swim", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Swim_Fwd_Rif.FBX","swim")
   
   # crouch:
-  loader.load_animation(bob,
-          "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Crouch_Lt_Rif.FBX","crouch_lt", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Crouch_Rt_Rif.FBX","crouch_rt", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch")
+  loader.load_animation(bob, "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd")
+  loader.load_animation(bob, "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd")
+  loader.load_animation(bob, "data/animations/Crouch_Lt_Rif.FBX","crouch_lt")
+  loader.load_animation(bob, "data/animations/Crouch_Rt_Rif.FBX","crouch_rt")
   
   # jump idle:
-  loader.load_animation(bob,
-          "data/animations/Jump_Idle_Rif_Start.FBX","jump", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Idle_Rif_Land.FBX","jump_land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Start.FBX","jump")
+  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop")
+  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland")
+  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Land.FBX","jump_land")
   
   # jump forward: 
-  loader.load_animation(bob,
-          "data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
+  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
+  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
+  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
 
   # jump backward: 
-  loader.load_animation(bob,
-          "data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
+  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
+  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
+  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
 
   # jump left: 
-  loader.load_animation(bob,
-          "data/animations/Jump_Lt_Rif_Start.FBX","jump_lt", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Start.FBX","jump_lt")
+  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
+  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
+  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
 
   # jump right: 
-  loader.load_animation(bob,
-          "data/animations/Jump_Rt_Rif_Start.FBX","jump_rt", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland", avango.gua.LoaderFlags.DEFAULTS)
-  loader.load_animation(bob,
-          "data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land", avango.gua.LoaderFlags.DEFAULTS)
+  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Start.FBX","jump_rt")
+  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
+  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
+  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
 
 
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
@@ -133,14 +96,14 @@ def start():
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower.fbx",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower_01_001.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-  environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment.fbx",
-                                            avango.gua.LoaderFlags.MAKE_PICKABLE|
-                                            avango.gua.LoaderFlags.LOAD_MATERIALS)
-  environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(0.1)
+  # environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment.fbx",
+  #                                           avango.gua.LoaderFlags.MAKE_PICKABLE|
+  #                                           avango.gua.LoaderFlags.LOAD_MATERIALS)
+  # environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(0.1)
 
   '''for child in medieval_harbour.Children.value:
     child.Material.value.EnableBackfaceCulling.value = False
@@ -149,16 +112,16 @@ def start():
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
   #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
 
-  plane = tri_mesh_loader.create_geometry_from_file("cube",
-                                            "data/objects/cube2.obj",
-                                            avango.gua.LoaderFlags.NORMALIZE_POSITION
-                                            | avango.gua.LoaderFlags.NORMALIZE_SCALE
-                                            | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
-                                            | avango.gua.LoaderFlags.MAKE_PICKABLE
-                                            | avango.gua.LoaderFlags.LOAD_MATERIALS)
-  plane.Transform.value *= avango.gua.make_scale_mat(10.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
+  # plane = tri_mesh_loader.create_geometry_from_file("cube",
+  #                                           "data/objects/cube2.obj",
+  #                                           avango.gua.LoaderFlags.NORMALIZE_POSITION
+  #                                           | avango.gua.LoaderFlags.NORMALIZE_SCALE
+  #                                           | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
+  #                                           | avango.gua.LoaderFlags.MAKE_PICKABLE
+  #                                           | avango.gua.LoaderFlags.LOAD_MATERIALS)
+  # plane.Transform.value *= avango.gua.make_scale_mat(10.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
 
-  plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
+  # plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
 
   sunlight = avango.gua.nodes.LightNode(
       Type=avango.gua.LightType.SUN,
@@ -209,7 +172,8 @@ def start():
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
   #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen]
-  graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, environment, sunlight]
+  graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, sunlight]
+  # graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, environment, sunlight]
 
   avango.gua.register_window("window", window)
 

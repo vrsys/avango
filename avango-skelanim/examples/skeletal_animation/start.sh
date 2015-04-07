@@ -32,6 +32,9 @@ else
     python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
 
+# run daemon
+python3.4 ./Daemon.py > /dev/null &
+
 # run program
 if [[ $* == *-d* ]]
 then
@@ -41,4 +44,6 @@ cd "$DIR" && python3.4 ./main.py
 fi
 
 # kill daemon
-kill %1
+#kill %1
+killall python3.4
+killall python3

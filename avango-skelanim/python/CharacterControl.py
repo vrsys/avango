@@ -1,6 +1,8 @@
 import avango
 import avango.script
 from avango.gua.skelanim.AnimationControl import *
+import avango.daemon
+import math
 
 class CharacterControl(avango.script.Script):
 
@@ -8,19 +10,20 @@ class CharacterControl(avango.script.Script):
 
     self.super(CharacterControl).__init__()
 
+    # animations
     self._animation_control = AnimationControl()
-
     self._queued_animations = []
     self._play_once = {}
 
+    # keys
     self._pressed_keys = []
-
     self._animations_kd = []
     self._animations_ku = []
+    
+    # transformations
     self._transformations = []
     self._delta_transformations = []
     self._translations = {}
-
     self._current_translation = avango.gua.Vec3(0.0,0.0,0.0)
     self._last_translation = avango.gua.Vec3(0.0,0.0,0.0)
 
@@ -31,6 +34,9 @@ class CharacterControl(avango.script.Script):
     self._wall_detect_offset = 0.0
     self._wall_detected = False
     self._wall_detect_idle = None
+
+    self._device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    self._device_sensor.Station.value = "device-xbox-1"
 
   def my_constructor(self, character_node, navigation_node, application_window):
     # character node (bob)
@@ -77,6 +83,58 @@ class CharacterControl(avango.script.Script):
     return self._animation_control.get_current_animation()
 
   def evaluate(self):
+
+    #xbox controller:
+    ###
+
+    # ABS_Y -> S
+    if self._device_sensor.Value1.value > 0.1:
+      if not 83 in self._pressed_keys:
+        self._handle_key(83,None,1,None)
+    elif 83 in self._pressed_keys:
+      self._handle_key(83,None,0,None)
+
+    # ABS_Y -> W
+    if self._device_sensor.Value1.value < -0.1:
+      if not 87 in self._pressed_keys:
+        self._handle_key(87,None,1,None)
+    elif 87 in self._pressed_keys:
+      self._handle_key(87,None,0,None)
+
+    # ABS_X -> D
+    if self._device_sensor.Value0.value > 0.5:
+      if not 68 in self._pressed_keys:
+        self._handle_key(68,None,1,None)
+    elif 68 in self._pressed_keys:
+      self._handle_key(68,None,0,None)
+
+    # ABS_X -> A
+    if self._device_sensor.Value0.value < -0.5:
+      if not 65 in self._pressed_keys:
+        self._handle_key(65,None,1,None)
+    elif 65 in self._pressed_keys:
+      self._handle_key(65,None,0,None)
+
+    # (A) -> SPACE
+    if self._device_sensor.Button2.value:
+      if not 32 in self._pressed_keys:
+        self._handle_key(32,None,1,None)
+    elif 32 in self._pressed_keys:
+      self._handle_key(32,None,0,None)
+
+    # (X) -> C
+    if self._device_sensor.Button0.value:
+      if not 67 in self._pressed_keys:
+        self._handle_key(67,None,1,None)
+    elif 67 in self._pressed_keys:
+      self._handle_key(67,None,0,None)
+
+    # ABS_Y -> current translation velocity z
+    if math.fabs(self._device_sensor.Value1.value) > 0.1:
+      self._current_translation = avango.gua.Vec3(self._current_translation.x,self._current_translation.y,self._device_sensor.Value1.value/-20.0)
+
+    ###
+
 
     self._check_animation_loop()
 

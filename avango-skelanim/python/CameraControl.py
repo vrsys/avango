@@ -1,5 +1,7 @@
 import avango
 import avango.script
+import avango.daemon
+import math
 from avango.script import field_has_changed
 
 def clamp(minimum, x, maximum):
@@ -16,6 +18,9 @@ class CameraControl(avango.script.Script):
   _mouse_last_pos = None
   _rotation_speed = 0.5
   _scroll_speed = 1
+
+  _device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+  _device_sensor.Station.value = "device-xbox-1"
 
   def __init__(self):
 
@@ -40,6 +45,14 @@ class CameraControl(avango.script.Script):
     
 
   def evaluate(self):
+
+    if math.fabs(self._device_sensor.Value2.value) > 0.3:
+      self._mouse_delta.x = self._mouse_delta.x + self._device_sensor.Value2.value
+    if math.fabs(self._device_sensor.Value3.value) > 0.3:
+      self._mouse_delta.y = self._mouse_delta.y + self._device_sensor.Value3.value
+    self._camera_offset += self._device_sensor.Value4.value/10
+    self._camera_offset -= self._device_sensor.Value5.value/10
+
     # this cant be done in the constructor because the bbox scale is onlz correct after first rendered frame
     target_height = self._target.BoundingBox.value.Max.value.y - self._target.BoundingBox.value.Min.value.y  
 

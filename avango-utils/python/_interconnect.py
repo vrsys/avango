@@ -70,7 +70,7 @@ class InterconnectOutputNode(avango.script.Script):
 
         if self._stream.output != self._old_output:
             # Full update
-            for i in xrange(self._get_num_fields()):
+            for i in range(self._get_num_fields()):
                 field = self._get_field(i)
                 self.write_field(field, field._get_name())
 
@@ -103,7 +103,7 @@ class InterconnectOutputNode(avango.script.Script):
         self._nodes[node_name] = nodefieldname
         self._node_fields[node_name] = []
 
-        for i in xrange(node._get_num_fields()):
+        for i in range(node._get_num_fields()):
             field = node._get_field(i)
 
             # create and add field with same type and mangled name
@@ -121,7 +121,7 @@ class InterconnectOutputNode(avango.script.Script):
         #print "remove_node: " + str(node_name) + " " + node.Name.value
 
         if node_name not in self._nodes:
-            print "WARNING: trying to remove node that was not added!"
+            print("WARNING: trying to remove node that was not added!")
             return
 
         for fieldname in self._node_fields[node_name]:
@@ -351,7 +351,7 @@ class _InterconnectNetworkStream(avango.script.Script):
                 self.Connected.value = False
                 return
             self._input.write(data)
-        except socket.error, err:
+        except socket.error as err:
             pass
 
         while True:
@@ -363,7 +363,7 @@ class _InterconnectNetworkStream(avango.script.Script):
             try:
                 n = self._connection.send(self._pending_output)
                 self._pending_output = self._pending_output[n:]
-            except socket.error, err:
+            except socket.error as err:
                 pass
 
     def close(self):
@@ -399,7 +399,7 @@ class InterconnectServer(_InterconnectNetworkStream):
         try:
             self._connection = self._socket.accept()[0]
             self._connection.setblocking(0)
-        except socket.error, err:
+        except socket.error as err:
             return False
         if not self._connection:
             return False
@@ -433,7 +433,7 @@ class InterconnectClient(_InterconnectNetworkStream):
                 self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self._socket.setblocking(0)
             self._socket.connect((self.Host.value, self.Port.value))
-        except socket.error, err:
+        except socket.error as err:
             #under windows ignore the error "The socket operation could not complete without blocking"
             #TODO: Most probably not the best way. Use other implementation
             if platform.system() == "Windows":
@@ -471,7 +471,7 @@ class InterconnectManagerBase(avango.script.Script):
 
     def init_connection(self, interconnect_object):
         try:
-            print "init_connection"
+            print("init_connection")
             #self._stream = InterconnectServer()
             self._stream = interconnect_object
             self._stream.Port.connect_from(self.Port)
@@ -484,8 +484,8 @@ class InterconnectManagerBase(avango.script.Script):
 
             return True
 
-        except socket.error, msg:
-            print "Connection: " + str(port) + " failed. Error: " + str(msg)
+        except socket.error as msg:
+            print("Connection: " + str(port) + " failed. Error: " + str(msg))
             return False
 
     @field_has_changed(Connected)

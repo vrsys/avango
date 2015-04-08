@@ -39,19 +39,19 @@ from ._range_checks import *
 from ._interpolators import *
 from ._node_optimizer import *
 #from ._screen_capture import *
-import ._guajacum
+from ._guajacum import *
 
 #import Leap
 #from ._leap_motion import *
-    
+
 #check for leapMotion sdk
 leap_motion_sdk_found = False
 try:
     import Leap
     from ._leap_motion import *
 except ImportError:
-    print "#############################################"
-    print "#No LeapMotion SDK found. No driver support.#"
-    print "#You won't be able to use any of the        #"
-    print "#LeapMotion functionality                   #"
-    print "#############################################"
+    print("#############################################")
+    print("#No LeapMotion SDK found. No driver support.#")
+    print("#You won't be able to use any of the        #")
+    print("#LeapMotion functionality                   #")
+    print("#############################################")

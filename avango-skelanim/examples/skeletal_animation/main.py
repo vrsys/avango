@@ -8,6 +8,7 @@ from avango.gua.skelanim.GroundFollowing import *
 from avango.gua.skelanim.CharacterControl import *
 from avango.gua.skelanim.CameraControl import *
 from avango.gua.skelanim.DistanceEvents import *
+from avango.gua.skelanim.AnimationControl import AnimationConfig
 
 def start():
   
@@ -96,7 +97,7 @@ def start():
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
   #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower_01_001.fbx",
+  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
 
@@ -194,10 +195,10 @@ def start():
   character_control.bind_transformation(65, "crouch_fwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(65, "crouch_bwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(65, "swim", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
-  character_control.key_down(65, "idle","run_lt")
-  character_control.key_up(65, "run_lt","idle")
-  character_control.key_down(65, "crouch","crouch_lt")
-  character_control.key_up(65, "crouch_lt","crouch")
+  character_control.on_key_down(65, "idle", AnimationConfig("run_lt"))
+  character_control.on_key_up(65, "run_lt", AnimationConfig("idle"))
+  character_control.on_key_down(65, "crouch", AnimationConfig("crouch_lt"))
+  character_control.on_key_up(65, "crouch_lt", AnimationConfig("crouch"))
 
   # D
   character_control.bind_transformation(68, "run_fwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
@@ -205,75 +206,75 @@ def start():
   character_control.bind_transformation(68, "crouch_fwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(68, "crouch_bwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
   character_control.bind_transformation(68, "swim", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.key_down(68, "idle","run_rt")
-  character_control.key_up(68, "run_rt","idle")
-  character_control.key_down(68, "crouch","crouch_rt")
-  character_control.key_up(68, "crouch_rt","crouch")
+  character_control.on_key_down(68, "idle", AnimationConfig("run_rt"))
+  character_control.on_key_up(68, "run_rt", AnimationConfig("idle"))
+  character_control.on_key_down(68, "crouch", AnimationConfig("crouch_rt"))
+  character_control.on_key_up(68, "crouch_rt", AnimationConfig("crouch"))
 
 
   # W
-  character_control.key_down(87, "idle","run_fwd")
-  character_control.key_up(87, "run_fwd","idle")
-  character_control.key_down(87, "crouch","crouch_fwd")
-  character_control.key_up(87, "crouch_fwd","crouch")
+  character_control.on_key_down(87, "idle", AnimationConfig("run_fwd"))
+  character_control.on_key_up(87, "run_fwd", AnimationConfig("idle"))
+  character_control.on_key_down(87, "crouch", AnimationConfig("crouch_fwd"))
+  character_control.on_key_up(87, "crouch_fwd", AnimationConfig("crouch"))
   character_control.bind_transformation(87, "run_rt", avango.gua.make_trans_mat(0.0,0.0,0.025))
   character_control.bind_transformation(87, "run_lt", avango.gua.make_trans_mat(0.0,0.0,0.025))
   character_control.bind_transformation(87, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
   character_control.bind_transformation(87, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
 
   # S
-  character_control.key_down(83, "idle","run_bwd")
-  character_control.key_up(83, "run_bwd","idle")
-  character_control.key_down(83, "crouch","crouch_bwd")
-  character_control.key_up(83, "crouch_bwd","crouch")
+  character_control.on_key_down(83, "idle", AnimationConfig("run_bwd"))
+  character_control.on_key_up(83, "run_bwd", AnimationConfig("idle"))
+  character_control.on_key_down(83, "crouch", AnimationConfig("crouch_bwd"))
+  character_control.on_key_up(83, "crouch_bwd", AnimationConfig("crouch"))
   character_control.bind_transformation(83, "run_rt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
   character_control.bind_transformation(83, "run_lt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
   character_control.bind_transformation(83, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
   character_control.bind_transformation(83, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
 
   # C
-  character_control.key_down(67, "idle","crouch",0.2)
-  character_control.key_up(67, "crouch","idle",0.4)
-  character_control.key_down(67, "run_fwd","crouch_fwd")
-  character_control.key_up(67, "crouch_fwd","run_fwd")
-  character_control.key_down(67, "run_bwd","crouch_bwd")
-  character_control.key_up(67, "crouch_bwd","run_bwd")
-  character_control.key_down(67, "run_lt","crouch_lt")
-  character_control.key_up(67, "crouch_lt","run_lt")
-  character_control.key_down(67, "run_rt","crouch_rt")
-  character_control.key_up(67, "crouch_rt","run_rt")
+  character_control.on_key_down(67, "idle", AnimationConfig("crouch"),0.2)
+  character_control.on_key_up(67, "crouch", AnimationConfig("idle"),0.4)
+  character_control.on_key_down(67, "run_fwd", AnimationConfig("crouch_fwd"))
+  character_control.on_key_up(67, "crouch_fwd", AnimationConfig("run_fwd"))
+  character_control.on_key_down(67, "run_bwd", AnimationConfig("crouch_bwd"))
+  character_control.on_key_up(67, "crouch_bwd", AnimationConfig("run_bwd"))
+  character_control.on_key_down(67, "run_lt", AnimationConfig("crouch_lt"))
+  character_control.on_key_up(67, "crouch_lt", AnimationConfig("run_lt"))
+  character_control.on_key_down(67, "run_rt", AnimationConfig("crouch_rt"))
+  character_control.on_key_up(67, "crouch_rt", AnimationConfig("run_rt"))
 
   # F
-  character_control.key_down(70, "idle","taunt1")
-  character_control.key_up(70, "taunt1","idle")
+  character_control.on_key_down(70, "idle", AnimationConfig("taunt1"))
+  character_control.on_key_up(70, "taunt1", AnimationConfig("idle"))
 
   # G
-  character_control.key_down(71, "idle","taunt2")
-  character_control.key_up(71, "taunt2","idle")
+  character_control.on_key_down(71, "idle", AnimationConfig("taunt2"))
+  character_control.on_key_up(71, "taunt2", AnimationConfig("idle"))
 
   # H
-  character_control.key_down(72, "idle","taunt3")
-  character_control.key_up(72, "taunt3","idle")
+  character_control.on_key_down(72, "idle", AnimationConfig("taunt3"))
+  character_control.on_key_up(72, "taunt3", AnimationConfig("idle"))
 
   # J
-  character_control.key_down(74, "idle","taunt4")
-  character_control.key_up(74, "taunt4","idle")
+  character_control.on_key_down(74, "idle", AnimationConfig("taunt4"))
+  character_control.on_key_up(74, "taunt4", AnimationConfig("idle"))
 
   # K
-  character_control.key_down(75, "idle","taunt5")
-  character_control.key_up(75, "taunt5","idle")
+  character_control.on_key_down(75, "idle", AnimationConfig("taunt5"))
+  character_control.on_key_up(75, "taunt5", AnimationConfig("idle"))
 
   # L
-  character_control.key_down(76, "idle","taunt6")
-  character_control.key_up(76, "taunt6","idle")
+  character_control.on_key_down(76, "idle", AnimationConfig("taunt6"))
+  character_control.on_key_up(76, "taunt6", AnimationConfig("idle"))
 
 
   # SPACE BAR
-  character_control.key_down(32, "idle","jump",0.1)
-  character_control.key_down(32, "run_fwd","jump_fwd",0.25)
-  character_control.key_down(32, "run_bwd","jump_bwd",0.25)
-  character_control.key_down(32, "run_lt","jump_lt",0.25)
-  character_control.key_down(32, "run_rt","jump_rt",0.25)
+  character_control.on_key_down(32, "idle", AnimationConfig("jump", False),0.1)
+  character_control.on_key_down(32, "run_fwd", AnimationConfig("jump_fwd", False),0.25)
+  character_control.on_key_down(32, "run_bwd", AnimationConfig("jump_bwd", False),0.25)
+  character_control.on_key_down(32, "run_lt", AnimationConfig("jump_lt", False),0.25)
+  character_control.on_key_down(32, "run_rt", AnimationConfig("jump_rt", False),0.25)
 
   # animation dependend translations:
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
@@ -306,16 +307,16 @@ def start():
   character_control.bind_translation("jump_rt_land",avango.gua.Vec3(-0.04, 0.0, 0.0))
 
   # animations only played once and followed by another one
-  character_control.play_once("jump","jump_loop",0.1)
-  character_control.play_once("jump_fwd","jump_fwd_loop",0.01)
-  character_control.play_once("jump_bwd","jump_bwd_loop",0.01)
-  character_control.play_once("jump_lt","jump_lt_loop",0.01)
-  character_control.play_once("jump_rt","jump_rt_loop",0.01)
-  character_control.play_once("jump_land","idle",0.25)
-  character_control.play_once("jump_fwd_land","idle",0.25)
-  character_control.play_once("jump_bwd_land","idle",0.25)
-  character_control.play_once("jump_lt_land","idle",0.25)
-  character_control.play_once("jump_rt_land","idle",0.25)
+  character_control.on_animation_end("jump", AnimationConfig("jump_loop"),0.1)
+  character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.01)
+  character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.01)
+  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.01)
+  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.01)
+  character_control.on_animation_end("jump_land", AnimationConfig("idle"),0.25)
+  character_control.on_animation_end("jump_fwd_land", AnimationConfig("idle"),0.25)
+  character_control.on_animation_end("jump_bwd_land", AnimationConfig("idle"),0.25)
+  character_control.on_animation_end("jump_lt_land", AnimationConfig("idle"),0.25)
+  character_control.on_animation_end("jump_rt_land", AnimationConfig("idle"),0.25)
 
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
@@ -338,18 +339,18 @@ def start():
   distance_events = DistanceEvents()
   distance_events.my_constructor(character_control)
   distance_events.DistanceToGround.connect_from(ground_following.DistanceToGround)
-  distance_events.smaller_than(0.09, "jump_fwd_loop", "jump_fwd_preland", 0.01, False)
-  distance_events.smaller_than(0.09, "jump_bwd_loop", "jump_bwd_preland", 0.01, False)
-  distance_events.smaller_than(0.09, "jump_lt_loop", "jump_lt_preland", 0.01, False)
-  distance_events.smaller_than(0.09, "jump_rt_loop", "jump_rt_preland", 0.01, False)
-  distance_events.smaller_than(0.09, "jump_loop", "jump_preland", 0.1, False)
-  distance_events.smaller_than(0.01, "jump_preland", "jump_land", 0.1, False)
-  distance_events.smaller_than(0.01, "jump_fwd_preland", "jump_fwd_land", 0.1, False)
-  distance_events.smaller_than(0.01, "jump_bwd_preland", "jump_bwd_land", 0.1, False)
-  distance_events.smaller_than(0.01, "jump_lt_preland", "jump_lt_land", 0.1, False)
-  distance_events.smaller_than(0.01, "jump_rt_preland", "jump_rt_land", 0.1, False)
-  distance_events.smaller_than(ground_following.MaxDistanceToGround.value, "swim", "run_fwd", 0.5, True)
-  distance_events.bigger_than(ground_following.MaxDistanceToGround.value, "run_fwd", "swim", 0.5, True)
+  distance_events.smaller_than(0.09, "jump_fwd_loop", AnimationConfig("jump_fwd_preland", False), 0.01)
+  distance_events.smaller_than(0.09, "jump_bwd_loop", AnimationConfig("jump_bwd_preland", False), 0.01)
+  distance_events.smaller_than(0.09, "jump_lt_loop", AnimationConfig("jump_lt_preland", False), 0.01)
+  distance_events.smaller_than(0.09, "jump_rt_loop", AnimationConfig("jump_rt_preland", False), 0.01)
+  distance_events.smaller_than(0.09, "jump_loop", AnimationConfig("jump_preland", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_preland", AnimationConfig("jump_land", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_fwd_preland", AnimationConfig("jump_fwd_land", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_bwd_preland", AnimationConfig("jump_bwd_land", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_lt_preland", AnimationConfig("jump_lt_land", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_rt_preland", AnimationConfig("jump_rt_land", False), 0.1)
+  distance_events.smaller_than(ground_following.MaxDistanceToGround.value, "swim", AnimationConfig("run_fwd"), 0.5)
+  distance_events.bigger_than(ground_following.MaxDistanceToGround.value, "run_fwd", AnimationConfig("swim"), 0.5)
 
   timer = avango.nodes.TimeSensor()
 

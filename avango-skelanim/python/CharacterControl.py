@@ -13,7 +13,7 @@ class CharacterControl(avango.script.Script):
     # animations
     self._animation_control = AnimationControl()
     self._queued_animations = []
-    self._play_once = {}
+    self._on_animation_end = {}
 
     # keys
     self._pressed_keys = []
@@ -52,32 +52,31 @@ class CharacterControl(avango.script.Script):
 
     application_window.on_key_press(self._handle_key)
     
-  def bind_transformation(self, key_nr, current_animation, transform_matrix):
+  def bind_transformation(self, key_nr, current_animation_name, transform_matrix):
     delta_list_id = len(self._delta_transformations)
     self._delta_transformations.append(avango.gua.make_identity_mat())
-    self._transformations.append((key_nr, current_animation, delta_list_id, transform_matrix))
+    self._transformations.append((key_nr, current_animation_name, delta_list_id, transform_matrix))
 
-  def key_down(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
-    self._animations_kd.append((key_nr, current_animation,next_animation, blend_duration))
+  def on_key_down(self, key_nr, current_animation_name, next_animation_config, blend_duration = 0.5):
+    self._animations_kd.append((key_nr, current_animation_name,next_animation_config, blend_duration))
 
-  def key_up(self, key_nr, current_animation, next_animation, blend_duration = 0.5):
-    self._animations_ku.append((key_nr, current_animation,next_animation, blend_duration))
+  def on_key_up(self, key_nr, current_animation_name, next_animation_config, blend_duration = 0.5):
+    self._animations_ku.append((key_nr, current_animation_name,next_animation_config, blend_duration))
 
-  def bind_translation(self, animation, translation_vec):
-    self._translations[animation] = translation_vec
+  def on_animation_end(self, animation_name, next_animation_config, blend_duration = 0.5):
+    self._on_animation_end[animation_name] = (next_animation_config,blend_duration)
 
-  def activate_wall_detection(self, dir_offset, height_offset, idle_animation, scene_graph):
+  def bind_translation(self, animation_name, translation_vec):
+    self._translations[animation_name] = translation_vec
+
+  def activate_wall_detection(self, dir_offset, height_offset, idle_animation_name, scene_graph):
     self._wall_detect_offset = dir_offset
     self._wall_detect_height = height_offset
-    self._wall_detect_idle = idle_animation
+    self._wall_detect_idle = AnimationConfig(idle_animation_name)
     self._scene_graph = scene_graph
 
-
-  def queue_animation(self, animation, blend_duration = 0.5):
-    self._queued_animations.append((animation,blend_duration))
-
-  def play_once(self, animation, next_animation, blend_duration = 0.5):
-    self._play_once[animation] = (next_animation,blend_duration)
+  def queue_animation(self, animation_config, blend_duration = 0.5):
+    self._queued_animations.append((animation_config,blend_duration))
 
   def get_current_animation(self):
     return self._animation_control.get_current_animation()
@@ -130,8 +129,9 @@ class CharacterControl(avango.script.Script):
       self._handle_key(67,None,0,None)
 
     # ABS_Y -> current translation velocity z
-    if math.fabs(self._device_sensor.Value1.value) > 0.1:
-      self._current_translation = avango.gua.Vec3(self._current_translation.x,self._current_translation.y,self._device_sensor.Value1.value/-20.0)
+    #if math.fabs(self._device_sensor.Value1.value) > 0.1:
+    #self._current_translation = avango.gua.Vec3(self._current_translation.x,self._current_translation.y,self._device_sensor.Value1.value/-20.0)
+    #self._animation_control._current_animation.speed = math.fabs(self._device_sensor.Value1.value)
 
     ###
 
@@ -144,56 +144,49 @@ class CharacterControl(avango.script.Script):
     
     self._blend_translations()
     
-  def switch_animation(self, animation, loop_mode = True):
+  def switch_animation(self, animation_config):
 
     # look for already pressed keys with propreitary current animation
     # abort blending if already pressed key changed state
-    if self._check_pressed_keys(animation):
+    if self._check_pressed_keys(animation_config.name):
         return
 
-    loop_mode_tmp = loop_mode
-    next_animation = self._check_play_once(animation)
-    if next_animation != None:
-      loop_mode_tmp = False
+    next_animation_blending = self._check_on_animation_end(animation_config.name)
     
-    self._animation_control.switch_to(AnimationConfig(animation, loop_mode_tmp))
+    self._animation_control.switch_to(animation_config)
     
-    self._apply_animation_changes(next_animation,loop_mode_tmp)
+    self._apply_animation_changes(next_animation_blending, animation_config.loop)
 
-  def blend_animation(self, animation, blending_duration = 0.5, loop_mode = True):
+  def blend_animation(self, animation_config, blending_duration = 0.5):
 
     # look for already pressed keys with propreitary current animation
     # abort blending if already pressed key changed state
-    if self._check_pressed_keys(animation):
+    if self._check_pressed_keys(animation_config.name):
         return
 
     if blending_duration < 0.001:
-      self.switch_animation(animation, loop_mode)
+      self.switch_animation(animation_config)
       return
 
-    loop_mode_tmp = loop_mode
-    next_animation = self._check_play_once(animation)
-    if next_animation != None:
-      loop_mode_tmp = False
+    next_animation_blending = self._check_on_animation_end(animation_config.name)
     
-    self._animation_control.blend_to(AnimationConfig(animation, loop_mode_tmp), blending_duration)
-    # self._animation_control.blend_to(animation, blending_duration, loop_mode_tmp)
+    self._animation_control.blend_to(animation_config, blending_duration)
     
-    self._apply_animation_changes(next_animation,loop_mode_tmp)
+    self._apply_animation_changes(next_animation_blending, animation_config.loop)
 
 
-  def _handle_key(self, ascii, unknown , event , unknown2, animation = None):
+  def _handle_key(self, ascii, unknown , event , unknown2, animation_name = None):
 
     # additional animation parameter for proprietary animation states
-    if animation is None:
-      animation = self._animation_control.get_current_animation()
+    if animation_name is None:
+      animation_name = self._animation_control.get_current_animation()
 
     # animation trigger key down
     if event == 1:
       if ascii not in self._pressed_keys:
         self._pressed_keys.append(ascii)
       for a in self._animations_kd:
-        if ascii == a[0] and animation == a[1]:
+        if ascii == a[0] and animation_name == a[1]:
 
           self.blend_animation(a[2],a[3])
 
@@ -202,15 +195,15 @@ class CharacterControl(avango.script.Script):
       if ascii in self._pressed_keys:
         self._pressed_keys.remove(ascii)
       for a in self._animations_ku:
-        if ascii == a[0] and animation == a[1]:
+        if ascii == a[0] and animation_name == a[1]:
 
           self.blend_animation(a[2],a[3])
 
     # transformation trigger
     for t in self._transformations:
-      if ascii == t[0] and event == 1 and animation == t[1]:
+      if ascii == t[0] and event == 1 and animation_name == t[1]:
         self._delta_transformations[t[2]] = t[3]
-      if ascii == t[0] and event == 0 and animation== t[1]:
+      if ascii == t[0] and event == 0 and animation_name== t[1]:
         self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
 
   def _blend_translations(self):
@@ -230,7 +223,6 @@ class CharacterControl(avango.script.Script):
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
 
     elif self._animation_control.get_current_animation() != self._wall_detect_idle:
-      ##self._animation_control.blend_to(self._wall_detect_idle)
       self.blend_animation(self._wall_detect_idle)
 
   def _wall_detection(self, delta_translation):
@@ -255,28 +247,26 @@ class CharacterControl(avango.script.Script):
   def _check_animation_loop(self):
 
     if not self._animation_control.is_looping() and len(self._queued_animations)>0:
-
       queued = self._queued_animations.pop(0)
+      self.blend_animation(queued[0],queued[1])
 
-      self.blend_animation(queued[0],queued[1],len(self._queued_animations)==0)
+  def _check_on_animation_end(self, animation_name):
 
-  def _check_play_once(self, animation):
+    next_animation_blending = None
+    if animation_name in self._on_animation_end:
+      next_animation_blending = self._on_animation_end[animation_name]
+    return next_animation_blending
 
-    next_animation = None
-    if animation in self._play_once:
-      next_animation = self._play_once[animation]
-    return next_animation
-
-  def _check_pressed_keys(self, next_animation):
+  def _check_pressed_keys(self, next_animation_name):
 
     current_animation = self._animation_control.get_current_animation()
     for ascii in self._pressed_keys:
-      self._handle_key(ascii,None,1,None,next_animation)
+      self._handle_key(ascii,None,1,None,next_animation_name)
       if current_animation != self._animation_control.get_current_animation():
         return True
     return False
 
-  def _apply_animation_changes(self, next_animation, loop_mode):
+  def _apply_animation_changes(self, next_animation_blending, loop_mode):
 
     if self._animation_control.get_last_animation() in self._translations:
       self._last_translation = self._translations[self._animation_control.get_last_animation()]
@@ -289,9 +279,9 @@ class CharacterControl(avango.script.Script):
      self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
 
-    # queue next animation if play once
-    if next_animation != None:
-      self.queue_animation(next_animation[0],next_animation[1])
+    # queue next animation
+    if next_animation_blending != None:
+      self.queue_animation(next_animation_blending[0],next_animation_blending[1])
     
     # clear queue when looped animation is triggered
     if loop_mode:

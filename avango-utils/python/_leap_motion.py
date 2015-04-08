@@ -5,7 +5,7 @@ import Leap
 import avango.gua
 
 #python 
-import Queue
+import queue
 from types import *
 
 keep_alive = []
@@ -516,7 +516,7 @@ class AVLeapMotionFrameListener(avango.script.Script):
 
 
 def create_leapmotion_listener(enable_gestures):
-    message_queue = Queue.Queue()
+    message_queue = queue.Queue()
     listener = LeapMotionInputListener(message_queue)
     keep_alive.append(listener)
     

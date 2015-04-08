@@ -85,6 +85,7 @@ def start():
   loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
 
 
+
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
 
   bob_ground.Children.value = [bob_nav]
@@ -184,10 +185,32 @@ def start():
   viewer.Windows.value = [window]
   #window.CursorMode.value = avango.gua.CursorMode.DISABLED
 
+  # XBOX Controller
+  device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+  device_sensor.Station.value = "device-xbox-1"
 
   # setup character control
   character_control = CharacterControl()
   character_control.my_constructor(bob,bob_nav,window)
+  # optional / additional xbox controller settings:
+  '''character_control.XBOX_X.connect_from(device_sensor.Value0)
+  character_control.XBOX_Y.connect_from(device_sensor.Value1)
+  character_control.XBOX_BTN_A.connect_from(device_sensor.Button2)
+  character_control.XBOX_BTN_X.connect_from(device_sensor.Button0)
+  character_control.xbox_override_key(character_control.XBOX_Y,83,0.1)
+  character_control.xbox_override_key(character_control.XBOX_Y,87,-0.1,-1.0)
+  character_control.xbox_override_key(character_control.XBOX_X,68,0.1)
+  character_control.xbox_override_key(character_control.XBOX_X,65,-0.1,-1.0)
+  character_control.xbox_override_key(character_control.XBOX_BTN_A,32)
+  character_control.xbox_override_key(character_control.XBOX_BTN_X,67)
+  character_control.xbox_animation_speed(character_control.XBOX_Y,"run_fwd")
+  character_control.xbox_animation_speed(character_control.XBOX_Y,"run_bwd")
+  character_control.xbox_animation_speed(character_control.XBOX_X,"run_lt")
+  character_control.xbox_animation_speed(character_control.XBOX_X,"run_rt")
+  character_control.xbox_animation_speed(character_control.XBOX_Y,"crouch_fwd")
+  character_control.xbox_animation_speed(character_control.XBOX_Y,"crouch_bwd")
+  character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_lt")
+  character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_rt")'''
 
   # A
   character_control.bind_transformation(65, "run_fwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
@@ -324,6 +347,11 @@ def start():
   # setup camera control
   camera_control = CameraControl()
   camera_control.my_constructor(bob,window)
+  # optional / additional xbox controller settings:
+  camera_control.XBOX_X.connect_from(device_sensor.Value2)
+  camera_control.XBOX_Y.connect_from(device_sensor.Value3)
+  camera_control.XBOX_LZ.connect_from(device_sensor.Value4)
+  camera_control.XBOX_RZ.connect_from(device_sensor.Value5)
   screen.Transform.connect_from(camera_control.OutTransform)
 
   # setup ground following

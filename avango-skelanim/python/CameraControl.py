@@ -1,6 +1,5 @@
 import avango
 import avango.script
-import avango.daemon
 import math
 from avango.script import field_has_changed
 
@@ -12,19 +11,25 @@ class CameraControl(avango.script.Script):
   OutTransform = avango.gua.SFMatrix4()
   OutTransform.value = avango.gua.make_identity_mat()
 
-  _mouse_delta = avango.gua.Vec2(0.0,.0)     # how much mouse was moved since last frame
-  _camera_offset = 0.01
-  _camera_rotation = avango.gua.Vec2(0.0,180.0)
-  _mouse_last_pos = None
-  _rotation_speed = 0.5
-  _scroll_speed = 1
-
-  _device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-  _device_sensor.Station.value = "device-xbox-1"
+  XBOX_X = avango.SFFloat()
+  XBOX_Y = avango.SFFloat()
+  XBOX_LZ = avango.SFFloat()
+  XBOX_RZ = avango.SFFloat()
 
   def __init__(self):
 
     self.super(CameraControl).__init__()
+
+    self._mouse_delta = avango.gua.Vec2(0.0,.0)     # how much mouse was moved since last frame
+    self._camera_offset = 0.01
+    self._camera_rotation = avango.gua.Vec2(0.0,180.0)
+    self._mouse_last_pos = None
+    self._rotation_speed = 0.5
+    self._scroll_speed = 1
+
+    self._rotation_speed_xbox = 4.0
+    self._scroll_speed_xbox = 0.1
+
 
   def my_constructor(self, target_node, application_window):
 
@@ -46,12 +51,12 @@ class CameraControl(avango.script.Script):
 
   def evaluate(self):
 
-    if math.fabs(self._device_sensor.Value2.value) > 0.3:
-      self._mouse_delta.x = self._mouse_delta.x + self._device_sensor.Value2.value
-    if math.fabs(self._device_sensor.Value3.value) > 0.3:
-      self._mouse_delta.y = self._mouse_delta.y + self._device_sensor.Value3.value
-    self._camera_offset += self._device_sensor.Value4.value/10
-    self._camera_offset -= self._device_sensor.Value5.value/10
+    if math.fabs(self.XBOX_X.value) > 0.3:
+      self._mouse_delta.x = self._mouse_delta.x + (self.XBOX_X.value*self._rotation_speed_xbox)
+    if math.fabs(self.XBOX_Y.value) > 0.3:
+      self._mouse_delta.y = self._mouse_delta.y + (self.XBOX_Y.value*self._rotation_speed_xbox)
+    self._camera_offset += self.XBOX_LZ.value * self._scroll_speed_xbox
+    self._camera_offset -= self.XBOX_RZ.value * self._scroll_speed_xbox
 
     # this cant be done in the constructor because the bbox scale is onlz correct after first rendered frame
     target_height = self._target.BoundingBox.value.Max.value.y - self._target.BoundingBox.value.Min.value.y  

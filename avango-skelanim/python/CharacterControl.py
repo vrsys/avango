@@ -6,6 +6,12 @@ import math
 
 class CharacterControl(avango.script.Script):
 
+  XBOX_X = avango.SFFloat()
+  XBOX_Y = avango.SFFloat()
+  XBOX_BTN_A = avango.SFFloat()
+  XBOX_BTN_X = avango.SFFloat()
+
+
   def __init__(self):
 
     self.super(CharacterControl).__init__()
@@ -35,8 +41,9 @@ class CharacterControl(avango.script.Script):
     self._wall_detected = False
     self._wall_detect_idle = None
 
-    self._device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    self._device_sensor.Station.value = "device-xbox-1"
+    self._xbox_events = []
+    self._xbox_animation_speeds = {}
+
 
   def my_constructor(self, character_node, navigation_node, application_window):
     # character node (bob)
@@ -81,60 +88,15 @@ class CharacterControl(avango.script.Script):
   def get_current_animation(self):
     return self._animation_control.get_current_animation()
 
+  def xbox_override_key(self, field, key, threshold = 0.0, multiplier = 1.0):
+    self._xbox_events.append((field,key,threshold,multiplier))
+
+  def xbox_animation_speed(self, field, animation_name):
+    self._xbox_animation_speeds[animation_name] = field
+
   def evaluate(self):
 
-    #xbox controller:
-    ###
-
-    # ABS_Y -> S
-    if self._device_sensor.Value1.value > 0.1:
-      if not 83 in self._pressed_keys:
-        self._handle_key(83,None,1,None)
-    elif 83 in self._pressed_keys:
-      self._handle_key(83,None,0,None)
-
-    # ABS_Y -> W
-    if self._device_sensor.Value1.value < -0.1:
-      if not 87 in self._pressed_keys:
-        self._handle_key(87,None,1,None)
-    elif 87 in self._pressed_keys:
-      self._handle_key(87,None,0,None)
-
-    # ABS_X -> D
-    if self._device_sensor.Value0.value > 0.5:
-      if not 68 in self._pressed_keys:
-        self._handle_key(68,None,1,None)
-    elif 68 in self._pressed_keys:
-      self._handle_key(68,None,0,None)
-
-    # ABS_X -> A
-    if self._device_sensor.Value0.value < -0.5:
-      if not 65 in self._pressed_keys:
-        self._handle_key(65,None,1,None)
-    elif 65 in self._pressed_keys:
-      self._handle_key(65,None,0,None)
-
-    # (A) -> SPACE
-    if self._device_sensor.Button2.value:
-      if not 32 in self._pressed_keys:
-        self._handle_key(32,None,1,None)
-    elif 32 in self._pressed_keys:
-      self._handle_key(32,None,0,None)
-
-    # (X) -> C
-    if self._device_sensor.Button0.value:
-      if not 67 in self._pressed_keys:
-        self._handle_key(67,None,1,None)
-    elif 67 in self._pressed_keys:
-      self._handle_key(67,None,0,None)
-
-    # ABS_Y -> current translation velocity z
-    #if math.fabs(self._device_sensor.Value1.value) > 0.1:
-    #self._current_translation = avango.gua.Vec3(self._current_translation.x,self._current_translation.y,self._device_sensor.Value1.value/-20.0)
-    #self._animation_control._current_animation.speed = math.fabs(self._device_sensor.Value1.value)
-
-    ###
-
+    self._check_xbox_overrides()
 
     self._check_animation_loop()
 
@@ -212,6 +174,12 @@ class CharacterControl(avango.script.Script):
     blendFact = self._animation_control.get_blending_factor()
 
     trans_vec = (self._last_translation * (1-blendFact) ) + (self._current_translation * blendFact)
+
+    #xbox_controller:
+    if math.fabs(self.XBOX_Y.value)>0.0:
+      trans_vec.z *= math.fabs(self.XBOX_Y.value)
+    if math.fabs(self.XBOX_X.value)>0.0:
+      trans_vec.x *= math.fabs(self.XBOX_X.value)
     
     # translation delta in world coordinate system:
     before_trans = self._navigation.WorldTransform.value.get_translate()
@@ -265,6 +233,19 @@ class CharacterControl(avango.script.Script):
       if current_animation != self._animation_control.get_current_animation():
         return True
     return False
+
+  def _check_xbox_overrides(self):
+
+    for tup in self._xbox_events:
+      if (tup[0].value*tup[3]) > (tup[2]*tup[3]):
+        if not tup[1] in self._pressed_keys:
+          self._handle_key(tup[1],None,1,None)
+      elif tup[1] in self._pressed_keys:
+        self._handle_key(tup[1],None,0,None)
+
+    cur_anim = self._animation_control.get_current_animation()
+    if cur_anim in self._xbox_animation_speeds:
+      self._animation_control._current_animation.speed = math.fabs(self._xbox_animation_speeds[cur_anim].value)
 
   def _apply_animation_changes(self, next_animation_blending, loop_mode):
 

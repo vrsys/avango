@@ -87,8 +87,10 @@ class AnimationControl(avango.script.Script):
         self._current_blending_start = self._timer.Time.value
         self._blending_end = self._current_blending_start
 
-        self._last_time = self._current_time
-        self._current_time = 0
+        self._animation_node.Time1.value = self._last_time = self._current_time
+        self._animation_node.Time2.value = self._current_time = 0
+
+        self._first_play = True
 
         # reset time
         self._timer.ReferenceTime.value = self._current_blending_start + self._timer.ReferenceTime.value

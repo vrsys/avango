@@ -7,6 +7,8 @@
  */
 
 #include <gua/node/SkeletalAnimationNode.hpp>
+ // necessary to prevent incomplete type error
+#include <gua/utils/SkeletalAnimation.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>

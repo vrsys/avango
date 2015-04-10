@@ -9,7 +9,8 @@
 #include <gua/renderer/SkeletalAnimationLoader.hpp>
 
 #include <avango/gua/Fields.hpp>
-#include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
+// #include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
+#include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
 
@@ -56,7 +57,7 @@ namespace av
         av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
                                                        std::string const& fileName,
                                                        Flags flags = DEFAULTS) const;
-        
+
       protected:
 
         /**

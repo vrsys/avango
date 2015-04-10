@@ -35,7 +35,6 @@ namespace av
          */
         SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
             std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
-
       protected:
 
         /**
@@ -69,6 +68,9 @@ namespace av
         virtual void setTime2CB(const SFFloat::SetValueEvent& event);
 
         float getAnimDuration(std::string const& name) const;
+
+        void loadAnimation(std::string const& file_name,
+                                    std::string const& animation_name) const;
 
         /*SFInt LoopNr;
 

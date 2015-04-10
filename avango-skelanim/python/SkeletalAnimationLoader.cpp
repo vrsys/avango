@@ -37,14 +37,6 @@ av::Link<av::gua::Node> createGeometryFromFile2(
                                 static_cast<av::gua::skelanim::SkeletalAnimationLoader::Flags>(flags));
 }
 
-void loadAnimation(
-    av::gua::skelanim::SkeletalAnimationLoader const& loader,
-    av::Link<av::gua::Node>& node,
-    std::string const& fileName,
-    std::string const& animation_name) {
-  loader.load_animation(node, fileName, animation_name);
-}
-
 void init_SkeletalAnimationLoader()
 {
   class_<av::gua::skelanim::SkeletalAnimationLoader,
@@ -52,7 +44,6 @@ void init_SkeletalAnimationLoader()
          bases<av::FieldContainer>, boost::noncopyable> ("SkeletalAnimationLoader", "docstring", no_init)
          .def("create_geometry_from_file", &createGeometryFromFile1)
          .def("create_geometry_from_file", &createGeometryFromFile2)
-         .def("load_animation", &loadAnimation)
          ;
 
   enum_<av::gua::skelanim::SkeletalAnimationLoader::Flags>("LoaderFlags")

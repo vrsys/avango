@@ -136,12 +136,10 @@ def start():
   portal_scene.Root.value.Children.value.append(bob_ground)
 
   # idle:
-  skel_loader.load_animation(bob,
-          "data/animations/Idle_Ready_Rif.FBX","idle", avango.gua.LoaderFlags.DEFAULTS)
+  bob.load_animation("data/animations/Idle_Ready_Rif.FBX","idle", avango.gua.LoaderFlags.DEFAULTS)
   
   # run:
-  skel_loader.load_animation(bob,
-         "data/animations/Run_Fwd_Rif.FBX","run_fwd", avango.gua.LoaderFlags.DEFAULTS)
+  bob.load_animation("data/animations/Run_Fwd_Rif.FBX","run_fwd", avango.gua.LoaderFlags.DEFAULTS)
 
   # setup ground following
   ground_following = GroundFollowing(

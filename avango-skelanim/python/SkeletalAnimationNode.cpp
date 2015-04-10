@@ -23,6 +23,12 @@ float getAnimDuration(av::gua::skelanim::SkeletalAnimationNode const& node, std:
    return node.getAnimDuration(name);
 }
 
+void loadAnimation(av::gua::skelanim::SkeletalAnimationNode& node,
+    std::string const& file_name,
+    std::string const& animation_name) {
+  node.loadAnimation(file_name, animation_name);
+}
+
 void init_SkeletalAnimationNode()
 {
   register_field<av::gua::skelanim::SFSkeletalAnimationNode>("SFSkeletalAnimationNode");
@@ -32,5 +38,6 @@ void init_SkeletalAnimationNode()
           bases<av::gua::GeometryNode>, boost::noncopyable 
     >("SkeletalAnimationNode", "docstring", no_init)
     .def("get_duration", &getAnimDuration)
+    .def("load_animation", &loadAnimation)
     ;
 }

@@ -50,16 +50,6 @@ av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string c
 }
 
 void
-av::gua::skelanim::SkeletalAnimationLoader::load_animation(av::Link<av::gua::Node>& node,
-                                                 std::string const& file_name,
-                                                 std::string const& animation_name) const
-{
-  auto gua_node(node->getGuaNode());
-
-  m_guaSkeletalAnimationLoader->load_animation(gua_node, file_name, animation_name);
-}
-
-void
 av::gua::skelanim::SkeletalAnimationLoader::initClass()
 {
     if (!isTypeInitialized())

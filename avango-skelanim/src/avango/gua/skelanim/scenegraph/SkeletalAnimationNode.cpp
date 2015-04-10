@@ -49,6 +49,13 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
 //{}
 
 void
+av::gua::skelanim::SkeletalAnimationNode::loadAnimation(std::string const& file_name,
+                                                 std::string const& animation_name) const
+{
+  m_guaSkeletalAnimationNode->add_animations(file_name, animation_name);
+}
+
+void
 av::gua::skelanim::SkeletalAnimationNode::initClass()
 {
     if (!isTypeInitialized())

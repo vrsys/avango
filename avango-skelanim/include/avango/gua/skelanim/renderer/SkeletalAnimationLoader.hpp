@@ -56,11 +56,7 @@ namespace av
         av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
                                                        std::string const& fileName,
                                                        Flags flags = DEFAULTS) const;
-
-        void load_animation(av::Link<av::gua::Node>& node,
-                            std::string const& file_name,
-                            std::string const& animation_name) const;
-
+        
       protected:
 
         /**

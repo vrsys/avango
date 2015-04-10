@@ -28,61 +28,61 @@ def start():
   bob.Transform.value = bob.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0)
 
   # idle:
-  loader.load_animation(bob, "data/animations/Idle_Ready_Rif.FBX","idle")
+  bob.load_animation("data/animations/Idle_Ready_Rif.FBX","idle")
   
   # run:
-  loader.load_animation(bob, "data/animations/Run_Fwd_Rif.FBX","run_fwd")
-  loader.load_animation(bob, "data/animations/Run_Bwd_Rif.FBX","run_bwd")
-  loader.load_animation(bob, "data/animations/Run_Lt_Rif.FBX","run_lt")
-  loader.load_animation(bob, "data/animations/Run_Rt_Rif.FBX","run_rt")
+  bob.load_animation("data/animations/Run_Fwd_Rif.FBX","run_fwd")
+  bob.load_animation("data/animations/Run_Bwd_Rif.FBX","run_bwd")
+  bob.load_animation("data/animations/Run_Lt_Rif.FBX","run_lt")
+  bob.load_animation("data/animations/Run_Rt_Rif.FBX","run_rt")
   
   # taunts:
-  loader.load_animation(bob, "data/animations/Taunt_BringItOn.FBX","taunt1")
-  loader.load_animation(bob, "data/animations/Taunt_ComeHear.FBX","taunt2")
-  loader.load_animation(bob, "data/animations/Taunt_Hoolahoop.FBX","taunt3")
-  loader.load_animation(bob, "data/animations/Taunt_NoNo.FBX","taunt4")
-  loader.load_animation(bob, "data/animations/Taunt_PelvicThrust.FBX","taunt5")
-  loader.load_animation(bob, "data/animations/Taunt_SlitThroat.FBX","taunt6")
+  bob.load_animation("data/animations/Taunt_BringItOn.FBX","taunt1")
+  bob.load_animation("data/animations/Taunt_ComeHear.FBX","taunt2")
+  bob.load_animation("data/animations/Taunt_Hoolahoop.FBX","taunt3")
+  bob.load_animation("data/animations/Taunt_NoNo.FBX","taunt4")
+  bob.load_animation("data/animations/Taunt_PelvicThrust.FBX","taunt5")
+  bob.load_animation("data/animations/Taunt_SlitThroat.FBX","taunt6")
   
   # swim forward: 
-  loader.load_animation(bob, "data/animations/Swim_Fwd_Rif.FBX","swim")
+  bob.load_animation("data/animations/Swim_Fwd_Rif.FBX","swim")
   
   # crouch:
-  loader.load_animation(bob, "data/animations/Crouch_Idle_Ready_Rif.FBX","crouch")
-  loader.load_animation(bob, "data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd")
-  loader.load_animation(bob, "data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd")
-  loader.load_animation(bob, "data/animations/Crouch_Lt_Rif.FBX","crouch_lt")
-  loader.load_animation(bob, "data/animations/Crouch_Rt_Rif.FBX","crouch_rt")
+  bob.load_animation("data/animations/Crouch_Idle_Ready_Rif.FBX","crouch")
+  bob.load_animation("data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd")
+  bob.load_animation("data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd")
+  bob.load_animation("data/animations/Crouch_Lt_Rif.FBX","crouch_lt")
+  bob.load_animation("data/animations/Crouch_Rt_Rif.FBX","crouch_rt")
   
   # jump idle:
-  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Start.FBX","jump")
-  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop")
-  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland")
-  loader.load_animation(bob, "data/animations/Jump_Idle_Rif_Land.FBX","jump_land")
+  bob.load_animation("data/animations/Jump_Idle_Rif_Start.FBX","jump")
+  bob.load_animation("data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop")
+  bob.load_animation("data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland")
+  bob.load_animation("data/animations/Jump_Idle_Rif_Land.FBX","jump_land")
   
   # jump forward: 
-  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
-  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
-  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
-  loader.load_animation(bob, "data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
+  bob.load_animation("data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
+  bob.load_animation("data/animations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
+  bob.load_animation("data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
+  bob.load_animation("data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
 
   # jump backward: 
-  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
-  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
-  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
-  loader.load_animation(bob, "data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
+  bob.load_animation("data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
+  bob.load_animation("data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
+  bob.load_animation("data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
+  bob.load_animation("data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
 
   # jump left: 
-  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Start.FBX","jump_lt")
-  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
-  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
-  loader.load_animation(bob, "data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
+  bob.load_animation("data/animations/Jump_Lt_Rif_Start.FBX","jump_lt")
+  bob.load_animation("data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
+  bob.load_animation("data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
+  bob.load_animation("data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
 
   # jump right: 
-  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Start.FBX","jump_rt")
-  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
-  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
-  loader.load_animation(bob, "data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
+  bob.load_animation("data/animations/Jump_Rt_Rif_Start.FBX","jump_rt")
+  bob.load_animation("data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
+  bob.load_animation("data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
+  bob.load_animation("data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
 
 
 

@@ -191,6 +191,7 @@ class CharacterControl(avango.script.Script):
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
 
     elif self._animation_control.get_current_animation() != self._wall_detect_idle:
+      self._pressed_keys = []
       self.blend_animation(self._wall_detect_idle)
 
   def _wall_detection(self, delta_translation):

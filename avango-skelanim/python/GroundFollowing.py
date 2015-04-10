@@ -37,7 +37,7 @@ class GroundFollowing(avango.script.Script):
     results = self.SceneGraph.value.ray_test(
                                      self.__ray,
                                      avango.gua.PickingOptions.PICK_ONLY_FIRST_OBJECT |
-                                     avango.gua.PickingOptions.GET_POSITIONS)
+                                     avango.gua.PickingOptions.GET_WORLD_POSITIONS)
 
 
     delta_trans = avango.gua.Vec3(0.0,0.0,0.0)
@@ -46,10 +46,10 @@ class GroundFollowing(avango.script.Script):
 
       first_hit = results.value[0]
 
-      hit_world = first_hit.Object.value.Transform.value * avango.gua.make_trans_mat(first_hit.Position.value)
+      #hit_world = first_hit.Object.value.Transform.value * avango.gua.make_trans_mat(first_hit.Position.value)
       
-      hit_world_trans = hit_world.get_translate()
-      #hit_world_trans = first_hit.WorldPosition.value
+      #hit_world_trans = hit_world.get_translate()
+      hit_world_trans = first_hit.WorldPosition.value
 
       new_pos = avango.gua.make_trans_mat(hit_world_trans)# * avango.gua.make_trans_mat(0.0,self.OffsetToGround.value, 0.0)
 

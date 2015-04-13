@@ -117,7 +117,7 @@ class CharacterControl(avango.script.Script):
     
     self._animation_control.switch_to(animation_config)
     
-    self._apply_animation_changes(next_animation_blending, animation_config.loop)
+    self._apply_animation_changes(next_animation_blending)
 
   def blend_animation(self, animation_config, blending_duration = 0.5):
 
@@ -134,7 +134,7 @@ class CharacterControl(avango.script.Script):
     
     self._animation_control.blend_to(animation_config, blending_duration)
     
-    self._apply_animation_changes(next_animation_blending, animation_config.loop)
+    self._apply_animation_changes(next_animation_blending)
 
 
   def _handle_key(self, ascii, unknown , event , unknown2, animation_name = None):
@@ -248,7 +248,7 @@ class CharacterControl(avango.script.Script):
     if cur_anim in self._xbox_animation_speeds:
       self._animation_control._current_animation.speed = math.fabs(self._xbox_animation_speeds[cur_anim].value)
 
-  def _apply_animation_changes(self, next_animation_blending, loop_mode):
+  def _apply_animation_changes(self, next_animation_blending):
 
     if self._animation_control.get_last_animation() in self._translations:
       self._last_translation = self._translations[self._animation_control.get_last_animation()]
@@ -264,10 +264,6 @@ class CharacterControl(avango.script.Script):
     # queue next animation
     if next_animation_blending != None:
       self.queue_animation(next_animation_blending[0],next_animation_blending[1])
-    
-    # clear queue when looped animation is triggered
-    if loop_mode:
-      self._queued_animations = []
 
     for index in range(0,len(self._delta_transformations)):
       self._delta_transformations[index] = avango.gua.make_identity_mat()

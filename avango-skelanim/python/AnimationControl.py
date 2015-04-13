@@ -92,10 +92,6 @@ class AnimationControl(avango.script.Script):
 
         self._first_play = True
 
-        # reset time
-        self._timer.ReferenceTime.value = self._current_blending_start + self._timer.ReferenceTime.value
-        self._current_blending_start = 0
-
         self._animation_node.BlendFactor.value = self._blending_factor = 1.0
         
         self._state = State.play
@@ -132,16 +128,16 @@ class AnimationControl(avango.script.Script):
 
         if self._current_animation == None:
             return
-        # always update time of current anim
-        if not self._current_animation.loop and self._timer.Time.value > self._current_blending_start + self._current_animation.duration:
+ 
+        if self._timer.Time.value > self._current_blending_start + self._current_animation.duration:
             self._first_play = False
-        else:
+        if self._current_animation.loop or self._timer.Time.value < self._current_blending_start + self._animation_node.get_duration(self._current_animation.name):
             self._current_time += self._delta_timer.Time.value / (self._animation_node.get_duration(self._current_animation.name) / self._current_animation.speed)
             self._animation_node.Time2.value = self._current_time % 1
 
         if self._state == State.blending:
             # update time for old animation only while blending
-            if self._last_animation.loop or self._timer.Time.value < self._last_blending_start + self._last_animation.duration:
+            if self._last_animation.loop or self._timer.Time.value < self._last_blending_start + self._animation_node.get_duration(self._last_animation.name):
                 self._last_time +=  self._delta_timer.Time.value / (self._animation_node.get_duration(self._last_animation.name) / self._last_animation.speed)
                 self._animation_node.Time1.value = self._last_time % 1
 
@@ -151,9 +147,6 @@ class AnimationControl(avango.script.Script):
 
                 self._state = State.play
                 self._blending_factor = 1.0
-                # reset time
-                self._timer.ReferenceTime.value = self._current_blending_start + self._timer.ReferenceTime.value
-                self._current_blending_start = 0
 
             self._animation_node.BlendFactor.value = self._blending_factor
 

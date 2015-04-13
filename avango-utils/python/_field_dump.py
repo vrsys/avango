@@ -30,7 +30,7 @@ def dump_fields(script):
     num_fields = script.get_num_fields()
     buffer += "ScriptName <" + str(script.Name.value) +">\n"
 
-    for i in xrange(num_fields):
+    for i in range(num_fields):
         field = script._get_field(i)
         field_name = field._get_name()
         field_type = field._get_type()
@@ -52,4 +52,4 @@ class ScriptFieldPrinter(avango.script.Script):
     def evaluate(self):
         if self.Script.value:
             buffer = dump_fields(self.Script.value)
-            print buffer
+            print(buffer)

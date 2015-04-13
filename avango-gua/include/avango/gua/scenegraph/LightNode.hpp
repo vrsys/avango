@@ -58,6 +58,7 @@ namespace av
       SFBool  EnableSpecularShading;
       SFFloat ShadowOffset;
       SFUInt  ShadowMapSize;
+      SFFloat LightSourceSize;
 
       // new
       MFFloat ShadowCascadedSplits;
@@ -102,6 +103,9 @@ namespace av
 
       virtual void getShadowMapSizeCB(const SFUInt::GetValueEvent& event);
       virtual void setShadowMapSizeCB(const SFUInt::SetValueEvent& event);
+      
+      virtual void getLightSourceSizeCB(const SFFloat::GetValueEvent& event);
+      virtual void setLightSourceSizeCB(const SFFloat::SetValueEvent& event);
 
       virtual void getShadowCascadedSplitsCB(const MFFloat::GetValueEvent& event);
       virtual void setShadowCascadedSplitsCB(const MFFloat::SetValueEvent& event);

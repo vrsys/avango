@@ -57,6 +57,10 @@ av::gua::LightNode::LightNode(std::shared_ptr< ::gua::node::LightNode> guanode)
                           boost::bind(&LightNode::getShadowMapSizeCB, this, _1),
                           boost::bind(&LightNode::setShadowMapSizeCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(LightSourceSize,
+                          boost::bind(&LightNode::getLightSourceSizeCB, this, _1),
+                          boost::bind(&LightNode::setLightSourceSizeCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(ShadowCascadedSplits,
                           boost::bind(&LightNode::getShadowCascadedSplitsCB, this, _1),
                           boost::bind(&LightNode::setShadowCascadedSplitsCB, this, _1));
@@ -218,6 +222,18 @@ void
 av::gua::LightNode::setShadowMapSizeCB(const SFUInt::SetValueEvent& event)
 {
     m_guaNode->data.shadow_map_size() = event.getValue();
+}
+
+void
+av::gua::LightNode::getLightSourceSizeCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.light_source_size();
+}
+
+void
+av::gua::LightNode::setLightSourceSizeCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.light_source_size() = event.getValue();
 }
 
 void

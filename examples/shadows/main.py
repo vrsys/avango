@@ -146,8 +146,8 @@ def start():
       avango.gua.nodes.TexturedQuadPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
-      avango.gua.nodes.BBoxPassDescription()
-      # avango.gua.nodes.DebugViewPassDescription()
+      avango.gua.nodes.BBoxPassDescription(),
+      avango.gua.nodes.DebugViewPassDescription()
     ],
     EnableABuffer = True
   )

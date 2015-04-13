@@ -72,7 +72,7 @@ def start():
                                          Type=avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
                                          EnableGodrays = True,
-                                         EnableShadows = False,
+                                         EnableShadows = True,
                                          ShadowMapSize = 1024,
                                          ShadowOffset = 0.001,
                                          ShadowCascadedSplits = [0.1, 3, 8, 15, 40],
@@ -131,7 +131,7 @@ def start():
   )
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.EnableSSAO.value = True
+  res_pass.EnableSSAO.value = False
   res_pass.SSAOIntensity.value = 3.0
   res_pass.SSAOFalloff.value = 20.0
   res_pass.SSAORadius.value = 10.0

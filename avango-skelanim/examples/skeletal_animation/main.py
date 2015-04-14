@@ -342,7 +342,7 @@ def start():
   character_control.on_animation_end("jump_rt_land", AnimationConfig("idle"),0.25)
 
   #wall detection:
-  character_control.activate_wall_detection(0.0075,0.013,"idle",graph)
+  character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
 
   # setup camera control
   camera_control = CameraControl()

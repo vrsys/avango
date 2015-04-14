@@ -140,8 +140,8 @@ class CharacterControl(avango.script.Script):
   def _handle_key(self, ascii, unknown , event , unknown2, animation_name = None):
 
     # additional animation parameter for proprietary animation states
-    if animation_name is None:
-      animation_name = self._animation_control.get_current_animation()
+    if animation_name is None and self._animation_control.get_current_animation() != None:
+      animation_name = self._animation_control.get_current_animation().name
 
     # animation trigger key down
     if event == 1:
@@ -190,7 +190,7 @@ class CharacterControl(avango.script.Script):
     if not self._wall_detection(delta_trans):
       self._navigation.Transform.value = self._navigation.Transform.value * avango.gua.make_trans_mat(trans_vec)
 
-    elif self._animation_control.get_current_animation() != self._wall_detect_idle:
+    elif self._animation_control.get_current_animation() != None and self._wall_detect_idle != None and self._animation_control.get_current_animation().name != self._wall_detect_idle.name:
       self._pressed_keys = []
       self.blend_animation(self._wall_detect_idle)
 
@@ -229,10 +229,11 @@ class CharacterControl(avango.script.Script):
   def _check_pressed_keys(self, next_animation_name):
 
     current_animation = self._animation_control.get_current_animation()
-    for ascii in self._pressed_keys:
-      self._handle_key(ascii,None,1,None,next_animation_name)
-      if current_animation != self._animation_control.get_current_animation():
-        return True
+    if current_animation != None:
+      for ascii in self._pressed_keys:
+        self._handle_key(ascii,None,1,None,next_animation_name)
+        if self._animation_control.get_current_animation() != None and current_animation.name != self._animation_control.get_current_animation().name:
+          return True
     return False
 
   def _check_xbox_overrides(self):
@@ -245,18 +246,19 @@ class CharacterControl(avango.script.Script):
         self._handle_key(tup[1],None,0,None)
 
     cur_anim = self._animation_control.get_current_animation()
-    if cur_anim in self._xbox_animation_speeds:
-      self._animation_control._current_animation.speed = math.fabs(self._xbox_animation_speeds[cur_anim].value)
+    if cur_anim != None and cur_anim.name in self._xbox_animation_speeds:
+      self._animation_control._current_animation.speed = math.fabs(self._xbox_animation_speeds[cur_anim.name].value)
 
   def _apply_animation_changes(self, next_animation_blending):
 
-    if self._animation_control.get_last_animation() in self._translations:
-      self._last_translation = self._translations[self._animation_control.get_last_animation()]
+    if self._animation_control.get_last_animation().name in self._translations:
+      self._last_translation = self._translations[self._animation_control.get_last_animation().name]
     else:
      self._last_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 
-    if self._animation_control.get_current_animation() in self._translations:
-      self._current_translation = self._translations[self._animation_control.get_current_animation()]
+    cur_anim = self._animation_control.get_current_animation()
+    if cur_anim != None and cur_anim.name in self._translations:
+      self._current_translation = self._translations[cur_anim.name]
     else:
      self._current_translation =  avango.gua.Vec3(0.0,0.0,0.0)
 

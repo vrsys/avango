@@ -26,10 +26,13 @@ class DistanceEvents(avango.script.Script):
 
   @field_has_changed(DistanceToGround)
   def distance_check(self):
+
+    cur_anim = self._character_control.get_current_animation()
+    if cur_anim != None:
     
-    for st in self._smaller_than:
-      if math.fabs(self.DistanceToGround.value) < st[0] and self._character_control.get_current_animation() == st[1]:
-        self._character_control.blend_animation(st[2],st[3])
-    for bt in self._bigger_than:
-      if math.fabs(self.DistanceToGround.value) > bt[0] and self._character_control.get_current_animation() == bt[1]:
-        self._character_control.blend_animation(bt[2],bt[3])
+      for st in self._smaller_than:
+        if math.fabs(self.DistanceToGround.value) < st[0] and cur_anim.name == st[1]:
+          self._character_control.blend_animation(st[2],st[3])
+      for bt in self._bigger_than:
+        if math.fabs(self.DistanceToGround.value) > bt[0] and cur_anim.name == bt[1]:
+          self._character_control.blend_animation(bt[2],bt[3])

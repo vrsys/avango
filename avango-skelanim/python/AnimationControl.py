@@ -54,16 +54,10 @@ class AnimationControl(avango.script.Script):
         self._animation_node.Time2.value = 0.5
 
     def get_current_animation(self):
-        if self._current_animation != None:
-            return self._current_animation.name
-        else:
-            return "none"
+        return self._current_animation
 
     def get_last_animation(self):
-        if self._current_animation != None:
-            return self._last_animation.name
-        else:
-            return "none"
+        return self._last_animation
 
     def get_blending_factor(self):
         return self._blending_factor

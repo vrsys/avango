@@ -66,6 +66,7 @@
 #include "renderer/Material.hpp"
 #include "renderer/PipelineDescription.hpp"
 #include "renderer/PipelinePassDescription.hpp"
+#include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
@@ -193,6 +194,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_Material();
     init_PipelineDescription();
     init_PipelinePassDescription();
+    init_StencilPassDescription();
     init_TriMeshPassDescription();
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();

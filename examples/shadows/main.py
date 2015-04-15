@@ -34,7 +34,7 @@ def start():
   spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
                                          Type=avango.gua.LightType.SPOT,
                                          Color = avango.gua.Color(1.0, 0.0, 0.7),
-                                         DisplayBoundingBox = True,
+                                         # DisplayBoundingBox = True,
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
@@ -48,7 +48,7 @@ def start():
   spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
                                          Type=avango.gua.LightType.SPOT,
                                          Color = avango.gua.Color(0.0, 1.0, 0.7),
-                                         DisplayBoundingBox = True,
+                                         # DisplayBoundingBox = True,
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
@@ -64,8 +64,12 @@ def start():
                                          Name = "point_light",
                                          Color = avango.gua.Color(0.2, 1.0, 0.7),
                                          EnableGodrays = True,
+                                         EnableShadows = True,
+                                         ShadowMapSize = 128,
+                                         ShadowOffset = 0.03,
+                                         Falloff = 0.5,
                                          Brightness = 10)
-  point_light.Transform.value = avango.gua.make_trans_mat(4.0, 1.0, 4.0) * avango.gua.make_scale_mat(10)
+  point_light.Transform.value = avango.gua.make_trans_mat(4.0, 1.0, 4.0) * avango.gua.make_scale_mat(4)
   graph.Root.value.Children.value.append(point_light)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
@@ -74,8 +78,7 @@ def start():
                                          EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
-                                         ShadowOffset = 0.001,
-                                         # ShadowCascadedSplits = [0.1, 3, 8, 15, 40],
+                                         ShadowOffset = 0.002,
                                          ShadowCascadedSplits = [0.1, 5, 20],
                                          ShadowNearClippingInSunDirection = 100,
                                          Brightness = 2

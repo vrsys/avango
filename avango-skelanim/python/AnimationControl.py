@@ -129,13 +129,13 @@ class AnimationControl(avango.script.Script):
  
         if self._timer.Time.value > self._current_blending_start + self._current_animation.duration:
             self._first_play = False
-        if self._current_animation.loop or self._timer.Time.value < self._current_blending_start + self._animation_node.get_duration(self._current_animation.name):
+        if self._current_animation.loop or self._timer.Time.value < self._current_blending_start + (self._animation_node.get_duration(self._current_animation.name)/self._current_animation.speed):
             self._current_time += self._delta_timer.Time.value / (self._animation_node.get_duration(self._current_animation.name) / self._current_animation.speed)
             self._animation_node.Time2.value = self._current_time % 1
 
         if self._state == State.blending:
             # update time for old animation only while blending
-            if self._last_animation.loop or self._timer.Time.value < self._last_blending_start + self._animation_node.get_duration(self._last_animation.name):
+            if self._last_animation.loop or self._timer.Time.value < self._last_blending_start + (self._animation_node.get_duration(self._last_animation.name)/self._last_animation.speed):
                 self._last_time +=  self._delta_timer.Time.value / (self._animation_node.get_duration(self._last_animation.name) / self._last_animation.speed)
                 self._animation_node.Time1.value = self._last_time % 1
 

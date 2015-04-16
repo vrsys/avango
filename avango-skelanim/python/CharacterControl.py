@@ -45,7 +45,7 @@ class CharacterControl(avango.script.Script):
     self._xbox_animation_speeds = {}
 
 
-  def my_constructor(self, character_node, navigation_node, application_window):
+  def my_constructor(self, character_node, navigation_node, start_animation_config, application_window = avango.gua.nodes.GlfwWindow()):
     # character node (bob)
     self._character = character_node
     # navigation node (bob_nav)
@@ -53,7 +53,7 @@ class CharacterControl(avango.script.Script):
     # window (for key evaluations)
     #self._window = application_window
 
-    self._animation_control.my_constructor(character_node)
+    self._animation_control.my_constructor(character_node, start_animation_config)
 
     self.always_evaluate(True)
 

@@ -41,12 +41,16 @@ class AnimationControl(avango.script.Script):
         self._blending_duration = 0.5
         self._blending_end = 0.0
 
-    def my_constructor(self, animation_node):
+    def my_constructor(self, animation_node, start_animation_config):
         self._timer.ReferenceTime.value = self._timer.RealTime.value
         self._animation_node = animation_node
 
         # start with idle or character controller wont work
-        self.switch_to(AnimationConfig("idle"))
+        if start_animation_config != None:
+            self.switch_to(start_animation_config)
+        else:
+            print("Error: Please select starting animation!")
+            exit()
 
         self.always_evaluate(True)
 

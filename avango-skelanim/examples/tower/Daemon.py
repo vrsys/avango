@@ -49,4 +49,5 @@ def xbox_controller(PLAYER_NUMBER):
 
 device_list = []
 xbox_controller(1)
+xbox_controller(2)
 avango.daemon.run(device_list)

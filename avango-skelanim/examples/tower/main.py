@@ -28,61 +28,61 @@ def start():
   bob.Transform.value = bob.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0)
 
   # idle:
-  bob.load_animation("data/animations/Idle_Ready_Rif.FBX","idle")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Idle_Ready_Rif.FBX","idle")
   
   # run:
-  bob.load_animation("data/animations/Run_Fwd_Rif.FBX","run_fwd")
-  bob.load_animation("data/animations/Run_Bwd_Rif.FBX","run_bwd")
-  bob.load_animation("data/animations/Run_Lt_Rif.FBX","run_lt")
-  bob.load_animation("data/animations/Run_Rt_Rif.FBX","run_rt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Fwd_Rif.FBX","run_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Bwd_Rif.FBX","run_bwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Lt_Rif.FBX","run_lt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Rt_Rif.FBX","run_rt")
   
   # taunts:
-  bob.load_animation("data/animations/Taunt_BringItOn.FBX","taunt1")
-  bob.load_animation("data/animations/Taunt_ComeHear.FBX","taunt2")
-  bob.load_animation("data/animations/Taunt_Hoolahoop.FBX","taunt3")
-  bob.load_animation("data/animations/Taunt_NoNo.FBX","taunt4")
-  bob.load_animation("data/animations/Taunt_PelvicThrust.FBX","taunt5")
-  bob.load_animation("data/animations/Taunt_SlitThroat.FBX","taunt6")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_BringItOn.FBX","taunt1")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_ComeHear.FBX","taunt2")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_Hoolahoop.FBX","taunt3")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_NoNo.FBX","taunt4")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_PelvicThrust.FBX","taunt5")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_SlitThroat.FBX","taunt6")
   
   # swim forward: 
-  bob.load_animation("data/animations/Swim_Fwd_Rif.FBX","swim")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Swim_Fwd_Rif.FBX","swim")
   
   # crouch:
-  bob.load_animation("data/animations/Crouch_Idle_Ready_Rif.FBX","crouch")
-  bob.load_animation("data/animations/Crouch_Fwd_Rif.FBX","crouch_fwd")
-  bob.load_animation("data/animations/Crouch_Bwd_Rif.FBX","crouch_bwd")
-  bob.load_animation("data/animations/Crouch_Lt_Rif.FBX","crouch_lt")
-  bob.load_animation("data/animations/Crouch_Rt_Rif.FBX","crouch_rt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Idle_Ready_Rif.FBX","crouch")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Fwd_Rif.FBX","crouch_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Bwd_Rif.FBX","crouch_bwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Lt_Rif.FBX","crouch_lt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Rt_Rif.FBX","crouch_rt")
   
   # jump idle:
-  bob.load_animation("data/animations/Jump_Idle_Rif_Start.FBX","jump")
-  bob.load_animation("data/animations/Jump_Idle_Rif_Loop.FBX","jump_loop")
-  bob.load_animation("data/animations/Jump_Idle_Rif_Preland.FBX","jump_preland")
-  bob.load_animation("data/animations/Jump_Idle_Rif_Land.FBX","jump_land")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Start.FBX","jump")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Loop.FBX","jump_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Preland.FBX","jump_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Land.FBX","jump_land")
   
   # jump forward: 
-  bob.load_animation("data/animations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
-  bob.load_animation("data/animations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
-  bob.load_animation("data/animations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
-  bob.load_animation("data/animations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
 
   # jump backward: 
-  bob.load_animation("data/animations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
-  bob.load_animation("data/animations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
-  bob.load_animation("data/animations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
-  bob.load_animation("data/animations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
 
   # jump left: 
-  bob.load_animation("data/animations/Jump_Lt_Rif_Start.FBX","jump_lt")
-  bob.load_animation("data/animations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
-  bob.load_animation("data/animations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
-  bob.load_animation("data/animations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Start.FBX","jump_lt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
 
   # jump right: 
-  bob.load_animation("data/animations/Jump_Rt_Rif_Start.FBX","jump_rt")
-  bob.load_animation("data/animations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
-  bob.load_animation("data/animations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
-  bob.load_animation("data/animations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Start.FBX","jump_rt")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
 
 
 
@@ -95,35 +95,15 @@ def start():
   #environment:
   tri_mesh_loader = avango.gua.nodes.TriMeshLoader()
 
-  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_dae.fbx",
-  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "/opt/3d_models/architecture/medieval_harbour/town.obj",
-  #medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/highrise_from_obj2.fbx",
-  medieval_harbour = tri_mesh_loader.create_geometry_from_file("medieval_harbour", "data/objects/highrise/tower.fbx",
+  tower = tri_mesh_loader.create_geometry_from_file("tower", "/opt/project_animation/highrise/tower.fbx",
                                             avango.gua.LoaderFlags.MAKE_PICKABLE|
                                             avango.gua.LoaderFlags.LOAD_MATERIALS)
+  tower.Transform.value = tower.Transform.value * avango.gua.make_rot_mat(235.0, 0.0, 1.0, 0.0) 
 
-  # environment = tri_mesh_loader.create_geometry_from_file("environment", "data/objects/highrise/environment.fbx",
-  #                                           avango.gua.LoaderFlags.MAKE_PICKABLE|
-  #                                           avango.gua.LoaderFlags.LOAD_MATERIALS)
-  # environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(0.1)
-
-  '''for child in medieval_harbour.Children.value:
-    child.Material.value.EnableBackfaceCulling.value = False
-    child.Material.value.set_uniform("Roughness",0.8)'''
-
-  #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0,0.57, -5)
-  #medieval_harbour.Transform.value = medieval_harbour.Transform.value * avango.gua.make_trans_mat(0.0,0.0, -5.0)
-
-  # plane = tri_mesh_loader.create_geometry_from_file("cube",
-  #                                           "data/objects/cube2.obj",
-  #                                           avango.gua.LoaderFlags.NORMALIZE_POSITION
-  #                                           | avango.gua.LoaderFlags.NORMALIZE_SCALE
-  #                                           | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
-  #                                           | avango.gua.LoaderFlags.MAKE_PICKABLE
-  #                                           | avango.gua.LoaderFlags.LOAD_MATERIALS)
-  # plane.Transform.value *= avango.gua.make_scale_mat(10.0,0.01,10.0) *  avango.gua.make_trans_mat(0, -3, 0)
-
-  # plane.Material.value.set_uniform("NormalMap","data/objects/glass_2_3_nm.TGA")
+  environment = tri_mesh_loader.create_geometry_from_file("environment", "/opt/project_animation/highrise/environment.fbx",
+                                            avango.gua.LoaderFlags.MAKE_PICKABLE|
+                                            avango.gua.LoaderFlags.LOAD_MATERIALS)
+  environment.Transform.value = environment.Transform.value * avango.gua.make_scale_mat(0.1) * avango.gua.make_rot_mat(235.0, 0.0, 1.0, 0.0) 
 
   sunlight = avango.gua.nodes.LightNode(
       Type=avango.gua.LightType.SUN,
@@ -173,9 +153,7 @@ def start():
   screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
-  #graph.Root.value.Children.value = [bob_ground, medieval_harbour ,screen]
-  graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, sunlight]
-  # graph.Root.value.Children.value = [bob_ground,screen, medieval_harbour, environment, sunlight]
+  graph.Root.value.Children.value = [bob_ground,screen, tower, environment, sunlight]
 
   avango.gua.register_window("window", window)
 
@@ -191,7 +169,7 @@ def start():
 
   # setup character control
   character_control = CharacterControl()
-  character_control.my_constructor(bob,bob_nav,window)
+  character_control.my_constructor(bob,bob_nav, AnimationConfig("idle"), window)
   # optional / additional xbox controller settings:
   '''character_control.XBOX_X.connect_from(device_sensor.Value0)
   character_control.XBOX_Y.connect_from(device_sensor.Value1)

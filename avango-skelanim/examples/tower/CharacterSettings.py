@@ -66,16 +66,17 @@ def load_unreal_animations(bob):
 def apply_distance_events(distance_events, ground_following):
 
   distance_events.DistanceToGround.connect_from(ground_following.DistanceToGround)
-  distance_events.smaller_than(0.09, "jump_fwd_loop", AnimationConfig("jump_fwd_preland", False), 0.01)
-  distance_events.smaller_than(0.09, "jump_bwd_loop", AnimationConfig("jump_bwd_preland", False), 0.01)
-  distance_events.smaller_than(0.09, "jump_lt_loop", AnimationConfig("jump_lt_preland", False), 0.01)
-  distance_events.smaller_than(0.09, "jump_rt_loop", AnimationConfig("jump_rt_preland", False), 0.01)
-  distance_events.smaller_than(0.09, "jump_loop", AnimationConfig("jump_preland", False), 0.1)
-  distance_events.smaller_than(0.01, "jump_preland", AnimationConfig("jump_land", False), 0.1)
-  distance_events.smaller_than(0.01, "jump_fwd_preland", AnimationConfig("jump_fwd_land", False), 0.1)
-  distance_events.smaller_than(0.01, "jump_bwd_preland", AnimationConfig("jump_bwd_land", False), 0.1)
-  distance_events.smaller_than(0.01, "jump_lt_preland", AnimationConfig("jump_lt_land", False), 0.1)
-  distance_events.smaller_than(0.01, "jump_rt_preland", AnimationConfig("jump_rt_land", False), 0.1)
+  distance_events.smaller_than(0.013, "jump_fwd_loop", AnimationConfig("jump_fwd_preland", False), 0.1)
+  distance_events.bigger_than(0.013, "jump_fwd_preland", AnimationConfig("jump_fwd_loop", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_bwd_loop", AnimationConfig("jump_bwd_preland", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_lt_loop", AnimationConfig("jump_lt_preland", False), 0.1)
+  distance_events.smaller_than(0.01, "jump_rt_loop", AnimationConfig("jump_rt_preland", False), 0.1)
+  distance_events.smaller_than(0.012, "jump_loop", AnimationConfig("jump_preland", False), 0.1)
+  distance_events.smaller_than(0.008, "jump_preland", AnimationConfig("jump_land", False), 0.1)
+  distance_events.smaller_than(0.008, "jump_fwd_preland", AnimationConfig("jump_fwd_land", False), 0.25)
+  distance_events.smaller_than(0.008, "jump_bwd_preland", AnimationConfig("jump_bwd_land", False), 0.25)
+  distance_events.smaller_than(0.008, "jump_lt_preland", AnimationConfig("jump_lt_land", False), 0.25)
+  distance_events.smaller_than(0.008 , "jump_rt_preland", AnimationConfig("jump_rt_land", False), 0.25)
   distance_events.smaller_than(ground_following.MaxDistanceToGround.value, "swim", AnimationConfig("run_fwd"), 0.5)
   distance_events.bigger_than(ground_following.MaxDistanceToGround.value, "run_fwd", AnimationConfig("swim"), 0.5)
 
@@ -185,7 +186,7 @@ def apply_character_control_settings1(character_control, device_sensor = None):
 
   # SPACE BAR
   character_control.on_key_down(32, "idle", AnimationConfig("jump", False),0.1)
-  character_control.on_key_down(32, "run_fwd", AnimationConfig("jump_fwd", False),0.25)
+  character_control.on_key_down(32, "run_fwd", AnimationConfig("jump_fwd", False, 1.5),0.25)
   character_control.on_key_down(32, "run_bwd", AnimationConfig("jump_bwd", False),0.25)
   character_control.on_key_down(32, "run_lt", AnimationConfig("jump_lt", False),0.25)
   character_control.on_key_down(32, "run_rt", AnimationConfig("jump_rt", False),0.25)
@@ -222,10 +223,10 @@ def apply_character_control_settings1(character_control, device_sensor = None):
 
   # animations only played once and followed by another one
   character_control.on_animation_end("jump", AnimationConfig("jump_loop"),0.1)
-  character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.01)
-  character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.01)
-  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.01)
-  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.01)
+  character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.1)
+  character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.1)
+  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.1)
+  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.1)
   character_control.on_animation_end("jump_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_fwd_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_bwd_land", AnimationConfig("idle"),0.25)
@@ -338,7 +339,7 @@ def apply_character_control_settings2(character_control, device_sensor = None):
 
   # SPACE BAR
   character_control.on_key_down(132, "idle", AnimationConfig("jump", False),0.1)
-  character_control.on_key_down(132, "run_fwd", AnimationConfig("jump_fwd", False),0.25)
+  character_control.on_key_down(132, "run_fwd", AnimationConfig("jump_fwd", False, 1.5),0.25)
   character_control.on_key_down(132, "run_bwd", AnimationConfig("jump_bwd", False),0.25)
   character_control.on_key_down(132, "run_lt", AnimationConfig("jump_lt", False),0.25)
   character_control.on_key_down(132, "run_rt", AnimationConfig("jump_rt", False),0.25)
@@ -375,10 +376,10 @@ def apply_character_control_settings2(character_control, device_sensor = None):
 
   # animations only played once and followed by another one
   character_control.on_animation_end("jump", AnimationConfig("jump_loop"),0.1)
-  character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.01)
-  character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.01)
-  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.01)
-  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.01)
+  character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.1)
+  character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.1)
+  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.1)
+  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.1)
   character_control.on_animation_end("jump_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_fwd_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_bwd_land", AnimationConfig("idle"),0.25)

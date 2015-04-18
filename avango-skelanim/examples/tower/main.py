@@ -18,10 +18,10 @@ def start():
 
   loader = avango.gua.skelanim.nodes.SkeletalAnimationLoader()
 
-  '''bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
+  bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
   bob_ground = avango.gua.nodes.TransformNode(Name = "bob_ground")
 
-  bob = loader.create_geometry_from_file("bob", "/opt/project_animation/Assets/UnrealTournament/Characters/Human/necris_male_ut4_SKELMESH.FBX" ,
+  bob = loader.create_geometry_from_file("bob", "/opt/project_animation/Assets/UnrealTournament/Characters/Necris_Male/necris_male_ut4_SKELMESH.FBX" ,
          avango.gua.LoaderFlags.LOAD_MATERIALS
          |avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
@@ -32,7 +32,7 @@ def start():
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
 
   bob_ground.Children.value = [bob_nav]
-  bob_nav.Children.value = [bob]'''
+  bob_nav.Children.value = [bob]
 
   '''bob2_nav = avango.gua.nodes.TransformNode(Name = "bob2_nav")
   bob2_ground = avango.gua.nodes.TransformNode(Name = "bob2_ground")
@@ -51,7 +51,7 @@ def start():
   bob2_nav.Children.value = [bob2]'''
 
 
-  mixamo_nav = avango.gua.nodes.TransformNode(Name = "mixamo_nav")
+  '''mixamo_nav = avango.gua.nodes.TransformNode(Name = "mixamo_nav")
   mixamo_ground = avango.gua.nodes.TransformNode(Name = "mixamo_ground")
 
   mixamo = loader.create_geometry_from_file("mixamo", "/opt/project_animation/Assets/Mixamo/Maw/Maw_J_Laygo.FBX" ,
@@ -65,7 +65,7 @@ def start():
   mixamo_nav.Transform.value =  mixamo_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0)
 
   mixamo_ground.Children.value = [mixamo_nav]
-  mixamo_nav.Children.value = [mixamo]
+  mixamo_nav.Children.value = [mixamo]'''
 
 
   #environment:
@@ -140,7 +140,7 @@ def start():
   screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
-  graph.Root.value.Children.value = [mixamo_ground,screen, tower, environment, sunlight]
+  graph.Root.value.Children.value = [bob_ground,screen, tower, environment, sunlight]
 
   avango.gua.register_window("window", window)
 
@@ -157,12 +157,12 @@ def start():
   device_sensor2 = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
   device_sensor2.Station.value = "device-xbox-2"
 
-  '''# setup character control
+  # setup character control
   character_control = CharacterControl()
   character_control.my_constructor(bob,bob_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings1(character_control, device_sensor)
+  apply_character_control_settings1(character_control)
   #wall detection:
-  character_control.activate_wall_detection(0.0075,0.009,"idle",graph)'''
+  character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
 
 
   '''# setup character control
@@ -173,17 +173,17 @@ def start():
   character_control.activate_wall_detection(0.0075,0.009,"idle",graph)'''
 
 
-  # setup character control
+  '''# setup character control
   character_control3 = CharacterControl()
   character_control3.my_constructor(mixamo,mixamo_nav,AnimationConfig("idle"),window)
   #character_control3.blend_animation(AnimationConfig("idle"))
   apply_character_control_settings_mixamo(character_control3)
   #wall detection:
-  character_control3.activate_wall_detection(0.0075,0.009,"idle",graph)
+  character_control3.activate_wall_detection(0.0075,0.009,"idle",graph)'''
 
 
 
-  '''# setup camera control
+  # setup camera control
   camera_control = CameraControl()
   camera_control.my_constructor(bob,window)
   # optional / additional xbox controller settings:
@@ -197,15 +197,16 @@ def start():
   ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
-    MaxDistanceToGround = 1.0
+    MaxDistanceToGround = 100.0
   )
+  ground_following.my_constructor(gravity = -0.00005)
   ground_following.InTransform.connect_from(bob.WorldTransform)
 
   bob_ground.Transform.connect_from(ground_following.OutTransform)
 
   distance_events = DistanceEvents()
   distance_events.my_constructor(character_control)
-  apply_distance_events(distance_events, ground_following)'''
+  apply_distance_events(distance_events, ground_following)
 
 
   '''# setup camera control
@@ -224,6 +225,7 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 1.0
   )
+  ground_following2.my_constructor(gravity = -0.00005)
   ground_following2.InTransform.connect_from(bob2.WorldTransform)
 
   bob2_ground.Transform.connect_from(ground_following2.OutTransform)
@@ -233,7 +235,7 @@ def start():
   apply_distance_events(distance_events2, ground_following2)'''
 
 
-  # setup camera control
+  '''# setup camera control
   camera_control3 = CameraControl()
   camera_control3.my_constructor(mixamo,window)
   # optional / additional xbox controller settings:
@@ -244,14 +246,15 @@ def start():
   screen.Transform.connect_from(camera_control3.OutTransform)
 
   # setup ground following
-  ground_following = GroundFollowing(
+  ground_following3 = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
     MaxDistanceToGround = 1.0
   )
-  ground_following.InTransform.connect_from(mixamo.WorldTransform)
+  ground_following3.my_constructor(gravity = -0.00005)
+  ground_following3.InTransform.connect_from(mixamo.WorldTransform)
 
-  mixamo_ground.Transform.connect_from(ground_following.OutTransform)
+  mixamo_ground.Transform.connect_from(ground_following3.OutTransform)'''
 
 
 

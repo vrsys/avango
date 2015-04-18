@@ -44,6 +44,8 @@ class CharacterControl(avango.script.Script):
     self._xbox_events = []
     self._xbox_animation_speeds = {}
 
+    self._listen_keyboard = True
+
 
   def my_constructor(self, character_node, navigation_node, start_animation_config, application_window = avango.gua.nodes.GlfwWindow()):
     # character node (bob)
@@ -58,6 +60,9 @@ class CharacterControl(avango.script.Script):
     self.always_evaluate(True)
 
     application_window.on_key_press(self._handle_key)
+
+  def listen_keyboard(self, do_listen = True):
+    self._listen_keyboard = do_listen
     
   def bind_transformation(self, key_nr, current_animation_name, transform_matrix):
     delta_list_id = len(self._delta_transformations)
@@ -139,34 +144,36 @@ class CharacterControl(avango.script.Script):
 
   def _handle_key(self, ascii, unknown , event , unknown2, animation_name = None):
 
-    # additional animation parameter for proprietary animation states
-    if animation_name is None and self._animation_control.get_current_animation() != None:
-      animation_name = self._animation_control.get_current_animation().name
+    if self._listen_keyboard:
 
-    # animation trigger key down
-    if event == 1:
-      if ascii not in self._pressed_keys:
-        self._pressed_keys.append(ascii)
-      for a in self._animations_kd:
-        if ascii == a[0] and animation_name == a[1]:
+      # additional animation parameter for proprietary animation states
+      if animation_name is None and self._animation_control.get_current_animation() != None:
+        animation_name = self._animation_control.get_current_animation().name
 
-          self.blend_animation(a[2],a[3])
+      # animation trigger key down
+      if event == 1:
+        if ascii not in self._pressed_keys:
+          self._pressed_keys.append(ascii)
+        for a in self._animations_kd:
+          if ascii == a[0] and animation_name == a[1]:
 
-    # animation trigger key up
-    if event == 0:
-      if ascii in self._pressed_keys:
-        self._pressed_keys.remove(ascii)
-      for a in self._animations_ku:
-        if ascii == a[0] and animation_name == a[1]:
+            self.blend_animation(a[2],a[3])
 
-          self.blend_animation(a[2],a[3])
+      # animation trigger key up
+      if event == 0:
+        if ascii in self._pressed_keys:
+          self._pressed_keys.remove(ascii)
+        for a in self._animations_ku:
+          if ascii == a[0] and animation_name == a[1]:
 
-    # transformation trigger
-    for t in self._transformations:
-      if ascii == t[0] and event == 1 and animation_name == t[1]:
-        self._delta_transformations[t[2]] = t[3]
-      if ascii == t[0] and event == 0 and animation_name== t[1]:
-        self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
+            self.blend_animation(a[2],a[3])
+
+      # transformation trigger
+      for t in self._transformations:
+        if ascii == t[0] and event == 1 and animation_name == t[1]:
+          self._delta_transformations[t[2]] = t[3]
+        if ascii == t[0] and event == 0 and animation_name== t[1]:
+          self._delta_transformations[t[2]] = avango.gua.make_identity_mat()
 
   def _blend_translations(self):
 

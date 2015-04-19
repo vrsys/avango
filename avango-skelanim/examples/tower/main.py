@@ -14,6 +14,46 @@ from CharacterSettings import *
 camera_controls = []
 character_controls = []
 current_character = 0
+device_sensor = None
+screen = None
+
+class XBOX_Listener(avango.script.Script):
+
+  XBOX_BTN_B = avango.SFFloat()
+  XBOX_BTN_Y = avango.SFFloat()
+
+  def __init__(self):
+
+    self.super(XBOX_Listener).__init__()
+
+  @field_has_changed(XBOX_BTN_B)
+  def xbox_button_b_changed(self):
+    if self.XBOX_BTN_B.value:
+      next_character()
+
+  @field_has_changed(XBOX_BTN_Y)
+  def xbox_button_y_changed(self):
+    if self.XBOX_BTN_Y.value:
+      next_character(-1)
+
+def next_character(add = 1):
+
+  global current_character
+  global camera_controls
+  global camera_controls
+  global device_sensor
+  global screen
+
+  if device_sensor != None and screen != None and len(character_controls)>0 and len(camera_controls)>0:
+    character_controls[current_character].listen_keyboard(False)
+    camera_controls[current_character].listen_mouse(False)
+    camera_control_xbox_disconnect(camera_controls[current_character], device_sensor)
+    current_character = (current_character + add) % len(camera_controls)
+    character_controls[current_character].listen_keyboard(True)
+    camera_controls[current_character].listen_mouse(True)
+    camera_control_xbox_connect(camera_controls[current_character], device_sensor)
+    screen.Transform.disconnect()
+    screen.Transform.connect_from(camera_controls[current_character].OutTransform) 
 
 def start():
   
@@ -79,20 +119,10 @@ def start():
   window.CursorMode.value = 2
 
   def handle_key(ascii, unknown , event , unknown2):
-    
-    global current_character
-    global camera_controls
-    global camera_controls
 
     if ascii == 257 and event == 1:
 
-      character_controls[current_character].listen_keyboard(False)
-      camera_controls[current_character].listen_mouse(False)
-      current_character = (current_character + 1) % len(camera_controls)
-      character_controls[current_character].listen_keyboard(True)
-      camera_controls[current_character].listen_mouse(True)
-      screen.Transform.disconnect()
-      screen.Transform.connect_from(camera_controls[current_character].OutTransform) 
+      next_character()
 
   window.on_key_press(handle_key)
 
@@ -124,6 +154,7 @@ def start():
   cam.FarClip.value = 300
   cam.NearClip.value = 0.01
 
+  global screen
   screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 0.8, Height = 0.45)
   screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
@@ -139,27 +170,28 @@ def start():
   #window.CursorMode.value = avango.gua.CursorMode.DISABLED
 
   # XBOX Controller
+  global device_sensor
   device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
   device_sensor.Station.value = "device-xbox-1"
   # XBOX Controller2
   device_sensor2 = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
   device_sensor2.Station.value = "device-xbox-2"
 
+  xbox_listener = XBOX_Listener()
+  xbox_listener.XBOX_BTN_B.connect_from(device_sensor.Button1)
+  xbox_listener.XBOX_BTN_Y.connect_from(device_sensor.Button3)
+
   # setup character control
   character_control = CharacterControl()
   character_control.my_constructor(bob,bob_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings1(character_control)
+  apply_character_control_settings1(character_control, device_sensor)
   #wall detection:
   character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   character_controls.append(character_control)
   # setup camera control
   camera_control = CameraControl()
   camera_control.my_constructor(bob,window)
-  # optional / additional xbox controller settings:
-  camera_control.XBOX_X.connect_from(device_sensor.Value2)
-  camera_control.XBOX_Y.connect_from(device_sensor.Value3)
-  camera_control.XBOX_LZ.connect_from(device_sensor.Value4)
-  camera_control.XBOX_RZ.connect_from(device_sensor.Value5)
+  camera_control_xbox_connect(camera_control, device_sensor)
   screen.Transform.connect_from(camera_control.OutTransform)
   camera_controls.append(camera_control)
   # setup ground following
@@ -176,64 +208,64 @@ def start():
   apply_distance_events(distance_events, ground_following)
 
 
-  '''adam = loader.create_geometry_from_file("adam", "/opt/project_animation/Assets/Mixamo/Adam/Maximo_Adam.FBX" ,
-         avango.gua.LoaderFlags.LOAD_MATERIALS
-         |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  adam_trans = avango.gua.nodes.TransformNode()
-  adam_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -0.0*SLIDE_OFFSET) * adam.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  adam.Transform.connect_from(timed_rotate.MatrixOut)
-  adam_trans.Children.value.append(adam)
-  graph.Root.value.Children.value.append(adam_trans)
-  # idle:
-  adam.load_animation("/opt/project_animation/Assets/Mixamo/Adam/Mixamo_Adam_idle_blender.FBX","idle")
-  # run:
-  adam.load_animation("/opt/project_animation/Assets/Mixamo/Adam/Mixamo_adam_run_blender.FBX","run_fwd")
-  # setup character control
-  adam_character_control = CharacterControl()
-  adam_character_control.my_constructor(adam,adam,AnimationConfig("idle"),window)
-  adam_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 2.0),0.5)
-  adam_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 2.0),0.5)
-  adam_character_control.switch_animation(AnimationConfig("idle", False, 1.0, 2.0))
-
-
-  alpha = loader.create_geometry_from_file("alpha", "/opt/project_animation/Assets/Mixamo/Alpha/Maximo_Alpha.FBX" ,
-         avango.gua.LoaderFlags.LOAD_MATERIALS
-         |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  alpha_trans = avango.gua.nodes.TransformNode()
-  alpha_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -1.0*SLIDE_OFFSET) * alpha.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  alpha.Transform.connect_from(timed_rotate.MatrixOut)
-  alpha_trans.Children.value.append(alpha)
-  graph.Root.value.Children.value.append(alpha_trans)
-  # idle:
-  alpha.load_animation("/opt/project_animation/Assets/Mixamo/Alpha/mixamo_idle_blender.FBX","idle")
-  # run:
-  alpha.load_animation("/opt/project_animation/Assets/Mixamo/Alpha/mixamo_run_blender.FBX","run_fwd")
-  # setup character control
-  alpha_character_control = CharacterControl()
-  alpha_character_control.my_constructor(alpha,alpha,AnimationConfig("idle"),window)
-  alpha_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
-  alpha_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  alpha_character_control.switch_animation(AnimationConfig("idle", False))
-
-
-  # # seg fault!!!
-  # exo = loader.create_geometry_from_file("exo", "/opt/project_animation/Assets/Mixamo/ExoRed/Maximo_ExoRed.FBX" ,
+  # adam = loader.create_geometry_from_file("adam", "/opt/project_animation/Assets/Mixamo/Adam/Maximo_Adam.FBX" ,
   #        avango.gua.LoaderFlags.LOAD_MATERIALS
   #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  # exo.Transform.value = avango.gua.make_trans_mat(2.0, 0.5, -0.0*SLIDE_OFFSET) * exo.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  # graph.Root.value.Children.value.append(exo)
+  # adam_trans = avango.gua.nodes.TransformNode()
+  # adam_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -0.0*SLIDE_OFFSET) * adam.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # adam.Transform.connect_from(timed_rotate.MatrixOut)
+  # adam_trans.Children.value.append(adam)
+  # graph.Root.value.Children.value.append(adam_trans)
   # # idle:
-  # loader.load_animation(exo,
-  #         "/opt/project_animation/Assets/Mixamo/ExoRed/Exo_Idle_Copy_blender.FBX","idle")
+  # adam.load_animation("/opt/project_animation/Assets/Mixamo/Adam/Mixamo_Adam_idle_blender.FBX","idle")
   # # run:
-  # loader.load_animation(exo,
-  #        "/opt/project_animation/Assets/Mixamo/ExoRed/Exo_Run_Copy_blender.FBX","run_fwd")
+  # adam.load_animation("/opt/project_animation/Assets/Mixamo/Adam/Mixamo_adam_run_blender.FBX","run_fwd")
   # # setup character control
-  # exo_character_control = CharacterControl()
-  # exo_character_control.my_constructor(exo,exo,AnimationConfig("idle"),window)
-  # exo_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
-  # exo_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  # exo_character_control.switch_animation(AnimationConfig("idle", False))'''
+  # adam_character_control = CharacterControl()
+  # adam_character_control.my_constructor(adam,adam,AnimationConfig("idle"),window)
+  # adam_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 2.0),0.5)
+  # adam_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 2.0),0.5)
+  # adam_character_control.switch_animation(AnimationConfig("idle", False, 1.0, 2.0))
+
+
+  # alpha = loader.create_geometry_from_file("alpha", "/opt/project_animation/Assets/Mixamo/Alpha/Maximo_Alpha.FBX" ,
+  #        avango.gua.LoaderFlags.LOAD_MATERIALS
+  #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  # alpha_trans = avango.gua.nodes.TransformNode()
+  # alpha_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -1.0*SLIDE_OFFSET) * alpha.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # alpha.Transform.connect_from(timed_rotate.MatrixOut)
+  # alpha_trans.Children.value.append(alpha)
+  # graph.Root.value.Children.value.append(alpha_trans)
+  # # idle:
+  # alpha.load_animation("/opt/project_animation/Assets/Mixamo/Alpha/mixamo_idle_blender.FBX","idle")
+  # # run:
+  # alpha.load_animation("/opt/project_animation/Assets/Mixamo/Alpha/mixamo_run_blender.FBX","run_fwd")
+  # # setup character control
+  # alpha_character_control = CharacterControl()
+  # alpha_character_control.my_constructor(alpha,alpha,AnimationConfig("idle"),window)
+  # alpha_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
+  # alpha_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
+  # alpha_character_control.switch_animation(AnimationConfig("idle", False))
+
+
+  # # # seg fault!!!
+  # # exo = loader.create_geometry_from_file("exo", "/opt/project_animation/Assets/Mixamo/ExoRed/Maximo_ExoRed.FBX" ,
+  # #        avango.gua.LoaderFlags.LOAD_MATERIALS
+  # #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  # # exo.Transform.value = avango.gua.make_trans_mat(2.0, 0.5, -0.0*SLIDE_OFFSET) * exo.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # # graph.Root.value.Children.value.append(exo)
+  # # # idle:
+  # # loader.load_animation(exo,
+  # #         "/opt/project_animation/Assets/Mixamo/ExoRed/Exo_Idle_Copy_blender.FBX","idle")
+  # # # run:
+  # # loader.load_animation(exo,
+  # #        "/opt/project_animation/Assets/Mixamo/ExoRed/Exo_Run_Copy_blender.FBX","run_fwd")
+  # # # setup character control
+  # # exo_character_control = CharacterControl()
+  # # exo_character_control.my_constructor(exo,exo,AnimationConfig("idle"),window)
+  # # exo_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
+  # # exo_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
+  # # exo_character_control.switch_animation(AnimationConfig("idle", False))
 
 
   ganfault_nav = avango.gua.nodes.TransformNode(Name = "ganfault_nav")
@@ -248,7 +280,7 @@ def start():
   ganfault_nav.Children.value = [ganfault]
   ganfault_character_control = CharacterControl()
   ganfault_character_control.my_constructor(ganfault,ganfault_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings_mixamo(ganfault_character_control)
+  apply_character_control_settings_mixamo(ganfault_character_control, device_sensor)
   character_controls.append(ganfault_character_control)
   ganfault_character_control.listen_keyboard(False)
   ganfault_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
@@ -267,7 +299,7 @@ def start():
   graph.Root.value.Children.value.append(ganfault_ground)
 
 
-  '''# # seg fault:
+  # # seg fault:
   # goblin = loader.create_geometry_from_file("goblin", "/opt/project_animation/Assets/Mixamo/Goblin/Mixamo_Goblin.FBX" ,
   #        avango.gua.LoaderFlags.LOAD_MATERIALS
   #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
@@ -324,7 +356,7 @@ def start():
   # jill_character_control.my_constructor(jill,jill,AnimationConfig("idle"),window)
   # jill_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
   # jill_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  # jill_character_control.switch_animation(AnimationConfig("idle", False))'''
+  # jill_character_control.switch_animation(AnimationConfig("idle", False))
 
 
   kachujin_nav = avango.gua.nodes.TransformNode(Name = "kachujin_nav")
@@ -339,7 +371,7 @@ def start():
   kachujin_nav.Children.value = [kachujin]
   kachujin_character_control = CharacterControl()
   kachujin_character_control.my_constructor(kachujin,kachujin_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings_mixamo(kachujin_character_control)
+  apply_character_control_settings_mixamo(kachujin_character_control, device_sensor)
   character_controls.append(kachujin_character_control)
   kachujin_character_control.listen_keyboard(False)
   kachujin_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
@@ -370,7 +402,7 @@ def start():
   maria_nav.Children.value = [maria]
   maria_character_control = CharacterControl()
   maria_character_control.my_constructor(maria,maria_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings_mixamo(maria_character_control)
+  apply_character_control_settings_mixamo(maria_character_control, device_sensor)
   character_controls.append(maria_character_control)
   maria_character_control.listen_keyboard(False)
   maria_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
@@ -401,7 +433,7 @@ def start():
   maw_nav.Children.value = [maw]
   maw_character_control = CharacterControl()
   maw_character_control.my_constructor(maw,maw_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings_mixamo(maw_character_control)
+  apply_character_control_settings_mixamo(maw_character_control, device_sensor)
   character_controls.append(maw_character_control)
   maw_character_control.listen_keyboard(False)
   maw_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
@@ -420,7 +452,7 @@ def start():
   graph.Root.value.Children.value.append(maw_ground)
 
 
-  '''# # run time seg fault:
+  # # run time seg fault:
   # mortimer = loader.create_geometry_from_file("mortimer", "/opt/project_animation/Assets/Mixamo/Mortimer/Mortimer.FBX" ,
   #        avango.gua.LoaderFlags.LOAD_MATERIALS
   #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
@@ -443,24 +475,24 @@ def start():
   # mortimer_character_control.switch_animation(AnimationConfig("idle", False))
 
 
-  swat = loader.create_geometry_from_file("swat", "/opt/project_animation/Assets/Mixamo/SWAT/Maximo_SWAT.FBX" ,
-         avango.gua.LoaderFlags.LOAD_MATERIALS
-         |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  swat_trans = avango.gua.nodes.TransformNode()
-  swat_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -8.0*SLIDE_OFFSET) * swat.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  swat.Transform.connect_from(timed_rotate.MatrixOut)
-  swat_trans.Children.value.append(swat)
-  graph.Root.value.Children.value.append(swat_trans)
-  # idle:
-  swat.load_animation("/opt/project_animation/Assets/Mixamo/SWAT/Maximo_Swat_Idle_blender.FBX","idle")
-  # run:
-  swat.load_animation("/opt/project_animation/Assets/Mixamo/SWAT/Maximo_Swat_Swat_Run_blender.FBX","run_fwd")
-  # setup character control
-  swat_character_control = CharacterControl()
-  swat_character_control.my_constructor(swat,swat,AnimationConfig("idle"),window)
-  swat_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
-  swat_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  swat_character_control.switch_animation(AnimationConfig("idle", False))'''
+  # swat = loader.create_geometry_from_file("swat", "/opt/project_animation/Assets/Mixamo/SWAT/Maximo_SWAT.FBX" ,
+  #        avango.gua.LoaderFlags.LOAD_MATERIALS
+  #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  # swat_trans = avango.gua.nodes.TransformNode()
+  # swat_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -8.0*SLIDE_OFFSET) * swat.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # swat.Transform.connect_from(timed_rotate.MatrixOut)
+  # swat_trans.Children.value.append(swat)
+  # graph.Root.value.Children.value.append(swat_trans)
+  # # idle:
+  # swat.load_animation("/opt/project_animation/Assets/Mixamo/SWAT/Maximo_Swat_Idle_blender.FBX","idle")
+  # # run:
+  # swat.load_animation("/opt/project_animation/Assets/Mixamo/SWAT/Maximo_Swat_Swat_Run_blender.FBX","run_fwd")
+  # # setup character control
+  # swat_character_control = CharacterControl()
+  # swat_character_control.my_constructor(swat,swat,AnimationConfig("idle"),window)
+  # swat_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
+  # swat_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
+  # swat_character_control.switch_animation(AnimationConfig("idle", False))
 
 
   vampire_nav = avango.gua.nodes.TransformNode(Name = "vampire_nav")
@@ -475,7 +507,7 @@ def start():
   vampire_nav.Children.value = [vampire]
   vampire_character_control = CharacterControl()
   vampire_character_control.my_constructor(vampire,vampire_nav,AnimationConfig("idle"),window)
-  apply_character_control_settings_mixamo(vampire_character_control)
+  apply_character_control_settings_mixamo(vampire_character_control, device_sensor)
   character_controls.append(vampire_character_control)
   vampire_character_control.listen_keyboard(False)
   vampire_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
@@ -494,44 +526,44 @@ def start():
   graph.Root.value.Children.value.append(vampire_ground)
 
 
-  '''vanguard = loader.create_geometry_from_file("vanguard", "/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung.FBX" ,
-         avango.gua.LoaderFlags.LOAD_MATERIALS
-         |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  vanguard_trans = avango.gua.nodes.TransformNode()
-  vanguard_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -10.0*SLIDE_OFFSET) * vanguard.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  vanguard.Transform.connect_from(timed_rotate.MatrixOut)
-  vanguard_trans.Children.value.append(vanguard)
-  graph.Root.value.Children.value.append(vanguard_trans)
-  # idle:
-  vanguard.load_animation("/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung_idle_blender.FBX","idle")
-  # run:
-  vanguard.load_animation("/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung_Run_blender.FBX","run_fwd")
-  # setup character control
-  vanguard_character_control = CharacterControl()
-  vanguard_character_control.my_constructor(vanguard,vanguard,AnimationConfig("idle"),window)
-  vanguard_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
-  vanguard_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  vanguard_character_control.switch_animation(AnimationConfig("idle", False))
+  # vanguard = loader.create_geometry_from_file("vanguard", "/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung.FBX" ,
+  #        avango.gua.LoaderFlags.LOAD_MATERIALS
+  #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  # vanguard_trans = avango.gua.nodes.TransformNode()
+  # vanguard_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -10.0*SLIDE_OFFSET) * vanguard.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # vanguard.Transform.connect_from(timed_rotate.MatrixOut)
+  # vanguard_trans.Children.value.append(vanguard)
+  # graph.Root.value.Children.value.append(vanguard_trans)
+  # # idle:
+  # vanguard.load_animation("/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung_idle_blender.FBX","idle")
+  # # run:
+  # vanguard.load_animation("/opt/project_animation/Assets/Mixamo/Vanguard/Vanguard_by_T__Choonyung_Run_blender.FBX","run_fwd")
+  # # setup character control
+  # vanguard_character_control = CharacterControl()
+  # vanguard_character_control.my_constructor(vanguard,vanguard,AnimationConfig("idle"),window)
+  # vanguard_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
+  # vanguard_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
+  # vanguard_character_control.switch_animation(AnimationConfig("idle", False))
 
 
-  zoe = loader.create_geometry_from_file("zoe", "/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe.FBX" ,
-         avango.gua.LoaderFlags.LOAD_MATERIALS
-         |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-  zoe_trans = avango.gua.nodes.TransformNode()
-  zoe_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -11.0*SLIDE_OFFSET) * zoe.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
-  zoe.Transform.connect_from(timed_rotate.MatrixOut)
-  zoe_trans.Children.value.append(zoe)
-  graph.Root.value.Children.value.append(zoe_trans)
-  # idle:
-  zoe.load_animation("/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe_idle_blender.FBX","idle")
-  # run:
-  zoe.load_animation("/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe_Run_blender.FBX","run_fwd")
-  # setup character control
-  zoe_character_control = CharacterControl()
-  zoe_character_control.my_constructor(zoe,zoe,AnimationConfig("idle"),window)
-  zoe_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
-  zoe_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
-  zoe_character_control.switch_animation(AnimationConfig("idle", False))'''
+  # zoe = loader.create_geometry_from_file("zoe", "/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe.FBX" ,
+  #        avango.gua.LoaderFlags.LOAD_MATERIALS
+  #        |avango.gua.LoaderFlags.NORMALIZE_SCALE)
+  # zoe_trans = avango.gua.nodes.TransformNode()
+  # zoe_trans.Transform.value = avango.gua.make_trans_mat(2.0, 1.0, -11.0*SLIDE_OFFSET) * zoe.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0) * avango.gua.make_rot_mat(90.0,0.0,0.0,1.0)
+  # zoe.Transform.connect_from(timed_rotate.MatrixOut)
+  # zoe_trans.Children.value.append(zoe)
+  # graph.Root.value.Children.value.append(zoe_trans)
+  # # idle:
+  # zoe.load_animation("/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe_idle_blender.FBX","idle")
+  # # run:
+  # zoe.load_animation("/opt/project_animation/Assets/Mixamo/Zoe/Mixamo_Zoe_Run_blender.FBX","run_fwd")
+  # # setup character control
+  # zoe_character_control = CharacterControl()
+  # zoe_character_control.my_constructor(zoe,zoe,AnimationConfig("idle"),window)
+  # zoe_character_control.on_animation_end("idle", AnimationConfig("run_fwd", False, 1.0, 3.0),0.5)
+  # zoe_character_control.on_animation_end("run_fwd", AnimationConfig("idle", False, 1.0, 3.0),0.5)
+  # zoe_character_control.switch_animation(AnimationConfig("idle", False))
 
 
 

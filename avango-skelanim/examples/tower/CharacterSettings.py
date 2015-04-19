@@ -11,6 +11,66 @@ def load_unreal_animations(bob):
   # run:
   bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Fwd_Rif.FBX","run_fwd")
   bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Bwd_Rif.FBX","run_bwd")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Lt_Rif.FBX","run_lt")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Rt_Rif.FBX","run_rt")
+  
+  # taunts:
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_BringItOn.FBX","taunt1")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_ComeHear.FBX","taunt2")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_Hoolahoop.FBX","taunt3")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_NoNo.FBX","taunt4")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_PelvicThrust.FBX","taunt5")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Taunt_SlitThroat.FBX","taunt6")
+  
+  # swim forward: 
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Swim_Fwd_Rif.FBX","swim")
+  
+  # crouch:
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Idle_Ready_Rif.FBX","crouch")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Fwd_Rif.FBX","crouch_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Bwd_Rif.FBX","crouch_bwd")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Lt_Rif.FBX","crouch_lt")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Crouch_Rt_Rif.FBX","crouch_rt")
+  
+  # jump idle:
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Start.FBX","jump")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Loop.FBX","jump_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Preland.FBX","jump_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Idle_Rif_Land.FBX","jump_land")
+  
+  # jump forward: 
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Start.FBX","jump_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Loop.FBX","jump_fwd_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_PreLand.FBX","jump_fwd_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Fwd_Rif_Land.FBX","jump_fwd_land")
+
+  # jump backward: 
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Start.FBX","jump_bwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Loop.FBX","jump_bwd_loop")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_PreLand.FBX","jump_bwd_preland")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Bwd_Rif_Land.FBX","jump_bwd_land")
+
+  # jump left: 
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Start.FBX","jump_lt")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Loop.FBX","jump_lt_loop")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_PreLand.FBX","jump_lt_preland")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Lt_Rif_Land.FBX","jump_lt_land")
+
+  # jump right: 
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Start.FBX","jump_rt")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Loop.FBX","jump_rt_loop")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_PreLand.FBX","jump_rt_preland")
+  #bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Jump_Rt_Rif_Land.FBX","jump_rt_land")
+
+
+def load_unreal_animations2(bob):
+  
+  # idle:
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Idle_Ready_Rif.FBX","idle")
+  
+  # run:
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Fwd_Rif.FBX","run_fwd")
+  bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Bwd_Rif.FBX","run_bwd")
   bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Lt_Rif.FBX","run_lt")
   bob.load_animation("/opt/project_animation/Assets/UnrealTournament/UniversalAnimations/Run_Rt_Rif.FBX","run_rt")
   
@@ -97,34 +157,38 @@ def apply_character_control_settings1(character_control, device_sensor = None):
     character_control.xbox_override_key(character_control.XBOX_BTN_X,67)
     character_control.xbox_animation_speed(character_control.XBOX_Y,"run_fwd")
     character_control.xbox_animation_speed(character_control.XBOX_Y,"run_bwd")
-    character_control.xbox_animation_speed(character_control.XBOX_X,"run_lt")
-    character_control.xbox_animation_speed(character_control.XBOX_X,"run_rt")
+    #character_control.xbox_animation_speed(character_control.XBOX_X,"run_lt")
+    #character_control.xbox_animation_speed(character_control.XBOX_X,"run_rt")
     character_control.xbox_animation_speed(character_control.XBOX_Y,"crouch_fwd")
     character_control.xbox_animation_speed(character_control.XBOX_Y,"crouch_bwd")
-    character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_lt")
-    character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_rt")
+    #character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_lt")
+    #character_control.xbox_animation_speed(character_control.XBOX_X,"crouch_rt")
 
   # A
-  character_control.bind_transformation(65, "run_fwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(65, "run_bwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(65, "crouch_fwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(65, "crouch_bwd", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(65, "swim", avango.gua.make_rot_mat(2.0, 0.0, 1.0,0.0))
-  character_control.on_key_down(65, "idle", AnimationConfig("run_lt"))
-  character_control.on_key_up(65, "run_lt", AnimationConfig("idle"))
-  character_control.on_key_down(65, "crouch", AnimationConfig("crouch_lt"))
-  character_control.on_key_up(65, "crouch_lt", AnimationConfig("crouch"))
+  character_control.bind_rotation(65, "idle", avango.gua.Vec4(2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "crouch", avango.gua.Vec4(2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "run_fwd", avango.gua.Vec4(4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "run_bwd", avango.gua.Vec4(4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "crouch_fwd", avango.gua.Vec4(2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "crouch_bwd", avango.gua.Vec4(2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "swim", avango.gua.Vec4(2.0, 0.0, 1.0,0.0))
+  #character_control.on_key_down(65, "idle", AnimationConfig("run_lt"))
+  #character_control.on_key_up(65, "run_lt", AnimationConfig("idle"))
+  #character_control.on_key_down(65, "crouch", AnimationConfig("crouch_lt"))
+  #character_control.on_key_up(65, "crouch_lt", AnimationConfig("crouch"))
 
   # D
-  character_control.bind_transformation(68, "run_fwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(68, "run_bwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(68, "crouch_fwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(68, "crouch_bwd", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(68, "swim", avango.gua.make_rot_mat(-2.0, 0.0, 1.0,0.0))
-  character_control.on_key_down(68, "idle", AnimationConfig("run_rt"))
-  character_control.on_key_up(68, "run_rt", AnimationConfig("idle"))
-  character_control.on_key_down(68, "crouch", AnimationConfig("crouch_rt"))
-  character_control.on_key_up(68, "crouch_rt", AnimationConfig("crouch"))
+  character_control.bind_rotation(68, "idle", avango.gua.Vec4(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "crouch", avango.gua.Vec4(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "run_fwd", avango.gua.Vec4(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "run_bwd", avango.gua.Vec4(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "crouch_fwd", avango.gua.Vec4(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "crouch_bwd", avango.gua.Vec4(-2.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "swim", avango.gua.Vec4(-2.0, 0.0, 1.0,0.0))
+  #character_control.on_key_down(68, "idle", AnimationConfig("run_rt"))
+  #character_control.on_key_up(68, "run_rt", AnimationConfig("idle"))
+  #character_control.on_key_down(68, "crouch", AnimationConfig("crouch_rt"))
+  #character_control.on_key_up(68, "crouch_rt", AnimationConfig("crouch"))
 
 
   # W
@@ -132,20 +196,20 @@ def apply_character_control_settings1(character_control, device_sensor = None):
   character_control.on_key_up(87, "run_fwd", AnimationConfig("idle"))
   character_control.on_key_down(87, "crouch", AnimationConfig("crouch_fwd"))
   character_control.on_key_up(87, "crouch_fwd", AnimationConfig("crouch"))
-  character_control.bind_transformation(87, "run_rt", avango.gua.make_trans_mat(0.0,0.0,0.025))
-  character_control.bind_transformation(87, "run_lt", avango.gua.make_trans_mat(0.0,0.0,0.025))
-  character_control.bind_transformation(87, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
-  character_control.bind_transformation(87, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
+  #character_control.bind_transformation(87, "run_rt", avango.gua.make_trans_mat(0.0,0.0,0.025))
+  #character_control.bind_transformation(87, "run_lt", avango.gua.make_trans_mat(0.0,0.0,0.025))
+  #character_control.bind_transformation(87, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
+  #character_control.bind_transformation(87, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,0.0175))
 
   # S
   character_control.on_key_down(83, "idle", AnimationConfig("run_bwd"))
   character_control.on_key_up(83, "run_bwd", AnimationConfig("idle"))
   character_control.on_key_down(83, "crouch", AnimationConfig("crouch_bwd"))
   character_control.on_key_up(83, "crouch_bwd", AnimationConfig("crouch"))
-  character_control.bind_transformation(83, "run_rt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
-  character_control.bind_transformation(83, "run_lt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
-  character_control.bind_transformation(83, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
-  character_control.bind_transformation(83, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
+  #character_control.bind_transformation(83, "run_rt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
+  #character_control.bind_transformation(83, "run_lt", avango.gua.make_trans_mat(0.0,0.0,-0.025))
+  #character_control.bind_transformation(83, "crouch_rt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
+  #character_control.bind_transformation(83, "crouch_lt", avango.gua.make_trans_mat(0.0,0.0,-0.0175))
 
   # C
   character_control.on_key_down(67, "idle", AnimationConfig("crouch"),0.2)
@@ -154,10 +218,10 @@ def apply_character_control_settings1(character_control, device_sensor = None):
   character_control.on_key_up(67, "crouch_fwd", AnimationConfig("run_fwd"))
   character_control.on_key_down(67, "run_bwd", AnimationConfig("crouch_bwd"))
   character_control.on_key_up(67, "crouch_bwd", AnimationConfig("run_bwd"))
-  character_control.on_key_down(67, "run_lt", AnimationConfig("crouch_lt"))
-  character_control.on_key_up(67, "crouch_lt", AnimationConfig("run_lt"))
-  character_control.on_key_down(67, "run_rt", AnimationConfig("crouch_rt"))
-  character_control.on_key_up(67, "crouch_rt", AnimationConfig("run_rt"))
+  #character_control.on_key_down(67, "run_lt", AnimationConfig("crouch_lt"))
+  #character_control.on_key_up(67, "crouch_lt", AnimationConfig("run_lt"))
+  #character_control.on_key_down(67, "run_rt", AnimationConfig("crouch_rt"))
+  #character_control.on_key_up(67, "crouch_rt", AnimationConfig("run_rt"))
 
   # F
   character_control.on_key_down(70, "idle", AnimationConfig("taunt1"))
@@ -188,19 +252,19 @@ def apply_character_control_settings1(character_control, device_sensor = None):
   character_control.on_key_down(32, "idle", AnimationConfig("jump", False),0.1)
   character_control.on_key_down(32, "run_fwd", AnimationConfig("jump_fwd", False, 1.5),0.25)
   character_control.on_key_down(32, "run_bwd", AnimationConfig("jump_bwd", False),0.25)
-  character_control.on_key_down(32, "run_lt", AnimationConfig("jump_lt", False),0.25)
-  character_control.on_key_down(32, "run_rt", AnimationConfig("jump_rt", False),0.25)
+  #character_control.on_key_down(32, "run_lt", AnimationConfig("jump_lt", False),0.25)
+  #character_control.on_key_down(32, "run_rt", AnimationConfig("jump_rt", False),0.25)
 
   # animation dependend translations:
   character_control.bind_translation("run_fwd",avango.gua.Vec3(0.0,0.0,0.05))
   character_control.bind_translation("run_bwd",avango.gua.Vec3(0.0,0.0,-0.05))
-  character_control.bind_translation("run_lt",avango.gua.Vec3(0.05,0.0,0.0))
-  character_control.bind_translation("run_rt",avango.gua.Vec3(-0.05,0.0,0.0))
+  #character_control.bind_translation("run_lt",avango.gua.Vec3(0.05,0.0,0.0))
+  #character_control.bind_translation("run_rt",avango.gua.Vec3(-0.05,0.0,0.0))
   character_control.bind_translation("swim",avango.gua.Vec3(0.0,0.0,0.05))
   character_control.bind_translation("crouch_fwd",avango.gua.Vec3(0.0,0.0,0.035))
   character_control.bind_translation("crouch_bwd",avango.gua.Vec3(0.0,0.0,-0.035))
-  character_control.bind_translation("crouch_lt",avango.gua.Vec3(0.035,0.0,0.0))
-  character_control.bind_translation("crouch_rt",avango.gua.Vec3(-0.035,0.0,0.0))
+  #character_control.bind_translation("crouch_lt",avango.gua.Vec3(0.035,0.0,0.0))
+  #character_control.bind_translation("crouch_rt",avango.gua.Vec3(-0.035,0.0,0.0))
   character_control.bind_translation("jump",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_loop",avango.gua.Vec3(0.0, 0.08, 0.0))
   character_control.bind_translation("jump_preland",avango.gua.Vec3(0.0, 0.08, 0.0))
@@ -212,26 +276,26 @@ def apply_character_control_settings1(character_control, device_sensor = None):
   character_control.bind_translation("jump_bwd_loop",avango.gua.Vec3(0.0, 0.08, -0.04))
   character_control.bind_translation("jump_bwd_preland",avango.gua.Vec3(0.0, 0.08, -0.04))
   character_control.bind_translation("jump_bwd_land",avango.gua.Vec3(0.0, 0.0, -0.04))
-  character_control.bind_translation("jump_lt",avango.gua.Vec3(0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_lt_loop",avango.gua.Vec3(0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_lt_preland",avango.gua.Vec3(0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_lt_land",avango.gua.Vec3(0.04, 0.0, 0.0))
-  character_control.bind_translation("jump_rt",avango.gua.Vec3(-0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_rt_loop",avango.gua.Vec3(-0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_rt_preland",avango.gua.Vec3(-0.04, 0.08, 0.0))
-  character_control.bind_translation("jump_rt_land",avango.gua.Vec3(-0.04, 0.0, 0.0))
+  #character_control.bind_translation("jump_lt",avango.gua.Vec3(0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_lt_loop",avango.gua.Vec3(0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_lt_preland",avango.gua.Vec3(0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_lt_land",avango.gua.Vec3(0.04, 0.0, 0.0))
+  #character_control.bind_translation("jump_rt",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_rt_loop",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_rt_preland",avango.gua.Vec3(-0.04, 0.08, 0.0))
+  #character_control.bind_translation("jump_rt_land",avango.gua.Vec3(-0.04, 0.0, 0.0))
 
   # animations only played once and followed by another one
   character_control.on_animation_end("jump", AnimationConfig("jump_loop"),0.1)
   character_control.on_animation_end("jump_fwd", AnimationConfig("jump_fwd_loop"),0.1)
   character_control.on_animation_end("jump_bwd", AnimationConfig("jump_bwd_loop"),0.1)
-  character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.1)
-  character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.1)
+  #character_control.on_animation_end("jump_lt", AnimationConfig("jump_lt_loop"),0.1)
+  #character_control.on_animation_end("jump_rt", AnimationConfig("jump_rt_loop"),0.1)
   character_control.on_animation_end("jump_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_fwd_land", AnimationConfig("idle"),0.25)
   character_control.on_animation_end("jump_bwd_land", AnimationConfig("idle"),0.25)
-  character_control.on_animation_end("jump_lt_land", AnimationConfig("idle"),0.25)
-  character_control.on_animation_end("jump_rt_land", AnimationConfig("idle"),0.25)
+  #character_control.on_animation_end("jump_lt_land", AnimationConfig("idle"),0.25)
+  #character_control.on_animation_end("jump_rt_land", AnimationConfig("idle"),0.25)
 
 
 def apply_character_control_settings2(character_control, device_sensor = None):
@@ -525,12 +589,16 @@ def apply_character_control_settings_mixamo(character_control, device_sensor = N
     character_control.xbox_animation_speed(character_control.XBOX_Y,"run_fwd")
 
   # A
-  character_control.bind_transformation(65, "run_fwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(65, "idle", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  # character_control.bind_transformation(65, "run_fwd", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))
+  # character_control.bind_transformation(65, "idle", avango.gua.make_rot_mat(4.0, 0.0, 1.0,0.0))#
+  character_control.bind_rotation(65, "run_fwd", avango.gua.Vec4(4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(65, "idle", avango.gua.Vec4(4.0, 0.0, 1.0,0.0))
 
   # D
-  character_control.bind_transformation(68, "run_fwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
-  character_control.bind_transformation(68, "idle", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  # character_control.bind_transformation(68, "run_fwd", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  # character_control.bind_transformation(68, "idle", avango.gua.make_rot_mat(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "run_fwd", avango.gua.Vec4(-4.0, 0.0, 1.0,0.0))
+  character_control.bind_rotation(68, "idle", avango.gua.Vec4(-4.0, 0.0, 1.0,0.0))
 
   # W
   character_control.on_key_down(87, "idle", AnimationConfig("run_fwd"))
@@ -548,3 +616,18 @@ def apply_character_control_settings_mixamo(character_control, device_sensor = N
   character_control.on_animation_end("jump",AnimationConfig("idle"))
   character_control.on_animation_end("jump_fwd",AnimationConfig("run_fwd_fall", True, 1.0, 0.5))
   character_control.on_animation_end("run_fwd_fall",AnimationConfig("idle"))
+
+
+def camera_control_xbox_connect(camera_control, device_sensor):
+  # optional / additional xbox controller settings:
+  camera_control.XBOX_X.connect_from(device_sensor.Value2)
+  camera_control.XBOX_Y.connect_from(device_sensor.Value3)
+  camera_control.XBOX_LZ.connect_from(device_sensor.Value4)
+  camera_control.XBOX_RZ.connect_from(device_sensor.Value5)
+
+def camera_control_xbox_disconnect(camera_control, device_sensor):
+  # optional / additional xbox controller settings:
+  camera_control.XBOX_X.disconnect()
+  camera_control.XBOX_Y.disconnect()
+  camera_control.XBOX_LZ.disconnect()
+  camera_control.XBOX_RZ.disconnect()

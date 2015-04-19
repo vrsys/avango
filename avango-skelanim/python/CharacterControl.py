@@ -30,6 +30,7 @@ class CharacterControl(avango.script.Script):
     self._transformations = []
     self._delta_transformations = []
     self._translations = {}
+    self._rotations = []
     self._current_translation = avango.gua.Vec3(0.0,0.0,0.0)
     self._last_translation = avango.gua.Vec3(0.0,0.0,0.0)
 
@@ -68,6 +69,9 @@ class CharacterControl(avango.script.Script):
     delta_list_id = len(self._delta_transformations)
     self._delta_transformations.append(avango.gua.make_identity_mat())
     self._transformations.append((key_nr, current_animation_name, delta_list_id, transform_matrix))
+
+  def bind_rotation(self, key_nr, current_animation_name, rotation_vec):
+    self._rotations.append((key_nr,current_animation_name,rotation_vec))
 
   def on_key_down(self, key_nr, current_animation_name, next_animation_config, blend_duration = 0.5):
     self._animations_kd.append((key_nr, current_animation_name,next_animation_config, blend_duration))
@@ -108,6 +112,21 @@ class CharacterControl(avango.script.Script):
     # add transformation delta from keys
     for mat in self._delta_transformations:
       self._navigation.Transform.value = self._navigation.Transform.value * mat
+    
+    # add rotation from keys
+    tmp_rot = avango.gua.make_identity_mat()
+    for rot in self._rotations:
+      if rot[0] in self._pressed_keys and self.get_current_animation().name == rot[1]:
+
+        tmp_vec = avango.gua.Vec4(rot[2].x,rot[2].y,rot[2].z,rot[2].w)
+
+        #xbox_controller:
+        if math.fabs(self.XBOX_X.value)>0.0:
+          tmp_vec.x *= math.fabs(self.XBOX_X.value)
+
+        tmp_rot = avango.gua.make_rot_mat(tmp_vec)
+
+    self._navigation.Transform.value = self._navigation.Transform.value * tmp_rot
     
     self._blend_translations()
     

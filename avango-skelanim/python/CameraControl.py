@@ -30,25 +30,33 @@ class CameraControl(avango.script.Script):
     self._rotation_speed_xbox = 4.0
     self._scroll_speed_xbox = 0.1
 
+    self._listen_mouse = True
+
 
   def my_constructor(self, target_node, application_window):
 
     self._target = target_node
 
-    def handle_mouse(m): 
-      if self._mouse_last_pos != None:
-        self._mouse_delta = self._mouse_last_pos - m
-      self._mouse_last_pos = m
+    def handle_mouse(m):
+      if self._listen_mouse:
+        if self._mouse_last_pos != None:
+          self._mouse_delta = self._mouse_last_pos - m
+        self._mouse_last_pos = m
 
     application_window.on_move_cursor(handle_mouse)
 
     def handle_scroll(s):
-      self._camera_offset += s.y * self._scroll_speed
+      if self._listen_mouse:
+        self._camera_offset += s.y * self._scroll_speed
     application_window.on_scroll(handle_scroll)
 
     self.always_evaluate(True)
-    
 
+  def listen_mouse(self, do_listen = True):
+    self._listen_mouse = do_listen
+    if not do_listen:
+      self._mouse_last_pos = None
+    
   def evaluate(self):
 
     if math.fabs(self.XBOX_X.value) > 0.3:

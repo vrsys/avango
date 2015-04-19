@@ -82,12 +82,15 @@ def start():
     
     global current_character
     global camera_controls
+    global camera_controls
 
     if ascii == 257 and event == 1:
 
       character_controls[current_character].listen_keyboard(False)
+      camera_controls[current_character].listen_mouse(False)
       current_character = (current_character + 1) % len(camera_controls)
       character_controls[current_character].listen_keyboard(True)
+      camera_controls[current_character].listen_mouse(True)
       screen.Transform.disconnect()
       screen.Transform.connect_from(camera_controls[current_character].OutTransform) 
 
@@ -252,6 +255,7 @@ def start():
   ganfault_camera_control = CameraControl()
   ganfault_camera_control.my_constructor(ganfault,window)
   camera_controls.append(ganfault_camera_control)
+  ganfault_camera_control.listen_mouse(False)
   ganfault_ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
@@ -342,6 +346,7 @@ def start():
   kachujin_camera_control = CameraControl()
   kachujin_camera_control.my_constructor(kachujin,window)
   camera_controls.append(kachujin_camera_control)
+  kachujin_camera_control.listen_mouse(False)
   kachujin_ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
@@ -372,6 +377,7 @@ def start():
   maria_camera_control = CameraControl()
   maria_camera_control.my_constructor(maria,window)
   camera_controls.append(maria_camera_control)
+  maria_camera_control.listen_mouse(False)
   maria_ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
@@ -402,6 +408,7 @@ def start():
   maw_camera_control = CameraControl()
   maw_camera_control.my_constructor(maw,window)
   camera_controls.append(maw_camera_control)
+  maw_camera_control.listen_mouse(False)
   maw_ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,
@@ -475,6 +482,7 @@ def start():
   vampire_camera_control = CameraControl()
   vampire_camera_control.my_constructor(vampire,window)
   camera_controls.append(vampire_camera_control)
+  vampire_camera_control.listen_mouse(False)
   vampire_ground_following = GroundFollowing(
     SceneGraph = graph,
     OffsetToGround = 0.01,

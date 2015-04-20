@@ -29,6 +29,7 @@ def start():
         new_cube.Transform.value = avango.gua.make_trans_mat(x*2, y*2, z*2) * \
                                    avango.gua.make_scale_mat(0.3, 0.3, 0.3)
         graph.Root.value.Children.value.append(new_cube)
+        new_cube.ShadowMode.value = 1
 
 
   spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
@@ -112,6 +113,7 @@ def start():
     avango.gua.LoaderFlags.DEFAULTS
   )
   floor.Transform.value = avango.gua.make_scale_mat(20, 1, 20) * avango.gua.make_trans_mat(1, -0.2, 1)
+  floor.ShadowMode.value = 0
   graph.Root.value.Children.value.append(floor)
 
   width = 1920;
@@ -163,7 +165,8 @@ def start():
   window = avango.gua.nodes.Window(
     Size = size,
     Title = "shadows",
-    LeftResolution = size
+    LeftResolution = size,
+    EnableVsync = False
   )
 
   avango.gua.register_window("window", window)

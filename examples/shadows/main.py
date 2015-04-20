@@ -2,7 +2,8 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
-
+import avango.gua.gui
+from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
@@ -10,10 +11,37 @@ CUBE_COUNT_X = 20
 CUBE_COUNT_Y = 2
 CUBE_COUNT_Z = 20
 
+class FPSUpdater(avango.script.Script):
+  TimeIn = avango.SFFloat()
+  FPSResource = avango.gua.gui.SFGuiResource()
+  Window = avango.gua.SFWindowBase()
+  Viewer = avango.gua.SFViewer()
+
+  @field_has_changed(TimeIn)
+  def update_fps(self):
+    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
+    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
+    fps_string = "FPS: " + application_string + " " + rendering_string
+    self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
+
 def start():
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   loader = avango.gua.nodes.TriMeshLoader()
+
+  fps_size = avango.gua.Vec2(170, 55)
+
+  fps = avango.gua.gui.nodes.GuiResource()
+  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+
+  fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
+    Name = "fps_quad",
+    Texture = "fps",
+    Width = int(fps_size.x),
+    Height = int(fps_size.y),
+    Anchor = avango.gua.Vec2(1.0, 1.0)
+  )
+  graph.Root.value.Children.value.append(fps_quad)
 
   for x in range(0, CUBE_COUNT_X):
     for y in range(0, CUBE_COUNT_Y):
@@ -33,10 +61,8 @@ def start():
 
 
   spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
-                                         Type=avango.gua.LightType.SPOT,
+                                         Type = avango.gua.LightType.SPOT,
                                          Color = avango.gua.Color(1.0, 0.0, 0.7),
-                                         # DisplayBoundingBox = True,
-                                         EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
@@ -47,10 +73,8 @@ def start():
   graph.Root.value.Children.value.append(spot_light_1)
 
   spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
-                                         Type=avango.gua.LightType.SPOT,
+                                         Type = avango.gua.LightType.SPOT,
                                          Color = avango.gua.Color(0.0, 1.0, 0.7),
-                                         # DisplayBoundingBox = True,
-                                         EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
@@ -61,10 +85,9 @@ def start():
   graph.Root.value.Children.value.append(spot_light_2)
 
   point_light = avango.gua.nodes.LightNode(
-                                         Type=avango.gua.LightType.POINT,
+                                         Type = avango.gua.LightType.POINT,
                                          Name = "point_light",
                                          Color = avango.gua.Color(0.2, 1.0, 0.7),
-                                         EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 128,
                                          ShadowOffset = 0.03,
@@ -74,9 +97,8 @@ def start():
   graph.Root.value.Children.value.append(point_light)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
-                                         Type=avango.gua.LightType.SUN,
+                                         Type = avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
-                                         EnableGodrays = True,
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
@@ -89,21 +111,21 @@ def start():
 
 
   top_light = avango.gua.nodes.LightNode(Name = "top_light",
-                                         Type=avango.gua.LightType.SUN,
+                                         Type = avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(0.1, 0.2, 0.4),
                                          EnableSpecularShading = False,
                                          Brightness = 1)
-  top_light.Transform.value = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+  top_light.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
   graph.Root.value.Children.value.append(top_light)
 
 
 
   fill_light = avango.gua.nodes.LightNode(Name = "fill_light",
-                                         Type=avango.gua.LightType.SUN,
+                                         Type = avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(0.05, 0.1, 0.05),
                                          EnableSpecularShading = False,
                                          Brightness = 1)
-  fill_light.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
+  fill_light.Transform.value = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
   graph.Root.value.Children.value.append(fill_light)
 
 
@@ -149,13 +171,14 @@ def start():
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
-      avango.gua.nodes.TexturedQuadPassDescription(),
+      # avango.gua.nodes.TexturedQuadPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
-      avango.gua.nodes.BBoxPassDescription(),
+      # avango.gua.nodes.BBoxPassDescription(),
+      avango.gua.nodes.TexturedScreenSpaceQuadPassDescription(),
       avango.gua.nodes.DebugViewPassDescription()
     ],
-    EnableABuffer = True
+    EnableABuffer = False
   )
 
   camera.PipelineDescription.value = pipeline_description
@@ -181,8 +204,18 @@ def start():
   camera.Transform.connect_from(navigator.OutTransform)
 
   viewer = avango.gua.nodes.Viewer()
+  # viewer.DesiredFPS.value = 200
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+
+  timer = avango.nodes.TimeSensor()
+
+  fps_updater = FPSUpdater(
+    FPSResource=fps,
+    Window=window,
+    Viewer=viewer
+  )
+  fps_updater.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

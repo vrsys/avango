@@ -11,6 +11,8 @@ class CharacterControl(avango.script.Script):
   XBOX_BTN_A = avango.SFFloat()
   XBOX_BTN_X = avango.SFFloat()
 
+  FPS = 60.0
+
 
   def __init__(self):
 
@@ -46,6 +48,10 @@ class CharacterControl(avango.script.Script):
     self._xbox_animation_speeds = {}
 
     self._listen_keyboard = True
+
+    self._timer = avango.nodes.TimeSensor()
+    self._last_time_rot = self._timer.Time.value
+    self._last_time_trans = self._timer.Time.value
 
 
   def my_constructor(self, character_node, navigation_node, start_animation_config, application_window = avango.gua.nodes.GlfwWindow()):
@@ -113,12 +119,19 @@ class CharacterControl(avango.script.Script):
     for mat in self._delta_transformations:
       self._navigation.Transform.value = self._navigation.Transform.value * mat
     
+
+    delta_time = self._timer.Time.value - self._last_time_rot
+    self._last_time_rot = self._timer.Time.value
+
     # add rotation from keys
     tmp_rot = avango.gua.make_identity_mat()
     for rot in self._rotations:
       if rot[0] in self._pressed_keys and self.get_current_animation().name == rot[1]:
 
         tmp_vec = avango.gua.Vec4(rot[2].x,rot[2].y,rot[2].z,rot[2].w)
+
+        # time dependent:
+        tmp_vec.x *= delta_time * self.FPS
 
         #xbox_controller:
         if math.fabs(self.XBOX_X.value)>0.0:
@@ -237,6 +250,11 @@ class CharacterControl(avango.script.Script):
     blendFact = self._animation_control.get_blending_factor()
 
     trans_vec = (self._last_translation * (1-blendFact) ) + (self._current_translation * blendFact)
+
+    # time dependent
+    delta_time = self._timer.Time.value - self._last_time_trans
+    self._last_time_trans = self._timer.Time.value
+    trans_vec *= delta_time * self.FPS
 
     #xbox_controller:
     if math.fabs(self.XBOX_Y.value)>0.0:

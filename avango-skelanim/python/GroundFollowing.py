@@ -14,6 +14,8 @@ class GroundFollowing(avango.script.Script):
 
   DistanceToGround = avango.SFFloat()
 
+  FPS = 60.0
+
 
   def __init__(self):
     self.super(GroundFollowing).__init__()
@@ -24,6 +26,9 @@ class GroundFollowing(avango.script.Script):
 
     self._velocity_y = 0.0
     self._gravity = -9.81
+
+    self._timer = avango.nodes.TimeSensor()
+    self._last_time = self._timer.Time.value
 
     self.always_evaluate(True)
 
@@ -65,7 +70,11 @@ class GroundFollowing(avango.script.Script):
     delta_norm = avango.gua.Vec3(delta_trans.x,delta_trans.y,delta_trans.z)
     length = delta_norm.normalize()
 
-    self._velocity_y -= self._gravity
+    # time dependent:
+    delta_time = self._timer.Time.value - self._last_time
+    self._last_time = self._timer.Time.value
+
+    self._velocity_y -= (self._gravity*delta_time*self.FPS)
     
     if length > math.fabs(self._velocity_y):
 

@@ -130,19 +130,32 @@ class AnimationControl(avango.script.Script):
         if self._timer.Time.value > self._current_blending_start + self._current_animation.duration:
             self._first_play = False
         
-        self._current_time += self._delta_timer.Time.value / (self._animation_node.get_duration(self._current_animation.name) / self._current_animation.speed)
-        if self._current_animation.loop or self._current_time < 1.0:
-            self._animation_node.Time2.value = self._current_time % 1
+        if self._animation_node.get_duration(self._current_animation.name) > 0.0 and self._current_animation.speed > 0.0:
+            self._current_time += self._delta_timer.Time.value / (self._animation_node.get_duration(self._current_animation.name) / self._current_animation.speed)
+            if self._current_animation.loop or self._current_time < 1.0:
+                self._animation_node.Time2.value = self._current_time % 1
+            else:
+                self._animation_node.Time2.value = 1.0
         else:
-            self._animation_node.Time2.value = 1.0
+            print("Warning: animation duration or speed is zero.")
+            print("Animation: "+str(self._current_animation.name))
+            print("Duration: "+str(self._animation_node.get_duration(self._current_animation.name)))
+            print("Speed: "+str(self._current_animation.speed))
 
         if self._state == State.blending:
             # update time for old animation only while blending
-            self._last_time +=  self._delta_timer.Time.value / (self._animation_node.get_duration(self._last_animation.name) / self._last_animation.speed)
-            if self._last_animation.loop or self._last_time < 1.0:
-                self._animation_node.Time1.value = self._last_time % 1
+
+            if self._animation_node.get_duration(self._last_animation.name) > 0.0 and self._last_animation.speed > 0.0:
+                self._last_time +=  self._delta_timer.Time.value / (self._animation_node.get_duration(self._last_animation.name) / self._last_animation.speed)
+                if self._last_animation.loop or self._last_time < 1.0:
+                    self._animation_node.Time1.value = self._last_time % 1
+                else:
+                    self._animation_node.Time1.value = 1.0
             else:
-                self._animation_node.Time1.value = 1.0
+                print("Warning: animation duration or speed is zero.")
+                print("Animation: "+str(self._last_animation.name))
+                print("Duration: "+str(self._animation_node.get_duration(self._last_animation.name)))
+                print("Speed: "+str(self._last_animation.speed))
 
             self._blending_factor = 1.0 - (self._blending_end - self._timer.Time.value) / self._blending_duration
             # if blending is finished, switch to normal play

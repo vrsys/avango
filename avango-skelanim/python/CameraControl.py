@@ -33,9 +33,11 @@ class CameraControl(avango.script.Script):
     self._listen_mouse = True
 
 
-  def my_constructor(self, target_node, application_window):
+  def my_constructor(self, target_node, application_window, camera_offset = 0.01):
 
     self._target = target_node
+
+    self._camera_offset = camera_offset
 
     def handle_mouse(m):
       if self._listen_mouse:

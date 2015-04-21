@@ -13,9 +13,11 @@
           gua_metalness = 0.0;
           gua_roughness = 0.8;
 
-          float dist_to_center = length(gua_world_position - center_fresnel.xyz);
+          vec3 dir = gua_camera_position-gua_world_position;
+          float dist = length(dir);
 
-          gua_alpha = clamp(dot(gua_normal, normalize(gua_camera_position-gua_world_position)), 0, 1);
+          gua_alpha = clamp(dot(gua_normal, dir/dist)*1.8-0.3, 0, 1);
+          gua_alpha *= clamp((dist-near_clip)/fade_dist, 0, 1);
         }
       ",
       "uniforms" :
@@ -26,9 +28,14 @@
           "value" : "portal"
         },
         {
-          "name" : "center_fresnel",
-          "type" : "vec4",
-          "value" : "(0 0 0 1)"
+          "name" : "fade_dist",
+          "type" : "float",
+          "value" : "0.5"
+        },
+        {
+          "name" : "near_clip",
+          "type" : "float",
+          "value" : "0.1"
         }
       ]
     }

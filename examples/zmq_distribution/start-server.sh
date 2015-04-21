@@ -8,8 +8,8 @@ LOCAL_GUACAMOLE="$DIR/../../../guacamole"
 LOCAL_AVANGO="$DIR/../../../avango"
 
 # if not, this path will be used
-GUACAMOLE=/opt/guacamole/master
-AVANGO=/opt/avango/master
+GUACAMOLE=/opt/guacamole/new_renderer
+AVANGO=/opt/avango/new_renderer
 
 # third party libs
 export LD_LIBRARY_PATH=/opt/boost/boost_1_55_0/lib:/opt/zmq/current/lib

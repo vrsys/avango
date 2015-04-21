@@ -36,6 +36,7 @@ av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
 av::gua::BlenderViewer::Image screenshot(
     scm::gl::render_context_ptr const& ctx,
     scm::gl::texture_2d_ptr const& tex ) {
+
   av::gua::BlenderViewer::Image img;
 
   if (!tex)
@@ -283,14 +284,11 @@ void av::gua::BlenderViewer::render_thread() {
           }
 
           if (serialized_cam.config.get_enable_stereo()) {
-            pipe->process(
-                ::gua::CameraMode::LEFT, serialized_cam, m_gua_graphs);
-            pipe->process(
-                ::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::LEFT,  serialized_cam, m_gua_graphs);
+            pipe->render_scene(::gua::CameraMode::RIGHT, serialized_cam, m_gua_graphs);
           } else {
-            pipe->process(serialized_cam.config.get_mono_mode(),
-                          serialized_cam,
-                          m_gua_graphs);
+            pipe->render_scene(serialized_cam.config.get_mono_mode(),
+                serialized_cam, m_gua_graphs);
           }
           m_image = screenshot(*pipe);
 
@@ -329,7 +327,13 @@ void av::gua::BlenderViewer::render_thread() {
 av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
-  auto color = pipe.get_gbuffer().get_current_color_buffer();
+  auto target(&pipe.get_current_target());
+  auto gbuffer(dynamic_cast<::gua::GBuffer*>(target));
+
+  if (!gbuffer)
+    return av::gua::BlenderViewer::Image{};
+
+  auto color = gbuffer->get_color_buffer();
 
   if (!color)
     return av::gua::BlenderViewer::Image{};
@@ -350,7 +354,7 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
     tmp.resize = true;
   }
 
-  ctx.render_context->copy_color_buffer(pipe.get_gbuffer().get_fbo_read() , tmp.fbo, 0);
+  ctx.render_context->copy_color_buffer(((::gua::GBuffer&)pipe.get_current_target()).get_fbo_read(), tmp.fbo, 0);
   return ::screenshot(ctx.render_context, tmp.rgba8_texture);
 }
 

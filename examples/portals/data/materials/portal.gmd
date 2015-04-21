@@ -12,6 +12,10 @@
           gua_emissivity = 1.0;
           gua_metalness = 0.0;
           gua_roughness = 0.8;
+
+          float dist_to_center = length(gua_world_position - center_fresnel.xyz);
+
+          gua_alpha = clamp(dot(gua_normal, normalize(gua_camera_position-gua_world_position)), 0, 1);
         }
       ",
       "uniforms" :
@@ -20,6 +24,11 @@
           "name" : "tex",
           "type" : "sampler2D",
           "value" : "portal"
+        },
+        {
+          "name" : "center_fresnel",
+          "type" : "vec4",
+          "value" : "(0 0 0 1)"
         }
       ]
     }

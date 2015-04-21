@@ -29,7 +29,6 @@ def start():
 
   main_scene  = avango.gua.nodes.SceneGraph(Name = "main_scene")
   portal_scene  = avango.gua.nodes.SceneGraph(Name = "portal_scene")
-  
   loader = avango.gua.nodes.TriMeshLoader()
 
   # main scene -----------------------------------------------------------------
@@ -37,15 +36,15 @@ def start():
   desc.load_from_file("data/materials/portal.gmd")
   avango.gua.register_material_shader(desc, "portal_mat")
 
-  cube = loader.create_geometry_from_file(
-    "cube",
-    "data/objects/cube.obj",
+  sphere = loader.create_geometry_from_file(
+    "sphere",
+    "data/objects/sphere.obj",
   )
-  cube.Transform.value = avango.gua.make_scale_mat(2)
-  cube.Material.value.ShaderName.value = "portal_mat"
-  cube.Material.value.EnableBackfaceCulling.value = False
+  sphere.Transform.value = avango.gua.make_scale_mat(2)
+  sphere.Material.value.ShaderName.value = "portal_mat"
+  sphere.Material.value.EnableBackfaceCulling.value = False
 
-  main_scene.Root.value.Children.value.append(cube)
+  main_scene.Root.value.Children.value.append(sphere)
 
   screen = avango.gua.nodes.ScreenNode(
     Name = "screen",
@@ -64,10 +63,13 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
 
-  res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.BackgroundMode.value = 1
-  res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/water_painted_noon.jpg"
+  res_pass = avango.gua.nodes.ResolvePassDescription(
+    BackgroundMode = 1,
+    BackgroundTexture = "/opt/guacamole/resources/skymaps/water_painted_noon.jpg"
+  )
+
   pipeline_description = avango.gua.nodes.PipelineDescription(
+    EnableABuffer = True,
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),

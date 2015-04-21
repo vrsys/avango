@@ -8,15 +8,20 @@
       "name" : "FragmentTeture",
       "source" : "
         void FragmentTeture() {
-          gua_color = texture(sampler2D(tex), gua_get_quad_coords()).rgb;
+          vec3 dir = gua_camera_position-gua_world_position;
+          float dist = length(dir);
+          float angle = dot(gua_normal, dir/dist);
+
+          vec2 lookup_offset = (transpose(gua_inverse_projection_view_matrix) * vec4(gua_normal, 0.0)).xy
+                               * pow((1.0 - angle), distortion_exponent);
+
+          gua_color = texture(sampler2D(tex), gua_get_quad_coords() + lookup_offset).rgb;
           gua_emissivity = 1.0;
           gua_metalness = 0.0;
           gua_roughness = 0.8;
 
-          vec3 dir = gua_camera_position-gua_world_position;
-          float dist = length(dir);
 
-          gua_alpha = clamp(dot(gua_normal, dir/dist)*1.8-0.3, 0, 1);
+          gua_alpha = clamp(angle*1.8-0.3, 0, 1);
           gua_alpha *= clamp((dist-near_clip)/fade_dist, 0, 1);
         }
       ",
@@ -31,6 +36,11 @@
           "name" : "fade_dist",
           "type" : "float",
           "value" : "0.5"
+        },
+        {
+          "name" : "distortion_exponent",
+          "type" : "float",
+          "value" : "5.0"
         },
         {
           "name" : "near_clip",

@@ -2,6 +2,7 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
+import avango.gua.gui
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
@@ -23,6 +24,19 @@ class ClippingControl(avango.script.Script):
       self.ClippingPlaneNode.value.Tags.value = ["invisible"]
     else:
       self.ClippingPlaneNode.value.Tags.value = []
+
+class FPSUpdater(avango.script.Script):
+  TimeIn = avango.SFFloat()
+  FPSResource = avango.gua.gui.SFGuiResource()
+  Window = avango.gua.SFWindowBase()
+  Viewer = avango.gua.SFViewer()
+
+  @field_has_changed(TimeIn)
+  def update_fps(self):
+    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
+    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
+    fps_string = "FPS: " + application_string + " " + rendering_string
+    self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
 def start():
 
@@ -85,7 +99,8 @@ def start():
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
-      res_pass
+      res_pass,
+      avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
     ]
   )
   camera.PipelineDescription.value = pipeline_description
@@ -125,6 +140,21 @@ def start():
   main_scene.Root.value.Children.value.append(top_light)
   main_scene.Root.value.Children.value.append(sun_light)
   main_scene.Root.value.Children.value.append(camera)
+
+
+  fps_size = avango.gua.Vec2(170, 55)
+
+  fps = avango.gua.gui.nodes.GuiResource()
+  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+
+  fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
+    Name = "fps_quad",
+    Texture = "fps",
+    Width = int(fps_size.x),
+    Height = int(fps_size.y),
+    Anchor = avango.gua.Vec2(1.0, 1.0)
+  )
+  main_scene.Root.value.Children.value.append(fps_quad)
 
   # portal scene ---------------------------------------------------------------
   portal_origin = avango.gua.nodes.TransformNode(
@@ -212,7 +242,7 @@ def start():
   add_clipping_plane(avango.gua.Vec3(0.5, 0.0, 0.0), avango.gua.Vec4(90, 0, 1, 0))
   add_clipping_plane(avango.gua.Vec3(-0.5, 0.0, 0.0), avango.gua.Vec4(-90, 0, 1, 0))
 
-  portal_scene.Root.value.Children.value.append(camera)
+  portal_scene.Root.value.Children.value.append(portal_camera)
 
   # window setup ---------------------------------------------------------------
   window = avango.gua.nodes.GlfwWindow(
@@ -251,6 +281,15 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [main_scene, portal_scene]
   viewer.Windows.value = [window]
+
+  timer = avango.nodes.TimeSensor()
+
+  fps_updater = FPSUpdater(
+    FPSResource=fps,
+    Window=window,
+    Viewer=viewer
+  )
+  fps_updater.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

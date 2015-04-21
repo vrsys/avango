@@ -30,12 +30,18 @@ class GroundFollowing(avango.script.Script):
     self._timer = avango.nodes.TimeSensor()
     self._last_time = self._timer.Time.value
 
+    self._init_matrix_out = avango.gua.make_identity_mat()
+
     self.always_evaluate(True)
 
   def my_constructor(self, gravity = -9.81, init_matrix_out = avango.gua.make_identity_mat()):
     
     self._gravity = gravity
     self.OutTransform.value = init_matrix_out
+    self._init_matrix_out = init_matrix_out
+
+  def reset_transform(self):
+    self.OutTransform.value = self._init_matrix_out
 
   def evaluate(self):
 

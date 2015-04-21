@@ -127,7 +127,7 @@ def apply_distance_events(distance_events, ground_following):
 
   distance_events.DistanceToGround.connect_from(ground_following.DistanceToGround)
   distance_events.smaller_than(0.013, "jump_fwd_loop", AnimationConfig("jump_fwd_preland", False), 0.1)
-  distance_events.bigger_than(0.013, "jump_fwd_preland", AnimationConfig("jump_fwd_loop", False), 0.1)
+  #distance_events.bigger_than(0.013, "jump_fwd_preland", AnimationConfig("jump_fwd_loop", False), 0.1)
   distance_events.smaller_than(0.01, "jump_bwd_loop", AnimationConfig("jump_bwd_preland", False), 0.1)
   distance_events.smaller_than(0.01, "jump_lt_loop", AnimationConfig("jump_lt_preland", False), 0.1)
   distance_events.smaller_than(0.01, "jump_rt_loop", AnimationConfig("jump_rt_preland", False), 0.1)

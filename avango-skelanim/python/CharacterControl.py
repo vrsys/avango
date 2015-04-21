@@ -53,12 +53,15 @@ class CharacterControl(avango.script.Script):
     self._last_time_rot = self._timer.Time.value
     self._last_time_trans = self._timer.Time.value
 
+    self._init_nav_transform = avango.gua.make_identity_mat()
+
 
   def my_constructor(self, character_node, navigation_node, start_animation_config, application_window = avango.gua.nodes.GlfwWindow()):
     # character node (bob)
     self._character = character_node
     # navigation node (bob_nav)
     self._navigation = navigation_node
+    self._init_nav_transform = navigation_node.Transform.value
     # window (for key evaluations)
     #self._window = application_window
 
@@ -67,6 +70,9 @@ class CharacterControl(avango.script.Script):
     self.always_evaluate(True)
 
     application_window.on_key_press(self._handle_key)
+
+  def reset_transform(self):
+    self._navigation.Transform.value = self._init_nav_transform
 
   def listen_keyboard(self, do_listen = True):
     self._listen_keyboard = do_listen

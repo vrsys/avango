@@ -13,6 +13,7 @@ from CharacterSettings import *
 
 camera_controls = []
 character_controls = []
+ground_followings = []
 current_character = 0
 device_sensor = None
 screen = None
@@ -64,17 +65,12 @@ def start():
 
   bob_nav = avango.gua.nodes.TransformNode(Name = "bob_nav")
   bob_ground = avango.gua.nodes.TransformNode(Name = "bob_ground")
-
   bob = loader.create_geometry_from_file("bob", "/opt/project_animation/Assets/UnrealTournament/Characters/Necris_Male/necris_male_ut4_SKELMESH.FBX" ,
          avango.gua.LoaderFlags.LOAD_MATERIALS
          |avango.gua.LoaderFlags.NORMALIZE_SCALE)
-
   bob.Transform.value = bob.Transform.value * avango.gua.make_rot_mat(-90.0,1.0,0.0,0.0)
-
   load_unreal_animations(bob)
-
   bob_nav.Transform.value =  bob_nav.Transform.value * avango.gua.make_trans_mat(0.0,0.05,0.0) * avango.gua.make_scale_mat(0.02,0.02,0.02)
-
   bob_ground.Children.value = [bob_nav]
   bob_nav.Children.value = [bob]
 
@@ -120,6 +116,14 @@ def start():
 
   def handle_key(ascii, unknown , event , unknown2):
 
+    global character_controls
+    global ground_followings
+    
+    if ascii == 82 and event ==1 and len(character_controls)>0 and len(ground_followings)>0:
+      
+      character_controls[current_character].reset_transform()
+      ground_followings[current_character].reset_transform()
+
     if ascii == 257 and event == 1:
 
       next_character()
@@ -138,7 +142,6 @@ def start():
             avango.gua.skelanim.nodes.SkeletalAnimationPassDescription(),
             avango.gua.nodes.ResolvePassDescription(),
             avango.gua.nodes.SSAAPassDescription(),
-            avango.gua.nodes.DebugViewPassDescription(),
           ])
 
   pipeline_description.Passes.value[3].EnableSSAO.value = True
@@ -159,7 +162,7 @@ def start():
   screen.Children.value = [cam]
   screen.Transform.value = avango.gua.make_trans_mat(0, 0.1, -2)
 
-  graph.Root.value.Children.value = [bob_ground,screen, tower, environment, sunlight]
+  graph.Root.value.Children.value = [screen, tower, environment, sunlight]
 
   avango.gua.register_window("window", window)
 
@@ -190,7 +193,7 @@ def start():
   character_controls.append(character_control)
   # setup camera control
   camera_control = CameraControl()
-  camera_control.my_constructor(bob,window)
+  camera_control.my_constructor(bob,window,-17.0)
   camera_controls.append(camera_control)
   # setup ground following
   ground_following = GroundFollowing(
@@ -198,12 +201,14 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  ground_following.my_constructor(gravity = -0.00005)
+  ground_following.my_constructor(gravity = -0.000075)
   ground_following.InTransform.connect_from(bob.WorldTransform)
   bob_ground.Transform.connect_from(ground_following.OutTransform)
+  ground_followings.append(ground_following)
   distance_events = DistanceEvents()
   distance_events.my_constructor(character_control)
   apply_distance_events(distance_events, ground_following)
+  graph.Root.value.Children.value.append(bob_ground)
 
   # adam = loader.create_geometry_from_file("adam", "/opt/project_animation/Assets/Mixamo/Adam/Maximo_Adam.FBX" ,
   #        avango.gua.LoaderFlags.LOAD_MATERIALS
@@ -282,7 +287,7 @@ def start():
   ganfault_character_control.listen_keyboard(False)
   ganfault_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   ganfault_camera_control = CameraControl()
-  ganfault_camera_control.my_constructor(ganfault,window)
+  ganfault_camera_control.my_constructor(ganfault,window,-17.0)
   camera_controls.append(ganfault_camera_control)
   ganfault_camera_control.listen_mouse(False)
   ganfault_ground_following = GroundFollowing(
@@ -290,9 +295,10 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  ganfault_ground_following.my_constructor(gravity = -0.00005)
+  ganfault_ground_following.my_constructor(gravity = -0.000075)
   ganfault_ground_following.InTransform.connect_from(ganfault.WorldTransform)
   ganfault_ground.Transform.connect_from(ganfault_ground_following.OutTransform)
+  ground_followings.append(ganfault_ground_following)
   graph.Root.value.Children.value.append(ganfault_ground)
 
 
@@ -373,7 +379,7 @@ def start():
   kachujin_character_control.listen_keyboard(False)
   kachujin_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   kachujin_camera_control = CameraControl()
-  kachujin_camera_control.my_constructor(kachujin,window)
+  kachujin_camera_control.my_constructor(kachujin,window,-17.0)
   camera_controls.append(kachujin_camera_control)
   kachujin_camera_control.listen_mouse(False)
   kachujin_ground_following = GroundFollowing(
@@ -381,9 +387,10 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  kachujin_ground_following.my_constructor(gravity = -0.00005)
+  kachujin_ground_following.my_constructor(gravity = -0.000075)
   kachujin_ground_following.InTransform.connect_from(kachujin.WorldTransform)
   kachujin_ground.Transform.connect_from(kachujin_ground_following.OutTransform)
+  ground_followings.append(kachujin_ground_following)
   graph.Root.value.Children.value.append(kachujin_ground)
 
 
@@ -404,7 +411,7 @@ def start():
   maria_character_control.listen_keyboard(False)
   maria_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   maria_camera_control = CameraControl()
-  maria_camera_control.my_constructor(maria,window)
+  maria_camera_control.my_constructor(maria,window,-17.0)
   camera_controls.append(maria_camera_control)
   maria_camera_control.listen_mouse(False)
   maria_ground_following = GroundFollowing(
@@ -412,9 +419,10 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  maria_ground_following.my_constructor(gravity = -0.00005)
+  maria_ground_following.my_constructor(gravity = -0.000075)
   maria_ground_following.InTransform.connect_from(maria.WorldTransform)
   maria_ground.Transform.connect_from(maria_ground_following.OutTransform)
+  ground_followings.append(maria_ground_following)
   graph.Root.value.Children.value.append(maria_ground)
 
 
@@ -435,7 +443,7 @@ def start():
   maw_character_control.listen_keyboard(False)
   maw_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   maw_camera_control = CameraControl()
-  maw_camera_control.my_constructor(maw,window)
+  maw_camera_control.my_constructor(maw,window,-9.0)
   camera_controls.append(maw_camera_control)
   maw_camera_control.listen_mouse(False)
   maw_ground_following = GroundFollowing(
@@ -443,9 +451,10 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  maw_ground_following.my_constructor(gravity = -0.00005)
+  maw_ground_following.my_constructor(gravity = -0.000075)
   maw_ground_following.InTransform.connect_from(maw.WorldTransform)
   maw_ground.Transform.connect_from(maw_ground_following.OutTransform)
+  ground_followings.append(maw_ground_following)
   graph.Root.value.Children.value.append(maw_ground)
 
 
@@ -509,7 +518,7 @@ def start():
   vampire_character_control.listen_keyboard(False)
   vampire_character_control.activate_wall_detection(0.0075,0.009,"idle",graph)
   vampire_camera_control = CameraControl()
-  vampire_camera_control.my_constructor(vampire,window)
+  vampire_camera_control.my_constructor(vampire,window,-17.0)
   camera_controls.append(vampire_camera_control)
   vampire_camera_control.listen_mouse(False)
   vampire_ground_following = GroundFollowing(
@@ -517,9 +526,10 @@ def start():
     OffsetToGround = 0.01,
     MaxDistanceToGround = 100.0
   )
-  vampire_ground_following.my_constructor(gravity = -0.00005)
+  vampire_ground_following.my_constructor(gravity = -0.000075)
   vampire_ground_following.InTransform.connect_from(vampire.WorldTransform)
   vampire_ground.Transform.connect_from(vampire_ground_following.OutTransform)
+  ground_followings.append(vampire_ground_following)
   graph.Root.value.Children.value.append(vampire_ground)
 
 

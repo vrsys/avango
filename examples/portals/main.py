@@ -5,9 +5,9 @@ import avango.gua
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-CUBE_COUNT_X = 20
-CUBE_COUNT_Y = 2
-CUBE_COUNT_Z = 20
+CUBE_COUNT_X = 15
+CUBE_COUNT_Y = 3
+CUBE_COUNT_Z = 15
 
 class ClippingControl(avango.script.Script):
   CameraNode = avango.gua.SFCameraNode()
@@ -20,9 +20,29 @@ class ClippingControl(avango.script.Script):
   def evaluate(self):
     direction = self.CameraNode.value.WorldTransform.value.get_translate() - self.ClippingPlaneNode.value.get_center()
     if self.ClippingPlaneNode.value.get_normal().dot(direction) > 0:
-      self.ClippingPlaneNode.value.Tags.value = ["invisible"]
+      self.ClippingPlaneNode.value.Tags.value = ["invisible", "clipping_plane"]
     else:
-      self.ClippingPlaneNode.value.Tags.value = []
+      self.ClippingPlaneNode.value.Tags.value = ["clipping_plane"]
+
+class TurnTo(avango.script.Script):
+  TransformIn = avango.gua.SFMatrix4()
+
+  TransformOutParent = avango.gua.SFMatrix4()
+  TransformOut = avango.gua.SFMatrix4()
+
+  def __init__(self):
+    self.super(TurnTo).__init__()
+
+  @field_has_changed(TransformIn)
+  def update(self):
+    target = self.TransformIn.value.get_translate()
+    pos = self.TransformOutParent.value.get_translate()
+
+    self.TransformOut.value = avango.gua.make_look_at_mat_inv(
+      avango.gua.Vec3(0, 0, 0),
+      pos-target, 
+      avango.gua.Vec3(0, 1, 0)
+    )
 
 def start():
 
@@ -133,6 +153,15 @@ def start():
   portal_origin.Transform.connect_from(portal_transform.Transform)
   portal_scene.Root.value.Children.value.append(portal_origin)
 
+  sphere = loader.create_geometry_from_file(
+    "sphere",
+    "data/objects/sphere.obj",
+  )
+  sphere.RenderToStencilBuffer.value = True
+  sphere.RenderToGBuffer.value = False
+  sphere.Material.value.EnableBackfaceCulling.value = False
+  portal_origin.Children.value.append(sphere)
+
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
 
   for x in range(0, CUBE_COUNT_X):
@@ -144,7 +173,7 @@ def start():
           fallback_mat,
           avango.gua.LoaderFlags.DEFAULTS
         )
-        new_cube.Transform.value = avango.gua.make_trans_mat(x-CUBE_COUNT_X/2, y, z-CUBE_COUNT_Z/2) * \
+        new_cube.Transform.value = avango.gua.make_trans_mat(x-CUBE_COUNT_X/2, y-CUBE_COUNT_Y/2, z-CUBE_COUNT_Z/2) * \
                                    avango.gua.make_scale_mat(0.1)
         portal_origin.Children.value.append(new_cube)
         new_cube.ShadowMode.value = 1
@@ -166,9 +195,21 @@ def start():
     Transform = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
   )
 
+  portal_culling_screen = avango.gua.nodes.ScreenNode(
+    Name = "portal_culling_screen",
+    Width = 1,
+    Height = 1
+  )
+  portal_origin.Children.value.append(portal_culling_screen)
+  turn_to = TurnTo()
+  turn_to.TransformIn.connect_from(camera.Transform)
+  turn_to.TransformOutParent.connect_from(portal_origin.Transform)
+  portal_culling_screen.Transform.connect_from(turn_to.TransformOut)
+
   portal_camera = avango.gua.nodes.CameraNode(
     Name = "portal_cam",
     LeftScreenPath = "/portal_cam/screen",
+    AlternativeFrustumCullingScreenPath = "/portal_origin/portal_culling_screen",
     SceneGraph = "portal_scene",
     Resolution = size,
     OutputTextureName = "portal",
@@ -187,14 +228,24 @@ def start():
   portal_res_pass.SSAORadius.value = 5
   portal_res_pass.SSAOIntensity.value = 2
   portal_res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/checker.png"
-  portal_pipeline_description = avango.gua.nodes.PipelineDescription(
+  portal_pipeline_description_stencil = avango.gua.nodes.PipelineDescription(
+    Passes = [
+      avango.gua.nodes.StencilPassDescription(),
+      avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.LightVisibilityPassDescription(),
+      portal_res_pass
+    ]
+  )
+  portal_camera.PipelineDescription.value = portal_pipeline_description_stencil
+
+  portal_pipeline_description_no_stencil = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       portal_res_pass
     ]
   )
-  portal_camera.PipelineDescription.value = portal_pipeline_description
+
   portal_camera.PipelineDescription.value.EnableABuffer.value = True
 
   def add_clipping_plane(translation, rotation):
@@ -208,6 +259,8 @@ def start():
     )
 
   add_clipping_plane(avango.gua.Vec3(0.0, 0.0, 0.5), avango.gua.Vec4(0, 0, 0, 0))
+  add_clipping_plane(avango.gua.Vec3(0.0, 0.5, 0.0), avango.gua.Vec4(-90, 1, 0, 0))
+  add_clipping_plane(avango.gua.Vec3(0.0, -0.5, 0.0), avango.gua.Vec4(90, 1, 0, 0))
   add_clipping_plane(avango.gua.Vec3(0.0, 0.0, -0.5), avango.gua.Vec4(180, 0, 1, 0))
   add_clipping_plane(avango.gua.Vec3(0.5, 0.0, 0.0), avango.gua.Vec4(90, 0, 1, 0))
   add_clipping_plane(avango.gua.Vec3(-0.5, 0.0, 0.0), avango.gua.Vec4(-90, 0, 1, 0))
@@ -224,12 +277,43 @@ def start():
   def handle_key(key, scancode, action, mods):
     nonlocal camera
     nonlocal portal_camera
-    if key is 50: # key 1
-      portal_camera.OutputWindowName.value = "window"
-      camera.OutputWindowName.value = ""
-    elif key is 49: # key 2
-      camera.OutputWindowName.value = "window"
-      portal_camera.OutputWindowName.value = ""
+    nonlocal portal_pipeline_description_stencil
+    nonlocal portal_pipeline_description_no_stencil
+
+    if action == 0:
+      if key is 49: # key 1
+        if portal_camera.OutputWindowName.value == "window":
+          camera.OutputWindowName.value = "window"
+          portal_camera.OutputWindowName.value = ""
+          print("Showing normal scene.")
+        else:
+          portal_camera.OutputWindowName.value = "window"
+          camera.OutputWindowName.value = ""
+          print("Showing portal scene.")
+
+      elif key is 50: # key 2
+        if len(portal_camera.PipelineDescription.value.Passes.value) == 4:
+          portal_camera.PipelineDescription.value = portal_pipeline_description_no_stencil
+          print("Disabled stencil pass of portal scene.")
+        else:
+          portal_camera.PipelineDescription.value = portal_pipeline_description_stencil
+          print("Enabled stencil pass of portal scene.")
+
+      elif key is 51: # key 3
+        if portal_camera.AlternativeFrustumCullingScreenPath.value == "":
+          portal_camera.AlternativeFrustumCullingScreenPath.value = "/portal_origin/portal_culling_screen"
+          print("Enabled alternativ culling of portal scene.")
+        else:
+          portal_camera.AlternativeFrustumCullingScreenPath.value = ""
+          print("Disabled alternativ culling of portal scene.")
+
+      elif key is 52: # key 4
+        if len(portal_camera.BlackList.value) == 1:
+          portal_camera.BlackList.value = ["invisible", "clipping_plane"]
+          print("Disabled global clipping planes of portal scene.")
+        else:
+          portal_camera.BlackList.value = ["invisible"]
+          print("Enabled global clipping planes of portal scene.")
 
 
   window.on_key_press(handle_key)
@@ -256,11 +340,13 @@ def start():
   guaVE.start(locals(), globals())
 
   print("")
-  print("Hotkeys")
-  print("  1: show normal scene.")
-  print("  2: show portal scene.")
+  print("Hotkeys:")
+  print("  1: toggle scene.")
+  print("  2: toggle stencil clipping of portal scene.")
+  print("  3: toggle alternative culling of portal scene.")
+  print("  4: toggle global clipping planes in portal scene.")
   print("")
-  print("  3: toggle stencil clipping of portal scene.")
+  print("")
 
   viewer.run()
 

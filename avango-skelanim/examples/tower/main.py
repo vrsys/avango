@@ -191,8 +191,6 @@ def start():
   # setup camera control
   camera_control = CameraControl()
   camera_control.my_constructor(bob,window)
-  camera_control_xbox_connect(camera_control, device_sensor)
-  screen.Transform.connect_from(camera_control.OutTransform)
   camera_controls.append(camera_control)
   # setup ground following
   ground_following = GroundFollowing(
@@ -206,7 +204,6 @@ def start():
   distance_events = DistanceEvents()
   distance_events.my_constructor(character_control)
   apply_distance_events(distance_events, ground_following)
-
 
   # adam = loader.create_geometry_from_file("adam", "/opt/project_animation/Assets/Mixamo/Adam/Maximo_Adam.FBX" ,
   #        avango.gua.LoaderFlags.LOAD_MATERIALS
@@ -566,6 +563,9 @@ def start():
   # zoe_character_control.switch_animation(AnimationConfig("idle", False))
 
 
+  if len(camera_controls) > 0:
+    camera_control_xbox_connect(camera_controls[0], device_sensor)
+    screen.Transform.connect_from(camera_controls[0].OutTransform)
 
   timer = avango.nodes.TimeSensor()
 

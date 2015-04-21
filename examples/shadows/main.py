@@ -102,7 +102,7 @@ def start():
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
-                                         ShadowCascadedSplits = [0.1, 5, 20],
+                                         ShadowCascadedSplits = [0.1, 4, 8, 30],
                                          ShadowNearClippingInSunDirection = 100,
                                          Brightness = 2
                                          )

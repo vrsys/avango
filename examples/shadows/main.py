@@ -43,6 +43,9 @@ def start():
   )
   graph.Root.value.Children.value.append(fps_quad)
 
+  fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
+
+
   for x in range(0, CUBE_COUNT_X):
     for y in range(0, CUBE_COUNT_Y):
       for z in range(0, CUBE_COUNT_Z):
@@ -50,6 +53,7 @@ def start():
         new_cube = loader.create_geometry_from_file(
           "cube" + str(x) + str(y) + str(z),
           "data/objects/monkey.obj",
+          fallback_mat,
           avango.gua.LoaderFlags.DEFAULTS
         )
         # new_cube.Material.value.set_uniform("Color", avango.gua.Vec4(1, 1, 1, 0.6))

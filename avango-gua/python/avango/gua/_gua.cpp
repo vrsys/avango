@@ -63,6 +63,7 @@
 #include "renderer/GlfwWindow.hpp"
 #include "renderer/MaterialShaderMethod.hpp"
 #include "renderer/MaterialShaderDescription.hpp"
+#include "renderer/PBSMaterialFactory.hpp"
 #include "renderer/Material.hpp"
 #include "renderer/PipelineDescription.hpp"
 #include "renderer/PipelinePassDescription.hpp"
@@ -191,6 +192,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_GlfwWindow();
     init_MaterialShaderMethod();
     init_MaterialShaderDescription();
+    init_PBSMaterialFactory();
     init_Material();
     init_PipelineDescription();
     init_PipelinePassDescription();

@@ -74,7 +74,7 @@ def start():
                                          Softness = 2,
                                          Brightness = 10)
   spot_light_1.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 18.0) * avango.gua.make_rot_mat(-20, 1, 0, 0) * avango.gua.make_scale_mat(20)
-  graph.Root.value.Children.value.append(spot_light_1)
+  # graph.Root.value.Children.value.append(spot_light_1)
 
   spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
                                          Type = avango.gua.LightType.SPOT,
@@ -155,9 +155,12 @@ def start():
   camera = avango.gua.nodes.CameraNode(
     Name = "cam",
     LeftScreenPath = "/cam/screen",
+    RightScreenPath = "/cam/screen",
     SceneGraph = "scene",
     Resolution = size,
     OutputWindowName = "window",
+    EyeDistance = 0.2,
+    EnableStereo = False,
     Children = [screen],
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 7.0)
   )
@@ -193,7 +196,9 @@ def start():
     Size = size,
     Title = "shadows",
     LeftResolution = size,
-    EnableVsync = False
+    RightResolution = size,
+    EnableVsync = False,
+    StereoMode = avango.gua.StereoMode.MONO
   )
 
   avango.gua.register_window("window", window)

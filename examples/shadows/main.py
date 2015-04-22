@@ -74,7 +74,7 @@ def start():
                                          Softness = 2,
                                          Brightness = 10)
   spot_light_1.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 18.0) * avango.gua.make_rot_mat(-20, 1, 0, 0) * avango.gua.make_scale_mat(20)
-  # graph.Root.value.Children.value.append(spot_light_1)
+  graph.Root.value.Children.value.append(spot_light_1)
 
   spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
                                          Type = avango.gua.LightType.SPOT,

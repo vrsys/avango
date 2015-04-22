@@ -10,41 +10,6 @@ CUBE_COUNT_X = 15
 CUBE_COUNT_Y = 3
 CUBE_COUNT_Z = 15
 
-class ClippingControl(avango.script.Script):
-  CameraNode = avango.gua.SFCameraNode()
-  ClippingPlaneNode = avango.gua.SFClippingPlaneNode()
-
-  def __init__(self):
-    self.super(ClippingControl).__init__()
-    self.always_evaluate(True)
-
-  def evaluate(self):
-    direction = self.CameraNode.value.WorldTransform.value.get_translate() - self.ClippingPlaneNode.value.get_center()
-    if self.ClippingPlaneNode.value.get_normal().dot(direction) > 0:
-      self.ClippingPlaneNode.value.Tags.value = ["invisible", "clipping_plane"]
-    else:
-      self.ClippingPlaneNode.value.Tags.value = ["clipping_plane"]
-
-class TurnTo(avango.script.Script):
-  TransformIn = avango.gua.SFMatrix4()
-
-  TransformOutParent = avango.gua.SFMatrix4()
-  TransformOut = avango.gua.SFMatrix4()
-
-  def __init__(self):
-    self.super(TurnTo).__init__()
-
-  @field_has_changed(TransformIn)
-  def update(self):
-    target = self.TransformIn.value.get_translate()
-    pos = self.TransformOutParent.value.get_translate()
-
-    self.TransformOut.value = avango.gua.make_look_at_mat_inv(
-      avango.gua.Vec3(0, 0, 0),
-      pos-target, 
-      avango.gua.Vec3(0, 1, 0)
-    )
-
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
   FPSResource = avango.gua.gui.SFGuiResource()
@@ -231,10 +196,19 @@ def start():
     Height = 1
   )
   portal_origin.Children.value.append(portal_culling_screen)
-  turn_to = TurnTo()
-  turn_to.TransformIn.connect_from(camera.Transform)
-  turn_to.TransformOutParent.connect_from(portal_origin.Transform)
-  portal_culling_screen.Transform.connect_from(turn_to.TransformOut)
+
+  frame = loader.create_geometry_from_file(
+    "frame",
+    "data/objects/plane.obj",
+  )
+  frame.Transform.value = avango.gua.make_rot_mat(90, 1, 0, 0)
+  frame.Tags.value = ["invisible"]
+  portal_culling_screen.Children.value.append(frame)
+
+  global_clipping_plane = avango.gua.nodes.ClippingPlaneNode(
+    Tags = ["invisible"]
+  )
+  portal_culling_screen.Children.value.append(global_clipping_plane);
 
   portal_camera = avango.gua.nodes.CameraNode(
     Name = "portal_cam",
@@ -278,23 +252,6 @@ def start():
 
   portal_camera.PipelineDescription.value.EnableABuffer.value = True
 
-  def add_clipping_plane(translation, rotation):
-    n = avango.gua.nodes.ClippingPlaneNode(
-      Transform = avango.gua.make_trans_mat(translation) * avango.gua.make_rot_mat(rotation)
-    )
-    portal_origin.Children.value.append(n);
-    c = ClippingControl(
-      CameraNode = portal_camera,
-      ClippingPlaneNode = n
-    )
-
-  add_clipping_plane(avango.gua.Vec3(0.0, 0.0, 0.5), avango.gua.Vec4(0, 0, 0, 0))
-  add_clipping_plane(avango.gua.Vec3(0.0, 0.5, 0.0), avango.gua.Vec4(-90, 1, 0, 0))
-  add_clipping_plane(avango.gua.Vec3(0.0, -0.5, 0.0), avango.gua.Vec4(90, 1, 0, 0))
-  add_clipping_plane(avango.gua.Vec3(0.0, 0.0, -0.5), avango.gua.Vec4(180, 0, 1, 0))
-  add_clipping_plane(avango.gua.Vec3(0.5, 0.0, 0.0), avango.gua.Vec4(90, 0, 1, 0))
-  add_clipping_plane(avango.gua.Vec3(-0.5, 0.0, 0.0), avango.gua.Vec4(-90, 0, 1, 0))
-
   portal_scene.Root.value.Children.value.append(portal_camera)
 
   # window setup ---------------------------------------------------------------
@@ -304,7 +261,68 @@ def start():
     LeftResolution = size
   )
 
+
+  def disable_global_clipping_plane():
+    nonlocal portal_camera
+    portal_camera.BlackList.value = ["invisible"]
+    print("Disable global clippping plane.")
+
+  def enable_global_clipping_plane():
+    nonlocal portal_camera
+    portal_camera.BlackList.value = []
+    print("Enable global clippping plane.")
+
+  def disable_portal_culling():
+    nonlocal portal_camera
+    portal_camera.AlternativeFrustumCullingScreenPath.value = ""
+    print("Disable portal culling.")
+
+  def enable_portal_culling():
+    nonlocal portal_camera
+    portal_camera.AlternativeFrustumCullingScreenPath.value = "/portal_origin/portal_culling_screen"
+    print("Enable portal culling.")
+
+  class TurnTo(avango.script.Script):
+    TransformIn = avango.gua.SFMatrix4()
+    CullingScreen = avango.gua.nodes.ScreenNode()
+    Outside = True
+
+    def __init__(self):
+      self.super(TurnTo).__init__()
+
+    @field_has_changed(TransformIn)
+    def update(self):
+      if self.CullingScreen.Parent.value != None:
+        target = self.TransformIn.value.get_translate()
+        pos = self.CullingScreen.Parent.value.WorldTransform.value.get_translate()
+
+        dir = target-pos
+        dist = dir.normalize()
+
+        if dist < 1.51:
+          if self.Outside:
+            self.Outside = False
+            disable_portal_culling()
+            disable_global_clipping_plane()
+        else:
+          if not self.Outside:
+            self.Outside = True
+            enable_portal_culling()
+            enable_global_clipping_plane()
+
+          self.CullingScreen.Tags.value = []
+          self.CullingScreen.Transform.value = avango.gua.make_look_at_mat_inv(
+            dir*0.5,
+            pos-target, 
+            avango.gua.Vec3(0, 1, 0)
+          ) 
+
+  turn_to = TurnTo()
+  turn_to.TransformIn.connect_from(camera.Transform)
+  turn_to.CullingScreen = portal_culling_screen
+
   def handle_key(key, scancode, action, mods):
+    nonlocal frame
     nonlocal camera
     nonlocal portal_camera
     nonlocal portal_pipeline_description_stencil
@@ -315,35 +333,39 @@ def start():
         if portal_camera.OutputWindowName.value == "window":
           camera.OutputWindowName.value = "window"
           portal_camera.OutputWindowName.value = ""
-          print("Showing normal scene.")
+          print("Showing both scenes.")
         else:
           portal_camera.OutputWindowName.value = "window"
           camera.OutputWindowName.value = ""
-          print("Showing portal scene.")
+          print("Showing only portal scene.")
 
       elif key is 50: # key 2
         if len(portal_camera.PipelineDescription.value.Passes.value) == 4:
           portal_camera.PipelineDescription.value = portal_pipeline_description_no_stencil
-          print("Disabled stencil pass of portal scene.")
+          print("Disable stencil clipping.")
         else:
           portal_camera.PipelineDescription.value = portal_pipeline_description_stencil
-          print("Enabled stencil pass of portal scene.")
+          print("Enable stencil clipping.")
 
       elif key is 51: # key 3
         if portal_camera.AlternativeFrustumCullingScreenPath.value == "":
-          portal_camera.AlternativeFrustumCullingScreenPath.value = "/portal_origin/portal_culling_screen"
-          print("Enabled alternativ culling of portal scene.")
+          enable_portal_culling()
         else:
-          portal_camera.AlternativeFrustumCullingScreenPath.value = ""
-          print("Disabled alternativ culling of portal scene.")
+          disable_portal_culling()
 
       elif key is 52: # key 4
-        if len(portal_camera.BlackList.value) == 1:
-          portal_camera.BlackList.value = ["invisible", "clipping_plane"]
-          print("Disabled global clipping planes of portal scene.")
+        if len(portal_camera.BlackList.value) == 0:
+          disable_global_clipping_plane()
         else:
-          portal_camera.BlackList.value = ["invisible"]
-          print("Enabled global clipping planes of portal scene.")
+          enable_global_clipping_plane()
+
+      elif key is 53: # key 5
+        if len(frame.Tags.value) == 0:
+          frame.Tags.value = ["invisible"]
+          print("Hide frame.")
+        else:
+          frame.Tags.value = []
+          print("Show frame.")
 
 
   window.on_key_press(handle_key)
@@ -380,10 +402,11 @@ def start():
 
   print("")
   print("Hotkeys:")
-  print("  1: toggle scene.")
-  print("  2: toggle stencil clipping of portal scene.")
-  print("  3: toggle alternative culling of portal scene.")
-  print("  4: toggle global clipping planes in portal scene.")
+  print("  1: toggle scene")
+  print("  2: toggle stencil clipping of portal scene")
+  print("  3: toggle alternative culling of portal scene")
+  print("  4: toggle global clipping planes in portal scene")
+  print("  5: toggle visibility of culling screen frame")
   print("")
   print("")
 

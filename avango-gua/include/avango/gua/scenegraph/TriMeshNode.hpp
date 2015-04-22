@@ -48,12 +48,20 @@ namespace av
 
       SFString   Geometry;
       SFMaterial Material;
+      SFBool     RenderToGBuffer;
+      SFBool     RenderToStencilBuffer;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
       virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
       virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
+      virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
+      virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
+      virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::TriMeshNode.

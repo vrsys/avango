@@ -20,6 +20,14 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
                       boost::bind(&TriMeshNode::getMaterialCB, this, _1),
                       boost::bind(&TriMeshNode::setMaterialCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
+                      boost::bind(&TriMeshNode::getRenderToGBufferCB, this, _1),
+                      boost::bind(&TriMeshNode::setRenderToGBufferCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RenderToStencilBuffer,
+                      boost::bind(&TriMeshNode::getRenderToStencilBufferCB, this, _1),
+                      boost::bind(&TriMeshNode::setRenderToStencilBufferCB, this, _1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -92,6 +100,30 @@ av::gua::TriMeshNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
     m_Material = event.getValue();
     m_guaTriMeshNode->set_material(m_Material->getGuaMaterial());
   }
+}
+
+void
+av::gua::TriMeshNode::getRenderToGBufferCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTriMeshNode->get_render_to_gbuffer();
+}
+
+void
+av::gua::TriMeshNode::setRenderToGBufferCB(const SFBool::SetValueEvent& event)
+{
+  m_guaTriMeshNode->set_render_to_gbuffer(event.getValue());
+}
+
+void
+av::gua::TriMeshNode::getRenderToStencilBufferCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTriMeshNode->get_render_to_stencil_buffer();
+}
+
+void
+av::gua::TriMeshNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& event)
+{
+  m_guaTriMeshNode->set_render_to_stencil_buffer(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::TriMeshNode>

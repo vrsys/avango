@@ -65,6 +65,7 @@
 #include <avango/gua/renderer/MaterialShaderDescription.hpp>
 #include <avango/gua/renderer/Material.hpp>
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
+#include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
@@ -160,6 +161,7 @@ av::gua::Init::initClass()
         av::gua::MaterialShaderDescription::initClass();
         av::gua::Material::initClass();
         av::gua::PipelinePassDescription::initClass();
+        av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();

@@ -61,6 +61,10 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       boost::bind(&CameraNode::getRightScreenPathCB, this, _1),
                       boost::bind(&CameraNode::setRightScreenPathCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(AlternativeFrustumCullingScreenPath,
+                      boost::bind(&CameraNode::getAlternativeFrustumCullingScreenPathCB, this, _1),
+                      boost::bind(&CameraNode::setAlternativeFrustumCullingScreenPathCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MonoMode,
                       boost::bind(&CameraNode::getMonoModeCB, this, _1),
                       boost::bind(&CameraNode::setMonoModeCB, this, _1));
@@ -106,7 +110,7 @@ av::gua::CameraNode::~CameraNode()
 {}
 
 av::Link<av::gua::Frustum> av::gua::CameraNode::get_frustum(av::gua::SceneGraph const& graph, av::gua::CameraNode::CameraMode mode) {
-  return av::Link<av::gua::Frustum>(new av::gua::Frustum(new ::gua::Frustum(m_guaNode->get_frustum(*graph.getGuaSceneGraph(), static_cast< ::gua::CameraMode >(mode)))));
+  return av::Link<av::gua::Frustum>(new av::gua::Frustum(new ::gua::Frustum(m_guaNode->get_rendering_frustum(*graph.getGuaSceneGraph(), static_cast< ::gua::CameraMode >(mode)))));
 }
 
 void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode)
@@ -267,6 +271,18 @@ void
 av::gua::CameraNode::setRightScreenPathCB(const SFString::SetValueEvent& event)
 {
   m_guaNode->config.right_screen_path() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getAlternativeFrustumCullingScreenPathCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->config.alternative_frustum_culling_screen_path();
+}
+
+void
+av::gua::CameraNode::setAlternativeFrustumCullingScreenPathCB(const SFString::SetValueEvent& event)
+{
+  m_guaNode->config.alternative_frustum_culling_screen_path() = event.getValue();
 }
 
 void

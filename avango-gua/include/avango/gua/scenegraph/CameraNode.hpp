@@ -76,6 +76,7 @@ namespace av
       SFFloat               EyeOffset;
       SFString              LeftScreenPath;
       SFString              RightScreenPath;
+      SFString              AlternativeFrustumCullingScreenPath;
       SFUInt                MonoMode;
 
       SFFloat               FarClip;
@@ -122,6 +123,9 @@ namespace av
 
       virtual void getRightScreenPathCB(const SFString::GetValueEvent& event);
       virtual void setRightScreenPathCB(const SFString::SetValueEvent& event);
+
+      virtual void getAlternativeFrustumCullingScreenPathCB(const SFString::GetValueEvent& event);
+      virtual void setAlternativeFrustumCullingScreenPathCB(const SFString::SetValueEvent& event);
 
       virtual void getMonoModeCB(const SFUInt::GetValueEvent& event);
       virtual void setMonoModeCB(const SFUInt::SetValueEvent& event);

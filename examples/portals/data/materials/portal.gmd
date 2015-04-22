@@ -45,7 +45,7 @@
         {
           "name" : "distortion_strength",
           "type" : "float",
-          "value" : "0"
+          "value" : "0.2"
         },
         {
           "name" : "near_clip",

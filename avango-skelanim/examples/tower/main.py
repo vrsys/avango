@@ -106,13 +106,14 @@ def start():
       Transform=(avango.gua.make_rot_mat(119.5, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-10, 1.0, 0.0, 0.0))
   )
 
-  size = avango.gua.Vec2ui(2560, 1440)
+  size = avango.gua.Vec2ui(1920, 1200)
 
   window = avango.gua.nodes.GlfwWindow(
     Size = size,
     LeftResolution = size
   )
   window.CursorMode.value = 2
+  window.EnableFullscreen.value = True
 
   def handle_key(ascii, unknown , event , unknown2):
 

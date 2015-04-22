@@ -78,6 +78,7 @@ set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GUACAMOLE_GUI_LIBRARIES}
+    ${GUACAMOLE_VOLUME_LIBRARIES}
     ${GUACAMOLE_PLOD_LIBRARIES}
     ${GL_LIBRARIES}
     ${SCHISM_LIBRARIES}
@@ -96,6 +97,7 @@ set(INCLUDE_PATHS
     ${BOOST_INCLUDE_DIRS}
     ${GUACAMOLE_INCLUDE_DIRS}
     ${GUACAMOLE_GUI_INCLUDE_DIRS}
+    ${GUACAMOLE_VOLUME_INCLUDE_DIRS}
     ${GUACAMOLE_PLOD_INCLUDE_DIRS}
     ${GL_INCLUDE_DIRS}
 )
@@ -146,6 +148,7 @@ option (AVANGO_PBR_SUPPORT "Set to enable PBR (point based rendering) support.")
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
+option (AVANGO_VOLUME_SUPPORT "Compile Volume module for Avango.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
 option (AVANGO_AWESOMIUM_SUPPORT "Enable building Awesomium module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
@@ -186,6 +189,11 @@ if (AVANGO_AWESOMIUM_SUPPORT)
     add_subdirectory(avango-awesomium)
 endif(AVANGO_AWESOMIUM_SUPPORT)
 
+if (AVANGO_VOLUME_SUPPORT)
+    include(find_guacamole_volume)
+    add_subdirectory(avango-volume)
+endif(AVANGO_VOLUME_SUPPORT)
+
 ################################################################
 # Summary
 ################################################################
@@ -213,11 +221,21 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
 
-message(STATUS " guacamole-gui:" )
-message(STATUS "   library: ${GUACAMOLE_GUI_LIBRARIES}" )
-message(STATUS "   library path: ${GUACAMOLE_GUI_LIBRARY_DIRS}" )
-message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
-message(STATUS "" )
+if ( AVANGO_VOLUME_SUPPORT  )
+  message(STATUS " guacamole-volume:" )
+  message(STATUS "   library: ${GUACAMOLE_VOLUME_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_VOLUME_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_VOLUME_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_VOLUME_SUPPORT )
+
+if ( AVANGO_AWESOMIUM_SUPPORT  )
+  message(STATUS " guacamole-gui:" )
+  message(STATUS "   library: ${GUACAMOLE_GUI_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_GUI_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_AWESOMIUM_SUPPORT )
 
 message(STATUS " schism:" )
 message(STATUS "   library: ${SCHISM_LIBRARIES}" )

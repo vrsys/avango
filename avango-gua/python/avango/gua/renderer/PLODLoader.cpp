@@ -1,6 +1,7 @@
 #include "PLODLoader.hpp"
 
 #include <boost/python.hpp>
+#include <boost/python/stl_iterator.hpp>
 #include <avango/python/register_field.h>
 #include <gua/math.hpp>
 #include <gua/renderer/PLOD.hpp>
@@ -47,6 +48,26 @@ bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {
    return loader.is_supported(file);
 }
 
+std::string pick_plod2(av::gua::PLODLoader const& loader,
+                       ::gua::math::vec3 const& ray_origin,
+                       ::gua::math::vec3 const& ray_forward,
+                       float max_distance,
+                       boost::python::list model_files_list,
+                       float aabb_scale) {
+
+  std::set<std::string> model_filenames;
+  boost::python::stl_input_iterator<std::string> a(model_files_list);
+  boost::python::stl_input_iterator<std::string> b;
+  model_filenames.insert(a, b);
+
+  return loader.pick_plod_bvh(ray_origin,
+                              ray_forward,
+                              max_distance,
+                              model_filenames,
+                              aabb_scale);
+
+}
+
 av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
                                  ::gua::math::vec3 const& bundle_origin,
                                  ::gua::math::vec3 const& bundle_forward,
@@ -78,6 +99,7 @@ void init_PLODLoader()
          .def("create_geometry_from_file", &load)
          .def("create_geometry_from_file", &load2)
          .def("is_supported", &is_supported)
+         .def("pick_plod_bvh", &pick_plod2)
          .def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
          ;
 

@@ -66,7 +66,8 @@ av::gua::PLODLoader::is_supported(std::string const& fileName) const
   return m_guaPLODLoader->is_supported(fileName);
 }
 
-std::string av::gua::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
+std::pair<std::string, ::gua::math::vec3>
+av::gua::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
                                                ::gua::math::vec3 const& ray_forward,
                                                float max_distance,
                                                std::set<std::string> const& model_filenames,

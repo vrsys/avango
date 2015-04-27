@@ -48,7 +48,8 @@ bool is_supported(av::gua::PLODLoader const& loader, std::string const& file) {
    return loader.is_supported(file);
 }
 
-std::string pick_plod2(av::gua::PLODLoader const& loader,
+boost::python::tuple pick_plod2(
+                       av::gua::PLODLoader const& loader,
                        ::gua::math::vec3 const& ray_origin,
                        ::gua::math::vec3 const& ray_forward,
                        float max_distance,
@@ -60,11 +61,14 @@ std::string pick_plod2(av::gua::PLODLoader const& loader,
   boost::python::stl_input_iterator<std::string> b;
   model_filenames.insert(a, b);
 
-  return loader.pick_plod_bvh(ray_origin,
-                              ray_forward,
-                              max_distance,
-                              model_filenames,
-                              aabb_scale);
+  std::pair<std::string, ::gua::math::vec3> result = loader.pick_plod_bvh(
+                                                            ray_origin,
+                                                            ray_forward,
+                                                            max_distance,
+                                                            model_filenames,
+                                                            aabb_scale);
+
+  return boost::python::make_tuple(result.first, result.second);
 
 }
 

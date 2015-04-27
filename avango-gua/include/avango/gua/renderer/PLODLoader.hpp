@@ -53,7 +53,8 @@ namespace av
                                   Flags flags = DEFAULTS) const;
     bool is_supported(std::string const& fileName) const;
 
-    std::string pick_plod_bvh(::gua::math::vec3 const& ray_origin,
+    std::pair<std::string, ::gua::math::vec3> pick_plod_bvh(
+                              ::gua::math::vec3 const& ray_origin,
                               ::gua::math::vec3 const& ray_forward,
                               float max_distance,
                               std::set<std::string> const& model_filenames,

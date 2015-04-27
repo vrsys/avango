@@ -70,6 +70,7 @@ def start():
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
+                                         ShadowMaxDistance = 10,
                                          Falloff = 1.5,
                                          Softness = 2,
                                          Brightness = 10)
@@ -82,6 +83,7 @@ def start():
                                          EnableShadows = True,
                                          ShadowMapSize = 512,
                                          ShadowOffset = 0.002,
+                                         ShadowMaxDistance = 10,
                                          Falloff = 1,
                                          Softness = 1,
                                          Brightness = 10)
@@ -94,6 +96,7 @@ def start():
                                          Color = avango.gua.Color(0.2, 1.0, 1.7),
                                          EnableShadows = True,
                                          ShadowMapSize = 128,
+                                         ShadowMaxDistance = 10,
                                          ShadowOffset = 0.03,
                                          Falloff = 0.5,
                                          Brightness = 20)
@@ -106,23 +109,12 @@ def start():
                                          Color = avango.gua.Color(1.2, 1.0, 0.1),
                                          EnableShadows = True,
                                          ShadowMapSize = 128,
+                                         ShadowMaxDistance = 10,
                                          ShadowOffset = 0.03,
                                          Falloff = 0.5,
                                          Brightness = 20)
   point_light2.Transform.value = avango.gua.make_trans_mat(12.5, 0.2, 4.5) * avango.gua.make_scale_mat(2)
   graph.Root.value.Children.value.append(point_light2)
-
-  point_light3 = avango.gua.nodes.LightNode(
-                                         Type = avango.gua.LightType.POINT,
-                                         Name = "point_light3",
-                                         Color = avango.gua.Color(1.2, 0.0, 0.0),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 128,
-                                         ShadowOffset = 0.03,
-                                         Falloff = 0.5,
-                                         Brightness = 20)
-  point_light3.Transform.value = avango.gua.make_trans_mat(2.5, 0.2, 14.5) * avango.gua.make_scale_mat(2)
-  graph.Root.value.Children.value.append(point_light3)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
                                          Type = avango.gua.LightType.SUN,
@@ -130,7 +122,8 @@ def start():
                                          EnableShadows = True,
                                          ShadowMapSize = 1024,
                                          ShadowOffset = 0.0005,
-                                         ShadowCascadedSplits = [0.1, 4, 8, 30],
+                                         ShadowCascadedSplits = [0.1, 4, 7, 20],
+                                         ShadowMaxDistance = 30,
                                          ShadowNearClippingInSunDirection = 100,
                                          ShadowFarClippingInSunDirection = 100,
                                          Brightness = 2
@@ -206,7 +199,7 @@ def start():
       # avango.gua.nodes.TexturedQuadPassDescription(),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
-      # avango.gua.nodes.BBoxPassDescription(),
+      avango.gua.nodes.BBoxPassDescription(),
       avango.gua.nodes.TexturedScreenSpaceQuadPassDescription(),
       avango.gua.nodes.DebugViewPassDescription()
     ],

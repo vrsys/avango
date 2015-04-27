@@ -57,6 +57,10 @@ av::gua::LightNode::LightNode(std::shared_ptr< ::gua::node::LightNode> guanode)
                           boost::bind(&LightNode::getShadowMapSizeCB, this, _1),
                           boost::bind(&LightNode::setShadowMapSizeCB, this, _1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(ShadowMaxDistance,
+                          boost::bind(&LightNode::getShadowMaxDistanceCB, this, _1),
+                          boost::bind(&LightNode::setShadowMaxDistanceCB, this, _1));
+
     AV_FC_ADD_ADAPTOR_FIELD(ShadowCascadedSplits,
                           boost::bind(&LightNode::getShadowCascadedSplitsCB, this, _1),
                           boost::bind(&LightNode::setShadowCascadedSplitsCB, this, _1));
@@ -222,6 +226,18 @@ void
 av::gua::LightNode::setShadowMapSizeCB(const SFUInt::SetValueEvent& event)
 {
     m_guaNode->data.shadow_map_size() = event.getValue();
+}
+
+void
+av::gua::LightNode::getShadowMaxDistanceCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.max_shadow_dist();
+}
+
+void
+av::gua::LightNode::setShadowMaxDistanceCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.max_shadow_dist() = event.getValue();
 }
 
 void

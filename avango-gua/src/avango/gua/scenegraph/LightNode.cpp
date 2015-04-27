@@ -64,6 +64,10 @@ av::gua::LightNode::LightNode(std::shared_ptr< ::gua::node::LightNode> guanode)
     AV_FC_ADD_ADAPTOR_FIELD(ShadowNearClippingInSunDirection,
                           boost::bind(&LightNode::getShadowNearClippingInSunDirectionCB, this, _1),
                           boost::bind(&LightNode::setShadowNearClippingInSunDirectionCB, this, _1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(ShadowFarClippingInSunDirection,
+                          boost::bind(&LightNode::getShadowFarClippingInSunDirectionCB, this, _1),
+                          boost::bind(&LightNode::setShadowFarClippingInSunDirectionCB, this, _1));
 }
 
 void
@@ -242,4 +246,16 @@ void
 av::gua::LightNode::setShadowNearClippingInSunDirectionCB(const SFFloat::SetValueEvent& event)
 {
     m_guaNode->data.shadow_near_clipping_in_sun_direction() = event.getValue();
+}
+
+void
+av::gua::LightNode::getShadowFarClippingInSunDirectionCB(const SFFloat::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = m_guaNode->data.shadow_far_clipping_in_sun_direction();
+}
+
+void
+av::gua::LightNode::setShadowFarClippingInSunDirectionCB(const SFFloat::SetValueEvent& event)
+{
+    m_guaNode->data.shadow_far_clipping_in_sun_direction() = event.getValue();
 }

@@ -62,6 +62,7 @@ namespace av
       // new
       MFFloat ShadowCascadedSplits;
       SFFloat ShadowNearClippingInSunDirection;
+      SFFloat ShadowFarClippingInSunDirection;
 
       /**
        * Get the wrapped ::gua::LightNode.
@@ -108,6 +109,9 @@ namespace av
 
       virtual void getShadowNearClippingInSunDirectionCB(const SFFloat::GetValueEvent& event);
       virtual void setShadowNearClippingInSunDirectionCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getShadowFarClippingInSunDirectionCB(const SFFloat::GetValueEvent& event);
+      virtual void setShadowFarClippingInSunDirectionCB(const SFFloat::SetValueEvent& event);
 
     private:
 

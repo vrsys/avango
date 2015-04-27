@@ -88,29 +88,54 @@ def start():
   spot_light_2.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 20.0) * avango.gua.make_rot_mat(40, 1, 0, 0) * avango.gua.make_rot_mat(-170, 0, 1, 0) * avango.gua.make_scale_mat(10)
   graph.Root.value.Children.value.append(spot_light_2)
 
-  point_light = avango.gua.nodes.LightNode(
+  point_light1 = avango.gua.nodes.LightNode(
                                          Type = avango.gua.LightType.POINT,
-                                         Name = "point_light",
-                                         Color = avango.gua.Color(0.2, 1.0, 0.7),
+                                         Name = "point_light1",
+                                         Color = avango.gua.Color(0.2, 1.0, 1.7),
                                          EnableShadows = True,
                                          ShadowMapSize = 128,
                                          ShadowOffset = 0.03,
                                          Falloff = 0.5,
-                                         Brightness = 10)
-  point_light.Transform.value = avango.gua.make_trans_mat(4.0, 1.0, 4.0) * avango.gua.make_scale_mat(4)
-  graph.Root.value.Children.value.append(point_light)
+                                         Brightness = 20)
+  point_light1.Transform.value = avango.gua.make_trans_mat(4.5, 1.0, 4.5) * avango.gua.make_scale_mat(4)
+  graph.Root.value.Children.value.append(point_light1)
+
+  point_light2 = avango.gua.nodes.LightNode(
+                                         Type = avango.gua.LightType.POINT,
+                                         Name = "point_light2",
+                                         Color = avango.gua.Color(1.2, 1.0, 0.1),
+                                         EnableShadows = True,
+                                         ShadowMapSize = 128,
+                                         ShadowOffset = 0.03,
+                                         Falloff = 0.5,
+                                         Brightness = 20)
+  point_light2.Transform.value = avango.gua.make_trans_mat(12.5, 0.2, 4.5) * avango.gua.make_scale_mat(2)
+  graph.Root.value.Children.value.append(point_light2)
+
+  point_light3 = avango.gua.nodes.LightNode(
+                                         Type = avango.gua.LightType.POINT,
+                                         Name = "point_light3",
+                                         Color = avango.gua.Color(1.2, 0.0, 0.0),
+                                         EnableShadows = True,
+                                         ShadowMapSize = 128,
+                                         ShadowOffset = 0.03,
+                                         Falloff = 0.5,
+                                         Brightness = 20)
+  point_light3.Transform.value = avango.gua.make_trans_mat(2.5, 0.2, 14.5) * avango.gua.make_scale_mat(2)
+  graph.Root.value.Children.value.append(point_light3)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
                                          Type = avango.gua.LightType.SUN,
                                          Color = avango.gua.Color(1.0, 1.0, 0.7),
                                          EnableShadows = True,
-                                         ShadowMapSize = 512,
-                                         ShadowOffset = 0.002,
+                                         ShadowMapSize = 1024,
+                                         ShadowOffset = 0.0005,
                                          ShadowCascadedSplits = [0.1, 4, 8, 30],
                                          ShadowNearClippingInSunDirection = 100,
+                                         ShadowFarClippingInSunDirection = 100,
                                          Brightness = 2
                                          )
-  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 1.0, 0.0)
+  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
 
 
@@ -166,7 +191,7 @@ def start():
   )
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
-  res_pass.EnableSSAO.value = False
+  res_pass.EnableSSAO.value = True
   res_pass.SSAOIntensity.value = 3.0
   res_pass.SSAOFalloff.value = 20.0
   res_pass.SSAORadius.value = 10.0

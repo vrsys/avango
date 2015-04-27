@@ -27,30 +27,36 @@ Learn how to configure a HIDInput device to collect input data based on
 the Linux input system.
 '''
 
-import sys
 import avango.daemon
+import os
 
-# enable logging for detailed information on device setup
-#avango.enable_logging()
 
-# create a station to propagate the input events
-station = avango.daemon.Station('mousestation')
+def main():
+    mouse_name = os.popen(
+        "ls /dev/input/by-id | grep \"-event-mouse\" | " +
+        "sed -e \'s/\"//g\'  | cut -d\" \" -f4"
+        ).read()
 
-# configure a mouse device
-mouse = avango.daemon.HIDInput()
-mouse.station = station
-if sys.platform == 'win32':
-  mouse.device = '01::02::1'
-else:
-  mouse.device = '/dev/input/event2'
+    mouse_name = mouse_name.split()[0]
 
-# map incoming events to station values
-mouse.values[0] = "EV_REL::REL_X"
-mouse.values[1] = "EV_REL::REL_Y"
+    # configure a mouse device
+    mouse = avango.daemon.HIDInput()
 
-# alternative way of mapping events
-#mouse.map_to_station_value(0, "EV_REL::REL_X")
-#mouse.map_to_station_value(1, "EV_REL::REL_Y")
+    # create a station to propagate the input events
+    mouse.station = avango.daemon.Station('gua-device-mouse')
+    mouse.device = "/dev/input/by-id/" + mouse_name
 
-# start daemon (will enter the main loop)
-avango.daemon.run([mouse])
+    # map incoming events to station values
+    mouse.values[0] = "EV_REL::REL_X"
+    mouse.values[1] = "EV_REL::REL_Y"
+    mouse.buttons[0] = "EV_KEY::BTN_LEFT"
+    mouse.buttons[1] = "EV_KEY::BTN_RIGHT"
+
+    print("Mouse started at:", mouse_name)
+
+    # start daemon (will enter the main loop)
+    avango.daemon.run([mouse])
+
+
+if __name__ == '__main__':
+    main()

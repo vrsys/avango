@@ -53,15 +53,22 @@ namespace av
                                   Flags flags = DEFAULTS) const;
     bool is_supported(std::string const& fileName) const;
 
+    std::pair<std::string, ::gua::math::vec3> pick_plod_bvh(
+                              ::gua::math::vec3 const& ray_origin,
+                              ::gua::math::vec3 const& ray_forward,
+                              float max_distance,
+                              std::set<std::string> const& model_filenames,
+                              float aabb_scale) const;
+
     av::gua::MFPickResult* pick_plod_interpolate(
-                                     ::gua::math::vec3 const& bundle_origin,
-                                     ::gua::math::vec3 const& bundle_forward,
-                                     ::gua::math::vec3 const& bundle_up,
-                                     float bundle_radius,
-                                     float max_distance,
-                                     unsigned int max_depth,
-                                     unsigned int surfel_skip,
-                                     float aabb_scale) const;
+                                  ::gua::math::vec3 const& bundle_origin,
+                                  ::gua::math::vec3 const& bundle_forward,
+                                  ::gua::math::vec3 const& bundle_up,
+                                  float bundle_radius,
+                                  float max_distance,
+                                  unsigned int max_depth,
+                                  unsigned int surfel_skip,
+                                  float aabb_scale) const;
   public:
 
       SFInt   UploadBudget;

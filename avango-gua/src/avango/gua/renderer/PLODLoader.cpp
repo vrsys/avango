@@ -66,6 +66,20 @@ av::gua::PLODLoader::is_supported(std::string const& fileName) const
   return m_guaPLODLoader->is_supported(fileName);
 }
 
+std::pair<std::string, ::gua::math::vec3>
+av::gua::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
+                                               ::gua::math::vec3 const& ray_forward,
+                                               float max_distance,
+                                               std::set<std::string> const& model_filenames,
+                                               float aabb_scale) const {
+
+  return m_guaPLODLoader->pick_plod_bvh(ray_origin,
+                                        ray_forward,
+                                        max_distance,
+                                        model_filenames,
+                                        aabb_scale);
+
+}
 
 av::gua::MFPickResult*
 av::gua::PLODLoader::pick_plod_interpolate(

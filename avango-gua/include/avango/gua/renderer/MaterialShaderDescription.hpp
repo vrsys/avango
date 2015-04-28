@@ -64,7 +64,7 @@ namespace av
       MFMaterialShaderMethod::ContainerType m_fragmentMethods;
 
 
-      MaterialShaderDescription(const MaterialShaderDescription&);
+      // MaterialShaderDescription(const MaterialShaderDescription&);
       MaterialShaderDescription& operator=(const MaterialShaderDescription&);
     };
 

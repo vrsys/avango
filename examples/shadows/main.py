@@ -192,6 +192,7 @@ def start():
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
   res_pass.Exposure.value = 1.0
   res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+  res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [

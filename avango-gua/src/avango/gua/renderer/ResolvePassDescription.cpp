@@ -40,6 +40,18 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getFogStartCB, this, _1),
                     boost::bind(&ResolvePassDescription::setFogStartCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(VignetteSoftness,
+                    boost::bind(&ResolvePassDescription::getVignetteSoftnessCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setVignetteSoftnessCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(VignetteCoverage,
+                    boost::bind(&ResolvePassDescription::getVignetteCoverageCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setVignetteCoverageCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(VignetteColor,
+                    boost::bind(&ResolvePassDescription::getVignetteColorCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setVignetteColorCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(FogEnd,
                     boost::bind(&ResolvePassDescription::getFogEndCB, this, _1),
                     boost::bind(&ResolvePassDescription::setFogEndCB, this, _1));
@@ -194,6 +206,42 @@ void
 av::gua::ResolvePassDescription::setFogEndCB(const SFFloat::SetValueEvent& event)
 {
   m_guaResolvePassDescription->fog_end(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getVignetteSoftnessCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->vignette_softness();
+}
+
+void
+av::gua::ResolvePassDescription::setVignetteSoftnessCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->vignette_softness(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getVignetteCoverageCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->vignette_coverage();
+}
+
+void
+av::gua::ResolvePassDescription::setVignetteCoverageCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->vignette_coverage(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getVignetteColorCB(const SFVec4::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->vignette_color();
+}
+
+void
+av::gua::ResolvePassDescription::setVignetteColorCB(const SFVec4::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->vignette_color(::gua::math::vec4f(event.getValue()));
 }
 
 void

@@ -292,6 +292,8 @@ void av::gua::BlenderViewer::render_thread() {
           }
           m_image = screenshot(*pipe);
 
+          pipe->clear_frame_cache();
+
           // swap buffers
           window->finish_frame();
           ++(window->get_context()->framecount);

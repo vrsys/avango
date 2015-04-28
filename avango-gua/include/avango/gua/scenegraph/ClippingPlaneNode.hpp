@@ -40,11 +40,17 @@ namespace av
       virtual ~ClippingPlaneNode();
 
     public:
-      
+
+      MFInt ViewIDs;
+
       /**
        * Get the wrapped ::gua::ClippingPlaneNode.
        */
       std::shared_ptr< ::gua::node::ClippingPlaneNode> getGuaNode() const;
+
+    public:
+      virtual void getViewIDsCB(const MFInt::GetValueEvent& event);
+      virtual void setViewIDsCB(const MFInt::SetValueEvent& event);
 
     private:
 

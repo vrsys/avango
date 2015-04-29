@@ -77,19 +77,6 @@ def start():
   spot_light_1.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 18.0) * avango.gua.make_rot_mat(-20, 1, 0, 0) * avango.gua.make_scale_mat(20)
   graph.Root.value.Children.value.append(spot_light_1)
 
-  spot_light_2 = avango.gua.nodes.LightNode(Name = "spot_light_2",
-                                         Type = avango.gua.LightType.SPOT,
-                                         Color = avango.gua.Color(0.0, 1.0, 0.7),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 512,
-                                         ShadowOffset = 0.002,
-                                         ShadowMaxDistance = 10,
-                                         Falloff = 1,
-                                         Softness = 1,
-                                         Brightness = 10)
-  spot_light_2.Transform.value = avango.gua.make_trans_mat(14.0, 3.0, 20.0) * avango.gua.make_rot_mat(40, 1, 0, 0) * avango.gua.make_rot_mat(-170, 0, 1, 0) * avango.gua.make_scale_mat(10)
-  graph.Root.value.Children.value.append(spot_light_2)
-
   point_light1 = avango.gua.nodes.LightNode(
                                          Type = avango.gua.LightType.POINT,
                                          Name = "point_light1",
@@ -102,19 +89,6 @@ def start():
                                          Brightness = 20)
   point_light1.Transform.value = avango.gua.make_trans_mat(4.5, 1.0, 4.5) * avango.gua.make_scale_mat(4)
   graph.Root.value.Children.value.append(point_light1)
-
-  point_light2 = avango.gua.nodes.LightNode(
-                                         Type = avango.gua.LightType.POINT,
-                                         Name = "point_light2",
-                                         Color = avango.gua.Color(1.2, 1.0, 0.1),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 128,
-                                         ShadowMaxDistance = 10,
-                                         ShadowOffset = 0.03,
-                                         Falloff = 0.5,
-                                         Brightness = 20)
-  point_light2.Transform.value = avango.gua.make_trans_mat(12.5, 0.2, 4.5) * avango.gua.make_scale_mat(2)
-  graph.Root.value.Children.value.append(point_light2)
 
   sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
                                          Type = avango.gua.LightType.SUN,
@@ -130,26 +104,6 @@ def start():
                                          )
   sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
   graph.Root.value.Children.value.append(sun_light)
-
-
-  top_light = avango.gua.nodes.LightNode(Name = "top_light",
-                                         Type = avango.gua.LightType.SUN,
-                                         Color = avango.gua.Color(0.1, 0.2, 0.4),
-                                         EnableSpecularShading = False,
-                                         Brightness = 1)
-  top_light.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
-  graph.Root.value.Children.value.append(top_light)
-
-
-
-  fill_light = avango.gua.nodes.LightNode(Name = "fill_light",
-                                         Type = avango.gua.LightType.SUN,
-                                         Color = avango.gua.Color(0.05, 0.1, 0.05),
-                                         EnableSpecularShading = False,
-                                         Brightness = 1)
-  fill_light.Transform.value = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-  graph.Root.value.Children.value.append(fill_light)
-
 
   floor = loader.create_geometry_from_file(
     "floor",
@@ -205,8 +159,8 @@ def start():
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
       avango.gua.nodes.BBoxPassDescription(),
-      avango.gua.nodes.TexturedScreenSpaceQuadPassDescription(),
-      avango.gua.nodes.DebugViewPassDescription()
+      avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
+      # avango.gua.nodes.DebugViewPassDescription()
     ],
     EnableABuffer = False
   )

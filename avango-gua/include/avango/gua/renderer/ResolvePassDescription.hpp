@@ -75,8 +75,7 @@ namespace av
 
       SFColor  EnvironmentLightingColor;
       SFUInt   EnvironmentLightingMode;
-      SFString EnvironmentLightingSphereMap;
-      // MFString EnvironmentLightingCubeMap;
+      SFString EnvironmentLightingTexture;
       SFFloat  HorizonFade;
 
       SFBool   EnableSSAO;
@@ -146,8 +145,8 @@ namespace av
       virtual void getEnvironmentLightingModeCB(const SFUInt::GetValueEvent& event);
       virtual void setEnvironmentLightingModeCB(const SFUInt::SetValueEvent& event);
 
-      virtual void getEnvironmentLightingSphereMapCB(const SFString::GetValueEvent& event);
-      virtual void setEnvironmentLightingSphereMapCB(const SFString::SetValueEvent& event);
+      virtual void getEnvironmentLightingTextureCB(const SFString::GetValueEvent& event);
+      virtual void setEnvironmentLightingTextureCB(const SFString::SetValueEvent& event);
 
       virtual void getHorizonFadeCB(const SFFloat::GetValueEvent& event);
       virtual void setHorizonFadeCB(const SFFloat::SetValueEvent& event);

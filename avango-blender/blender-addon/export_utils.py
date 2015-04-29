@@ -27,9 +27,9 @@ def export_links(obj):
                 ref_obj = bpy.data.objects[link.to_node.referenced_object]
             else:
                 ref_obj = link.to_node
-                field_connections.append({
-                    "from_field": key,
-                    "to_node": ref_obj.name,
-                    "to_field": link.to_socket.name,
-                    })
+            field_connections.append({
+                "from_field": key,
+                "to_node": ref_obj.name,
+                "to_field": link.to_socket.name,
+                })
     return field_connections

@@ -72,9 +72,9 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getEnvironmentLightingModeCB, this, _1),
                     boost::bind(&ResolvePassDescription::setEnvironmentLightingModeCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingSphereMap,
-                    boost::bind(&ResolvePassDescription::getEnvironmentLightingSphereMapCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnvironmentLightingSphereMapCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingTexture,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingTextureCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingTextureCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(HorizonFade,
                     boost::bind(&ResolvePassDescription::getHorizonFadeCB, this, _1),
@@ -299,15 +299,15 @@ av::gua::ResolvePassDescription::setEnvironmentLightingModeCB(const SFUInt::SetV
 }
 
 void
-av::gua::ResolvePassDescription::getEnvironmentLightingSphereMapCB(const SFString::GetValueEvent& event)
+av::gua::ResolvePassDescription::getEnvironmentLightingTextureCB(const SFString::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting_spheremap();
+  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting_texture();
 }
 
 void
-av::gua::ResolvePassDescription::setEnvironmentLightingSphereMapCB(const SFString::SetValueEvent& event)
+av::gua::ResolvePassDescription::setEnvironmentLightingTextureCB(const SFString::SetValueEvent& event)
 {
-  m_guaResolvePassDescription->environment_lighting_spheremap(event.getValue());
+  m_guaResolvePassDescription->environment_lighting_texture(event.getValue());
 }
 
 void

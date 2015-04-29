@@ -3,36 +3,45 @@ import avango.script
 from avango.script import field_has_changed
 import math
 
+
 class DistanceEvents(avango.script.Script):
 
-  DistanceToGround = avango.SFFloat()
-  
-  def __init__(self):
+    DistanceToGround = avango.SFFloat()
 
-    self.super(DistanceEvents).__init__()
+    def __init__(self):
 
-    self._character_control = None
-    self._smaller_than = []
-    self._bigger_than = []
+        self.super(DistanceEvents).__init__()
 
-  def my_constructor(self, character_control):
-    self._character_control = character_control
+        self._character_control = None
+        self._smaller_than = []
+        self._bigger_than = []
 
-  def smaller_than(self, distance_to_ground, current_animation_name, next_animation_config, blending_duration = 0.5):
-    self._smaller_than.append((distance_to_ground,current_animation_name,next_animation_config,blending_duration))
+    def my_constructor(self, character_control):
+        self._character_control = character_control
 
-  def bigger_than(self, distance_to_ground, current_animation_name, next_animation_config, blending_duration = 0.5):
-    self._bigger_than.append((distance_to_ground,current_animation_name,next_animation_config,blending_duration))
+    def smaller_than(self, distance_to_ground, current_animation_name,
+                     next_animation_config, blending_duration=0.5):
+        self._smaller_than.append((distance_to_ground, current_animation_name,
+                                   next_animation_config, blending_duration))
 
-  @field_has_changed(DistanceToGround)
-  def distance_check(self):
+    def bigger_than(self, distance_to_ground, current_animation_name,
+                    next_animation_config, blending_duration=0.5):
+        self._bigger_than.append((distance_to_ground, current_animation_name,
+                                  next_animation_config, blending_duration))
 
-    cur_anim = self._character_control.get_current_animation()
-    if cur_anim != None:
-    
-      for st in self._smaller_than:
-        if math.fabs(self.DistanceToGround.value) < st[0] and cur_anim.name == st[1]:
-          self._character_control.blend_animation(st[2],st[3])
-      for bt in self._bigger_than:
-        if math.fabs(self.DistanceToGround.value) > bt[0] and cur_anim.name == bt[1]:
-          self._character_control.blend_animation(bt[2],bt[3])
+    @field_has_changed(DistanceToGround)
+    def distance_check(self):
+
+        cur_anim = self._character_control.get_current_animation()
+        if cur_anim is not None:
+
+            for st in self._smaller_than:
+                if(math.fabs(self.DistanceToGround.value) < st[0] and
+                   cur_anim.name == st[1]):
+
+                    self._character_control.blend_animation(st[2], st[3])
+
+            for bt in self._bigger_than:
+                if(math.fabs(self.DistanceToGround.value) > bt[0] and
+                   cur_anim.name == bt[1]):
+                    self._character_control.blend_animation(bt[2], bt[3])

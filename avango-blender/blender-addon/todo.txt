@@ -1,0 +1,237 @@
+Exporter neu machen
+
+Licht nicht als Node erzwingen
+
+Interface für Action
+    -> maybe Sebastians Animation Conrtoll
+
+Keyboard verbessern
+
+Spacemouse / Maus etc..
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------nodes---------------
+# class Camera(Node, node_tree.AvangoCustomTreeNode):
+#     bl_idname = 'Camera'
+#     bl_label = 'Camera'
+
+#     def update_name(self, context):
+#         if self.referenced_object in bpy.data.objects:
+#             bpy.data.objects[self.referenced_object].name = self.name
+#             self.referenced_object = self.name
+#         else:
+#             print("Error: failed referenced_object")
+
+#     current_mode = StringProperty(default="MONO")
+
+#     def mode_change(self, context):
+#         mode = self.mode
+#         if mode == self.current_mode:
+#             return
+#         if mode == 'STEREO':
+#             self.inputs.new('ScreenSocketType', 'RightScreen')
+#         else:
+#             self.inputs.remove(self.inputs['RightScreen'])
+#         self.current_mode = mode
+
+#     modes = [
+#             ("MONO", "Mono", "mono camera"),
+#             ("STEREO", "Stereo", "stereo camera")
+#             ]
+
+#     mode = EnumProperty(name="mode", description="mode",
+#                           default='MONO', items=modes,
+#                           update=mode_change)
+
+#     name = StringProperty(description='name', update=update_name)
+
+#     scenegraph = StringProperty(
+#             default='SceneGraph',
+#             description='name of scene'
+#             )
+
+#     output_window_name = StringProperty(
+#             default='Window',
+#             description=''
+#             )
+
+#     referenced_object = StringProperty(
+#             description='name of referenced blender object'
+#             )
+
+#     resolution = IntVectorProperty(
+#             name="Resolution",
+#             description="resolution",
+#             default=(1024,768),
+#             min=1,
+#             size=2
+#             )
+
+#     left_screen_path = StringProperty(
+#             description='path to screen node used for the left eye',
+#             default='/Screen'
+#             )
+
+#     def init(self, context):
+
+#         bpy.ops.object.camera_add()
+#         obj = bpy.context.object
+#         self.referenced_object = obj.name
+#         self.name = obj.name
+#         obj["avango_nodes"] = self.name
+
+#         self.inputs.new('ScreenSocketType', 'LeftScreen')
+#         self.outputs.new('CameraSocketType', 'Camera')
+# # Todo, if camera is moved to another scene, update scenegraph
+#         self.scenegraph = bpy.context.scene.name
+
+#     def draw_buttons(self, context, layout):
+#         scene = context.scene
+#         col = layout.column()
+#         col.prop(self, 'name', text='Name')
+#         #col.prop(self, 'scenegraph', text='SceneGraph')
+#         col.label(text=self.scenegraph, icon='SCENE_DATA')
+#         col.prop(self, 'output_window_name', text='OutputWindowName')
+#         layout.prop(self, "mode", expand=True)
+#         col.prop(self, 'resolution', text='Resolution')
+# #        if leftScreenSocket.is_linked and leftScreenSocket.links[0].is_valid:
+# #          col.label(text='LeftScreen')
+# #        else:
+# #          col.prop(self, 'left_screen_path', text='LeftScreen')
+#         # browse cameras
+#         #col.prop_search(self, 'referenced_object', bpy.data, 'cameras',
+#         #        text='', icon='CAMERA_DATA')
+
+#     def process(self):
+#         pass
+
+#     def get_args(self):
+#         pass
+
+-----------
+# class Light(Node, node_tree.AvangoCustomTreeNode):
+#     bl_idname = 'Light'
+#     bl_label = 'Light'
+
+#     def update_name(self, context):
+#         lamp = None
+#         if self.referenced_object in bpy.data.objects:
+#             bpy.data.objects[self.referenced_object].name = self.name
+#             self.referenced_object = self.name
+#         else:
+#             print("Error: failed referenced_object")
+
+#     name = StringProperty(description='name', update=update_name)
+
+#     referenced_object = StringProperty(
+#             default='',
+#             description='name of referenced blender object'
+#             #update=update_node
+#             )
+#             #update= todo when update , add my name to blender object
+
+#     def init(self, context):
+#         bpy.ops.object.lamp_add(type='POINT')
+#         obj = bpy.context.object
+#         self.referenced_object = obj.name
+#         self.name = obj.name
+#         obj["avango_nodes"] = self.name
+
+#     def draw_buttons(self, context, layout):
+#         scene = context.scene
+#         col = layout.column()
+#         col.prop(self, 'name', text='Name')
+#         #if referenced_object == '':
+#         #    col.prop(self, ...oplus, button new light
+#         # browse lights
+#         #col.prop_search(self, 'referenced_object', bpy.data, 'lamps',
+#         #        text='', icon='LAMP_DATA')
+#         col.label(text='Light: '+self.referenced_object, icon='LAMP_DATA')
+
+#     def free(self):
+#         print("Light unregister shit")
+#         i = bpy.data.objects.find(self.referenced_object)
+#         if -1 != i :
+#             print("Remove link to me")
+
+#             obj = bpy.data.objects[self.referenced_object]
+#             if obj.get("avango_nodes"):
+#                 obj["avango_nodes"] = list(filter((obj["avango_nodes"]).__ne__, self.name))
+
+#     def process(self):
+#         pass
+
+#     def get_args(self):
+#         pass
+
+-----------
+# class Transform(Node, node_tree.AvangoCustomTreeNode):
+#     bl_idname = 'Transform'
+#     bl_label = 'Transform'
+
+#     def update_name(self, context):
+#         if self.referenced_object in bpy.data.objects:
+#             bpy.data.objects[self.referenced_object].name = self.name
+#             self.referenced_object = self.name
+#         else:
+#             print("Error: failed referenced_object")
+
+#     name = StringProperty(description='name', update=update_name)
+
+#     referenced_object = StringProperty(default='transform',
+#             description='identifies this FieldContainer')
+
+#     def init(self, context):
+#         bpy.ops.object.empty_add(type='PLAIN_AXES')
+#         obj = bpy.context.object
+# #        bpy.context.object.name = 'transform'
+#         # self.inputs.new('MatrixSocketType', 'Transform')
+#         self.referenced_object = obj.name
+#         self.name = obj.name
+
+#     def draw_buttons(self, context, layout):
+#         col = layout.column()
+#         col.prop(self, 'name', text='Name')
+#         col.prop_search(self, 'referenced_object', bpy.data, 'objects',
+#                 text='', icon='OBJECT_DATA')
+
+#     def process(self):
+#         pass
+
+#     def get_args(self):
+#         pass
+
+
+
+------------exporter------------
+# if isinstance(obj, field_container.Camera):
+#     parent = 'null'
+#     if obj.referenced_object in bpy.data.objects:
+#       if bpy.data.objects[obj.referenced_object].parent:
+#         parent = bpy.data.objects[obj.referenced_object].parent.name
+#       matrix = bpy.data.objects[obj.referenced_object].matrix_local
+
+#     return {
+#             'type' : 'Camera',
+#             'name' : obj.name,
+#             'scenegraph' : obj.scenegraph,
+#             'output_window_name' : obj.output_window_name,
+#             'left_screen_path' : obj.left_screen_path,
+#             'resolution' : [ obj.resolution[0], obj.resolution[1] ],
+#             'field_of_view' : bpy.data.objects[obj.referenced_object].data.angle,
+#             'transform' : matrixToList(matrix),
+#             'parent' : parent
+#     }

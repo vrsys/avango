@@ -1,0 +1,25 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "."
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/yuqo8702/dev/projektAnimation/sverchok"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/yuqo8702/dev/projektAnimation/avango-json-loader"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/yuqo8702/dev/hiwi/projective-texturering/avango/examples/projective-texturing"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/home/yuqo8702/dev/hiwi/projective-texturering/guacamole"
+		}
+	]
+}

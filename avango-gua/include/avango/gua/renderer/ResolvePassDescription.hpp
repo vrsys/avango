@@ -31,7 +31,8 @@ namespace av
       enum BackgroundModeEnum {
         COLOR = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::COLOR),
         SKYMAP_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::SKYMAP_TEXTURE),
-        QUAD_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::QUAD_TEXTURE)
+        QUAD_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::QUAD_TEXTURE),
+        CUBEMAP_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::CUBEMAP)
       };
 
       enum ToneMappingModeEnum {

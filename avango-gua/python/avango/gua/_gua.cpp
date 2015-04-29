@@ -71,6 +71,7 @@
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
 #include "renderer/BackgroundPassDescription.hpp"
+#include "renderer/SkyMapPassDescription.hpp"
 #include "renderer/BBoxPassDescription.hpp"
 #include "renderer/EmissivePassDescription.hpp"
 #include "renderer/PhysicallyBasedShadingPassDescription.hpp"
@@ -198,6 +199,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();
     init_BackgroundPassDescription();
+    init_SkyMapPassDescription();
     init_BBoxPassDescription();
     init_EmissivePassDescription();
     init_PhysicallyBasedShadingPassDescription();

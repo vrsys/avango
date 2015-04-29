@@ -32,6 +32,7 @@ void init_ResolvePassDescription()
         .value("COLOR", av::gua::ResolvePassDescription::COLOR)
         .value("SKYMAP_TEXTURE", av::gua::ResolvePassDescription::SKYMAP_TEXTURE)
         .value("QUAD_TEXTURE", av::gua::ResolvePassDescription::QUAD_TEXTURE)
+        .value("CUBEMAP_TEXTURE", av::gua::ResolvePassDescription::CUBEMAP_TEXTURE)
         ;
 
     enum_<av::gua::ResolvePassDescription::ToneMappingModeEnum>("ToneMappingMode")

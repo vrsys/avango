@@ -191,13 +191,17 @@ def start():
   res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
   res_pass.Exposure.value = 1.0
-  res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+  res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
+  res_pass.BackgroundTexture.value = "awesome_skymap"
+  # res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
   res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
-      # avango.gua.nodes.TexturedQuadPassDescription(),
+      avango.gua.nodes.SkyMapPassDescription(
+        OutputTextureName="awesome_skymap"
+      ),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
       avango.gua.nodes.BBoxPassDescription(),

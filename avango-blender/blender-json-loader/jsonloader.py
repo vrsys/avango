@@ -253,7 +253,7 @@ class jsonloader:
                     json_materials[mat]['color'][0],
                     json_materials[mat]['color'][1],
                     json_materials[mat]['color'][2],
-                    1.0,
+                    json_materials[mat]['opacity'],
                 )
                 new_mat.set_uniform('Color', color)
                 new_mat.set_uniform('Opacity', json_materials[mat]['opacity'])

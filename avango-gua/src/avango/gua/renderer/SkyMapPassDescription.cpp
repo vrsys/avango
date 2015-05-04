@@ -31,6 +31,10 @@ av::gua::SkyMapPassDescription::SkyMapPassDescription(
   AV_FC_ADD_ADAPTOR_FIELD(LightDirection,
                     boost::bind(&SkyMapPassDescription::getLightDirectionCB, this, _1),
                     boost::bind(&SkyMapPassDescription::setLightDirectionCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GroundColor,
+                    boost::bind(&SkyMapPassDescription::getGroundColorCB, this, _1),
+                    boost::bind(&SkyMapPassDescription::setGroundColorCB, this, _1));
 }
 
 void
@@ -82,4 +86,16 @@ void
 av::gua::SkyMapPassDescription::setLightDirectionCB(const SFVec3::SetValueEvent& event)
 {
   m_guaSkyMapPassDescription->light_direction(::gua::math::vec3f(event.getValue()));
+}
+
+void
+av::gua::SkyMapPassDescription::getGroundColorCB(const SFColor::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = ::gua::utils::Color3f(m_guaSkyMapPassDescription->ground_color());
+}
+
+void
+av::gua::SkyMapPassDescription::setGroundColorCB(const SFColor::SetValueEvent& event)
+{
+  m_guaSkyMapPassDescription->ground_color(event.getValue().vec3f());
 }

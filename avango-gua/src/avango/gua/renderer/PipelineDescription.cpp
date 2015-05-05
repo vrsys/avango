@@ -33,6 +33,18 @@ av::gua::PipelineDescription::PipelineDescription(
                       boost::bind(&PipelineDescription::setPassesCB, this, _1));
 }
 
+av::gua::PipelineDescription::~PipelineDescription()
+{
+  if (m_guaPipelineDescription) {
+    auto avGuaPasses(static_cast<av::MultiField<av::Link<PipelinePassDescription>>::ContainerType*>(m_guaPipelineDescription->get_user_data()));
+    m_guaPipelineDescription->set_user_data(nullptr);
+    if (avGuaPasses) {
+      avGuaPasses->clear();
+      delete avGuaPasses;
+    }
+  }
+}
+
 void
 av::gua::PipelineDescription::initClass()
 {

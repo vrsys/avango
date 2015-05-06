@@ -81,7 +81,7 @@ namespace av
       BlenderViewer& operator=(const BlenderViewer&) = delete;
 
       void render_thread();
-      Image screenshot(::gua::Pipeline const& pipe);
+      Image screenshot(::gua::Pipeline& pipe);
 
       std::mutex m_mutex;
       std::condition_variable m_condition;

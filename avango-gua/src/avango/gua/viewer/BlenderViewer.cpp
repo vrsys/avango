@@ -326,7 +326,7 @@ void av::gua::BlenderViewer::render_thread() {
   }
 }
 
-av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline const& pipe) {
+av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline& pipe) {
   auto const& ctx(pipe.get_context());
 
   auto target(&pipe.get_current_target());

@@ -226,7 +226,6 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
 
-<<<<<<< HEAD
 if ( AVANGO_VOLUME_SUPPORT  )
   message(STATUS " guacamole-volume:" )
   message(STATUS "   library: ${GUACAMOLE_VOLUME_LIBRARIES}" )
@@ -242,7 +241,7 @@ if ( AVANGO_AWESOMIUM_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_AWESOMIUM_SUPPORT )
-=======
+
 if ( AVANGO_SKELANIM_SUPPORT  )
   message(STATUS " guacamole-oculus:" )
   message(STATUS "   library: ${GUACAMOLE_SKELANIM_LIBRARIES}" )
@@ -250,13 +249,6 @@ if ( AVANGO_SKELANIM_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_SKELANIM_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_SKELANIM_SUPPORT )
-
-message(STATUS " guacamole-gui:" )
-message(STATUS "   library: ${GUACAMOLE_GUI_LIBRARIES}" )
-message(STATUS "   library path: ${GUACAMOLE_GUI_LIBRARY_DIRS}" )
-message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
-message(STATUS "" )
->>>>>>> Start to make skeletal animation a plugin. Compiling works but module is not found
 
 message(STATUS " schism:" )
 message(STATUS "   library: ${SCHISM_LIBRARIES}" )

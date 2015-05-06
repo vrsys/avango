@@ -1,0 +1,28 @@
+<!-- XML -->
+
+<Root>
+	<Image>
+		<Pixel>
+			<Width Unit="Pixel">6332</Width>
+			<Height Unit="Pixel">3266</Height>
+			<DPI>300</DPI>
+			<Size Unit="Metre">0.0000847</Size>
+		</Pixel>
+		<Colour>
+			<Background Unit="RGB">16777215</Background>
+		</Colour>
+	</Image>
+	<Transformation>
+		<Position>(499211.641143046/-1095888.0106695/130737.704808047)</Position>
+		<Direction>
+			<X>(0.4624103/0.853757418/0.239321928)</X>
+			<Y>(-0.830781123/0.511493386/-0.2194931)</Y>
+			<Z>(-0.309805487/-0.097328246/0.945805357)</Z>
+		</Direction>
+	</Transformation>
+	<Depth>
+		<Near Unit="Metre">-0.0014469</Near>
+		<Far Unit="Metre">0.0014469</Far>
+		<Range Unit="Metre">0.002893738</Range>
+	</Depth>
+</Root>

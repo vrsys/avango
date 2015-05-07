@@ -147,13 +147,18 @@ def to_json(obj):
                 parent = bpy.data.objects[obj.referenced_object].parent.name
             matrix = bpy.data.objects[obj.referenced_object].matrix_local
 
+        enable_shadows = True
+        if lamp.shadow_method == 'NOSHADOW':
+            enable_shadows = False
+
         return {
             'name': obj.name,
             'type': lamp.type,
             'color': [lamp.color.r, lamp.color.g, lamp.color.b],
             'parent': parent,
             'transform': matrixToList(matrix),
-            'brightness': lamp.energy
+            'brightness': lamp.energy,
+            'enable_shadows': enable_shadows,
         }
 
     if obj.type == 'MESH':

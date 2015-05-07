@@ -404,7 +404,8 @@ class jsonloader:
         )
 
         brightness = json_light["brightness"]
-
+        # enable_shadows = True
+        enable_shadows = json_light["enable_shadows"]
         light_type = eval("avango.gua.LightType." + json_light["type"])
 
         light = avango.gua.nodes.LightNode(
@@ -412,7 +413,7 @@ class jsonloader:
             Type=light_type,
             Transform=transform,
             Color=color,
-            EnableShadows=True,
+            EnableShadows=enable_shadows,
             Brightness=brightness,
         )
 

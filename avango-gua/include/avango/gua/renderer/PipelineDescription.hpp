@@ -39,6 +39,12 @@ namespace av
       PipelineDescription(std::shared_ptr< ::gua::PipelineDescription> const& PipelineDescription =
                           std::shared_ptr< ::gua::PipelineDescription>(new ::gua::PipelineDescription()));
 
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~PipelineDescription();
 
     public:
 

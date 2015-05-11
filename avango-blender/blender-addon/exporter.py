@@ -417,6 +417,7 @@ class ExportAvango(bpy.types.Operator, ExportHelper):
 
     bl_idname = "export.avango"
     bl_label = "Export Avango"
+    bl_description = "Export avango-json file and geoemtry"
 
     filename_ext = ".avango"
     filter_glob = StringProperty(default="*.avango")

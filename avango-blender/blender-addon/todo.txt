@@ -1,3 +1,5 @@
+remove socket from script
+
 Exporter neu machen
 
 Licht nicht als Node erzwingen
@@ -8,6 +10,10 @@ Interface für Action
 Keyboard verbessern
 
 Spacemouse / Maus etc..
+
+Material verberssern
+    - zusammenmultiplizieren möglich 
+    - Materialfactory
 
 
 

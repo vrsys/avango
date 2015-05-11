@@ -110,7 +110,7 @@ class AvangoObject_PT_nodes(AvangoButtonsPanel, Panel):
 
 
 class AvangoCamera_PT_nodes(AvangoButtonsPanel, Panel):
-    bl_label = "Avango"
+    bl_label = "Avango Camera Settings"
     bl_context = "data"
 
     @classmethod
@@ -159,6 +159,7 @@ class AVANGO_OT_pipeline_pass_add(Operator):
     """Add pipeline pass to pipeline"""
     bl_idname = "avango.pipeline_pass_add"
     bl_label = "Add Pass"
+    bl_description = "Add a pass to the pipeline description"
     bl_options = {'INTERNAL', 'UNDO', 'REGISTER'}
 
     pass_type = bpy.props.EnumProperty(name="", items=enum_pipeline_passes,
@@ -417,7 +418,7 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
 
 
 class AvangoMaterial_PT_material(AvangoButtonsPanel, Panel):
-    bl_label = "Material"
+    bl_label = "Avango PBR Material"
     bl_context = "material"
 
     @classmethod
@@ -587,7 +588,7 @@ def draw_avango_starter(self, context):
     scene = context.scene
 
     if scene.render.engine == 'AVANGO':
-        layout.operator("start.avango", text="Start Avango Application")
+        layout.operator("start.avango", icon='PLAY')
 
 
 def get_panels():

@@ -7,6 +7,8 @@ import os
 class StartAvango(bpy.types.Operator):
     bl_idname = "start.avango"
     bl_label = "Start Avango"
+    bl_description =\
+        "exports an .avango file, loads it in avango and starts it"
 
     def invoke(self, context, event):
         print("invoke avango application")

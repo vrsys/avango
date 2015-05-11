@@ -6,7 +6,8 @@ from nodeitems_utils import NodeCategory
 class AvangoCustomTree(NodeTree):
     ''' FieldContainer Nodes, (Avango) '''
     bl_idname = 'AvangoCustomTreeType'  # bl_idname = 'CustomTreeType'
-    bl_label = 'Avango Custom Tree'
+    bl_label = 'Avango Field Containers'
+    bl_description = "Avango application logic editor"
     bl_icon = 'SEQ_CHROMA_SCOPE'
 
     def update(self):

@@ -519,7 +519,7 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.color_texture = StringProperty(
             name="Diffuse Texture",
-            description="Diffuse Texture Path",
+            description="If path is set, base color will be ignored",
             subtype='FILE_PATH',
             )
         cls.metalness = FloatProperty(
@@ -530,7 +530,7 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.metalness_texture = StringProperty(
             name="Metalness Texture",
-            description="Metalness Texture Path",
+            description="If path is set, metalness will be ignored",
             subtype='FILE_PATH',
             )
         cls.roughness = FloatProperty(
@@ -541,7 +541,7 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.roughness_texture = StringProperty(
             name="Roughness Texture",
-            description="Roughness Texture Path",
+            description="If path is set, roughness will be ignored",
             subtype='FILE_PATH',
             )
         cls.emissivity = FloatProperty(
@@ -552,7 +552,7 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.emissivity_texture = StringProperty(
             name="Emissivity Texture",
-            description="Emissivity Texture Path",
+            description="If path is set, emissivity will be ignored",
             subtype='FILE_PATH',
             )
         cls.opacity = FloatProperty(
@@ -563,7 +563,6 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.normal_texture = StringProperty(
             name="Normal Texture",
-            description="Normal Texture Path",
             subtype='FILE_PATH',
             )
         cls.backface_culling = BoolProperty(

@@ -22,7 +22,8 @@ SOCKET_TO_FIELD = {
 
 class NewSocketOperator(bpy.types.Operator):
     bl_idname = "object.new_socket_operator"
-    bl_label = "New Socket"
+    bl_label = "New Field"
+    bl_description = "add a new field to this script field container"
 
     types = [
         ("FLOAT", "Float", "single float value", 1),
@@ -40,20 +41,21 @@ class NewSocketOperator(bpy.types.Operator):
     new_socket_type = bpy.props.EnumProperty(
         items=types,
         name="Type",
-        description="wich type should the new socket have",
+        description="choose the type of the new field",
         default="FLOAT",
         )
 
     new_socket_direction = bpy.props.EnumProperty(
         items=directions,
         name="Input-Output",
-        description="create Input or Output Socket",
+        description="choose Input or Output",
         default="INPUT",
         )
 
     new_socket_name = bpy.props.StringProperty(
-        description='socket_name',
-        default='myNewSocket',
+        name="Field Name",
+        description="should start with an upper case letter",
+        default='NewField',
         )
 
     def execute(self, context):
@@ -84,6 +86,8 @@ class NewSocketOperator(bpy.types.Operator):
 class EditSourceOperator(bpy.types.Operator):
     bl_idname = "object.edit_source_operator"
     bl_label = "Edit Source"
+    bl_description =\
+        "opens source code, make sure to have a text editor view open"
 
     def execute(self, context):
         context.node.update_script_source()
@@ -120,13 +124,12 @@ class ScriptNode(Node, node_tree.AvangoCustomTreeNode):
     bl_label = "Script"
 
     name_prop = StringProperty(
-        description='name of the script',
+        name="Name",
         default='MyScript',
         update=update_name
         )
 
     field_connections_dirty = BoolProperty(
-        description='',
         default=False,
         update=update_field_connections
         )
@@ -137,9 +140,9 @@ class ScriptNode(Node, node_tree.AvangoCustomTreeNode):
 
     def draw_buttons(self, context, layout):
         col = layout.column()
-        col.prop(self, 'name_prop', text='Name')
-        col.operator('object.new_socket_operator', text='new socket')
-        col.operator('object.edit_source_operator', text='Edit Source')
+        col.prop(self, 'name_prop')
+        col.operator('object.new_socket_operator')
+        col.operator('object.edit_source_operator')
 
     def to_dict(self):
         return {

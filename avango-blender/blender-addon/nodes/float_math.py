@@ -23,7 +23,7 @@ class FloatMath(Node, node_tree.AvangoCustomTreeNode):
     operator = bpy.props.EnumProperty(
         items=operators,
         name="Operator",
-        description="wich operator is applied",
+        description="Choose the operator you want to apply",
         default="ADD",
         )
 

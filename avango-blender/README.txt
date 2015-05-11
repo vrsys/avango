@@ -3,7 +3,7 @@ How to use the Blender Plugin to create an avango-application:
 1. Get Blender (Tested in version 2.73a)
 2. Add a link to the blender-addon to blender/*version*/scripts/addons
    Link has to be called "avango-blender"
-   To start blender you'll need to set the environment variables for avango, for example with a startscript. (For the previewer) 
+   To start blender you'll need to set the environment variables for avango-gua, for example with a startscript. (For the previewer)
 
 3. Create Application in Blender 
    For reference or starting point, load the ".blend" files in the examples directory

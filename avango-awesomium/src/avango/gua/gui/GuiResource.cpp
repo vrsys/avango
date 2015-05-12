@@ -95,6 +95,9 @@ void
 av::gua::gui::GuiResource::setURLCB(const SFString::SetValueEvent& event)
 {
     m_guaGuiResource->set_url(event.getValue());
+    if (check_completeness()) {
+      init();
+    }
 }
 
 

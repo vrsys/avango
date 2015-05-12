@@ -90,6 +90,7 @@ def start():
                                                  avango.gua.LoaderFlags.NORMALIZE_SCALE |
                                                  avango.gua.LoaderFlags.MAKE_PICKABLE )
 
+  google_geom.Children.value.append(web)
   transform.Children.value.append(google_geom)
 
   fps_size = avango.gua.Vec2(170, 55)

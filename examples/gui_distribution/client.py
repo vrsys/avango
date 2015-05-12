@@ -31,6 +31,7 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
+import avango.gua.gui
 from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE

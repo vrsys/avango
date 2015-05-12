@@ -6,10 +6,15 @@
 
 #include <gua/gui.hpp>
 
+#include <sstream>
+
 namespace
 {
+  const std::string callback_delimiter("§$&&$§");
+
   av::Logger& logger(av::getLogger("av::gua::gui::GuiResource"));
 }
+
 
 AV_FC_DEFINE(av::gua::gui::GuiResource);
 
@@ -47,6 +52,7 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
   AV_FC_ADD_FIELD(m_networkCharEvent, MFUInt::ContainerType());
   AV_FC_ADD_FIELD(m_networkMouseButtons, MFVec3i::ContainerType());
   AV_FC_ADD_FIELD(m_networkMouseWheelDirections, MFVec2::ContainerType());
+  AV_FC_ADD_FIELD(m_networkJavascriptCalls, MFString::ContainerType());
 
   m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
 
@@ -172,6 +178,18 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
         for (auto direction : m_networkMouseWheelDirections.getValue()) {
             m_guaGuiResource->inject_mouse_wheel(direction);
         }
+    } else if (field.getName() == "m_networkJavascriptCalls") {
+        for (auto callback : m_networkJavascriptCalls.getValue()) {
+            size_t current_pos = 0;
+            size_t last_pos = 0;
+            std::vector<std::string> tokens;
+            while ((current_pos = callback.find(callback_delimiter, last_pos)) != std::string::npos) {
+                tokens.push_back(callback.substr(last_pos, current_pos));
+                last_pos = current_pos + callback_delimiter.length();
+            }
+
+            m_guaGuiResource->call_javascript(tokens[0], std::vector<std::string>(tokens.begin()+1, tokens.end()));
+        }
     }
   }
 }
@@ -204,6 +222,7 @@ av::gua::gui::GuiResource::clearCallback() {
     m_networkCharEvent.clear();
     m_networkMouseButtons.clear();
     m_networkMouseWheelDirections.clear();
+    m_networkJavascriptCalls.clear();
   }
 }
 
@@ -311,6 +330,18 @@ av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction
 void
 av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
   m_guaGuiResource->call_javascript(method, args);
+
+  if (m_distributed) {
+    std::stringstream callStringStream;
+
+    callStringStream << method;
+
+    for (auto const& arg : args) {
+      callStringStream << callback_delimiter << args;
+    }
+
+    m_networkJavascriptCalls.add1Value(callStringStream.str());
+  }
 }
 
 

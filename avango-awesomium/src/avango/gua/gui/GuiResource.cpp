@@ -75,9 +75,13 @@ av::gua::gui::GuiResource::getTextureNameCB(const SFString::GetValueEvent& event
 void
 av::gua::gui::GuiResource::setTextureNameCB(const SFString::SetValueEvent& event)
 {
-  m_TextureName = event.getValue();
-  if (check_completeness()) {
-    init();
+  if (m_TextureName == "") {
+    m_TextureName = event.getValue();
+    if (check_completeness()) {
+      init();
+    }
+  } else {
+    ::gua::Logger::LOG_WARNING << "TextureName can only be set once!" << std::endl;
   }
 }
 
@@ -103,9 +107,13 @@ av::gua::gui::GuiResource::getSizeCB(const SFVec2::GetValueEvent& event)
 void
 av::gua::gui::GuiResource::setSizeCB(const SFVec2::SetValueEvent& event)
 {
-  m_Size = event.getValue();
-  if (check_completeness()) {
-    init();
+  if (m_Size == ::gua::math::vec2(-1.f)) {
+    m_Size = event.getValue();
+    if (check_completeness()) {
+      init();
+    }
+  } else {
+    ::gua::Logger::LOG_WARNING << "Size can only be set once!" << std::endl;
   }
 }
 void
@@ -133,7 +141,7 @@ av::gua::gui::GuiResource::init() {
   if(!m_Initialized) {
     m_guaGuiResource->init(m_TextureName, m_guaGuiResource->get_url(), m_Size);
     m_Initialized = true;
-    std::cout << "Initializing gui resource with name " << m_TextureName
+    ::gua::Logger::LOG_DEBUG << "Initializing gui resource with name " << m_TextureName
               << ", URL " << m_guaGuiResource->get_url() << " and size "
               << m_Size << "." << std::endl;
   }

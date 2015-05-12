@@ -45,6 +45,8 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
   AV_FC_ADD_FIELD(m_networkMousePositionsRelative, MFVec2::ContainerType());
   AV_FC_ADD_FIELD(m_networkKeyboardEvent, MFVec4i::ContainerType());
   AV_FC_ADD_FIELD(m_networkCharEvent, MFUInt::ContainerType());
+  AV_FC_ADD_FIELD(m_networkMouseButtons, MFVec3i::ContainerType());
+  AV_FC_ADD_FIELD(m_networkMouseWheelDirections, MFVec2::ContainerType());
 
   m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
 
@@ -162,6 +164,14 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
         for (auto e : m_networkCharEvent.getValue()) {
             m_guaGuiResource->inject_char_event(e);
         }
+    } else if (field.getName() == "m_networkMouseButtons") {
+        for (auto button : m_networkMouseButtons.getValue()) {
+            m_guaGuiResource->inject_mouse_button(::gua::Button(button.x), button.y, button.z);
+        }
+    } else if (field.getName() == "m_networkMouseWheelDirections") {
+        for (auto direction : m_networkMouseWheelDirections.getValue()) {
+            m_guaGuiResource->inject_mouse_wheel(direction);
+        }
     }
   }
 }
@@ -192,6 +202,8 @@ av::gua::gui::GuiResource::clearCallback() {
     m_networkMousePositionsRelative.clear();
     m_networkKeyboardEvent.clear();
     m_networkCharEvent.clear();
+    m_networkMouseButtons.clear();
+    m_networkMouseWheelDirections.clear();
   }
 }
 
@@ -281,11 +293,19 @@ av::gua::gui::GuiResource::inject_mouse_position(::gua::math::vec2 const& positi
 void
 av::gua::gui::GuiResource::inject_mouse_button(int button, int action, int mods) const {
   m_guaGuiResource->inject_mouse_button(::gua::Button(button), action, mods);
+
+  if (m_distributed) {
+    m_networkMouseButtons.add1Value(::gua::math::vec3i(button, action, mods));
+  }
 }
 
 void
 av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction) const {
   m_guaGuiResource->inject_mouse_wheel(direction);
+
+  if (m_distributed) {
+    m_networkMouseWheelDirections.add1Value(direction);
+  }
 }
 
 void

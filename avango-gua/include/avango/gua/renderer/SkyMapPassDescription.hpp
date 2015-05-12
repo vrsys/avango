@@ -42,7 +42,10 @@ namespace av
       SFString OutputTextureName;
       SFColor  LightColor;
       SFVec3   LightDirection;
+      SFFloat  LightBrightness;
       SFColor  GroundColor;
+      SFFloat  RayleighFactor;
+      SFFloat  MieFactor;
 
       virtual void getOutputTextureNameCB(const SFString::GetValueEvent& event);
       virtual void setOutputTextureNameCB(const SFString::SetValueEvent& event);
@@ -53,8 +56,17 @@ namespace av
       virtual void getLightDirectionCB(const SFVec3::GetValueEvent& event);
       virtual void setLightDirectionCB(const SFVec3::SetValueEvent& event);
 
+      virtual void getLightBrightnessCB(const SFFloat::GetValueEvent& event);
+      virtual void setLightBrightnessCB(const SFFloat::SetValueEvent& event);
+
       virtual void getGroundColorCB(const SFColor::GetValueEvent& event);
       virtual void setGroundColorCB(const SFColor::SetValueEvent& event);
+
+      virtual void getRayleighFactorCB(const SFFloat::GetValueEvent& event);
+      virtual void setRayleighFactorCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getMieFactorCB(const SFFloat::GetValueEvent& event);
+      virtual void setMieFactorCB(const SFFloat::SetValueEvent& event);
 
        /**
        * Get the wrapped ::gua::SkyMapPassDescription.

@@ -32,9 +32,21 @@ av::gua::SkyMapPassDescription::SkyMapPassDescription(
                     boost::bind(&SkyMapPassDescription::getLightDirectionCB, this, _1),
                     boost::bind(&SkyMapPassDescription::setLightDirectionCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(LightBrightness,
+                    boost::bind(&SkyMapPassDescription::getLightBrightnessCB, this, _1),
+                    boost::bind(&SkyMapPassDescription::setLightBrightnessCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(GroundColor,
                     boost::bind(&SkyMapPassDescription::getGroundColorCB, this, _1),
                     boost::bind(&SkyMapPassDescription::setGroundColorCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RayleighFactor,
+                    boost::bind(&SkyMapPassDescription::getRayleighFactorCB, this, _1),
+                    boost::bind(&SkyMapPassDescription::setRayleighFactorCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(MieFactor,
+                    boost::bind(&SkyMapPassDescription::getMieFactorCB, this, _1),
+                    boost::bind(&SkyMapPassDescription::setMieFactorCB, this, _1));
 }
 
 void
@@ -89,6 +101,18 @@ av::gua::SkyMapPassDescription::setLightDirectionCB(const SFVec3::SetValueEvent&
 }
 
 void
+av::gua::SkyMapPassDescription::getLightBrightnessCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkyMapPassDescription->light_brightness();
+}
+
+void
+av::gua::SkyMapPassDescription::setLightBrightnessCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaSkyMapPassDescription->light_brightness(event.getValue());
+}
+
+void
 av::gua::SkyMapPassDescription::getGroundColorCB(const SFColor::GetValueEvent& event)
 {
   *(event.getValuePtr()) = ::gua::utils::Color3f(m_guaSkyMapPassDescription->ground_color());
@@ -98,4 +122,28 @@ void
 av::gua::SkyMapPassDescription::setGroundColorCB(const SFColor::SetValueEvent& event)
 {
   m_guaSkyMapPassDescription->ground_color(event.getValue().vec3f());
+}
+
+void
+av::gua::SkyMapPassDescription::getRayleighFactorCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkyMapPassDescription->rayleigh_factor();
+}
+
+void
+av::gua::SkyMapPassDescription::setRayleighFactorCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaSkyMapPassDescription->rayleigh_factor(event.getValue());
+}
+
+void
+av::gua::SkyMapPassDescription::getMieFactorCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkyMapPassDescription->mie_factor();
+}
+
+void
+av::gua::SkyMapPassDescription::setMieFactorCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaSkyMapPassDescription->mie_factor(event.getValue());
 }

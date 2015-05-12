@@ -1,0 +1,19 @@
+{
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "..",
+            "file_exclude_patterns": ["*.nfs*", "*~"]
+		}
+	],
+	"build_systems":
+	[
+	  {
+	    "name": "shadows",
+	    "file_regex": "^(..[^:]*):(.*)$",
+	    "working_dir": "${project_path}",
+	    "cmd":  ["./start.sh"]
+	  }
+	]
+}

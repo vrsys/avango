@@ -186,11 +186,15 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
           size_t last_pos = 0;
           std::vector<std::string> tokens;
           while ((current_pos = callback.find(callback_delimiter, last_pos)) != std::string::npos) {
-              tokens.push_back(callback.substr(last_pos, current_pos));
+              tokens.push_back(callback.substr(last_pos, current_pos - last_pos));
               last_pos = current_pos + callback_delimiter.length();
           }
-
-          m_guaGuiResource->call_javascript(tokens[0], std::vector<std::string>(tokens.begin()+1, tokens.end()));
+          tokens.push_back(callback.substr(last_pos, std::string::npos));
+          if (tokens.size() == 1) {
+            m_guaGuiResource->call_javascript(tokens[0]);
+          } else {
+            m_guaGuiResource->call_javascript_arg_vector(tokens[0], std::vector<std::string>(tokens.begin()+1, tokens.end()));
+          }
         }
     } else if (field.getName() == "m_networkActionEvent") {
         for (auto action : m_networkActionEvent.getValue()) {
@@ -364,7 +368,7 @@ av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction
 
 void
 av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
-  m_guaGuiResource->call_javascript(method, args);
+  m_guaGuiResource->call_javascript_arg_vector(method, args);
 
   if (m_distributed) {
     std::stringstream callStringStream;
@@ -372,7 +376,7 @@ av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vecto
     callStringStream << method;
 
     for (auto const& arg : args) {
-      callStringStream << callback_delimiter << args;
+      callStringStream << callback_delimiter << arg;
     }
 
     m_networkJavascriptCalls.add1Value(callStringStream.str());

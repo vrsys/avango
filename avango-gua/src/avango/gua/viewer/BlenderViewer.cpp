@@ -329,7 +329,7 @@ void av::gua::BlenderViewer::render_thread() {
 av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline const& pipe) {
   auto const& ctx(pipe.get_context());
 
-  auto target(&pipe.get_current_target());
+  auto target(pipe.current_viewstate().target);
   auto gbuffer(dynamic_cast<::gua::GBuffer*>(target));
 
   if (!gbuffer)
@@ -356,7 +356,7 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
     tmp.resize = true;
   }
 
-  ctx.render_context->copy_color_buffer(((::gua::GBuffer&)pipe.get_current_target()).get_fbo_read(), tmp.fbo, 0);
+  ctx.render_context->copy_color_buffer(((::gua::GBuffer*)pipe.current_viewstate().target)->get_fbo_read(), tmp.fbo, 0);
   return ::screenshot(ctx.render_context, tmp.rgba8_texture);
 }
 

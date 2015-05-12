@@ -10,6 +10,7 @@
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/Application.h>
 
 namespace av
 {
@@ -100,17 +101,28 @@ namespace gua
 
       void call_javascript(std::string const& method, std::vector<std::string> const& args) const;
 
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
     private:
 
       std::shared_ptr< ::gua::GuiResource> m_guaGuiResource;
 
-      bool              m_Initialized;
-      std::string       m_TextureName;
-      ::gua::math::vec2 m_Size;
+      bool              m_initialized;
+      bool              m_distributed;
+      std::string       m_textureName;
+      ::gua::math::vec2 m_size;
+
+      Application::CallbackHandle m_clearCallbackHandle;
+
+      mutable MFVec2 m_networkMousePositions;
+      mutable MFVec2 m_networkMousePositionsRelative;
 
       bool check_completeness() const;
 
       void init();
+      void clearCallback();
+      /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
 
       GuiResource(const GuiResource&);
       GuiResource& operator=(const GuiResource&);

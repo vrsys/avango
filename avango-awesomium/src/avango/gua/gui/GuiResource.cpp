@@ -19,9 +19,11 @@ AV_FIELD_DEFINE(av::gua::gui::MFGuiResource);
 av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiResource)
   : av::gua::TransformNode(std::make_shared<::gua::node::TransformNode>()),
     m_guaGuiResource(guaGuiResource),
-    m_Initialized(false),
-    m_TextureName(""),
-    m_Size(::gua::math::vec2(-1.f))
+    m_initialized(false),
+    m_distributed(false),
+    m_textureName(""),
+    m_size(::gua::math::vec2(-1.f)),
+    m_clearCallbackHandle()
 {
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
                           boost::bind(&GuiResource::getTextureNameCB, this, _1),
@@ -39,10 +41,17 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
                           boost::bind(&GuiResource::getInteractiveCB, this, _1),
                           boost::bind(&GuiResource::setInteractiveCB, this, _1));
 
+  AV_FC_ADD_FIELD(m_networkMousePositions, MFVec2::ContainerType());
+  AV_FC_ADD_FIELD(m_networkMousePositionsRelative, MFVec2::ContainerType());
+
+  m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
+
 }
 
 av::gua::gui::GuiResource::~GuiResource()
-{}
+{
+  ApplicationInstance::get().removeCallback(m_clearCallbackHandle);
+}
 
 void
 av::gua::gui::GuiResource::initClass()
@@ -69,14 +78,14 @@ av::gua::gui::GuiResource::getGuaGuiResource() const
 void
 av::gua::gui::GuiResource::getTextureNameCB(const SFString::GetValueEvent& event)
 {
-   *(event.getValuePtr()) = m_TextureName;
+   *(event.getValuePtr()) = m_textureName;
 }
 
 void
 av::gua::gui::GuiResource::setTextureNameCB(const SFString::SetValueEvent& event)
 {
-  if (m_TextureName == "") {
-    m_TextureName = event.getValue();
+  if (m_textureName == "") {
+    m_textureName = event.getValue();
     if (check_completeness()) {
       init();
     }
@@ -104,14 +113,14 @@ av::gua::gui::GuiResource::setURLCB(const SFString::SetValueEvent& event)
 void
 av::gua::gui::GuiResource::getSizeCB(const SFVec2::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_Size;
+  *(event.getValuePtr()) = m_size;
 }
 
 void
 av::gua::gui::GuiResource::setSizeCB(const SFVec2::SetValueEvent& event)
 {
-  if (m_Size == ::gua::math::vec2(-1.f)) {
-    m_Size = event.getValue();
+  if (m_size == ::gua::math::vec2(-1.f)) {
+    m_size = event.getValue();
     if (check_completeness()) {
       init();
     }
@@ -131,22 +140,46 @@ av::gua::gui::GuiResource::setInteractiveCB(const SFBool::SetValueEvent& event)
     m_guaGuiResource->set_interactive(event.getValue());
 }
 
+void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& field) {
+  TransformNode::fieldHasChangedLocalSideEffect(field);
+
+  if (!m_distributed) {
+    if (field.getName() == "m_networkMousePositions") {
+        for (auto position : m_networkMousePositions.getValue()) {
+            m_guaGuiResource->inject_mouse_position(position);
+        }
+    } else if (field.getName() == "m_networkMousePositionsRelative") {
+        for (auto position : m_networkMousePositionsRelative.getValue()) {
+            m_guaGuiResource->inject_mouse_position_relative(position);
+        }
+    }
+  }
+}
+
 bool
 av::gua::gui::GuiResource::check_completeness() const{
 
   return m_guaGuiResource->get_url() != "" &&
-         m_TextureName != "" &&
-         m_Size != ::gua::math::vec2(-1.f);
+         m_textureName != "" &&
+         m_size != ::gua::math::vec2(-1.f);
 }
 
 void
 av::gua::gui::GuiResource::init() {
-  if(!m_Initialized) {
-    m_guaGuiResource->init(m_TextureName, m_guaGuiResource->get_url(), m_Size);
-    m_Initialized = true;
-    ::gua::Logger::LOG_DEBUG << "Initializing gui resource with name " << m_TextureName
+  if(!m_initialized) {
+    m_guaGuiResource->init(m_textureName, m_guaGuiResource->get_url(), m_size);
+    m_initialized = true;
+    ::gua::Logger::LOG_DEBUG << "Initializing gui resource with name " << m_textureName
               << ", URL " << m_guaGuiResource->get_url() << " and size "
-              << m_Size << "." << std::endl;
+              << m_size << "." << std::endl;
+  }
+}
+
+void
+av::gua::gui::GuiResource::clearCallback() {
+  if (m_distributed) {
+    m_networkMousePositions.clear();
+    m_networkMousePositionsRelative.clear();
   }
 }
 
@@ -210,11 +243,19 @@ av::gua::gui::GuiResource::inject_char_event(unsigned c) const {
 void
 av::gua::gui::GuiResource::inject_mouse_position_relative(::gua::math::vec2 const& position) const {
   m_guaGuiResource->inject_mouse_position_relative(position);
+
+  if (m_distributed) {
+    m_networkMousePositionsRelative.add1Value(position);
+  }
 }
 
 void
 av::gua::gui::GuiResource::inject_mouse_position(::gua::math::vec2 const& position) const {
   m_guaGuiResource->inject_mouse_position(position);
+
+  if (m_distributed) {
+    m_networkMousePositions.add1Value(position);
+  }
 }
 
 void
@@ -230,4 +271,19 @@ av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction
 void
 av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
   m_guaGuiResource->call_javascript(method, args);
+}
+
+
+void av::gua::gui::GuiResource::on_distribute(av::gua::NetTransform& netNode)
+{
+  TransformNode::on_distribute(netNode);
+
+  m_distributed = true;
+}
+
+void av::gua::gui::GuiResource::on_undistribute(av::gua::NetTransform& netNode)
+{
+  TransformNode::on_undistribute(netNode);
+
+  m_distributed = false;
 }

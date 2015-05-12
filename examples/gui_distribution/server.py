@@ -52,7 +52,7 @@ class FPSUpdater(avango.script.Script):
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
   # specify role, ip, and port
-  Groupname = "AVSERVER|127.0.0.1|7432"
+  Groupname = "AVSERVER|141.54.147.23|7777"
 )
 
 def make_node_distributable(node):

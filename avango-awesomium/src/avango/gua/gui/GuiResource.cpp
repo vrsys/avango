@@ -43,6 +43,8 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
 
   AV_FC_ADD_FIELD(m_networkMousePositions, MFVec2::ContainerType());
   AV_FC_ADD_FIELD(m_networkMousePositionsRelative, MFVec2::ContainerType());
+  AV_FC_ADD_FIELD(m_networkKeyboardEvent, MFVec4i::ContainerType());
+  AV_FC_ADD_FIELD(m_networkCharEvent, MFUInt::ContainerType());
 
   m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
 
@@ -152,6 +154,14 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
         for (auto position : m_networkMousePositionsRelative.getValue()) {
             m_guaGuiResource->inject_mouse_position_relative(position);
         }
+    } else if (field.getName() == "m_networkKeyboardEvent") {
+        for (auto e : m_networkKeyboardEvent.getValue()) {
+            m_guaGuiResource->inject_keyboard_event(::gua::Key(e.x), e.y, e.z, e.w);
+        }
+    } else if (field.getName() == "m_networkCharEvent") {
+        for (auto e : m_networkCharEvent.getValue()) {
+            m_guaGuiResource->inject_char_event(e);
+        }
     }
   }
 }
@@ -180,6 +190,8 @@ av::gua::gui::GuiResource::clearCallback() {
   if (m_distributed) {
     m_networkMousePositions.clear();
     m_networkMousePositionsRelative.clear();
+    m_networkKeyboardEvent.clear();
+    m_networkCharEvent.clear();
   }
 }
 
@@ -233,11 +245,19 @@ av::gua::gui::GuiResource::focus() {
 void
 av::gua::gui::GuiResource::inject_keyboard_event(int key, int scancode, int action, int mods) const {
   m_guaGuiResource->inject_keyboard_event(::gua::Key(key), scancode, action, mods);
+
+  if (m_distributed) {
+    m_networkKeyboardEvent.add1Value(::gua::math::vec4i(key, scancode, action, mods));
+  }
 }
 
 void
 av::gua::gui::GuiResource::inject_char_event(unsigned c) const {
   m_guaGuiResource->inject_char_event(c);
+
+  if (m_distributed) {
+    m_networkCharEvent.add1Value(c);
+  }
 }
 
 void

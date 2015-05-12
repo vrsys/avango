@@ -121,6 +121,8 @@ namespace gua
       mutable MFUInt m_networkCharEvent;
       mutable MFVec3i m_networkMouseButtons;
       mutable MFVec2 m_networkMouseWheelDirections;
+      mutable MFInt m_networkActionEvent;
+      mutable MFInt m_networkHistoryEvent;
 
       bool check_completeness() const;
 

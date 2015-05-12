@@ -47,6 +47,8 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
   AV_FC_ADD_FIELD(m_networkCharEvent, MFUInt::ContainerType());
   AV_FC_ADD_FIELD(m_networkMouseButtons, MFVec3i::ContainerType());
   AV_FC_ADD_FIELD(m_networkMouseWheelDirections, MFVec2::ContainerType());
+  AV_FC_ADD_FIELD(m_networkActionEvent, MFInt::ContainerType());
+  AV_FC_ADD_FIELD(m_networkHistoryEvent, MFInt::ContainerType());
 
   m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
 
@@ -172,6 +174,17 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
         for (auto direction : m_networkMouseWheelDirections.getValue()) {
             m_guaGuiResource->inject_mouse_wheel(direction);
         }
+    } else if (field.getName() == "m_networkActionEvent") {
+        for (auto action : m_networkActionEvent.getValue()) {
+            if      (action == 0) m_guaGuiResource->go_forward();
+            else if (action == 1) m_guaGuiResource->go_back();
+            else if (action == 2) m_guaGuiResource->reload();
+            else if (action == 3) m_guaGuiResource->focus();
+        }
+    } else if (field.getName() == "m_networkHistoryEvent") {
+        for (auto offset : m_networkHistoryEvent.getValue()) {
+            m_guaGuiResource->go_to_history_offset(offset);
+        }
     }
   }
 }
@@ -204,6 +217,8 @@ av::gua::gui::GuiResource::clearCallback() {
     m_networkCharEvent.clear();
     m_networkMouseButtons.clear();
     m_networkMouseWheelDirections.clear();
+    m_networkActionEvent.clear();
+    m_networkHistoryEvent.clear();
   }
 }
 
@@ -232,26 +247,46 @@ av::gua::gui::GuiResource::add_javascript_getter(std::string const& name, std::f
 void
 av::gua::gui::GuiResource::go_forward() {
   m_guaGuiResource->go_forward();
+
+  if (m_distributed) {
+    m_networkActionEvent.add1Value(0);
+  }
 }
 
 void
 av::gua::gui::GuiResource::go_back() {
   m_guaGuiResource->go_back();
+
+  if (m_distributed) {
+    m_networkActionEvent.add1Value(1);
+  }
 }
 
 void
 av::gua::gui::GuiResource::go_to_history_offset(int offset) {
   m_guaGuiResource->go_to_history_offset(offset);
+
+  if (m_distributed) {
+    m_networkHistoryEvent.add1Value(offset);
+  }
 }
 
 void
 av::gua::gui::GuiResource::reload() {
   m_guaGuiResource->reload();
+
+  if (m_distributed) {
+    m_networkActionEvent.add1Value(2);
+  }
 }
 
 void
 av::gua::gui::GuiResource::focus() {
   m_guaGuiResource->focus();
+
+  if (m_distributed) {
+    m_networkActionEvent.add1Value(3);
+  }
 }
 
 void

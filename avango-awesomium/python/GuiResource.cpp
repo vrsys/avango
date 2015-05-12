@@ -57,9 +57,9 @@ void init_GuiResource()
   register_field<av::gua::gui::SFGuiResource>("SFGuiResource");
   register_multifield<av::gua::gui::MFGuiResource>("MFGuiResource");
   class_<av::gua::gui::GuiResource, av::Link<av::gua::gui::GuiResource>,
-    bases<av::FieldContainer>,
+    bases<av::gua::TransformNode>,
     boost::noncopyable >("GuiResource", "docstring", no_init)
-    .def("init", &av::gua::gui::GuiResource::init)
+    // .def("init", &av::gua::gui::GuiResource::init)
     .def("go_forward", &av::gua::gui::GuiResource::go_forward)
     .def("go_back", &av::gua::gui::GuiResource::go_back)
     .def("go_to_history_offset", &av::gua::gui::GuiResource::go_to_history_offset)

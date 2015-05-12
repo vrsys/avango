@@ -26,7 +26,9 @@ def start():
 
 
   web = avango.gua.gui.nodes.GuiResource()
-  web.init("google", "https://www.google.com", avango.gua.Vec2(1024, 1024))
+  web.TextureName.value = "google"
+  web.URL.value = "https://www.google.com"
+  web.Size.value = avango.gua.Vec2(1024, 1024)
 
   focused_element = web
 
@@ -49,7 +51,9 @@ def start():
   fps_size = avango.gua.Vec2(170, 55)
 
   fps = avango.gua.gui.nodes.GuiResource()
-  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+  fps.TextureName.value = "fps"
+  fps.URL.value = "asset://gua/data/html/fps.html"
+  fps.Size.value = fps_size
 
   fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
     Name = "fps_quad",
@@ -59,12 +63,12 @@ def start():
     Anchor = avango.gua.Vec2(1.0, 1.0)
   )
 
-
-
   address_bar_size = avango.gua.Vec2(340, 55)
 
   address_bar = avango.gua.gui.nodes.GuiResource()
-  address_bar.init("address_bar", "asset://gua/data/html/address_bar.html", address_bar_size)
+  address_bar.TextureName.value = "address_bar"
+  address_bar.URL.value = "asset://gua/data/html/address_bar.html"
+  address_bar.Size.value = address_bar_size
 
   def address_bar_loaded():
     address_bar.add_javascript_callback("update_address")

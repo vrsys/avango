@@ -17,12 +17,23 @@ AV_FIELD_DEFINE(av::gua::gui::SFGuiResource);
 AV_FIELD_DEFINE(av::gua::gui::MFGuiResource);
 
 av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiResource)
-  : av::FieldContainer(),
-    m_guaGuiResource(guaGuiResource)
+  : av::gua::TransformNode(std::make_shared<::gua::node::TransformNode>()),
+    m_guaGuiResource(guaGuiResource),
+    m_Initialized(false),
+    m_TextureName(""),
+    m_Size(::gua::math::vec2(-1.f))
 {
+  AV_FC_ADD_ADAPTOR_FIELD(TextureName,
+                          boost::bind(&GuiResource::getTextureNameCB, this, _1),
+                          boost::bind(&GuiResource::setTextureNameCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(URL,
                           boost::bind(&GuiResource::getURLCB, this, _1),
                           boost::bind(&GuiResource::setURLCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(Size,
+                          boost::bind(&GuiResource::getSizeCB, this, _1),
+                          boost::bind(&GuiResource::setSizeCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Interactive,
                           boost::bind(&GuiResource::getInteractiveCB, this, _1),
@@ -53,6 +64,20 @@ av::gua::gui::GuiResource::getGuaGuiResource() const
     return m_guaGuiResource;
 }
 
+void
+av::gua::gui::GuiResource::getTextureNameCB(const SFString::GetValueEvent& event)
+{
+   *(event.getValuePtr()) = m_TextureName;
+}
+
+void
+av::gua::gui::GuiResource::setTextureNameCB(const SFString::SetValueEvent& event)
+{
+  m_TextureName = event.getValue();
+  if (check_completeness()) {
+    init();
+  }
+}
 
 void
 av::gua::gui::GuiResource::getURLCB(const SFString::GetValueEvent& event)
@@ -66,6 +91,21 @@ av::gua::gui::GuiResource::setURLCB(const SFString::SetValueEvent& event)
     m_guaGuiResource->set_url(event.getValue());
 }
 
+
+void
+av::gua::gui::GuiResource::getSizeCB(const SFVec2::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_Size;
+}
+
+void
+av::gua::gui::GuiResource::setSizeCB(const SFVec2::SetValueEvent& event)
+{
+  m_Size = event.getValue();
+  if (check_completeness()) {
+    init();
+  }
+}
 void
 av::gua::gui::GuiResource::getInteractiveCB(const SFBool::GetValueEvent& event)
 {
@@ -78,10 +118,23 @@ av::gua::gui::GuiResource::setInteractiveCB(const SFBool::SetValueEvent& event)
     m_guaGuiResource->set_interactive(event.getValue());
 }
 
+bool
+av::gua::gui::GuiResource::check_completeness() const{
+
+  return m_guaGuiResource->get_url() != "" &&
+         m_TextureName != "" &&
+         m_Size != ::gua::math::vec2(-1.f);
+}
+
 void
-av::gua::gui::GuiResource::init(std::string const& name, std::string const& url,
-                           ::gua::math::vec2 const& size) {
-  m_guaGuiResource->init(name, url, size);
+av::gua::gui::GuiResource::init() {
+  if(!m_Initialized) {
+    m_guaGuiResource->init(m_TextureName, m_guaGuiResource->get_url(), m_Size);
+    m_Initialized = true;
+    std::cout << "Initializing gui resource with name " << m_TextureName
+              << ", URL " << m_guaGuiResource->get_url() << " and size "
+              << m_Size << "." << std::endl;
+  }
 }
 
 void

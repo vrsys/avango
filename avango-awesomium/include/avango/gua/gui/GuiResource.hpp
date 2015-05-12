@@ -9,8 +9,7 @@
 #include <gua/gui/GuiResource.hpp>
 #include <gua/math/math.hpp>
 
-#include <avango/gua/Fields.hpp>
-#include <avango/FieldContainer.h>
+#include <avango/gua/scenegraph/TransformNode.hpp>
 
 namespace av
 {
@@ -25,7 +24,7 @@ namespace gua
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL GuiResource : public av::FieldContainer
+    class AV_GUA_DLL GuiResource : public av::gua::TransformNode
     {
       AV_FC_DECLARE();
 
@@ -47,8 +46,11 @@ namespace gua
 
     public:
 
+      SFString TextureName;
       SFString URL;
+      SFVec2   Size;
       SFBool   Interactive;
+
 
       /**
        * Get the wrapped ::gua::GuiResource.
@@ -59,14 +61,18 @@ namespace gua
 
     public:
 
+      virtual void getTextureNameCB(const SFString::GetValueEvent& event);
+      virtual void setTextureNameCB(const SFString::SetValueEvent& event);
+
       virtual void getURLCB(const SFString::GetValueEvent& event);
       virtual void setURLCB(const SFString::SetValueEvent& event);
+
+      virtual void getSizeCB(const SFVec2::GetValueEvent& event);
+      virtual void setSizeCB(const SFVec2::SetValueEvent& event);
 
       virtual void getInteractiveCB(const SFBool::GetValueEvent& event);
       virtual void setInteractiveCB(const SFBool::SetValueEvent& event);
 
-      void init(std::string const& name, std::string const& url,
-                ::gua::math::vec2 const& size);
 
       void on_loaded(std::function<void()> const& callback) const;
 
@@ -98,8 +104,17 @@ namespace gua
 
       std::shared_ptr< ::gua::GuiResource> m_guaGuiResource;
 
+      bool              m_Initialized;
+      std::string       m_TextureName;
+      ::gua::math::vec2 m_Size;
+
+      bool check_completeness() const;
+
+      void init();
+
       GuiResource(const GuiResource&);
       GuiResource& operator=(const GuiResource&);
+
     };
 
     typedef SingleField<Link<GuiResource> > SFGuiResource;

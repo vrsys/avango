@@ -32,7 +32,9 @@ def start():
   fps_size = avango.gua.Vec2(170, 55)
 
   fps = avango.gua.gui.nodes.GuiResource()
-  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+  fps.TextureName.value = "fps"
+  fps.URL.value = "asset://gua/data/html/fps.html"
+  fps.Size.value = fps_size
 
   fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
     Name = "fps_quad",

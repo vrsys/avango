@@ -117,6 +117,8 @@ namespace gua
 
       mutable MFVec2 m_networkMousePositions;
       mutable MFVec2 m_networkMousePositionsRelative;
+      mutable MFVec3i m_networkMouseButtons;
+      mutable MFVec2 m_networkMouseWheelDirections;
 
       bool check_completeness() const;
 

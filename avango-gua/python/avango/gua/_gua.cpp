@@ -64,6 +64,7 @@
 #include "renderer/MaterialShaderDescription.hpp"
 #include "renderer/PBSMaterialFactory.hpp"
 #include "renderer/Material.hpp"
+#include "renderer/Texture2D.hpp"
 #include "renderer/PipelineDescription.hpp"
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
@@ -191,6 +192,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_MaterialShaderDescription();
     init_PBSMaterialFactory();
     init_Material();
+    init_Texture2D();
     init_PipelineDescription();
     init_PipelinePassDescription();
     init_StencilPassDescription();

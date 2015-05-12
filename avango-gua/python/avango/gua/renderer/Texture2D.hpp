@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_TEXTURE2D_HPP
+#define AV_PYTHON_GUA_TEXTURE2D_HPP
+
+void init_Texture2D();
+
+#endif //AV_PYTHON_GUA_TEXTURE2D_HPP

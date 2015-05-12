@@ -7,7 +7,7 @@ from examples_common.GuaVE import GuaVE
 
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.gui.SFGuiResource()
+  FPSResource = avango.gua.gui.SFGuiResourceNode()
   Window = avango.gua.SFWindowBase()
   Viewer = avango.gua.SFViewer()
 
@@ -24,7 +24,7 @@ def start():
   # setup scenegraph
   graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-  web = avango.gua.gui.nodes.GuiResource(
+  web = avango.gua.gui.nodes.GuiResourceNode(
     TextureName = "google",
     URL = "https://www.google.com",
     Size = avango.gua.Vec2(1024, 1024)
@@ -50,7 +50,7 @@ def start():
 
   fps_size = avango.gua.Vec2(170, 55)
 
-  fps = avango.gua.gui.nodes.GuiResource(
+  fps = avango.gua.gui.nodes.GuiResourceNode(
     TextureName = "fps",
     URL = "asset://gua/data/html/fps.html",
     Size = fps_size
@@ -66,7 +66,7 @@ def start():
 
   address_bar_size = avango.gua.Vec2(340, 55)
 
-  address_bar = avango.gua.gui.nodes.GuiResource(
+  address_bar = avango.gua.gui.nodes.GuiResourceNode(
     TextureName = "address_bar",
     URL = "asset://gua/data/html/address_bar.html",
     Size = address_bar_size

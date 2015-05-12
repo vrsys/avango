@@ -24,8 +24,8 @@
 \************************************************************************/
 
 
-#include "GuiResource.hpp"
-#include <avango/gua/gui/GuiResource.hpp>
+#include "GuiResourceNode.hpp"
+#include <avango/gua/gui/GuiResourceNode.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 
@@ -45,6 +45,6 @@ namespace boost
 
 BOOST_PYTHON_MODULE(_gui)
 {
-  av::gua::gui::GuiResource::initClass();
-  init_GuiResource();
+  av::gua::gui::GuiResourceNode::initClass();
+  init_GuiResourceNode();
 }

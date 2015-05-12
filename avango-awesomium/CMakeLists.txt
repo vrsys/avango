@@ -2,8 +2,8 @@
 # determine source and header files
 ###############################################################################
 file(GLOB AVANGO_AWESOMIUM_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    src/avango/gua/gui/GuiResource.cpp
-    include/avango/gua/gui/GuiResource.h
+    src/avango/gua/gui/GuiResourceNode.cpp
+    include/avango/gua/gui/GuiResourceNode.h
 )
 
 ###############################################################################

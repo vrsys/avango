@@ -1,4 +1,4 @@
-#include <avango/gua/gui/GuiResource.hpp>
+#include <avango/gua/gui/GuiResourceNode.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -12,16 +12,16 @@ namespace
 {
   const std::string callback_delimiter("§$&&$§");
 
-  av::Logger& logger(av::getLogger("av::gua::gui::GuiResource"));
+  av::Logger& logger(av::getLogger("av::gua::gui::GuiResourceNode"));
 }
 
 
-AV_FC_DEFINE(av::gua::gui::GuiResource);
+AV_FC_DEFINE(av::gua::gui::GuiResourceNode);
 
-AV_FIELD_DEFINE(av::gua::gui::SFGuiResource);
-AV_FIELD_DEFINE(av::gua::gui::MFGuiResource);
+AV_FIELD_DEFINE(av::gua::gui::SFGuiResourceNode);
+AV_FIELD_DEFINE(av::gua::gui::MFGuiResourceNode);
 
-av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiResource)
+av::gua::gui::GuiResourceNode::GuiResourceNode(std::shared_ptr< ::gua::GuiResource> guaGuiResource)
   : av::gua::TransformNode(std::make_shared<::gua::node::TransformNode>()),
     m_guaGuiResource(guaGuiResource),
     m_initialized(false),
@@ -31,20 +31,20 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
     m_clearCallbackHandle()
 {
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
-                          boost::bind(&GuiResource::getTextureNameCB, this, _1),
-                          boost::bind(&GuiResource::setTextureNameCB, this, _1));
+                          boost::bind(&GuiResourceNode::getTextureNameCB, this, _1),
+                          boost::bind(&GuiResourceNode::setTextureNameCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(URL,
-                          boost::bind(&GuiResource::getURLCB, this, _1),
-                          boost::bind(&GuiResource::setURLCB, this, _1));
+                          boost::bind(&GuiResourceNode::getURLCB, this, _1),
+                          boost::bind(&GuiResourceNode::setURLCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Size,
-                          boost::bind(&GuiResource::getSizeCB, this, _1),
-                          boost::bind(&GuiResource::setSizeCB, this, _1));
+                          boost::bind(&GuiResourceNode::getSizeCB, this, _1),
+                          boost::bind(&GuiResourceNode::setSizeCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Interactive,
-                          boost::bind(&GuiResource::getInteractiveCB, this, _1),
-                          boost::bind(&GuiResource::setInteractiveCB, this, _1));
+                          boost::bind(&GuiResourceNode::getInteractiveCB, this, _1),
+                          boost::bind(&GuiResourceNode::setInteractiveCB, this, _1));
 
   AV_FC_ADD_FIELD(m_networkMousePositions, MFVec2::ContainerType());
   AV_FC_ADD_FIELD(m_networkMousePositionsRelative, MFVec2::ContainerType());
@@ -56,45 +56,45 @@ av::gua::gui::GuiResource::GuiResource(std::shared_ptr< ::gua::GuiResource> guaG
   AV_FC_ADD_FIELD(m_networkActionEvent, MFInt::ContainerType());
   AV_FC_ADD_FIELD(m_networkHistoryEvent, MFInt::ContainerType());
 
-  m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResource::clearCallback, this));
+  m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResourceNode::clearCallback, this));
 
 }
 
-av::gua::gui::GuiResource::~GuiResource()
+av::gua::gui::GuiResourceNode::~GuiResourceNode()
 {
   ApplicationInstance::get().removeCallback(m_clearCallbackHandle);
 }
 
 void
-av::gua::gui::GuiResource::initClass()
+av::gua::gui::GuiResourceNode::initClass()
 {
     if (!isTypeInitialized())
     {
         av::gua::TransformNode::initClass();
 
-        AV_FC_INIT(av::gua::TransformNode, av::gua::gui::GuiResource, true);
+        AV_FC_INIT(av::gua::TransformNode, av::gua::gui::GuiResourceNode, true);
 
-        SFGuiResource::initClass("av::gua::gui::SFGuiResource", "av::Field");
-        MFGuiResource::initClass("av::gua::gui::MFGuiResource", "av::Field");
+        SFGuiResourceNode::initClass("av::gua::gui::SFGuiResource", "av::Field");
+        MFGuiResourceNode::initClass("av::gua::gui::MFGuiResource", "av::Field");
 
         sClassTypeId.setDistributable(true);
     }
 }
 
 std::shared_ptr< ::gua::GuiResource>
-av::gua::gui::GuiResource::getGuaGuiResource() const
+av::gua::gui::GuiResourceNode::getGuaGuiResource() const
 {
     return m_guaGuiResource;
 }
 
 void
-av::gua::gui::GuiResource::getTextureNameCB(const SFString::GetValueEvent& event)
+av::gua::gui::GuiResourceNode::getTextureNameCB(const SFString::GetValueEvent& event)
 {
    *(event.getValuePtr()) = m_textureName;
 }
 
 void
-av::gua::gui::GuiResource::setTextureNameCB(const SFString::SetValueEvent& event)
+av::gua::gui::GuiResourceNode::setTextureNameCB(const SFString::SetValueEvent& event)
 {
   if (m_textureName == "") {
     m_textureName = event.getValue();
@@ -107,13 +107,13 @@ av::gua::gui::GuiResource::setTextureNameCB(const SFString::SetValueEvent& event
 }
 
 void
-av::gua::gui::GuiResource::getURLCB(const SFString::GetValueEvent& event)
+av::gua::gui::GuiResourceNode::getURLCB(const SFString::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaGuiResource->get_url();
 }
 
 void
-av::gua::gui::GuiResource::setURLCB(const SFString::SetValueEvent& event)
+av::gua::gui::GuiResourceNode::setURLCB(const SFString::SetValueEvent& event)
 {
     m_guaGuiResource->set_url(event.getValue());
     if (check_completeness()) {
@@ -123,13 +123,13 @@ av::gua::gui::GuiResource::setURLCB(const SFString::SetValueEvent& event)
 
 
 void
-av::gua::gui::GuiResource::getSizeCB(const SFVec2::GetValueEvent& event)
+av::gua::gui::GuiResourceNode::getSizeCB(const SFVec2::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_size;
 }
 
 void
-av::gua::gui::GuiResource::setSizeCB(const SFVec2::SetValueEvent& event)
+av::gua::gui::GuiResourceNode::setSizeCB(const SFVec2::SetValueEvent& event)
 {
   if (m_size == ::gua::math::vec2(-1.f)) {
     m_size = event.getValue();
@@ -141,18 +141,18 @@ av::gua::gui::GuiResource::setSizeCB(const SFVec2::SetValueEvent& event)
   }
 }
 void
-av::gua::gui::GuiResource::getInteractiveCB(const SFBool::GetValueEvent& event)
+av::gua::gui::GuiResourceNode::getInteractiveCB(const SFBool::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaGuiResource->is_interactive();
 }
 
 void
-av::gua::gui::GuiResource::setInteractiveCB(const SFBool::SetValueEvent& event)
+av::gua::gui::GuiResourceNode::setInteractiveCB(const SFBool::SetValueEvent& event)
 {
     m_guaGuiResource->set_interactive(event.getValue());
 }
 
-void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& field) {
+void av::gua::gui::GuiResourceNode::fieldHasChangedLocalSideEffect(Field const& field) {
   TransformNode::fieldHasChangedLocalSideEffect(field);
 
   if (!m_distributed) {
@@ -212,7 +212,7 @@ void av::gua::gui::GuiResource::fieldHasChangedLocalSideEffect(Field const& fiel
 }
 
 bool
-av::gua::gui::GuiResource::check_completeness() const{
+av::gua::gui::GuiResourceNode::check_completeness() const{
 
   return m_guaGuiResource->get_url() != "" &&
          m_textureName != "" &&
@@ -220,18 +220,15 @@ av::gua::gui::GuiResource::check_completeness() const{
 }
 
 void
-av::gua::gui::GuiResource::init() {
+av::gua::gui::GuiResourceNode::init() {
   if(!m_initialized) {
     m_guaGuiResource->init(m_textureName, m_guaGuiResource->get_url(), m_size);
     m_initialized = true;
-    ::gua::Logger::LOG_DEBUG << "Initializing gui resource with name " << m_textureName
-              << ", URL " << m_guaGuiResource->get_url() << " and size "
-              << m_size << "." << std::endl;
   }
 }
 
 void
-av::gua::gui::GuiResource::clearCallback() {
+av::gua::gui::GuiResourceNode::clearCallback() {
   if (m_distributed) {
     m_networkMousePositions.clear();
     m_networkMousePositionsRelative.clear();
@@ -246,29 +243,29 @@ av::gua::gui::GuiResource::clearCallback() {
 }
 
 void
-av::gua::gui::GuiResource::on_loaded(std::function<void()> const& callback) const {
+av::gua::gui::GuiResourceNode::on_loaded(std::function<void()> const& callback) const {
   m_guaGuiResource->on_loaded.connect(callback);
 }
 
 void
-av::gua::gui::GuiResource::on_javascript_callback(std::function<void(
+av::gua::gui::GuiResourceNode::on_javascript_callback(std::function<void(
                                               std::string const&,
                                               std::vector<std::string> const& )> const& callback) const {
   m_guaGuiResource->on_javascript_callback.connect(callback);
 }
 
 void
-av::gua::gui::GuiResource::add_javascript_callback(std::string const& name) {
+av::gua::gui::GuiResourceNode::add_javascript_callback(std::string const& name) {
   m_guaGuiResource->add_javascript_callback(name);
 }
 
 void
-av::gua::gui::GuiResource::add_javascript_getter(std::string const& name, std::function<std::string()> callback) {
+av::gua::gui::GuiResourceNode::add_javascript_getter(std::string const& name, std::function<std::string()> callback) {
   m_guaGuiResource->add_javascript_getter(name, callback);
 }
 
 void
-av::gua::gui::GuiResource::go_forward() {
+av::gua::gui::GuiResourceNode::go_forward() {
   m_guaGuiResource->go_forward();
 
   if (m_distributed) {
@@ -277,7 +274,7 @@ av::gua::gui::GuiResource::go_forward() {
 }
 
 void
-av::gua::gui::GuiResource::go_back() {
+av::gua::gui::GuiResourceNode::go_back() {
   m_guaGuiResource->go_back();
 
   if (m_distributed) {
@@ -286,7 +283,7 @@ av::gua::gui::GuiResource::go_back() {
 }
 
 void
-av::gua::gui::GuiResource::go_to_history_offset(int offset) {
+av::gua::gui::GuiResourceNode::go_to_history_offset(int offset) {
   m_guaGuiResource->go_to_history_offset(offset);
 
   if (m_distributed) {
@@ -295,7 +292,7 @@ av::gua::gui::GuiResource::go_to_history_offset(int offset) {
 }
 
 void
-av::gua::gui::GuiResource::reload() {
+av::gua::gui::GuiResourceNode::reload() {
   m_guaGuiResource->reload();
 
   if (m_distributed) {
@@ -304,7 +301,7 @@ av::gua::gui::GuiResource::reload() {
 }
 
 void
-av::gua::gui::GuiResource::focus() {
+av::gua::gui::GuiResourceNode::focus() {
   m_guaGuiResource->focus();
 
   if (m_distributed) {
@@ -313,7 +310,7 @@ av::gua::gui::GuiResource::focus() {
 }
 
 void
-av::gua::gui::GuiResource::inject_keyboard_event(int key, int scancode, int action, int mods) const {
+av::gua::gui::GuiResourceNode::inject_keyboard_event(int key, int scancode, int action, int mods) const {
   m_guaGuiResource->inject_keyboard_event(::gua::Key(key), scancode, action, mods);
 
   if (m_distributed) {
@@ -322,7 +319,7 @@ av::gua::gui::GuiResource::inject_keyboard_event(int key, int scancode, int acti
 }
 
 void
-av::gua::gui::GuiResource::inject_char_event(unsigned c) const {
+av::gua::gui::GuiResourceNode::inject_char_event(unsigned c) const {
   m_guaGuiResource->inject_char_event(c);
 
   if (m_distributed) {
@@ -331,7 +328,7 @@ av::gua::gui::GuiResource::inject_char_event(unsigned c) const {
 }
 
 void
-av::gua::gui::GuiResource::inject_mouse_position_relative(::gua::math::vec2 const& position) const {
+av::gua::gui::GuiResourceNode::inject_mouse_position_relative(::gua::math::vec2 const& position) const {
   m_guaGuiResource->inject_mouse_position_relative(position);
 
   if (m_distributed) {
@@ -340,7 +337,7 @@ av::gua::gui::GuiResource::inject_mouse_position_relative(::gua::math::vec2 cons
 }
 
 void
-av::gua::gui::GuiResource::inject_mouse_position(::gua::math::vec2 const& position) const {
+av::gua::gui::GuiResourceNode::inject_mouse_position(::gua::math::vec2 const& position) const {
   m_guaGuiResource->inject_mouse_position(position);
 
   if (m_distributed) {
@@ -349,7 +346,7 @@ av::gua::gui::GuiResource::inject_mouse_position(::gua::math::vec2 const& positi
 }
 
 void
-av::gua::gui::GuiResource::inject_mouse_button(int button, int action, int mods) const {
+av::gua::gui::GuiResourceNode::inject_mouse_button(int button, int action, int mods) const {
   m_guaGuiResource->inject_mouse_button(::gua::Button(button), action, mods);
 
   if (m_distributed) {
@@ -358,7 +355,7 @@ av::gua::gui::GuiResource::inject_mouse_button(int button, int action, int mods)
 }
 
 void
-av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction) const {
+av::gua::gui::GuiResourceNode::inject_mouse_wheel(::gua::math::vec2 const& direction) const {
   m_guaGuiResource->inject_mouse_wheel(direction);
 
   if (m_distributed) {
@@ -367,7 +364,7 @@ av::gua::gui::GuiResource::inject_mouse_wheel(::gua::math::vec2 const& direction
 }
 
 void
-av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
+av::gua::gui::GuiResourceNode::call_javascript(std::string const& method, std::vector<std::string> const& args) const {
   m_guaGuiResource->call_javascript_arg_vector(method, args);
 
   if (m_distributed) {
@@ -384,14 +381,14 @@ av::gua::gui::GuiResource::call_javascript(std::string const& method, std::vecto
 }
 
 
-void av::gua::gui::GuiResource::on_distribute(av::gua::NetTransform& netNode)
+void av::gua::gui::GuiResourceNode::on_distribute(av::gua::NetTransform& netNode)
 {
   TransformNode::on_distribute(netNode);
 
   m_distributed = true;
 }
 
-void av::gua::gui::GuiResource::on_undistribute(av::gua::NetTransform& netNode)
+void av::gua::gui::GuiResourceNode::on_undistribute(av::gua::NetTransform& netNode)
 {
   TransformNode::on_undistribute(netNode);
 

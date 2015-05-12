@@ -1,5 +1,5 @@
-#ifndef AVANGO_GUA_GUI_RESOURCE_HPP
-#define AVANGO_GUA_GUI_RESOURCE_HPP
+#ifndef AVANGO_GUA_GUI_RESOURCE_NODE_HPP
+#define AVANGO_GUA_GUI_RESOURCE_NODE_HPP
 
 /**
  * \file
@@ -21,21 +21,21 @@ namespace gua
   namespace gui
   {
     /**
-     * Wrapper for ::gua::GuiResource
+     * Wrapper for ::gua::GuiResourceNode
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL GuiResource : public av::gua::TransformNode
+    class AV_GUA_DLL GuiResourceNode : public av::gua::TransformNode
     {
       AV_FC_DECLARE();
 
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::GuiResource is created.
-       * Otherwise, the given ::gua::GuiResource is used.
+       * Constructor. When called without arguments, a new ::gua::GuiResourceNode is created.
+       * Otherwise, the given ::gua::GuiResourceNode is used.
        */
-      GuiResource(std::shared_ptr< ::gua::GuiResource> guaGuiResource =
+      GuiResourceNode(std::shared_ptr< ::gua::GuiResource> guaGuiResource =
                   std::shared_ptr< ::gua::GuiResource>(new ::gua::GuiResource()));
 
     protected:
@@ -43,7 +43,7 @@ namespace gua
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~GuiResource();
+      virtual ~GuiResourceNode();
 
     public:
 
@@ -54,7 +54,7 @@ namespace gua
 
 
       /**
-       * Get the wrapped ::gua::GuiResource.
+       * Get the wrapped ::gua::GuiResourceNode.
        */
       std::shared_ptr< ::gua::GuiResource> getGuaGuiResource() const;
       unsigned     getUserDataHandle() const;
@@ -131,23 +131,23 @@ namespace gua
       void clearCallback();
       /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
 
-      GuiResource(const GuiResource&);
-      GuiResource& operator=(const GuiResource&);
+      GuiResourceNode(const GuiResourceNode&);
+      GuiResourceNode& operator=(const GuiResourceNode&);
 
     };
 
-    typedef SingleField<Link<GuiResource> > SFGuiResource;
-    typedef MultiField<Link<GuiResource> > MFGuiResource;
+    typedef SingleField<Link<GuiResourceNode> > SFGuiResourceNode;
+    typedef MultiField<Link<GuiResourceNode> > MFGuiResourceNode;
 
   } // namespace gui
 
 } // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::gui::GuiResource> >;
-  template class AV_GUA_DLL MultiField<Link<gua::gui::GuiResource> >;
+  template class AV_GUA_DLL SingleField<Link<gua::gui::GuiResourceNode> >;
+  template class AV_GUA_DLL MultiField<Link<gua::gui::GuiResourceNode> >;
 #endif
 
 } // namespace av
 
-#endif //AVANGO_GUA_GUI_RESOURCE_HPP
+#endif //AVANGO_GUA_GUI_RESOURCE_NODE_HPP

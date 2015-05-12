@@ -4,10 +4,10 @@ LINK_DIRECTORIES(
     ${BULLET_LIBRARY_DIRS}
 )
 
-ADD_LIBRARY( _gui SHARED 
+ADD_LIBRARY( _gui SHARED
   "_gui.cpp"
-  "GuiResource.hpp"
-  "GuiResource.cpp"
+  "GuiResourceNode.hpp"
+  "GuiResourceNode.cpp"
   )
 
 set_target_properties( _gui

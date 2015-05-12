@@ -12,7 +12,7 @@ CUBE_COUNT_Z = 15
 
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.gui.SFGuiResource()
+  FPSResource = avango.gua.gui.SFGuiResourceNode()
   Window = avango.gua.SFWindowBase()
   Viewer = avango.gua.SFViewer()
 
@@ -129,7 +129,7 @@ def start():
 
   fps_size = avango.gua.Vec2(170, 55)
 
-  fps = avango.gua.gui.nodes.GuiResource()
+  fps = avango.gua.gui.nodes.GuiResourceNode()
   fps.TextureName.value = "fps"
   fps.URL.value = "asset://gua/data/html/fps.html"
   fps.Size.value = fps_size

@@ -57,7 +57,7 @@ class NetInit(avango.script.Script):
 nettrans = avango.gua.nodes.NetTransform(
   Name = "net",
   # specify role, ip, and port
-  Groupname = "AVCLIENT|141.54.147.23|7777"
+  Groupname = "AVCLIENT|127.0.0.1|7777"
 )
 
 loader = avango.gua.nodes.TriMeshLoader()

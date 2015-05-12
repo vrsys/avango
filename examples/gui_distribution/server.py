@@ -1,8 +1,39 @@
+# -*- Mode:Python -*-
+
+##########################################################################
+#                                                                        #
+# This file is part of AVANGO.                                           #
+#                                                                        #
+# Copyright 1997 - 2009 Fraunhofer-Gesellschaft zur Foerderung der       #
+# angewandten Forschung (FhG), Munich, Germany.                          #
+#                                                                        #
+# AVANGO is free software: you can redistribute it and/or modify         #
+# it under the terms of the GNU Lesser General Public License as         #
+# published by the Free Software Foundation, version 3.                  #
+#                                                                        #
+# AVANGO is distributed in the hope that it will be useful,              #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the           #
+# GNU General Public License for more details.                           #
+#                                                                        #
+# You should have received a copy of the GNU Lesser General Public       #
+# License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
+#                                                                        #
+##########################################################################
+
+'''
+A distributed viewer setup: This Python scripts starts an
+avango.osg.simpleviewer to load a given geometry. Any client connected to the
+group "testgroup" should receive this model. (see also simpleviewer-clnt.py)
+'''
+
 import avango
 import avango.script
-from avango.script import field_has_changed
 import avango.gua
 import avango.gua.gui
+from avango.script import field_has_changed
+import time
+
 from examples_common.GuaVE import GuaVE
 
 class FPSUpdater(avango.script.Script):
@@ -18,11 +49,23 @@ class FPSUpdater(avango.script.Script):
     fps_string = "FPS: " + application_string + " " + rendering_string
     self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
+nettrans = avango.gua.nodes.NetTransform(
+  Name = "net",
+  # specify role, ip, and port
+  Groupname = "AVSERVER|127.0.0.1|7432"
+)
+
+def make_node_distributable(node):
+  for child in node.Children.value:
+    make_node_distributable(child)
+  nettrans.distribute_object(node)
+
+def make_material_distributable(mat):
+  nettrans.distribute_object(mat)
 
 def start():
-
   # setup scenegraph
-  graph  = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+  graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
   web = avango.gua.gui.nodes.GuiResource(
     TextureName = "google",
@@ -34,9 +77,10 @@ def start():
 
   web_mat = avango.gua.nodes.Material()
   web_mat.set_uniform("ColorMap", "google")
-  web_mat.set_uniform("Emissivity", 1.0)
+  web_mat.set_uniform("Emissivity", 0.0)
 
   transform = avango.gua.nodes.TransformNode()
+  transform.Transform.value = avango.gua.make_scale_mat(0.5) * avango.gua.make_rot_mat(40, 1, 0, 0)
 
   resolution = avango.gua.Vec2ui(1920, 1080)
 
@@ -61,7 +105,8 @@ def start():
     Texture = "fps",
     Width = int(fps_size.x),
     Height = int(fps_size.y),
-    Anchor = avango.gua.Vec2(1.0, 1.0)
+    Anchor = avango.gua.Vec2(1.0, 1.0),
+    Children = [fps]
   )
 
   address_bar_size = avango.gua.Vec2(340, 55)
@@ -93,25 +138,38 @@ def start():
     Texture = "address_bar",
     Width = int(address_bar_size.x),
     Height = int(address_bar_size.y),
-    Anchor = avango.gua.Vec2(-1.0, 1.0)
+    Anchor = avango.gua.Vec2(-1.0, 1.0),
+    Children = [address_bar]
   )
 
   google_geom.Children.value.append(address_bar_quad)
+  google_geom.Children.value.append(fps_quad)
 
 
   light = avango.gua.nodes.LightNode(
     Type=avango.gua.LightType.POINT,
     Name = "light",
     Color = avango.gua.Color(1.0, 1.0, 1.0),
-    Transform = avango.gua.make_trans_mat(-2, 3, 5) * avango.gua.make_scale_mat(10)
+    Brightness = 80,
+    Transform = avango.gua.make_trans_mat(-2, 3, 5) * avango.gua.make_scale_mat(50)
   )
 
-  cam = avango.gua.nodes.CameraNode(
-    LeftScreenPath = "/screen",
+  server_cam = avango.gua.nodes.CameraNode(
+    ViewID = 1,
+    LeftScreenPath = "/net/screen",
     SceneGraph = "scenegraph",
     Resolution = resolution,
-    OutputWindowName = "window",
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+    OutputWindowName = "server_window",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 1.5)
+  )
+
+  client_cam = avango.gua.nodes.CameraNode(
+    ViewID = 2,
+    LeftScreenPath = "/net/screen",
+    SceneGraph = "scenegraph",
+    Resolution = resolution,
+    OutputWindowName = "client_window",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 1.5)
   )
 
   screen = avango.gua.nodes.ScreenNode(
@@ -119,18 +177,24 @@ def start():
     Width = 1.92 * 0.25,
     Height = 1.08 * 0.25,
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0),
-    Children = [cam]
+    Children = [server_cam, client_cam]
   )
 
-  graph.Root.value.Children.value = [transform, light, screen, fps_quad]
+  graph.Root.value.Children.value = [nettrans]
 
+  make_node_distributable(transform)
+  make_node_distributable(light)
+  make_node_distributable(screen)
+
+  nettrans.Children.value = [transform, light, screen]
 
   window = avango.gua.nodes.GlfwWindow(
     Size = resolution,
-    LeftResolution = resolution
+    LeftResolution = resolution,
+    Title = "server_window"
   )
 
-  avango.gua.register_window("window", window)
+  avango.gua.register_window("server_window", window)
 
   def handle_char(c):
     nonlocal focused_element
@@ -157,7 +221,7 @@ def start():
       screen_space_pos = pos/res - 0.5
 
       origin = screen.ScaledWorldTransform.value * avango.gua.Vec4(screen_space_pos.x, screen_space_pos.y, 0, 1)
-      direction = origin - cam.WorldTransform.value * avango.gua.Vec4(0,0,0,1)
+      direction = origin - server_cam.WorldTransform.value * avango.gua.Vec4(0,0,0,1)
 
       ray = avango.gua.nodes.Ray(
         Origin = avango.gua.Vec3(origin.x, origin.y, origin.z),
@@ -183,6 +247,7 @@ def start():
   window.on_move_cursor(handle_cursor)
   window.on_scroll(handle_scroll)
 
+
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [graph]
@@ -202,7 +267,5 @@ def start():
 
   viewer.run()
 
-
 if __name__ == '__main__':
   start()
-

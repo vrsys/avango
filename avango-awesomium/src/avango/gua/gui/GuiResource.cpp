@@ -49,12 +49,14 @@ av::gua::gui::GuiResource::initClass()
 {
     if (!isTypeInitialized())
     {
-        av::FieldContainer::initClass();
+        av::gua::TransformNode::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::gui::GuiResource, true);
+        AV_FC_INIT(av::gua::TransformNode, av::gua::gui::GuiResource, true);
 
         SFGuiResource::initClass("av::gua::gui::SFGuiResource", "av::Field");
         MFGuiResource::initClass("av::gua::gui::MFGuiResource", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
 }
 

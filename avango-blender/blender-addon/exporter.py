@@ -130,22 +130,13 @@ def to_json(obj):
             'backface_culling': obj.avango.backface_culling,
         }
 
-    if isinstance(obj, nodes.light.Light):
-        i = bpy.data.objects.find(obj.referenced_object)
-        lamp = None
-        o = None
-        if -1 != i:
-            o = bpy.data.objects[obj.referenced_object]
-            lamp = bpy.data.lamps[o.data.name]
-        # ty = 'null'
-        # if lamp.type == 'POINT':
-            # ty = 'PointLight'
+    if obj.type == 'LAMP':
+        lamp = obj.data
 
         parent = 'null'
-        if obj.referenced_object in bpy.data.objects:
-            if bpy.data.objects[obj.referenced_object].parent:
-                parent = bpy.data.objects[obj.referenced_object].parent.name
-            matrix = bpy.data.objects[obj.referenced_object].matrix_local
+        if obj.parent:
+            parent = obj.parent.name
+        matrix = obj.matrix_local
 
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
@@ -153,12 +144,13 @@ def to_json(obj):
 
         return {
             'name': obj.name,
-            'type': lamp.type,
-            'color': [lamp.color.r, lamp.color.g, lamp.color.b],
             'parent': parent,
             'transform': matrixToList(matrix),
+            'type': lamp.type,
+            'color': [lamp.color.r, lamp.color.g, lamp.color.b],
             'brightness': lamp.energy,
             'enable_shadows': enable_shadows,
+
         }
 
     if obj.type == 'MESH':
@@ -350,6 +342,7 @@ def save(filepath, context):
     meshes = []
     materials = {}
     transforms = []
+    lights = []
     for obj in bpy.data.objects:
         if obj.type == 'MESH':
             meshes.append(obj)
@@ -361,6 +354,8 @@ def save(filepath, context):
             transforms.append(obj)
         elif obj.type == 'CAMERA':
             camera = obj
+        elif obj.type == 'LAMP':
+            lights.append(obj)
 
     document = {
         # triMeshes  = (x for x in ns if (x.bl_label == 'Mesh'))
@@ -370,10 +365,10 @@ def save(filepath, context):
         #                     if (x.bl_label == 'SceneGraph')),
         'camera': camera,
         'meshes': dict((m.name, m) for m in meshes),
+        'lights': dict((l.name, l) for l in lights),
         'materials': materials,
         'transforms': dict((t.name, t) for t in transforms),
         'windows': dict((x.name, x) for x in ns if (x.bl_label == 'Window')),
-        'lights': dict((x.name, x) for x in ns if (x.bl_label == 'Light')),
         'screens': dict((x.name, x) for x in ns if (x.bl_label == 'Screen')),
         'time_sensors': dict((x.name, x) for x in ns
                              if (x.bl_label == 'TimeSensor')),

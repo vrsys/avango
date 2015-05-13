@@ -141,7 +141,7 @@ def to_json(obj):
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
             enable_shadows = False
-        
+
         return {
             'name': obj.name,
             'parent': parent,
@@ -369,7 +369,6 @@ def save(filepath, context):
         'materials': materials,
         'transforms': dict((t.name, t) for t in transforms),
         'windows': dict((x.name, x) for x in ns if (x.bl_label == 'Window')),
-        # 'lights': dict((x.name, x) for x in ns if (x.bl_label == 'Light')),
         'screens': dict((x.name, x) for x in ns if (x.bl_label == 'Screen')),
         'time_sensors': dict((x.name, x) for x in ns
                              if (x.bl_label == 'TimeSensor')),

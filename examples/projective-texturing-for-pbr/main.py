@@ -5,8 +5,10 @@ from examples_common.GuaVE import GuaVE
 
 from projector import XML_Projector
 
+import sys
 
-def start():
+
+def start(filename):
 
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
@@ -22,8 +24,10 @@ def start():
     plodloader.UploadBudget.value = 32
     plodloader.RenderBudget.value = 2048
     plodloader.OutOfCoreBudget.value = 4096
+    
+    # filename = "/home/yuqo8702/Desktop/Area-7_Rosa-Camuna_knn.kdn"
     plod_node = plodloader.create_geometry_from_file(
-        "/home/yuqo8702/Desktop/Area-7_Rosa-Camuna_knn.kdn",
+        filename,
         avango.gua.PLODLoaderFlags.DEFAULTS,
     )
 
@@ -83,4 +87,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    start(sys.argv[1])

@@ -28,6 +28,14 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
                     boost::bind(&ResolvePassDescription::getBackgroundTextureCB, this, _1),
                     boost::bind(&ResolvePassDescription::setBackgroundTextureCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(AlternativeBackgroundTexture,
+                    boost::bind(&ResolvePassDescription::getAlternativeBackgroundTextureCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setAlternativeBackgroundTextureCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(BackgroundTextureBlendFactor,
+                    boost::bind(&ResolvePassDescription::getBackgroundTextureBlendFactorCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setBackgroundTextureBlendFactorCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(BackgroundMode,
                     boost::bind(&ResolvePassDescription::getBackgroundModeCB, this, _1),
                     boost::bind(&ResolvePassDescription::setBackgroundModeCB, this, _1));
@@ -75,6 +83,14 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
   AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingTexture,
                     boost::bind(&ResolvePassDescription::getEnvironmentLightingTextureCB, this, _1),
                     boost::bind(&ResolvePassDescription::setEnvironmentLightingTextureCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(AlternativeEnvironmentLightingTexture,
+                    boost::bind(&ResolvePassDescription::getAlternativeEnvironmentLightingTextureCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setAlternativeEnvironmentLightingTextureCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingTextureBlendFactor,
+                    boost::bind(&ResolvePassDescription::getEnvironmentLightingTextureBlendFactorCB, this, _1),
+                    boost::bind(&ResolvePassDescription::setEnvironmentLightingTextureBlendFactorCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(HorizonFade,
                     boost::bind(&ResolvePassDescription::getHorizonFadeCB, this, _1),
@@ -158,6 +174,30 @@ void
 av::gua::ResolvePassDescription::setBackgroundTextureCB(const SFString::SetValueEvent& event)
 {
   m_guaResolvePassDescription->background_texture(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getAlternativeBackgroundTextureCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->alternative_background_texture();
+}
+
+void
+av::gua::ResolvePassDescription::setAlternativeBackgroundTextureCB(const SFString::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->alternative_background_texture(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getBackgroundTextureBlendFactorCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->background_texture_blend_factor();
+}
+
+void
+av::gua::ResolvePassDescription::setBackgroundTextureBlendFactorCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->background_texture_blend_factor(event.getValue());
 }
 
 void
@@ -309,6 +349,31 @@ av::gua::ResolvePassDescription::setEnvironmentLightingTextureCB(const SFString:
 {
   m_guaResolvePassDescription->environment_lighting_texture(event.getValue());
 }
+
+void
+av::gua::ResolvePassDescription::getAlternativeEnvironmentLightingTextureCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->alternative_environment_lighting_texture();
+}
+
+void
+av::gua::ResolvePassDescription::setAlternativeEnvironmentLightingTextureCB(const SFString::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->alternative_environment_lighting_texture(event.getValue());
+}
+
+void
+av::gua::ResolvePassDescription::getEnvironmentLightingTextureBlendFactorCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaResolvePassDescription->environment_lighting_texture_blend_factor();
+}
+
+void
+av::gua::ResolvePassDescription::setEnvironmentLightingTextureBlendFactorCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaResolvePassDescription->environment_lighting_texture_blend_factor(event.getValue());
+}
+
 
 void
 av::gua::ResolvePassDescription::getHorizonFadeCB(const SFFloat::GetValueEvent& event)

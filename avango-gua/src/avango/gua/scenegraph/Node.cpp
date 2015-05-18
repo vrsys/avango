@@ -68,7 +68,16 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
 }
 
 av::gua::Node::~Node()
-{}
+{
+  if (m_guaNode) {
+    auto avGuaChildren(static_cast<av::MultiField<av::Link<Node>>::ContainerType*>(m_guaNode->get_user_data(m_childrenUserDataHandle)));
+    m_guaNode->add_user_data(nullptr);
+    if (avGuaChildren) {
+      avGuaChildren->clear();
+      delete avGuaChildren;
+    }
+  }
+}
 
 void av::gua::Node::on_distribute(av::gua::NetTransform& netNode)
 {

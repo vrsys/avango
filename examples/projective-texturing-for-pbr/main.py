@@ -44,12 +44,25 @@ def start(filename):
 
     avango.gua.register_window("window", window)
 
+    screen = avango.gua.nodes.ScreenNode(
+        Name="screen",
+        Width=0.64,
+        Height=0.36,
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, -2.0),
+    )
+
     cam = avango.gua.nodes.CameraNode(
-        LeftScreenPath="/screen",
+        Name="cam",
+        LeftScreenPath="/cam/screen",
         SceneGraph="scenegraph",
         Resolution=size,
         OutputWindowName="window",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0),
+        Children=[screen],
+        Transform=avango.gua.make_trans_mat(
+            499.211641143046,
+            -1095.8880106695,
+            133.737704808047,
+        ),
     )
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
@@ -62,28 +75,16 @@ def start(filename):
 
     cam.PipelineDescription.value = pipeline_description
 
-    screen = avango.gua.nodes.ScreenNode(
-        Name="screen",
-        Width=0.64,
-        Height=0.36,
-        Children=[cam],
-        Transform=avango.gua.make_trans_mat(
-            499.211641143046,
-            -1095.8880106695,
-            130.737704808047,
-        ),
-    )
-
-    graph.Root.value.Children.value = [screen, projector.group_node, plod_node]
+    graph.Root.value.Children.value = [cam, projector.group_node, plod_node]
 
     #navigation
     navigator = examples_common.navigator.Navigator()
-    navigator.StartLocation.value = screen.Transform.value.get_translate()
-    navigator.OutTransform.connect_from(screen.Transform)
+    navigator.StartLocation.value = cam.Transform.value.get_translate()
+    navigator.OutTransform.connect_from(cam.Transform)
 
-    navigator.RotationSpeed.value = 0.2
-    navigator.MotionSpeed.value = 0.04
-    screen.Transform.connect_from(navigator.OutTransform)
+    navigator.RotationSpeed.value = 0.1
+    navigator.MotionSpeed.value = 0.03
+    cam.Transform.connect_from(navigator.OutTransform)
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

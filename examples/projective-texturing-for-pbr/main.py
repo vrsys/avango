@@ -2,6 +2,7 @@ import avango
 import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
+import examples_common.navigator
 
 from projector import XML_Projector
 
@@ -74,6 +75,15 @@ def start(filename):
     )
 
     graph.Root.value.Children.value = [screen, projector.group_node, plod_node]
+
+    #navigation
+    navigator = examples_common.navigator.Navigator()
+    navigator.StartLocation.value = screen.Transform.value.get_translate()
+    navigator.OutTransform.connect_from(screen.Transform)
+
+    navigator.RotationSpeed.value = 0.2
+    navigator.MotionSpeed.value = 0.04
+    screen.Transform.connect_from(navigator.OutTransform)
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

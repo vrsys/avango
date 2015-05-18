@@ -2,11 +2,27 @@ import avango
 import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
+import examples_common.device
 import examples_common.navigator
 
 from projector import XML_Projector
 
 import sys
+
+
+class Toggler(avango.script.Script):
+    EnableOut = avango.SFBool()
+    KeyIn = avango.SFBool()
+
+    def __init__(self):
+        self.super(Toggler).__init__()
+        self.key_in = False
+
+    def evaluate(self):
+        if self.KeyIn.value is True and self.key_in is False:
+            print("toggle Segmentation")
+            self.EnableOut.value = not self.EnableOut.value
+        self.key_in = self.KeyIn.value
 
 
 def start(filename):
@@ -85,6 +101,12 @@ def start(filename):
     navigator.RotationSpeed.value = 0.1
     navigator.MotionSpeed.value = 0.03
     cam.Transform.connect_from(navigator.OutTransform)
+
+    #toggling
+    keyboard = examples_common.device.KeyboardDevice()
+    toggler = Toggler()
+    toggler.KeyIn.connect_from(keyboard.KeyT)
+    projector.Enable.connect_from(toggler.EnableOut)
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

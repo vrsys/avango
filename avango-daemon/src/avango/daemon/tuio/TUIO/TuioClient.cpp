@@ -373,7 +373,6 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
                             for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
                                 (*listener)->removeTuioHand(hand);
 
-                                std::cout << "delete hand " << hand->getHandID() << std::endl;
                             }
                         }
                         return iter == aliveHandList.end();
@@ -561,7 +560,6 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
                 aliveHandList.clear();
                 while(!args.Eos()) {
                     args >> s_id;
-                    std::cout<< "alive handID: " << s_id << std::endl;
 
                     aliveHandList.push_back((long)s_id);
                 }
@@ -571,8 +569,6 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 
                 int32 s_id, hand_class, f1, f2, f3, f4, f5;
                 args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
-
-                std::cout<< "Set hand: " << s_id << std::endl;
 
                 lockHandList();
                 std::list<TuioHand*>::iterator thand;

@@ -38,9 +38,9 @@ def start(filename):
 
     # init point cloud
     plodloader = avango.gua.nodes.PLODLoader()
-    plodloader.UploadBudget.value = 32
-    plodloader.RenderBudget.value = 2048
-    plodloader.OutOfCoreBudget.value = 4096
+    plodloader.UploadBudget.value = 16
+    plodloader.RenderBudget.value = 1024
+    plodloader.OutOfCoreBudget.value = 1024 * 6
     
     # filename = "/home/yuqo8702/Desktop/Area-7_Rosa-Camuna_knn.kdn"
     plod_node = plodloader.create_geometry_from_file(
@@ -51,11 +51,11 @@ def start(filename):
     plod_node.Material.value = projector.Material.value
 
     # setup viewing
-    size = avango.gua.Vec2ui(1920, 1080)
+    size = avango.gua.Vec2ui(2560, 1440)
 
     window = avango.gua.nodes.GlfwWindow(
         Size=size,
-        LeftResolution=size
+        LeftResolution=size,
     )
 
     avango.gua.register_window("window", window)
@@ -99,7 +99,7 @@ def start(filename):
     navigator.OutTransform.connect_from(cam.Transform)
 
     navigator.RotationSpeed.value = 0.1
-    navigator.MotionSpeed.value = 0.03
+    navigator.MotionSpeed.value = 0.01
     cam.Transform.connect_from(navigator.OutTransform)
 
     #toggling

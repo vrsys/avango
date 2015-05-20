@@ -2,10 +2,27 @@ import avango
 import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
+import examples_common.device
+import examples_common.navigator
 
 from projector import XML_Projector
 
 import sys
+
+
+class Toggler(avango.script.Script):
+    EnableOut = avango.SFBool()
+    KeyIn = avango.SFBool()
+
+    def __init__(self):
+        self.super(Toggler).__init__()
+        self.key_in = False
+
+    def evaluate(self):
+        if self.KeyIn.value is True and self.key_in is False:
+            print("toggle Segmentation")
+            self.EnableOut.value = not self.EnableOut.value
+        self.key_in = self.KeyIn.value
 
 
 def start(filename):
@@ -21,9 +38,9 @@ def start(filename):
 
     # init point cloud
     plodloader = avango.gua.nodes.PLODLoader()
-    plodloader.UploadBudget.value = 32
-    plodloader.RenderBudget.value = 2048
-    plodloader.OutOfCoreBudget.value = 4096
+    plodloader.UploadBudget.value = 16
+    plodloader.RenderBudget.value = 1024
+    plodloader.OutOfCoreBudget.value = 1024 * 6
     
     # filename = "/home/yuqo8702/Desktop/Area-7_Rosa-Camuna_knn.kdn"
     plod_node = plodloader.create_geometry_from_file(
@@ -34,21 +51,34 @@ def start(filename):
     plod_node.Material.value = projector.Material.value
 
     # setup viewing
-    size = avango.gua.Vec2ui(1920, 1080)
+    size = avango.gua.Vec2ui(2560, 1440)
 
     window = avango.gua.nodes.GlfwWindow(
         Size=size,
-        LeftResolution=size
+        LeftResolution=size,
     )
 
     avango.gua.register_window("window", window)
 
+    screen = avango.gua.nodes.ScreenNode(
+        Name="screen",
+        Width=0.64,
+        Height=0.36,
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, -2.0),
+    )
+
     cam = avango.gua.nodes.CameraNode(
-        LeftScreenPath="/screen",
+        Name="cam",
+        LeftScreenPath="/cam/screen",
         SceneGraph="scenegraph",
         Resolution=size,
         OutputWindowName="window",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0),
+        Children=[screen],
+        Transform=avango.gua.make_trans_mat(
+            499.211641143046,
+            -1095.8880106695,
+            133.737704808047,
+        ),
     )
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
@@ -61,19 +91,22 @@ def start(filename):
 
     cam.PipelineDescription.value = pipeline_description
 
-    screen = avango.gua.nodes.ScreenNode(
-        Name="screen",
-        Width=0.64,
-        Height=0.36,
-        Children=[cam],
-        Transform=avango.gua.make_trans_mat(
-            499.211641143046,
-            -1095.8880106695,
-            130.737704808047,
-        ),
-    )
+    graph.Root.value.Children.value = [cam, projector.group_node, plod_node]
 
-    graph.Root.value.Children.value = [screen, projector.group_node, plod_node]
+    #navigation
+    navigator = examples_common.navigator.Navigator()
+    navigator.StartLocation.value = cam.Transform.value.get_translate()
+    navigator.OutTransform.connect_from(cam.Transform)
+
+    navigator.RotationSpeed.value = 0.1
+    navigator.MotionSpeed.value = 0.01
+    cam.Transform.connect_from(navigator.OutTransform)
+
+    #toggling
+    keyboard = examples_common.device.KeyboardDevice()
+    toggler = Toggler()
+    toggler.KeyIn.connect_from(keyboard.KeyT)
+    projector.Enable.connect_from(toggler.EnableOut)
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

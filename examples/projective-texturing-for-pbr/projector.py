@@ -10,6 +10,7 @@ class XML_Projector(avango.script.Script):
     Texture = avango.SFString()
     Material = avango.gua.SFMaterial()
     Image_View_Mat = avango.gua.SFMatrix4()
+    Enable = avango.SFBool()
 
     def __init__(self):
         self.super(XML_Projector).__init__()
@@ -26,9 +27,9 @@ class XML_Projector(avango.script.Script):
         )
         self.geometry.Material.value.set_uniform(
             "Color",
-            avango.gua.Vec4(1.0, 1.0, 1.0, 1.0),
+            avango.gua.Vec4(0.7, 0.7, 0.7, 1.0),
         )
-        self.geometry.Material.value.set_uniform("Emissivity", 0.5)
+        self.geometry.Material.value.set_uniform("Emissivity", 1.0)
         self.group_node.Children.value.append(self.geometry)
 
         # setup Material
@@ -40,6 +41,7 @@ class XML_Projector(avango.script.Script):
             "data/materials/Projective_Texture_pbr.gmd"
         )
         avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
+        self.Material.value.set_uniform("Emissivity", 1.0)
 
     def load_XML(self, XML_path, parent):
         xml = ET.parse(XML_path).getroot()
@@ -80,6 +82,10 @@ class XML_Projector(avango.script.Script):
             # avango.gua.make_scale_mat(0.1)
 
         return transform
+
+    @field_has_changed(Enable)
+    def update_enable_uniform(self):
+        self.Material.value.set_uniform("EnableProjection", self.Enable.value)
 
     @field_has_changed(Texture)
     def update_texture(self):

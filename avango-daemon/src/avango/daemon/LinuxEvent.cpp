@@ -510,6 +510,8 @@ av::daemon::LinuxEvent::LinuxEvent()
   insert(std::make_pair("LED_MAIL", 0x09));
   insert(std::make_pair("LED_CHARGING", 0x0a));
   insert(std::make_pair("LED_MAX", 0x0f));
+  // custom
+  insert(std::make_pair("BTN_BUW1", 0x2af));
 }
 
 unsigned long

@@ -31,7 +31,8 @@ namespace av
       enum BackgroundModeEnum {
         COLOR = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::COLOR),
         SKYMAP_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::SKYMAP_TEXTURE),
-        QUAD_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::QUAD_TEXTURE)
+        QUAD_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::QUAD_TEXTURE),
+        CUBEMAP_TEXTURE = static_cast<unsigned>(::gua::ResolvePassDescription::BackgroundMode::CUBEMAP)
       };
 
       enum ToneMappingModeEnum {
@@ -59,6 +60,8 @@ namespace av
 
       SFColor  BackgroundColor;
       SFString BackgroundTexture;
+      SFString AlternativeBackgroundTexture;
+      SFFloat  BackgroundTextureBlendFactor;
       SFUInt   BackgroundMode;
 
       SFBool   EnableFog;
@@ -75,6 +78,8 @@ namespace av
       SFColor  EnvironmentLightingColor;
       SFUInt   EnvironmentLightingMode;
       SFString EnvironmentLightingTexture;
+      SFString AlternativeEnvironmentLightingTexture;
+      SFFloat  EnvironmentLightingTextureBlendFactor;
       SFFloat  HorizonFade;
 
       SFBool   EnableSSAO;
@@ -95,6 +100,12 @@ namespace av
 
       virtual void getBackgroundTextureCB(const SFString::GetValueEvent& event);
       virtual void setBackgroundTextureCB(const SFString::SetValueEvent& event);
+
+      virtual void getAlternativeBackgroundTextureCB(const SFString::GetValueEvent& event);
+      virtual void setAlternativeBackgroundTextureCB(const SFString::SetValueEvent& event);
+
+      virtual void getBackgroundTextureBlendFactorCB(const SFFloat::GetValueEvent& event);
+      virtual void setBackgroundTextureBlendFactorCB(const SFFloat::SetValueEvent& event);
 
       virtual void getBackgroundModeCB(const SFUInt::GetValueEvent& event);
       virtual void setBackgroundModeCB(const SFUInt::SetValueEvent& event);
@@ -146,6 +157,12 @@ namespace av
 
       virtual void getEnvironmentLightingTextureCB(const SFString::GetValueEvent& event);
       virtual void setEnvironmentLightingTextureCB(const SFString::SetValueEvent& event);
+
+      virtual void getAlternativeEnvironmentLightingTextureCB(const SFString::GetValueEvent& event);
+      virtual void setAlternativeEnvironmentLightingTextureCB(const SFString::SetValueEvent& event);
+
+      virtual void getEnvironmentLightingTextureBlendFactorCB(const SFFloat::GetValueEvent& event);
+      virtual void setEnvironmentLightingTextureBlendFactorCB(const SFFloat::SetValueEvent& event);
 
       virtual void getHorizonFadeCB(const SFFloat::GetValueEvent& event);
       virtual void setHorizonFadeCB(const SFFloat::SetValueEvent& event);

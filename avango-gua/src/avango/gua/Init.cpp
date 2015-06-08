@@ -68,6 +68,7 @@
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
+#include <avango/gua/renderer/SkyMapPassDescription.hpp>
 #include <avango/gua/renderer/BBoxPassDescription.hpp>
 #include <avango/gua/renderer/EmissivePassDescription.hpp>
 #include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
@@ -162,6 +163,7 @@ av::gua::Init::initClass()
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
+        av::gua::SkyMapPassDescription::initClass();
         av::gua::BBoxPassDescription::initClass();
         av::gua::EmissivePassDescription::initClass();
         av::gua::PhysicallyBasedShadingPassDescription::initClass();

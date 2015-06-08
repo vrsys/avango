@@ -83,7 +83,7 @@ def start():
   monkey_updater.TimeIn.connect_from(timer.Time)
   monkey.Transform.connect_from(monkey_updater.MatrixOut)
 
-  #projector movement
+  # projector movement
   navigator = Navigator()
   navigator.OutTransform.value = avango.gua.make_identity_mat()
   navigator.StartLocation.value = avango.gua.Vec3(0.0, 0.0, 1.0)

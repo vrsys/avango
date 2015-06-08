@@ -364,20 +364,19 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
                     });
                     unlockFingerList();
 
-                    // remove stall hands
+                    // find the removed hands
                     lockHandList();
                     handList.remove_if([&](TuioHand* hand) {
-                        auto fingerIDs = hand->getFingerIDs();
-                        bool stall = true;
-                        for (auto i : fingerIDs) {
-                            stall &= (std::find(aliveCursorList.begin(), aliveCursorList.end(), i) == aliveCursorList.end());
-                        }
-                        if (stall) {
+                        std::list<long>::iterator iter = find(aliveHandList.begin(), aliveHandList.end(), hand->getHandID());
+
+                        if (iter == aliveHandList.end()) {
                             for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
                                 (*listener)->removeTuioHand(hand);
+
                             }
                         }
-                        return stall;
+                        return iter == aliveHandList.end();
+
                     });
                     unlockHandList();
 					
@@ -554,29 +553,45 @@ void TuioClient::ProcessMessage( const ReceivedMessage& msg, const IpEndpointNam
 
             unlockFingerList();
         } else if ( strcmp( msg.AddressPattern(), "/tuiox/hand" ) == 0 ) {
-            int32 s_id, hand_class, f1, f2, f3, f4, f5;
-            args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
+            const char* cmd;
+            args >> cmd;
+            if (strcmp(cmd,"alive")==0) {
+                int32 s_id;
+                aliveHandList.clear();
+                while(!args.Eos()) {
+                    args >> s_id;
 
-            lockHandList();
-            std::list<TuioHand*>::iterator thand;
-            for ( thand = handList.begin(); thand != handList.end(); ++thand) {
-                if (( *thand)->getSessionID() == (long)s_id) break;
-            }
+                    aliveHandList.push_back((long)s_id);
+                }
 
-            if ( thand == handList.end()) {
-                TuioHand* addHand = new TuioHand(
-                                            (long)s_id, (TuioHand::Class)hand_class,
-                                            (long)f1, (long)f2, (long)f3, (long)f4, (long)f5
-                );
-                handList.push_back(addHand);
-                for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
-                    (*listener)->addTuioHand(addHand);
+
+            } else if (strcmp(cmd,"set")==0){
+
+                int32 s_id, hand_class, f1, f2, f3, f4, f5;
+                args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
+
+                lockHandList();
+                std::list<TuioHand*>::iterator thand;
+                for ( thand = handList.begin(); thand != handList.end(); ++thand) {
+                    if (( *thand)->getSessionID() == (long)s_id) break;
                 }
-            } else {
-                (*thand)->update((long)f1, (long)f2, (long)f3, (long)f4, (long)f5);
-                for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
-                    (*listener)->updateTuioHand(*thand);
+
+                if ( thand == handList.end()) {
+                    TuioHand* addHand = new TuioHand(
+                                                (long)s_id, (TuioHand::Class)hand_class,
+                                                (long)f1, (long)f2, (long)f3, (long)f4, (long)f5
+                    );
+                    handList.push_back(addHand);
+                    for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
+                        (*listener)->addTuioHand(addHand);
+                    }
+                } else {
+                    (*thand)->update((long)f1, (long)f2, (long)f3, (long)f4, (long)f5);
+                    for (std::list<TuioListener*>::iterator listener=listenerList.begin(); listener != listenerList.end(); listener++){
+                        (*listener)->updateTuioHand(*thand);
+                    }
                 }
+
             }
 
             unlockHandList();

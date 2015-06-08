@@ -1,6 +1,0 @@
-#ifndef AV_PYTHON_GUA_GUI_RESOURCE_HPP
-#define AV_PYTHON_GUA_GUI_RESOURCE_HPP
-
-void init_GuiResource();
-
-#endif //AV_PYTHON_GUA_GUI_RESOURCE_HPP

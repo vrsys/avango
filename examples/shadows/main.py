@@ -13,7 +13,7 @@ CUBE_COUNT_Z = 20
 
 class FPSUpdater(avango.script.Script):
   TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.gui.SFGuiResource()
+  FPSResource = avango.gua.gui.SFGuiResourceNode()
   Window = avango.gua.SFWindowBase()
   Viewer = avango.gua.SFViewer()
 
@@ -31,8 +31,10 @@ def start():
 
   fps_size = avango.gua.Vec2(170, 55)
 
-  fps = avango.gua.gui.nodes.GuiResource()
-  fps.init("fps", "asset://gua/data/html/fps.html", fps_size)
+  fps = avango.gua.gui.nodes.GuiResourceNode()
+  fps.TextureName.value = "fps"
+  fps.URL.value = "asset://gua/data/html/fps.html"
+  fps.Size.value = fps_size
 
   fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
     Name = "fps_quad",
@@ -145,13 +147,17 @@ def start():
   res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1,0.1,0.1)
   res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
   res_pass.Exposure.value = 1.0
-  res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+  res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
+  res_pass.BackgroundTexture.value = "awesome_skymap"
+  # res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
   res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
-      # avango.gua.nodes.TexturedQuadPassDescription(),
+      avango.gua.nodes.SkyMapPassDescription(
+        OutputTextureName="awesome_skymap"
+      ),
       avango.gua.nodes.LightVisibilityPassDescription(),
       res_pass,
       avango.gua.nodes.BBoxPassDescription(),

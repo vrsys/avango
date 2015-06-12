@@ -54,6 +54,7 @@ namespace av
       SFVec2ui RightPosition;
 
       SFBool   EnableVsync;
+      SFBool   EnableFullscreen;
 
       SFString WarpMatrixRedRight;
       SFString WarpMatrixGreenRight;
@@ -77,6 +78,9 @@ namespace av
 
       virtual void getDisplayCB(const SFString::GetValueEvent& event);
       virtual void setDisplayCB(const SFString::SetValueEvent& event);
+
+      virtual void setEnableFullscreenCB(const SFBool::SetValueEvent& event);
+      virtual void getEnableFullscreenCB(const SFBool::GetValueEvent& event);
 
       virtual void getStereoModeCB(const SFUInt::GetValueEvent& event);
       virtual void setStereoModeCB(const SFUInt::SetValueEvent& event);

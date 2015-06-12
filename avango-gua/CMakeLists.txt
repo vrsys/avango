@@ -160,6 +160,10 @@ INCLUDE_DIRECTORIES(BEFORE
   ${CMAKE_SOURCE_DIR}/avango-python/include
 )
 
+
+
+
+
 ADD_LIBRARY( avango_gua SHARED
     	     ${AVANGO_GUA_SRC}
 )

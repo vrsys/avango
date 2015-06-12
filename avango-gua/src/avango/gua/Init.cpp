@@ -8,6 +8,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+
 #include <avango/gua/scenegraph/Video3DNode.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
@@ -110,7 +111,7 @@ av::gua::Init::initClass()
         av::gua::TransformNode::initClass();
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
-        av::gua::TriMeshNode::initClass();
+        av::gua::TriMeshNode::initClass();        
         // av::gua::Video3DNode::initClass();
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)

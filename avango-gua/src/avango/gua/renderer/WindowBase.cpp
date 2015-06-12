@@ -30,6 +30,10 @@ av::gua::WindowBase::WindowBase(std::shared_ptr< ::gua::WindowBase> const& guaWi
   AV_FC_ADD_ADAPTOR_FIELD(Display,
                       boost::bind(&WindowBase::getDisplayCB, this, _1),
                       boost::bind(&WindowBase::setDisplayCB, this, _1));
+  
+  AV_FC_ADD_ADAPTOR_FIELD(EnableFullscreen,
+                      boost::bind(&WindowBase::getEnableFullscreenCB, this, _1),
+                      boost::bind(&WindowBase::setEnableFullscreenCB, this, _1));
 
   AV_FC_ADD_ADAPTOR_FIELD(StereoMode,
                       boost::bind(&WindowBase::getStereoModeCB, this, _1),
@@ -235,6 +239,18 @@ void
 av::gua::WindowBase::setEnableVsyncCB(const SFBool::SetValueEvent& event)
 {
   m_guaWindowBase->config.set_enable_vsync(event.getValue());
+}
+
+void
+av::gua::WindowBase::getEnableFullscreenCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaWindowBase->config.get_fullscreen_mode();
+}
+
+void
+av::gua::WindowBase::setEnableFullscreenCB(const SFBool::SetValueEvent& event)
+{
+  m_guaWindowBase->config.set_fullscreen_mode(event.getValue());
 }
 
 void

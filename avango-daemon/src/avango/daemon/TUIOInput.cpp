@@ -41,8 +41,8 @@ namespace
 
 AV_BASE_DEFINE(av::daemon::TUIOInput);
 
-av::daemon::TUIOInput::TUIOInput():
-mTUIOInputListener(new TUIOInputListener())
+av::daemon::TUIOInput::TUIOInput()
+  : mTUIOInputListener(std::make_shared<TUIOInputListener>())
 {
   mRequiredFeatures.push_back("port");
 }
@@ -70,7 +70,7 @@ av::daemon::TUIOInput::startDevice()
 
   // initialize
 
-  mTUIOClient = boost::shared_ptr<TUIO::TuioClient>(new TUIO::TuioClient(mPort));
+  mTUIOClient = std::make_shared<TUIO::TuioClient>(mPort);
   mTUIOClient->addTuioListener(mTUIOInputListener.get());
   mTUIOClient->connect();
 

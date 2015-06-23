@@ -45,7 +45,7 @@ namespace TUIO {
           */
         enum Class { UNKNOWN = 0, LEFT = 1, RIGHT = 2 };
 
-        typedef std::array<long, 5> FingerArray;
+        using FingerArray = std::array<long, 5>;
 
         /**
          * This constructor takes a TuioTime argument and assigns it along with the provided
@@ -118,7 +118,7 @@ namespace TUIO {
           * Get a std::array of finger IDs for this hand.
           * @return the finger Session IDs
           */
-        std::array<long, 5> getFingerIDs() {
+        FingerArray getFingerIDs() {
             return fingers;
         }
 
@@ -137,7 +137,6 @@ namespace TUIO {
         int hand_id;
         Class hand_class;
         FingerArray fingers;
-
     };
 }
 #endif

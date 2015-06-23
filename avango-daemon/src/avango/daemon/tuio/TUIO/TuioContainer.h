@@ -134,11 +134,6 @@ namespace TUIO {
 		};
 		
 		/**
-		 * The destructor is doing nothing in particular. 
-		 */
-		virtual ~TuioContainer(){};
-		
-		/**
 		 * Takes a TuioTime argument and assigns it along with the provided 
 		 * X and Y coordinate to the private TuioContainer attributes.
 		 * The speed and accleration values are calculated accordingly.

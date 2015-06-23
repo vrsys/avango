@@ -68,7 +68,7 @@ namespace TUIO {
 			ypos = yp;
 			currentTime = TuioTime::getSessionTime();
 			startTime = currentTime;
-		};
+		}
 	
 		/**
 		 * This constructor takes a TuioTime object and two floating point coordinate arguments and sets   
@@ -101,7 +101,7 @@ namespace TUIO {
 		/**
 		 * The destructor is doing nothing in particular. 
 		 */
-		~TuioPoint(){};
+		virtual ~TuioPoint() {}
 		
 		/**
 		 * Takes a TuioPoint argument and updates its coordinate attributes 

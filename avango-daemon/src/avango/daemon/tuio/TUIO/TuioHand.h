@@ -132,7 +132,7 @@ namespace TUIO {
 
     protected:
         /**
-         * The individual finger ID number that is assigned to each TuioFinger.
+         * The individual hand ID number that is assigned to each TuioHand.
          */
         int hand_id;
         Class hand_class;

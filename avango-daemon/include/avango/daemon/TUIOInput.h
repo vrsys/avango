@@ -99,6 +99,10 @@ namespace av
       std::shared_ptr<TUIO::TuioClient> mTUIOClient;
       std::shared_ptr<TUIOInputListener> mTUIOInputListener;
       std::vector<std::string> mRequiredFeatures;
+      /* 0 == cursor
+       * 1 == finger
+       * 2 == hand
+       */
       std::map<int, boost::bimap<int, int>> mStationToSessionID;
       size_t  mPort;
 

@@ -25,7 +25,7 @@
 #ifndef INCLUDED_TUIOFINGER_H
 #define INCLUDED_TUIOFINGER_H
 
-#include <math.h>
+#include <cmath>
 #include "TuioContainer.h"
 
 namespace TUIO {
@@ -43,17 +43,17 @@ namespace TUIO {
          * This constructor takes a TuioTime argument and assigns it along with the provided
          * Session ID, Finger ID, X and Y coordinate to the newly created TuioFinger
          *
-         * @param	ttime	the TuioTime to assign
-         * @param	si	the Session ID  to assign
-         * @param	xp	the X coordinate to assign
-         * @param	yp	the Y coordinate to assign
-         * @param   xv  the X velocity to assign
-         * @param   yv  the Y velocity to assign
-         * @param   xe  the bounding ellipse center X coordinate
-         * @param   ye  the bounding ellipse center Y coordinate
-         * @param   mi  the bounding ellipse minor axis
-         * @param   ma  the bounding ellipse major axis
-         * @param   in  the bounding ellipse inclination
+         * @param ttime the TuioTime to assign
+         * @param si the Session ID  to assign
+         * @param xp the X coordinate to assign
+         * @param yp the Y coordinate to assign
+         * @param xv the X velocity to assign
+         * @param yv the Y velocity to assign
+         * @param xe the bounding ellipse center X coordinate
+         * @param ye the bounding ellipse center Y coordinate
+         * @param mi the bounding ellipse minor axis
+         * @param ma the bounding ellipse major axis
+         * @param in the bounding ellipse inclination
          */
         TuioFinger (TuioTime ttime,
                     long si,

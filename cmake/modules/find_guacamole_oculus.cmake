@@ -3,16 +3,15 @@
 ##############################################################################
 SET(GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIR}
-  ${GUACAMOLE_INCLUDE_DIRS}/../plugins/guacamole-oculus/include
-  ${CMAKE_SOURCE_DIR}/../guacamole-oculus/include
-  /opt/guacamole/current/guacamole-oculus/include
+  ${CMAKE_SOURCE_DIR}/../guacamole/install/include
+  /opt/guacamole/current/guacamole/install/include
 )
 
 SET(GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIRS
   ${GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIR}
   ${GUACAMOLE_LIBRARY_DIRS}
-  ${CMAKE_SOURCE_DIR}/../guacamole-oculus/lib
-  /opt/guacamole/current/guacamole-oculus/lib
+  ${CMAKE_SOURCE_DIR}/../guacamole/install/lib
+  /opt/guacamole/current/guacamole/install/lib
 )
 
 ##############################################################################

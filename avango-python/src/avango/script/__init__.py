@@ -21,9 +21,9 @@
 #                                                                        #
 ##########################################################################
 
-from _script import *
-from _meta_script import *
-from _container import *
+from . _script import *
+from . _meta_script import *
+from . _container import *
 
 import avango.nodefactory
 nodes = avango.nodefactory.NodeFactory(module=__name__)

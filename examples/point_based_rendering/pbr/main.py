@@ -25,7 +25,9 @@ def start(filename):
                   filename)
 
 
-  light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
+  light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.POINT,
+      Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
 
   eye = avango.gua.nodes.TransformNode(Name = "eye")

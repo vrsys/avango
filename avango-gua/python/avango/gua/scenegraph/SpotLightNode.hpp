@@ -1,6 +1,0 @@
-#ifndef AV_PYTHON_GUA_SPOT_LIGHT_NODE_HPP
-#define AV_PYTHON_GUA_SPOT_LIGHT_NODE_HPP
-
-void init_SpotLightNode();
-
-#endif //AV_PYTHON_GUA_SPOT_LIGHT_NODE_HPP

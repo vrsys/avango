@@ -1,31 +1,31 @@
-#include <avango/gua/scenegraph/PBRNode.hpp>
-#include <avango/Base.h>
-#include <boost/bind.hpp>
+// #include <avango/gua/scenegraph/PBRNode.hpp>
+// #include <avango/Base.h>
+// #include <boost/bind.hpp>
 
-AV_FC_DEFINE(av::gua::PBRNode);
+// AV_FC_DEFINE(av::gua::PBRNode);
 
-AV_FIELD_DEFINE(av::gua::SFPBRNode);
-AV_FIELD_DEFINE(av::gua::MFPBRNode);
+// AV_FIELD_DEFINE(av::gua::SFPBRNode);
+// AV_FIELD_DEFINE(av::gua::MFPBRNode);
 
-av::gua::PBRNode::PBRNode(std::shared_ptr< ::gua::node::PBRNode> guanode)
-    : GeometryNode(guanode)
-{
-}
+// av::gua::PBRNode::PBRNode(std::shared_ptr< ::gua::node::PBRNode> guanode)
+//     : GeometryNode(guanode)
+// {
+// }
 
-//av::gua::PBRNode::~PBRNode()
-//{}
+// //av::gua::PBRNode::~PBRNode()
+// //{}
 
-void
-av::gua::PBRNode::initClass()
-{
-  if (!isTypeInitialized()) {
-    av::gua::GeometryNode::initClass();
+// void
+// av::gua::PBRNode::initClass()
+// {
+//   if (!isTypeInitialized()) {
+//     av::gua::GeometryNode::initClass();
 
-    AV_FC_INIT(av::gua::GeometryNode, av::gua::PBRNode, true);
+//     AV_FC_INIT(av::gua::GeometryNode, av::gua::PBRNode, true);
 
-    SFPBRNode::initClass("av::gua::SFPBRNode", "av::Field");
-    MFPBRNode::initClass("av::gua::MFPBRNode", "av::Field");
+//     SFPBRNode::initClass("av::gua::SFPBRNode", "av::Field");
+//     MFPBRNode::initClass("av::gua::MFPBRNode", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
-}
+//     sClassTypeId.setDistributable(true);
+//   }
+// }

@@ -65,9 +65,9 @@ class GuajacumTreePrinter():
         """
 
         # check given arguments
-        for i in args.keys():
+        for i in list(args.keys()):
             if i not in self._treeOpts:
-                print >> sys.stderr, self._colorize('error', "Invalid  argument '" + i + "'")
+                print(self._colorize('error', "Invalid  argument '" + i + "'"), file=sys.stderr)
                 return
 
         joined_args = dict(list(self._treeOpts.items()) + list(args.items()))
@@ -96,31 +96,31 @@ class GuajacumTreePrinter():
         if not args['print_memory_addr']:
             obj_name = re.sub(' object at 0x[0-9a-zA-Z]+>$', '>', obj_name)
 
-        print self._indent(cur_depth, 'Name: %s%s Obj: %s%s%s' % ( \
+        print(self._indent(cur_depth, 'Name: %s%s Obj: %s%s%s' % ( \
             self._colorize('important', '"' + node.Name.value + '"'), \
             self._colorize('bold', ' (Group)') if is_grouped else '', \
             self._colorize('important', obj_name,), \
             ' Path: "' + '/'.join(cur_path).replace('//', '/', 1) + '"' if args['print_full_path'] else '', \
             ' Depth: ' + str(cur_depth) if args['print_depth'] else '' \
-        ))
+        )))
 
         if (args['print_field_values'] or args['print_field_names']) and node.get_num_fields():
-            print self._indent(cur_depth + 1, self._colorize('bold', 'Fields:'))
+            print(self._indent(cur_depth + 1, self._colorize('bold', 'Fields:')))
             num_fields = node.get_num_fields()
             for i in range(num_fields):
                 if args['print_field_values']:
-                    print self._indent(cur_depth + 2, '%s: %s = %s' % (\
+                    print(self._indent(cur_depth + 2, '%s: %s = %s' % (\
                         node.get_field_name(i), \
                         node.get_field(i).__class__.__name__, \
                         str(node.get_field(i).value) \
-                    ))
+                    )))
                 else:
-                    print self._indent(cur_depth + 2, '%s: %s' % (node.get_field_name(i), node.get_field(i).__class__.__name__))
+                    print(self._indent(cur_depth + 2, '%s: %s' % (node.get_field_name(i), node.get_field(i).__class__.__name__)))
 
         # if it's a leaf or max_depth is reached, pop current level from path stack and abort recursion
         if 0 == len(node.Children.value) or cur_depth == args['max_depth']:
             if len(node.Children.value):
-                print self._indent(cur_depth + 1, self._colorize('bold', 'Node has children...'))
+                print(self._indent(cur_depth + 1, self._colorize('bold', 'Node has children...')))
 
             cur_path.pop()
             return
@@ -139,15 +139,15 @@ class GuajacumTreePrinter():
 
             # cut off sub trees if shorten_sub_trees is set
             if -1 < args['shorten_sub_trees'] and counter >= args['shorten_sub_trees']:
-                print self._indent(cur_depth, \
-                    self._colorize('bold', 'Shortened sub tree (' + str(len(node.Children.value) - counter) + ' more...)'))
+                print(self._indent(cur_depth, \
+                    self._colorize('bold', 'Shortened sub tree (' + str(len(node.Children.value) - counter) + ' more...)')))
                 break
             self.__printRecursively(i, cur_depth + 1, args, cur_path, used_name_count and name_matches)
             counter += 1
 
 
         if  1 < used_name_count:
-            print self._indent(cur_depth, self._colorize('bold', 'Grouped children: ' +  str(used_name_count)))
+            print(self._indent(cur_depth, self._colorize('bold', 'Grouped children: ' +  str(used_name_count))))
 
         # go up the tree stack
         cur_path.pop()

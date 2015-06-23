@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-from _avango import _make_instance_by_name
+from ._avango import _make_instance_by_name
 
 def mangle_class_name(module_name, class_name=''):
     module_path = module_name.split('.')
@@ -49,7 +49,7 @@ class NodeFactory(object):
                 try:
                     node = _make_instance_by_name(self._name)
                     values = node.get_values()
-                    for key, value in args.iteritems():
+                    for key, value in args.items():
                         setattr(values, key, value)
                     return node
                 except RuntimeError: # We don't have a expection translation ...

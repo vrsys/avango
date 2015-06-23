@@ -4,27 +4,28 @@
 
 #include <avango/gua/scenegraph/Node.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/scenegraph/ClippingPlaneNode.hpp>
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+
 #include <avango/gua/scenegraph/Video3DNode.hpp>
-#include <avango/gua/scenegraph/VolumeNode.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
 #endif
 #include <avango/gua/scenegraph/NURBSNode.hpp>
-#include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/gua/scenegraph/ScreenNode.hpp>
-#include <avango/gua/scenegraph/PointLightNode.hpp>
-#include <avango/gua/scenegraph/SpotLightNode.hpp>
-#include <avango/gua/scenegraph/SunLightNode.hpp>
+#include <avango/gua/scenegraph/LightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
+#include <avango/gua/scenegraph/TexturedScreenSpaceQuadNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/PickResult.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 
 #include <avango/gua/math/BoundingBox.hpp>
+#include <avango/gua/math/Frustum.hpp>
 #include <avango/gua/math/BoundingSphere.hpp>
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -48,19 +49,42 @@
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/renderer/Video3DLoader.hpp>
-#include <avango/gua/renderer/VolumeLoader.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/renderer/PBRLoader.hpp>
 #include <avango/gua/renderer/PLODLoader.hpp>
+#include <avango/gua/renderer/PLODPassDescription.hpp>
 #endif
 #include <avango/gua/renderer/NURBSLoader.hpp>
+#include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
-#include <avango/gua/renderer/Pipeline.hpp>
-#include <avango/gua/renderer/Camera.hpp>
+#include <avango/gua/renderer/HeadlessSurface.hpp>
+#include <avango/gua/renderer/GlfwWindow.hpp>
+#include <avango/gua/renderer/MaterialShaderMethod.hpp>
+#include <avango/gua/renderer/MaterialShaderDescription.hpp>
+#include <avango/gua/renderer/Material.hpp>
+#include <avango/gua/renderer/PipelinePassDescription.hpp>
+#include <avango/gua/renderer/StencilPassDescription.hpp>
+#include <avango/gua/renderer/TriMeshPassDescription.hpp>
+#include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
+#include <avango/gua/renderer/DebugViewPassDescription.hpp>
+#include <avango/gua/renderer/BackgroundPassDescription.hpp>
+#include <avango/gua/renderer/SkyMapPassDescription.hpp>
+#include <avango/gua/renderer/BBoxPassDescription.hpp>
+#include <avango/gua/renderer/EmissivePassDescription.hpp>
+#include <avango/gua/renderer/PhysicallyBasedShadingPassDescription.hpp>
+#include <avango/gua/renderer/TexturedScreenSpaceQuadPassDescription.hpp>
+#include <avango/gua/renderer/FullscreenPassDescription.hpp>
+#include <avango/gua/renderer/SSAOPassDescription.hpp>
+#include <avango/gua/renderer/SSAAPassDescription.hpp>
+#include <avango/gua/renderer/ResolvePassDescription.hpp>
+#include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
+#include <avango/gua/renderer/PipelineDescription.hpp>
 
 #include <avango/gua/viewer/Viewer.hpp>
+#include <avango/gua/viewer/BlenderViewer.hpp>
 
 #include <avango/gua/utils/Logger.hpp>
+#include <avango/gua/utils/Ray.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
@@ -85,26 +109,26 @@ av::gua::Init::initClass()
         av::gua::Node::initClass();
         av::gua::GeometryNode::initClass();
         av::gua::TransformNode::initClass();
+        av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
-        av::gua::TriMeshNode::initClass();
-        av::gua::Video3DNode::initClass();
-        av::gua::VolumeNode::initClass();
+        av::gua::TriMeshNode::initClass();        
+        // av::gua::Video3DNode::initClass();
+        av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
-        av::gua::PBRNode::initClass();
+        // av::gua::PBRNode::initClass();
         av::gua::PLODNode::initClass();
 #endif
-        av::gua::NURBSNode::initClass();
-        av::gua::VolumeNode::initClass();
+        // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();
-        av::gua::PointLightNode::initClass();
-        av::gua::SpotLightNode::initClass();
-        av::gua::SunLightNode::initClass();
+        av::gua::LightNode::initClass();
         av::gua::RayNode::initClass();
         av::gua::TexturedQuadNode::initClass();
+        av::gua::TexturedScreenSpaceQuadNode::initClass();
         av::gua::SceneGraph::initClass();
         av::gua::PickResult::initClass();
 
         av::gua::BoundingBox::initClass();
+        av::gua::Frustum::initClass();
         av::gua::BoundingSphere::initClass();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
@@ -125,22 +149,45 @@ av::gua::Init::initClass()
         av::gua::Physics::initClass();
 #endif
 
-        av::gua::Pipeline::initClass();
         av::gua::Renderer::initClass();
+        av::gua::WindowBase::initClass();
         av::gua::Window::initClass();
-        av::gua::Camera::initClass();
+        av::gua::HeadlessSurface::initClass();
+        av::gua::GlfwWindow::initClass();
+        av::gua::MaterialShaderMethod::initClass();
+        av::gua::MaterialShaderDescription::initClass();
+        av::gua::Material::initClass();
+        av::gua::PipelinePassDescription::initClass();
+        av::gua::StencilPassDescription::initClass();
+        av::gua::TriMeshPassDescription::initClass();
+        av::gua::TexturedQuadPassDescription::initClass();
+        av::gua::DebugViewPassDescription::initClass();
+        av::gua::BackgroundPassDescription::initClass();
+        av::gua::SkyMapPassDescription::initClass();
+        av::gua::BBoxPassDescription::initClass();
+        av::gua::EmissivePassDescription::initClass();
+        av::gua::PhysicallyBasedShadingPassDescription::initClass();
+        av::gua::TexturedScreenSpaceQuadPassDescription::initClass();
+        av::gua::FullscreenPassDescription::initClass();
+        av::gua::SSAOPassDescription::initClass();
+        av::gua::SSAAPassDescription::initClass();
+        av::gua::ResolvePassDescription::initClass();
+        av::gua::LightVisibilityPassDescription::initClass();
+        av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
-        av::gua::Video3DLoader::initClass();
-        av::gua::VolumeLoader::initClass();
+        // av::gua::Video3DLoader::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
-        av::gua::PBRLoader::initClass();
+        // av::gua::PBRLoader::initClass();
         av::gua::PLODLoader::initClass();
+        av::gua::PLODPassDescription::initClass();
 #endif
-        av::gua::NURBSLoader::initClass();
+        // av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();
+        av::gua::BlenderViewer::initClass();
 
         av::gua::Logger::initClass();
+        av::gua::Ray::initClass();
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

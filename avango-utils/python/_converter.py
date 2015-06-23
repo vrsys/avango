@@ -231,7 +231,7 @@ class FloatToAlphaConverter(avango.script.Script):
         self.__alpha_changed = True
         
     def evaluate(self):
-        print "eval: " + str(self.Alpha.value)
+        print("eval: " + str(self.Alpha.value))
         if self.__alpha_changed:
             
             self.Color.value = avango.gua.Vec4(self.__color_in.x, self.__color_in.y, self.__color_in.z, self.Alpha.value)

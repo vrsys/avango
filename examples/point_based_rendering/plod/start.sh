@@ -15,11 +15,11 @@ AVANGO=/opt/avango/master
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib
 
 # schism
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86:/opt/Awesomium/lib:/opt/pbr/inst_cb/lib
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
-export PYTHONPATH="$LOCAL_AVANGO/lib/python2.7":"$LOCAL_AVANGO/examples":$AVANGO/lib/python2.7:$AVANGO/examples:$PYTHONPATH
+export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.4:$AVANGO/examples:$PYTHONPATH
 
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
@@ -27,18 +27,18 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$LOCAL_AVANGO/examples/examples_common/daemon.py" > /dev/null &
 else
-    "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
+    python3 "$AVANGO/examples/examples_common/daemon.py" > /dev/null &
 fi
 
-filename="/mnt/pitoti/KDN_LOD/PITOTI_KDN_LOD/Spacemonkey_new.kdn"
+filename="/opt/guacamole/new_renderer/examples/plod/data/objects/pig.kdn"
 if [ $# -eq 1 ]; then
   filename=$1
 fi
 
 # run program
-cd "$DIR" && ./main.py $filename
+cd "$DIR" && python3 ./main.py $filename
 
 # kill daemon
 kill %1

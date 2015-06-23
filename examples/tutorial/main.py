@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.gua
 import avango.script
@@ -122,7 +120,7 @@ Continue by typing 'tip(9)' or 'next_tip()'!\n",
 "\n----------------------------------------------------------\n\n\
 Awesome! But it's a bit dark in here. Let's add a \n\
 lamp! You can do it! It's as simple as:\n\n\
-\033[93mlamp_node = avango.gua.nodes.SpotLightNode(Name = 'lamp', EnableShadows = True, EnableGodrays = True)\033[0m\n\n\
+\033[93mlamp_node = avango.gua.nodes.LightNode(Type=avango.gua.LightType.SPOT, Name='lamp', EnableShadows=True, EnableGodrays=True)\033[0m\n\n\
 You'll have to transform it in order to see the light...\n\n\
 \033[93mlamp_node.Transform.value = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_rot_mat(-90, 1, 0, 0) * avango.gua.make_scale_mat(55, 55, 30)\033[0m\n\n\
 ...and add it to the scenegraph as well:\n\n\
@@ -324,7 +322,7 @@ def tip(which):
   global current_tip
   global tips
   current_tip = max(min(which, tip_count - 2),-1)
-  print tips[current_tip]
+  print(tips[current_tip])
 
 def next_tip():
   global current_tip

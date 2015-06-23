@@ -5,7 +5,7 @@
 #    modifies environment for running avango examples from checkout
 
 AVANGO_HOME=$PWD
-PREFIX_PYTHONPATH="$AVANGO_HOME/lib/python2.7:$AVANGO_HOME/examples"
+PREFIX_PYTHONPATH="$AVANGO_HOME/lib/python3.2:$AVANGO_HOME/examples"
 PREFIX_LD_LIBRARY_PATH="$AVANGO_HOME/lib"
 
 # modify this

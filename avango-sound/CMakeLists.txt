@@ -31,7 +31,7 @@ file(GLOB AVANGO_SOUND_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 LINK_DIRECTORIES(
     ${LIB_PATHS}
-    ${PYTHON_LIBRARY_DIRS}
+    ${PYTHON3_LIBRARY_DIRS}
     ${BULLET_LIBRARY_DIRS}
 )
 
@@ -46,7 +46,7 @@ INCLUDE_DIRECTORIES(
     include
     ../avango-core/include
     ../avango-python/include
-    ${PYTHON_INCLUDE_DIRS}
+    ${PYTHON3_INCLUDE_DIRS}
     ../avango-gua/include
 )
 

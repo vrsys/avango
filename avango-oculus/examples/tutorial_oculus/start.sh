@@ -2,7 +2,7 @@
 
 #avango + python
 #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/avango/vr_application_lib:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/home/lopa1693/CurrentFramework/avango/lib:/opt/zmq/current/lib
-#export PYTHONPATH=$PYTHONPATH:/opt/avango/vr_application_lib/:/opt/avango/current/lib/python2.7
+#export PYTHONPATH=$PYTHONPATH:/opt/avango/vr_application_lib/:/opt/avango/current/lib/python3.4
 
 # guacamole
 #export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/lopa1693/CurrentFramework/guacamole/lib:/home/lopa1693/CurrentFramework/avango/avango-gua/lib/avango

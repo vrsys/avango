@@ -1,6 +1,5 @@
 #include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
-#include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -24,13 +23,25 @@ av::gua::TriMeshLoader::TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader)
 
 av::Link<av::gua::Node>
 av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
-                                                std::string const& fileName,
-                                                std::string const& fallbackMaterial,
-                                                Flags flags) const
+                                               std::string const& fileName,
+                                               av::gua::Material const& fallbackMaterial,
+                                               Flags flags) const
 {
 
     auto gua_node(m_guaTriMeshLoader->create_geometry_from_file(
-                                            nodeName, fileName, fallbackMaterial, flags));
+                                            nodeName, fileName, fallbackMaterial.getGuaMaterial(), flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
+av::Link<av::gua::Node>
+av::gua::TriMeshLoader::createGeometryFromFile(std::string const& nodeName,
+                                               std::string const& fileName,
+                                               Flags flags) const
+{
+
+    auto gua_node(m_guaTriMeshLoader->create_geometry_from_file(nodeName, fileName, flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
@@ -66,12 +77,12 @@ av::gua::TriMeshLoader::createChildren(std::shared_ptr< ::gua::node::Node> root)
     av_node = new av::gua::TransformNode(group_cast);
   }
 
-  if (!av_node) {
-    auto vol_cast(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(root));
-    if (vol_cast) {
-      av_node = new av::gua::VolumeNode(vol_cast);
-    }
-  }
+  // if (!av_node) {
+  //   auto vol_cast(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(root));
+  //   if (vol_cast) {
+  //     av_node = new av::gua::VolumeNode(vol_cast);
+  //   }
+  // }
 
   if (!av_node) {
     auto geom_cast(std::dynamic_pointer_cast< ::gua::node::TriMeshNode>(root));

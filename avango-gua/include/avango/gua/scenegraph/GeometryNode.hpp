@@ -47,8 +47,6 @@ namespace av
 
     public:
 
-      SFString Geometry;
-      SFString Material;
       SFUInt   ShadowMode;
 
       /**
@@ -57,12 +55,6 @@ namespace av
       std::shared_ptr< ::gua::node::GeometryNode> getGuaNode() const;
 
     public:
-
-      virtual void getGeometryCB(const SFString::GetValueEvent& event);
-      virtual void setGeometryCB(const SFString::SetValueEvent& event);
-
-      virtual void getMaterialCB(const SFString::GetValueEvent& event);
-      virtual void setMaterialCB(const SFString::SetValueEvent& event);
 
       virtual void getShadowModeCB(const SFUInt::GetValueEvent& event);
       virtual void setShadowModeCB(const SFUInt::SetValueEvent& event);

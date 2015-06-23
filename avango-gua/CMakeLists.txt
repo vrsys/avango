@@ -23,10 +23,12 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
     src/avango/gua/scenegraph/PLODNode.cpp
     src/avango/gua/scenegraph/PBRNode.cpp
     src/avango/gua/renderer/PLODLoader.cpp
+    src/avango/gua/renderer/PLODPassDescription.cpp
     src/avango/gua/renderer/PBRLoader.cpp
     include/avango/gua/scenegraph/PLODNode.h
     include/avango/gua/scenegraph/PBRNode.h
     include/avango/gua/renderer/PLODLoader.h
+    include/avango/gua/renderer/PLODPassDescription.h
     include/avango/gua/renderer/PBRLoader.h
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
@@ -88,6 +90,8 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/scenegraph/PBRNode.cpp
   python/avango/gua/renderer/PLODLoader.hpp
   python/avango/gua/renderer/PLODLoader.cpp
+  python/avango/gua/renderer/PLODPassDescription.hpp
+  python/avango/gua/renderer/PLODPassDescription.cpp
   python/avango/gua/renderer/PBRLoader.hpp
   python/avango/gua/renderer/PBRLoader.cpp
 )
@@ -134,7 +138,7 @@ ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
 # set link directories
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS}
-                 ${PYTHON_LIBRARY_DIRS}
+                 ${PYTHON3_LIBRARY_DIRS}
                  ${BOOST_LIBRARY_DIRS}
                  ${SCHISM_LIBRARY_DIRS}
                  ${BULLET_LIBRARY_DIRS}
@@ -148,13 +152,17 @@ INCLUDE_DIRECTORIES(BEFORE
   include
   include/avango/python/
   ${INCLUDE_PATHS}
-  ${PYTHON_INCLUDE_DIRS}
+  ${PYTHON3_INCLUDE_DIRS}
   ${SCHISM_INCLUDE_DIRS}
   ${BULLET_INCLUDE_DIRS}
   ${JSON_INCLUDE_DIRS}
   ${CMAKE_SOURCE_DIR}/avango-core/include
   ${CMAKE_SOURCE_DIR}/avango-python/include
 )
+
+
+
+
 
 ADD_LIBRARY( avango_gua SHARED
     	     ${AVANGO_GUA_SRC}
@@ -192,7 +200,7 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 # set dependencies
 ###############################################################################
 SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
-                          ${PYTHON_LIBRARIES}
+                          ${PYTHON3_LIBRARIES}
                           ${BOOST_LIBRARIES}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
@@ -231,15 +239,15 @@ ENDIF (UNIX)
 ###############################################################################
 IF (MSVC)
   post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/avango_gua.dll)
-  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua/_gua.pyd)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/_gua.pyd)
 ELSEIF (UNIX)
   post_build_install_target(avango_gua ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_gua.so)
-  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua/_gua.so)
+  post_build_install_target(_gua ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/_gua.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
-    ${CMAKE_SOURCE_DIR}/avango-gua/lib/avango/gua
-    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/gua
+    ${CMAKE_SOURCE_DIR}/avango-gua/python/avango/gua
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua
     _gua
 )
 

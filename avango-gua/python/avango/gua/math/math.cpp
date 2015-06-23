@@ -308,6 +308,24 @@ void setElement(::gua::math::mat4& mat,
   mat[row + col * 4] = val;
 }
 
+::gua::math::mat4 mat4FromList( boost::python::list const& l)
+{
+  ::gua::math::mat4 mat = ::gua::math::mat4::identity();
+  for (int i = 0; i < len(l) && i < 16; ++i) {
+    mat[i] = boost::python::extract<float>(l[i]);
+  }
+  return mat;
+}
+
+boost::python::list mat4ToList(::gua::math::mat4 const& mat)
+{
+  boost::python::list l;
+  for (int i = 0; i < 16; ++i) {
+    l.append(mat[i]);
+  }
+  return l;
+}
+
 void setTranslate1(::gua::math::mat4& mat,
                    ::gua::math::vec3 const& vec) {
 
@@ -344,6 +362,10 @@ void setTranslate2(::gua::math::mat4& mat,
 
 ::gua::math::mat4 const makeRot3(::gua::math::quat const& quat) {
   return quat.to_matrix();
+}
+
+::gua::math::mat4 const makeRot4(::gua::math::vec4 const& rotation_axis) {
+  return scm::math::make_rotation(rotation_axis.x, rotation_axis.y, rotation_axis.z, rotation_axis.w);
 }
 
 ::gua::math::mat4 const makeScale3(::gua::math::mat4::value_type value) {
@@ -384,6 +406,13 @@ void init_Mat4() {
 
   ::gua::math::mat4 const (*inverse)( ::gua::math::mat4 const&) =
       &scm::math::inverse;
+  ::gua::math::mat4 const (*transpose)( ::gua::math::mat4 const&) =
+      &scm::math::transpose;
+
+  ::gua::math::mat4 const (*makeLookAt)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =
+      &scm::math::make_look_at_matrix;
+  ::gua::math::mat4 const (*makeLookAtInv)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =
+      &scm::math::make_look_at_matrix_inv;
 
   // wrapping gua::math::mat4 functionality
   class_< ::gua::math::mat4>("Mat4", no_init)
@@ -451,16 +480,23 @@ void init_Mat4() {
 
   def("make_trans_mat", makeTrans1);
   def("make_trans_mat", makeTrans2);
+  def("from_list", mat4FromList);
+  def("to_list", mat4ToList);
 
   def("make_rot_mat", makeRot1);
   def("make_rot_mat", makeRot2);
   def("make_rot_mat", makeRot3);
+  def("make_rot_mat", makeRot4);
+
 
   def("make_scale_mat", makeScale1);
   def("make_scale_mat", makeScale2);
   def("make_scale_mat", makeScale3);
 
   def("make_inverse_mat", inverse);
+  def("transpose", transpose);
+  def("make_look_at_mat", makeLookAt);
+  def("make_look_at_mat_inv", makeLookAtInv);
 }
 
 void normalizeQuat(::gua::math::quat& quat) {

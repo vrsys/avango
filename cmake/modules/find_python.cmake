@@ -5,15 +5,15 @@ SET(PYTHON_INCLUDE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/inc/python
   ${PYTHON_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_SEARCH_DIR}
-  "C:/python27/include"
-  "/usr/include/python2.7"
+  "C:/python34/include"
+  "/usr/include/python3.4"
 )
 
 SET(PYTHON_LIBRARY_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/lib
   ${PYTHON_LIBRARY_DIRS}
   ${PYTHON_LIBRARY_SEARCH_DIR}
-  "C:/Python27/libs"
+  "C:/Python34/libs"
   "/usr/lib"
 )
 
@@ -74,9 +74,9 @@ IF (NOT PYTHON_INCLUDE_DIRS)
 ENDIF (NOT PYTHON_INCLUDE_DIRS)
 
 IF(UNIX)
-	SET(PYTHON_LIB_FILENAME "libpython2.7.so")
+	SET(PYTHON_LIB_FILENAME "libpython3.4m.so")
 ELSEIF(WIN32)
-	SET(PYTHON_LIB_FILENAME "python27.lib")
+	SET(PYTHON_LIB_FILENAME "python32.lib")
 ENDIF(UNIX)
 
 IF ( NOT PYTHON_LIBRARY_DIRS )

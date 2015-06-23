@@ -56,3 +56,4 @@ avango-daemon/include/avango/daemon/Config.h
 
 # example
 #examples/zmq_distribution/data
+avango-skelanim/examples/skeletal_animation/data/

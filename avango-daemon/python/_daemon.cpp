@@ -49,7 +49,7 @@
 #  include <avango/daemon/VRPNClient.h>
 #endif
 
-#ifdef OCULUS_SUPPORT
+#ifdef AVANGO_OCULUS_RIFT_SUPPORT
 #include <avango/daemon/Oculus.h>
 #endif
 
@@ -242,7 +242,7 @@ BOOST_PYTHON_MODULE(_daemon)
     ;
 #endif
 
-#ifdef OCULUS_SUPPORT
+#ifdef AVANGO_OCULUS_RIFT_SUPPORT
   // Avango NG device: Oculus
   class_<av::daemon::Oculus, av::Link<av::daemon::Oculus>, bases<av::daemon::Device>, boost::noncopyable >("_OculusHelper",
     "A helper class that provides some basic properties and function inherited from Oculus,"

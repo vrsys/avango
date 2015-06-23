@@ -19,6 +19,7 @@
 namespace gua
 {
   class TriMeshNode;
+  class SkeletalAnimationNode;
   class Video3DNode;
   class VolumeNode;
   class NURBSNode;
@@ -35,31 +36,47 @@ namespace gua
 
 namespace av
 {
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat4&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat4&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat4d&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat4d&);
 
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat3&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat3&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat4f&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat4f&);
 
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::quat&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::quat&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat3d&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat3d&);
 
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::mat3f&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::mat3f&);
+
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::quatd&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::quatd&);
+
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::quatf&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::quatf&);
+
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4d&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4d&);
+
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4f&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4f&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4i&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4i&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec4ui&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec4ui&);
 
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec3&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec3&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec3d&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec3d&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec3f&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec3f&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec3i&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec3i&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec3ui&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec3ui&);
 
-  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec2&);
-  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec2&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec2d&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec2d&);
+  AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec2f&);
+  AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec2f&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec2i&);
   AV_GUA_DLL InputStream& operator>>(InputStream&, ::gua::math::vec2i&);
   AV_GUA_DLL OutputStream& operator<<(OutputStream&, const ::gua::math::vec2ui&);
@@ -89,6 +106,8 @@ namespace av
 
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TriMeshNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TriMeshNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SkeletalAnimationNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SkeletalAnimationNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Video3DNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
@@ -121,31 +140,44 @@ namespace av {
   // not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat4& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4d& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat4d& buf);
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat3& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat4f& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat4f& buf);
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::quat& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::quat& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3d& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat3d& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::mat3f& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::mat3f& buf);
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::quatd& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::quatd& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::quatf& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::quatf& buf);
+
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4d& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4d& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4f& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4f& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4i& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4i& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec4ui& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec4ui& buf);
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec3& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3d& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec3d& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3f& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec3f& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3i& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec3i& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec3ui& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec3ui& buf);
 
-  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2& buf);
-  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec2& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2d& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec2d& buf);
+  AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2f& buf);
+  AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec2f& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2i& buf);
   AV_GUA_DLL void av_popMsg(av::Msg& netMsg, ::gua::math::vec2i& buf);
   AV_GUA_DLL void av_pushMsg(av::Msg& netMsg, const ::gua::math::vec2ui& buf);

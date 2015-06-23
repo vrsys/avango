@@ -42,7 +42,7 @@ class MFMerger(avango.script.Script):
             return
 
         result = []
-        for i in xrange(0, self._num_inputs):
+        for i in range(0, self._num_inputs):
             value = self.get_input(i).value
             if value:
                 result.append(value)

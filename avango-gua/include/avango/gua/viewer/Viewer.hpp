@@ -9,7 +9,8 @@
 #include <gua/events.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/renderer/WindowBase.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/Physics.hpp>
@@ -34,24 +35,31 @@ namespace av
 
       Viewer();
 
-      MFPipeline   Pipelines;
       MFSceneGraph SceneGraphs;
+      MFWindowBase Windows;
 #if defined(AVANGO_PHYSICS_SUPPORT)
       SFPhysics    Physics;
 #endif
       SFFloat      DesiredFPS;
 
+      SFFloat      ApplicationFPS;
+
       virtual void getDesiredFPSCB(const SFFloat::GetValueEvent& event);
       virtual void setDesiredFPSCB(const SFFloat::SetValueEvent& event);
 
+      virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
+      virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
+
       void run() const;
+
+      void frame();
 
     protected:
 
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-//      virtual ~Viewer();
+      virtual ~Viewer();
 
 
     private:

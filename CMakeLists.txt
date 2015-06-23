@@ -39,12 +39,17 @@ include(find_compiler)
 include(file_copy_macro)
 
 include(find_guacamole)
+
+if (AVANGO_PBR_SUPPORT)
+  include(FindGuacamolePLOD)
+endif (AVANGO_PBR_SUPPORT)
+
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)
   pkg_check_modules(ASSIMP REQUIRED assimp)
   pkg_check_modules(JSON REQUIRED jsoncpp)
-  pkg_check_modules(PYTHON REQUIRED python)
+  pkg_check_modules(PYTHON3 REQUIRED python-3.4)
 elseif (WIN32)
   include(find_assimp)
   include(find_json)
@@ -61,13 +66,20 @@ if (AVANGO_DISTRIBUTION_SUPPORT)
     include(FindZMQ)
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  include(find_ovr)
+endif(AVANGO_OCULUS_RIFT_SUPPORT)
+
 if (UNIX)
-    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python)
+    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python3)
 endif (UNIX)
 
 set(LIBRARIES
     ${BOOST_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
+    ${GUACAMOLE_GUI_LIBRARIES}
+    ${GUACAMOLE_VOLUME_LIBRARIES}
+    ${GUACAMOLE_PLOD_LIBRARIES}
     ${GL_LIBRARIES}
     ${SCHISM_LIBRARIES}
 )
@@ -84,6 +96,9 @@ set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${BOOST_INCLUDE_DIRS}
     ${GUACAMOLE_INCLUDE_DIRS}
+    ${GUACAMOLE_GUI_INCLUDE_DIRS}
+    ${GUACAMOLE_VOLUME_INCLUDE_DIRS}
+    ${GUACAMOLE_PLOD_INCLUDE_DIRS}
     ${GL_INCLUDE_DIRS}
 )
 
@@ -92,6 +107,11 @@ if (AVANGO_DISTRIBUTION_SUPPORT)
     list(APPEND INCLUDE_PATHS ${ZMQ_INCLUDE_DIRS})
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
+if (AVANGO_OCULUS_RIFT_SUPPORT)
+  list(APPEND LIB_PATHS ${OVR_LIBRARY_DIRS})
+  list(APPEND INCLUDE_PATHS ${OVR_INCLUDE_DIRS})
+endif(AVANGO_OCULUS_RIFT_SUPPORT)
+
 include_directories(ALL
                     ${INCLUDE_PATHS}
 )
@@ -99,6 +119,8 @@ include_directories(ALL
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
+
+
 
 ################################################################
 # preprocessor configuration
@@ -121,20 +143,28 @@ set (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH
     "Install path for avango.")
 
 option (AVANGO_DEBUG "Set to enable avango debugging.")
-option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support.")
+option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support." ON)
 option (AVANGO_PBR_SUPPORT "Set to enable PBR (point based rendering) support.")
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
+option (AVANGO_VOLUME_SUPPORT "Compile Volume module for Avango.")
+option (AVANGO_SKELANIM_SUPPORT "Compile Skeletal animation module for Avango.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
+option (AVANGO_AWESOMIUM_SUPPORT "Enable building Awesomium module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
+option (AVANGO_RUNTIME_PROGRAM_COMPILATION "Set to enable runtime program compilation." ON)
+
+IF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGUACAMOLE_RUNTIME_PROGRAM_COMPILATION")
+ENDIF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
 
 ################################################################
 # Create libraries
 ################################################################
 file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
-file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python2.7)
+file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.4)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
@@ -151,9 +181,23 @@ if (AVANGO_OCULUS_RIFT_SUPPORT)
     add_subdirectory(avango-oculus)
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
 
+if (AVANGO_SKELANIM_SUPPORT)
+    add_subdirectory(avango-skelanim)
+endif(AVANGO_SKELANIM_SUPPORT)
+
 if (AVANGO_OPENAL_SUPPORT)
     add_subdirectory(avango-openal)
 endif(AVANGO_OPENAL_SUPPORT)
+
+if (AVANGO_AWESOMIUM_SUPPORT)
+    include(find_guacamole_gui)
+    add_subdirectory(avango-awesomium)
+endif(AVANGO_AWESOMIUM_SUPPORT)
+
+if (AVANGO_VOLUME_SUPPORT)
+    include(find_guacamole_volume)
+    add_subdirectory(avango-volume)
+endif(AVANGO_VOLUME_SUPPORT)
 
 ################################################################
 # Summary
@@ -181,6 +225,30 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
+
+if ( AVANGO_VOLUME_SUPPORT  )
+  message(STATUS " guacamole-volume:" )
+  message(STATUS "   library: ${GUACAMOLE_VOLUME_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_VOLUME_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_VOLUME_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_VOLUME_SUPPORT )
+
+if ( AVANGO_AWESOMIUM_SUPPORT  )
+  message(STATUS " guacamole-gui:" )
+  message(STATUS "   library: ${GUACAMOLE_GUI_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_GUI_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_GUI_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_AWESOMIUM_SUPPORT )
+
+if ( AVANGO_SKELANIM_SUPPORT  )
+  message(STATUS " guacamole-oculus:" )
+  message(STATUS "   library: ${GUACAMOLE_SKELANIM_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_SKELANIM_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_SKELANIM_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_SKELANIM_SUPPORT )
 
 message(STATUS " schism:" )
 message(STATUS "   library: ${SCHISM_LIBRARIES}" )

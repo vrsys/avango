@@ -27,6 +27,7 @@
 #define AV_DAEMON_TUIO_INPUT_LISTENER_H
 
 #include <TuioListener.h>
+#include <array>
 
 namespace av
 {
@@ -47,14 +48,35 @@ namespace av
           int session_id;
         };
 
+        struct TUIOFinger {
+            float x;
+            float y;
+            float x_speed;
+            float y_speed;
+            float ellipse_x;
+            float ellipse_y;
+            float ellipse_major;
+            float ellipse_minor;
+            float ellipse_inclination;
+            int session_id;
+        };
+
+        struct TUIOHand {
+            TUIO::TuioHand::Class hand_class;
+            TUIO::TuioHand::FingerArray fingers;
+            int session_id;
+        };
+
         std::map<int, TUIOCursor> cursors;
+        std::map<int, TUIOFinger> fingers;
+        std::map<int, TUIOHand> hands;
 
         void addTuioObject(TUIO::TuioObject* tobj) {}
         void updateTuioObject(TUIO::TuioObject* tobj) {}
         void removeTuioObject(TUIO::TuioObject* tobj) {}
 
         void addTuioCursor(TUIO::TuioCursor* tcur) {
-          TUIOCursor& cursor = cursors[tcur->getCursorID()];
+          TUIOCursor& cursor = cursors[tcur->getSessionID()];
           cursor.session_id = tcur->getSessionID();
           cursor.x = tcur->getX();
           cursor.y = tcur->getY();
@@ -66,7 +88,7 @@ namespace av
           cursor.state = tcur->getTuioState();
         }
         void updateTuioCursor(TUIO::TuioCursor* tcur) {
-          TUIOCursor& cursor = cursors[tcur->getCursorID()];
+          TUIOCursor& cursor = cursors[tcur->getSessionID()];
           cursor.x = tcur->getX();
           cursor.y = tcur->getY();
           cursor.x_speed = tcur->getXSpeed();
@@ -78,7 +100,38 @@ namespace av
         }
 
         void removeTuioCursor(TUIO::TuioCursor* tcur) {
-          cursors.erase(tcur->getCursorID());
+          cursors.erase(tcur->getSessionID());
+        }
+
+        void addTuioFinger(TUIO::TuioFinger* tfinger) {
+            TUIOFinger& finger = fingers[tfinger->getSessionID()];
+            finger.session_id = tfinger->getSessionID();
+            finger.x = tfinger->getX();
+            finger.y = tfinger->getY();
+            finger.ellipse_x = tfinger->getEllipseX();
+            finger.ellipse_y = tfinger->getEllipseY();
+            finger.ellipse_major = tfinger->getEllipseMajor();
+            finger.ellipse_minor = tfinger->getEllipseMinor();
+            finger.ellipse_inclination = tfinger->getEllipseInclination();
+        }
+        void updateTuioFinger(TUIO::TuioFinger* tfinger) {
+            addTuioFinger(tfinger);
+        }
+        void removeTuioFinger(TUIO::TuioFinger* tfinger) {
+            fingers.erase(tfinger->getSessionID());
+        }
+
+        void addTuioHand(TUIO::TuioHand* thand) {
+            TUIOHand& hand = hands[thand->getSessionID()];
+            hand.session_id = thand->getSessionID();
+            hand.hand_class = thand->getHandClass();
+            hand.fingers = thand->getFingerIDs();
+        }
+        void updateTuioHand(TUIO::TuioHand* thand) {
+            addTuioHand(thand);
+        }
+        void removeTuioHand(TUIO::TuioHand* thand) {
+            hands.erase(thand->getSessionID());
         }
 
         void refresh(TUIO::TuioTime frameTime) {}

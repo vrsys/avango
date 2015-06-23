@@ -4,15 +4,15 @@
 SET(GUACAMOLE_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_INCLUDE_DIRS}
   ${GUACAMOLE_INCLUDE_SEARCH_DIR}
-  ${CMAKE_SOURCE_DIR}/../guacamole/include
-  /opt/guacamole/current/guacamole/include
+  ${CMAKE_SOURCE_DIR}/../guacamole/install/include
+  /opt/guacamole/current/guacamole/install/include
 )
 
 SET(GUACAMOLE_LIBRARY_SEARCH_DIRS
   ${GUACAMOLE_LIBRARY_DIRS}
   ${GUACAMOLE_LIBRARY_SEARCH_DIR}
-  ${CMAKE_SOURCE_DIR}/../guacamole/lib
-  /opt/guacamole/current/guacamole/lib
+  ${CMAKE_SOURCE_DIR}/../guacamole/install/lib
+  /opt/guacamole/current/guacamole/install/lib
 )
 
 ##############################################################################

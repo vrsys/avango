@@ -269,16 +269,16 @@ av::sound::openal::OpenALSoundRenderer::createLocalSource()
 void
 av::sound::openal::OpenALSoundRenderer::setListenerPosition(const ::gua::math::mat4& position)
 {
-  ::gua::math::quat rotation = ::scm::math::quat<float>::from_matrix(position);
-  ::gua::math::vec3 translation = ::gua::math::get_translation(position);
+  ::gua::math::quatf rotation(::scm::math::quat<double>::from_matrix(position));
+  ::gua::math::vec3f translation(::gua::math::get_translation(position));
 
   ::alListenerfv(AL_POSITION, translation.data_array);
-  ::gua::math::mat4 rotationMat = rotation.to_matrix();
+  ::gua::math::mat4f rotationMat = rotation.to_matrix();
 
-  ::gua::math::vec3 atAndUpVec[2];
+  ::gua::math::vec3f atAndUpVec[2];
 
-  atAndUpVec[0] = rotationMat * ::gua::math::vec3(0.0f, 0.0f, -1.0f);
-  atAndUpVec[1] = rotationMat * ::gua::math::vec3(0.0f, 1.0f, 0.0f);
+  atAndUpVec[0] = rotationMat * ::gua::math::vec3f(0.0f, 0.0f, -1.0f);
+  atAndUpVec[1] = rotationMat * ::gua::math::vec3f(0.0f, 1.0f, 0.0f);
 
   ::alListenerfv(AL_ORIENTATION, atAndUpVec[0].data_array);
 
@@ -327,7 +327,7 @@ void
 av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setWorldTransform(const ::gua::math::mat4& worldMatrix)
 {
 
-  ::gua::math::vec3 position = ::gua::math::get_translation(worldMatrix);
+  ::gua::math::vec3f position = ::gua::math::vec3f(::gua::math::get_translation(worldMatrix));
   //::alSourcefv(mSource, AL_POSITION, position.ptr());
   ::alSourcefv(mSource, AL_POSITION, position.data_array);
 }
@@ -401,7 +401,8 @@ void
 av::sound::openal::OpenALSoundRenderer::OpenALLocalSource::setVelocity(const ::gua::math::vec3& velocity)
 {
   //::alSourcefv(mSource, AL_VELOCITY, velocity.ptr());
-  ::alSourcefv(mSource, AL_VELOCITY, static_cast<const ALfloat*>(velocity.data_array));
+  ::gua::math::vec3f vel(velocity);
+  ::alSourcefv(mSource, AL_VELOCITY, static_cast<const ALfloat*>(vel.data_array));
 }
 
 void

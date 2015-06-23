@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.daemon
 import avango.gua
@@ -19,15 +17,21 @@ def create_monkeys(PARENT_NODE):
 
 
 def create_lights(PARENT_NODE):
-  red_light = avango.gua.nodes.PointLightNode(Name = "red_light", Color = avango.gua.Color(1, 0, 0))
+  red_light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.POINT,
+      Name = "red_light", Color = avango.gua.Color(1, 0, 0))
   red_light.Transform.value = avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
   PARENT_NODE.Children.value.append(red_light)
 
-  green_light = avango.gua.nodes.PointLightNode(Name = "green_light", Color = avango.gua.Color(0, 1, 0))
+  green_light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.POINT,
+      Name = "green_light", Color = avango.gua.Color(0, 1, 0))
   green_light.Transform.value = avango.gua.make_rot_mat(120, 0, 1, 0) * avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
   PARENT_NODE.Children.value.append(green_light)
 
-  blue_light = avango.gua.nodes.PointLightNode(Name = "blue_light", Color = avango.gua.Color(0, 0, 1))
+  blue_light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.POINT,
+      Name = "blue_light", Color = avango.gua.Color(0, 0, 1))
   blue_light.Transform.value = avango.gua.make_rot_mat(240, 0, 1, 0) * avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
   PARENT_NODE.Children.value.append(blue_light)
   

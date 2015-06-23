@@ -10,6 +10,7 @@
 
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/gua/windows_specific_gua.hpp>
@@ -36,7 +37,9 @@ namespace av
         OPTIMIZE_GEOMETRY = ::gua::TriMeshLoader::OPTIMIZE_GEOMETRY,
         MAKE_PICKABLE = ::gua::TriMeshLoader::MAKE_PICKABLE,
         NORMALIZE_SCALE = ::gua::TriMeshLoader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::TriMeshLoader::NORMALIZE_POSITION
+        NORMALIZE_POSITION = ::gua::TriMeshLoader::NORMALIZE_POSITION,
+        NO_SHARED_MATERIALS = ::gua::TriMeshLoader::NO_SHARED_MATERIALS,
+        OPTIMIZE_MATERIALS = ::gua::TriMeshLoader::OPTIMIZE_MATERIALS
       };
 
       /**
@@ -46,9 +49,13 @@ namespace av
       TriMeshLoader(::gua::TriMeshLoader* guaTriMeshLoader = new ::gua::TriMeshLoader());
 
       av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                             std::string const& fileName,
-                                                             std::string const& fallbackMaterial,
-                                                             Flags flags = DEFAULTS) const;
+                                                     std::string const& fileName,
+                                                     av::gua::Material const& fallbackMaterial,
+                                                     Flags flags = DEFAULTS) const;
+
+      av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
+                                                     std::string const& fileName,
+                                                     Flags flags = DEFAULTS) const;
 
     protected:
 

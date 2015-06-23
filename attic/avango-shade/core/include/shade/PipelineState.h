@@ -21,32 +21,32 @@
 *                                                                        *
 \************************************************************************/
 
-#ifndef shade_PipelineState_H
-#define shade_PipelineState_H shade_PipelineState_H
+// #ifndef shade_PipelineState_H
+// #define shade_PipelineState_H shade_PipelineState_H
 
-#include <boost/shared_ptr.hpp>
+// #include <boost/shared_ptr.hpp>
 
-namespace shade
-{
-  class Shader;
+// namespace shade
+// {
+//   class Shader;
 
-  class PipelineState
-  {
-  public:
+//   class PipelineState
+//   {
+//   public:
 
-    PipelineState(void);
+//     PipelineState(void);
 
-    void set_geometry_shader(bool enable);
-    bool has_geometry_shader(void) const;
+//     void set_geometry_shader(bool enable);
+//     bool has_geometry_shader(void) const;
 
-    void set_root_shader(boost::shared_ptr<Shader> root);
-    boost::shared_ptr<Shader> get_root_shader(void) const;
+//     void set_root_shader(boost::shared_ptr<Shader> root);
+//     boost::shared_ptr<Shader> get_root_shader(void) const;
 
-  private:
+//   private:
 
-    bool m_has_geometry_shader;
-    boost::shared_ptr<Shader>  m_root_object;
-  };
-}
+//     bool m_has_geometry_shader;
+//     boost::shared_ptr<Shader>  m_root_object;
+//   };
+// }
 
-#endif /* shade_PipelineState_H */
+// #endif /* shade_PipelineState_H */

@@ -10,6 +10,7 @@
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 
 namespace av
 {
@@ -34,6 +35,9 @@ namespace av
       PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode =
           std::shared_ptr< ::gua::node::PLODNode>(new ::gua::node::PLODNode("")));
 
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
     protected:
 
       /**
@@ -43,12 +47,36 @@ namespace av
 
     public:
 
+      SFString   Geometry;
+      SFMaterial Material;
+      SFFloat    RadiusScale;
+      SFFloat    ErrorThreshold;
+      SFBool     EnableBackfaceCulling;
+
+      virtual void getGeometryCB(const SFString::GetValueEvent& event);
+      virtual void setGeometryCB(const SFString::SetValueEvent& event);
+
+      virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+      virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
+      virtual void getRadiusScaleCB(const SFFloat::GetValueEvent& event);
+      virtual void setRadiusScaleCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
+      virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::PLODNode.
        */
-      //std::shared_ptr< ::gua::PLODNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::PLODNode> getGuaPLODNode() const;
 
     private:
+
+      std::shared_ptr< ::gua::node::PLODNode> m_guaPLODNode;
+      av::Link< av::gua::Material> m_Material;
 
       PLODNode(const PLODNode&);
       PLODNode& operator=(const PLODNode&);

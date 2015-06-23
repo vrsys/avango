@@ -1,12 +1,9 @@
-#!/usr/bin/python
-
 import avango.daemon
 import os
 import sys
 
 # functions
 def init_pst_tracking():
-
 	# create instance of DTrack
 	pst = avango.daemon.DTrack()
 	pst.port = "5000" # PST port
@@ -21,7 +18,7 @@ def init_pst_tracking():
 	pst.stations[13] = avango.daemon.Station('lens')
 
 	device_list.append(pst)
-	print "PST Tracking started!"
+	print("PST Tracking started!")
 
 # functions
 def init_tuio_input():
@@ -51,7 +48,7 @@ def init_tuio_input():
 	tuio.stations[19] = avango.daemon.Station('gua-finger19')
 
 	device_list.append(tuio)
-	print "TUIO Input started!"
+	print("TUIO Input started!")
 
 def init_mouse():
 
@@ -73,10 +70,10 @@ def init_mouse():
 		mouse.buttons[1] = "EV_KEY::BTN_RIGHT"
 
 		device_list.append(mouse)
-		print "Mouse started at:", mouse_name
+		print("Mouse started at:", mouse_name)
 
 	else:
-		print "Mouse NOT found !"
+		print("Mouse NOT found !")
 
 
 def init_keyboard():
@@ -129,7 +126,7 @@ def init_keyboard():
 
 
 		device_list.append(keyboard)
-		print "Keyboard " + str(i) + " started at:", name
+		print("Keyboard " + str(i) + " started at:", name)
 
 
 def init_spheron():
@@ -153,10 +150,67 @@ def init_spheron():
 		spheron.values[5] = "EV_ABS::ABS_RZ"  # rotate Z
 
 		device_list.append(spheron)
-		print 'Spheron started at:', name
+		print('Spheron started at:', name)
 
 	else:
-		print "Spheron NOT found !"
+		print("Spheron NOT found !")
+
+
+def init_xbox_controllers():
+
+	# xbox receiver gives us up to four controllers, init each
+	for num in range(4):
+		_query = "/opt/avango/vr_application_lib/tools/list-ev -s " + \
+				"| grep \"Xbox 360 Wireless Receiver\" | sed -e \'s/\"//g\' " + \
+				"| cut -d\" \" -f4" + num * " | sed -n \'1!p\'"
+
+		string = os.popen(_query).read()
+		string = string.split()
+
+		# more than one xbox receiver found, use the first one
+		if len(string) > 0:
+			string = string[0]
+
+			# create a station to propagate the input events
+			xbox = avango.daemon.HIDInput()
+			xbox.station = avango.daemon.Station('gua-device-xbox-' + str(num))
+			xbox.device = string
+
+			xbox.values[0] = "EV_ABS::ABS_X"         # left joystick
+			xbox.values[1] = "EV_ABS::ABS_Y"         # left joystick
+			xbox.values[2] = "EV_ABS::ABS_RX"        # right joystick
+			xbox.values[3] = "EV_ABS::ABS_RY"        # right joystick
+
+			xbox.values[4] = "EV_ABS::ABS_Z"         # left bumper
+			xbox.values[5] = "EV_ABS::ABS_RZ"        # right bumper
+
+			xbox.buttons[0] = "EV_KEY::BTN_X"        # Button X
+			xbox.buttons[1] = "EV_KEY::BTN_B"        # Button B
+			xbox.buttons[2] = "EV_KEY::BTN_A"        # Button A
+			xbox.buttons[3] = "EV_KEY::BTN_Y"        # Button Y
+
+			xbox.buttons[4] = "EV_KEY::BTN_START"    # Start button
+			xbox.buttons[5] = "EV_KEY::BTN_SELECT"   # Select button
+
+			xbox.buttons[6] = "EV_KEY::BTN_TL"       # left shoulder button
+			xbox.buttons[7] = "EV_KEY::BTN_TR"       # right shoulder button
+
+			xbox.buttons[8] = "EV_KEY::BTN_THUMBL"	 # left joystick button
+			xbox.buttons[9] = "EV_KEY::BTN_THUMBR"	 # right joystick button
+
+			xbox.buttons[10] = "EV_KEY::BTN_TRIGGER_HAPPY1"	# left key
+			xbox.buttons[11] = "EV_KEY::BTN_TRIGGER_HAPPY2"	# right key
+			xbox.buttons[12] = "EV_KEY::BTN_TRIGGER_HAPPY3"	# up key
+			xbox.buttons[13] = "EV_KEY::BTN_TRIGGER_HAPPY4"	# down key
+
+			device_list.append(xbox)
+			print("XBox Controller started at:", string)
+
+		else:
+			print("XBox Controllers NOT found!")
+			return
+
+
 
 device_list = []
 
@@ -165,5 +219,6 @@ init_tuio_input()
 init_mouse()
 init_keyboard()
 init_spheron()
+init_xbox_controllers()
 
 avango.daemon.run(device_list)

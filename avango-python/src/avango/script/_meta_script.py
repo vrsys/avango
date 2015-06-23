@@ -23,7 +23,8 @@
 
 import avango
 import avango.nodefactory
-import _script
+from . import _script
+import functools
 
 def field_has_changed(field):
     class container(object):
@@ -56,15 +57,15 @@ class ScriptMetaclass(type):
             else:
                 base = base._Script__wrapper
             wrapped_bases.append(base)
-        wrapped_code = "class %s(%s): pass" % (classname, ','.join([ 'wrapped_bases[%i]'%i for i in xrange(len(wrapped_bases)) ]))
+        wrapped_code = "class %s(%s): pass" % (classname, ','.join([ 'wrapped_bases[%i]'%i for i in range(len(wrapped_bases)) ]))
         wrapped_locals = { 'wrapped_bases': wrapped_bases }
-        exec wrapped_code in wrapped_locals
+        exec(wrapped_code, wrapped_locals)
         Wrapper = wrapped_locals[classname]
         cls._Script__wrapper = Wrapper
 
         # Build list of all fields (including fields of bases) and
         # field_has_changes methods
-        Wrapper._Script__fields = list(reduce(lambda x,y: x+y, [ getattr(base, '_Script__fields', []) for base in wrapped_bases ]))
+        Wrapper._Script__fields = list(functools.reduce(lambda x,y: x+y, [ getattr(base, '_Script__fields', []) for base in wrapped_bases ]))
         bases_field_has_changed = [ getattr(base, '_Script__field_has_changed', {}) for base in wrapped_bases ]
         Wrapper._Script__field_has_changed = {}
         for base_field_has_changed in bases_field_has_changed:
@@ -72,7 +73,7 @@ class ScriptMetaclass(type):
 
         # Copy all attributes to our wrapping class. Ignore fields as these
         # will be set in class __init__ function
-        for name, attribute in classdict.iteritems():
+        for name, attribute in classdict.items():
             if isinstance(attribute, avango.Field):
                 Wrapper._Script__fields.append( (name, attribute) )
                 continue
@@ -92,13 +93,12 @@ class ScriptMetaclass(type):
         # The user-defined class must create our wrapping class
         def __new(cls, **args):
             result = cls._Script__wrapper()
-            for name, value in args.iteritems():
+            for name, value in args.items():
                 getattr(result, name).value = value
             return result
         setattr(cls, '__new__', staticmethod(__new))
 
-class Script(object):
-    __metaclass__ = ScriptMetaclass
+class Script(object, metaclass=ScriptMetaclass):
 
     def __init__(self):
         self.super(Script).__init__(self._Script__type)

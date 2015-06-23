@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import avango
 import avango.script
 from avango.script import field_has_changed
@@ -25,25 +23,15 @@ def start():
   graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
   loader = avango.gua.nodes.TriMeshLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.DEFAULTS)
 
-  light = avango.gua.nodes.PointLightNode(Name = "light", Color = avango.gua.Color(1.0, 1.0, 1.0))
+  light = avango.gua.nodes.LightNode(
+    Type=avango.gua.LightType.POINT,
+    Name = "light",
+    Color = avango.gua.Color(1.0, 1.0, 1.0),
+    Brightness = 10
+  )
   light.Transform.value = avango.gua.make_trans_mat(1, 1, 2) * avango.gua.make_scale_mat(15, 15, 15)
-
-  left_eye = avango.gua.nodes.TransformNode(Name = "left_eye")
-  left_eye.Transform.value = avango.gua.make_trans_mat(-0.1, 0.0, 0.0)
-
-  right_eye = avango.gua.nodes.TransformNode(Name = "right_eye")
-  right_eye.Transform.value = avango.gua.make_trans_mat(0.1, 0.0, 0.0)
-
-  head = avango.gua.nodes.TransformNode(Name = "head")
-  head.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
-  head.Children.value = [left_eye, right_eye]
-
-  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
-  screen.Children.value = [head]
-
-  graph.Root.value.Children.value = [monkey, light, screen]
 
   # setup viewing
   width = 1024
@@ -57,25 +45,36 @@ def start():
     right_pos.x = width + 1
     window_size.x *= 2
 
-  pipe = avango.gua.nodes.Pipeline(Camera = avango.gua.nodes.Camera(LeftEye = "/screen/head/left_eye",
-                                                                    RightEye = "/screen/head/right_eye",
-                                                                    LeftScreen = "/screen",
-                                                                    RightScreen = "/screen",
-                                                                    SceneGraph = "scenegraph"),
-                                   Window = avango.gua.nodes.Window(Size = window_size,
-                                                                    LeftPosition = left_pos,
-                                                                    LeftResolution = eye_size,
-                                                                    RightPosition = right_pos,
-                                                                    RightResolution = eye_size,
-                                                                    StereoMode = STEREO_MODE),
-                                   LeftResolution = eye_size,
-                                   RightResolution = eye_size,
-                                   EnableStereo = True)
+  window = avango.gua.nodes.GlfwWindow(Size = window_size,
+                                       LeftPosition = left_pos,
+                                       LeftResolution = eye_size,
+                                       RightPosition = right_pos,
+                                       RightResolution = eye_size,
+                                       StereoMode = STEREO_MODE)
+
+  avango.gua.register_window("window", window)
+
+  cam = avango.gua.nodes.CameraNode(
+    Name = "cam",
+    LeftScreenPath = "/screen",
+    RightScreenPath = "/screen",
+    SceneGraph = "scenegraph",
+    Resolution = eye_size,
+    EyeDistance = 0.2,
+    EnableStereo = True,
+    OutputWindowName = "window",
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+  )
+
+  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
+  screen.Children.value = [cam]
+
+  graph.Root.value.Children.value = [monkey, light, screen]
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [pipe]
   viewer.SceneGraphs.value = [graph]
+  viewer.Windows.value = [window]
 
   monkey_updater = TimedRotate()
 

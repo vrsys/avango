@@ -1,5 +1,5 @@
 #include <avango/gua/renderer/Renderer.hpp>
-#include <avango/gua/renderer/Pipeline.hpp>
+#include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -18,15 +18,6 @@ AV_FIELD_DEFINE(av::gua::MFRenderer);
 av::gua::Renderer::Renderer(::gua::Renderer* guaRenderer)
     : m_guaRenderer(guaRenderer)
 {}
-
-av::gua::Renderer::Renderer(std::vector<av::gua::Pipeline const*> const& pipes)
-    : m_guaRenderer(nullptr) {
-        std::vector< ::gua::Pipeline*> gua_pipes;
-        for (auto pipe : pipes) {
-            gua_pipes.push_back(pipe->getGuaPipeline());
-        }
-        m_guaRenderer = new ::gua::Renderer(gua_pipes);
-    }
 
 //av::gua::Renderer::~Renderer()
 //{}

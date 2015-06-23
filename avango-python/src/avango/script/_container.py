@@ -21,7 +21,7 @@
 #                                                                        #
 ##########################################################################
 
-import _meta_script
+from . import _meta_script
 
 class Container(_meta_script.Script):
     '''Base class for containers.

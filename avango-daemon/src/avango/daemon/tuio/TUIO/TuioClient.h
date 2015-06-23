@@ -43,6 +43,8 @@
 #include "TuioListener.h"
 #include "TuioObject.h"
 #include "TuioCursor.h"
+#include "TuioHand.h"
+#include "TuioFinger.h"
 
 namespace TUIO {
 	
@@ -128,6 +130,20 @@ namespace TUIO {
 		 */
 		std::list<TuioCursor*> getTuioCursors();
 
+        /**
+         * Returns a List of all currently active TuioFingers
+         *
+         * @return  a List of all currently active TuioFingers
+         */
+        std::list<TuioFinger*> getTuioFingers();
+
+        /**
+         * Returns a List of all currently active TuioHands
+         *
+         * @return  a List of all currently active TuioHands
+         */
+        std::list<TuioHand*> getTuioHands();
+
 		/**
 		 * Returns the TuioObject corresponding to the provided Session ID
 		 * or NULL if the Session ID does not refer to an active TuioObject
@@ -143,6 +159,22 @@ namespace TUIO {
 		 * @return  an active TuioCursor corresponding to the provided Session ID or NULL
 		 */
 		TuioCursor* getTuioCursor(long s_id);
+
+        /**
+         * Returns the TuioFinger corresponding to the provided Session ID
+         * or NULL if the Session ID does not refer to an active TuioFinger
+         *
+         * @return  an active TuioFinger corresponding to the provided Session ID or NULL
+         */
+        TuioFinger* getTuioFinger(long s_id);
+
+        /**
+         * Returns the TuioHand corresponding to the provided Session ID
+         * or NULL if the Session ID does not refer to an active TuioHand
+         *
+         * @return  an active TuioFinger corresponding to the provided Session ID or NULL
+         */
+        TuioHand* getTuioHand(long s_id);
 
 		/**
 		 * Locks the TuioObject list in order to avoid updates during access
@@ -164,7 +196,27 @@ namespace TUIO {
 		 */
 		void unlockCursorList();
 
-		void ProcessPacket( const char *data, int size, const IpEndpointName &remoteEndpoint );
+        /**
+         * Locks the TuioHand list in order to avoid updates during access
+         */
+        void lockHandList();
+
+        /**
+         * Releases the lock of the TuioHand list
+         */
+        void unlockHandList();
+
+        /**
+         * Locks the TuioFinger list in order to avoid updates during access
+         */
+        void lockFingerList();
+
+        /**
+         * Releases the lock of the TuioFinger list
+         */
+        void unlockFingerList();
+
+        void ProcessPacket( const char *data, int size, const IpEndpointName &remoteEndpoint );
 		UdpListeningReceiveSocket *socket;
 				
 	protected:
@@ -186,6 +238,9 @@ namespace TUIO {
 		std::list<long> aliveObjectList;
 		std::list<TuioCursor*> cursorList, frameCursors;
 		std::list<long> aliveCursorList;
+        std::list<long> aliveHandList;
+        std::list<TuioFinger*> fingerList;
+        std::list<TuioHand*> handList;
 		
 		osc::int32 currentFrame;
 		TuioTime currentTime;
@@ -197,11 +252,15 @@ namespace TUIO {
 		pthread_t thread;
 		pthread_mutex_t objectMutex;
 		pthread_mutex_t cursorMutex;
-		//pthread_mutexattr_t attr_p;
+        pthread_mutex_t handMutex;
+        pthread_mutex_t fingerMutex;
+        //pthread_mutexattr_t attr_p;
 #else
 		HANDLE thread;
 		HANDLE objectMutex;
-		HANDLE cursorMutex;
+        HANDLE cursorMutex;
+        HANDLE handMutex;
+        HANDLE fingerMutex;
 #endif	
 				
 		bool locked;

@@ -24,7 +24,7 @@
 import avango
 import avango.script
 
-import _bool_scripts
+from ._bool_scripts import *
 
 
 def merge_and_connect_bool_scripts(script1, script2):

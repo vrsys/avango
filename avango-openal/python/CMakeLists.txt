@@ -20,13 +20,13 @@ SET_TARGET_PROPERTIES( _openal PROPERTIES PREFIX "")
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_openal ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/sound/openal/_openal.pyd)
+  post_build_install_target(_openal ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound/openal/_openal.pyd)
 ELSEIF (UNIX)
-  post_build_install_target(_openal ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/sound/openal/_openal.so)
+  post_build_install_target(_openal ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound/openal/_openal.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python2.7/avango/sound/openal
+    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound/openal
     _openal
 )

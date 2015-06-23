@@ -1,0 +1,59 @@
+{
+  "vertex_methods" :
+  [],
+
+  "fragment_methods" :
+  [
+    {
+      "name" : "FragmentTeture",
+      "source" : "
+        void FragmentTeture() {
+          vec3 dir = gua_camera_position-gua_world_position;
+          float dist = length(dir);
+          float angle = dot(gua_normal, dir/dist);
+
+          vec2 lookup_offset = (transpose(gua_inverse_projection_view_matrix) * vec4(gua_normal, 0.0)).xy
+                               * pow((1.0 - angle), distortion_exponent);
+
+          gua_color = texture(sampler2D(tex), gua_get_quad_coords() + lookup_offset*distortion_strength).rgb;
+          gua_emissivity = 1.0;
+          gua_metalness = 0.0;
+          gua_roughness = 0.8;
+
+
+          gua_alpha = clamp(angle*1.8-0.3, 0, 1);
+          gua_alpha *= clamp((dist-near_clip)/fade_dist, 0, 1);
+        }
+      ",
+      "uniforms" :
+      [
+        {
+          "name" : "tex",
+          "type" : "sampler2D",
+          "value" : "portal"
+        },
+        {
+          "name" : "fade_dist",
+          "type" : "float",
+          "value" : "0.5"
+        },
+        {
+          "name" : "distortion_exponent",
+          "type" : "float",
+          "value" : "8.0"
+        },
+        {
+          "name" : "distortion_strength",
+          "type" : "float",
+          "value" : "0.2"
+        },
+        {
+          "name" : "near_clip",
+          "type" : "float",
+          "value" : "0.1"
+        }
+      ]
+    }
+  ]
+
+}

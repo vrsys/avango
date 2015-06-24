@@ -108,9 +108,9 @@ void sigsegv_handler(int sig) {
 
   std::exit(EXIT_FAILURE);
 }
-#endif
+#endif // AVANGO_DAEMON_DEBUG
 
-}
+} // namespace
 
 AV_BASE_DEFINE(av::daemon::TUIOInput);
 

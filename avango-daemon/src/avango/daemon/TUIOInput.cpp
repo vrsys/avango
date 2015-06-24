@@ -120,9 +120,6 @@ av::daemon::TUIOInput::TUIOInput()
   mRequiredFeatures.push_back("port");
 }
 
-av::daemon::TUIOInput::~TUIOInput()
-{}
-
 void
 av::daemon::TUIOInput::initClass()
 {

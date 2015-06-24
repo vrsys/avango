@@ -89,17 +89,15 @@ av::daemon::DeviceDaemon::run()
   std::cout << "Press 'q' to stop daemon." << std::endl;
 
   // start all devices
-  for (std::vector<av::Link<Device> >::iterator iter = mDevices.begin(); iter != mDevices.end(); ++iter)
-    (*iter)->startUp();
+  for (auto const& d : mDevices)
+    d->startUp();
 
   // wait for 'exit' command
   char key = 0;
   while (key != 'q')
-  {
     std::cin >> key;
-  }
 
   // shutdown all devices
-  for (std::vector<av::Link<Device> >::iterator iter = mDevices.begin(); iter != mDevices.end(); ++iter)
-    (*iter)->shutDown();
+  for (auto const& d : mDevices)
+    d->shutDown();
 }

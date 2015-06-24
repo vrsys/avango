@@ -33,7 +33,7 @@
 
 #include <TuioClient.h>
 
-#ifdef WITH_TOUCH_DEBUG
+#ifdef AVANGO_DAEMON_DEBUG
 #include <cstdlib>
 #include <cstring>
 #include <execinfo.h>
@@ -47,7 +47,7 @@ namespace
 {
 av::Logger& logger(av::getLogger("av::daemon::TUIOInput"));
 
-#ifdef WITH_TOUCH_DEBUG
+#ifdef AVANGO_DAEMON_DEBUG
 
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
 struct sig_ucontext_t {
@@ -153,7 +153,7 @@ av::daemon::TUIOInput::startDevice()
 /* virtual */ void
 av::daemon::TUIOInput::readLoop()
 {
-#ifdef WITH_TOUCH_DEBUG
+#ifdef AVANGO_DAEMON_DEBUG
   //signal(SIGSEGV, sigsegv_handler);
 
   struct sigaction sigact;

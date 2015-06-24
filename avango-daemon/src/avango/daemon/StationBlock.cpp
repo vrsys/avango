@@ -38,9 +38,6 @@ av::daemon::StationBlock::StationBlock()
     mMutex()
 {}
 
-av::daemon::StationBlock::~StationBlock()
-{}
-
 av::daemon::Station*
 av::daemon::StationBlock::getStation(const char* name)
 {

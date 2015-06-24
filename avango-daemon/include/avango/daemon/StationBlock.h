@@ -65,7 +65,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~StationBlock();
+      virtual ~StationBlock() = default;
 
     private:
 

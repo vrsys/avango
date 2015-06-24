@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 #include <avango/daemon/Device.h>
 
@@ -37,10 +36,8 @@ AV_BASE_DEFINE_ABSTRACT(av::daemon::Device);
 av::daemon::Device::Device() :
   mKeepRunning(false),
   mEmptyFeature(std::string("")),
+  mThread(nullptr),
   mRunning(false)
-{}
-
-av::daemon::Device::~Device()
 {}
 
 void
@@ -62,13 +59,15 @@ av::daemon::Device::addStation(int station_number, Station* station)
 bool
 av::daemon::Device::startUp()
 {
-  if(mRunning) return false;
+  if (mRunning)
+    return false;
 
-  if(mStations.empty()) throw std::runtime_error("No station attached to this device.");
+  if (mStations.empty())
+    throw std::runtime_error("No station attached to this device.");
 
   startDevice();
   mKeepRunning = true;
-  mThread.reset(new Thread(boost::bind(&av::daemon::Device::threadFunction, this)));
+  mThread = std::make_shared<std::thread>(std::thread(av::daemon::Device::threadFunction, this));
   mRunning = true;
   return true;
 }
@@ -76,7 +75,8 @@ av::daemon::Device::startUp()
 bool
 av::daemon::Device::shutDown()
 {
-  if (!mRunning) return false;
+  if (!mRunning)
+    return false;
 
   mKeepRunning = false;
 
@@ -129,5 +129,5 @@ av::daemon::Device::unconfigureFeature(const std::string& feature)
 av::daemon::Device::queryFeature(const std::string& feature)
 {
   StringStringMap::iterator i = mFeatures.find(feature);
-  return (i != mFeatures.end()) ? (*i).second : mEmptyFeature;
+  return (i != mFeatures.end()) ? i->second : mEmptyFeature;
 }

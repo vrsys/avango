@@ -27,23 +27,10 @@
 #define AV_DAEMON_DEVICE_H
 
 #include <map>
-#include <boost/shared_ptr.hpp>
+#include <thread>
+#include <memory>
 #include <avango/Base.h>
 #include <avango/daemon/Station.h>
-
-#if BOOST_VERSION > 104000
-#include <boost/thread.hpp>
-namespace av
-{
-typedef ::boost::thread Thread;
-}
-#else
-#include <boost/thread/thread.hpp>
-namespace av
-{
-  typedef ::boost::thread Thread;
-}
-#endif
 
 /**
  * \file
@@ -126,7 +113,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      ~Device();
+      ~Device() = default;
 
       /**
        * This function is called once before the separate thread is created. It is
@@ -174,7 +161,7 @@ namespace av
 
       const std::string mEmptyFeature;
 
-      ::boost::shared_ptr< av::Thread > mThread;
+      std::shared_ptr<std::thread> mThread;
       bool mRunning;
     };
   }

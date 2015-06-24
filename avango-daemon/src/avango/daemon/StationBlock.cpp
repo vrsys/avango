@@ -46,7 +46,7 @@ av::daemon::StationBlock::getStation(const char* name)
 
   std::lock_guard<std::mutex> lock(mMutex);
 
-  int i;
+  int i = 0;
 
   for (i=0; i<mNumStations; i++)
   {

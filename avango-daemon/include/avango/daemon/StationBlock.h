@@ -32,7 +32,7 @@
  * \ingroup av_daemon
  */
 
-#include <boost/thread/mutex.hpp>
+#include <mutex>
 #include <avango/daemon/Station.h>
 #include <avango/daemon/windows_specific_daemon.h>
 
@@ -81,7 +81,7 @@ namespace av
        */
       Station mStations[sMaxStationNum];
       int       mNumStations;
-      boost::mutex  mMutex;
+      std::mutex  mMutex;
 
       /**
        * Made private to prevent copying construction.

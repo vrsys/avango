@@ -45,9 +45,9 @@ av::daemon::Station*
 av::daemon::StationBlock::getStation(const char* name)
 {
   // very simple and inefficient for now
-  Station* station = 0;
+  Station* station = nullptr;
 
-  boost::mutex::scoped_lock lock(mMutex);
+  std::lock_guard<std::mutex> lock(mMutex);
 
   int i;
 

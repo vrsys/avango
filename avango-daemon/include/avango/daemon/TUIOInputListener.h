@@ -71,11 +71,11 @@ namespace av
         std::map<int, TUIOFinger> fingers;
         std::map<int, TUIOHand> hands;
 
-        void addTuioObject(TUIO::TuioObject* tobj) {}
-        void updateTuioObject(TUIO::TuioObject* tobj) {}
-        void removeTuioObject(TUIO::TuioObject* tobj) {}
+        void addTuioObject(TUIO::TuioObject* tobj) override {}
+        void updateTuioObject(TUIO::TuioObject* tobj) override {}
+        void removeTuioObject(TUIO::TuioObject* tobj) override {}
 
-        void addTuioCursor(TUIO::TuioCursor* tcur) {
+        void addTuioCursor(TUIO::TuioCursor* tcur) override {
           TUIOCursor& cursor = cursors[tcur->getSessionID()];
           cursor.session_id = tcur->getSessionID();
           cursor.x = tcur->getX();
@@ -87,7 +87,7 @@ namespace av
           cursor.is_moving = tcur->isMoving();
           cursor.state = tcur->getTuioState();
         }
-        void updateTuioCursor(TUIO::TuioCursor* tcur) {
+        void updateTuioCursor(TUIO::TuioCursor* tcur) override {
           TUIOCursor& cursor = cursors[tcur->getSessionID()];
           cursor.x = tcur->getX();
           cursor.y = tcur->getY();
@@ -99,11 +99,11 @@ namespace av
           cursor.state = tcur->getTuioState();
         }
 
-        void removeTuioCursor(TUIO::TuioCursor* tcur) {
+        void removeTuioCursor(TUIO::TuioCursor* tcur) override {
           cursors.erase(tcur->getSessionID());
         }
 
-        void addTuioFinger(TUIO::TuioFinger* tfinger) {
+        void addTuioFinger(TUIO::TuioFinger* tfinger) override {
             TUIOFinger& finger = fingers[tfinger->getSessionID()];
             finger.session_id = tfinger->getSessionID();
             finger.x = tfinger->getX();
@@ -114,27 +114,27 @@ namespace av
             finger.ellipse_minor = tfinger->getEllipseMinor();
             finger.ellipse_inclination = tfinger->getEllipseInclination();
         }
-        void updateTuioFinger(TUIO::TuioFinger* tfinger) {
+        void updateTuioFinger(TUIO::TuioFinger* tfinger) override {
             addTuioFinger(tfinger);
         }
-        void removeTuioFinger(TUIO::TuioFinger* tfinger) {
+        void removeTuioFinger(TUIO::TuioFinger* tfinger) override {
             fingers.erase(tfinger->getSessionID());
         }
 
-        void addTuioHand(TUIO::TuioHand* thand) {
+        void addTuioHand(TUIO::TuioHand* thand) override {
             TUIOHand& hand = hands[thand->getSessionID()];
             hand.session_id = thand->getSessionID();
             hand.hand_class = thand->getHandClass();
             hand.fingers = thand->getFingerIDs();
         }
-        void updateTuioHand(TUIO::TuioHand* thand) {
+        void updateTuioHand(TUIO::TuioHand* thand) override {
             addTuioHand(thand);
         }
-        void removeTuioHand(TUIO::TuioHand* thand) {
+        void removeTuioHand(TUIO::TuioHand* thand) override {
             hands.erase(thand->getSessionID());
         }
 
-        void refresh(TUIO::TuioTime frameTime) {}
+        void refresh(TUIO::TuioTime frameTime) override {}
     };
   }
 }

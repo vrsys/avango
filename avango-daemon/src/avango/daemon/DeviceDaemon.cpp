@@ -59,12 +59,6 @@ namespace
 
 AV_BASE_DEFINE(av::daemon::DeviceDaemon);
 
-av::daemon::DeviceDaemon::DeviceDaemon()
-{}
-
-av::daemon::DeviceDaemon::~DeviceDaemon()
-{}
-
 void
 av::daemon::DeviceDaemon::initClass()
 {

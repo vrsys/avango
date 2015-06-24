@@ -56,7 +56,7 @@ namespace av
       /**
        * Constructor.
        */
-      DeviceDaemon();
+      DeviceDaemon() = default;
 
       /**
        * This method appends a device to the internal list of devices that
@@ -75,7 +75,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      ~DeviceDaemon();
+      ~DeviceDaemon() = default;
 
     private:
 

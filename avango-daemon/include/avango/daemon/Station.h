@@ -59,7 +59,10 @@ namespace av
       /**
        * Destructor
        */
-      virtual ~Station();
+      virtual ~Station() = default;
+
+      Station(const Station&) = delete;
+      const Station& operator=(const Station&) = delete;
 
     public:
 
@@ -105,16 +108,6 @@ namespace av
       int      mButtonsUsed;
       int      mValuesUsed;
       int      mLedsUsed;
-
-      /**
-       * Made private to prevent copying construction.
-       */
-      Station(const Station&);
-
-      /**
-       * Made private to prevent assignment.
-       */
-      const Station& operator=(const Station&);
 
     };
   }

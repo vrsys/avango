@@ -54,10 +54,6 @@ av::daemon::Station::Station()
   }
 }
 
-/* virtual */
-av::daemon::Station::~Station()
-{}
-
 void
 av::daemon::Station::initClass()
 {

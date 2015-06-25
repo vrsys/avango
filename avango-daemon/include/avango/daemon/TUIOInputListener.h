@@ -28,6 +28,8 @@
 
 #include <TuioListener.h>
 #include <array>
+#include <mutex>
+#include <boost/optional.hpp>
 
 namespace av
 {
@@ -67,16 +69,58 @@ namespace av
             int session_id;
         };
 
-        std::map<int, TUIOCursor> cursors;
-        std::map<int, TUIOFinger> fingers;
-        std::map<int, TUIOHand> hands;
+      private:
+        mutable std::mutex m_cursorsMutex;
+        std::map<int, TUIOCursor> m_cursors;
+        mutable std::mutex m_fingersMutex;
+        std::map<int, TUIOFinger> m_fingers;
+        mutable std::mutex m_handsMutex;
+        std::map<int, TUIOHand> m_hands;
+      public:
+        inline std::map<int, TUIOCursor> const& cursors() const { return m_cursors; }
+        inline std::map<int, TUIOFinger> const& fingers() const { return m_fingers; }
+        inline std::map<int, TUIOHand> const& hands() const { return m_hands; }
+
+        boost::optional<TUIOCursor> find_cursor(int id) const
+        {
+          std::lock_guard<std::mutex> lock(m_cursorsMutex);
+          auto it = m_cursors.find(id);
+          if (it == m_cursors.end()) {
+            return boost::optional<TUIOCursor>();
+          } else {
+            return boost::make_optional(it->second);
+          }
+        }
+
+        boost::optional<TUIOFinger> find_finger(int id) const
+        {
+          std::lock_guard<std::mutex> lock(m_fingersMutex);
+          auto it = m_fingers.find(id);
+          if (it == m_fingers.end()) {
+            return boost::optional<TUIOFinger>();
+          } else {
+            return boost::make_optional(it->second);
+          }
+        }
+
+        boost::optional<TUIOHand> find_hand(int id) const
+        {
+          std::lock_guard<std::mutex> lock(m_handsMutex);
+          auto it = m_hands.find(id);
+          if (it == m_hands.end()) {
+            return boost::optional<TUIOHand>();
+          } else {
+            return boost::make_optional(it->second);
+          }
+        }
 
         void addTuioObject(TUIO::TuioObject* tobj) override {}
         void updateTuioObject(TUIO::TuioObject* tobj) override {}
         void removeTuioObject(TUIO::TuioObject* tobj) override {}
 
         void addTuioCursor(TUIO::TuioCursor* tcur) override {
-          TUIOCursor& cursor = cursors[tcur->getSessionID()];
+          std::lock_guard<std::mutex> lock(m_cursorsMutex);
+          TUIOCursor& cursor = m_cursors[tcur->getSessionID()];
           cursor.session_id = tcur->getSessionID();
           cursor.x = tcur->getX();
           cursor.y = tcur->getY();
@@ -88,7 +132,8 @@ namespace av
           cursor.state = tcur->getTuioState();
         }
         void updateTuioCursor(TUIO::TuioCursor* tcur) override {
-          TUIOCursor& cursor = cursors[tcur->getSessionID()];
+          std::lock_guard<std::mutex> lock(m_cursorsMutex);
+          TUIOCursor& cursor = m_cursors[tcur->getSessionID()];
           cursor.x = tcur->getX();
           cursor.y = tcur->getY();
           cursor.x_speed = tcur->getXSpeed();
@@ -100,38 +145,43 @@ namespace av
         }
 
         void removeTuioCursor(TUIO::TuioCursor* tcur) override {
-          cursors.erase(tcur->getSessionID());
+          std::lock_guard<std::mutex> lock(m_cursorsMutex);
+          m_cursors.erase(tcur->getSessionID());
         }
 
         void addTuioFinger(TUIO::TuioFinger* tfinger) override {
-            TUIOFinger& finger = fingers[tfinger->getSessionID()];
-            finger.session_id = tfinger->getSessionID();
-            finger.x = tfinger->getX();
-            finger.y = tfinger->getY();
-            finger.ellipse_x = tfinger->getEllipseX();
-            finger.ellipse_y = tfinger->getEllipseY();
-            finger.ellipse_major = tfinger->getEllipseMajor();
-            finger.ellipse_minor = tfinger->getEllipseMinor();
-            finger.ellipse_inclination = tfinger->getEllipseInclination();
+          std::lock_guard<std::mutex> lock(m_fingersMutex);
+          TUIOFinger& finger = m_fingers[tfinger->getSessionID()];
+          finger.session_id = tfinger->getSessionID();
+          finger.x = tfinger->getX();
+          finger.y = tfinger->getY();
+          finger.ellipse_x = tfinger->getEllipseX();
+          finger.ellipse_y = tfinger->getEllipseY();
+          finger.ellipse_major = tfinger->getEllipseMajor();
+          finger.ellipse_minor = tfinger->getEllipseMinor();
+          finger.ellipse_inclination = tfinger->getEllipseInclination();
         }
         void updateTuioFinger(TUIO::TuioFinger* tfinger) override {
-            addTuioFinger(tfinger);
+          addTuioFinger(tfinger);
         }
         void removeTuioFinger(TUIO::TuioFinger* tfinger) override {
-            fingers.erase(tfinger->getSessionID());
+          std::lock_guard<std::mutex> lock(m_fingersMutex);
+          m_fingers.erase(tfinger->getSessionID());
         }
 
         void addTuioHand(TUIO::TuioHand* thand) override {
-            TUIOHand& hand = hands[thand->getSessionID()];
-            hand.session_id = thand->getSessionID();
-            hand.hand_class = thand->getHandClass();
-            hand.fingers = thand->getFingerIDs();
+          std::lock_guard<std::mutex> lock(m_handsMutex);
+          TUIOHand& hand = m_hands[thand->getSessionID()];
+          hand.session_id = thand->getSessionID();
+          hand.hand_class = thand->getHandClass();
+          hand.fingers = thand->getFingerIDs();
         }
         void updateTuioHand(TUIO::TuioHand* thand) override {
-            addTuioHand(thand);
+          addTuioHand(thand);
         }
         void removeTuioHand(TUIO::TuioHand* thand) override {
-            hands.erase(thand->getSessionID());
+          std::lock_guard<std::mutex> lock(m_handsMutex);
+          m_hands.erase(thand->getSessionID());
         }
 
         void refresh(TUIO::TuioTime frameTime) override {}

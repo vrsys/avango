@@ -1,13 +1,12 @@
-remove socket from script
-
 Exporter neu machen
 
-Licht nicht als Node erzwingen
-
 Interface für Action
-    -> maybe Sebastians Animation Conrtoll
+  -> maybe Sebastians Animation Conrtoll
 
 Keyboard verbessern
+  done -> Bleder Node verbessern
+  -> Im JsonLoader eingen deamon and device
+
 
 Spacemouse / Maus etc..
 

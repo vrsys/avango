@@ -83,6 +83,32 @@ class NewSocketOperator(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
 
 
+class RemoveSocketOperator(bpy.types.Operator):
+    bl_idname = "object.remove_socket_operator"
+    bl_label = "Remove Field"
+    bl_description = "remove a new field by name from this script field container"
+
+    remove_socket_name = bpy.props.StringProperty(
+        name="Field Name",
+        description="enter name of field to remove",
+        default='NewField',
+        )
+
+    def execute(self, context):
+        for field in self.node.inputs:
+            if field.name == self.remove_socket_name:
+                self.node.inputs.remove(field)
+        for field in self.node.outputs:
+            if field.name == self.remove_socket_name:
+                self.node.outputs.remove(field)
+        
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        self.node = context.node
+        return context.window_manager.invoke_props_dialog(self)
+
+
 class EditSourceOperator(bpy.types.Operator):
     bl_idname = "object.edit_source_operator"
     bl_label = "Edit Source"
@@ -142,6 +168,7 @@ class ScriptNode(Node, node_tree.AvangoCustomTreeNode):
         col = layout.column()
         col.prop(self, 'name_prop')
         col.operator('object.new_socket_operator')
+        col.operator('object.remove_socket_operator')
         col.operator('object.edit_source_operator')
 
     def to_dict(self):
@@ -189,10 +216,12 @@ class ScriptNode(Node, node_tree.AvangoCustomTreeNode):
 def register():
     bpy.utils.register_class(ScriptNode)
     bpy.utils.register_class(NewSocketOperator)
+    bpy.utils.register_class(RemoveSocketOperator)
     bpy.utils.register_class(EditSourceOperator)
 
 
 def unregister():
     bpy.utils.unregister_class(ScriptNode)
     bpy.utils.unregister_class(NewSocketOperator)
+    bpy.utils.unregister_class(RemoveSocketOperator)
     bpy.utils.unregister_class(EditSourceOperator)

@@ -328,6 +328,10 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
             row = layout.row()
             row.prop(p, "resolve_background_texture")
 
+        layout.prop(p, "resolve_vignette_softness")
+        layout.prop(p, "resolve_vignette_coverage")
+        layout.prop(p, "resolve_vignette_color")
+
         row = layout.row()
         row.prop(p, "resolve_environment_lighting_mode")
         if p.resolve_environment_lighting_mode == 'AMBIENT_COLOR':
@@ -335,10 +339,12 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
             row.prop(p, "resolve_environment_lighting_color")
         elif p.resolve_environment_lighting_mode == 'SPHEREMAP':
             row = layout.row()
-            row.prop(p, "resolve_environment_lighting_spheremap")
+            #row.prop(p, "resolve_environment_lighting_spheremap")
+            row.prop(p, "resolve_environment_lighting_texture")
         elif p.resolve_environment_lighting_mode == 'CUBEMAP':
             row = layout.row()
-            row.prop(p, "resolve_environment_lighting_cubemap")
+            #row.prop(p, "resolve_environment_lighting_cubemap")
+            row.prop(p, "resolve_environment_lighting_texture")
 
         row = layout.row()
         row.prop(p, "resolve_horizon_fade")

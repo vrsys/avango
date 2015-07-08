@@ -118,6 +118,34 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
         description="background texture",
         default="gua_default_texture"
         )
+    resolve_alternative_background_texture = StringProperty(
+        name="Alternative Background Texture",
+        description="alternative background texture",
+        default="gua_default_texture"
+        )
+
+    resolve_vignette_softness = FloatProperty(
+        name="Vignette Softness",
+        description="vignette softness",
+        min=0.0,
+        default=1.3
+        )
+    resolve_vignette_coverage = FloatProperty(
+        name="Vignette Coverage",
+        description="vignette coverage",
+        min=0.0,
+        default=1.3
+        )
+    resolve_vignette_color = FloatVectorProperty(
+        name="Vignette Color",
+        description="vignette color",
+        min=0,
+        max=1,
+        #default=(0.05, 0.05, 0.05),
+        #subtype='COLOR'
+        size=4
+        )
+
     resolve_environment_lighting_mode = EnumProperty(
         name="Environment Lighting Mode",
         description="environment lighting mode",
@@ -132,14 +160,24 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
         default=(0.05, 0.05, 0.05),
         subtype='COLOR'
         )
-    resolve_environment_lighting_spheremap = StringProperty(
-        name="Environment Lighting Spheremap",
-        description="environment lighting spheremap",
+    #resolve_environment_lighting_spheremap = StringProperty(
+    #    name="Environment Lighting Spheremap",
+    #    description="environment lighting spheremap",
+    #    default="gua_default_texture"
+    #    )
+    #resolve_environment_lighting_cubemap = StringProperty(
+    #    name="Environment Lighting Cubemap",
+    #    description="environment lighting cubemap",
+    #    default="gua_default_texture"
+    #    )
+    resolve_environment_lighting_texture = StringProperty(
+        name="Environment Lighting Texture",
+        description="environment lighting texture",
         default="gua_default_texture"
         )
-    resolve_environment_lighting_cubemap = StringProperty(
-        name="Environment Lighting Cubemap",
-        description="environment lighting cubemap",
+    resolve_alternative_environment_lighting_texture = StringProperty(
+        name="Alternative Environment Lighting Texture",
+        description="alternative environment lighting texture",
         default="gua_default_texture"
         )
     resolve_horizon_fade = FloatProperty(
@@ -271,6 +309,14 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
                 self.resolve_background_color.g,
                 self.resolve_background_color.b]
             new_dict['background_texture'] = self.resolve_background_texture
+            new_dict['vignette_softness'] = self.resolve_vignette_softness
+            new_dict['vignette_coverage'] = self.resolve_vignette_coverage
+            new_dict['vignette_color'] = [
+                self.resolve_vignette_color[0],
+                self.resolve_vignette_color[1],
+                self.resolve_vignette_color[2],
+                self.resolve_vignette_color[3]
+                ]
 
             new_dict['environment_lighting_mode'] = (
                 self.resolve_environment_lighting_mode)
@@ -278,10 +324,12 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
                 self.resolve_environment_lighting_color.r,
                 self.resolve_environment_lighting_color.g,
                 self.resolve_environment_lighting_color.b]
-            new_dict['environment_lighting_cubemap'] = (
-                self.resolve_environment_lighting_cubemap)
-            new_dict['environment_lighting_spheremap'] = (
-                self.resolve_environment_lighting_spheremap)
+            #new_dict['environment_lighting_cubemap'] = (
+            #    self.resolve_environment_lighting_cubemap)
+            #new_dict['environment_lighting_spheremap'] = (
+            #    self.resolve_environment_lighting_spheremap)
+            new_dict['environment_lighting_texture'] = (
+                self.resolve_environment_lighting_texture)
 
             new_dict['horizon_fade'] = self.resolve_horizon_fade
 

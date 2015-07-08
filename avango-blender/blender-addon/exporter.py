@@ -10,6 +10,8 @@ import json
 from . import nodes
 from mathutils import Matrix
 
+def texture_filepath(texname):
+    return bpy.data.textures[texname].image.filepath
 
 def defaultWindow(scene):
     return {
@@ -121,11 +123,15 @@ def to_json(obj):
             'roughness': obj.avango.roughness,
             'metalness': obj.avango.metalness,
             'emissivity': obj.avango.emissivity,
-            'color_map': bpy.path.abspath(obj.avango.color_texture),
-            'metalness_map': bpy.path.abspath(obj.avango.metalness_texture),
-            'roughness_map': bpy.path.abspath(obj.avango.roughness_texture),
-            'emissivity_map': bpy.path.abspath(obj.avango.emissivity_texture),
-            'normal_map': bpy.path.abspath(obj.avango.normal_texture),
+            'color_map': texture_filepath(obj.avango.color_texture) if
+                obj.avango.use_color_texture else "",
+            'metalness_map': texture_filepath(obj.avango.metalness_map) if
+                obj.avango.use_metalness_texture else "",
+            'roughness_map': texture_filepath(obj.avango.roughness_map) if
+                obj.avango.use_roughness_texture else "",
+            'emissivity_map': texture_filepath(obj.avango.emissivity_map) if
+                obj.avango.use_emissivity_texture else "",
+            'normal_map': "" if obj.avango.normal_texture == "" else texture_filepath(obj.avango.normal_texture),
             'opacity': obj.avango.opacity,
             'backface_culling': obj.avango.backface_culling,
         }

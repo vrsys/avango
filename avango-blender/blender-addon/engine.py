@@ -11,6 +11,9 @@ WIN_SIZE = av.Vec2ui(1024, 768)
 # it is currently impossible to close windows in guacamole. Therefore we create
 # one global window, which we will use for all previews.
 
+def texture_filepath(texname):
+    return bpy.data.textures[texname].image.filepath
+
 g_window = av.nodes.HeadlessSurface(
     Size=WIN_SIZE,
     LeftResolution=WIN_SIZE

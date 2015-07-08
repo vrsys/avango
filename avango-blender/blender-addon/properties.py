@@ -518,9 +518,14 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             type=cls,
             )
         cls.color_texture = StringProperty(
-            name="Diffuse Texture",
+            name="Base Color Texture",
             description="If path is set, base color will be ignored",
             subtype='FILE_PATH',
+            )
+        cls.use_color_texture = BoolProperty(
+            name="Use Color Texture",
+            description="Base Color",
+            default=False,
             )
         cls.metalness = FloatProperty(
             name="Metalness",
@@ -533,6 +538,11 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             description="If path is set, metalness will be ignored",
             subtype='FILE_PATH',
             )
+        cls.use_metalness_texture = BoolProperty(
+            name="Use Metalness Texture",
+            description="Metalness Texture",
+            default=False,
+            )
         cls.roughness = FloatProperty(
             name="Roughness",
             description="zero means smooth and one means rough",
@@ -544,6 +554,11 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             description="If path is set, roughness will be ignored",
             subtype='FILE_PATH',
             )
+        cls.use_roughness_texture = BoolProperty(
+            name="Use Roughness Texture",
+            description="Roughness Texture",
+            default=False,
+            )
         cls.emissivity = FloatProperty(
             name="Emissivity",
             description="Emissivity",
@@ -554,6 +569,11 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             name="Emissivity Texture",
             description="If path is set, emissivity will be ignored",
             subtype='FILE_PATH',
+            )
+        cls.use_emissivity_texture = BoolProperty(
+            name="Use Emissivity Texture",
+            description="Emissivity Texture",
+            default=False,
             )
         cls.opacity = FloatProperty(
             name="Opacity",

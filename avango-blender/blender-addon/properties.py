@@ -35,12 +35,14 @@ enum_pipeline_passes = [
     ("SKEL_ANIM_PASS", "SkeletalAnimationPass", "Render skinned meshes", 14),
     # ("TONE_MAPPING_PASS", "ToneMapping", "Apply tone mapping operator", 14),
     # ("EMISSIVE_PASS", "Emissive", "Render emissive objects", 11),
+    ("SKY_MAP_PASS", "SkyMapPass", "Render sky map", 15),
     ]
 
 enum_resolve_background_mode = [
     ("COLOR", "Color", "solid color", 0),
     ("SKYMAP_TEXTURE", "Skymap Texture", "skymap texture", 1),
-    ("QUAD_TEXTURE", "Texture", "texture", 2)
+    ("QUAD_TEXTURE", "Texture", "texture", 2),
+    ("CUBEMAP_TEXTURE", "Cubemap", "texture", 3),
     ]
 
 enum_resolve_tonemapping_mode = [
@@ -231,6 +233,31 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
         description="show debug tiles",
         default=False
         )
+    skymap_output_texture_name = StringProperty(
+        name="Output Texture Name",
+        description="output texture name",
+        default="day_skymap"
+        )
+    #skymap_light_color # LightColor
+    skymap_light_direction = FloatVectorProperty(
+        name="Light Direction",
+        description="light direction",
+        #min=-1,
+        #max=1,
+        default=(0.00, 1.00, 0.00),
+        subtype='DIRECTION'
+        )
+    # LightBrightness
+    skymap_ground_color = FloatVectorProperty(
+        name="Ground Color",
+        description="ground color",
+        min=0,
+        max=1,
+        default=(0.05, 0.05, 0.05),
+        subtype='COLOR'
+        )
+    # RayleighFactor
+    # MieFactor
 
     def to_dict(self):
         new_dict = {
@@ -288,6 +315,11 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
             new_dict['rasterization_mode'] = (
                 self.light_visibility_rasterization_mode)
             new_dict['tile_power'] = self.light_visibility_tile_power
+
+        if self.pass_type == "SKY_MAP_PASS":
+            new_dict['output_texture_name'] = self.skymap_output_texture_name
+            #new_dict['light_direction'] = self.skymap_light_direction
+            #new_dict['ground_color'] = self.skymap_ground_color
 
         return new_dict
 

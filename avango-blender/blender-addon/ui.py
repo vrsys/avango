@@ -429,30 +429,51 @@ class AvangoMaterial_PT_material(AvangoButtonsPanel, Panel):
         layout = self.layout
         material = context.material
         amaterial = material.avango
-        if amaterial.color_texture == "":
-            layout.prop(material, "diffuse_color", text="Base Color")
-        layout.prop(amaterial, "color_texture", text="Albedo Texture")
+        row = layout.row()
+        row.prop(material, "diffuse_color", text="Base Color")
+        row.prop(amaterial, "use_color_texture", text="", icon='TEXTURE',
+                 toggle=1)
+        if amaterial.use_color_texture:
+            layout.prop_search(amaterial, "color_texture", bpy.data, 'textures',
+                               text='', icon='TEXTURE_DATA')
+
         layout.prop(amaterial, "opacity")
 
-        if amaterial.roughness_texture == "":
-            layout.prop(amaterial, "roughness")
-        layout.prop(amaterial, "roughness_texture", text="Roughness Texture")
+        row = layout.row()
+        if amaterial.use_roughness_texture:
+            row.prop_search(amaterial, "roughness_texture", bpy.data, 'textures',
+                               text='', icon='TEXTURE_DATA')
+        else:
+            row.prop(amaterial, "roughness")
+        row.prop(amaterial, "use_roughness_texture", text="", icon='TEXTURE',
+                 toggle=1)
 
-        if amaterial.metalness_texture == "":
-            layout.prop(amaterial, "metalness")
-        layout.prop(amaterial, "metalness_texture", text="Metalness Texture")
+        row = layout.row()
+        if amaterial.use_metalness_texture:
+            row.prop_search(amaterial, "metalness_texture", bpy.data, 'textures',
+                               text='', icon='TEXTURE_DATA')
+        else:
+            row.prop(amaterial, "metalness", text="Metall")
+        row.prop(amaterial, "use_metalness_texture", text="", icon='TEXTURE',
+                 toggle=1)
 
         # actually mix between shaded fragment and base color
-        if amaterial.emissivity_texture == "":
-            layout.prop(amaterial, "emissivity")
-        layout.prop(amaterial, "emissivity_texture", text="Emissivity Texture")
 
-        layout.prop(amaterial, "normal_texture", text="Normal Texture")
+        row = layout.row()
+        if amaterial.use_emissivity_texture:
+            row.prop_search(amaterial, "emissivity_texture", bpy.data, 'textures',
+                               text='', icon='TEXTURE_DATA')
+        else:
+            row.prop(amaterial, "emissivity", text="Emissive Color")
+        row.prop(amaterial, "use_emissivity_texture", text="", icon='TEXTURE',
+                 toggle=1)
+
+        row = layout.row()
+        row.label("Normal")
+        row.prop_search(amaterial, "normal_texture", bpy.data, 'textures',
+                           text='', icon='TEXTURE_DATA')
 
         layout.prop(amaterial, "backface_culling")
-        # layout.label("Emissive Color")
-        # layout.label("Opacity")
-        # layout.label("Normal")
         # layout.label("Ambient Occlusion")
 
         '''
@@ -605,7 +626,10 @@ def get_panels():
         "DATA_PT_context_lamp",
 
         "MATERIAL_PT_context_material",
-        #"TEXTURE_PT_context_texture",
+
+        "TEXTURE_PT_preview",
+        "TEXTURE_PT_context_texture",
+        "TEXTURE_PT_image",
         #"TEXTURE_PT_envmap",
     ]
     return [getattr(types, p) for p in panels if hasattr(types, p)]

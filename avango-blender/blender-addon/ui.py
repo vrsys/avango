@@ -324,6 +324,9 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
         elif p.resolve_background_mode == 'QUAD_TEXTURE':
             row = layout.row()
             row.prop(p, "resolve_background_texture")
+        elif p.resolve_background_mode == 'CUBEMAP_TEXTURE':
+            row = layout.row()
+            row.prop(p, "resolve_background_texture")
 
         row = layout.row()
         row.prop(p, "resolve_environment_lighting_mode")
@@ -374,6 +377,12 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
         row.prop(p, "resolve_tone_mapping_mode")
         row = layout.row()
         row.prop(p, "resolve_enable_debug_tiles")
+
+    def SKY_MAP_PASS(self, layout, cam, p):
+        row = layout.row()
+        row.prop(p, "skymap_output_texture_name")
+        row.prop(p, "skymap_light_direction")
+        row.prop(p, "skymap_ground_color")
 
     def TEXTURED_QUAD_PASS(self, layout, cam, p):
         pass

@@ -1,6 +1,6 @@
 import avango
 import avango.gua
-# import avango.gua.skelanim
+import avango.gua.skelanim
 # from avango.gua.skelanim.AnimationControl import AnimationControl
 from examples_common import device
 
@@ -17,8 +17,8 @@ class jsonloader:
         self.json_data = None
         self.root_node = None
         self.TriMeshLoader = avango.gua.nodes.TriMeshLoader()
-        # self.SkelMeshLoader =\
-            # avango.gua.skelanim.nodes.SkeletalAnimationLoader()
+        self.SkelMeshLoader =\
+            avango.gua.skelanim.nodes.SkeletalAnimationLoader()
 
     def create_application_from_json(self, json_path):
         print("creating application from", json_path)
@@ -523,8 +523,8 @@ def load_pipeline_pass(json_pass):
     elif json_pass["type"] == "TRI_MESH_PASS":
         return avango.gua.nodes.TriMeshPassDescription()
 
-    # elif json_pass["type"] == "SKEL_ANIM_PASS":
-        # return avango.gua.skelanim.nodes.SkeletalAnimationPassDescription()
+    elif json_pass["type"] == "SKEL_ANIM_PASS":
+        return avango.gua.skelanim.nodes.SkeletalAnimationPassDescription()
 
     elif json_pass["type"] == "TEXTURED_QUAD_PASS":
         return avango.gua.nodes.TexturedQuadPassDescription()

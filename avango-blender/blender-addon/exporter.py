@@ -121,7 +121,7 @@ def to_json(obj):
             'name': obj.name,
             'color': [color.r, color.g, color.b],
             'roughness': obj.avango.roughness,
-            'metalness': obj.avango.metalness,
+            'metalness': float(obj.avango.metalness),
             'emissivity': obj.avango.emissivity,
             'color_map': bpy.path.abspath(
                 texture_filepath(obj.avango.color_texture)

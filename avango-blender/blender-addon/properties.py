@@ -366,8 +366,16 @@ class PipelinePassDescription(bpy.types.PropertyGroup):
 
         if self.pass_type == "SKY_MAP_PASS":
             new_dict['output_texture_name'] = self.skymap_output_texture_name
-            #new_dict['light_direction'] = self.skymap_light_direction
-            #new_dict['ground_color'] = self.skymap_ground_color
+            new_dict['light_direction'] = [
+                self.skymap_light_direction[0],
+                self.skymap_light_direction[1],
+                self.skymap_light_direction[2],
+                ]
+            new_dict['ground_color'] = [
+                self.skymap_ground_color[0],
+                self.skymap_ground_color[1],
+                self.skymap_ground_color[2],
+                ]
 
         return new_dict
 

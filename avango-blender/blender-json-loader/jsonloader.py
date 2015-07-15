@@ -494,6 +494,22 @@ def load_pipeline_pass(json_pass):
 
         return res_pass
 
+    elif json_pass["type"] == "SKY_MAP_PASS":
+        skymap_pass = avango.gua.nodes.SkyMapPassDescription()
+        skymap_pass.OutputTextureName.value = json_pass["output_texture_name"]
+        skymap_pass.LightDirection.value = avango.gua.Vec3(
+            json_pass["light_direction"][0],
+            json_pass["light_direction"][1],
+            json_pass["light_direction"][2],
+        )
+        skymap_pass.GroundColor.value = avango.gua.Color(
+            json_pass['ground_color'][0],
+            json_pass['ground_color'][1],
+            json_pass['ground_color'][2],
+        )
+
+        return skymap_pass
+
     elif json_pass["type"] == "LIGHT_VISIBILITY_PASS":
         light_pass = avango.gua.nodes.LightVisibilityPassDescription()
 

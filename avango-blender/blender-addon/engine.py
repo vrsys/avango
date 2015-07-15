@@ -533,7 +533,7 @@ def scene_update(scene):
                                     amaterial.roughness)
                                 mesh.Material.value.set_uniform(
                                     "Metalness",
-                                    amaterial.metalness)
+                                    float(amaterial.metalness))
                                 mesh.Material.value.set_uniform(
                                     "Emissivity",
                                     amaterial.emissivity)

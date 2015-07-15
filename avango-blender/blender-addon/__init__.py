@@ -18,18 +18,17 @@ if "bpy" in locals():
     imp.reload(sockets)
     imp.reload(engine)
 else:
-    from . import preferences
-    from . import node_tree
-    from . import exporter
-    from . import starter
-    from . import nodes
-    from . import sockets
-    from . import engine
-
-
-import bpy
-import nodeitems_utils as nu
-
+    import bpy
+    import nodeitems_utils as nu
+    from . import (
+            preferences,
+            node_tree,
+            exporter,
+            starter,
+            nodes,
+            sockets,
+            engine,
+            )
 
 node_categories = [
     node_tree.AvangoNodeCategory("SOMENODES", "scene", items=[

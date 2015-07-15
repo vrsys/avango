@@ -272,6 +272,61 @@ def to_json(obj):
                 'has_armature': True,
             }
 
+    if obj.type == 'FONT':
+        parent = 'null'
+        blender_obj = obj
+        if obj.name in bpy.data.objects:
+            blender_obj = bpy.data.objects[obj.name]
+            if blender_obj.parent:
+                parent = blender_obj.parent.name
+            matrix = blender_obj.matrix_local
+        filename = obj.name + '.obj'
+
+        bpy.ops.object.select_all(action='DESELECT')
+        # scene.objects.active = blender_obj
+        blender_obj.select = True
+
+        world = blender_obj.matrix_world.copy()
+        if not blender_obj.animation_data is None:
+            for f in blender_obj.animation_data.action.fcurves:
+                f.mute = True
+
+        Matrix.identity(blender_obj.matrix_world)
+        bpy.ops.export_scene.obj(
+            filepath=g_tmp_filepath+filename,
+            check_existing=False,
+            use_selection=True,
+            use_normals=True,
+            use_triangles=True,
+            use_uvs=True,
+            use_materials=False,
+            axis_forward='Y',
+            axis_up='Z',
+            path_mode='AUTO',
+            )
+        blender_obj.matrix_world = world
+
+        if not blender_obj.animation_data is None:
+            for f in blender_obj.animation_data.action.fcurves:
+                f.mute = False
+
+        blender_obj.select = False
+
+        if len(blender_obj.material_slots) > 0:
+            material = blender_obj.material_slots[0].material.name
+        else:
+            material = "default_material"
+
+        return {
+            'type': 'Mesh',
+            'name': obj.name,
+            'file': 'tmp/' + filename,
+            'parent': parent,
+            'transform': matrixToList(matrix),
+            'material': material,
+            'has_armature': False,
+        }
+
     # if isinstance(obj, nodes.window.Window):
     #     modeSocket = bpy.data.node_groups["NodeTree"] \
     #                 .nodes["Window"] \
@@ -367,6 +422,13 @@ def save(filepath, context):
             camera = obj
         elif obj.type == 'LAMP':
             lights.append(obj)
+        elif obj.type == 'FONT':
+            meshes.append(obj)
+            if len(obj.material_slots) > 0:
+                for mat_slot in obj.material_slots:
+                    mat = mat_slot.material
+                    materials[mat.name] = mat
+
 
     document = {
         # triMeshes  = (x for x in ns if (x.bl_label == 'Mesh'))

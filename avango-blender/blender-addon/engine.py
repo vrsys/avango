@@ -419,24 +419,22 @@ def engine_update(engine, data, scene):
                     Transform=av.make_trans_mat(0.0, 0.0, -2.5),
                 )
 
-                res_pass = av.nodes.ResolvePassDescription()
-                res_pass.EnableSSAO.value = True
-                res_pass.SSAOIntensity.value = 4.0
-                res_pass.SSAOFalloff.value = 10.0
-                res_pass.SSAORadius.value = 7.0
-                res_pass.EnvironmentLightingColor.value = (
-                    av.Color(0.1, 0.1, 0.1))
-                res_pass.ToneMappingMode.value = av.ToneMappingMode.UNCHARTED
-                res_pass.Exposure.value = 1.0
-                res_pass.BackgroundColor.value = av.Color(1.0, 0.0, 0.0)
+                #res_pass = av.nodes.ResolvePassDescription()
+                #res_pass.EnableSSAO.value = True
+                #res_pass.SSAOIntensity.value = 4.0
+                #res_pass.SSAOFalloff.value = 10.0
+                #res_pass.SSAORadius.value = 7.0
+                #res_pass.EnvironmentLightingColor.value = (
+                #    av.Color(0.1, 0.1, 0.1))
+                #res_pass.ToneMappingMode.value = av.ToneMappingMode.UNCHARTED
+                #res_pass.Exposure.value = 1.0
+                #res_pass.BackgroundColor.value = av.Color(1.0, 0.0, 0.0)
+
+                pc = PassCreator()
+                passes = pc.create(o.data.avango.pipeline_passes)
 
                 pipeline_description = av.nodes.PipelineDescription(
-                    Passes=[
-                        av.nodes.TriMeshPassDescription(),
-                        av.nodes.LightVisibilityPassDescription(),
-                        res_pass,
-                        av.nodes.SSAAPassDescription(),
-                        ],
+                    Passes=passes,
                     EnableABuffer=acamera.enable_abuffer,
                     )
 

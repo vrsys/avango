@@ -599,19 +599,18 @@ class AvangoMaterialSettings(bpy.types.PropertyGroup):
             )
         cls.color_texture = StringProperty(
             name="Base Color Texture",
-            description="If path is set, base color will be ignored",
-            subtype='FILE_PATH',
+            description="If texture is set, base color will be ignored",
+            #subtype='FILE_PATH',
             )
         cls.use_color_texture = BoolProperty(
             name="Use Color Texture",
             description="Base Color",
             default=False,
             )
-        cls.metalness = FloatProperty(
+        cls.metalness = BoolProperty(
             name="Metalness",
-            description="set to 1 for a metal and zero for a non-metal",
-            min=0, max=1,
-            default=0.0,
+            description="Metalness",
+            default=False,
             )
         cls.metalness_texture = StringProperty(
             name="Metalness Texture",

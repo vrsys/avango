@@ -477,7 +477,8 @@ def engine_draw(engine, region, v3d, rv3d):
         screen.Width.value = width
         screen.Height.value = height
         screen.Transform.value = av.make_trans_mat(
-            0.0, 0.0, -camera.NearClip.value)
+            #0.0, 0.0, -camera.NearClip.value)
+            0.0, 0.0, -v3d.clip_start)
     else:
         camera_from_view(engine.viewport_camera, region, v3d)
         engine.viewport_screen.Width.value = width

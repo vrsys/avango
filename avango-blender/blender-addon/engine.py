@@ -550,6 +550,35 @@ def scene_update(scene):
                             camera.PipelineDescription.value.Passes.value = ps
                     elif o.type == 'MATERIAL':
                         print("MATERIAL ???", o.type)
+                    elif o.type == 'FONT':
+                        print("what???", o.type)
+                        mesh = g_cached_objects[o.name]
+                        mesh.Transform.value = from_blender_matrix4(
+                            o.matrix_world)
+                        for slot in o.material_slots:
+                            # material = o.material_slots['Material'].material
+                            material = o.material_slots[0].material
+                            if material.is_updated:
+                                amaterial = material.avango
+                                col = slot.material.diffuse_color
+
+                                mesh.Material.value.set_uniform(
+                                    "Color",
+                                    av.Vec4(col.r,
+                                            col.g,
+                                            col.b, 1.0))
+                                mesh.Material.value.set_uniform(
+                                    "Roughness",
+                                    amaterial.roughness)
+                                mesh.Material.value.set_uniform(
+                                    "Metalness",
+                                    float(amaterial.metalness))
+                                mesh.Material.value.set_uniform(
+                                    "Emissivity",
+                                    amaterial.emissivity)
+                                mesh.Material.value.set_uniform(
+                                    "Opacity",
+                                    amaterial.opacity)
                     else:
                         print("what???", o.type)
 

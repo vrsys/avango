@@ -440,7 +440,16 @@ def load_pipeline_pass(json_pass):
             json_pass["background_color"][1],
             json_pass["background_color"][2],
         )
+        res_pass.BackgroundTexture.value = json_pass["background_texture"]
 
+        res_pass.VignetteCoverage.value = json_pass["vignette_coverage"]
+        res_pass.VignetteSoftness.value = json_pass["vignette_softness"]
+        res_pass.VignetteColor.value = avango.gua.Vec4(
+            json_pass["vignette_color"][0],
+            json_pass["vignette_color"][1],
+            json_pass["vignette_color"][2],
+            json_pass["vignette_color"][3],
+        )
         res_pass.EnvironmentLightingMode.value =\
             eval("avango.gua.EnvironmentLightingMode." +
                  json_pass["environment_lighting_mode"])
@@ -449,6 +458,10 @@ def load_pipeline_pass(json_pass):
             json_pass["environment_lighting_color"][1],
             json_pass["environment_lighting_color"][2],
         )
+
+        res_pass.EnvironmentLightingTexture.value = json_pass[
+            "environment_lighting_texture"]
+
         # res_pass.EnvironmentLightingSphereMap.value =\
             # json_pass["environment_lighting_spheremap"]
 

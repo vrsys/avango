@@ -165,15 +165,24 @@ class PassCreator:
             "avango.gua.BackgroundMode."+p.resolve_background_mode)
         res_pass.BackgroundColor.value = from_blender_color(
             p.resolve_background_color)
+        res_pass.BackgroundTexture.value = p.resolve_background_texture
+
+        res_pass.VignetteCoverage.value = p.resolve_vignette_coverage
+        res_pass.VignetteSoftness.value = p.resolve_vignette_softness
+        res_pass.VignetteColor.value = av.Vec4(
+                p.resolve_vignette_color[0],
+                p.resolve_vignette_color[1],
+                p.resolve_vignette_color[2],
+                p.resolve_vignette_color[3]
+                )
+
+        res_pass.EnvironmentLightingTexture.value = (
+                p.resolve_environment_lighting_texture)
         res_pass.EnvironmentLightingMode.value = eval(
             "avango.gua.EnvironmentLightingMode." +
             p.resolve_environment_lighting_mode)
         res_pass.EnvironmentLightingColor.value = from_blender_color(
             p.resolve_environment_lighting_color)
-        res_pass.EnvironmentLightingSphereMap.value = (
-            p.resolve_environment_lighting_spheremap)
-        # res_pass.EnvironmentLightingCubeMap.value = (
-        #     p.resolve_environment_lighting_cubemap)
         res_pass.HorizonFade.value = p.resolve_horizon_fade
         res_pass.EnableSSAO.value = p.resolve_ssao_enable
         res_pass.SSAORadius.value = p.resolve_ssao_radius
@@ -197,6 +206,16 @@ class PassCreator:
             "avango.gua.ToneMappingMode." + p.resolve_tone_mapping_mode)
         res_pass.DebugTiles.value = p.resolve_enable_debug_tiles
         return res_pass
+
+    def SKY_MAP_PASS(self, p):
+        sky_pass = av.nodes.SkyMapPassDescription()
+        sky_pass.OutputTextureName.value = p.skymap_output_texture_name
+        sky_pass.LightDirection.value = av.Vec3(
+                p.skymap_light_direction[0],
+                p.skymap_light_direction[1],
+                p.skymap_light_direction[2])
+        #sky_pass.GroundColor.value = p.skymap_ground_color
+        return sky_pass
 
     def TRI_MESH_PASS(self, p):
         return av.nodes.TriMeshPassDescription()

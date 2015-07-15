@@ -21,6 +21,10 @@ class Application:
     def run(self):
         guaVE = GuaVE()
         guaVE.start(locals(), globals(), show_banner=False)
+        tmp = self.camera.EnableFrustumCulling.value
+        self.camera.EnableFrustumCulling.value = False
+        self.viewer.frame()
+        self.camera.EnableFrustumCulling.value = tmp
         self.viewer.run()
 
     def basic_setup(self):

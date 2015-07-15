@@ -134,6 +134,11 @@ def default_pipeline_passes(pipeline_passes):
     # p.pass_type = 'DEBUG_VIEW_PASS'
     # p.uuid = str(uuid.uuid4())
 
+def get_resolve_pass(pipeline_passes):
+    for p in pipeline_passes:
+        if p.pass_type is 'RESOLVE_PASS':
+            return p
+    return None
 
 class PassCreator:
     def create(self, pipeline_passes):

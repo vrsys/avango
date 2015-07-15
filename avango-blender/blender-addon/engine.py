@@ -389,10 +389,19 @@ def engine_update(engine, data, scene):
                                                     av.Vec4(col.r,
                                                             col.g,
                                                             col.b, 1.0))
+                    if slot.material.avango.use_color_texture:
+                        mesh.Material.value.set_uniform("ColorMap",
+                                texture_filepath(slot.material.avango.color_texture))
                     mesh.Material.value.set_uniform("Roughness",
                                                     amaterial.roughness)
+                    if slot.material.avango.use_roughness_texture:
+                        mesh.Material.value.set_uniform("RoughnessMap",
+                                texture_filepath(slot.material.avango.roughness_texture))
                     mesh.Material.value.set_uniform("Metalness",
-                                                    amaterial.metalness)
+                                                    float(amaterial.metalness))
+                    if slot.material.avango.use_metalness_texture:
+                        mesh.Material.value.set_uniform("MetalnessMap",
+                                texture_filepath(slot.material.avango.metalness_texture))
                     mesh.Material.value.set_uniform("Emissivity",
                                                     amaterial.emissivity)
                     mesh.Material.value.set_uniform("Opacity",

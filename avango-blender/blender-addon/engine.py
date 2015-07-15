@@ -270,7 +270,7 @@ def engine_create(engine, context):
     passes = pc.create(ascene.pipeline_passes)
 
     engine.viewport_screen = av.nodes.ScreenNode(
-        Name="screen",
+        Name="viewport_screen",
         Width=2,
         Height=1.5
     )
@@ -282,7 +282,7 @@ def engine_create(engine, context):
 
     engine.viewport_camera = av.nodes.CameraNode(
         Name=str(engine.uuid),
-        LeftScreenPath="/"+str(engine.uuid)+"/screen",
+        LeftScreenPath="/"+str(engine.uuid)+"/viewport_screen",
         SceneGraph="scenegraph",
         Resolution=WIN_SIZE,
         OutputWindowName="blender_window",

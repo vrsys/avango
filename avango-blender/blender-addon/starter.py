@@ -2,6 +2,7 @@ import bpy
 import bpy.types
 from . import exporter
 import os
+import tempfile
 
 
 class StartAvango(bpy.types.Operator):
@@ -12,7 +13,11 @@ class StartAvango(bpy.types.Operator):
 
     def invoke(self, context, event):
         print("invoke avango application")
-        exporter.save('/tmp/automatic_export.avango', context)
+
+        tmpdir = tempfile.mkdtemp()
+        tmpfilepath = tmpdir+'/automatic_export.avango'
+
+        exporter.save(tmpfilepath, context)
 
         relativ_path =\
             context.user_preferences.\
@@ -21,10 +26,10 @@ class StartAvango(bpy.types.Operator):
 
         absolute_path = bpy.path.abspath(relativ_path)
 
-        command = "./start.sh /tmp/automatic_export.avango"
+        command = "./start.sh "+tmpfilepath
 
         os.system(
-            "gnome-terminal --working-directory=" +
+            "gnome-terminal --hide-menubar --working-directory=" +
             absolute_path +
             " --command=\"" +
             command +

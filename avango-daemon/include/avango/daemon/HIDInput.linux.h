@@ -57,11 +57,11 @@ namespace av
 
     public:
 
-      typedef std::map<unsigned int, unsigned int, std::less<unsigned int> > HIDMapping;
-      typedef std::map<unsigned int, unsigned int, std::less<unsigned int> > HIDLEDMapping;
-      typedef std::map<int, HIDMapping, std::less<int> > StationHIDMappingLookup;
-      typedef std::map<int, HIDLEDMapping, std::less<int> > StationHIDLEDMappingLookup;
-      typedef std::map<Station*, std::vector<bool> > LastLEDStateLookup;
+      using HIDMapping = std::map<unsigned int, unsigned int, std::less<unsigned int> >;
+      using HIDLEDMapping = std::map<unsigned int, unsigned int, std::less<unsigned int> >;
+      using StationHIDMappingLookup = std::map<int, HIDMapping, std::less<int> >;
+      using StationHIDLEDMappingLookup = std::map<int, HIDLEDMapping, std::less<int> >;
+      using LastLEDStateLookup = std::map<Station*, std::vector<bool> >;
 
       /**
        * Constructor
@@ -199,7 +199,7 @@ namespace av
       virtual void stopLEDs();
 
       // For every EV_ABS type we store the values (current, min, max, flat, fuzz)
-      typedef std::map<unsigned int, input_absinfo, std::less<unsigned int> > AbsInfoMap;
+      using AbsInfoMap = std::map<unsigned int, input_absinfo, std::less<unsigned int> >;
 
       HIDMapping                 mDefaultHIDMapping;
       HIDLEDMapping              mDefaultHIDLEDMapping;

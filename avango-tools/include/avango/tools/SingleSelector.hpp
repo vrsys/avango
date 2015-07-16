@@ -48,8 +48,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<SingleSelector> > SFSingleSelector;
-    typedef MultiField<Link<SingleSelector> > MFSingleSelector;
+    using SFSingleSelector = SingleField<Link<SingleSelector> >;
+    using MFSingleSelector = MultiField<Link<SingleSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

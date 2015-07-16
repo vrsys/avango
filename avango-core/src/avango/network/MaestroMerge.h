@@ -49,7 +49,7 @@ namespace av
     int stateCounter; // counts the number of cast and send upcalls, added by Roy Friedman
   };
 
-  typedef Maestro_GrpMemb_Options MaestroMergeOptions;
+  using MaestroMergeOptions = Maestro_GrpMemb_Options;
 
   /**
    * MaestroMerge is a specialization of Maestro_GroupMember providing additional features
@@ -193,7 +193,7 @@ namespace av
       bool _use_dest;
     };
 
-    typedef std::vector<DelayMsg> DelayMsgVec;
+    using DelayMsgVec = std::vector<DelayMsg>;
     DelayMsgVec mDelayedMsgs;
 
     void delayMessage(Maestro_Message &msg);

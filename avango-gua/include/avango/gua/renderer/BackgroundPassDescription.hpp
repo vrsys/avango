@@ -85,8 +85,8 @@ namespace av
       BackgroundPassDescription& operator=(const BackgroundPassDescription&);
     };
 
-    typedef SingleField<Link<BackgroundPassDescription> > SFBackgroundPassDescription;
-    typedef MultiField<Link<BackgroundPassDescription> > MFBackgroundPassDescription;
+    using SFBackgroundPassDescription = SingleField<Link<BackgroundPassDescription> >;
+    using MFBackgroundPassDescription = MultiField<Link<BackgroundPassDescription> >;
 
   }
 

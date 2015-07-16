@@ -67,8 +67,8 @@ namespace av
       BoundingBox& operator=(const BoundingBox&);
     };
 
-    typedef SingleField<Link<BoundingBox> > SFBoundingBox;
-    typedef MultiField<Link<BoundingBox> > MFBoundingBox;
+    using SFBoundingBox = SingleField<Link<BoundingBox> >;
+    using MFBoundingBox = MultiField<Link<BoundingBox> >;
 
   }
 

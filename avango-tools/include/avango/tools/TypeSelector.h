@@ -105,8 +105,8 @@ namespace av
       bool mTypesDirty;
     };
 
-    typedef SingleField<Link<TypeSelector> > SFTypeSelector;
-    typedef MultiField<Link<TypeSelector> > MFTypeSelector;
+    using SFTypeSelector = SingleField<Link<TypeSelector> >;
+    using MFTypeSelector = MultiField<Link<TypeSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

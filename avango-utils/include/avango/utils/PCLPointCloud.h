@@ -53,8 +53,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<PCLPointCloud> > SFPCLPointCloud;
-    typedef MultiField<Link<PCLPointCloud> > MFPCLPointCloud;
+    using SFPCLPointCloud = SingleField<Link<PCLPointCloud> >;
+    using MFPCLPointCloud = MultiField<Link<PCLPointCloud> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

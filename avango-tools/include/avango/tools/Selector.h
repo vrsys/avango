@@ -70,8 +70,8 @@ namespace av
       Link<TargetHolder> combine(const Link<TargetHolder> holder1, const Link<TargetHolder> holder2);
     };
 
-    typedef SingleField<Link<Selector> > SFSelector;
-    typedef MultiField<Link<Selector> > MFSelector;
+    using SFSelector = SingleField<Link<Selector> >;
+    using MFSelector = MultiField<Link<Selector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

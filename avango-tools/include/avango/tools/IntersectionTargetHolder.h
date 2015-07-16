@@ -75,8 +75,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<IntersectionTargetHolder> > SFIntersectionTargetHolder;
-    typedef MultiField<Link<IntersectionTargetHolder> > MFIntersectionTargetHolder;
+    using SFIntersectionTargetHolder = SingleField<Link<IntersectionTargetHolder> >;
+    using MFIntersectionTargetHolder = MultiField<Link<IntersectionTargetHolder> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

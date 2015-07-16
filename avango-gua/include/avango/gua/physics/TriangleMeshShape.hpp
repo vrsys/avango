@@ -61,8 +61,8 @@ namespace av
       TriangleMeshShape& operator=(const TriangleMeshShape&);
     };
 
-    typedef SingleField<Link<TriangleMeshShape> > SFTriangleMeshShape;
-    typedef MultiField<Link<TriangleMeshShape> > MFTriangleMeshShape;
+    using SFTriangleMeshShape = SingleField<Link<TriangleMeshShape> >;
+    using MFTriangleMeshShape = MultiField<Link<TriangleMeshShape> >;
 
   }
 

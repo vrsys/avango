@@ -82,8 +82,8 @@ namespace av
       TriMeshLoader& operator=(const TriMeshLoader&);
     };
 
-    typedef SingleField<Link<TriMeshLoader> > SFTriMeshLoader;
-    typedef MultiField<Link<TriMeshLoader> > MFTriMeshLoader;
+    using SFTriMeshLoader = SingleField<Link<TriMeshLoader> >;
+    using MFTriMeshLoader = MultiField<Link<TriMeshLoader> >;
 
   }
 

@@ -67,8 +67,8 @@ namespace av
       Renderer& operator=(const Renderer&);
     };
 
-    typedef SingleField<Link<Renderer> > SFRenderer;
-    typedef MultiField<Link<Renderer> > MFRenderer;
+    using SFRenderer = SingleField<Link<Renderer> >;
+    using MFRenderer = MultiField<Link<Renderer> >;
 
   }
 

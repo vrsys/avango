@@ -74,8 +74,8 @@ namespace av
       PipelineDescription& operator=(const PipelineDescription&);
     };
 
-    typedef SingleField<Link<PipelineDescription> > SFPipelineDescription;
-    typedef MultiField<Link<PipelineDescription> > MFPipelineDescription;
+    using SFPipelineDescription = SingleField<Link<PipelineDescription> >;
+    using MFPipelineDescription = MultiField<Link<PipelineDescription> >;
 
   }
 

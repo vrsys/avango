@@ -72,8 +72,8 @@ namespace av
       Constraint& operator=(const Constraint&);
     };
 
-    typedef SingleField<Link<Constraint> > SFConstraint;
-    typedef MultiField<Link<Constraint> > MFConstraint;
+    using SFConstraint = SingleField<Link<Constraint> >;
+    using MFConstraint = MultiField<Link<Constraint> >;
 
   }
 

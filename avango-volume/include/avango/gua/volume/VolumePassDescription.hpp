@@ -53,8 +53,8 @@ namespace av
       VolumePassDescription& operator=(const VolumePassDescription&);
     };
 
-    typedef SingleField<Link<VolumePassDescription> > SFVolumePassDescription;
-    typedef MultiField<Link<VolumePassDescription> > MFVolumePassDescription;
+    using SFVolumePassDescription = SingleField<Link<VolumePassDescription> >;
+    using MFVolumePassDescription = MultiField<Link<VolumePassDescription> >;
 
   }
 

@@ -67,8 +67,8 @@ namespace av
       BoundingSphere& operator=(const BoundingSphere&);
     };
 
-    typedef SingleField<Link<BoundingSphere> > SFBoundingSphere;
-    typedef MultiField<Link<BoundingSphere> > MFBoundingSphere;
+    using SFBoundingSphere = SingleField<Link<BoundingSphere> >;
+    using MFBoundingSphere = MultiField<Link<BoundingSphere> >;
 
   }
 

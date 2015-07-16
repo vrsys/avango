@@ -40,7 +40,7 @@ namespace av
 
   public:
 
-    typedef T ValueType;
+    using ValueType = T;
 
     SingleField<ValueType> Value;
 
@@ -108,13 +108,13 @@ namespace av
   template class AV_DLL ObjectValue<Link<FieldContainer> >;
   template class AV_DLL ObjectValue<std::string>;
 
-  typedef ObjectValue<bool>                   BoolObject;
-  typedef ObjectValue<int>                    IntObject;
-  typedef ObjectValue<unsigned int>           UIntObject;
-  typedef ObjectValue<float>                  FloatObject;
-  typedef ObjectValue<double>                 DoubleObject;
-  typedef ObjectValue<Link<FieldContainer> >  ObjectObject;
-  typedef ObjectValue<std::string>            StringObject;
+  using BoolObject = ObjectValue<bool>;
+  using IntObject = ObjectValue<int>;
+  using UIntObject = ObjectValue<unsigned int>;
+  using FloatObject = ObjectValue<float>;
+  using DoubleObject = ObjectValue<double>;
+  using ObjectObject = ObjectValue<Link<FieldContainer> >;
+  using StringObject = ObjectValue<std::string>;
 }
 
 #endif // #if !defined(AVANGO_OBJECTVALUE_H)

@@ -101,11 +101,9 @@ av::logging::LoggerManager::getLogger(const std::string& name)
     // lock after creating parent logger to avoid recursive locking
     boost::mutex::scoped_lock lock(mLoggerMapMutex);
 
-    typedef LoggerMap::const_iterator iter;
-    iter it = mLoggerMap.find(name);
-    iter it_end = mLoggerMap.end();
+    auto it = mLoggerMap.find(name);
 
-    if (it == it_end) // not in map
+    if (it == mLoggerMap.end()) // not in map
     {
         Logger* logger = new Logger(name);
         logger->setParent(parent_logger);

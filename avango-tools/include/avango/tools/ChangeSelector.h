@@ -87,8 +87,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<ChangeSelector> > SFChangeSelector;
-    typedef MultiField<Link<ChangeSelector> > MFChangeSelector;
+    using SFChangeSelector = SingleField<Link<ChangeSelector> >;
+    using MFChangeSelector = MultiField<Link<ChangeSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

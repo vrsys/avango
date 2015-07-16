@@ -61,8 +61,8 @@ namespace av
       BoxShape& operator=(const BoxShape&);
     };
 
-    typedef SingleField<Link<BoxShape> > SFBoxShape;
-    typedef MultiField<Link<BoxShape> > MFBoxShape;
+    using SFBoxShape = SingleField<Link<BoxShape> >;
+    using MFBoxShape = MultiField<Link<BoxShape> >;
 
   }
 

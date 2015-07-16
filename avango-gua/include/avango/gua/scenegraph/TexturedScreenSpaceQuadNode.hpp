@@ -99,8 +99,8 @@ namespace av
       TexturedScreenSpaceQuadNode& operator=(const TexturedScreenSpaceQuadNode&);
     };
 
-    typedef SingleField<Link<TexturedScreenSpaceQuadNode> > SFTexturedScreenSpaceQuadNode;
-    typedef MultiField<Link<TexturedScreenSpaceQuadNode> > MFTexturedScreenSpaceQuadNode;
+    using SFTexturedScreenSpaceQuadNode = SingleField<Link<TexturedScreenSpaceQuadNode> >;
+    using MFTexturedScreenSpaceQuadNode = MultiField<Link<TexturedScreenSpaceQuadNode> >;
 
   }
 

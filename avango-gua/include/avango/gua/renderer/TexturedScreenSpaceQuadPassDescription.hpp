@@ -52,8 +52,8 @@ namespace av
       TexturedScreenSpaceQuadPassDescription& operator=(const TexturedScreenSpaceQuadPassDescription&);
     };
 
-    typedef SingleField<Link<TexturedScreenSpaceQuadPassDescription> > SFTexturedScreenSpaceQuadPassDescription;
-    typedef MultiField<Link<TexturedScreenSpaceQuadPassDescription> > MFTexturedScreenSpaceQuadPassDescription;
+    using SFTexturedScreenSpaceQuadPassDescription = SingleField<Link<TexturedScreenSpaceQuadPassDescription> >;
+    using MFTexturedScreenSpaceQuadPassDescription = MultiField<Link<TexturedScreenSpaceQuadPassDescription> >;
 
   }
 

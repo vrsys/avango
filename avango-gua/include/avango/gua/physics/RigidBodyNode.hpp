@@ -101,8 +101,8 @@ namespace av
       RigidBodyNode& operator=(const RigidBodyNode&);
     };
 
-    typedef SingleField<Link<RigidBodyNode> > SFRigidBodyNode;
-    typedef MultiField<Link<RigidBodyNode> > MFRigidBodyNode;
+    using SFRigidBodyNode = SingleField<Link<RigidBodyNode> >;
+    using MFRigidBodyNode = MultiField<Link<RigidBodyNode> >;
 
   }
 

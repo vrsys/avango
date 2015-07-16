@@ -393,7 +393,7 @@ namespace
 {
   template<class A, class B> class first_equal_to
   {
-    typedef std::pair<A, B> Pair;
+    using Pair = std::pair<A, B>;
     A mValue;
 
   public:

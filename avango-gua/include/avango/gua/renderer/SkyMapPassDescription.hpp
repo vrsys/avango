@@ -82,8 +82,8 @@ namespace av
       SkyMapPassDescription& operator=(const SkyMapPassDescription&);
     };
 
-    typedef SingleField<Link<SkyMapPassDescription> > SFSkyMapPassDescription;
-    typedef MultiField<Link<SkyMapPassDescription> > MFSkyMapPassDescription;
+    using SFSkyMapPassDescription = SingleField<Link<SkyMapPassDescription> >;
+    using MFSkyMapPassDescription = MultiField<Link<SkyMapPassDescription> >;
 
   }
 

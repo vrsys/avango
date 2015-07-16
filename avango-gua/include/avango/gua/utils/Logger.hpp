@@ -75,8 +75,8 @@ namespace av
       Logger& operator=(const Logger&);
     };
 
-    typedef SingleField<Link<Logger> > SFLogger;
-    typedef MultiField<Link<Logger> > MFLogger;
+    using SFLogger = SingleField<Link<Logger> >;
+    using MFLogger = MultiField<Link<Logger> >;
 
   }
 

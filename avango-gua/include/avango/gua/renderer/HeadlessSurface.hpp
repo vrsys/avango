@@ -51,8 +51,8 @@ namespace av
       HeadlessSurface& operator=(const HeadlessSurface&) = delete;
     };
 
-    typedef SingleField<Link<HeadlessSurface> > SFHeadlessSurface;
-    typedef MultiField<Link<HeadlessSurface> > MFHeadlessSurface;
+    using SFHeadlessSurface = SingleField<Link<HeadlessSurface> >;
+    using MFHeadlessSurface = MultiField<Link<HeadlessSurface> >;
 
   }
 

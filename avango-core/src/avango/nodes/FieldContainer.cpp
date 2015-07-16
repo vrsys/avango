@@ -47,7 +47,7 @@ namespace
 {
   av::Logger& logger(av::Logger::getLogger("av::FieldContainer"));
 
-  typedef std::list<av::Link<av::FieldContainer> > FieldContainerList;
+  using FieldContainerList = std::list<av::Link<av::FieldContainer> >;
 
   FieldContainerList& evaluation_list = *new FieldContainerList;
 

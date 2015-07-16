@@ -82,8 +82,8 @@ namespace av
       PLODNode& operator=(const PLODNode&);
     };
 
-    typedef SingleField<Link<PLODNode> > SFPLODNode;
-    typedef MultiField<Link<PLODNode> > MFPLODNode;
+    using SFPLODNode = SingleField<Link<PLODNode> >;
+    using MFPLODNode = MultiField<Link<PLODNode> >;
 
   }
 

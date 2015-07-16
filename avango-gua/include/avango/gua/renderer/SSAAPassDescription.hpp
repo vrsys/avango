@@ -95,8 +95,8 @@ namespace av
       SSAAPassDescription& operator=(const SSAAPassDescription&);
     };
 
-    typedef SingleField<Link<SSAAPassDescription> > SFSSAAPassDescription;
-    typedef MultiField<Link<SSAAPassDescription> > MFSSAAPassDescription;
+    using SFSSAAPassDescription = SingleField<Link<SSAAPassDescription> >;
+    using MFSSAAPassDescription = MultiField<Link<SSAAPassDescription> >;
 
   }
 

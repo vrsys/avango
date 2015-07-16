@@ -81,8 +81,8 @@ namespace av
       Frustum& operator=(const Frustum&);
     };
 
-    typedef SingleField<Link<Frustum> > SFFrustum;
-    typedef MultiField<Link<Frustum> > MFFrustum;
+    using SFFrustum = SingleField<Link<Frustum> >;
+    using MFFrustum = MultiField<Link<Frustum> >;
 
   }
 

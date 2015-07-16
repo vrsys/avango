@@ -60,8 +60,8 @@ namespace av
       ClippingPlaneNode& operator=(const ClippingPlaneNode&);
     };
 
-    typedef SingleField<Link<ClippingPlaneNode> > SFClippingPlaneNode;
-    typedef MultiField<Link<ClippingPlaneNode> > MFClippingPlaneNode;
+    using SFClippingPlaneNode = SingleField<Link<ClippingPlaneNode> >;
+    using MFClippingPlaneNode = MultiField<Link<ClippingPlaneNode> >;
 
   }
 

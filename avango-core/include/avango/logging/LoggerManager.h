@@ -70,7 +70,7 @@ namespace av
       LoggerManager& operator=(const LoggerManager&);
 
     private:
-      typedef std::map<std::string, Logger*> LoggerMap;
+      using LoggerMap = std::map<std::string, Logger*>;
       LoggerMap& getLoggerMap();
 
       boost::mutex mLoggerMapMutex;
@@ -79,7 +79,10 @@ namespace av
 
     };
 
-    typedef Singleton<LoggerManager, CreateUsingNew, DefaultLifeTime, MultiThreaded> LoggerManagerInstance;
+    using LoggerManagerInstance = Singleton<LoggerManager,
+                                            CreateUsingNew,
+                                            DefaultLifeTime,
+                                            MultiThreaded>;
 
   } //namespace logging
 

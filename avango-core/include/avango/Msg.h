@@ -88,7 +88,7 @@ namespace av
     void setNetNode(NetNode* netNode);
 
   private:
-    typedef std::vector<unsigned char> MessageBuffer;
+    using MessageBuffer = std::vector<unsigned char>;
 
     Msg(MsgType newMsgType, boost::shared_ptr<MessageBuffer> newBuffer);
 

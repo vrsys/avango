@@ -38,7 +38,7 @@ namespace
 {
   av::Logger& logger(av::getLogger("av::daemon::DeviceService"));
 
-  typedef std::list<av::daemon::StationSegment*> station_segment_list_type;
+  using station_segment_list_type = std::list<av::daemon::StationSegment*>;
   station_segment_list_type station_segment_list;
 
   extern "C" void remove_remaining_station_segments()

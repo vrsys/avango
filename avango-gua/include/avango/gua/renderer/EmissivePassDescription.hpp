@@ -52,8 +52,8 @@ namespace av
       EmissivePassDescription& operator=(const EmissivePassDescription&);
     };
 
-    typedef SingleField<Link<EmissivePassDescription> > SFEmissivePassDescription;
-    typedef MultiField<Link<EmissivePassDescription> > MFEmissivePassDescription;
+    using SFEmissivePassDescription = SingleField<Link<EmissivePassDescription> >;
+    using MFEmissivePassDescription = MultiField<Link<EmissivePassDescription> >;
 
   }
 

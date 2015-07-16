@@ -106,8 +106,8 @@ namespace av
       internal
     };
 
-    typedef std::set<Field*>    FieldPtrSet;
-    typedef std::vector<Field*> FieldPtrVec;
+    using FieldPtrSet = std::set<Field*>;
+    using FieldPtrVec = std::vector<Field*>;
 
     Field();
     virtual ~Field();
@@ -319,8 +319,8 @@ namespace av
 
     FieldPtrSet mAuditors;
 
-    typedef std::pair<Field*, bool> FieldConnection;
-    typedef std::list<FieldConnection> InputFieldsList;
+    using FieldConnection = std::pair<Field*, bool>;
+    using InputFieldsList = std::list<FieldConnection>;
     InputFieldsList mConnectedFrom;
 
     struct {

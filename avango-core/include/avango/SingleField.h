@@ -76,8 +76,8 @@ namespace av
 
   public:
 
-    typedef Field SuperType;
-    typedef Value ValueType;
+    using SuperType = Field;
+    using ValueType = Value;
 
     /**
      * Event class for field getValue events.
@@ -126,8 +126,8 @@ namespace av
       const ValueType& mValue;
     };
 
-    typedef boost::function<void (const GetValueEvent&)> GetValueCallback;
-    typedef boost::function<void (const SetValueEvent&)> SetValueCallback;
+    using GetValueCallback = boost::function<void (const GetValueEvent&)>;
+    using SetValueCallback = boost::function<void (const SetValueEvent&)>;
 
     SingleField() :
       Field(),

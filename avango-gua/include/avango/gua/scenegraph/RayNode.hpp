@@ -57,8 +57,8 @@ namespace av
       RayNode& operator=(const RayNode&);
     };
 
-    typedef SingleField<Link<RayNode> > SFRayNode;
-    typedef MultiField<Link<RayNode> > MFRayNode;
+    using SFRayNode = SingleField<Link<RayNode> >;
+    using MFRayNode = MultiField<Link<RayNode> >;
 
   }
 

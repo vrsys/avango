@@ -39,7 +39,7 @@ namespace av {
     class SampleBuffer : public av::FieldContainer {
       AV_FC_DECLARE();
       public:
-        typedef int16_t SampleType;
+        using SampleType = int16_t;
         // static const unsigned int sampleRate = 48000;
 
         SFUInt NumSamples;
@@ -68,8 +68,8 @@ namespace av {
         bool         mStereo;
         unsigned int mSampleRate;
     };
-    typedef SingleField<Link<SampleBuffer> > SFSampleBuffer;
-    typedef MultiField<Link<SampleBuffer> > MFSampleBuffer;
+    using SFSampleBuffer = SingleField<Link<SampleBuffer> >;
+    using MFSampleBuffer = MultiField<Link<SampleBuffer> >;
   }
 }
 

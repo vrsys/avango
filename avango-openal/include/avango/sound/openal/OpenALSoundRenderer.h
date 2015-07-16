@@ -107,7 +107,7 @@ namespace av
               ALuint mSource;
               bool   mHaveSource;
               ALuint mBuffer;
-              typedef std::deque<ALuint> BufferQueue;
+              using BufferQueue = std::deque<ALuint>;
               BufferQueue mBufferQueue;
               bool   mHaveBuffer;
               double mPlayTime;

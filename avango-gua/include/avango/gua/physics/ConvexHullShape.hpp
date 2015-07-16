@@ -55,8 +55,8 @@ namespace av
       ConvexHullShape& operator=(const ConvexHullShape&);
     };
 
-    typedef SingleField<Link<ConvexHullShape> > SFConvexHullShape;
-    typedef MultiField<Link<ConvexHullShape> > MFConvexHullShape;
+    using SFConvexHullShape = SingleField<Link<ConvexHullShape> >;
+    using MFConvexHullShape = MultiField<Link<ConvexHullShape> >;
 
   }
 

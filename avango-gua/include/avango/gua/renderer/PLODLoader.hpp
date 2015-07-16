@@ -97,8 +97,8 @@ namespace av
       PLODLoader& operator=(const PLODLoader&);
     };
 
-    typedef SingleField<Link<PLODLoader> > SFPLODLoader;
-    typedef MultiField<Link<PLODLoader> > MFPLODLoader;
+    using SFPLODLoader = SingleField<Link<PLODLoader> >;
+    using MFPLODLoader = MultiField<Link<PLODLoader> >;
 
   }
 

@@ -89,7 +89,7 @@ namespace av
      * List of Types type definition. This is used as return value of
      * some functions.
      */
-    typedef std::vector<Type> TypeList;
+    using TypeList = std::vector<Type>;
 
     /**
      * Constructor
@@ -297,7 +297,7 @@ namespace av
   /**
    * An Alias for Type::TypeList
    */
-  typedef Type::TypeList TypeList;
+  using TypeList = Type::TypeList;
 
   InputStream& operator>>(InputStream& is, Type& value);
   OutputStream& operator<<(OutputStream& os, const Type& value);

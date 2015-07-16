@@ -199,7 +199,7 @@ namespace boost
   {
     template <class T> struct pointee<av::Link<T> >
     {
-      typedef T type;
+      using type = T;
     };
     template <> struct has_back_reference<av::script::Script>
       : mpl::true_

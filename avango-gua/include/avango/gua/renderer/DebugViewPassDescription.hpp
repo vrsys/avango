@@ -52,8 +52,8 @@ namespace av
       DebugViewPassDescription& operator=(const DebugViewPassDescription&);
     };
 
-    typedef SingleField<Link<DebugViewPassDescription> > SFDebugViewPassDescription;
-    typedef MultiField<Link<DebugViewPassDescription> > MFDebugViewPassDescription;
+    using SFDebugViewPassDescription = SingleField<Link<DebugViewPassDescription> >;
+    using MFDebugViewPassDescription = MultiField<Link<DebugViewPassDescription> >;
 
   }
 

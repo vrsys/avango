@@ -71,8 +71,8 @@ namespace av
       PickResult& operator=(const PickResult&);
     };
 
-    typedef SingleField<Link<PickResult> > SFPickResult;
-    typedef MultiField<Link<PickResult> > MFPickResult;
+    using SFPickResult = SingleField<Link<PickResult> >;
+    using MFPickResult = MultiField<Link<PickResult> >;
 
   }
 

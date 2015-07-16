@@ -298,7 +298,7 @@ namespace av {
         void         initializeLocalSource(boost::shared_ptr<SoundSource::LocalSource> localSource);
 
       private:
-        typedef std::vector<boost::shared_ptr<LocalSource> > LocalSources;
+        using LocalSources = std::vector<boost::shared_ptr<LocalSource> >;
         LocalSources                     mLocalSources;
         bool                            mPollPlaying;
 

@@ -86,8 +86,8 @@ namespace av
       double mScale;
     };
 
-    typedef SingleField<Link<ScaledGrabTool> > SFScaledGrabTool;
-    typedef MultiField<Link<ScaledGrabTool> > MFScaledGrabTool;
+    using SFScaledGrabTool = SingleField<Link<ScaledGrabTool> >;
+    using MFScaledGrabTool = MultiField<Link<ScaledGrabTool> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

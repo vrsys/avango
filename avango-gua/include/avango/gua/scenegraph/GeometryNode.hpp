@@ -70,8 +70,8 @@ namespace av
       GeometryNode& operator=(const GeometryNode&);
     };
 
-    typedef SingleField<Link<GeometryNode> > SFGeometryNode;
-    typedef MultiField<Link<GeometryNode> > MFGeometryNode;
+    using SFGeometryNode = SingleField<Link<GeometryNode> >;
+    using MFGeometryNode = MultiField<Link<GeometryNode> >;
 
   }
 

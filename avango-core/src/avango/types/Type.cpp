@@ -62,8 +62,8 @@ namespace
     bool         mDistributable;
   };
 
-  typedef std::vector<TypeData> TypeDataVec;
-  typedef std::map<std::string, uint32_t> TypeMap;
+  using TypeDataVec = std::vector<TypeData>;
+  using TypeMap = std::map<std::string, uint32_t>;
 
   // store internal type information indexed by Type::_type_spec
   TypeDataVec type_data_vec;

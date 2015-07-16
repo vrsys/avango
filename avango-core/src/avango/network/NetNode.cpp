@@ -94,7 +94,7 @@ av::NetNode::join(const std::string& groupName)
     // from http://stackoverflow.com/questions/541561/using-boost-tokenizer-escaped-list-separator-with-different-parameters
     std::string gn(groupName);
 
-    typedef boost::tokenizer< boost::escaped_list_separator<char> > Tokenizer;
+    using Tokenizer = boost::tokenizer< boost::escaped_list_separator<char> >;
     boost::escaped_list_separator<char> Separator( ' ', '|' );
     Tokenizer tok( gn, Separator );
     unsigned numTokens = 0;
@@ -485,7 +485,7 @@ av::NetNode::notifyCreations()
     return;
   }
 
-  typedef std::vector<DistributedSet::value_type> av_dst_vector;
+  using av_dst_vector = std::vector<DistributedSet::value_type>;
 
   av_dst_vector tmp(mPendingCreations.begin(), mPendingCreations.end());
 
@@ -539,7 +539,7 @@ av::NetNode::notifyUpdates()
   if (!mPendingUpdates.size())
     return;
 
-  typedef std::vector<DistributedSet::value_type> av_dst_vector;
+  using av_dst_vector = std::vector<DistributedSet::value_type>;
 
   av_dst_vector tmp(mPendingUpdates.begin(), mPendingUpdates.end());
 
@@ -582,7 +582,7 @@ av::NetNode::notifyDeletes()
   if (!mPendingDeletes.size())
     return;
 
-  typedef std::vector<DistributedSet::value_type> av_dst_vector;
+  using av_dst_vector = std::vector<DistributedSet::value_type>;
 
   av_dst_vector tmp(mPendingDeletes.begin(), mPendingDeletes.end());
 

@@ -53,8 +53,8 @@ namespace av
       StencilPassDescription& operator=(const StencilPassDescription&);
     };
 
-    typedef SingleField<Link<StencilPassDescription> > SFStencilPassDescription;
-    typedef MultiField<Link<StencilPassDescription> > MFStencilPassDescription;
+    using SFStencilPassDescription = SingleField<Link<StencilPassDescription> >;
+    using MFStencilPassDescription = MultiField<Link<StencilPassDescription> >;
 
   }
 

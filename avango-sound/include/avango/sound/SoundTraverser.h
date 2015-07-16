@@ -78,8 +78,8 @@ namespace av {
         bool mCheckTraversal;
         bool mHaveCallbackHandle;
         av::Application::CallbackHandle mCallbackHandle;
-        typedef std::vector<Link<SoundRenderer> > SoundRenderers;
-        typedef std::vector<Link<av::gua::Node> > ChildNodes;
+        using SoundRenderers = std::vector<Link<SoundRenderer> >;
+        using ChildNodes = std::vector<Link<av::gua::Node> >;
     };
   }
 }

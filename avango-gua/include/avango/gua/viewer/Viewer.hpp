@@ -73,8 +73,8 @@ namespace av
       Viewer& operator=(const Viewer&);
     };
 
-    typedef SingleField<Link<Viewer> > SFViewer;
-    typedef MultiField<Link<Viewer> > MFViewer;
+    using SFViewer = SingleField<Link<Viewer> >;
+    using MFViewer = MultiField<Link<Viewer> >;
 
   }
 

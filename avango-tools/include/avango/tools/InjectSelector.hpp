@@ -53,8 +53,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<InjectSelector> > SFInjectSelector;
-    typedef MultiField<Link<InjectSelector> > MFInjectSelector;
+    using SFInjectSelector = SingleField<Link<InjectSelector> >;
+    using MFInjectSelector = MultiField<Link<InjectSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

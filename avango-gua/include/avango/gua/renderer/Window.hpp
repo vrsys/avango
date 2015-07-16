@@ -54,8 +54,8 @@ namespace av
       Window& operator=(const Window&);
     };
 
-    typedef SingleField<Link<Window> > SFWindow;
-    typedef MultiField<Link<Window> > MFWindow;
+    using SFWindow = SingleField<Link<Window> >;
+    using MFWindow = MultiField<Link<Window> >;
 
   }
 

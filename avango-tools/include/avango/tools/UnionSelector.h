@@ -74,8 +74,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<UnionSelector> > SFUnionSelector;
-    typedef MultiField<Link<UnionSelector> > MFUnionSelector;
+    using SFUnionSelector = SingleField<Link<UnionSelector> >;
+    using MFUnionSelector = MultiField<Link<UnionSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

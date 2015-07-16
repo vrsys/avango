@@ -66,7 +66,7 @@ namespace av
 
   public:
 
-    typedef long int IDType;
+    using IDType = long int;
 
     /**
      * Constructor
@@ -293,7 +293,7 @@ namespace av
 
   private:
 
-    typedef std::vector<Field*> FieldPtrVec;
+    using FieldPtrVec = std::vector<Field*>;
     FieldPtrVec mFieldPtrs;     // for fast lookup in getFields, do not use directly !
 
     struct FieldInfo
@@ -303,10 +303,10 @@ namespace av
       std::string mName;
     };
 
-    typedef std::vector<FieldInfo> FieldInfos;
+    using FieldInfos = std::vector<FieldInfo>;
     FieldInfos mFields;
 
-    typedef std::tr1::unordered_map<std::string, FieldInfos::size_type> FieldsIndex;
+    using FieldsIndex = std::tr1::unordered_map<std::string, FieldInfos::size_type>;
     FieldsIndex mFieldsIndex;
 
     FieldInfo* getFieldInfo(const std::string& name);
@@ -326,8 +326,8 @@ namespace av
   template class AV_DLL MultiField<Link<FieldContainer> >;
 #endif
 
-  typedef SingleField<Link<FieldContainer> > SFContainer;
-  typedef MultiField<Link<FieldContainer> >  MFContainer;
+  using SFContainer = SingleField<Link<FieldContainer> >;
+  using MFContainer = MultiField<Link<FieldContainer> >;
 
 }
 

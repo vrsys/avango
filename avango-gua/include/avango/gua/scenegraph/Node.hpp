@@ -114,8 +114,8 @@ namespace av
       Node& operator=(const Node&);
     };
 
-    typedef SingleField<Link<Node> > SFNode;
-    typedef MultiField<Link<Node> > MFNode;
+    using SFNode = SingleField<Link<Node> >;
+    using MFNode = MultiField<Link<Node> >;
 
   }
 

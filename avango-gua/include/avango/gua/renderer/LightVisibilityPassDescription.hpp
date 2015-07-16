@@ -72,8 +72,8 @@ namespace av
       LightVisibilityPassDescription& operator=(const LightVisibilityPassDescription&);
     };
 
-    typedef SingleField<Link<LightVisibilityPassDescription> > SFLightVisibilityPassDescription;
-    typedef MultiField<Link<LightVisibilityPassDescription> > MFLightVisibilityPassDescription;
+    using SFLightVisibilityPassDescription = SingleField<Link<LightVisibilityPassDescription> >;
+    using MFLightVisibilityPassDescription = MultiField<Link<LightVisibilityPassDescription> >;
 
   }
 

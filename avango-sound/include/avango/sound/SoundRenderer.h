@@ -68,8 +68,8 @@ namespace av {
         void setListenerVeloCB(const av::gua::SFVec3::SetValueEvent& event);
 
     };
-    typedef SingleField<Link<SoundRenderer> > SFSoundRenderer;
-    typedef MultiField<Link<SoundRenderer> > MFSoundRenderer;
+    using SFSoundRenderer = SingleField<Link<SoundRenderer> >;
+    using MFSoundRenderer = MultiField<Link<SoundRenderer> >;
   }
 }
 #endif /*AV_SOUND_SOUNDRENDERER_H*/

@@ -138,8 +138,8 @@ namespace av
       WindowBase& operator=(const WindowBase&);
     };
 
-    typedef SingleField<Link<WindowBase> > SFWindowBase;
-    typedef MultiField<Link<WindowBase> > MFWindowBase;
+    using SFWindowBase = SingleField<Link<WindowBase> >;
+    using MFWindowBase = MultiField<Link<WindowBase> >;
 
   }
 

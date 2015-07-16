@@ -57,7 +57,7 @@ namespace av
             throw index_exception();
         }
 
-        // typedef typename Type::ValueType ValueType;
+        // using ValueType = typename Type::ValueType;
 
       public:
 
@@ -95,7 +95,7 @@ namespace av
 
       template<class Type> void MultiValueField_set_all_values(Type& self, boost::python::object value)
       {
-        typedef typename Type::ValueType value_type;
+        using value_type = typename Type::ValueType;
         int len = boost::python::extract<int>(value.attr("__len__")());
         std::vector<value_type> list(len);
         for (int i = 0; i != len; ++i)
@@ -108,7 +108,7 @@ namespace av
 
       template<class Type> void MultiValueField_set_some_values(Type& self, boost::python::object value, boost::python::object inds)
       {
-        typedef typename Type::ValueType value_type;
+        using value_type = typename Type::ValueType;
 
         int len = boost::python::extract<int>(value.attr("__len__")());
         std::vector<value_type> value_list(len);

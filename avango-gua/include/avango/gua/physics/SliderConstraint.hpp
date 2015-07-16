@@ -87,8 +87,8 @@ namespace av
       SliderConstraint& operator=(const SliderConstraint&);
     };
 
-    typedef SingleField<Link<SliderConstraint> > SFSliderConstraint;
-    typedef MultiField<Link<SliderConstraint> > MFSliderConstraint;
+    using SFSliderConstraint = SingleField<Link<SliderConstraint> >;
+    using MFSliderConstraint = MultiField<Link<SliderConstraint> >;
 
   }
 

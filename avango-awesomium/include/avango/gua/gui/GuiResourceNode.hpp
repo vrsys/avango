@@ -136,8 +136,8 @@ namespace gua
 
     };
 
-    typedef SingleField<Link<GuiResourceNode> > SFGuiResourceNode;
-    typedef MultiField<Link<GuiResourceNode> > MFGuiResourceNode;
+    using SFGuiResourceNode = SingleField<Link<GuiResourceNode> >;
+    using MFGuiResourceNode = MultiField<Link<GuiResourceNode> >;
 
   } // namespace gui
 

@@ -57,7 +57,7 @@ namespace av
     {
       template<class Type> struct select_link_type
       {
-        typedef Type type;
+        using type = Type;
         static Type get_value(boost::python::object obj)
         {
           return boost::python::extract<type>(obj);
@@ -66,7 +66,7 @@ namespace av
 
       template<class Type> struct select_link_type< av::Link<Type> >
       {
-        typedef Type type;
+        using type = Type;
         static av::Link<Type> get_value(boost::python::object obj)
         {
           av::Base* av_value = boost::python::extract<av::Base*>(obj);
@@ -82,7 +82,7 @@ namespace av
 
       template<class Type> void Field_set_value(Type& self, boost::python::object value)
       {
-        typedef typename Type::ValueType value_type;
+        using value_type = typename Type::ValueType;
         value_type tmp(detail::select_link_type<value_type>::get_value(value));
         self.setValue(tmp);
       }
@@ -116,8 +116,8 @@ namespace av
             throw index_exception();
         }
 
-        typedef typename Type::ValueType ValueType;
-        typedef detail::select_link_type<ValueType> SelectType;
+        using ValueType = typename Type::ValueType;
+        using SelectType = detail::select_link_type<ValueType>;
 
       public:
 
@@ -192,7 +192,7 @@ namespace av
 
       template<class Type> void MultiField_set_value(Type& self, boost::python::object value)
       {
-        typedef typename Type::ValueType value_type;
+        using value_type = typename Type::ValueType;
         int len = boost::python::extract<int>(value.attr("__len__")());
         std::vector<value_type> list(len);
         for (int i = 0; i != len; ++i)

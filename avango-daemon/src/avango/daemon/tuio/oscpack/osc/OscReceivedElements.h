@@ -426,7 +426,7 @@ public:
     const char *TypeTags() const { return typeTagsBegin_; }
 
 
-    typedef ReceivedMessageArgumentIterator const_iterator;
+    using const_iterator = ReceivedMessageArgumentIterator;
     
 	ReceivedMessageArgumentIterator ArgumentsBegin() const
     {
@@ -461,7 +461,7 @@ public:
 
     unsigned long ElementCount() const { return elementCount_; }
 
-    typedef ReceivedBundleElementIterator const_iterator;
+    using const_iterator = ReceivedBundleElementIterator;
     
 	ReceivedBundleElementIterator ElementsBegin() const
     {

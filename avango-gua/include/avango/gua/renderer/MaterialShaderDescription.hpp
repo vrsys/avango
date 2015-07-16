@@ -68,8 +68,8 @@ namespace av
       MaterialShaderDescription& operator=(const MaterialShaderDescription&);
     };
 
-    typedef SingleField<Link<MaterialShaderDescription> > SFMaterialShaderDescription;
-    typedef MultiField<Link<MaterialShaderDescription> > MFMaterialShaderDescription;
+    using SFMaterialShaderDescription = SingleField<Link<MaterialShaderDescription> >;
+    using MFMaterialShaderDescription = MultiField<Link<MaterialShaderDescription> >;
 
   }
 

@@ -74,8 +74,8 @@ namespace av
       SceneGraph& operator=(const SceneGraph&);
     };
 
-    typedef SingleField<Link<SceneGraph> > SFSceneGraph;
-    typedef MultiField<Link<SceneGraph> > MFSceneGraph;
+    using SFSceneGraph = SingleField<Link<SceneGraph> >;
+    using MFSceneGraph = MultiField<Link<SceneGraph> >;
 
   }
 

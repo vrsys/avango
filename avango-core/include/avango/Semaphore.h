@@ -34,19 +34,19 @@
 #include <boost/thread/condition_variable.hpp>
 namespace av
 {
-	typedef boost::condition_variable condition;
+	using condition = boost::condition_variable;
 }
 #else
 #include <boost/thread/condition.hpp>
 namespace av
 {
-	typedef boost::condition condition;
+	using condition = boost::condition;
 }
 #endif
 
 #include "windows_specific.h"
 
-namespace av 
+namespace av
 {
   /**
    * Semaphore implementation using boost::mutex

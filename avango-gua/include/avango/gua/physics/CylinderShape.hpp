@@ -61,8 +61,8 @@ namespace av
       CylinderShape& operator=(const CylinderShape&);
     };
 
-    typedef SingleField<Link<CylinderShape> > SFCylinderShape;
-    typedef MultiField<Link<CylinderShape> > MFCylinderShape;
+    using SFCylinderShape = SingleField<Link<CylinderShape> >;
+    using MFCylinderShape = MultiField<Link<CylinderShape> >;
 
   }
 

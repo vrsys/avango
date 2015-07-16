@@ -62,8 +62,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<TriggerSelector> > SFTriggerSelector;
-    typedef MultiField<Link<TriggerSelector> > MFTriggerSelector;
+    using SFTriggerSelector = SingleField<Link<TriggerSelector> >;
+    using MFTriggerSelector = MultiField<Link<TriggerSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

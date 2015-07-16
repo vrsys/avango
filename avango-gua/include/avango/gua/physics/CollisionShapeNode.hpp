@@ -62,8 +62,8 @@ namespace av
       CollisionShapeNode& operator=(const CollisionShapeNode&);
     };
 
-    typedef SingleField<Link<CollisionShapeNode> > SFCollisionShapeNode;
-    typedef MultiField<Link<CollisionShapeNode> > MFCollisionShapeNode;
+    using SFCollisionShapeNode = SingleField<Link<CollisionShapeNode> >;
+    using MFCollisionShapeNode = MultiField<Link<CollisionShapeNode> >;
 
   }
 

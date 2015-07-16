@@ -619,7 +619,7 @@ av::daemon::HIDInput::processInput(HWND hWnd, WPARAM wParam, LPARAM lParam)
 void
 av::daemon::HIDInput::reportHidButtonState(const HidButtonList& list)
 {
-  typedef std::vector<struct input_event> EventArray;
+  using EventArray = std::vector<struct input_event>;
   EventArray events;
   WindowsEventMapping::EventPair ev;
 
@@ -780,7 +780,7 @@ av::daemon::HIDInput::parseRawInputHid(PRAWINPUT raw)
               value |= ((ULONG)-1 << valueCaps[i].BitSize);
             LONG signedValue = *reinterpret_cast<LONG*>(&value);
 
-            typedef std::vector<struct input_event> EventArray;
+            using EventArray = std::vector<struct input_event>;
             EventArray events;
 
             if (valueCaps[i].UsagePage == HID_USAGE_PAGE_GENERIC && valueCaps[i].Range.UsageMin == HID_USAGE_GENERIC_HATSWITCH)
@@ -862,7 +862,7 @@ void
 av::daemon::HIDInput::parseRawInputMouse(PRAWINPUT raw)
 {
   const RAWMOUSE m = raw->data.mouse;
-  typedef std::vector<struct input_event> EventArray;
+  using EventArray = std::vector<struct input_event>;
   EventArray events;
 
   // left button

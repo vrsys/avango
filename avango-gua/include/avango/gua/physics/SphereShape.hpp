@@ -61,8 +61,8 @@ namespace av
       SphereShape& operator=(const SphereShape&);
     };
 
-    typedef SingleField<Link<SphereShape> > SFSphereShape;
-    typedef MultiField<Link<SphereShape> > MFSphereShape;
+    using SFSphereShape = SingleField<Link<SphereShape> >;
+    using MFSphereShape = MultiField<Link<SphereShape> >;
 
   }
 

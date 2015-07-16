@@ -62,7 +62,7 @@ namespace av
 
 
     };
-    typedef Singleton<ConsoleAppender> ConsoleAppenderInstance;
+    using ConsoleAppenderInstance = Singleton<ConsoleAppender>;
 
   } // namespace logging
 

@@ -50,8 +50,8 @@ namespace av
       PipelinePassDescription& operator=(const PipelinePassDescription&);
     };
 
-    typedef SingleField<Link<PipelinePassDescription> > SFPipelinePassDescription;
-    typedef MultiField<Link<PipelinePassDescription> > MFPipelinePassDescription;
+    using SFPipelinePassDescription = SingleField<Link<PipelinePassDescription> >;
+    using MFPipelinePassDescription = MultiField<Link<PipelinePassDescription> >;
 
   }
 

@@ -59,8 +59,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<ObjectSelector> > SFObjectSelector;
-    typedef MultiField<Link<ObjectSelector> > MFObjectSelector;
+    using SFObjectSelector = SingleField<Link<ObjectSelector> >;
+    using MFObjectSelector = MultiField<Link<ObjectSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

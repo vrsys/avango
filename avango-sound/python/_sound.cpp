@@ -35,15 +35,15 @@ using namespace av::python;
 
 
 namespace boost
- {
+{
   namespace python
-   {
+  {
     template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+    {
+      using type = T;
+    };
+  }
+}
 
 
 BOOST_PYTHON_MODULE(_sound)

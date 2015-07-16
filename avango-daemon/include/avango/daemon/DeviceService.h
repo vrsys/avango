@@ -129,9 +129,9 @@ namespace av
       void     clearStationCache();
     };
 
-    typedef SingleField<Link<DeviceService> > SFDeviceService;
-    typedef MultiField<Link<DeviceService> > MFDeviceService;
-    typedef Singleton<DeviceService> DevService;
+    using SFDeviceService = SingleField<Link<DeviceService> >;
+    using MFDeviceService = MultiField<Link<DeviceService> >;
+    using DevService = Singleton<DeviceService>;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

@@ -106,9 +106,9 @@ namespace av
      */
     void exit(bool realExit = true);
 
-    typedef boost::signals2::signal<void ()> VoidCallbackSignal;
-    typedef VoidCallbackSignal::slot_type VoidCallback;
-    typedef boost::signals2::connection CallbackHandle;
+    using VoidCallbackSignal = boost::signals2::signal<void ()>;
+    using VoidCallback = VoidCallbackSignal::slot_type;
+    using CallbackHandle = boost::signals2::connection;
 
     /**
      * add a callback which is called before the evaluation of Avango FieldContainers
@@ -152,7 +152,7 @@ namespace av
 
   };
 
-  typedef Singleton<Application> ApplicationInstance;
+  using ApplicationInstance = Singleton<Application>;
 
 }
 

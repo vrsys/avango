@@ -79,8 +79,8 @@ namespace av
       bool mDragged;
     };
 
-    typedef SingleField<Link<DragTool> > SFDragTool;
-    typedef MultiField<Link<DragTool> > MFDragTool;
+    using SFDragTool = SingleField<Link<DragTool> >;
+    using MFDragTool = MultiField<Link<DragTool> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

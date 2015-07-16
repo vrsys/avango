@@ -64,8 +64,8 @@ namespace av
 
   namespace script
   {
-    typedef SingleField<boost::python::object> SFObject;
-    typedef MultiField<boost::python::object> MFObject;
+    using SFObject = SingleField<boost::python::object>;
+    using MFObject = MultiField<boost::python::object>;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

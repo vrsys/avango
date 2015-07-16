@@ -74,7 +74,7 @@ namespace av
     public:
       size_t operator()(const AnyLink& link) const
       {
-        typedef size_t cast_destination_t;
+        using cast_destination_t = size_t;
         return reinterpret_cast<cast_destination_t>(link.getBasePtr())>>3;
       }
     };

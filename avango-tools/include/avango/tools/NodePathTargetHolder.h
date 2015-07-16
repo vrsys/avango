@@ -75,8 +75,8 @@ namespace av
 
     };
 
-    typedef SingleField<Link<NodePathTargetHolder> > SFNodePathTargetHolder;
-    typedef MultiField<Link<NodePathTargetHolder> > MFNodePathTargetHolder;
+    using SFNodePathTargetHolder = SingleField<Link<NodePathTargetHolder> >;
+    using MFNodePathTargetHolder = MultiField<Link<NodePathTargetHolder> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

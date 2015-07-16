@@ -57,8 +57,8 @@ namespace av
       TransformNode& operator=(const TransformNode&);
     };
 
-    typedef SingleField<Link<TransformNode> > SFTransformNode;
-    typedef MultiField<Link<TransformNode> > MFTransformNode;
+    using SFTransformNode = SingleField<Link<TransformNode> >;
+    using MFTransformNode = MultiField<Link<TransformNode> >;
 
   }
 

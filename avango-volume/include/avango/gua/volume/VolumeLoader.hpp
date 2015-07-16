@@ -72,8 +72,8 @@ namespace av
       VolumeLoader& operator=(const VolumeLoader&);
     };
 
-    typedef SingleField<Link<VolumeLoader> > SFVolumeLoader;
-    typedef MultiField<Link<VolumeLoader> > MFVolumeLoader;
+    using SFVolumeLoader = SingleField<Link<VolumeLoader> >;
+    using MFVolumeLoader = MultiField<Link<VolumeLoader> >;
 
   }
 

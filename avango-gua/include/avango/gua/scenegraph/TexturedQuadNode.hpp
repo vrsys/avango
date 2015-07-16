@@ -89,8 +89,8 @@ namespace av
       TexturedQuadNode& operator=(const TexturedQuadNode&);
     };
 
-    typedef SingleField<Link<TexturedQuadNode> > SFTexturedQuadNode;
-    typedef MultiField<Link<TexturedQuadNode> > MFTexturedQuadNode;
+    using SFTexturedQuadNode = SingleField<Link<TexturedQuadNode> >;
+    using MFTexturedQuadNode = MultiField<Link<TexturedQuadNode> >;
 
   }
 

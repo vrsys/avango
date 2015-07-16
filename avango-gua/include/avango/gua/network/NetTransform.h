@@ -60,7 +60,7 @@ namespace av
 
     public:
 
-      typedef std::tr1::unordered_set<std::string>           EIDGrpMap;
+      using EIDGrpMap = std::tr1::unordered_set<std::string>;
       NetTransform();
       virtual ~NetTransform();
 
@@ -121,15 +121,15 @@ namespace av
       // the current view, meaning the current set of participants in this group
       EIDGrpMap mGroupMap;
 
-      typedef std::tr1::unordered_map<std::string, Link<SharedContainerHolder> > SharedContainerMap;
+      using SharedContainerMap = std::tr1::unordered_map<std::string, Link<SharedContainerHolder> >;
       SharedContainerMap mSharedContainerMap;
 
       Application::CallbackHandle mPreEvalHandle;
       Application::CallbackHandle mPostEvalHandle;
     };
 
-    typedef SingleField<Link<NetTransform> > SFNetTransform;
-    typedef MultiField<Link<NetTransform> > MFNetTransform;
+    using SFNetTransform = SingleField<Link<NetTransform> >;
+    using MFNetTransform = MultiField<Link<NetTransform> >;
 
   } // namespace gua
 

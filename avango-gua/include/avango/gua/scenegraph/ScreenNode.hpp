@@ -74,8 +74,8 @@ namespace av
       ScreenNode& operator=(const ScreenNode&);
     };
 
-    typedef SingleField<Link<ScreenNode> > SFScreenNode;
-    typedef MultiField<Link<ScreenNode> > MFScreenNode;
+    using SFScreenNode = SingleField<Link<ScreenNode> >;
+    using MFScreenNode = MultiField<Link<ScreenNode> >;
 
   }
 

@@ -457,7 +457,7 @@ av::daemon::WindowsEventMapping::mapHidValueEvent(unsigned short usagePage,
                                                   unsigned short appUsageId, 
                                                   EventPair& ev)
 {
-  typedef ::std::map<std::pair<unsigned short, unsigned short>, EventPair > ValMap;
+  using ValMap = ::std::map<std::pair<unsigned short, unsigned short>, EventPair >;
   bool ret = false;
   ValMap::const_iterator return_value = sWindowsEventMap.mHidMappingValue.find(std::make_pair(usagePage, usageId));
   if (return_value != sWindowsEventMap.mHidMappingValue.end()) 

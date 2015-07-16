@@ -102,8 +102,8 @@ namespace av
       HingeConstraint& operator=(const HingeConstraint&);
     };
 
-    typedef SingleField<Link<HingeConstraint> > SFHingeConstraint;
-    typedef MultiField<Link<HingeConstraint> > MFHingeConstraint;
+    using SFHingeConstraint = SingleField<Link<HingeConstraint> >;
+    using MFHingeConstraint = MultiField<Link<HingeConstraint> >;
 
   }
 

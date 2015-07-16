@@ -54,8 +54,8 @@ namespace av
         OculusWindow& operator=(const OculusWindow&);
     };
 
-    typedef SingleField<Link<OculusWindow> > SFOculusWindow;
-    typedef MultiField<Link<OculusWindow> > MFOculusWindow;
+    using SFOculusWindow = SingleField<Link<OculusWindow> >;
+    using MFOculusWindow = MultiField<Link<OculusWindow> >;
 
   }
 

@@ -67,8 +67,8 @@ namespace av
       FullscreenPassDescription& operator=(const FullscreenPassDescription&);
     };
 
-    typedef SingleField<Link<FullscreenPassDescription> > SFFullscreenPassDescription;
-    typedef MultiField<Link<FullscreenPassDescription> > MFFullscreenPassDescription;
+    using SFFullscreenPassDescription = SingleField<Link<FullscreenPassDescription> >;
+    using MFFullscreenPassDescription = MultiField<Link<FullscreenPassDescription> >;
 
   }
 

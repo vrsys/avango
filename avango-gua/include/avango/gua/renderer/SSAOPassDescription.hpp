@@ -65,8 +65,8 @@ namespace av
       SSAOPassDescription& operator=(const SSAOPassDescription&);
     };
 
-    typedef SingleField<Link<SSAOPassDescription> > SFSSAOPassDescription;
-    typedef MultiField<Link<SSAOPassDescription> > MFSSAOPassDescription;
+    using SFSSAOPassDescription = SingleField<Link<SSAOPassDescription> >;
+    using MFSSAOPassDescription = MultiField<Link<SSAOPassDescription> >;
 
   }
 

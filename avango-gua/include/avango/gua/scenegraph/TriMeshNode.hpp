@@ -77,8 +77,8 @@ namespace av
       TriMeshNode& operator=(const TriMeshNode&);
     };
 
-    typedef SingleField<Link<TriMeshNode> > SFTriMeshNode;
-    typedef MultiField<Link<TriMeshNode> > MFTriMeshNode;
+    using SFTriMeshNode = SingleField<Link<TriMeshNode> >;
+    using MFTriMeshNode = MultiField<Link<TriMeshNode> >;
 
   }
 

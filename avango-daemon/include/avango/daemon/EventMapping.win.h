@@ -29,16 +29,16 @@ namespace av
        */
       WindowsEventMapping();
 
-      typedef std::pair<unsigned short, unsigned short> EventPair;
+      using EventPair = std::pair<unsigned short, unsigned short>;
 
       static unsigned long mapKeyboardEvent(USHORT VKey);
 
-      static bool mapHidButtonEvent(unsigned short usagePage, unsigned short usageId, 
-                                    unsigned short appUsagePage, unsigned short appUsageId, 
+      static bool mapHidButtonEvent(unsigned short usagePage, unsigned short usageId,
+                                    unsigned short appUsagePage, unsigned short appUsageId,
                                     EventPair& ev);
-      
-      static bool mapHidValueEvent(unsigned short usagePage, unsigned short usageId, 
-                                    unsigned short appUsagePage, unsigned short appUsageId, 
+
+      static bool mapHidValueEvent(unsigned short usagePage, unsigned short usageId,
+                                    unsigned short appUsagePage, unsigned short appUsageId,
                                     EventPair& ev);
     private:
 

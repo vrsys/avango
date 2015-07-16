@@ -52,8 +52,8 @@ namespace av
       PhysicallyBasedShadingPassDescription& operator=(const PhysicallyBasedShadingPassDescription&);
     };
 
-    typedef SingleField<Link<PhysicallyBasedShadingPassDescription> > SFPhysicallyBasedShadingPassDescription;
-    typedef MultiField<Link<PhysicallyBasedShadingPassDescription> > MFPhysicallyBasedShadingPassDescription;
+    using SFPhysicallyBasedShadingPassDescription = SingleField<Link<PhysicallyBasedShadingPassDescription> >;
+    using MFPhysicallyBasedShadingPassDescription = MultiField<Link<PhysicallyBasedShadingPassDescription> >;
 
   }
 

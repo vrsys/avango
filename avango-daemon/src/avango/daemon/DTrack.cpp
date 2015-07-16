@@ -111,7 +111,7 @@ av::daemon::DTrack::readLoop()
 
   while (mKeepRunning)
   {
-    typedef NumStationMap::const_iterator station_map_it;
+    using station_map_it = NumStationMap::const_iterator;
 
     for (station_map_it current = mStations.begin(); current != mStations.end(); ++current)
     {

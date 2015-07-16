@@ -123,8 +123,7 @@ namespace av
     std::string getNewId();
     std::string depthIndent();
 
-    typedef std::map<Link<Base>, std::string, std::less<Link<Base> > >
-    BaseStringMap;
+    using BaseStringMap = std::map<Link<Base>, std::string, std::less<Link<Base> > >;
 
     BaseStringMap mIdMap;
 

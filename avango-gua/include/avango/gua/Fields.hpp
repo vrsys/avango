@@ -19,39 +19,39 @@ namespace av
   {
     void AV_GUA_DLL initFields();
 
-    typedef SingleField< ::gua::math::mat4> SFMatrix4;
-    typedef MultiField< ::gua::math::mat4> MFMatrix4;
-    typedef SingleField< ::gua::math::mat3> SFMatrix3;
-    typedef MultiField< ::gua::math::mat3> MFMatrix3;
+    using SFMatrix4 = SingleField< ::gua::math::mat4>;
+    using MFMatrix4 = MultiField< ::gua::math::mat4>;
+    using SFMatrix3 = SingleField< ::gua::math::mat3>;
+    using MFMatrix3 = MultiField< ::gua::math::mat3>;
 
-    typedef MultiField< ::gua::math::quat> MFQuat;
-    typedef SingleField< ::gua::math::quat> SFQuat;
+    using MFQuat = MultiField< ::gua::math::quat>;
+    using SFQuat = SingleField< ::gua::math::quat>;
 
-    typedef SingleField< ::gua::math::vec4> SFVec4;
-    typedef MultiField< ::gua::math::vec4> MFVec4;
-    typedef SingleField< ::gua::math::vec3> SFVec3;
-    typedef MultiField< ::gua::math::vec3> MFVec3;
-    typedef SingleField< ::gua::math::vec2> SFVec2;
-    typedef MultiField< ::gua::math::vec2> MFVec2;
+    using SFVec4 = SingleField< ::gua::math::vec4>;
+    using MFVec4 = MultiField< ::gua::math::vec4>;
+    using SFVec3 = SingleField< ::gua::math::vec3>;
+    using MFVec3 = MultiField< ::gua::math::vec3>;
+    using SFVec2 = SingleField< ::gua::math::vec2>;
+    using MFVec2 = MultiField< ::gua::math::vec2>;
 
-    typedef SingleField< ::gua::math::vec4i> SFVec4i;
-    typedef MultiField< ::gua::math::vec4i> MFVec4i;
-    typedef SingleField< ::gua::math::vec3i> SFVec3i;
-    typedef MultiField< ::gua::math::vec3i> MFVec3i;
-    typedef SingleField< ::gua::math::vec2i> SFVec2i;
-    typedef MultiField< ::gua::math::vec2i> MFVec2i;
+    using SFVec4i = SingleField< ::gua::math::vec4i>;
+    using MFVec4i = MultiField< ::gua::math::vec4i>;
+    using SFVec3i = SingleField< ::gua::math::vec3i>;
+    using MFVec3i = MultiField< ::gua::math::vec3i>;
+    using SFVec2i = SingleField< ::gua::math::vec2i>;
+    using MFVec2i = MultiField< ::gua::math::vec2i>;
 
-    typedef SingleField< ::gua::math::vec4ui> SFVec4ui;
-    typedef MultiField< ::gua::math::vec4ui> MFVec4ui;
-    typedef SingleField< ::gua::math::vec3ui> SFVec3ui;
-    typedef MultiField< ::gua::math::vec3ui> MFVec3ui;
-    typedef SingleField< ::gua::math::vec2ui> SFVec2ui;
-    typedef MultiField< ::gua::math::vec2ui> MFVec2ui;
+    using SFVec4ui = SingleField< ::gua::math::vec4ui>;
+    using MFVec4ui = MultiField< ::gua::math::vec4ui>;
+    using SFVec3ui = SingleField< ::gua::math::vec3ui>;
+    using MFVec3ui = MultiField< ::gua::math::vec3ui>;
+    using SFVec2ui = SingleField< ::gua::math::vec2ui>;
+    using MFVec2ui = MultiField< ::gua::math::vec2ui>;
 
-    typedef SFMatrix4 SFMatrix;
-    typedef MFMatrix4 MFMatrix;
-    typedef SingleField< ::gua::utils::Color3f> SFColor;
-    typedef MultiField< ::gua::utils::Color3f> MFColor;
+    using SFMatrix = SFMatrix4;
+    using MFMatrix = MFMatrix4;
+    using SFColor = SingleField< ::gua::utils::Color3f>;
+    using MFColor = MultiField< ::gua::utils::Color3f>;
 
   }
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

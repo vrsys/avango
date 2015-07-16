@@ -387,7 +387,7 @@ namespace av
    * Convenience definition, shorthand for logging::Logger.
    * \ingroup av_logging
    */
-  typedef logging::Logger Logger;
+  using Logger = logging::Logger;
 
   /**
    * Convenience definition, shorthand for Logger::getLogger.

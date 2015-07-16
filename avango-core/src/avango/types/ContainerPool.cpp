@@ -325,8 +325,6 @@ av::ContainerPool::notifyConnect(av::Field* field)
 /*static*/ void
 av::ContainerPool::notifyDisconnect(av::Field* field)
 {
-  typedef FieldDisconnectCallbacksType::iterator iterator;
-
   for (FieldDisconnectCallbacksType::iterator iter = sDisconnectCallbacks.begin();
        iter != sDisconnectCallbacks.end(); ++iter)
   {

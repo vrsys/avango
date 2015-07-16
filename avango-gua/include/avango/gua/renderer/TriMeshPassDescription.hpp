@@ -53,8 +53,8 @@ namespace av
       TriMeshPassDescription& operator=(const TriMeshPassDescription&);
     };
 
-    typedef SingleField<Link<TriMeshPassDescription> > SFTriMeshPassDescription;
-    typedef MultiField<Link<TriMeshPassDescription> > MFTriMeshPassDescription;
+    using SFTriMeshPassDescription = SingleField<Link<TriMeshPassDescription> >;
+    using MFTriMeshPassDescription = MultiField<Link<TriMeshPassDescription> >;
 
   }
 

@@ -128,7 +128,7 @@ namespace boost
   {
     template<> struct pointee<FieldContainerLink>
     {
-      typedef av::FieldContainer type;
+      using type = av::FieldContainer;
     };
   }
 }

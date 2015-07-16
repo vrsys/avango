@@ -120,8 +120,8 @@ namespace av
 
     protected:
 
-      typedef std::pair<Link<av::osg::Node>, double> TargetTimePair_t;
-      typedef std::list<TargetTimePair_t> TargetTimeList_t;
+      using TargetTimePair_t = std::pair<Link<av::osg::Node>, double>;
+      using TargetTimeList_t = std::list<TargetTimePair_t>;
 
       static inline TargetTimeList_t::iterator
       find(TargetTimeList_t& candidates, const SFContainer::ValueType& target)
@@ -142,8 +142,8 @@ namespace av
       MFTargetHolder::ContainerType mSelTargets;
     };
 
-    typedef SingleField<Link<ProximitySelector> > SFProximitySelector;
-    typedef MultiField<Link<ProximitySelector> > MFProximitySelector;
+    using SFProximitySelector = SingleField<Link<ProximitySelector> >;
+    using MFProximitySelector = MultiField<Link<ProximitySelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

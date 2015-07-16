@@ -51,9 +51,9 @@ namespace av
 {
   class NetGroup;
 
-  typedef std::tr1::unordered_map<NetID, Link<Distributed>, NetID::Hasher> NetIDDstMap;
-  typedef std::deque<Msg> MsgDeq;
-  typedef std::vector<std::pair<std::string, Msg> > MaestroStateUpdateList;
+  using NetIDDstMap = std::tr1::unordered_map<NetID, Link<Distributed>, NetID::Hasher>;
+  using MsgDeq = std::deque<Msg>;
+  using MaestroStateUpdateList = std::vector<std::pair<std::string, Msg> >;
 
   /**
    * This class is the link between avango and the group communication toolkit. It represents the avango process in the named group
@@ -254,8 +254,8 @@ namespace av
     boost::mutex mMessageMutex;
     bool         mBlocked;
 
-    typedef std::vector<std::pair<std::string, Msg> > StateUpdateList;
-    typedef std::vector<std::string>                  StateRemoveList;
+    using StateUpdateList = std::vector<std::pair<std::string, Msg> >;
+    using StateRemoveList = std::vector<std::string>;
 
     StateUpdateList mStateUpdates;
     StateRemoveList mStateRemoves;

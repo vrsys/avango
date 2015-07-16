@@ -69,8 +69,8 @@ namespace av
       Point2PointConstraint& operator=(const Point2PointConstraint&);
     };
 
-    typedef SingleField<Link<Point2PointConstraint> > SFPoint2PointConstraint;
-    typedef MultiField<Link<Point2PointConstraint> > MFPoint2PointConstraint;
+    using SFPoint2PointConstraint = SingleField<Link<Point2PointConstraint> >;
+    using MFPoint2PointConstraint = MultiField<Link<Point2PointConstraint> >;
 
   }
 

@@ -68,8 +68,8 @@ namespace av
       GlfwWindow& operator=(const GlfwWindow&);
     };
 
-    typedef SingleField<Link<GlfwWindow> > SFGlfwWindow;
-    typedef MultiField<Link<GlfwWindow> > MFGlfwWindow;
+    using SFGlfwWindow = SingleField<Link<GlfwWindow> >;
+    using MFGlfwWindow = MultiField<Link<GlfwWindow> >;
 
   }
 

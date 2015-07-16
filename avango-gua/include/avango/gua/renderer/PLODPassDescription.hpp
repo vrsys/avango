@@ -53,8 +53,8 @@ namespace av
       PLODPassDescription& operator=(const PLODPassDescription&);
     };
 
-    typedef SingleField<Link<PLODPassDescription> > SFPLODPassDescription;
-    typedef MultiField<Link<PLODPassDescription> > MFPLODPassDescription;
+    using SFPLODPassDescription = SingleField<Link<PLODPassDescription> >;
+    using MFPLODPassDescription = MultiField<Link<PLODPassDescription> >;
 
   }
 

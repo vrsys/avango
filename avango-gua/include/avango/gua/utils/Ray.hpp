@@ -69,8 +69,8 @@ namespace av
       Ray& operator=(const Ray&);
     };
 
-    typedef SingleField<Link<Ray> > SFRay;
-    typedef MultiField<Link<Ray> > MFRay;
+    using SFRay = SingleField<Link<Ray> >;
+    using MFRay = MultiField<Link<Ray> >;
 
   }
 

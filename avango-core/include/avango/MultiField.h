@@ -53,9 +53,9 @@ namespace av
 
   public:
 
-    typedef Field              SuperType;
-    typedef std::vector<Value> ContainerType;
-    typedef Value              ValueType;
+    using SuperType = Field;
+    using ContainerType = std::vector<Value>;
+    using ValueType = Value;
 
     /**
      * Event class for field getValue events.
@@ -104,8 +104,8 @@ namespace av
       const ContainerType& mValue;
     };
 
-    typedef boost::function<void (const GetValueEvent&)> GetValueCallback;
-    typedef boost::function<void (const SetValueEvent&)> SetValueCallback;
+    using GetValueCallback = boost::function<void (const GetValueEvent&)>;
+    using SetValueCallback = boost::function<void (const SetValueEvent&)>;
 
     MultiField() :
       Field(),

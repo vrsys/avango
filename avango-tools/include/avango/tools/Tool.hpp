@@ -74,8 +74,8 @@ namespace av
       MFTargetHolder::ContainerType mLastTargets;
     };
 
-    typedef SingleField<Link<Tool> > SFTool;
-    typedef MultiField<Link<Tool> > MFTool;
+    using SFTool = SingleField<Link<Tool> >;
+    using MFTool = MultiField<Link<Tool> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

@@ -145,7 +145,9 @@ namespace av
 
   };
 
-  typedef std::unordered_set<Link<Distributed>, AnyLink::Hasher, std::equal_to<AnyLink> > DistributedSet;
+  using DistributedSet = std::unordered_set<Link<Distributed>,
+                                            AnyLink::Hasher,
+                                            std::equal_to<AnyLink> >;
 }
 
 #endif // #if !defined(AVANGO_DISTRIBUTED_H)

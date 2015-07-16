@@ -62,8 +62,8 @@ namespace av
       VolumeNode& operator=(const VolumeNode&);
     };
 
-    typedef SingleField<Link<VolumeNode> > SFVolumeNode;
-    typedef MultiField<Link<VolumeNode> > MFVolumeNode;
+    using SFVolumeNode = SingleField<Link<VolumeNode> >;
+    using MFVolumeNode = MultiField<Link<VolumeNode> >;
 
   }
 

@@ -60,29 +60,29 @@ namespace av
   template class AV_DLL MultiField<std::string>;
 #endif
 
-  typedef SingleField<bool>               SFBool;
-  typedef MultiField<bool>                MFBool;
+  using SFBool   = SingleField<bool>;
+  using MFBool   = MultiField<bool>;
 
-  typedef SingleField<double>             SFDouble;
-  typedef MultiField<double>              MFDouble;
+  using SFDouble = SingleField<double>;
+  using MFDouble = MultiField<double>;
 
-  typedef SingleField<float>              SFFloat;
-  typedef MultiField<float>               MFFloat;
+  using SFFloat  = SingleField<float>;
+  using MFFloat  = MultiField<float>;
 
-  typedef SingleField<int32_t>            SFInt;
-  typedef MultiField<int32_t>             MFInt;
+  using SFInt    = SingleField<int32_t>;
+  using MFInt    = MultiField<int32_t>;
 
-  typedef SingleField<int64_t>            SFLong;
-  typedef MultiField<int64_t>             MFLong;
+  using SFLong   = SingleField<int64_t>;
+  using MFLong   = MultiField<int64_t>;
 
-  typedef SingleField<uint32_t>           SFUInt;
-  typedef MultiField<uint32_t>            MFUInt;
+  using SFUInt   = SingleField<uint32_t>;
+  using MFUInt   = MultiField<uint32_t>;
 
-  typedef SingleField<uint64_t>           SFULong;
-  typedef MultiField<uint64_t>            MFULong;
+  using SFULong  = SingleField<uint64_t>;
+  using MFULong  = MultiField<uint64_t>;
 
-  typedef SingleField<std::string>        SFString;
-  typedef MultiField<std::string>         MFString;
+  using SFString = SingleField<std::string>;
+  using MFString = MultiField<std::string>;
 
   void AV_DLL initStandardFields();
 }

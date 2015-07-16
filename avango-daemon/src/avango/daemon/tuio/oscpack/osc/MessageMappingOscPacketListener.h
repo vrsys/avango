@@ -64,7 +64,7 @@ private:
             { return strcmp( lhs, rhs ) < 0; }
     };
 
-    typedef std::map<const char*, function_type, cstr_compare> function_map_type;
+    using function_map_type = std::map<const char*, function_type, cstr_compare>;
     function_map_type functions_;
 };
 

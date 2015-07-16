@@ -105,8 +105,8 @@ namespace av
       boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128> > m_unregister_queue;
     };
 
-    typedef SingleField<Link<BlenderViewer> > SFBlenderViewer;
-    typedef MultiField<Link<BlenderViewer> > MFBlenderViewer;
+    using SFBlenderViewer = SingleField<Link<BlenderViewer> >;
+    using MFBlenderViewer = MultiField<Link<BlenderViewer> >;
 
   }
 

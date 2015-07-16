@@ -95,8 +95,8 @@ namespace av
       Physics& operator=(const Physics&);
     };
 
-    typedef SingleField<Link<Physics> > SFPhysics;
-    typedef MultiField<Link<Physics> > MFPhysics;
+    using SFPhysics = SingleField<Link<Physics> >;
+    using MFPhysics = MultiField<Link<Physics> >;
 
   }
 

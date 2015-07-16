@@ -71,8 +71,8 @@ namespace av
       bool isSelectable(av::FieldContainer& object);
     };
 
-    typedef SingleField<Link<FieldSelector> > SFFieldSelector;
-    typedef MultiField<Link<FieldSelector> > MFFieldSelector;
+    using SFFieldSelector = SingleField<Link<FieldSelector> >;
+    using MFFieldSelector = MultiField<Link<FieldSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

@@ -51,14 +51,14 @@ namespace av
 
   public:
 
-    typedef FieldContainer::IDType FieldContainerID;
+    using FieldContainerID = FieldContainer::IDType;
 
-    typedef std::map<FieldContainerID, FieldContainer*> InstancePoolType;
-    typedef void (*NodeCreationCallback)(FieldContainer*, void*);
-    typedef void (*NodeDeletionCallback)(FieldContainer*, void*);
-    typedef void (*FieldConnectCallback)(Field*, void*);
-    typedef void (*FieldDisconnectCallback)(Field*, void*);
-    typedef void (*FieldHasChangedCallback)(Field*, void*);
+    using InstancePoolType = std::map<FieldContainerID, FieldContainer*>;
+    using NodeCreationCallback = void (*)(FieldContainer*, void*);
+    using NodeDeletionCallback = void (*)(FieldContainer*, void*);
+    using FieldConnectCallback = void (*)(Field*, void*);
+    using FieldDisconnectCallback = void (*)(Field*, void*);
+    using FieldHasChangedCallback = void (*)(Field*, void*);
 
     struct FieldHasChangedReg
     {
@@ -68,11 +68,11 @@ namespace av
       void* mUserData;
     };
 
-    typedef std::list<std::pair<NodeCreationCallback, void*> >    NodeCreationCallbacksType;
-    typedef std::list<std::pair<NodeDeletionCallback, void*> >    NodeDeletionCallbacksType;
-    typedef std::list<std::pair<FieldConnectCallback, void*> >    FieldConnectCallbacksType;
-    typedef std::list<std::pair<FieldDisconnectCallback, void*> > FieldDisconnectCallbacksType;
-    typedef std::list<FieldHasChangedReg>                         FieldHasChangedCallbacksType;
+    using NodeCreationCallbacksType = std::list<std::pair<NodeCreationCallback, void*> >   ;
+    using NodeDeletionCallbacksType = std::list<std::pair<NodeDeletionCallback, void*> >   ;
+    using FieldConnectCallbacksType = std::list<std::pair<FieldConnectCallback, void*> >   ;
+    using FieldDisconnectCallbacksType = std::list<std::pair<FieldDisconnectCallback, void*> >;
+    using FieldHasChangedCallbacksType = std::list<FieldHasChangedReg>                        ;
 
     static unsigned int getNumberOfContainers() {return sContainerPool.size();};
 
@@ -179,8 +179,8 @@ namespace av
     static FieldDisconnectCallbacksType sDisconnectCallbacks;
     static FieldHasChangedCallbacksType sFieldHasChangedCallbacks;
 
-    typedef std::map<std::string, FieldContainer*> NameToContainerMap;
-    typedef std::map<FieldContainer*, std::string> ContainerToNameMap;
+    using NameToContainerMap = std::map<std::string, FieldContainer*>;
+    using ContainerToNameMap = std::map<FieldContainer*, std::string>;
 
     static NameToContainerMap sNameContainerMap;
     static ContainerToNameMap sContainerNameMap;

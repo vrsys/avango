@@ -75,8 +75,8 @@ namespace av
 
   private:
 
-    typedef std::tr1::unordered_map<int, Link<Distributed> > IntDstMap;
-    typedef std::tr1::unordered_map<std::string, IntDstMap> EIDMapMap;
+    using IntDstMap = std::tr1::unordered_map<int, Link<Distributed> >;
+    using EIDMapMap = std::tr1::unordered_map<std::string, IntDstMap>;
 
     EIDMapMap mEIDMap;
 

@@ -65,8 +65,8 @@ namespace av
       PlaneShape& operator=(const PlaneShape&);
     };
 
-    typedef SingleField<Link<PlaneShape> > SFPlaneShape;
-    typedef MultiField<Link<PlaneShape> > MFPlaneShape;
+    using SFPlaneShape = SingleField<Link<PlaneShape> >;
+    using MFPlaneShape = MultiField<Link<PlaneShape> >;
 
   }
 

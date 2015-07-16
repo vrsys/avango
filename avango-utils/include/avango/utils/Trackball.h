@@ -185,8 +185,8 @@ namespace av
       void reset();
     };
 
-    typedef SingleField<Link<Trackball> > SFTrackball;
-    typedef MultiField<Link<Trackball> > MFTrackball;
+    using SFTrackball = SingleField<Link<Trackball> >;
+    using MFTrackball = MultiField<Link<Trackball> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

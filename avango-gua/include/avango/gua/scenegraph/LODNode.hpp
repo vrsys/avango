@@ -62,8 +62,8 @@ namespace av
       LODNode& operator=(const LODNode&);
     };
 
-    typedef SingleField<Link<LODNode> > SFLODNode;
-    typedef MultiField<Link<LODNode> > MFLODNode;
+    using SFLODNode = SingleField<Link<LODNode> >;
+    using MFLODNode = MultiField<Link<LODNode> >;
 
   }
 

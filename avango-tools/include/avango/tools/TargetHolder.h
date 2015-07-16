@@ -39,8 +39,8 @@ namespace av
   namespace tools
   {
     class TargetHolder;
-    typedef SingleField<Link<TargetHolder> > SFTargetHolder;
-    typedef MultiField<Link<TargetHolder> > MFTargetHolder;
+    using SFTargetHolder = SingleField<Link<TargetHolder> >;
+    using MFTargetHolder = MultiField<Link<TargetHolder> >;
 
     /**
      * TargetHolder base class
@@ -92,7 +92,7 @@ namespace av
        */
       SFBool Keep;
 
-      typedef std::list<Link<TargetHolder> > FindList;
+      using FindList = std::list<Link<TargetHolder> >;
 
       /**
        * Searches self and recursively all parents for the given or derived types of target holders.

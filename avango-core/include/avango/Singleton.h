@@ -60,7 +60,7 @@ namespace av
     public:
       Lock() { ; }
     };
-    typedef T VolatileType; //ensure optimal variant for single threaded environment
+    using VolatileType = T; //ensure optimal variant for single threaded environment
   };
 
   template<class T>
@@ -70,12 +70,12 @@ namespace av
     class Lock
     {
     public:
-      typedef boost::mutex::scoped_lock ScopeLock;
+      using ScopeLock = boost::mutex::scoped_lock;
       Lock();
     private:
       ScopeLock mGuard;
     };
-    typedef volatile T VolatileType; //ensure compiler does get hints what we are trying to do
+    using VolatileType = volatile T; //ensure compiler does get hints what we are trying to do
     static boost::mutex sConstructionMutex;
   };
 
@@ -92,8 +92,8 @@ namespace av
   class Singleton
   {
   public:
-    typedef typename ThreadingModel<T*>::VolatileType InstanceTypePtr; //T or volatile T, depending on threading model
-    typedef T Type;
+    using InstanceTypePtr = typename ThreadingModel<T*>::VolatileType; //T or volatile T, depending on threading model
+    using Type = T;
 
     static Type& get() //no exposing of raw pointer to assure no delete call on ValueType
     {

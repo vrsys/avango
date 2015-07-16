@@ -86,8 +86,8 @@ namespace av
       MaterialShaderMethod& operator=(const MaterialShaderMethod&);
     };
 
-    typedef SingleField<Link<MaterialShaderMethod> > SFMaterialShaderMethod;
-    typedef MultiField<Link<MaterialShaderMethod> > MFMaterialShaderMethod;
+    using SFMaterialShaderMethod = SingleField<Link<MaterialShaderMethod> >;
+    using MFMaterialShaderMethod = MultiField<Link<MaterialShaderMethod> >;
 
   }
 

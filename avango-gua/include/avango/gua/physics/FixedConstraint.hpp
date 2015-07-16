@@ -78,8 +78,8 @@ namespace av
       FixedConstraint& operator=(const FixedConstraint&);
     };
 
-    typedef SingleField<Link<FixedConstraint> > SFFixedConstraint;
-    typedef MultiField<Link<FixedConstraint> > MFFixedConstraint;
+    using SFFixedConstraint = SingleField<Link<FixedConstraint> >;
+    using MFFixedConstraint = MultiField<Link<FixedConstraint> >;
 
   }
 

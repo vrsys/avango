@@ -88,8 +88,8 @@ namespace av
       SFBool m_uniformsDirty;
     };
 
-    typedef SingleField<Link<Material> > SFMaterial;
-    typedef MultiField<Link<Material> > MFMaterial;
+    using SFMaterial = SingleField<Link<Material> >;
+    using MFMaterial = MultiField<Link<Material> >;
 
   }
 

@@ -45,9 +45,9 @@ namespace av
 
   public:
 
-    typedef std::vector<Link<Base> > BaseLinkVec;
-    typedef std::map<std::string, Link<Base> > StringBaseMap;
-    typedef std::map<Field*, std::pair<std::string, int> > ConnectionMap;
+    using BaseLinkVec = std::vector<Link<Base> >;
+    using StringBaseMap = std::map<std::string, Link<Base> >;
+    using ConnectionMap = std::map<Field*, std::pair<std::string, int> >;
 
     Reader();
     ~Reader();

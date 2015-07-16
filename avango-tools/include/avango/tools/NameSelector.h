@@ -112,8 +112,8 @@ namespace av
       bool mNamesDirty;
     };
 
-    typedef SingleField<Link<NameSelector> > SFNameSelector;
-    typedef MultiField<Link<NameSelector> > MFNameSelector;
+    using SFNameSelector = SingleField<Link<NameSelector> >;
+    using MFNameSelector = MultiField<Link<NameSelector> >;
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

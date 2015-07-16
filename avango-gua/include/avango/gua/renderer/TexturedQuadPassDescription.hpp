@@ -53,8 +53,8 @@ namespace av
       TexturedQuadPassDescription& operator=(const TexturedQuadPassDescription&);
     };
 
-    typedef SingleField<Link<TexturedQuadPassDescription> > SFTexturedQuadPassDescription;
-    typedef MultiField<Link<TexturedQuadPassDescription> > MFTexturedQuadPassDescription;
+    using SFTexturedQuadPassDescription = SingleField<Link<TexturedQuadPassDescription> >;
+    using MFTexturedQuadPassDescription = MultiField<Link<TexturedQuadPassDescription> >;
 
   }
 

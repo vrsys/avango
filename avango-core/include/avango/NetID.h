@@ -89,7 +89,7 @@ namespace av
 
   std::ostream& operator<< (std::ostream& os, const NetID&);
 
-  typedef std::tr1::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID> > NetID_set;
+  using NetID_set = std::tr1::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID> >;
 
 } // namespace av
 

@@ -54,8 +54,8 @@ namespace av
 
     public:
 
-      typedef std::map<int, Station*, std::less<int> > NumStationMap;
-      typedef std::map<std::string, std::string, std::less<std::string> > StringStringMap;
+      using NumStationMap = std::map<int, Station*, std::less<int> >;
+      using StringStringMap = std::map<std::string, std::string, std::less<std::string> >;
 
       /**
        * Constructor.

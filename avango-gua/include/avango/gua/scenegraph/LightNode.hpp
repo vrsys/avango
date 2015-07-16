@@ -124,8 +124,8 @@ namespace av
       LightNode& operator=(const LightNode&);
     };
 
-    typedef SingleField<Link<LightNode> > SFLightNode;
-    typedef MultiField<Link<LightNode> > MFLightNode;
+    using SFLightNode = SingleField<Link<LightNode> >;
+    using MFLightNode = MultiField<Link<LightNode> >;
 
   }
 

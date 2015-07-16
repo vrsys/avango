@@ -196,8 +196,8 @@ namespace av
       ResolvePassDescription& operator=(const ResolvePassDescription&);
     };
 
-    typedef SingleField<Link<ResolvePassDescription> > SFResolvePassDescription;
-    typedef MultiField<Link<ResolvePassDescription> > MFResolvePassDescription;
+    using SFResolvePassDescription = SingleField<Link<ResolvePassDescription> >;
+    using MFResolvePassDescription = MultiField<Link<ResolvePassDescription> >;
 
   }
 

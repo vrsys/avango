@@ -52,8 +52,8 @@ namespace av
       BBoxPassDescription& operator=(const BBoxPassDescription&);
     };
 
-    typedef SingleField<Link<BBoxPassDescription> > SFBBoxPassDescription;
-    typedef MultiField<Link<BBoxPassDescription> > MFBBoxPassDescription;
+    using SFBBoxPassDescription = SingleField<Link<BBoxPassDescription> >;
+    using MFBBoxPassDescription = MultiField<Link<BBoxPassDescription> >;
 
   }
 

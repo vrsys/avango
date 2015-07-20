@@ -68,6 +68,7 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/Video3DPassDescription.hpp"
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
 #include "renderer/BackgroundPassDescription.hpp"
@@ -147,7 +148,7 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
-    // init_Video3DNode();
+    init_Video3DNode();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
     // init_PBRNode();
@@ -196,6 +197,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
+    init_Video3DPassDescription();
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();
     init_BackgroundPassDescription();
@@ -211,7 +213,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_LightVisibilityPassDescription();
     init_Databases();
     init_TriMeshLoader();
-    // init_Video3DLoader();
+    init_Video3DLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
     init_PLODPassDescription();

@@ -1,69 +1,69 @@
-// #ifndef AVANGO_GUA_VIDEO3D_NODE_HPP
-// #define AVANGO_GUA_VIDEO3D_NODE_HPP
+#ifndef AVANGO_GUA_VIDEO3D_NODE_HPP
+#define AVANGO_GUA_VIDEO3D_NODE_HPP
 
-// /**
-//  * \file
-//  * \ingroup av_gua
-//  */
+/**
+ * \file
+ * \ingroup av_gua
+ */
 
-// #include <gua/node/Video3DNode.hpp>
-// #include <gua/math/math.hpp>
+#include <gua/video3d/Video3DNode.hpp>
+#include <gua/math/math.hpp>
 
-// #include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/scenegraph/GeometryNode.hpp>
 
-// namespace av
-// {
-//   namespace gua
-//   {
-//     /**
-//      * Wrapper for ::gua::Video3DNode
-//      *
-//      * \ingroup av_gua
-//      */
-//     class AV_GUA_DLL Video3DNode : public av::gua::GeometryNode
-//     {
-//       AV_FC_DECLARE();
+namespace av
+{
+  namespace gua
+  {
+    /**
+     * Wrapper for ::gua::Video3DNode
+     *
+     * \ingroup av_gua
+     */
+    class AV_GUA_DLL Video3DNode : public av::gua::GeometryNode
+    {
+      AV_FC_DECLARE();
 
-//     public:
+    public:
 
-//       /**
-//        * Constructor. When called without arguments, a new ::gua::Video3DNode
-//        * is created.
-//        * Otherwise, the given ::gua::Video3DNode is used.
-//        */
-//       Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode =
-//           std::shared_ptr< ::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
+      /**
+       * Constructor. When called without arguments, a new ::gua::Video3DNode
+       * is created.
+       * Otherwise, the given ::gua::Video3DNode is used.
+       */
+      Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode =
+          std::shared_ptr< ::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
 
-//     protected:
+    protected:
 
-//       /**
-//        * Destructor made protected to prevent allocation on stack.
-//        */
-// //      virtual ~Video3DNode();
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+//      virtual ~Video3DNode();
 
-//     public:
+    public:
 
-//       /**
-//        * Get the wrapped ::gua::Video3DNode.
-//        */
-//       //std::shared_ptr< ::gua::Video3DNode> getGuaNode() const;
+      /**
+       * Get the wrapped ::gua::Video3DNode.
+       */
+      //std::shared_ptr< ::gua::Video3DNode> getGuaNode() const;
 
-//     private:
+    private:
 
-//       Video3DNode(const Video3DNode&);
-//       Video3DNode& operator=(const Video3DNode&);
-//     };
+      Video3DNode(const Video3DNode&);
+      Video3DNode& operator=(const Video3DNode&);
+    };
 
-//     typedef SingleField<Link<Video3DNode> > SFVideo3DNode;
-//     typedef MultiField<Link<Video3DNode> > MFVideo3DNode;
+    using SFVideo3DNode = SingleField<Link<Video3DNode> >;
+    using MFVideo3DNode = MultiField<Link<Video3DNode> >;
 
-//   }
+  }
 
-// #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-//   template class AV_GUA_DLL SingleField<Link<gua::Video3DNode> >;
-//   template class AV_GUA_DLL MultiField<Link<gua::Video3DNode> >;
-// #endif
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_GUA_DLL SingleField<Link<gua::Video3DNode> >;
+  template class AV_GUA_DLL MultiField<Link<gua::Video3DNode> >;
+#endif
 
-// }
+}
 
-// #endif //AVANGO_GUA_VIDEO3D_NODE_HPP
+#endif //AVANGO_GUA_VIDEO3D_NODE_HPP

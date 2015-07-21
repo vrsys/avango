@@ -101,10 +101,6 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       boost::bind(&CameraNode::getBlackListCB, this, _1),
                       boost::bind(&CameraNode::setBlackListCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(AllowUntagged,
-                      boost::bind(&CameraNode::getAllowUntaggedCB, this, _1),
-                      boost::bind(&CameraNode::setAllowUntaggedCB, this, _1));
-
   AV_FC_ADD_ADAPTOR_FIELD(PreRenderCameras,
                       boost::bind(&CameraNode::getPreRenderCamerasCB, this, _1),
                       boost::bind(&CameraNode::setPreRenderCamerasCB, this, _1));
@@ -401,18 +397,6 @@ av::gua::CameraNode::setBlackListCB(const MFString::SetValueEvent& event)
   for (auto tag : event.getValue()) {
     m_guaNode->config.mask().blacklist.add_tag(tag);
   }
-}
-
-void
-av::gua::CameraNode::getAllowUntaggedCB(const SFBool::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaNode->config.mask().allow_untagged;
-}
-
-void
-av::gua::CameraNode::setAllowUntaggedCB(const SFBool::SetValueEvent& event)
-{
-  m_guaNode->config.mask().allow_untagged = event.getValue();
 }
 
 void

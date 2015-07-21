@@ -17,7 +17,7 @@ namespace boost
   {
     template <class T> struct pointee<av::Link<T> >
     {
-      using type = T;
+      typedef T type;
     };
   }
 }
@@ -26,8 +26,7 @@ av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options,
                                 std::vector<std::string> const& whitelist,
-                                std::vector<std::string> const& blacklist,
-                                bool allow_untagged) {
+                                std::vector<std::string> const& blacklist) {
 
   ::gua::Mask mask;
   for (auto tag: whitelist) {
@@ -37,8 +36,6 @@ av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph,
   for (auto tag: blacklist) {
     mask.blacklist.add_tag(tag);
   }
-
-  mask.allow_untagged = allow_untagged;
 
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaRay()),
@@ -55,19 +52,8 @@ av::gua::MFPickResult* rayTest1(av::gua::SceneGraph const& graph,
 av::gua::MFPickResult* rayTest2(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options,
-                                std::vector<std::string> const& whitelist,
-                                std::vector<std::string> const& blacklist) {
-
-  return rayTest1(graph, ray, options, whitelist, blacklist, false);
-}
-
-
-av::gua::MFPickResult* rayTest3(av::gua::SceneGraph const& graph,
-                                av::gua::Ray const& ray,
-                                int options,
                                 list const& whitelist,
-                                list const& blacklist,
-                                bool allow_untagged) {
+                                list const& blacklist) {
 
   ::gua::Mask mask;
   for (int i(0); i < len(whitelist); ++i) {
@@ -77,8 +63,6 @@ av::gua::MFPickResult* rayTest3(av::gua::SceneGraph const& graph,
   for (int i(0); i < len(blacklist); ++i) {
     mask.blacklist.add_tag(extract<std::string>(blacklist[i]));
   }
-
-  mask.allow_untagged = allow_untagged;
 
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaRay()),
@@ -92,33 +76,19 @@ av::gua::MFPickResult* rayTest3(av::gua::SceneGraph const& graph,
   return results;
 }
 
-av::gua::MFPickResult* rayTest4(av::gua::SceneGraph const& graph,
-                                av::gua::Ray const& ray,
-                                int options,
-                                list const& whitelist,
-                                list const& blacklist) {
-
-
-  return rayTest3(graph, ray, options, whitelist, blacklist, false);
-}
-
-
-av::gua::MFPickResult* rayTest5(av::gua::SceneGraph const& graph,
+av::gua::MFPickResult* rayTest3(av::gua::SceneGraph const& graph,
                                 av::gua::Ray const& ray,
                                 int options) {
 
-  return rayTest3(graph, ray, options, list(), list(), false);
+  return rayTest2(graph, ray, options, list(), list());
 }
 
 
-
-
-av::gua::MFPickResult* rayNodeTest1(av::gua::SceneGraph const& graph,
-                                    av::gua::RayNode const& ray,
-                                    int options,
-                                    std::vector<std::string> const& whitelist,
-                                    std::vector<std::string> const& blacklist,
-                                    bool allow_untagged) {
+av::gua::MFPickResult* rayTest4(av::gua::SceneGraph const& graph,
+                                av::gua::RayNode const& ray,
+                                int options,
+                                std::vector<std::string> const& whitelist,
+                                std::vector<std::string> const& blacklist) {
 
   ::gua::Mask mask;
   for (auto tag: whitelist) {
@@ -129,8 +99,6 @@ av::gua::MFPickResult* rayNodeTest1(av::gua::SceneGraph const& graph,
     mask.blacklist.add_tag(tag);
   }
 
-  mask.allow_untagged = allow_untagged;
-
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaNode()),
                                     static_cast< ::gua::PickResult::Options>(options),
@@ -143,22 +111,11 @@ av::gua::MFPickResult* rayNodeTest1(av::gua::SceneGraph const& graph,
   return results;
 }
 
-av::gua::MFPickResult* rayNodeTest2(av::gua::SceneGraph const& graph,
-                                    av::gua::RayNode const& ray,
-                                    int options,
-                                    std::vector<std::string> const& whitelist,
-                                    std::vector<std::string> const& blacklist) {
-
-
-  return rayNodeTest1(graph, ray, options, whitelist, blacklist, false);
-}
-
-av::gua::MFPickResult* rayNodeTest3(av::gua::SceneGraph const& graph,
-                                    av::gua::RayNode const& ray,
-                                    int options,
-                                    list const& whitelist,
-                                    list const& blacklist,
-                                    bool allow_untagged) {
+av::gua::MFPickResult* rayTest5(av::gua::SceneGraph const& graph,
+                                av::gua::RayNode const& ray,
+                                int options,
+                                list const& whitelist,
+                                list const& blacklist) {
 
   ::gua::Mask mask;
   for (int i(0); i < len(whitelist); ++i) {
@@ -169,8 +126,6 @@ av::gua::MFPickResult* rayNodeTest3(av::gua::SceneGraph const& graph,
     mask.blacklist.add_tag(extract<std::string>(blacklist[i]));
   }
 
-  mask.allow_untagged = allow_untagged;
-
   auto gua_results(graph.getGuaSceneGraph()->ray_test(
                                     *(ray.getGuaNode()),
                                     static_cast< ::gua::PickResult::Options>(options),
@@ -183,21 +138,11 @@ av::gua::MFPickResult* rayNodeTest3(av::gua::SceneGraph const& graph,
   return results;
 }
 
-av::gua::MFPickResult* rayNodeTest4(av::gua::SceneGraph const& graph,
-                                    av::gua::RayNode const& ray,
-                                    int options,
-                                    list const& whitelist,
-                                    list const& blacklist) {
+av::gua::MFPickResult* rayTest6(av::gua::SceneGraph const& graph,
+                                av::gua::RayNode const& ray,
+                                int options) {
 
-  return rayNodeTest3(graph, ray, options, whitelist, blacklist, false);
-}
-
-
-av::gua::MFPickResult* rayNodeTest5(av::gua::SceneGraph const& graph,
-                                    av::gua::RayNode const& ray,
-                                    int options) {
-
-  return rayNodeTest3(graph, ray, options, list(), list(), false);
+  return rayTest5(graph, ray, options, list(), list());
 }
 
 av::Link<av::gua::Node> getNode(av::gua::SceneGraph const& graph, std::string const& path) {
@@ -222,11 +167,7 @@ void init_SceneGraph()
          .def("ray_test", &rayTest3, return_value_policy<manage_new_object>())
          .def("ray_test", &rayTest4, return_value_policy<manage_new_object>())
          .def("ray_test", &rayTest5, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayNodeTest1, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayNodeTest2, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayNodeTest3, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayNodeTest4, return_value_policy<manage_new_object>())
-         .def("ray_test", &rayNodeTest5, return_value_policy<manage_new_object>())
+         .def("ray_test", &rayTest6, return_value_policy<manage_new_object>())
          .def("update_cache", &av::gua::SceneGraph::updateCache)
          ;
 }

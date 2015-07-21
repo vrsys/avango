@@ -91,7 +91,6 @@ namespace av
 
       MFString              WhiteList;
       MFString              BlackList;
-      SFBool                AllowUntagged;
 
       MultiField<Link<CameraNode>> PreRenderCameras;
 
@@ -155,9 +154,6 @@ namespace av
       virtual void getBlackListCB(const MFString::GetValueEvent& event);
       virtual void setBlackListCB(const MFString::SetValueEvent& event);
 
-      virtual void getAllowUntaggedCB(const SFBool::GetValueEvent& event);
-      virtual void setAllowUntaggedCB(const SFBool::SetValueEvent& event);
-
       virtual void getPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::GetValueEvent& event);
       virtual void setPreRenderCamerasCB(const  MultiField<Link<CameraNode>>::SetValueEvent& event);
 
@@ -181,8 +177,8 @@ namespace av
       CameraNode& operator=(const CameraNode&);
     };
 
-    using SFCameraNode = SingleField<Link<CameraNode> >;
-    using MFCameraNode = MultiField<Link<CameraNode> >;
+    typedef SingleField<Link<CameraNode> > SFCameraNode;
+    typedef MultiField<Link<CameraNode> > MFCameraNode;
 
   }
 

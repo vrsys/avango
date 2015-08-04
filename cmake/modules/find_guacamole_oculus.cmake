@@ -52,7 +52,7 @@ IF ( NOT GUACAMOLE_OCULUS_INCLUDE_DIRS )
 
     FOREACH(_SEARCH_DIR ${GUACAMOLE_OCULUS_INCLUDE_SEARCH_DIRS})
         FIND_PATH(_CUR_SEARCH
-                NAMES gua/OculusWindow.hpp
+                NAMES gua/OculusSDK2Window.hpp
                 PATHS ${_SEARCH_DIR}
                 NO_DEFAULT_PATH)
         IF (_CUR_SEARCH)
@@ -84,12 +84,12 @@ IF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
     FOREACH(_SEARCH_DIR ${GUACAMOLE_OCULUS_LIBRARY_SEARCH_DIRS})
 		IF (UNIX)
 			FIND_PATH(_CUR_SEARCH
-					NAMES libguacamole-oculus.so
+					NAMES libguacamole-oculusSDK2.so
 					PATHS ${_SEARCH_DIR}
 					NO_DEFAULT_PATH)
 		ELSEIF(WIN32)
 			FIND_PATH(_CUR_SEARCH
-					NAMES guacamole-oculus.lib
+					NAMES guacamole-oculusSDK2.lib
 					PATHS ${_SEARCH_DIR}
 					PATH_SUFFIXES debug release
 					NO_DEFAULT_PATH)
@@ -110,9 +110,9 @@ IF ( NOT GUACAMOLE_OCULUS_LIBRARY_DIRS )
 
     FOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
 		    IF (UNIX)
-			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/libguacamole-oculus.so)
+			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/libguacamole-oculusSDK2.so)
 		    ELSEIF(WIN32)
-			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/release/guacamole-oculus.lib)
+			    file(GLOB_RECURSE _GUACAMOLE_OCULUS_LIBRARIES_ABSOLUTE ${_LIB_DIR}/release/guacamole-oculusSDK2.lib)
 		    ENDIF(UNIX)
     ENDFOREACH(_LIB_DIR ${_GUACAMOLE_OCULUS_FOUND_LIB_DIR})
 

@@ -3,10 +3,10 @@
 
 #include <gua/OculusSDK2Window.hpp>
 
-#include <avango/gua/Fields.hpp>
 #include <avango/gua/renderer/Window.hpp>
 
 #include <gua/math/math.hpp>
+#include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/oculus/windows_specific.hpp>
@@ -42,6 +42,9 @@ namespace av
          virtual ~OculusWindow();
 
        public:
+        ::av::gua::SFMatrix                  Orientation;
+
+       public:
          /**
           * Get the wrapped ::gua::OculusRift
           */
@@ -49,6 +52,8 @@ namespace av
 
        private:
         std::shared_ptr< ::gua::OculusSDK2Window> m_guaOculusWindow;
+
+        void evaluate() override;
 
         OculusWindow(const OculusWindow&);
         OculusWindow& operator=(const OculusWindow&);

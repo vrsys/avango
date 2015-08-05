@@ -59,7 +59,6 @@ def start():
         )
 
     window = avango.oculus.nodes.OculusWindow()
-
     avango.gua.register_window("window", window)
 
     cam = avango.gua.nodes.CameraNode(
@@ -97,24 +96,23 @@ def start():
 
     cam.PipelineDescription.value = pipeline_description
 
-    oculus_screen_size = avango.gua.Vec2(0.12576, 0.07074)
     eye_screen_distance = 0.08
 
     left_screen = avango.gua.nodes.ScreenNode(
         Name="left_screen",
-        Width=0.5 * oculus_screen_size.x,
-        Height=oculus_screen_size.y,
+        Width=window.EyeScreenSize.value.x,
+        Height=window.EyeScreenSize.value.y,
         Transform=avango.gua.make_trans_mat(
-            -0.25 * oculus_screen_size.x, 0.0, -eye_screen_distance
+            -0.5 * window.EyeScreenSize.value.x, 0.0, -eye_screen_distance
             )
         )
 
     right_screen = avango.gua.nodes.ScreenNode(
         Name="right_screen",
-        Width=0.5 * oculus_screen_size.x,
-        Height=oculus_screen_size.y,
+        Width=window.EyeScreenSize.value.x,
+        Height=window.EyeScreenSize.value.y,
         Transform=avango.gua.make_trans_mat(
-            0.25 * oculus_screen_size.x, 0.0, -eye_screen_distance
+            0.5 * window.EyeScreenSize.value.x, 0.0, -eye_screen_distance
             )
         )
 
@@ -142,7 +140,7 @@ def start():
     timer = avango.nodes.TimeSensor()
     monkey_updater.TimeIn.connect_from(timer.Time)
 
-    head.Transform.connect_from(window.Orientation)
+    head.Transform.connect_from(window.SensorOrientation)
     transform1.Transform.connect_from(monkey_updater.MatrixOut)
 
     guaVE = GuaVE()

@@ -58,13 +58,7 @@ def start():
                    avango.gua.make_scale_mat(30, 30, 30))
         )
 
-    size = avango.gua.Vec2ui(1920, 1080)
-
-    window = avango.oculus.nodes.OculusWindow(
-        Size=size,
-        LeftResolution=avango.gua.Vec2ui(int(size.x / 2), size.y),
-        RightResolution=avango.gua.Vec2ui(int(size.x / 2), size.y),
-        )
+    window = avango.oculus.nodes.OculusWindow()
 
     avango.gua.register_window("window", window)
 
@@ -72,7 +66,7 @@ def start():
         LeftScreenPath="/nav/head/left_screen",
         RightScreenPath="/nav/head/right_screen",
         SceneGraph="scenegraph",
-        Resolution=size,
+        Resolution=window.LeftResolution.value,
         OutputWindowName="window",
         EyeDistance=0.064,
         EnableStereo=True

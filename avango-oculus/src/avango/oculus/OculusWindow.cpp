@@ -23,7 +23,7 @@ av::oculus::OculusWindow::OculusWindow(
 ) : av::gua::Window(guaOculusWindow),
     m_guaOculusWindow(guaOculusWindow)
 {
-  AV_FC_ADD_FIELD(Orientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(SensorOrientation, ::gua::math::mat4());
 
   alwaysEvaluate(true);
 }
@@ -54,5 +54,5 @@ av::oculus::OculusWindow::getGuaOculusWindow() const {
 void
 av::oculus::OculusWindow::evaluate()
 {
-  Orientation.setValue(m_guaOculusWindow->get_oculus_sensor_orientation());
+  SensorOrientation.setValue(m_guaOculusWindow->get_sensor_orientation());
 }

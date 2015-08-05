@@ -42,7 +42,7 @@ namespace av
          virtual ~OculusWindow();
 
        public:
-        ::av::gua::SFMatrix                  Orientation;
+        ::av::gua::SFMatrix                  SensorOrientation;
 
        public:
          /**

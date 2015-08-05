@@ -69,8 +69,8 @@ def start():
     avango.gua.register_window("window", window)
 
     cam = avango.gua.nodes.CameraNode(
-        LeftScreenPath="/nav/left_screen",
-        RightScreenPath="/nav/right_screen",
+        LeftScreenPath="/nav/head/left_screen",
+        RightScreenPath="/nav/head/right_screen",
         SceneGraph="scenegraph",
         Resolution=size,
         OutputWindowName="window",
@@ -124,10 +124,16 @@ def start():
             )
         )
 
+    head = avango.gua.nodes.TransformNode(
+        Name="head",
+        Children=[left_screen, right_screen, cam],
+        Transform=avango.gua.make_identity_mat()
+        )
+
     nav = avango.gua.nodes.TransformNode(
         Name="nav",
         Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0),
-        Children=[left_screen, right_screen, cam]
+        Children=[head]
         )
 
     graph.Root.value.Children.value = [transform1, transform2, light, nav]
@@ -142,6 +148,7 @@ def start():
     timer = avango.nodes.TimeSensor()
     monkey_updater.TimeIn.connect_from(timer.Time)
 
+    head.Transform.connect_from(window.Orientation)
     transform1.Transform.connect_from(monkey_updater.MatrixOut)
 
     guaVE = GuaVE()

@@ -42,7 +42,12 @@ namespace av
          virtual ~OculusWindow();
 
        public:
-        ::av::gua::SFMatrix                  SensorOrientation;
+        ::av::SFString                      ProductName;
+        ::av::gua::SFMatrix                 SensorOrientation;
+        ::av::gua::SFVec2ui                 Resolution;
+        ::av::gua::SFVec2ui                 EyeResolution;
+        ::av::gua::SFVec2                   ScreenSize;
+        ::av::gua::SFVec2                   EyeScreenSize;
 
        public:
          /**

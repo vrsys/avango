@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_DEPTH_MAP_NODE_HPP
+#define AV_PYTHON_GUA_DEPTH_MAP_NODE_HPP
+
+void init_DepthMapNode();
+
+#endif //AV_PYTHON_GUA_DEPTH_MAP_NODE_HPP

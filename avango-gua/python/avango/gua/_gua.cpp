@@ -19,6 +19,7 @@
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#include "scenegraph/DepthMapNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
 #include "scenegraph/PLODNode.hpp"
@@ -149,6 +150,7 @@ BOOST_PYTHON_MODULE(_gua)
 #endif
     init_TriMeshNode();
     init_Video3DNode();
+    init_DepthMapNode();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
     // init_PBRNode();

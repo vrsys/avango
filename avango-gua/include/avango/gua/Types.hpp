@@ -19,6 +19,7 @@
 namespace gua
 {
   class TriMeshNode;
+  class CubemapNode;
   class SkeletalAnimationNode;
   class Video3DNode;
   class VolumeNode;
@@ -106,6 +107,8 @@ namespace av
 
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TriMeshNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TriMeshNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::CubemapNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::CubemapNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SkeletalAnimationNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SkeletalAnimationNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);

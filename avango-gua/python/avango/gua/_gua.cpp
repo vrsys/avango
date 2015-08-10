@@ -69,6 +69,7 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/DepthMapPassDescription.hpp"
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
@@ -199,6 +200,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
+    init_DepthMapPassDescription();
     init_Video3DPassDescription();
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();

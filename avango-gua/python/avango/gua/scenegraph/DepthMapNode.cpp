@@ -24,6 +24,6 @@ void init_DepthMapNode()
   register_field<av::gua::SFDepthMapNode>("SFDepthMapNode");
   register_multifield<av::gua::MFDepthMapNode>("MFDepthMapNode");
   class_<av::gua::DepthMapNode, av::Link<av::gua::DepthMapNode>,
-    bases<av::gua::GeometryNode>,
+    bases<av::gua::Node>,
     boost::noncopyable >("DepthMapNode", "docstring", no_init);
 }

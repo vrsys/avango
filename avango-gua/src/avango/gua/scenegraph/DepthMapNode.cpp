@@ -15,6 +15,9 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
   AV_FC_ADD_ADAPTOR_FIELD(ClosestDistance,
                       boost::bind(&DepthMapNode::getClosestDistanceCB, this, _1),
                       boost::bind(&DepthMapNode::setClosestDistanceCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(TextureName,
+                      boost::bind(&DepthMapNode::getTextureNameCB, this, _1),
+                      boost::bind(&DepthMapNode::setTextureNameCB, this, _1));
 }
 
 //av::gua::DepthMapNode::~DepthMapNode()
@@ -56,6 +59,18 @@ void
 av::gua::DepthMapNode::setClosestDistanceCB(const SFFloat::SetValueEvent& event)
 {
   std::cout << "this value can't be set" << std::endl;
+}
+
+void
+av::gua::DepthMapNode::getTextureNameCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->config.get_texture_name();
+}
+
+void
+av::gua::DepthMapNode::setTextureNameCB(const SFString::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.set_texture_name(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::CubemapNode>

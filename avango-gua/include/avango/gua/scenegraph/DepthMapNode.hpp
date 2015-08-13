@@ -47,11 +47,17 @@ namespace av
 
       SFFloat ClosestDistance;
       SFString TextureName;
+      SFFloat NearClip;
+      SFFloat FarClip;
 
       virtual void getClosestDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setClosestDistanceCB(const SFFloat::SetValueEvent& event);
       virtual void getTextureNameCB(const SFString::GetValueEvent& event);
       virtual void setTextureNameCB(const SFString::SetValueEvent& event);
+      virtual void getNearClipCB(const SFFloat::GetValueEvent& event);
+      virtual void setNearClipCB(const SFFloat::SetValueEvent& event);
+      virtual void getFarClipCB(const SFFloat::GetValueEvent& event);
+      virtual void setFarClipCB(const SFFloat::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::DepthMapNode.

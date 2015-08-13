@@ -19,7 +19,7 @@ AV_FIELD_DEFINE(av::oculus::SFOculusWindow);
 AV_FIELD_DEFINE(av::oculus::MFOculusWindow);
 
 av::oculus::OculusWindow::OculusWindow(
-  std::shared_ptr< ::gua::OculusSDK2Window> const& guaOculusWindow
+  std::shared_ptr< ::gua::OculusWindow> const& guaOculusWindow
 ) : av::gua::Window(guaOculusWindow),
     m_guaOculusWindow(guaOculusWindow)
 {
@@ -53,7 +53,7 @@ av::oculus::OculusWindow::initClass()
   }
 }
 
-std::shared_ptr< ::gua::OculusSDK2Window> const&
+std::shared_ptr< ::gua::OculusWindow> const&
 av::oculus::OculusWindow::getGuaOculusWindow() const {
   return m_guaOculusWindow;
 }

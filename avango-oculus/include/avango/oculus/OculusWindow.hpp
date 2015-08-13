@@ -1,7 +1,7 @@
 #ifndef AVANGO_OCULUS_OCULUSWINDOW_HPP
 #define AVANGO_OCULUS_OCULUSWINDOW_HPP
 
-#include <gua/OculusSDK2Window.hpp>
+#include <gua/OculusWindow.hpp>
 
 #include <avango/gua/renderer/Window.hpp>
 
@@ -16,7 +16,7 @@ namespace av
   namespace oculus
   {
     /**
-    * Wrapper for ::gua::OculusSDK2Window
+    * Wrapper for ::gua::OculusWindow
     */
 
     class AV_OCULUS_DLL OculusWindow : public av::gua::Window
@@ -30,8 +30,8 @@ namespace av
          * Otherwise, the given ::gua::OculusRift is used.
          */
 
-         OculusWindow(std::shared_ptr< ::gua::OculusSDK2Window> const& guaOculusWindow =
-                      std::shared_ptr< ::gua::OculusSDK2Window> (new ::gua::OculusSDK2Window(":0.0")));
+         OculusWindow(std::shared_ptr< ::gua::OculusWindow> const& guaOculusWindow =
+                      std::shared_ptr< ::gua::OculusWindow> (new ::gua::OculusWindow(":0.0")));
 
        protected:
 
@@ -53,10 +53,10 @@ namespace av
          /**
           * Get the wrapped ::gua::OculusRift
           */
-         std::shared_ptr< ::gua::OculusSDK2Window> const& getGuaOculusWindow() const;
+         std::shared_ptr< ::gua::OculusWindow> const& getGuaOculusWindow() const;
 
        private:
-        std::shared_ptr< ::gua::OculusSDK2Window> m_guaOculusWindow;
+        std::shared_ptr< ::gua::OculusWindow> m_guaOculusWindow;
 
         void evaluate() override;
 

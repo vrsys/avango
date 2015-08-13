@@ -3,16 +3,16 @@
 ##############################################################################
 SET(OVR_INCLUDE_SEARCH_DIRS
   ${GUACAMOLE_EXT_DIR}/inc/ovr/include
-  ${OVRSDK2_INCLUDE_DIRS}
-  ${OVRSDK2_INCLUDE_SEARCH_DIR}
+  ${OVR_INCLUDE_DIRS}
+  ${OVR_INCLUDE_SEARCH_DIR}
   /opt/OculusSDK/currentSDK2/LibOVR/Include
   /opt/OculusSDK/currentSDK2/LibOVRKernel/Src
 )
 
 SET(OVR_LIBRARY_SEARCH_DIRS
   ${GUACAMOLE_EXT_DIR}/lib
-  ${OVRSDK2_LIBRARY_DIRS}
-  ${OVRSDK2_LIBRARY_SEARCH_DIR}
+  ${OVR_LIBRARY_DIRS}
+  ${OVR_LIBRARY_SEARCH_DIR}
   /opt/OculusSDK/currentSDK2/LibOVR/Lib/Linux/x86_64/Release
 )
 

@@ -124,11 +124,15 @@ def start(scenename, stereo=False):
         )
     navigation.Children.value.append(screen)
 
+    dcm_transform = avango.gua.make_identity_mat()
+    if stereo:
+      dcm_transform = avango.gua.make_trans_mat(0.0, 0.0, -0.20)
+
     distance_cube_map = avango.gua.nodes.DepthMapNode(
       Name="navigation_depth_cube_map",
       NearClip=0.0001,
       FarClip=1000.0,
-      Transform=avango.gua.make_trans_mat(0.0, 0.0, -0.20),
+      Transform=dcm_transform,
     )
     navigation.Children.value.append(distance_cube_map)
 

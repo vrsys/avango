@@ -11,6 +11,7 @@ from examples_common.GuaVE import GuaVE
 #multiscale
 import navigator
 import scenes
+import csv_logger
 
 class ClippingUpdater(avango.script.Script):
   ClosestDistance = avango.SFFloat()
@@ -130,8 +131,8 @@ def start(scenename):
     navi.OutTransform.connect_from(navigation.Transform)
 
     navi.RotationSpeed.value = 0.2
-    navi.MaxMotionSpeed.value = 10.0
-    navi.MaxDistance.value = 10.0
+    navi.MaxMotionSpeed.value = 1000.0
+    navi.MaxDistance.value = 1000.0
     navi.DepthMapNode.value = distance_cube_map
 
     navigation.Transform.connect_from(navi.OutTransform)
@@ -154,7 +155,16 @@ def start(scenename):
     viewer.Windows.value = [window]
 
     # def toogle_adaptive_locomotion():
-      
+
+    #logging
+    logger = csv_logger.CSV_Logger()
+    timer = avango.nodes.TimeSensor()
+    logger.Input_Time.connect_from(timer.Time)
+    logger.Input_MinDistance.connect_from(navi.ClosestDistance)
+    logger.Input_MotionSpeed.connect_from(navi.CurrentMotionSpeed)
+    logger.Input_NearClip.connect_from(clip_updater.Near)
+    logger.Input_FarClip.connect_from(clip_updater.Far)
+    logger.Input_Window.value = window
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

@@ -19,6 +19,7 @@ class MulitScaleNavigator(avango.script.Script):
 
   RotationSpeed = avango.SFFloat()
   MaxMotionSpeed = avango.SFFloat()
+  CurrentMotionSpeed = avango.SFFloat()
 
   StartLocation = avango.gua.SFVec3()
   StartRotation = avango.gua.SFVec2()
@@ -41,6 +42,7 @@ class MulitScaleNavigator(avango.script.Script):
 
     self.RotationSpeed.value = 0.1
     self.MaxMotionSpeed.value = 0.1
+    self.CurrentMotionSpeed.value = 0.0
 
     self.__rel_rot_x.connect_from(self.Mouse.RelY)
     self.__rel_rot_y.connect_from(self.Mouse.RelX)
@@ -77,6 +79,7 @@ class MulitScaleNavigator(avango.script.Script):
         if not self.ClosestDistance.value == -1:
           current_motion_speed = (self.ClosestDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
      
+      self.CurrentMotionSpeed.value = current_motion_speed
       # m/s in m/frame:
       current_motion_speed = current_motion_speed * frame_time
       

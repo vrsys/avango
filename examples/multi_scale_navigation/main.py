@@ -34,7 +34,8 @@ class ClippingUpdater(avango.script.Script):
     self.Far.value = self.Near.value * 1000.0
 
 
-def start(scenename):
+def start(scenename, stereo=False):
+    print("loading:", scenename, "Stereo:", stereo) 
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 
@@ -53,20 +54,32 @@ def start(scenename):
 
     size = avango.gua.Vec2ui(2560, 1440)
 
+    stereomode = avango.gua.StereoMode.MONO
+    if stereo:
+      stereomode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+
     window = avango.gua.nodes.GlfwWindow(
-        Size=size,
-        LeftResolution=size
-        )
+      Size = size,
+      LeftPosition = avango.gua.Vec2ui(0, 0),
+      LeftResolution = size,
+      RightPosition = avango.gua.Vec2ui(0, 0),
+      RightResolution = size,
+      StereoMode = stereomode
+    )
 
     avango.gua.register_window("window", window)
 
     cam = avango.gua.nodes.CameraNode(
-        LeftScreenPath="/navigation/screen",
-        SceneGraph="scenegraph",
-        Resolution=size,
-        OutputWindowName="window",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 0.0)
-        )
+      Name = "cam",
+      LeftScreenPath = "/navigation/screen",
+      RightScreenPath = "/navigation/screen",
+      SceneGraph = "scenegraph",
+      Resolution = size,
+      EyeDistance = 0.06,
+      EnableStereo = stereo,
+      OutputWindowName = "window",
+      Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+    )
     navigation.Children.value.append(cam)
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
@@ -81,7 +94,8 @@ def start(scenename):
     res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
     res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
-    res_pass.BackgroundTexture.value = "awesome_skymap"
+    if not stereo:
+      res_pass.BackgroundTexture.value = "awesome_skymap"
 
     anti_aliasing = avango.gua.nodes.SSAAPassDescription()
 
@@ -104,9 +118,9 @@ def start(scenename):
 
     screen = avango.gua.nodes.ScreenNode(
         Name="screen",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, -1.0),
-        Width=0.8,
-        Height=0.45,
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, -0.45),
+        Width=0.444,
+        Height=0.25,
         )
     navigation.Children.value.append(screen)
 
@@ -114,6 +128,7 @@ def start(scenename):
       Name="navigation_depth_cube_map",
       NearClip=0.0001,
       FarClip=1000.0,
+      Transform=avango.gua.make_trans_mat(0.0, 0.0, -0.20),
     )
     navigation.Children.value.append(distance_cube_map)
 
@@ -124,7 +139,7 @@ def start(scenename):
       Height = int(size.x / 12),
       Anchor = avango.gua.Vec2(0.0, -1.0)
       )
-    graph.Root.value.Children.value.append(debug_quad)
+    # graph.Root.value.Children.value.append(debug_quad)
     
     navi = navigator.MulitScaleNavigator()
     navi.StartLocation.value = navigation.Transform.value.get_translate()
@@ -175,6 +190,11 @@ def start(scenename):
 if __name__ == '__main__':
   if len(sys.argv) == 2:
     start(sys.argv[1])
+  elif len(sys.argv) == 3:
+    if sys.argv[2] == "stereo":
+      start(sys.argv[1], stereo=  True)
+    else:
+      start(sys.argv[1])
   else:
     print("please pass a scene name as first argument, now loading monkey scene")
     start("monkey")

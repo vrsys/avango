@@ -37,7 +37,7 @@ if [[ $* == *-d* ]]
 then
 cd "$DIR" && gdb --args python3.4 ./main.py
 else
-cd "$DIR" && python3.4 ./main.py
+cd "$DIR" && python3.4 ./main.py $1
 fi
 
 # kill daemon

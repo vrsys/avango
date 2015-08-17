@@ -62,6 +62,7 @@ class MulitScaleNavigator(avango.script.Script):
     if self.__last_time != -1:
       current_time = time.time()
       frame_time = current_time - self.__last_time
+      
       self.__last_time = current_time
 
       self.__rot_x -= self.__rel_rot_x.value
@@ -76,6 +77,9 @@ class MulitScaleNavigator(avango.script.Script):
         if not self.ClosestDistance.value == -1:
           current_motion_speed = (self.ClosestDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
      
+      # m/s in m/frame:
+      current_motion_speed = current_motion_speed * frame_time
+      
       if self.Keyboard.KeyW.value:
         self.__location += (rotation * \
                            avango.gua.make_trans_mat(0.0, 0.0, -current_motion_speed)).get_translate()

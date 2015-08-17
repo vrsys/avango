@@ -29,6 +29,7 @@ __pycache__
 .sconsign.dblite
 .sconf_temp
 config.log
+*.csv
 localdefs.py
 # Temporary files
 *~

@@ -10,6 +10,7 @@
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
+#include <avango/gua/renderer/Material.hpp>
 
 namespace av
 {
@@ -34,6 +35,10 @@ namespace av
       Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode =
           std::shared_ptr< ::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
 
+      virtual void on_distribute(av::gua::NetTransform& netNode);
+      virtual void on_undistribute(av::gua::NetTransform& netNode);
+
+
     protected:
 
       /**
@@ -43,12 +48,32 @@ namespace av
 
     public:
 
+      SFString   Geometry;
+      SFMaterial Material;
+      SFBool     RenderToGBuffer;
+      SFBool     RenderToStencilBuffer;
+
+      virtual void getGeometryCB(const SFString::GetValueEvent& event);
+      virtual void setGeometryCB(const SFString::SetValueEvent& event);
+
+      virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+      virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
+      virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
+      virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
+      virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::Video3DNode.
        */
-      //std::shared_ptr< ::gua::Video3DNode> getGuaNode() const;
+      std::shared_ptr< ::gua::node::Video3DNode> getGuaVideo3DNode() const;
 
     private:
+
+      std::shared_ptr< ::gua::node::Video3DNode> m_guaVideo3DNode;
+      av::Link< av::gua::Material> m_Material;
 
       Video3DNode(const Video3DNode&);
       Video3DNode& operator=(const Video3DNode&);

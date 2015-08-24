@@ -200,6 +200,9 @@ if __name__ == '__main__':
     else:
       start(sys.argv[1])
   else:
-    print("please pass a scene name as first argument, now loading monkey scene")
+    print("please pass a scene name as first argument")
+    print("available scenes:")
+    print(scenes.get_scene_names())
+    print("now loading monkey scene")
     start("monkey")
 

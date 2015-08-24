@@ -210,3 +210,6 @@ def load_scene(scene_name, node):
     else:
         print("there is no scene with this name, loading monkey scene..")
         return load_monkey_scene(node)
+
+def get_scene_names():
+    return ["monkey","oilrigs","pitoti"]

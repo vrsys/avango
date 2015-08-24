@@ -14,19 +14,19 @@ import scenes
 import csv_logger
 
 class ClippingUpdater(avango.script.Script):
-  ClosestDistance = avango.SFFloat()
+  MinDistance = avango.SFFloat()
   Near = avango.SFFloat()
   Far = avango.SFFloat()
 
-  @field_has_changed(ClosestDistance)
+  @field_has_changed(MinDistance)
   def update(self):
-    # print(self.ClosestDistance.value)
-    if self.ClosestDistance.value == -1.0:
+    # print(self.MinDistance.value)
+    if self.MinDistance.value == -1.0:
       self.Near.value *= 1.5
     else:  
-      if self.ClosestDistance.value < (self.Near.value*3):
+      if self.MinDistance.value < (self.Near.value*3):
         self.Near.value *= 0.6
-      if self.ClosestDistance.value > (self.Near.value*10):
+      if self.MinDistance.value > (self.Near.value*10):
         self.Near.value *= 1.5
     
     self.Near.value = min(self.Near.value, 10)
@@ -161,7 +161,7 @@ def start(scenename, stereo=False):
       Near=0.1,
       Far=10.0,
     )
-    clip_updater.ClosestDistance.connect_from(navi.ClosestDistance)
+    clip_updater.MinDistance.connect_from(navi.MinDistance)
 
     cam.NearClip.connect_from(clip_updater.Near)
     cam.FarClip.connect_from(clip_updater.Far)
@@ -179,7 +179,7 @@ def start(scenename, stereo=False):
     logger = csv_logger.CSV_Logger()
     timer = avango.nodes.TimeSensor()
     logger.Input_Time.connect_from(timer.Time)
-    logger.Input_MinDistance.connect_from(navi.ClosestDistance)
+    logger.Input_MinDistance.connect_from(navi.MinDistance)
     logger.Input_MotionSpeed.connect_from(navi.CurrentMotionSpeed)
     logger.Input_NearClip.connect_from(clip_updater.Near)
     logger.Input_FarClip.connect_from(clip_updater.Far)

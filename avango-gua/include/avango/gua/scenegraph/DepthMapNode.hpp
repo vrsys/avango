@@ -45,13 +45,13 @@ namespace av
 
     public:
 
-      SFFloat ClosestDistance;
+      SFFloat MinDistance;
       SFString TextureName;
       SFFloat NearClip;
       SFFloat FarClip;
 
-      virtual void getClosestDistanceCB(const SFFloat::GetValueEvent& event);
-      virtual void setClosestDistanceCB(const SFFloat::SetValueEvent& event);
+      virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
+      virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);
       virtual void getTextureNameCB(const SFString::GetValueEvent& event);
       virtual void setTextureNameCB(const SFString::SetValueEvent& event);
       virtual void getNearClipCB(const SFFloat::GetValueEvent& event);

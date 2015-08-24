@@ -14,7 +14,7 @@ class MulitScaleNavigator(avango.script.Script):
 
   DepthMapNode = avango.gua.SFDepthMapNode()
 
-  ClosestDistance = avango.SFFloat()
+  MinDistance = avango.SFFloat()
   MaxDistance = avango.SFFloat()
 
   RotationSpeed = avango.SFFloat()
@@ -32,7 +32,7 @@ class MulitScaleNavigator(avango.script.Script):
 
     self.DepthMapNode.value = None
 
-    self.ClosestDistance.value = -1.0
+    self.MinDistance.value = -1.0
     self.MaxDistance.value = 10.0
 
     self.__rot_x = 0.0
@@ -75,9 +75,9 @@ class MulitScaleNavigator(avango.script.Script):
 
       current_motion_speed = self.MaxMotionSpeed.value
       if self.DepthMapNode.value:
-        self.ClosestDistance.value = self.DepthMapNode.value.ClosestDistance.value
-        if not self.ClosestDistance.value == -1:
-          current_motion_speed = (self.ClosestDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
+        self.MinDistance.value = self.DepthMapNode.value.MinDistance.value
+        if not self.MinDistance.value == -1:
+          current_motion_speed = (self.MinDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
      
       self.CurrentMotionSpeed.value = current_motion_speed
       # m/s in m/frame:

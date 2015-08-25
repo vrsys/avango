@@ -1,6 +1,5 @@
 import avango
 import avango.script
-from avango.script import field_has_changed
 import avango.gua
 from examples_common.GuaVE import GuaVE
 import sys
@@ -11,7 +10,9 @@ class TimedRotate(avango.script.Script):
     MatrixOut = avango.gua.SFMatrix4()
 
     def evaluate(self):
-        self.MatrixOut.value = avango.gua.make_trans_mat(0.0, -1.0, -2.0) * avango.gua.make_rot_mat( 10*self.TimeIn.value * 2.0, 0.0, 1.0, 0.0)
+        self.MatrixOut.value = avango.gua.make_trans_mat(
+            0.0, -1.0, -2.0) * avango.gua.make_rot_mat(10 * self.TimeIn.value *
+                                                       2.0, 0.0, 1.0, 0.0)
 
 
 def start(filename):
@@ -22,9 +23,7 @@ def start(filename):
     videoloader = avango.gua.nodes.Video3DLoader()
     video_geode = videoloader.load("kinect", filename)
 
-    transform1 = avango.gua.nodes.TransformNode(
-        Children=[video_geode]
-        )
+    transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -32,15 +31,11 @@ def start(filename):
         Color=avango.gua.Color(1.0, 1.0, 1.0),
         Brightness=100.0,
         Transform=(avango.gua.make_trans_mat(1, 1, 5) *
-                   avango.gua.make_scale_mat(30, 30, 30))
-        )
+                   avango.gua.make_scale_mat(30, 30, 30)))
 
     size = avango.gua.Vec2ui(1024, 768)
 
-    window = avango.gua.nodes.GlfwWindow(
-        Size=size,
-        LeftResolution=size
-        )
+    window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
 
     avango.gua.register_window("window", window)
 
@@ -49,8 +44,7 @@ def start(filename):
         SceneGraph="scenegraph",
         Resolution=size,
         OutputWindowName="window",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5)
-        )
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
     res_pass.EnableSSAO.value = True
@@ -74,7 +68,7 @@ def start(filename):
             avango.gua.nodes.Video3DPassDescription(),
             res_pass,
             anti_aliasing,
-            ])
+        ])
 
     cam.PipelineDescription.value = pipeline_description
 
@@ -82,8 +76,7 @@ def start(filename):
         Name="screen",
         Width=2,
         Height=1.5,
-        Children=[cam]
-        )
+        Children=[cam])
 
     graph.Root.value.Children.value = [transform1, light, screen]
 
@@ -106,5 +99,4 @@ def start(filename):
 
 
 if __name__ == '__main__':
-  start(sys.argv[1])
-
+    start(sys.argv[1])

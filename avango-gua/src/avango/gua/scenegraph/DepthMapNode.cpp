@@ -15,6 +15,9 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
   AV_FC_ADD_ADAPTOR_FIELD(MinDistance,
                       boost::bind(&DepthMapNode::getMinDistanceCB, this, _1),
                       boost::bind(&DepthMapNode::setMinDistanceCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(MinDistanceWorldPosition,
+                      boost::bind(&DepthMapNode::getMinDistanceWorldPositionCB, this, _1),
+                      boost::bind(&DepthMapNode::setMinDistanceWorldPositionCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
                       boost::bind(&DepthMapNode::getTextureNameCB, this, _1),
                       boost::bind(&DepthMapNode::setTextureNameCB, this, _1));
@@ -58,7 +61,7 @@ av::gua::DepthMapNode::initClass()
   }
 }
 
-//ClosestDistance
+//MinDistance
 void
 av::gua::DepthMapNode::getMinDistanceCB(const SFFloat::GetValueEvent& event)
 {
@@ -67,6 +70,19 @@ av::gua::DepthMapNode::getMinDistanceCB(const SFFloat::GetValueEvent& event)
 
 void
 av::gua::DepthMapNode::setMinDistanceCB(const SFFloat::SetValueEvent& event)
+{
+  std::cout << "this value can't be set" << std::endl;
+}
+
+//MinDistanceWorldPosition
+void
+av::gua::DepthMapNode::getMinDistanceWorldPositionCB(const SFVec3::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->get_min_distance_position();
+}
+
+void
+av::gua::DepthMapNode::setMinDistanceWorldPositionCB(const SFVec3::SetValueEvent& event)
 {
   std::cout << "this value can't be set" << std::endl;
 }

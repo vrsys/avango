@@ -34,6 +34,21 @@ class ClippingUpdater(avango.script.Script):
     self.Far.value = self.Near.value * 1000.0
 
 
+class MarkerUpdater(avango.script.Script):
+  DistanceMapNode = avango.gua.SFDepthMapNode()
+  OutTransform = avango.gua.SFMatrix4()
+
+  def __init__(self):
+    self.super(MarkerUpdater).__init__()
+    self.DistanceMapNode.value = None
+    self.always_evaluate(True)
+  
+  def evaluate(self):
+    pos = self.DistanceMapNode.value.MinDistanceWorldPosition.value
+    distance = self.DistanceMapNode.value.MinDistance.value
+    self.OutTransform.value = avango.gua.make_trans_mat(pos) * avango.gua.make_scale_mat(distance/100)
+
+
 def start(scenename, stereo=False):
     print("loading:", scenename, "Stereo:", stereo) 
     # setup scenegraph
@@ -50,7 +65,13 @@ def start(scenename, stereo=False):
       Transform=avango.gua.make_trans_mat(starting_pos),
       Name="navigation"
       )
-    graph.Root.value.Children.value.extend([scene, navigation])
+
+    loader = avango.gua.nodes.TriMeshLoader()
+    marker = loader.create_geometry_from_file(
+        "marker", "data/objects/sphere.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE
+    )
+    marker.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.1, 0.1, 1.0))
+    graph.Root.value.Children.value.extend([scene, navigation, marker])
 
     size = avango.gua.Vec2ui(2560, 1440)
 
@@ -143,7 +164,7 @@ def start(scenename, stereo=False):
       Height = int(size.x / 12),
       Anchor = avango.gua.Vec2(0.0, -1.0)
       )
-    # graph.Root.value.Children.value.append(debug_quad)
+    graph.Root.value.Children.value.append(debug_quad)
     
     navi = navigator.MulitScaleNavigator()
     navi.StartLocation.value = navigation.Transform.value.get_translate()
@@ -155,6 +176,12 @@ def start(scenename, stereo=False):
     navi.DepthMapNode.value = distance_cube_map
 
     navigation.Transform.connect_from(navi.OutTransform)
+
+    #MarkerUpdate
+    marker_updater = MarkerUpdater()
+    marker_updater.DistanceMapNode.value = distance_cube_map
+    marker.Transform.connect_from(marker_updater.OutTransform)
+
 
     #Clipping update
     clip_updater = ClippingUpdater(

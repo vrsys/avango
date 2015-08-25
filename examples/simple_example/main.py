@@ -1,6 +1,5 @@
 import avango
 import avango.script
-from avango.script import field_has_changed
 import avango.gua
 from examples_common.GuaVE import GuaVE
 

@@ -49,6 +49,7 @@ namespace av
       SFString TextureName;
       SFFloat NearClip;
       SFFloat FarClip;
+      SFInt Resolution;
 
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);
@@ -58,6 +59,8 @@ namespace av
       virtual void setNearClipCB(const SFFloat::SetValueEvent& event);
       virtual void getFarClipCB(const SFFloat::GetValueEvent& event);
       virtual void setFarClipCB(const SFFloat::SetValueEvent& event);
+      virtual void getResolutionCB(const SFInt::GetValueEvent& event);
+      virtual void setResolutionCB(const SFInt::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::DepthMapNode.

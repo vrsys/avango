@@ -7,9 +7,25 @@ from bpy.props import StringProperty,  BoolProperty
 from .. import node_tree
 from .. import export_utils
 
-template_path = "2.73/scripts/addons/avango-blender/nodes/script_template.py"
-with open(template_path, "r") as myfile:
-    SCRIPT_TEMPLATE = myfile.read()
+SCRIPT_TEMPLATE = """
+import avango
+import avango.gua
+import avango.script
+from avango.script import field_has_changed
+
+
+class %CLASSNAME%(avango.script.Script):
+
+%FIELD_DECLARATIONS%
+
+    def __init__(self):
+        self.super(%CLASSNAME%).__init__()
+
+    def evaluate(self):
+        #code here
+        pass
+"""
+
 
 SOCKET_TO_FIELD = {
     "NodeSocketFloat": "avango.SFFloat",

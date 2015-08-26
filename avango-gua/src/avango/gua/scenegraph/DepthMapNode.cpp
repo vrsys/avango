@@ -18,18 +18,28 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
   AV_FC_ADD_ADAPTOR_FIELD(MinDistanceWorldPosition,
                       boost::bind(&DepthMapNode::getMinDistanceWorldPositionCB, this, _1),
                       boost::bind(&DepthMapNode::setMinDistanceWorldPositionCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
                       boost::bind(&DepthMapNode::getTextureNameCB, this, _1),
                       boost::bind(&DepthMapNode::setTextureNameCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(NearClip,
                       boost::bind(&DepthMapNode::getNearClipCB, this, _1),
                       boost::bind(&DepthMapNode::setNearClipCB, this, _1));
   AV_FC_ADD_ADAPTOR_FIELD(FarClip,
                       boost::bind(&DepthMapNode::getFarClipCB, this, _1),
                       boost::bind(&DepthMapNode::setFarClipCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(Resolution,
                       boost::bind(&DepthMapNode::getResolutionCB, this, _1),
                       boost::bind(&DepthMapNode::setResolutionCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
+                      boost::bind(&DepthMapNode::getWhiteListCB, this, _1),
+                      boost::bind(&DepthMapNode::setWhiteListCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(BlackList,
+                      boost::bind(&DepthMapNode::getBlackListCB, this, _1),
+                      boost::bind(&DepthMapNode::setBlackListCB, this, _1));
 }
 
 //av::gua::DepthMapNode::~DepthMapNode()
@@ -137,6 +147,38 @@ void
 av::gua::DepthMapNode::setResolutionCB(const SFInt::SetValueEvent& event)
 {
   m_guaDepthMapNode->config.set_resolution(event.getValue());
+}
+
+//WhiteList
+void
+av::gua::DepthMapNode::getWhiteListCB(const MFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->config.mask().whitelist.get_strings();
+}
+
+void
+av::gua::DepthMapNode::setWhiteListCB(const MFString::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.mask().whitelist.clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaDepthMapNode->config.mask().whitelist.add_tag(tag);
+  }
+}
+
+//BlackList
+void
+av::gua::DepthMapNode::getBlackListCB(const MFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->config.mask().blacklist.get_strings();
+}
+
+void
+av::gua::DepthMapNode::setBlackListCB(const MFString::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.mask().blacklist.clear_tags();
+  for (auto tag : event.getValue()) {
+    m_guaDepthMapNode->config.mask().blacklist.add_tag(tag);
+  }
 }
 
 std::shared_ptr< ::gua::node::CubemapNode>

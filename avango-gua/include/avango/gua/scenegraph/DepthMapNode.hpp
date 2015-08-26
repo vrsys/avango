@@ -47,24 +47,40 @@ namespace av
 
       SFFloat MinDistance;
       SFVec3 MinDistanceWorldPosition;
+
       SFString TextureName;
+
       SFFloat NearClip;
       SFFloat FarClip;
+
       SFInt Resolution;
+
+      MFString WhiteList;
+      MFString BlackList;
 
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);
+
       virtual void getMinDistanceWorldPositionCB(const SFVec3::GetValueEvent& event);
       virtual void setMinDistanceWorldPositionCB(const SFVec3::SetValueEvent& event);
+
       virtual void getTextureNameCB(const SFString::GetValueEvent& event);
       virtual void setTextureNameCB(const SFString::SetValueEvent& event);
+
       virtual void getNearClipCB(const SFFloat::GetValueEvent& event);
       virtual void setNearClipCB(const SFFloat::SetValueEvent& event);
+
       virtual void getFarClipCB(const SFFloat::GetValueEvent& event);
       virtual void setFarClipCB(const SFFloat::SetValueEvent& event);
+
       virtual void getResolutionCB(const SFInt::GetValueEvent& event);
       virtual void setResolutionCB(const SFInt::SetValueEvent& event);
 
+      virtual void getWhiteListCB(const MFString::GetValueEvent& event);
+      virtual void setWhiteListCB(const MFString::SetValueEvent& event);
+
+      virtual void getBlackListCB(const MFString::GetValueEvent& event);
+      virtual void setBlackListCB(const MFString::SetValueEvent& event);
       /**
        * Get the wrapped ::gua::DepthMapNode.
        */

@@ -1,4 +1,5 @@
 import avango
+import random
 
 def load_monkey_scene(node):
     loader = avango.gua.nodes.TriMeshLoader()
@@ -20,6 +21,46 @@ def load_monkey_scene(node):
     node.Children.value.append(light)
     return avango.gua.Vec3(0.0, 0.0, 5.0)
 
+
+def load_balls_scene(node):
+  loader = avango.gua.nodes.TriMeshLoader()
+  random.seed(0)
+  directions = [
+    avango.gua.Vec3(1.0, 0.0, 0.0),
+    avango.gua.Vec3(-1.0, 0.0, 0.0),
+    avango.gua.Vec3(0.0, 1.0, 0.0),
+    avango.gua.Vec3(0.0, -1.0, 0.0),
+    avango.gua.Vec3(0.0, 0.0, 1.0),
+    avango.gua.Vec3(0.0, 0.0, -1.0),
+  ]
+
+  colors = [
+    avango.gua.Vec4(0.9, 0.1, 0.5, 1.0),
+    avango.gua.Vec4(0.1, 0.9, 0.1, 1.0),
+    avango.gua.Vec4(0.1, 0.1, 0.9, 1.0),
+    avango.gua.Vec4(0.9, 0.9, 0.1, 1.0),
+    avango.gua.Vec4(1.0, 0.3, 0.0, 1.0),
+  ]
+
+  for scale in [1000 ,100, 10, 1, 0.1, 0.01, 0.001]:
+    for i in range(6):
+      ball = loader.create_geometry_from_file(
+        "ball"+str(i), "data/objects/sphere.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE
+      )
+      ball.Transform.value = avango.gua.make_scale_mat(scale) * avango.gua.make_trans_mat(directions[i]) * avango.gua.make_scale_mat(0.2)
+      ball.Material.value.set_uniform("Color", random.choice(colors))
+      node.Children.value.append(ball)
+
+  light = avango.gua.nodes.LightNode(
+      Type=avango.gua.LightType.SUN,
+      Name="light",
+      Color=avango.gua.Color(1.0, 1.0, 1.0),
+      Brightness=2.5,
+      Transform=avango.gua.make_rot_mat(-50.0, 1.0, -0.9, 0.0)
+      )
+  node.Children.value.append(light)
+
+  return avango.gua.Vec3(0.0, 0.0, 0.003)
 
 def load_oilrig_scene(node):
     def load_oilrig(transform, node):
@@ -207,6 +248,8 @@ def load_scene(scene_name, node):
         return load_oilrig_scene(node)
     elif scene_name == "pitoti":
         return load_pitoti_scene(node)
+    elif scene_name == "balls":
+        return load_balls_scene(node)
     else:
         print("there is no scene with this name, loading monkey scene..")
         return load_monkey_scene(node)

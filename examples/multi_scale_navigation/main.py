@@ -46,7 +46,7 @@ class MarkerUpdater(avango.script.Script):
   def evaluate(self):
     pos = self.DistanceMapNode.value.MinDistanceWorldPosition.value
     distance = self.DistanceMapNode.value.MinDistance.value
-    self.OutTransform.value = avango.gua.make_trans_mat(pos) * avango.gua.make_scale_mat(distance/100)
+    self.OutTransform.value = avango.gua.make_trans_mat(pos) * avango.gua.make_scale_mat(distance/50)
 
 
 def start(scenename, stereo=False):
@@ -70,7 +70,9 @@ def start(scenename, stereo=False):
     marker = loader.create_geometry_from_file(
         "marker", "data/objects/sphere.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE
     )
-    marker.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.1, 0.1, 1.0))
+    marker.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.0, 0.0, 1.0))
+    marker.Material.value.set_uniform("Emissivity", 1.0)
+    marker.Tags.value = ["marker"]
     graph.Root.value.Children.value.extend([scene, navigation, marker])
 
     size = avango.gua.Vec2ui(2560, 1440)
@@ -154,6 +156,8 @@ def start(scenename, stereo=False):
       NearClip=0.0001,
       FarClip=1000.0,
       Transform=dcm_transform,
+      Resolution=256,
+      BlackList=["marker"],
     )
     navigation.Children.value.append(distance_cube_map)
 

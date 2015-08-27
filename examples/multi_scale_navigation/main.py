@@ -13,6 +13,21 @@ import navigator
 import scenes
 import csv_logger
 
+class DistanceMapWrapper(avango.script.Script):
+  DistanceMapNode = avango.gua.SFDepthMapNode()
+  MinDistance = avango.SFFloat()
+  MinDistancePos = avango.gua.SFVec3()
+
+  def __init__(self):
+    self.super(DistanceMapWrapper).__init__()
+    self.DistanceMapNode.value = None
+    self.always_evaluate(True)
+
+  def evaluate(self):
+    self.MinDistance.value = self.DistanceMapNode.value.MinDistance.value
+    self.MinDistancePos.value = self.DistanceMapNode.value.MinDistanceWorldPosition.value
+
+
 class ClippingUpdater(avango.script.Script):
   MinDistance = avango.SFFloat()
   Near = avango.SFFloat()
@@ -20,7 +35,6 @@ class ClippingUpdater(avango.script.Script):
 
   @field_has_changed(MinDistance)
   def update(self):
-    # print(self.MinDistance.value)
     if self.MinDistance.value == -1.0:
       self.Near.value *= 1.5
     else:  
@@ -35,17 +49,14 @@ class ClippingUpdater(avango.script.Script):
 
 
 class MarkerUpdater(avango.script.Script):
-  DistanceMapNode = avango.gua.SFDepthMapNode()
+  MinDistance = avango.SFFloat()
+  MinDistancePos = avango.gua.SFVec3()
   OutTransform = avango.gua.SFMatrix4()
-
-  def __init__(self):
-    self.super(MarkerUpdater).__init__()
-    self.DistanceMapNode.value = None
-    self.always_evaluate(True)
   
   def evaluate(self):
-    pos = self.DistanceMapNode.value.MinDistanceWorldPosition.value
-    distance = self.DistanceMapNode.value.MinDistance.value
+    distance = self.MinDistance.value
+    pos = self.MinDistancePos.value
+
     self.OutTransform.value = avango.gua.make_trans_mat(pos) * avango.gua.make_scale_mat(distance/50)
 
 
@@ -161,6 +172,9 @@ def start(scenename, stereo=False):
     )
     navigation.Children.value.append(distance_cube_map)
 
+    distance_cube_map_wrapper = DistanceMapWrapper()
+    distance_cube_map_wrapper.DistanceMapNode.value = distance_cube_map
+
     debug_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
       Name = "DepthMapDebug",
       Texture = distance_cube_map.TextureName.value,
@@ -177,13 +191,14 @@ def start(scenename, stereo=False):
     navi.RotationSpeed.value = 0.2
     navi.MaxMotionSpeed.value = 1000.0
     navi.MaxDistance.value = 1000.0
-    navi.DepthMapNode.value = distance_cube_map
+    navi.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
 
     navigation.Transform.connect_from(navi.OutTransform)
 
-    #MarkerUpdate
+    # MarkerUpdate
     marker_updater = MarkerUpdater()
-    marker_updater.DistanceMapNode.value = distance_cube_map
+    marker_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
+    marker_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
     marker.Transform.connect_from(marker_updater.OutTransform)
 
 
@@ -192,7 +207,7 @@ def start(scenename, stereo=False):
       Near=0.1,
       Far=10.0,
     )
-    clip_updater.MinDistance.connect_from(navi.MinDistance)
+    clip_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
 
     cam.NearClip.connect_from(clip_updater.Near)
     cam.FarClip.connect_from(clip_updater.Far)
@@ -210,7 +225,7 @@ def start(scenename, stereo=False):
     logger = csv_logger.CSV_Logger()
     timer = avango.nodes.TimeSensor()
     logger.Input_Time.connect_from(timer.Time)
-    logger.Input_MinDistance.connect_from(navi.MinDistance)
+    logger.Input_MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
     logger.Input_MotionSpeed.connect_from(navi.CurrentMotionSpeed)
     logger.Input_NearClip.connect_from(clip_updater.Near)
     logger.Input_FarClip.connect_from(clip_updater.Far)

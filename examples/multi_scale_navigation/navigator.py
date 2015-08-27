@@ -12,8 +12,6 @@ class MulitScaleNavigator(avango.script.Script):
   Mouse = device.MouseDevice()
   Keyboard = device.KeyboardDevice()
 
-  DepthMapNode = avango.gua.SFDepthMapNode()
-
   MinDistance = avango.SFFloat()
   MaxDistance = avango.SFFloat()
 
@@ -29,8 +27,6 @@ class MulitScaleNavigator(avango.script.Script):
 
   def __init__(self):
     self.super(MulitScaleNavigator).__init__()
-
-    self.DepthMapNode.value = None
 
     self.MinDistance.value = -1.0
     self.MaxDistance.value = 10.0
@@ -74,10 +70,9 @@ class MulitScaleNavigator(avango.script.Script):
                  avango.gua.make_rot_mat(self.__rot_x * self.RotationSpeed.value, 1.0, 0.0, 0.0)
 
       current_motion_speed = self.MaxMotionSpeed.value
-      if self.DepthMapNode.value:
-        self.MinDistance.value = self.DepthMapNode.value.MinDistance.value
-        if not self.MinDistance.value == -1:
-          current_motion_speed = (self.MinDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
+
+      if not self.MinDistance.value == -1:
+        current_motion_speed = (self.MinDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
      
       self.CurrentMotionSpeed.value = current_motion_speed
       # m/s in m/frame:

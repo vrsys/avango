@@ -43,7 +43,7 @@ class ClippingUpdater(avango.script.Script):
       if self.MinDistance.value > (self.Near.value*10):
         self.Near.value *= 1.5
     
-    self.Near.value = min(self.Near.value, 10)
+    self.Near.value = min(self.Near.value, 1)
     self.Near.value = max(self.Near.value, 0.0001)
     self.Far.value = self.Near.value * 1000.0
 
@@ -58,6 +58,33 @@ class MarkerUpdater(avango.script.Script):
     pos = self.MinDistancePos.value
 
     self.OutTransform.value = avango.gua.make_trans_mat(pos) * avango.gua.make_scale_mat(distance/50)
+
+
+class ArrowUpdater(avango.script.Script):
+  NavigationTransformIn = avango.gua.SFMatrix4()
+  MinDistance = avango.SFFloat()
+  MinDistancePos = avango.gua.SFVec3()
+  OutTransform = avango.gua.SFMatrix4()
+
+  def __init__(self):
+    self.super(ArrowUpdater).__init__()
+    self.MinDistance.value = -1.0
+    self.arrow_offset = avango.gua.Vec3(0.0, 0.0, -0.50)
+    self.arrow_scale = 0.04
+
+  @field_has_changed(NavigationTransformIn)
+  def update_arrow(self):
+    if not self.MinDistance.value == -1.0:
+      arrow_pos = (self.NavigationTransformIn.value * avango.gua.make_trans_mat(self.arrow_offset)).get_translate()
+
+      look_mat = avango.gua.make_look_at_mat_inv(arrow_pos, self.MinDistancePos.value, avango.gua.Vec3(0.0, 1.0, 0.0))
+      nav_rot_mat = (avango.gua.make_rot_mat(self.NavigationTransformIn.value.get_rotate_scale_corrected()))
+      rot_mat = avango.gua.make_rot_mat(look_mat.get_rotate())
+
+      self.OutTransform.value = avango.gua.make_trans_mat(self.arrow_offset) * avango.gua.make_inverse_mat(nav_rot_mat) * rot_mat * avango.gua.make_scale_mat(self.arrow_scale)
+    else:
+      self.OutTransform.value = avango.gua.make_trans_mat(self.arrow_offset) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.arrow_scale)
+
 
 
 def start(scenename, stereo=False):
@@ -81,9 +108,18 @@ def start(scenename, stereo=False):
     marker = loader.create_geometry_from_file(
         "marker", "data/objects/sphere.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE
     )
-    marker.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.0, 0.0, 1.0))
-    marker.Material.value.set_uniform("Emissivity", 1.0)
-    marker.Tags.value = ["marker"]
+    marker.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 1.0 ,1.0 ,1.0))
+    marker.Material.value.set_uniform("Emissivity", 0.3)
+    marker.Tags.value = ["markers"]
+
+    arrow = loader.create_geometry_from_file(
+       "arrow", "data/objects/arrow.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.NORMALIZE_POSITION
+    )
+    arrow.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 1.0 ,1.0 ,1.0))
+    arrow.Material.value.set_uniform("Emissivity", 0.3)
+    arrow.Tags.value = ["markers"]
+    navigation.Children.value.append(arrow)
+
     graph.Root.value.Children.value.extend([scene, navigation, marker])
 
     size = avango.gua.Vec2ui(2560, 1440)
@@ -112,7 +148,8 @@ def start(scenename, stereo=False):
       EyeDistance = 0.06,
       EnableStereo = stereo,
       OutputWindowName = "window",
-      Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+      Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0),
+      EnableFrustumCulling = False,
     )
     navigation.Children.value.append(cam)
 
@@ -121,9 +158,6 @@ def start(scenename, stereo=False):
     res_pass.SSAOIntensity.value = 4.0
     res_pass.SSAOFalloff.value = 10.0
     res_pass.SSAORadius.value = 7.0
-
-    #res_pass.EnableScreenSpaceShadow.value = True
-
     res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
     res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
@@ -158,6 +192,7 @@ def start(scenename, stereo=False):
         )
     navigation.Children.value.append(screen)
 
+    
     dcm_transform = avango.gua.make_identity_mat()
     if stereo:
       dcm_transform = avango.gua.make_trans_mat(0.0, 0.0, -0.20)
@@ -168,7 +203,7 @@ def start(scenename, stereo=False):
       FarClip=1000.0,
       Transform=dcm_transform,
       Resolution=256,
-      BlackList=["marker"],
+      BlackList=["markers"],
     )
     navigation.Children.value.append(distance_cube_map)
 
@@ -200,12 +235,18 @@ def start(scenename, stereo=False):
     marker_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
     marker_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
     marker.Transform.connect_from(marker_updater.OutTransform)
-
+    
+    # ArrowUpdate
+    arrow_updater = ArrowUpdater()
+    arrow_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
+    arrow_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
+    arrow_updater.NavigationTransformIn.connect_from(navigation.Transform)
+    arrow.Transform.connect_from(arrow_updater.OutTransform)
 
     #Clipping update
     clip_updater = ClippingUpdater(
-      Near=0.1,
-      Far=10.0,
+      Near=0.01,
+      Far=100.0,
     )
     clip_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
 

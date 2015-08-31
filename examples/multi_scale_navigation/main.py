@@ -149,7 +149,6 @@ def start(scenename, stereo=False):
       EnableStereo = stereo,
       OutputWindowName = "window",
       Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0),
-      EnableFrustumCulling = False,
     )
     navigation.Children.value.append(cam)
 

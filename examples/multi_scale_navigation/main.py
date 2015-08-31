@@ -62,6 +62,7 @@ class MarkerUpdater(avango.script.Script):
 
 class ArrowUpdater(avango.script.Script):
   NavigationTransformIn = avango.gua.SFMatrix4()
+  NearClip = avango.SFFloat()
   MinDistance = avango.SFFloat()
   MinDistancePos = avango.gua.SFVec3()
   OutTransform = avango.gua.SFMatrix4()
@@ -69,22 +70,38 @@ class ArrowUpdater(avango.script.Script):
   def __init__(self):
     self.super(ArrowUpdater).__init__()
     self.MinDistance.value = -1.0
-    self.arrow_offset = avango.gua.Vec3(0.0, 0.0, -0.50)
-    self.arrow_scale = 0.04
+    self.OutTransform.value = avango.gua.make_identity_mat()
 
   @field_has_changed(NavigationTransformIn)
   def update_arrow(self):
+    scale = self.NearClip.value * 0.3
+    offset = avango.gua.Vec3(self.NearClip.value * 0.5, self.NearClip.value * -0.22, self.NearClip.value * -1.5)
+
     if not self.MinDistance.value == -1.0:
-      arrow_pos = (self.NavigationTransformIn.value * avango.gua.make_trans_mat(self.arrow_offset)).get_translate()
+      arrow_pos = (self.NavigationTransformIn.value * avango.gua.make_trans_mat(offset)).get_translate()
 
       look_mat = avango.gua.make_look_at_mat_inv(arrow_pos, self.MinDistancePos.value, avango.gua.Vec3(0.0, 1.0, 0.0))
       nav_rot_mat = (avango.gua.make_rot_mat(self.NavigationTransformIn.value.get_rotate_scale_corrected()))
       rot_mat = avango.gua.make_rot_mat(look_mat.get_rotate())
 
-      self.OutTransform.value = avango.gua.make_trans_mat(self.arrow_offset) * avango.gua.make_inverse_mat(nav_rot_mat) * rot_mat * avango.gua.make_scale_mat(self.arrow_scale)
+      self.OutTransform.value = avango.gua.make_trans_mat(offset) * avango.gua.make_inverse_mat(nav_rot_mat) * rot_mat * avango.gua.make_scale_mat(scale)
     else:
-      self.OutTransform.value = avango.gua.make_trans_mat(self.arrow_offset) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.arrow_scale)
+      self.OutTransform.value = avango.gua.make_trans_mat(offset) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(scale)
 
+
+class TransformSmoother(avango.script.Script):
+  InTransform = avango.gua.SFMatrix4()
+  OutTransform = avango.gua.SFMatrix4()
+  Smoothness = avango.SFFloat()
+
+  def __init__(self):
+    self.super(TransformSmoother).__init__()
+    self.always_evaluate(True)
+    self.InTransform.value = avango.gua.make_identity_mat()
+    self.OutTransform.value = avango.gua.make_identity_mat()
+
+  def evaluate(self):
+    self.OutTransform.value = self.OutTransform.value * (1.0-self.Smoothness.value) + self.InTransform.value * self.Smoothness.value
 
 
 def start(scenename, stereo=False):
@@ -216,7 +233,7 @@ def start(scenename, stereo=False):
       Texture = distance_cube_map.TextureName.value,
       Width = int(size.x / 2),
       Height = int(size.x / 12),
-      Anchor = avango.gua.Vec2(0.0, -1.0)
+      Anchor = avango.gua.Vec2(-1.0, -1.0)
       )
     graph.Root.value.Children.value.append(debug_quad)
     
@@ -235,14 +252,18 @@ def start(scenename, stereo=False):
     marker_updater = MarkerUpdater()
     marker_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
     marker_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
-    marker.Transform.connect_from(marker_updater.OutTransform)
+    marker_smoother = TransformSmoother(Smoothness=0.2)
+    marker_smoother.InTransform.connect_from(marker_updater.OutTransform)
+    marker.Transform.connect_from(marker_smoother.OutTransform)
     
     # ArrowUpdate
     arrow_updater = ArrowUpdater()
     arrow_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
     arrow_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
     arrow_updater.NavigationTransformIn.connect_from(navigation.Transform)
-    arrow.Transform.connect_from(arrow_updater.OutTransform)
+    arrow_smoother = TransformSmoother(Smoothness=0.2)
+    arrow_smoother.InTransform.connect_from(arrow_updater.OutTransform)
+    arrow.Transform.connect_from(arrow_smoother.OutTransform)
 
     #Clipping update
     clip_updater = ClippingUpdater(
@@ -255,6 +276,7 @@ def start(scenename, stereo=False):
     cam.FarClip.connect_from(clip_updater.Far)
     # distance_cube_map.NearClip.connect_from(clip_updater.Near)
     # distance_cube_map.FarClip.connect_from(clip_updater.Far)
+    arrow_updater.NearClip.connect_from(clip_updater.Near)
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

@@ -58,6 +58,8 @@ namespace av
       MFString WhiteList;
       MFString BlackList;
 
+      SFInt ViewID;
+
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);
 
@@ -81,6 +83,9 @@ namespace av
 
       virtual void getBlackListCB(const MFString::GetValueEvent& event);
       virtual void setBlackListCB(const MFString::SetValueEvent& event);
+
+      virtual void getViewIDCB(const SFInt::GetValueEvent& event);
+      virtual void setViewIDCB(const SFInt::SetValueEvent& event);
       /**
        * Get the wrapped ::gua::DepthMapNode.
        */

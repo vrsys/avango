@@ -40,6 +40,10 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
   AV_FC_ADD_ADAPTOR_FIELD(BlackList,
                       boost::bind(&DepthMapNode::getBlackListCB, this, _1),
                       boost::bind(&DepthMapNode::setBlackListCB, this, _1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(ViewID,
+                      boost::bind(&DepthMapNode::getViewIDCB, this, _1),
+                      boost::bind(&DepthMapNode::setViewIDCB, this, _1));
 }
 
 //av::gua::DepthMapNode::~DepthMapNode()
@@ -179,6 +183,19 @@ av::gua::DepthMapNode::setBlackListCB(const MFString::SetValueEvent& event)
   for (auto tag : event.getValue()) {
     m_guaDepthMapNode->config.mask().blacklist.add_tag(tag);
   }
+}
+
+//ViewID
+void
+av::gua::DepthMapNode::getViewIDCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->config.view_id();
+}
+
+void
+av::gua::DepthMapNode::setViewIDCB(const SFInt::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.set_view_id(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::CubemapNode>

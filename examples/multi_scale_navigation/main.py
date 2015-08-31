@@ -148,6 +148,7 @@ def start(scenename, stereo=False):
       EyeDistance = 0.06,
       EnableStereo = stereo,
       OutputWindowName = "window",
+      ViewID = 1,
       Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0),
     )
     navigation.Children.value.append(cam)
@@ -201,7 +202,8 @@ def start(scenename, stereo=False):
       NearClip=0.0001,
       FarClip=1000.0,
       Transform=dcm_transform,
-      Resolution=256,
+      Resolution=64,
+      ViewID=2,
       BlackList=["markers"],
     )
     navigation.Children.value.append(distance_cube_map)

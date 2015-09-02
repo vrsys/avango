@@ -65,18 +65,28 @@ class ArrowUpdater(avango.script.Script):
   NearClip = avango.SFFloat()
   MinDistance = avango.SFFloat()
   MinDistancePos = avango.gua.SFVec3()
+  EvasionInfo = avango.SFBool()
   OutTransform = avango.gua.SFMatrix4()
+  OutMaterial = avango.gua.SFMaterial()
+
 
   def __init__(self):
     self.super(ArrowUpdater).__init__()
     self.MinDistance.value = -1.0
     self.OutTransform.value = avango.gua.make_identity_mat()
+    self.OutMaterial.value = avango.gua.nodes.Material()
+
+  @field_has_changed(EvasionInfo)
+  def update_color(self):
+    if self.EvasionInfo.value:
+      self.OutMaterial.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.0, 0.0, 1.0))
+    else:
+      self.OutMaterial.value.set_uniform("Color", avango.gua.Vec4(0.4, 0.9, 0.4, 1.0))
 
   @field_has_changed(NavigationTransformIn)
   def update_arrow(self):
     scale = self.NearClip.value * 0.3
     offset = avango.gua.Vec3(self.NearClip.value * 0.5, self.NearClip.value * -0.22, self.NearClip.value * -1.5)
-
     if not self.MinDistance.value == -1.0:
       arrow_pos = (self.NavigationTransformIn.value * avango.gua.make_trans_mat(offset)).get_translate()
 
@@ -132,8 +142,6 @@ def start(scenename, stereo=False):
     arrow = loader.create_geometry_from_file(
        "arrow", "data/objects/arrow.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.NORMALIZE_POSITION
     )
-    arrow.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 1.0 ,1.0 ,1.0))
-    arrow.Material.value.set_uniform("Emissivity", 0.3)
     arrow.Tags.value = ["markers"]
     navigation.Children.value.append(arrow)
 
@@ -237,14 +245,16 @@ def start(scenename, stereo=False):
       )
     graph.Root.value.Children.value.append(debug_quad)
     
-    navi = navigator.MulitScaleNavigator()
+    navi = navigator.MulitScaleNavigator(
+      EnableEvasion=True,
+      RotationSpeed=0.2,
+      MaxMotionSpeed=1000.0,
+      MaxDistance=1000.0,
+      )
     navi.StartLocation.value = navigation.Transform.value.get_translate()
     navi.OutTransform.connect_from(navigation.Transform)
-
-    navi.RotationSpeed.value = 0.2
-    navi.MaxMotionSpeed.value = 1000.0
-    navi.MaxDistance.value = 1000.0
     navi.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
+    navi.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
 
     navigation.Transform.connect_from(navi.OutTransform)
 
@@ -261,9 +271,11 @@ def start(scenename, stereo=False):
     arrow_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
     arrow_updater.MinDistancePos.connect_from(distance_cube_map_wrapper.MinDistancePos)
     arrow_updater.NavigationTransformIn.connect_from(navigation.Transform)
+    arrow_updater.EvasionInfo.connect_from(navi.EvasionInfo)
     arrow_smoother = TransformSmoother(Smoothness=0.2)
     arrow_smoother.InTransform.connect_from(arrow_updater.OutTransform)
     arrow.Transform.connect_from(arrow_smoother.OutTransform)
+    arrow.Material.connect_from(arrow_updater.OutMaterial)
 
     #Clipping update
     clip_updater = ClippingUpdater(

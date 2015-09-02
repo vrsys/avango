@@ -9,10 +9,14 @@ class MulitScaleNavigator(avango.script.Script):
 
   OutTransform = avango.gua.SFMatrix4()
 
+  EnableEvasion = avango.SFBool()
+  EvasionInfo = avango.SFBool()
+
   Mouse = device.MouseDevice()
   Keyboard = device.KeyboardDevice()
 
   MinDistance = avango.SFFloat()
+  MinDistancePos = avango.gua.SFVec3()
   MaxDistance = avango.SFFloat()
 
   RotationSpeed = avango.SFFloat()
@@ -29,7 +33,10 @@ class MulitScaleNavigator(avango.script.Script):
     self.super(MulitScaleNavigator).__init__()
 
     self.MinDistance.value = -1.0
+    self.MinDistancePos.value = avango.gua.Vec3(0.0, 0.0, 0.0)
     self.MaxDistance.value = 10.0
+
+    self.EnableEvasion.value = False
 
     self.__rot_x = 0.0
     self.__rot_y = 0.0
@@ -63,6 +70,8 @@ class MulitScaleNavigator(avango.script.Script):
       
       self.__last_time = current_time
 
+      self.EvasionInfo.value = False
+
       self.__rot_x -= self.__rel_rot_x.value
       self.__rot_y -= self.__rel_rot_y.value
 
@@ -82,7 +91,12 @@ class MulitScaleNavigator(avango.script.Script):
         self.__location += (rotation * \
                            avango.gua.make_trans_mat(0.0, 0.0, -current_motion_speed)).get_translate()
 
+      # BACKWARDS
       if self.Keyboard.KeyS.value:
+        if self.EnableEvasion.value:
+          eva_direction = self.calc_evasion(rotation)
+          self.__location += (rotation * \
+                            avango.gua.make_trans_mat(eva_direction*current_motion_speed)).get_translate()
         self.__location += (rotation * \
                            avango.gua.make_trans_mat(0.0, 0.0, current_motion_speed)).get_translate()
 
@@ -114,4 +128,26 @@ class MulitScaleNavigator(avango.script.Script):
 
       self.__last_time = time.time()
 
+  def calc_evasion(self, rotation):
+    world_direction = self.MinDistancePos.value - self.OutTransform.value.get_translate()
+    world_direction = avango.gua.Vec4(world_direction.x, world_direction.y, world_direction.z, 0.0)
+    local_direction = world_direction * rotation
+    # MinDistance behind navigation?
+    if local_direction.z > 0.0:
+      self.EvasionInfo.value = True
+      eva_direction = local_direction
+      eva_direction.normalize()
 
+      if eva_direction.x > 0.0:
+        eva_direction.x -= 1.0
+      else:
+        eva_direction.x += 1.0
+
+      if eva_direction.y > 0.0:
+        eva_direction.y -= 1.0
+      else:
+        eva_direction.y += 1.0
+
+      return avango.gua.Vec3(eva_direction.x, eva_direction.y, 0.0)
+    else:
+      return avango.gua.Vec3(0.0, 0.0, 0.0)

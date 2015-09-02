@@ -1,5 +1,6 @@
 #basic
 import sys
+import math
 
 #avango gua
 import avango
@@ -111,7 +112,23 @@ class TransformSmoother(avango.script.Script):
     self.OutTransform.value = avango.gua.make_identity_mat()
 
   def evaluate(self):
-    self.OutTransform.value = self.OutTransform.value * (1.0-self.Smoothness.value) + self.InTransform.value * self.Smoothness.value
+    if math.isnan(self.OutTransform.value.get_element(0,0)):
+      self.OutTransform.value = avango.gua.make_identity_mat()
+    in_translate = self.InTransform.value.get_translate()
+    in_rotation = self.InTransform.value.get_rotate_scale_corrected()
+    in_scale = self.InTransform.value.get_scale()
+
+    out_translate = self.OutTransform.value.get_translate()
+    out_rotation = self.OutTransform.value.get_rotate_scale_corrected()
+    out_scale = self.OutTransform.value.get_scale()
+
+    out_translate = out_translate * (1.0 - self.Smoothness.value) + in_translate * self.Smoothness.value
+    out_rotation = out_rotation.slerp_to(in_rotation, self.Smoothness.value)
+    out_scale = out_scale * (1.0 - self.Smoothness.value) + in_scale * self.Smoothness.value
+
+    self.OutTransform.value = avango.gua.make_trans_mat(out_translate) *\
+                              avango.gua.make_rot_mat(out_rotation) *\
+                              avango.gua.make_scale_mat(out_scale)
 
 
 def start(scenename, stereo=False):

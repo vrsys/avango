@@ -31,10 +31,11 @@ def defaultWindow(scene):
     }
 
 
-def blender_mat4_to_avango(matrix):
+def rot_x_neg90(matrix):
     rotation = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X') #mathutils.Quaternion((1.0, 0.0, 0.0), math.radians(-90.0)).to_matrix().to_4x4()
 
     return rotation * matrix
+
 
 # TODO:
 # write parent
@@ -88,7 +89,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = blender_mat4_to_avango(obj.matrix_local)
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         return {
             'name': obj.name,
@@ -100,7 +101,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = blender_mat4_to_avango(obj.matrix_local)
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         acam = obj.data.avango
 
@@ -158,7 +159,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = blender_mat4_to_avango(obj.matrix_local)
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
@@ -182,7 +183,7 @@ def to_json(obj):
                 blender_obj = bpy.data.objects[obj.name]
                 if blender_obj.parent:
                     parent = blender_obj.parent.name
-                matrix = blender_mat4_to_avango(blender_obj.matrix_local)
+                matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
             filename = obj.name + '.obj'
 
             bpy.ops.object.select_all(action='DESELECT')
@@ -275,7 +276,7 @@ def to_json(obj):
                 'name': obj.name,
                 'file': 'tmp/' + filename,
                 'parent': parent,
-                'transform': matrixToList(blender_mat4_to_avango(arma.matrix_local)),
+                'transform': matrixToList(arma.matrix_local if arma.parent else rot_x_neg90(arma.matrix_local)),
                 'material': materials,
                 'has_armature': True,
             }
@@ -287,7 +288,7 @@ def to_json(obj):
             blender_obj = bpy.data.objects[obj.name]
             if blender_obj.parent:
                 parent = blender_obj.parent.name
-            matrix = blender_mat4_to_avango(blender_obj.matrix_local)
+            matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
         filename = obj.name + '.obj'
 
         bpy.ops.object.select_all(action='DESELECT')

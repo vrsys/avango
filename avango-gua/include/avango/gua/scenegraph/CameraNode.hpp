@@ -177,8 +177,8 @@ namespace av
       CameraNode& operator=(const CameraNode&);
     };
 
-    using SFCameraNode = SingleField<Link<CameraNode> >;
-    using MFCameraNode = MultiField<Link<CameraNode> >;
+    typedef SingleField<Link<CameraNode> > SFCameraNode;
+    typedef MultiField<Link<CameraNode> > MFCameraNode;
 
   }
 

@@ -17,7 +17,7 @@ namespace boost
   {
     template <class T> struct pointee<av::Link<T> >
     {
-      using type = T;
+      typedef T type;
     };
   }
 }

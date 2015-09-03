@@ -14,6 +14,8 @@ import mathutils
 
 
 def texture_filepath(texname):
+    if texname.image.packed_file is not None:
+        print("packed files not supported")
     return bpy.data.textures[texname].image.filepath
 
 

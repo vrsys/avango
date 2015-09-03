@@ -388,7 +388,7 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
         row = layout.row()
         row.prop(p, "skymap_output_texture_name")
         row.prop(p, "skymap_light_direction")
-        row.prop(p, "skymap_ground_color")
+        row.prop(p, "skymap_ground_color", text="Ground Albedo")
 
     def TEXTURED_QUAD_PASS(self, layout, cam, p):
         pass

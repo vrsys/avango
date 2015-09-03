@@ -11,6 +11,8 @@ from . import nodes
 from mathutils import Matrix
 
 def texture_filepath(texname):
+    if texname.image.packed_file is not None:
+        print("packed files not supported")
     return bpy.data.textures[texname].image.filepath
 
 def defaultWindow(scene):

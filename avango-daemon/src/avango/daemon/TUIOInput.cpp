@@ -115,7 +115,12 @@ void sigsegv_handler(int sig) {
 AV_BASE_DEFINE(av::daemon::TUIOInput);
 
 av::daemon::TUIOInput::TUIOInput()
-  : mTUIOInputListener(std::make_shared<TUIOInputListener>())
+  : mTUIOClient(nullptr)
+  , mTUIOInputListener(std::make_shared<TUIOInputListener>())
+  , mRequiredFeatures()
+  , mStationToSessionID_cursors()
+  , mStationToSessionID_fingers()
+  , mStationToSessionID_hands()
 {
   mRequiredFeatures.push_back("port");
 }
@@ -147,6 +152,111 @@ av::daemon::TUIOInput::startDevice()
   logger.info() << "startDevice: device initialized successfully";
 }
 
+int
+av::daemon::TUIOInput::getSessionIDForStation_cursors(std::pair<int, av::daemon::Station*> const& station)
+{
+  auto cursors = mTUIOInputListener->cursors();
+  auto left_it(mStationToSessionID_cursors.left.find(station.first));
+
+  // remove mapping if session ID has expired
+  if (left_it != mStationToSessionID_cursors.left.end()
+      && cursors.find(left_it->second) == cursors.end())
+  {
+    mStationToSessionID_cursors.left.erase(left_it);
+    left_it = mStationToSessionID_cursors.left.end();
+  }
+
+  int sessionId = -1;
+
+  if (left_it == mStationToSessionID_cursors.left.end()) {
+    for (auto const& cursor : cursors) {
+      auto right_it(mStationToSessionID_cursors.right.find(
+                      cursor.second.session_id));
+      if (right_it == mStationToSessionID_cursors.right.end()) {
+        mStationToSessionID_cursors.insert(
+            ::boost::bimap<int, int>::value_type(station.first,
+                                                 cursor.second.session_id));
+        sessionId = cursor.second.session_id;
+        break;
+      }
+    }
+  } else {
+    sessionId = left_it->second;
+  }
+
+  return sessionId;
+}
+
+int
+av::daemon::TUIOInput::getSessionIDForStation_fingers(std::pair<int, av::daemon::Station*> const& station)
+{
+  auto fingers = mTUIOInputListener->fingers();
+  auto left_it(mStationToSessionID_fingers.left.find(station.first));
+
+  // remove mapping if session ID has expired
+  if (left_it != mStationToSessionID_fingers.left.end()
+      && fingers.find(left_it->second) == fingers.end())
+  {
+    mStationToSessionID_fingers.left.erase(left_it);
+    left_it = mStationToSessionID_fingers.left.end();
+  }
+
+  int sessionId = -1;
+
+  if (left_it == mStationToSessionID_fingers.left.end()) {
+    for (auto const& finger : fingers) {
+      auto right_it(mStationToSessionID_fingers.right.find(
+                      finger.second.session_id));
+      if (right_it == mStationToSessionID_fingers.right.end()) {
+        mStationToSessionID_fingers.insert(
+            ::boost::bimap<int, int>::value_type(station.first,
+                                                 finger.second.session_id));
+        sessionId = finger.second.session_id;
+        break;
+      }
+    }
+  } else {
+    sessionId = left_it->second;
+  }
+
+  return sessionId;
+}
+
+int
+av::daemon::TUIOInput::getSessionIDForStation_hands(std::pair<int, av::daemon::Station*> const& station)
+{
+  auto hands = mTUIOInputListener->hands();
+  auto left_it(mStationToSessionID_hands.left.find(station.first));
+
+  // remove mapping if session ID has expired
+  if (left_it != mStationToSessionID_hands.left.end()
+      && hands.find(left_it->second) == hands.end())
+  {
+    mStationToSessionID_hands.left.erase(left_it);
+    left_it = mStationToSessionID_hands.left.end();
+  }
+
+  int sessionId = -1;
+
+  if (left_it == mStationToSessionID_hands.left.end()) {
+    for (auto const& hand : hands) {
+      auto right_it(mStationToSessionID_hands.right.find(
+                      hand.second.session_id));
+      if (right_it == mStationToSessionID_hands.right.end()) {
+        mStationToSessionID_hands.insert(
+            ::boost::bimap<int, int>::value_type(station.first,
+                                                 hand.second.session_id));
+        sessionId = hand.second.session_id;
+        break;
+      }
+    }
+  } else {
+    sessionId = left_it->second;
+  }
+
+  return sessionId;
+}
+
 /* virtual */ void
 av::daemon::TUIOInput::readLoop()
 {
@@ -173,8 +283,7 @@ av::daemon::TUIOInput::readLoop()
       std::string name = station.second->getName();
 
       if (boost::algorithm::ends_with(name, "#cursor") || name.find("#") == std::string::npos) {
-        auto cursors = mTUIOInputListener->cursors();
-        int sessionID = getSessionIDForStation(station, 0, cursors);
+        int sessionID = getSessionIDForStation_cursors(station);
         if (auto cursor = mTUIOInputListener->find_cursor(sessionID)) {
           station.second->setValue(0, cursor->x);
           station.second->setValue(1, cursor->y);
@@ -197,8 +306,7 @@ av::daemon::TUIOInput::readLoop()
           station.second->setValue(8, -1.f);
         }
       } else if (boost::algorithm::ends_with(name, "#finger")) {
-        auto fingers = mTUIOInputListener->fingers();
-        int sessionID = getSessionIDForStation(station, 1, fingers);
+        int sessionID = getSessionIDForStation_fingers(station);
         if (auto finger = mTUIOInputListener->find_finger(sessionID)) {
           station.second->setValue(0, finger->x);
           station.second->setValue(1, finger->y);
@@ -223,8 +331,7 @@ av::daemon::TUIOInput::readLoop()
           station.second->setValue(9, -1.f);
         }
       } else if (boost::algorithm::ends_with(name, "#hand")) {
-        auto hands = mTUIOInputListener->hands();
-        int sessionID = getSessionIDForStation(station, 2, hands);
+        int sessionID = getSessionIDForStation_hands(station);
         if (auto hand = mTUIOInputListener->find_hand(sessionID)) {
           station.second->setValue(0, hand->hand_class);
           station.second->setValue(1, hand->fingers[0]);

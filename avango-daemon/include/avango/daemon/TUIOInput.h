@@ -103,7 +103,9 @@ namespace av
        * 1 == finger
        * 2 == hand
        */
-      std::map<int, boost::bimap<int, int>> mStationToSessionID;
+      boost::bimap<int, int> mStationToSessionID_cursors;
+      boost::bimap<int, int> mStationToSessionID_fingers;
+      boost::bimap<int, int> mStationToSessionID_hands;
       size_t  mPort;
 
       bool parseFeatures();
@@ -116,41 +118,11 @@ namespace av
        * @param objectMap   A map with int keys and TUIOCursor|TUIOFinger|TUIOHand objects
        * @return the session ID for this station or -1 if no mapping could be found
        */
-      template<typename T>
-      int getSessionIDForStation(std::pair<int, Station*> const& station,
-                                 int groupID,
-                                 std::map<int, T> const& objectMap)
-      {
-        auto left_it(mStationToSessionID[groupID].left.find(station.first));
+      int getSessionIDForStation_cursors(std::pair<int, Station*> const& station);
 
-        // remove mapping if session ID has expired
-        if (left_it != mStationToSessionID[groupID].left.end()
-            && objectMap.find(left_it->second) == objectMap.end())
-        {
-          mStationToSessionID[groupID].left.erase(left_it);
-          left_it = mStationToSessionID[groupID].left.end();
-        }
+      int getSessionIDForStation_fingers(std::pair<int, Station*> const& station);
 
-        int sessionId = -1;
-
-        if (left_it == mStationToSessionID[groupID].left.end()) {
-          for (auto const& i : objectMap) {
-            auto right_it(mStationToSessionID[groupID].right.find(
-                            i.second.session_id));
-            if (right_it == mStationToSessionID[groupID].right.end()) {
-              mStationToSessionID[groupID].insert(
-                  ::boost::bimap<int, int>::value_type(station.first,
-                                                       i.second.session_id));
-              sessionId = i.second.session_id;
-              break;
-            }
-          }
-        } else {
-          sessionId = left_it->second;
-        }
-
-        return sessionId;
-      }
+      int getSessionIDForStation_hands(std::pair<int, Station*> const& station);
     };
   }
 }

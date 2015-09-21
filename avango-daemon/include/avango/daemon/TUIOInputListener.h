@@ -96,10 +96,6 @@ namespace av
           return m_hands;
         }
 
-        // is the given key a member of the map ?
-        template<typename T>
-        bool member(int) const { return false; }
-
         boost::optional<TUIOCursor> find_cursor(int id) const
         {
           std::lock_guard<std::mutex> lock(m_cursorsMutex);
@@ -206,32 +202,6 @@ namespace av
         void refresh(TUIO::TuioTime frameTime) override {}
     };
 
-    // is the given cursor id a member of the cursor map ?
-    template<>
-    bool TUIOInputListener::member<TUIOInputListener::TUIOCursor>(int id) const
-    {
-      std::lock_guard<std::mutex> lock(m_cursorsMutex);
-      auto it = m_cursors.find(id);
-      return it != m_cursors.end();
-    }
-
-    // is the given finger id a member of the finger map ?
-    template<>
-    bool TUIOInputListener::member<TUIOInputListener::TUIOFinger>(int id) const
-    {
-      std::lock_guard<std::mutex> lock(m_fingersMutex);
-      auto it = m_fingers.find(id);
-      return it != m_fingers.end();
-    }
-
-    // is the given hand id a member of the hand map ?
-    template<>
-    bool TUIOInputListener::member<TUIOInputListener::TUIOHand>(int id) const
-    {
-      std::lock_guard<std::mutex> lock(m_handsMutex);
-      auto it = m_hands.find(id);
-      return it != m_hands.end();
-    }
   }
 }
 

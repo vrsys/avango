@@ -9,6 +9,7 @@ class MulitScaleNavigator(avango.script.Script):
 
   OutTransform = avango.gua.SFMatrix4()
 
+  EnableAdaptiveMotionSpeed = avango.SFBool()
   EnableEvasion = avango.SFBool()
   EvasionInfo = avango.SFBool()
 
@@ -36,6 +37,7 @@ class MulitScaleNavigator(avango.script.Script):
     self.MinDistancePos.value = avango.gua.Vec3(0.0, 0.0, 0.0)
     self.MaxDistance.value = 10.0
 
+    self.EnableAdaptiveMotionSpeed.value = False
     self.EnableEvasion.value = False
 
     self.__rot_x = 0.0
@@ -80,7 +82,7 @@ class MulitScaleNavigator(avango.script.Script):
 
       current_motion_speed = self.MaxMotionSpeed.value
 
-      if not self.MinDistance.value == -1:
+      if (not self.MinDistance.value == -1) and self.EnableAdaptiveMotionSpeed.value:
         current_motion_speed = (self.MinDistance.value / self.MaxDistance.value) * self.MaxMotionSpeed.value
      
       self.CurrentMotionSpeed.value = current_motion_speed

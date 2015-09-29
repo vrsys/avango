@@ -31,7 +31,8 @@ namespace av
         SIDE_BY_SIDE = static_cast<unsigned>(::gua::StereoMode::SIDE_BY_SIDE),
         ANAGLYPH_RED_GREEN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_GREEN),
         ANAGLYPH_RED_CYAN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_CYAN),
-        CHECKERBOARD = static_cast<unsigned>(::gua::StereoMode::CHECKERBOARD)
+        CHECKERBOARD = static_cast<unsigned>(::gua::StereoMode::CHECKERBOARD),
+        ACTIVE = static_cast<unsigned>(::gua::StereoMode::ACTIVE)
       };
 
       /**

@@ -130,9 +130,9 @@ def load_pitoti_scene(node):
         node.Children.value.append(plod)
 
     loader = avango.gua.nodes.PLODLoader()
-    loader.UploadBudget.value = 128
-    loader.RenderBudget.value = 4096
-    loader.OutOfCoreBudget.value = 4096
+    loader.UploadBudget.value = 1
+    loader.RenderBudget.value = 1024
+    loader.OutOfCoreBudget.value = 1024 * 6
 
    # rotate whole scene upright
     _rot_mat = avango.gua.make_identity_mat()

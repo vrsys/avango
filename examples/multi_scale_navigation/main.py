@@ -44,7 +44,7 @@ class ClippingUpdater(avango.script.Script):
       if self.MinDistance.value > (self.Near.value*10):
         self.Near.value *= 1.5
     
-    self.Near.value = min(self.Near.value, 1)
+    self.Near.value = min(self.Near.value, 10)
     self.Near.value = max(self.Near.value, 0.0001)
     self.Far.value = self.Near.value * 1000.0
 
@@ -192,6 +192,7 @@ def start(scenename, stereo=False):
       OutputWindowName = "window",
       ViewID = 1,
       Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0),
+      # BlackList = ["markers"],
     )
     navigation.Children.value.append(cam)
 
@@ -264,9 +265,10 @@ def start(scenename, stereo=False):
     
     navi = navigator.MulitScaleNavigator(
       EnableEvasion=True,
-      RotationSpeed=0.2,
-      MaxMotionSpeed=1000.0,
-      MaxDistance=1000.0,
+      EnableAdaptiveMotionSpeed=True,
+      RotationSpeed=0.3,
+      MaxMotionSpeed=300.0,
+      MaxDistance=300.0,
       )
     navi.StartLocation.value = navigation.Transform.value.get_translate()
     navi.OutTransform.connect_from(navigation.Transform)
@@ -296,8 +298,8 @@ def start(scenename, stereo=False):
 
     #Clipping update
     clip_updater = ClippingUpdater(
-      Near=0.01,
-      Far=100.0,
+      Near=0.0001,
+      # Far=100.0,
     )
     clip_updater.MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
 

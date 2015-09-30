@@ -49,10 +49,6 @@
 #  include <avango/daemon/VRPNClient.h>
 #endif
 
-#ifdef AVANGO_OCULUS_RIFT_SUPPORT
-#include <avango/daemon/Oculus.h>
-#endif
-
 using namespace boost::python;
 using namespace av::python;
 
@@ -239,14 +235,6 @@ BOOST_PYTHON_MODULE(_daemon)
   class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable >("_VRPNClientHelper",
     "A helper class used to construct a concrete Python VRPN client device representation.")
     .add_property("server", &::getServerFeature, &::setServerFeature)
-    ;
-#endif
-
-#ifdef AVANGO_OCULUS_RIFT_SUPPORT
-  // Avango NG device: Oculus
-  class_<av::daemon::Oculus, av::Link<av::daemon::Oculus>, bases<av::daemon::Device>, boost::noncopyable >("_OculusHelper",
-    "A helper class that provides some basic properties and function inherited from Oculus,"
-    "used to construct a concrete Python device representation.")
     ;
 #endif
 

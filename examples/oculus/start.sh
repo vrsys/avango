@@ -24,16 +24,5 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-# run daemon
-if [ -f "$LOCAL_AVANGO/examples/daemon/oculus-daemon.py" ]
-then
-    python3 "$LOCAL_AVANGO/examples/daemon/oculus-daemon.py" > /dev/null &
-else
-    python3 "$AVANGO/examples/daemon/oculus-daemon.py" > /dev/null &
-fi
-
 # run program
 cd "$DIR" && python3 ./main.py
-
-# kill daemon
-kill %1

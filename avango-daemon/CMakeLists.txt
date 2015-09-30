@@ -91,18 +91,9 @@ if (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
     list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/VRPNClient.h")
 endif (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-    list(APPEND AVANGO_DAEMON_SRC "src/avango/daemon/Oculus.cpp")
-    list(APPEND AVANGO_DAEMON_SRC "include/avango/daemon/Oculus.h")
-endif ()
-
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  list(APPEND LIB_PATHS ${OVR_LIBRARY_DIRS} )
-endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
 link_directories(
     ${LIB_PATHS}
@@ -113,10 +104,6 @@ link_directories(
 ADD_LIBRARY(avango_daemon SHARED
     ${AVANGO_DAEMON_SRC}
 )
-
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  list(APPEND INCLUDE_PATHS ${OVR_INCLUDE_DIRS} )
-endif (AVANGO_OCULUS_RIFT_SUPPORT)
 
 include_directories(
     ${INCLUDE_PATHS}
@@ -147,14 +134,6 @@ endif (MSVC)
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUILD_FLAGS})
 
 list(APPEND LIBRARIES avango avango_script avango_gua)
-
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-if (UNIX)
-  list(APPEND LIBRARIES udev Xinerama ${OVR_LIBRARIES} )
-elseif (MSVC)
-  list(APPEND LIBRARIES winmm.lib guacamole ${OVR_LIBRARIES})
-endif(UNIX)
-endif()
 
 target_link_libraries( avango_daemon
   debug avango_gua avango_script avango ${LIBRARIES}

@@ -19,6 +19,10 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
                       boost::bind(&DepthMapNode::getMinDistanceWorldPositionCB, this, _1),
                       boost::bind(&DepthMapNode::setMinDistanceWorldPositionCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(WeightedMinDistance,
+                      boost::bind(&DepthMapNode::getWeightedMinDistanceCB, this, _1),
+                      boost::bind(&DepthMapNode::setWeightedMinDistanceCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
                       boost::bind(&DepthMapNode::getTextureNameCB, this, _1),
                       boost::bind(&DepthMapNode::setTextureNameCB, this, _1));
@@ -59,6 +63,11 @@ void av::gua::DepthMapNode::on_undistribute(av::gua::NetTransform& netNode)
     Node::on_undistribute(netNode);    
 }
 
+void av::gua::DepthMapNode::create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction)
+{
+    m_guaDepthMapNode->create_weights(view_direction, move_direction);
+}
+
 
 void
 av::gua::DepthMapNode::initClass()
@@ -85,7 +94,7 @@ av::gua::DepthMapNode::getMinDistanceCB(const SFFloat::GetValueEvent& event)
 void
 av::gua::DepthMapNode::setMinDistanceCB(const SFFloat::SetValueEvent& event)
 {
-  std::cout << "this value can't be set" << std::endl;
+  std::cout << "\"MinDistance\" value can't be set" << std::endl;
 }
 
 //MinDistanceWorldPosition
@@ -98,7 +107,20 @@ av::gua::DepthMapNode::getMinDistanceWorldPositionCB(const SFVec3::GetValueEvent
 void
 av::gua::DepthMapNode::setMinDistanceWorldPositionCB(const SFVec3::SetValueEvent& event)
 {
-  std::cout << "this value can't be set" << std::endl;
+  std::cout << "\"MinDistanceWorldPosition\" value can't be set" << std::endl;
+}
+
+//WeightedMinDistance
+void
+av::gua::DepthMapNode::getWeightedMinDistanceCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->get_weighted_min_distance();
+}
+
+void
+av::gua::DepthMapNode::setWeightedMinDistanceCB(const SFFloat::SetValueEvent& event)
+{
+  std::cout << "\"WeightedMinDistance\" value can't be set" << std::endl;
 }
 
 //TextureName

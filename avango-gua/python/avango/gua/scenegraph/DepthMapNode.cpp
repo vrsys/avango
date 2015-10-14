@@ -25,5 +25,7 @@ void init_DepthMapNode()
   register_multifield<av::gua::MFDepthMapNode>("MFDepthMapNode");
   class_<av::gua::DepthMapNode, av::Link<av::gua::DepthMapNode>,
     bases<av::gua::Node>,
-    boost::noncopyable >("DepthMapNode", "docstring", no_init);
+    boost::noncopyable >("DepthMapNode", "docstring", no_init)
+    .def("create_weights", &av::gua::DepthMapNode::create_weights)
+    ;
 }

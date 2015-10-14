@@ -47,6 +47,7 @@ namespace av
 
       SFFloat MinDistance;
       SFVec3 MinDistanceWorldPosition;
+      SFFloat WeightedMinDistance;
 
       SFString TextureName;
 
@@ -60,11 +61,16 @@ namespace av
 
       SFInt ViewID;
 
+      void create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction);
+
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);
 
       virtual void getMinDistanceWorldPositionCB(const SFVec3::GetValueEvent& event);
       virtual void setMinDistanceWorldPositionCB(const SFVec3::SetValueEvent& event);
+
+      virtual void getWeightedMinDistanceCB(const SFFloat::GetValueEvent& event);
+      virtual void setWeightedMinDistanceCB(const SFFloat::SetValueEvent& event);
 
       virtual void getTextureNameCB(const SFString::GetValueEvent& event);
       virtual void setTextureNameCB(const SFString::SetValueEvent& event);

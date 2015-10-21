@@ -24,12 +24,21 @@ av::oculus::OculusWindow::OculusWindow(
     m_guaOculusWindow(guaOculusWindow)
 {
   // store hmd params in according fields
-  AV_FC_ADD_FIELD(ProductName, m_guaOculusWindow->get_product_name());
+  //AV_FC_ADD_FIELD(ProductName, m_guaOculusWindow->get_product_name());
   AV_FC_ADD_FIELD(SensorOrientation, ::gua::math::mat4());
-  AV_FC_ADD_FIELD(Resolution, m_guaOculusWindow->get_resolution());
-  AV_FC_ADD_FIELD(EyeResolution, m_guaOculusWindow->get_eye_resolution());
-  AV_FC_ADD_FIELD(ScreenSize, m_guaOculusWindow->get_screen_size());
+  //AV_FC_ADD_FIELD(Resolution, m_guaOculusWindow->get_resolution());
+  AV_FC_ADD_FIELD(Resolution,m_guaOculusWindow->get_window_resolution());
+  AV_FC_ADD_FIELD(EyeResolution,m_guaOculusWindow->get_window_resolution());
+  //AV_FC_ADD_FIELD(EyeResolution, m_guaOculusWindow->get_eye_resolution());
+  //AV_FC_ADD_FIELD(ScreenSize, m_guaOculusWindow->get_screen_size());
+  AV_FC_ADD_FIELD(LeftScreenSize, m_guaOculusWindow->get_left_screen_size());
+  AV_FC_ADD_FIELD(RightScreenSize, m_guaOculusWindow->get_right_screen_size());
+  AV_FC_ADD_FIELD(LeftScreenTranslation, m_guaOculusWindow->get_left_screen_translation());
+  AV_FC_ADD_FIELD(RightScreenTranslation, m_guaOculusWindow->get_right_screen_translation());
   AV_FC_ADD_FIELD(EyeScreenSize, m_guaOculusWindow->get_screen_size_per_eye());
+  AV_FC_ADD_FIELD(EyeDistance, m_guaOculusWindow->get_IPD());
+
+
 
   // needs to evaluate every frame to update sensor orientation
   alwaysEvaluate(true);

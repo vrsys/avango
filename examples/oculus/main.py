@@ -57,8 +57,32 @@ def start():
         Transform=(avango.gua.make_trans_mat(1, 1, 5) *
                    avango.gua.make_scale_mat(30, 30, 30))
         )
-
+    
     window = avango.oculus.nodes.OculusWindow()
+
+    #notice, that the oculus screen transforms and translations are automatically
+    #computed by the oculus. do not try to enter them yourself, or you will
+    #most likely get a wrong result due to influence of the lenses
+
+    #accessible fields:
+    #    SensorOrientation ##head pose (rotation and translation)
+    #    Resolution ##window resolution
+    #    EyeResolution ##recommended eye resolution (behaves strange so far)
+    #    LeftScreenSize  ## size of left screen in meters
+    #    RightScreenSize ## size of right screen in meters
+    #    LeftScreenTranslation  ## translation of left screen in meters
+    #    RightScreenTranslation ## translation of right screen in meters 
+    #    EyeDistance ## distance between both eyes in meters. for SDKs < v0.6, this is fixed to 0.064
+
+    # start the window in fullscreen and with the oculus window as primary display in order to fit the
+    # window nicely on the HMD
+    
+    window.Size.value = window.Resolution.value
+    window.LeftResolution.value = window.Resolution.value
+    window.RightResolution.value = window.Resolution.value
+    window.EnableFullscreen.value = True
+
+    
     avango.gua.register_window("window", window)
 
     cam = avango.gua.nodes.CameraNode(
@@ -67,7 +91,7 @@ def start():
         SceneGraph="scenegraph",
         Resolution=window.LeftResolution.value,
         OutputWindowName="window",
-        EyeDistance=0.064,
+        EyeDistance=window.EyeDistance.value,
         EnableStereo=True
         )
 
@@ -96,23 +120,22 @@ def start():
 
     cam.PipelineDescription.value = pipeline_description
 
-    eye_screen_distance = 0.08
 
     left_screen = avango.gua.nodes.ScreenNode(
         Name="left_screen",
-        Width=window.EyeScreenSize.value.x,
-        Height=window.EyeScreenSize.value.y,
+        Width=window.LeftScreenSize.value.x,
+        Height=window.LeftScreenSize.value.y,
         Transform=avango.gua.make_trans_mat(
-            -0.5 * window.EyeScreenSize.value.x, 0.0, -eye_screen_distance
+            window.LeftScreenTranslation.value
             )
         )
 
     right_screen = avango.gua.nodes.ScreenNode(
         Name="right_screen",
-        Width=window.EyeScreenSize.value.x,
-        Height=window.EyeScreenSize.value.y,
+        Width=window.RightScreenSize.value.x,
+        Height=window.RightScreenSize.value.y,
         Transform=avango.gua.make_trans_mat(
-            0.5 * window.EyeScreenSize.value.x, 0.0, -eye_screen_distance
+            window.RightScreenTranslation.value
             )
         )
 

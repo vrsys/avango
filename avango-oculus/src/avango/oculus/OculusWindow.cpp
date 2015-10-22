@@ -20,22 +20,17 @@ AV_FIELD_DEFINE(av::oculus::MFOculusWindow);
 
 av::oculus::OculusWindow::OculusWindow(
   std::shared_ptr< ::gua::OculusWindow> const& guaOculusWindow
-) : av::gua::Window(guaOculusWindow),
+) : av::gua::GlfwWindow(guaOculusWindow),
     m_guaOculusWindow(guaOculusWindow)
 {
   // store hmd params in according fields
-  //AV_FC_ADD_FIELD(ProductName, m_guaOculusWindow->get_product_name());
   AV_FC_ADD_FIELD(SensorOrientation, ::gua::math::mat4());
-  //AV_FC_ADD_FIELD(Resolution, m_guaOculusWindow->get_resolution());
   AV_FC_ADD_FIELD(Resolution,m_guaOculusWindow->get_window_resolution());
   AV_FC_ADD_FIELD(EyeResolution,m_guaOculusWindow->get_window_resolution());
-  //AV_FC_ADD_FIELD(EyeResolution, m_guaOculusWindow->get_eye_resolution());
-  //AV_FC_ADD_FIELD(ScreenSize, m_guaOculusWindow->get_screen_size());
   AV_FC_ADD_FIELD(LeftScreenSize, m_guaOculusWindow->get_left_screen_size());
   AV_FC_ADD_FIELD(RightScreenSize, m_guaOculusWindow->get_right_screen_size());
   AV_FC_ADD_FIELD(LeftScreenTranslation, m_guaOculusWindow->get_left_screen_translation());
   AV_FC_ADD_FIELD(RightScreenTranslation, m_guaOculusWindow->get_right_screen_translation());
-  AV_FC_ADD_FIELD(EyeScreenSize, m_guaOculusWindow->get_screen_size_per_eye());
   AV_FC_ADD_FIELD(EyeDistance, m_guaOculusWindow->get_IPD());
 
 
@@ -53,9 +48,9 @@ av::oculus::OculusWindow::initClass()
 
   if (!isTypeInitialized())
   {
-    av::gua::Window::initClass();
+    av::gua::GlfwWindow::initClass();
 
-    AV_FC_INIT(av::gua::Window, av::oculus::OculusWindow, true);
+    AV_FC_INIT(av::gua::GlfwWindow, av::oculus::OculusWindow, true);
 
     SFOculusWindow::initClass("av::oculus::SFOculusWindow", "av::Field");
     MFOculusWindow::initClass("av::oculus::MFOculusWindow", "av::Field");
@@ -70,5 +65,5 @@ av::oculus::OculusWindow::getGuaOculusWindow() const {
 void
 av::oculus::OculusWindow::evaluate()
 {
-  SensorOrientation.setValue(m_guaOculusWindow->get_sensor_orientation());
+  SensorOrientation.setValue(m_guaOculusWindow->get_oculus_sensor_orientation());
 }

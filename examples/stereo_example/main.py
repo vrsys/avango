@@ -7,7 +7,8 @@ from examples_common.GuaVE import GuaVE
 # STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
 # STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_GREEN
 # STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
-STEREO_MODE = avango.gua.StereoMode.CHECKERBOARD
+# STEREO_MODE = avango.gua.StereoMode.CHECKERBOARD
+STEREO_MODE = avango.gua.StereoMode.ACTIVE
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -60,7 +61,7 @@ def start():
     RightScreenPath = "/screen",
     SceneGraph = "scenegraph",
     Resolution = eye_size,
-    EyeDistance = 0.2,
+    EyeDistance = 1.2,
     EnableStereo = True,
     OutputWindowName = "window",
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)

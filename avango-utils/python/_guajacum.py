@@ -29,10 +29,10 @@
 #                                                                        #
 ##########################################################################
 
-
 import re
 import sys
 import avango.gua
+
 
 class GuajacumTreePrinter():
     """
@@ -67,11 +67,11 @@ class GuajacumTreePrinter():
         # check given arguments
         for i in list(args.keys()):
             if i not in self._treeOpts:
-                print(self._colorize('error', "Invalid  argument '" + i + "'"), file=sys.stderr)
+                print(self._colorize('error', "Invalid  argument '" + i + "'"),
+                      file=sys.stderr)
                 return
 
         joined_args = dict(list(self._treeOpts.items()) + list(args.items()))
-
 
         _root = self._root
         if hasattr(self._root, 'Root'):
@@ -79,13 +79,17 @@ class GuajacumTreePrinter():
         elif hasattr(self._root, 'Children'):
             _root = self._root
         else:
-            raise Exception("Invalid tree structure, missing attributes 'Root' or 'Children'")
+            raise Exception(
+                "Invalid tree structure, missing attributes 'Root' or 'Children'")
 
         self.__printRecursively(_root, 0, joined_args)
 
-    def __printRecursively(self, node, cur_depth, args, cur_path=[], is_grouped=False):
+    def __printRecursively(self, node, cur_depth, args,
+                           cur_path=[],
+                           is_grouped=False):
         # return if current node name matches user-specified exclude pattern
-        if None != args['exclude_pattern'] and re.search(args['exclude_pattern'], node.Name.value):
+        if None != args['exclude_pattern'] and re.search(
+                args['exclude_pattern'], node.Name.value):
             return
 
         # push current basename to path stack
@@ -96,58 +100,66 @@ class GuajacumTreePrinter():
         if not args['print_memory_addr']:
             obj_name = re.sub(' object at 0x[0-9a-zA-Z]+>$', '>', obj_name)
 
-        print(self._indent(cur_depth, 'Name: %s%s Obj: %s%s%s' % ( \
-            self._colorize('important', '"' + node.Name.value + '"'), \
-            self._colorize('bold', ' (Group)') if is_grouped else '', \
-            self._colorize('important', obj_name,), \
-            ' Path: "' + '/'.join(cur_path).replace('//', '/', 1) + '"' if args['print_full_path'] else '', \
-            ' Depth: ' + str(cur_depth) if args['print_depth'] else '' \
-        )))
+        print(self._indent(
+            cur_depth, 'Name: %s%s Obj: %s%s%s' %
+            (self._colorize('important', '"' + node.Name.value + '"'),
+             self._colorize('bold', ' (Group)')
+             if is_grouped else '', self._colorize('important', obj_name, ),
+             ' Path: "' + '/'.join(cur_path).replace('//', '/', 1) + '"'
+             if args['print_full_path'] else '', ' Depth: ' + str(cur_depth)
+             if args['print_depth'] else '')))
 
-        if (args['print_field_values'] or args['print_field_names']) and node.get_num_fields():
-            print(self._indent(cur_depth + 1, self._colorize('bold', 'Fields:')))
+        if (args['print_field_values'] or args['print_field_names']
+            ) and node.get_num_fields():
+            print(self._indent(cur_depth + 1, self._colorize('bold',
+                                                             'Fields:')))
             num_fields = node.get_num_fields()
             for i in range(num_fields):
                 if args['print_field_values']:
-                    print(self._indent(cur_depth + 2, '%s: %s = %s' % (\
-                        node.get_field_name(i), \
-                        node.get_field(i).__class__.__name__, \
-                        str(node.get_field(i).value) \
-                    )))
+                    print(self._indent(cur_depth + 2, '%s: %s = %s' %
+                                       (node.get_field_name(i),
+                                        node.get_field(i).__class__.__name__,
+                                        str(node.get_field(i).value))))
                 else:
-                    print(self._indent(cur_depth + 2, '%s: %s' % (node.get_field_name(i), node.get_field(i).__class__.__name__)))
+                    print(self._indent(cur_depth + 2, '%s: %s' %
+                                       (node.get_field_name(i),
+                                        node.get_field(i).__class__.__name__)))
 
         # if it's a leaf or max_depth is reached, pop current level from path stack and abort recursion
         if 0 == len(node.Children.value) or cur_depth == args['max_depth']:
             if len(node.Children.value):
-                print(self._indent(cur_depth + 1, self._colorize('bold', 'Node has children...')))
+                print(self._indent(cur_depth + 1, self._colorize(
+                    'bold', 'Node has children...')))
 
             cur_path.pop()
             return
 
-        counter         = 0
+        counter = 0
         used_name_count = 0
 
         for i in node.Children.value:
             # group by names if option 'group_by_name' is set
-            name_matches = False 
-            if None != args['group_by_name'] and re.search(args['group_by_name'], i.Name.value):
+            name_matches = False
+            if None != args['group_by_name'] and re.search(
+                    args['group_by_name'], i.Name.value):
                 name_matches = True
                 used_name_count += 1
                 if 1 != used_name_count:
                     continue
 
             # cut off sub trees if shorten_sub_trees is set
-            if -1 < args['shorten_sub_trees'] and counter >= args['shorten_sub_trees']:
+            if -1 < args['shorten_sub_trees'
+                         ] and counter >= args['shorten_sub_trees']:
                 print(self._indent(cur_depth, \
                     self._colorize('bold', 'Shortened sub tree (' + str(len(node.Children.value) - counter) + ' more...)')))
                 break
-            self.__printRecursively(i, cur_depth + 1, args, cur_path, used_name_count and name_matches)
+            self.__printRecursively(i, cur_depth + 1, args, cur_path,
+                                    used_name_count and name_matches)
             counter += 1
 
-
-        if  1 < used_name_count:
-            print(self._indent(cur_depth, self._colorize('bold', 'Grouped children: ' +  str(used_name_count))))
+        if 1 < used_name_count:
+            print(self._indent(cur_depth, self._colorize(
+                'bold', 'Grouped children: ' + str(used_name_count))))
 
         # go up the tree stack
         cur_path.pop()
@@ -167,10 +179,10 @@ class GuajacumTreePrinter():
         Possible values for color: important, error, bold
         """
         color_codes = {
-            'important' : '\033[1;32m',
-            'error'     : '\033[1;93m',
-            'bold'      : '\033[1m',
-            'none'      : '\033[0m',
+            'important': '\033[1;32m',
+            'error': '\033[1;93m',
+            'bold': '\033[1m',
+            'none': '\033[0m',
         }
         if color not in color_codes or 'none' == color:
             return text
@@ -179,15 +191,15 @@ class GuajacumTreePrinter():
 
     # possible tree formatting user options
     _treeOpts = {
-        'max_depth'          : -1,
-        'exclude_pattern'    : None,
-        'print_full_path'    : False,
-        'print_depth'        : False,
-        'shorten_sub_trees'  : -1,
-        'group_by_name'      : None,
-        'print_memory_addr'  : False,
-        'print_field_names'  : False,
-        'print_field_values' : False,
+        'max_depth': -1,
+        'exclude_pattern': None,
+        'print_full_path': False,
+        'print_depth': False,
+        'shorten_sub_trees': -1,
+        'group_by_name': None,
+        'print_memory_addr': False,
+        'print_field_names': False,
+        'print_field_values': False,
     }
 
 
@@ -195,18 +207,14 @@ def _printTree(self, **args):
     e314 = GuajacumTreePrinter(self)
     e314.printTree(args)
 
+
 def _printFields(self):
     e314 = GuajacumTreePrinter(self)
-    args = {
-        'print_field_values' : True,
-        'max_depth'          : 0
-    }
+    args = {'print_field_values': True, 'max_depth': 0}
     e314.printTree(args)
 
-
 # now put some antioxidant on our guacamole
-avango.gua._gua.SceneGraph.print_tree   = _printTree
-avango.gua._gua.Node.print_tree         = _printTree
+avango.gua._gua.SceneGraph.print_tree = _printTree
+avango.gua._gua.Node.print_tree = _printTree
 avango.gua._gua.SceneGraph.print_fields = _printFields
-avango.gua._gua.Node.print_fields       = _printFields
-
+avango.gua._gua.Node.print_fields = _printFields

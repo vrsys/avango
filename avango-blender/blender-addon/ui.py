@@ -16,11 +16,6 @@ class AvangoButtonsPanel():
         #return True
 
 
-# scene references node_tree
-#   when an object is added to bpy.context.scene, it will inherit the same
-#   node_tree reference
-# id_data in Lamp, Mesh, Camera, Empty, Lattice, Speaker, Armature, Text,
-#   Metaball, Surface, Curve
 def panel_node_draw(layout, id_data, output_type, input_name):
     # ntree = id_data.node_tree
     pass
@@ -33,17 +28,22 @@ def template_pipeline_pass(layout, acam, p):
 
     sub = row.row(align=True)
     sub.alignment = 'LEFT'
-    sub.prop(p, "show_expanded", icon_only=True, text="", emboss=False,
+    sub.prop(p, "show_expanded",
+             icon_only=True,
+             text="",
+             emboss=False,
              icon='TRIA_DOWN' if p.show_expanded else 'TRIA_RIGHT')
 
     row.label(text="", icon='MOD_ARRAY')
     row.prop(p, "pass_type", text="", icon='NONE')
     # up and down arrows aligned
     sub = row.row(align=True)
-    op = sub.operator("AVANGO_OT_pipeline_pass_move_up", text="",
+    op = sub.operator("AVANGO_OT_pipeline_pass_move_up",
+                      text="",
                       icon='TRIA_UP')
     op.uuid = p.uuid
-    op = sub.operator("AVANGO_OT_pipeline_pass_move_down", text="",
+    op = sub.operator("AVANGO_OT_pipeline_pass_move_down",
+                      text="",
                       icon='TRIA_DOWN')
     op.uuid = p.uuid
 
@@ -137,7 +137,7 @@ class AvangoCamera_PT_nodes(AvangoButtonsPanel, Panel):
 
         sub = layout.column(align=True)
         sub.prop(cam, "clip_start", text="Near Clip")
-        sub.prop(cam, "clip_end",   text="Far Clip")
+        sub.prop(cam, "clip_end", text="Far Clip")
 
         layout.prop(acam, "enable_frustum_culling", text="Frustum Culling")
         layout.prop(acam, "mono_mode", text="Mono Mode", expand=True)
@@ -162,7 +162,8 @@ class AVANGO_OT_pipeline_pass_add(Operator):
     bl_description = "Add a pass to the pipeline description"
     bl_options = {'INTERNAL', 'UNDO', 'REGISTER'}
 
-    pass_type = bpy.props.EnumProperty(name="", items=enum_pipeline_passes,
+    pass_type = bpy.props.EnumProperty(name="",
+                                       items=enum_pipeline_passes,
                                        default="TRI_MESH_PASS")
 
     @classmethod
@@ -198,9 +199,9 @@ class AVANGO_OT_pipeline_pass_move_up(Operator):
         cam = context.camera
         acam = cam.avango
         i = next((i for (i, p) in enumerate(acam.pipeline_passes)
-                 if self.uuid == p.uuid), -1)
+                  if self.uuid == p.uuid), -1)
         if i > 0:
-            acam.pipeline_passes.move(i, i-1)
+            acam.pipeline_passes.move(i, i - 1)
         return {'FINISHED'}
 
 
@@ -221,9 +222,9 @@ class AVANGO_OT_pipeline_pass_move_down(Operator):
         cam = context.camera
         acam = cam.avango
         i = next((i for (i, p) in enumerate(acam.pipeline_passes)
-                 if self.uuid == p.uuid), -1)
+                  if self.uuid == p.uuid), -1)
         if i > -1:
-            acam.pipeline_passes.move(i, i+1)
+            acam.pipeline_passes.move(i, i + 1)
         return {'FINISHED'}
 
 
@@ -245,15 +246,13 @@ class AVANGO_OT_pipeline_pass_remove(Operator):
         acam = cam.avango
 
         i = next((i for (i, p) in enumerate(acam.pipeline_passes)
-                 if self.uuid == p.uuid), -1)
+                  if self.uuid == p.uuid), -1)
         if i > -1:
             acam.pipeline_passes.remove(i)
         return {'FINISHED'}
 
     def invoke(self, context, event):
         #self.pipeline_pass = event
-        #print(dir(self))
-        #print(dir(context))
 
         return self.execute(context)
 
@@ -297,12 +296,8 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
 
     def TRI_MESH_PASS(self, layout, cam, p):
         pass
-        #row = layout.row(align=False)
-        #row.label("TRI_MESH_PASS")
 
     def LIGHT_VISIBILITY_PASS(self, layout, cam, p):
-        #row = layout.row(align=False)
-        #row.label("LIGHT_VISIBILITY_PASS")
         row = layout.row()
         row.prop(p, "light_visibility_rasterization_mode")
         row = layout.row()
@@ -310,11 +305,6 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
 
     def RESOLVE_PASS(self, layout, cam, p):
         row = layout.row(align=False)
-
-        #row.label("RESOLVE_PASS")
-
-        #row.prop(p, "name")
-        #row.prop(p, "pass_type")
 
         row = layout.row()
         row.prop(p, "resolve_background_mode")
@@ -339,11 +329,9 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
             row.prop(p, "resolve_environment_lighting_color")
         elif p.resolve_environment_lighting_mode == 'SPHEREMAP':
             row = layout.row()
-            #row.prop(p, "resolve_environment_lighting_spheremap")
             row.prop(p, "resolve_environment_lighting_texture")
         elif p.resolve_environment_lighting_mode == 'CUBEMAP':
             row = layout.row()
-            #row.prop(p, "resolve_environment_lighting_cubemap")
             row.prop(p, "resolve_environment_lighting_texture")
 
         row = layout.row()
@@ -388,7 +376,7 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
         row = layout.row()
         row.prop(p, "skymap_output_texture_name")
         row.prop(p, "skymap_light_direction")
-        row.prop(p, "skymap_ground_color")
+        row.prop(p, "skymap_ground_color", text="Ground Albedo")
 
     def TEXTURED_QUAD_PASS(self, layout, cam, p):
         pass
@@ -423,10 +411,8 @@ class AvangoCamera_PT_pipeline(AvangoButtonsPanel, Panel):
     def SKEL_ANIM_PASS(self, layout, cam, p):
         pass
 
-
 #    def TONE_MAPPING_PASS(self, layout, cam, p):
 #        pass
-
 
 #    def EMISSIVE_PASS(self, layout, cam, p):
 #        pass
@@ -446,51 +432,67 @@ class AvangoMaterial_PT_material(AvangoButtonsPanel, Panel):
         amaterial = material.avango
         row = layout.row()
         row.prop(material, "diffuse_color", text="Base Color")
-        row.prop(amaterial, "use_color_texture", text="", icon='TEXTURE',
+        row.prop(amaterial, "use_color_texture",
+                 text="",
+                 icon='TEXTURE',
                  toggle=1)
         if amaterial.use_color_texture:
-            layout.prop_search(amaterial, "color_texture", bpy.data, 'textures',
-                               text='', icon='TEXTURE_DATA')
+            layout.prop_search(amaterial, "color_texture", bpy.data,
+                               'textures',
+                               text='',
+                               icon='TEXTURE_DATA')
 
         layout.prop(amaterial, "opacity")
 
         row = layout.row()
         if amaterial.use_roughness_texture:
-            row.prop_search(amaterial, "roughness_texture", bpy.data, 'textures',
-                               text='', icon='TEXTURE_DATA')
+            row.prop_search(amaterial, "roughness_texture", bpy.data,
+                            'textures',
+                            text='',
+                            icon='TEXTURE_DATA')
         else:
             row.prop(amaterial, "roughness")
-        row.prop(amaterial, "use_roughness_texture", text="", icon='TEXTURE',
+        row.prop(amaterial, "use_roughness_texture",
+                 text="",
+                 icon='TEXTURE',
                  toggle=1)
 
         row = layout.row()
         if amaterial.use_metalness_texture:
-            row.prop_search(amaterial, "metalness_texture", bpy.data, 'textures',
-                               text='', icon='TEXTURE_DATA')
+            row.prop_search(amaterial, "metalness_texture", bpy.data,
+                            'textures',
+                            text='',
+                            icon='TEXTURE_DATA')
         else:
             row.prop(amaterial, "metalness", text="Metall")
-        row.prop(amaterial, "use_metalness_texture", text="", icon='TEXTURE',
+        row.prop(amaterial, "use_metalness_texture",
+                 text="",
+                 icon='TEXTURE',
                  toggle=1)
 
         # actually mix between shaded fragment and base color
 
         row = layout.row()
         if amaterial.use_emissivity_texture:
-            row.prop_search(amaterial, "emissivity_texture", bpy.data, 'textures',
-                               text='', icon='TEXTURE_DATA')
+            row.prop_search(amaterial, "emissivity_texture", bpy.data,
+                            'textures',
+                            text='',
+                            icon='TEXTURE_DATA')
         else:
             row.prop(amaterial, "emissivity", text="Emissive Color")
-        row.prop(amaterial, "use_emissivity_texture", text="", icon='TEXTURE',
+        row.prop(amaterial, "use_emissivity_texture",
+                 text="",
+                 icon='TEXTURE',
                  toggle=1)
 
         row = layout.row()
         row.label("Normal")
         row.prop_search(amaterial, "normal_texture", bpy.data, 'textures',
-                           text='', icon='TEXTURE_DATA')
+                        text='',
+                        icon='TEXTURE_DATA')
 
         layout.prop(amaterial, "backface_culling")
         # layout.label("Ambient Occlusion")
-
         '''
         split = layout.split(percentage=0.35, align=False)
         row = split.row()
@@ -544,9 +546,11 @@ class AvangoLamp_PT_lamp(AvangoButtonsPanel, Panel):
             if lamp.falloff_type == 'LINEAR_QUADRATIC_WEIGHTED':
                 col.label(text="Attenuation Factors:")
                 sub = col.column(align=True)
-                sub.prop(lamp, "linear_attenuation", slider=True,
+                sub.prop(lamp, "linear_attenuation",
+                         slider=True,
                          text="Linear")
-                sub.prop(lamp, "quadratic_attenuation", slider=True,
+                sub.prop(lamp, "quadratic_attenuation",
+                         slider=True,
                          text="Quadratic")
 
             col.prop(lamp, "use_sphere")
@@ -633,19 +637,14 @@ def get_panels():
         "OBJECT_PT_so",
         "DATA_PT_mesh",
         "DATA_PT_context_mesh",
-
         "DATA_PT_camera",
         "DATA_PT_context_camera",
         "DATA_PT_camera_display",
-
         "DATA_PT_context_lamp",
-
         "MATERIAL_PT_context_material",
-
         "TEXTURE_PT_preview",
         "TEXTURE_PT_context_texture",
         "TEXTURE_PT_image",
-        #"TEXTURE_PT_envmap",
     ]
     return [getattr(types, p) for p in panels if hasattr(types, p)]
 

@@ -11,13 +11,12 @@ WIN_SIZE = av.Vec2ui(1024, 768)
 # it is currently impossible to close windows in guacamole. Therefore we create
 # one global window, which we will use for all previews.
 
+
 def texture_filepath(texname):
     return bpy.data.textures[texname].image.filepath
 
-g_window = av.nodes.HeadlessSurface(
-    Size=WIN_SIZE,
-    LeftResolution=WIN_SIZE
-)
+
+g_window = av.nodes.HeadlessSurface(Size=WIN_SIZE, LeftResolution=WIN_SIZE)
 av.register_window("blender_window", g_window)
 
 g_graph = av.nodes.SceneGraph(Name="scenegraph")
@@ -52,7 +51,7 @@ blender_lamp_type = {
     'SUN': av.LightType.SUN,
     'HEMI': av.LightType.SUN,
     'AREA': av.LightType.SUN
-    }
+}
 
 
 def from_blender_lamp_type(c):
@@ -65,13 +64,12 @@ def camera_from_view(camera, region, b_space_view_3d):
     rv3d = b_space_view_3d.region_3d
     camera.NearClip.value = b_space_view_3d.clip_start
     camera.FarClip.value = b_space_view_3d.clip_end
-    camera.Resolution.value = av.Vec2ui(int(region.width),
-                                        int(region.height))
+    camera.Resolution.value = av.Vec2ui(int(region.width), int(region.height))
     camera.Transform.value = av.make_inverse_mat(
         from_blender_matrix4(rv3d.view_matrix))
     camera.Mode.value = 0 if rv3d.is_perspective else 1
 
-# perspective
+    # perspective
     # zoom = 1
     # pixelaspect 1 : 1
     # sensor_width = 32
@@ -104,9 +102,9 @@ def default_pipeline_passes(pipeline_passes):
     p.pass_type = 'TEXTURED_QUAD_PASS'
     p.uuid = str(uuid.uuid4())
 
-#    p = pipeline_passes.add()
-#    p.pass_type = 'TEXTURED_SCREENSPACE_QUAD_PASS'
-#    p.uuid = str(uuid.uuid4())
+    #    p = pipeline_passes.add()
+    #    p.pass_type = 'TEXTURED_SCREENSPACE_QUAD_PASS'
+    #    p.uuid = str(uuid.uuid4())
 
     p = pipeline_passes.add()
     p.pass_type = 'LIGHT_VISIBILITY_PASS'
@@ -134,11 +132,13 @@ def default_pipeline_passes(pipeline_passes):
     # p.pass_type = 'DEBUG_VIEW_PASS'
     # p.uuid = str(uuid.uuid4())
 
+
 def get_resolve_pass(pipeline_passes):
     for p in pipeline_passes:
         if p.pass_type is 'RESOLVE_PASS':
             return p
     return None
+
 
 class PassCreator:
     def create(self, pipeline_passes):
@@ -162,7 +162,7 @@ class PassCreator:
     def RESOLVE_PASS(self, p):
         res_pass = av.nodes.ResolvePassDescription()
         res_pass.BackgroundMode.value = eval(
-            "avango.gua.BackgroundMode."+p.resolve_background_mode)
+            "avango.gua.BackgroundMode." + p.resolve_background_mode)
         res_pass.BackgroundColor.value = from_blender_color(
             p.resolve_background_color)
         res_pass.BackgroundTexture.value = p.resolve_background_texture
@@ -170,14 +170,11 @@ class PassCreator:
         res_pass.VignetteCoverage.value = p.resolve_vignette_coverage
         res_pass.VignetteSoftness.value = p.resolve_vignette_softness
         res_pass.VignetteColor.value = av.Vec4(
-                p.resolve_vignette_color[0],
-                p.resolve_vignette_color[1],
-                p.resolve_vignette_color[2],
-                p.resolve_vignette_color[3]
-                )
+            p.resolve_vignette_color[0], p.resolve_vignette_color[1],
+            p.resolve_vignette_color[2], p.resolve_vignette_color[3])
 
         res_pass.EnvironmentLightingTexture.value = (
-                p.resolve_environment_lighting_texture)
+            p.resolve_environment_lighting_texture)
         res_pass.EnvironmentLightingMode.value = eval(
             "avango.gua.EnvironmentLightingMode." +
             p.resolve_environment_lighting_mode)
@@ -211,9 +208,8 @@ class PassCreator:
         sky_pass = av.nodes.SkyMapPassDescription()
         sky_pass.OutputTextureName.value = p.skymap_output_texture_name
         sky_pass.LightDirection.value = av.Vec3(
-                p.skymap_light_direction[0],
-                p.skymap_light_direction[1],
-                p.skymap_light_direction[2])
+            p.skymap_light_direction[0], p.skymap_light_direction[1],
+            p.skymap_light_direction[2])
         #sky_pass.GroundColor.value = p.skymap_ground_color
         return sky_pass
 
@@ -272,23 +268,20 @@ def engine_create(engine, context):
     engine.viewport_screen = av.nodes.ScreenNode(
         Name="viewport_screen",
         Width=2,
-        Height=1.5
-    )
+        Height=1.5)
 
     pipeline_description = av.nodes.PipelineDescription(
         Passes=passes,
-        EnableABuffer=True,
-        )
+        EnableABuffer=True, )
 
     engine.viewport_camera = av.nodes.CameraNode(
         Name=str(engine.uuid),
-        LeftScreenPath="/"+str(engine.uuid)+"/viewport_screen",
+        LeftScreenPath="/" + str(engine.uuid) + "/viewport_screen",
         SceneGraph="scenegraph",
         Resolution=WIN_SIZE,
         OutputWindowName="blender_window",
         Children=[engine.viewport_screen],
-        PipelineDescription=pipeline_description,
-    )
+        PipelineDescription=pipeline_description, )
 
     engine.session = {'uuid': str(engine.uuid)}
 
@@ -339,8 +332,7 @@ def engine_update(engine, data, scene):
                     Name=o.name,
                     Color=from_blender_color(bl_lamp.color),
                     Brightness=bl_lamp.energy,
-                    Transform=from_blender_matrix4(o.matrix_world)
-                )
+                    Transform=from_blender_matrix4(o.matrix_world))
                 g_cached_objects[o.name] = light
                 g_graph.Root.value.Children.value.append(light)
             elif o.type == 'MESH':
@@ -361,7 +353,7 @@ def engine_update(engine, data, scene):
                 world = o.matrix_world.copy()
                 Matrix.identity(o.matrix_world)
                 bpy.ops.export_scene.obj(
-                    filepath=path+filename,
+                    filepath=path + filename,
                     check_existing=False,
                     use_selection=True,
                     use_normals=True,
@@ -370,15 +362,12 @@ def engine_update(engine, data, scene):
                     use_materials=True,
                     axis_forward='Y',
                     axis_up='Z',
-                    path_mode='AUTO'
-                    )
+                    path_mode='AUTO')
                 o.matrix_world = world
                 o.select = False
 
                 mesh = g_loader.create_geometry_from_file(
-                    o.name,
-                    path+filename,
-                    av.LoaderFlags.NORMALIZE_SCALE)
+                    o.name, path + filename, av.LoaderFlags.NORMALIZE_SCALE)
                 for slot in o.material_slots:
                     # material = o.material_slots['Material'].material
                     material = o.material_slots[0].material
@@ -386,22 +375,24 @@ def engine_update(engine, data, scene):
                     col = slot.material.diffuse_color
 
                     mesh.Material.value.set_uniform("Color",
-                                                    av.Vec4(col.r,
-                                                            col.g,
+                                                    av.Vec4(col.r, col.g,
                                                             col.b, 1.0))
                     if slot.material.avango.use_color_texture:
-                        mesh.Material.value.set_uniform("ColorMap",
-                                texture_filepath(slot.material.avango.color_texture))
+                        mesh.Material.value.set_uniform(
+                            "ColorMap", texture_filepath(
+                                slot.material.avango.color_texture))
                     mesh.Material.value.set_uniform("Roughness",
                                                     amaterial.roughness)
                     if slot.material.avango.use_roughness_texture:
-                        mesh.Material.value.set_uniform("RoughnessMap",
-                                texture_filepath(slot.material.avango.roughness_texture))
+                        mesh.Material.value.set_uniform(
+                            "RoughnessMap", texture_filepath(
+                                slot.material.avango.roughness_texture))
                     mesh.Material.value.set_uniform("Metalness",
                                                     float(amaterial.metalness))
                     if slot.material.avango.use_metalness_texture:
-                        mesh.Material.value.set_uniform("MetalnessMap",
-                                texture_filepath(slot.material.avango.metalness_texture))
+                        mesh.Material.value.set_uniform(
+                            "MetalnessMap", texture_filepath(
+                                slot.material.avango.metalness_texture))
                     mesh.Material.value.set_uniform("Emissivity",
                                                     amaterial.emissivity)
                     mesh.Material.value.set_uniform("Opacity",
@@ -416,8 +407,7 @@ def engine_update(engine, data, scene):
                     Name="screen",
                     Width=2,
                     Height=1.5,
-                    Transform=av.make_trans_mat(0.0, 0.0, -2.5),
-                )
+                    Transform=av.make_trans_mat(0.0, 0.0, -2.5), )
 
                 #res_pass = av.nodes.ResolvePassDescription()
                 #res_pass.EnableSSAO.value = True
@@ -435,27 +425,23 @@ def engine_update(engine, data, scene):
 
                 pipeline_description = av.nodes.PipelineDescription(
                     Passes=passes,
-                    EnableABuffer=acamera.enable_abuffer,
-                    )
+                    EnableABuffer=acamera.enable_abuffer, )
 
                 camera = av.nodes.CameraNode(
                     Name=o.name,
-                    LeftScreenPath="/"+o.name+"/screen",
+                    LeftScreenPath="/" + o.name + "/screen",
                     SceneGraph="scenegraph",
                     Resolution=av.Vec2ui(
-                        acamera.resolution[0],
-                        acamera.resolution[1]),
+                        acamera.resolution[0], acamera.resolution[1]),
                     OutputWindowName="blender_window",
                     Children=[screen],
                     Transform=from_blender_matrix4(o.matrix_world),
                     NearClip=bl_camera.clip_start,
                     FarClip=bl_camera.clip_end,
                     Mode=0 if o.data.type == 'PERSP' else 1,
-                    PipelineDescription=pipeline_description,
-                )
+                    PipelineDescription=pipeline_description, )
                 g_cached_objects[o.name] = camera
                 g_graph.Root.value.Children.value.append(camera)
-
 
 # res_pass.EnvironmentLightingColor.value = from_blender_color(
 #                                    context.scene.world.ambient_color)
@@ -505,8 +491,7 @@ def scene_update(scene):
 
                         bl_lamp = bpy.data.lamps[o.data.name]
                         lamp = g_cached_objects[o.name]
-                        lamp.Type.value = from_blender_lamp_type(
-                            o.data.type)
+                        lamp.Type.value = from_blender_lamp_type(o.data.type)
                         lamp.Name.value = o.name
                         lamp.Color.value = from_blender_color(bl_lamp.color)
                         lamp.Brightness.value = bl_lamp.energy
@@ -524,22 +509,15 @@ def scene_update(scene):
                                 col = slot.material.diffuse_color
 
                                 mesh.Material.value.set_uniform(
-                                    "Color",
-                                    av.Vec4(col.r,
-                                            col.g,
-                                            col.b, 1.0))
+                                    "Color", av.Vec4(col.r, col.g, col.b, 1.0))
                                 mesh.Material.value.set_uniform(
-                                    "Roughness",
-                                    amaterial.roughness)
+                                    "Roughness", amaterial.roughness)
                                 mesh.Material.value.set_uniform(
-                                    "Metalness",
-                                    float(amaterial.metalness))
+                                    "Metalness", float(amaterial.metalness))
                                 mesh.Material.value.set_uniform(
-                                    "Emissivity",
-                                    amaterial.emissivity)
+                                    "Emissivity", amaterial.emissivity)
                                 mesh.Material.value.set_uniform(
-                                    "Opacity",
-                                    amaterial.opacity)
+                                    "Opacity", amaterial.opacity)
                     elif o.type == 'CAMERA':
                         camera = g_cached_objects[o.name]
                         camera.Transform.value = from_blender_matrix4(
@@ -563,22 +541,15 @@ def scene_update(scene):
                                 col = slot.material.diffuse_color
 
                                 mesh.Material.value.set_uniform(
-                                    "Color",
-                                    av.Vec4(col.r,
-                                            col.g,
-                                            col.b, 1.0))
+                                    "Color", av.Vec4(col.r, col.g, col.b, 1.0))
                                 mesh.Material.value.set_uniform(
-                                    "Roughness",
-                                    amaterial.roughness)
+                                    "Roughness", amaterial.roughness)
                                 mesh.Material.value.set_uniform(
-                                    "Metalness",
-                                    float(amaterial.metalness))
+                                    "Metalness", float(amaterial.metalness))
                                 mesh.Material.value.set_uniform(
-                                    "Emissivity",
-                                    amaterial.emissivity)
+                                    "Emissivity", amaterial.emissivity)
                                 mesh.Material.value.set_uniform(
-                                    "Opacity",
-                                    amaterial.opacity)
+                                    "Opacity", amaterial.opacity)
                     else:
                         print("what???", o.type)
 
@@ -590,6 +561,7 @@ class AvangoRender(bpy.types.RenderEngine):
     bl_use_preview = False
     bl_use_exclude_layers = True
     bl_use_save_buffers = True
+
     # is_animation = True
 
     def __init__(self):

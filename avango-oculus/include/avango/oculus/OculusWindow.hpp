@@ -3,10 +3,10 @@
 
 #include <gua/OculusWindow.hpp>
 
-#include <avango/gua/Fields.hpp>
-#include <avango/gua/renderer/Window.hpp>
+#include <avango/gua/renderer/GlfwWindow.hpp>
 
 #include <gua/math/math.hpp>
+#include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
 
 #include <avango/oculus/windows_specific.hpp>
@@ -19,7 +19,7 @@ namespace av
     * Wrapper for ::gua::OculusWindow
     */
 
-    class AV_OCULUS_DLL OculusWindow : public av::gua::Window
+    class AV_OCULUS_DLL OculusWindow : public av::gua::GlfwWindow
     {
       AV_FC_DECLARE();
 
@@ -42,6 +42,16 @@ namespace av
          virtual ~OculusWindow();
 
        public:
+        ::av::gua::SFMatrix                 SensorOrientation;
+        ::av::gua::SFVec2ui                 Resolution;
+        ::av::gua::SFVec2ui                 EyeResolution;
+        ::av::gua::SFVec2                   LeftScreenSize;
+        ::av::gua::SFVec2                   RightScreenSize;
+        ::av::gua::SFVec3                   LeftScreenTranslation;
+        ::av::gua::SFVec3                   RightScreenTranslation;
+        ::av::SFFloat                       EyeDistance;
+
+       public:
          /**
           * Get the wrapped ::gua::OculusRift
           */
@@ -49,6 +59,8 @@ namespace av
 
        private:
         std::shared_ptr< ::gua::OculusWindow> m_guaOculusWindow;
+
+        void evaluate() override;
 
         OculusWindow(const OculusWindow&);
         OculusWindow& operator=(const OculusWindow&);

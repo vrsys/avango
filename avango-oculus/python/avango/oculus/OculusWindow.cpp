@@ -25,6 +25,6 @@ void init_OculusWindow()
 
   class_<av::oculus::OculusWindow,
        av::Link<av::oculus::OculusWindow>,
-       bases<av::gua::Window>, boost::noncopyable >("OculusWindow", "docstring", no_init)
+       bases<av::gua::GlfwWindow>, boost::noncopyable >("OculusWindow", "docstring", no_init)
         ;
 }

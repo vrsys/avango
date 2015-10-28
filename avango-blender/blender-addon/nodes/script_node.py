@@ -2,14 +2,29 @@ import bpy
 import copy
 from bpy.types import Node
 
-from bpy.props import StringProperty,  BoolProperty
+from bpy.props import StringProperty, BoolProperty
 
 from .. import node_tree
 from .. import export_utils
 
-template_path = "2.73/scripts/addons/avango-blender/nodes/script_template.py"
-with open(template_path, "r") as myfile:
-    SCRIPT_TEMPLATE = myfile.read()
+SCRIPT_TEMPLATE = """
+import avango
+import avango.gua
+import avango.script
+from avango.script import field_has_changed
+
+
+class %CLASSNAME%(avango.script.Script):
+
+%FIELD_DECLARATIONS%
+
+    def __init__(self):
+        self.super(%CLASSNAME%).__init__()
+
+    def evaluate(self):
+        #code here
+        pass
+"""
 
 SOCKET_TO_FIELD = {
     "NodeSocketFloat": "avango.SFFloat",
@@ -17,7 +32,7 @@ SOCKET_TO_FIELD = {
     "MatrixSocket": "avango.gua.SFMatrix4",
     "NodeSocketBool": "avango.SFBool",
     "NodeSocketInt": "avango.SFInt",
-    }
+}
 
 
 class NewSocketOperator(bpy.types.Operator):
@@ -33,30 +48,24 @@ class NewSocketOperator(bpy.types.Operator):
         ("INT", "Int", "Integer", 5),
     ]
 
-    directions = [
-        ("INPUT",   "Input",   "", 1),
-        ("OUTPUT",   "Output",   "", 2),
-    ]
+    directions = [("INPUT", "Input", "", 1), ("OUTPUT", "Output", "", 2), ]
 
     new_socket_type = bpy.props.EnumProperty(
         items=types,
         name="Type",
         description="choose the type of the new field",
-        default="FLOAT",
-        )
+        default="FLOAT", )
 
     new_socket_direction = bpy.props.EnumProperty(
         items=directions,
         name="Input-Output",
         description="choose Input or Output",
-        default="INPUT",
-        )
+        default="INPUT", )
 
     new_socket_name = bpy.props.StringProperty(
         name="Field Name",
         description="should start with an upper case letter",
-        default='NewField',
-        )
+        default='NewField', )
 
     def execute(self, context):
         if self.new_socket_type == "FLOAT":
@@ -86,13 +95,12 @@ class NewSocketOperator(bpy.types.Operator):
 class RemoveSocketOperator(bpy.types.Operator):
     bl_idname = "object.remove_socket_operator"
     bl_label = "Remove Field"
-    bl_description = "remove a new field by name from this script field container"
+    bl_description = "remove a field by name from this script field container"
 
     remove_socket_name = bpy.props.StringProperty(
         name="Field Name",
         description="enter name of field to remove",
-        default='NewField',
-        )
+        default='NewField', )
 
     def execute(self, context):
         for field in self.node.inputs:
@@ -101,7 +109,7 @@ class RemoveSocketOperator(bpy.types.Operator):
         for field in self.node.outputs:
             if field.name == self.remove_socket_name:
                 self.node.outputs.remove(field)
-        
+
         return {'FINISHED'}
 
     def invoke(self, context, event):
@@ -152,13 +160,11 @@ class ScriptNode(Node, node_tree.AvangoCustomTreeNode):
     name_prop = StringProperty(
         name="Name",
         default='MyScript',
-        update=update_name
-        )
+        update=update_name)
 
     field_connections_dirty = BoolProperty(
         default=False,
-        update=update_field_connections
-        )
+        update=update_field_connections)
 
     def init(self, context):
         self.name = "MyScript"

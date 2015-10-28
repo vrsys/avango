@@ -1,113 +1,175 @@
 import avango
-import avango.daemon
+import avango.script
+from avango.script import field_has_changed
 import avango.gua
 import avango.oculus
 from examples_common.GuaVE import GuaVE
 
-def create_monkeys(PARENT_NODE):
-  loader = avango.gua.nodes.TriMeshLoader()
 
-  num_monkeys = 6
+class TimedRotate(avango.script.Script):
+    TimeIn = avango.SFFloat()
+    MatrixOut = avango.gua.SFMatrix4()
 
-  # create NUM monkeys around the user's head position
-  for i in range(num_monkeys):
-    monkey_geometry = loader.create_geometry_from_file("monkey_geometry" + str(i), "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
-    monkey_geometry.Transform.value = avango.gua.make_rot_mat(360 / num_monkeys * i, 0, 1, 0) * avango.gua.make_trans_mat(0, 0, -3)
-    PARENT_NODE.Children.value.append(monkey_geometry)
-
-
-def create_lights(PARENT_NODE):
-  red_light = avango.gua.nodes.LightNode(
-      Type=avango.gua.LightType.POINT,
-      Name = "red_light", Color = avango.gua.Color(1, 0, 0))
-  red_light.Transform.value = avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
-  PARENT_NODE.Children.value.append(red_light)
-
-  green_light = avango.gua.nodes.LightNode(
-      Type=avango.gua.LightType.POINT,
-      Name = "green_light", Color = avango.gua.Color(0, 1, 0))
-  green_light.Transform.value = avango.gua.make_rot_mat(120, 0, 1, 0) * avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
-  PARENT_NODE.Children.value.append(green_light)
-
-  blue_light = avango.gua.nodes.LightNode(
-      Type=avango.gua.LightType.POINT,
-      Name = "blue_light", Color = avango.gua.Color(0, 0, 1))
-  blue_light.Transform.value = avango.gua.make_rot_mat(240, 0, 1, 0) * avango.gua.make_trans_mat(0, 1, 2) * avango.gua.make_scale_mat(5, 5, 5)
-  PARENT_NODE.Children.value.append(blue_light)
-  
+    def evaluate(self):
+        self.MatrixOut.value = avango.gua.make_rot_mat(
+            self.TimeIn.value * 2.0, 0.0, 1.0, 0.0)
 
 
 def start():
-  # oculus data (for the development kit)
-  eye_distance = 0.064  # in meters
-  oculus_resolution = avango.gua.Vec2ui(1280, 800)  # in pixels
-  oculus_screensize = avango.gua.Vec2(0.16, 0.1)    # in meters
+    # setup scenegraph
+    graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
+    loader = avango.gua.nodes.TriMeshLoader()
 
-  # setup scenegraph and setup scene
-  graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
-  create_monkeys(graph.Root.value)
-  create_lights(graph.Root.value)
+    monkey1 = loader.create_geometry_from_file(
+        "monkey",
+        "data/objects/monkey.obj",
+        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  # viewing setup for the OculusRift
-  head = avango.gua.nodes.TransformNode(Name = "head")
+    monkey2 = loader.create_geometry_from_file(
+        "monkey",
+        "data/objects/monkey.obj",
+        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-  eye_left = avango.gua.nodes.TransformNode(Name = "eye_left")
-  eye_left.Transform.value = avango.gua.make_trans_mat(-0.5 * eye_distance, 0.0, 0.0)
+    monkey1.Material.value.set_uniform(
+        "Color",
+        avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+    monkey1.Material.value.set_uniform("Roughness", 0.3)
+    monkey1.Material.value.set_uniform("Metalness", 1.0)
 
-  eye_right = avango.gua.nodes.TransformNode(Name = "eye_right")
-  eye_right.Transform.value = avango.gua.make_trans_mat(0.5 * eye_distance, 0.0, 0.0)
+    monkey2.Material.value.set_uniform(
+        "Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
+    monkey2.Material.value.set_uniform("Roughness", 0.6)
+    monkey2.Material.value.set_uniform("Metalness", 0.0)
 
-  screen_left = avango.gua.nodes.ScreenNode(Name = "screen_left")
-  screen_left.Width.value = 0.5 * oculus_screensize.x
-  screen_left.Height.value = oculus_screensize.y
-  screen_left.Transform.value = avango.gua.make_trans_mat(-0.04, 0.0, -0.05)
+    transform1 = avango.gua.nodes.TransformNode(
+        Children=[monkey1]
+        )
+    transform2 = avango.gua.nodes.TransformNode(
+        Transform=avango.gua.make_trans_mat(-0.5, 0.0, 0.0),
+        Children=[monkey2]
+        )
 
-  screen_right = avango.gua.nodes.ScreenNode(Name = "screen_right")
-  screen_right.Width.value = 0.5 * oculus_screensize.x
-  screen_right.Height.value = oculus_screensize.y
-  screen_right.Transform.value = avango.gua.make_trans_mat(0.04, 0.0, -0.05)
+    light = avango.gua.nodes.LightNode(
+        Type=avango.gua.LightType.POINT,
+        Name="light",
+        Color=avango.gua.Color(1.0, 1.0, 1.0),
+        Brightness=100.0,
+        Transform=(avango.gua.make_trans_mat(1, 1, 5) *
+                   avango.gua.make_scale_mat(30, 30, 30))
+        )
+    
+    window = avango.oculus.nodes.OculusWindow()
 
-  head.Children.value = [eye_left, eye_right, screen_left, screen_right]
+    #notice, that the oculus screen transforms and translations are automatically
+    #computed by the oculus. do not try to enter them yourself, or you will
+    #most likely get a wrong result due to influence of the lenses
 
-  graph.Root.value.Children.value.append(head)
+    #accessible fields:
+    #    SensorOrientation ##head pose (rotation and translation)
+    #    Resolution ##window resolution
+    #    EyeResolution ##recommended eye resolution (behaves strange so far)
+    #    LeftScreenSize  ## size of left screen in meters
+    #    RightScreenSize ## size of right screen in meters
+    #    LeftScreenTranslation  ## translation of left screen in meters
+    #    RightScreenTranslation ## translation of right screen in meters 
+    #    EyeDistance ## distance between both eyes in meters. for SDKs < v0.6, this is fixed to 0.064
 
-  # setup a stereo camera
-  camera = avango.gua.nodes.Camera()
-  camera.LeftEye.value = "/head/eye_left"
-  camera.RightEye.value = "/head/eye_right"
-  camera.LeftScreen.value = "/head/screen_left"
-  camera.RightScreen.value = "/head/screen_right"
-  camera.SceneGraph.value = "scenegraph"
+    # start the window in fullscreen and with the oculus window as primary display in order to fit the
+    # window nicely on the HMD
+    
+    window.Size.value = window.Resolution.value
+    window.LeftResolution.value = window.Resolution.value
+    window.RightResolution.value = window.Resolution.value
+    window.EnableFullscreen.value = True
 
-  # create an OculusRift window with the barrel distortion
-  window = avango.oculus.nodes.OculusWindow()
-  window.Size.value = oculus_resolution
-  window.LeftResolution.value = avango.gua.Vec2ui(oculus_resolution.x / 2, oculus_resolution.y)
-  window.RightResolution.value = avango.gua.Vec2ui(oculus_resolution.x / 2, oculus_resolution.y)
+    
+    avango.gua.register_window("window", window)
 
-  # setup the pipe
-  pipe = avango.gua.nodes.Pipeline()
-  pipe.Camera.value = camera
-  pipe.Window.value = window
-  pipe.LeftResolution.value = window.LeftResolution.value
-  pipe.RightResolution.value = window.RightResolution.value
-  pipe.EnableStereo.value = True
+    cam = avango.gua.nodes.CameraNode(
+        LeftScreenPath="/nav/head/left_screen",
+        RightScreenPath="/nav/head/right_screen",
+        SceneGraph="scenegraph",
+        Resolution=window.LeftResolution.value,
+        OutputWindowName="window",
+        EyeDistance=window.EyeDistance.value,
+        EnableStereo=True
+        )
 
-  # create a viewer
-  viewer = avango.gua.nodes.Viewer()
-  viewer.Pipelines.value = [pipe]
-  viewer.SceneGraphs.value = [graph]
+    res_pass = avango.gua.nodes.ResolvePassDescription()
+    res_pass.EnableSSAO.value = True
+    res_pass.SSAOIntensity.value = 4.0
+    res_pass.SSAOFalloff.value = 10.0
+    res_pass.SSAORadius.value = 7.0
 
-  # connect oculus rotation to head node
-  oculus_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-  oculus_sensor.Station.value = "oculus-0"
-  head.Transform.connect_from(oculus_sensor.Matrix)
+    #res_pass.EnableScreenSpaceShadow.value = True
 
-  # create interactive shell and run the viewer
-  guaVE = GuaVE()
-  guaVE.start(locals(), globals())
+    res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
+    res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
+    res_pass.Exposure.value = 1.0
+    res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
 
-  viewer.run()
+    anti_aliasing = avango.gua.nodes.SSAAPassDescription()
+
+    pipeline_description = avango.gua.nodes.PipelineDescription(
+        Passes=[
+            avango.gua.nodes.TriMeshPassDescription(),
+            avango.gua.nodes.LightVisibilityPassDescription(),
+            res_pass,
+            anti_aliasing,
+            ])
+
+    cam.PipelineDescription.value = pipeline_description
+
+
+    left_screen = avango.gua.nodes.ScreenNode(
+        Name="left_screen",
+        Width=window.LeftScreenSize.value.x,
+        Height=window.LeftScreenSize.value.y,
+        Transform=avango.gua.make_trans_mat(
+            window.LeftScreenTranslation.value
+            )
+        )
+
+    right_screen = avango.gua.nodes.ScreenNode(
+        Name="right_screen",
+        Width=window.RightScreenSize.value.x,
+        Height=window.RightScreenSize.value.y,
+        Transform=avango.gua.make_trans_mat(
+            window.RightScreenTranslation.value
+            )
+        )
+
+    head = avango.gua.nodes.TransformNode(
+        Name="head",
+        Children=[left_screen, right_screen, cam],
+        Transform=avango.gua.make_identity_mat()
+        )
+
+    nav = avango.gua.nodes.TransformNode(
+        Name="nav",
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0),
+        Children=[head]
+        )
+
+    graph.Root.value.Children.value = [transform1, transform2, light, nav]
+
+    #setup viewer
+    viewer = avango.gua.nodes.Viewer()
+    viewer.SceneGraphs.value = [graph]
+    viewer.Windows.value = [window]
+
+    monkey_updater = TimedRotate()
+
+    timer = avango.nodes.TimeSensor()
+    monkey_updater.TimeIn.connect_from(timer.Time)
+
+    head.Transform.connect_from(window.SensorOrientation)
+    transform1.Transform.connect_from(monkey_updater.MatrixOut)
+
+    guaVE = GuaVE()
+    guaVE.start(locals(), globals())
+
+    viewer.run()
 
 
 if __name__ == '__main__':

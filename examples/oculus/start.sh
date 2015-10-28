@@ -11,8 +11,14 @@ LOCAL_AVANGO="$DIR/../../../avango"
 GUACAMOLE=/opt/guacamole/master
 AVANGO=/opt/avango/master
 
+echo "Starting Oculus Rift Daemon..."
+/opt/OculusSDK/currentSDK2/Service/OVRServer/Bin/Linux/x86_64/ReleaseStatic/ovrd&
+
+sleep 3
+echo "Done."
+
 # third party libs
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib:/opt/pbr/inst_cb/lib:/opt/Awesomium/lib:/opt/OculusSDK/currentSDK2/LibOVR/Lib/Linux/x86_64/Release
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
@@ -24,16 +30,5 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-# run daemon
-if [ -f "$LOCAL_AVANGO/examples/daemon/oculus-daemon.py" ]
-then
-    python3 "$LOCAL_AVANGO/examples/daemon/oculus-daemon.py" > /dev/null &
-else
-    python3 "$AVANGO/examples/daemon/oculus-daemon.py" > /dev/null &
-fi
-
 # run program
 cd "$DIR" && python3 ./main.py
-
-# kill daemon
-kill %1

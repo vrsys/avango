@@ -47,9 +47,7 @@ class NewKeyOperator(bpy.types.Operator):
         items=keys,
         name="Key",
         description="choose key",
-        default="KeyUp",
-        )
-
+        default="KeyUp", )
 
     def execute(self, context):
         self.node.outputs.new("NodeSocketBool", self.new_key)
@@ -59,6 +57,7 @@ class NewKeyOperator(bpy.types.Operator):
     def invoke(self, context, event):
         self.node = context.node
         return context.window_manager.invoke_props_dialog(self)
+
 
 class Keyboard(Node, node_tree.AvangoCustomTreeNode):
     bl_idname = "Keyboard"

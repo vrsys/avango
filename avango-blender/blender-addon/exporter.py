@@ -9,9 +9,15 @@ import os
 import json
 from . import nodes
 from mathutils import Matrix
+import math
+import mathutils
+
 
 def texture_filepath(texname):
+    if texname.image.packed_file is not None:
+        print("packed files not supported")
     return bpy.data.textures[texname].image.filepath
+
 
 def defaultWindow(scene):
     return {
@@ -23,6 +29,12 @@ def defaultWindow(scene):
         'left_position': [0, 0],
         'mode': 'MONO'
     }
+
+
+def rot_x_neg90(matrix):
+    rotation = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X') #mathutils.Quaternion((1.0, 0.0, 0.0), math.radians(-90.0)).to_matrix().to_4x4()
+
+    return rotation * matrix
 
 
 # TODO:
@@ -43,7 +55,7 @@ def export_fieldconnections(obj):
                     "from_field": key,
                     "to_node": ref_obj.name,
                     "to_field": link.to_socket.name,
-                    })
+                })
     return field_connections
 
 
@@ -77,7 +89,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         return {
             'name': obj.name,
@@ -89,7 +101,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         acam = obj.data.avango
 
@@ -124,17 +136,17 @@ def to_json(obj):
             'metalness': float(obj.avango.metalness),
             'emissivity': obj.avango.emissivity,
             'color_map': bpy.path.abspath(
-                texture_filepath(obj.avango.color_texture)
-                ) if obj.avango.use_color_texture else "",
+                texture_filepath(obj.avango.color_texture))
+            if obj.avango.use_color_texture else "",
             'metalness_map': bpy.path.abspath(
-                texture_filepath(obj.avango.metalness_map)
-                ) if obj.avango.use_metalness_texture else "",
+                texture_filepath(obj.avango.metalness_map))
+            if obj.avango.use_metalness_texture else "",
             'roughness_map': bpy.path.abspath(
-                texture_filepath(obj.avango.roughness_map)
-                ) if obj.avango.use_roughness_texture else "",
+                texture_filepath(obj.avango.roughness_map))
+            if obj.avango.use_roughness_texture else "",
             'emissivity_map': bpy.path.abspath(
-                texture_filepath(obj.avango.emissivity_map)
-                ) if obj.avango.use_emissivity_texture else "",
+                texture_filepath(obj.avango.emissivity_map))
+            if obj.avango.use_emissivity_texture else "",
             'normal_map': "" if obj.avango.normal_texture == "" else
             bpy.path.abspath(texture_filepath(obj.avango.normal_texture)),
             'opacity': obj.avango.opacity,
@@ -147,7 +159,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local
+        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
 
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
@@ -161,7 +173,6 @@ def to_json(obj):
             'color': [lamp.color.r, lamp.color.g, lamp.color.b],
             'brightness': lamp.energy,
             'enable_shadows': enable_shadows,
-
         }
 
     if obj.type == 'MESH':
@@ -172,7 +183,7 @@ def to_json(obj):
                 blender_obj = bpy.data.objects[obj.name]
                 if blender_obj.parent:
                     parent = blender_obj.parent.name
-                matrix = blender_obj.matrix_local
+                matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
             filename = obj.name + '.obj'
 
             bpy.ops.object.select_all(action='DESELECT')
@@ -186,7 +197,7 @@ def to_json(obj):
 
             Matrix.identity(blender_obj.matrix_world)
             bpy.ops.export_scene.obj(
-                filepath=g_tmp_filepath+filename,
+                filepath=g_tmp_filepath + filename,
                 check_existing=False,
                 use_selection=True,
                 use_normals=True,
@@ -195,8 +206,7 @@ def to_json(obj):
                 use_materials=False,
                 axis_forward='Y',
                 axis_up='Z',
-                path_mode='AUTO',
-                )
+                path_mode='AUTO', )
             blender_obj.matrix_world = world
 
             if not blender_obj.animation_data is None:
@@ -224,7 +234,7 @@ def to_json(obj):
             parent = 'null'
             # blender_obj = obj
             # if obj.name in bpy.data.objects:
-                # blender_obj = bpy.data.objects[obj.name]
+            # blender_obj = bpy.data.objects[obj.name]
             if arma.parent:
                 parent = arma.parent.name
             filename = obj.name + '.fbx'
@@ -236,7 +246,7 @@ def to_json(obj):
             world = arma.matrix_world.copy()
             Matrix.identity(arma.matrix_world)
             bpy.ops.export_scene.fbx(
-                filepath=g_tmp_filepath+filename,
+                filepath=g_tmp_filepath + filename,
                 check_existing=False,
                 use_selection=True,
                 version='BIN7400',
@@ -248,8 +258,7 @@ def to_json(obj):
                 axis_forward='Y',
                 axis_up='Z',
                 path_mode='AUTO',
-                embed_textures=True,
-                )
+                embed_textures=True, )
             arma.matrix_world = world
             obj.select = False
             arma.select = False
@@ -267,7 +276,7 @@ def to_json(obj):
                 'name': obj.name,
                 'file': 'tmp/' + filename,
                 'parent': parent,
-                'transform': matrixToList(arma.matrix_local),
+                'transform': matrixToList(arma.matrix_local if arma.parent else rot_x_neg90(arma.matrix_local)),
                 'material': materials,
                 'has_armature': True,
             }
@@ -279,7 +288,7 @@ def to_json(obj):
             blender_obj = bpy.data.objects[obj.name]
             if blender_obj.parent:
                 parent = blender_obj.parent.name
-            matrix = blender_obj.matrix_local
+            matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
         filename = obj.name + '.obj'
 
         bpy.ops.object.select_all(action='DESELECT')
@@ -293,7 +302,7 @@ def to_json(obj):
 
         Matrix.identity(blender_obj.matrix_world)
         bpy.ops.export_scene.obj(
-            filepath=g_tmp_filepath+filename,
+            filepath=g_tmp_filepath + filename,
             check_existing=False,
             use_selection=True,
             use_normals=True,
@@ -302,8 +311,7 @@ def to_json(obj):
             use_materials=False,
             axis_forward='Y',
             axis_up='Z',
-            path_mode='AUTO',
-            )
+            path_mode='AUTO', )
         blender_obj.matrix_world = world
 
         if not blender_obj.animation_data is None:
@@ -395,7 +403,6 @@ def to_json(obj):
     except TypeError:
         print(repr(obj) + ' is not JSON serializable')
 
-
     # raise TypeError(repr(obj) + ' is not JSON serializable')
 
 
@@ -428,7 +435,6 @@ def save(filepath, context):
                 for mat_slot in obj.material_slots:
                     mat = mat_slot.material
                     materials[mat.name] = mat
-
 
     document = {
         # triMeshes  = (x for x in ns if (x.bl_label == 'Mesh'))
@@ -470,8 +476,8 @@ def save(filepath, context):
     # export scripts
     for node in ns:
         if node.bl_idname == 'Script':
-            with open(g_tmp_filepath + node.name.lower() +
-                      ".py", 'w', encoding='utf-8') as f:
+            with open(g_tmp_filepath + node.name.lower() + ".py", 'w',
+                      encoding='utf-8') as f:
                 f.write(bpy.data.texts[node.name].as_string())
             print("exported " + node.name)
 
@@ -515,8 +521,8 @@ class ExportAvango(bpy.types.Operator, ExportHelper):
 def menu_func_export(self, context):
     default_path = bpy.data.filepath.replace(".blend", ".json")
     self.layout.operator(
-        ExportAvango.bl_idname, text="Avango (.avango)"
-        ).filepath = default_path
+        ExportAvango.bl_idname,
+        text="Avango (.avango)").filepath = default_path
 
 
 def register():

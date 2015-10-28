@@ -37,6 +37,7 @@ void init_WindowBase()
         .value("ANAGLYPH_RED_GREEN", av::gua::WindowBase::ANAGLYPH_RED_GREEN)
         .value("ANAGLYPH_RED_CYAN", av::gua::WindowBase::ANAGLYPH_RED_CYAN)
         .value("CHECKERBOARD", av::gua::WindowBase::CHECKERBOARD)
+        .value("ACTIVE", av::gua::WindowBase::ACTIVE)
         ;
 
  }

@@ -14,7 +14,6 @@ class Application:
         self.planned_field_connections = []
         self.root = avango.gua.nodes.TransformNode(
             Name="Custom_Root",
-            Transform=avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
         )
         self.scenegraph.Root.value.Children.value.append(self.root)
 

@@ -71,11 +71,11 @@ if (AVANGO_OCULUS_RIFT_SUPPORT)
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
 
 if (UNIX)
-    list(APPEND BOOST_LIBRARIES boost_thread boost_signals boost_python3)
+  list(APPEND Boost_LIBRARIES boost_thread boost_signals boost_python3)
 endif (UNIX)
 
 set(LIBRARIES
-    ${BOOST_LIBRARIES}
+  ${Boost_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GUACAMOLE_GUI_LIBRARIES}
     ${GUACAMOLE_VOLUME_LIBRARIES}
@@ -85,7 +85,7 @@ set(LIBRARIES
 )
 
 set(LIB_PATHS
-    ${BOOST_LIBRARY_DIRS}
+  ${Boost_LIBRARY_DIRS}
     ${GUACAMOLE_LIBRARY_DIRS}
     ${GL_LIBRARY_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
@@ -94,7 +94,7 @@ set(LIB_PATHS
 set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/build
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${BOOST_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
     ${GUACAMOLE_INCLUDE_DIRS}
     ${GUACAMOLE_GUI_INCLUDE_DIRS}
     ${GUACAMOLE_VOLUME_INCLUDE_DIRS}
@@ -208,9 +208,9 @@ message(STATUS "Summary:" )
 message(STATUS " build type: ${CMAKE_BUILD_TYPE}" )
 message(STATUS "" )
 message(STATUS " boost:" )
-message(STATUS "   library: ${BOOST_LIBRARIES}" )
-message(STATUS "   library path: ${BOOST_LIBRARY_DIRS}" )
-message(STATUS "   include: ${BOOST_INCLUDE_DIRS}" )
+message(STATUS "   library: ${Boost_LIBRARIES}" )
+message(STATUS "   library path: ${Boost_LIBRARY_DIRS}" )
+message(STATUS "   include: ${Boost_INCLUDE_DIRS}" )
 message(STATUS "" )
 message(STATUS " guacamole:" )
 message(STATUS "   library: ${GUACAMOLE_LIBRARIES}" )

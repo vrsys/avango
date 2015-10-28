@@ -11,7 +11,7 @@ SET(AVANGO_BOOST_INCLUDE_SEARCH_DIRS
     ${GLOBAL_EXT_DIR}/inc/boost
     ${GUACAMOLE_EXT_DIR}/inc/boost
     ${BOOST_INCLUDE_SEARCH_DIR}
-    ${BOOST_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
     /opt/boost/latest/include
     ${CMAKE_SYSTEM_INCLUDE_PATH}
     ${CMAKE_INCLUDE_PATH}
@@ -22,7 +22,7 @@ SET(AVANGO_BOOST_LIBRARY_SEARCH_DIRS
     ${GLOBAL_EXT_DIR}/lib
     ${GUACAMOLE_EXT_DIR}/lib
     ${BOOST_LIBRARY_SEARCH_DIR}
-    ${BOOST_LIBRARY_DIRS}
+    ${Boost_LIBRARY_DIRS}
     /opt/boost/latest/lib
     ${CMAKE_SYSTEM_LIBRARY_PATH}
     ${CMAKE_LIBRARY_PATH}
@@ -34,25 +34,25 @@ SET(AVANGO_BOOST_LIBRARY_SEARCH_DIRS
 ##############################################################################
 MACRO (request_boost_search_directories)
     
-    IF ( NOT BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
+  IF ( NOT Boost_INCLUDE_DIRS AND NOT Boost_LIBRARY_DIRS )
         SET(BOOST_INCLUDE_SEARCH_DIR "Please provide boost include path." CACHE PATH "path to boost headers.")
         SET(BOOST_LIBRARY_SEARCH_DIR "Please provide boost library path." CACHE PATH "path to boost libraries.")
         MESSAGE(FATAL_ERROR "find_boost.cmake: unable to find boost.")
-    ENDIF ( NOT BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
+      ENDIF ( NOT Boost_INCLUDE_DIRS AND NOT Boost_LIBRARY_DIRS )
 
-    IF ( NOT BOOST_INCLUDE_DIRS )
+      IF ( NOT Boost_INCLUDE_DIRS )
         SET(BOOST_INCLUDE_SEARCH_DIR "Please provide boost include path." CACHE PATH "path to boost headers.")
         MESSAGE(FATAL_ERROR "find_boost.cmake: unable to find boost headers.")
-    ELSE ( NOT BOOST_INCLUDE_DIRS )
+      ELSE ( NOT Boost_INCLUDE_DIRS )
         UNSET(BOOST_INCLUDE_SEARCH_DIR CACHE)
-    ENDIF ( NOT BOOST_INCLUDE_DIRS )
+      ENDIF ( NOT Boost_INCLUDE_DIRS )
 
-    IF ( NOT BOOST_LIBRARY_DIRS )
+    IF ( NOT Boost_LIBRARY_DIRS )
         SET(BOOST_LIBRARY_SEARCH_DIR "Please provide boost library path." CACHE PATH "path to boost libraries.")
         MESSAGE(FATAL_ERROR "find_boost.cmake: unable to find boost libraries.")
-    ELSE ( NOT BOOST_LIBRARY_DIRS )
+      ELSE ( NOT Boost_LIBRARY_DIRS )
         UNSET(BOOST_LIBRARY_SEARCH_DIR CACHE)
-    ENDIF ( NOT BOOST_LIBRARY_DIRS ) 
+      ENDIF ( NOT Boost_LIBRARY_DIRS ) 
 
 ENDMACRO (request_boost_search_directories)
 
@@ -62,7 +62,7 @@ ENDMACRO (request_boost_search_directories)
 
 message(STATUS "-- checking for BOOST")
 
-IF ( NOT BOOST_INCLUDE_DIRS )
+IF ( NOT Boost_INCLUDE_DIRS )
 
     SET(_AVANGO_BOOST_FOUND_INC_DIRS "")
     FOREACH(_SEARCH_DIR ${AVANGO_BOOST_INCLUDE_SEARCH_DIRS})
@@ -79,7 +79,7 @@ IF ( NOT BOOST_INCLUDE_DIRS )
     IF (NOT _AVANGO_BOOST_FOUND_INC_DIRS)
         request_boost_search_directories()
 	  ELSE (NOT _AVANGO_BOOST_FOUND_INC_DIRS)
-		    SET(BOOST_INCLUDE_DIRS ${_AVANGO_BOOST_FOUND_INC_DIRS})
+            SET(Boost_INCLUDE_DIRS ${_AVANGO_BOOST_FOUND_INC_DIRS})
     ENDIF (NOT _AVANGO_BOOST_FOUND_INC_DIRS)
 
     SET(AVANGO_BOOST_VERSION       0)
@@ -109,7 +109,7 @@ IF ( NOT BOOST_INCLUDE_DIRS )
             SET(AVANGO_BOOST_VERSION               ${_BOOST_VERSION})
             SET(AVANGO_BOOST_LIB_VERSION           ${_BOOST_LIB_VERSION})
             SET(AVANGO_BOOST_LIB_SUFFIX            ".${_BOOST_MAJOR_VERSION}.${_BOOST_MINOR_VERSION}.${_BOOST_SUBMINOR_VERSION}")
-            SET(BOOST_INCLUDE_DIRS               ${_INC_DIR})
+            SET(Boost_INCLUDE_DIRS               ${_INC_DIR})
             SET(_AVANGO_BOOST_CUR_VERSION          ${_BOOST_VERSION_NUM})
         ENDIF (   _AVANGO_BOOST_CUR_VERSION LESS  _BOOST_VERSION_NUM
                OR _AVANGO_BOOST_CUR_VERSION EQUAL _BOOST_VERSION_NUM)
@@ -120,15 +120,15 @@ IF ( NOT BOOST_INCLUDE_DIRS )
         MESSAGE(FATAL_ERROR "found boost versions ${_BOOST_VERSION} to old (min. version ${AVANGO_BOOST_MIN_VERSION} required)")
         request_boost_search_directories()
     ELSE (AVANGO_BOOST_VERSION EQUAL 0)
-        SET(BOOST_INCLUDE_DIRS                 ${BOOST_INCLUDE_DIRS}                 CACHE STRING "The boost include directory")
+      SET(Boost_INCLUDE_DIRS                 ${Boost_INCLUDE_DIRS}                 CACHE STRING "The boost include directory")
         SET(AVANGO_BOOST_VERSION               ${AVANGO_BOOST_VERSION}               CACHE STRING "The boost version number")
         SET(AVANGO_BOOST_LIB_SUFFIX            ${AVANGO_BOOST_LIB_SUFFIX}            CACHE STRING "The boost library suffix")
         SET(AVANGO_BOOST_LIB_VERSION           ${AVANGO_BOOST_LIB_VERSION}           CACHE STRING "The boost library version string")
     ENDIF (AVANGO_BOOST_VERSION EQUAL 0)
 
-ENDIF ( NOT BOOST_INCLUDE_DIRS )
+  ENDIF ( NOT Boost_INCLUDE_DIRS )
 
-IF ( BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
+  IF ( Boost_INCLUDE_DIRS AND NOT Boost_LIBRARY_DIRS )
 
     SET(_AVANGO_BOOST_FILESYSTEM_LIB "")
     SET(_AVANGO_BOOST_FOUND_LIB_DIR "")
@@ -156,10 +156,10 @@ IF ( BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
             if (UNIX)
                 FIND_FILE(_CUR_SEARCH_FILE NAMES ${_AVANGO_BOOST_FILESYSTEM_LIB} PATHS ${_CUR_SEARCH})
                 if (_CUR_SEARCH_FILE)
-                    LIST(APPEND BOOST_LIBRARIES ${_CUR_SEARCH_FILE})
+                  LIST(APPEND Boost_LIBRARIES ${_CUR_SEARCH_FILE})
                     STRING(REGEX REPLACE "${_CUR_SEARCH}/${CMAKE_SHARED_LIBRARY_PREFIX}boost_filesystem(.*).so(.*)" "\\2" _AVANGO_BOOST_UNIX_LIB_SUF ${_CUR_SEARCH_FILE})
                     if (${_AVANGO_BOOST_UNIX_LIB_SUF} STREQUAL ${AVANGO_BOOST_LIB_SUFFIX})
-                        list(APPEND BOOST_LIBRARIES _AVANGO_BOOST_FILESYSTEM_LIB)
+                      list(APPEND Boost_LIBRARIES _AVANGO_BOOST_FILESYSTEM_LIB)
                         STRING(REGEX REPLACE "${_CUR_SEARCH}/${CMAKE_SHARED_LIBRARY_PREFIX}boost_filesystem(.*).so(.*)" "\\1" _AVANGO_BOOST_POSTFIX ${_CUR_SEARCH_FILE})
                     endif (${_AVANGO_BOOST_UNIX_LIB_SUF} STREQUAL ${AVANGO_BOOST_LIB_SUFFIX})
                 endif (_CUR_SEARCH_FILE)
@@ -173,9 +173,9 @@ IF ( BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
     IF (NOT _AVANGO_BOOST_FOUND_LIB_DIR)
         MESSAGE(FATAL_ERROR "guacamole_boost.cmake: unable to find boost library")
     ELSE (NOT _AVANGO_BOOST_FOUND_LIB_DIR)
-        SET(BOOST_LIBRARY_DIRS ${_AVANGO_BOOST_FOUND_LIB_DIR} CACHE PATH "boost library path.")
+      SET(Boost_LIBRARY_DIRS ${_AVANGO_BOOST_FOUND_LIB_DIR} CACHE PATH "boost library path.")
         IF (UNIX)
-            FILE(GLOB BOOST_LIBRARIES ${_AVANGO_BOOST_FOUND_LIB_DIR}/*.so)
+          FILE(GLOB Boost_LIBRARIES ${_AVANGO_BOOST_FOUND_LIB_DIR}/*.so)
         ELSEIF (MSVC)
             # use boost auto link
         ENDIF (UNIX)
@@ -193,15 +193,15 @@ IF ( BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
         set(AVANGO_BOOST_MT_S_DBG  "${COMPILER_SUFFIX}-mt-sgd-${AVANGO_BOOST_LIB_VERSION}" CACHE STRING "boost static library debug postfix")
     endif (UNIX)
 	
-ENDIF ( BOOST_INCLUDE_DIRS AND NOT BOOST_LIBRARY_DIRS )
+  ENDIF ( Boost_INCLUDE_DIRS AND NOT Boost_LIBRARY_DIRS )
 
 ##############################################################################
 # verify
 ##############################################################################
-IF ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS )
+IF ( NOT Boost_INCLUDE_DIRS OR NOT Boost_LIBRARY_DIRS )
     request_boost_search_directories()
-ELSE ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS ) 
+  ELSE ( NOT Boost_INCLUDE_DIRS OR NOT Boost_LIBRARY_DIRS ) 
     UNSET(BOOST_INCLUDE_SEARCH_DIR CACHE)
     UNSET(BOOST_LIBRARY_SEARCH_DIR CACHE)
     MESSAGE(STATUS "--  found matching boost version")
-ENDIF ( NOT BOOST_INCLUDE_DIRS OR NOT BOOST_LIBRARY_DIRS )
+  ENDIF ( NOT Boost_INCLUDE_DIRS OR NOT Boost_LIBRARY_DIRS )

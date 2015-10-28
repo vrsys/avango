@@ -139,7 +139,7 @@ ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
 ###############################################################################
 LINK_DIRECTORIES(${LIB_PATHS}
                  ${PYTHON3_LIBRARY_DIRS}
-                 ${BOOST_LIBRARY_DIRS}
+                 ${Boost_LIBRARY_DIRS}
                  ${SCHISM_LIBRARY_DIRS}
                  ${BULLET_LIBRARY_DIRS}
 )
@@ -201,7 +201,7 @@ set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1
 ###############################################################################
 SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
                           ${PYTHON3_LIBRARIES}
-                          ${BOOST_LIBRARIES}
+                          ${Boost_LIBRARIES}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
                           ${ASSIMP_LIBRARIES}

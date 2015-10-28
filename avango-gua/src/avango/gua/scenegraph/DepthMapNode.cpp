@@ -68,6 +68,11 @@ void av::gua::DepthMapNode::create_weights(::gua::math::vec3 const& view_directi
     m_guaDepthMapNode->create_weights(view_direction, move_direction);
 }
 
+::gua::math::vec3 av::gua::DepthMapNode::get_push_back(float radius)
+{
+    return m_guaDepthMapNode->get_push_back(radius);
+}
+
 
 void
 av::gua::DepthMapNode::initClass()

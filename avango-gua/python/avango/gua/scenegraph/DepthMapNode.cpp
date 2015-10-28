@@ -27,5 +27,6 @@ void init_DepthMapNode()
     bases<av::gua::Node>,
     boost::noncopyable >("DepthMapNode", "docstring", no_init)
     .def("create_weights", &av::gua::DepthMapNode::create_weights)
+    .def("get_push_back", &av::gua::DepthMapNode::get_push_back)
     ;
 }

@@ -62,6 +62,7 @@ namespace av
       SFInt ViewID;
 
       void create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction);
+      ::gua::math::vec3 get_push_back(float radius);
 
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);

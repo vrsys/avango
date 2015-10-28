@@ -56,7 +56,12 @@ elseif (WIN32)
   include(find_python)
 endif (UNIX)
 
-include(find_boost)
+find_package(Boost COMPONENTS
+  thread
+  signals
+  python-py34
+  REQUIRED
+  )
 set (BULLET_ROOT "/opt/bullet/default" CACHE PATH
     "Set to your bullet install path.")
 find_package(Bullet)
@@ -71,7 +76,7 @@ if (AVANGO_OCULUS_RIFT_SUPPORT)
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
 
 if (UNIX)
-  list(APPEND Boost_LIBRARIES boost_thread boost_signals boost_python3)
+  list(APPEND Boost_LIBRARIES boost_thread boost_signals boost_python-py34)
 endif (UNIX)
 
 set(LIBRARIES

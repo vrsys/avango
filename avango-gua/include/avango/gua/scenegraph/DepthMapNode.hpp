@@ -44,6 +44,7 @@ namespace av
 //      virtual ~DepthMapNode();
 
     public:
+      SFBool Active;
 
       SFFloat MinDistance;
       SFVec3 MinDistanceWorldPosition;
@@ -62,7 +63,10 @@ namespace av
       SFInt ViewID;
 
       void create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction);
-      ::gua::math::vec3 get_push_back(float radius);
+      ::gua::math::vec3 get_push_back(float radius, float softness);
+
+      virtual void getActiveCB(const SFBool::GetValueEvent& event);
+      virtual void setActiveCB(const SFBool::SetValueEvent& event);
 
       virtual void getMinDistanceCB(const SFFloat::GetValueEvent& event);
       virtual void setMinDistanceCB(const SFFloat::SetValueEvent& event);

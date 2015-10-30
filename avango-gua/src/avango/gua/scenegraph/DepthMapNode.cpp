@@ -12,6 +12,10 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
     : Node(guanode)
     , m_guaDepthMapNode(guanode)
 {
+  AV_FC_ADD_ADAPTOR_FIELD(Active,
+                      boost::bind(&DepthMapNode::getActiveCB, this, _1),
+                      boost::bind(&DepthMapNode::setActiveCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(MinDistance,
                       boost::bind(&DepthMapNode::getMinDistanceCB, this, _1),
                       boost::bind(&DepthMapNode::setMinDistanceCB, this, _1));
@@ -68,9 +72,9 @@ void av::gua::DepthMapNode::create_weights(::gua::math::vec3 const& view_directi
     m_guaDepthMapNode->create_weights(view_direction, move_direction);
 }
 
-::gua::math::vec3 av::gua::DepthMapNode::get_push_back(float radius)
+::gua::math::vec3 av::gua::DepthMapNode::get_push_back(float radius, float softness)
 {
-    return m_guaDepthMapNode->get_push_back(radius);
+    return m_guaDepthMapNode->get_push_back(radius, softness);
 }
 
 
@@ -87,6 +91,19 @@ av::gua::DepthMapNode::initClass()
 
     sClassTypeId.setDistributable(true);
   }
+}
+
+//Active
+void
+av::gua::DepthMapNode::getActiveCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaDepthMapNode->config.get_active();
+}
+
+void
+av::gua::DepthMapNode::setActiveCB(const SFBool::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.set_active(event.getValue());
 }
 
 //MinDistance

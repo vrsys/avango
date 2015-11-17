@@ -33,6 +33,18 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
 
+IF (NOT ${AVANGO_VIDEO3D_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/scenegraph/Video3DNode.cpp
+    src/avango/gua/renderer/Video3DLoader.cpp
+    src/avango/gua/renderer/Video3DPassDescription.cpp
+    include/avango/gua/scenegraph/Video3DNode.h
+    include/avango/gua/renderer/Video3DLoader.h
+    include/avango/gua/renderer/Video3DPassDescription.h
+)
+ENDIF (NOT ${AVANGO_VIDEO3D_SUPPORT})
+
+
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_SRC
   include/avango/gua/physics/BoxShape.hpp
@@ -96,6 +108,17 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/renderer/PBRLoader.cpp
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
+
+IF (NOT ${AVANGO_VIDEO3D_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/scenegraph/Video3DNode.hpp
+  python/avango/gua/scenegraph/Video3DNode.cpp
+  python/avango/gua/renderer/Video3DLoader.hpp
+  python/avango/gua/renderer/Video3DLoader.cpp
+  python/avango/gua/renderer/Video3DPassDescription.hpp
+  python/avango/gua/renderer/Video3DPassDescription.cpp
+)
+ENDIF (NOT ${AVANGO_VIDEO3D_SUPPORT})
 
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC

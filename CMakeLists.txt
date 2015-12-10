@@ -56,6 +56,7 @@ elseif (WIN32)
   include(find_python)
 endif (UNIX)
 
+set (BOOST_ROOT "/opt/boost/latest" CACHE PATH "Set to your boost install")
 find_package(Boost COMPONENTS
   thread
   signals

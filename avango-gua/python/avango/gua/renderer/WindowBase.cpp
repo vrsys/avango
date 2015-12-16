@@ -38,6 +38,7 @@ void init_WindowBase()
         .value("ANAGLYPH_RED_CYAN", av::gua::WindowBase::ANAGLYPH_RED_CYAN)
         .value("CHECKERBOARD", av::gua::WindowBase::CHECKERBOARD)
         .value("NVIDIA_3D_VISION", av::gua::WindowBase::NVIDIA_3D_VISION)
+        .value("QUAD_BUFFERED", av::gua::WindowBase::QUAD_BUFFERED)
         ;
 
  }

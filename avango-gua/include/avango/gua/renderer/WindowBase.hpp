@@ -32,7 +32,8 @@ namespace av
         ANAGLYPH_RED_GREEN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_GREEN),
         ANAGLYPH_RED_CYAN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_CYAN),
         CHECKERBOARD = static_cast<unsigned>(::gua::StereoMode::CHECKERBOARD),
-        NVIDIA_3D_VISION = static_cast<unsigned>(::gua::StereoMode::NVIDIA_3D_VISION)
+        NVIDIA_3D_VISION = static_cast<unsigned>(::gua::StereoMode::NVIDIA_3D_VISION),
+        QUAD_BUFFERED = static_cast<unsigned>(::gua::StereoMode::QUAD_BUFFERED)
       };
 
       /**

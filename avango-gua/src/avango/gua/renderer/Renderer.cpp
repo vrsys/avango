@@ -34,6 +34,17 @@ av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& gra
 }
 
 void
+av::gua::Renderer::draw_single_threaded(std::vector<av::gua::SceneGraph const*> const& graphs) const
+{
+  std::vector< ::gua::SceneGraph const*> gua_graphs;
+  for (auto graph : graphs) {
+    gua_graphs.push_back(graph->getGuaSceneGraph());
+  }
+
+  m_guaRenderer->draw_single_threaded(gua_graphs);
+}
+
+void
 av::gua::Renderer::initClass()
 {
     if (!isTypeInitialized())

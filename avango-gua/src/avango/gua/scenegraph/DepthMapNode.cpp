@@ -77,6 +77,10 @@ void av::gua::DepthMapNode::create_weights(::gua::math::vec3 const& view_directi
     return m_guaDepthMapNode->get_push_back(radius, softness);
 }
 
+::gua::math::vec3 av::gua::DepthMapNode::get_pull_in(float inner_radius, float outer_radius, float softness)
+{
+    return m_guaDepthMapNode->get_pull_in(inner_radius, outer_radius, softness);
+}
 
 void
 av::gua::DepthMapNode::initClass()

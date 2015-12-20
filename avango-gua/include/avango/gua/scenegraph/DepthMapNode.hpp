@@ -64,6 +64,7 @@ namespace av
 
       void create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction);
       ::gua::math::vec3 get_push_back(float radius, float softness);
+      ::gua::math::vec3 get_pull_in(float inner_radius, float outer_radius, float softness);
 
       virtual void getActiveCB(const SFBool::GetValueEvent& event);
       virtual void setActiveCB(const SFBool::SetValueEvent& event);

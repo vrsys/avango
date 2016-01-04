@@ -4,11 +4,11 @@ from avango.script import field_has_changed
 import avango.gua
 from examples_common.GuaVE import GuaVE
 
-# STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
 # STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_GREEN
 # STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
 # STEREO_MODE = avango.gua.StereoMode.CHECKERBOARD
-STEREO_MODE = avango.gua.StereoMode.ACTIVE
+# STEREO_MODE = avango.gua.StereoMode.NVIDIA_3D_VISION
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -61,13 +61,15 @@ def start():
     RightScreenPath = "/screen",
     SceneGraph = "scenegraph",
     Resolution = eye_size,
-    EyeDistance = 1.2,
+    EyeDistance = 0.06,
     EnableStereo = True,
     OutputWindowName = "window",
-    Transform = avango.gua.make_trans_mat(0.0, 0.0, 3.5)
+    Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.5)
+    # NearClip =
   )
 
-  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 4, Height = 3)
+  screen = avango.gua.nodes.ScreenNode(Name = "screen", Width = 0.5, Height = 0.5 * 0.3 / 0.4)
+  screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.5)
   screen.Children.value = [cam]
 
   graph.Root.value.Children.value = [monkey, light, screen]
@@ -76,6 +78,7 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+  viewer.DesiredFPS.value = 500.0
 
   monkey_updater = TimedRotate()
 

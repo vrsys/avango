@@ -69,7 +69,7 @@ def start():
         LeftResolution=size
     )
     window.CursorMode.value = 2
-    window.EnableFullscreen.value = True
+    window.EnableFullscreen.value = False
 
     cam = avango.gua.nodes.CameraNode(
         LeftScreenPath="/screen",

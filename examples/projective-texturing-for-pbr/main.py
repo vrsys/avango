@@ -34,7 +34,8 @@ def start(filename):
     # init Projector
     projector = XML_Projector()
     projector.load_XML("data/orthoimage.d.xml", graph.Root.value)
-    projector.Texture.value = "data/textures/segMask.tga"
+    projector.Texture.value = "data/textures/segMask_small.jpg"
+
 
     # init point cloud
     plodloader = avango.gua.nodes.PLODLoader()
@@ -47,6 +48,9 @@ def start(filename):
         filename,
         avango.gua.PLODLoaderFlags.DEFAULTS,
     )
+
+    plod_node.RadiusScale.value = 1.0
+    plod_node.ErrorThreshold.value = 2.5
 
     plod_node.Material.value = projector.Material.value
 

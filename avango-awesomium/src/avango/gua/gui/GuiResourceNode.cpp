@@ -191,9 +191,9 @@ void av::gua::gui::GuiResourceNode::fieldHasChangedLocalSideEffect(Field const& 
           }
           tokens.push_back(callback.substr(last_pos, std::string::npos));
           if (tokens.size() == 1) {
-            m_guaGuiResource->call_javascript(tokens[0]);
+            m_guaGuiResource->call_javascript_async(tokens[0]);
           } else {
-            m_guaGuiResource->call_javascript_arg_vector(tokens[0], std::vector<std::string>(tokens.begin()+1, tokens.end()));
+            m_guaGuiResource->call_javascript_arg_vector_async(tokens[0], std::vector<std::string>(tokens.begin()+1, tokens.end()));
           }
         }
     } else if (field.getName() == "m_networkActionEvent") {

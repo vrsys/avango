@@ -38,6 +38,10 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
                       boost::bind(&DepthMapNode::getFarClipCB, this, _1),
                       boost::bind(&DepthMapNode::setFarClipCB, this, _1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(RenderMode,
+                      boost::bind(&DepthMapNode::getRenderModeCB, this, _1),
+                      boost::bind(&DepthMapNode::setRenderModeCB, this, _1));
+
   AV_FC_ADD_ADAPTOR_FIELD(Resolution,
                       boost::bind(&DepthMapNode::getResolutionCB, this, _1),
                       boost::bind(&DepthMapNode::setResolutionCB, this, _1));
@@ -186,6 +190,18 @@ void
 av::gua::DepthMapNode::setFarClipCB(const SFFloat::SetValueEvent& event)
 {
   m_guaDepthMapNode->config.set_far_clip(event.getValue());
+}
+
+void
+av::gua::DepthMapNode::getRenderModeCB(const SFUInt::GetValueEvent& event)
+{
+    *(event.getValuePtr()) = static_cast<unsigned>(m_guaDepthMapNode->config.get_render_mode());
+}
+
+void
+av::gua::DepthMapNode::setRenderModeCB(const SFUInt::SetValueEvent& event)
+{
+  m_guaDepthMapNode->config.render_mode() = static_cast< ::gua::node::CubemapNode::RenderMode>(event.getValue());
 }
 
 //Resolution

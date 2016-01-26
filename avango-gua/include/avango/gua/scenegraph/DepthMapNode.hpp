@@ -26,6 +26,11 @@ namespace av
 
     public:
 
+      enum RenderModeEnum {
+        COMPLETE = static_cast<unsigned>(::gua::node::CubemapNode::RenderMode::COMPLETE),
+        ONE_SIDE_PER_FRAME = static_cast<unsigned>(::gua::node::CubemapNode::RenderMode::ONE_SIDE_PER_FRAME),
+      };
+
       /**
        * Constructor. When called without arguments, a new ::gua::DepthMapNode is created.
        * Otherwise, the given ::gua::DepthMapNode is used.
@@ -54,6 +59,8 @@ namespace av
 
       SFFloat NearClip;
       SFFloat FarClip;
+
+      SFUInt  RenderMode;
 
       SFInt Resolution;
 
@@ -86,6 +93,9 @@ namespace av
 
       virtual void getFarClipCB(const SFFloat::GetValueEvent& event);
       virtual void setFarClipCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getRenderModeCB(const SFUInt::GetValueEvent& event);
+      virtual void setRenderModeCB(const SFUInt::SetValueEvent& event);
 
       virtual void getResolutionCB(const SFInt::GetValueEvent& event);
       virtual void setResolutionCB(const SFInt::SetValueEvent& event);

@@ -30,4 +30,9 @@ void init_DepthMapNode()
     .def("get_push_back", &av::gua::DepthMapNode::get_push_back)
     .def("get_pull_in", &av::gua::DepthMapNode::get_pull_in)
     ;
+
+  enum_<av::gua::DepthMapNode::RenderModeEnum>("DepthCubeMapRenderMode")
+      .value("COMPLETE", av::gua::DepthMapNode::COMPLETE)
+      .value("ONE_SIDE_PER_FRAME", av::gua::DepthMapNode::ONE_SIDE_PER_FRAME)
+        ;
 }

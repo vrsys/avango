@@ -19,6 +19,7 @@
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#include "scenegraph/DepthMapNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
 #include "scenegraph/PLODNode.hpp"
@@ -68,6 +69,7 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/DepthMapPassDescription.hpp"
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -150,6 +152,7 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
+    init_DepthMapNode();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DNode();
 #endif
@@ -200,6 +203,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
+    init_DepthMapPassDescription();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DPassDescription();
     init_Video3DLoader();

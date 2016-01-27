@@ -8,6 +8,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/scenegraph/DepthMapNode.hpp>
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include <avango/gua/scenegraph/Video3DNode.hpp>
@@ -68,6 +69,8 @@
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 #include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
+#include <avango/gua/renderer/DepthMapPassDescription.hpp>
+#include <avango/gua/renderer/Video3DPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
@@ -115,6 +118,7 @@ av::gua::Init::initClass()
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();        
+        av::gua::DepthMapNode::initClass();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DNode::initClass();
 #endif
@@ -165,6 +169,7 @@ av::gua::Init::initClass()
         av::gua::PipelinePassDescription::initClass();
         av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
+        av::gua::DepthMapPassDescription::initClass();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DLoader::initClass();
         av::gua::Video3DPassDescription::initClass();

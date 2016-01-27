@@ -12,7 +12,6 @@ from examples_common.GuaVE import GuaVE
 #multiscale
 import navigator
 import scenes
-import csv_logger
 
 class DistanceMapWrapper(avango.script.Script):
   DistanceMapNode = avango.gua.SFDepthMapNode()
@@ -254,6 +253,8 @@ def start(scenename, stereo=False):
     distance_cube_map_wrapper = DistanceMapWrapper()
     distance_cube_map_wrapper.DistanceMapNode.value = distance_cube_map
 
+    '''
+    # NOT SUPPORTED BY GUACAMOLE RIGHT NOW -> textured_screen_space_quad.frag has to be adapted
     debug_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
       Name = "DepthMapDebug",
       Texture = distance_cube_map.TextureName.value,
@@ -262,6 +263,7 @@ def start(scenename, stereo=False):
       Anchor = avango.gua.Vec2(-1.0, -1.0)
       )
     graph.Root.value.Children.value.append(debug_quad)
+    '''
     
     navi = navigator.MulitScaleNavigator(
       EnableEvasion=True,
@@ -315,16 +317,6 @@ def start(scenename, stereo=False):
     viewer.Windows.value = [window]
 
     # def toogle_adaptive_locomotion():
-
-    #logging
-    logger = csv_logger.CSV_Logger()
-    timer = avango.nodes.TimeSensor()
-    logger.Input_Time.connect_from(timer.Time)
-    logger.Input_MinDistance.connect_from(distance_cube_map_wrapper.MinDistance)
-    logger.Input_MotionSpeed.connect_from(navi.CurrentMotionSpeed)
-    logger.Input_NearClip.connect_from(clip_updater.Near)
-    logger.Input_FarClip.connect_from(clip_updater.Far)
-    logger.Input_Window.value = window
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

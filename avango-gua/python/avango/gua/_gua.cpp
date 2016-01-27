@@ -69,9 +69,7 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
-
 #include "renderer/DepthMapPassDescription.hpp"
-
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/Video3DLoader.hpp"
@@ -205,9 +203,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
-
     init_DepthMapPassDescription();
-
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DPassDescription();
     init_Video3DLoader();

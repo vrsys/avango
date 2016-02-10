@@ -72,27 +72,27 @@ av::gua::Frustum::getGuaFrustum() const
 }
 
 /* virtual */ void 
-av::gua::Frustum::getClipNearCB(const SFFloat::GetValueEvent& event)
+av::gua::Frustum::getClipNearCB(const SFDouble::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_clip_near();
 }
 
 /* virtual */ void 
-av::gua::Frustum::setClipNearCB(const SFFloat::SetValueEvent& event)
+av::gua::Frustum::setClipNearCB(const SFDouble::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
 /* virtual */ void 
-av::gua::Frustum::getClipFarCB(const SFFloat::GetValueEvent& event)
+av::gua::Frustum::getClipFarCB(const SFDouble::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_clip_far();
 
 }
 
 /* virtual */ void 
-av::gua::Frustum::setClipFarCB(const SFFloat::SetValueEvent& event)
+av::gua::Frustum::setClipFarCB(const SFDouble::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }

@@ -38,8 +38,8 @@ namespace av
 
     public:
 
-      SFFloat ClipNear;
-      SFFloat ClipFar;
+      SFDouble ClipNear;
+      SFDouble ClipFar;
 
       SFMatrix4 CameraTransform;
       SFMatrix4 ScreenTransform;
@@ -50,11 +50,11 @@ namespace av
 
     public:
 
-      virtual void getClipNearCB(const SFFloat::GetValueEvent& event);
-      virtual void setClipNearCB(const SFFloat::SetValueEvent& event);
+      virtual void getClipNearCB(const SFDouble::GetValueEvent& event);
+      virtual void setClipNearCB(const SFDouble::SetValueEvent& event);
 
-      virtual void getClipFarCB(const SFFloat::GetValueEvent& event);
-      virtual void setClipFarCB(const SFFloat::SetValueEvent& event);
+      virtual void getClipFarCB(const SFDouble::GetValueEvent& event);
+      virtual void setClipFarCB(const SFDouble::SetValueEvent& event);
 
       virtual void getCameraTransformCB(const SFMatrix4::GetValueEvent& event);
       virtual void setCameraTransformCB(const SFMatrix4::SetValueEvent& event);

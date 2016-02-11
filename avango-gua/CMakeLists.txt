@@ -227,7 +227,6 @@ SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
                           ${Boost_LIBRARIES}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
-                          ${ASSIMP_LIBRARIES}
                           ${SCHISM_LIBRARIES}
                           avango
                           avango_gua

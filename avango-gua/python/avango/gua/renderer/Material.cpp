@@ -56,5 +56,7 @@ void init_Material()
          .def("set_view_uniform", &av::gua::Material::set_view_uniform< ::gua::math::vec3>)
          .def("set_view_uniform", &av::gua::Material::set_view_uniform< ::gua::math::vec4>)
          .def("set_view_uniform", &av::gua::Material::set_view_uniform< ::gua::math::mat4>)
+
+         .def("get_mat4", &av::gua::Material::get_mat4)
          ;
  }

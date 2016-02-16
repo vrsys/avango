@@ -66,6 +66,13 @@ namespace av
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
 
+      inline ::gua::math::mat4 get_mat4(std::string const& name) {
+        if (m_guaMaterial)
+          return ::gua::math::mat4(m_guaMaterial->get_mat4(name));
+        else
+          return ::gua::math::mat4::identity();
+      }
+
       /**
        * Get the wrapped ::gua::Material.
        */

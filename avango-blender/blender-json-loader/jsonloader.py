@@ -343,7 +343,7 @@ class jsonloader:
         screen = avango.gua.nodes.ScreenNode(
             Name="generated_screen",
             Width=width,
-            Height=height,
+            Height=height
         )
         screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -1.0)
 
@@ -354,6 +354,11 @@ class jsonloader:
             Resolution=resolution,
             OutputWindowName="window",
             Transform=transform,
+            NearClip=json_camera["near_clip"],
+            FarClip=json_camera["far_clip"],
+            Mode=json_camera["mode"],
+            EnableFrustumCulling=json_camera["enable_frustum_culling"],
+            EnableStereo=json_camera["enable_stereo"],
         )
 
         # create pipeline decription and passes

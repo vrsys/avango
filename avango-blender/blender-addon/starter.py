@@ -1,6 +1,6 @@
 import bpy
 import bpy.types
-from . import exporter
+from . import export_avango
 import os
 import tempfile
 
@@ -17,7 +17,8 @@ class StartAvango(bpy.types.Operator):
         tmpdir = tempfile.mkdtemp()
         tmpfilepath = tmpdir+'/automatic_export.avango'
 
-        exporter.save(tmpfilepath, context)
+        bpy.ops.export_scene.avango(
+            filepath=tmpfilepath)
 
         relativ_path =\
             context.user_preferences.\
@@ -28,13 +29,16 @@ class StartAvango(bpy.types.Operator):
 
         command = "./start.sh "+tmpfilepath
 
-        os.system(
-            "gnome-terminal --hide-menubar --working-directory=" +
-            absolute_path +
-            " --command=\"" +
-            command +
-            "\" "
-        )
+        #cmd = "gnome-terminal --hide-menubar --working-directory=" + absolute_path + " --command=\"" + command + "\" "
+        #cmd = "cd "+tmpdir+"; " + absolute_path + "start.sh " + tmpfilepath
+        cmd = "python3.4 " + absolute_path + "main.py " + tmpfilepath
+        print(cmd)
+        try:
+            os.system(cmd)
+        except:
+            self.report({'ERROR'},
+                "avango starter not found, "
+                "please fix starter.py")
 
         return {'FINISHED'}
 

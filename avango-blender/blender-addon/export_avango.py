@@ -89,7 +89,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
+        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
 
         return {
             'name': obj.name,
@@ -101,7 +101,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
+        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
 
         acam = obj.data.avango
 
@@ -116,12 +116,17 @@ def to_json(obj):
             'name': obj.name,
             'transform': matrixToList(matrix),
             'parent': parent,
+            'near_clip': obj.data.clip_start,
+            'far_clip': obj.data.clip_end,
+            'mode': 0 if obj.data.type == 'PERSP' else 1,
             # 'scenegraph': obj.scenegraph,
             # 'output_window_name': obj.output_window_name,
             # 'left_screen_path': obj.left_screen_path,
             'resolution': [acam.resolution[0], acam.resolution[1]],
             'field_of_view': obj.data.angle,
+            'enable_frustum_culling': acam.enable_frustum_culling,
             'enable_abuffer': acam.enable_abuffer,
+            'enable_stereo': acam.enable_stereo,
             'passes': json_passes,
         }
 
@@ -159,7 +164,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local if obj.parent else rot_x_neg90(obj.matrix_local)
+        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
 
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
@@ -183,7 +188,7 @@ def to_json(obj):
                 blender_obj = bpy.data.objects[obj.name]
                 if blender_obj.parent:
                     parent = blender_obj.parent.name
-                matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
+                matrix = blender_obj.matrix_local #if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
             filename = obj.name + '.obj'
 
             bpy.ops.object.select_all(action='DESELECT')
@@ -276,7 +281,7 @@ def to_json(obj):
                 'name': obj.name,
                 'file': 'tmp/' + filename,
                 'parent': parent,
-                'transform': matrixToList(arma.matrix_local if arma.parent else rot_x_neg90(arma.matrix_local)),
+                'transform': matrixToList(arma.matrix_local), #if arma.parent else rot_x_neg90(arma.matrix_local)),
                 'material': materials,
                 'has_armature': True,
             }
@@ -288,7 +293,7 @@ def to_json(obj):
             blender_obj = bpy.data.objects[obj.name]
             if blender_obj.parent:
                 parent = blender_obj.parent.name
-            matrix = blender_obj.matrix_local if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
+            matrix = blender_obj.matrix_local #if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
         filename = obj.name + '.obj'
 
         bpy.ops.object.select_all(action='DESELECT')
@@ -408,7 +413,10 @@ def to_json(obj):
 
 def save(filepath, context):
     which = "NodeTree"
-    ns = bpy.data.node_groups[which].nodes
+
+    ns = []
+    if which in bpy.data.node_groups:
+      ns = bpy.data.node_groups[which].nodes
 
     context.scene.frame_set(context.scene.frame_start)
 
@@ -489,7 +497,7 @@ def save(filepath, context):
 class ExportAvango(bpy.types.Operator, ExportHelper):
     '''Export selected object / scene for Avango (ASCII JSON format).'''
 
-    bl_idname = "export.avango"
+    bl_idname = "export_scene.avango"
     bl_label = "Export Avango"
     bl_description = "Export avango-json file and geoemtry"
 

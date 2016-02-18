@@ -11,23 +11,28 @@ bl_info = {
 }
 
 if "bpy" in locals():
-    import imp
-    imp.reload(preferences)
-    imp.reload(node_tree)
-    imp.reload(exporter)
-    imp.reload(sockets)
-    imp.reload(engine)
-else:
-    import bpy
-    import nodeitems_utils as nu
-    from . import (
-        preferences,
-        node_tree,
-        exporter,
-        starter, nodes,
-        sockets,
-        engine,
-        )
+    import importlib
+    if "preferences" in locals():
+        importlib.reload(preferences)
+    if "node_tree" in locals():
+        importlib.reload(node_tree)
+    if "export_avango" in locals():
+        importlib.reload(export_avango)
+    if "sockets" in locals():
+        importlib.reload(sockets)
+    if "engine" in locals():
+        importlib.reload(engine)
+
+import bpy
+import nodeitems_utils as nu
+from . import (
+    preferences,
+    node_tree,
+    export_avango,
+    starter, nodes,
+    sockets,
+    engine,
+    )
 
 node_categories = [
     node_tree.AvangoNodeCategory("SOMENODES", "scene",
@@ -63,7 +68,7 @@ def register():
     ui.register()
     node_tree.register()
     sockets.register()
-    exporter.register()
+    export_avango.register()
     starter.register()
     nodes.register()
 
@@ -90,7 +95,7 @@ def unregister():
     from . import ui
     from . import properties
     node_tree.unregister()
-    exporter.unregister()
+    export_avango.unregister()
     starter.unregister()
     if 'AVANGO_NODES' in nu._node_categories:
         nu.unregister_node_categories('AVANGO_NODES')

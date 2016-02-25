@@ -31,6 +31,7 @@
 #include <avango/daemon/DeviceSensor.h>
 #include <avango/daemon/DeviceService.h>
 #include <avango/daemon/DTrack.h>
+#include <avango/daemon/KinectTrack.h>
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/Wiimote.h>
 

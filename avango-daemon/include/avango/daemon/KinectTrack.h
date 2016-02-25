@@ -23,61 +23,72 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/daemon/Init.h>
+#if !defined(AV_DAEMON_KINECT_TRACK_H)
+#define AV_DAEMON_KINECT_TRACK_H
 
-#include <avango/Logger.h>
-
-#include <avango/daemon/Config.h>
 #include <avango/daemon/Device.h>
-#include <avango/daemon/DeviceActuator.h>
-#include <avango/daemon/DeviceDaemon.h>
-#include <avango/daemon/DeviceSensor.h>
-#include <avango/daemon/DeviceService.h>
-#include <avango/daemon/DTrack.h>
-#include <avango/daemon/KinectTrack.h>
-#include <avango/daemon/HIDInput.h>
-#include <avango/daemon/WacomTablet.h>
-#include <avango/daemon/Wiimote.h>
-#include <avango/daemon/WiimoteActuator.h>
-#include <avango/daemon/TUIOInput.h>
 
-#ifdef VRPN_SUPPORT
-#include <avango/daemon/VRPNClient.h>
-#endif
+/**
+ * \file
+ * \ingroup av_daemon
+ */
 
-namespace
+namespace av
 {
-  av::Logger& logger(av::getLogger("av::daemon::Init"));
-}
-
-AV_TYPED_DEFINE_ABSTRACT(av::daemon::Init);
-
-/* static */ void
-av::daemon::Init::initClass()
-{
-  if (!isTypeInitialized())
+  namespace daemon
   {
-    av::daemon::Device::initClass();
-    av::daemon::DeviceActuator::initClass();
-    av::daemon::DeviceDaemon::initClass();
-    av::daemon::DeviceSensor::initClass();
-    av::daemon::DeviceService::initClass();
-    av::daemon::DTrack::initClass();
-    av::daemon::KinectTrack::initClass();
-    av::daemon::TUIOInput::initClass();
+    /**
+     * An Avango NG device for processing KinectTrack udp packets (ASCII protocol).
+     * (from A.R.T. GmbH)
+     *
+     * \ingroup av_daemon
+     */
+    class AV_DAEMON_DLL KinectTrack : public Device
+    {
+      AV_BASE_DECLARE();
 
+    public:
+      /**
+       * Constructor
+       */
+      KinectTrack();
 
-    av::daemon::HIDInput::initClass();
-#ifndef WIN32
-    av::daemon::WacomTablet::initClass();
-    av::daemon::Wiimote::initClass();
-    av::daemon::WiimoteActuator::initClass();
-#endif
+    protected:
 
-#ifdef VRPN_SUPPORT
-    av::daemon::VRPNClient::initClass();
-#endif
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~KinectTrack();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
+      /**
+       * Inherited from base class, implements the initialization of this device.
+       */
+      void startDevice();
+
+      /**
+       * Inherited from base class, implements the loop in which the device is read out.
+       */
+      void readLoop();
+
+      /**
+       * Inherited from base class, implements the closing operation of this device.
+       */
+      void stopDevice();
+
+      /**
+       * Inherited from base class, returns a list of settable features.
+       */
+      const std::vector<std::string>& queryFeatures();
+
+    private:
+
+      ::std::vector< ::std::string> mRequiredFeatures;
+      size_t  mPort;
+      size_t  mIp;
+      bool parseFeatures();
+      unsigned long int convert_charpointer_to_ulong(const char* arg) const;
+    };
   }
 }
+
+#endif

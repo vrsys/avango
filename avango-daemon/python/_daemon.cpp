@@ -30,6 +30,7 @@
 #include <avango/daemon/DeviceService.h>
 #include <avango/daemon/DeviceActuator.h>
 #include <avango/daemon/DTrack.h>
+#include <avango/daemon/KinectTrack.h>
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/TUIOInput.h>
 #include <avango/daemon/Init.h>
@@ -221,6 +222,14 @@ BOOST_PYTHON_MODULE(_daemon)
   class_<av::daemon::DTrack, av::Link<av::daemon::DTrack>, bases<av::daemon::Device>, boost::noncopyable >("_DTrackHelper",
     "A helper class that provides some basic properties and function inherited from DTrack,"
     "used to construct a concrete Python device representation.")
+    .add_property("port", &::getPortFeature, &::setPortFeature)
+    ;
+
+  // Avango NG device: KinectTrack
+  class_<av::daemon::KinectTrack, av::Link<av::daemon::KinectTrack>, bases<av::daemon::Device>, boost::noncopyable >("_KinectTrackHelper",
+    "A helper class that provides some basic properties and function inherited from KinectTrack,"
+    "used to construct a concrete Python device representation.")
+    .add_property("server", &::getServerFeature, &::setServerFeature)
     .add_property("port", &::getPortFeature, &::setPortFeature)
     ;
 

@@ -53,6 +53,9 @@ Wiimote
 DTrack
     For processing DTrack udp packets (ASCII protocol).
 
+KinectTrack
+    For processing KinecTrack messages.
+
 WacomTablet
     To communicate with a Wacom tablet.
 
@@ -77,6 +80,7 @@ from ._daemon import *
 from ._daemon import _Device
 from ._daemon import _HIDHelper
 from ._daemon import _DTrackHelper
+from ._daemon import _KinectTrackHelper
 from ._daemon import _TUIOInputHelper
 
 # currently WacomTablet and Wiimote are not supported on Windows
@@ -204,6 +208,29 @@ class DTrack(_DTrackHelper):
             return self._dtrack.add_station(key, st.name)
 
     stations = property(StationProxy)
+
+class KinectTrack(_KinectTrackHelper):
+    """Avango NG device for processing KinectTrack udp packets (ASCII protocol).
+    Required properties: stations, port."""
+    def __init__(self):
+        super(KinectTrack, self).__init__()
+        self._stations = {}
+
+    class StationProxy(object):
+        """Proxy object to override the functions that are called on access of list
+        values via [] operator."""
+        def __init__(self, kinect):
+            self._kinect = kinect
+        def __getitem__(self, key):
+            if self._kinect._stations.has_key(key):
+                return self._kinect._stations[key]
+            else: return ''
+        def __setitem__(self, key, st):
+            self._kinect._stations[key] = st
+            return self._kinect.add_station(key, st.name)
+
+    stations = property(StationProxy)
+
 
 class TUIOInput(_TUIOInputHelper):
     """Avango NG device for processing TUIOInput udp packets (ASCII protocol).

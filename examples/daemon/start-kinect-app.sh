@@ -24,4 +24,16 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-python3 ./kinect-daemon.py
+# run daemon
+if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
+then
+    python3 kinect-daemon.py > /dev/null &
+else
+    python3 kinect-daemon.py > /dev/null &
+fi
+
+# run program
+cd "$DIR" && python3 ./kinect-app.py
+
+# kill daemon
+kill %1

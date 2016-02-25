@@ -115,7 +115,7 @@ av::daemon::DTrack::readLoop()
 
     for (station_map_it current = mStations.begin(); current != mStations.end(); ++current)
     {
-      if (static_cast<unsigned> ((*current).first) > max_station_id)
+      if (static_cast<unsigned>(current->first) > max_station_id)
         max_station_id = (*current).first;
     }
 
@@ -166,7 +166,7 @@ av::daemon::DTrack::readLoop()
                                    body[i].rot[6], body[i].rot[7], body[i].rot[8], 0.0f,
                                    body[i].loc[0] * 0.001f, body[i].loc[1] * 0.001f, body[i].loc[2] * 0.001f, 1.0f);
 
-          (*it).second->setMatrix(xform);
+          it->second->setMatrix(xform);
           logger.trace() << "readLoop: set matrix of station number '%s'", body_idx + 1;
         }
         else logger.debug() << "readLoop: can't find station for body #%d (station not configured?)", body_idx;

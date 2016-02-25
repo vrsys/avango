@@ -63,22 +63,22 @@ namespace av
       /**
        * Inherited from base class, implements the initialization of this device.
        */
-      void startDevice();
+      void startDevice() override;
 
       /**
        * Inherited from base class, implements the loop in which the device is read out.
        */
-      void readLoop();
+      void readLoop() override;
 
       /**
        * Inherited from base class, implements the closing operation of this device.
        */
-      void stopDevice();
+      void stopDevice() override;
 
       /**
        * Inherited from base class, returns a list of settable features.
        */
-      const std::vector<std::string>& queryFeatures();
+      const std::vector<std::string>& queryFeatures() override;
 
     private:
 

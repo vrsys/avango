@@ -41,13 +41,10 @@ namespace
 AV_BASE_DEFINE(av::daemon::KinectTrack);
 
 av::daemon::KinectTrack::KinectTrack()
-  // mKinectTrack(new ::KinectTrack)
-{
-  mRequiredFeatures.push_back("port");
-  mRequiredFeatures.push_back("server");
-}
-
-av::daemon::KinectTrack::~KinectTrack()
+  : Device()
+  , mRequiredFeatures{"port", "server"}
+  , mPort{"7000"}
+  , mServer{"127.0.0.1"}
 {}
 
 void
@@ -75,8 +72,9 @@ av::daemon::KinectTrack::startDevice()
 /* virtual */ void
 av::daemon::KinectTrack::readLoop()
 {
-  //mRequiredFeatures["server"] mRequiredFeatures["port"]
-  std::string address{"127.0.0.1:7000"};
+  std::string mServer = queryFeature("server");
+  std::string mPort = queryFeature("port");
+  std::string address = mServer + ":" + mPort; // {"127.0.0.1:7000"};
   logger.info() << "readLoop: start";
   std::cout << "KinectTrack::readLoop " << address << "\n";
 
@@ -88,22 +86,15 @@ av::daemon::KinectTrack::readLoop()
   std::string endpoint("tcp://" + address);
   socket.connect(endpoint.c_str());
 
+  // stations[0] |-> head
 
   while (mKeepRunning) {
-    // todo
-
-    zmq::message_t zmqm(16*sizeof(float));
-    socket.recv(&zmqm);
-    // * TODO convert received 16 floats to gua::math::mat4 (16*double) and print matrix to console
-    // * TODO set matrix on station "head"
+    zmq::message_t message(16*sizeof(float));
+    socket.recv(&message);
     // * TODO Use port and server property to set address
-    // ::gua::math::mat4 pose;
-    //memcpy( &pose, (const unsigned char* ) zmqm.data(), sizeof(::gua::math::mat4));
-    
-    // std::cout << "received: " << pose << std::endl;
-
-
-
+    ::gua::math::mat4f pose;
+    std::memcpy( &pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
+    mStations[0]->setMatrix(::gua::math::mat4(pose));
   }
 }
 
@@ -116,41 +107,6 @@ av::daemon::KinectTrack::stopDevice()
   logger.info() << "stopDevice: done.";
 }
 
-unsigned long int
-av::daemon::KinectTrack::convert_charpointer_to_ulong(const char* arg) const
-{
-  unsigned long int result = 0;
-  errno = 0;
-
-  if (arg)
-  {
-    // man strtoul:
-    // ...
-    // The string must begin with an arbitrary amount of white space (as determined by isspace(3))
-    // followed by a single optional '+' or '-' sign.  If base is zero  or 16, the string may then
-    // include a '0x' prefix, and the number will be read in base 16; otherwise, a zero base is
-    // taken as 10 (decimal) unless the next character is '0', in which case it is taken as 8
-    // (octal).
-    static int base_magic(0);
-
-    result = ::strtoul(arg, 0, base_magic);
-
-    if (errno)
-    {
-      logger.warn() << "convert_charpointer_to_ulong: unable to convert arg '%s' to int; errno: '%s' ",
-                 arg, std::strerror(errno);
-      result = 0;
-    }
-    else
-      LOG_TRACE(logger) << "convert_charpointer_to_ulong: converted arg '%s' to %ld", arg, result;
-
-  }
-  else
-    logger.warn() << "convert_charpointer_to_ulong: got null pointer for arg conversion";
-
-  return result;
-}
-
 const std::vector<std::string>&
 av::daemon::KinectTrack::queryFeatures()
 {
@@ -160,28 +116,20 @@ av::daemon::KinectTrack::queryFeatures()
 bool
 av::daemon::KinectTrack::parseFeatures()
 {
-  std::string port(queryFeature("port"));
-  if (port == "")
-  {
+  mPort = queryFeature("port");
+  if (mPort == "") {
     logger.warn() << "parseFeatures: feature 'port' not specified";
     return false;
-  }
-  else
-  {
-    logger.info() << "parseFeatures: configured feature 'port' = %s", port;
-    mPort = convert_charpointer_to_ulong(port.c_str());
+  } else {
+    logger.info() << "parseFeatures: configured feature 'port' = %s", mPort;
   }
 
-  std::string server(queryFeature("server"));
-  if (server == "")
-  {
+  mServer = queryFeature("server");
+  if (mServer == "") {
     logger.warn() << "parseFeatures: feature 'server' not specified";
     return false;
-  }
-  else
-  {
-    logger.info() << "parseFeatures: configured feature 'server' = %s", server;
-    mIp = convert_charpointer_to_ulong(server.c_str());
+  } else {
+    logger.info() << "parseFeatures: configured feature 'server' = %s", mServer;
   }
 
   return true;

@@ -58,7 +58,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~KinectTrack();
+      virtual ~KinectTrack() {}
 
       /**
        * Inherited from base class, implements the initialization of this device.
@@ -83,10 +83,9 @@ namespace av
     private:
 
       ::std::vector< ::std::string> mRequiredFeatures;
-      size_t  mPort;
-      size_t  mIp;
+      std::string mPort;
+      std::string mServer;
       bool parseFeatures();
-      unsigned long int convert_charpointer_to_ulong(const char* arg) const;
     };
   }
 }

@@ -6,6 +6,12 @@ from examples_common.GuaVE import GuaVE
 
 
 def start():
+    # device sensor listening to the daemon values
+    device = avango.daemon.nodes.DeviceSensor(
+        DeviceService=avango.daemon.DeviceService())
+    # station name determines which device is used
+    device.Station.value = "kinect-head-0"  # 0 for first xbox controller
+
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     loader = avango.gua.nodes.TriMeshLoader()
@@ -15,11 +21,12 @@ def start():
         avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
     monkey.Material.value.set_uniform("Color",
-                                       avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+                                      avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
     monkey.Material.value.set_uniform("Roughness", 0.3)
     monkey.Material.value.set_uniform("Metalness", 1.0)
 
     transform = avango.gua.nodes.TransformNode(Children=[monkey])
+    transform.Transform.connect_from(device.Matrix)
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -73,15 +80,6 @@ def start():
     viewer = avango.gua.nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
-
-    # device sensor listening to the daemon values
-    device = avango.daemon.nodes.DeviceSensor(
-        DeviceService=avango.daemon.DeviceService()
-        )
-    # station name determines which device is used
-    device.Station.value = "kinect-head-0"  # 0 for first xbox controller
-
-    transform.Transform.connect_from(device.Matrix)
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

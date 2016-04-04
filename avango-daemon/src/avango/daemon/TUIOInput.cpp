@@ -282,74 +282,80 @@ av::daemon::TUIOInput::readLoop()
 
       std::string name = station.second->getName();
 
-      if (boost::algorithm::ends_with(name, "#cursor") || name.find("#") == std::string::npos) {
+      if (boost::algorithm::ends_with(name, "#cursor")/* || name.find("#") == std::string::npos*/) {
         int sessionID = getSessionIDForStation_cursors(station);
         if (auto cursor = mTUIOInputListener->find_cursor(sessionID)) {
-          station.second->setValue(0, cursor->x);
-          station.second->setValue(1, cursor->y);
-          station.second->setValue(2, cursor->x_speed);
-          station.second->setValue(3, cursor->y_speed);
-          station.second->setValue(4, cursor->motion_speed);
-          station.second->setValue(5, cursor->motion_acceleration);
-          station.second->setValue(6, cursor->is_moving);
-          station.second->setValue(7, cursor->state);
-          station.second->setValue(8, cursor->session_id);
+          station.second->setValue(0, cursor->session_id);
+          station.second->setValue(1, cursor->x);
+          station.second->setValue(2, cursor->y);
+          station.second->setValue(3, cursor->x_speed);
+          station.second->setValue(4, cursor->y_speed);
+          station.second->setValue(5, cursor->motion_speed);
+          station.second->setValue(6, cursor->motion_acceleration);
+          station.second->setValue(7, cursor->is_moving);
+          station.second->setValue(8, cursor->state);
         } else {
           station.second->setValue(0, -1.f);
           station.second->setValue(1, -1.f);
-          station.second->setValue(2, 0.f);
+          station.second->setValue(2, -1.f);
           station.second->setValue(3, 0.f);
           station.second->setValue(4, 0.f);
           station.second->setValue(5, 0.f);
-          station.second->setValue(6, false);
-          station.second->setValue(7, TUIOState::REMOVED);
-          station.second->setValue(8, -1.f);
+          station.second->setValue(6, 0.f);
+          station.second->setValue(7, false);
+          station.second->setValue(8, TUIOState::REMOVED);
         }
       } else if (boost::algorithm::ends_with(name, "#finger")) {
-        int sessionID = getSessionIDForStation_fingers(station);
-        if (auto finger = mTUIOInputListener->find_finger(sessionID)) {
-          station.second->setValue(0, finger->x);
-          station.second->setValue(1, finger->y);
-          station.second->setValue(2, finger->x_speed);
-          station.second->setValue(3, finger->y_speed);
-          station.second->setValue(4, finger->ellipse_x);
-          station.second->setValue(5, finger->ellipse_y);
-          station.second->setValue(6, finger->ellipse_major);
-          station.second->setValue(7, finger->ellipse_minor);
-          station.second->setValue(8, finger->ellipse_inclination);
-          station.second->setValue(9, finger->session_id);
-        } else {
-          station.second->setValue(0, -1.f);
-          station.second->setValue(1, -1.f);
-          station.second->setValue(2, 0.f);
-          station.second->setValue(3, 0.f);
-          station.second->setValue(4, -1.f);
-          station.second->setValue(5, -1.f);
-          station.second->setValue(6, 0.f);
-          station.second->setValue(7, 0.f);
-          station.second->setValue(8, -0.f);
-          station.second->setValue(9, -1.f);
+          int sessionID = getSessionIDForStation_fingers(station);
+          if (auto finger = mTUIOInputListener->find_finger(sessionID)) {
+            //std::cout << "finger  "<< finger->session_id << "  [" << finger->x << ", " << finger->y << "]  hand id: " << finger->hand_id << std::endl;
+            station.second->setValue(0, finger->session_id);
+            station.second->setValue(1, finger->x);
+            station.second->setValue(2, finger->y);
+            station.second->setValue(3, finger->hand_id);
+            station.second->setValue(4, finger->finger_class);
+          } else {
+            station.second->setValue(0, -1.f);
+            station.second->setValue(1, -1.f);
+            station.second->setValue(2, -1.f);
+            station.second->setValue(3, -1.f);
+            station.second->setValue(4, TUIO::TuioFinger::Class::UNKNOWN);
+          }
+        } else if (boost::algorithm::ends_with(name, "#hand")) {
+          int sessionID = getSessionIDForStation_hands(station);
+          if (auto hand = mTUIOInputListener->find_hand(sessionID)) {
+              //std::cout << "hand  " << hand->session_id << "  f1: " << hand->fingers[0] << std::endl;
+            station.second->setValue(0,  hand->session_id);
+            station.second->setValue(1,  hand->x);
+            station.second->setValue(2,  hand->y);
+            station.second->setValue(3,  hand->fingers[0]);
+            station.second->setValue(4,  hand->fingers[1]);
+            station.second->setValue(5,  hand->fingers[2]);
+            station.second->setValue(6,  hand->fingers[3]);
+            station.second->setValue(7,  hand->fingers[4]);
+            station.second->setValue(8,  hand->hand_class);
+            station.second->setValue(9,  hand->ellipse_x);
+            station.second->setValue(10, hand->ellipse_y);
+            station.second->setValue(11, hand->ellipse_major);
+            station.second->setValue(12, hand->ellipse_minor);
+            station.second->setValue(13, hand->ellipse_inclination);
+          } else {
+            station.second->setValue(0,  -1.f);
+            station.second->setValue(1,  -1.f);
+            station.second->setValue(2,  -1.f);
+            station.second->setValue(3,  -1.f);
+            station.second->setValue(4,  -1.f);
+            station.second->setValue(5,  -1.f);
+            station.second->setValue(6,  -1.f);
+            station.second->setValue(7,  -1.f);
+            station.second->setValue(8,  TUIO::TuioHand::Class::UNKNOWN);
+            station.second->setValue(9,  -1.f);
+            station.second->setValue(10, -1.f);
+            station.second->setValue(11, -1.f);
+            station.second->setValue(12, -1.f);
+            station.second->setValue(13, -1.f);
+          }
         }
-      } else if (boost::algorithm::ends_with(name, "#hand")) {
-        int sessionID = getSessionIDForStation_hands(station);
-        if (auto hand = mTUIOInputListener->find_hand(sessionID)) {
-          station.second->setValue(0, hand->hand_class);
-          station.second->setValue(1, hand->fingers[0]);
-          station.second->setValue(2, hand->fingers[1]);
-          station.second->setValue(3, hand->fingers[2]);
-          station.second->setValue(4, hand->fingers[3]);
-          station.second->setValue(5, hand->fingers[4]);
-          station.second->setValue(6, hand->session_id);
-        } else {
-          station.second->setValue(0, TUIO::TuioHand::Class::UNKNOWN);
-          station.second->setValue(1, -1.f);
-          station.second->setValue(2, -1.f);
-          station.second->setValue(3, -1.f);
-          station.second->setValue(4, -1.f);
-          station.second->setValue(5, -1.f);
-          station.second->setValue(6, -1.f);
-        }
-      }
     }
   }
 }

@@ -53,19 +53,36 @@ namespace TUIO {
          *
          * @param	ttime	the TuioTime to assign
          * @param	si	the Session ID  to assign
-         * @param	hc	the hand class to assign (UNKNOWN, LEFT,RIGHT)
+         * @param   xp  the X coordinate to assign
+         * @param   yp  the Y coordinate to assign
          * @param	f1	first finger session ID
          * @param	f2	second finger session ID
          * @param	f3	third finger session ID
          * @param	f4	fourth finger session ID
          * @param	f5	fifth finger session ID
+         * @param	hc	the hand class to assign (UNKNOWN, LEFT,RIGHT)
+         * @param   xe  the bounding ellipse center X coordinate
+         * @param   ye  the bounding ellipse center Y coordinate
+         * @param   mi  the bounding ellipse minor axis
+         * @param   ma  the bounding ellipse major axis
+         * @param   in  the bounding ellipse inclination
          */
         TuioHand (TuioTime ttime,
-                  long si, Class hc,
-                  long f1, long f2, long f3, long f4, long f5) :
-            TuioContainer(ttime,si,-1,-1),
-            hand_id(si), hand_class(hc),
-            fingers({f1, f2, f3, f4, f5})
+                  long si,
+                  float xp, float yp,
+                  long f1,
+                  long f2, long f3, long f4, long f5,
+                  Class hc,
+                  float xe, float ye, float mi, float ma, float in) :
+            TuioContainer(ttime,si, xp,yp),
+            hand_id(si),
+            x_pos(xp), y_pos(yp),
+            fingers({f1, f2, f3, f4, f5}),
+            hand_class(hc),
+            ellipse_centerX(xe),
+            ellipse_centerY(ye),
+            ellipse_minor_axis(mi), ellipse_major_axis(ma),
+            ellipse_inclination(in)
         {
         }
 
@@ -74,36 +91,71 @@ namespace TUIO {
          * Session ID, Hand ID, X and Y coordinate to the newly created TuioFinger
          *
          * @param	si	the Session ID  to assign
-         * @param	hc	the hand class to assign (UNKNOWN, LEFT,RIGHT)
+         * @param   xp  the X coordinate to assign
+         * @param   yp  the Y coordinate to assign
          * @param	f1	first finger session ID
          * @param	f2	second finger session ID
          * @param	f3	third finger session ID
          * @param	f4	fourth finger session ID
          * @param	f5	fifth finger session ID
+         * @param	hc	the hand class to assign (UNKNOWN, LEFT,RIGHT)
+         * @param   xe  the bounding ellipse center X coordinate
+         * @param   ye  the bounding ellipse center Y coordinate
+         * @param   mi  the bounding ellipse minor axis
+         * @param   ma  the bounding ellipse major axis
+         * @param   in  the bounding ellipse inclination
          */
-        TuioHand (long si, Class hc,
-                  long f1, long f2, long f3, long f4, long f5) :
-            TuioContainer(si,-1,-1),
-            hand_id(si), hand_class(hc),
-            fingers({f1, f2, f3, f4, f5})
+        TuioHand (long si,
+                  float xp, float yp,
+                  long f1, long f2, long f3, long f4, long f5,
+                  Class hc,
+                  float xe, float ye, float mi, float ma, float in) :
+            TuioContainer(si, xp, yp),
+            hand_id(si),
+            x_pos(xp), y_pos(yp),
+            fingers({f1, f2, f3, f4, f5}),
+            hand_class(hc),
+            ellipse_centerX(xe),
+            ellipse_centerY(ye),
+            ellipse_minor_axis(mi), ellipse_major_axis(ma),
+            ellipse_inclination(in)
         {
         }
 
         /**
           * Update finger IDs of the hand.
           *
+          * @param xp   the X coordinate to assign
+          * @param yp   the Y coordinate to assign
           * @param f1   Session ID of the first finger
           * @param f2   Session ID of the second finger
           * @param f3   Session ID of the third finger
           * @param f4   Session ID of the fourth finge
           * @param f5   Session ID of the fifth finger
+          * @param hc   the hand class to assign (UNKNOWN, LEFT,RIGHT)
+          * @param xe   the bounding ellipse center X coordinate
+          * @param ye   the bounding ellipse center Y coordinate
+          * @param mi   the bounding ellipse minor axis
+          * @param ma   the bounding ellipse major axis
+          * @param in   the bounding ellipse inclination
           */
-        void update(long f1, long f2, long f3, long f4, long f5) {
+        void update(float xp, float yp,
+                    long f1, long f2, long f3, long f4, long f5,
+                    Class hc,
+                    float xe, float ye, float mi, float ma, float in) {
+            x_pos = xp;
+            y_pos = yp;
             fingers[0] = f1;
             fingers[1] = f2;
             fingers[2] = f3;
             fingers[3] = f4;
             fingers[4] = f5;
+            hand_class = hc;
+            ellipse_centerX = xe;
+            ellipse_centerY = ye;
+            ellipse_minor_axis = mi;
+            ellipse_major_axis = ma;
+            ellipse_inclination = in;
         }
 
         /**
@@ -130,13 +182,69 @@ namespace TUIO {
             return hand_id;
         }
 
+        /**
+          * Return the hand ellipse center X ccordinate.
+          * @return the hand ellipse center X ccordinate
+          */
+        float getEllipseX() {
+            return ellipse_centerX;
+        }
+
+        /**
+          * Return the hand ellipse center Y ccordinate.
+          * @return the hand ellipse center Y ccordinate
+          */
+        float getEllipseY() {
+            return ellipse_centerY;
+        }
+
+        /**
+          * Return the hand ellipse center major axis.
+          * @return the hand ellipse center major axis
+          */
+        float getEllipseMajor() {
+            return ellipse_major_axis;
+        }
+
+        /**
+          * Return the hand ellipse center minor axis.
+          * @return the hand ellipse center minor axis
+          */
+        float getEllipseMinor() {
+            return ellipse_minor_axis;
+        }
+
+        /**
+          * Return the hand ellipse inclination.
+          * @return the hand ellipse inclination
+          */
+        float getEllipseInclination() {
+            return ellipse_inclination;
+        }
+
+        float getXPos() const
+        {
+            return x_pos;
+        }
+        float getYPos() const
+        {
+            return y_pos;
+        }
     protected:
         /**
          * The individual hand ID number that is assigned to each TuioHand.
          */
         int hand_id;
-        Class hand_class;
+        float x_pos;
+        float y_pos;
         FingerArray fingers;
+        Class hand_class;
+
+        float ellipse_centerX;
+        float ellipse_centerY;
+        float ellipse_minor_axis;
+        float ellipse_major_axis;
+        float ellipse_inclination;
     };
 }
 #endif

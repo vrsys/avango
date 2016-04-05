@@ -401,8 +401,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
           }
           unlockCursorList();
 
-
-#if 1
           // remove stall fingers
           lockFingerList();
           fingerList.remove_if([&](TuioFinger * finger) {
@@ -417,24 +415,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
             return stall;
           });
           unlockFingerList();
-#else
-          // remove stall fingers
-          lockFingerList();
-          fingerList.remove_if([&](TuioFinger * finger) {
-            std::list<long>::iterator iter = find(
-                aliveFingerList.begin(), aliveFingerList.end(), finger->getFingerID());
-
-            if (iter == aliveFingerList.end()) {
-              for (TuioListener* listener : listenerList)
-                listener->removeTuioFinger(finger);
-            }
-            return iter == aliveFingerList.end();
-          });
-          unlockFingerList();
-#endif
-
-
-
 
           // find the removed hands
           lockHandList();
@@ -458,7 +438,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                 frameCursor = tcur;
                 frameCursor->remove(currentTime);
 
-
                 {
                   std::list<TuioFinger*>::iterator removeFingerIter;
                   for (removeFingerIter = fingerList.begin();
@@ -478,7 +457,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                       (*listener)->removeTuioFinger(*removeFingerIter);
                   }
                 }
-
 
                 lockCursorList();
                 for (std::list<TuioCursor*>::iterator delcur =
@@ -558,7 +536,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                 delete tcur;
                 unlockCursorList();
 
-
                 {
                   std::list<TuioFinger*>::iterator newFingerIter;
                   for (newFingerIter = fingerList.begin();
@@ -578,7 +555,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                       (*listener)->addTuioFinger(*newFingerIter);
                   }
                 }
-
 
                 break;
               default:
@@ -607,7 +583,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                 delete tcur;
                 unlockCursorList();
 
-
                 {
                   std::list<TuioFinger*>::iterator updateFingerIter;
                   for (updateFingerIter = fingerList.begin();
@@ -627,8 +602,6 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                       (*listener)->updateTuioFinger(*updateFingerIter);
                   }
                 }
-
-
 
             }
           }

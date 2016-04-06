@@ -677,8 +677,7 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
       } else if (strcmp(cmd, "set") == 0) {
 
           osc::int32 s_id, f1, f2, f3, f4, f5, hand_class;
-          float x_pos, y_pos;
-          float xellipse(0), yellipse(0), minoraxis(0), majoraxis(0), incl(0);
+          float x_pos(0), y_pos(0), xellipse(0), yellipse(0), minoraxis(0), majoraxis(0), incl(0);
 
           args >> s_id >> x_pos >> y_pos >> f1 >> f2 >> f3 >> f4 >> f5 >> hand_class;
 
@@ -726,7 +725,7 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
     }
   }
   catch (osc::Exception & e) {
-    std::cerr << "FUCK error parsing TUIO message: " << msg.AddressPattern() << " - "
+    std::cerr << "error parsing TUIO message: " << msg.AddressPattern() << " - "
               << e.what() << std::endl;
 
     osc::ReceivedMessageArgumentStream args = msg.ArgumentStream();

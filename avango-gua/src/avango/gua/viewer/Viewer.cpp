@@ -98,7 +98,7 @@ av::gua::Viewer::frame() {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
 
-#if 0
+#if 1
   for (auto& window: Windows.getValue()) {
     if(!window->is_open()) {
       window->open();
@@ -139,7 +139,7 @@ av::gua::Viewer::frame() {
 }
 
 void
-av::gua::Viewer::run() const {
+av::gua::Viewer::run() {
 
   ::gua::Logger::enable_debug = false;
 

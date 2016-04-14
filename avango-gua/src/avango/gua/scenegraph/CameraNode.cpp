@@ -1,6 +1,10 @@
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
+
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
@@ -113,6 +117,7 @@ av::Link<av::gua::Frustum> av::gua::CameraNode::get_frustum(av::gua::SceneGraph 
   return av::Link<av::gua::Frustum>(new av::gua::Frustum(new ::gua::Frustum(m_guaNode->get_rendering_frustum(*graph.getGuaSceneGraph(), static_cast< ::gua::CameraMode >(mode)))));
 }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::CameraNode::on_distribute(av::gua::NetTransform& netNode)
 {
     Node::on_distribute(netNode);
@@ -124,7 +129,7 @@ void av::gua::CameraNode::on_undistribute(av::gua::NetTransform& netNode)
     Node::on_undistribute(netNode);
     // netNode.undistributeFieldContainer(m_PipelineDescription);
 }
-
+#endif
 
 void
 av::gua::CameraNode::initClass()

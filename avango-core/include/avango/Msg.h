@@ -26,6 +26,8 @@
 #if !defined(AVANGO_MSG_H)
 #define AVANGO_MSG_H
 
+#include "windows_specific.h"
+
 #include <string>
 #include <vector>
 #include <utility>
@@ -42,7 +44,7 @@ namespace av
    * Serialization facility for Avango distribution.
    * This class is a smart handler for the underlying memory buffer.
    */
-  class Msg
+  class AV_DLL Msg
   {
 
   public:
@@ -102,9 +104,14 @@ namespace av
   class XDRHandle {
   public:
     XDRHandle(void* buffer, size_t bufferSize, xdr_op direction)
-    { xdrmem_create(&mXDR, (caddr_t)buffer, bufferSize, direction); }
+    { 
+      xdrmem_create(&mXDR, (caddr_t)buffer, bufferSize, direction); 
+    }
+
     ~XDRHandle()
-    { xdr_destroy(&mXDR); }
+    { 
+      xdr_destroy(&mXDR); 
+    }
 
     XDR* getXDR() { return &mXDR; }
 
@@ -123,80 +130,80 @@ namespace av
   class Field;
 
   // bool
-  void av_pushMsg(Msg& msg, const bool& buf);
-  void av_popMsg(Msg& msg, bool& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const bool& buf);
+  AV_DLL void av_popMsg(Msg& msg, bool& buf);
 
   // int32_t
-  void av_pushMsg(Msg& msg, const int32_t& buf);
-  void av_popMsg(Msg& msg, int32_t& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const int32_t& buf);
+  AV_DLL void av_popMsg(Msg& msg, int32_t& buf);
 
   // std::vector<int32_t>
-  void av_pushMsg(Msg& msg, const std::vector<int32_t>& buf);
-  void av_popMsg(Msg& msg, std::vector<int32_t>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<int32_t>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<int32_t>& buf);
 
   // uint32_t
-  void av_pushMsg(Msg& msg, const uint32_t& buf);
-  void av_popMsg(Msg& msg, uint32_t& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const uint32_t& buf);
+  AV_DLL void av_popMsg(Msg& msg, uint32_t& buf);
 
   // std::vector<uint32_t>
-  void av_pushMsg(Msg& msg, const std::vector<uint32_t>& buf);
-  void av_popMsg(Msg& msg, std::vector<uint32_t>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<uint32_t>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<uint32_t>& buf);
 
   // int64_t
-  void av_pushMsg(Msg& msg, const int64_t& buf);
-  void av_popMsg(Msg& msg, int64_t& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const int64_t& buf);
+  AV_DLL void av_popMsg(Msg& msg, int64_t& buf);
 
   // std::vector<int64_t>
-  void av_pushMsg(Msg& msg, const std::vector<int64_t>& buf);
-  void av_popMsg(Msg& msg, std::vector<int64_t>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<int64_t>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<int64_t>& buf);
 
   // uint64_t
-  void av_pushMsg(Msg& msg, const uint64_t& buf);
-  void av_popMsg(Msg& msg, uint64_t& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const uint64_t& buf);
+  AV_DLL void av_popMsg(Msg& msg, uint64_t& buf);
 
   // std::vector<uint64_t>
-  void av_pushMsg(Msg& msg, const std::vector<uint64_t>& buf);
-  void av_popMsg(Msg& msg, std::vector<uint64_t>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<uint64_t>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<uint64_t>& buf);
 
   // float
-  void av_pushMsg(Msg& msg, const float& buf);
-  void av_popMsg(Msg& msg, float& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const float& buf);
+  AV_DLL void av_popMsg(Msg& msg, float& buf);
 
   // std::vector<float>
-  void av_pushMsg(Msg& msg, const std::vector<float>& buf);
-  void av_popMsg(Msg& msg, std::vector<float>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<float>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<float>& buf);
 
   // double
-  void av_pushMsg(Msg& msg, const double& buf);
-  void av_popMsg(Msg& msg, double& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const double& buf);
+  AV_DLL void av_popMsg(Msg& msg, double& buf);
 
   // std::vector<double>
-  void av_pushMsg(Msg& msg, const std::vector<double>& buf);
-  void av_popMsg(Msg& msg, std::vector<double>& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::vector<double>& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::vector<double>& buf);
 
   // AnyLink
-  void av_pushMsg(Msg& msg, const AnyLink& buf);
-  void av_popMsg(Msg& msg, AnyLink& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const AnyLink& buf);
+  AV_DLL void av_popMsg(Msg& msg, AnyLink& buf);
 
   // Type
-  void av_pushMsg(Msg& msg, const Type& buf);
-  void av_popMsg(Msg& msg, Type& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const Type& buf);
+  AV_DLL void av_popMsg(Msg& msg, Type& buf);
 
   // Field
-  void av_pushMsg(Msg& msg, Field* buf);
-  void av_popMsg(Msg& msg, Field* buf);
+  AV_DLL void av_pushMsg(Msg& msg, Field* buf);
+  AV_DLL void av_popMsg(Msg& msg, Field* buf);
 
   // Distributed
-  void av_pushMsg(Msg& msg, Distributed* buf);
-  void av_popMsg(Msg& msg, Distributed* buf);
+  AV_DLL void av_pushMsg(Msg& msg, Distributed* buf);
+  AV_DLL void av_popMsg(Msg& msg, Distributed* buf);
 
   // std::string
-  void av_pushMsg(Msg& msg, const std::string& buf);
-  void av_popMsg(Msg& msg, std::string& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const std::string& buf);
+  AV_DLL void av_popMsg(Msg& msg, std::string& buf);
 
   // NetID
-  void av_pushMsg(Msg& msg, const NetID& buf);
-  void av_popMsg(Msg& msg, NetID& buf);
+  AV_DLL void av_pushMsg(Msg& msg, const NetID& buf);
+  AV_DLL void av_popMsg(Msg& msg, NetID& buf);
 
   template <typename T1, typename T2>
     void av_pushMsg(Msg& msg, const std::pair<T1, T2>& val)

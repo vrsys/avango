@@ -4,6 +4,8 @@ LINK_DIRECTORIES(
     ${BULLET_LIBRARY_DIRS}
 )
 
+include_directories(${PYTHON_INCLUDE_DIR})
+
 ADD_LIBRARY( _sound SHARED "_sound.cpp" )
 
 set_target_properties( _sound
@@ -13,7 +15,10 @@ set_target_properties( _sound
 
 ADD_DEPENDENCIES ( _sound avango_sound )
 
-TARGET_LINK_LIBRARIES( _sound debug ${LIBRARIES} avango_sound optimized ${LIBRARIES} avango_sound)
+TARGET_LINK_LIBRARIES( _sound 
+                       avango_sound)
+
+set_target_properties(_sound PROPERTIES COMPILE_FLAGS "-D AV_SOUND_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
 SET_TARGET_PROPERTIES( _sound PROPERTIES PREFIX "")
 
 ###############################################################################

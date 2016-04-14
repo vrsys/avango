@@ -20,14 +20,26 @@
 * License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. *
 *                                                                        *
 \************************************************************************/
+#if !defined(AV_SOUND_PLATFORM_H)
+#define AV_SOUND_PLATFORM_H
 
-#include <avango/python/script/Init.h>
-#include <avango/python/script/Script.h>
-#include <boost/python.hpp>
+/**
+* \file
+* \ingroup av_gua
+*/
 
-BOOST_PYTHON_MODULE(_script)
-{
-  av::script::register_object();
-  av::script::register_object_fields();
-  av::script::register_script();
-}
+#if defined(_MSC_VER)
+#pragma warning(disable: 4251) // needs to have dll-interface to be used by clients of class
+#pragma warning(disable: 4661) // no suitable definition provided for explicit template instantiation request 
+#if defined(AV_SOUND_LIBRARY)
+#define AV_SOUND_DLL __declspec( dllexport )
+#else
+#define AV_SOUND_DLL __declspec( dllimport )
+#endif
+#else
+#define AV_SOUND_DLL
+#endif // #if defined(_MSC_VER)
+
+#endif // #if !defined(AV_SOUND_PLATFORM_H)
+
+

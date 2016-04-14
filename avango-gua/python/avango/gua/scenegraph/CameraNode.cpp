@@ -22,6 +22,7 @@ namespace boost
 
 void init_CameraNode()
  {
+   register_ptr_to_python<av::Link<av::gua::CameraNode> >();
 
   register_field<av::gua::SFCameraNode>("SFCameraNode");
   register_multifield<av::gua::MFCameraNode>("MFCameraNode");

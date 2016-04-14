@@ -38,8 +38,10 @@ namespace av
       DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> guanode =
           std::shared_ptr< ::gua::node::CubemapNode>(new ::gua::node::CubemapNode("")));
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
+#endif
 
     protected:
 

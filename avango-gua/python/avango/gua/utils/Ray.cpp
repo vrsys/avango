@@ -21,6 +21,7 @@ namespace boost
 
 void init_Ray()
  {
+   register_ptr_to_python<av::Link<av::gua::Ray> >();
   register_field<av::gua::SFRay>("SFRay");
   register_multifield<av::gua::MFRay>("MFRay");
   class_<av::gua::Ray, av::Link<av::gua::Ray>, bases<av::FieldContainer>,

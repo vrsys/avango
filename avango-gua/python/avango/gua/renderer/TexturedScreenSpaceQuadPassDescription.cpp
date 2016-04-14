@@ -21,6 +21,7 @@ namespace boost
 
 void init_TexturedScreenSpaceQuadPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::TexturedScreenSpaceQuadPassDescription> >();
   register_field<av::gua::SFTexturedScreenSpaceQuadPassDescription>("SFTexturedScreenSpaceQuadPassDescription");
   register_multifield<av::gua::MFTexturedScreenSpaceQuadPassDescription>("MFTexturedScreenSpaceQuadPassDescription");
   class_<av::gua::TexturedScreenSpaceQuadPassDescription,

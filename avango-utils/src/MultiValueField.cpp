@@ -402,6 +402,7 @@ void av::utils::MultiValueField<bool>::pullValueImpl(av::Field* fromField)
   }
 }
 
+#if 0
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 template<> void
@@ -483,4 +484,4 @@ av::utils::MultiValueField<uint64_t>::pop(av::Msg& msg)
 }
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-
+#endif

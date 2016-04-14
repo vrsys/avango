@@ -135,6 +135,7 @@ namespace boost
 
 void init_FieldContainer(void)
 {
+  register_ptr_to_python<FieldContainerLink>();
 
   av::Field* (av::FieldContainer::*getField_uint)(unsigned int) = &av::FieldContainer::getField;
   av::Field* (av::FieldContainer::*getField_string)(const std::string&) = &av::FieldContainer::getField;

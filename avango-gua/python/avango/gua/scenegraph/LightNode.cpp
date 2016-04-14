@@ -17,6 +17,8 @@ struct pointee<av::Link<T> > {
 }
 
 void init_LightNode() {
+  register_ptr_to_python<av::Link<av::gua::LightNode> >();
+
   register_field<av::gua::SFLightNode>("SFLightNode");
   register_multifield<av::gua::MFLightNode>("MFLightNode");
   class_<av::gua::LightNode,

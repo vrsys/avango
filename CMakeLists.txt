@@ -50,29 +50,49 @@ if (UNIX)
   pkg_check_modules(JSON REQUIRED jsoncpp)
   pkg_check_modules(PYTHON3 REQUIRED python-3.4)
 elseif (WIN32)
-  include(find_assimp)
-  include(find_json)
-  include(find_python)
+  include(findAssimp)
+  include(findJson)
+  include(findPythonLibs)
 endif (UNIX)
 
-set (BOOST_ROOT "/opt/boost/latest" CACHE PATH "Set to your boost install")
+if (UNIX)
+  set (BOOST_ROOT "/opt/boost/latest" CACHE PATH "Set to your boost install")
+  find_package(Boost COMPONENTS python-py34 REQUIRED)
+elseif (MSVC)
+  set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
+  message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}") 
+  set (Boost_USE_MULTITHREADED ON)
+  #set (Boost_USE_STATIC_LIBS ON)
+  ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
+  find_package(Boost COMPONENTS python python3 REQUIRED)
+endif(UNIX)
+
 find_package(Boost COMPONENTS
   thread
   signals
-  python-py34
+  system
+  program_options
+  regex
   REQUIRED
-  )
-set (BULLET_ROOT "/opt/bullet/default" CACHE PATH
+)
+
+if (MSVC)
+  include(findRPC)
+endif (MSVC)
+
+set (BULLET_ROOT 
+     /opt/bullet/default  
+     ${GLOBAL_EXT_DIR}/bullet
+     CACHE PATH
     "Set to your bullet install path.")
 find_package(Bullet)
-include(find_schism)
 
-if (AVANGO_DISTRIBUTION_SUPPORT)
-    include(FindZMQ)
-endif (AVANGO_DISTRIBUTION_SUPPORT)
+include(findSchism)
+
+include(FindZMQ)
 
 if (AVANGO_OCULUS_RIFT_SUPPORT)
-  include(find_ovr)
+  include(findOVR)
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
 
 if (UNIX)
@@ -80,7 +100,6 @@ if (UNIX)
 endif (UNIX)
 
 set(LIBRARIES
-  ${Boost_LIBRARIES}
     ${GUACAMOLE_LIBRARIES}
     ${GUACAMOLE_GUI_LIBRARIES}
     ${GUACAMOLE_VOLUME_LIBRARIES}

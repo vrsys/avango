@@ -20,6 +20,7 @@ namespace boost
 
 void init_Viewer()
  {
+   register_ptr_to_python<av::Link<av::gua::Viewer> >();
 
   class_<av::gua::Viewer,
          av::Link<av::gua::Viewer>,

@@ -21,6 +21,8 @@ namespace boost
 
 void init_LightVisibilityPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::LightVisibilityPassDescription> >();
+
   register_field<av::gua::SFLightVisibilityPassDescription>("SFLightVisibilityPassDescription");
   register_multifield<av::gua::MFLightVisibilityPassDescription>("MFLightVisibilityPassDescription");
   class_<av::gua::LightVisibilityPassDescription,

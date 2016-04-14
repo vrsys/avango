@@ -54,7 +54,7 @@ namespace av
        *
        * \ingroup av_gua
        */
-      class Init
+      class AV_GUA_DLL Init
       {
         AV_TYPED_DECLARE_ABSTRACT();
       };

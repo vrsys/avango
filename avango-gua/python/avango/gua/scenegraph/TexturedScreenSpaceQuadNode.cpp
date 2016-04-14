@@ -20,6 +20,7 @@ namespace boost
 
 void init_TexturedScreenSpaceQuadNode()
  {
+   register_ptr_to_python<av::Link<av::gua::TexturedScreenSpaceQuadNode> >();
   register_field<av::gua::SFTexturedScreenSpaceQuadNode>("SFTexturedScreenSpaceQuadNode");
   register_multifield<av::gua::MFTexturedScreenSpaceQuadNode>("MFTexturedScreenSpaceQuadNode");
   class_<av::gua::TexturedScreenSpaceQuadNode,

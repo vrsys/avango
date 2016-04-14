@@ -61,10 +61,6 @@ LINK_DIRECTORIES(
     ${BULLET_LIBRARY_DIRS}
 )
 
-ADD_LIBRARY(avango_tools SHARED
-  ${AVANGO_TOOLS_SRC}
-)
-
 INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
@@ -74,6 +70,14 @@ INCLUDE_DIRECTORIES(
     ../avango-python/include
     ${PYTHON3_INCLUDE_DIRS}
     ../avango-gua/include
+)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
+ADD_LIBRARY(avango_tools SHARED
+  ${AVANGO_TOOLS_SRC}
 )
 
 ADD_DEPENDENCIES ( avango_tools avango)
@@ -86,9 +90,12 @@ SET (AVANGO_TOOLS_BUILD_FLAGS "${BUILD_FLAGS} -D AV_TOOLS_LIBRARY")
 
 set_target_properties(avango_tools PROPERTIES COMPILE_FLAGS ${AVANGO_TOOLS_BUILD_FLAGS})
 
-TARGET_LINK_LIBRARIES( avango_tools
-  debug avango_gua avango_script avango ${LIBRARIES}
-  optimized avango_gua avango_script avango ${LIBRARIES})
+TARGET_LINK_LIBRARIES( avango_tools 
+                       avango_gua 
+                       avango_script 
+                       avango 
+                       ${LIBRARIES}
+                     )
 
 ###############################################################################
 # python module

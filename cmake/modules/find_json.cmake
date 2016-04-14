@@ -2,14 +2,14 @@
 # pre-defined search paths
 ##############################################################################
 SET(JSON_INCLUDE_SEARCH_DIRS
-	${GLOBAL_EXT_DIR}/inc/json
-	${GUACAMOLE_EXT_DIR}/inc/json
-    /usr/include
+	${GLOBAL_EXT_DIR}/json/include
+	${GUACAMOLE_EXT_DIR}/json/include
+  /usr/include
 )
 
 SET(JSON_LIBRARY_SEARCH_DIRS
-	${GLOBAL_EXT_DIR}/lib
-	${GUACAMOLE_EXT_DIR}/lib
+	${GLOBAL_EXT_DIR}/json/lib
+	${GUACAMOLE_EXT_DIR}/json/lib
     /usr/lib
 )
 

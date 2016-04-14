@@ -30,6 +30,7 @@ list list_uniforms(av::gua::Material& mat) {
 
 void init_Material()
  {
+  register_ptr_to_python<av::Link<av::gua::Material> >();
 
   register_field<av::gua::SFMaterial>("SFMaterial");
   register_multifield<av::gua::MFMaterial>("MFMaterial");

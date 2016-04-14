@@ -18,8 +18,10 @@ file(GLOB AVANGO_SOUND_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/sound/SoundRenderer.cpp
     src/avango/sound/SoundSource.cpp
     src/avango/sound/SoundTraverser.cpp
+    src/avango/sound/Init.cpp
     include/avango/sound/Config.h
     include/avango/sound/Doxygen.h
+    include/avango/sound/Platform.h
     include/avango/sound/SampleBuffer.h
     include/avango/sound/SoundRenderer.h
     include/avango/sound/SoundSource.h
@@ -35,10 +37,6 @@ LINK_DIRECTORIES(
     ${BULLET_LIBRARY_DIRS}
 )
 
-ADD_LIBRARY(avango_sound SHARED
-  ${AVANGO_SOUND_SRC}
-)
-
 INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
@@ -48,6 +46,14 @@ INCLUDE_DIRECTORIES(
     ../avango-python/include
     ${PYTHON3_INCLUDE_DIRS}
     ../avango-gua/include
+)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
+ADD_LIBRARY(avango_sound SHARED
+  ${AVANGO_SOUND_SRC}
 )
 
 ADD_DEPENDENCIES ( avango_sound avango)
@@ -61,9 +67,12 @@ IF (MSVC)
   set_target_properties(avango_sound PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ENDIF (MSVC)
 
-TARGET_LINK_LIBRARIES( avango_sound
-  debug avango_gua avango_script avango ${LIBRARIES}
-  optimized avango_gua avango_script avango ${LIBRARIES})
+TARGET_LINK_LIBRARIES( avango_sound 
+                       avango_gua 
+                       avango_script 
+                       avango 
+                       ${LIBRARIES} 
+                     )
 
 ###############################################################################
 # python module

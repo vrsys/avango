@@ -1,5 +1,9 @@
 #include <avango/gua/scenegraph/DepthMapNode.hpp>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
+
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 
@@ -61,6 +65,7 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
 //av::gua::DepthMapNode::~DepthMapNode()
 //{}
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::DepthMapNode::on_distribute(av::gua::NetTransform& netNode) 
 {
     Node::on_distribute(netNode);
@@ -70,6 +75,7 @@ void av::gua::DepthMapNode::on_undistribute(av::gua::NetTransform& netNode)
 {
     Node::on_undistribute(netNode);    
 }
+#endif
 
 void av::gua::DepthMapNode::create_weights(::gua::math::vec3 const& view_direction, ::gua::math::vec3 const& move_direction)
 {

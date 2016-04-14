@@ -36,10 +36,6 @@ LINK_DIRECTORIES(
     ${BULLET_LIBRARY_DIRS}
 )
 
-ADD_LIBRARY(avango_utils SHARED
-  ${AVANGO_UTILS_SRC}
-)
-
 INCLUDE_DIRECTORIES(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
@@ -49,6 +45,14 @@ INCLUDE_DIRECTORIES(
     ../avango-python/include
     ${PYTHON3_INCLUDE_DIRS}
     ../avango-gua/include
+)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
+ADD_LIBRARY(avango_utils SHARED
+  ${AVANGO_UTILS_SRC}
 )
 
 ADD_DEPENDENCIES ( avango_utils avango)

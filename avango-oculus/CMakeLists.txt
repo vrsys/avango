@@ -9,7 +9,6 @@ file(GLOB AVANGO_OCULUS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 # Location where cmake first looks for modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)
 
-include(find_ovr)
 include(find_guacamole_oculus)
 
 ###############################################################################
@@ -27,6 +26,7 @@ INCLUDE_DIRECTORIES(
     ${SCHISM_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
     ${PYTHON3_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIR}
     ${OVR_INCLUDE_DIR}
     ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}

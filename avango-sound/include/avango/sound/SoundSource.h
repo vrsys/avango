@@ -26,7 +26,7 @@
 #ifndef AV_SOUND_SOUNDSOURCE_H
 #define AV_SOUND_SOUNDSOURCE_H
 
-//#include <avango/gua/Group.h>
+#include <avango/sound/Platform.h>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/sound/SampleBuffer.h>
@@ -48,7 +48,7 @@ namespace av {
     * LocalSources, which are implemented by the concrete SoundRenderers.
     */
     //class SoundSource : public av::osg::Group {
-    class SoundSource : public av::gua::TransformNode {
+    class AV_SOUND_DLL SoundSource : public av::gua::TransformNode {
       AV_FC_DECLARE();
       public:
         SoundSource();
@@ -308,7 +308,15 @@ namespace av {
         template <class MemFun, class Arg>
         void for_each_local_source(MemFun f, Arg arg);
     };
+
+    using SFSoundSource = SingleField<Link<SoundSource> >;
+    using MFSoundSource = MultiField<Link<SoundSource> >;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_SOUND_DLL SingleField<Link<sound::SoundSource> >;
+  template class AV_SOUND_DLL MultiField<Link<sound::SoundSource> >;
+#endif
 }
 
 #endif /*AV_SOUND_SOUNDSOURCE_H*/

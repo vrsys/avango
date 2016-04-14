@@ -21,6 +21,7 @@ namespace boost
 
 void init_PipelinePassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::PipelinePassDescription> >();
   register_field<av::gua::SFPipelinePassDescription>("SFPipelinePassDescription");
   register_multifield<av::gua::MFPipelinePassDescription>("MFPipelinePassDescription");
   class_<av::gua::PipelinePassDescription,

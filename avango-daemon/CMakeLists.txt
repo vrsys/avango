@@ -101,16 +101,14 @@ link_directories(
     ${LIB_PATHS}
     ${PYTHON3_LIBRARY_DIRS}
     ${BULLET_LIBRARY_DIRS}
-)
-
-ADD_LIBRARY(avango_daemon SHARED
-    ${AVANGO_DAEMON_SRC}
+    ${ZMQ_LIBRARY_DIRS}
 )
 
 include_directories(
     ${INCLUDE_PATHS}
     ${SCHISM_INCLUDE_DIRS}
     ${BULLET_INCLUDE_DIRS}
+    ${ZMQ_INCLUDE_DIRS}
     include
     ../avango-core/include
     ../avango-python/include
@@ -118,6 +116,14 @@ include_directories(
     ../avango-gua/include
     src/avango/daemon/tuio/TUIO
     src/avango/daemon/tuio/oscpack
+)
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
+ADD_LIBRARY(avango_daemon SHARED
+    ${AVANGO_DAEMON_SRC}
 )
 
 add_dependencies ( avango_daemon avango)
@@ -135,11 +141,16 @@ endif (MSVC)
 
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUILD_FLAGS})
 
-list(APPEND LIBRARIES avango avango_script avango_gua)
-
 target_link_libraries( avango_daemon
-  debug avango_gua avango_script avango ${LIBRARIES}
-  optimized avango_gua avango_script avango ${LIBRARIES})
+  avango_gua 
+  avango_script 
+  avango 
+  ${ZMQ_LIBRARIES}
+  )
+
+if (MSVC)
+  target_link_libraries(avango_daemon winmm.lib Ws2_32.lib)
+endif (MSVC)
 
 ###############################################################################
 # python module

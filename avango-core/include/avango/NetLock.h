@@ -37,7 +37,7 @@ namespace av {
    * which resets the "Granted" field to the empty string.
    * Short: This is cooperative locking, you only have the lock when your id shows up in the "Granted" field.
    */
-  class NetLock : public FieldContainer {
+  class AV_DLL NetLock : public FieldContainer {
 
       AV_FC_DECLARE();
 

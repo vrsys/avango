@@ -21,6 +21,8 @@ namespace boost
 
 void init_BBoxPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::BBoxPassDescription> >();
+
   register_field<av::gua::SFBBoxPassDescription>("SFBBoxPassDescription");
   register_multifield<av::gua::MFBBoxPassDescription>("MFBBoxPassDescription");
   class_<av::gua::BBoxPassDescription,

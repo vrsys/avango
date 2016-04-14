@@ -20,6 +20,7 @@ namespace boost
 
 void init_TransformNode()
  {
+   register_ptr_to_python<av::Link<av::gua::TransformNode> >();
   register_field<av::gua::SFTransformNode>("SFTransformNode");
   register_multifield<av::gua::MFTransformNode>("MFTransformNode");
   class_<av::gua::TransformNode, av::Link<av::gua::TransformNode>, bases<av::gua::Node>, boost::noncopyable >("TransformNode", "docstring", no_init);

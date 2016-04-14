@@ -21,7 +21,7 @@ namespace boost
 
 void init_WindowBase()
  {
-
+   register_ptr_to_python<av::Link<av::gua::WindowBase> >();
   register_field<av::gua::SFWindowBase>("SFWindowBase");
   register_multifield<av::gua::MFWindowBase>("MFWindowBase");
   class_<av::gua::WindowBase,

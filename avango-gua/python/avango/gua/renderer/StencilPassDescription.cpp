@@ -21,6 +21,7 @@ namespace boost
 
 void init_StencilPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::StencilPassDescription> >();
   register_field<av::gua::SFStencilPassDescription>("SFStencilPassDescription");
   register_multifield<av::gua::MFStencilPassDescription>("MFStencilPassDescription");
   class_<av::gua::StencilPassDescription,

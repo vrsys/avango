@@ -21,6 +21,8 @@ namespace boost
 
 void init_DepthMapPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::DepthMapPassDescription> >();
+
   register_field<av::gua::SFDepthMapPassDescription>("SFDepthMapPassDescription");
   register_multifield<av::gua::MFDepthMapPassDescription>("MFDepthMapPassDescription");
   class_<av::gua::DepthMapPassDescription,

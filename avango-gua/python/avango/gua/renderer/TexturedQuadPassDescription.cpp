@@ -21,6 +21,7 @@ namespace boost
 
 void init_TexturedQuadPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::TexturedQuadPassDescription> >();
   register_field<av::gua::SFTexturedQuadPassDescription>("SFTexturedQuadPassDescription");
   register_multifield<av::gua::MFTexturedQuadPassDescription>("MFTexturedQuadPassDescription");
   class_<av::gua::TexturedQuadPassDescription,

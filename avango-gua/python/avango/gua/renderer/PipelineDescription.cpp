@@ -28,7 +28,7 @@ av::Link<av::gua::PipelineDescription> create_default_pipeline_description() {
 
 void init_PipelineDescription()
  {
-
+   register_ptr_to_python<av::Link<av::gua::PipelineDescription> >();
   register_field<av::gua::SFPipelineDescription>("SFPipelineDescription");
   register_multifield<av::gua::MFPipelineDescription>("MFPipelineDescription");
   class_<av::gua::PipelineDescription,

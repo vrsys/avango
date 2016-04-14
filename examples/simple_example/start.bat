@@ -1,8 +1,7 @@
-#avango + guacamole + python
 set AVANGO_DIR=%cd%\..\..
-set Path=%Path%;%AVANGO_DIR%\lib\avango
-set PYTHONPATH=%PYTHONPATH%;%AVANGO_DIR%\lib\Release\avango;%PYTHONPATH%;%AVANGO_DIR%\lib\Release\avango\daemon
+set Path=%Path%;%AVANGO_DIR%\lib\Release
+set PYTHONPATH=%PYTHONPATH%;%AVANGO_DIR%\lib\Python3.4;%PYTHONPATH%;%AVANGO_DIR%\lib\python3.4\avango\daemon;%AVANGO_DIR%\examples
 
-start "python3 ../examples_common/daemon.py"
+start "python ../examples_common/daemon.py"
 
-start "python3 main.py"
+start "python main.py"

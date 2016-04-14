@@ -70,7 +70,6 @@
 #include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/DepthMapPassDescription.hpp>
-#include <avango/gua/renderer/Video3DPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
@@ -109,7 +108,6 @@ av::gua::Init::initClass()
     {
         char** argv;
         ::gua::init(0, argv);
-
         av::gua::initFields();
 
         av::gua::Node::initClass();
@@ -119,6 +117,7 @@ av::gua::Init::initClass()
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();        
         av::gua::DepthMapNode::initClass();
+
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DNode::initClass();
 #endif
@@ -170,6 +169,7 @@ av::gua::Init::initClass()
         av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
         av::gua::DepthMapPassDescription::initClass();
+
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DLoader::initClass();
         av::gua::Video3DPassDescription::initClass();
@@ -189,6 +189,7 @@ av::gua::Init::initClass()
         av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
+
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();
         av::gua::PLODLoader::initClass();
@@ -197,6 +198,7 @@ av::gua::Init::initClass()
         // av::gua::NURBSLoader::initClass();
 
         av::gua::Viewer::initClass();
+
         av::gua::BlenderViewer::initClass();
 
         av::gua::Logger::initClass();

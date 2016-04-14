@@ -21,6 +21,8 @@ namespace boost
 
 void init_EmissivePassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::EmissivePassDescription> >();
+
   register_field<av::gua::SFEmissivePassDescription>("SFEmissivePassDescription");
   register_multifield<av::gua::MFEmissivePassDescription>("MFEmissivePassDescription");
   class_<av::gua::EmissivePassDescription,

@@ -250,6 +250,12 @@ namespace av
       return static_cast<T*>(mBasePtr);
     }
 
+    template <typename A>
+    T* get_pointer(Link<A> const& p) const
+    {
+      return p.getPtr();
+    }
+
     /**
      * Get a reference to the empty link.
      */

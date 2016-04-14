@@ -21,6 +21,8 @@ namespace boost
 
 void init_FullscreenPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::FullscreenPassDescription> >();
+
   register_field<av::gua::SFFullscreenPassDescription>("SFFullscreenPassDescription");
   register_multifield<av::gua::MFFullscreenPassDescription>("MFFullscreenPassDescription");
   class_<av::gua::FullscreenPassDescription,

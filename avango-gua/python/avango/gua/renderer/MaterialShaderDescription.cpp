@@ -21,7 +21,7 @@ namespace boost
 
 void init_MaterialShaderDescription()
  {
-
+   register_ptr_to_python<av::Link<av::gua::MaterialShaderDescription> >();
   register_field<av::gua::SFMaterialShaderDescription>("SFMaterialShaderDescription");
   register_multifield<av::gua::MFMaterialShaderDescription>("MFMaterialShaderDescription");
   class_<av::gua::MaterialShaderDescription,

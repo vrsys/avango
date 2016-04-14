@@ -25,6 +25,7 @@
 #define AV_SOUND_SOUNDRENDERER_H
 
 #include <avango/FieldContainer.h>
+#include <avango/sound/Platform.h>
 #include <avango/sound/SoundSource.h>
 #include <avango/gua/Fields.hpp>
 #include <gua/math/math.hpp>
@@ -38,7 +39,7 @@
 namespace av {
   namespace sound {
 
-    class SoundRenderer : public FieldContainer {
+    class AV_SOUND_DLL SoundRenderer : public FieldContainer {
 
       AV_FC_DECLARE_ABSTRACT();
 
@@ -71,5 +72,10 @@ namespace av {
     using SFSoundRenderer = SingleField<Link<SoundRenderer> >;
     using MFSoundRenderer = MultiField<Link<SoundRenderer> >;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_SOUND_DLL SingleField<Link<sound::SoundRenderer> >;
+  template class AV_SOUND_DLL MultiField<Link<sound::SoundRenderer> >;
+#endif
 }
 #endif /*AV_SOUND_SOUNDRENDERER_H*/

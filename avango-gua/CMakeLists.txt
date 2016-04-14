@@ -157,6 +157,9 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   )
 ENDIF (NOT ${AVANGO_PHYSICS_SUPPORT})
 
+SOURCE_GROUP("" FILES ${AVANGO_GUA_SRC})
+SOURCE_GROUP("" FILES ${AVANGO_GUA_PYTHON_SRC})
+
 ###############################################################################
 # set link directories
 ###############################################################################
@@ -176,6 +179,7 @@ INCLUDE_DIRECTORIES(BEFORE
   include/avango/python/
   ${INCLUDE_PATHS}
   ${PYTHON3_INCLUDE_DIRS}
+  ${PYTHON_INCLUDE_DIR}
   ${SCHISM_INCLUDE_DIRS}
   ${BULLET_INCLUDE_DIRS}
   ${JSON_INCLUDE_DIRS}
@@ -183,9 +187,9 @@ INCLUDE_DIRECTORIES(BEFORE
   ${CMAKE_SOURCE_DIR}/avango-python/include
 )
 
-
-
-
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
 
 ADD_LIBRARY( avango_gua SHARED
     	     ${AVANGO_GUA_SRC}
@@ -206,8 +210,8 @@ ADD_DEPENDENCIES(_gua avango avango_gua)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-SET( AVANGO_GUA_BUILD_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY")
-SET( AVANGO_GUA_PYTHON_BUILD_FLAGS "${BUILD_FLAGS} ")
+SET( AVANGO_GUA_BUILD_FLAGS "${BUILD_FLAGS} -D AV_GUA_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
+SET( AVANGO_GUA_PYTHON_BUILD_FLAGS "${BUILD_FLAGS} -D BOOST_PYTHON_STATIC_LIB")
 
 IF (MSVC)
 	SET( AVANGO_GUA_BUILD_FLAGS "${AVANGO_GUA_BUILD_FLAGS} /bigobj")
@@ -219,38 +223,41 @@ set_target_properties(avango_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_D
 set_target_properties(_gua PROPERTIES COMPILE_FLAGS "${AVANGO_GUA_PYTHON_BUILD_FLAGS}")
 set_target_properties(_gua PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
+SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
+
 ###############################################################################
 # set dependencies
 ###############################################################################
 SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
+                          ${GUACAMOLE_LIBRARIES}
                           ${PYTHON3_LIBRARIES}
-                          ${Boost_LIBRARIES}
+                          ${PYTHON_LIBRARY}
+                          optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}
+                          optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_OPTIONS_LIBRARY_DEBUG}
+                          optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_OPTIONS_LIBRARY_DEBUG}
+                          optimized ${Boost_REGEX_LIBRARY_RELEASE} debug ${Boost_REGEX_LIBRARY_DEBUG}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
-                          ${SCHISM_LIBRARIES}
+                          optimized ${SCHISM_CORE_LIBRARY} debug ${SCHISM_CORE_LIBRARY_DEBUG}
+                          optimized ${SCHISM_GL_CORE_LIBRARY} debug ${SCHISM_GL_CORE_LIBRARY_DEBUG}
+                          optimized ${SCHISM_GL_UTIL_LIBRARY} debug ${SCHISM_GL_UTIL_LIBRARY_DEBUG}
                           avango
-                          avango_gua
 )
 
 IF (UNIX)
-	LIST(APPEND _AVANGO_GUA_LIBRARIES boost_program_options boost_regex)
+	LIST(APPEND _AVANGO_GUA_LIBRARIES " ")
+ELSEIF (MSVC)
+  LIST(APPEND _AVANGO_GUA_LIBRARIES OpenGL32.lib)
 ENDIF (UNIX)
 
 TARGET_LINK_LIBRARIES( avango_gua
-                       debug
-                       ${_AVANGO_GUA_LIBRARIES}
-                       optimized
                        ${_AVANGO_GUA_LIBRARIES}
 )
 
 TARGET_LINK_LIBRARIES( _gua
-                       debug
-                       ${_AVANGO_GUA_LIBRARIES}
-                       optimized
+                       avango_gua
                        ${_AVANGO_GUA_LIBRARIES}
 )
-
-SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 
 IF (UNIX)
 	SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)

@@ -29,6 +29,7 @@
 #include <avango/sound/SampleBuffer.h>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
+#include <avango/sound/Init.h>
 
 using namespace boost::python;
 using namespace av::python;
@@ -48,11 +49,13 @@ namespace boost
 
 BOOST_PYTHON_MODULE(_sound)
 {
+  av::sound::Init::initClass();
+
   av::sound::SoundTraverser::initClass();
   av::sound::SoundRenderer::initClass();
   av::sound::SoundSource::initClass();
   av::sound::SampleBuffer::initClass();
-
+  
   class_<av::sound::SoundTraverser, av::Link<av::sound::SoundTraverser>, bases<av::FieldContainer>, boost::noncopyable >("SoundTraverser", "docstring");
   class_<av::sound::SoundRenderer, av::Link<av::sound::SoundRenderer>, bases<av::FieldContainer>, boost::noncopyable >("SoundRenderer", "docstring", no_init);
   class_<av::sound::SampleBuffer, av::Link<av::sound::SampleBuffer>, bases<av::FieldContainer>, boost::noncopyable >("SampleBuffer", "docstring", no_init);

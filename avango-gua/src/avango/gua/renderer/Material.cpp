@@ -2,7 +2,10 @@
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 #include <avango/Logger.h>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
 
 #include <avango/gua/Types.hpp>
 
@@ -36,6 +39,7 @@ av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial
     m_uniformsDirty.dontDistribute(true);    
 }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::Material::on_distribute(av::gua::NetTransform& netNode) 
 {
   // store material description for distribution
@@ -63,6 +67,7 @@ void av::gua::Material::on_undistribute(av::gua::NetTransform& netNode)
   netNode.undistributeFieldContainer(m_materialShaderDescription.getValue());
   m_distributed = false;
 }
+#endif
 
 void
 av::gua::Material::initClass()

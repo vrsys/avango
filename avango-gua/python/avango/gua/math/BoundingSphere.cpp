@@ -45,6 +45,8 @@ av::gua::BoundingSphere combine(av::gua::BoundingSphere const& lhs,
 
 void init_BoundingSphere()
 {
+  register_ptr_to_python<av::Link<av::gua::BoundingSphere> >();
+
   register_field<av::gua::SFBoundingSphere>("SFBoundingSphere");
   register_multifield<av::gua::MFBoundingSphere>("MFBoundingSphere");
 

@@ -20,10 +20,12 @@ namespace boost
 
 
 void init_Node()
- {
+{
+  register_ptr_to_python<av::Link<av::gua::Node> >();
+
   register_field<av::gua::SFNode>("SFNode");
   register_multifield<av::gua::MFNode>("MFNode");
   class_<av::gua::Node, av::Link<av::gua::Node>, bases<av::FieldContainer>,
          boost::noncopyable >("Node", "docstring", no_init)
   ;
- }
+}

@@ -21,7 +21,7 @@ namespace boost
 
 void init_MaterialShaderMethod()
  {
-
+   register_ptr_to_python<av::Link<av::gua::MaterialShaderMethod> >();
   register_field<av::gua::SFMaterialShaderMethod>("SFMaterialShaderMethod");
   register_multifield<av::gua::MFMaterialShaderMethod>("MFMaterialShaderMethod");
   class_<av::gua::MaterialShaderMethod,

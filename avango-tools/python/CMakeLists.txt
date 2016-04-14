@@ -1,5 +1,7 @@
 LIST(APPEND INCLUDE_DIRECTORIES ..)
 
+include_directories(${PYTHON_INCLUDE_DIR})
+
 LINK_DIRECTORIES(
     ${LIB_PATHS}
     ${BULLET_LIBRARY_DIRS}
@@ -21,7 +23,15 @@ set_target_properties( _tools
 
 ADD_DEPENDENCIES ( _tools avango_tools )
 
-TARGET_LINK_LIBRARIES( _tools debug ${LIBRARIES} avango_tools optimized ${LIBRARIES} avango_tools)
+TARGET_LINK_LIBRARIES( _tools 
+                       avango_tools
+                       ${PYTHON_LIBRARY}
+                       ${PYTHON3_LIBRARIES}
+                       optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
+                       optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_LIBRARY_DEBUG}
+                     )
+
+set_target_properties( _tools PROPERTIES COMPILE_FLAGS "-D BOOST_PYTHON_STATIC_LIB")
 SET_TARGET_PROPERTIES( _tools PROPERTIES PREFIX "")
 
 ###############################################################################

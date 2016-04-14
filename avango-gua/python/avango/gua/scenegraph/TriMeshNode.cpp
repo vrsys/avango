@@ -21,6 +21,8 @@ namespace boost
 
 void init_TriMeshNode()
 {
+  register_ptr_to_python<av::Link<av::gua::TriMeshNode> >();
+
   register_field<av::gua::SFTriMeshNode>("SFTriMeshNode");
   register_multifield<av::gua::MFTriMeshNode>("MFTriMeshNode");
   class_<av::gua::TriMeshNode, av::Link<av::gua::TriMeshNode>,

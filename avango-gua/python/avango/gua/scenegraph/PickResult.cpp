@@ -20,6 +20,8 @@ namespace boost
 
 void init_PickResult()
 {
+  register_ptr_to_python<av::Link<av::gua::PickResult> >();
+
   register_field<av::gua::SFPickResult>("SFPickResult");
   register_multifield<av::gua::MFPickResult>("MFPickResult");
   class_<av::gua::PickResult, av::Link<av::gua::PickResult>, bases<av::FieldContainer>, boost::noncopyable >("PickResult", "docstring", no_init);

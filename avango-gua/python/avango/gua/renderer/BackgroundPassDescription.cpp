@@ -21,6 +21,8 @@ namespace boost
 
 void init_BackgroundPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::BackgroundPassDescription> >();
+
   register_field<av::gua::SFBackgroundPassDescription>("SFBackgroundPassDescription");
   register_multifield<av::gua::MFBackgroundPassDescription>("MFBackgroundPassDescription");
   class_<av::gua::BackgroundPassDescription,

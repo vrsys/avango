@@ -60,6 +60,8 @@ av::Link<av::gua::Node> createGeometryFromFile4(
 
 void init_TriMeshLoader()
 {
+  register_ptr_to_python<av::Link<av::gua::TriMeshLoader> >();
+
   class_<av::gua::TriMeshLoader,
          av::Link<av::gua::TriMeshLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("TriMeshLoader", "docstring", no_init)

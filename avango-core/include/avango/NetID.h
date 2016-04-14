@@ -26,14 +26,13 @@
 #if !defined(AVANGO_NETID_H)
 #define AVANGO_NETID_H
 
+#include "windows_specific.h"
+
 #include <string>
 #include <iosfwd>
 
-#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
-#include <tr1/unordered_set>
-#else
 #include <unordered_map>
-#endif
+#include <unordered_set>
 
 
 namespace av
@@ -42,7 +41,7 @@ namespace av
    * Unique ID for every node in a net group.
    * It consists of the endpoint id and a number.
    */
-  class NetID
+  class AV_DLL NetID
   {
 
   public:
@@ -89,7 +88,7 @@ namespace av
 
   std::ostream& operator<< (std::ostream& os, const NetID&);
 
-  using NetID_set = std::tr1::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID> >;
+  using NetID_set = std::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID> >;
 
 } // namespace av
 

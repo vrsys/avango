@@ -21,6 +21,7 @@ namespace boost
 
 void init_ResolvePassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::ResolvePassDescription> >();
   register_field<av::gua::SFResolvePassDescription>("SFResolvePassDescription");
   register_multifield<av::gua::MFResolvePassDescription>("MFResolvePassDescription");
   class_<av::gua::ResolvePassDescription,

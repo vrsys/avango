@@ -23,8 +23,14 @@
 
 #include <avango/sound/SampleBuffer.h>
 
+#include <avango/Logger.h>
 #include <boost/bind.hpp>
 #include <stdexcept>
+
+namespace
+{
+  av::Logger& logger(av::getLogger("av::sound::SampleBuffer"));
+}
 
 AV_FC_DEFINE(av::sound::SampleBuffer)
 
@@ -51,8 +57,7 @@ av::sound::SampleBuffer::SampleBuffer(boost::shared_array<SampleType> buffer, un
 
 /* virtual */
 av::sound::SampleBuffer::~SampleBuffer()
-{
-}
+{}
 
 unsigned int
 av::sound::SampleBuffer::getNumSamples() const

@@ -66,6 +66,7 @@ void register_on_enter(av::gua::GlfwWindow& window, boost::python::object& func)
 
 void init_GlfwWindow()
  {
+   register_ptr_to_python<av::Link<av::gua::GlfwWindow> >();
 
   register_field<av::gua::SFGlfwWindow>("SFGlfwWindow");
   register_multifield<av::gua::MFGlfwWindow>("MFGlfwWindow");

@@ -4,7 +4,10 @@
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
 
 namespace
 {
@@ -54,6 +57,7 @@ av::gua::MaterialShaderDescription::initClass()
     }
 }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::MaterialShaderDescription::on_distribute(av::gua::NetTransform& netNode) 
 {
   for (auto& method : VertexMethods.getValue()) {
@@ -77,6 +81,7 @@ void av::gua::MaterialShaderDescription::on_undistribute(av::gua::NetTransform& 
     netNode.undistributeFieldContainer(method);
   }
 }
+#endif
 
 void
 av::gua::MaterialShaderDescription::getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event)

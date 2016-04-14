@@ -21,6 +21,7 @@ namespace boost
 
 void init_SSAAPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::SSAAPassDescription> >();
   register_field<av::gua::SFSSAAPassDescription>("SFSSAAPassDescription");
   register_multifield<av::gua::MFSSAAPassDescription>("MFSSAAPassDescription");
   class_<av::gua::SSAAPassDescription,

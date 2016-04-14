@@ -584,6 +584,7 @@ namespace av
       fieldChanged(true);
     }
 
+#if 0
     template<> void MultiValueField<float>::push(Msg&);
     template<> void MultiValueField<float>::pop(Msg&);
     template<> void MultiValueField<double>::push(Msg&);
@@ -596,6 +597,7 @@ namespace av
     template<> void MultiValueField<int64_t>::pop(Msg&);
     template<> void MultiValueField<uint64_t>::push(Msg&);
     template<> void MultiValueField<uint64_t>::pop(Msg&);
+#endif
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 

@@ -29,7 +29,15 @@
 #include <boost/bind.hpp>
 #include <iostream>
 
+namespace
+{
+  av::Logger& logger(av::getLogger("av::sound::SoundTraverser"));
+}
+
 AV_FC_DEFINE(av::sound::SoundTraverser);
+
+AV_FIELD_DEFINE(av::sound::SFSoundTraverser);
+AV_FIELD_DEFINE(av::sound::MFSoundTraverser);
 
 av::sound::SoundTraverser::SoundTraverser()
 : mCheckTraversal(false), mHaveCallbackHandle(false)
@@ -66,9 +74,10 @@ av::sound::SoundTraverser::initClass()
   if(!isTypeInitialized())
   {
     FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer,
-               av::sound::SoundTraverser,
-               true);
+    AV_FC_INIT(av::FieldContainer, av::sound::SoundTraverser, true);
+
+    SFSoundTraverser::initClass("av::sound::SFSoundTraverser", "av::Field");
+    MFSoundTraverser::initClass("av::sound::MFSoundTraverser", "av::Field");
   }
 }
 

@@ -20,6 +20,7 @@ namespace boost
 
 void init_ScreenNode()
  {
+   register_ptr_to_python<av::Link<av::gua::ScreenNode> >();
   register_field<av::gua::SFScreenNode>("SFScreenNode");
   register_multifield<av::gua::MFScreenNode>("MFScreenNode");
   class_<av::gua::ScreenNode, av::Link<av::gua::ScreenNode>, bases<av::gua::Node>, boost::noncopyable >("ScreenNode", "docstring", no_init);

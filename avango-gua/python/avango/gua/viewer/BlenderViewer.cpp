@@ -20,7 +20,8 @@ namespace boost
 
 void init_BlenderViewer()
  {
-
+   register_ptr_to_python<av::Link<av::gua::BlenderViewer> >();
+   
   class_<av::gua::BlenderViewer,
          av::Link<av::gua::BlenderViewer>,
          bases<av::FieldContainer>, boost::noncopyable> ("BlenderViewer", "docstring", no_init)

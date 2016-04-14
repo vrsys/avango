@@ -1,5 +1,9 @@
 #include <avango/gua/scenegraph/Node.hpp>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
+
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
 #include <boost/bind.hpp>
@@ -79,6 +83,7 @@ av::gua::Node::~Node()
   }
 }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::Node::on_distribute(av::gua::NetTransform& netNode)
 {
 }
@@ -86,6 +91,7 @@ void av::gua::Node::on_distribute(av::gua::NetTransform& netNode)
 void av::gua::Node::on_undistribute(av::gua::NetTransform& netNode)
 {
 }
+#endif
 
 void
 av::gua::Node::initClass()

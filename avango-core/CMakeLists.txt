@@ -50,7 +50,10 @@ ADD_LIBRARY( avango SHARED
              ${AVANGO_CORE_DISTRIBUTION_SRC}
 )
 
-INCLUDE_DIRECTORIES( ${INCLUDE_PATHS} include)
+INCLUDE_DIRECTORIES( ${INCLUDE_PATHS} 
+                     ${RPC_INCLUDE_DIR} 
+                     include
+                   )
 
 ###############################################################################
 # set preprocessor configuration
@@ -63,15 +66,20 @@ IF (MSVC)
   set_target_properties( avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 ENDIF (MSVC)
 
-SET(_AVANGO_CORE_LIBRARIES ${LIBRARIES})
+TARGET_LINK_LIBRARIES( avango
+  ${_AVANGO_CORE_LIBRARIES}
+  debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE} 
+  debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE} 
+)
 
 IF (AVANGO_DISTRIBUTION_SUPPORT)
-  LIST(APPEND _AVANGO_CORE_LIBRARIES zmq)
+  IF (MSVC)
+    TARGET_LINK_LIBRARIES( avango ${ZMQ_LIBRARIES} ${RPC_LIBRARY} Ws2_32.lib)
+  ELSEIF (UNIX)
+    TARGET_LINK_LIBRARIES( avango zmq)
+  ENDIF()
 ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
 
-TARGET_LINK_LIBRARIES( avango
-  debug ${_AVANGO_CORE_LIBRARIES}
-  optimized ${_AVANGO_CORE_LIBRARIES} )
 
 ###############################################################################
 # targets for unittesting

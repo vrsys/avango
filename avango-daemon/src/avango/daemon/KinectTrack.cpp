@@ -42,9 +42,9 @@ AV_BASE_DEFINE(av::daemon::KinectTrack);
 
 av::daemon::KinectTrack::KinectTrack()
   : Device()
-  , mRequiredFeatures{"port", "server"}
-  , mPort{"7000"}
-  , mServer{"127.0.0.1"}
+  , mRequiredFeatures({ "port", "server" })
+  , mPort("7000")
+  , mServer("127.0.0.1")
 {}
 
 void

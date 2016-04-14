@@ -156,6 +156,7 @@ av::Link<av::gua::Node> getNode(av::gua::SceneGraph const& graph, std::string co
 
 void init_SceneGraph()
 {
+  register_ptr_to_python<av::Link<av::gua::SceneGraph> >();
   register_field<av::gua::SFSceneGraph>("SFSceneGraph");
   register_multifield<av::gua::MFSceneGraph>("MFSceneGraph");
   class_<av::gua::SceneGraph, av::Link<av::gua::SceneGraph>,

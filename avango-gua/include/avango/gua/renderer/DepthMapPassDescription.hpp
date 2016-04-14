@@ -59,8 +59,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::DepthCubeMapPassDesciption> >;
-  template class AV_GUA_DLL MultiField<Link<gua::DepthCubeMapPassDesciption> >;
+  template class AV_GUA_DLL SingleField<Link<gua::DepthMapPassDescription> >;
+  template class AV_GUA_DLL MultiField<Link<gua::DepthMapPassDescription> >;
 #endif
 
 }

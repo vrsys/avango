@@ -21,6 +21,8 @@ namespace boost
 
 void init_DepthMapNode()
 {
+  register_ptr_to_python<av::Link<av::gua::DepthMapNode> >();
+
   register_field<av::gua::SFDepthMapNode>("SFDepthMapNode");
   register_multifield<av::gua::MFDepthMapNode>("MFDepthMapNode");
   class_<av::gua::DepthMapNode, av::Link<av::gua::DepthMapNode>,

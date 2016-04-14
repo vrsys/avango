@@ -35,9 +35,10 @@ namespace av
       MaterialShaderDescription(std::shared_ptr< ::gua::MaterialShaderDescription> const& guaMaterialShaderDescription =
                                 std::shared_ptr< ::gua::MaterialShaderDescription>(new ::gua::MaterialShaderDescription()));
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
-
+#endif
     public:
 
       MFMaterialShaderMethod VertexMethods;

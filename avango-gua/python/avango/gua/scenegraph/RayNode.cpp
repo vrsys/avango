@@ -20,6 +20,7 @@ namespace boost
 
 void init_RayNode()
  {
+   register_ptr_to_python<av::Link<av::gua::RayNode> >();
   register_field<av::gua::SFRayNode>("SFRayNode");
   register_multifield<av::gua::MFRayNode>("MFRayNode");
   class_<av::gua::RayNode, av::Link<av::gua::RayNode>, bases<av::gua::Node>, boost::noncopyable >("RayNode", "docstring", no_init);

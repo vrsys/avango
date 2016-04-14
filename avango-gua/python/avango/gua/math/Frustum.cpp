@@ -94,6 +94,8 @@ av::gua::MFPickResult* rayTest4(av::gua::Frustum const& frustum,
 
 void init_Frustum()
 {
+  register_ptr_to_python<av::Link<av::gua::Frustum> >();
+
   register_field<av::gua::SFFrustum>("SFFrustum");
   register_multifield<av::gua::MFFrustum>("MFFrustum");
 

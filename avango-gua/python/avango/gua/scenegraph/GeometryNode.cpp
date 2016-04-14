@@ -20,6 +20,8 @@ namespace boost
 
 void init_GeometryNode()
  {
+   register_ptr_to_python<av::Link<av::gua::GeometryNode> >();
+
   register_field<av::gua::SFGeometryNode>("SFGeometryNode");
   register_multifield<av::gua::MFGeometryNode>("MFGeometryNode");
   class_<av::gua::GeometryNode, av::Link<av::gua::GeometryNode>, bases<av::gua::Node>,

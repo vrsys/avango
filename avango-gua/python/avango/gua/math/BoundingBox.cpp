@@ -73,6 +73,8 @@ av::gua::BoundingBox intersection(av::gua::BoundingBox const& lhs,
 
 void init_BoundingBox()
 {
+  register_ptr_to_python<av::Link<av::gua::BoundingBox> >();
+
   register_field<av::gua::SFBoundingBox>("SFBoundingBox");
   register_multifield<av::gua::MFBoundingBox>("MFBoundingBox");
 

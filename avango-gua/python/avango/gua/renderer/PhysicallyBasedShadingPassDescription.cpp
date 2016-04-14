@@ -21,6 +21,7 @@ namespace boost
 
 void init_PhysicallyBasedShadingPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::PhysicallyBasedShadingPassDescription> >();
   register_field<av::gua::SFPhysicallyBasedShadingPassDescription>("SFPhysicallyBasedShadingPassDescription");
   register_multifield<av::gua::MFPhysicallyBasedShadingPassDescription>("MFPhysicallyBasedShadingPassDescription");
   class_<av::gua::PhysicallyBasedShadingPassDescription,

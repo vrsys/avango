@@ -21,6 +21,8 @@ namespace boost
 
 void init_DebugViewPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::DebugViewPassDescription> >();
+
   register_field<av::gua::SFDebugViewPassDescription>("SFDebugViewPassDescription");
   register_multifield<av::gua::MFDebugViewPassDescription>("MFDebugViewPassDescription");
   class_<av::gua::DebugViewPassDescription,

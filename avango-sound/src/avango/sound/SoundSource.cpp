@@ -25,9 +25,13 @@
 
 #include "avango/sound/SoundSource.h"
 
+#include <avango/Field.h>
 #include <avango/gua/Types.hpp>
 
-AV_FC_DEFINE(av::sound::SoundSource)
+AV_FC_DEFINE(av::sound::SoundSource);
+
+AV_FIELD_DEFINE(av::sound::SFSoundSource);
+AV_FIELD_DEFINE(av::sound::MFSoundSource);
 
 av::sound::SoundSource::SoundSource()
   : mPollPlaying(false)

@@ -63,8 +63,10 @@ namespace av
         m_uniformsDirty.setValue(true);
       }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
+#endif
 
       inline ::gua::math::mat4 get_mat4(std::string const& name) {
         if (m_guaMaterial)
@@ -98,6 +100,7 @@ namespace av
     using SFMaterial = SingleField<Link<Material> >;
     using MFMaterial = MultiField<Link<Material> >;
 
+    template AV_GUA_DLL void Material::set_view_uniform<std::string>(std::string const& name, std::string const& value, int view);
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

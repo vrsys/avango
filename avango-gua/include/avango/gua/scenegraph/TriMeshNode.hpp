@@ -34,9 +34,10 @@ namespace av
       TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> guanode =
           std::shared_ptr< ::gua::node::TriMeshNode>(new ::gua::node::TriMeshNode("")));
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
-
+#endif
     protected:
 
       /**

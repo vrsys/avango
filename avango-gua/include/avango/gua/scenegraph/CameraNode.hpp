@@ -48,10 +48,10 @@ namespace av
           std::shared_ptr< ::gua::node::CameraNode>(new ::gua::node::CameraNode("")));
 
       av::Link<Frustum> get_frustum(SceneGraph const& graph, CameraMode mode);
-
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
-
+#endif
     protected:
 
       /**

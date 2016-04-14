@@ -24,6 +24,7 @@
 #ifndef AV_SOUND_SOUNDTRAVERSER_H
 #define AV_SOUND_SOUNDTRAVERSER_H
 
+#include <avango/sound/Platform.h>
 #include <avango/FieldContainer.h>
 #include <avango/gua/Fields.hpp>
 #include <avango/gua/scenegraph/Node.hpp>
@@ -43,7 +44,7 @@ namespace av {
      * matrix. It then lets the SoundRenderers stored in Renderers update their LocalSources stored
      * in a SoundSource that is found in the tree.
      */
-    class SoundTraverser : public FieldContainer {
+    class AV_SOUND_DLL SoundTraverser : public FieldContainer {
 
       AV_FC_DECLARE();
 
@@ -81,7 +82,15 @@ namespace av {
         using SoundRenderers = std::vector<Link<SoundRenderer> >;
         using ChildNodes = std::vector<Link<av::gua::Node> >;
     };
+
+    using SFSoundTraverser = SingleField<Link<SoundTraverser> >;
+    using MFSoundTraverser = MultiField<Link<SoundTraverser> >;
   }
+
+#ifdef AV_INSTANTIATE_FIELD_TEMPLATES
+  template class AV_SOUND_DLL SingleField<Link<sound::SoundTraverser> >;
+  template class AV_SOUND_DLL MultiField<Link<sound::SoundTraverser> >;
+#endif
 }
 
 #endif /*AV_SOUND_SOUNDTRAVERSER_H*/

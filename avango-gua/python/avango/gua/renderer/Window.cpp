@@ -21,7 +21,7 @@ namespace boost
 
 void init_Window()
  {
-
+   register_ptr_to_python<av::Link<av::gua::Window> >();
   register_field<av::gua::SFWindow>("SFWindow");
   register_multifield<av::gua::MFWindow>("MFWindow");
   class_<av::gua::Window,

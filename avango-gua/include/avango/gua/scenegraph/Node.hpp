@@ -35,11 +35,13 @@ namespace av
        */
       Node(std::shared_ptr< ::gua::node::Node> guanode); // use defined type to circumvent compiler bug in VS8
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
       /**
        * Override these to distribute embedded field containers.
        */
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
+#endif
 
     protected:
 

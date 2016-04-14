@@ -59,7 +59,7 @@ namespace av
    * This class is the link between avango and the group communication toolkit. It represents the avango process in the named group
    * this NetNode joins.
    */
-  class NetNode
+  class AV_DLL NetNode
   {
 
   public:

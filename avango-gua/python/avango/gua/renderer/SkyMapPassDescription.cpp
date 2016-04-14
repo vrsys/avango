@@ -21,6 +21,7 @@ namespace boost
 
 void init_SkyMapPassDescription()
  {
+   register_ptr_to_python<av::Link<av::gua::SkyMapPassDescription> >();
   register_field<av::gua::SFSkyMapPassDescription>("SFSkyMapPassDescription");
   register_multifield<av::gua::MFSkyMapPassDescription>("MFSkyMapPassDescription");
   class_<av::gua::SkyMapPassDescription,

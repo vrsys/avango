@@ -42,7 +42,7 @@ namespace av
    *
    * \ingroup av
    */
-  class Init
+  class AV_DLL Init
   {
     AV_TYPED_DECLARE_ABSTRACT();
   };

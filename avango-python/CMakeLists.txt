@@ -57,12 +57,18 @@ INCLUDE_DIRECTORIES(BEFORE
   include/avango/python/
 	${INCLUDE_PATHS}
   ${PYTHON3_INCLUDE_DIRS}
+  ${PYTHON_INCLUDE_DIR}
   ${CMAKE_SOURCE_DIR}/avango-core/include
 )
+
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
 
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
+#SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
 SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY")
 
 set_target_properties(avango_script PROPERTIES COMPILE_FLAGS ${AVANGO_SCRIPT_BUILD_FLAGS})
@@ -75,25 +81,33 @@ set_target_properties(_script PROPERTIES COMPILE_FLAGS ${AVANGO_SCRIPT_BUILD_FLA
 set_target_properties(_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 TARGET_LINK_LIBRARIES( avango_script
-                       debug
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango
-                       optimized
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango
+                       ${LIBRARIES} 
+                       ${PYTHON3_LIBRARIES} 
+                       ${PYTHON_LIBRARY} 
+                       optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
+                       optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_LIBRARY_DEBUG}
+                       avango
 )
 
 TARGET_LINK_LIBRARIES( _avango
-                       debug
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango avango_script
-                       optimized
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango avango_script
+                       ${LIBRARIES} 
+                       ${PYTHON3_LIBRARIES} 
+                       ${PYTHON_LIBRARY} 
+                       avango 
+                       avango_script
 )
+
 SET_TARGET_PROPERTIES( _avango PROPERTIES PREFIX "")
 
 TARGET_LINK_LIBRARIES( _script
-                       debug
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango avango_script _avango
-                       optimized
-                       ${LIBRARIES} ${PYTHON3_LIBRARIES} ${Boost_LIBRARIES} avango avango_script _avango
+                       ${LIBRARIES} 
+                       ${PYTHON3_LIBRARIES} 
+                       ${PYTHON_LIBRARY} 
+                       optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
+                       optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_LIBRARY_DEBUG}
+                       avango 
+                       avango_script 
+                       _avango
 )
 SET_TARGET_PROPERTIES( _script PROPERTIES PREFIX "")
 

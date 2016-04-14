@@ -1,5 +1,9 @@
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
+#endif
+
 #include <avango/Base.h>
 #include <boost/bind.hpp>
 
@@ -34,8 +38,7 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
 
 }
 
-//av::gua::TriMeshNode::~TriMeshNode()
-//{}
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 void av::gua::TriMeshNode::on_distribute(av::gua::NetTransform& netNode) 
 {
@@ -56,7 +59,7 @@ void av::gua::TriMeshNode::on_undistribute(av::gua::NetTransform& netNode)
     }
     netNode.undistributeFieldContainer(m_Material);
 }
-
+#endif
 
 void
 av::gua::TriMeshNode::initClass()

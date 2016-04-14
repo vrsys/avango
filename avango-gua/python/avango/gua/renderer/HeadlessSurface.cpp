@@ -20,6 +20,8 @@ namespace boost
 
 void init_HeadlessSurface()
 {
+  register_ptr_to_python<av::Link<av::gua::HeadlessSurface> >();
+
   register_field<av::gua::SFHeadlessSurface>("SFHeadlessSurface");
   register_multifield<av::gua::MFHeadlessSurface>("MFHeadlessSurface");
   class_<

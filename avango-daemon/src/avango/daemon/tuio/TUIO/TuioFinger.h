@@ -115,8 +115,8 @@ namespace TUIO {
 
 
         /**
-         * Returns the Y velocity of this TuioFinger.
-         * @return	the Y velocity of this TuioFinger
+         * Returns the X position of this TuioFinger.
+         * @return	the X position of this TuioFinger
          */
         float getXpos() const
         {
@@ -124,19 +124,27 @@ namespace TUIO {
         }
 
         /**
-         * Returns the Y velocity of this TuioFinger.
-         * @return	the Y velocity of this TuioFinger
+         * Returns the Y position of this TuioFinger.
+         * @return	the Y position of this TuioFinger
          */
         float getYpos() const
         {
             return y_pos;
         }
 
+        /**
+         * Returns the Class of this TuioFinger.
+         * @return	the Hand ID of this TuioFinger
+         */
         Class getFinger_class() const
         {
             return finger_class;
         }
 
+        /**
+         * Returns the Hand ID of this TuioFinger.
+         * @return	the Hand ID of this TuioFinger
+         */
         int getHand_id() const
         {
             return hand_id;

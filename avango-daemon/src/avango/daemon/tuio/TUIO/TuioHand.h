@@ -159,7 +159,7 @@ namespace TUIO {
         }
 
         /**
-          * Get the class  of this hand.
+          * Get the class of this hand.
           * @return the hand class
           */
         Class getHandClass() {
@@ -180,6 +180,24 @@ namespace TUIO {
          */
         int getHandID() {
             return hand_id;
+        }
+
+        /**
+          * Returns the X position of this TuioHand.
+          * @return the X position of this TuioHand
+          */
+        float getXPos() const
+        {
+            return x_pos;
+        }
+
+        /**
+          * Returns the Y position of this TuioHand.
+          * @return the Y position of this TuioHand
+          */
+        float getYPos() const
+        {
+            return y_pos;
         }
 
         /**
@@ -222,14 +240,6 @@ namespace TUIO {
             return ellipse_inclination;
         }
 
-        float getXPos() const
-        {
-            return x_pos;
-        }
-        float getYPos() const
-        {
-            return y_pos;
-        }
     protected:
         /**
          * The individual hand ID number that is assigned to each TuioHand.

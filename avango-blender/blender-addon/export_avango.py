@@ -1,16 +1,60 @@
 import bpy
 import bpy.types
 # from bpy_extras.io_utils import create_derived_objects, free_derived_objects
-from bpy_extras.io_utils import ExportHelper
+from bpy_extras.io_utils import (
+        ExportHelper,
+        orientation_helper_factory,
+        path_reference_mode,
+        axis_conversion,
+        )
 from bpy.props import StringProperty
 import bpy.path
 import os
 # import shutil
 import json
 from . import nodes
-from mathutils import Matrix
+from mathutils import Matrix, Vector
 import math
 import mathutils
+from mathutils import (Vector, Matrix, Quaternion)
+
+
+def change_coordinate_system(P, A):
+    return P * A * P.inverted()
+
+
+def to_avango_node_id(name):
+    return "node_" + name
+
+
+"""
+def to_avango_camera(bl_camera):
+    if bl_camera.type == 'PERSP':
+        return {
+            "name": bl_camera.name,
+            "perspective": {
+                "aspectRatio":
+                bl_camera.sensor_width / bl_camera.sensor_height,
+                "yfov": bl_camera.angle_y,
+                "znear": bl_camera.clip_start,
+                "zfar": bl_camera.clip_end
+            },
+            "type": "perspective"
+        }
+    elif bl_camera.type == 'ORTHO':
+        return {
+            "name": bl_camera.name,
+            "orthographic": {
+                "xmag": bl_camera.ortho_scale,
+                "ymag": bl_camera.ortho_scale,
+                "znear": bl_camera.clip_start,
+                "zfar": bl_camera.clip_end,
+            },
+            "type": "orthographic"
+        }
+    else:
+        return {}
+"""
 
 
 def texture_filepath(texname):
@@ -29,12 +73,6 @@ def defaultWindow(scene):
         'left_position': [0, 0],
         'mode': 'MONO'
     }
-
-
-def rot_x_neg90(matrix):
-    rotation = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X') #mathutils.Quaternion((1.0, 0.0, 0.0), math.radians(-90.0)).to_matrix().to_4x4()
-
-    return rotation * matrix
 
 
 # TODO:
@@ -73,23 +111,46 @@ def avangoNodeTrees():
     #        }
 
 
+def to_avango_camera(bl_camera):
+    parent = 'null'
+    if bl_camera.parent:
+        parent = bl_camera.parent.name
+    matrix = bl_camera.matrix_local
+
+    acam = bl_camera.data.avango
+
+    passes = acam.pipeline_passes
+    json_passes = []
+
+    for p in passes:
+        json_passes.append(p.to_dict())
+
+    return {
+        'type': 'Camera',
+        'name': bl_camera.name,
+        'transform': matrixToList(matrix),
+        'parent': parent,
+        'near_clip': bl_camera.data.clip_start,
+        'far_clip': bl_camera.data.clip_end,
+        'mode': 0 if bl_camera.data.type == 'PERSP' else 1,
+        # 'scenegraph': bl_camera.scenegraph,
+        # 'output_window_name': bl_camera.output_window_name,
+        # 'left_screen_path': bl_camera.left_screen_path,
+        'resolution': [acam.resolution[0], acam.resolution[1]],
+        'field_of_view': bl_camera.data.angle,
+        'enable_frustum_culling': acam.enable_frustum_culling,
+        'enable_abuffer': acam.enable_abuffer,
+        'enable_stereo': acam.enable_stereo,
+        'passes': json_passes,
+    }
+
+
 def to_json(obj):
-    # if isinstance(obj, field_container.SceneGraph):
-    #     name = obj.name
-    #     root = 'null'
-    #     i = bpy.data.objects.find(obj.root)
-    #     if -1 != i :
-    #         root = bpy.data.objects[obj.root].name
-    #     return {
-    #             'type' : 'SceneGraph',
-    #             'name' : obj.name,
-    #             'root' : root
-    #     }
     if obj.type == 'EMPTY':
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
+        matrix = obj.matrix_local
 
         return {
             'name': obj.name,
@@ -98,37 +159,10 @@ def to_json(obj):
         }
 
     if obj.type == 'CAMERA':
-        parent = 'null'
-        if obj.parent:
-            parent = obj.parent.name
-        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
+        node = to_avango_camera(obj)
+        #local_matrix = obj.matrix_local
+        #new_local = change_coordinate_system(global_matrix, local_matrix)
 
-        acam = obj.data.avango
-
-        passes = acam.pipeline_passes
-        json_passes = []
-
-        for p in passes:
-            json_passes.append(p.to_dict())
-
-        return {
-            'type': 'Camera',
-            'name': obj.name,
-            'transform': matrixToList(matrix),
-            'parent': parent,
-            'near_clip': obj.data.clip_start,
-            'far_clip': obj.data.clip_end,
-            'mode': 0 if obj.data.type == 'PERSP' else 1,
-            # 'scenegraph': obj.scenegraph,
-            # 'output_window_name': obj.output_window_name,
-            # 'left_screen_path': obj.left_screen_path,
-            'resolution': [acam.resolution[0], acam.resolution[1]],
-            'field_of_view': obj.data.angle,
-            'enable_frustum_culling': acam.enable_frustum_culling,
-            'enable_abuffer': acam.enable_abuffer,
-            'enable_stereo': acam.enable_stereo,
-            'passes': json_passes,
-        }
 
     if isinstance(obj, bpy.types.Material):
         color = obj.diffuse_color
@@ -164,7 +198,7 @@ def to_json(obj):
         parent = 'null'
         if obj.parent:
             parent = obj.parent.name
-        matrix = obj.matrix_local #if obj.parent else rot_x_neg90(obj.matrix_local)
+        matrix = obj.matrix_local
 
         enable_shadows = True
         if lamp.shadow_method == 'NOSHADOW':
@@ -188,7 +222,7 @@ def to_json(obj):
                 blender_obj = bpy.data.objects[obj.name]
                 if blender_obj.parent:
                     parent = blender_obj.parent.name
-                matrix = blender_obj.matrix_local #if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
+                matrix = blender_obj.matrix_local
             filename = obj.name + '.obj'
 
             bpy.ops.object.select_all(action='DESELECT')
@@ -281,7 +315,7 @@ def to_json(obj):
                 'name': obj.name,
                 'file': 'tmp/' + filename,
                 'parent': parent,
-                'transform': matrixToList(arma.matrix_local), #if arma.parent else rot_x_neg90(arma.matrix_local)),
+                'transform': matrixToList(arma.matrix_local),
                 'material': materials,
                 'has_armature': True,
             }
@@ -293,7 +327,7 @@ def to_json(obj):
             blender_obj = bpy.data.objects[obj.name]
             if blender_obj.parent:
                 parent = blender_obj.parent.name
-            matrix = blender_obj.matrix_local #if blender_obj.parent else rot_x_neg90(blender_obj.matrix_local)
+            matrix = blender_obj.matrix_local
         filename = obj.name + '.obj'
 
         bpy.ops.object.select_all(action='DESELECT')
@@ -395,23 +429,121 @@ def to_json(obj):
             'field_connections': export_fieldconnections(obj),
         }
 
-    # if isinstance(obj, nodes.rotation_matrix.RotationMatrix):
-    #   return obj.to_dict()
-
-    # if isinstance(obj, nodes.vec3.Vec3):
-    #   return obj.to_dict()
-
-    # if isinstance(obj, nodes.script_node.ScriptNode):
-    #   return obj.to_dict()
     try:
         return obj.to_dict()
     except TypeError:
         print(repr(obj) + ' is not JSON serializable')
 
-    # raise TypeError(repr(obj) + ' is not JSON serializable')
+
+def to_avango_node(obj, global_matrix):
+    local_matrix = obj.matrix_local
+    new_local = change_coordinate_system(global_matrix, local_matrix)
+
+    obj.matrix_local = new_local
+
+    rot_mode = obj.rotation_mode
+    if rot_mode != 'QUATERNION':
+        obj.rotation_mode = 'QUATERNION'
+    node = {
+        "name": obj.name,
+        # if not armature
+        "children": [] if obj.type == 'ARMATURE' else [
+            to_avango_node_id(child.name)
+            for child in obj.children
+        ],
+        "rotation": [
+            obj.rotation_quaternion.x, obj.rotation_quaternion.y,
+            obj.rotation_quaternion.z, obj.rotation_quaternion.w
+        ],
+        "scale": [
+            obj.scale[0], obj.scale[1], obj.scale[2]
+        ],
+        "translation": [
+            obj.location[0], obj.location[1], obj.location[2]
+        ]
+    }
+    obj.rotation_mode = rot_mode
+    obj.matrix_local = local_matrix
+
+    joints = []
+
+    if obj.type == 'CAMERA':
+        node["camera"] = "camera_" + obj.data.name
+
+        q = obj.rotation_quaternion * Quaternion((1.0, 0.0, 0.0), math.radians(-90.0))
+        node["rotation"] = [q.x, q.y, q.z, q.w]
+        node["type"] = 'CameraNode'
+
+    # Skin
+    elif obj.type == 'MESH' and obj.find_armature():
+        node["meshes"] = ["mesh_" + obj.data.name]
+        armature = obj.find_armature()
+        if armature:  # skinned mesh
+            node["skeletons"] = ["joint_" + armature.data.name +
+                                 "_" + bone.name
+                                 for bone in armature.data.bones
+                                 if bone.parent is None]
+            node["skin"] = "skin_" + obj.data.name
+        node["type"] = 'SkeletalAnimationNode'
+
+    elif obj.type == 'MESH':
+        node["meshes"] = ["mesh_" + obj.data.name]
+        node["type"] = 'TriMeshNode'
+
+    elif obj.type == 'LAMP':
+        node["type"] = 'LightNode'
+
+    elif obj.type == 'EMPTY':
+        node["type"] = 'TransformNode'
+
+    elif obj.type == 'ARMATURE':
+        armature = obj.data
+        prefix = "joint_" + armature.name + "_"
+
+        def to_joint(armature, bone):
+            matrix = bone.parent.matrix_local.inverted() * bone.matrix_local if bone.parent else bone.matrix_local
+            return {
+                "name": bone.name,
+                "jointName": prefix + bone.name,
+                "children": [prefix + child.name for child in bone.children],
+                "matrix": matrix_to_list(
+                    change_coordinate_system(global_matrix, matrix))
+                }
+        node["children"] = [prefix+bone.name
+                            for bone in armature.bones
+                            if bone.parent is None] + [
+                            to_avango_node_id(child.name)
+                            for child in obj.children
+                            ]
+        joints = list((prefix+bone.name, to_joint(armature, bone))
+                      for bone in armature.bones)
+    return [(to_avango_node_id(obj.name), node)] + joints
 
 
-def save(filepath, context):
+def save(operator, context,
+        filepath="",
+        global_matrix=Matrix(),
+        **kwargs
+        ):
+
+    base_name, ext = os.path.splitext(filepath)
+    base_dir = os.path.dirname(filepath)
+    context_name = [base_name, '', '',
+                    ext]  # Base name, scene name, frame number, extension
+
+    def nodes():
+        nns = (to_avango_node(obj, global_matrix)
+               for obj in context.scene.objects)
+        return dict(inner for outer in nns for inner in outer)
+
+    def scenes():
+        export_scenes = [context.scene]
+        return dict((scene.name, {
+                "nodes": list(to_avango_node_id(n.name)
+                              for n in scene.objects.values()
+                              if not n.parent)
+                }) for scene in export_scenes)
+
     which = "NodeTree"
 
     ns = []
@@ -420,13 +552,14 @@ def save(filepath, context):
 
     context.scene.frame_set(context.scene.frame_start)
 
-    meshes = []
     materials = {}
     transforms = []
-    lights = []
+    lamps = []
+
+    mes = []
     for obj in bpy.data.objects:
         if obj.type == 'MESH':
-            meshes.append(obj)
+            mes.append(obj)
             if len(obj.material_slots) > 0:
                 for mat_slot in obj.material_slots:
                     mat = mat_slot.material
@@ -436,24 +569,39 @@ def save(filepath, context):
         elif obj.type == 'CAMERA':
             camera = obj
         elif obj.type == 'LAMP':
-            lights.append(obj)
+            lamps.append(obj)
         elif obj.type == 'FONT':
-            meshes.append(obj)
+            mes.append(obj)
             if len(obj.material_slots) > 0:
                 for mat_slot in obj.material_slots:
                     mat = mat_slot.material
                     materials[mat.name] = mat
 
+    def cameras(context):
+        return dict(("camera_" + obj.data.name, to_avango_camera(obj.data))
+                    for obj in context.scene.objects if obj.type == 'CAMERA')
+
+    def scripts():
+        return dict((x.name, x) for x in ns if (x.bl_label == 'Script'))
+
+    def meshes():
+        return dict((m.name, m) for m in mes)
+
+    def lights():
+        return dict((l.name, l) for l in lamps)
+
+    def fieldcontainers():
+        pass
+
+    def fieldconnections():
+        pass
+
     document = {
-        # triMeshes  = (x for x in ns if (x.bl_label == 'Mesh'))
-        # screens    = (x for x in ns if (x.bl_label == 'Screen'))
-        # 'transforms' : list(x for x in ns if (x.bl_label == 'Transform'))
-        # 'scenegraphs' : dict((x.name,x) for x in ns
-        #                     if (x.bl_label == 'SceneGraph')),
         'camera': camera,
-        'meshes': dict((m.name, m) for m in meshes),
-        'lights': dict((l.name, l) for l in lights),
+        'meshes': meshes(),
+        'lights': lights(),
         'materials': materials,
+
         'transforms': dict((t.name, t) for t in transforms),
         'windows': dict((x.name, x) for x in ns if (x.bl_label == 'Window')),
         'screens': dict((x.name, x) for x in ns if (x.bl_label == 'Screen')),
@@ -471,7 +619,12 @@ def save(filepath, context):
                            if (x.bl_label == 'Float Math')),
         'from_objects': dict((x.name, x) for x in ns
                              if (x.bl_label == 'Object as FieldContainer')),
-        'scripts': dict((x.name, x) for x in ns if (x.bl_label == 'Script')),
+        'scripts': scripts(),
+
+        "nodes": nodes(),
+        "scene": context.scene.name,
+        "scenes": scenes(),
+        "textures": {},
     }
 
     global g_tmp_filepath
@@ -494,7 +647,10 @@ def save(filepath, context):
     return {'FINISHED'}
 
 
-class ExportAvango(bpy.types.Operator, ExportHelper):
+IOAvangoOrientationHelper = orientation_helper_factory("IOAvangoOrientationHelper", axis_forward='-Z', axis_up='Y')
+
+
+class ExportAvango(bpy.types.Operator, ExportHelper, IOAvangoOrientationHelper):
     '''Export selected object / scene for Avango (ASCII JSON format).'''
 
     bl_idname = "export_scene.avango"
@@ -517,7 +673,15 @@ class ExportAvango(bpy.types.Operator, ExportHelper):
         if not self.properties.filepath:
             raise Exception("filename not set")
 
-        return save(self.filepath, context)  # , **self.properties)
+        global_matrix = (Matrix.Scale(-1, 4, Vector((0, 0, 1))) *
+                        axis_conversion(to_forward=self.axis_forward,
+                                        to_up=self.axis_up,
+                                        ).to_4x4())
+        keywords = self.as_keywords(ignore=("filter_glob",
+                                            ))
+        keywords["global_matrix"] = global_matrix
+
+        return save(self, context, **keywords)
 
     def draw(self, context):
         layout = self.layout

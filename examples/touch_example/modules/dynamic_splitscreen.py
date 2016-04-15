@@ -157,7 +157,7 @@ class DynamicSplitScreens(avango.script.Script):
       return new_split_screen
 
     else:
-      print "Trying to add too many split screens!"
+      print("Trying to add too many split screens!")
 
   def remove_split_screen(self, target_split_Screen):
 

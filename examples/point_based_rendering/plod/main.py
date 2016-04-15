@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-
 import avango
 import avango.script
 from avango.script import field_has_changed
@@ -7,13 +5,6 @@ import avango.gua
 from examples_common.GuaVE import GuaVE
 import sys
 
-class TimedRotate(avango.script.Script):
-  TimeIn = avango.SFFloat()
-  MatrixOut = avango.gua.SFMatrix4()
-
-  @field_has_changed(TimeIn)
-  def update(self):
-    self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value*2.0, 0.0, 1.0, 0.0)
 
 def start(filename):
 
@@ -93,9 +84,6 @@ def start(filename):
   screen.Children.value = [eye]
 
   graph.Root.value.Children.value = [plod_geode, light, screen]
-
-  # setup viewing
-  size = avango.gua.Vec2ui(1024, 768)
 
   #setup viewer
   viewer = avango.gua.nodes.Viewer()

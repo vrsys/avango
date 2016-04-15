@@ -409,6 +409,7 @@ void init_Mat4() {
   ::gua::math::mat4 const (*transpose)( ::gua::math::mat4 const&) =
       &scm::math::transpose;
 
+  // eye, center, up
   ::gua::math::mat4 const (*makeLookAt)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =
       &scm::math::make_look_at_matrix;
   ::gua::math::mat4 const (*makeLookAtInv)( ::gua::math::vec3 const&, ::gua::math::vec3 const&, ::gua::math::vec3 const&) =

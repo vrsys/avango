@@ -87,7 +87,7 @@ set (BULLET_ROOT
     "Set to your bullet install path.")
 find_package(Bullet)
 
-include(findSchism)
+include(FindSchism)
 
 include(FindZMQ)
 

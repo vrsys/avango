@@ -63,7 +63,7 @@ def make_material_distributable(mat):
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
 
-filename = "/opt/guacamole/new_renderer/examples/plod/data/objects/pig.kdn"
+filename = "/opt/guacamole/master/examples/plod/data/objects/pig.kdn"
 plodloader = avango.gua.nodes.PLODLoader()
 plodloader.UploadBudget.value = 32
 plodloader.RenderBudget.value = 2048

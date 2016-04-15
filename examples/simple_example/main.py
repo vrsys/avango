@@ -9,8 +9,8 @@ class TimedRotate(avango.script.Script):
     MatrixOut = avango.gua.SFMatrix4()
 
     def evaluate(self):
-        self.MatrixOut.value = avango.gua.make_rot_mat(
-            self.TimeIn.value * 2.0, 0.0, 1.0, 0.0)
+        self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 2.0,
+                                                       0.0, 1.0, 0.0)
 
 
 def start():
@@ -26,13 +26,13 @@ def start():
         "monkey", "data/objects/monkey.obj",
         avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
-    monkey1.Material.value.set_uniform(
-        "Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+    monkey1.Material.value.set_uniform("Color",
+                                       avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
     monkey1.Material.value.set_uniform("Roughness", 0.3)
     monkey1.Material.value.set_uniform("Metalness", 1.0)
 
-    monkey2.Material.value.set_uniform(
-        "Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
+    monkey2.Material.value.set_uniform("Color",
+                                       avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
     monkey2.Material.value.set_uniform("Roughness", 0.6)
     monkey2.Material.value.set_uniform("Metalness", 0.0)
 
@@ -77,21 +77,19 @@ def start():
 
     anti_aliasing = avango.gua.nodes.SSAAPassDescription()
 
-    pipeline_description = avango.gua.nodes.PipelineDescription(
-        Passes=[
-            avango.gua.nodes.TriMeshPassDescription(),
-            avango.gua.nodes.LightVisibilityPassDescription(),
-            res_pass,
-            anti_aliasing,
-        ])
+    pipeline_description = avango.gua.nodes.PipelineDescription(Passes=[
+        avango.gua.nodes.TriMeshPassDescription(),
+        avango.gua.nodes.LightVisibilityPassDescription(),
+        res_pass,
+        anti_aliasing,
+    ])
 
     cam.PipelineDescription.value = pipeline_description
 
-    screen = avango.gua.nodes.ScreenNode(
-        Name="screen",
-        Width=2,
-        Height=1.5,
-        Children=[cam])
+    screen = avango.gua.nodes.ScreenNode(Name="screen",
+                                         Width=2,
+                                         Height=1.5,
+                                         Children=[cam])
 
     graph.Root.value.Children.value = [transform1, transform2, light, screen]
 

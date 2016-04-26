@@ -139,7 +139,7 @@ av::gua::Viewer::frame() {
 }
 
 void
-av::gua::Viewer::run() const {
+av::gua::Viewer::run() {
 
   ::gua::Logger::enable_debug = false;
 

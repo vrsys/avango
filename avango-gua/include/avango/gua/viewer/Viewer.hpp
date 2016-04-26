@@ -50,7 +50,7 @@ namespace av
       virtual void getApplicationFPSCB(const SFFloat::GetValueEvent& event);
       virtual void setApplicationFPSCB(const SFFloat::SetValueEvent& event);
 
-      void run() const;
+      void run();
 
       void frame();
 

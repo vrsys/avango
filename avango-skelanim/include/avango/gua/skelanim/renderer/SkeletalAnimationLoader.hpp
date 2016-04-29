@@ -28,7 +28,7 @@ namespace av
        *
        * \ingroup av_gua
        */
-      class AV_GUA_DLL SkeletalAnimationLoader : public av::FieldContainer
+      class AV_GUA_ANIM_DLL SkeletalAnimationLoader : public av::FieldContainer
       {
         AV_FC_DECLARE();
 
@@ -90,8 +90,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SkeletalAnimationLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SkeletalAnimationLoader> >;
+  template class AV_GUA_ANIM_DLL SingleField<Link<gua::skelanim::SkeletalAnimationLoader> >;
+  template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::SkeletalAnimationLoader> >;
 #endif
 
 }

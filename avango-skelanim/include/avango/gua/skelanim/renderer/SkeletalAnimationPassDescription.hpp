@@ -23,7 +23,7 @@ namespace av
        *
        * \ingroup av_gua
        */
-      class AV_GUA_DLL SkeletalAnimationPassDescription : public av::gua::PipelinePassDescription
+      class AV_GUA_ANIM_DLL SkeletalAnimationPassDescription : public av::gua::PipelinePassDescription
       {
         AV_FC_DECLARE();
 
@@ -61,8 +61,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SkeletalAnimationPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SkeletalAnimationPassDescription> >;
+  template class AV_GUA_ANIM_DLL SingleField<Link<gua::skelanim::SkeletalAnimationPassDescription> >;
+  template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::SkeletalAnimationPassDescription> >;
 #endif
 
 }

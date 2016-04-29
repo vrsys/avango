@@ -40,9 +40,9 @@ include(file_copy_macro)
 
 include(find_guacamole)
 
-if (AVANGO_PBR_SUPPORT)
-  include(FindGuacamolePLOD)
-endif (AVANGO_PBR_SUPPORT)
+#if (AVANGO_PBR_SUPPORT)
+#  include(FindGuacamolePLOD)
+#endif (AVANGO_PBR_SUPPORT)
 
 set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
@@ -91,9 +91,9 @@ include(FindSchism)
 
 include(FindZMQ)
 
-if (AVANGO_OCULUS_RIFT_SUPPORT)
+if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
-endif(AVANGO_OCULUS_RIFT_SUPPORT)
+endif(${AVANGO_OCULUS_RIFT_SUPPORT})
 
 if (UNIX)
   list(APPEND Boost_LIBRARIES boost_thread boost_signals boost_python-py34)
@@ -215,12 +215,10 @@ if (AVANGO_OPENAL_SUPPORT)
 endif(AVANGO_OPENAL_SUPPORT)
 
 if (AVANGO_AWESOMIUM_SUPPORT)
-    include(find_guacamole_gui)
     add_subdirectory(avango-awesomium)
 endif(AVANGO_AWESOMIUM_SUPPORT)
 
 if (AVANGO_VOLUME_SUPPORT)
-    include(find_guacamole_volume)
     add_subdirectory(avango-volume)
 endif(AVANGO_VOLUME_SUPPORT)
 

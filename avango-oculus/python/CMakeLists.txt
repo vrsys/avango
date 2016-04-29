@@ -17,8 +17,13 @@ set_target_properties( _oculus
 
 ADD_DEPENDENCIES ( _oculus avango_oculus )
 
-LIST(APPEND LIBRARIES avango avango_gua avango_oculus ${GUACAMOLE_OCULUS_LIBRARIES})
-TARGET_LINK_LIBRARIES( _oculus debug ${LIBRARIES} optimized ${LIBRARIES})
+TARGET_LINK_LIBRARIES( _oculus 
+                       avango 
+                       avango_gua 
+                       avango_oculus
+                       ${GUACAMOLE_OCULUS_LIBRARIES}
+                     )
+
 SET_TARGET_PROPERTIES( _oculus PROPERTIES PREFIX "")
 
 ###############################################################################

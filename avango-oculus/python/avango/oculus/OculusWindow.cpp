@@ -20,11 +20,13 @@ namespace boost
 
 void init_OculusWindow()
 {
+  register_ptr_to_python<av::Link<av::oculus::OculusWindow> >();
+
   register_field<av::oculus::SFOculusWindow>("SFOculusWindow");
   register_multifield<av::oculus::MFOculusWindow>("MFOculusWindow");
 
   class_<av::oculus::OculusWindow,
        av::Link<av::oculus::OculusWindow>,
-       bases<av::gua::GlfwWindow>, boost::noncopyable >("OculusWindow", "docstring", no_init)
+       bases<av::gua::GlfwWindow>, boost::noncopyable >("OculusWindow", "docstring")
         ;
 }

@@ -24,7 +24,7 @@ namespace av
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL VolumeLoader : public av::FieldContainer
+    class AV_GUA_VOLUME_DLL VolumeLoader : public av::FieldContainer
     {
       AV_FC_DECLARE();
 
@@ -78,8 +78,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::VolumeLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::VolumeLoader> >;
+  template class AV_GUA_VOLUME_DLL SingleField<Link<gua::VolumeLoader> >;
+  template class AV_GUA_VOLUME_DLL MultiField<Link<gua::VolumeLoader> >;
 #endif
 
 }

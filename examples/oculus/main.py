@@ -22,31 +22,11 @@ def start():
 
     monkey1 = loader.create_geometry_from_file(
         "monkey",
-        "data/objects/monkey.obj",
-        avango.gua.LoaderFlags.NORMALIZE_SCALE)
-
-    monkey2 = loader.create_geometry_from_file(
-        "monkey",
-        "data/objects/monkey.obj",
-        avango.gua.LoaderFlags.NORMALIZE_SCALE)
-
-    monkey1.Material.value.set_uniform(
-        "Color",
-        avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
-    monkey1.Material.value.set_uniform("Roughness", 0.3)
-    monkey1.Material.value.set_uniform("Metalness", 1.0)
-
-    monkey2.Material.value.set_uniform(
-        "Color", avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
-    monkey2.Material.value.set_uniform("Roughness", 0.6)
-    monkey2.Material.value.set_uniform("Metalness", 0.0)
+        "data/objects/re_room/RE2 Briefing room.obj",
+        avango.gua.LoaderFlags.LOAD_MATERIALS)
 
     transform1 = avango.gua.nodes.TransformNode(
         Children=[monkey1]
-        )
-    transform2 = avango.gua.nodes.TransformNode(
-        Transform=avango.gua.make_trans_mat(-0.5, 0.0, 0.0),
-        Children=[monkey2]
         )
 
     light = avango.gua.nodes.LightNode(
@@ -78,48 +58,10 @@ def start():
     # window nicely on the HMD
     
     window.Size.value = window.Resolution.value
-    window.LeftResolution.value = window.Resolution.value
-    window.RightResolution.value = window.Resolution.value
-    window.EnableFullscreen.value = True
+    window.EnableVsync.value = False
+    window.EnableFullscreen.value = False
 
-    
     avango.gua.register_window("window", window)
-
-    cam = avango.gua.nodes.CameraNode(
-        LeftScreenPath="/nav/head/left_screen",
-        RightScreenPath="/nav/head/right_screen",
-        SceneGraph="scenegraph",
-        Resolution=window.LeftResolution.value,
-        OutputWindowName="window",
-        EyeDistance=window.EyeDistance.value,
-        EnableStereo=True
-        )
-
-    res_pass = avango.gua.nodes.ResolvePassDescription()
-    res_pass.EnableSSAO.value = True
-    res_pass.SSAOIntensity.value = 4.0
-    res_pass.SSAOFalloff.value = 10.0
-    res_pass.SSAORadius.value = 7.0
-
-    #res_pass.EnableScreenSpaceShadow.value = True
-
-    res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
-    res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
-    res_pass.Exposure.value = 1.0
-    res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
-
-    anti_aliasing = avango.gua.nodes.SSAAPassDescription()
-
-    pipeline_description = avango.gua.nodes.PipelineDescription(
-        Passes=[
-            avango.gua.nodes.TriMeshPassDescription(),
-            avango.gua.nodes.LightVisibilityPassDescription(),
-            res_pass,
-            anti_aliasing,
-            ])
-
-    cam.PipelineDescription.value = pipeline_description
-
 
     left_screen = avango.gua.nodes.ScreenNode(
         Name="left_screen",
@@ -139,19 +81,61 @@ def start():
             )
         )
 
-    head = avango.gua.nodes.TransformNode(
-        Name="head",
-        Children=[left_screen, right_screen, cam],
-        Transform=avango.gua.make_identity_mat()
+    cam = avango.gua.nodes.CameraNode(
+        LeftScreenPath="/nav/cam/left_screen",
+        RightScreenPath="/nav/cam/right_screen",
+        SceneGraph="scenegraph",
+        Resolution=window.Resolution.value,
+        OutputWindowName="window",
+        EyeDistance=window.EyeDistance.value,
+        EnableStereo=True,
+        Name="cam",
+        Children=[left_screen, right_screen]
         )
 
     nav = avango.gua.nodes.TransformNode(
         Name="nav",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0),
-        Children=[head]
+        Transform=avango.gua.make_trans_mat(0.0, 1.8, 0.0),
+        Children=[cam]
         )
 
-    graph.Root.value.Children.value = [transform1, transform2, light, nav]
+    graph.Root.value.Children.value = [transform1, light, nav]
+
+    res_pass = avango.gua.nodes.ResolvePassDescription()
+    res_pass.EnableSSAO.value = True
+    res_pass.SSAOIntensity.value = 4.0
+    res_pass.SSAOFalloff.value = 10.0
+    res_pass.SSAORadius.value = 7.0
+
+    #res_pass.EnableScreenSpaceShadow.value = True
+
+    avango.gua.create_texture_cube(
+        "night_skymap",
+        "data/textures/stars/purple-nebula/purple-nebula_right1.jpg",
+        "data/textures/stars/purple-nebula/purple-nebula_left2.jpg",
+        "data/textures/stars/purple-nebula/purple-nebula_bottom4.jpg",
+        "data/textures/stars/purple-nebula/purple-nebula_top3.jpg",
+        "data/textures/stars/purple-nebula/purple-nebula_front5.jpg",
+        "data/textures/stars/purple-nebula/purple-nebula_back6.jpg")
+
+    res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
+    res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
+    res_pass.Exposure.value = 1.0
+    res_pass.BackgroundTexture.value = "night_skymap"
+    #res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+    res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
+
+    anti_aliasing = avango.gua.nodes.SSAAPassDescription()
+
+    pipeline_description = avango.gua.nodes.PipelineDescription(
+        Passes=[
+            avango.gua.nodes.TriMeshPassDescription(),
+            avango.gua.nodes.LightVisibilityPassDescription(),
+            res_pass,
+            anti_aliasing,
+            ])
+
+    cam.PipelineDescription.value = pipeline_description
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()
@@ -163,14 +147,17 @@ def start():
     timer = avango.nodes.TimeSensor()
     monkey_updater.TimeIn.connect_from(timer.Time)
 
-    head.Transform.connect_from(window.SensorOrientation)
-    transform1.Transform.connect_from(monkey_updater.MatrixOut)
+    cam.Transform.connect_from(window.SensorOrientation)
+    #transform1.Transform.connect_from(monkey_updater.MatrixOut)
 
-    guaVE = GuaVE()
-    guaVE.start(locals(), globals())
+    #guaVE = GuaVE()
+    #guaVE.start(locals(), globals())
 
+    #while True :
+    #    viewer.frame()
+        
+        
     viewer.run()
-
 
 if __name__ == '__main__':
   start()

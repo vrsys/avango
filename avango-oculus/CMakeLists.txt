@@ -9,8 +9,6 @@ file(GLOB AVANGO_OCULUS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 # Location where cmake first looks for modules.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)
 
-include(find_guacamole_oculus)
-
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
@@ -37,6 +35,10 @@ INCLUDE_DIRECTORIES(
     ../../guacamole-oculus/include
 )
 
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
 ADD_LIBRARY( avango_oculus SHARED
     ${AVANGO_OCULUS_SRC}
 )
@@ -52,9 +54,7 @@ set_target_properties(avango_oculus PROPERTIES COMPILE_FLAGS ${AVANGO_OCULUS_BUI
 
 LIST(APPEND LIBRARIES avango avango_script avango_gua ${OVR_LIBRARY} ${GUACAMOLE_OCULUS_LIBRARIES})
 
-TARGET_LINK_LIBRARIES( avango_oculus
-  debug ${LIBRARIES}
-  optimized ${LIBRARIES})
+TARGET_LINK_LIBRARIES( avango_oculus ${LIBRARIES} )
 
 ###############################################################################
 # python module

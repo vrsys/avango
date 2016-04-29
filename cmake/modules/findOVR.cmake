@@ -2,7 +2,8 @@
 # search paths
 ##############################################################################
 SET(OVR_INCLUDE_SEARCH_DIRS
-  ${GLOBAL_EXT_DIR}/libOVR/include
+  ${GLOBAL_EXT_DIR}/LibOVR/include
+  ${GLOBAL_EXT_DIR}/LibOVR/Include
   ${OVR_INCLUDE_DIRS}
   ${OVR_INCLUDE_SEARCH_DIR}
   /opt/OculusSDK/currentSDK2/LibOVR/Include
@@ -10,8 +11,8 @@ SET(OVR_INCLUDE_SEARCH_DIRS
 )
 
 SET(OVR_LIBRARY_SEARCH_DIRS
-  ${GLOBAL_EXT_DIR}/libOVR/lib
-  ${GLOBAL_EXT_DIR}/libOVR/Lib
+  ${GLOBAL_EXT_DIR}/LibOVR/lib
+  ${GLOBAL_EXT_DIR}/LibOVR/Lib
   ${OVR_LIBRARY_DIRS}
   ${OVR_LIBRARY_SEARCH_DIR}
   /opt/OculusSDK/currentSDK2/LibOVR/Lib/Linux/x86_64/Release
@@ -22,10 +23,10 @@ SET(OVR_LIBRARY_SEARCH_DIRS
 ##############################################################################
 message(STATUS "-- checking for Oculus SDK")
 
-find_path(OVR_INCLUDE_DIR NAMES OVR.h Kernel/OVR_Types.h PATHS ${OVR_INCLUDE_SEARCH_DIRS})
+find_path(OVR_INCLUDE_DIR NAMES OVR_CAPI.h PATHS ${OVR_INCLUDE_SEARCH_DIRS})
 
 IF (MSVC)
-    find_library(OVR_LIBRARY NAMES libOVR64.lib libOVR.lib PATHS ${OVR_LIBRARY_SEARCH_DIRS} PATH_SUFFIXES release)
+    find_library(OVR_LIBRARY NAMES libOVR64.lib libOVR.lib LibOVR.lib PATHS ${OVR_LIBRARY_SEARCH_DIRS} PATH_SUFFIXES release)
 ELSEIF (UNIX)
     find_library(OVR_LIBRARY NAMES libOVRRT64_0.so PATHS ${OVR_LIBRARY_SEARCH_DIRS})
 ENDIF (MSVC)

@@ -20,6 +20,8 @@ namespace boost
 
 void init_SphereShape()
 {
+  register_ptr_to_python<av::Link<av::gua::SphereShape> >();
+
   register_field<av::gua::SFSphereShape>("SFSphereShape");
   register_multifield<av::gua::MFSphereShape>("MFSphereShape");
 

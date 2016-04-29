@@ -33,8 +33,6 @@ av::oculus::OculusWindow::OculusWindow(
   AV_FC_ADD_FIELD(RightScreenTranslation, m_guaOculusWindow->get_right_screen_translation());
   AV_FC_ADD_FIELD(EyeDistance, m_guaOculusWindow->get_IPD());
 
-
-
   // needs to evaluate every frame to update sensor orientation
   alwaysEvaluate(true);
 }

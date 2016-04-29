@@ -25,7 +25,7 @@ namespace av
        *
        * \ingroup av_gua
        */
-      class AV_GUA_DLL SkeletalAnimationNode : public av::gua::GeometryNode
+      class AV_GUA_ANIM_DLL SkeletalAnimationNode : public av::gua::GeometryNode
       {
         AV_FC_DECLARE();
 
@@ -100,8 +100,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SkeletalAnimationNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SkeletalAnimationNode> >;
+  template class AV_GUA_ANIM_DLL SingleField<Link<gua::skelanim::SkeletalAnimationNode> >;
+  template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::SkeletalAnimationNode> >;
 #endif
 
 }

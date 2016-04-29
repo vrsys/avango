@@ -228,22 +228,20 @@ SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 ###############################################################################
 # set dependencies
 ###############################################################################
-SET(_AVANGO_GUA_LIBRARIES ${LIBRARIES}
+SET(_AVANGO_GUA_LIBRARIES avango
                           ${GUACAMOLE_LIBRARIES}
-                          ${PYTHON3_LIBRARIES}
                           ${PYTHON_LIBRARY}
-                          optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}
-                          optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_OPTIONS_LIBRARY_DEBUG}
-                          optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_OPTIONS_LIBRARY_DEBUG}
-                          optimized ${Boost_REGEX_LIBRARY_RELEASE} debug ${Boost_REGEX_LIBRARY_DEBUG}
                           ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
+                          optimized ${Boost_PROGRAM_OPTIONS_LIBRARY_RELEASE} debug ${Boost_PROGRAM_OPTIONS_LIBRARY_DEBUG}
+                          optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_OPTIONS_LIBRARY_DEBUG}
+                          #optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_OPTIONS_LIBRARY_DEBUG}
+                          optimized ${Boost_REGEX_LIBRARY_RELEASE} debug ${Boost_REGEX_LIBRARY_DEBUG}
                           optimized ${SCHISM_CORE_LIBRARY} debug ${SCHISM_CORE_LIBRARY_DEBUG}
                           optimized ${SCHISM_GL_CORE_LIBRARY} debug ${SCHISM_GL_CORE_LIBRARY_DEBUG}
                           optimized ${SCHISM_GL_UTIL_LIBRARY} debug ${SCHISM_GL_UTIL_LIBRARY_DEBUG}
-                          avango
 )
-
+                                                                  
 IF (UNIX)
 	LIST(APPEND _AVANGO_GUA_LIBRARIES " ")
 ELSEIF (MSVC)

@@ -22,7 +22,7 @@ namespace av
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL VolumePassDescription : public av::gua::PipelinePassDescription
+    class AV_GUA_VOLUME_DLL VolumePassDescription : public av::gua::PipelinePassDescription
     {
       AV_FC_DECLARE();
 
@@ -59,8 +59,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::VolumePassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::VolumePassDescription> >;
+  template class AV_GUA_VOLUME_DLL SingleField<Link<gua::VolumePassDescription> >;
+  template class AV_GUA_VOLUME_DLL MultiField<Link<gua::VolumePassDescription> >;
 #endif
 
 }

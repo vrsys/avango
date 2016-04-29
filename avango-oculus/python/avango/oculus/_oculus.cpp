@@ -30,5 +30,4 @@ BOOST_PYTHON_MODULE(_oculus)
     av::oculus::Init::initClass();
 
     init_OculusWindow();
-
 }

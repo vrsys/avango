@@ -20,7 +20,7 @@ namespace av
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL VolumeNode : public av::gua::Node
+    class AV_GUA_VOLUME_DLL VolumeNode : public av::gua::Node
     {
       AV_FC_DECLARE();
 
@@ -68,8 +68,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::VolumeNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::VolumeNode> >;
+  template class AV_GUA_VOLUME_DLL SingleField<Link<gua::VolumeNode> >;
+  template class AV_GUA_VOLUME_DLL MultiField<Link<gua::VolumeNode> >;
 #endif
 
 }

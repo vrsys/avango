@@ -27,6 +27,10 @@ INCLUDE_DIRECTORIES(
     ../avango-gua/include
 )
 
+IF (AVANGO_DISTRIBUTION_SUPPORT)
+  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+ENDIF()
+
 ADD_LIBRARY(avango_skelanim SHARED
   ${AVANGO_SKELANIM_SRC}
 )

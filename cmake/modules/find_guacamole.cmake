@@ -140,5 +140,22 @@ ELSE ( NOT GUACAMOLE_INCLUDE_DIRS OR NOT GUACAMOLE_LIBRARY_DIRS )
     UNSET(GUACAMOLE_INCLUDE_SEARCH_DIR CACHE)
     UNSET(GUACAMOLE_LIBRARY_SEARCH_DIR CACHE)
     MESSAGE(STATUS "--  found matching guacamole version")
+    MESSAGE(STATUS "Found guacamole libraries: ${GUACAMOLE_LIBRARIES}")
 ENDIF ( NOT GUACAMOLE_INCLUDE_DIRS OR NOT GUACAMOLE_LIBRARY_DIRS )
 
+##############################################################################
+# find libraries
+##############################################################################
+IF (GUACAMOLE_INCLUDE_DIRS AND GUACAMOLE_LIBRARY_DIRS)
+
+  set (GUACAMOLE_PLUGINS_SEARCH_INCLUDE_DIR
+     ${GUACAMOLE_INCLUDE_DIRS}
+       /opt/guacamole/current/guacamole/install/include
+      )
+
+  set (GUACAMOLE_PLUGINS_SEARCH_LIBRARY_DIR 
+     ${GUACAMOLE_INCLUDE_DIRS}../lib
+     ${GUACAMOLE_LIBRARY_DIRS}
+     /opt/guacamole/current/guacamole/install/lib
+     )
+ENDIF()

@@ -3,6 +3,11 @@ LINK_DIRECTORIES(
     ${GUACAMOLE_VOLUME_LIBRARY_DIRS}
 )
 
+include_directories(
+  ${PYTHON3_INCLUDE_DIRS}
+  ${PYTHON_INCLUDE_DIR}
+)
+
 ADD_LIBRARY( _volume SHARED
     "volume/VolumeLoader.cpp"
     "volume/VolumeLoader.hpp"

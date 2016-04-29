@@ -1,6 +1,5 @@
 MACRO (ADD_PARAMETER parameter input)
     SET(tmp "${parameter} ${input}")
-    MESSAGE(${parameter})
     SET(${parameter} ${tmp})
 ENDMACRO(ADD_PARAMETER)
 
@@ -53,6 +52,8 @@ ENDMACRO(COPY_PYTHON_FILES_INTO_DIRECTORY)
 
 # Copies output of target to file
 MACRO ( post_build_install_target cmake_target out_file )
+   
+  cmake_policy(SET  CMP0026  OLD)
 
   GET_PROPERTY(_SOURCE_PATH TARGET ${cmake_target} PROPERTY LOCATION)
   FILE ( TO_NATIVE_PATH ${_SOURCE_PATH} _SOURCE_PATH )

@@ -602,6 +602,7 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
                       (*listener)->updateTuioFinger(*updateFingerIter);
                   }
                 }
+
             }
           }
 
@@ -616,52 +617,53 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
         frameCursors.clear();
       }
     } else if (strcmp(msg.AddressPattern(), "/tuiox/finger") == 0) {
-      osc::int32 s_id;
-      float xpos,
-          ypos,
-          xspeed,
-          yspeed,
-          xellipse,
-          yellipse,
-          minoraxis,
-          majoraxis,
-          incl;
-      args >> s_id >> xpos >> ypos >> xspeed >> yspeed >> xellipse >>
-          yellipse >> minoraxis >> majoraxis >> incl;
+        const char* cmd;
+        args >> cmd;
+        if (false && strcmp(cmd, "alive") == 0) {
+          osc::int32 s_id;
+          aliveFingerList.clear();
+          while (!args.Eos()) {
+            args >> s_id;
+            aliveFingerList.push_back((long) s_id);
+          }
+        } else if (strcmp(cmd, "set") == 0) {
+            osc::int32 s_id, hand_id, finger_class;
+            float xpos,
+                  ypos;
+            args >> s_id >> xpos >> ypos >> hand_id >> finger_class;
 
-      lockFingerList();
-      std::list<TuioFinger*>::iterator tfinger;
-      for (tfinger = fingerList.begin(); tfinger != fingerList.end();
-           ++tfinger) {
-        if ((*tfinger)->getSessionID() == (long) s_id)
-          break;
-      }
+            lockFingerList();
+            std::list<TuioFinger*>::iterator tfinger;
+            for (tfinger = fingerList.begin(); tfinger != fingerList.end();
+                 ++tfinger) {
+              if ((*tfinger)->getSessionID() == (long) s_id)
+                break;
+            }
 
-      if (tfinger == fingerList.end()) {
-        TuioFinger* addFinger = new TuioFinger((long) s_id,
-                                               xpos,
-                                               ypos,
-                                               xspeed,
-                                               yspeed,
-                                               xellipse,
-                                               yellipse,
-                                               minoraxis,
-                                               majoraxis,
-                                               incl);
-        fingerList.push_back(addFinger);
-      } else {
-        (*tfinger)->update(xpos,
-                           ypos,
-                           xspeed,
-                           yspeed,
-                           xellipse,
-                           yellipse,
-                           minoraxis,
-                           majoraxis,
-                           incl);
-      }
-
-      unlockFingerList();
+            if (tfinger == fingerList.end()) {
+              TuioFinger* addFinger = new TuioFinger((long) s_id,
+                                                     xpos,
+                                                     ypos,
+                                                     hand_id,
+                                                     (TUIO::TuioFinger::Class) finger_class);
+              fingerList.push_back(addFinger);
+              for (std::list<TuioListener*>::iterator listener =
+                       listenerList.begin();
+                   listener != listenerList.end();
+                   listener++) {
+                (*listener)->addTuioFinger(addFinger);
+              }
+            } else {
+              (*tfinger)->update(xpos,
+                                 ypos,
+                                 hand_id,
+                                 (TUIO::TuioFinger::Class) finger_class);
+                for (auto it = listenerList.begin(); it != listenerList.end(); ++it) {
+                  (*it)->updateTuioFinger(*tfinger);
+                }
+            }
+            unlockFingerList();
+        }
     } else if (strcmp(msg.AddressPattern(), "/tuiox/hand") == 0) {
       const char* cmd;
       args >> cmd;
@@ -670,13 +672,14 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
         aliveHandList.clear();
         while (!args.Eos()) {
           args >> s_id;
-
           aliveHandList.push_back((long) s_id);
         }
       } else if (strcmp(cmd, "set") == 0) {
 
-        osc::int32 s_id, hand_class, f1, f2, f3, f4, f5;
-        args >> s_id >> hand_class >> f1 >> f2 >> f3 >> f4 >> f5;
+          osc::int32 s_id, f1, f2, f3, f4, f5, hand_class;
+          float x_pos(0), y_pos(0), xellipse(0), yellipse(0), minoraxis(0), majoraxis(0), incl(0);
+
+          args >> s_id >> x_pos >> y_pos >> f1 >> f2 >> f3 >> f4 >> f5 >> hand_class;
 
         lockHandList();
         std::list<TuioHand*>::iterator thand;
@@ -687,12 +690,18 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
 
         if (thand == handList.end()) {
           TuioHand* addHand = new TuioHand((long) s_id,
-                                           (TuioHand::Class) hand_class,
+                                           x_pos, y_pos,
                                            (long) f1,
                                            (long) f2,
                                            (long) f3,
                                            (long) f4,
-                                           (long) f5);
+                                           (long) f5,
+                                           (TUIO::TuioHand::Class) hand_class,
+                                           xellipse,
+                                           yellipse,
+                                           minoraxis,
+                                           majoraxis,
+                                           incl);
           handList.push_back(addHand);
           for (std::list<TuioListener*>::iterator listener =
                    listenerList.begin();
@@ -702,18 +711,27 @@ void TuioClient::ProcessMessage(const osc::ReceivedMessage& msg,
           }
         } else {
           (*thand)
-              ->update((long) f1, (long) f2, (long) f3, (long) f4, (long) f5);
+              ->update(x_pos, y_pos,
+                       (long) f1, (long) f2, (long) f3, (long) f4, (long) f5,
+                       (TuioHand::Class) hand_class,
+                       xellipse, yellipse, minoraxis, majoraxis, incl);
+
           for (auto it = listenerList.begin(); it != listenerList.end(); ++it) {
             (*it)->updateTuioHand(*thand);
           }
         }
+        unlockHandList();
       }
-      unlockHandList();
     }
   }
   catch (osc::Exception & e) {
     std::cerr << "error parsing TUIO message: " << msg.AddressPattern() << " - "
               << e.what() << std::endl;
+
+    osc::ReceivedMessageArgumentStream args = msg.ArgumentStream();
+    const char* cmd;
+    args >> cmd;
+    std::cout << cmd << std::endl;
   }
 }
 

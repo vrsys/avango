@@ -53,19 +53,21 @@ namespace av
         struct TUIOFinger {
             float x;
             float y;
-            float x_speed;
-            float y_speed;
+            int hand_id;
+            TUIO::TuioFinger::Class finger_class;
+            int session_id;
+        };
+
+        struct TUIOHand {
+            float x;
+            float y;
+            TUIO::TuioHand::FingerArray fingers;
+            TUIO::TuioHand::Class hand_class;
             float ellipse_x;
             float ellipse_y;
             float ellipse_major;
             float ellipse_minor;
             float ellipse_inclination;
-            int session_id;
-        };
-
-        struct TUIOHand {
-            TUIO::TuioHand::Class hand_class;
-            TUIO::TuioHand::FingerArray fingers;
             int session_id;
         };
 
@@ -170,11 +172,8 @@ namespace av
           finger.session_id = tfinger->getSessionID();
           finger.x = tfinger->getX();
           finger.y = tfinger->getY();
-          finger.ellipse_x = tfinger->getEllipseX();
-          finger.ellipse_y = tfinger->getEllipseY();
-          finger.ellipse_major = tfinger->getEllipseMajor();
-          finger.ellipse_minor = tfinger->getEllipseMinor();
-          finger.ellipse_inclination = tfinger->getEllipseInclination();
+          finger.hand_id = tfinger->getHand_id();
+          finger.finger_class = tfinger->getFinger_class();
         }
         void updateTuioFinger(TUIO::TuioFinger* tfinger) override {
           addTuioFinger(tfinger);
@@ -188,8 +187,15 @@ namespace av
           std::lock_guard<std::mutex> lock(m_handsMutex);
           TUIOHand& hand = m_hands[thand->getSessionID()];
           hand.session_id = thand->getSessionID();
-          hand.hand_class = thand->getHandClass();
+          hand.x = thand->getXPos();
+          hand.y = thand->getYPos();
           hand.fingers = thand->getFingerIDs();
+          hand.hand_class = thand->getHandClass();
+          hand.ellipse_x = thand->getEllipseX();
+          hand.ellipse_y = thand->getEllipseY();
+          hand.ellipse_major = thand->getEllipseMajor();
+          hand.ellipse_minor = thand->getEllipseMinor();
+          hand.ellipse_inclination = thand->getEllipseInclination();
         }
         void updateTuioHand(TUIO::TuioHand* thand) override {
           addTuioHand(thand);

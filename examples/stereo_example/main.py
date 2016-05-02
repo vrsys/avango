@@ -9,6 +9,7 @@ STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
 # STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
 # STEREO_MODE = avango.gua.StereoMode.CHECKERBOARD
 # STEREO_MODE = avango.gua.StereoMode.NVIDIA_3D_VISION
+# STEREO_MODE = avango.gua.StereoMode.QUAD_BUFFERED
 
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -46,7 +47,8 @@ def start():
     right_pos.x = width + 1
     window_size.x *= 2
 
-  window = avango.gua.nodes.GlfwWindow(Size = window_size,
+  #window = avango.gua.nodes.GlfwWindow(Size = window_size,
+  window = avango.gua.nodes.Window(Size = window_size,
                                        LeftPosition = left_pos,
                                        LeftResolution = eye_size,
                                        RightPosition = right_pos,

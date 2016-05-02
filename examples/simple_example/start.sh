@@ -4,12 +4,12 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # assuming a local guacmole version is located properly
-LOCAL_GUACAMOLE="$DIR/../../../guacamole"
-LOCAL_AVANGO="$DIR/../../../avango"
+#LOCAL_GUACAMOLE="$DIR/../../../guacamole"
+#LOCAL_AVANGO="$DIR/../../../avango"
 
 # if not, this path will be used
-GUACAMOLE=/opt/guacamole/new_renderer
-AVANGO=/opt/avango/new_renderer
+GUACAMOLE=/opt/guacamole/master
+AVANGO=/opt/avango/master
 
 # third party libs
 export LD_LIBRARY_PATH=/opt/boost/boost_1_55_0/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/pbr/inst_cb/lib

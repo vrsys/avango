@@ -20,13 +20,13 @@ def start():
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     loader = avango.gua.nodes.TriMeshLoader()
 
-    monkey1 = loader.create_geometry_from_file(
-        "monkey",
+    room = loader.create_geometry_from_file(
+        "room",
         "data/objects/re_room/RE2 Briefing room.obj",
         avango.gua.LoaderFlags.LOAD_MATERIALS)
 
     transform1 = avango.gua.nodes.TransformNode(
-        Children=[monkey1]
+        Children=[room]
         )
 
     light = avango.gua.nodes.LightNode(
@@ -102,27 +102,17 @@ def start():
     graph.Root.value.Children.value = [transform1, light, nav]
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
-    res_pass.EnableSSAO.value = True
-    res_pass.SSAOIntensity.value = 4.0
-    res_pass.SSAOFalloff.value = 10.0
-    res_pass.SSAORadius.value = 7.0
+    #res_pass.EnableSSAO.value = True
+    #res_pass.SSAOIntensity.value = 4.0
+    #res_pass.SSAOFalloff.value = 10.0
+    #res_pass.SSAORadius.value = 7.0
 
     #res_pass.EnableScreenSpaceShadow.value = True
-
-    avango.gua.create_texture_cube(
-        "night_skymap",
-        "data/textures/stars/purple-nebula/purple-nebula_right1.jpg",
-        "data/textures/stars/purple-nebula/purple-nebula_left2.jpg",
-        "data/textures/stars/purple-nebula/purple-nebula_bottom4.jpg",
-        "data/textures/stars/purple-nebula/purple-nebula_top3.jpg",
-        "data/textures/stars/purple-nebula/purple-nebula_front5.jpg",
-        "data/textures/stars/purple-nebula/purple-nebula_back6.jpg")
 
     res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
     res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
-    res_pass.BackgroundTexture.value = "night_skymap"
-    #res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+    res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
     res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
 
     anti_aliasing = avango.gua.nodes.SSAAPassDescription()
@@ -142,10 +132,10 @@ def start():
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
 
-    monkey_updater = TimedRotate()
+    #monkey_updater = TimedRotate()
 
-    timer = avango.nodes.TimeSensor()
-    monkey_updater.TimeIn.connect_from(timer.Time)
+    #timer = avango.nodes.TimeSensor()
+    #monkey_updater.TimeIn.connect_from(timer.Time)
 
     cam.Transform.connect_from(window.SensorOrientation)
     #transform1.Transform.connect_from(monkey_updater.MatrixOut)

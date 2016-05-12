@@ -27,7 +27,6 @@
 #include <fstream>
 #include <iterator>
 
-#include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
 #include <avango/Link.h>
 #include <avango/Logger.h>
@@ -38,8 +37,6 @@
 #include <avango/logging/FileAppender.h>
 
 using namespace av::logging;
-
-namespace po = boost::program_options;
 
 namespace
 {

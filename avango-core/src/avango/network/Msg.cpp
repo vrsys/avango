@@ -25,13 +25,11 @@
 
 #include "avango/Msg.h"
 
-#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/Assert.h>
 #include <avango/Distributed.h>
 #include <avango/Field.h>
 #include <avango/NetID.h>
 #include <avango/NetNode.h>
-#endif
 
 #include <avango/Config.h>
 

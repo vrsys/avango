@@ -90,15 +90,10 @@ namespace av
 
     template<class Type> void register_field(std::string name)
     {
-      try {
-        boost::python::class_<Type, boost::python::bases<av::Field> >(name.c_str())
-          .def("get_value", &Type::getValue, boost::python::return_value_policy<boost::python::copy_const_reference>())
-          .def("set_value", detail::Field_set_value<Type>)
-          .add_property("value", detail::Field_get_value<Type>, detail::Field_set_value<Type>);
-      }
-      catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
-      }
+      boost::python::class_<Type, boost::python::bases<av::Field> >(name.c_str())
+        .def("get_value", &Type::getValue, boost::python::return_value_policy<boost::python::copy_const_reference>())
+        .def("set_value", detail::Field_set_value<Type>)
+        .add_property("value", detail::Field_get_value<Type>, detail::Field_set_value<Type>);
     }
 
 

@@ -150,8 +150,8 @@ endif()
 # preprocessor configuration
 ################################################################
 if (UNIX)
-    set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++0x")
-    set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++0x")
+    set(CMAKE_CXX_FLAGS_RELEASE "-s -O4 --std=c++11")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -Wall --std=c++11")
 elseif(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "-D NDEBUG -D _SECURE_SCL=0 -D _SCL_SECURE_NO_WARNINGS -D _CRT_SECURE_NO_DEPRECATE /MD /MP")
     set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG /MDd /Zi")

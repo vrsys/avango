@@ -24,7 +24,7 @@
 #include <avango/tools/NameSelector.hpp>
 
 #include <avango/Logger.h>
-#include <boost/regex.hpp>
+#include <regex>
 #include <iostream>
 
 
@@ -201,7 +201,7 @@ av::tools::NameSelector::isSelectable(av::FieldContainer& object)
       for(name = mNames.begin();name!=mNames.end();++name)
       {
         const std::string expr = EqualNameOnly.getValue() ? (".*" + *name + ".*") : *name;
-        boost::regex e(expr);
+        std::regex e(expr);
         if(regex_match(object_name, e))
           break;
       }

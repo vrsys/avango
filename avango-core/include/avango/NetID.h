@@ -33,7 +33,7 @@
 
 #include <unordered_map>
 #include <unordered_set>
-
+#include <functional>
 
 namespace av
 {
@@ -53,7 +53,7 @@ namespace av
       // this is a very poor hash function. improve it!
       size_t operator()(const NetID& id) const
       {
-        return std::tr1::hash<std::string>()(id.getEID()) + id.getNum();
+        return std::hash<std::string>()(id.getEID()) + id.getNum();
       }
     };
 

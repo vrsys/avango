@@ -35,11 +35,7 @@
 #include <avango/NetNode.h>
 #include <avango/Application.h>
 
-#ifdef __GNUC__ // GNU C++ stores TR1 headers differently
-#include <tr1/unordered_map>
-#else
 #include <unordered_set>
-#endif
 
 namespace av
 {
@@ -60,7 +56,7 @@ namespace av
 
     public:
 
-      using EIDGrpMap = std::tr1::unordered_set<std::string>;
+      using EIDGrpMap = std::unordered_set<std::string>;
       NetTransform();
       virtual ~NetTransform();
 
@@ -121,7 +117,7 @@ namespace av
       // the current view, meaning the current set of participants in this group
       EIDGrpMap mGroupMap;
 
-      using SharedContainerMap = std::tr1::unordered_map<std::string, Link<SharedContainerHolder> >;
+      using SharedContainerMap = std::unordered_map<std::string, Link<SharedContainerHolder> >;
       SharedContainerMap mSharedContainerMap;
 
       Application::CallbackHandle mPreEvalHandle;

@@ -98,7 +98,7 @@ av::gua::Viewer::frame() {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
 
-#if 1
+#if 0
   for (auto& window: Windows.getValue()) {
     if(!window->is_open()) {
       window->open();

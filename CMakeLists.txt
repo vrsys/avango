@@ -57,7 +57,6 @@ endif (UNIX)
 
 if (UNIX)
   set (BOOST_ROOT "/opt/boost/latest" CACHE PATH "Set to your boost install")
-  find_package(Boost COMPONENTS python-py34 REQUIRED)
 elseif (MSVC)
   set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
   message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}") 
@@ -68,11 +67,10 @@ elseif (MSVC)
 endif(UNIX)
 
 find_package(Boost COMPONENTS
+  python3
   thread
   signals
   system
-  program_options
-  regex
   REQUIRED
 )
 
@@ -94,10 +92,6 @@ include(FindZMQ)
 if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
 endif(${AVANGO_OCULUS_RIFT_SUPPORT})
-
-if (UNIX)
-  list(APPEND Boost_LIBRARIES boost_thread boost_signals boost_python-py34)
-endif (UNIX)
 
 set(LIBRARIES
     ${GUACAMOLE_LIBRARIES}

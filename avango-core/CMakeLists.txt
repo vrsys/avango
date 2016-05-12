@@ -25,7 +25,7 @@ file(GLOB AVANGO_CORE_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # optional sources for distribution support
 ###############################################################################
-IF (${AVANGO_DISTRIBUTION_SUPPORT})
+if (${AVANGO_DISTRIBUTION_SUPPORT})
   file(GLOB AVANGO_CORE_DISTRIBUTION_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         src/avango/network/Helper.h
         src/avango/network/NetNodeClient.h
@@ -41,16 +41,16 @@ IF (${AVANGO_DISTRIBUTION_SUPPORT})
         src/avango/network/NetNode.cpp
         src/avango/network/NetNodeServer.cpp
   )
-ENDIF (${AVANGO_DISTRIBUTION_SUPPORT})
+endif (${AVANGO_DISTRIBUTION_SUPPORT})
 
-LINK_DIRECTORIES(${LIB_PATHS})
+link_directories(${LIB_PATHS})
 
-ADD_LIBRARY( avango SHARED
+add_library( avango SHARED
     	     ${AVANGO_CORE_SRC}
              ${AVANGO_CORE_DISTRIBUTION_SRC}
 )
 
-INCLUDE_DIRECTORIES( ${INCLUDE_PATHS} 
+include_directories( ${INCLUDE_PATHS} 
                      ${RPC_INCLUDE_DIR} 
                      include
                    )
@@ -59,45 +59,45 @@ INCLUDE_DIRECTORIES( ${INCLUDE_PATHS}
 # set preprocessor configuration
 ###############################################################################
 
-IF (MSVC)
-  SET(AVANGO_BUILD_FLAGS "${AVANGO_BUILD_FLAGS} -D AV_LIBRARY")
+if (MSVC)
+  set(AVANGO_BUILD_FLAGS "${AVANGO_BUILD_FLAGS} -D AV_LIBRARY")
 
   set_target_properties( avango PROPERTIES COMPILE_FLAGS ${AVANGO_BUILD_FLAGS})
   set_target_properties( avango PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
-ENDIF (MSVC)
+endif (MSVC)
 
-TARGET_LINK_LIBRARIES( avango
+target_link_libraries( avango
   ${_AVANGO_CORE_LIBRARIES}
   debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE} 
   debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE} 
 )
 
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  IF (MSVC)
-    TARGET_LINK_LIBRARIES( avango ${ZMQ_LIBRARIES} ${RPC_LIBRARY} Ws2_32.lib)
-  ELSEIF (UNIX)
-    TARGET_LINK_LIBRARIES( avango ${ZMQ_LIBRARIES})
-  ENDIF()
-ENDIF (AVANGO_DISTRIBUTION_SUPPORT)
+if (AVANGO_DISTRIBUTION_SUPPORT)
+  if (MSVC)
+    target_link_libraries( avango ${ZMQ_LIBRARIES} ${RPC_LIBRARY} Ws2_32.lib)
+  elseif (UNIX)
+    target_link_libraries( avango ${ZMQ_LIBRARIES})
+  endif()
+endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 
 ###############################################################################
 # targets for unittesting
 ###############################################################################
-IF (AVANGO_UNITTESTS)
+if (AVANGO_UNITTESTS)
   add_subdirectory(src/avango/nodes/tests)
   add_subdirectory(src/avango/interface/tests)
   add_subdirectory(src/avango/types/tests)
   add_subdirectory(src/avango/fields/tests)
   add_subdirectory(src/avango/network/tests)
   add_subdirectory(src/avango/logging/tests)
-ENDIF (AVANGO_UNITTESTS)
+endif (AVANGO_UNITTESTS)
 
 ###############################################################################
 # rename libaries in windows
 ###############################################################################
-IF (MSVC)
+if (MSVC)
   post_build_install_target(avango ${AVANGO_INSTALL_DIRECTORY}/avango/avango.dll)
-ELSEIF (UNIX)
+elseif (UNIX)
   post_build_install_target(avango ${AVANGO_INSTALL_DIRECTORY}/avango/libavango.so)
-ENDIF (MSVC)
+endif (MSVC)

@@ -1,6 +1,6 @@
 #include <avango/gua/utils/Ray.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::Ray);
 
@@ -11,14 +11,14 @@ av::gua::Ray::Ray(std::shared_ptr< ::gua::Ray> guaRay)
     : m_guaRay(guaRay)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Origin,
-                          boost::bind(&Ray::getOriginCB, this, _1),
-                          boost::bind(&Ray::setOriginCB, this, _1));
+                          std::bind(&Ray::getOriginCB, this, std::placeholders::_1),
+                          std::bind(&Ray::setOriginCB, this, std::placeholders::_1));
     AV_FC_ADD_ADAPTOR_FIELD(Direction,
-                          boost::bind(&Ray::getDirectionCB, this, _1),
-                          boost::bind(&Ray::setDirectionCB, this, _1));
+                          std::bind(&Ray::getDirectionCB, this, std::placeholders::_1),
+                          std::bind(&Ray::setDirectionCB, this, std::placeholders::_1));
     AV_FC_ADD_ADAPTOR_FIELD(TMax,
-                          boost::bind(&Ray::getTMaxCB, this, _1),
-                          boost::bind(&Ray::setTMaxCB, this, _1));
+                          std::bind(&Ray::getTMaxCB, this, std::placeholders::_1),
+                          std::bind(&Ray::setTMaxCB, this, std::placeholders::_1));
 }
 
 

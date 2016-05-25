@@ -1,6 +1,6 @@
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::Logger);
 
@@ -11,20 +11,20 @@ av::gua::Logger::Logger()
     : av::FieldContainer()
 {
     AV_FC_ADD_ADAPTOR_FIELD(EnableDebug,
-                          boost::bind(&Logger::getEnableDebugCB, this, _1),
-                          boost::bind(&Logger::setEnableDebugCB, this, _1));
+                          std::bind(&Logger::getEnableDebugCB, this, std::placeholders::_1),
+                          std::bind(&Logger::setEnableDebugCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableMessage,
-                          boost::bind(&Logger::getEnableMessageCB, this, _1),
-                          boost::bind(&Logger::setEnableMessageCB, this, _1));
+                          std::bind(&Logger::getEnableMessageCB, this, std::placeholders::_1),
+                          std::bind(&Logger::setEnableMessageCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableWarning,
-                          boost::bind(&Logger::getEnableWarningCB, this, _1),
-                          boost::bind(&Logger::setEnableWarningCB, this, _1));
+                          std::bind(&Logger::getEnableWarningCB, this, std::placeholders::_1),
+                          std::bind(&Logger::setEnableWarningCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableError,
-                          boost::bind(&Logger::getEnableErrorCB, this, _1),
-                          boost::bind(&Logger::setEnableErrorCB, this, _1));
+                          std::bind(&Logger::getEnableErrorCB, this, std::placeholders::_1),
+                          std::bind(&Logger::setEnableErrorCB, this, std::placeholders::_1));
 }
 
 // av::gua::Logger::~Logger()

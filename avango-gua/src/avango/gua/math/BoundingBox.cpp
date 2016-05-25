@@ -1,7 +1,7 @@
 #include <avango/gua/math/BoundingBox.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,11 +19,11 @@ av::gua::BoundingBox::BoundingBox(::gua::math::BoundingBox< ::gua::math::vec3>* 
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Min,
-                        boost::bind(&BoundingBox::getMinCB, this, _1),
-                        boost::bind(&BoundingBox::setMinCB, this, _1));
+                        std::bind(&BoundingBox::getMinCB, this, std::placeholders::_1),
+                        std::bind(&BoundingBox::setMinCB, this, std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Max,
-                        boost::bind(&BoundingBox::getMaxCB, this, _1),
-                        boost::bind(&BoundingBox::setMaxCB, this, _1));
+                        std::bind(&BoundingBox::getMaxCB, this, std::placeholders::_1),
+                        std::bind(&BoundingBox::setMaxCB, this, std::placeholders::_1));
 }
 
 av::gua::BoundingBox::~BoundingBox()

@@ -36,6 +36,7 @@
 #include <set>
 #include <string>
 #include <sstream>
+#include <mutex>
 
 #include <boost/format.hpp>
 #include <boost/shared_ptr.hpp>
@@ -350,7 +351,7 @@ namespace av
       Level mLevel;
       Logger* mParent;
       std::set<boost::shared_ptr<Appender>, compareSharedPtrs > mAppenders;
-      boost::mutex mAppenderMutex;
+      std::mutex mAppenderMutex;
     };
 
     // variables, exported (extern)

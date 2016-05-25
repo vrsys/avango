@@ -26,8 +26,9 @@
 #include <avango/logging/Logger.h>
 
 #include <algorithm>
-#include <boost/bind.hpp>
 #include <map>
+#include <functional>
+#include <mutex>
 #include <stdexcept>
 
 #include <avango/logging/Appender.h>
@@ -145,11 +146,11 @@ av::logging::Logger::passMessage(LoggingEvent& event)
   size_t listSize = mAppenders.size();
   if (event.getLevel() <= mLevel)
   {
-    boost::mutex::scoped_lock lock(mAppenderMutex);
+    std::lock_guard<std::mutex> lock(mAppenderMutex);
     if (listSize == mAppenders.size())
     {
       std::for_each(mAppenders.begin(), mAppenders.end(),
-                    boost::bind(&Appender::doAppend, _1, event));
+                    std::bind(&Appender::doAppend, std::placeholders::_1, event));
     }
   }
   if (mParent)
@@ -215,7 +216,7 @@ av::logging::Logger::setLevel(Level level)
 void
 av::logging::Logger::addAppender(boost::shared_ptr<Appender> appender)
 {
-  boost::mutex::scoped_lock lock(mAppenderMutex);
+  std::lock_guard<std::mutex> lock(mAppenderMutex);
   mAppenders.insert(appender);
 }
 
@@ -228,7 +229,7 @@ av::logging::Logger::addConsoleAppender()
 void
 av::logging::Logger::removeAppender(boost::shared_ptr<Appender> appender)
 {
-  boost::mutex::scoped_lock lock(mAppenderMutex);
+  std::lock_guard<std::mutex> lock(mAppenderMutex);
   mAppenders.erase(appender);
 }
 
@@ -241,7 +242,7 @@ av::logging::Logger::removeConsoleAppender()
 void
 av::logging::Logger::removeAllAppenders()
 {
-  boost::mutex::scoped_lock lock(mAppenderMutex);
+  std::lock_guard<std::mutex> lock(mAppenderMutex);
   mAppenders.clear();
 }
 

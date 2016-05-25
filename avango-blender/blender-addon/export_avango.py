@@ -111,13 +111,28 @@ def avangoNodeTrees():
     #        }
 
 
-def to_avango_camera(bl_camera):
-    parent = 'null'
-    if bl_camera.parent:
-        parent = bl_camera.parent.name
-    matrix = bl_camera.matrix_local
+def to_avango_camera(obj, global_matrix):
+    local_matrix = obj.matrix_local
+    new_local = change_coordinate_system(global_matrix, local_matrix)
+    #new_local = Matrix.Identity(4)
+    mat_rot = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X')
+    new_local = new_local * mat_rot
 
-    acam = bl_camera.data.avango
+    parent = 'null'
+    if obj.parent:
+        parent = obj.parent.name
+
+    #rot_mode = obj.rotation_mode
+    #if rot_mode != 'QUATERNION':
+    #    obj.rotation_mode = 'QUATERNION'
+
+    #q = obj.rotation_quaternion * Quaternion((1.0, 0.0, 0.0), math.radians(-90.0))
+
+
+    #obj.rotation_mode = rot_mode
+    #obj.matrix_local = local_matrix
+
+    acam = obj.data.avango
 
     passes = acam.pipeline_passes
     json_passes = []
@@ -125,45 +140,74 @@ def to_avango_camera(bl_camera):
     for p in passes:
         json_passes.append(p.to_dict())
 
-    return {
+    cam = {
         'type': 'Camera',
-        'name': bl_camera.name,
-        'transform': matrixToList(matrix),
+        'name': obj.name,
+        'transform': matrixToList(new_local),
         'parent': parent,
-        'near_clip': bl_camera.data.clip_start,
-        'far_clip': bl_camera.data.clip_end,
-        'mode': 0 if bl_camera.data.type == 'PERSP' else 1,
-        # 'scenegraph': bl_camera.scenegraph,
-        # 'output_window_name': bl_camera.output_window_name,
-        # 'left_screen_path': bl_camera.left_screen_path,
+        'near_clip': obj.data.clip_start,
+        'far_clip': obj.data.clip_end,
+        'mode': 0 if obj.data.type == 'PERSP' else 1,
+        # 'scenegraph': obj.scenegraph,
+        # 'output_window_name': obj.output_window_name,
+        # 'left_screen_path': obj.left_screen_path,
         'resolution': [acam.resolution[0], acam.resolution[1]],
-        'field_of_view': bl_camera.data.angle,
+        'field_of_view': obj.data.angle,
         'enable_frustum_culling': acam.enable_frustum_culling,
         'enable_abuffer': acam.enable_abuffer,
         'enable_stereo': acam.enable_stereo,
         'passes': json_passes,
     }
+    return cam
+
+
+def to_avango_light(obj, global_matrix):
+    local_matrix = obj.matrix_local
+    new_local = change_coordinate_system(global_matrix, local_matrix)
+
+    lamp = obj.data
+
+    parent = 'null'
+    if obj.parent:
+        parent = obj.parent.name
+
+    enable_shadows = True
+    if lamp.shadow_method == 'NOSHADOW':
+        enable_shadows = False
+
+    return {
+        'name': obj.name,
+        'parent': parent,
+        'transform': matrixToList(new_local),
+        'type': lamp.type,
+        'color': [lamp.color.r, lamp.color.g, lamp.color.b],
+        'brightness': lamp.energy,
+        'enable_shadows': enable_shadows,
+    }
+
+def to_avango_transform(obj, global_matrix):
+    parent = 'null'
+    if obj.parent:
+        parent = obj.parent.name
+
+    local_matrix = obj.matrix_local
+    new_local = change_coordinate_system(global_matrix, local_matrix)
+
+    #obj.matrix_local = new_local
+    #rot_mode = obj.rotation_mode
+
+    #matrix = obj.matrix_local
+    #obj.rotation_mode = rot_mode
+    #obj.matrix_local = local_matrix
+
+    return {
+        'name': obj.name,
+        'parent': parent,
+        'transform': matrixToList(new_local)
+    }
 
 
 def to_json(obj):
-    if obj.type == 'EMPTY':
-        parent = 'null'
-        if obj.parent:
-            parent = obj.parent.name
-        matrix = obj.matrix_local
-
-        return {
-            'name': obj.name,
-            'parent': parent,
-            'transform': matrixToList(matrix)
-        }
-
-    if obj.type == 'CAMERA':
-        node = to_avango_camera(obj)
-        #local_matrix = obj.matrix_local
-        #new_local = change_coordinate_system(global_matrix, local_matrix)
-
-
     if isinstance(obj, bpy.types.Material):
         color = obj.diffuse_color
 
@@ -190,188 +234,6 @@ def to_json(obj):
             bpy.path.abspath(texture_filepath(obj.avango.normal_texture)),
             'opacity': obj.avango.opacity,
             'backface_culling': obj.avango.backface_culling,
-        }
-
-    if obj.type == 'LAMP':
-        lamp = obj.data
-
-        parent = 'null'
-        if obj.parent:
-            parent = obj.parent.name
-        matrix = obj.matrix_local
-
-        enable_shadows = True
-        if lamp.shadow_method == 'NOSHADOW':
-            enable_shadows = False
-
-        return {
-            'name': obj.name,
-            'parent': parent,
-            'transform': matrixToList(matrix),
-            'type': lamp.type,
-            'color': [lamp.color.r, lamp.color.g, lamp.color.b],
-            'brightness': lamp.energy,
-            'enable_shadows': enable_shadows,
-        }
-
-    if obj.type == 'MESH':
-        if obj.find_armature() is None:
-            parent = 'null'
-            blender_obj = obj
-            if obj.name in bpy.data.objects:
-                blender_obj = bpy.data.objects[obj.name]
-                if blender_obj.parent:
-                    parent = blender_obj.parent.name
-                matrix = blender_obj.matrix_local
-            filename = obj.name + '.obj'
-
-            bpy.ops.object.select_all(action='DESELECT')
-            # scene.objects.active = blender_obj
-            blender_obj.select = True
-
-            world = blender_obj.matrix_world.copy()
-            if not blender_obj.animation_data is None:
-                for f in blender_obj.animation_data.action.fcurves:
-                    f.mute = True
-
-            Matrix.identity(blender_obj.matrix_world)
-            bpy.ops.export_scene.obj(
-                filepath=g_tmp_filepath + filename,
-                check_existing=False,
-                use_selection=True,
-                use_normals=True,
-                use_triangles=True,
-                use_uvs=True,
-                use_materials=False,
-                axis_forward='Y',
-                axis_up='Z',
-                path_mode='AUTO', )
-            blender_obj.matrix_world = world
-
-            if not blender_obj.animation_data is None:
-                for f in blender_obj.animation_data.action.fcurves:
-                    f.mute = False
-
-            blender_obj.select = False
-
-            if len(blender_obj.material_slots) > 0:
-                material = blender_obj.material_slots[0].material.name
-            else:
-                material = "default_material"
-
-            return {
-                'type': 'Mesh',
-                'name': obj.name,
-                'file': 'tmp/' + filename,
-                'parent': parent,
-                'transform': matrixToList(matrix),
-                'material': material,
-                'has_armature': False,
-            }
-        else:
-            arma = obj.find_armature()
-            parent = 'null'
-            # blender_obj = obj
-            # if obj.name in bpy.data.objects:
-            # blender_obj = bpy.data.objects[obj.name]
-            if arma.parent:
-                parent = arma.parent.name
-            filename = obj.name + '.fbx'
-
-            bpy.ops.object.select_all(action='DESELECT')
-            obj.select = True
-            arma.select = True
-
-            world = arma.matrix_world.copy()
-            Matrix.identity(arma.matrix_world)
-            bpy.ops.export_scene.fbx(
-                filepath=g_tmp_filepath + filename,
-                check_existing=False,
-                use_selection=True,
-                version='BIN7400',
-                use_mesh_modifiers=False,
-                add_leaf_bones=False,
-                bake_anim=False,
-                use_anim=False,
-                use_anim_action_all=False,
-                axis_forward='Y',
-                axis_up='Z',
-                path_mode='AUTO',
-                embed_textures=True, )
-            arma.matrix_world = world
-            obj.select = False
-            arma.select = False
-
-            materials = []
-
-            if len(obj.material_slots) > 0:
-                for mat in obj.material_slots:
-                    materials.append(mat.material.name)
-            else:
-                materials = ["default_material"]
-
-            return {
-                'type': 'Mesh',
-                'name': obj.name,
-                'file': 'tmp/' + filename,
-                'parent': parent,
-                'transform': matrixToList(arma.matrix_local),
-                'material': materials,
-                'has_armature': True,
-            }
-
-    if obj.type == 'FONT':
-        parent = 'null'
-        blender_obj = obj
-        if obj.name in bpy.data.objects:
-            blender_obj = bpy.data.objects[obj.name]
-            if blender_obj.parent:
-                parent = blender_obj.parent.name
-            matrix = blender_obj.matrix_local
-        filename = obj.name + '.obj'
-
-        bpy.ops.object.select_all(action='DESELECT')
-        # scene.objects.active = blender_obj
-        blender_obj.select = True
-
-        world = blender_obj.matrix_world.copy()
-        if not blender_obj.animation_data is None:
-            for f in blender_obj.animation_data.action.fcurves:
-                f.mute = True
-
-        Matrix.identity(blender_obj.matrix_world)
-        bpy.ops.export_scene.obj(
-            filepath=g_tmp_filepath + filename,
-            check_existing=False,
-            use_selection=True,
-            use_normals=True,
-            use_triangles=True,
-            use_uvs=True,
-            use_materials=False,
-            axis_forward='Y',
-            axis_up='Z',
-            path_mode='AUTO', )
-        blender_obj.matrix_world = world
-
-        if not blender_obj.animation_data is None:
-            for f in blender_obj.animation_data.action.fcurves:
-                f.mute = False
-
-        blender_obj.select = False
-
-        if len(blender_obj.material_slots) > 0:
-            material = blender_obj.material_slots[0].material.name
-        else:
-            material = "default_material"
-
-        return {
-            'type': 'Mesh',
-            'name': obj.name,
-            'file': 'tmp/' + filename,
-            'parent': parent,
-            'transform': matrixToList(matrix),
-            'material': material,
-            'has_armature': False,
         }
 
     # if isinstance(obj, nodes.window.Window):
@@ -431,8 +293,170 @@ def to_json(obj):
 
     try:
         return obj.to_dict()
-    except TypeError:
+    except (TypeError, AttributeError):
         print(repr(obj) + ' is not JSON serializable')
+
+
+def to_avango_mesh(obj, global_matrix):
+    local_matrix = obj.matrix_local
+    new_local = change_coordinate_system(global_matrix, local_matrix)
+    if obj.type == 'MESH':
+        if obj.find_armature() is None:
+            parent = 'null'
+            blender_obj = obj
+            if obj.name in bpy.data.objects:
+                blender_obj = bpy.data.objects[obj.name]
+                if blender_obj.parent:
+                    parent = blender_obj.parent.name
+            filename = obj.name + '.obj'
+
+            bpy.ops.object.select_all(action='DESELECT')
+            # scene.objects.active = blender_obj
+            blender_obj.select = True
+
+            world = blender_obj.matrix_world.copy()
+            if not blender_obj.animation_data is None:
+                for f in blender_obj.animation_data.action.fcurves:
+                    f.mute = True
+
+            Matrix.identity(blender_obj.matrix_world)
+            bpy.ops.export_scene.obj(
+                filepath=g_tmp_filepath + '/' + filename,
+                check_existing=False,
+                use_selection=True,
+                use_normals=True,
+                use_triangles=True,
+                use_uvs=True,
+                use_materials=False,
+                axis_forward='-Z',
+                axis_up='Y',
+                path_mode='AUTO', )
+            blender_obj.matrix_world = world
+
+            if not blender_obj.animation_data is None:
+                for f in blender_obj.animation_data.action.fcurves:
+                    f.mute = False
+
+            blender_obj.select = False
+
+            if len(blender_obj.material_slots) > 0:
+                material = blender_obj.material_slots[0].material.name
+            else:
+                material = "default_material"
+
+            return {
+                'type': 'Mesh',
+                'name': obj.name,
+                'file': filename,
+                'parent': parent,
+                'transform': matrixToList(new_local),
+                'material': material,
+                'has_armature': False,
+            }
+        else:
+            arma = obj.find_armature()
+            parent = 'null'
+            # blender_obj = obj
+            # if obj.name in bpy.data.objects:
+            # blender_obj = bpy.data.objects[obj.name]
+            if arma.parent:
+                parent = arma.parent.name
+            filename = obj.name + '.fbx'
+
+            bpy.ops.object.select_all(action='DESELECT')
+            obj.select = True
+            arma.select = True
+
+            world = arma.matrix_world.copy()
+            Matrix.identity(arma.matrix_world)
+            bpy.ops.export_scene.fbx(
+                filepath=g_tmp_filepath + '/' + filename,
+                check_existing=False,
+                use_selection=True,
+                version='BIN7400',
+                use_mesh_modifiers=False,
+                add_leaf_bones=False,
+                bake_anim=False,
+                use_anim=False,
+                use_anim_action_all=False,
+                axis_forward='-Z',
+                axis_up='Y',
+                path_mode='AUTO',
+                embed_textures=True, )
+            arma.matrix_world = world
+            obj.select = False
+            arma.select = False
+
+            materials = []
+
+            if len(obj.material_slots) > 0:
+                for mat in obj.material_slots:
+                    materials.append(mat.material.name)
+            else:
+                materials = ["default_material"]
+
+            return {
+                'type': 'Mesh',
+                'name': obj.name,
+                'file': filename,
+                'parent': parent,
+                'transform': matrixToList(arma.matrix_local),
+                'material': materials,
+                'has_armature': True,
+            }
+
+    if obj.type == 'FONT':
+        parent = 'null'
+        blender_obj = obj
+        if obj.name in bpy.data.objects:
+            blender_obj = bpy.data.objects[obj.name]
+            if blender_obj.parent:
+                parent = blender_obj.parent.name
+        filename = obj.name + '.obj'
+
+        bpy.ops.object.select_all(action='DESELECT')
+        # scene.objects.active = blender_obj
+        blender_obj.select = True
+
+        world = blender_obj.matrix_world.copy()
+        if not blender_obj.animation_data is None:
+            for f in blender_obj.animation_data.action.fcurves:
+                f.mute = True
+
+        Matrix.identity(blender_obj.matrix_world)
+        bpy.ops.export_scene.obj(
+            filepath=g_tmp_filepath + '/' + filename,
+            check_existing=False,
+            use_selection=True,
+            use_normals=True,
+            use_triangles=True,
+            use_uvs=True,
+            use_materials=False,
+            axis_forward='-Z',
+            axis_up='Y',
+            path_mode='AUTO', )
+        blender_obj.matrix_world = world
+
+        if not blender_obj.animation_data is None:
+            for f in blender_obj.animation_data.action.fcurves:
+                f.mute = False
+
+        blender_obj.select = False
+
+        if len(blender_obj.material_slots) > 0:
+            material = blender_obj.material_slots[0].material.name
+        else:
+            material = "default_material"
+
+        return {
+            'type': 'Mesh',
+            'name': obj.name,
+            'file': filename,
+            'parent': parent,
+            'transform': matrixToList(new_local),
+            'material': material,
+            'has_armature': False,
+        }
 
 
 def to_avango_node(obj, global_matrix):
@@ -448,7 +472,7 @@ def to_avango_node(obj, global_matrix):
         "name": obj.name,
         # if not armature
         "children": [] if obj.type == 'ARMATURE' else [
-            to_avango_node_id(child.name)
+           to_avango_node_id(child.name)
             for child in obj.children
         ],
         "rotation": [
@@ -526,10 +550,14 @@ def save(operator, context,
         **kwargs
         ):
 
+
     base_name, ext = os.path.splitext(filepath)
     base_dir = os.path.dirname(filepath)
     context_name = [base_name, '', '',
                     ext]  # Base name, scene name, frame number, extension
+
+    global g_tmp_filepath
+    g_tmp_filepath = base_dir
 
     def nodes():
         nns = (to_avango_node(obj, global_matrix)
@@ -577,18 +605,18 @@ def save(operator, context,
                     mat = mat_slot.material
                     materials[mat.name] = mat
 
-    def cameras(context):
-        return dict(("camera_" + obj.data.name, to_avango_camera(obj.data))
-                    for obj in context.scene.objects if obj.type == 'CAMERA')
+    #def cameras(context):
+    #    return dict(("camera_" + obj.data.name, to_avango_camera(obj.data))
+    #                for obj in context.scene.objects if obj.type == 'CAMERA')
 
     def scripts():
         return dict((x.name, x) for x in ns if (x.bl_label == 'Script'))
 
     def meshes():
-        return dict((m.name, m) for m in mes)
+        return dict((obj.name, to_avango_mesh(obj, global_matrix)) for obj in mes)
 
     def lights():
-        return dict((l.name, l) for l in lamps)
+        return dict((obj.name, to_avango_light(obj, global_matrix)) for obj in lamps)
 
     def fieldcontainers():
         pass
@@ -596,13 +624,17 @@ def save(operator, context,
     def fieldconnections():
         pass
 
+    if not os.path.exists(g_tmp_filepath):
+        os.makedirs(g_tmp_filepath)
+
     document = {
-        'camera': camera,
+        'camera': to_avango_camera(camera, global_matrix),
         'meshes': meshes(),
         'lights': lights(),
         'materials': materials,
 
-        'transforms': dict((t.name, t) for t in transforms),
+        'transforms': dict((obj.name, to_avango_transform(obj, global_matrix))
+            for obj in transforms),
         'windows': dict((x.name, x) for x in ns if (x.bl_label == 'Window')),
         'screens': dict((x.name, x) for x in ns if (x.bl_label == 'Screen')),
         'time_sensors': dict((x.name, x) for x in ns
@@ -627,22 +659,16 @@ def save(operator, context,
         "textures": {},
     }
 
-    global g_tmp_filepath
-    g_tmp_filepath = filepath.rpartition('/')[0]
-    g_tmp_filepath += '/tmp/'
-
-    if not os.path.exists(g_tmp_filepath):
-        os.makedirs(g_tmp_filepath)
-
     # export scripts
     for node in ns:
         if node.bl_idname == 'Script':
-            with open(g_tmp_filepath + node.name.lower() + ".py", 'w',
+            with open(g_tmp_filepath + '/' + node.name.lower() + ".py", 'w',
                       encoding='utf-8') as f:
                 f.write(bpy.data.texts[node.name].as_string())
             print("exported " + node.name)
 
     with open(filepath, 'w', encoding='utf-8') as f:
+        #json.dump(document, f, indent=4)
         json.dump(document, f, default=to_json, indent=4)
     return {'FINISHED'}
 
@@ -673,11 +699,12 @@ class ExportAvango(bpy.types.Operator, ExportHelper, IOAvangoOrientationHelper):
         if not self.properties.filepath:
             raise Exception("filename not set")
 
-        global_matrix = (Matrix.Scale(-1, 4, Vector((0, 0, 1))) *
-                        axis_conversion(to_forward=self.axis_forward,
+        global_matrix = (axis_conversion(to_forward=self.axis_forward,
                                         to_up=self.axis_up,
                                         ).to_4x4())
         keywords = self.as_keywords(ignore=("filter_glob",
+                                            "check_existing",
+                                            "filter_glob",
                                             ))
         keywords["global_matrix"] = global_matrix
 

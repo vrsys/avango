@@ -96,6 +96,14 @@ av::NetNodeClient::loop()
 
   socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 
+#if ZMQ_VERSION_MAJOR < 3
+  uint64_t hwm = 1;
+  socket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
+#else
+  uint32_t hwm = 1;
+  socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
+#endif
+
   std::string endpoint("tcp://" + mHost + ":" + mPort);
   socket.connect(endpoint.c_str());
 

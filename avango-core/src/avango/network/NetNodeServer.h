@@ -39,8 +39,11 @@ namespace av
   {
 
   public:
+#if ZMQ_VERSION_MAJOR < 3
     NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm);
-    ~NetNodeServer();
+#else
+    NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm);
+#endif
 
     // called from NetNode
     void cast(av::Msg& av_msg);

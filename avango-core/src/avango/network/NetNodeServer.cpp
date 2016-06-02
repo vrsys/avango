@@ -29,7 +29,11 @@
 #include <chrono>
 #include <thread>
 
+#if ZMQ_VERSION_MAJOR < 3
 av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm)
+#else
+NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm);
+#endif
   : mHost(host),
     mPort(port),
     mNetNode(netnode),
@@ -41,15 +45,16 @@ av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& por
   //int64_t  rate(500);
   //mSocket.setsockopt(ZMQ_RATE,&rate, sizeof(rate));
 
+#if ZMQ_VERSION_MAJOR < 3
   mSocket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
+#else
+  mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
+#endif
   std::string endpoint("tcp://" + mHost + ":" + mPort);
   mSocket.bind(endpoint.c_str());
   std::chrono::milliseconds dura(200);
   std::this_thread::sleep_for(dura);
 }
-
-av::NetNodeServer::~NetNodeServer()
-{}
 
 void
 av::NetNodeServer::cast(av::Msg& av_msg)

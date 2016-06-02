@@ -52,7 +52,7 @@ void init_Physics()
          av::Link<av::gua::Physics>,
          bases<av::FieldContainer>, boost::noncopyable >("Physics",
                                                     "docstring", no_init)
-         .def("synchronize", &::gua::physics::Physics::synchronize)
+         .def("synchronize", &av::gua::Physics::synchronize)
          .def("add_rigid_body", &av::gua::Physics::addRigidBody)
          .def("remove_rigid_body", &av::gua::Physics::removeRigidBody)
          .def("add_constraint", &av::gua::Physics::addConstraint)

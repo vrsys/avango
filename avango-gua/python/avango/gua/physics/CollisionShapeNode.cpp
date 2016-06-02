@@ -20,11 +20,12 @@ namespace boost
 
 void init_CollisionShapeNode()
 {
+  register_ptr_to_python<av::Link<av::gua::CollisionShapeNode> >();
   register_field<av::gua::SFCollisionShapeNode>("SFCollisionShapeNode");
   register_multifield<av::gua::MFCollisionShapeNode>("MFCollisionShapeNode");
 
   class_<av::gua::CollisionShapeNode,
          av::Link<av::gua::CollisionShapeNode>,
-         bases<av::gua::Node>, boost::noncopyable >("CollisionShapeNode",
+         bases<av::gua::TransformNode>, boost::noncopyable >("CollisionShapeNode",
                                                     "docstring", no_init);
 }

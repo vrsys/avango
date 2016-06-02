@@ -15,7 +15,7 @@ AV_FIELD_DEFINE(av::gua::SFRigidBodyNode);
 AV_FIELD_DEFINE(av::gua::MFRigidBodyNode);
 
 av::gua::RigidBodyNode::RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBodyNode> guanode)
-  : Node(guanode),
+  : TransformNode(guanode),
     m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(IsKinematic,
@@ -69,9 +69,9 @@ av::gua::RigidBodyNode::initClass()
 {
     if (!isTypeInitialized())
     {
-        av::gua::Node::initClass();
+        av::gua::TransformNode::initClass();
 
-        AV_FC_INIT(av::gua::Node, av::gua::RigidBodyNode, true);
+        AV_FC_INIT(av::gua::TransformNode, av::gua::RigidBodyNode, true);
 
         SFRigidBodyNode::initClass("av::gua::SFRigidBodyNode", "av::Field");
         MFRigidBodyNode::initClass("av::gua::MFRigidBodyNode", "av::Field");

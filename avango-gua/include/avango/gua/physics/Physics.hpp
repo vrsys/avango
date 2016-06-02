@@ -91,8 +91,8 @@ namespace av
       RunningState m_state;
       bool m_simulationRateReduced;
 
-      Physics(const Physics&);
-      Physics& operator=(const Physics&);
+      Physics(const Physics&) = delete;
+      Physics& operator=(const Physics&) = delete;
     };
 
     using SFPhysics = SingleField<Link<Physics> >;

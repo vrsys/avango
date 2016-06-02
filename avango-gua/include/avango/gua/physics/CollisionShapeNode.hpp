@@ -9,7 +9,7 @@
 #include <gua/physics/CollisionShapeNode.hpp>
 #include <gua/math/math.hpp>
 
-#include <avango/gua/scenegraph/Node.hpp>
+#include <avango/gua/scenegraph/TransformNode.hpp>
 
 namespace av
 {
@@ -20,7 +20,7 @@ namespace av
      *
      * \ingroup av_gua
      */
-    class AV_GUA_DLL CollisionShapeNode : public av::gua::Node
+    class AV_GUA_DLL CollisionShapeNode : public av::gua::TransformNode
     {
       AV_FC_DECLARE();
 

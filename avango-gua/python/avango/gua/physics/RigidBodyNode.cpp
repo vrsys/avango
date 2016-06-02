@@ -63,12 +63,13 @@ void clearForces(av::gua::RigidBodyNode const& node) {
 
 void init_RigidBodyNode()
 {
+  register_ptr_to_python<av::Link<av::gua::RigidBodyNode> >();
   register_field<av::gua::SFRigidBodyNode>("SFRigidBodyNode");
   register_multifield<av::gua::MFRigidBodyNode>("MFRigidBodyNode");
 
   class_<av::gua::RigidBodyNode,
          av::Link<av::gua::RigidBodyNode>,
-         bases<av::gua::Node>, boost::noncopyable >("RigidBodyNode", "docstring", no_init)
+         bases<av::gua::TransformNode>, boost::noncopyable >("RigidBodyNode", "docstring", no_init)
          .def("apply_force", &applyForce)
          .def("apply_central_force", &applyCentralForce)
          .def("apply_torque", &applyTorque)

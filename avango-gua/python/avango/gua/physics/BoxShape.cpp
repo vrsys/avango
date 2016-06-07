@@ -20,6 +20,8 @@ namespace boost
 
 void init_BoxShape()
 {
+  register_ptr_to_python<av::Link<av::gua::BoxShape> >();
+
   register_field<av::gua::SFBoxShape>("SFBoxShape");
   register_multifield<av::gua::MFBoxShape>("MFBoxShape");
 

@@ -45,6 +45,8 @@ void callOnce(av::gua::Physics& physics, boost::python::object const& function) 
 
 void init_Physics()
 {
+  register_ptr_to_python<av::Link<av::gua::Physics> >();
+
   register_field<av::gua::SFPhysics>("SFPhysics");
   register_multifield<av::gua::MFPhysics>("MFPhysics");
 

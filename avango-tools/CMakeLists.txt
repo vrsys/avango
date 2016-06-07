@@ -94,7 +94,8 @@ TARGET_LINK_LIBRARIES( avango_tools
                        avango_gua 
                        avango_script 
                        avango 
-                       ${LIBRARIES}
+                      optimized ${Boost_REGEX_LIBRARY_RELEASE} debug ${Boost_REGEX_LIBRARY_DEBUG}
+                      #${LIBRARIES}
                      )
 
 ###############################################################################

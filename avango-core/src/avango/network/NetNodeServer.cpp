@@ -32,7 +32,7 @@
 #if ZMQ_VERSION_MAJOR < 3
 av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm)
 #else
-NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm);
+av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm)
 #endif
   : mHost(host),
     mPort(port),

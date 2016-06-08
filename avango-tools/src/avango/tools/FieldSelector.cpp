@@ -1,4 +1,4 @@
-// -*- Mode:C++ -*-
+//  -*- Mode:C++ -*-
 
 /************************************************************************\
 *                                                                        *
@@ -24,7 +24,7 @@
 #include <avango/tools/FieldSelector.hpp>
 
 #include <avango/Logger.h>
-#include <boost/regex.hpp>
+#include <regex>
 #include <iostream>
 
 
@@ -173,7 +173,7 @@ av::tools::FieldSelector::isSelectable(av::FieldContainer& object)
     for (field = fields.begin();field!=fields.end();++field)
     {
       const std::string expr = EqualNameOnly.getValue() ? (".*" + (*field)->getName() + ".*") : (*field)->getName();
-      boost::regex e(expr);
+      std::regex e(expr);
       if(regex_match(field_name, e))
         break;
     }

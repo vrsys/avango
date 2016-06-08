@@ -90,12 +90,11 @@ SET (AVANGO_TOOLS_BUILD_FLAGS "${BUILD_FLAGS} -D AV_TOOLS_LIBRARY")
 
 set_target_properties(avango_tools PROPERTIES COMPILE_FLAGS ${AVANGO_TOOLS_BUILD_FLAGS})
 
-TARGET_LINK_LIBRARIES( avango_tools 
-                       avango_gua 
-                       avango_script 
-                       avango 
-                      optimized ${Boost_REGEX_LIBRARY_RELEASE} debug ${Boost_REGEX_LIBRARY_DEBUG}
-                      #${LIBRARIES}
+TARGET_LINK_LIBRARIES( avango_tools
+                       avango_gua
+                       avango_script
+                       avango
+                       ${LIBRARIES}
                      )
 
 ###############################################################################

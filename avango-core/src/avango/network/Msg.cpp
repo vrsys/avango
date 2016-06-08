@@ -144,12 +144,7 @@ av::av_popMsg(av::Msg& msg, bool& buf)
 void
 av::av_pushMsg(av::Msg& msg, const int32_t& buf)
 {
-  int32_t b;
-  XDRHandle xdr(&b, sizeof(b), XDR_ENCODE);
-
-  xdr_int(xdr.getXDR(), (int32_t*) &buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (int32_t) [%1%]") % buf));
 }
@@ -157,12 +152,7 @@ av::av_pushMsg(av::Msg& msg, const int32_t& buf)
 void
 av::av_popMsg(av::Msg& msg, int32_t& buf)
 {
-  int32_t b;
-  XDRHandle xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop((void*) &b, sizeof(b));
-
-  xdr_int(xdr.getXDR(), (int32_t*) &buf);
+  msg.pop((void*) &buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (int32_t) [%1%]") % buf));
 }
@@ -171,15 +161,7 @@ av::av_popMsg(av::Msg& msg, int32_t& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<int32_t>& buf)
 {
-  std::vector<int32_t> tmpBuf(buf.size());
-  XDRHandle xdr(&tmpBuf[0], sizeof(int32_t)*buf.size(), XDR_ENCODE) ;
-
-  int32_t* arrayStart = const_cast<int32_t*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(arrayStart), static_cast<uint32_t>(buf.size()), sizeof(int32_t),
-             (xdrproc_t)xdr_int);
-
-  msg.push(&tmpBuf[0], sizeof(int32_t)*buf.size());
+  msg.push(buf.data(), sizeof(int32_t)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 }
 
@@ -191,13 +173,7 @@ av::av_popMsg(av::Msg& msg, std::vector<int32_t>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<int32_t> tmpVec(arraySize);
-  XDRHandle xdr(&tmpVec[0],  sizeof(int32_t) * arraySize, XDR_DECODE);
-
-  msg.pop(&tmpVec[0], sizeof(int32_t)*arraySize);
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(&buf[0]), static_cast<uint32_t>(buf.size()), sizeof(int32_t),
-             (xdrproc_t)xdr_int);
+  msg.pop(buf.data(), sizeof(int32_t)*arraySize);
 }
 
 
@@ -205,12 +181,7 @@ av::av_popMsg(av::Msg& msg, std::vector<int32_t>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const uint32_t& buf)
 {
-  uint32_t b;
-  XDRHandle    xdr(&b, sizeof(b), XDR_ENCODE);
-
-  xdr_u_int(xdr.getXDR(), (uint32_t*) &buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (uint32_t) [%1%]") % buf));
 }
@@ -218,12 +189,7 @@ av::av_pushMsg(av::Msg& msg, const uint32_t& buf)
 void
 av::av_popMsg(av::Msg& msg, uint32_t& buf)
 {
-  uint32_t b;
-  XDRHandle    xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop(&b, sizeof(b));
-
-  xdr_u_int(xdr.getXDR(), &buf);
+  msg.pop(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (uint32_t) [%1%]") % buf));
 }
@@ -232,15 +198,7 @@ av::av_popMsg(av::Msg& msg, uint32_t& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<uint32_t>& buf)
 {
-  std::vector<uint32_t> tmpVec(buf.size());
-  XDRHandle   xdr(&tmpVec[0], sizeof(uint32_t)*buf.size(), XDR_ENCODE);
-
-  uint32_t* arrayStart = const_cast<uint32_t*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(arrayStart), static_cast<uint32_t>(buf.size()), sizeof(uint32_t),
-             (xdrproc_t)xdr_u_int);
-
-  msg.push(&tmpVec[0], sizeof(uint32_t)*buf.size());
+  msg.push(buf.data(), sizeof(uint32_t)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 }
 
@@ -252,13 +210,7 @@ av::av_popMsg(av::Msg& msg, std::vector<uint32_t>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<uint32_t> tmpVec(arraySize);
-
-  XDRHandle xdr(&tmpVec[0], sizeof(uint32_t)*arraySize, XDR_DECODE);
-  msg.pop(&tmpVec[0], sizeof(uint32_t)*arraySize);
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(&buf[0]), static_cast<uint32_t>(buf.size()), sizeof(uint32_t),
-             (xdrproc_t)xdr_u_int);
+  msg.pop(buf.data(), sizeof(uint32_t)*arraySize);
 }
 
 
@@ -266,12 +218,7 @@ av::av_popMsg(av::Msg& msg, std::vector<uint32_t>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const int64_t& buf)
 {
-  int64_t b;
-  XDRHandle   xdr(&b, sizeof(b), XDR_ENCODE);
-
-  xdr_longlong_t(xdr.getXDR(), (int64_t*) &buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (int64_t) [%1%]") % buf));
 }
@@ -279,12 +226,7 @@ av::av_pushMsg(av::Msg& msg, const int64_t& buf)
 void
 av::av_popMsg(av::Msg& msg, int64_t& buf)
 {
-  int64_t b;
-  XDRHandle   xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop(&b, sizeof(b));
-
-  xdr_longlong_t(xdr.getXDR(), (int64_t*) &buf);
+  msg.pop(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (int64_t) [%1%]") % buf));
 }
@@ -293,15 +235,7 @@ av::av_popMsg(av::Msg& msg, int64_t& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<int64_t>& buf)
 {
-  std::vector<int64_t> tmpVec(buf.size());
-  XDRHandle xdr(&tmpVec[0], sizeof(int64_t)*buf.size(), XDR_ENCODE);
-
-  int64_t* arrayStart = const_cast<int64_t*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(arrayStart), static_cast<uint32_t>(buf.size()), sizeof(int64_t),
-             (xdrproc_t)xdr_longlong_t);
-
-  msg.push(&tmpVec[0], sizeof(int64_t)*buf.size());
+  msg.push(buf.data(), sizeof(int64_t)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 }
 
@@ -313,13 +247,7 @@ av::av_popMsg(av::Msg& msg, std::vector<int64_t>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<int64_t> tmpVec(arraySize);
-  XDRHandle xdr(&tmpVec[0], sizeof(int64_t)*arraySize, XDR_DECODE);
-
-  msg.pop(&tmpVec[0], sizeof(int64_t)*arraySize);
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(&buf[0]), static_cast<uint32_t>(buf.size()), sizeof(int64_t),
-             (xdrproc_t)xdr_longlong_t);
+  msg.pop(buf.data(), sizeof(int64_t)*arraySize);
 }
 
 
@@ -327,12 +255,7 @@ av::av_popMsg(av::Msg& msg, std::vector<int64_t>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const uint64_t& buf)
 {
-  uint64_t b;
-  XDRHandle    xdr(&b, sizeof(b), XDR_ENCODE);
-
-  xdr_u_longlong_t(xdr.getXDR(), (uint64_t*) &buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (uint64_t) [%1%]") % buf));
 }
@@ -340,12 +263,7 @@ av::av_pushMsg(av::Msg& msg, const uint64_t& buf)
 void
 av::av_popMsg(av::Msg& msg, uint64_t& buf)
 {
-  uint64_t b;
-  XDRHandle    xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop(&b, sizeof(b));
-
-  xdr_u_longlong_t(xdr.getXDR(), (uint64_t*) &buf);
+  msg.pop(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (uint64_t) [%1%]") % buf));
 }
@@ -354,16 +272,7 @@ av::av_popMsg(av::Msg& msg, uint64_t& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<uint64_t>& buf)
 {
-  std::vector<uint64_t> tmpVec(buf.size());
-
-  XDRHandle xdr(&tmpVec[0], sizeof(uint64_t)*buf.size(), XDR_ENCODE);
-
-  uint64_t* arrayStart = const_cast<uint64_t*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(arrayStart), static_cast<uint32_t>(buf.size()), sizeof(uint64_t),
-             (xdrproc_t)xdr_u_longlong_t);
-
-  msg.push(&tmpVec[0], sizeof(uint64_t)*buf.size());
+  msg.push(buf.data(), sizeof(uint64_t)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 }
 
@@ -375,13 +284,7 @@ av::av_popMsg(av::Msg& msg, std::vector<uint64_t>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<uint64_t> tmpVec(arraySize);
-
-  XDRHandle xdr(&tmpVec[0], sizeof(uint64_t)*arraySize, XDR_DECODE);
-  msg.pop(&tmpVec[0], sizeof(uint64_t)*arraySize);
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(&buf[0]), static_cast<uint32_t>(buf.size()), sizeof(uint64_t),
-             (xdrproc_t)xdr_u_longlong_t);
+  msg.pop(buf.data(), sizeof(uint64_t)*arraySize);
 }
 
 
@@ -389,12 +292,7 @@ av::av_popMsg(av::Msg& msg, std::vector<uint64_t>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const float& buf)
 {
-  float b;
-  XDRHandle   xdr(&b, sizeof(b),  XDR_ENCODE);
-
-  xdr_float(xdr.getXDR(), (float*) &buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (float) [%1%]") % buf));
 }
@@ -402,12 +300,7 @@ av::av_pushMsg(av::Msg& msg, const float& buf)
 void
 av::av_popMsg(av::Msg& msg, float& buf)
 {
-  float b;
-  XDRHandle xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop(&b, sizeof(b));
-
-  xdr_float(xdr.getXDR(), &buf);
+  msg.pop(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (float) [%1%]") % buf));
 }
@@ -416,15 +309,7 @@ av::av_popMsg(av::Msg& msg, float& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<float>& buf)
 {
-  std::vector<float> tmpVec(buf.size());
-
-  XDRHandle xdr(&tmpVec[0], sizeof(float)*buf.size(), XDR_ENCODE);
-
-  float* arrayStart = const_cast<float*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), (char*)arrayStart, static_cast<uint32_t>(buf.size()), sizeof(float), (xdrproc_t)xdr_float);
-
-  msg.push(&tmpVec[0], sizeof(float)*buf.size());
+  msg.push(buf.data(), sizeof(float)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (vector<float>) [%1%]") % buf.size()))
@@ -438,13 +323,7 @@ av::av_popMsg(av::Msg& msg, std::vector<float>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<float> tmpVec(arraySize);
-
-  XDRHandle xdr(&tmpVec[0], sizeof(float)*arraySize, XDR_DECODE);
-
-  msg.pop(&tmpVec[0], sizeof(float)*arraySize);
-
-  xdr_vector(xdr.getXDR(), (char*)&buf[0], static_cast<uint32_t>(buf.size()), sizeof(float), (xdrproc_t)xdr_float);
+  msg.pop(buf.data(), sizeof(float)*arraySize);
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (vector<float>) [%1%]") % buf.size()))
 }
@@ -454,12 +333,7 @@ av::av_popMsg(av::Msg& msg, std::vector<float>& buf)
 void
 av::av_pushMsg(av::Msg& msg, const double& buf)
 {
-  double b;
-  XDRHandle    xdr(&b, sizeof(b), XDR_ENCODE);
-
-  xdr_double(xdr.getXDR(), (double*)&buf);
-
-  msg.push(&b, sizeof(b));
+  msg.push(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (double) [%1%]") % buf))
 }
@@ -467,12 +341,7 @@ av::av_pushMsg(av::Msg& msg, const double& buf)
 void
 av::av_popMsg(av::Msg& msg, double& buf)
 {
-  double b;
-  XDRHandle xdr(&b, sizeof(b), XDR_DECODE);
-
-  msg.pop(&b, sizeof(b));
-
-  xdr_double(xdr.getXDR(), &buf);
+  msg.pop(&buf, sizeof(buf));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (double) [%1%]") % buf))
 }
@@ -481,16 +350,7 @@ av::av_popMsg(av::Msg& msg, double& buf)
 void
 av::av_pushMsg(av::Msg& msg, const std::vector<double>& buf)
 {
-  std::vector<double> tmpVec(buf.size());
-
-  XDRHandle xdr(&tmpVec[0], sizeof(double)*buf.size(), XDR_ENCODE);
-
-  double* arrayStart = const_cast<double*>(&buf[0]); // ugly, but necessary
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(arrayStart), static_cast<uint32_t>(buf.size()), sizeof(double),
-             (xdrproc_t)xdr_double);
-
-  msg.push(&tmpVec[0], sizeof(double)*buf.size());
+  msg.push(buf.data(), sizeof(double)*buf.size());
   av_pushMsg(msg, static_cast<uint32_t>(buf.size()));
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("push: (vector<double>) [%1%]") % buf.size()))
@@ -504,14 +364,7 @@ av::av_popMsg(av::Msg& msg, std::vector<double>& buf)
 
   buf.resize(arraySize);
 
-  std::vector<double> tmpVec(arraySize);
-
-  XDRHandle xdr(&tmpVec[0], sizeof(double)*arraySize, XDR_DECODE);
-
-  msg.pop(&tmpVec[0], sizeof(double)*arraySize);
-
-  xdr_vector(xdr.getXDR(), reinterpret_cast<char*>(&buf[0]), static_cast<uint32_t>(buf.size()), sizeof(double),
-             (xdrproc_t)xdr_double);
+  msg.pop(buf.data(), sizeof(double)*arraySize);
 
   AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("pop: (vector<double>) [%1%]") % buf.size()))
 }

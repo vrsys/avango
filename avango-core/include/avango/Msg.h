@@ -100,28 +100,6 @@ namespace av
     NetNode*                         mNetNode;
   };
 
-
-  class XDRHandle {
-  public:
-    XDRHandle(void* buffer, size_t bufferSize, xdr_op direction)
-    { 
-      xdrmem_create(&mXDR, (caddr_t)buffer, bufferSize, direction); 
-    }
-
-    ~XDRHandle()
-    { 
-      xdr_destroy(&mXDR); 
-    }
-
-    XDR* getXDR() { return &mXDR; }
-
-  private:
-    XDRHandle(const XDRHandle&);
-    XDRHandle& operator=(const XDRHandle&);
-
-    XDR mXDR;
-  };
-
   class Field;
   class Distributed;
   class NetID;

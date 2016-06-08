@@ -36,12 +36,13 @@ class BallSpawner(avango.script.Script):
 
             body = avango.gua.nodes.RigidBodyNode(
                 Name="body",
-                Mass=1.0,
+                Mass=2.0,
                 Friction=0.6,
                 RollingFriction=0.03,
-                Restitution=1.0,
+                Restitution=0.7,
                 Transform=avango.gua.make_trans_mat(
-                    math.sin(current_time) * 0.3, 5.0, math.cos(current_time) * 0.4))
+                    math.sin(3 * current_time), 7.0, math.cos(3 *
+                                                              current_time)))
 
             sphere_geometry = self.__loader.create_geometry_from_file(
                 "sphere_geometry", "data/objects/sphere.obj")
@@ -51,20 +52,23 @@ class BallSpawner(avango.script.Script):
 
             if self.red:
                 sphere_geometry.Material.value.set_uniform(
-                    "Color", av.Vec4(1.0, 0.266, 0.136, 1.0))
-                sphere_geometry.Material.value.set_uniform("Roughness", 0.6)
+                    #"Color", av.Vec4(0.08, 0.08, 0.09, 1.0))
+                    "Color",
+                    av.Vec4(0.9, 0.266, 0.136, 1.0))
+                sphere_geometry.Material.value.set_uniform("Roughness", 0.75)
                 sphere_geometry.Material.value.set_uniform("Metalness", 0.0)
 
             else:
                 sphere_geometry.Material.value.set_uniform(
-                    "Color", av.Vec4(1.0, 0.766, 0.336, 1.0))
-                sphere_geometry.Material.value.set_uniform("Roughness", 0.3)
-                sphere_geometry.Material.value.set_uniform("Metalness", 1.0)
+                    "Color", av.Vec4(1.0, 1.0, 1.0, 1.0))
+                sphere_geometry.Material.value.set_uniform("Roughness", 0.2)
+                sphere_geometry.Material.value.set_uniform("Metalness", 0.0)
 
             self.red = not self.red
 
-            collision_shape_node = avango.gua.nodes.CollisionShapeNode(Name="collision_shape_node",
-                                                            ShapeName="sphere")
+            collision_shape_node = avango.gua.nodes.CollisionShapeNode(
+                Name="collision_shape_node",
+                ShapeName="sphere")
 
             collision_shape_node.Children.value.append(sphere_geometry)
             body.Children.value.append(collision_shape_node)
@@ -127,8 +131,8 @@ light = avango.gua.nodes.LightNode(
     ShadowNearClippingInSunDirection=100,
     ShadowFarClippingInSunDirection=100,
     Brightness=3,
-    Transform=avango.gua.make_rot_mat(50, 0, 1, 0) * avango.gua.make_rot_mat(-40.0, 1.0, 0.0, 0.0)
-    )
+    Transform=avango.gua.make_rot_mat(50, 0, 1, 0) * avango.gua.make_rot_mat(
+        -40.0, 1.0, 0.0, 0.0))
 
 size = av.Vec2ui(1024, 768)
 
@@ -148,7 +152,7 @@ res_pass.SSAOIntensity.value = 4.0
 res_pass.SSAOFalloff.value = 10.0
 res_pass.SSAORadius.value = 7.0
 
-res_pass.EnvironmentLightingColor.value = av.Color(0.01, 0.01, 0.01)
+res_pass.EnvironmentLightingColor.value = av.Color(0.02, 0.02, 0.02)
 res_pass.ToneMappingMode.value = av.ToneMappingMode.UNCHARTED
 res_pass.Exposure.value = 1.0
 res_pass.BackgroundColor.value = av.Color(0.45, 0.5, 0.6)

@@ -20,7 +20,6 @@
 # License along with AVANGO. If not, see <http://www.gnu.org/licenses/>. #
 #                                                                        #
 ##########################################################################
-
 '''
 A distributed viewer setup: This Python scripts starts an
 avango.osg.simpleviewer and connects to the distribution group "testgroup". If
@@ -37,12 +36,12 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "client.log")
 
-class NetInit(avango.script.Script):
-  NetChildren = avango.gua.MFNode()
-  WindowName  = avango.SFString()
-  Viewer      = avango.gua.nodes.Viewer()
 
-  """
+class NetInit(avango.script.Script):
+    NetChildren = avango.gua.MFNode()
+    WindowName = avango.SFString()
+    Viewer = avango.gua.nodes.Viewer()
+    """
   @field_has_changed(NetChildren)
   def update(self):
     for tmp in self.NetChildren.value:
@@ -53,29 +52,24 @@ class NetInit(avango.script.Script):
             pass
   """
 
-nettrans = avango.gua.nodes.NetTransform(
-  Name = "net",
-  # specify role, ip, and port
-  Groupname = "AVCLIENT|127.0.0.1|7432"
-)
+
+nettrans = avango.gua.nodes.NetTransform(Name="net",
+                                         # specify role, ip, and port
+                                         Groupname="AVCLIENT|127.0.0.1|7432")
 
 loader = avango.gua.nodes.TriMeshLoader()
 
-graph = avango.gua.nodes.SceneGraph(Name = "scenegraph")
+graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
 size = avango.gua.Vec2ui(800, 600)
 
-window = avango.gua.nodes.GlfwWindow(
-  Size = size,
-  LeftResolution = size,
-  Title = "client_window"
-)
+window = avango.gua.nodes.GlfwWindow(Size=size,
+                                     LeftResolution=size,
+                                     Title="client_window")
 avango.gua.register_window("client_window", window)
 
-logger = avango.gua.nodes.Logger(
-  EnableWarning = False
-)
+logger = avango.gua.nodes.Logger(EnableWarning=False)
 
 viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]

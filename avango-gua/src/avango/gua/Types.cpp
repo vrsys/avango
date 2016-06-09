@@ -34,7 +34,6 @@ namespace
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-#include <rpc/rpc.h>
 #include <avango/Msg.h>
 
 namespace av {

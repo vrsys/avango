@@ -48,7 +48,7 @@ INCLUDE_DIRECTORIES(
 )
 
 IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+  include_directories(${ZMQ_INCLUDE_DIRS})
 ENDIF()
 
 ADD_LIBRARY(avango_utils SHARED

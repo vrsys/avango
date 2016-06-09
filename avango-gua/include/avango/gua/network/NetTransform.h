@@ -50,7 +50,7 @@ namespace av
      *   each creator has an own group node here which is well known.
      *  \end_container_doc
      */
-    class NetTransform : public TransformNode, public NetNode {
+    class AV_GUA_DLL NetTransform : public TransformNode, public NetNode {
 
       AV_FC_DECLARE();
 

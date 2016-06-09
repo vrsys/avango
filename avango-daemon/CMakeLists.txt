@@ -119,7 +119,7 @@ include_directories(
 )
 
 IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${RPC_INCLUDE_DIR} ${ZMQ_INCLUDE_DIRS})
+  include_directories(${ZMQ_INCLUDE_DIRS})
 ENDIF()
 
 ADD_LIBRARY(avango_daemon SHARED
@@ -145,8 +145,11 @@ target_link_libraries( avango_daemon
   avango_gua 
   avango_script 
   avango 
-  ${ZMQ_LIBRARIES}
-  )
+)
+
+if (AVANGO_DISTRIBUTION_SUPPORT)
+  target_link_libraries( avango_daemon optimized ${ZMQ_LIBRARY} debug ${ZMQ_LIBRARY_DEBUG})
+endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (MSVC)
   target_link_libraries(avango_daemon winmm.lib Ws2_32.lib)

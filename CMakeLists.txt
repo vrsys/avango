@@ -74,12 +74,8 @@ find_package(Boost COMPONENTS
   REQUIRED
 )
 
-if (MSVC)
-  include(findRPC)
-endif (MSVC)
-
 set (BULLET_ROOT 
-     /opt/bullet/default  
+     /opt/bullet/default
      ${GLOBAL_EXT_DIR}/bullet
      CACHE PATH
     "Set to your bullet install path.")

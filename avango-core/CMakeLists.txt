@@ -51,7 +51,6 @@ add_library( avango SHARED
 )
 
 include_directories( ${INCLUDE_PATHS} 
-                     ${RPC_INCLUDE_DIR} 
                      include
                    )
 
@@ -73,11 +72,10 @@ target_link_libraries( avango
 )
 
 if (AVANGO_DISTRIBUTION_SUPPORT)
+  target_link_libraries( avango optimized ${ZMQ_LIBRARY} debug ${ZMQ_LIBRARY_DEBUG})
   if (MSVC)
-    target_link_libraries( avango ${ZMQ_LIBRARIES} ${RPC_LIBRARY} Ws2_32.lib)
-  elseif (UNIX)
-    target_link_libraries( avango ${ZMQ_LIBRARIES})
-  endif()
+    target_link_libraries( avango Ws2_32.lib)
+  endif(MSVC)
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 

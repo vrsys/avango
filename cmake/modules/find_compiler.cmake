@@ -1,27 +1,38 @@
 if (WIN32)
     if (MSVC71)
         set (COMPILER_SUFFIX "vc71")
+        set (COMPILER_SUFFIX_VERSION "71")
     endif(MSVC71)
 
     if (MSVC80)
         set (COMPILER_SUFFIX "vc80")
+        set (COMPILER_SUFFIX_VERSION "80")
     endif(MSVC80)
 
     if (MSVC90)
         set (COMPILER_SUFFIX "vc90")
+        set (COMPILER_SUFFIX_VERSION "90")
     endif(MSVC90)
 
     if (MSVC10)
         set (COMPILER_SUFFIX "vc100")
+        set (COMPILER_SUFFIX_VERSION "100")
     endif(MSVC10)
 
     if (MSVC11)
         set (COMPILER_SUFFIX "vc110")
+        set (COMPILER_SUFFIX_VERSION "110")
     endif(MSVC11)
 	
-	if (MSVC12)
+    if (MSVC12)
         set (COMPILER_SUFFIX "vc120")
+        set (COMPILER_SUFFIX_VERSION "120")
     endif(MSVC12)
+
+    if (MSVC14)
+        set (COMPILER_SUFFIX "vc140")
+        set (COMPILER_SUFFIX_VERSION "140")
+    endif(MSVC14)
 endif (WIN32)
 
 if (UNIX)

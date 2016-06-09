@@ -32,8 +32,6 @@
 #include <vector>
 #include <utility>
 
-#include <rpc/rpc.h>
-
 #include <boost/shared_ptr.hpp>
 
 namespace av

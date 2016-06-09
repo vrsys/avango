@@ -75,7 +75,7 @@ find_package(Boost COMPONENTS
 )
 
 set (BULLET_ROOT 
-     /opt/bullet/default  
+     /opt/bullet/default
      ${GLOBAL_EXT_DIR}/bullet
      CACHE PATH
     "Set to your bullet install path.")

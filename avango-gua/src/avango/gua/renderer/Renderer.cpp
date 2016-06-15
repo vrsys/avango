@@ -2,7 +2,6 @@
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 namespace

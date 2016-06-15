@@ -1,6 +1,6 @@
 #include <avango/gua/scenegraph/TexturedScreenSpaceQuadNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::TexturedScreenSpaceQuadNode);
 
@@ -12,36 +12,36 @@ av::gua::TexturedScreenSpaceQuadNode::TexturedScreenSpaceQuadNode(std::shared_pt
       m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Texture,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getTextureCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setTextureCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getTextureCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setTextureCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Width,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getWidthCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setWidthCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getWidthCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setWidthCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Height,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getHeightCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setHeightCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getHeightCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setHeightCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Anchor,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getAnchorCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setAnchorCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getAnchorCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setAnchorCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Offset,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getOffsetCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setOffsetCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getOffsetCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setOffsetCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Opacity,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getOpacityCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setOpacityCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getOpacityCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setOpacityCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FlipX,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getFlipXCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setFlipXCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getFlipXCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setFlipXCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FlipY,
-                          boost::bind(&TexturedScreenSpaceQuadNode::getFlipYCB, this, _1),
-                          boost::bind(&TexturedScreenSpaceQuadNode::setFlipYCB, this, _1));
+                          std::bind(&TexturedScreenSpaceQuadNode::getFlipYCB, this,std::placeholders::_1),
+                          std::bind(&TexturedScreenSpaceQuadNode::setFlipYCB, this,std::placeholders::_1));
 
 }
 

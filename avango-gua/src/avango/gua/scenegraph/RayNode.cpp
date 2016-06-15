@@ -1,6 +1,5 @@
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 
 AV_FC_DEFINE(av::gua::RayNode);
 

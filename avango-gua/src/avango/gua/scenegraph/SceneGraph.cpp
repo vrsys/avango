@@ -1,7 +1,7 @@
 #include <avango/gua/scenegraph/SceneGraph.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::SceneGraph);
 
@@ -13,12 +13,12 @@ av::gua::SceneGraph::SceneGraph(::gua::SceneGraph* guaSceneGraph)
       m_root(new av::gua::TransformNode(std::dynamic_pointer_cast< ::gua::node::TransformNode>((*m_guaSceneGraph)["/"])))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Root,
-                          boost::bind(&SceneGraph::getRootCB, this, _1),
-                          boost::bind(&SceneGraph::setRootCB, this, _1));
+                          std::bind(&SceneGraph::getRootCB, this,std::placeholders::_1),
+                          std::bind(&SceneGraph::setRootCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Name,
-                          boost::bind(&SceneGraph::getNameCB, this, _1),
-                          boost::bind(&SceneGraph::setNameCB, this, _1));
+                          std::bind(&SceneGraph::getNameCB, this,std::placeholders::_1),
+                          std::bind(&SceneGraph::setNameCB, this,std::placeholders::_1));
 }
 
 //av::gua::SceneGraph::~SceneGraph()

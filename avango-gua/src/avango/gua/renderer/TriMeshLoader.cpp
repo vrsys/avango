@@ -1,7 +1,6 @@
 #include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 namespace

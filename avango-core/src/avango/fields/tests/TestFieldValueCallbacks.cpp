@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <avango/Application.h>
 #include <avango/Link.h>
@@ -50,11 +50,11 @@ namespace
       mValue(false)
     {
       AV_FC_ADD_ADAPTOR_FIELD(Value,
-                              boost::bind(&MyObject::getValueCallback, this, _1),
-                              boost::bind(&MyObject::setValueCallback, this, _1));
+                              std::bind(&MyObject::getValueCallback, this, std::placeholders::_1),
+                              std::bind(&MyObject::setValueCallback, this, std::placeholders::_1));
       AV_FC_ADD_ADAPTOR_FIELD(Values,
-                              boost::bind(&MyObject::getValuesCallback, this, _1),
-                              boost::bind(&MyObject::setValuesCallback, this, _1));
+                              std::bind(&MyObject::getValuesCallback, this, std::placeholders::_1),
+                              std::bind(&MyObject::setValuesCallback, this, std::placeholders::_1));
     }
 
     bool mValue;

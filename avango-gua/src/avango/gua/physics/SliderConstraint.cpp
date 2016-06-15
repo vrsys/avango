@@ -3,7 +3,7 @@
 #include <avango/gua/Types.hpp>
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -21,28 +21,28 @@ av::gua::SliderConstraint::SliderConstraint(::gua::physics::SliderConstraint* gu
     m_guaConstraint(reinterpret_cast< ::gua::physics::SliderConstraint*>(Constraint::getGuaConstraint()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(FrameA,
-                        boost::bind(&SliderConstraint::getFrameACB, this, _1),
-                        boost::bind(&SliderConstraint::setFrameACB, this, _1));
+                        std::bind(&SliderConstraint::getFrameACB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setFrameACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FrameB,
-                        boost::bind(&SliderConstraint::getFrameBCB, this, _1),
-                        boost::bind(&SliderConstraint::setFrameBCB, this, _1));
+                        std::bind(&SliderConstraint::getFrameBCB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setFrameBCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LowerLinearLimit,
-                        boost::bind(&SliderConstraint::getLowerLinearLimitCB, this, _1),
-                        boost::bind(&SliderConstraint::setLowerLinearLimitCB, this, _1));
+                        std::bind(&SliderConstraint::getLowerLinearLimitCB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setLowerLinearLimitCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(UpperLinearLimit,
-                        boost::bind(&SliderConstraint::getUpperLinearLimitCB, this, _1),
-                        boost::bind(&SliderConstraint::setUpperLinearLimitCB, this, _1));
+                        std::bind(&SliderConstraint::getUpperLinearLimitCB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setUpperLinearLimitCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LowerAngularLimit,
-                        boost::bind(&SliderConstraint::getLowerAngularLimitCB, this, _1),
-                        boost::bind(&SliderConstraint::setLowerAngularLimitCB, this, _1));
+                        std::bind(&SliderConstraint::getLowerAngularLimitCB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setLowerAngularLimitCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(UpperAngularLimit,
-                        boost::bind(&SliderConstraint::getUpperAngularLimitCB, this, _1),
-                        boost::bind(&SliderConstraint::setUpperAngularLimitCB, this, _1));
+                        std::bind(&SliderConstraint::getUpperAngularLimitCB, this,std::placeholders::_1),
+                        std::bind(&SliderConstraint::setUpperAngularLimitCB, this,std::placeholders::_1));
 
 
 }

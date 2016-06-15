@@ -1,6 +1,5 @@
 #include <avango/gua/renderer/Video3DPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>

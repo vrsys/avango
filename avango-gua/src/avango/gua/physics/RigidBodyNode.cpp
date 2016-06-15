@@ -1,7 +1,7 @@
 #include <avango/gua/physics/RigidBodyNode.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,40 +19,40 @@ av::gua::RigidBodyNode::RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBody
     m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(IsKinematic,
-                        boost::bind(&RigidBodyNode::getIsKinematicCB, this, _1),
-                        boost::bind(&RigidBodyNode::setIsKinematicCB, this, _1));
+                        std::bind(&RigidBodyNode::getIsKinematicCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setIsKinematicCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Mass,
-                        boost::bind(&RigidBodyNode::getMassCB, this, _1),
-                        boost::bind(&RigidBodyNode::setMassCB, this, _1));
+                        std::bind(&RigidBodyNode::getMassCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setMassCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Friction,
-                        boost::bind(&RigidBodyNode::getFrictionCB, this, _1),
-                        boost::bind(&RigidBodyNode::setFrictionCB, this, _1));
+                        std::bind(&RigidBodyNode::getFrictionCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setFrictionCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(RollingFriction,
-                        boost::bind(&RigidBodyNode::getRollingFrictionCB, this, _1),
-                        boost::bind(&RigidBodyNode::setRollingFrictionCB, this, _1));
+                        std::bind(&RigidBodyNode::getRollingFrictionCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setRollingFrictionCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Restitution,
-                        boost::bind(&RigidBodyNode::getRestitutionCB, this, _1),
-                        boost::bind(&RigidBodyNode::setRestitutionCB, this, _1));
+                        std::bind(&RigidBodyNode::getRestitutionCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setRestitutionCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LinearDamping,
-                        boost::bind(&RigidBodyNode::getLinearDampingCB, this, _1),
-                        boost::bind(&RigidBodyNode::setLinearDampingCB, this, _1));
+                        std::bind(&RigidBodyNode::getLinearDampingCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setLinearDampingCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(AngularDamping,
-                        boost::bind(&RigidBodyNode::getAngularDampingCB, this, _1),
-                        boost::bind(&RigidBodyNode::setAngularDampingCB, this, _1));
+                        std::bind(&RigidBodyNode::getAngularDampingCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setAngularDampingCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LinearVelocity,
-                        boost::bind(&RigidBodyNode::getLinearVelocityCB, this, _1),
-                        boost::bind(&RigidBodyNode::setLinearVelocityCB, this, _1));
+                        std::bind(&RigidBodyNode::getLinearVelocityCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setLinearVelocityCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(AngularVelocity,
-                        boost::bind(&RigidBodyNode::getAngularVelocityCB, this, _1),
-                        boost::bind(&RigidBodyNode::setAngularVelocityCB, this, _1));
+                        std::bind(&RigidBodyNode::getAngularVelocityCB, this,std::placeholders::_1),
+                        std::bind(&RigidBodyNode::setAngularVelocityCB, this,std::placeholders::_1));
 
     AV_FC_ADD_FIELD        (Group, static_cast<int>(RigidBodyNode::CollisionFilterGroups::STATIC_FILTER));
     AV_FC_ADD_FIELD        (Mask,  static_cast<int>(RigidBodyNode::CollisionFilterGroups::ALL_FILTER) ^ static_cast<int>(RigidBodyNode::CollisionFilterGroups::STATIC_FILTER));

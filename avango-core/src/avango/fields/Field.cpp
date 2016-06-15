@@ -29,7 +29,6 @@
 #include <iostream>
 #include <iterator>
 
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
 
 #include <avango/Assert.h>

@@ -28,7 +28,6 @@
 #include <avango/python/register_field.h>
 #include <vector>
 #include <string>
-#include <boost/bind.hpp>
 
 #include "Field.h"
 

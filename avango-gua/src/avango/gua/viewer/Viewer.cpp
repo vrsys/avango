@@ -11,7 +11,7 @@
 #include <gua/gui/Interface.hpp>
 #endif
 
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <chrono>
 
@@ -37,11 +37,11 @@ av::gua::Viewer::Viewer()
 #endif
 
     AV_FC_ADD_ADAPTOR_FIELD(DesiredFPS,
-                    boost::bind(&Viewer::getDesiredFPSCB, this, _1),
-                    boost::bind(&Viewer::setDesiredFPSCB, this, _1));
+                    std::bind(&Viewer::getDesiredFPSCB, this,std::placeholders::_1),
+                    std::bind(&Viewer::setDesiredFPSCB, this,std::placeholders::_1));
     AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
-                    boost::bind(&Viewer::getApplicationFPSCB, this, _1),
-                    boost::bind(&Viewer::setApplicationFPSCB, this, _1));
+                    std::bind(&Viewer::getApplicationFPSCB, this,std::placeholders::_1),
+                    std::bind(&Viewer::setApplicationFPSCB, this,std::placeholders::_1));
 }
 
 av::gua::Viewer::~Viewer()

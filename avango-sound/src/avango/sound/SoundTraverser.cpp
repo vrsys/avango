@@ -26,7 +26,7 @@
 #include <avango/gua/scenegraph/TransformNode.hpp>
 //#include <avango/gua/scenegraph/Group.hpp>
 #include <avango/Application.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <iostream>
 
 namespace
@@ -143,7 +143,7 @@ av::sound::SoundTraverser::evaluate()
       if (mHaveCallbackHandle) {
         return;
       }
-      mCallbackHandle = app.addRenderCallback(boost::bind(&SoundTraverser::render, this));
+      mCallbackHandle = app.addRenderCallback(std::bind(&SoundTraverser::render, this));
       mHaveCallbackHandle = true;
     } else
     {

@@ -3,7 +3,7 @@
 #include <avango/gua/Types.hpp>
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -21,12 +21,12 @@ av::gua::Point2PointConstraint::Point2PointConstraint(::gua::physics::Point2Poin
     m_guaConstraint(reinterpret_cast< ::gua::physics::Point2PointConstraint*>(Constraint::getGuaConstraint()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(PivotA,
-                        boost::bind(&Point2PointConstraint::getPivotACB, this, _1),
-                        boost::bind(&Point2PointConstraint::setPivotACB, this, _1));
+                        std::bind(&Point2PointConstraint::getPivotACB, this,std::placeholders::_1),
+                        std::bind(&Point2PointConstraint::setPivotACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(PivotB,
-                        boost::bind(&Point2PointConstraint::getPivotBCB, this, _1),
-                        boost::bind(&Point2PointConstraint::setPivotBCB, this, _1));
+                        std::bind(&Point2PointConstraint::getPivotBCB, this,std::placeholders::_1),
+                        std::bind(&Point2PointConstraint::setPivotBCB, this,std::placeholders::_1));
 }
 
 av::gua::Point2PointConstraint::~Point2PointConstraint()

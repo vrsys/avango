@@ -1,6 +1,6 @@
 #include <avango/gua/physics/SphereShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,8 +20,8 @@ av::gua::SphereShape::SphereShape(::gua::physics::SphereShape* guashape)
     m_guaShape(reinterpret_cast< ::gua::physics::SphereShape*>(CollisionShape::getGuaShape()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Radius,
-                        boost::bind(&SphereShape::getRadiusCB, this, _1),
-                        boost::bind(&SphereShape::setRadiusCB, this, _1));
+                        std::bind(&SphereShape::getRadiusCB, this,std::placeholders::_1),
+                        std::bind(&SphereShape::setRadiusCB, this,std::placeholders::_1));
 
 }
 

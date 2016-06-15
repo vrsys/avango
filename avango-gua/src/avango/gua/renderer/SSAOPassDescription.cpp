@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -22,16 +22,16 @@ av::gua::SSAOPassDescription::SSAOPassDescription(
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Radius,
-                    boost::bind(&SSAOPassDescription::getRadiusCB, this, _1),
-                    boost::bind(&SSAOPassDescription::setRadiusCB, this, _1));
+                    std::bind(&SSAOPassDescription::getRadiusCB, this,std::placeholders::_1),
+                    std::bind(&SSAOPassDescription::setRadiusCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Intensity,
-                    boost::bind(&SSAOPassDescription::getIntensityCB, this, _1),
-                    boost::bind(&SSAOPassDescription::setIntensityCB, this, _1));
+                    std::bind(&SSAOPassDescription::getIntensityCB, this,std::placeholders::_1),
+                    std::bind(&SSAOPassDescription::setIntensityCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Falloff,
-                    boost::bind(&SSAOPassDescription::getFalloffCB, this, _1),
-                    boost::bind(&SSAOPassDescription::setFalloffCB, this, _1));
+                    std::bind(&SSAOPassDescription::getFalloffCB, this,std::placeholders::_1),
+                    std::bind(&SSAOPassDescription::setFalloffCB, this,std::placeholders::_1));
 
 }
 

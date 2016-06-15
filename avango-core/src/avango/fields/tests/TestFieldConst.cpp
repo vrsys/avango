@@ -25,8 +25,6 @@
 
 #include <vector>
 
-#include <boost/bind.hpp>
-
 #include <avango/Application.h>
 #include <avango/Link.h>
 #include <avango/Logger.h>

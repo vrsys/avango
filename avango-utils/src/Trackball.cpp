@@ -25,7 +25,6 @@
 
 #include <avango/utils/Trackball.h>
 #include <avango/Logger.h>
-#include <boost/bind.hpp>
 #include <gua/math.hpp>
 #include <cmath>
 

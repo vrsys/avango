@@ -1,6 +1,6 @@
 #include <avango/gua/physics/PlaneShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,12 +20,12 @@ av::gua::PlaneShape::PlaneShape(::gua::physics::PlaneShape* guashape)
     m_guaShape(reinterpret_cast< ::gua::physics::PlaneShape*>(CollisionShape::getGuaShape()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Normal,
-                        boost::bind(&PlaneShape::getNormalCB, this, _1),
-                        boost::bind(&PlaneShape::setNormalCB, this, _1));
+                        std::bind(&PlaneShape::getNormalCB, this,std::placeholders::_1),
+                        std::bind(&PlaneShape::setNormalCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(PlaneConstant,
-                        boost::bind(&PlaneShape::getPlaneConstantCB, this, _1),
-                        boost::bind(&PlaneShape::setPlaneConstantCB, this, _1));
+                        std::bind(&PlaneShape::getPlaneConstantCB, this,std::placeholders::_1),
+                        std::bind(&PlaneShape::setPlaneConstantCB, this,std::placeholders::_1));
 
 }
 

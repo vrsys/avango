@@ -23,7 +23,7 @@
 
 #include "avango/sound/SoundRenderer.h"
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/gua/Fields.hpp>
 
 AV_FC_DEFINE_ABSTRACT(av::sound::SoundRenderer)
@@ -34,11 +34,11 @@ AV_FIELD_DEFINE(av::sound::MFSoundRenderer);
 av::sound::SoundRenderer::SoundRenderer()
 {
   AV_FC_ADD_ADAPTOR_FIELD(ListenerPosition,
-                          boost::bind(&SoundRenderer::getListenerPosCB, this, _1),
-                          boost::bind(&SoundRenderer::setListenerPosCB, this, _1));
+                          std::bind(&SoundRenderer::getListenerPosCB, this, std::placeholders::_1),
+                          std::bind(&SoundRenderer::setListenerPosCB, this, std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(ListenerVelocity,
-                          boost::bind(&SoundRenderer::getListenerVeloCB, this, _1),
-                          boost::bind(&SoundRenderer::setListenerVeloCB, this, _1));
+                          std::bind(&SoundRenderer::getListenerVeloCB, this, std::placeholders::_1),
+                          std::bind(&SoundRenderer::setListenerVeloCB, this, std::placeholders::_1));
 }
 
 

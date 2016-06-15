@@ -1,7 +1,6 @@
 #include <avango/oculus/OculusWindow.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>

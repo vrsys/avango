@@ -1,7 +1,7 @@
 #include <avango/gua/scenegraph/Video3DNode.hpp>
 #include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::Video3DNode);
 
@@ -13,20 +13,20 @@ av::gua::Video3DNode::Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> gua
   , m_guaVideo3DNode(guanode)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-                        boost::bind(&Video3DNode::getGeometryCB, this, _1),
-                        boost::bind(&Video3DNode::setGeometryCB, this, _1));
+                        std::bind(&Video3DNode::getGeometryCB, this,std::placeholders::_1),
+                        std::bind(&Video3DNode::setGeometryCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Material,
-                      boost::bind(&Video3DNode::getMaterialCB, this, _1),
-                      boost::bind(&Video3DNode::setMaterialCB, this, _1));
+                      std::bind(&Video3DNode::getMaterialCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setMaterialCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
-                      boost::bind(&Video3DNode::getRenderToGBufferCB, this, _1),
-                      boost::bind(&Video3DNode::setRenderToGBufferCB, this, _1));
+                      std::bind(&Video3DNode::getRenderToGBufferCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setRenderToGBufferCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToStencilBuffer,
-                      boost::bind(&Video3DNode::getRenderToStencilBufferCB, this, _1),
-                      boost::bind(&Video3DNode::setRenderToStencilBufferCB, this, _1));
+                      std::bind(&Video3DNode::getRenderToStencilBufferCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setRenderToStencilBufferCB, this,std::placeholders::_1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));

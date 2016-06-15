@@ -3,7 +3,7 @@
 #include <avango/gua/Types.hpp>
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -21,40 +21,40 @@ av::gua::HingeConstraint::HingeConstraint(::gua::physics::HingeConstraint* guaco
     m_guaConstraint(reinterpret_cast< ::gua::physics::HingeConstraint*>(Constraint::getGuaConstraint()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(PivotA,
-                        boost::bind(&HingeConstraint::getPivotACB, this, _1),
-                        boost::bind(&HingeConstraint::setPivotACB, this, _1));
+                        std::bind(&HingeConstraint::getPivotACB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setPivotACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(PivotB,
-                        boost::bind(&HingeConstraint::getPivotBCB, this, _1),
-                        boost::bind(&HingeConstraint::setPivotBCB, this, _1));
+                        std::bind(&HingeConstraint::getPivotBCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setPivotBCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(AxisA,
-                        boost::bind(&HingeConstraint::getAxisACB, this, _1),
-                        boost::bind(&HingeConstraint::setAxisACB, this, _1));
+                        std::bind(&HingeConstraint::getAxisACB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setAxisACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(AxisB,
-                        boost::bind(&HingeConstraint::getAxisBCB, this, _1),
-                        boost::bind(&HingeConstraint::setAxisBCB, this, _1));
+                        std::bind(&HingeConstraint::getAxisBCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setAxisBCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(UpperLimit,
-                        boost::bind(&HingeConstraint::getUpperLimitCB, this, _1),
-                        boost::bind(&HingeConstraint::setUpperLimitCB, this, _1));
+                        std::bind(&HingeConstraint::getUpperLimitCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setUpperLimitCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LowerLimit,
-                        boost::bind(&HingeConstraint::getLowerLimitCB, this, _1),
-                        boost::bind(&HingeConstraint::setLowerLimitCB, this, _1));
+                        std::bind(&HingeConstraint::getLowerLimitCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setLowerLimitCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(MotorEnabled,
-                        boost::bind(&HingeConstraint::getMotorEnabledCB, this, _1),
-                        boost::bind(&HingeConstraint::setMotorEnabledCB, this, _1));
+                        std::bind(&HingeConstraint::getMotorEnabledCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setMotorEnabledCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(MotorTargetVelocity,
-                        boost::bind(&HingeConstraint::getMotorTargetVelocityCB, this, _1),
-                        boost::bind(&HingeConstraint::setMotorTargetVelocityCB, this, _1));
+                        std::bind(&HingeConstraint::getMotorTargetVelocityCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setMotorTargetVelocityCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(MotorMaxImpulse,
-                        boost::bind(&HingeConstraint::getMotorMaxImpulseCB, this, _1),
-                        boost::bind(&HingeConstraint::setMotorMaxImpulseCB, this, _1));
+                        std::bind(&HingeConstraint::getMotorMaxImpulseCB, this,std::placeholders::_1),
+                        std::bind(&HingeConstraint::setMotorMaxImpulseCB, this,std::placeholders::_1));
 }
 
 av::gua::HingeConstraint::~HingeConstraint()

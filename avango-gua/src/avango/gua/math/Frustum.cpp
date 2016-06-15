@@ -1,7 +1,8 @@
 #include <avango/gua/math/Frustum.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,32 +20,32 @@ av::gua::Frustum::Frustum(::gua::Frustum* guaFrustum)
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(ClipNear,
-                        boost::bind(&Frustum::getClipNearCB, this, _1),
-                        boost::bind(&Frustum::setClipNearCB, this, _1));
+                        std::bind(&Frustum::getClipNearCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setClipNearCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ClipFar,
-                        boost::bind(&Frustum::getClipFarCB, this, _1),
-                        boost::bind(&Frustum::setClipFarCB, this, _1));
+                        std::bind(&Frustum::getClipFarCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setClipFarCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(CameraTransform,
-                        boost::bind(&Frustum::getCameraTransformCB, this, _1),
-                        boost::bind(&Frustum::setCameraTransformCB, this, _1));
+                        std::bind(&Frustum::getCameraTransformCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setCameraTransformCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ScreenTransform,
-                        boost::bind(&Frustum::getScreenTransformCB, this, _1),
-                        boost::bind(&Frustum::setScreenTransformCB, this, _1));
+                        std::bind(&Frustum::getScreenTransformCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setScreenTransformCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ViewMatrix,
-                        boost::bind(&Frustum::getViewMatrixCB, this, _1),
-                        boost::bind(&Frustum::setViewMatrixCB, this, _1));
+                        std::bind(&Frustum::getViewMatrixCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setViewMatrixCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ProjectionMatrix,
-                        boost::bind(&Frustum::getProjectionMatrixCB, this, _1),
-                        boost::bind(&Frustum::setProjectionMatrixCB, this, _1));
+                        std::bind(&Frustum::getProjectionMatrixCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setProjectionMatrixCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Corners,
-                        boost::bind(&Frustum::getCornersCB, this, _1),
-                        boost::bind(&Frustum::setCornersCB, this, _1));
+                        std::bind(&Frustum::getCornersCB, this, std::placeholders::_1),
+                        std::bind(&Frustum::setCornersCB, this, std::placeholders::_1));
 
 }
 
@@ -71,92 +72,92 @@ av::gua::Frustum::getGuaFrustum() const
     return m_guaFrustum;
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getClipNearCB(const SFDouble::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_clip_near();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setClipNearCB(const SFDouble::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getClipFarCB(const SFDouble::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_clip_far();
 
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setClipFarCB(const SFDouble::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getCameraTransformCB(const SFMatrix4::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_camera_transform();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setCameraTransformCB(const SFMatrix4::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getScreenTransformCB(const SFMatrix4::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_screen_transform();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setScreenTransformCB(const SFMatrix4::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getViewMatrixCB(const SFMatrix4::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_view();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setViewMatrixCB(const SFMatrix4::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getProjectionMatrixCB(const SFMatrix4::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_projection();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setProjectionMatrixCB(const SFMatrix4::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;
 }
 
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::getCornersCB(const MFVec3::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaFrustum->get_corners();
 }
 
-/* virtual */ void 
+/* virtual */ void
 av::gua::Frustum::setCornersCB(const MFVec3::SetValueEvent& event)
 {
   // std::cout << "Error in av::gua::Frustum: Frustum is read-only structure!" << std::endl;

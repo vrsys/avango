@@ -2,7 +2,6 @@
 #include <avango/gua/scenegraph/Video3DNode.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 namespace

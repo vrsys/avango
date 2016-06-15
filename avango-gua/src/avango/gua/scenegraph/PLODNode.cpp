@@ -1,7 +1,7 @@
 #include <avango/gua/scenegraph/PLODNode.hpp>
 #include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::PLODNode);
 
@@ -13,24 +13,24 @@ av::gua::PLODNode::PLODNode(std::shared_ptr< ::gua::node::PLODNode> guanode)
     , m_guaPLODNode(guanode)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-                        boost::bind(&PLODNode::getGeometryCB, this, _1),
-                        boost::bind(&PLODNode::setGeometryCB, this, _1));
+                        std::bind(&PLODNode::getGeometryCB, this,std::placeholders::_1),
+                        std::bind(&PLODNode::setGeometryCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Material,
-                      boost::bind(&PLODNode::getMaterialCB, this, _1),
-                      boost::bind(&PLODNode::setMaterialCB, this, _1));
+                      std::bind(&PLODNode::getMaterialCB, this,std::placeholders::_1),
+                      std::bind(&PLODNode::setMaterialCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RadiusScale,
-                      boost::bind(&PLODNode::getRadiusScaleCB, this, _1),
-                      boost::bind(&PLODNode::setRadiusScaleCB, this, _1));
+                      std::bind(&PLODNode::getRadiusScaleCB, this,std::placeholders::_1),
+                      std::bind(&PLODNode::setRadiusScaleCB, this,std::placeholders::_1));
  
   AV_FC_ADD_ADAPTOR_FIELD(ErrorThreshold,
-                      boost::bind(&PLODNode::getErrorThresholdCB, this, _1),
-                      boost::bind(&PLODNode::setErrorThresholdCB, this, _1));
+                      std::bind(&PLODNode::getErrorThresholdCB, this,std::placeholders::_1),
+                      std::bind(&PLODNode::setErrorThresholdCB, this,std::placeholders::_1));
   
   AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
-                      boost::bind(&PLODNode::getEnableBackfaceCullingCB, this, _1),
-                      boost::bind(&PLODNode::setEnableBackfaceCullingCB, this, _1));
+                      std::bind(&PLODNode::getEnableBackfaceCullingCB, this,std::placeholders::_1),
+                      std::bind(&PLODNode::setEnableBackfaceCullingCB, this,std::placeholders::_1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));

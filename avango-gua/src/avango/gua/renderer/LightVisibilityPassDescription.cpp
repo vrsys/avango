@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -22,12 +22,12 @@ av::gua::LightVisibilityPassDescription::LightVisibilityPassDescription(
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(RasterizationMode,
-                    boost::bind(&LightVisibilityPassDescription::getRasterizationModeCB, this, _1),
-                    boost::bind(&LightVisibilityPassDescription::setRasterizationModeCB, this, _1));
+                    std::bind(&LightVisibilityPassDescription::getRasterizationModeCB, this,std::placeholders::_1),
+                    std::bind(&LightVisibilityPassDescription::setRasterizationModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(TilePower,
-                    boost::bind(&LightVisibilityPassDescription::getTilePowerCB, this, _1),
-                    boost::bind(&LightVisibilityPassDescription::setTilePowerCB, this, _1));
+                    std::bind(&LightVisibilityPassDescription::getTilePowerCB, this,std::placeholders::_1),
+                    std::bind(&LightVisibilityPassDescription::setTilePowerCB, this,std::placeholders::_1));
 }
 
 void

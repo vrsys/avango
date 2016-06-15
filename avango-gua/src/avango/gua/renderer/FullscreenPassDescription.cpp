@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/FullscreenPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -22,12 +22,12 @@ av::gua::FullscreenPassDescription::FullscreenPassDescription(
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Source,
-                    boost::bind(&FullscreenPassDescription::getSourceCB, this, _1),
-                    boost::bind(&FullscreenPassDescription::setSourceCB, this, _1));
+                    std::bind(&FullscreenPassDescription::getSourceCB, this,std::placeholders::_1),
+                    std::bind(&FullscreenPassDescription::setSourceCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SourceFile,
-                    boost::bind(&FullscreenPassDescription::getSourceFileCB, this, _1),
-                    boost::bind(&FullscreenPassDescription::setSourceFileCB, this, _1));
+                    std::bind(&FullscreenPassDescription::getSourceFileCB, this,std::placeholders::_1),
+                    std::bind(&FullscreenPassDescription::setSourceFileCB, this,std::placeholders::_1));
 }
 
 void

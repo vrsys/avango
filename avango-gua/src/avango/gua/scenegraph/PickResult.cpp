@@ -1,7 +1,6 @@
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 
 AV_FC_DEFINE(av::gua::PickResult);
 

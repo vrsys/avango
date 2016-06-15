@@ -2,7 +2,7 @@
 
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::LightNode);
 
@@ -14,64 +14,64 @@ av::gua::LightNode::LightNode(std::shared_ptr< ::gua::node::LightNode> guanode)
       m_guaNode(std::dynamic_pointer_cast< ::gua::node::LightNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Type,
-                          boost::bind(&LightNode::getTypeCB, this, _1),
-                          boost::bind(&LightNode::setTypeCB, this, _1));
+                          std::bind(&LightNode::getTypeCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setTypeCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Color,
-                          boost::bind(&LightNode::getColorCB, this, _1),
-                          boost::bind(&LightNode::setColorCB, this, _1));
+                          std::bind(&LightNode::getColorCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setColorCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Brightness,
-                          boost::bind(&LightNode::getBrightnessCB, this, _1),
-                          boost::bind(&LightNode::setBrightnessCB, this, _1));
+                          std::bind(&LightNode::getBrightnessCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setBrightnessCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Falloff,
-                          boost::bind(&LightNode::getFallofCB, this, _1),
-                          boost::bind(&LightNode::setFallofCB, this, _1));
+                          std::bind(&LightNode::getFallofCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setFallofCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Softness,
-                          boost::bind(&LightNode::getSoftnessCB, this, _1),
-                          boost::bind(&LightNode::setSoftnessCB, this, _1));
+                          std::bind(&LightNode::getSoftnessCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setSoftnessCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableShadows,
-                          boost::bind(&LightNode::getEnableShadowsCB, this, _1),
-                          boost::bind(&LightNode::setEnableShadowsCB, this, _1));
+                          std::bind(&LightNode::getEnableShadowsCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setEnableShadowsCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableGodrays,
-                          boost::bind(&LightNode::getEnableGodraysCB, this, _1),
-                          boost::bind(&LightNode::setEnableGodraysCB, this, _1));
+                          std::bind(&LightNode::getEnableGodraysCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setEnableGodraysCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableDiffuseShading,
-                          boost::bind(&LightNode::getEnableDiffuseShadingCB, this, _1),
-                          boost::bind(&LightNode::setEnableDiffuseShadingCB, this, _1));
+                          std::bind(&LightNode::getEnableDiffuseShadingCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setEnableDiffuseShadingCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableSpecularShading,
-                          boost::bind(&LightNode::getEnableSpecularShadingCB, this, _1),
-                          boost::bind(&LightNode::setEnableSpecularShadingCB, this, _1));
+                          std::bind(&LightNode::getEnableSpecularShadingCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setEnableSpecularShadingCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowOffset,
-                          boost::bind(&LightNode::getShadowOffsetCB, this, _1),
-                          boost::bind(&LightNode::setShadowOffsetCB, this, _1));
+                          std::bind(&LightNode::getShadowOffsetCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowOffsetCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowMapSize,
-                          boost::bind(&LightNode::getShadowMapSizeCB, this, _1),
-                          boost::bind(&LightNode::setShadowMapSizeCB, this, _1));
+                          std::bind(&LightNode::getShadowMapSizeCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowMapSizeCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowMaxDistance,
-                          boost::bind(&LightNode::getShadowMaxDistanceCB, this, _1),
-                          boost::bind(&LightNode::setShadowMaxDistanceCB, this, _1));
+                          std::bind(&LightNode::getShadowMaxDistanceCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowMaxDistanceCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowCascadedSplits,
-                          boost::bind(&LightNode::getShadowCascadedSplitsCB, this, _1),
-                          boost::bind(&LightNode::setShadowCascadedSplitsCB, this, _1));
+                          std::bind(&LightNode::getShadowCascadedSplitsCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowCascadedSplitsCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowNearClippingInSunDirection,
-                          boost::bind(&LightNode::getShadowNearClippingInSunDirectionCB, this, _1),
-                          boost::bind(&LightNode::setShadowNearClippingInSunDirectionCB, this, _1));
+                          std::bind(&LightNode::getShadowNearClippingInSunDirectionCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowNearClippingInSunDirectionCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ShadowFarClippingInSunDirection,
-                          boost::bind(&LightNode::getShadowFarClippingInSunDirectionCB, this, _1),
-                          boost::bind(&LightNode::setShadowFarClippingInSunDirectionCB, this, _1));
+                          std::bind(&LightNode::getShadowFarClippingInSunDirectionCB, this,std::placeholders::_1),
+                          std::bind(&LightNode::setShadowFarClippingInSunDirectionCB, this,std::placeholders::_1));
 }
 
 void

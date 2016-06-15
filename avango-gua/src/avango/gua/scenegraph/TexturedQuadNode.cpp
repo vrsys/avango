@@ -1,6 +1,6 @@
 #include <avango/gua/scenegraph/TexturedQuadNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::TexturedQuadNode);
 
@@ -12,32 +12,32 @@ av::gua::TexturedQuadNode::TexturedQuadNode(std::shared_ptr< ::gua::node::Textur
       m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Texture,
-                          boost::bind(&TexturedQuadNode::getTextureCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setTextureCB, this, _1));
+                          std::bind(&TexturedQuadNode::getTextureCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setTextureCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Width,
-                          boost::bind(&TexturedQuadNode::getWidthCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setWidthCB, this, _1));
+                          std::bind(&TexturedQuadNode::getWidthCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setWidthCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Height,
-                          boost::bind(&TexturedQuadNode::getHeightCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setHeightCB, this, _1));
+                          std::bind(&TexturedQuadNode::getHeightCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setHeightCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FlipX,
-                          boost::bind(&TexturedQuadNode::getFlipXCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setFlipXCB, this, _1));
+                          std::bind(&TexturedQuadNode::getFlipXCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setFlipXCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FlipY,
-                          boost::bind(&TexturedQuadNode::getFlipYCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setFlipYCB, this, _1));
+                          std::bind(&TexturedQuadNode::getFlipYCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setFlipYCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ScaledTransform,
-                          boost::bind(&TexturedQuadNode::getScaledTransformCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setScaledTransformCB, this, _1));
+                          std::bind(&TexturedQuadNode::getScaledTransformCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setScaledTransformCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(ScaledWorldTransform,
-                          boost::bind(&TexturedQuadNode::getScaledWorldTransformCB, this, _1),
-                          boost::bind(&TexturedQuadNode::setScaledWorldTransformCB, this, _1));
+                          std::bind(&TexturedQuadNode::getScaledWorldTransformCB, this,std::placeholders::_1),
+                          std::bind(&TexturedQuadNode::setScaledWorldTransformCB, this,std::placeholders::_1));
 
 }
 

@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/SkyMapPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -21,32 +21,32 @@ av::gua::SkyMapPassDescription::SkyMapPassDescription(
     , m_guaSkyMapPassDescription(guaSkyMapPassDescription)
 {
   AV_FC_ADD_ADAPTOR_FIELD(OutputTextureName,
-                    boost::bind(&SkyMapPassDescription::getOutputTextureNameCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setOutputTextureNameCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getOutputTextureNameCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setOutputTextureNameCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LightColor,
-                    boost::bind(&SkyMapPassDescription::getLightColorCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setLightColorCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getLightColorCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setLightColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LightDirection,
-                    boost::bind(&SkyMapPassDescription::getLightDirectionCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setLightDirectionCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getLightDirectionCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setLightDirectionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LightBrightness,
-                    boost::bind(&SkyMapPassDescription::getLightBrightnessCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setLightBrightnessCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getLightBrightnessCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setLightBrightnessCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(GroundColor,
-                    boost::bind(&SkyMapPassDescription::getGroundColorCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setGroundColorCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getGroundColorCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setGroundColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RayleighFactor,
-                    boost::bind(&SkyMapPassDescription::getRayleighFactorCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setRayleighFactorCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getRayleighFactorCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setRayleighFactorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(MieFactor,
-                    boost::bind(&SkyMapPassDescription::getMieFactorCB, this, _1),
-                    boost::bind(&SkyMapPassDescription::setMieFactorCB, this, _1));
+                    std::bind(&SkyMapPassDescription::getMieFactorCB, this,std::placeholders::_1),
+                    std::bind(&SkyMapPassDescription::setMieFactorCB, this,std::placeholders::_1));
 }
 
 void

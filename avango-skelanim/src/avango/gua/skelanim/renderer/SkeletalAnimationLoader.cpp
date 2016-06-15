@@ -3,7 +3,6 @@
 #include <avango/gua/scenegraph/TransformNode.hpp>
 //#include <avango/gua/scenegraph/VolumeNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 namespace

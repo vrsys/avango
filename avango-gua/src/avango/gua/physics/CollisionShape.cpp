@@ -1,6 +1,6 @@
 #include <avango/gua/physics/CollisionShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -17,16 +17,16 @@ av::gua::CollisionShape::CollisionShape(::gua::physics::CollisionShape* guashape
   : m_guaShape(guashape)
 {
     AV_FC_ADD_ADAPTOR_FIELD(IsDynamicShape,
-                        boost::bind(&CollisionShape::getIsDynamicShapeCB, this, _1),
-                        boost::bind(&CollisionShape::setIsDynamicShapeCB, this, _1));
+                        std::bind(&CollisionShape::getIsDynamicShapeCB, this,std::placeholders::_1),
+                        std::bind(&CollisionShape::setIsDynamicShapeCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(IsStaticShape,
-                        boost::bind(&CollisionShape::getIsStaticShapeCB, this, _1),
-                        boost::bind(&CollisionShape::setIsStaticShapeCB, this, _1));
+                        std::bind(&CollisionShape::getIsStaticShapeCB, this,std::placeholders::_1),
+                        std::bind(&CollisionShape::setIsStaticShapeCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(HasIdenticalShapeConstructor,
-                        boost::bind(&CollisionShape::getHasIdenticalShapeConstructorCB, this, _1),
-                        boost::bind(&CollisionShape::setHasIdenticalShapeConstructorCB, this, _1));
+                        std::bind(&CollisionShape::getHasIdenticalShapeConstructorCB, this,std::placeholders::_1),
+                        std::bind(&CollisionShape::setHasIdenticalShapeConstructorCB, this,std::placeholders::_1));
 }
 
 av::gua::CollisionShape::~CollisionShape()

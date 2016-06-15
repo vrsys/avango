@@ -23,13 +23,10 @@
 
 #include <avango/utils/PCLPointCloud.h>
 #include <avango/Logger.h>
-#include <boost/bind.hpp>
 #include <cmath>
 
 #include <pcl/io/pcd_io.h>
 #include <pcl/point_types.h>
-
-
 
 namespace
 {

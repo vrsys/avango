@@ -3,7 +3,7 @@
 #include <avango/gua/Types.hpp>
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -21,20 +21,20 @@ av::gua::FixedConstraint::FixedConstraint(::gua::physics::FixedConstraint* guaco
     m_guaConstraint(reinterpret_cast< ::gua::physics::FixedConstraint*>(Constraint::getGuaConstraint()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(FrameA,
-                        boost::bind(&FixedConstraint::getFrameACB, this, _1),
-                        boost::bind(&FixedConstraint::setFrameACB, this, _1));
+                        std::bind(&FixedConstraint::getFrameACB, this,std::placeholders::_1),
+                        std::bind(&FixedConstraint::setFrameACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FrameB,
-                        boost::bind(&FixedConstraint::getFrameBCB, this, _1),
-                        boost::bind(&FixedConstraint::setFrameBCB, this, _1));
+                        std::bind(&FixedConstraint::getFrameBCB, this,std::placeholders::_1),
+                        std::bind(&FixedConstraint::setFrameBCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LockRotation,
-                        boost::bind(&FixedConstraint::getLockRotationCB, this, _1),
-                        boost::bind(&FixedConstraint::setLockRotationCB, this, _1));
+                        std::bind(&FixedConstraint::getLockRotationCB, this,std::placeholders::_1),
+                        std::bind(&FixedConstraint::setLockRotationCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(LockTranslation,
-                        boost::bind(&FixedConstraint::getLockTranslationCB, this, _1),
-                        boost::bind(&FixedConstraint::setLockTranslationCB, this, _1));
+                        std::bind(&FixedConstraint::getLockTranslationCB, this,std::placeholders::_1),
+                        std::bind(&FixedConstraint::setLockTranslationCB, this,std::placeholders::_1));
 }
 
 av::gua::FixedConstraint::~FixedConstraint()

@@ -6,7 +6,7 @@
 #endif
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -26,88 +26,88 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
   m_PipelineDescription = av::Link<av::gua::PipelineDescription>(new av::gua::PipelineDescription(m_guaNode->get_pipeline_description()));
 
   AV_FC_ADD_ADAPTOR_FIELD(Enabled,
-                      boost::bind(&CameraNode::getEnabledCB, this, _1),
-                      boost::bind(&CameraNode::setEnabledCB, this, _1));
+                      std::bind(&CameraNode::getEnabledCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setEnabledCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(PipelineDescription,
-                      boost::bind(&CameraNode::getPipelineDescriptionCB, this, _1),
-                      boost::bind(&CameraNode::setPipelineDescriptionCB, this, _1));
+                      std::bind(&CameraNode::getPipelineDescriptionCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setPipelineDescriptionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SceneGraph,
-                      boost::bind(&CameraNode::getSceneGraphCB, this, _1),
-                      boost::bind(&CameraNode::setSceneGraphCB, this, _1));
+                      std::bind(&CameraNode::getSceneGraphCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setSceneGraphCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ViewID,
-                      boost::bind(&CameraNode::getViewIDCB, this, _1),
-                      boost::bind(&CameraNode::setViewIDCB, this, _1));
+                      std::bind(&CameraNode::getViewIDCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setViewIDCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Mode,
-                      boost::bind(&CameraNode::getModeCB, this, _1),
-                      boost::bind(&CameraNode::setModeCB, this, _1));
+                      std::bind(&CameraNode::getModeCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableStereo,
-                      boost::bind(&CameraNode::getEnableStereoCB, this, _1),
-                      boost::bind(&CameraNode::setEnableStereoCB, this, _1));
+                      std::bind(&CameraNode::getEnableStereoCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setEnableStereoCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EyeDistance,
-                      boost::bind(&CameraNode::getEyeDistanceCB, this, _1),
-                      boost::bind(&CameraNode::setEyeDistanceCB, this, _1));
+                      std::bind(&CameraNode::getEyeDistanceCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setEyeDistanceCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EyeOffset,
-                      boost::bind(&CameraNode::getEyeOffsetCB, this, _1),
-                      boost::bind(&CameraNode::setEyeOffsetCB, this, _1));
+                      std::bind(&CameraNode::getEyeOffsetCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setEyeOffsetCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LeftScreenPath,
-                      boost::bind(&CameraNode::getLeftScreenPathCB, this, _1),
-                      boost::bind(&CameraNode::setLeftScreenPathCB, this, _1));
+                      std::bind(&CameraNode::getLeftScreenPathCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setLeftScreenPathCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RightScreenPath,
-                      boost::bind(&CameraNode::getRightScreenPathCB, this, _1),
-                      boost::bind(&CameraNode::setRightScreenPathCB, this, _1));
+                      std::bind(&CameraNode::getRightScreenPathCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setRightScreenPathCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(AlternativeFrustumCullingScreenPath,
-                      boost::bind(&CameraNode::getAlternativeFrustumCullingScreenPathCB, this, _1),
-                      boost::bind(&CameraNode::setAlternativeFrustumCullingScreenPathCB, this, _1));
+                      std::bind(&CameraNode::getAlternativeFrustumCullingScreenPathCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setAlternativeFrustumCullingScreenPathCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(MonoMode,
-                      boost::bind(&CameraNode::getMonoModeCB, this, _1),
-                      boost::bind(&CameraNode::setMonoModeCB, this, _1));
+                      std::bind(&CameraNode::getMonoModeCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setMonoModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FarClip,
-                      boost::bind(&CameraNode::getFarClipCB, this, _1),
-                      boost::bind(&CameraNode::setFarClipCB, this, _1));
+                      std::bind(&CameraNode::getFarClipCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setFarClipCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(NearClip,
-                      boost::bind(&CameraNode::getNearClipCB, this, _1),
-                      boost::bind(&CameraNode::setNearClipCB, this, _1));
+                      std::bind(&CameraNode::getNearClipCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setNearClipCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Resolution,
-                      boost::bind(&CameraNode::getResolutionCB, this, _1),
-                      boost::bind(&CameraNode::setResolutionCB, this, _1));
+                      std::bind(&CameraNode::getResolutionCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setResolutionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(OutputTextureName,
-                      boost::bind(&CameraNode::getOutputTextureNameCB, this, _1),
-                      boost::bind(&CameraNode::setOutputTextureNameCB, this, _1));
+                      std::bind(&CameraNode::getOutputTextureNameCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setOutputTextureNameCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(OutputWindowName,
-                      boost::bind(&CameraNode::getOutputWindowNameCB, this, _1),
-                      boost::bind(&CameraNode::setOutputWindowNameCB, this, _1));
+                      std::bind(&CameraNode::getOutputWindowNameCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setOutputWindowNameCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableFrustumCulling,
-                      boost::bind(&CameraNode::getEnableFrustumCullingCB, this, _1),
-                      boost::bind(&CameraNode::setEnableFrustumCullingCB, this, _1));
+                      std::bind(&CameraNode::getEnableFrustumCullingCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setEnableFrustumCullingCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
-                      boost::bind(&CameraNode::getWhiteListCB, this, _1),
-                      boost::bind(&CameraNode::setWhiteListCB, this, _1));
+                      std::bind(&CameraNode::getWhiteListCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setWhiteListCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(BlackList,
-                      boost::bind(&CameraNode::getBlackListCB, this, _1),
-                      boost::bind(&CameraNode::setBlackListCB, this, _1));
+                      std::bind(&CameraNode::getBlackListCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setBlackListCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(PreRenderCameras,
-                      boost::bind(&CameraNode::getPreRenderCamerasCB, this, _1),
-                      boost::bind(&CameraNode::setPreRenderCamerasCB, this, _1));
+                      std::bind(&CameraNode::getPreRenderCamerasCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setPreRenderCamerasCB, this,std::placeholders::_1));
 }
 
 av::gua::CameraNode::~CameraNode()

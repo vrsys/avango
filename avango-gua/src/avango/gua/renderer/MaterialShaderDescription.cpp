@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/MaterialShaderDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -25,12 +25,12 @@ av::gua::MaterialShaderDescription::MaterialShaderDescription(
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(VertexMethods,
-                      boost::bind(&MaterialShaderDescription::getVertexMethodsCB, this, _1),
-                      boost::bind(&MaterialShaderDescription::setVertexMethodsCB, this, _1));
+                      std::bind(&MaterialShaderDescription::getVertexMethodsCB, this,std::placeholders::_1),
+                      std::bind(&MaterialShaderDescription::setVertexMethodsCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FragmentMethods,
-                      boost::bind(&MaterialShaderDescription::getFragmentMethodsCB, this, _1),
-                      boost::bind(&MaterialShaderDescription::setFragmentMethodsCB, this, _1));
+                      std::bind(&MaterialShaderDescription::getFragmentMethodsCB, this,std::placeholders::_1),
+                      std::bind(&MaterialShaderDescription::setFragmentMethodsCB, this,std::placeholders::_1));
 
   for (auto& method : guaMaterialShaderDescription->get_vertex_methods()) {
     m_vertexMethods.push_back(new av::gua::MaterialShaderMethod(method));

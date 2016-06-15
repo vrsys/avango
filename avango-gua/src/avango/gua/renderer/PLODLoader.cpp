@@ -2,7 +2,7 @@
 #include <avango/gua/scenegraph/PLODNode.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,14 +19,14 @@ av::gua::PLODLoader::PLODLoader(::gua::PLODLoader* guaPLODLoader)
     : m_guaPLODLoader(guaPLODLoader)
 {
   AV_FC_ADD_ADAPTOR_FIELD(UploadBudget,
-                      boost::bind(&PLODLoader::getUploadBudgetCB, this, _1),
-                      boost::bind(&PLODLoader::setUploadBudgetCB, this, _1));
+                      std::bind(&PLODLoader::getUploadBudgetCB, this,std::placeholders::_1),
+                      std::bind(&PLODLoader::setUploadBudgetCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(RenderBudget,
-                      boost::bind(&PLODLoader::getRenderBudgetCB, this, _1),
-                      boost::bind(&PLODLoader::setRenderBudgetCB, this, _1));
+                      std::bind(&PLODLoader::getRenderBudgetCB, this,std::placeholders::_1),
+                      std::bind(&PLODLoader::setRenderBudgetCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(OutOfCoreBudget,
-                      boost::bind(&PLODLoader::getOutOfCoreBudgetCB, this, _1),
-                      boost::bind(&PLODLoader::setOutOfCoreBudgetCB, this, _1));
+                      std::bind(&PLODLoader::getOutOfCoreBudgetCB, this,std::placeholders::_1),
+                      std::bind(&PLODLoader::setOutOfCoreBudgetCB, this,std::placeholders::_1));
 }
 
 //av::gua::PLODLoader::~PLODLoader()

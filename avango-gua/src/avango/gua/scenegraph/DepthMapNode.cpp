@@ -5,7 +5,7 @@
 #endif
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::DepthMapNode);
 
@@ -17,49 +17,49 @@ av::gua::DepthMapNode::DepthMapNode(std::shared_ptr< ::gua::node::CubemapNode> g
     , m_guaDepthMapNode(guanode)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Active,
-                      boost::bind(&DepthMapNode::getActiveCB, this, _1),
-                      boost::bind(&DepthMapNode::setActiveCB, this, _1));
+                      std::bind(&DepthMapNode::getActiveCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setActiveCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(MinDistance,
-                      boost::bind(&DepthMapNode::getMinDistanceCB, this, _1),
-                      boost::bind(&DepthMapNode::setMinDistanceCB, this, _1));
+                      std::bind(&DepthMapNode::getMinDistanceCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setMinDistanceCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(MinDistanceWorldPosition,
-                      boost::bind(&DepthMapNode::getMinDistanceWorldPositionCB, this, _1),
-                      boost::bind(&DepthMapNode::setMinDistanceWorldPositionCB, this, _1));
+                      std::bind(&DepthMapNode::getMinDistanceWorldPositionCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setMinDistanceWorldPositionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WeightedMinDistance,
-                      boost::bind(&DepthMapNode::getWeightedMinDistanceCB, this, _1),
-                      boost::bind(&DepthMapNode::setWeightedMinDistanceCB, this, _1));
+                      std::bind(&DepthMapNode::getWeightedMinDistanceCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setWeightedMinDistanceCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
-                      boost::bind(&DepthMapNode::getTextureNameCB, this, _1),
-                      boost::bind(&DepthMapNode::setTextureNameCB, this, _1));
+                      std::bind(&DepthMapNode::getTextureNameCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setTextureNameCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(NearClip,
-                      boost::bind(&DepthMapNode::getNearClipCB, this, _1),
-                      boost::bind(&DepthMapNode::setNearClipCB, this, _1));
+                      std::bind(&DepthMapNode::getNearClipCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setNearClipCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(FarClip,
-                      boost::bind(&DepthMapNode::getFarClipCB, this, _1),
-                      boost::bind(&DepthMapNode::setFarClipCB, this, _1));
+                      std::bind(&DepthMapNode::getFarClipCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setFarClipCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderMode,
-                      boost::bind(&DepthMapNode::getRenderModeCB, this, _1),
-                      boost::bind(&DepthMapNode::setRenderModeCB, this, _1));
+                      std::bind(&DepthMapNode::getRenderModeCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setRenderModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Resolution,
-                      boost::bind(&DepthMapNode::getResolutionCB, this, _1),
-                      boost::bind(&DepthMapNode::setResolutionCB, this, _1));
+                      std::bind(&DepthMapNode::getResolutionCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setResolutionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WhiteList,
-                      boost::bind(&DepthMapNode::getWhiteListCB, this, _1),
-                      boost::bind(&DepthMapNode::setWhiteListCB, this, _1));
+                      std::bind(&DepthMapNode::getWhiteListCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setWhiteListCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(BlackList,
-                      boost::bind(&DepthMapNode::getBlackListCB, this, _1),
-                      boost::bind(&DepthMapNode::setBlackListCB, this, _1));
+                      std::bind(&DepthMapNode::getBlackListCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setBlackListCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ViewID,
-                      boost::bind(&DepthMapNode::getViewIDCB, this, _1),
-                      boost::bind(&DepthMapNode::setViewIDCB, this, _1));
+                      std::bind(&DepthMapNode::getViewIDCB, this,std::placeholders::_1),
+                      std::bind(&DepthMapNode::setViewIDCB, this,std::placeholders::_1));
 }
 
 //av::gua::DepthMapNode::~DepthMapNode()

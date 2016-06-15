@@ -28,7 +28,7 @@
 #include <avango/gua/network/SharedContainerHolder.h>
 
 #include <avango/Application.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 #include <avango/Logger.h>
 
@@ -55,8 +55,8 @@ av::gua::NetTransform::NetTransform()
   AV_FC_ADD_FIELD(DepartedMembers, std::vector<std::string>());
   AV_FC_ADD_FIELD(NetId, std::string());
   AV_FC_ADD_ADAPTOR_FIELD(SharedContainers,
-      boost::bind(&NetTransform::getSharedContainersCB,   this, _1),
-      boost::bind(&NetTransform::setSharedContainersCB,   this, _1));
+      std::bind(&NetTransform::getSharedContainersCB,   this,std::placeholders::_1),
+      std::bind(&NetTransform::setSharedContainersCB,   this,std::placeholders::_1));
 
 
   Groupname.dontDistribute(true);
@@ -65,8 +65,8 @@ av::gua::NetTransform::NetTransform()
   DepartedMembers.dontDistribute(true);
   NetId.dontDistribute(true);
 
-  mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(boost::bind(&NetTransform::handleNetworkReceives, this));
-  mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(boost::bind(&NetTransform::handleNetworkSends, this));
+  mPreEvalHandle = ApplicationInstance::get().addPreEvaluationContainerCallback(std::bind(&NetTransform::handleNetworkReceives, this));
+  mPostEvalHandle = ApplicationInstance::get().addPostEvaluationContainerCallback(std::bind(&NetTransform::handleNetworkSends, this));
 
 }
 

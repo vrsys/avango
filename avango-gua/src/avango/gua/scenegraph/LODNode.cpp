@@ -1,7 +1,7 @@
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,8 +19,8 @@ av::gua::LODNode::LODNode(std::shared_ptr< ::gua::node::LODNode> guanode)
     m_guaNode(std::dynamic_pointer_cast< ::gua::node::LODNode> (Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(LODDistances,
-                          boost::bind(&LODNode::getLODDistancesCB, this, _1),
-                          boost::bind(&LODNode::setLODDistancesCB, this, _1));
+                          std::bind(&LODNode::getLODDistancesCB, this,std::placeholders::_1),
+                          std::bind(&LODNode::setLODDistancesCB, this,std::placeholders::_1));
 
 }
 

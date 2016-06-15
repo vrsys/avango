@@ -2,7 +2,7 @@
 
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -21,22 +21,22 @@ av::gua::Physics::Physics(::gua::physics::Physics* guaPhysics)
     m_simulationRateReduced(false)
 {
     AV_FC_ADD_ADAPTOR_FIELD(State,
-                        boost::bind(&Physics::getStateCB, this, _1),
-                        boost::bind(&Physics::setStateCB, this, _1));
+                        std::bind(&Physics::getStateCB, this,std::placeholders::_1),
+                        std::bind(&Physics::setStateCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Gravity,
-                        boost::bind(&Physics::getGravityCB, this, _1),
-                        boost::bind(&Physics::setGravityCB, this, _1));
+                        std::bind(&Physics::getGravityCB, this,std::placeholders::_1),
+                        std::bind(&Physics::setGravityCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(FixedTimeStep,
-                        boost::bind(&Physics::getFixedTimeStepCB, this, _1),
-                        boost::bind(&Physics::setFixedTimeStepCB, this, _1));
+                        std::bind(&Physics::getFixedTimeStepCB, this,std::placeholders::_1),
+                        std::bind(&Physics::setFixedTimeStepCB, this,std::placeholders::_1));
 
     AV_FC_ADD_FIELD(MaxSimTime, ::gua::physics::physics_default_max_sim_time);
 
     AV_FC_ADD_ADAPTOR_FIELD(ReduceSimulationRate,
-                        boost::bind(&Physics::getReduceSimulationRateCB, this, _1),
-                        boost::bind(&Physics::setReduceSimulationRateCB, this, _1));
+                        std::bind(&Physics::getReduceSimulationRateCB, this,std::placeholders::_1),
+                        std::bind(&Physics::setReduceSimulationRateCB, this,std::placeholders::_1));
 
 }
 

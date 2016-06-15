@@ -2,7 +2,7 @@
 
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::ClippingPlaneNode);
 
@@ -14,8 +14,8 @@ av::gua::ClippingPlaneNode::ClippingPlaneNode(std::shared_ptr< ::gua::node::Clip
       m_guaNode(std::dynamic_pointer_cast< ::gua::node::ClippingPlaneNode>(Node::getGuaNode()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(ViewIDs,
-                          boost::bind(&ClippingPlaneNode::getViewIDsCB, this, _1),
-                          boost::bind(&ClippingPlaneNode::setViewIDsCB, this, _1));
+                          std::bind(&ClippingPlaneNode::getViewIDsCB, this,std::placeholders::_1),
+                          std::bind(&ClippingPlaneNode::setViewIDsCB, this,std::placeholders::_1));
 }
 
 av::gua::ClippingPlaneNode::~ClippingPlaneNode()

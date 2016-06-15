@@ -1,6 +1,6 @@
 #include <avango/gua/scenegraph/ScreenNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::ScreenNode);
 
@@ -12,14 +12,14 @@ av::gua::ScreenNode::ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanod
       m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Width,
-                          boost::bind(&ScreenNode::getWidthCB, this, _1),
-                          boost::bind(&ScreenNode::setWidthCB, this, _1));
+                          std::bind(&ScreenNode::getWidthCB, this,std::placeholders::_1),
+                          std::bind(&ScreenNode::setWidthCB, this,std::placeholders::_1));
     AV_FC_ADD_ADAPTOR_FIELD(Height,
-                          boost::bind(&ScreenNode::getHeightCB, this, _1),
-                          boost::bind(&ScreenNode::setHeightCB, this, _1));
+                          std::bind(&ScreenNode::getHeightCB, this,std::placeholders::_1),
+                          std::bind(&ScreenNode::setHeightCB, this,std::placeholders::_1));
     AV_FC_ADD_ADAPTOR_FIELD(ScaledWorldTransform,
-                          boost::bind(&ScreenNode::getScaledWorldTransformCB, this, _1),
-                          boost::bind(&ScreenNode::setScaledWorldTransformCB, this, _1));
+                          std::bind(&ScreenNode::getScaledWorldTransformCB, this,std::placeholders::_1),
+                          std::bind(&ScreenNode::setScaledWorldTransformCB, this,std::placeholders::_1));
 }
 
 av::gua::ScreenNode::~ScreenNode()

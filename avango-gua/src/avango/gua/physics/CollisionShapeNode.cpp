@@ -1,7 +1,7 @@
 #include <avango/gua/physics/CollisionShapeNode.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,8 +19,8 @@ av::gua::CollisionShapeNode::CollisionShapeNode(std::shared_ptr< ::gua::physics:
     m_guaNode(guanode)
 {
     AV_FC_ADD_ADAPTOR_FIELD(ShapeName,
-                        boost::bind(&CollisionShapeNode::getShapeNameCB, this, _1),
-                        boost::bind(&CollisionShapeNode::setShapeNameCB, this, _1));
+                        std::bind(&CollisionShapeNode::getShapeNameCB, this,std::placeholders::_1),
+                        std::bind(&CollisionShapeNode::setShapeNameCB, this,std::placeholders::_1));
 }
 
 av::gua::CollisionShapeNode::~CollisionShapeNode()

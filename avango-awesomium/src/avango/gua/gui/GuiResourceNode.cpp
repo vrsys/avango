@@ -1,7 +1,7 @@
 #include <avango/gua/gui/GuiResourceNode.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <gua/gui.hpp>
@@ -31,20 +31,20 @@ av::gua::gui::GuiResourceNode::GuiResourceNode(std::shared_ptr< ::gua::GuiResour
     m_clearCallbackHandle()
 {
   AV_FC_ADD_ADAPTOR_FIELD(TextureName,
-                          boost::bind(&GuiResourceNode::getTextureNameCB, this, _1),
-                          boost::bind(&GuiResourceNode::setTextureNameCB, this, _1));
+                          std::bind(&GuiResourceNode::getTextureNameCB, this, std::placeholders::_1),
+                          std::bind(&GuiResourceNode::setTextureNameCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(URL,
-                          boost::bind(&GuiResourceNode::getURLCB, this, _1),
-                          boost::bind(&GuiResourceNode::setURLCB, this, _1));
+                          std::bind(&GuiResourceNode::getURLCB, this, std::placeholders::_1),
+                          std::bind(&GuiResourceNode::setURLCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Size,
-                          boost::bind(&GuiResourceNode::getSizeCB, this, _1),
-                          boost::bind(&GuiResourceNode::setSizeCB, this, _1));
+                          std::bind(&GuiResourceNode::getSizeCB, this, std::placeholders::_1),
+                          std::bind(&GuiResourceNode::setSizeCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Interactive,
-                          boost::bind(&GuiResourceNode::getInteractiveCB, this, _1),
-                          boost::bind(&GuiResourceNode::setInteractiveCB, this, _1));
+                          std::bind(&GuiResourceNode::getInteractiveCB, this, std::placeholders::_1),
+                          std::bind(&GuiResourceNode::setInteractiveCB, this, std::placeholders::_1));
 
   AV_FC_ADD_FIELD(m_networkMousePositions, MFVec2::ContainerType());
   AV_FC_ADD_FIELD(m_networkMousePositionsRelative, MFVec2::ContainerType());
@@ -56,7 +56,7 @@ av::gua::gui::GuiResourceNode::GuiResourceNode(std::shared_ptr< ::gua::GuiResour
   AV_FC_ADD_FIELD(m_networkActionEvent, MFInt::ContainerType());
   AV_FC_ADD_FIELD(m_networkHistoryEvent, MFInt::ContainerType());
 
-  m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(boost::bind(&GuiResourceNode::clearCallback, this));
+  m_clearCallbackHandle = ApplicationInstance::get().addRenderCallback(std::bind(&GuiResourceNode::clearCallback, this));
 
 }
 

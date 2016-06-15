@@ -1,7 +1,7 @@
 #include <avango/gua/math/BoundingSphere.hpp>
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -19,11 +19,11 @@ av::gua::BoundingSphere::BoundingSphere(::gua::math::BoundingSphere< ::gua::math
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Center,
-                        boost::bind(&BoundingSphere::getCenterCB, this, _1),
-                        boost::bind(&BoundingSphere::setCenterCB, this, _1));
+                        std::bind(&BoundingSphere::getCenterCB, this,std::placeholders::_1),
+                        std::bind(&BoundingSphere::setCenterCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Radius,
-                        boost::bind(&BoundingSphere::getRadiusCB, this, _1),
-                        boost::bind(&BoundingSphere::setRadiusCB, this, _1));
+                        std::bind(&BoundingSphere::getRadiusCB, this,std::placeholders::_1),
+                        std::bind(&BoundingSphere::setRadiusCB, this,std::placeholders::_1));
 }
 
 av::gua::BoundingSphere::~BoundingSphere()

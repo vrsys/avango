@@ -6,7 +6,7 @@
 
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -36,38 +36,38 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
   });
 
   AV_FC_ADD_ADAPTOR_FIELD(Parent,
-                        boost::bind(&Node::getParentCB, this, _1),
-                        boost::bind(&Node::setParentCB, this, _1));
+                        std::bind(&Node::getParentCB, this,std::placeholders::_1),
+                        std::bind(&Node::setParentCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Children,
-                        boost::bind(&Node::getChildrenCB, this, _1),
-                        boost::bind(&Node::setChildrenCB, this, _1));
+                        std::bind(&Node::getChildrenCB, this,std::placeholders::_1),
+                        std::bind(&Node::setChildrenCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Name,
-                        boost::bind(&Node::getNameCB, this, _1),
-                        boost::bind(&Node::setNameCB, this, _1));
+                        std::bind(&Node::getNameCB, this,std::placeholders::_1),
+                        std::bind(&Node::setNameCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Transform,
-                        boost::bind(&Node::getTransformCB, this, _1),
-                        boost::bind(&Node::setTransformCB, this, _1));
+                        std::bind(&Node::getTransformCB, this,std::placeholders::_1),
+                        std::bind(&Node::setTransformCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(WorldTransform,
-                        boost::bind(&Node::getWorldTransformCB, this, _1),
-                        boost::bind(&Node::setWorldTransformCB, this, _1));
+                        std::bind(&Node::getWorldTransformCB, this,std::placeholders::_1),
+                        std::bind(&Node::setWorldTransformCB, this,std::placeholders::_1));
   WorldTransform.dontDistribute(true);
 
   AV_FC_ADD_ADAPTOR_FIELD(BoundingBox,
-                        boost::bind(&Node::getBoundingBoxCB, this, _1),
-                        boost::bind(&Node::setBoundingBoxCB, this, _1));
+                        std::bind(&Node::getBoundingBoxCB, this,std::placeholders::_1),
+                        std::bind(&Node::setBoundingBoxCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(DisplayBoundingBox,
-                        boost::bind(&Node::getDisplayBoundingBoxCB, this, _1),
-                        boost::bind(&Node::setDisplayBoundingBoxCB, this, _1));
+                        std::bind(&Node::getDisplayBoundingBoxCB, this,std::placeholders::_1),
+                        std::bind(&Node::setDisplayBoundingBoxCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Depth,
-                        boost::bind(&Node::getDepthCB, this, _1),
-                        boost::bind(&Node::setDepthCB, this, _1));
+                        std::bind(&Node::getDepthCB, this,std::placeholders::_1),
+                        std::bind(&Node::setDepthCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Path,
-                        boost::bind(&Node::getPathCB, this, _1),
-                        boost::bind(&Node::setPathCB, this, _1));
+                        std::bind(&Node::getPathCB, this,std::placeholders::_1),
+                        std::bind(&Node::setPathCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Tags,
-                        boost::bind(&Node::getTagsCB, this, _1),
-                        boost::bind(&Node::setTagsCB, this, _1));
+                        std::bind(&Node::getTagsCB, this,std::placeholders::_1),
+                        std::bind(&Node::setTagsCB, this,std::placeholders::_1));
 
 }
 

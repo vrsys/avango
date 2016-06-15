@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/PipelineDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -23,14 +23,14 @@ av::gua::PipelineDescription::PipelineDescription(
   guaPipelineDescription->set_user_data(avGuaPasses);
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableABuffer,
-                      boost::bind(&PipelineDescription::getEnableABufferCB, this, _1),
-                      boost::bind(&PipelineDescription::setEnableABufferCB, this, _1));
+                      std::bind(&PipelineDescription::getEnableABufferCB, this,std::placeholders::_1),
+                      std::bind(&PipelineDescription::setEnableABufferCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(ABufferSize,
-                      boost::bind(&PipelineDescription::getABufferSizeCB, this, _1),
-                      boost::bind(&PipelineDescription::setABufferSizeCB, this, _1));
+                      std::bind(&PipelineDescription::getABufferSizeCB, this,std::placeholders::_1),
+                      std::bind(&PipelineDescription::setABufferSizeCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Passes,
-                      boost::bind(&PipelineDescription::getPassesCB, this, _1),
-                      boost::bind(&PipelineDescription::setPassesCB, this, _1));
+                      std::bind(&PipelineDescription::getPassesCB, this,std::placeholders::_1),
+                      std::bind(&PipelineDescription::setPassesCB, this,std::placeholders::_1));
 }
 
 av::gua::PipelineDescription::~PipelineDescription()

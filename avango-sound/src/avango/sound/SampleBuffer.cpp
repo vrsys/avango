@@ -24,7 +24,7 @@
 #include <avango/sound/SampleBuffer.h>
 
 #include <avango/Logger.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <stdexcept>
 
 namespace
@@ -49,10 +49,10 @@ av::sound::SampleBuffer::SampleBuffer()
 av::sound::SampleBuffer::SampleBuffer(boost::shared_array<SampleType> buffer, unsigned int numberOfSamples, bool stereo)
     : mBuffer(buffer), mNumSamples(numberOfSamples), mStereo(stereo), mSampleRate(0)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(NumSamples, boost::bind(&av::sound::SampleBuffer::getNumSamplesCB, this, _1),
-                          boost::bind(&av::sound::SampleBuffer::setNumSamplesCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(IsStereo, boost::bind(&av::sound::SampleBuffer::getIsStereoCB, this, _1),
-                          boost::bind(&av::sound::SampleBuffer::setIsStereoCB, this, _1));
+  AV_FC_ADD_ADAPTOR_FIELD(NumSamples, std::bind(&av::sound::SampleBuffer::getNumSamplesCB, this, std::placeholders::_1),
+                          std::bind(&av::sound::SampleBuffer::setNumSamplesCB, this, std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(IsStereo, std::bind(&av::sound::SampleBuffer::getIsStereoCB, this, std::placeholders::_1),
+                          std::bind(&av::sound::SampleBuffer::setIsStereoCB, this, std::placeholders::_1));
 }
 
 /* virtual */

@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/Material.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -26,12 +26,12 @@ av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial
     , m_distributed(false)
 {
     AV_FC_ADD_ADAPTOR_FIELD(ShaderName,
-                      boost::bind(&Material::getShaderNameCB, this, _1),
-                      boost::bind(&Material::setShaderNameCB, this, _1));
+                      std::bind(&Material::getShaderNameCB, this,std::placeholders::_1),
+                      std::bind(&Material::setShaderNameCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(EnableBackfaceCulling,
-                      boost::bind(&Material::getEnableBackfaceCullingCB, this, _1),
-                      boost::bind(&Material::setEnableBackfaceCullingCB, this, _1));
+                      std::bind(&Material::getEnableBackfaceCullingCB, this,std::placeholders::_1),
+                      std::bind(&Material::setEnableBackfaceCullingCB, this,std::placeholders::_1));
 
     AV_FC_ADD_FIELD(m_materialShaderDescription, SFMaterialShaderDescription::ValueType());
     AV_FC_ADD_FIELD(m_serializedUniforms, "");

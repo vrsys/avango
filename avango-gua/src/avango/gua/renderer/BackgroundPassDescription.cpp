@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/BackgroundPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -21,28 +21,28 @@ av::gua::BackgroundPassDescription::BackgroundPassDescription(
     , m_guaBackgroundPassDescription(guaBackgroundPassDescription)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Color,
-                    boost::bind(&BackgroundPassDescription::getColorCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setColorCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getColorCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Texture,
-                    boost::bind(&BackgroundPassDescription::getTextureCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setTextureCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getTextureCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Mode,
-                    boost::bind(&BackgroundPassDescription::getModeCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setModeCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getModeCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableFog,
-                    boost::bind(&BackgroundPassDescription::getEnableFogCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setEnableFogCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getEnableFogCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setEnableFogCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FogStart,
-                    boost::bind(&BackgroundPassDescription::getFogStartCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setFogStartCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getFogStartCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setFogStartCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FogEnd,
-                    boost::bind(&BackgroundPassDescription::getFogEndCB, this, _1),
-                    boost::bind(&BackgroundPassDescription::setFogEndCB, this, _1));
+                    std::bind(&BackgroundPassDescription::getFogEndCB, this,std::placeholders::_1),
+                    std::bind(&BackgroundPassDescription::setFogEndCB, this,std::placeholders::_1));
 
 }
 

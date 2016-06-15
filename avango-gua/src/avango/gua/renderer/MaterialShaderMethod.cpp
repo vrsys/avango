@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/MaterialShaderMethod.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -21,12 +21,12 @@ av::gua::MaterialShaderMethod::MaterialShaderMethod(std::shared_ptr< ::gua::Mate
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Name,
-                      boost::bind(&MaterialShaderMethod::getNameCB, this, _1),
-                      boost::bind(&MaterialShaderMethod::setNameCB, this, _1));
+                      std::bind(&MaterialShaderMethod::getNameCB, this,std::placeholders::_1),
+                      std::bind(&MaterialShaderMethod::setNameCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Source,
-                      boost::bind(&MaterialShaderMethod::getSourceCB, this, _1),
-                      boost::bind(&MaterialShaderMethod::setSourceCB, this, _1));
+                      std::bind(&MaterialShaderMethod::getSourceCB, this,std::placeholders::_1),
+                      std::bind(&MaterialShaderMethod::setSourceCB, this,std::placeholders::_1));
 
   AV_FC_ADD_FIELD(m_serializedUniforms, "");
   AV_FC_ADD_FIELD(m_uniformsDirty, false);

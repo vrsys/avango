@@ -1,6 +1,6 @@
 #include <avango/gua/physics/CylinderShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,8 +20,8 @@ av::gua::CylinderShape::CylinderShape(::gua::physics::CylinderShape* guashape)
     m_guaShape(reinterpret_cast< ::gua::physics::CylinderShape*>(CollisionShape::getGuaShape()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(HalfExtents,
-                        boost::bind(&CylinderShape::getHalfExtentsCB, this, _1),
-                        boost::bind(&CylinderShape::setHalfExtentsCB, this, _1));
+                        std::bind(&CylinderShape::getHalfExtentsCB, this,std::placeholders::_1),
+                        std::bind(&CylinderShape::setHalfExtentsCB, this,std::placeholders::_1));
 
 }
 

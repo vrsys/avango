@@ -1,6 +1,6 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE_ABSTRACT(av::gua::GeometryNode);
 
@@ -13,8 +13,8 @@ av::gua::GeometryNode::GeometryNode(std::shared_ptr< ::gua::node::GeometryNode> 
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(ShadowMode,
-                        boost::bind(&GeometryNode::getShadowModeCB, this, _1),
-                        boost::bind(&GeometryNode::setShadowModeCB, this, _1));
+                        std::bind(&GeometryNode::getShadowModeCB, this,std::placeholders::_1),
+                        std::bind(&GeometryNode::setShadowModeCB, this,std::placeholders::_1));
 }
 
 void

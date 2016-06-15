@@ -1,6 +1,6 @@
 #include <avango/gua/physics/TriangleMeshShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,8 +20,8 @@ av::gua::TriangleMeshShape::TriangleMeshShape(::gua::physics::TriangleMeshShape*
     m_guaShape(reinterpret_cast< ::gua::physics::TriangleMeshShape*>(CollisionShape::getGuaShape()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(Scaling,
-                        boost::bind(&TriangleMeshShape::getScalingCB, this, _1),
-                        boost::bind(&TriangleMeshShape::setScalingCB, this, _1));
+                        std::bind(&TriangleMeshShape::getScalingCB, this,std::placeholders::_1),
+                        std::bind(&TriangleMeshShape::setScalingCB, this,std::placeholders::_1));
 
 }
 

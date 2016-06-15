@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -21,120 +21,120 @@ av::gua::ResolvePassDescription::ResolvePassDescription(
     , m_guaResolvePassDescription(guaResolvePassDescription)
 {
   AV_FC_ADD_ADAPTOR_FIELD(BackgroundColor,
-                    boost::bind(&ResolvePassDescription::getBackgroundColorCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setBackgroundColorCB, this, _1));
+                    std::bind(&ResolvePassDescription::getBackgroundColorCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setBackgroundColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(BackgroundTexture,
-                    boost::bind(&ResolvePassDescription::getBackgroundTextureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setBackgroundTextureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getBackgroundTextureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setBackgroundTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(AlternativeBackgroundTexture,
-                    boost::bind(&ResolvePassDescription::getAlternativeBackgroundTextureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setAlternativeBackgroundTextureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getAlternativeBackgroundTextureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setAlternativeBackgroundTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(BackgroundTextureBlendFactor,
-                    boost::bind(&ResolvePassDescription::getBackgroundTextureBlendFactorCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setBackgroundTextureBlendFactorCB, this, _1));
+                    std::bind(&ResolvePassDescription::getBackgroundTextureBlendFactorCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setBackgroundTextureBlendFactorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(BackgroundMode,
-                    boost::bind(&ResolvePassDescription::getBackgroundModeCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setBackgroundModeCB, this, _1));
+                    std::bind(&ResolvePassDescription::getBackgroundModeCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setBackgroundModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableFog,
-                    boost::bind(&ResolvePassDescription::getEnableFogCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnableFogCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnableFogCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnableFogCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FogStart,
-                    boost::bind(&ResolvePassDescription::getFogStartCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setFogStartCB, this, _1));
+                    std::bind(&ResolvePassDescription::getFogStartCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setFogStartCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(VignetteSoftness,
-                    boost::bind(&ResolvePassDescription::getVignetteSoftnessCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setVignetteSoftnessCB, this, _1));
+                    std::bind(&ResolvePassDescription::getVignetteSoftnessCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setVignetteSoftnessCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(VignetteCoverage,
-                    boost::bind(&ResolvePassDescription::getVignetteCoverageCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setVignetteCoverageCB, this, _1));
+                    std::bind(&ResolvePassDescription::getVignetteCoverageCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setVignetteCoverageCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(VignetteColor,
-                    boost::bind(&ResolvePassDescription::getVignetteColorCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setVignetteColorCB, this, _1));
+                    std::bind(&ResolvePassDescription::getVignetteColorCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setVignetteColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(FogEnd,
-                    boost::bind(&ResolvePassDescription::getFogEndCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setFogEndCB, this, _1));
+                    std::bind(&ResolvePassDescription::getFogEndCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setFogEndCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ToneMappingMode,
-                    boost::bind(&ResolvePassDescription::getToneMappingModeCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setToneMappingModeCB, this, _1));
+                    std::bind(&ResolvePassDescription::getToneMappingModeCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setToneMappingModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Exposure,
-                    boost::bind(&ResolvePassDescription::getExposureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setExposureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getExposureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setExposureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingColor,
-                    boost::bind(&ResolvePassDescription::getEnvironmentLightingColorCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnvironmentLightingColorCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnvironmentLightingColorCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnvironmentLightingColorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingMode,
-                    boost::bind(&ResolvePassDescription::getEnvironmentLightingModeCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnvironmentLightingModeCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnvironmentLightingModeCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnvironmentLightingModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingTexture,
-                    boost::bind(&ResolvePassDescription::getEnvironmentLightingTextureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnvironmentLightingTextureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnvironmentLightingTextureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnvironmentLightingTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(AlternativeEnvironmentLightingTexture,
-                    boost::bind(&ResolvePassDescription::getAlternativeEnvironmentLightingTextureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setAlternativeEnvironmentLightingTextureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getAlternativeEnvironmentLightingTextureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setAlternativeEnvironmentLightingTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnvironmentLightingTextureBlendFactor,
-                    boost::bind(&ResolvePassDescription::getEnvironmentLightingTextureBlendFactorCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnvironmentLightingTextureBlendFactorCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnvironmentLightingTextureBlendFactorCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnvironmentLightingTextureBlendFactorCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(HorizonFade,
-                    boost::bind(&ResolvePassDescription::getHorizonFadeCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setHorizonFadeCB, this, _1));
+                    std::bind(&ResolvePassDescription::getHorizonFadeCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setHorizonFadeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableSSAO,
-                    boost::bind(&ResolvePassDescription::getEnableSSAOCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnableSSAOCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnableSSAOCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnableSSAOCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SSAORadius,
-                    boost::bind(&ResolvePassDescription::getSSAORadiusCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setSSAORadiusCB, this, _1));
+                    std::bind(&ResolvePassDescription::getSSAORadiusCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setSSAORadiusCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SSAOIntensity,
-                    boost::bind(&ResolvePassDescription::getSSAOIntensityCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setSSAOIntensityCB, this, _1));
+                    std::bind(&ResolvePassDescription::getSSAOIntensityCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setSSAOIntensityCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SSAOFalloff,
-                    boost::bind(&ResolvePassDescription::getSSAOFalloffCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setSSAOFalloffCB, this, _1));
+                    std::bind(&ResolvePassDescription::getSSAOFalloffCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setSSAOFalloffCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(SSAONoiseTexture,
-                    boost::bind(&ResolvePassDescription::getSSAONoiseTextureCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setSSAONoiseTextureCB, this, _1));
+                    std::bind(&ResolvePassDescription::getSSAONoiseTextureCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setSSAONoiseTextureCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableScreenSpaceShadow,
-                    boost::bind(&ResolvePassDescription::getEnableScreenSpaceShadowCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setEnableScreenSpaceShadowCB, this, _1));
+                    std::bind(&ResolvePassDescription::getEnableScreenSpaceShadowCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setEnableScreenSpaceShadowCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ScreenSpaceShadowRadius,
-                    boost::bind(&ResolvePassDescription::getScreenSpaceShadowRadiusCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setScreenSpaceShadowRadiusCB, this, _1));
+                    std::bind(&ResolvePassDescription::getScreenSpaceShadowRadiusCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setScreenSpaceShadowRadiusCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ScreenSpaceShadowMaxRadiusPX,
-                    boost::bind(&ResolvePassDescription::getScreenSpaceShadowMaxRadiusPXCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setScreenSpaceShadowMaxRadiusPXCB, this, _1));
+                    std::bind(&ResolvePassDescription::getScreenSpaceShadowMaxRadiusPXCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setScreenSpaceShadowMaxRadiusPXCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(ScreenSpaceShadowIntensity,
-                    boost::bind(&ResolvePassDescription::getScreenSpaceShadowIntensityCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setScreenSpaceShadowIntensityCB, this, _1));
+                    std::bind(&ResolvePassDescription::getScreenSpaceShadowIntensityCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setScreenSpaceShadowIntensityCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(DebugTiles,
-                    boost::bind(&ResolvePassDescription::getDebugTilesCB, this, _1),
-                    boost::bind(&ResolvePassDescription::setDebugTilesCB, this, _1));
+                    std::bind(&ResolvePassDescription::getDebugTilesCB, this,std::placeholders::_1),
+                    std::bind(&ResolvePassDescription::setDebugTilesCB, this,std::placeholders::_1));
 }
 
 void

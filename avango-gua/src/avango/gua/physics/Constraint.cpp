@@ -1,6 +1,6 @@
 #include <avango/gua/physics/Constraint.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 namespace
@@ -17,20 +17,20 @@ av::gua::Constraint::Constraint(::gua::physics::Constraint* guaconstraint)
   : m_guaConstraint(guaconstraint)
 {
     AV_FC_ADD_ADAPTOR_FIELD(BodyA,
-                        boost::bind(&Constraint::getBodyACB, this, _1),
-                        boost::bind(&Constraint::setBodyACB, this, _1));
+                        std::bind(&Constraint::getBodyACB, this,std::placeholders::_1),
+                        std::bind(&Constraint::setBodyACB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(BodyB,
-                        boost::bind(&Constraint::getBodyBCB, this, _1),
-                        boost::bind(&Constraint::setBodyBCB, this, _1));
+                        std::bind(&Constraint::getBodyBCB, this,std::placeholders::_1),
+                        std::bind(&Constraint::setBodyBCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(Enabled,
-                        boost::bind(&Constraint::getEnabledCB, this, _1),
-                        boost::bind(&Constraint::setEnabledCB, this, _1));
+                        std::bind(&Constraint::getEnabledCB, this,std::placeholders::_1),
+                        std::bind(&Constraint::setEnabledCB, this,std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(BreakingImpulseThreshold,
-                        boost::bind(&Constraint::getBreakingImpulseThresholdCB, this, _1),
-                        boost::bind(&Constraint::setBreakingImpulseThresholdCB, this, _1));
+                        std::bind(&Constraint::getBreakingImpulseThresholdCB, this,std::placeholders::_1),
+                        std::bind(&Constraint::setBreakingImpulseThresholdCB, this,std::placeholders::_1));
 
     AV_FC_ADD_FIELD        (DisableCollisionBetweenLinkedBodies, false);
 }

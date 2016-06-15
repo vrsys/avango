@@ -5,7 +5,7 @@
 #endif
 
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::TriMeshNode);
 
@@ -17,20 +17,20 @@ av::gua::TriMeshNode::TriMeshNode(std::shared_ptr< ::gua::node::TriMeshNode> gua
     , m_guaTriMeshNode(guanode)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-                        boost::bind(&TriMeshNode::getGeometryCB, this, _1),
-                        boost::bind(&TriMeshNode::setGeometryCB, this, _1));
+                        std::bind(&TriMeshNode::getGeometryCB, this,std::placeholders::_1),
+                        std::bind(&TriMeshNode::setGeometryCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Material,
-                      boost::bind(&TriMeshNode::getMaterialCB, this, _1),
-                      boost::bind(&TriMeshNode::setMaterialCB, this, _1));
+                      std::bind(&TriMeshNode::getMaterialCB, this,std::placeholders::_1),
+                      std::bind(&TriMeshNode::setMaterialCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
-                      boost::bind(&TriMeshNode::getRenderToGBufferCB, this, _1),
-                      boost::bind(&TriMeshNode::setRenderToGBufferCB, this, _1));
+                      std::bind(&TriMeshNode::getRenderToGBufferCB, this,std::placeholders::_1),
+                      std::bind(&TriMeshNode::setRenderToGBufferCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToStencilBuffer,
-                      boost::bind(&TriMeshNode::getRenderToStencilBufferCB, this, _1),
-                      boost::bind(&TriMeshNode::setRenderToStencilBufferCB, this, _1));
+                      std::bind(&TriMeshNode::getRenderToStencilBufferCB, this,std::placeholders::_1),
+                      std::bind(&TriMeshNode::setRenderToStencilBufferCB, this,std::placeholders::_1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));

@@ -1,6 +1,6 @@
 #include <avango/gua/volume/VolumeNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::VolumeNode);
 
@@ -12,8 +12,8 @@ av::gua::VolumeNode::VolumeNode(std::shared_ptr< ::gua::node::VolumeNode> guanod
       m_guaNode(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(Node::getGuaNode()))
 {
 //    AV_FC_ADD_ADAPTOR_FIELD(Geometry,
-//                          boost::bind(&VolumeNode::getGeometryCB, this, _1),
-//                          boost::bind(&VolumeNode::setGeometryCB, this, _1));
+//                          std::bind(&VolumeNode::getGeometryCB, this, std::placeholders::_1),
+//                          std::bind(&VolumeNode::setGeometryCB, this, std::placeholders::_1));
 }
 
 //av::gua::VolumeNode::~VolumeNode()

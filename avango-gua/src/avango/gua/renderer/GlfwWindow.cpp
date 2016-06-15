@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/GlfwWindow.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,8 +20,8 @@ av::gua::GlfwWindow::GlfwWindow(std::shared_ptr< ::gua::GlfwWindow> const& guaGl
     , m_guaGlfwWindow(guaGlfwWindow)
 {
   AV_FC_ADD_ADAPTOR_FIELD(CursorMode,
-                    boost::bind(&GlfwWindow::getCursorModeCB, this, _1),
-                    boost::bind(&GlfwWindow::setCursorModeCB, this, _1)); 
+                    std::bind(&GlfwWindow::getCursorModeCB, this,std::placeholders::_1),
+                    std::bind(&GlfwWindow::setCursorModeCB, this,std::placeholders::_1)); 
 }
 
 void

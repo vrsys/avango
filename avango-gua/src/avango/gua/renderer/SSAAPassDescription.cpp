@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/SSAAPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -21,17 +21,17 @@ av::gua::SSAAPassDescription::SSAAPassDescription(
     , m_guaSSAAPassDescription(guaSSAAPassDescription)
 {
   AV_FC_ADD_ADAPTOR_FIELD(Mode,
-                    boost::bind(&SSAAPassDescription::getModeCB, this, _1),
-                    boost::bind(&SSAAPassDescription::setModeCB, this, _1));
+                    std::bind(&SSAAPassDescription::getModeCB, this,std::placeholders::_1),
+                    std::bind(&SSAAPassDescription::setModeCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(FxaaQualitySubpix,
-                    boost::bind(&SSAAPassDescription::getFxaaQualitySubpixCB, this, _1),
-                    boost::bind(&SSAAPassDescription::setFxaaQualitySubpixCB, this, _1));
+                    std::bind(&SSAAPassDescription::getFxaaQualitySubpixCB, this,std::placeholders::_1),
+                    std::bind(&SSAAPassDescription::setFxaaQualitySubpixCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(FxaaEdgeThreshold,
-                    boost::bind(&SSAAPassDescription::getFxaaEdgeThresholdCB, this, _1),
-                    boost::bind(&SSAAPassDescription::setFxaaEdgeThresholdCB, this, _1));
+                    std::bind(&SSAAPassDescription::getFxaaEdgeThresholdCB, this,std::placeholders::_1),
+                    std::bind(&SSAAPassDescription::setFxaaEdgeThresholdCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(FxaaThresholdMin,
-                    boost::bind(&SSAAPassDescription::getFxaaThresholdMinCB, this, _1),
-                    boost::bind(&SSAAPassDescription::setFxaaThresholdMinCB, this, _1));
+                    std::bind(&SSAAPassDescription::getFxaaThresholdMinCB, this,std::placeholders::_1),
+                    std::bind(&SSAAPassDescription::setFxaaThresholdMinCB, this,std::placeholders::_1));
 }
 
 void

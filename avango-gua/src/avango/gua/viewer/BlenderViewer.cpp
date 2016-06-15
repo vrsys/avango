@@ -23,8 +23,8 @@
 #endif
 
 #include <boost/make_shared.hpp>
-#include <boost/bind.hpp>
 
+#include <functional>
 #include <cstdint>
 #include <chrono>
 #include <algorithm>

@@ -1,6 +1,6 @@
 #include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 
 AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationNode);
 
@@ -21,28 +21,28 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
   }
 
   AV_FC_ADD_ADAPTOR_FIELD(Materials,
-                      boost::bind(&SkeletalAnimationNode::getMaterialsCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setMaterialsCB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getMaterialsCB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setMaterialsCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Animation1,
-                      boost::bind(&SkeletalAnimationNode::getAnimation1CB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setAnimation1CB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getAnimation1CB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setAnimation1CB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Animation2,
-                      boost::bind(&SkeletalAnimationNode::getAnimation2CB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setAnimation2CB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getAnimation2CB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setAnimation2CB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(BlendFactor,
-                      boost::bind(&SkeletalAnimationNode::getBlendFactorCB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setBlendFactorCB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getBlendFactorCB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setBlendFactorCB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Time1,
-                      boost::bind(&SkeletalAnimationNode::getTime1CB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setTime1CB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getTime1CB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setTime1CB, this, std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Time2,
-                      boost::bind(&SkeletalAnimationNode::getTime2CB, this, _1),
-                      boost::bind(&SkeletalAnimationNode::setTime2CB, this, _1));
+                      std::bind(&SkeletalAnimationNode::getTime2CB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setTime2CB, this, std::placeholders::_1));
 }
 
 //av::gua::skelanim::SkeletalAnimationNode::~SkeletalAnimationNode()

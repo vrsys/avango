@@ -1,6 +1,5 @@
 #include <avango/gua/skelanim/renderer/SkeletalAnimationPassDescription.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>

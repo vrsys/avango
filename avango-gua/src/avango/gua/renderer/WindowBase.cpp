@@ -1,6 +1,6 @@
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,72 +20,72 @@ av::gua::WindowBase::WindowBase(std::shared_ptr< ::gua::WindowBase> const& guaWi
 {
 
   AV_FC_ADD_ADAPTOR_FIELD(Size,
-                      boost::bind(&WindowBase::getSizeCB, this, _1),
-                      boost::bind(&WindowBase::setSizeCB, this, _1));
+                      std::bind(&WindowBase::getSizeCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setSizeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Title,
-                      boost::bind(&WindowBase::getTitleCB, this, _1),
-                      boost::bind(&WindowBase::setTitleCB, this, _1));
+                      std::bind(&WindowBase::getTitleCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setTitleCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(Display,
-                      boost::bind(&WindowBase::getDisplayCB, this, _1),
-                      boost::bind(&WindowBase::setDisplayCB, this, _1));
+                      std::bind(&WindowBase::getDisplayCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setDisplayCB, this,std::placeholders::_1));
   
   AV_FC_ADD_ADAPTOR_FIELD(EnableFullscreen,
-                      boost::bind(&WindowBase::getEnableFullscreenCB, this, _1),
-                      boost::bind(&WindowBase::setEnableFullscreenCB, this, _1));
+                      std::bind(&WindowBase::getEnableFullscreenCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setEnableFullscreenCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(StereoMode,
-                      boost::bind(&WindowBase::getStereoModeCB, this, _1),
-                      boost::bind(&WindowBase::setStereoModeCB, this, _1));
+                      std::bind(&WindowBase::getStereoModeCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setStereoModeCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LeftResolution,
-                      boost::bind(&WindowBase::getLeftResolutionCB, this, _1),
-                      boost::bind(&WindowBase::setLeftResolutionCB, this, _1));
+                      std::bind(&WindowBase::getLeftResolutionCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setLeftResolutionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(LeftPosition,
-                      boost::bind(&WindowBase::getLeftPositionCB, this, _1),
-                      boost::bind(&WindowBase::setLeftPositionCB, this, _1));
+                      std::bind(&WindowBase::getLeftPositionCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setLeftPositionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RightResolution,
-                      boost::bind(&WindowBase::getRightResolutionCB, this, _1),
-                      boost::bind(&WindowBase::setRightResolutionCB, this, _1));
+                      std::bind(&WindowBase::getRightResolutionCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setRightResolutionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RightPosition,
-                      boost::bind(&WindowBase::getRightPositionCB, this, _1),
-                      boost::bind(&WindowBase::setRightPositionCB, this, _1));
+                      std::bind(&WindowBase::getRightPositionCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setRightPositionCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(EnableVsync,
-                      boost::bind(&WindowBase::getEnableVsyncCB, this, _1),
-                      boost::bind(&WindowBase::setEnableVsyncCB, this, _1));
+                      std::bind(&WindowBase::getEnableVsyncCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setEnableVsyncCB, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixRedRight,
-                      boost::bind(&WindowBase::getWarpMatrixRedRight, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixRedRight, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixRedRight, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixRedRight, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixGreenRight,
-                      boost::bind(&WindowBase::getWarpMatrixGreenRight, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixGreenRight, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixGreenRight, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixGreenRight, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixBlueRight,
-                      boost::bind(&WindowBase::getWarpMatrixBlueRight, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixBlueRight, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixBlueRight, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixBlueRight, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixRedLeft,
-                      boost::bind(&WindowBase::getWarpMatrixRedLeft, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixRedLeft, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixRedLeft, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixRedLeft, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixGreenLeft,
-                      boost::bind(&WindowBase::getWarpMatrixGreenLeft, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixGreenLeft, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixGreenLeft, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixGreenLeft, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixBlueLeft,
-                      boost::bind(&WindowBase::getWarpMatrixBlueLeft, this, _1),
-                      boost::bind(&WindowBase::setWarpMatrixBlueLeft, this, _1));
+                      std::bind(&WindowBase::getWarpMatrixBlueLeft, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setWarpMatrixBlueLeft, this,std::placeholders::_1));
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderingFPS,
-                      boost::bind(&WindowBase::getRenderingFPSCB, this, _1),
-                      boost::bind(&WindowBase::setRenderingFPSCB, this, _1));
+                      std::bind(&WindowBase::getRenderingFPSCB, this,std::placeholders::_1),
+                      std::bind(&WindowBase::setRenderingFPSCB, this,std::placeholders::_1));
 }
 
 void

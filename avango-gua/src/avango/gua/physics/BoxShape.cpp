@@ -1,6 +1,6 @@
 #include <avango/gua/physics/BoxShape.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
+#include <functional>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>
@@ -20,8 +20,8 @@ av::gua::BoxShape::BoxShape(::gua::physics::BoxShape* guashape)
     m_guaShape(reinterpret_cast< ::gua::physics::BoxShape*>(CollisionShape::getGuaShape()))
 {
     AV_FC_ADD_ADAPTOR_FIELD(HalfExtents,
-                        boost::bind(&BoxShape::getHalfExtentsCB, this, _1),
-                        boost::bind(&BoxShape::setHalfExtentsCB, this, _1));
+                        std::bind(&BoxShape::getHalfExtentsCB, this,std::placeholders::_1),
+                        std::bind(&BoxShape::setHalfExtentsCB, this,std::placeholders::_1));
 
 }
 

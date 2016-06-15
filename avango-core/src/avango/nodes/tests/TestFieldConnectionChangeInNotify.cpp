@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
 
 #include <avango/Application.h>

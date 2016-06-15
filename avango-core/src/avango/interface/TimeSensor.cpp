@@ -34,7 +34,6 @@
 #include <sys/time.h>
 #endif
 
-#include <boost/bind.hpp>
 #include <boost/format.hpp>
 
 #include <avango/Logger.h>

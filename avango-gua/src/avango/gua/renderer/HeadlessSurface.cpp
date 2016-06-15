@@ -1,6 +1,5 @@
 #include <avango/gua/renderer/HeadlessSurface.hpp>
 #include <avango/Base.h>
-#include <boost/bind.hpp>
 #include <avango/Logger.h>
 
 #include <avango/gua/Types.hpp>

@@ -28,7 +28,7 @@
 #include <algorithm>
 #include <cstdlib>
 
-#include <boost/bind.hpp>
+#include <functional>
 #include <boost/format.hpp>
 
 #include <avango/ContainerPool.h>
@@ -99,7 +99,7 @@ av::Application::startInBackground()
 {
   // ?! why boost::thread::thread ?!
   // mThread.reset(new boost::thread::thread(boost::bind(&av::Application::start, this)));
-  mThread.reset(new boost::thread(boost::bind(&av::Application::start, this)));
+  mThread.reset(new boost::thread(std::bind(&av::Application::start, this)));
 }
 
 bool
@@ -175,7 +175,7 @@ av::Application::disconnectAllFields()
           % (container->Name.getValue().empty()? "<unnamed>" : container->Name.getValue())))
     container->enableNotify(false);
     for_each(container->getFields().begin(), container->getFields().end(),
-             boost::bind(&Field::disconnect, _1));
+             std::bind(&Field::disconnect, std::placeholders::_1));
   }
 }
 

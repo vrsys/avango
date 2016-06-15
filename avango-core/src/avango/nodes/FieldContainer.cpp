@@ -26,8 +26,8 @@
 #include <list>
 #include <iterator>
 #include <stdexcept>
+#include <functional>
 
-#include <boost/bind.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/lambda/bind.hpp>
 #include <boost/lexical_cast.hpp>
@@ -77,8 +77,8 @@ av::FieldContainer::FieldContainer() :
   av::ContainerPool::notifyCreation(this);
 
   AV_FC_ADD_ADAPTOR_FIELD(Name,
-                          boost::bind(&av::FieldContainer::getNameCB, this, _1),
-                          boost::bind(&av::FieldContainer::setNameCB, this, _1));
+                          std::bind(&av::FieldContainer::getNameCB, this, std::placeholders::_1),
+                          std::bind(&av::FieldContainer::setNameCB, this, std::placeholders::_1));
 }
 
 /* virtual */
@@ -509,7 +509,7 @@ av::FieldContainer::getFields()
     FieldPtrVec emptyVec(mFields.size());
     mFieldPtrs.swap(emptyVec);
     std::transform(mFields.begin(), mFields.end(), mFieldPtrs.begin(),
-                   boost::bind(&FieldInfo::mField, _1));
+                   std::bind(&FieldInfo::mField, std::placeholders::_1));
     mFlags.mFieldsCalculated = true;
   }
   return mFieldPtrs;

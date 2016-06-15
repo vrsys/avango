@@ -28,11 +28,7 @@
 #define AVANGO_NETNODECLIENT_H
 
 #include <string>
-
-namespace boost
-{
-  class thread;
-}
+#include <thread>
 
 namespace av
 {
@@ -59,7 +55,7 @@ namespace av
 
     std::string     mHost;
     std::string     mPort;
-    boost::thread*  mThread;
+    std::thread     mThread;
     bool            mRunning;
     av::NetNode*    mNetNode;
     std::string     mClientEndpoint;

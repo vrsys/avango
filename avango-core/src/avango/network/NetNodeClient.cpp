@@ -25,7 +25,7 @@
 
 #include "NetNodeClient.h"
 
-#include <boost/thread/thread.hpp>
+#include <thread>
 #include <zmq.hpp>
 
 #include <avango/NetNode.h>
@@ -49,7 +49,7 @@ namespace {
 av::NetNodeClient::NetNodeClient(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se)
   : mHost(host),
     mPort(port),
-    mThread(0),
+    mThread(),
     mRunning(false),
     mNetNode(netnode),
     mClientEndpoint(ce),
@@ -59,10 +59,7 @@ av::NetNodeClient::NetNodeClient(const std::string& host, const std::string& por
 av::NetNodeClient::~NetNodeClient()
 {
   stop();
-  // wait
-
-  if (mThread)
-    delete mThread;
+  mThread.join();
 }
 
 void
@@ -73,9 +70,9 @@ av::NetNodeClient::start()
   mNetNode->getStateFragment(mClientEndpoint, dummy_msg);
   mNetNode->setStateFragment(mServerEndpoint, dummy_msg);
 
-  if(!mRunning && !mThread) {
+  if(!mRunning) {
     mRunning = true;
-    mThread = new boost::thread(boost::bind(&NetNodeClient::loop, this));
+    mThread = std::thread([this]() { this->loop(); });
   } else {
     std::cerr << "ALARM in NetNodeClient::start() , thread already running!" << std::endl;
   }

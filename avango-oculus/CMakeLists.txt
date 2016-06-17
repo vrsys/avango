@@ -12,38 +12,16 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/avango-oculus/cmake/modules)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-  ${LIB_PATHS}
-  ${GUACAMOLE_OCULUS_LIBRARY_DIRS}
-  ${PYTHON3_LIBRARY_DIRS}
-  ${BULLET_LIBRARY_DIRS}
-)
-
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    ${PYTHON3_INCLUDE_DIRS}
-    ${PYTHON_INCLUDE_DIR}
-    ${OVR_INCLUDE_DIR}
-    ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-gua/include
-    ../avango-python/include
-    ../../guacamole-oculus/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY( avango_oculus SHARED
-    ${AVANGO_OCULUS_SRC}
+  ${AVANGO_OCULUS_SRC}
 )
 
-ADD_DEPENDENCIES ( avango_oculus avango )
+target_include_directories(avango_oculus PUBLIC include)
+
+target_include_directories(avango_oculus SYSTEM PUBLIC
+  ${OVR_INCLUDE_DIRS}
+  ${GUACAMOLE_OCULUS_INCLUDE_DIRS}
+)
 
 ###############################################################################
 # set preprocessor configuration
@@ -52,9 +30,12 @@ SET(AVANGO_OCULUS_BUILD_FLAGS "${BUILD_FLAGS} -D AV_OCULUS_LIBRARY")
 
 set_target_properties(avango_oculus PROPERTIES COMPILE_FLAGS ${AVANGO_OCULUS_BUILD_FLAGS})
 
-LIST(APPEND LIBRARIES avango avango_script avango_gua ${OVR_LIBRARY} ${GUACAMOLE_OCULUS_LIBRARIES})
-
-TARGET_LINK_LIBRARIES( avango_oculus ${LIBRARIES} )
+TARGET_LINK_LIBRARIES( avango_oculus
+  avango_script
+  avango_gua
+  guacamole-oculus
+  ${OVR_LIBRARY}
+)
 
 ###############################################################################
 # python module

@@ -15,8 +15,6 @@ set_target_properties( _gui
   ${CMAKE_SOURCE_DIR}/lib/avango/gua/gui
 )
 
-ADD_DEPENDENCIES ( _gui avango_gui )
-
 TARGET_LINK_LIBRARIES( _gui
   debug ${LIBRARIES} avango_awesomium
   optimized ${LIBRARIES} avango_awesomium)

@@ -1,9 +1,4 @@
 
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
 ADD_LIBRARY( _openal SHARED "_openal.cpp" )
 
 set_target_properties( _openal
@@ -11,9 +6,7 @@ set_target_properties( _openal
   ${CMAKE_SOURCE_DIR}/lib/avango/sound/openal
 )
 
-ADD_DEPENDENCIES ( _openal avango_openal )
-
-TARGET_LINK_LIBRARIES( _openal debug ${LIBRARIES} avango_openal optimized ${LIBRARIES} avango_openal)
+TARGET_LINK_LIBRARIES( _openal avango_openal)
 SET_TARGET_PROPERTIES( _openal PROPERTIES PREFIX "")
 
 ###############################################################################

@@ -9,33 +9,14 @@ file(GLOB_RECURSE AVANGO_SKELANIM_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    ${PYTHON3_INCLUDE_DIRS}
-    ${GUACAMOLE_SKELANIM_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ../avango-gua/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY(avango_skelanim SHARED
   ${AVANGO_SKELANIM_SRC}
 )
 
-ADD_DEPENDENCIES ( avango_skelanim avango)
+target_include_directories( avango_skelanim PUBLIC
+    include
+)
+
 set_target_properties(avango_skelanim PROPERTIES LINKER_LANGUAGE CXX)
 ###############################################################################
 # set preprocessor configuration
@@ -46,12 +27,10 @@ IF (MSVC)
   set_target_properties(avango_skelanim PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ENDIF (MSVC)
 
-SET(_AVANGO_SKELANIM_LIBRARIES ${LIBRARIES} guacamole-skelanim)
-LIST(APPEND _AVANGO_SKELANIM_LIBRARIES )
-
 TARGET_LINK_LIBRARIES( avango_skelanim
-  debug avango_gua avango_script avango ${_AVANGO_SKELANIM_LIBRARIES}
-  optimized avango_gua avango_script avango ${_AVANGO_SKELANIM_LIBRARIES})
+  avango_gua
+  avango_script
+)
 
 ###############################################################################
 # python module

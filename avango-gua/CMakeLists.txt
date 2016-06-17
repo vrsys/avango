@@ -169,30 +169,29 @@ LINK_DIRECTORIES(${LIB_PATHS}
                  ${SCHISM_LIBRARY_DIRS}
                  ${BULLET_LIBRARY_DIRS}
 )
-
-
 ###############################################################################
 # create libraries
 ###############################################################################
-INCLUDE_DIRECTORIES(BEFORE
+# INCLUDE_DIRECTORIES(BEFORE
+#   ${INCLUDE_PATHS}
+#   ${CMAKE_SOURCE_DIR}/avango-core/include
+# )
+
+ADD_LIBRARY( avango_gua SHARED
+           ${AVANGO_GUA_SRC}
+)
+
+target_include_directories(avango_gua BEFORE PUBLIC
   include
-  include/avango/python/
-  ${INCLUDE_PATHS}
+  ${CMAKE_SOURCE_DIR}/avango-python/include
+)
+
+target_include_directories(avango_gua SYSTEM BEFORE PUBLIC
   ${PYTHON3_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_DIR}
   ${SCHISM_INCLUDE_DIRS}
   ${BULLET_INCLUDE_DIRS}
   ${JSON_INCLUDE_DIRS}
-  ${CMAKE_SOURCE_DIR}/avango-core/include
-  ${CMAKE_SOURCE_DIR}/avango-python/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
-ADD_LIBRARY( avango_gua SHARED
-    	     ${AVANGO_GUA_SRC}
 )
 
 ADD_LIBRARY( _gua SHARED
@@ -203,9 +202,6 @@ set_target_properties( _gua
   PROPERTIES LIBRARY_OUTPUT_DIRECTORY
   ${CMAKE_SOURCE_DIR}/lib/avango/gua
 )
-
-ADD_DEPENDENCIES(avango_gua avango)
-ADD_DEPENDENCIES(_gua avango avango_gua)
 
 ###############################################################################
 # set preprocessor configuration
@@ -231,28 +227,25 @@ SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 SET(_AVANGO_GUA_LIBRARIES avango
                           ${GUACAMOLE_LIBRARIES}
                           ${PYTHON_LIBRARY}
-                          ${BULLET_LIBRARIES}
                           ${JSON_LIBRARIES}
                           optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
                           optimized ${SCHISM_CORE_LIBRARY} debug ${SCHISM_CORE_LIBRARY_DEBUG}
                           optimized ${SCHISM_GL_CORE_LIBRARY} debug ${SCHISM_GL_CORE_LIBRARY_DEBUG}
                           optimized ${SCHISM_GL_UTIL_LIBRARY} debug ${SCHISM_GL_UTIL_LIBRARY_DEBUG}
 )
-                                                                  
+IF (${AVANGO_PHYSICS_SUPPORT})                                                            
+  list(APPEND _AVANGO_GUA_LIBRARIES ${BULLET_LIBRARIES})
+ENDIF (${AVANGO_PHYSICS_SUPPORT})                                                            
+
 IF (UNIX)
   list(APPEND _AVANGO_GUA_LIBRARIES "")
 ELSEIF (MSVC)
   LIST(APPEND _AVANGO_GUA_LIBRARIES OpenGL32.lib)
 ENDIF (UNIX)
 
-TARGET_LINK_LIBRARIES( avango_gua
-                       ${_AVANGO_GUA_LIBRARIES}
-)
+TARGET_LINK_LIBRARIES( avango_gua ${_AVANGO_GUA_LIBRARIES})
 
-TARGET_LINK_LIBRARIES( _gua
-                       avango_gua
-                       ${_AVANGO_GUA_LIBRARIES}
-)
+TARGET_LINK_LIBRARIES( _gua avango_gua)
 
 IF (UNIX)
 	SET_TARGET_PROPERTIES( _gua PROPERTIES COMPILE_FLAGS -fPIC)

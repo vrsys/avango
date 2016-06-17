@@ -90,7 +90,7 @@ def start():
     pipeline_description.Passes.value[3].SSAOIntensity.value = 2.0
     pipeline_description.Passes.value[3].BackgroundMode.value = 1
     pipeline_description.Passes.value[3].BackgroundTexture.value = \
-        "/opt/avango/master/examples/picking/data/textures/skymap.jpg"
+        "../../../examples/shadows/data/textures/skymap.jpg"
     pipeline_description.Passes.value[3].ToneMappingMode.value = \
         avango.gua.ToneMappingMode.LINEAR
     #pipeline_description.EnableABuffer.value = True

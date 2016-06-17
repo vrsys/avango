@@ -172,11 +172,6 @@ LINK_DIRECTORIES(${LIB_PATHS}
 ###############################################################################
 # create libraries
 ###############################################################################
-# INCLUDE_DIRECTORIES(BEFORE
-#   ${INCLUDE_PATHS}
-#   ${CMAKE_SOURCE_DIR}/avango-core/include
-# )
-
 ADD_LIBRARY( avango_gua SHARED
            ${AVANGO_GUA_SRC}
 )

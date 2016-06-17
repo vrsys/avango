@@ -100,38 +100,18 @@ endif (DEFINE_AVANGO_DAEMON_VRPN_SUPPORT)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-
-link_directories(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-    ${ZMQ_LIBRARY_DIRS}
-)
-
-include_directories(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    ${ZMQ_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ${PYTHON3_INCLUDE_DIRS}
-    ../avango-gua/include
-    src/avango/daemon/tuio/TUIO
-    src/avango/daemon/tuio/oscpack
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY(avango_daemon SHARED
     ${AVANGO_DAEMON_SRC}
 )
 
-add_dependencies ( avango_daemon avango)
+target_include_directories( avango_daemon PUBLIC
+    include
+)
 
+target_include_directories( avango_daemon SYSTEM PUBLIC
+    src/avango/daemon/tuio/TUIO
+    src/avango/daemon/tuio/oscpack
+)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -146,14 +126,9 @@ endif (MSVC)
 set_target_properties(avango_daemon PROPERTIES COMPILE_FLAGS ${AVANGO_DAEMON_BUILD_FLAGS})
 
 target_link_libraries( avango_daemon
-  avango_gua
+  avango_gua 
   avango_script
-  avango
 )
-
-if (AVANGO_DISTRIBUTION_SUPPORT)
-  target_link_libraries( avango_daemon optimized ${ZMQ_LIBRARY} debug ${ZMQ_LIBRARY_DEBUG})
-endif (AVANGO_DISTRIBUTION_SUPPORT)
 
 if (MSVC)
   target_link_libraries(avango_daemon winmm.lib Ws2_32.lib)

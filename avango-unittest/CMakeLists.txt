@@ -25,10 +25,7 @@ ADD_LIBRARY( avango_unittest STATIC
     	     ${AVANGO_UNITTEST_SRC}
 )
 
-INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
-		    ${CMAKE_CURRENT_SOURCE_DIR}/include
-		    ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++
-	      ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++/tests
+target_include_directories(avango_unittest SYSTEM PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++/tests
 )
-
-

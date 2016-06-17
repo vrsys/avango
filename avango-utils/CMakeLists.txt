@@ -66,8 +66,9 @@ SET (AVANGO_UTILS_BUILD_FLAGS "${BUILD_FLAGS} -D AV_UTILS_LIBRARY")
 set_target_properties(avango_utils PROPERTIES COMPILE_FLAGS ${AVANGO_UTILS_BUILD_FLAGS})
 
 TARGET_LINK_LIBRARIES( avango_utils
-  debug avango_gua avango_script avango ${LIBRARIES}
-  optimized avango_gua avango_script avango ${LIBRARIES})
+    avango_gua
+    avango_script
+)
 
 ###############################################################################
 # python module

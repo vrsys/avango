@@ -1,12 +1,5 @@
 LIST(APPEND INCLUDE_DIRECTORIES ..)
 
-include_directories(${PYTHON_INCLUDE_DIR})
-
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
 file(GLOB_RECURSE AVANGO_TOOLS_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     avango/tools/*.hpp
     avango/tools/*.cpp
@@ -21,14 +14,8 @@ set_target_properties( _tools
   ${CMAKE_SOURCE_DIR}/lib/avango/tools
 )
 
-ADD_DEPENDENCIES ( _tools avango_tools )
-
 TARGET_LINK_LIBRARIES( _tools 
                        avango_tools
-                       ${PYTHON_LIBRARY}
-                       ${PYTHON3_LIBRARIES}
-                       optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
-                       optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_LIBRARY_DEBUG}
                      )
 
 set_target_properties( _tools PROPERTIES COMPILE_FLAGS "-D BOOST_PYTHON_STATIC_LIB")

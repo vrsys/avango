@@ -55,33 +55,13 @@ file(GLOB AVANGO_TOOLS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ${PYTHON3_INCLUDE_DIRS}
-    ../avango-gua/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY(avango_tools SHARED
   ${AVANGO_TOOLS_SRC}
 )
 
-ADD_DEPENDENCIES ( avango_tools avango)
-
+target_include_directories( avango_tools PUBLIC
+    include
+)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -93,8 +73,6 @@ set_target_properties(avango_tools PROPERTIES COMPILE_FLAGS ${AVANGO_TOOLS_BUILD
 TARGET_LINK_LIBRARIES( avango_tools
                        avango_gua
                        avango_script
-                       avango
-                       ${LIBRARIES}
                      )
 
 ###############################################################################

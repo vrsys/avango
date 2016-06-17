@@ -106,8 +106,9 @@ set(LIB_PATHS
   ${Boost_LIBRARY_DIRS}
     ${GUACAMOLE_LIBRARY_DIRS}
     ${GL_LIBRARY_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
+# allow linking with local libraries
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 set(INCLUDE_PATHS
     ${CMAKE_CURRENT_SOURCE_DIR}/build

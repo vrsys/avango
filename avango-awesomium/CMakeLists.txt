@@ -9,28 +9,13 @@ file(GLOB AVANGO_AWESOMIUM_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
 ADD_LIBRARY(avango_awesomium SHARED
   ${AVANGO_AWESOMIUM_SRC}
 )
 
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ${PYTHON3_INCLUDE_DIRS}
-    ../avango-gua/include
+target_include_directories(avango_awesomium PUBLIC
+  include
 )
-
-ADD_DEPENDENCIES ( avango_awesomium avango)
 
 ###############################################################################
 # set preprocessor configuration
@@ -41,12 +26,10 @@ IF (MSVC)
   set_target_properties(avango_awesomium PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ENDIF (MSVC)
 
-SET(_AVANGO_AWESOMIUM_LIBRARIES ${LIBRARIES})
-LIST(APPEND _AVANGO_AWESOMIUM_LIBRARIES )
-
-TARGET_LINK_LIBRARIES( avango_awesomium
-  debug avango_gua avango_script avango ${_AVANGO_AWESOMIUM_LIBRARIES}
-  optimized avango_gua avango_script avango ${_AVANGO_AWESOMIUM_LIBRARIES})
+TARGET_LINK_LIBRARIES(avango_awesomium 
+                      avango_gua
+                      avango_script
+)
 
 ###############################################################################
 # python module

@@ -43,8 +43,6 @@ if (${AVANGO_DISTRIBUTION_SUPPORT})
   )
 endif (${AVANGO_DISTRIBUTION_SUPPORT})
 
-link_directories(${LIB_PATHS})
-
 add_library(avango SHARED
             ${AVANGO_CORE_SRC}
             ${AVANGO_CORE_DISTRIBUTION_SRC}

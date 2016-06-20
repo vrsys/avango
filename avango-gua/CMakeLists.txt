@@ -161,15 +161,6 @@ SOURCE_GROUP("" FILES ${AVANGO_GUA_SRC})
 SOURCE_GROUP("" FILES ${AVANGO_GUA_PYTHON_SRC})
 
 ###############################################################################
-# set link directories
-###############################################################################
-LINK_DIRECTORIES(${LIB_PATHS}
-                 ${PYTHON3_LIBRARY_DIRS}
-                 ${Boost_LIBRARY_DIRS}
-                 ${SCHISM_LIBRARY_DIRS}
-                 ${BULLET_LIBRARY_DIRS}
-)
-###############################################################################
 # create libraries
 ###############################################################################
 ADD_LIBRARY( avango_gua SHARED

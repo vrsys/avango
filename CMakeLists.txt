@@ -103,12 +103,11 @@ set(LIBRARIES
 )
 
 set(LIB_PATHS
-  ${Boost_LIBRARY_DIRS}
-    ${GUACAMOLE_LIBRARY_DIRS}
-    ${GL_LIBRARY_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
+  ${GL_LIBRARY_DIRS}
 )
 # allow linking with local libraries
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+link_directories(${LIB_PATHS})
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")

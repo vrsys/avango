@@ -34,15 +34,26 @@ class BallSpawner(avango.script.Script):
         if self.__last_spawn_time == -1 or current_time - self.__last_spawn_time >= SPAWN_TIME:
             self.__last_spawn_time = current_time
 
-            body = avango.gua.nodes.RigidBodyNode(
-                Name="body",
-                Mass=2.0,
-                Friction=0.6,
-                RollingFriction=0.03,
-                Restitution=0.7,
-                Transform=avango.gua.make_trans_mat(
-                    math.sin(3 * current_time), 7.0, math.cos(3 *
-                                                              current_time)))
+            if self.red:
+                body = avango.gua.nodes.RigidBodyNode(
+                    Name="body",
+                    Mass=1.5,
+                    Friction=0.7,
+                    RollingFriction=0.04,
+                    Restitution=0.8,
+                    Transform=avango.gua.make_trans_mat(
+                        math.sin(3 * current_time), 7.0, math.cos(3 *
+                                                                  current_time)))
+            else:
+                body = avango.gua.nodes.RigidBodyNode(
+                    Name="body",
+                    Mass=2.0,
+                    Friction=0.6,
+                    RollingFriction=0.03,
+                    Restitution=0.3,
+                    Transform=avango.gua.make_trans_mat(
+                        math.sin(3 * current_time), 7.0, math.cos(3 *
+                                                                  current_time)))
 
             sphere_geometry = self.__loader.create_geometry_from_file(
                 "sphere_geometry", "data/objects/sphere.obj")

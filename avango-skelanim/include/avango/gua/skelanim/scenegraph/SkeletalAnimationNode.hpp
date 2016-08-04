@@ -37,6 +37,11 @@ namespace av
          */
         SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
             std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
+
+        #if defined(AVANGO_DISTRIBUTION_SUPPORT)
+        virtual void on_distribute(av::gua::NetTransform& netNode);
+        virtual void on_undistribute(av::gua::NetTransform& netNode);
+      #endif
       protected:
 
         /**
@@ -45,10 +50,25 @@ namespace av
   //      virtual ~SkeletalAnimationNode();
 
       public:
+        // trimesh
+        MFString   Geometries;
         MultiField<Link<Material>> Materials;
+        SFBool     RenderToGBuffer;
+        SFBool     RenderToStencilBuffer;
+
+        virtual void getGeometriesCB(const MFString::GetValueEvent& event);
+        virtual void setGeometriesCB(const MFString::SetValueEvent& event);
+
         virtual void getMaterialsCB(const MultiField<Link<Material>>::GetValueEvent& event);
         virtual void setMaterialsCB(const MultiField<Link<Material>>::SetValueEvent& event);
 
+        virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
+        virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
+
+        virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
+        virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
+       
+        //skelanim 
         SFString Animation1;
         virtual void getAnimation1CB(const SFString::GetValueEvent& event);
         virtual void setAnimation1CB(const SFString::SetValueEvent& event);

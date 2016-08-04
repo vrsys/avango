@@ -2,6 +2,10 @@
 #include <avango/Base.h>
 #include <functional>
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+#include <avango/gua/network/NetTransform.h>
+#endif
+
 AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationNode);
 
 AV_FIELD_DEFINE(av::gua::skelanim::SFSkeletalAnimationNode);
@@ -12,6 +16,19 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
     , m_materialsUserDataHandle{0}
     , m_guaSkeletalAnimationNode(std::dynamic_pointer_cast< ::gua::node::SkeletalAnimationNode>(GeometryNode::getGuaNode()))
 {
+  // trimesh
+  AV_FC_ADD_ADAPTOR_FIELD(Geometries,
+                        std::bind(&SkeletalAnimationNode::getGeometriesCB, this,std::placeholders::_1),
+                        std::bind(&SkeletalAnimationNode::setGeometriesCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
+                      std::bind(&SkeletalAnimationNode::getRenderToGBufferCB, this,std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setRenderToGBufferCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RenderToStencilBuffer,
+                      std::bind(&SkeletalAnimationNode::getRenderToStencilBufferCB, this,std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setRenderToStencilBufferCB, this,std::placeholders::_1));
+
   //crate user data for avango material links
   auto avGuaMaterials(new av::MultiField<av::Link<av::gua::Material>>::ContainerType());
   m_materialsUserDataHandle = m_guaSkeletalAnimationNode->add_user_data(avGuaMaterials);
@@ -23,7 +40,7 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
   AV_FC_ADD_ADAPTOR_FIELD(Materials,
                       std::bind(&SkeletalAnimationNode::getMaterialsCB, this, std::placeholders::_1),
                       std::bind(&SkeletalAnimationNode::setMaterialsCB, this, std::placeholders::_1));
-
+  // skelanim
   AV_FC_ADD_ADAPTOR_FIELD(Animation1,
                       std::bind(&SkeletalAnimationNode::getAnimation1CB, this, std::placeholders::_1),
                       std::bind(&SkeletalAnimationNode::setAnimation1CB, this, std::placeholders::_1));
@@ -45,30 +62,95 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
                       std::bind(&SkeletalAnimationNode::setTime2CB, this, std::placeholders::_1));
 }
 
-//av::gua::skelanim::SkeletalAnimationNode::~SkeletalAnimationNode()
-//{}
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+
+void av::gua::skelanim::SkeletalAnimationNode::on_distribute(av::gua::NetTransform& netNode) 
+{
+    GeometryNode::on_distribute(netNode);
+
+    auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
+    for(auto& material : *avGuaMaterials) {
+      if (material.isValid()) {
+        material->on_distribute(netNode);
+        netNode.distributeFieldContainer(material);
+      }
+    }
+}
+
+void av::gua::skelanim::SkeletalAnimationNode::on_undistribute(av::gua::NetTransform& netNode) 
+{
+    GeometryNode::on_undistribute(netNode);
+
+    auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
+    for(auto& material : *avGuaMaterials) {
+      if (material.isValid()) {
+        material->on_undistribute(netNode);
+        netNode.undistributeFieldContainer(material);
+      }
+    }
+}
+#endif
+
+void
+av::gua::skelanim::SkeletalAnimationNode::initClass()
+{
+  if (!isTypeInitialized()) {
+    av::gua::GeometryNode::initClass();
+
+    AV_FC_INIT(av::gua::GeometryNode, av::gua::skelanim::SkeletalAnimationNode, true);
+
+    SFSkeletalAnimationNode::initClass("av::gua::skelanim::SFSkeletalAnimationNode", "av::Field");
+    MFSkeletalAnimationNode::initClass("av::gua::skelanim::MFSkeletalAnimationNode", "av::Field");
+
+    sClassTypeId.setDistributable(true);
+  }
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::getGeometriesCB(const MFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_geometry_descriptions();
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setGeometriesCB(const MFString::SetValueEvent& event)
+{ 
+  std::size_t i = 0;
+  for (auto const& description : event.getValue()) {
+    m_guaSkeletalAnimationNode->set_geometry_description(description, i);
+    ++i;
+  }
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::getRenderToGBufferCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_render_to_gbuffer();
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setRenderToGBufferCB(const SFBool::SetValueEvent& event)
+{
+  m_guaSkeletalAnimationNode->set_render_to_gbuffer(event.getValue());
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::getRenderToStencilBufferCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_render_to_stencil_buffer();
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& event)
+{
+  m_guaSkeletalAnimationNode->set_render_to_stencil_buffer(event.getValue());
+}
 
 void
 av::gua::skelanim::SkeletalAnimationNode::loadAnimation(std::string const& file_name,
                                                  std::string const& animation_name) const
 {
   m_guaSkeletalAnimationNode->add_animations(file_name, animation_name);
-}
-
-void
-av::gua::skelanim::SkeletalAnimationNode::initClass()
-{
-    if (!isTypeInitialized())
-    {
-        av::gua::GeometryNode::initClass();
-
-        AV_FC_INIT(av::gua::GeometryNode, av::gua::skelanim::SkeletalAnimationNode, true);
-
-        SFSkeletalAnimationNode::initClass("av::gua::skelanim::SFSkeletalAnimationNode", "av::Field");
-        MFSkeletalAnimationNode::initClass("av::gua::skelanim::MFSkeletalAnimationNode", "av::Field");
-
-        sClassTypeId.setDistributable(true);
-    }
 }
 
 float
@@ -93,7 +175,7 @@ av::gua::skelanim::SkeletalAnimationNode::setMaterialsCB(const av::gua::MFMateri
 
     if (avGuaMaterials) avGuaMaterials->clear();
 
-    const av::gua::MFMaterial::ContainerType &materials(event.getValue());
+    av::gua::MFMaterial::ContainerType const& materials(event.getValue());
 
     for (auto& material: materials) {
       if (material->getGuaMaterial() != nullptr) {

@@ -18,6 +18,10 @@ av::gua::RigidBodyNode::RigidBodyNode(std::shared_ptr< ::gua::physics::RigidBody
   : TransformNode(std::dynamic_pointer_cast<::gua::node::TransformNode>(guanode)),
     m_guaNode(guanode)
 {
+
+  guanode->on_world_transform_changed.connect([&](::gua::math::mat4 const&){
+    Transform.touch();
+  });
     AV_FC_ADD_ADAPTOR_FIELD(IsKinematic,
                         std::bind(&RigidBodyNode::getIsKinematicCB, this,std::placeholders::_1),
                         std::bind(&RigidBodyNode::setIsKinematicCB, this,std::placeholders::_1));

@@ -37,11 +37,22 @@ av::gua::Viewer::Viewer()
 #endif
 
     AV_FC_ADD_ADAPTOR_FIELD(DesiredFPS,
-                    std::bind(&Viewer::getDesiredFPSCB, this,std::placeholders::_1),
-                    std::bind(&Viewer::setDesiredFPSCB, this,std::placeholders::_1));
+        [this](av::SFFloat::GetValueEvent const& e) {
+            *(e.getValuePtr()) = 1.f/m_ticker.get_tick_time();
+        },
+        [this](av::SFFloat::SetValueEvent const& e) {
+            m_ticker.set_tick_time(1.f/e.getValue());
+        }
+    );
+
     AV_FC_ADD_ADAPTOR_FIELD(ApplicationFPS,
-                    std::bind(&Viewer::getApplicationFPSCB, this,std::placeholders::_1),
-                    std::bind(&Viewer::setApplicationFPSCB, this,std::placeholders::_1));
+        [this](av::SFFloat::GetValueEvent const& e) {
+          if (m_renderer) {
+            *(e.getValuePtr()) = m_renderer->getGuaRenderer()->get_application_fps();
+          }
+        },
+        [](av::SFFloat::SetValueEvent const&) {}
+    );
 }
 
 av::gua::Viewer::~Viewer()
@@ -66,30 +77,6 @@ av::gua::Viewer::initClass()
         MFViewer::initClass("av::gua::MFViewer", "av::Field");
     }
 }
-
-void
-av::gua::Viewer::getDesiredFPSCB(const av::SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = 1.f/m_ticker.get_tick_time();
-}
-
-void
-av::gua::Viewer::setDesiredFPSCB(const av::SFFloat::SetValueEvent& event)
-{
-  m_ticker.set_tick_time(1.f/event.getValue());
-}
-
-void
-av::gua::Viewer::getApplicationFPSCB(const SFFloat::GetValueEvent& event)
-{
-  if (m_renderer) {
-    *(event.getValuePtr()) = m_renderer->getGuaRenderer()->get_application_fps();
-  }
-}
-
-void
-av::gua::Viewer::setApplicationFPSCB(const SFFloat::SetValueEvent& event)
-{}
 
 void
 av::gua::Viewer::frame() {

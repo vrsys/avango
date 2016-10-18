@@ -31,6 +31,8 @@
 #include <avango/daemon/DeviceActuator.h>
 #include <avango/daemon/DTrack.h>
 #include <avango/daemon/KinectTrack.h>
+#include <avango/daemon/SkeletonTrack.h>
+#include <avango/daemon/HMDTrack.h>
 #include <avango/daemon/HIDInput.h>
 #include <avango/daemon/TUIOInput.h>
 #include <avango/daemon/Init.h>
@@ -222,6 +224,22 @@ BOOST_PYTHON_MODULE(_daemon)
   class_<av::daemon::DTrack, av::Link<av::daemon::DTrack>, bases<av::daemon::Device>, boost::noncopyable >("_DTrackHelper",
     "A helper class that provides some basic properties and function inherited from DTrack,"
     "used to construct a concrete Python device representation.")
+    .add_property("port", &::getPortFeature, &::setPortFeature)
+    ;
+
+  // Avango NG device: SkeletonTrack
+  class_<av::daemon::SkeletonTrack, av::Link<av::daemon::SkeletonTrack>, bases<av::daemon::Device>, boost::noncopyable >("_SkeletonTrackHelper",
+    "A helper class that provides some basic properties and function inherited from SkeletonTrack,"
+    "used to construct a concrete Python device representation.")
+    .add_property("server", &::getServerFeature, &::setServerFeature)
+    .add_property("port", &::getPortFeature, &::setPortFeature)
+    ;
+
+  // Avango NG device: HMDTrack
+  class_<av::daemon::HMDTrack, av::Link<av::daemon::HMDTrack>, bases<av::daemon::Device>, boost::noncopyable >("_HMDTrackHelper",
+    "A helper class that provides some basic properties and function inherited from HMDTrack,"
+    "used to construct a concrete Python device representation.")
+    .add_property("server", &::getServerFeature, &::setServerFeature)
     .add_property("port", &::getPortFeature, &::setPortFeature)
     ;
 

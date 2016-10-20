@@ -53,6 +53,12 @@ Wiimote
 DTrack
     For processing DTrack udp packets (ASCII protocol).
 
+SkeletonTrack
+    For processing SkeletonTrack messages.
+
+HMDTrack
+    For processing HMDTrack messages.
+
 KinectTrack
     For processing KinecTrack messages.
 
@@ -81,6 +87,8 @@ from ._daemon import _Device
 from ._daemon import _HIDHelper
 from ._daemon import _DTrackHelper
 from ._daemon import _KinectTrackHelper
+from ._daemon import _SkeletonTrackHelper
+from ._daemon import _HMDTrackHelper
 from ._daemon import _TUIOInputHelper
 
 # currently WacomTablet and Wiimote are not supported on Windows
@@ -209,6 +217,7 @@ class DTrack(_DTrackHelper):
 
     stations = property(StationProxy)
 
+
 class KinectTrack(_KinectTrackHelper):
     """Avango NG device for processing KinectTrack udp packets (ASCII protocol).
     Required properties: stations, port."""
@@ -228,6 +237,52 @@ class KinectTrack(_KinectTrackHelper):
         def __setitem__(self, key, st):
             self._kinect._stations[key] = st
             return self._kinect.add_station(key, st.name)
+
+    stations = property(StationProxy)
+
+
+class SkeletonTrack(_SkeletonTrackHelper):
+    """Avango NG device for processing SkeletonTrack zmq messages.
+    Required properties: stations, port."""
+    def __init__(self):
+        super(SkeletonTrack, self).__init__()
+        self._stations = {}
+
+    class StationProxy(object):
+        """Proxy object to override the functions that are called on access of list
+        values via [] operator."""
+        def __init__(self, skeleton):
+            self._skeleton = skeleton
+        def __getitem__(self, key):
+            if self._skeleton._stations.has_key(key):
+                return self._skeleton._stations[key]
+            else: return ''
+        def __setitem__(self, key, st):
+            self._skeleton._stations[key] = st
+            return self._skeleton.add_station(key, st.name)
+
+    stations = property(StationProxy)
+
+
+class HMDTrack(_HMDTrackHelper):
+    """Avango NG device for processing HMDTrack zmq messages.
+    Required properties: stations, port."""
+    def __init__(self):
+        super(HMDTrack, self).__init__()
+        self._stations = {}
+
+    class StationProxy(object):
+        """Proxy object to override the functions that are called on access of list
+        values via [] operator."""
+        def __init__(self, skeleton):
+            self._skeleton = skeleton
+        def __getitem__(self, key):
+            if self._skeleton._stations.has_key(key):
+                return self._skeleton._stations[key]
+            else: return ''
+        def __setitem__(self, key, st):
+            self._skeleton._stations[key] = st
+            return self._skeleton.add_station(key, st.name)
 
     stations = property(StationProxy)
 

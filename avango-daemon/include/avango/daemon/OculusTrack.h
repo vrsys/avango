@@ -23,23 +23,66 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/Application.h>
-#include <avango/Logger.h>
+#if !defined(AV_DAEMON_OCULUS_TRACK_H)
+#define AV_DAEMON_OCULUS_TRACK_H
 
-#include <avango/UnitTest++/UnitTest++.h>
+#include <avango/daemon/Device.h>
 
-#include <avango/daemon/DeviceSensor.h>
-#include <avango/daemon/DeviceService.h>
-#include <avango/daemon/DTrack.h>
-#include <avango/daemon/KinectTrack.h>
-#include <avango/daemon/SkeletonTrack.h>
-#include <avango/daemon/HMDTrack.h>
-#include <avango/daemon/HIDInput.h>
-#include <avango/daemon/Wiimote.h>
+/**
+ * \file
+ * \ingroup av_daemon
+ */
 
-int main()
+namespace av
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+  namespace daemon
+  {
+
+    class AV_DAEMON_DLL OculusTrack : public Device
+    {
+      AV_BASE_DECLARE();
+
+    public:
+      /**
+       * Constructor
+       */
+      OculusTrack();
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~OculusTrack() {}
+
+      /**
+       * Inherited from base class, implements the initialization of this device.
+       */
+      void startDevice() override;
+
+      /**
+       * Inherited from base class, implements the loop in which the device is read out.
+       */
+      void readLoop() override;
+
+      /**
+       * Inherited from base class, implements the closing operation of this device.
+       */
+      void stopDevice() override;
+
+      /**
+       * Inherited from base class, returns a list of settable features.
+       */
+      const std::vector<std::string>& queryFeatures() override;
+
+    private:
+
+      ::std::vector< ::std::string> mRequiredFeatures;
+      std::string mPort;
+      std::string mServer;
+      bool parseFeatures();
+    };
+  }
 }
+
+#endif

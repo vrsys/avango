@@ -23,23 +23,82 @@
 *                                                                        *
 \************************************************************************/
 
-#include <avango/Application.h>
-#include <avango/Logger.h>
+#if !defined(AV_DAEMON_SKELETON_TRACK_H)
+#define AV_DAEMON_SKELETON_TRACK_H
 
-#include <avango/UnitTest++/UnitTest++.h>
+#include <avango/daemon/Device.h>
 
-#include <avango/daemon/DeviceSensor.h>
-#include <avango/daemon/DeviceService.h>
-#include <avango/daemon/DTrack.h>
-#include <avango/daemon/KinectTrack.h>
-#include <avango/daemon/SkeletonTrack.h>
-#include <avango/daemon/HMDTrack.h>
-#include <avango/daemon/HIDInput.h>
-#include <avango/daemon/Wiimote.h>
+/**
+ * \file
+ * \ingroup av_daemon
+ */
 
-int main()
+namespace av
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+  namespace daemon
+  {
+    /**
+     * An Avango NG device for processing SkeletonTrack udp packets (ASCII protocol).
+     * (from A.R.T. GmbH)
+     *
+     * \ingroup av_daemon
+     */
+
+     struct Message {
+        Message()
+          :id{ -1 }
+        {}
+        short id;
+        ::gua::math::mat4f matrix;
+        bool status;
+        bool grab;
+     };
+
+    class AV_DAEMON_DLL SkeletonTrack : public Device
+    {
+      AV_BASE_DECLARE();
+
+    public:
+      /**
+       * Constructor
+       */
+      SkeletonTrack();
+
+    protected:
+
+      /**
+       * Destructor made protected to prevent allocation on stack.
+       */
+      virtual ~SkeletonTrack() {}
+
+      /**
+       * Inherited from base class, implements the initialization of this device.
+       */
+      void startDevice() override;
+
+      /**
+       * Inherited from base class, implements the loop in which the device is read out.
+       */
+      void readLoop() override;
+
+      /**
+       * Inherited from base class, implements the closing operation of this device.
+       */
+      void stopDevice() override;
+
+      /**
+       * Inherited from base class, returns a list of settable features.
+       */
+      const std::vector<std::string>& queryFeatures() override;
+
+    private:
+
+      ::std::vector< ::std::string> mRequiredFeatures;
+      std::string mPort;
+      std::string mServer;
+      bool parseFeatures();
+    };
+  }
 }
+
+#endif

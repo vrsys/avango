@@ -30,8 +30,8 @@ scripted with python. In this tutorial I will teach \n\
 you the basics that are neccessary to create an \n\
 entire \033[92mguacamole\033[0m application. \n\n\
 Here is your first task: Start the tutorial by \n\
-typing the command 'tip(0)' after my friendly \n\
-'gua>'-prompt!",
+pressing enter to ignore the error message and typing \n\
+the command 'tip(0)' after my friendly 'gua>'-prompt!",
 
   0:
 "\n----------------------------------------------------------\n\n\
@@ -72,6 +72,10 @@ Well done! In order to help, I created a SimpleViewer \n\
 for you. Assign the newly created scenegraph to my viewer \n\
 by typing \n\n\
 \033[93mviewer.SceneGraph.value = graph\033[0m\n\n\
+You need to write \".value\" because SceneGraph is a field.\n\
+Fields are a powerful tool for building complex dataflows and\n\
+you will learn how to build your first dependency graph later.\n\
+Just accept this syntax for the moment.\n\n\
 Continue with the next tip! As an alternative to 'tip(4)',\n\
 you may use 'next_tip()' as well.\n",
 
@@ -94,11 +98,13 @@ Therefore you will need a TriMeshLoader: \n\n\
 "\n----------------------------------------------------------\n\n\
 Now you have to load a 3D-model as TriMeshNode. \n\
 This is done by: \n\n\
-\033[93mmonkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', 'data/materials/Stones.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
+\033[93mmonkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
 The first parameter ('monkey') is the new node's name. \n\
-The second is the 3D-model file, the third is the \n\
-desired material and finally you can pass some flags \n\
-to the loader. Just use the defaults. (next tip!)\n",
+The second is the 3D-model file and finally you can pass some flags \n\
+to the loader. Just use the defaults.\n\n\
+To assing a texture to the monkey, type:\n\n\
+\033[93mmonkey_node.Material.value.set_uniform(\"ColorMap\", \"data/textures/stones.jpg\")\033[0m\n\n\
+Continue by typing 'tip(7)' or 'next_tip()'!\n",
 
   7:
 "\n----------------------------------------------------------\n\n\
@@ -131,23 +137,36 @@ Don't forget the next tip!",
 "\n----------------------------------------------------------\n\n\
 Beautiful! Isn't it? You got a nice monkey! Let's add \n\
 a floor! First load it, then add it to the scenegraph! \n\n\
-\033[93mplane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', 'data/materials/Tiles.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
+\033[93mplane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
+\033[93mplane_node.Material.value.set_uniform(\"ColorMap\", \"data/textures/tiles.jpg\")\033[0m\n\n\
 \033[93mgraph.Root.value.Children.value.append(plane_node)\033[0m\n\n\
 Continue by typing 'tip(11)' or 'next_tip()'!\n",
 
-  11:
+ 11:
 "\n----------------------------------------------------------\n\n\
-Okay, let's move it down a bit! \n\n\
-\033[93mplane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0)\033[0m\n\n\
+For your convenience, I have added a function that is able \n\
+to print the scenegraph for you. Just try it out by typing \n\n\
+\033[93mprint_graph(graph)\033[0m\n\n\
+For the time being, just note the three nodes \"monkey\", \"lamp\"\n\
+and \"floor\" you have added so far. The \"navigation\" node and its\n\
+children have been added automatically during startup.\n\n\
+You can use this function throughout the tutorial whenever you are\n\
+unsure about the underlying scenegraph structure.\n\n\
 Continue by typing 'tip(12)' or 'next_tip()'!\n",
 
  12:
 "\n----------------------------------------------------------\n\n\
-Maybe a bit bigger?\n\n\
-\033[93mplane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0) * avango.gua.make_scale_mat(5, 1, 5)\033[0m\n\n\
+Okay, let's move the plane down a bit! \n\n\
+\033[93mplane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0)\033[0m\n\n\
 Continue by typing 'tip(13)' or 'next_tip()'!\n",
 
-  13:
+ 13:
+"\n----------------------------------------------------------\n\n\
+Maybe a bit bigger?\n\n\
+\033[93mplane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0) * avango.gua.make_scale_mat(5, 1, 5)\033[0m\n\n\
+Continue by typing 'tip(14)' or 'next_tip()'!\n",
+
+ 14: 
 "\n----------------------------------------------------------\n\n\
 There are three transformation types:\n\n\
 translation: avango.gua.make_trans_mat(x, y, z) \n\
@@ -157,68 +176,71 @@ For your next task, type \n\n\
 \033[93madd_sample_monkey(graph)\033[0m\n\n\
 followed by 'tip(14)' or 'next_tip()'!\n",
 
-  14:
+  15:
 "\n----------------------------------------------------------\n\n\
 A new monkey appeared! Now try to set the position, \n\
 rotation and scale of your original monkey to be exact \n\
-the same! You're finished, if your monkey is axactly \n\
+the same! You're finished, if your monkey is exactly \n\
 inside the other!\n\n\
-When you're ready, 'tip(15)' or 'next_tip()'!\n",
-
-  15:
-"\n----------------------------------------------------------\n\n\
-Well done (At least, I hope so)! Now on to some more \n\
-stuff! Your scenegraph object has many nodes now, but all \n\
-are attached to the root! Let's create a group of objects, \n\
-which are moved around together.\n\n\
-You'll need a TransformNode:\n\n\
-\033[93mtransform_node = avango.gua.nodes.TransformNode(Name = 'group')\033[0m\n\
-\033[93mgraph.Root.value.Children.value.append(transform_node)\033[0m\n\n\
-Continue by typing 'tip(16)' or 'next_tip()'!\n",
+When you're ready, 'tip(16)' or 'next_tip()'!\n",
 
   16:
 "\n----------------------------------------------------------\n\n\
-Now we need some objects we can attach to this group:\n\n\
-\033[93mpot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
-\033[93mpot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
-\033[93mpot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', 'data/materials/Shiny.gmd', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
+Well done (At least, I hope so)! Now on to some more \n\
+stuff! Your scenegraph object has many nodes now, but all \n\
+are attached to the root (verify that by printing the scene graph)!\n\
+Let's create a group of objects, which are moved around together.\n\n\
+You'll need a TransformNode:\n\n\
+\033[93mmonkey_node.Transform.value = avango.gua.make_identity_mat()\033[0m\n\
+\033[93mtransform_node = avango.gua.nodes.TransformNode(Name = 'group')\033[0m\n\
+\033[93mgraph.Root.value.Children.value.append(transform_node)\033[0m\n\n\
 Continue by typing 'tip(17)' or 'next_tip()'!\n",
 
   17:
 "\n----------------------------------------------------------\n\n\
-Now add them all to our group node:\n\n\
-\033[93mtransform_node.Children.value = [pot1, pot2, pot3]\033[0m\n\n\
+Now we need some objects we can attach to this group:\n\n\
+\033[93mpot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
+\033[93mpot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\
+\033[93mpot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)\033[0m\n\n\
 Continue by typing 'tip(18)' or 'next_tip()'!\n",
 
   18:
+"\n----------------------------------------------------------\n\n\
+Now add them all to our group node:\n\n\
+\033[93mtransform_node.Children.value = [pot1, pot2, pot3]\033[0m\n\n\
+Check out the scenegraph layout to understand what you have just done.\n\n\
+Continue by typing 'tip(19)' or 'next_tip()'!\n",
+
+  19:
 "\n----------------------------------------------------------\n\n\
 Move them all to different places:\n\n\
 \033[93mpot1.Transform.value = avango.gua.make_trans_mat(2,  0, 0) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)\033[0m\n\
 \033[93mpot2.Transform.value = avango.gua.make_trans_mat(0,  0, 2) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)\033[0m\n\
 \033[93mpot3.Transform.value = avango.gua.make_trans_mat(-2,  0, 0) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)\033[0m\n\
-Continue by typing 'tip(19)' or 'next_tip()'!\n",
-
-  19:
-"\n----------------------------------------------------------\n\n\
-Now you may try to position all pots on the floor by \n\
-moving the transform_node down!\n\n\
-transform_node.Transform.value = ...\n\n\
 Continue by typing 'tip(20)' or 'next_tip()'!\n",
 
   20:
 "\n----------------------------------------------------------\n\n\
-Let's get our monkey some new looks!\n\
-In \033[92mguacamole\033[0m, materials are assigned to GeometryNodes. You told\n\
-the TriMeshLoader to do so, rembember? As a matter of fact,\n\
-you can change a TriMeshNode's material at runtime.\n\
-Move the monkey back to the origin and try to make \n\
-it a chameleon by setting its material to the one the \n\
-floor already has:\n\n\
-\033[93mmonkey_node.Transform.value = avango.gua.make_identity_mat()\033[0m\n\n\
-\033[93mmonkey_node.Material.value = \"data/materials/Tiles.gmd\"\033[0m\n\n\
+Now you may try to position all pots on the floor by \n\
+moving the transform_node down!\n\n\
+transform_node.Transform.value = ...\n\n\
 Continue by typing 'tip(21)' or 'next_tip()'!\n",
 
   21:
+"\n----------------------------------------------------------\n\n\
+Let's get our monkey some new looks!\n\
+In \033[92mguacamole\033[0m, each GeometryNode has an assigned material.\n\
+As a matter of fact, you can change a TriMeshNode's material at runtime. \n\
+You can pass coefficients for Emissivity, Roughness and Metalness directly \n\
+to the shader. You can also pass texture uniforms directly to the shader,\n\
+just like I asked you to do already. Try:\n\n\
+\033[93mmonkey_node.Material.value.set_uniform(\"ColorMap\", \"data/textures/grass.jpg\")\033[0m\n\n\
+Afterwards, play around with the shading coefficients.\n\
+You can try, for example:\n\n\
+\033[93mmonkey_node.Material.value.set_uniform(\"Emissivity\", 1.0)\033[0m\n\n\
+Continue by typing 'tip(22)' or 'next_tip()'!\n",
+
+  22:
 "\n----------------------------------------------------------\n\n\
 Time for some fancy stuff!\n\
 Throughout this tutorial you have worked with \033[92mguacamole\033[0m's nodes\n\
@@ -227,9 +249,9 @@ scenegraph structure.\n\
 However, there is another way of defining dependencies in \033[92mguacamole\033[0m:\n\
 A so called dependency graph.\n\
 Let me show you, what this means...\n\n\
-Move on by typing 'tip(22)' or 'next_tip()'!\n",
+Move on by typing 'tip(23)' or 'next_tip()'!\n",
 
-  22:
+  23:
 "\n----------------------------------------------------------\n\n\
 I prepared a little something for you.\n\
 There is an object called 'timed_rotate' which has a field called\n\
@@ -237,24 +259,25 @@ There is an object called 'timed_rotate' which has a field called\n\
 y-Axis and is being updated every frame.\n\
 Let's use this to give your monkey some spin:\n\n\
 \033[93mmonkey_node.Transform.connect_from(timed_rotate.MatrixOut)\033[0m\n\n\
-Continue by typing 'tip(23)' or 'next_tip()'!\n",
-
-  23:
-"\n----------------------------------------------------------\n\n\
-Let's speed this up! Use the field 'RotationSpeed' to controll\n\
-how fast the monkey is spinning!\n\n\
-\033[93mtimed_rotate.RotationSpeed.value = 50.0\033[0m\n\n\
 Continue by typing 'tip(24)' or 'next_tip()'!\n",
 
   24:
 "\n----------------------------------------------------------\n\n\
+Let's speed this up! Use the field 'RotationSpeed' to controll\n\
+how fast the monkey is spinning!\n\n\
+\033[93mtimed_rotate.RotationSpeed.value = 50.0\033[0m\n\n\
+Continue by typing 'tip(25)' or 'next_tip()'!\n",
+
+  25:
+"\n----------------------------------------------------------\n\n\
+I bet you tried to set the rotation speed higher than 50.0, right? ;-)\n\n\
 As you can see, you can define dependencies between fields by simply using\n\
 the 'connect_from()' method! Now it's your turn!\n\
 Make all of the teapots spin around by connecting the 'Transform' field\n\
 of 'transform_node' to 'MatrixOut' of 'timed_rotate' as well!\n\n\
-If you are done, continue by typing 'tip(25)' or 'next_tip()'!\n",
+If you are done, continue by typing 'tip(26)' or 'next_tip()'!\n",
 
-  25:
+  26:
 "\n----------------------------------------------------------\n\n\
 Gosh! What happened! All your teapots are no longer on the floor!\n\
 This is due to the timed_rotate's behaviour: It produces a rotation \n\
@@ -263,13 +286,14 @@ You'll need to perform the following steps: \n\n\
   -> Create a new TransformNode which is responsible for the translation\n\
   -> Add the new TransformNode to your scenegraph\n\
   -> Detach the Teapot-Group from the root of your scenegraph \n\
-     (hint: scenegraph.Root.value.Children.value.remove( ... ))\n\
+     (hint: graph.Root.value.Children.value.remove( ... ))\n\
   -> Attach the Teapot-Group to your new TransformNode\n\n\
-Now try to do this on your own! If you're struggling -- the \n\
-neccessary code comes with the next tip!\n\n\
-Continue by typing 'tip(26)' or 'next_tip()'!\n",
+Now try to do this on your own! You can use the print_graph\n\
+function to check the current layout of the scenegraph.\n\n\
+If you're struggling -- the neccessary code comes with the next tip!\n\n\
+Continue by typing 'tip(27)' or 'next_tip()'!\n",
 
-  26:
+  27:
 "\n----------------------------------------------------------\n\n\
 Here is how it's done:\n\n\
 \033[93mtea_move_node = avango.gua.nodes.TransformNode(Name = 'teaMove')\033[0m\n\
@@ -277,9 +301,9 @@ Here is how it's done:\n\n\
 \033[93mgraph.Root.value.Children.value.remove(transform_node)\033[0m\n\
 \033[93mgraph.Root.value.Children.value.append(tea_move_node)\033[0m\n\
 \033[93mtea_move_node.Children.value.append(transform_node)\033[0m\n\n\
-Continue by typing 'tip(27)' or 'next_tip()'!\n",
+Continue by typing 'tip(28)' or 'next_tip()'!\n",
 
-  27:
+  28:
 "\n----------------------------------------------------------\n\n\
 Okay! So let's see what you have learned today:\n\
   -> Using me, GuaVE, as an interactive Python interpreter.\n\
@@ -290,21 +314,23 @@ Okay! So let's see what you have learned today:\n\
   -> Adding lights to your scene.\n\
      (tip 9)\n\
   -> Translating, scaling and rotating objects.\n\
-     (tips 10 to 14)\n\
+     (tips 10 to 15)\n\
   -> Grouping objects in the scene and manipulating them as a whole.\n\
-     (tips 15 to 19)\n\
+     (tips 16 to 20)\n\
   -> Changing a geometry's material.\n\
-     (tip 20)\n\
+     (tip 21)\n\
   -> Using field connections to describe dependency graphs.\n\
-     (tips 21 to 26)\n\n\
+     (tips 22 to 27)\n\n\
 This shall be it as a first glimpse on \033[92mguacamole\033[0m.\n\
-I put all the code of this little tutorial in a seperate example \n\
-directory called 'tutorial_result'. Copy this directory and start \n\
+Copy the directory of this tutorial and start \n\
 writing your own, spicy \033[92mguacamole\033[0m application! \n\n\
-Of course, there are alot of other things to\n\
+Of course, there are a lot of other things to\n\
 learn and to experiment with!\n\n\
 Anyhow, thank you for taking this little course\n\
 and have fun fooling around with \033[92mguacamole\033[0m!\n",
+
+  29:
+ "I'm serious, this is the end of the tutorial! :-) \n"
 }
 
 current_tip = -1
@@ -314,9 +340,20 @@ timed_rotate = TimedRotate()
 
 def add_sample_monkey(graph):
   loader = avango.gua.nodes.TriMeshLoader()
-  monkey = loader.create_geometry_from_file("monkey", "data/objects/monkey.obj", "data/materials/Stones.gmd", avango.gua.LoaderFlags.DEFAULTS)
+  monkey = loader.create_geometry_from_file("another_monkey", "data/objects/monkey.obj", avango.gua.LoaderFlags.DEFAULTS)
+  monkey.Material.value.set_uniform("ColorMap", "data/textures/stones.jpg")
   monkey.Transform.value = avango.gua.make_trans_mat(2, 1, 0) * avango.gua.make_rot_mat(90, 0, 1, 0) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   graph.Root.value.Children.value.append(monkey)
+
+def print_graph(graph):
+  root_node = graph.Root.value
+  stack = [(root_node, 0)]
+  while stack:
+    node, level = stack.pop()
+    print("│   " * level + "├── {0} <{1}>".format(
+      node.Name.value, node.__class__.__name__))
+    stack.extend(
+      [(child, level + 1) for child in reversed(node.Children.value)])
 
 def tip(which):
   global current_tip
@@ -340,10 +377,7 @@ def start():
   timer = avango.nodes.TimeSensor()
   timed_rotate.TimeIn.connect_from(timer.Time)
 
-  logger = avango.gua.nodes.Logger(EnableWarning = False)
-
-  avango.gua.load_shading_models_from("data/materials")
-  avango.gua.load_materials_from("data/materials")
+  logger = avango.gua.nodes.Logger(EnableWarning = True)
 
   viewer.run(locals(), globals(), False)
 

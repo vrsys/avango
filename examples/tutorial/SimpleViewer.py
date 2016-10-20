@@ -8,39 +8,40 @@ import examples_common.navigator
 class SimpleViewer(avango.script.Script):
 
   SceneGraph = avango.gua.SFSceneGraph()
-
-  Pipeline = avango.gua.SFPipeline()
-  WindowSize = avango.gua.SFVec2ui()
-
   Navigator = examples_common.navigator.Navigator()
-
   Viewer = avango.gua.nodes.Viewer()
   Shell = GuaVE()
 
   def __init__(self):
     self.super(SimpleViewer).__init__()
-    self.WindowSize.value = avango.gua.Vec2ui(1920, 1080)
+    self.window_size = avango.gua.Vec2ui(1920, 1080)
 
-    self.Pipeline.value = avango.gua.nodes.Pipeline(
-                            Window = avango.gua.nodes.Window(
-                              Size = self.WindowSize.value,
-                              LeftResolution = self.WindowSize.value
-                            ),
+    # create resolve pass
+    self.res_pass = avango.gua.nodes.ResolvePassDescription()
+    self.res_pass.EnableSSAO.value = True
+    self.res_pass.SSAOIntensity.value = 4.0
+    self.res_pass.SSAOFalloff.value = 10.0
+    self.res_pass.SSAORadius.value = 7.0
+    self.res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
+    self.res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
+    self.res_pass.Exposure.value = 1.0
+    self.res_pass.BackgroundColor.value = avango.gua.Color(0.0, 0.0, 0.0)
+    self.res_pass.BackgroundMode.value = avango.gua.BackgroundMode.COLOR
 
-                            LeftResolution = self.WindowSize.value,
-                            EnableBackfaceCulling = False,
-                            AmbientColor = avango.gua.Color(1, 1, 1),
-                            BackgroundMode = avango.gua.BackgroundMode.SKYMAP_TEXTURE,
-                            SsaoIntensity = 3,
-                            SsaoRadius = 5,
-                            EnableSsao = True,
-                            EnableBloom = True,
-                            BloomRadius = 20,
-                            BloomIntensity = 2
-                          )
+    # create anti-aliasing pass
+    self.anti_aliasing = avango.gua.nodes.SSAAPassDescription()
 
+    # create pipeline description
+    self.pipeline_description = avango.gua.nodes.PipelineDescription(Passes=[
+      avango.gua.nodes.TriMeshPassDescription(),
+      avango.gua.nodes.LightVisibilityPassDescription(),
+      self.res_pass,
+      self.anti_aliasing])
 
-    self.Viewer.Pipelines.value = [self.Pipeline.value]
+    # create window
+    self.window = avango.gua.nodes.GlfwWindow(Size = self.window_size,
+                                              LeftResolution = self.window_size)
+    avango.gua.register_window("window", self.window)
 
 
   def run(self, locals, globals, show_guave_banner = True):
@@ -51,45 +52,38 @@ class SimpleViewer(avango.script.Script):
     self.Shell.list_variables()
 
   def start_navigation(self):
-    self.__navigation.Transform.connect_from(self.Navigator.OutTransform)
+    self.navigation.Transform.connect_from(self.Navigator.OutTransform)
 
   def set_background_image(self, path):
-    avango.gua.create_texture(path)
-    self.Pipeline.value.BackgroundTexture.value = path
+    self.res_pass.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
+    self.res_pass.BackgroundTexture.value = path
 
   @field_has_changed(SceneGraph)
   def update_scenegraph(self):
 
-    self.__navigation = avango.gua.nodes.TransformNode(Name = "navigation")
+    self.navigation = avango.gua.nodes.TransformNode(Name = "navigation")
 
-    eye = avango.gua.nodes.TransformNode(Name = "eye")
-    eye.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+    cam = avango.gua.nodes.CameraNode(Name = "cam",
+                                      LeftScreenPath = "/navigation/screen",
+                                      SceneGraph = self.SceneGraph.value.Name.value,
+                                      Resolution = self.window_size,
+                                      OutputWindowName = "window",
+                                      Transform = avango.gua.make_trans_mat(0.0, 0.0, 1.0))
 
-    screen = avango.gua.nodes.ScreenNode(
-      Name = "screen",
-      Width = 1.6,
-      Height = 1.0
-    )
-    screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+    cam.PipelineDescription.value = self.pipeline_description
 
-    self.__navigation.Children.value = [eye, screen]
+    screen = avango.gua.nodes.ScreenNode(Name = "screen",
+                                         Width = 1.6,
+                                         Height = 1.0)
 
-    self.SceneGraph.value.Root.value.Children.value.append(self.__navigation)
+    self.navigation.Children.value = [cam, screen]
 
-    self.Navigator.OutTransform.connect_from(eye.Transform)
+    self.SceneGraph.value.Root.value.Children.value.append(self.navigation)
 
+    self.Navigator.OutTransform.connect_from(cam.Transform)
     self.Navigator.RotationSpeed.value = 0.2
     self.Navigator.MotionSpeed.value = 0.04
 
-
-
-    self.Pipeline.value.Camera.value = avango.gua.nodes.Camera(
-                                  LeftEye = "/navigation/eye",
-                                  RightEye = "/navigation/eye",
-                                  LeftScreen = "/navigation/screen",
-                                  RightScreen = "/navigation/screen",
-                                  SceneGraph = self.SceneGraph.value.Name.value
-                                 )
-
     self.Viewer.SceneGraphs.value = [self.SceneGraph.value]
+    self.Viewer.Windows.value = [self.window]
 

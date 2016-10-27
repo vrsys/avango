@@ -52,7 +52,7 @@ BOOST_PYTHON_MODULE(_skelanim)
   av::gua::skelanim::SkeletalAnimationLoader::initClass();
   av::gua::skelanim::SkeletalAnimationPassDescription::initClass();
   av::gua::skelanim::SkeletalAnimationNode::initClass();
-  av::gua::Bone::initClass();
+  av::gua::skelanim::Bone::initClass();
   init_SkeletalAnimationNode();
   init_SkeletalAnimationPassDescription();
   init_SkeletalAnimationLoader();

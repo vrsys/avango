@@ -25,8 +25,10 @@
 #include "SkeletalAnimationLoader.hpp"
 #include "SkeletalAnimationPassDescription.hpp"
 #include "SkeletalAnimationNode.hpp"
+#include "Bone.hpp"
 #include <avango/gua/skelanim/renderer/SkeletalAnimationLoader.hpp>
 #include <avango/gua/skelanim/renderer/SkeletalAnimationPassDescription.hpp>
+#include <avango/gua/skelanim/renderer/Bone.hpp>
 #include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
@@ -50,7 +52,9 @@ BOOST_PYTHON_MODULE(_skelanim)
   av::gua::skelanim::SkeletalAnimationLoader::initClass();
   av::gua::skelanim::SkeletalAnimationPassDescription::initClass();
   av::gua::skelanim::SkeletalAnimationNode::initClass();
+  av::gua::Bone::initClass();
   init_SkeletalAnimationNode();
   init_SkeletalAnimationPassDescription();
   init_SkeletalAnimationLoader();
+  init_Bone();
 }

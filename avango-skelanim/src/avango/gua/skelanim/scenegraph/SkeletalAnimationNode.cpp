@@ -107,6 +107,29 @@ av::gua::skelanim::SkeletalAnimationNode::initClass()
 }
 
 void
+av::gua::skelanim::SkeletalAnimationNode::getBonesCB(const MFBone::GetValueEvent& event)
+{
+  
+  // auto const& gua_bones = m_guaSkeletalAnimationNode->get_bones();
+  // std::vector<av::gua::Bone> av_bones{};
+  // for (::gua::Bone const& gua_bone : gua_bones) {
+  //   av_bones.emplace_back(&gua_bone);
+  // }
+  // *(event.getValuePtr()) = av_bones;
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setBonesCB(const MFBone::SetValueEvent& event)
+{
+  // std::vector<::gua::Bone> gua_bones{};
+  // for (auto const& av_bone : event.getValue()) {
+  //   gua_bones.push_back(*av_bone.getGuaBone());
+  // }
+  // m_guaSkeletalAnimationNode->set_bones(gua_bones);
+}
+
+
+void
 av::gua::skelanim::SkeletalAnimationNode::getGeometriesCB(const MFString::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_geometry_descriptions();

@@ -27,39 +27,26 @@ namespace av
         AV_FC_DECLARE();
 
       public:
-
         /**
          * Constructor. When called without arguments, a new ::gua::Bone is created.
          * Otherwise, the given ::gua::Bone is used.
          */
-        Bone(std::shared_ptr< ::gua::Bone> guaRay =
-            std::shared_ptr< ::gua::Bone>(new ::gua::Bone()));
+        Bone(::gua::Bone const& guaBone = ::gua::Bone{});
 
       public:
-        SFVec3  Origin;
-        SFVec3  Direction;
-        SFFloat TMax;
+        SFString name;
+        MFUInt children;
+        SFMatrix idle_matrix;
+        SFMatrix offset_matrix;
 
         /**
          * Get the wrapped ::gua::Bone.
          */
-        std::shared_ptr< ::gua::Bone> getGuaBone() const;
+        ::gua::Bone getGuaBone() const;
 
       public:
 
-        // virtual void getOriginCB(const SFVec3::GetValueEvent& event);
-        // virtual void setOriginCB(const SFVec3::SetValueEvent& event);
-
-        // virtual void getDirectionCB(const SFVec3::GetValueEvent& event);
-        // virtual void setDirectionCB(const SFVec3::SetValueEvent& event);
-
-        // virtual void getTMaxCB(const SFFloat::GetValueEvent& event);
-        // virtual void setTMaxCB(const SFFloat::SetValueEvent& event);
-
       private:
-
-        std::shared_ptr< ::gua::Bone> m_guaBone;
-
         Bone(const Bone&);
         Bone& operator=(const Bone&);
       };

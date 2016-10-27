@@ -7,75 +7,34 @@ AV_FC_DEFINE(av::gua::skelanim::Bone);
 AV_FIELD_DEFINE(av::gua::skelanim::SFBone);
 AV_FIELD_DEFINE(av::gua::skelanim::MFBone);
 
-av::gua::skelanim::Bone::Bone(std::shared_ptr< ::gua::Bone> guaBone)
-    : m_guaBone(guaBone)
-{
-    // AV_FC_ADD_ADAPTOR_FIELD(Origin,
-    //                       std::bind(&Bone::getOriginCB, this, std::placeholders::_1),
-    //                       std::bind(&Bone::setOriginCB, this, std::placeholders::_1));
-    // AV_FC_ADD_ADAPTOR_FIELD(Direction,
-    //                       std::bind(&Bone::getDirectionCB, this, std::placeholders::_1),
-    //                       std::bind(&Bone::setDirectionCB, this, std::placeholders::_1));
-    // AV_FC_ADD_ADAPTOR_FIELD(TMax,
-    //                       std::bind(&Bone::getTMaxCB, this, std::placeholders::_1),
-    //                       std::bind(&Bone::setTMaxCB, this, std::placeholders::_1));
+av::gua::skelanim::Bone::Bone(::gua::Bone const& guaBone) {
+  name.setValue(guaBone.name);
+  children.setValue(guaBone.children);
+  idle_matrix.setValue(::gua::math::mat4{guaBone.idle_matrix});
+  offset_matrix.setValue(::gua::math::mat4{guaBone.offset_matrix});
 }
-
 
 void
-av::gua::skelanim::Bone::initClass()
-{
-    if (!isTypeInitialized())
-    {
-        av::FieldContainer::initClass();
+av::gua::skelanim::Bone::initClass() {
+  if (!isTypeInitialized())
+  {
+    av::FieldContainer::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::skelanim::Bone, true);
+    AV_FC_INIT(av::FieldContainer, av::gua::skelanim::Bone, true);
 
-        SFBone::initClass("av::gua::skelanim::SFBone", "av::Field");
-        MFBone::initClass("av::gua::skelanim::MFBone", "av::Field");
+    SFBone::initClass("av::gua::skelanim::SFBone", "av::Field");
+    MFBone::initClass("av::gua::skelanim::MFBone", "av::Field");
 
-        sClassTypeId.setDistributable(true);
-    }
+    sClassTypeId.setDistributable(true);
+  }
 }
 
-std::shared_ptr< ::gua::Bone>
-av::gua::skelanim::Bone::getGuaBone() const
-{
-    return m_guaBone;
+::gua::Bone
+av::gua::skelanim::Bone::getGuaBone() const {
+  ::gua::Bone guaBone{name.getValue(), 
+    scm::math::mat4f{idle_matrix.getValue()},
+    scm::math::mat4f{offset_matrix.getValue()},
+    children.getValue()
+  };
+  return guaBone;
 }
-
-// void
-// av::gua::skelanim::Bone::getOriginCB(const SFVec3::GetValueEvent& event)
-// {
-//     *(event.getValuePtr()) = m_guaBone->origin_;
-// }
-
-// void
-// av::gua::skelanim::Bone::setOriginCB(const SFVec3::SetValueEvent& event)
-// {
-//     m_guaBone->origin_ = event.getValue();
-// }
-
-// void
-// av::gua::skelanim::Bone::getDirectionCB(const SFVec3::GetValueEvent& event)
-// {
-//     *(event.getValuePtr()) = m_guaBone->direction_;
-// }
-
-// void
-// av::gua::skelanim::Bone::setDirectionCB(const SFVec3::SetValueEvent& event)
-// {
-//     m_guaBone->direction_ = event.getValue();
-// }
-
-// void
-// av::gua::skelanim::Bone::getTMaxCB(const SFFloat::GetValueEvent& event)
-// {
-//     *(event.getValuePtr()) = m_guaBone->t_max_;
-// }
-
-// void
-// av::gua::skelanim::Bone::setTMaxCB(const SFFloat::SetValueEvent& event)
-// {
-//     m_guaBone->t_max_ = event.getValue();
-// }

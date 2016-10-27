@@ -16,58 +16,59 @@ namespace av
 {
   namespace gua
   {
-    /**
-     * Wrapper for ::gua::Ray
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL Bone : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
-
-    public:
-
+    namespace skelanim {
       /**
-       * Constructor. When called without arguments, a new ::gua::Ray is created.
-       * Otherwise, the given ::gua::Ray is used.
+       * Wrapper for ::gua::Ray
+       *
+       * \ingroup av_gua
        */
-      Bone(std::shared_ptr< ::gua::Ray> guaRay =
-          std::shared_ptr< ::gua::Ray>(new ::gua::Ray(
-            ::gua::math::vec3(0.f,0.f,0.f), ::gua::math::vec3(0.f,0.f,0.f), 1.f
-          )));
+      class AV_GUA_DLL Bone : public av::FieldContainer
+      {
+        AV_FC_DECLARE();
 
-    public:
-      SFVec3  Origin;
-      SFVec3  Direction;
-      SFFloat TMax;
+      public:
 
-      /**
-       * Get the wrapped ::gua::Ray.
-       */
-      std::shared_ptr< ::gua::Ray> getGuaBone() const;
+        /**
+         * Constructor. When called without arguments, a new ::gua::Ray is created.
+         * Otherwise, the given ::gua::Ray is used.
+         */
+        Bone(std::shared_ptr< ::gua::Ray> guaRay =
+            std::shared_ptr< ::gua::Ray>(new ::gua::Ray(
+              ::gua::math::vec3(0.f,0.f,0.f), ::gua::math::vec3(0.f,0.f,0.f), 1.f
+            )));
 
-    public:
+      public:
+        SFVec3  Origin;
+        SFVec3  Direction;
+        SFFloat TMax;
 
-      virtual void getOriginCB(const SFVec3::GetValueEvent& event);
-      virtual void setOriginCB(const SFVec3::SetValueEvent& event);
+        /**
+         * Get the wrapped ::gua::Ray.
+         */
+        std::shared_ptr< ::gua::Ray> getGuaBone() const;
 
-      virtual void getDirectionCB(const SFVec3::GetValueEvent& event);
-      virtual void setDirectionCB(const SFVec3::SetValueEvent& event);
+      public:
 
-      virtual void getTMaxCB(const SFFloat::GetValueEvent& event);
-      virtual void setTMaxCB(const SFFloat::SetValueEvent& event);
+        virtual void getOriginCB(const SFVec3::GetValueEvent& event);
+        virtual void setOriginCB(const SFVec3::SetValueEvent& event);
 
-    private:
+        virtual void getDirectionCB(const SFVec3::GetValueEvent& event);
+        virtual void setDirectionCB(const SFVec3::SetValueEvent& event);
 
-      std::shared_ptr< ::gua::Ray> m_guaBone;
+        virtual void getTMaxCB(const SFFloat::GetValueEvent& event);
+        virtual void setTMaxCB(const SFFloat::SetValueEvent& event);
 
-      Bone(const Bone&);
-      Bone& operator=(const Bone&);
-    };
+      private:
 
-    using SFBone = SingleField<Link<Bone> >;
-    using MFBone = MultiField<Link<Bone> >;
+        std::shared_ptr< ::gua::Ray> m_guaBone;
 
+        Bone(const Bone&);
+        Bone& operator=(const Bone&);
+      };
+
+      using SFBone = SingleField<Link<Bone> >;
+      using MFBone = MultiField<Link<Bone> >;
+    }
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

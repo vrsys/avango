@@ -21,10 +21,10 @@ namespace boost
 
 void init_Bone()
  {
-  register_ptr_to_python<av::Link<av::gua::Bone> >();
-  register_field<av::gua::SFBone>("SFBone");
-  register_multifield<av::gua::MFBone>("MFBone");
-  class_<av::gua::Bone, av::Link<av::gua::Bone>, bases<av::FieldContainer>,
+  register_ptr_to_python<av::Link<av::gua::skelanim::Bone> >();
+  register_field<av::gua::skelanim::SFBone>("SFBone");
+  register_multifield<av::gua::skelanim::MFBone>("MFBone");
+  class_<av::gua::skelanim::Bone, av::Link<av::gua::skelanim::Bone>, bases<av::FieldContainer>,
          boost::noncopyable >("Bone", "docstring", no_init)
   ;
  }

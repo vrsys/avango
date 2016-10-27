@@ -2,12 +2,12 @@
 #include <avango/Base.h>
 #include <functional>
 
-AV_FC_DEFINE(av::gua::Bone);
+AV_FC_DEFINE(av::gua::skelanim::Bone);
 
-AV_FIELD_DEFINE(av::gua::SFBone);
-AV_FIELD_DEFINE(av::gua::MFBone);
+AV_FIELD_DEFINE(av::gua::skelanim::SFBone);
+AV_FIELD_DEFINE(av::gua::skelanim::MFBone);
 
-av::gua::Bone::Bone(std::shared_ptr< ::gua::Ray> guaBone)
+av::gua::skelanim::Bone::Bone(std::shared_ptr< ::gua::Ray> guaBone)
     : m_guaBone(guaBone)
 {
     AV_FC_ADD_ADAPTOR_FIELD(Origin,
@@ -23,59 +23,59 @@ av::gua::Bone::Bone(std::shared_ptr< ::gua::Ray> guaBone)
 
 
 void
-av::gua::Bone::initClass()
+av::gua::skelanim::Bone::initClass()
 {
     if (!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::Bone, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::skelanim::Bone, true);
 
-        SFBone::initClass("av::gua::SFBone", "av::Field");
-        MFBone::initClass("av::gua::MFBone", "av::Field");
+        SFBone::initClass("av::gua::skelanim::SFBone", "av::Field");
+        MFBone::initClass("av::gua::skelanim::MFBone", "av::Field");
 
         sClassTypeId.setDistributable(true);
     }
 }
 
 std::shared_ptr< ::gua::Ray>
-av::gua::Bone::getGuaBone() const
+av::gua::skelanim::Bone::getGuaBone() const
 {
     return m_guaBone;
 }
 
 void
-av::gua::Bone::getOriginCB(const SFVec3::GetValueEvent& event)
+av::gua::skelanim::Bone::getOriginCB(const SFVec3::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaBone->origin_;
 }
 
 void
-av::gua::Bone::setOriginCB(const SFVec3::SetValueEvent& event)
+av::gua::skelanim::Bone::setOriginCB(const SFVec3::SetValueEvent& event)
 {
     m_guaBone->origin_ = event.getValue();
 }
 
 void
-av::gua::Bone::getDirectionCB(const SFVec3::GetValueEvent& event)
+av::gua::skelanim::Bone::getDirectionCB(const SFVec3::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaBone->direction_;
 }
 
 void
-av::gua::Bone::setDirectionCB(const SFVec3::SetValueEvent& event)
+av::gua::skelanim::Bone::setDirectionCB(const SFVec3::SetValueEvent& event)
 {
     m_guaBone->direction_ = event.getValue();
 }
 
 void
-av::gua::Bone::getTMaxCB(const SFFloat::GetValueEvent& event)
+av::gua::skelanim::Bone::getTMaxCB(const SFFloat::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaBone->t_max_;
 }
 
 void
-av::gua::Bone::setTMaxCB(const SFFloat::SetValueEvent& event)
+av::gua::skelanim::Bone::setTMaxCB(const SFFloat::SetValueEvent& event)
 {
     m_guaBone->t_max_ = event.getValue();
 }

@@ -7,12 +7,14 @@
  */
 
 #include <gua/node/SkeletalAnimationNode.hpp>
+// #include <gua/utils/Bone.hpp>
  // necessary to prevent incomplete type error
 #include <gua/utils/SkeletalAnimation.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
+#include <avango/gua/skelanim/renderer/Bone.hpp>
 
 namespace av
 {
@@ -38,7 +40,7 @@ namespace av
         SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
             std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
 
-        #if defined(AVANGO_DISTRIBUTION_SUPPORT)
+      #if defined(AVANGO_DISTRIBUTION_SUPPORT)
         virtual void on_distribute(av::gua::NetTransform& netNode);
         virtual void on_undistribute(av::gua::NetTransform& netNode);
       #endif
@@ -53,11 +55,15 @@ namespace av
         // trimesh
         MFString   Geometries;
         MultiField<Link<Material>> Materials;
+        MFBone     Bones;
         SFBool     RenderToGBuffer;
         SFBool     RenderToStencilBuffer;
 
         virtual void getGeometriesCB(const MFString::GetValueEvent& event);
         virtual void setGeometriesCB(const MFString::SetValueEvent& event);
+
+        virtual void getBonesCB(const MFBone::GetValueEvent& event);
+        virtual void setBonesCB(const MFBone::SetValueEvent& event);
 
         virtual void getMaterialsCB(const MultiField<Link<Material>>::GetValueEvent& event);
         virtual void setMaterialsCB(const MultiField<Link<Material>>::SetValueEvent& event);

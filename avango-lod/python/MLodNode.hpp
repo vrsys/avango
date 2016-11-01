@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_LOD_MLOD_NODE_HPP
+#define AV_PYTHON_GUA_LOD_MLOD_NODE_HPP
+
+void init_MLodNode();
+
+#endif //AV_PYTHON_GUA_LOD_MLOD_NODE_HPP

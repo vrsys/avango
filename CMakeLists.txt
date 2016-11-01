@@ -159,6 +159,7 @@ set (AVANGO_INSTALL_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE PATH
 option (AVANGO_DEBUG "Set to enable avango debugging.")
 option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support." ON)
 option (AVANGO_PBR_SUPPORT "Set to enable point based rendering support.")
+option (AVANGO_LOD_SUPPORT "Set to enable level of detail support.")
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
@@ -199,6 +200,10 @@ endif(AVANGO_OCULUS_RIFT_SUPPORT)
 if (AVANGO_SKELANIM_SUPPORT)
     add_subdirectory(avango-skelanim)
 endif(AVANGO_SKELANIM_SUPPORT)
+
+if (AVANGO_LOD_SUPPORT)
+  add_subdirectory(avango-lod)
+endif(AVANGO_LOD_SUPPORT)
 
 if (AVANGO_OPENAL_SUPPORT)
     add_subdirectory(avango-openal)

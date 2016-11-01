@@ -44,12 +44,12 @@ namespace av
         virtual void on_distribute(av::gua::NetTransform& netNode);
         virtual void on_undistribute(av::gua::NetTransform& netNode);
       #endif
+       virtual ~SkeletalAnimationNode();
       protected:
 
         /**
          * Destructor made protected to prevent allocation on stack.
          */
-  //      virtual ~SkeletalAnimationNode();
 
       public:
         // trimesh
@@ -96,7 +96,7 @@ namespace av
         virtual void setTime2CB(const SFFloat::SetValueEvent& event);
 
         float getAnimDuration(std::string const& name) const;
-
+        // string distribution
         void loadAnimation(std::string const& file_name,
                                     std::string const& animation_name) const;
 
@@ -110,8 +110,8 @@ namespace av
          */
         std::shared_ptr< ::gua::node::SkeletalAnimationNode> getGuaSkeletalAnimationNode() const;
 
+        MFBone BonesInternal;
       private:
-
         std::shared_ptr< ::gua::node::SkeletalAnimationNode> m_guaSkeletalAnimationNode;
           unsigned m_materialsUserDataHandle;
 

@@ -23,7 +23,7 @@ namespace av
        *
        * \ingroup av_gua
        */
-      class AV_GUA_ANIM_DLL MLodNode : public av::gua::GeometryNode
+      class AV_GUA_LOD_DLL MLodNode : public av::gua::GeometryNode
       {
         AV_FC_DECLARE();
 
@@ -35,6 +35,10 @@ namespace av
          */
         MLodNode(std::shared_ptr< ::gua::node::MLodNode> guanode =
             std::shared_ptr< ::gua::node::MLodNode>(new ::gua::node::MLodNode("")));
+            
+        virtual void on_distribute(av::gua::NetTransform& netNode);
+        virtual void on_undistribute(av::gua::NetTransform& netNode);
+
       protected:
 
         /**
@@ -48,9 +52,25 @@ namespace av
          */
         std::shared_ptr< ::gua::node::MLodNode> getGuaMLodNode() const;
 
+
+        SFString   Geometry;
+        SFMaterial Material;
+        SFFloat    ErrorThreshold;
+        
+        virtual void getGeometryCB(const SFString::GetValueEvent& event);
+        virtual void setGeometryCB(const SFString::SetValueEvent& event);
+
+        virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+        virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+
+        virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
+        virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
+
+
       private:
 
         std::shared_ptr< ::gua::node::MLodNode> m_guaMLodNode;
+        av::Link< av::gua::Material> m_Material;
 
         MLodNode(const MLodNode&);
         MLodNode& operator=(const MLodNode&);
@@ -63,8 +83,8 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_ANIM_DLL SingleField<Link<gua::lod::MLodNode> >;
-  template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::MLodNode> >;
+  template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::MLodNode> >;
+  template class AV_GUA_LOD_DLL MultiField<Link<gua::skelanim::MLodNode> >;
 #endif
 
 }

@@ -22,12 +22,14 @@
 * Avango is a trademark owned by FhG.                                    *
 *                                                                        *
 \************************************************************************/
-//#include "LodLoader.hpp"
-//#include "LodPassDescription.hpp"
+#include "LodLoader.hpp"
+#include "MLodPassDescription.hpp"
+#include "PLodPassDescription.hpp"
 #include "MLodNode.hpp"
 #include "PLodNode.hpp"
-//#include <avango/gua/lod/renderer/LodLoader.hpp>
-//#include <avango/gua/lod/renderer/LodPassDescription.hpp>
+#include <avango/gua/lod/renderer/LodLoader.hpp>
+#include <avango/gua/lod/renderer/MLodPassDescription.hpp>
+#include <avango/gua/lod/renderer/PLodPassDescription.hpp>
 #include <avango/gua/lod/scenegraph/MLodNode.hpp>
 #include <avango/gua/lod/scenegraph/PLodNode.hpp>
 #include <avango/python/register_field.h>
@@ -49,12 +51,14 @@ namespace boost
 
 BOOST_PYTHON_MODULE(_lod)
 {
-  //av::gua::lod::LodLoader::initClass();
-  //av::gua::lod::LodPassDescription::initClass();
+  av::gua::lod::LodLoader::initClass();
+  av::gua::lod::MLodPassDescription::initClass();
+  av::gua::lod::PLodPassDescription::initClass();
   av::gua::lod::MLodNode::initClass();
   av::gua::lod::PLodNode::initClass();
   init_MLodNode();
   init_PLodNode();
-  //init_LodPassDescription();
-  //init_LodLoader();
+  init_MLodPassDescription();
+  init_PLodPassDescription();
+  init_LodLoader();
 }

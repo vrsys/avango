@@ -23,6 +23,12 @@
     #define AV_GUA_ANIM_DLL __declspec( dllimport )
   #endif
 
+  #if defined(AV_LOD_LIBRARY)
+    #define AV_GUA_LOD_DLL __declspec( dllexport )
+  #else
+    #define AV_GUA_LOD_DLL __declspec( dllimport )
+  #endif
+
   #if defined(AV_VOLUME_LIBRARY)
     #define AV_GUA_VOLUME_DLL __declspec( dllexport )
   #else
@@ -34,6 +40,7 @@
   // unix
   #define AV_GUA_DLL
   #define AV_GUA_ANIM_DLL
+  #define AV_GUA_LOD_DLL
   #define AV_GUA_VOLUME_DLL
 
 #endif // #if defined(_MSC_VER)

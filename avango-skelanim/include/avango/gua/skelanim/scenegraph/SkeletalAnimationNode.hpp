@@ -50,6 +50,12 @@ namespace av
         /**
          * Destructor made protected to prevent allocation on stack.
          */
+      private:
+        MFString Animations;
+        MFString AnimationsInternal;
+        
+        virtual void getAnimationsCB(const MFString::GetValueEvent& event);
+        virtual void setAnimationsCB(const MFString::SetValueEvent& event);
 
       public:
         // trimesh
@@ -98,7 +104,7 @@ namespace av
         float getAnimDuration(std::string const& name) const;
         // string distribution
         void loadAnimation(std::string const& file_name,
-                                    std::string const& animation_name) const;
+                                    std::string const& animation_name);
 
         /*SFInt LoopNr;
 

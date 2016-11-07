@@ -24,6 +24,10 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
   , m_materialsUserDataHandle{0}
 {
   // trimesh
+  AV_FC_ADD_ADAPTOR_FIELD(Animations,
+                      std::bind(&SkeletalAnimationNode::getAnimationsCB, this, std::placeholders::_1),
+                      std::bind(&SkeletalAnimationNode::setAnimationsCB, this, std::placeholders::_1));
+
   AV_FC_ADD_ADAPTOR_FIELD(Geometries,
                         std::bind(&SkeletalAnimationNode::getGeometriesCB, this,std::placeholders::_1),
                         std::bind(&SkeletalAnimationNode::setGeometriesCB, this,std::placeholders::_1));
@@ -38,6 +42,7 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
     av_bones.emplace_back(Link<av::gua::skelanim::Bone>{new av::gua::skelanim::Bone{gua_bone}});
   }
   BonesInternal.setValue(av_bones);
+  
   AVANGO_LOG(logger, av::logging::DEBUG, "creating " + std::to_string(BonesInternal.getValue().size()) + " Bones");
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
@@ -152,7 +157,17 @@ av::gua::skelanim::SkeletalAnimationNode::initClass()
 void
 av::gua::skelanim::SkeletalAnimationNode::getBonesCB(const MFBone::GetValueEvent& event)
 {
-  AVANGO_LOG(logger, av::logging::DEBUG, "sending " + std::to_string(BonesInternal.getValue().size()) + " Bones");
+  AVANGO_LOG(logger, av::logging::DEBUG, "sending " + std::to_string(BonesInternal.getValue().size()))
+  if (BonesInternal.getValue().size() > 10) {
+    AVANGO_LOG(logger, av::logging::DEBUG, " Bones, name 1 is " + BonesInternal.getValue()[1]->name.getValue());
+  }
+  
+  // auto const& gua_bones = m_guaSkeletalAnimationNode->get_bones();
+  // std::vector<Link<av::gua::skelanim::Bone>> av_bones{};
+  // for (auto const& gua_bone : gua_bones) {
+  //   av_bones.emplace_back(Link<av::gua::skelanim::Bone>{new av::gua::skelanim::Bone{gua_bone}});
+  // }
+  // BonesInternal.setValue(av_bones);
 
   *(event.getValuePtr()) = BonesInternal.getValue();
 }
@@ -161,7 +176,10 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setBonesCB(const MFBone::SetValueEvent& event)
 {
   BonesInternal.setValue(event.getValue());
-  AVANGO_LOG(logger, av::logging::DEBUG, "receiving " + std::to_string(event.getValue().size()) + " Bones");
+  AVANGO_LOG(logger, av::logging::DEBUG, "receiving " + std::to_string(event.getValue().size()))
+  if (event.getValue().size() > 10) {
+    AVANGO_LOG(logger, av::logging::DEBUG, "Bones, name 1 is " + event.getValue()[1]->name.getValue());
+  }
 
   std::vector<::gua::Bone> gua_bones{};
   for (auto const& av_bone : event.getValue()) {
@@ -181,11 +199,6 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setGeometriesCB(const MFString::SetValueEvent& event)
 { 
   m_guaSkeletalAnimationNode->set_geometry_descriptions(event.getValue());
-  // std::size_t i = 0;
-  // for (auto const& description : event.getValue()) {
-  //   m_guaSkeletalAnimationNode->set_geometry_description(description, i);
-  //   ++i;
-  // }
 }
 
 void
@@ -214,15 +227,19 @@ av::gua::skelanim::SkeletalAnimationNode::setRenderToStencilBufferCB(const SFBoo
 
 void
 av::gua::skelanim::SkeletalAnimationNode::loadAnimation(std::string const& file_name,
-                                                 std::string const& animation_name) const
+                                                 std::string const& animation_name)
 {
   m_guaSkeletalAnimationNode->add_animations(file_name, animation_name);
+  // add animation to list
+  auto names = AnimationsInternal.getValue();
+  names.push_back(file_name + "|" + animation_name);
+  AnimationsInternal.setValue(names);
 }
 
 float
 av::gua::skelanim::SkeletalAnimationNode::getAnimDuration(std::string const& name) const
 {
-    return m_guaSkeletalAnimationNode->get_duration(name);
+  return m_guaSkeletalAnimationNode->get_duration(name);
 }
 
 /* virtual */ void
@@ -259,6 +276,26 @@ av::gua::skelanim::SkeletalAnimationNode::setMaterialsCB(const av::gua::MFMateri
 
 
 void
+av::gua::skelanim::SkeletalAnimationNode::getAnimationsCB(const MFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = AnimationsInternal.getValue();
+}
+
+void
+av::gua::skelanim::SkeletalAnimationNode::setAnimationsCB(const MFString::SetValueEvent& event)
+{
+  auto const& descriptions = event.getValue();
+  for(auto const& description : descriptions) {
+    std::size_t index_sep = description.find('|');
+    std::string path = description.substr(0, index_sep);
+    std::string name = description.substr(index_sep + 1);
+    AVANGO_LOG(logger, av::logging::DEBUG, "receiving animation '" + path + "' with name '" + name + "'");
+
+    loadAnimation(path, name);
+  }
+}
+
+void
 av::gua::skelanim::SkeletalAnimationNode::getAnimation1CB(const SFString::GetValueEvent& event)
 {
     *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_animation_1();
@@ -268,7 +305,9 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setAnimation1CB(const SFString::SetValueEvent& event)
 {
   m_guaSkeletalAnimationNode->set_animation_1(event.getValue());
+  AVANGO_LOG(logger, av::logging::DEBUG, "setting animation1 to '" + event.getValue() + "'");
 }
+
 void
 av::gua::skelanim::SkeletalAnimationNode::getAnimation2CB(const SFString::GetValueEvent& event)
 {
@@ -279,6 +318,7 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setAnimation2CB(const SFString::SetValueEvent& event)
 {
   m_guaSkeletalAnimationNode->set_animation_2(event.getValue());
+  AVANGO_LOG(logger, av::logging::DEBUG, "setting animation2 to '" + event.getValue() + "'");
 }
 
 void

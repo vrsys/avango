@@ -1,6 +1,9 @@
 #include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
+#include <avango/gua/skelanim/scenegraph/SkeletalAnimationNode.hpp>
 #include <avango/Base.h>
 #include <functional>
+
+#include <gua/databases/GeometryDescription.hpp>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include <avango/gua/network/NetTransform.h>
@@ -31,19 +34,6 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
   AV_FC_ADD_ADAPTOR_FIELD(Geometries,
                         std::bind(&SkeletalAnimationNode::getGeometriesCB, this,std::placeholders::_1),
                         std::bind(&SkeletalAnimationNode::setGeometriesCB, this,std::placeholders::_1));
-
-  AV_FC_ADD_ADAPTOR_FIELD(Bones,
-                        std::bind(&SkeletalAnimationNode::getBonesCB, this,std::placeholders::_1),
-                        std::bind(&SkeletalAnimationNode::setBonesCB, this,std::placeholders::_1));
-  // store bones in field container
-  auto const& gua_bones = m_guaSkeletalAnimationNode->get_bones();
-  std::vector<Link<av::gua::skelanim::Bone>> av_bones{};
-  for (auto const& gua_bone : gua_bones) {
-    av_bones.emplace_back(Link<av::gua::skelanim::Bone>{new av::gua::skelanim::Bone{gua_bone}});
-  }
-  BonesInternal.setValue(av_bones);
-  
-  AVANGO_LOG(logger, av::logging::DEBUG, "creating " + std::to_string(BonesInternal.getValue().size()) + " Bones");
 
   AV_FC_ADD_ADAPTOR_FIELD(RenderToGBuffer,
                       std::bind(&SkeletalAnimationNode::getRenderToGBufferCB, this,std::placeholders::_1),
@@ -89,8 +79,7 @@ av::gua::skelanim::SkeletalAnimationNode::SkeletalAnimationNode(std::shared_ptr<
 av::gua::skelanim::SkeletalAnimationNode::~SkeletalAnimationNode() {
   if (m_guaSkeletalAnimationNode) {
     auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
-    // m_guaSkeletalAnimationNode->set_user_data(nullptr);
-    // m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle) = nullptr;
+
     if (avGuaMaterials) {
       avGuaMaterials->clear();
       delete avGuaMaterials;
@@ -102,40 +91,28 @@ av::gua::skelanim::SkeletalAnimationNode::~SkeletalAnimationNode() {
 
 void av::gua::skelanim::SkeletalAnimationNode::on_distribute(av::gua::NetTransform& netNode) 
 {
-    GeometryNode::on_distribute(netNode);
+  GeometryNode::on_distribute(netNode);
 
-    auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
-    for(auto& material : *avGuaMaterials) {
-      if (material.isValid()) {
-        material->on_distribute(netNode);
-        netNode.distributeFieldContainer(material);
-      }
+  auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
+  for(auto& material : *avGuaMaterials) {
+    if (material.isValid()) {
+      material->on_distribute(netNode);
+      netNode.distributeFieldContainer(material);
     }
-
-    for(auto& av_bone : BonesInternal.getValue()) {
-      if (av_bone.isValid()) {
-        netNode.distributeFieldContainer(av_bone);
-      }
-    }
+  }
 }
 
 void av::gua::skelanim::SkeletalAnimationNode::on_undistribute(av::gua::NetTransform& netNode) 
 {
-    GeometryNode::on_undistribute(netNode);
+  GeometryNode::on_undistribute(netNode);
 
-    auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
-    for(auto& material : *avGuaMaterials) {
-      if (material.isValid()) {
-        material->on_undistribute(netNode);
-        netNode.undistributeFieldContainer(material);
-      }
+  auto avGuaMaterials(static_cast<av::MultiField<av::Link<Material>>::ContainerType*>(m_guaSkeletalAnimationNode->get_user_data(m_materialsUserDataHandle)));
+  for(auto& material : *avGuaMaterials) {
+    if (material.isValid()) {
+      material->on_undistribute(netNode);
+      netNode.undistributeFieldContainer(material);
     }
-
-    for(auto& av_bone : BonesInternal.getValue()) {
-      if (av_bone.isValid()) {
-        netNode.undistributeFieldContainer(av_bone);
-      }
-    }
+  }
 }
 #endif
 
@@ -155,41 +132,6 @@ av::gua::skelanim::SkeletalAnimationNode::initClass()
 }
 
 void
-av::gua::skelanim::SkeletalAnimationNode::getBonesCB(const MFBone::GetValueEvent& event)
-{
-  AVANGO_LOG(logger, av::logging::DEBUG, "sending " + std::to_string(BonesInternal.getValue().size()))
-  if (BonesInternal.getValue().size() > 10) {
-    AVANGO_LOG(logger, av::logging::DEBUG, " Bones, name 1 is " + BonesInternal.getValue()[1]->name.getValue());
-  }
-  
-  // auto const& gua_bones = m_guaSkeletalAnimationNode->get_bones();
-  // std::vector<Link<av::gua::skelanim::Bone>> av_bones{};
-  // for (auto const& gua_bone : gua_bones) {
-  //   av_bones.emplace_back(Link<av::gua::skelanim::Bone>{new av::gua::skelanim::Bone{gua_bone}});
-  // }
-  // BonesInternal.setValue(av_bones);
-
-  *(event.getValuePtr()) = BonesInternal.getValue();
-}
-
-void
-av::gua::skelanim::SkeletalAnimationNode::setBonesCB(const MFBone::SetValueEvent& event)
-{
-  BonesInternal.setValue(event.getValue());
-  AVANGO_LOG(logger, av::logging::DEBUG, "receiving " + std::to_string(event.getValue().size()))
-  if (event.getValue().size() > 10) {
-    AVANGO_LOG(logger, av::logging::DEBUG, "Bones, name 1 is " + event.getValue()[1]->name.getValue());
-  }
-
-  std::vector<::gua::Bone> gua_bones{};
-  for (auto const& av_bone : event.getValue()) {
-    gua_bones.emplace_back(av_bone->getGuaBone());
-  }
-  m_guaSkeletalAnimationNode->set_bones(gua_bones);
-}
-
-
-void
 av::gua::skelanim::SkeletalAnimationNode::getGeometriesCB(const MFString::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaSkeletalAnimationNode->get_geometry_descriptions();
@@ -199,6 +141,11 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setGeometriesCB(const MFString::SetValueEvent& event)
 { 
   m_guaSkeletalAnimationNode->set_geometry_descriptions(event.getValue());
+  // if not just empry descritions are transferred, load skeleton from given file
+  if (!event.getValue().empty()) {
+    ::gua::GeometryDescription desc{event.getValue()[0]};
+    m_guaSkeletalAnimationNode->set_skeleton_description(desc.filepath());
+  }
 }
 
 void
@@ -289,8 +236,6 @@ av::gua::skelanim::SkeletalAnimationNode::setAnimationsCB(const MFString::SetVal
     std::size_t index_sep = description.find('|');
     std::string path = description.substr(0, index_sep);
     std::string name = description.substr(index_sep + 1);
-    AVANGO_LOG(logger, av::logging::DEBUG, "receiving animation '" + path + "' with name '" + name + "'");
-
     loadAnimation(path, name);
   }
 }
@@ -305,7 +250,6 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setAnimation1CB(const SFString::SetValueEvent& event)
 {
   m_guaSkeletalAnimationNode->set_animation_1(event.getValue());
-  AVANGO_LOG(logger, av::logging::DEBUG, "setting animation1 to '" + event.getValue() + "'");
 }
 
 void
@@ -318,7 +262,6 @@ void
 av::gua::skelanim::SkeletalAnimationNode::setAnimation2CB(const SFString::SetValueEvent& event)
 {
   m_guaSkeletalAnimationNode->set_animation_2(event.getValue());
-  AVANGO_LOG(logger, av::logging::DEBUG, "setting animation2 to '" + event.getValue() + "'");
 }
 
 void

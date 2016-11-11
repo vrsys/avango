@@ -6,9 +6,8 @@
  * \ingroup av_gua
  */
 
-#include <gua/node/SkeletalAnimationNode.hpp>
+#include <gua/skelanim/node/SkeletalAnimationNode.hpp>
  // necessary to prevent incomplete type error
-#include <gua/utils/SkeletalAnimation.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -99,12 +98,6 @@ namespace av
         // string distribution
         void loadAnimation(std::string const& file_name,
                                     std::string const& animation_name);
-
-        /*SFInt LoopNr;
-
-        virtual void getLoopNrCB(const SFInt::GetValueEvent& event);
-        virtual void setLoopNrCB(const SFInt::SetValueEvent& event);*/
-
         /**
          * Get the wrapped ::gua::SkeletalAnimationNode.
          */
@@ -121,7 +114,6 @@ namespace av
       typedef SingleField<Link<SkeletalAnimationNode> > SFSkeletalAnimationNode;
       typedef MultiField<Link<SkeletalAnimationNode> > MFSkeletalAnimationNode;
     }
-
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

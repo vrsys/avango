@@ -28,7 +28,6 @@ void init_PLodPassDescription()
   enum_<av::gua::lod::PLodPassDescription::Flags>("RenderFlags")
         .value("LQ_ONE_PASS", av::gua::lod::PLodPassDescription::LQ_ONE_PASS)
         .value("HQ_TWO_PASS", av::gua::lod::PLodPassDescription::HQ_TWO_PASS)
-        .value("HQ_LINKED_LIST", av::gua::lod::PLodPassDescription::HQ_LINKED_LIST)
         ;
 
  }

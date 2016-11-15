@@ -32,7 +32,6 @@ namespace av
         enum Flags {
           LQ_ONE_PASS = ::gua::PLodPassDescription::SurfelRenderMode::LQ_ONE_PASS,
           HQ_TWO_PASS = ::gua::PLodPassDescription::SurfelRenderMode::HQ_TWO_PASS,
-          HQ_LINKED_LIST = ::gua::PLodPassDescription::SurfelRenderMode::HQ_LINKED_LIST
         };
 
         /**

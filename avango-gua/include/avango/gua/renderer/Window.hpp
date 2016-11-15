@@ -44,6 +44,14 @@ namespace av
 
     public:
 
+      SFUInt   SwapGroup;
+      SFUInt   SwapBarrier;
+
+      virtual void getSwapGroupCB(const SFUInt::GetValueEvent& event);
+      virtual void setSwapGroupCB(const SFUInt::SetValueEvent& event);
+
+      virtual void getSwapBarrierCB(const SFUInt::GetValueEvent& event);
+      virtual void setSwapBarrierCB(const SFUInt::SetValueEvent& event);
 
 
     private:

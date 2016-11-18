@@ -212,7 +212,7 @@ SET_TARGET_PROPERTIES( _gua PROPERTIES PREFIX "")
 # set dependencies
 ###############################################################################
 SET(_AVANGO_GUA_LIBRARIES avango
-                          ${GUACAMOLE_LIBRARIES}
+                          guacamole
                           ${PYTHON_LIBRARY}
                           ${JSON_LIBRARIES}
                           optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
@@ -220,6 +220,19 @@ SET(_AVANGO_GUA_LIBRARIES avango
                           optimized ${SCHISM_GL_CORE_LIBRARY} debug ${SCHISM_GL_CORE_LIBRARY_DEBUG}
                           optimized ${SCHISM_GL_UTIL_LIBRARY} debug ${SCHISM_GL_UTIL_LIBRARY_DEBUG}
 )
+# link with plugin libraries only if they are enabled
+IF (${AVANGO_VIDEO3D_SUPPORT})                                                            
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d)
+ENDIF (${AVANGO_VIDEO3D_SUPPORT})                                                            
+
+IF (${AVANGO_PBR_SUPPORT})                                                            
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-PLOD)
+ENDIF (${AVANGO_PBR_SUPPORT})                                                            
+
+IF (${AVANGO_AWESOMIUM_SUPPORT})                                                            
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-gui)
+ENDIF (${AVANGO_AWESOMIUM_SUPPORT})                                                            
+
 IF (${AVANGO_PHYSICS_SUPPORT})                                                            
   list(APPEND _AVANGO_GUA_LIBRARIES ${BULLET_LIBRARIES})
 ENDIF (${AVANGO_PHYSICS_SUPPORT})                                                            

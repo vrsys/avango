@@ -30,6 +30,7 @@ set_target_properties(avango_volume PROPERTIES COMPILE_FLAGS ${AVANGO_VOLUME_BUI
 TARGET_LINK_LIBRARIES( avango_volume
   avango_gua
   avango_script
+  guacamole-volume
 )
 
 ###############################################################################

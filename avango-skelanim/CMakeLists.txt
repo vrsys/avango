@@ -30,6 +30,7 @@ ENDIF (MSVC)
 TARGET_LINK_LIBRARIES( avango_skelanim
   avango_gua
   avango_script
+  guacamole-skelanim
 )
 
 ###############################################################################

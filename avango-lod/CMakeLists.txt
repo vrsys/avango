@@ -38,6 +38,7 @@ ENDIF (MSVC)
 TARGET_LINK_LIBRARIES( avango_lod
   avango_gua
   avango_script
+  guacamole-lod
 )
 ###############################################################################
 # python module

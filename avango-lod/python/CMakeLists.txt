@@ -1,16 +1,6 @@
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${GUACAMOLE_LOD_LIBRARY_DIRS}
-)
-
 file(GLOB_RECURSE AVANGO_LOD_PYTHON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     *.cpp
     *.hpp
-)
-
-include_directories(
-  ${PYTHON3_INCLUDE_DIRS}
-  ${PYTHON_INCLUDE_DIR}
 )
 
 ADD_LIBRARY( _lod SHARED 
@@ -22,11 +12,7 @@ set_target_properties( _lod
   ${CMAKE_SOURCE_DIR}/lib/avango/gua/lod
 )
 
-ADD_DEPENDENCIES ( _lod avango_lod )
-
-TARGET_LINK_LIBRARIES( _lod
-  debug ${LIBRARIES} avango_lod
-  optimized ${LIBRARIES} avango_lod)
+TARGET_LINK_LIBRARIES( _lod avango_lod)
 SET_TARGET_PROPERTIES( _lod PROPERTIES PREFIX "")
 
 ###############################################################################

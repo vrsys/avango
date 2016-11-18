@@ -14,7 +14,7 @@ ADD_LIBRARY(avango_skelanim SHARED
 )
 
 target_include_directories( avango_skelanim PUBLIC
-    include
+  include
 )
 
 set_target_properties(avango_skelanim PROPERTIES LINKER_LANGUAGE CXX)

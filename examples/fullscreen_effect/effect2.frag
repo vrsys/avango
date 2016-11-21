@@ -91,5 +91,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 void main() {
   vec4 color;
   mainImage(color, gl_FragCoord.xy);
-  gua_out_color = mix(vec3(color), gua_get_color(), sin(time/4.0));
+  gua_out_color = mix(vec3(color), gua_get_color(), 0.5 + 0.5 * sin(time/4.0));
 }

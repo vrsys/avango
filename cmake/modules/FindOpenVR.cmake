@@ -2,6 +2,7 @@
 # search paths
 ##############################################################################
 SET(OPENVR_INCLUDE_SEARCH_DIRS
+    ${GLOBAL_EXT_DIR}/openvr/headers
     ${GLOBAL_EXT_DIR}/openvr/include
     ${OPENVR_INCLUDE_DIRS}
     ${OPENVR_INCLUDE_SEARCH_DIR}

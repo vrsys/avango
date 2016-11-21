@@ -84,7 +84,7 @@ namespace av
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
   template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::MLodNode> >;
-  template class AV_GUA_LOD_DLL MultiField<Link<gua::skelanim::MLodNode> >;
+  template class AV_GUA_LOD_DLL MultiField<Link<gua::lod::MLodNode> >;
 #endif
 
 }

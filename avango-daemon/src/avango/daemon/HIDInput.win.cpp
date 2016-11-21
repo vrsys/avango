@@ -41,6 +41,10 @@
 
 #include <iostream>
 
+#if WIN32
+#include <Rpc.h>
+#endif
+
 extern "C" {
 #include <hidsdi.h>
 }

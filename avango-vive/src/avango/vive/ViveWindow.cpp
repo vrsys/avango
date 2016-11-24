@@ -62,5 +62,5 @@ av::vive::ViveWindow::getGuaViveWindow() const {
 void
 av::vive::ViveWindow::evaluate()
 {
-  SensorOrientation.setValue(m_guaViveWindow->get_vive_sensor_orientation());
+  SensorOrientation.setValue(m_guaViveWindow->get_hmd_sensor_orientation());
 }

@@ -59,7 +59,7 @@ if (UNIX)
   set (BOOST_ROOT "/opt/boost/current" CACHE PATH "Set to your boost install")
 elseif (MSVC)
   set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
-  message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}") 
+  message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}")
   set (Boost_USE_MULTITHREADED ON)
   #set (Boost_USE_STATIC_LIBS ON)
   ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
@@ -74,7 +74,7 @@ find_package(Boost COMPONENTS
   REQUIRED
 )
 
-set (BULLET_ROOT 
+set (BULLET_ROOT
      /opt/bullet/default
      ${GLOBAL_EXT_DIR}/bullet
      CACHE PATH
@@ -88,6 +88,10 @@ include(FindZMQ)
 if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
 endif(${AVANGO_OCULUS_RIFT_SUPPORT})
+
+if (${AVANGO_VIVE_SUPPORT})
+  include(FindOpenVR)
+endif(${AVANGO_VIVE_SUPPORT})
 
 set(LIBRARIES
     ${GUACAMOLE_LIBRARIES}
@@ -126,6 +130,11 @@ if (AVANGO_OCULUS_RIFT_SUPPORT)
   list(APPEND INCLUDE_PATHS ${OVR_INCLUDE_DIRS})
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
 
+if (AVANGO_VIVE_SUPPORT)
+  list(APPEND LIB_PATHS ${OPENVR_LIBRARY_DIRS})
+  list(APPEND INCLUDE_PATHS ${OPENVR_INCLUDE_DIRS})
+endif(AVANGO_VIVE_SUPPORT)
+
 include_directories(ALL
                     ${INCLUDE_PATHS}
 )
@@ -163,6 +172,7 @@ option (AVANGO_LOD_SUPPORT "Set to enable level of detail support.")
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
+option (AVANGO_VIVE_SUPPORT "Compile Vive module for Avango.")
 option (AVANGO_VOLUME_SUPPORT "Compile Volume module for Avango.")
 option (AVANGO_SKELANIM_SUPPORT "Compile Skeletal animation module for Avango.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
@@ -196,6 +206,10 @@ add_subdirectory(avango-utils)
 if (AVANGO_OCULUS_RIFT_SUPPORT)
     add_subdirectory(avango-oculus)
 endif(AVANGO_OCULUS_RIFT_SUPPORT)
+
+if (AVANGO_VIVE_SUPPORT)
+    add_subdirectory(avango-vive)
+endif(AVANGO_VIVE_SUPPORT)
 
 if (AVANGO_SKELANIM_SUPPORT)
     add_subdirectory(avango-skelanim)
@@ -243,6 +257,14 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
+
+if ( AVANGO_VIVE_SUPPORT  )
+  message(STATUS " guacamole-vive:" )
+  message(STATUS "   library: ${GUACAMOLE_VIVE_LIBRARIES}" )
+  message(STATUS "   library path: ${GUACAMOLE_VIVE_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${GUACAMOLE_VIVE_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_VIVE_SUPPORT )
 
 if ( AVANGO_VOLUME_SUPPORT  )
   message(STATUS " guacamole-volume:" )

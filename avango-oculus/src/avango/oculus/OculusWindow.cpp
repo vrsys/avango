@@ -62,5 +62,5 @@ av::oculus::OculusWindow::getGuaOculusWindow() const {
 void
 av::oculus::OculusWindow::evaluate()
 {
-  SensorOrientation.setValue(m_guaOculusWindow->get_oculus_sensor_orientation());
+  SensorOrientation.setValue(m_guaOculusWindow->get_hmd_sensor_orientation());
 }

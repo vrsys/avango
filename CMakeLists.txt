@@ -56,7 +56,7 @@ elseif (WIN32)
 endif (UNIX)
 
 if (UNIX)
-  set (BOOST_ROOT "/opt/boost/latest" CACHE PATH "Set to your boost install")
+  set (BOOST_ROOT "/opt/boost/current" CACHE PATH "Set to your boost install")
 elseif (MSVC)
   set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
   message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}") 

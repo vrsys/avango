@@ -12,7 +12,7 @@ GUACAMOLE=/opt/guacamole/new_renderer
 AVANGO=/opt/avango/new_renderer
 
 # third party libs
-export LD_LIBRARY_PATH=/usr/lib:/opt/boost/boost_1_55_0/lib:/opt/zmq/current/lib
+export LD_LIBRARY_PATH=/usr/lib:/opt/boost/current/lib:/opt/zmq/current/lib
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86

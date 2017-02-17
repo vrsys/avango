@@ -57,7 +57,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~CameraNode();
+      virtual ~CameraNode() {}
 
     public:
 
@@ -86,6 +86,8 @@ namespace av
 
       SFString              OutputTextureName;
       SFString              OutputWindowName;
+      SFString              LeftOutputWindow;
+      SFString              RightOutputWindow;
 
       SFBool                EnableFrustumCulling;
 
@@ -144,6 +146,12 @@ namespace av
 
       virtual void getOutputWindowNameCB(const SFString::GetValueEvent& event);
       virtual void setOutputWindowNameCB(const SFString::SetValueEvent& event);
+
+      virtual void getLeftOutputWindowCB(const SFString::GetValueEvent& event);
+      virtual void setLeftOutputWindowCB(const SFString::SetValueEvent& event);
+
+      virtual void getRightOutputWindowCB(const SFString::GetValueEvent& event);
+      virtual void setRightOutputWindowCB(const SFString::SetValueEvent& event);
 
       virtual void getEnableFrustumCullingCB(const SFBool::GetValueEvent& event);
       virtual void setEnableFrustumCullingCB(const SFBool::SetValueEvent& event);

@@ -39,6 +39,7 @@ void init_WindowBase()
         .value("CHECKERBOARD", av::gua::WindowBase::CHECKERBOARD)
         .value("NVIDIA_3D_VISION", av::gua::WindowBase::NVIDIA_3D_VISION)
         .value("QUAD_BUFFERED", av::gua::WindowBase::QUAD_BUFFERED)
+        .value("SEPARATE_WINDOWS", av::gua::WindowBase::SEPARATE_WINDOWS)
         ;
 
  }

@@ -93,6 +93,14 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       std::bind(&CameraNode::getOutputWindowNameCB, this,std::placeholders::_1),
                       std::bind(&CameraNode::setOutputWindowNameCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(LeftOutputWindow,
+                      std::bind(&CameraNode::getLeftOutputWindowCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setLeftOutputWindowCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RightOutputWindow,
+                      std::bind(&CameraNode::getRightOutputWindowCB, this,std::placeholders::_1),
+                      std::bind(&CameraNode::setRightOutputWindowCB, this,std::placeholders::_1));
+
   AV_FC_ADD_ADAPTOR_FIELD(EnableFrustumCulling,
                       std::bind(&CameraNode::getEnableFrustumCullingCB, this,std::placeholders::_1),
                       std::bind(&CameraNode::setEnableFrustumCullingCB, this,std::placeholders::_1));
@@ -109,9 +117,6 @@ av::gua::CameraNode::CameraNode(std::shared_ptr< ::gua::node::CameraNode> guaCam
                       std::bind(&CameraNode::getPreRenderCamerasCB, this,std::placeholders::_1),
                       std::bind(&CameraNode::setPreRenderCamerasCB, this,std::placeholders::_1));
 }
-
-av::gua::CameraNode::~CameraNode()
-{}
 
 av::Link<av::gua::Frustum> av::gua::CameraNode::get_frustum(av::gua::SceneGraph const& graph, av::gua::CameraNode::CameraMode mode) {
   return av::Link<av::gua::Frustum>(new av::gua::Frustum(new ::gua::Frustum(m_guaNode->get_rendering_frustum(*graph.getGuaSceneGraph(), static_cast< ::gua::CameraMode >(mode)))));
@@ -360,6 +365,30 @@ void
 av::gua::CameraNode::setOutputWindowNameCB(const SFString::SetValueEvent& event)
 {
   m_guaNode->config.output_window_name() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getLeftOutputWindowCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->config.left_output_window();
+}
+
+void
+av::gua::CameraNode::setLeftOutputWindowCB(const SFString::SetValueEvent& event)
+{
+  m_guaNode->config.left_output_window() = event.getValue();
+}
+
+void
+av::gua::CameraNode::getRightOutputWindowCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNode->config.right_output_window();
+}
+
+void
+av::gua::CameraNode::setRightOutputWindowCB(const SFString::SetValueEvent& event)
+{
+  m_guaNode->config.right_output_window() = event.getValue();
 }
 
 void

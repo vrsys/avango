@@ -335,13 +335,12 @@ av::gua::BlenderViewer::Image av::gua::BlenderViewer::screenshot(::gua::Pipeline
   if (!gbuffer)
     return av::gua::BlenderViewer::Image{};
 
-  auto color = gbuffer->get_color_buffer();
+  auto texture_ptr = gbuffer->get_color_buffer();
 
-  if (!color)
-    return av::gua::BlenderViewer::Image{};
-
-  auto texture_ptr = color->get_buffer(ctx);
   auto tex = boost::dynamic_pointer_cast<scm::gl::texture_2d>(texture_ptr);
+
+  if (!tex)
+    return av::gua::BlenderViewer::Image{};
 
   auto& tmp = m_engines[m_current_engine];
 

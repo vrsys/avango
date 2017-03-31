@@ -141,14 +141,14 @@ av::gua::Viewer::run() {
   }
 #endif
 
-  PyThreadState* save_state(PyEval_SaveThread());
+  //PyThreadState* save_state(PyEval_SaveThread());
 
   m_ticker.on_tick.connect([&,this]() {
-    PyEval_RestoreThread(save_state);
+    //PyEval_RestoreThread(save_state);
 
     frame();
 
-    save_state = PyEval_SaveThread();
+    //save_state = PyEval_SaveThread();
   });
 
   m_loop.start();

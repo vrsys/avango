@@ -58,6 +58,12 @@
 #include <avango/gua/renderer/PLODLoader.hpp>
 #include <avango/gua/renderer/PLODPassDescription.hpp>
 #endif
+#if defined(AVANGO_TV_3_SUPPORT)
+#include <avango/gua/scenegraph/TV_3Node.hpp>
+#include <avango/gua/renderer/TV_3Renderer.hpp>
+#include <avango/gua/renderer/TV_3SurfacePassDescription.hpp>
+#include <avango/gua/renderer/TV_3VolumePassDescription.hpp>
+#endif
 #include <avango/gua/renderer/NURBSLoader.hpp>
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
@@ -125,6 +131,10 @@ av::gua::Init::initClass()
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRNode::initClass();
         av::gua::PLODNode::initClass();
+#endif
+
+#if defined(AVANGO_TV_3_SUPPORT)
+        av::gua::TV_3Node::initClass();
 #endif
         // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();
@@ -196,6 +206,12 @@ av::gua::Init::initClass()
         av::gua::PLODPassDescription::initClass();
 #endif
         // av::gua::NURBSLoader::initClass();
+
+#if defined(AVANGO_TV_3_SUPPORT)
+        av::gua::TV_3Loader::initClass();
+        av::gua::TV_3SurfacePassDescription::initClass();
+        av::gua::TV_3VolumePassDescription::initClass();
+#endif
 
         av::gua::Viewer::initClass();
 

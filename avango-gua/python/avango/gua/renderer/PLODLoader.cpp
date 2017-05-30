@@ -95,6 +95,8 @@ av::gua::MFPickResult* pick_plod(av::gua::PLODLoader const& loader,
 
 void init_PLODLoader()
 {
+  register_ptr_to_python<av::Link<av::gua::PLODLoader> >();
+
   class_<av::gua::PLODLoader,
          av::Link<av::gua::PLODLoader>,
          bases<av::FieldContainer>, boost::noncopyable> ("PLODLoader", "docstring", no_init)

@@ -35,6 +35,9 @@ namespace gua
   class PBRNode;
   class PLODNode;
 #endif //if defined(AVANGO_PBR_SUPPORT)
+#if defined(AVANGO_TV_3_SUPPORT)
+  class TV_3Node;
+#endif //if defined(AVANGO_TV_3_SUPPORT)
 }
 
 namespace av
@@ -126,6 +129,11 @@ namespace av
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::PLODNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::PLODNode&);
 #endif //#if defined(AVANGO_PBR_SUPPORT)
+
+#if defined(AVANGO_TV_3_SUPPORT)
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TV_3Node&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TV_3Node&);
+#endif //#if defined(AVANGO_TV_3_SUPPORT)
 
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::NURBSNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::NURBSNode&);

@@ -180,6 +180,7 @@ option (AVANGO_AWESOMIUM_SUPPORT "Enable building Awesomium module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 option (AVANGO_RUNTIME_PROGRAM_COMPILATION "Set to enable runtime program compilation." ON)
+option (AVANGO_TV_3_SUPPORT "Compile time-varying volume rendering support.")
 option (AVANGO_VIDEO3D_SUPPORT "Compile Video3d module.")
 
 IF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
@@ -226,6 +227,10 @@ endif(AVANGO_OPENAL_SUPPORT)
 if (AVANGO_AWESOMIUM_SUPPORT)
     add_subdirectory(avango-awesomium)
 endif(AVANGO_AWESOMIUM_SUPPORT)
+
+if (AVANGO_TV_3_SUPPORT)
+  add_subdirectory(avango-tv_3)
+endif(AVANGO_TV_3_SUPPORT)
 
 if (AVANGO_VOLUME_SUPPORT)
     add_subdirectory(avango-volume)

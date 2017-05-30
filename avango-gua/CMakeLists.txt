@@ -33,6 +33,19 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_PBR_SUPPORT})
 
+IF (NOT ${AVANGO_TV_3_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/scenegraph/TV_3Node.cpp
+    src/avango/gua/renderer/TV_3Loader.cpp
+    src/avango/gua/renderer/TV_3SurfacePassDescription.cpp
+    src/avango/gua/renderer/TV_3VolumePassDescription.cpp
+    include/avango/gua/scenegraph/TV_3Node.h
+    include/avango/gua/renderer/TV_3Loader.h
+    include/avango/gua/renderer/TV_3SurfacePassDescription.h
+    include/avango/gua/renderer/TV_3VolumePassDescription.h
+)
+ENDIF (NOT ${AVANGO_TV_3_SUPPORT})
+
 IF (NOT ${AVANGO_VIDEO3D_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_SRC
     src/avango/gua/scenegraph/Video3DNode.cpp

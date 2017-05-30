@@ -24,6 +24,9 @@
 #include "scenegraph/PBRNode.hpp"
 #include "scenegraph/PLODNode.hpp"
 #endif
+#if defined(AVANGO_TV_3_SUPPORT)
+#include "scenegraph/TV_3Node.hpp"
+#endif
 #include "scenegraph/NURBSNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
 #include "scenegraph/LightNode.hpp"
@@ -94,6 +97,11 @@
 #include "renderer/PLODLoader.hpp"
 #include "renderer/PLODPassDescription.hpp"
 #endif
+#if defined(AVANGO_TV_3_SUPPORT)
+#include "renderer/TV_3Loader.hpp"
+#include "renderer/TV_3SurfacePassDescription.hpp"
+#include "renderer/TV_3VolumePassDescription.hpp"
+#endif
 #include "renderer/NURBSLoader.hpp"
 #include "renderer/Texture.hpp"
 
@@ -158,6 +166,9 @@ BOOST_PYTHON_MODULE(_gua)
 #endif
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+    init_TV_3Node();
 #endif
     // init_NURBSNode();
     init_ScreenNode();
@@ -227,6 +238,11 @@ BOOST_PYTHON_MODULE(_gua)
     init_PLODLoader();
     init_PLODPassDescription();
     // init_PBRLoader();
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+    init_TV_3Loader();
+    init_TV_3SurfacePassDescription();
+    init_TV_3VolumePassDescription();
 #endif
     // init_NURBSLoader();
     init_Texture();

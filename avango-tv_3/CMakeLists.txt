@@ -5,11 +5,11 @@ file(GLOB_RECURSE AVANGO_TV_3_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   src/avango/gua/tv_3/scenegraph/TV_3Node.cpp
   src/avango/gua/tv_3/renderer/TV_3Loader.cpp
   src/avango/gua/tv_3/renderer/TV_3SurfacePassDescription.cpp
-  #src/avango/gua/tv_3/renderer/TV_3VolumeDescription.cpp
+  src/avango/gua/tv_3/renderer/TV_3VolumePassDescription.cpp
   include/avango/gua/tv_3/scenegraph/TV_3Node.hpp
   include/avango/gua/tv_3/renderer/TV_3Loader.hpp
   include/avango/gua/tv_3/renderer/TV_3SurfacePassDescription.hpp
-  #include/avango/gua/tv_3/renderer/TV_3VolumePassDescription.hpp
+  include/avango/gua/tv_3/renderer/TV_3VolumePassDescription.hpp
 )
 
 ###############################################################################

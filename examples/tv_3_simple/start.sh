@@ -3,12 +3,12 @@
 # get directory of script
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-LOCAL_GUACAMOLE="$DIR/../../../guacamole"
-LOCAL_AVANGO="$DIR/../../../avango"
+#LOCAL_GUACAMOLE="$DIR/../../../guacamole"
+#LOCAL_AVANGO="$DIR/../../../avango"
 
 # if not, this path will be used
-GUACAMOLE=/opt/guacamole/master
-AVANGO=/opt/avango/master
+GUACAMOLE=/home/wabi7015/Programming/guacamole
+AVANGO=/home/wabi7015/Programming/avango
 
 # third party libs
 export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib

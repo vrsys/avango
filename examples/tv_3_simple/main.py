@@ -20,7 +20,7 @@ def start():
 
   tv_3_node = tv_3_loader.load("tv_3_node", "/mnt/pitoti/MA_Adrian/Supernova/VQ_222/compressed_time_series_SW_VQ_MCM.v_rsc")
   
-  tv_3_node.IsoValue.value = 0.02
+  tv_3_node.IsoValue.value = 0.07
 
   new_cube = mesh_loader.create_geometry_from_file(
     "cube",

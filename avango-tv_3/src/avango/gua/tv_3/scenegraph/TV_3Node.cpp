@@ -36,6 +36,24 @@ av::gua::tv_3::TV_3Node::TV_3Node(std::shared_ptr< ::gua::node::TV_3Node> guanod
                       std::bind(&TV_3Node::getIsoValueCB, this,std::placeholders::_1),
                       std::bind(&TV_3Node::setIsoValueCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(TimeCursorPos,
+                      std::bind(&TV_3Node::getTimeCursorPosCB, this,std::placeholders::_1),
+                      std::bind(&TV_3Node::setTimeCursorPosCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(PlaybackFPS,
+                      std::bind(&TV_3Node::getPlaybackFPSCB, this,std::placeholders::_1),
+                      std::bind(&TV_3Node::setPlaybackFPSCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(PlaybackMode,
+                      std::bind(&TV_3Node::getPlaybackModeCB, this,std::placeholders::_1),
+                      std::bind(&TV_3Node::setPlaybackModeCB, this,std::placeholders::_1));
+
+/*
+  AV_FC_ADD_ADAPTOR_FIELD(EnablePlayback,
+                      std::bind(&TV_3Node::getEnablePlaybackCB, this,std::placeholders::_1),
+                      std::bind(&TV_3Node::setEnablePlaybackCB, this,std::placeholders::_1));
+*/
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -119,8 +137,6 @@ av::gua::tv_3::TV_3Node::getRenderModeCB(const SFInt::GetValueEvent& event)
 void
 av::gua::tv_3::TV_3Node::setRenderModeCB(const SFInt::SetValueEvent& event)
 {
-
-
   m_guaTV_3Node->set_render_mode( static_cast<::gua::node::TV_3Node::RenderMode>(event.getValue()) );
 }
 
@@ -148,6 +164,18 @@ av::gua::tv_3::TV_3Node::enableTemporalLinearFilterCB(const SFInt::SetValueEvent
   m_guaTV_3Node->enable_temporal_linear_filter(event.getValue());
 }
 
+void 
+av::gua::tv_3::TV_3Node::getPlaybackModeCB(const SFInt::GetValueEvent& event) 
+{
+  *(event.getValuePtr()) = m_guaTV_3Node->get_playback_mode();
+}
+
+void 
+av::gua::tv_3::TV_3Node::setPlaybackModeCB(const SFInt::SetValueEvent& event) 
+{
+  m_guaTV_3Node->set_playback_mode( static_cast<::gua::node::TV_3Node::PlaybackMode>(event.getValue()) );
+}
+
 void
 av::gua::tv_3::TV_3Node::getIsoValueCB(const SFFloat::GetValueEvent& event)
 {
@@ -159,6 +187,44 @@ av::gua::tv_3::TV_3Node::setIsoValueCB(const SFFloat::SetValueEvent& event)
 {
   m_guaTV_3Node->set_iso_value(event.getValue());
 }
+
+void
+av::gua::tv_3::TV_3Node::getTimeCursorPosCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTV_3Node->get_time_cursor_pos();
+}
+
+void
+av::gua::tv_3::TV_3Node::setTimeCursorPosCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaTV_3Node->set_time_cursor_pos(event.getValue());
+}
+
+void 
+av::gua::tv_3::TV_3Node::getPlaybackFPSCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTV_3Node->get_playback_fps();
+}
+
+void 
+av::gua::tv_3::TV_3Node::setPlaybackFPSCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaTV_3Node->set_playback_fps(event.getValue());
+}
+
+/*
+void 
+av::gua::tv_3::TV_3Node::getEnablePlaybackCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaTV_3Node->get_playback_enabled();
+}
+
+void 
+av::gua::tv_3::TV_3Node::setEnablePlaybackCB(const SFBool::SetValueEvent& event)
+{
+  m_guaTV_3Node->enable_playback(event.getValue());
+}
+*/
 
 std::shared_ptr< ::gua::node::TV_3Node>
 av::gua::tv_3::TV_3Node::getGuaTV_3Node() const {

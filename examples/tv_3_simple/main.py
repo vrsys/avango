@@ -7,7 +7,11 @@ from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+
+frame_cnt = 0
+tv_3_node = None
 def start():
+  global tv_3_node
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   mesh_loader = avango.gua.nodes.TriMeshLoader()
@@ -18,9 +22,19 @@ def start():
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
 
 
-  tv_3_node = tv_3_loader.load("tv_3_node", "/mnt/pitoti/MA_Adrian/Supernova/VQ_222/compressed_time_series_SW_VQ_MCM.v_rsc")
+  tv_3_node = tv_3_loader.load("tv_3_node", "/mnt/pitoti/MA_Adrian/Supernova/VQ_222/a_few_compressed_time_series_SW_VQ_MCM.v_rsc")
   
   tv_3_node.IsoValue.value = 0.07
+  tv_3_node.RenderMode.value = avango.gua.tv_3.RenderMode.SUR_PBR
+  tv_3_node.PlaybackMode.value = avango.gua.tv_3.PlaybackMode.FORWARD
+  #tv_3_node.TimeCursorPos.value = 0.0
+  tv_3_node.PlaybackFPS.value = 14.0
+  #tv_3_node.EnablePlayback.value = True
+
+
+  ## @var frame_trigger
+  # Triggers framewise evaluation of respective callback method
+  frame_trigger = avango.script.nodes.Update(Callback = frame_callback, Active = True)
 
   new_cube = mesh_loader.create_geometry_from_file(
     "cube",
@@ -97,6 +111,7 @@ def start():
 
   width = 1920;
   height = int(width * 9.0 / 16.0)
+
   size = avango.gua.Vec2ui(width, height)
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",
@@ -184,6 +199,12 @@ def start():
   guaVE.start(locals(), globals())
 
   viewer.run()
+
+
+def frame_callback():
+  global frame_cnt
+  global tv_3_node
+  frame_cnt += 1
 
 
 if __name__ == '__main__':

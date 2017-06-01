@@ -30,7 +30,7 @@ namespace av
 
       public:
 
-        enum RenderMode {
+        enum NodeRenderMode {
           VOL_ISOSURFACE    = ::gua::node::TV_3Node::VOL_ISOSURFACE,
           VOL_MAX_INTENSITY = ::gua::node::TV_3Node::VOL_MAX_INTENSITY,
           VOL_COMPOSITING   = ::gua::node::TV_3Node::VOL_COMPOSITING,
@@ -38,22 +38,22 @@ namespace av
           SUR_PBR           = ::gua::node::TV_3Node::SUR_PBR
         };
 
-        enum SpatialFilterMode {
+        enum NodeSpatialFilterMode {
           S_NEAREST = ::gua::node::TV_3Node::S_NEAREST, 
           S_LINEAR  = ::gua::node::TV_3Node::S_LINEAR
         };
 
-        enum TemporalFilterMode {
+        enum NodeTemporalFilterMode {
           T_NEAREST = ::gua::node::TV_3Node::T_NEAREST, 
           T_LINEAR  = ::gua::node::TV_3Node::T_LINEAR
         };
 
-        using SFRenderMode         = SingleField<Link<::gua::node::TV_3Node::RenderMode>>;
-        using SFSpatialFilterMode  = SingleField<Link<::gua::node::TV_3Node::SpatialFilterMode>>;
-        using SFTemporalFilterMode = SingleField<Link<::gua::node::TV_3Node::TemporalFilterMode>>;
-        using MFRenderMode         = MultiField<Link<::gua::node::TV_3Node::RenderMode>>;
-        using MFSpatialFilterMode  = MultiField<Link<::gua::node::TV_3Node::SpatialFilterMode>>;
-        using MFTemporalFilterMode = MultiField<Link<::gua::node::TV_3Node::TemporalFilterMode>>;
+        enum NodePlaybackMode {
+          NONE     = ::gua::node::TV_3Node::NONE, 
+          FORWARD  = ::gua::node::TV_3Node::FORWARD,
+          BACKWARD = ::gua::node::TV_3Node::BACKWARD
+        };
+
         /**
          * Constructor. When called without arguments, a new ::gua::TV_3Node
          * is created.
@@ -79,7 +79,11 @@ namespace av
         SFInt      RenderMode;
         SFInt      SpatialFilterMode;
         SFInt      TemporalFilterMode;
+        SFInt      PlaybackMode;
         SFFloat    IsoValue;
+        SFFloat    TimeCursorPos;
+        SFFloat    PlaybackFPS;
+        //SFBool     EnablePlayback;
 
         virtual void getGeometryCB(const SFString::GetValueEvent& event);
         virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -96,9 +100,21 @@ namespace av
         virtual void getTemporalFilterModeCB(const SFInt::GetValueEvent& event);
         virtual void enableTemporalLinearFilterCB(const SFInt::SetValueEvent& event);
 
+        virtual void getPlaybackModeCB(const SFInt::GetValueEvent& event);
+        virtual void setPlaybackModeCB(const SFInt::SetValueEvent& event);
+
         virtual void getIsoValueCB(const SFFloat::GetValueEvent& event);
         virtual void setIsoValueCB(const SFFloat::SetValueEvent& event);
 
+        virtual void getTimeCursorPosCB(const SFFloat::GetValueEvent& event);
+        virtual void setTimeCursorPosCB(const SFFloat::SetValueEvent& event);
+
+        virtual void getPlaybackFPSCB(const SFFloat::GetValueEvent& event);
+        virtual void setPlaybackFPSCB(const SFFloat::SetValueEvent& event);
+/*
+        virtual void getEnablePlaybackCB(const SFBool::GetValueEvent& event);
+        virtual void setEnablePlaybackCB(const SFBool::SetValueEvent& event);
+*/
         /**
          * Get the wrapped ::gua::TV_3Node.
          */

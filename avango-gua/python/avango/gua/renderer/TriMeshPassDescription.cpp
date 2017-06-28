@@ -21,7 +21,7 @@ namespace boost
 
 void init_TriMeshPassDescription()
  {
-   register_ptr_to_python<av::Link<av::gua::TriMeshPassDescription> >();
+  register_ptr_to_python<av::Link<av::gua::TriMeshPassDescription> >();
   register_field<av::gua::SFTriMeshPassDescription>("SFTriMeshPassDescription");
   register_multifield<av::gua::MFTriMeshPassDescription>("MFTriMeshPassDescription");
   class_<av::gua::TriMeshPassDescription,

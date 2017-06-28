@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_TV_3_LOADER_HPP
+#define AV_PYTHON_GUA_TV_3_LOADER_HPP
+
+void init_TV_3Loader();
+
+#endif //AV_PYTHON_GUA_TV_3_LOADER_HPP

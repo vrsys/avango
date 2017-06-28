@@ -686,6 +686,20 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::PLODNode &)
 
 #endif
 
+#if defined(AVANGO_TV_3_SUPPORT)
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
+          const::gua::TV_3Node &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::TV_3Node &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+#endif
+
 av::OutputStream & av::operator<<(av::OutputStream & os,
                                   const::gua::NURBSNode &)
 {

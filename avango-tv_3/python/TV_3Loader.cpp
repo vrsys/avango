@@ -197,6 +197,7 @@ void init_TV_3Loader()
     .value("MAKE_PICKABLE", av::gua::tv_3::TV_3Loader::MAKE_PICKABLE)
     .value("NORMALIZE_POSITION", av::gua::tv_3::TV_3Loader::NORMALIZE_POSITION)
     .value("NORMALIZE_SCALE", av::gua::tv_3::TV_3Loader::NORMALIZE_SCALE)
+    .value("USE_SURFACE_MODE", av::gua::tv_3::TV_3Loader::USE_SURFACE_MODE)
     ;
 
 

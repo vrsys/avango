@@ -22,10 +22,9 @@ def start():
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
 
 
-  tv_3_node = tv_3_loader.load("tv_3_node", "/mnt/pitoti/MA_Adrian/Supernova/VQ_222/a_few_compressed_time_series_SW_VQ_MCM.v_rsc")
+  tv_3_node = tv_3_loader.load("tv_3_node", "/mnt/pitoti/MA_Adrian/Supernova/VQ_222/a_few_compressed_time_series_SW_VQ_MCM.v_rsc", avango.gua.tv_3.LoaderFlags.USE_SURFACE_MODE)
   
   tv_3_node.IsoValue.value = 0.07
-  tv_3_node.RenderMode.value = avango.gua.tv_3.RenderMode.SUR_PBR
   tv_3_node.PlaybackMode.value = avango.gua.tv_3.PlaybackMode.FORWARD
   #tv_3_node.TimeCursorPos.value = 0.0
   tv_3_node.PlaybackFPS.value = 14.0

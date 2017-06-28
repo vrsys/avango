@@ -38,7 +38,8 @@ namespace av
         DEFAULTS = ::gua::TV_3Loader::DEFAULTS,
         MAKE_PICKABLE = ::gua::TV_3Loader::MAKE_PICKABLE,
         NORMALIZE_SCALE = ::gua::TV_3Loader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::TV_3Loader::NORMALIZE_POSITION
+        NORMALIZE_POSITION = ::gua::TV_3Loader::NORMALIZE_POSITION,
+        USE_SURFACE_MODE = ::gua::TV_3Loader::USE_SURFACE_MODE
       };
 
    /**

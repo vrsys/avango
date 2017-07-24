@@ -48,7 +48,7 @@ set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)
   pkg_check_modules(JSON REQUIRED jsoncpp)
-  pkg_check_modules(PYTHON3 REQUIRED python-3.4)
+  pkg_check_modules(PYTHON3 REQUIRED python-3.5)
 elseif (WIN32)
   include(findAssimp)
   include(findJson)
@@ -191,7 +191,7 @@ ENDIF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
 # Create libraries
 ################################################################
 file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
-file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.4)
+file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.5)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 

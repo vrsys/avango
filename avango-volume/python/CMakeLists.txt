@@ -34,13 +34,13 @@ SET_TARGET_PROPERTIES( _volume PROPERTIES PREFIX "")
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_volume ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/volume/_volume.pyd)
+  post_build_install_target(_volume ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/volume/_volume.pyd)
 ELSEIF (UNIX)
-  post_build_install_target(_volume ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/volume/_volume.so)
+  post_build_install_target(_volume ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/volume/_volume.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}/volume
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/volume
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/volume
     _volume
 )

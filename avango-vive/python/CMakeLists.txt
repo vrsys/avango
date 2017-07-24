@@ -31,14 +31,14 @@ SET_TARGET_PROPERTIES( _vive PROPERTIES PREFIX "")
 ###############################################################################
 IF (MSVC)
   post_build_install_target(_vive
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/vive/_vive.pyd)
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/vive/_vive.pyd)
 ELSEIF (UNIX)
   post_build_install_target(_vive
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/vive/_vive.so)
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/vive/_vive.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}/avango/vive
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/vive
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/vive
     _vive
 )

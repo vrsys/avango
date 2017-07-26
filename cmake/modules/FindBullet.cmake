@@ -53,11 +53,11 @@ endmacro()
 
 find_path(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
   HINTS
-    ${BULLET_ROOT}/include
-    ${BULLET_ROOT}/src
-  PATH_SUFFIXES bullet
+    ${BULLET_ROOT}
+  PATH_SUFFIXES
+    include/bullet
+    src
 )
-
 # Find the libraries
 
 _FIND_BULLET_LIBRARY(BULLET_DYNAMICS_LIBRARY        BulletDynamics)

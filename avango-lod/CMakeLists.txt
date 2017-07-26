@@ -17,33 +17,14 @@ file(GLOB_RECURSE AVANGO_LOD_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    ${PYTHON3_INCLUDE_DIRS}
-    ${GUACAMOLE_LOD_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ../avango-gua/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY(avango_lod SHARED
   ${AVANGO_LOD_SRC}
 )
 
-ADD_DEPENDENCIES ( avango_lod avango)
+target_include_directories( avango_lod PUBLIC
+  include
+)
+
 set_target_properties(avango_lod PROPERTIES LINKER_LANGUAGE CXX)
 ###############################################################################
 # set preprocessor configuration
@@ -54,13 +35,11 @@ IF (MSVC)
   set_target_properties(avango_lod PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ENDIF (MSVC)
 
-SET(_AVANGO_LOD_LIBRARIES ${LIBRARIES} guacamole-lod)
-LIST(APPEND _AVANGO_LOD_LIBRARIES )
-
 TARGET_LINK_LIBRARIES( avango_lod
-  debug avango_gua avango_script avango ${_AVANGO_LOD_LIBRARIES}
-  optimized avango_gua avango_script avango ${_AVANGO_LOD_LIBRARIES})
-
+  avango_gua
+  avango_script
+  guacamole-lod
+)
 ###############################################################################
 # python module
 ###############################################################################

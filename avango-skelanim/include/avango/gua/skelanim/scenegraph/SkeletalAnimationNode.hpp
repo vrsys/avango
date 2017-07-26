@@ -6,9 +6,8 @@
  * \ingroup av_gua
  */
 
-#include <gua/node/SkeletalAnimationNode.hpp>
+#include <gua/skelanim/node/SkeletalAnimationNode.hpp>
  // necessary to prevent incomplete type error
-#include <gua/utils/SkeletalAnimation.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -37,18 +36,44 @@ namespace av
          */
         SkeletalAnimationNode(std::shared_ptr< ::gua::node::SkeletalAnimationNode> guanode =
             std::shared_ptr< ::gua::node::SkeletalAnimationNode>(new ::gua::node::SkeletalAnimationNode("")));
+
+      #if defined(AVANGO_DISTRIBUTION_SUPPORT)
+        virtual void on_distribute(av::gua::NetTransform& netNode);
+        virtual void on_undistribute(av::gua::NetTransform& netNode);
+      #endif
+       virtual ~SkeletalAnimationNode();
       protected:
 
         /**
          * Destructor made protected to prevent allocation on stack.
          */
-  //      virtual ~SkeletalAnimationNode();
+      private:
+        MFString Animations;
+        MFString AnimationsInternal;
+        
+        virtual void getAnimationsCB(const MFString::GetValueEvent& event);
+        virtual void setAnimationsCB(const MFString::SetValueEvent& event);
 
       public:
+        // trimesh
+        MFString   Geometries;
         MultiField<Link<Material>> Materials;
+        SFBool     RenderToGBuffer;
+        SFBool     RenderToStencilBuffer;
+
+        virtual void getGeometriesCB(const MFString::GetValueEvent& event);
+        virtual void setGeometriesCB(const MFString::SetValueEvent& event);
+
         virtual void getMaterialsCB(const MultiField<Link<Material>>::GetValueEvent& event);
         virtual void setMaterialsCB(const MultiField<Link<Material>>::SetValueEvent& event);
 
+        virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
+        virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
+
+        virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
+        virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
+       
+        //skelanim 
         SFString Animation1;
         virtual void getAnimation1CB(const SFString::GetValueEvent& event);
         virtual void setAnimation1CB(const SFString::SetValueEvent& event);
@@ -70,22 +95,15 @@ namespace av
         virtual void setTime2CB(const SFFloat::SetValueEvent& event);
 
         float getAnimDuration(std::string const& name) const;
-
+        // string distribution
         void loadAnimation(std::string const& file_name,
-                                    std::string const& animation_name) const;
-
-        /*SFInt LoopNr;
-
-        virtual void getLoopNrCB(const SFInt::GetValueEvent& event);
-        virtual void setLoopNrCB(const SFInt::SetValueEvent& event);*/
-
+                                    std::string const& animation_name);
         /**
          * Get the wrapped ::gua::SkeletalAnimationNode.
          */
         std::shared_ptr< ::gua::node::SkeletalAnimationNode> getGuaSkeletalAnimationNode() const;
 
       private:
-
         std::shared_ptr< ::gua::node::SkeletalAnimationNode> m_guaSkeletalAnimationNode;
           unsigned m_materialsUserDataHandle;
 
@@ -96,7 +114,6 @@ namespace av
       typedef SingleField<Link<SkeletalAnimationNode> > SFSkeletalAnimationNode;
       typedef MultiField<Link<SkeletalAnimationNode> > MFSkeletalAnimationNode;
     }
-
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES

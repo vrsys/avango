@@ -43,17 +43,17 @@ if (${AVANGO_DISTRIBUTION_SUPPORT})
   )
 endif (${AVANGO_DISTRIBUTION_SUPPORT})
 
-link_directories(${LIB_PATHS})
-
-add_library( avango SHARED
-    	     ${AVANGO_CORE_SRC}
-             ${AVANGO_CORE_DISTRIBUTION_SRC}
+add_library(avango SHARED
+            ${AVANGO_CORE_SRC}
+            ${AVANGO_CORE_DISTRIBUTION_SRC}
 )
 
-include_directories( ${INCLUDE_PATHS} 
-                     include
-                   )
+target_include_directories(avango PUBLIC include)
+target_include_directories(avango SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
+if (AVANGO_DISTRIBUTION_SUPPORT)
+  target_include_directories(avango SYSTEM PUBLIC ${ZMQ_INCLUDE_DIRS})
+endif (AVANGO_DISTRIBUTION_SUPPORT)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -66,7 +66,6 @@ if (MSVC)
 endif (MSVC)
 
 target_link_libraries( avango
-  ${_AVANGO_CORE_LIBRARIES}
   debug ${Boost_SYSTEM_LIBRARY_DEBUG} optimized ${Boost_SYSTEM_LIBRARY_RELEASE} 
   debug ${Boost_THREAD_LIBRARY_DEBUG} optimized ${Boost_THREAD_LIBRARY_RELEASE} 
 )

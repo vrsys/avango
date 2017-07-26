@@ -24,11 +24,17 @@ ENDIF (UNIX)
 ADD_LIBRARY( avango_unittest STATIC
     	     ${AVANGO_UNITTEST_SRC}
 )
-
-INCLUDE_DIRECTORIES(${INCLUDE_PATHS}
-		    ${CMAKE_CURRENT_SOURCE_DIR}/include
-		    ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++
-	      ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++/tests
+# link with avango to tests dont have to link with it additionally
+TARGET_LINK_LIBRARIES(avango_unittest
+  avango
 )
 
+target_include_directories(avango_unittest SYSTEM PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/avango/UnitTest++/tests
+)
 
+target_include_directories(avango_unittest SYSTEM INTERFACE
+  ${CMAKE_SOURCE_DIR}/avango-unittest/include
+  ${CMAKE_SOURCE_DIR}/avango-unittest/include/avango
+)

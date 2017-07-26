@@ -31,33 +31,13 @@ file(GLOB AVANGO_SOUND_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
-    include
-    ../avango-core/include
-    ../avango-python/include
-    ${PYTHON3_INCLUDE_DIRS}
-    ../avango-gua/include
-)
-
-IF (AVANGO_DISTRIBUTION_SUPPORT)
-  include_directories(${ZMQ_INCLUDE_DIRS})
-ENDIF()
-
 ADD_LIBRARY(avango_sound SHARED
   ${AVANGO_SOUND_SRC}
 )
 
-ADD_DEPENDENCIES ( avango_sound avango)
-
+target_include_directories( avango_sound PUBLIC
+    include
+)
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -69,9 +49,7 @@ ENDIF (MSVC)
 
 TARGET_LINK_LIBRARIES( avango_sound 
                        avango_gua 
-                       avango_script 
-                       avango 
-                       ${LIBRARIES} 
+                       avango_script  
                      )
 
 ###############################################################################

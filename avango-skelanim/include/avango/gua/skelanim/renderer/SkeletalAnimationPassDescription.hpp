@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/SkeletalAnimationPass.hpp>
+#include <gua/skelanim/renderer/SkeletalAnimationPass.hpp>
 
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 

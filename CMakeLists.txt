@@ -93,58 +93,17 @@ if (${AVANGO_VIVE_SUPPORT})
   include(FindOpenVR)
 endif(${AVANGO_VIVE_SUPPORT})
 
-set(LIBRARIES
-    ${GUACAMOLE_LIBRARIES}
-    ${GUACAMOLE_GUI_LIBRARIES}
-    ${GUACAMOLE_VOLUME_LIBRARIES}
-    ${GUACAMOLE_PLOD_LIBRARIES}
-    ${GL_LIBRARIES}
-    ${SCHISM_LIBRARIES}
-)
-
 set(LIB_PATHS
-  ${Boost_LIBRARY_DIRS}
-    ${GUACAMOLE_LIBRARY_DIRS}
-    ${GL_LIBRARY_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+  ${GUACAMOLE_LIBRARY_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
+  ${GL_LIBRARY_DIRS}
 )
-
-set(INCLUDE_PATHS
-    ${CMAKE_CURRENT_SOURCE_DIR}/build
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${Boost_INCLUDE_DIRS}
-    ${GUACAMOLE_INCLUDE_DIRS}
-    ${GUACAMOLE_GUI_INCLUDE_DIRS}
-    ${GUACAMOLE_VOLUME_INCLUDE_DIRS}
-    ${GUACAMOLE_PLOD_INCLUDE_DIRS}
-    ${GL_INCLUDE_DIRS}
-)
-
-if (AVANGO_DISTRIBUTION_SUPPORT)
-    list(APPEND LIB_PATHS ${ZMQ_LIBRARY_DIRS})
-    list(APPEND INCLUDE_PATHS ${ZMQ_INCLUDE_DIRS})
-endif (AVANGO_DISTRIBUTION_SUPPORT)
-
-if (AVANGO_OCULUS_RIFT_SUPPORT)
-  list(APPEND LIB_PATHS ${OVR_LIBRARY_DIRS})
-  list(APPEND INCLUDE_PATHS ${OVR_INCLUDE_DIRS})
-endif(AVANGO_OCULUS_RIFT_SUPPORT)
-
-if (AVANGO_VIVE_SUPPORT)
-  list(APPEND LIB_PATHS ${OPENVR_LIBRARY_DIRS})
-  list(APPEND INCLUDE_PATHS ${OPENVR_INCLUDE_DIRS})
-endif(AVANGO_VIVE_SUPPORT)
-
-include_directories(ALL
-                    ${INCLUDE_PATHS}
-)
+# allow linking with local libraries
+link_directories(${LIB_PATHS})
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
-
-
-
 ################################################################
 # preprocessor configuration
 ################################################################
@@ -288,7 +247,7 @@ if ( AVANGO_AWESOMIUM_SUPPORT  )
 endif ( AVANGO_AWESOMIUM_SUPPORT )
 
 if ( AVANGO_SKELANIM_SUPPORT  )
-  message(STATUS " guacamole-oculus:" )
+  message(STATUS " guacamole-skelanim:" )
   message(STATUS "   library: ${GUACAMOLE_SKELANIM_LIBRARIES}" )
   message(STATUS "   library path: ${GUACAMOLE_SKELANIM_LIBRARY_DIRS}" )
   message(STATUS "   include: ${GUACAMOLE_SKELANIM_INCLUDE_DIRS}" )

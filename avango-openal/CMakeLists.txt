@@ -14,30 +14,14 @@ include(find_openal)
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-    ${LIB_PATHS}
-    ${PYTHON3_LIBRARY_DIRS}
-    ${BULLET_LIBRARY_DIRS}
-)
-
 ADD_LIBRARY(avango_openal SHARED
   ${AVANGO_SOUND_SRC}
 )
 
-INCLUDE_DIRECTORIES(
-    ${INCLUDE_PATHS}
-    ${SCHISM_INCLUDE_DIRS}
-    ${BULLET_INCLUDE_DIRS}
+target_include_directories( avango_openal PUBLIC
     include
-    ../avango-core/include
-    ../avango-python/include
-    ${PYTHON3_INCLUDE_DIRS}
-    ../avango-gua/include
     ../avango-sound/include
 )
-
-ADD_DEPENDENCIES ( avango_sound avango)
-
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
@@ -47,13 +31,13 @@ IF (MSVC)
   set_target_properties(avango_openal PROPERTIES COMPILE_FLAGS ${BUILD_FLAGS})
 ENDIF (MSVC)
 
-SET(_AVANGO_OPENAL_LIBRARIES ${LIBRARIES})
-LIST(APPEND _AVANGO_OPENAL_LIBRARIES openal alut vorbisfile)
+SET(_AVANGO_OPENAL_LIBRARIES openal alut vorbisfile)
 
-TARGET_LINK_LIBRARIES( avango_openal
-  debug avango_gua avango_script avango ${_AVANGO_OPENAL_LIBRARIES}
-  optimized avango_gua avango_script avango ${_AVANGO_OPENAL_LIBRARIES})
-
+TARGET_LINK_LIBRARIES( avango_openal 
+                       avango_gua 
+                       avango_script  
+                      ${_AVANGO_OPENAL_LIBRARIES}
+                     )
 ###############################################################################
 # python module
 ###############################################################################

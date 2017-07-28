@@ -41,9 +41,6 @@ av::gua::Node::Node(std::shared_ptr< ::gua::node::Node> guanode)
   AV_FC_ADD_ADAPTOR_FIELD(Children,
                         std::bind(&Node::getChildrenCB, this,std::placeholders::_1),
                         std::bind(&Node::setChildrenCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(Name,
-                        std::bind(&Node::getNameCB, this,std::placeholders::_1),
-                        std::bind(&Node::setNameCB, this,std::placeholders::_1));
   AV_FC_ADD_ADAPTOR_FIELD(Transform,
                         std::bind(&Node::getTransformCB, this,std::placeholders::_1),
                         std::bind(&Node::setTransformCB, this,std::placeholders::_1));

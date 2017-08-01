@@ -161,7 +161,6 @@ av::gua::Node::setChildrenCB(const av::gua::MFNode::SetValueEvent& event)
 
       if (child->getGuaNode() != nullptr) {
         m_guaNode->add_child(child->getGuaNode());
-        child->getField("Parent")->touch();
 
         if (avGuaChildren) {
           avGuaChildren->push_back(child);

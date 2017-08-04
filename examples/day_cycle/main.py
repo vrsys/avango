@@ -3,7 +3,6 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import avango.gua as av
-import avango.gua.gui
 from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 
@@ -24,22 +23,6 @@ def get_azimuth(city, time):
 
 def get_elevation(city, time):
     return a.solar_elevation(time, city.latitude, city.longitude)
-
-
-class FPSUpdater(avango.script.Script):
-    TimeIn = avango.SFFloat()
-    FPSResource = av.gui.SFGuiResourceNode()
-    Window = av.SFWindowBase()
-    Viewer = av.SFViewer()
-
-    @field_has_changed(TimeIn)
-    def update_fps(self):
-        application_string = "{:5.2f}".format(
-            self.Viewer.value.ApplicationFPS.value)
-        rendering_string = "{:5.2f}".format(
-            self.Window.value.RenderingFPS.value)
-        fps_string = "FPS: " + application_string + " " + rendering_string
-        self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
 
 class SunUpdater(avango.script.Script):
@@ -93,20 +76,6 @@ class SunUpdater(avango.script.Script):
 def start():
     graph = av.nodes.SceneGraph(Name="scene")
     loader = av.nodes.TriMeshLoader()
-
-    fps_size = av.Vec2(170, 55)
-
-    fps = av.gui.nodes.GuiResourceNode()
-    fps.TextureName.value = "fps"
-    fps.URL.value = "asset://gua/data/html/fps.html"
-    fps.Size.value = fps_size
-
-    fps_quad = av.nodes.TexturedScreenSpaceQuadNode(Name="fps_quad",
-                                                    Texture="fps",
-                                                    Width=int(fps_size.x),
-                                                    Height=int(fps_size.y),
-                                                    Anchor=av.Vec2(1.0, 1.0))
-    graph.Root.value.Children.value.append(fps_quad)
 
     fallback_mat = av.create_material(av.MaterialCapabilities.COLOR_VALUE |
                                       av.MaterialCapabilities.ROUGHNESS_VALUE)
@@ -208,7 +177,7 @@ def start():
     graph.Root.value.Children.value.append(camera)
 
     window = av.nodes.Window(Size=size,
-                             Title="shadows",
+                             Title="day_night",
                              LeftResolution=size,
                              RightResolution=size,
                              EnableVsync=False,
@@ -230,9 +199,6 @@ def start():
     viewer.Windows.value = [window]
 
     timer = avango.nodes.TimeSensor()
-
-    fps_updater = FPSUpdater(FPSResource=fps, Window=window, Viewer=viewer)
-    fps_updater.TimeIn.connect_from(timer.Time)
 
     sun_updater = SunUpdater(TimeScale=3500)
     sun_updater.TimeIn.connect_from(timer.Time)

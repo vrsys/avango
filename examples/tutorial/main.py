@@ -5,6 +5,8 @@ from avango.script import field_has_changed
 
 from SimpleViewer import SimpleViewer
 
+import sys
+
 class TimedRotate(avango.script.Script):
   TimeIn = avango.SFFloat()
   MatrixOut = avango.gua.SFMatrix4()
@@ -24,7 +26,10 @@ tips = {
   -1:
 "\n\
 Hello! I'm GuaVE, the friendly, built-in shell \n\
-of \033[92mguacamole\033[0m and I will be your guide today! \n\
+of \033[92mguacamole\033[0m and I will be your guide today! \n\n\
+If you accidentally killed the application during \n\
+a previous run, you can restart at the last tip by \n\
+launching \033[93m./start.sh TIP_ID\033[0m\n\n\
 \033[92mguacamole\033[0m is a powerful scenegraph which can be \n\
 scripted with python. In this tutorial I will teach \n\
 you the basics that are neccessary to create an \n\
@@ -146,7 +151,7 @@ Continue by typing 'tip(11)' or 'next_tip()'!\n",
 "\n----------------------------------------------------------\n\n\
 For your convenience, I have added a function that is able \n\
 to print the scenegraph for you. Just try it out by typing \n\n\
-\033[93mprint_graph(graph)\033[0m\n\n\
+\033[93mprint_graph(graph.Root.value)\033[0m\n\n\
 For the time being, just note the three nodes \"monkey\", \"lamp\"\n\
 and \"floor\" you have added so far. The \"navigation\" node and its\n\
 children have been added automatically during startup.\n\n\
@@ -229,7 +234,7 @@ Continue by typing 'tip(21)' or 'next_tip()'!\n",
   21:
 "\n----------------------------------------------------------\n\n\
 Let's get our monkey some new looks!\n\
-In \033[92mguacamole\033[0m, each GeometryNode has an assigned material.\n\
+In \033[92mguacamole\033[0m, each TriMeshNode has an assigned material.\n\
 As a matter of fact, you can change a TriMeshNode's material at runtime. \n\
 You can pass coefficients for Emissivity, Roughness and Metalness directly \n\
 to the shader. You can also pass texture uniforms directly to the shader,\n\
@@ -322,10 +327,13 @@ Okay! So let's see what you have learned today:\n\
   -> Using field connections to describe dependency graphs.\n\
      (tips 22 to 27)\n\n\
 This shall be it as a first glimpse on \033[92mguacamole\033[0m.\n\
-Copy the directory of this tutorial and start \n\
-writing your own, spicy \033[92mguacamole\033[0m application! \n\n\
 Of course, there are a lot of other things to\n\
 learn and to experiment with!\n\n\
+If you want to know more, have a look at the examples\n\
+in \033[93m/opt/avango/master/examples\033[0m. The simple_example,\n\
+simple_physics and big_scenegraph_example directories\n\
+are good starting points teaching how to write spicy\n\
+\033[92mguacamole\033[0m applications!\n\n\
 Anyhow, thank you for taking this little course\n\
 and have fun fooling around with \033[92mguacamole\033[0m!\n",
 
@@ -333,10 +341,82 @@ and have fun fooling around with \033[92mguacamole\033[0m!\n",
  "I'm serious, this is the end of the tutorial! :-) \n"
 }
 
+
+### simple_example, simple_physics, big_scenegraph_example
+
 current_tip = -1
 tip_count = len(tips)
 viewer = SimpleViewer()
 timed_rotate = TimedRotate()
+
+def launch_from(tip_id):
+  
+  if tip_id > 2:
+    graph = avango.gua.nodes.SceneGraph(Name = 'scenegraph')
+  if tip_id > 3:
+    viewer.SceneGraph.value = graph
+  if tip_id > 4:
+    viewer.set_background_image('data/textures/checker.png')
+  if tip_id > 5:
+    loader = avango.gua.nodes.TriMeshLoader()
+  if tip_id > 6:
+    monkey_node = loader.create_geometry_from_file('monkey', 'data/objects/monkey.obj', avango.gua.LoaderFlags.DEFAULTS)
+    monkey_node.Material.value.set_uniform("ColorMap", "data/textures/stones.jpg")
+  if tip_id > 7:
+    graph.Root.value.Children.value.append(monkey_node)
+  if tip_id > 8:
+    viewer.start_navigation()
+  if tip_id > 9:
+    lamp_node = avango.gua.nodes.LightNode(Type=avango.gua.LightType.SPOT, Name='lamp', EnableShadows=True, EnableGodrays=True)
+    lamp_node.Transform.value = avango.gua.make_trans_mat(0, 3, 0) * avango.gua.make_rot_mat(-90, 1, 0, 0) * avango.gua.make_scale_mat(55, 55, 30)
+    graph.Root.value.Children.value.append(lamp_node)
+  if tip_id > 10:
+    plane_node = loader.create_geometry_from_file('floor', 'data/objects/plane.obj', avango.gua.LoaderFlags.DEFAULTS)
+    plane_node.Material.value.set_uniform("ColorMap", "data/textures/tiles.jpg")
+    graph.Root.value.Children.value.append(plane_node)
+  if tip_id > 12:
+    plane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0)
+  if tip_id > 13:
+    plane_node.Transform.value = avango.gua.make_trans_mat(0, -2, 0) * avango.gua.make_scale_mat(5, 1, 5)
+  if tip_id > 14:
+    add_sample_monkey(graph)
+  if tip_id > 15:
+    monkey_node.Transform.value = avango.gua.make_trans_mat(2, 1, 0) * avango.gua.make_rot_mat(90, 0, 1, 0) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
+  if tip_id > 16:
+    monkey_node.Transform.value = avango.gua.make_identity_mat()
+    transform_node = avango.gua.nodes.TransformNode(Name = 'group')
+    graph.Root.value.Children.value.append(transform_node)
+  if tip_id > 17:
+    pot1 = loader.create_geometry_from_file('pot1', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)
+    pot2 = loader.create_geometry_from_file('pot2', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)
+    pot3 = loader.create_geometry_from_file('pot3', 'data/objects/teapot.obj', avango.gua.LoaderFlags.DEFAULTS)
+  if tip_id > 18:
+    transform_node.Children.value = [pot1, pot2, pot3]
+  if tip_id > 19:
+    pot1.Transform.value = avango.gua.make_trans_mat(2,  0, 0) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)
+    pot2.Transform.value = avango.gua.make_trans_mat(0,  0, 2) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)
+    pot3.Transform.value = avango.gua.make_trans_mat(-2,  0, 0) * avango.gua.make_scale_mat(0.2, 0.2, 0.2)
+  if tip_id > 20:
+    transform_node.Transform.value = avango.gua.make_trans_mat(0.0, 1.75, 0.0)
+  if tip_id > 21:
+    monkey_node.Material.value.set_uniform("ColorMap", "data/textures/grass.jpg")
+    monkey_node.Material.value.set_uniform("Emissivity", 1.0)
+  if tip_id > 23:
+    monkey_node.Transform.connect_from(timed_rotate.MatrixOut)
+  if tip_id > 24:
+    timed_rotate.RotationSpeed.value = 50.0
+  if tip_id > 25:
+    transform_node.Transform.connect_from(timed_rotate.MatrixOut)
+  if tip_id > 26:
+    tea_move_node = avango.gua.nodes.TransformNode(Name = 'teaMove')
+    tea_move_node.Transform.value = avango.gua.make_trans_mat(0, -1.85, 0)
+    graph.Root.value.Children.value.remove(transform_node)
+    graph.Root.value.Children.value.append(tea_move_node)
+    tea_move_node.Children.value.append(transform_node)
+
+  tip(tip_id)
+  viewer.run(locals(), globals(), False)
+
 
 def add_sample_monkey(graph):
   loader = avango.gua.nodes.TriMeshLoader()
@@ -345,8 +425,7 @@ def add_sample_monkey(graph):
   monkey.Transform.value = avango.gua.make_trans_mat(2, 1, 0) * avango.gua.make_rot_mat(90, 0, 1, 0) * avango.gua.make_scale_mat(0.5, 0.5, 0.5)
   graph.Root.value.Children.value.append(monkey)
 
-def print_graph(graph):
-  root_node = graph.Root.value
+def print_graph(root_node):
   stack = [(root_node, 0)]
   while stack:
     node, level = stack.pop()
@@ -369,18 +448,21 @@ def previous_tip():
   global current_tip
   tip(current_tip - 1)
 
-def start():
+def start(tip_id):
   global timed_rotate
-
-  tip(current_tip)
 
   timer = avango.nodes.TimeSensor()
   timed_rotate.TimeIn.connect_from(timer.Time)
 
   logger = avango.gua.nodes.Logger(EnableWarning = True)
 
-  viewer.run(locals(), globals(), False)
+  launch_from(tip_id)
+
 
 if __name__ == '__main__':
-  start()
+
+  if len(sys.argv) > 1:
+    start(int(sys.argv[1]))
+  else:
+    start(-1)
 

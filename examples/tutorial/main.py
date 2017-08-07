@@ -5,6 +5,7 @@ from avango.script import field_has_changed
 
 from SimpleViewer import SimpleViewer
 
+import os
 import sys
 
 class TimedRotate(avango.script.Script):
@@ -329,7 +330,7 @@ Okay! So let's see what you have learned today:\n\
 This shall be it as a first glimpse on \033[92mguacamole\033[0m.\n\
 Of course, there are a lot of other things to\n\
 learn and to experiment with!\n\n\
-If you want to know more, have a look at the examples\n\
+Now have a look at the examples located\n\
 in \033[93m/opt/avango/master/examples\033[0m. The simple_example,\n\
 simple_physics and big_scenegraph_example directories\n\
 are good starting points teaching how to write spicy\n\
@@ -438,6 +439,12 @@ def tip(which):
   global current_tip
   global tips
   current_tip = max(min(which, tip_count - 2),-1)
+
+  # launch file browser in final tip
+  if current_tip == 28:
+    os.system("nautilus /opt/avango/master/examples")
+
+
   print(tips[current_tip])
 
 def next_tip():

@@ -2,26 +2,12 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
-import avango.gua.gui
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 CUBE_COUNT_X = 15
 CUBE_COUNT_Y = 3
 CUBE_COUNT_Z = 15
-
-class FPSUpdater(avango.script.Script):
-  TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.gui.SFGuiResourceNode()
-  Window = avango.gua.SFWindowBase()
-  Viewer = avango.gua.SFViewer()
-
-  @field_has_changed(TimeIn)
-  def update_fps(self):
-    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
-    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
-    fps_string = "FPS: " + application_string + " " + rendering_string
-    self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
 def start():
 
@@ -125,23 +111,6 @@ def start():
   main_scene.Root.value.Children.value.append(top_light)
   main_scene.Root.value.Children.value.append(sun_light)
   main_scene.Root.value.Children.value.append(camera)
-
-
-  fps_size = avango.gua.Vec2(170, 55)
-
-  fps = avango.gua.gui.nodes.GuiResourceNode()
-  fps.TextureName.value = "fps"
-  fps.URL.value = "asset://gua/data/html/fps.html"
-  fps.Size.value = fps_size
-
-  fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
-    Name = "fps_quad",
-    Texture = "fps",
-    Width = int(fps_size.x),
-    Height = int(fps_size.y),
-    Anchor = avango.gua.Vec2(1.0, 1.0)
-  )
-  main_scene.Root.value.Children.value.append(fps_quad)
 
   # portal scene ---------------------------------------------------------------
   portal_origin = avango.gua.nodes.TransformNode(
@@ -391,13 +360,6 @@ def start():
   viewer.Windows.value = [window]
 
   timer = avango.nodes.TimeSensor()
-
-  fps_updater = FPSUpdater(
-    FPSResource=fps,
-    Window=window,
-    Viewer=viewer
-  )
-  fps_updater.TimeIn.connect_from(timer.Time)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

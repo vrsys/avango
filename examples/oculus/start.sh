@@ -18,7 +18,7 @@ sleep 3
 echo "Done."
 
 # third party libs
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib:/opt/pbr/inst_cb/lib:/opt/Awesomium/lib:/opt/OculusSDK/currentSDK2/LibOVR/Lib/Linux/x86_64/Release
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/boost/current/lib:/opt/openscenegraph/3.0.1/lib64/:/opt/zmq/current/lib:/opt/lamure/install/lib:/opt/Awesomium/lib:/opt/OculusSDK/currentSDK2/LibOVR/Lib/Linux/x86_64/Release
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86

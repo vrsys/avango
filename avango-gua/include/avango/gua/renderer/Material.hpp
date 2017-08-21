@@ -37,12 +37,16 @@ namespace av
 
       SFString ShaderName;
       SFBool   EnableBackfaceCulling;
+      SFBool   EnableWireframeRendering;
 
       virtual void getShaderNameCB(const SFString::GetValueEvent& event);
       virtual void setShaderNameCB(const SFString::SetValueEvent& event);
 
       virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event); 
+      virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
+
+      virtual void getEnableWireframeRenderingCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableWireframeRenderingCB(const SFBool::SetValueEvent& event);
 
     public:
 

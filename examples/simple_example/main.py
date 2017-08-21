@@ -23,7 +23,11 @@ def start():
         avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
     monkey2 = loader.create_geometry_from_file(
-        "monkey", "data/objects/monkey.obj",
+        "monkey2", "data/objects/monkey.obj",
+        avango.gua.LoaderFlags.NORMALIZE_SCALE)
+
+    wireframe_monkey = loader.create_geometry_from_file(
+        "wf_monkey", "data/objects/monkey.obj",
         avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
     monkey1.Material.value.set_uniform("Color",
@@ -36,10 +40,31 @@ def start():
     monkey2.Material.value.set_uniform("Roughness", 0.6)
     monkey2.Material.value.set_uniform("Metalness", 0.0)
 
-    transform1 = avango.gua.nodes.TransformNode(Children=[monkey1])
+    wireframe_monkey.Material.value.set_uniform("Color",
+                                       avango.gua.Vec4(0.766, 0.766, 0.766, 1.0))
+    wireframe_monkey.Material.value.set_uniform("Roughness", 0.3)
+    wireframe_monkey.Material.value.set_uniform("Metalness", 1.0)
+    wireframe_monkey.Material.value.set_uniform("Emissivity", 0.1)
+    #start with initially enabled wireframe mode
+    wireframe_monkey.Material.value.EnableWireframeRendering.value = True
+    #disable backface culling to make the wireframe mode stereo coherent
+    wireframe_monkey.Material.value.EnableBackfaceCulling.value = False
+
+
+    transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
+                                                Children=[monkey1])
+
+    transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
+
     transform2 = avango.gua.nodes.TransformNode(
-        Transform=avango.gua.make_trans_mat(-0.5, 0.0, 0.0),
+        Transform=avango.gua.make_trans_mat(-0.75, 0.0, 0.0) * 
+                  avango.gua.make_scale_mat(0.66),
         Children=[monkey2])
+
+    wireframe_transform = avango.gua.nodes.TransformNode(
+        Transform=avango.gua.make_trans_mat( 0.75, 0.0, 0.0) * 
+                  avango.gua.make_scale_mat(0.66),
+        Children=[wireframe_monkey])
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -91,7 +116,7 @@ def start():
                                          Height=1.5,
                                          Children=[cam])
 
-    graph.Root.value.Children.value = [transform1, transform2, light, screen]
+    graph.Root.value.Children.value = [transform1, transform2, wireframe_transform, light, screen]
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()
@@ -104,7 +129,6 @@ def start():
     monkey_updater.TimeIn.connect_from(timer.Time)
 
     transform1.Transform.connect_from(monkey_updater.MatrixOut)
-
     guaVE = GuaVE()
     guaVE.start(locals(), globals())
 

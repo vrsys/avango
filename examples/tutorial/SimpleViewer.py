@@ -2,13 +2,14 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
-from examples_common.GuaVE import GuaVE
-import examples_common.navigator
+
+from GuaVE import GuaVE
+from Navigator import Navigator
 
 class SimpleViewer(avango.script.Script):
 
   SceneGraph = avango.gua.SFSceneGraph()
-  Navigator = examples_common.navigator.Navigator()
+  Navigator = Navigator()
   Viewer = avango.gua.nodes.Viewer()
   Shell = GuaVE()
 

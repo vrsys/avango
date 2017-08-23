@@ -121,7 +121,7 @@ namespace av
     protected:
 
       const ::gua::math::mat4* mIdentityMatrix;
-      const char*     mCachedStationName;
+      std::string     mCachedStationName;
       Station*        mCachedStation;
       StationSegment* mStationSegment;
 

@@ -61,8 +61,8 @@ AV_FIELD_DEFINE(av::daemon::MFDeviceService);
 
 av::daemon::DeviceService::DeviceService()
   : mIdentityMatrix(new ::gua::math::mat4),
-    mCachedStationName(0),
-    mCachedStation(0),
+    mCachedStationName(""),
+    mCachedStation(nullptr),
     mStationSegment(0)
 {
   connectDaemon();
@@ -104,14 +104,14 @@ av::daemon::DeviceService::disconnectDaemon()
 void
 av::daemon::DeviceService::clearStationCache()
 {
-  mCachedStationName = 0;
-  mCachedStation = 0;
+  mCachedStationName = "";
+  mCachedStation = nullptr;
 }
 
 av::daemon::Station*
 av::daemon::DeviceService::lookupCachedStation(const char* station_name)
 {
-  if (station_name == mCachedStationName)
+  if (!std::string(station_name).compare(mCachedStationName))
   {
     logger.trace() << "lookupCachedStation(): " << this << " cache hit for station " << station_name;
     return mCachedStation;
@@ -124,7 +124,7 @@ av::daemon::DeviceService::lookupCachedStation(const char* station_name)
 
     if (station)
     {
-      mCachedStationName = station_name;
+      mCachedStationName = std::string(station_name);
       mCachedStation = station;
       return station;
     }

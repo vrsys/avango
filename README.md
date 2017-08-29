@@ -22,6 +22,7 @@ As a prerequisite, our rendering engine guacamole must be installed. Please foll
   * adapt find script `cmake/modules/find_schism.cmake` such that `SCHISM_INCLUDE_SEARCH_DIRS` and `SCHISM_LIBRARY_SEARCH_DIRS` contain the paths created during the installation of schism in the guacamole installation tutorial
   * configure with CMake and set paths to dependencies as mentioned in the guacamole tutorial if not found automatically; in particular, set `GUACAMOLE_INCLUDE_DIRS` and `GUACAMOLE_LIBRARY_DIRS` to `install/include` and `install/lib` in the guacamole directory
   * when CMake can't find `libboost_python3` although it was installed, change `Boost_PYTHON3_LIBRARY_DEBUG` and `Boost_PYTHON3_LIBRARY_RELEASE` to `/usr/lib/x86_64-linux-gnu/libboost_python-py35.so`
+  * CMake flags that were set to ON during writing of this tutorial: `AVANGO_DISTRIBUTION_SUPPORT`, `AVANGO_LOD_SUPPORT`, `AVANGO_PHYSICS_SUPPORT`, `AVANGO_RUNTIME_PROGRAM_COMPILATION`, `AVANGO_SKELANIM_SUPPORT`, `AVANGO_TV_3_SUPPORT`, `AVANGO_VIDEO3D_SUPPORT`
   * `make`
 
 If everything worked well, you can start by running an example in the `examples/` directory, e.g. the `simple_example`.

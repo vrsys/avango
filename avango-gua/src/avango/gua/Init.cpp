@@ -15,6 +15,11 @@
 #include <avango/gua/renderer/Video3DLoader.hpp>
 #include <avango/gua/renderer/Video3DPassDescription.hpp>
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+#include <avango/gua/scenegraph/SPointsNode.hpp>
+#include <avango/gua/renderer/SPointsLoader.hpp>
+#include <avango/gua/renderer/SPointsPassDescription.hpp>
+#endif
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
@@ -127,6 +132,10 @@ av::gua::Init::initClass()
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DNode::initClass();
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+        av::gua::SPointsNode::initClass();
+#endif
+
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRNode::initClass();
@@ -183,6 +192,10 @@ av::gua::Init::initClass()
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DLoader::initClass();
         av::gua::Video3DPassDescription::initClass();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+        av::gua::SPointsLoader::initClass();
+        av::gua::SPointsPassDescription::initClass();
 #endif
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();

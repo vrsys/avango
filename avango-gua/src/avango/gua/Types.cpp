@@ -660,6 +660,19 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::Video3DNode &)
 }
 #endif
 
+#if defined(AVANGO_SPOINTS_SUPPORT)
+av::OutputStream & av::operator<<(av::OutputStream & os,
+          const::gua::SPointsNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::SPointsNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+#endif
+
 #if defined(AVANGO_PBR_SUPPORT)
 
 av::OutputStream & av::operator<<(av::OutputStream & os,

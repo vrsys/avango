@@ -19,6 +19,7 @@
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#include "scenegraph/SPointsNode.hpp"
 #include "scenegraph/DepthMapNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
@@ -76,6 +77,10 @@
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/Video3DLoader.hpp"
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+#include "renderer/SPointsPassDescription.hpp"
+#include "renderer/SPointsLoader.hpp"
 #endif
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
@@ -164,6 +169,9 @@ BOOST_PYTHON_MODULE(_gua)
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DNode();
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsNode();
+#endif
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
 #endif
@@ -218,6 +226,10 @@ BOOST_PYTHON_MODULE(_gua)
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DPassDescription();
     init_Video3DLoader();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsPassDescription();
+    init_SPointsLoader();
 #endif
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();

@@ -24,6 +24,9 @@ namespace gua
 #if defined(AVANGO_VIDEO3D_SUPPORT)
   class Video3DNode;
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+  class SPointsNode;
+#endif
   class VolumeNode;
   class NURBSNode;
   class SceneGraph;
@@ -119,6 +122,10 @@ namespace av
 #if defined(AVANGO_VIDEO3D_SUPPORT)
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Video3DNode&);
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SPointsNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SPointsNode&);
 #endif
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::VolumeNode&);

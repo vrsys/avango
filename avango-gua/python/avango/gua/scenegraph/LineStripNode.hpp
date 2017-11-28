@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_LINE_STRIP_NODE_HPP
+#define AV_PYTHON_GUA_LINE_STRIP_NODE_HPP
+
+void init_LineStripNode();
+
+#endif //AV_PYTHON_GUA_LINE_STRIP_NODE_HPP

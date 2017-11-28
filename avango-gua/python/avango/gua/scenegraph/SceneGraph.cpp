@@ -7,6 +7,7 @@
 #include <avango/gua/scenegraph/RayNode.hpp>
 #include <avango/gua/utils/Ray.hpp>
 #include <gua/node/TriMeshNode.hpp>
+#include <gua/node/LineStripNode.hpp>
 
 using namespace boost::python;
 using namespace av::python;

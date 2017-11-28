@@ -626,6 +626,17 @@ av::InputStream & av::operator>>(av::InputStream & is,::gua::TriMeshNode &)
 }
 
 av::OutputStream & av::operator<<(av::OutputStream & os,
+          const::gua::LineStripNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::InputStream & av::operator>>(av::InputStream & is,::gua::LineStripNode &)
+{
+    throw std::runtime_error("not implemented yet.");
+}
+
+av::OutputStream & av::operator<<(av::OutputStream & os,
           const::gua::CubemapNode &)
 {
     throw std::runtime_error("not implemented yet.");

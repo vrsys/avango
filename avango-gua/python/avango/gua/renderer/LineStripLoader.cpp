@@ -71,7 +71,7 @@ void init_LineStripLoader()
          .def("create_geometry_from_file", &createGeometryFromFile4)
          ;
 
-  enum_<av::gua::LineStripLoader::Flags>("LoaderFlags")
+  enum_<av::gua::LineStripLoader::Flags>("LineStripLoaderFlags")
         .value("DEFAULTS", av::gua::LineStripLoader::DEFAULTS)
         .value("MAKE_PICKABLE", av::gua::LineStripLoader::MAKE_PICKABLE)
         .value("NORMALIZE_SCALE", av::gua::LineStripLoader::NORMALIZE_SCALE)

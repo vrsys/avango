@@ -38,6 +38,26 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
 
 }
 
+void av::gua::LineStripNode::popBackVertex() const
+{
+  m_guaLineStripNode->pop_back_vertex();
+}
+
+void av::gua::LineStripNode::popFrontVertex() const
+{
+  m_guaLineStripNode->pop_front_vertex();
+}
+
+void av::gua::LineStripNode::pushVertex(float x_pos, float y_pos, float z_pos,
+                                        float col_r, float col_g, float col_b, float col_a,
+                                        float thickness) const
+{
+  m_guaLineStripNode->push_vertex(x_pos, y_pos, z_pos,
+                                  col_r, col_g, col_b, col_a,
+                                  thickness);
+}
+
+
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 void av::gua::LineStripNode::on_distribute(av::gua::NetTransform& netNode) 

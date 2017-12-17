@@ -46,6 +46,34 @@ av::gua::LineStripLoader::createGeometryFromFile(std::string const& nodeName,
     return av::Link<av::gua::Node>(root);
 }
 
+
+
+av::Link<av::gua::Node>
+av::gua::LineStripLoader::createEmptyGeometry(std::string const& nodeName,
+                                              std::string const& emptyName,
+                                              av::gua::Material const& fallbackMaterial,
+                                              unsigned flags) const
+{
+
+    auto gua_node(m_guaLineStripLoader->create_empty_geometry(
+                                            nodeName, emptyName, fallbackMaterial.getGuaMaterial(), flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
+av::Link<av::gua::Node>
+av::gua::LineStripLoader::createEmptyGeometry(std::string const& nodeName,
+                                              std::string const& emptyName,
+                                              unsigned flags) const
+{
+
+    auto gua_node(m_guaLineStripLoader->create_empty_geometry(nodeName, emptyName, flags));
+    auto root(createChildren(gua_node));
+
+    return av::Link<av::gua::Node>(root);
+}
+
 void
 av::gua::LineStripLoader::initClass()
 {

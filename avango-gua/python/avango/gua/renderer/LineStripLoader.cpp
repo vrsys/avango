@@ -58,6 +58,25 @@ av::Link<av::gua::Node> createGeometryFromFile4(
                                 static_cast<av::gua::LineStripLoader::Flags>(0));
 }
 
+av::Link<av::gua::Node> createEmptyGeometry1(
+                                          av::gua::LineStripLoader const& loader,
+                                          std::string const& nodeName,
+                                          std::string const& emptyName,
+                                          av::gua::Material const& fallbackMaterial) {
+
+   return loader.createEmptyGeometry(nodeName, emptyName, fallbackMaterial,
+                                     static_cast<av::gua::LineStripLoader::Flags>(0));
+}
+
+av::Link<av::gua::Node> createEmptyGeometry2(
+                                          av::gua::LineStripLoader const& loader,
+                                          std::string const& nodeName,
+                                          std::string const& emptyName) {
+
+   return loader.createEmptyGeometry(nodeName, emptyName,
+                                     static_cast<av::gua::LineStripLoader::Flags>(0));
+}
+
 void init_LineStripLoader()
 {
   register_ptr_to_python<av::Link<av::gua::LineStripLoader> >();
@@ -69,6 +88,8 @@ void init_LineStripLoader()
          .def("create_geometry_from_file", &createGeometryFromFile2)
          .def("create_geometry_from_file", &createGeometryFromFile3)
          .def("create_geometry_from_file", &createGeometryFromFile4)
+         .def("create_empty_geometry", &createEmptyGeometry1)
+         .def("create_empty_geometry", &createEmptyGeometry2)
          ;
 
   enum_<av::gua::LineStripLoader::Flags>("LineStripLoaderFlags")

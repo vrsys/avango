@@ -4,6 +4,9 @@ import avango.gua
 from examples_common.GuaVE import GuaVE
 
 
+class TimedVertexPush(avango.script.Script)
+    TimeIn = avango.SFFloat()
+    
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
@@ -20,11 +23,13 @@ def start():
 
     loader = avango.gua.nodes.LineStripLoader()
 
-    line_strip_geode = loader.create_geometry_from_file(
-        "line_strip_model", "data/objects/spiraled_avatar.lob",
-        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
+#    line_strip_geode = loader.create_geometry_from_file(
+#        "line_strip_model", "data/objects/spiraled_avatar.lob",
+#        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
+    line_strip_geode = loader.create_empty_geometry(
+        "line_strip_model", "data/objects/spiraled_avatar.lob")
 
 
     transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),

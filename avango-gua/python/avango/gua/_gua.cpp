@@ -18,7 +18,9 @@
 #include "scenegraph/ClippingPlaneNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
+#include "scenegraph/LineStripNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#include "scenegraph/SPointsNode.hpp"
 #include "scenegraph/DepthMapNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
@@ -72,10 +74,15 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/LineStripPassDescription.hpp"
 #include "renderer/DepthMapPassDescription.hpp"
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/Video3DLoader.hpp"
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+#include "renderer/SPointsPassDescription.hpp"
+#include "renderer/SPointsLoader.hpp"
 #endif
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
@@ -92,6 +99,7 @@
 #include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
+#include "renderer/LineStripLoader.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "renderer/PBRLoader.hpp"
 #include "renderer/PLODLoader.hpp"
@@ -160,9 +168,13 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
+    init_LineStripNode();
     init_DepthMapNode();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DNode();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsNode();
 #endif
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
@@ -214,10 +226,15 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
+    init_LineStripPassDescription();
     init_DepthMapPassDescription();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DPassDescription();
     init_Video3DLoader();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsPassDescription();
+    init_SPointsLoader();
 #endif
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();
@@ -234,6 +251,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_LightVisibilityPassDescription();
     init_Databases();
     init_TriMeshLoader();
+    init_LineStripLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
     init_PLODPassDescription();

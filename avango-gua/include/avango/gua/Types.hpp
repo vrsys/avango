@@ -19,10 +19,14 @@
 namespace gua
 {
   class TriMeshNode;
+  class LineStripNode;
   class CubemapNode;
   class SkeletalAnimationNode;
 #if defined(AVANGO_VIDEO3D_SUPPORT)
   class Video3DNode;
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+  class SPointsNode;
 #endif
   class VolumeNode;
   class NURBSNode;
@@ -112,6 +116,8 @@ namespace av
 
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::TriMeshNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::TriMeshNode&);
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::LineStripNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::LineStripNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::CubemapNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::CubemapNode&);
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SkeletalAnimationNode&);
@@ -119,6 +125,10 @@ namespace av
 #if defined(AVANGO_VIDEO3D_SUPPORT)
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::Video3DNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::Video3DNode&);
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+  AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::SPointsNode&);
+  AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::SPointsNode&);
 #endif
   AV_GUA_DLL av::OutputStream& operator<<(OutputStream& os, const ::gua::VolumeNode&);
   AV_GUA_DLL av::InputStream& operator>>(InputStream& is, ::gua::VolumeNode&);

@@ -44,6 +44,16 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_VIDEO3D_SUPPORT})
 
+IF (NOT ${AVANGO_SPOINTS_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/scenegraph/SPointsNode.cpp
+    src/avango/gua/renderer/SPointsLoader.cpp
+    src/avango/gua/renderer/SPointsPassDescription.cpp
+    include/avango/gua/scenegraph/SPointsNode.h
+    include/avango/gua/renderer/SPointsLoader.h
+    include/avango/gua/renderer/SPointsPassDescription.h
+)
+ENDIF (NOT ${AVANGO_SPOINTS_SUPPORT})
 
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_SRC
@@ -119,6 +129,19 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
   python/avango/gua/renderer/Video3DPassDescription.cpp
 )
 ENDIF (NOT ${AVANGO_VIDEO3D_SUPPORT})
+
+IF (NOT ${AVANGO_SPOINTS_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/scenegraph/SPointsNode.hpp
+  python/avango/gua/scenegraph/SPointsNode.cpp
+  python/avango/gua/renderer/SPointsLoader.hpp
+  python/avango/gua/renderer/SPointsLoader.cpp
+  python/avango/gua/renderer/SPointsPassDescription.hpp
+  python/avango/gua/renderer/SPointsPassDescription.cpp
+)
+ENDIF (NOT ${AVANGO_SPOINTS_SUPPORT})
+
+
 
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
@@ -224,6 +247,10 @@ SET(_AVANGO_GUA_LIBRARIES avango
 IF (${AVANGO_VIDEO3D_SUPPORT})                                                            
   list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d)
 ENDIF (${AVANGO_VIDEO3D_SUPPORT})                                                            
+
+IF (${AVANGO_SPOINTS_SUPPORT})                                                            
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-spoints)
+ENDIF (${AVANGO_SPOINTS_SUPPORT})
 
 IF (${AVANGO_PBR_SUPPORT})                                                            
   list(APPEND _AVANGO_GUA_LIBRARIES guacamole-PLOD)

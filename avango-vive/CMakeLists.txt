@@ -19,7 +19,7 @@ ADD_LIBRARY( avango_vive SHARED
 target_include_directories( avango_vive PUBLIC include)
 
 target_include_directories(avango_vive SYSTEM PUBLIC
-  ${OPENVR_INCLUDE_DIRS}
+  ${OPENVR_INCLUDE_DIR}
   ${GUACAMOLE_VIVE_INCLUDE_DIRS}
 )
 

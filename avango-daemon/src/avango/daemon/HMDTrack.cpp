@@ -92,56 +92,51 @@ av::daemon::HMDTrack::readLoop()
   std::string endpoint("tcp://" + address);
   socket.connect(endpoint.c_str());
 
-  // stations[0] |-> head
 
   while (mKeepRunning) {
     zmq::message_t message(sizeof(HMD_Message));
     socket.recv(&message);
-    // ::gua::math::mat4f pose;
-    // std::memcpy( &pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
-    HMD_Message vrdevices;
-    std::memcpy( &vrdevices, reinterpret_cast<HMD_Message*>(message.data()),
-      sizeof(HMD_Message));
-    mStations[0]->setButton(0, vrdevices.hmd_status);
-    if (vrdevices.hmd_status) {
-      //std::cout << "HMD Status OK!" << std::endl;
-      mStations[0]->setMatrix(::gua::math::mat4(vrdevices.hmd));
+    HMD_Message hmdMessage;
+    std::memcpy(&hmdMessage, reinterpret_cast<HMD_Message*>(message.data()), sizeof(HMD_Message));
+   
+	// Set values for headset
+	mStations[0]->setButton(0, hmdMessage.hmd.status);
+    if (hmdMessage.hmd.status) {
+      mStations[0]->setMatrix(::gua::math::mat4(hmdMessage.hmd.matrix));
     }
-    mStations[0]->setValue(0, vrdevices.hmd_id);
-    if (!vrdevices.controller.empty()) {  
-      for (int i = 1; i < 5 ; ++i)
+    mStations[0]->setValue(0, hmdMessage.hmd.id);
+
+	// Set values for controllers
+    if (!hmdMessage.controllers.empty()) {  
+      for (int i = 0; i < 2; ++i)
       {
-        mStations[i]->setButton(0, vrdevices.controller[i-1].status);
-        if(vrdevices.controller[i-1].status) {
-          mStations[i]->setMatrix(::gua::math::mat4(vrdevices.controller[i-1].matrix));
+        mStations[i + 1]->setButton(0, hmdMessage.controllers[i].status);
+        if(hmdMessage.controllers[i].status) {
+          mStations[i + 1]->setMatrix(::gua::math::mat4(hmdMessage.controllers[i].matrix));
         }
-        //std::cout << "Mat = " << vrdevices.controller[i-1].matrix << std::endl;
-        mStations[i]->setValue(0, vrdevices.controller[i-1].id);
-        mStations[i]->setButton(1, vrdevices.controller[i-1].app_menu);
-        mStations[i]->setButton(2, vrdevices.controller[i-1].grip);
-        //std::cout << vrdevices.controller[i-1].grip << std::endl;
-        mStations[i]->setButton(3, vrdevices.controller[i-1].pad_touch);
-        mStations[i]->setButton(4, vrdevices.controller[i-1].pad_press);
-        mStations[i]->setButton(5, vrdevices.controller[i-1].trigger_p);
-        mStations[i]->setValue(1, vrdevices.controller[i-1].pad_x);
-        //std::cout << vrdevices.controller[i-1].pad_x << std::endl;
-        mStations[i]->setValue(2, vrdevices.controller[i-1].pad_y);
-        //std::cout << vrdevices.controller[i-1].pad_y << std::endl;
-        mStations[i]->setValue(3, vrdevices.controller[i-1].trigger);
-        //std::cout << vrdevices.controller[i-1].trigger << std::endl;
+        mStations[i + 1]->setValue(0, hmdMessage.controllers[i].id);
+        mStations[i + 1]->setButton(1, hmdMessage.controllers[i].appMenuButton);
+        mStations[i + 1]->setButton(2, hmdMessage.controllers[i].gripButton);
+        mStations[i + 1]->setButton(3, hmdMessage.controllers[i].padTouchButton);
+        mStations[i + 1]->setButton(4, hmdMessage.controllers[i].padButton);
+        mStations[i + 1]->setButton(5, hmdMessage.controllers[i].triggerButton);
+        mStations[i + 1]->setValue(1, hmdMessage.controllers[i].padX);
+        mStations[i + 1]->setValue(2, hmdMessage.controllers[i].padY);
+        mStations[i + 1]->setValue(3, hmdMessage.controllers[i].trigger);
       }
     }
-    if (!vrdevices.tracker.empty()) {
-      for (int i = 5 ; i < 7; ++i)
+
+	// Set values for trackers
+    if (!hmdMessage.trackers.empty()) {
+      for (int i = 0 ; i < 2; ++i)
       {
-        mStations[i]->setValue(0, vrdevices.tracker[i-5].id);
-        if(vrdevices.tracker[i-5].id) {
-          mStations[i]->setMatrix(::gua::math::mat4(vrdevices.tracker[i-5].matrix));
+        mStations[i + 3]->setValue(0, hmdMessage.trackers[i].id);
+        if(hmdMessage.trackers[i].id) {
+          mStations[i + 3]->setMatrix(::gua::math::mat4(hmdMessage.trackers[i].matrix));
         }
-        mStations[i]->setButton(0, vrdevices.tracker[i-5].status);
+        mStations[i + 3]->setButton(0, hmdMessage.trackers[i].status);
       }
     }
-    // mStations[0]->setMatrix(::gua::math::mat4(pose));
   }
 }
 

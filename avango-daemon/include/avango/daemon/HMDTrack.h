@@ -38,56 +38,37 @@ namespace av
   namespace daemon
   {
 
-    struct HMD_Controller{ // adapted for vive controller
-      HMD_Controller() :
-        status{false},
-        id{-1},
-        app_menu{false},
-        grip{false},
-        pad_touch{false},
-        pad_press{false},
-        trigger_p{false},
-        pad_x{0.0},
-        pad_y{0.0},
-        trigger{0.0} 
-      { };
+	struct HMD_TrackedDevice {
+		HMD_TrackedDevice() : status(false), id(-1) {};
 
-      ::gua::math::mat4f matrix;
-      bool status;
-      short id;
-      bool app_menu;  // Application Menu button on Vive controller
-      bool grip;    // Grip button on Vive controller
-      bool pad_touch; // touch/untouch on Touchpad
-      bool pad_press; // Touchpad button
-      bool trigger_p; // Trigger is fully pressed
-      float pad_x;  // X values on touchpad
-      float pad_y;  // Y values on touchpad
-      float trigger;  // Trigger value
-    };
+		bool status;
+		short id;
+		::gua::math::mat4f matrix;
+	};
 
-    struct HMD_Tracker { // e.g. Lighthouse or Oculus tracking device
-      HMD_Tracker() :
-        status{false},
-        id{-1}
-      { };
+	struct HMD_ControllerDevice : HMD_TrackedDevice {
+		HMD_ControllerDevice() : HMD_TrackedDevice(),
+			appMenuButton(false), gripButton(false), padTouchButton(false), padButton(false),
+			triggerButton(false), padX(0.0f), padY(0.0f), trigger(0.0f) {}
 
-      ::gua::math::mat4f matrix;
-      bool status;
-      short id;
-    };
+		bool appMenuButton;
+		bool gripButton;
+		bool padTouchButton;
+		bool padButton;
+		bool triggerButton;
+		float padX;
+		float padY;
+		float trigger;
+	};
+    
 
-    struct HMD_Message {
-      HMD_Message() :
-        hmd_status{false}, 
-        hmd_id{-1}
-      { };
-      
-      bool hmd_status;
-      short hmd_id;
-      ::gua::math::mat4f hmd;
-      std::array<HMD_Controller, 4> controller;
-      std::array<HMD_Tracker, 2> tracker;
-    };
+	struct HMD_Message {
+		HMD_Message() {};
+
+		HMD_TrackedDevice hmd;
+		std::array<HMD_ControllerDevice, 2> controllers;
+		std::array<HMD_TrackedDevice, 2> trackers;
+	};
 
     class AV_DAEMON_DLL HMDTrack : public Device
     {

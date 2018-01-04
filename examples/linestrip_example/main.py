@@ -13,6 +13,7 @@ class TimedVertexPush(avango.script.Script):
     def set_line_strip_node(self, line_strip_node):
         self.node_to_update = line_strip_node
         self.always_evaluate(True)
+        self.vertices_pushed = 0
 
     def evaluate(self):
         vertex_x = random.uniform(-1.0, 1.0)
@@ -24,6 +25,12 @@ class TimedVertexPush(avango.script.Script):
         thickness = 0.02
 
         self.node_to_update.push_vertex(vertex_x, vertex_y, vertex_z, col_r, col_g, col_b, thickness)
+
+        self.vertices_pushed += 1
+
+        if self.vertices_pushed == 200:
+            self.node_to_update.clear_vertices()
+            self.vertices_pushed = 0
 
     
 class TimedRotate(avango.script.Script):
@@ -59,6 +66,7 @@ def start():
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
 
     line_strip_geode.RenderVolumetric.value = False
+    line_strip_geode.RenderAsPoints.value = False
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,

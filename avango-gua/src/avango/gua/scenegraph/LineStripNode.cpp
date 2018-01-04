@@ -36,9 +36,9 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getRenderVolumetricCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setRenderVolumetricCB, this,std::placeholders::_1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(RenderLines,
-                      std::bind(&LineStripNode::getRenderLinesCB, this,std::placeholders::_1),
-                      std::bind(&LineStripNode::setRenderLinesCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(RenderAsPoints,
+                      std::bind(&LineStripNode::getRenderAsPointsCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setRenderAsPointsCB, this,std::placeholders::_1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -172,12 +172,12 @@ void av::gua::LineStripNode::setRenderVolumetricCB(const SFBool::SetValueEvent& 
   m_guaLineStripNode->set_render_volumetric(event.getValue());
 }
 
-void av::gua::LineStripNode::getRenderLinesCB(const SFBool::GetValueEvent& event)
+void av::gua::LineStripNode::getRenderAsPointsCB(const SFBool::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaLineStripNode->get_render_vertices_as_points();
 }
 
-void av::gua::LineStripNode::setRenderLinesCB(const SFBool::SetValueEvent& event)
+void av::gua::LineStripNode::setRenderAsPointsCB(const SFBool::SetValueEvent& event)
 {
   m_guaLineStripNode->set_render_vertices_as_points(event.getValue());
 }

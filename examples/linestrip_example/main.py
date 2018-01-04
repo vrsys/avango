@@ -3,9 +3,28 @@ import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
 
+import random
 
-class TimedVertexPush(avango.script.Script)
-    TimeIn = avango.SFFloat()
+class TimedVertexPush(avango.script.Script):
+    
+    def __init__(self):
+        self.super(TimedVertexPush).__init__()
+
+    def set_line_strip_node(self, line_strip_node):
+        self.node_to_update = line_strip_node
+        self.always_evaluate(True)
+
+    def evaluate(self):
+        vertex_x = random.uniform(-1.0, 1.0)
+        vertex_y = random.uniform(-1.0, 1.0)
+        vertex_z = random.uniform(-1.0, 1.0)
+        col_r = random.uniform(0.0, 1.0)
+        col_g = random.uniform(0.0, 1.0)
+        col_b = random.uniform(0.0, 1.0)
+        thickness = 0.02
+
+        self.node_to_update.push_vertex(vertex_x, vertex_y, vertex_z, col_r, col_g, col_b, thickness)
+
     
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
@@ -29,8 +48,10 @@ def start():
 #        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
     line_strip_geode = loader.create_empty_geometry(
-        "line_strip_model", "data/objects/spiraled_avatar.lob")
+        "line_strip_model", "empty_name.lob")
 
+
+    line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -5.0)
 
     transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
                                                 Children=[line_strip_geode])
@@ -95,12 +116,16 @@ def start():
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
 
-    avatar_rotator = TimedRotate()
+
 
     timer = avango.nodes.TimeSensor()
-    avatar_rotator.TimeIn.connect_from(timer.Time)
 
-    transform1.Transform.connect_from(avatar_rotator.MatrixOut)
+
+
+    timed_vertex_push_object = TimedVertexPush()
+
+    timed_vertex_push_object.set_line_strip_node(line_strip_geode)
+
     guaVE = GuaVE()
     guaVE.start(locals(), globals())
 

@@ -44,7 +44,7 @@ void pushVertex2(av::gua::LineStripNode const& node,
                  float col_r, float col_g, float col_b) {
 
    return node.pushVertex(x_pos, y_pos, z_pos,
-                          col_r, col_g, col_b);
+                          col_r, col_g, col_b, 1.0);
 }
 
 void pushVertex3(av::gua::LineStripNode const& node,
@@ -52,7 +52,7 @@ void pushVertex3(av::gua::LineStripNode const& node,
                  float thickness) {
 
    return node.pushVertex(x_pos, y_pos, z_pos,
-                          0.0f, 0.0f, 0.0f, //black vertex
+                          0.0f, 0.0f, 0.0f, 1.0, //black vertex
                           thickness);
 }
 
@@ -62,7 +62,7 @@ void pushVertex4(av::gua::LineStripNode const& node,
                  float thickness) {
 
    return node.pushVertex(x_pos, y_pos, z_pos,
-                          col_r, col_g, col_b,
+                          col_r, col_g, col_b, 1.0,
                           thickness);
 }
 

@@ -3,6 +3,7 @@ import avango.script
 import avango.gua
 from examples_common.GuaVE import GuaVE
 
+import math
 import random
 
 class TimedVertexPush(avango.script.Script):
@@ -10,15 +11,24 @@ class TimedVertexPush(avango.script.Script):
     def __init__(self):
         self.super(TimedVertexPush).__init__()
 
-    def set_line_strip_node(self, line_strip_node):
+    def set_line_strip_nodes(self, line_strip_node):
         self.node_to_update = line_strip_node
         self.always_evaluate(True)
         self.vertices_pushed = 0
 
     def evaluate(self):
-        vertex_x = random.uniform(-1.0, 1.0)
-        vertex_y = random.uniform(-1.0, 1.0)
-        vertex_z = random.uniform(-1.0, 1.0)
+
+        b = 0.1;
+        a = 6.28;
+        spiral_float_parameter = self.vertices_pushed * 0.1;
+
+        norm_pos_x = b * spiral_float_parameter * math.cos(spiral_float_parameter + a);
+        norm_pos_y = spiral_float_parameter * 0.05;
+        norm_pos_z = b * spiral_float_parameter * math.sin(spiral_float_parameter + a);
+
+        vertex_x = norm_pos_x
+        vertex_y = norm_pos_y
+        vertex_z = norm_pos_z
         col_r = random.uniform(0.0, 1.0)
         col_g = random.uniform(0.0, 1.0)
         col_b = random.uniform(0.0, 1.0)
@@ -50,23 +60,19 @@ def start():
     loader = avango.gua.nodes.LineStripLoader()
 
 
-#    line_strip_geode = loader.create_geometry_from_file(
-#        "line_strip_model", "data/objects/spiraled_avatar.lob",
-#        avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
     line_strip_geode = loader.create_empty_geometry(
-        "line_strip_model", "empty_name.lob")
-
+        "line_strip_model_1", "empty_name_1.lob")
 
     line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -5.0)
-
     transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
                                                 Children=[line_strip_geode])
 
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
 
-    line_strip_geode.RenderVolumetric.value = False
+    line_strip_geode.RenderVolumetric.value = True
     line_strip_geode.RenderAsPoints.value = False
+
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -133,7 +139,7 @@ def start():
 
     timed_vertex_push_object = TimedVertexPush()
 
-    timed_vertex_push_object.set_line_strip_node(line_strip_geode)
+    timed_vertex_push_object.set_line_strip_nodes(line_strip_geode)
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

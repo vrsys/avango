@@ -58,6 +58,7 @@ def start():
 
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
 
+    line_strip_geode.RenderVolumetric.value = False
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,

@@ -32,10 +32,23 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getRenderToStencilBufferCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setRenderToStencilBufferCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(RenderVolumetric,
+                      std::bind(&LineStripNode::getRenderVolumetricCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setRenderVolumetricCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(RenderLines,
+                      std::bind(&LineStripNode::getRenderLinesCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setRenderLinesCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
 
+}
+
+void av::gua::LineStripNode::clearVertices() const
+{
+  m_guaLineStripNode->clear_vertices();
 }
 
 void av::gua::LineStripNode::popBackVertex() const
@@ -148,6 +161,28 @@ av::gua::LineStripNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& 
 {
   m_guaLineStripNode->set_render_to_stencil_buffer(event.getValue());
 }
+
+void av::gua::LineStripNode::getRenderVolumetricCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaLineStripNode->get_render_volumetric();
+}
+
+void av::gua::LineStripNode::setRenderVolumetricCB(const SFBool::SetValueEvent& event)
+{
+  m_guaLineStripNode->set_render_volumetric(event.getValue());
+}
+
+void av::gua::LineStripNode::getRenderLinesCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaLineStripNode->get_render_vertices_as_points();
+}
+
+void av::gua::LineStripNode::setRenderLinesCB(const SFBool::SetValueEvent& event)
+{
+  m_guaLineStripNode->set_render_vertices_as_points(event.getValue());
+}
+
+
 
 std::shared_ptr< ::gua::node::LineStripNode>
 av::gua::LineStripNode::getGuaLineStripNode() const {

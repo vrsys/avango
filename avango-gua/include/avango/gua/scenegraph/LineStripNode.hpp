@@ -33,7 +33,9 @@ namespace av
        */
       LineStripNode(std::shared_ptr< ::gua::node::LineStripNode> guanode =
           std::shared_ptr< ::gua::node::LineStripNode>(new ::gua::node::LineStripNode("")));
-     
+      
+      void clearVertices() const;
+
       void popBackVertex() const;
 
       void popFrontVertex() const;
@@ -74,13 +76,11 @@ namespace av
       virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
       virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
 
-/*
       virtual void getRenderVolumetricCB(const SFBool::GetValueEvent& event);
       virtual void setRenderVolumetricCB(const SFBool::SetValueEvent& event);
 
       virtual void getRenderLinesCB(const SFBool::GetValueEvent& event);
       virtual void setRenderLinesCB(const SFBool::SetValueEvent& event);
-*/
 
       /**
        * Get the wrapped ::gua::LineStripNode.

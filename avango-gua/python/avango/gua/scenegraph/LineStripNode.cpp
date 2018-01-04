@@ -19,6 +19,9 @@ namespace boost
   }
 }
 
+void clearVertices(av::gua::LineStripNode const& node) {
+  return node.clearVertices();
+}
 
 void popBackVertex(av::gua::LineStripNode const& node) {
 
@@ -77,6 +80,7 @@ void init_LineStripNode()
   class_<av::gua::LineStripNode,
          av::Link<av::gua::LineStripNode>,
          bases<av::FieldContainer>, boost::noncopyable> ("LineStripNode", "docstring", no_init)
+         .def("clear_vertices", &clearVertices)         
          .def("pop_back_vertex", &popBackVertex)
          .def("pop_front_vertex", &popFrontVertex)
          .def("push_vertex", &pushVertex1)

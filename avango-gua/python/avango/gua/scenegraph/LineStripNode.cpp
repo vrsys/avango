@@ -67,6 +67,13 @@ void init_LineStripNode()
 {
   register_ptr_to_python<av::Link<av::gua::LineStripNode> >();
 
+  register_field<av::gua::SFLineStripNode>("SFLineStripNode");
+  register_multifield<av::gua::MFLineStripNode>("MFLineStripNode");
+ /* class_<av::gua::LineStripNode, av::Link<av::gua::LineStripNode>,
+    bases<av::gua::GeometryNode>,
+    boost::noncopyable >("LineStripNode", "docstring", no_init);
+*/
+
   class_<av::gua::LineStripNode,
          av::Link<av::gua::LineStripNode>,
          bases<av::FieldContainer>, boost::noncopyable> ("LineStripNode", "docstring", no_init)
@@ -78,9 +85,4 @@ void init_LineStripNode()
          .def("push_vertex", &pushVertex4)
          ;
 
-  register_field<av::gua::SFLineStripNode>("SFLineStripNode");
-  register_multifield<av::gua::MFLineStripNode>("MFLineStripNode");
-  class_<av::gua::LineStripNode, av::Link<av::gua::LineStripNode>,
-    bases<av::gua::GeometryNode>,
-    boost::noncopyable >("LineStripNode", "docstring", no_init);
 }

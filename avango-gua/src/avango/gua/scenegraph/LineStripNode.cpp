@@ -48,9 +48,20 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getWasCreatedEmptyCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setWasCreatedEmptyCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(Vertices,
+                      std::bind(&LineStripNode::getVerticesCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setVerticesCB, this,std::placeholders::_1));
+
+
+
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
+
+
+  m_Vertex = av::Link<av::gua::LineStripVertex>(new av::gua::LineStripVertex());
+  
 
 }
 
@@ -88,7 +99,9 @@ void av::gua::LineStripNode::on_distribute(av::gua::NetTransform& netNode)
     if (m_Material.isValid()) {
       m_Material->on_distribute(netNode);
     }
+
     netNode.distributeFieldContainer(m_Material);
+    netNode.distributeFieldContainer(m_Vertex);
 }
 
 void av::gua::LineStripNode::on_undistribute(av::gua::NetTransform& netNode) 
@@ -98,7 +111,9 @@ void av::gua::LineStripNode::on_undistribute(av::gua::NetTransform& netNode)
     if (m_Material.isValid()) {
       m_Material->on_undistribute(netNode);
     }
+
     netNode.undistributeFieldContainer(m_Material);
+    netNode.undistributeFieldContainer(m_Vertex);
 }
 #endif
 
@@ -172,7 +187,7 @@ av::gua::LineStripNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& 
 
 void av::gua::LineStripNode::getRenderVolumetricCB(const SFBool::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaLineStripNode->get_render_volumetric();
+  //*(event.getValuePtr()) = m_guaLineStripNode->get_render_volumetric();
 }
 
 void av::gua::LineStripNode::setRenderVolumetricCB(const SFBool::SetValueEvent& event)
@@ -208,6 +223,56 @@ void av::gua::LineStripNode::getWasCreatedEmptyCB(const SFBool::GetValueEvent& e
 void av::gua::LineStripNode::setWasCreatedEmptyCB(const SFBool::SetValueEvent& event)
 {
   m_guaLineStripNode->set_was_created_empty(event.getValue());
+}
+
+void av::gua::LineStripNode::getVerticesCB(const SFLineStripVertex::GetValueEvent& event)
+{
+  if (m_Vertex.isValid()) {
+    *(event.getValuePtr()) = m_Vertex;
+  }
+}
+
+void av::gua::LineStripNode::setVerticesCB(const SFLineStripVertex::SetValueEvent& event)
+{
+
+  
+  if (event.getValue().isValid()) {
+    m_Vertex = event.getValue();
+
+    std::cout << "READY!!!!\n";
+
+    //auto is_it = m_Vertex->getGuaLineStripVertex();
+
+    //m_guaLineStripNode->set_material(m_Material->getGuaMaterial());
+  } else {
+    std::cout << "NOT READY!!!!\n";
+  }
+
+/*
+  std::cout << "CALLED THE EVIL SET VERTICES!!!\n";
+
+  m_guaLineStripNode->clear_vertices();
+
+  auto bla = event.getValue();
+
+
+  *bla;*/
+/*
+  for (auto line_strip_vertex : event.getValue()) {
+
+    if(!line_strip_vertex.isValid()) {
+      std::cout << "LINESTRIPVERTEX IS NULLPTR!!!!\n";
+    } else {
+      auto gua_ls_vertex = line_strip_vertex->getGuaLineStripVertex();
+    }
+                                            //getGuaLineStripVertex()
+    //m_guaLineStripNode->push_vertex(*gua_ls_vertex);
+
+    m_guaLineStripNode->push_vertex({1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
+    m_guaLineStripNode->push_vertex({-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
+  }
+*/
+  //m_guaLineStripNode->set_was_created_empty(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::LineStripNode>

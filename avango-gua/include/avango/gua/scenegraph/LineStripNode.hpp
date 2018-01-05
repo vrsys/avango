@@ -11,6 +11,7 @@
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
+#include <avango/gua/math/LineStripVertex.hpp>
 
 namespace av
 {
@@ -57,14 +58,16 @@ namespace av
 
     public:
 
-      SFString   Geometry;
-      SFMaterial Material;
-      SFBool     RenderToGBuffer;
-      SFBool     RenderToStencilBuffer;
-      SFBool     RenderVolumetric;
-      SFBool     RenderAsPoints;
-      SFFloat    ScreenSpaceLineWidth;
-      SFBool     WasCreatedEmpty;
+      SFString          Geometry;
+      SFMaterial        Material;
+      SFBool            RenderToGBuffer;
+      SFBool            RenderToStencilBuffer;
+      SFBool            RenderVolumetric;
+      SFBool            RenderAsPoints;
+      SFFloat           ScreenSpaceLineWidth;
+      SFBool            WasCreatedEmpty;
+
+      SFLineStripVertex Vertices;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -89,6 +92,10 @@ namespace av
 
       virtual void getWasCreatedEmptyCB(const SFBool::GetValueEvent& event);
       virtual void setWasCreatedEmptyCB(const SFBool::SetValueEvent& event);
+
+      virtual void getVerticesCB(const SFLineStripVertex::GetValueEvent& event);
+      virtual void setVerticesCB(const SFLineStripVertex::SetValueEvent& event);
+
       /**
        * Get the wrapped ::gua::LineStripNode.
        */
@@ -98,6 +105,10 @@ namespace av
 
       std::shared_ptr< ::gua::node::LineStripNode> m_guaLineStripNode;
       av::Link< av::gua::Material> m_Material;
+
+      av::Link< av::gua::LineStripVertex> m_Vertex;
+      //av::Link< av::gua::Material> m_Material;
+
 
       LineStripNode(const LineStripNode&);
       LineStripNode& operator=(const LineStripNode&);

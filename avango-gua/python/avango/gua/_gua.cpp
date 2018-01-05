@@ -42,6 +42,7 @@
 #include "math/BoundingBox.hpp"
 #include "math/Frustum.hpp"
 #include "math/BoundingSphere.hpp"
+#include "math/LineStripVertex.hpp"
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include "physics/RigidBodyNode.hpp"
@@ -194,6 +195,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_BoundingBox();
     init_Frustum();
     init_BoundingSphere();
+    init_LineStripVertex();
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
     init_RigidBodyNode();

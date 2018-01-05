@@ -72,7 +72,9 @@ def start():
 
     line_strip_geode.RenderVolumetric.value = True
     line_strip_geode.RenderAsPoints.value = False
-
+    #only has effect if 'RenderVolumetric' is set to 'False'
+    #   the effective range of this parameter is [1.0-10.0]
+    line_strip_geode.ScreenSpaceLineWidth.value = 1.0
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,

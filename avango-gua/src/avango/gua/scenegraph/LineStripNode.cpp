@@ -40,6 +40,10 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getRenderAsPointsCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setRenderAsPointsCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(ScreenSpaceLineWidth,
+                      std::bind(&LineStripNode::getScreenSpaceLineWidthCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setScreenSpaceLineWidthCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -182,6 +186,15 @@ void av::gua::LineStripNode::setRenderAsPointsCB(const SFBool::SetValueEvent& ev
   m_guaLineStripNode->set_render_vertices_as_points(event.getValue());
 }
 
+void av::gua::LineStripNode::getScreenSpaceLineWidthCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaLineStripNode->get_screen_space_line_width();
+}
+
+void av::gua::LineStripNode::setScreenSpaceLineWidthCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaLineStripNode->set_screen_space_line_width(event.getValue());
+}
 
 
 std::shared_ptr< ::gua::node::LineStripNode>

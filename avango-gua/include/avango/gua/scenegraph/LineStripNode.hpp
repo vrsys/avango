@@ -63,6 +63,7 @@ namespace av
       SFBool     RenderToStencilBuffer;
       SFBool     RenderVolumetric;
       SFBool     RenderAsPoints;
+      SFFloat    ScreenSpaceLineWidth;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -81,6 +82,9 @@ namespace av
 
       virtual void getRenderAsPointsCB(const SFBool::GetValueEvent& event);
       virtual void setRenderAsPointsCB(const SFBool::SetValueEvent& event);
+
+      virtual void getScreenSpaceLineWidthCB(const SFFloat::GetValueEvent& event);
+      virtual void setScreenSpaceLineWidthCB(const SFFloat::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::LineStripNode.

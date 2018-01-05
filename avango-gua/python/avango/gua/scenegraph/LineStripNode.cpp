@@ -72,10 +72,6 @@ void init_LineStripNode()
 
   register_field<av::gua::SFLineStripNode>("SFLineStripNode");
   register_multifield<av::gua::MFLineStripNode>("MFLineStripNode");
- /* class_<av::gua::LineStripNode, av::Link<av::gua::LineStripNode>,
-    bases<av::gua::GeometryNode>,
-    boost::noncopyable >("LineStripNode", "docstring", no_init);
-*/
 
   class_<av::gua::LineStripNode,
          av::Link<av::gua::LineStripNode>,

@@ -44,6 +44,10 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getScreenSpaceLineWidthCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setScreenSpaceLineWidthCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(WasCreatedEmpty,
+                      std::bind(&LineStripNode::getWasCreatedEmptyCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setWasCreatedEmptyCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -196,6 +200,15 @@ void av::gua::LineStripNode::setScreenSpaceLineWidthCB(const SFFloat::SetValueEv
   m_guaLineStripNode->set_screen_space_line_width(event.getValue());
 }
 
+void av::gua::LineStripNode::getWasCreatedEmptyCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaLineStripNode->get_was_created_empty();
+}
+
+void av::gua::LineStripNode::setWasCreatedEmptyCB(const SFBool::SetValueEvent& event)
+{
+  m_guaLineStripNode->set_was_created_empty(event.getValue());
+}
 
 std::shared_ptr< ::gua::node::LineStripNode>
 av::gua::LineStripNode::getGuaLineStripNode() const {

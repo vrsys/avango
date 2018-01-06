@@ -48,20 +48,18 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getWasCreatedEmptyCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setWasCreatedEmptyCB, this,std::placeholders::_1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Vertices,
-                      std::bind(&LineStripNode::getVerticesCB, this,std::placeholders::_1),
-                      std::bind(&LineStripNode::setVerticesCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(TriggerUpdate,
+                      std::bind(&LineStripNode::getTriggerUpdateCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setTriggerUpdateCB, this,std::placeholders::_1));
 
-
+  AV_FC_ADD_ADAPTOR_FIELD(PrivateLineStripData,
+                      std::bind(&LineStripNode::getPrivateLineStripDataCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setPrivateLineStripDataCB, this,std::placeholders::_1));
 
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
-
-
-  m_Vertex = av::Link<av::gua::LineStripVertex>(new av::gua::LineStripVertex());
-  
 
 }
 
@@ -101,7 +99,6 @@ void av::gua::LineStripNode::on_distribute(av::gua::NetTransform& netNode)
     }
 
     netNode.distributeFieldContainer(m_Material);
-    netNode.distributeFieldContainer(m_Vertex);
 }
 
 void av::gua::LineStripNode::on_undistribute(av::gua::NetTransform& netNode) 
@@ -113,7 +110,6 @@ void av::gua::LineStripNode::on_undistribute(av::gua::NetTransform& netNode)
     }
 
     netNode.undistributeFieldContainer(m_Material);
-    netNode.undistributeFieldContainer(m_Vertex);
 }
 #endif
 
@@ -225,54 +221,83 @@ void av::gua::LineStripNode::setWasCreatedEmptyCB(const SFBool::SetValueEvent& e
   m_guaLineStripNode->set_was_created_empty(event.getValue());
 }
 
-void av::gua::LineStripNode::getVerticesCB(const SFLineStripVertex::GetValueEvent& event)
+void av::gua::LineStripNode::getTriggerUpdateCB(const SFBool::GetValueEvent& event)
 {
-  if (m_Vertex.isValid()) {
-    *(event.getValuePtr()) = m_Vertex;
-  }
+  std::cout << "WOULD HAVE CALLED GET TRIGGER UPDATE\n";
+  *(event.getValuePtr()) = m_guaLineStripNode->get_trigger_update();
 }
 
-void av::gua::LineStripNode::setVerticesCB(const SFLineStripVertex::SetValueEvent& event)
+void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& event)
+{
+  std::cout << "CALLED CALLED SET TRIGGER UPDATE with value: " << event.getValue() << "\n";
+
+  role_server_client_unidentified = event.getValue() == 1 ? 0 : 1;
+  if(0 == role_server_client_unidentified) {
+    m_guaLineStripNode->set_trigger_update(!event.getValue());
+
+    std::string compiled_buffer_string;
+    
+    m_guaLineStripNode->compile_buffer_string(compiled_buffer_string);
+
+    std::cout << "COMILED BUFFER SIZE FINAL: " << compiled_buffer_string.size() << "\n";
+
+    privateLineStripData = compiled_buffer_string;// + std::string("+++");//std::string("MyTestData123456789");
+  }
+
+}
+
+void av::gua::LineStripNode::getPrivateLineStripDataCB(const SFString::GetValueEvent& event)
+{
+  //std::cout << "CALLED LSDATA GETTER " << privateLineStripData << "\n";
+
+  std::cout << "BEFORE WRITING IT ON THE SERVER SIZE, THE STRING STILL CONTAINS: " << privateLineStripData.size() << " BYTES\n";
+
+  *(event.getValuePtr()) = privateLineStripData;
+}
+
+void av::gua::LineStripNode::setPrivateLineStripDataCB(const SFString::SetValueEvent& event)
 {
 
-  
-  if (event.getValue().isValid()) {
-    m_Vertex = event.getValue();
+  if(1 == role_server_client_unidentified) {
+    std::string received = event.getValue(); 
+    //std::cout << "CALLED LSDATA SETTER WITH: " << received << "\n";
+    std::cout << "it contains: " << received.size() << " Bytes\n";
 
-    std::cout << "READY!!!!\n";
+    uint64_t num_vertices_written = 0;
 
-    //auto is_it = m_Vertex->getGuaLineStripVertex();
+    uint64_t read_offset = 0;
+    memcpy(&num_vertices_written, &received[0], sizeof(num_vertices_written) );
 
-    //m_guaLineStripNode->set_material(m_Material->getGuaMaterial());
-  } else {
-    std::cout << "NOT READY!!!!\n";
-  }
+    std::cout << "RECEIVED " << num_vertices_written << " VERTICES\n";
 
-/*
-  std::cout << "CALLED THE EVIL SET VERTICES!!!\n";
-
-  m_guaLineStripNode->clear_vertices();
-
-  auto bla = event.getValue();
+    //if()
+      std::vector<::gua::math::vec3f> positions(num_vertices_written);
+      std::vector<::gua::math::vec4f> colors(num_vertices_written);
+      std::vector<float> thicknesses(num_vertices_written);
 
 
-  *bla;*/
-/*
-  for (auto line_strip_vertex : event.getValue()) {
+      read_offset += sizeof(num_vertices_written);
+      memcpy(&positions[0], &received[read_offset], num_vertices_written*sizeof(::gua::math::vec3f));
+      read_offset +=  num_vertices_written*sizeof(::gua::math::vec3f);
+      memcpy(&colors[0], &received[read_offset], num_vertices_written*sizeof(::gua::math::vec4f));
+      read_offset +=  num_vertices_written*sizeof(::gua::math::vec4f);
+      memcpy(&thicknesses[0], &received[read_offset], num_vertices_written*sizeof(float));
 
-    if(!line_strip_vertex.isValid()) {
-      std::cout << "LINESTRIPVERTEX IS NULLPTR!!!!\n";
-    } else {
-      auto gua_ls_vertex = line_strip_vertex->getGuaLineStripVertex();
-    }
-                                            //getGuaLineStripVertex()
-    //m_guaLineStripNode->push_vertex(*gua_ls_vertex);
+      m_guaLineStripNode->clear_vertices();
 
-    m_guaLineStripNode->push_vertex({1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
-    m_guaLineStripNode->push_vertex({-1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
-  }
-*/
+
+      for(uint64_t vertex_idx = 0; vertex_idx < num_vertices_written; ++vertex_idx) {
+
+        auto const& current_pos = positions[vertex_idx];
+        auto const& current_col = colors[vertex_idx];
+        auto const& current_thick = thicknesses[vertex_idx];
+        //std::cout << "Pushing vertex: " << pos_entry[0] << " " << pos_entry[1] << " " << pos_entry[2] << "\n\n";
+        m_guaLineStripNode->push_vertex(current_pos[0], current_pos[1], current_pos[2], 
+                                        current_col[0], current_col[1], current_col[2], current_col[3], 
+                                        current_thick);
+      }
   //m_guaLineStripNode->set_was_created_empty(event.getValue());
+  }
 }
 
 std::shared_ptr< ::gua::node::LineStripNode>

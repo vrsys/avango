@@ -38,7 +38,6 @@
 #include <avango/gua/math/BoundingBox.hpp>
 #include <avango/gua/math/Frustum.hpp>
 #include <avango/gua/math/BoundingSphere.hpp>
-#include <avango/gua/math/LineStripVertex.hpp>
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
 #include <avango/gua/physics/RigidBodyNode.hpp>
@@ -162,8 +161,7 @@ av::gua::Init::initClass()
         av::gua::BoundingBox::initClass();
         av::gua::Frustum::initClass();
         av::gua::BoundingSphere::initClass();
-        av::gua::LineStripVertex::initClass();
-        
+
 #if defined(AVANGO_PHYSICS_SUPPORT)
         av::gua::RigidBodyNode::initClass();
         av::gua::CollisionShapeNode::initClass();

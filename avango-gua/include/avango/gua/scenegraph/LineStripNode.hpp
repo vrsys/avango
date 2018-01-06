@@ -11,7 +11,6 @@
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
-#include <avango/gua/math/LineStripVertex.hpp>
 
 namespace av
 {
@@ -67,7 +66,8 @@ namespace av
       SFFloat           ScreenSpaceLineWidth;
       SFBool            WasCreatedEmpty;
 
-      SFLineStripVertex Vertices;
+      SFBool            TriggerUpdate;
+      SFString          PrivateLineStripData;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -93,8 +93,11 @@ namespace av
       virtual void getWasCreatedEmptyCB(const SFBool::GetValueEvent& event);
       virtual void setWasCreatedEmptyCB(const SFBool::SetValueEvent& event);
 
-      virtual void getVerticesCB(const SFLineStripVertex::GetValueEvent& event);
-      virtual void setVerticesCB(const SFLineStripVertex::SetValueEvent& event);
+      virtual void getTriggerUpdateCB(const SFBool::GetValueEvent& event);
+      virtual void setTriggerUpdateCB(const SFBool::SetValueEvent& event);
+
+      virtual void getPrivateLineStripDataCB(const SFString::GetValueEvent& event);
+      virtual void setPrivateLineStripDataCB(const SFString::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::LineStripNode.
@@ -103,12 +106,12 @@ namespace av
 
     private:
 
+      std::string privateLineStripData = "";
+
+      //0 = server, 1 = client, 2 = unidentified
+      int32_t role_server_client_unidentified = 2;
       std::shared_ptr< ::gua::node::LineStripNode> m_guaLineStripNode;
       av::Link< av::gua::Material> m_Material;
-
-      av::Link< av::gua::LineStripVertex> m_Vertex;
-      //av::Link< av::gua::Material> m_Material;
-
 
       LineStripNode(const LineStripNode&);
       LineStripNode& operator=(const LineStripNode&);

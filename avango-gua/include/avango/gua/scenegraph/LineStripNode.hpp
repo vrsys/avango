@@ -44,6 +44,8 @@ namespace av
                       float col_r = 0.0f, float col_g = 0.0f, float col_b = 0.0f, float col_a = 1.0f,
                       float thickness = 1.0f) const;
 
+      //void submitVertices();
+
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
       virtual void on_distribute(av::gua::NetTransform& netNode);
       virtual void on_undistribute(av::gua::NetTransform& netNode);
@@ -67,7 +69,7 @@ namespace av
       SFBool            WasCreatedEmpty;
 
       SFBool            TriggerUpdate;
-      SFString          PrivateLineStripData;
+
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -96,15 +98,29 @@ namespace av
       virtual void getTriggerUpdateCB(const SFBool::GetValueEvent& event);
       virtual void setTriggerUpdateCB(const SFBool::SetValueEvent& event);
 
-      virtual void getPrivateLineStripDataCB(const SFString::GetValueEvent& event);
-      virtual void setPrivateLineStripDataCB(const SFString::SetValueEvent& event);
+
 
       /**
        * Get the wrapped ::gua::LineStripNode.
        */
       std::shared_ptr< ::gua::node::LineStripNode> getGuaLineStripNode() const;
 
+      /**
+       * Wrapper to trigger the setPrivateLineStripDataStringCB in a clean way 
+         from the application side
+       */
+      void submitVertices();
+
     private:
+      /* the "PrivateLineStripDataString" should not be set by a user! it is only used
+       * as mechanism to distribute the dynamical vertex data encoded as a string containing
+       * the original binary data
+       */
+
+      SFString          PrivateLineStripDataString;
+      virtual void getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event);
+      virtual void setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event);
+
 
       std::string privateLineStripData = "";
 

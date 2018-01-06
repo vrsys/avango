@@ -66,6 +66,10 @@ void pushVertex4(av::gua::LineStripNode const& node,
                           thickness);
 }
 
+void submitVertices(av::gua::LineStripNode& node) {
+  node.submitVertices();
+}
+
 void init_LineStripNode()
 {
   register_ptr_to_python<av::Link<av::gua::LineStripNode> >();
@@ -83,6 +87,7 @@ void init_LineStripNode()
          .def("push_vertex", &pushVertex2)
          .def("push_vertex", &pushVertex3)
          .def("push_vertex", &pushVertex4)
+         .def("submit_vertices", &submitVertices)
          ;
 
 }

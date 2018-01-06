@@ -52,9 +52,9 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getTriggerUpdateCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setTriggerUpdateCB, this,std::placeholders::_1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(PrivateLineStripData,
-                      std::bind(&LineStripNode::getPrivateLineStripDataCB, this,std::placeholders::_1),
-                      std::bind(&LineStripNode::setPrivateLineStripDataCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(PrivateLineStripDataString,
+                      std::bind(&LineStripNode::getPrivateLineStripDataStringCB, this,std::placeholders::_1),
+                      std::bind(&LineStripNode::setPrivateLineStripDataStringCB, this,std::placeholders::_1));
 
 
   if (guanode->get_material()) {
@@ -246,7 +246,7 @@ void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& eve
 
 }
 
-void av::gua::LineStripNode::getPrivateLineStripDataCB(const SFString::GetValueEvent& event)
+void av::gua::LineStripNode::getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event)
 {
   //std::cout << "CALLED LSDATA GETTER " << privateLineStripData << "\n";
 
@@ -255,7 +255,7 @@ void av::gua::LineStripNode::getPrivateLineStripDataCB(const SFString::GetValueE
   *(event.getValuePtr()) = privateLineStripData;
 }
 
-void av::gua::LineStripNode::setPrivateLineStripDataCB(const SFString::SetValueEvent& event)
+void av::gua::LineStripNode::setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event)
 {
 
   if(1 == role_server_client_unidentified) {
@@ -303,4 +303,9 @@ void av::gua::LineStripNode::setPrivateLineStripDataCB(const SFString::SetValueE
 std::shared_ptr< ::gua::node::LineStripNode>
 av::gua::LineStripNode::getGuaLineStripNode() const {
   return m_guaLineStripNode;
+}
+
+void 
+av::gua::LineStripNode::submitVertices() {
+  PrivateLineStripDataString.setValue("");
 }

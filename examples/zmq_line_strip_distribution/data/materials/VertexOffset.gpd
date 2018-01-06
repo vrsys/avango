@@ -1,0 +1,10 @@
+{
+  "name" : "VertexOffset",
+  "source" : "
+    void VertexOffset() {
+      gua_position += gua_normal * 0.1;
+    }
+  ",
+  "uniforms" :
+  []
+}

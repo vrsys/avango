@@ -42,12 +42,12 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          Groupname="AVSERVER|127.0.0.1|7432")
 
 
-class TimedRotate(avango.script.Script):
+class CreateSpiralPerFrameScript(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
 
     def __init__(self):
-        self.super(TimedRotate).__init__()
+        self.super(CreateSpiralPerFrameScript).__init__()
         self.FrameCount = 0
         self.StartCounting = False
         self.CountForward = True
@@ -67,7 +67,22 @@ class TimedRotate(avango.script.Script):
 
             if self.FrameCount >= 0:
                 
-                self.node_to_update.clear_vertices()
+
+                """ 
+                    LINE DATA DISTRIBUTION STEP 1
+                    =============================
+                Start a new vertex list for the node with
+                 .start_vertex_list()
+
+                method
+
+                This clears the data of the node on the 
+                server side and keeps the server and client
+                sides consistent
+                """
+                self.node_to_update.start_vertex_list()
+   
+                # create FrameCount vertices for the spiral
                 for i in range(self.FrameCount):
                     b = 0.1;
                     a = 6.28;
@@ -85,27 +100,58 @@ class TimedRotate(avango.script.Script):
                     col_b = random.uniform(0.0, 1.0)
                     thickness = 0.02
 
+                    """ 
+                    LINE DATA DISTRIBUTION STEP 2
+                    =============================
+                    Enqueue vertices to the vertex list with the
+                     .enqueue_vertex(float pos_x, float pos_y, float pos_z,
+                                     float col_r, float col_g, float col_b,
+                                     float thickness)
 
-                    self.node_to_update.push_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
-                    #self.node_to_update.push_vertex(-1, 0, 0, 1, 0, 0)
-                    #self.node_to_update.Vertices.value = test
-                    #test.value = 
+                    method
 
-                    #self.node_to_update.Vertices.value = ver1
+                        
+                    the thickness only plays a role for the line width in volumetric mode
+
+                    the field ScreenSpaceLineWidth plays a role for the line width in non-volumetric mode
+
+                    This clears the data of the node on the 
+                    server side and keeps the server and client
+                    sides consistent
+                    """
+                    self.node_to_update.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
+
+                    #attributes for rendering volumetric and linesize in non_volumetric node
                     self.node_to_update.RenderVolumetric.value = False if self.FrameCount % 60 < 30 else True
-                self.node_to_update.TriggerUpdate.value = True
-                self.node_to_update.submit_vertices()
+                    self.node_to_update.ScreenSpaceLineWidth.value = 2.0
+                
+                    """ 
+                    LINE DATA DISTRIBUTION STEP 3
+                    =============================
+                    End the vertex list for the node with
+                     .end_vertex_list()
 
+                    method
+
+                    This replaces all vertices for the server side node with
+                    the ones defined in the list and sends this state to the
+                    client afterwards
+                    server side and keeps the server and client
+                    sides consistent
+                    """
+                self.node_to_update.end_vertex_list()
+
+            #switch spiral movement
             if self.CountForward == True and self.FrameCount > 1300:
                 self.CountForward = False
-                #self.FrameCount = 1
+
             elif self.CountForward == False and self.FrameCount < 1:
                 self.CountForward = True
 
-    @field_has_changed(TimeIn)
-    def update(self):
-        self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 2.0,
-                                                       0.0, 1.0, 0.0)
+    #@field_has_changed(TimeIn)
+    #def update(self):
+    #    self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 2.0,
+    #                                                   0.0, 1.0, 0.0)
 
 
 
@@ -123,24 +169,18 @@ graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 line_loader = avango.gua.nodes.LineStripLoader()
 
-#monkey1 = loader.create_geometry_from_file(
-#    "monkey", "../simple_example/data/objects/monkey.obj")
-monkey2 = loader.create_geometry_from_file(
+monkey = loader.create_geometry_from_file(
     "monkey", "../simple_example/data/objects/monkey.obj")
 
-monkey2.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
+monkey.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
                                                             1.0))
-monkey2.Material.value.set_uniform("Roughness", 0.3)
-monkey2.Material.value.set_uniform("Metalness", 1.0)
+monkey.Material.value.set_uniform("Roughness", 0.3)
+monkey.Material.value.set_uniform("Metalness", 1.0)
 
 
+# empty nodes are used for adding geometry dynamically
 line_strip_geode = line_loader.create_empty_geometry("lines", "empty.lob")
 line_strip_geode.RenderVolumetric.value = False
-#line_strip_geode.push_vertex(1, 0, 0, 1, 0, 0)
-#line_strip_geode.push_vertex(-1, 0, 0, 1, 0, 0)
-
-
-
 
 
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
@@ -149,13 +189,9 @@ avango.gua.register_material_shader(mat_desc, "mat")
 
 mat = avango.gua.nodes.Material(ShaderName="mat")
 
-#monkey1.Material.value = mat
 nettrans.distribute_object(mat)
 
-#transform1 = avango.gua.nodes.TransformNode(Children=[monkey1])
-transform2 = avango.gua.nodes.TransformNode(
-    Transform=avango.gua.make_trans_mat(-0.5, 0.0, 0),
-    Children=[monkey2])
+
 
 light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
                                    Name="light",
@@ -164,16 +200,12 @@ light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
                                    Transform=avango.gua.make_trans_mat(1, 1, 5)
                                    * avango.gua.make_scale_mat(30, 30, 30))
 
-#monkey_transform1 = avango.gua.nodes.TransformNode(Name="monkey_transform1")
-#monkey_transform1.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
-#monkey_transform1.Children.value = [monkey1]
-
-monkey_transform2 = avango.gua.nodes.TransformNode(Name="monkey_transform2")
-monkey_transform2.Transform.value = avango.gua.make_trans_mat(-0.05, 0.0, -0.5)
-monkey_transform2.Children.value = [monkey2]
+monkey_transform = avango.gua.nodes.TransformNode(Name="monkey_transform")
+monkey_transform.Transform.value = avango.gua.make_trans_mat(-0.00, 0.0, -0.5) * avango.gua.make_scale_mat(0.7)
+monkey_transform.Children.value = [monkey]
 
 group = avango.gua.nodes.TransformNode(Name="group")
-group.Children.value = [line_strip_geode, monkey_transform2, light]
+group.Children.value = [line_strip_geode, monkey_transform, light]
 
 screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
 
@@ -240,16 +272,11 @@ viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 
-monkey_updater = TimedRotate()
+spiral_creator = CreateSpiralPerFrameScript()
 
-monkey_updater.set_line_strip_node(line_strip_geode)
+#add linestrip to the spiral creator to create new vertices every frame
+spiral_creator.set_line_strip_node(line_strip_geode)
 
-timer = avango.nodes.TimeSensor()
-monkey_updater.TimeIn.connect_from(timer.Time)
-
-#monkey1.Transform.connect_from(monkey_updater.MatrixOut)
-line_strip_geode.Transform.connect_from(monkey_updater.MatrixOut)
-monkey2.Transform.connect_from(monkey_updater.MatrixOut)
 
 guaVE = GuaVE()
 guaVE.start(locals(), globals())

@@ -36,11 +36,15 @@ namespace av
       
       void clearVertices() const;
 
+      void enqueueVertex(float pos_x, float pos_y, float pos_z,
+                         float col_r = 0.0f, float col_g = 0.0f, float col_b = 0.0f, float col_a = 1.0f,
+                         float thickness = 1.0f) const;
+
       void popBackVertex() const;
 
       void popFrontVertex() const;
 
-      void pushVertex(float x, float y, float z,
+      void pushVertex(float pos_x, float pos_y, float pos_z,
                       float col_r = 0.0f, float col_g = 0.0f, float col_b = 0.0f, float col_a = 1.0f,
                       float thickness = 1.0f) const;
 
@@ -106,10 +110,15 @@ namespace av
       std::shared_ptr< ::gua::node::LineStripNode> getGuaLineStripNode() const;
 
       /**
+       * Wrapper to clear the vertices of the server side node in a clean way
+         from the application side
+       */
+      void startVertexList();
+      /**
        * Wrapper to trigger the setPrivateLineStripDataStringCB in a clean way 
          from the application side
        */
-      void submitVertices();
+      void endVertexList();
 
     private:
       /* the "PrivateLineStripDataString" should not be set by a user! it is only used
@@ -120,7 +129,6 @@ namespace av
       SFString          PrivateLineStripDataString;
       virtual void getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event);
       virtual void setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event);
-
 
       std::string privateLineStripData = "";
 

@@ -68,6 +68,14 @@ void av::gua::LineStripNode::clearVertices() const
   m_guaLineStripNode->clear_vertices();
 }
 
+void av::gua::LineStripNode::enqueueVertex(float pos_x, float pos_y, float pos_z,
+                                           float col_r, float col_g, float col_b, float col_a,
+                                           float thickness) const {
+  m_guaLineStripNode->enqueue_vertex(pos_x, pos_y, pos_z,
+                                     col_r, col_g, col_b, col_a,
+                                     thickness);
+}
+
 void av::gua::LineStripNode::popBackVertex() const
 {
   m_guaLineStripNode->pop_back_vertex();
@@ -78,11 +86,11 @@ void av::gua::LineStripNode::popFrontVertex() const
   m_guaLineStripNode->pop_front_vertex();
 }
 
-void av::gua::LineStripNode::pushVertex(float x_pos, float y_pos, float z_pos,
+void av::gua::LineStripNode::pushVertex(float pos_x, float pos_y, float pos_z,
                                         float col_r, float col_g, float col_b, float col_a,
                                         float thickness) const
 {
-  m_guaLineStripNode->push_vertex(x_pos, y_pos, z_pos,
+  m_guaLineStripNode->push_vertex(pos_x, pos_y, pos_z,
                                   col_r, col_g, col_b, col_a,
                                   thickness);
 }
@@ -223,14 +231,11 @@ void av::gua::LineStripNode::setWasCreatedEmptyCB(const SFBool::SetValueEvent& e
 
 void av::gua::LineStripNode::getTriggerUpdateCB(const SFBool::GetValueEvent& event)
 {
-  std::cout << "WOULD HAVE CALLED GET TRIGGER UPDATE\n";
   *(event.getValuePtr()) = m_guaLineStripNode->get_trigger_update();
 }
 
 void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& event)
 {
-  std::cout << "CALLED CALLED SET TRIGGER UPDATE with value: " << event.getValue() << "\n";
-
   role_server_client_unidentified = event.getValue() == 1 ? 0 : 1;
   if(0 == role_server_client_unidentified) {
     m_guaLineStripNode->set_trigger_update(!event.getValue());
@@ -239,64 +244,24 @@ void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& eve
     
     m_guaLineStripNode->compile_buffer_string(compiled_buffer_string);
 
-    std::cout << "COMILED BUFFER SIZE FINAL: " << compiled_buffer_string.size() << "\n";
-
-    privateLineStripData = compiled_buffer_string;// + std::string("+++");//std::string("MyTestData123456789");
+    privateLineStripData = compiled_buffer_string;
   }
 
 }
 
 void av::gua::LineStripNode::getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event)
 {
-  //std::cout << "CALLED LSDATA GETTER " << privateLineStripData << "\n";
-
-  std::cout << "BEFORE WRITING IT ON THE SERVER SIZE, THE STRING STILL CONTAINS: " << privateLineStripData.size() << " BYTES\n";
-
   *(event.getValuePtr()) = privateLineStripData;
 }
 
+
 void av::gua::LineStripNode::setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event)
 {
-
   if(1 == role_server_client_unidentified) {
-    std::string received = event.getValue(); 
-    //std::cout << "CALLED LSDATA SETTER WITH: " << received << "\n";
-    std::cout << "it contains: " << received.size() << " Bytes\n";
+    std::string compiled_buffer_string = event.getValue(); 
 
-    uint64_t num_vertices_written = 0;
-
-    uint64_t read_offset = 0;
-    memcpy(&num_vertices_written, &received[0], sizeof(num_vertices_written) );
-
-    std::cout << "RECEIVED " << num_vertices_written << " VERTICES\n";
-
-    //if()
-      std::vector<::gua::math::vec3f> positions(num_vertices_written);
-      std::vector<::gua::math::vec4f> colors(num_vertices_written);
-      std::vector<float> thicknesses(num_vertices_written);
-
-
-      read_offset += sizeof(num_vertices_written);
-      memcpy(&positions[0], &received[read_offset], num_vertices_written*sizeof(::gua::math::vec3f));
-      read_offset +=  num_vertices_written*sizeof(::gua::math::vec3f);
-      memcpy(&colors[0], &received[read_offset], num_vertices_written*sizeof(::gua::math::vec4f));
-      read_offset +=  num_vertices_written*sizeof(::gua::math::vec4f);
-      memcpy(&thicknesses[0], &received[read_offset], num_vertices_written*sizeof(float));
-
-      m_guaLineStripNode->clear_vertices();
-
-
-      for(uint64_t vertex_idx = 0; vertex_idx < num_vertices_written; ++vertex_idx) {
-
-        auto const& current_pos = positions[vertex_idx];
-        auto const& current_col = colors[vertex_idx];
-        auto const& current_thick = thicknesses[vertex_idx];
-        //std::cout << "Pushing vertex: " << pos_entry[0] << " " << pos_entry[1] << " " << pos_entry[2] << "\n\n";
-        m_guaLineStripNode->push_vertex(current_pos[0], current_pos[1], current_pos[2], 
-                                        current_col[0], current_col[1], current_col[2], current_col[3], 
-                                        current_thick);
-      }
-  //m_guaLineStripNode->set_was_created_empty(event.getValue());
+    //m_guaLineStripNode->clear_vertices();
+    m_guaLineStripNode->uncompile_buffer_string(compiled_buffer_string);
   }
 }
 
@@ -306,6 +271,14 @@ av::gua::LineStripNode::getGuaLineStripNode() const {
 }
 
 void 
-av::gua::LineStripNode::submitVertices() {
+av::gua::LineStripNode::startVertexList() {
+  m_guaLineStripNode->clear_vertices();
+}
+
+void 
+av::gua::LineStripNode::endVertexList() {
+  m_guaLineStripNode->forward_queued_vertices();
+  TriggerUpdate.setValue(true);
   PrivateLineStripDataString.setValue("");
+
 }

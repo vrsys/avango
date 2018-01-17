@@ -21,8 +21,8 @@ namespace boost
 
 void init_SPointsPassDescription()
 {
-  register_field<av::gua::SFSPointsPassDescription>("SFSPoints3DPassDescription");
-  register_multifield<av::gua::MFSPointsPassDescription>("MFSPoints3DPassDescription");
+  register_field<av::gua::SFSPointsPassDescription>("SFSPointsPassDescription");
+  register_multifield<av::gua::MFSPointsPassDescription>("MFSPointsPassDescription");
   class_<av::gua::SPointsPassDescription,
          av::Link<av::gua::SPointsPassDescription>,
          bases<av::gua::PipelinePassDescription>, boost::noncopyable >("SPointsPassDescription", "docstring", no_init)

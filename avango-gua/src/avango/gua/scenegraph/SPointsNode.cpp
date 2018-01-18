@@ -28,6 +28,10 @@ av::gua::SPointsNode::SPointsNode(std::shared_ptr< ::gua::node::SPointsNode> gua
                       std::bind(&SPointsNode::getRenderToStencilBufferCB, this,std::placeholders::_1),
                       std::bind(&SPointsNode::setRenderToStencilBufferCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(ScreenSpacePointSize,
+                      std::bind(&SPointsNode::getScreenSpacePointSizeCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setScreenSpacePointSizeCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -122,6 +126,18 @@ void
 av::gua::SPointsNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& event)
 {
 //  m_guaSPointsNode->set_render_to_stencil_buffer(event.getValue());
+}
+
+void 
+av::gua::SPointsNode::getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_screen_space_point_size();
+}
+
+void 
+av::gua::SPointsNode::setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_screen_space_point_size(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::SPointsNode>

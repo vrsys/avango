@@ -52,6 +52,7 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
+      SFFloat     ScreenSpacePointSize;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -64,6 +65,9 @@ namespace av
 
       virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
       virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event);
+      virtual void setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::SPointsNode.

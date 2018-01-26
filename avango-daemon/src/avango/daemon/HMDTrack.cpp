@@ -82,13 +82,8 @@ av::daemon::HMDTrack::readLoop()
   zmq::context_t ctx(1); // means single threaded
   zmq::socket_t  socket(ctx, ZMQ_SUB); // means a subscriber
   socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-#if ZMQ_VERSION_MAJOR < 3
-  uint64_t hwm = 1;
-  socket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
-#else
-  uint32_t hwm = 1;
-  socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
-#endif
+  uint32_t conflate_messages = 1;
+  socket.setsockopt(ZMQ_CONFLATE, &conflate_messages, sizeof(conflate_messages));
   std::string endpoint("tcp://" + address);
   socket.connect(endpoint.c_str());
 

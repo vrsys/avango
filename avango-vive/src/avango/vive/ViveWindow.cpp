@@ -94,7 +94,7 @@ av::vive::ViveWindow::evaluate()
   Controller0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_0));
   Controller1SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_1));
   TrackingReference0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0));
-  TrackingReference0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1));
+  TrackingReference1SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1));
 
   //forward the current binary controller states
   Controller0TriggerButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 

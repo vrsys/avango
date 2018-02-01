@@ -9,7 +9,7 @@ AVANGO=/opt/avango/master
 
 export LD_LIBRARY_PATH=$GUACAMOLE/lib:$AVANGO/lib:/opt/boost/boost_1_55_0/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/pbr/inst_cb/lib:/opt/schism/current/lib/linux_x86
 
-export PYTHONPATH=$AVANGO/lib/python3.4:$AVANGO/examples
+export PYTHONPATH=$AVANGO/lib/python3.5:$AVANGO/examples
 
 # run program
 if [[ $* == *-d* ]]

@@ -42,7 +42,11 @@ namespace av
          virtual ~ViveWindow();
 
        public:
-        ::av::gua::SFMatrix                 SensorOrientation;
+        ::av::gua::SFMatrix                 HMDSensorOrientation;
+        ::av::gua::SFMatrix                 Controller0SensorOrientation;
+        ::av::gua::SFMatrix                 Controller1SensorOrientation;
+        ::av::gua::SFMatrix                 TrackingReference0SensorOrientation;
+        ::av::gua::SFMatrix                 TrackingReference1SensorOrientation;
         ::av::gua::SFVec2ui                 Resolution;
         ::av::gua::SFVec2ui                 EyeResolution;
         ::av::gua::SFVec2                   LeftScreenSize;

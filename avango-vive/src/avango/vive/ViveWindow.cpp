@@ -23,7 +23,11 @@ av::vive::ViveWindow::ViveWindow(
     m_guaViveWindow(guaViveWindow)
 {
   // store hmd params in according fields
-  AV_FC_ADD_FIELD(SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(HMDSensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Controller0SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Controller1SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(TrackingReference0SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(TrackingReference1SensorOrientation, ::gua::math::mat4());
   AV_FC_ADD_FIELD(Resolution,m_guaViveWindow->get_window_resolution());
   AV_FC_ADD_FIELD(EyeResolution,m_guaViveWindow->get_window_resolution());
   AV_FC_ADD_FIELD(LeftScreenSize, m_guaViveWindow->get_left_screen_size());
@@ -62,5 +66,11 @@ av::vive::ViveWindow::getGuaViveWindow() const {
 void
 av::vive::ViveWindow::evaluate()
 {
-  SensorOrientation.setValue(m_guaViveWindow->get_hmd_sensor_orientation());
+  m_guaViveWindow->update_sensor_orientations();
+
+  HMDSensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::HMD));
+  Controller0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_0));
+  Controller1SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_1));
+  TrackingReference0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0));
+  TrackingReference0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1));
 }

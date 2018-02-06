@@ -34,9 +34,9 @@
  */
 
 /**
- * Foreward declaration of the DTrack class declarated in dtrack.h
+ * Foreward declaration of the DTrackSDK class
  */
-class DTrack;
+class DTrackSDK;
 
 namespace av
 {
@@ -87,10 +87,9 @@ namespace av
 
     private:
 
-      ::boost::shared_ptr< ::DTrack> mDTrack;
+      ::std::shared_ptr< ::DTrackSDK> mDTrackSDK;
       ::std::vector< ::std::string> mRequiredFeatures;
       size_t  mPort;
-      size_t  mTimeout;
 
       bool parseFeatures();
       unsigned long int convert_charpointer_to_ulong(const char* arg) const;

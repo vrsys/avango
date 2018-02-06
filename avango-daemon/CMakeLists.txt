@@ -29,7 +29,7 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     src/avango/daemon/Station.cpp
     src/avango/daemon/StationBlock.cpp
     src/avango/daemon/StationSegment.cpp
-    src/avango/daemon/dtrack/dtrack.cpp
+    src/avango/daemon/DTrackSDK/*.cpp
     src/avango/daemon/tuio/TUIO/TuioClient.cpp
     src/avango/daemon/tuio/TUIO/TuioContainer.h
     src/avango/daemon/tuio/TUIO/TuioCursor.h
@@ -72,7 +72,7 @@ file(GLOB AVANGO_DAEMON_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     include/avango/daemon/WiimoteActuator.h
     include/avango/daemon/TUIOInput.h
     include/avango/daemon/windows_specific_daemon.h
-    src/avango/daemon/dtrack/dtrack.h
+    src/avango/daemon/DTrackSDK/*.hpp
 )
 
 if (UNIX)

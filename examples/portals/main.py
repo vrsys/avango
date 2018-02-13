@@ -76,16 +76,6 @@ def start():
   )
   camera.PipelineDescription.value = pipeline_description
 
-  geometry = loader.create_geometry_from_file(
-    "geometry",
-    "/opt/3d_models/architecture/weimar_geometry/weimar_stadtmodell_latest_version/weimar_stadtmodell_final.obj",
-    avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY
-  )
-  geometry.Material.value.set_uniform("Roughness", 0.6)
-  geometry.Material.value.set_uniform("Metalness", 0.0)
-  geometry.Transform.value = avango.gua.make_trans_mat(0, -0.99, 0) * avango.gua.make_scale_mat(0.1)
-  main_scene.Root.value.Children.value.append(geometry)
-
   sun_light = avango.gua.nodes.LightNode(
     Name = "sun_light",
     Type = avango.gua.LightType.SUN,

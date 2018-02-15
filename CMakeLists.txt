@@ -57,22 +57,17 @@ endif (UNIX)
 
 if (UNIX)
   set (BOOST_ROOT "/opt/boost/current" CACHE PATH "Set to your boost install")
+  find_package(Boost COMPONENTS python python-py35 thread signals system REQUIRED)
+  set(Boost_PYTHON3_LIBRARY_RELEASE ${Boost_PYTHON-PY35_LIBRARY_RELEASE} CACHE FILEPATH "")
+  set(Boost_PYTHON3_LIBRARY_DEBUG ${Boost_PYTHON-PY35_LIBRARY_DEBUG} CACHE FILEPATH "")
 elseif (MSVC)
   set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
   message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}")
   set (Boost_USE_MULTITHREADED ON)
   #set (Boost_USE_STATIC_LIBS ON)
   ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
-  find_package(Boost COMPONENTS python python3 REQUIRED)
+  find_package(Boost COMPONENTS python python35 thread signals system REQUIRED)
 endif(UNIX)
-
-find_package(Boost COMPONENTS
-  python3
-  thread
-  signals
-  system
-  REQUIRED
-)
 
 set (BULLET_ROOT
      /opt/bullet/default
@@ -80,6 +75,33 @@ set (BULLET_ROOT
      CACHE PATH
     "Set to your bullet install path.")
 find_package(Bullet)
+
+ if (UNIX)
+                if (BULLET_COLLISION_LIBRARY)
+                  unset(BULLET_COLLISION_LIBRARY_DEBUG CACHE)
+                  set(BULLET_COLLISION_LIBRARY_DEBUG ${BULLET_COLLISION_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_COLLISION_LIBRARY)
+
+                if (BULLET_HACD_LIBRARY)
+                  unset(BULLET_HACD_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_HACD_LIBRARY_DEBUG ${BULLET_HACD_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_HACD_LIBRARY)
+
+                if (BULLET_DYNAMICS_LIBRARY)
+                  unset(BULLET_DYNAMICS_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_DYNAMICS_LIBRARY_DEBUG ${BULLET_DYNAMICS_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_DYNAMICS_LIBRARY)
+
+                if (BULLET_MATH_LIBRARY)
+                  unset(BULLET_MATH_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_MATH_LIBRARY_DEBUG ${BULLET_MATH_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_MATH_LIBRARY)
+
+                if (BULLET_SOFTBODY_LIBRARY)
+                  unset(BULLET_SOFTBODY_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_SOFTBODY_LIBRARY_DEBUG ${BULLET_SOFTBODY_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_SOFTBODY_LIBRARY)
+        endif(UNIX)
 
 include(FindSchism)
 
@@ -128,6 +150,7 @@ option (AVANGO_DEBUG "Set to enable avango debugging.")
 option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support." ON)
 option (AVANGO_PBR_SUPPORT "Set to enable point based rendering support.")
 option (AVANGO_LOD_SUPPORT "Set to enable level of detail support.")
+option (AVANGO_NURBS_SUPPORT "Set to enable direct NURBS rendering." OFF)
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
@@ -195,6 +218,10 @@ endif(AVANGO_TV_3_SUPPORT)
 if (AVANGO_VOLUME_SUPPORT)
     add_subdirectory(avango-volume)
 endif(AVANGO_VOLUME_SUPPORT)
+
+if (AVANGO_NURBS_SUPPORT)
+  add_subdirectory(avango-nurbs)
+endif (AVANGO_NURBS_SUPPORT)
 
 ################################################################
 # Summary

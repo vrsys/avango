@@ -2,6 +2,7 @@
 # search paths
 ##############################################################################
 SET(ZMQ_INCLUDE_SEARCH_DIRS
+  /usr/include
   ${GLOBAL_EXT_DIR}/zmq/include
   ${ZMQ_INCLUDE_DIRS}
   ${ZMQ_INCLUDE_SEARCH_DIR}

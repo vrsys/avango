@@ -21,8 +21,8 @@
 #                                                                        #
 ##########################################################################
 
-from ._tv_3 import *
+from ._nurbs import *
 
 import avango.nodefactory
 # nodes = avango.nodefactory.NodeFactory(module=__name__)
-nodes = avango.nodefactory.NodeFactory('av::gua::tv_3::')
+nodes = avango.nodefactory.NodeFactory('av::gua::nurbs::')

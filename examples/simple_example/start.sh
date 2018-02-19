@@ -4,12 +4,12 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # assuming a local guacmole version is located properly
-LOCAL_GUACAMOLE="$DIR/../../../guacamole"
-LOCAL_AVANGO="$DIR/../../../avango"
+LOCAL_GUACAMOLE="$DIR/../../../guacamole-github-scholli"
+LOCAL_AVANGO="$DIR/../../../avango-github-vrsys"
 
 # if not, this path will be used
-GUACAMOLE=/opt/guacamole/master
-AVANGO=/opt/avango/master
+GUACAMOLE=/
+AVANGO=/
 
 # third party libs
 export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/lamure/install/lib
@@ -29,7 +29,7 @@ if [[ $* == *-d* ]]
 then
 cd "$DIR" && gdb --args python3 ./main.py
 else
-cd "$DIR" && python3 ./main.py
+cd "$DIR" && python3.5 ./main.py
 fi
 
 # kill daemon

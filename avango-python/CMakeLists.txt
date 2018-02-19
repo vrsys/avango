@@ -52,8 +52,8 @@ target_include_directories(avango_script SYSTEM BEFORE PUBLIC
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-#SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
-SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY")
+SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
+#SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY")
 
 set_target_properties(avango_script PROPERTIES COMPILE_FLAGS ${AVANGO_SCRIPT_BUILD_FLAGS})
 set_target_properties(avango_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
@@ -65,11 +65,13 @@ set_target_properties(_script PROPERTIES COMPILE_FLAGS ${AVANGO_SCRIPT_BUILD_FLA
 set_target_properties(_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
 
 TARGET_LINK_LIBRARIES( avango_script
-                       general ${PYTHON_LIBRARY}
-                       optimized ${Boost_PYTHON_LIBRARY_RELEASE} debug ${Boost_PYTHON_LIBRARY_DEBUG}
                        optimized ${Boost_PYTHON3_LIBRARY_RELEASE} debug ${Boost_PYTHON3_LIBRARY_DEBUG}
                        avango
 )
+
+IF (MSVC)
+  TARGET_LINK_LIBRARIES( avango_script general ${PYTHON_LIBRARY})
+ENDIF (MSVC)
 
 TARGET_LINK_LIBRARIES(_avango avango_script)
 SET_TARGET_PROPERTIES( _avango PROPERTIES PREFIX "")

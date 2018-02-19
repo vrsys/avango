@@ -45,7 +45,7 @@ namespace boost
    }
  }
 
-BOOST_PYTHON_MODULE(_tv_3)
+BOOST_PYTHON_MODULE(_nurbs)
 {
 
   av::gua::nurbs::NURBSLoader::initClass();

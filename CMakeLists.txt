@@ -57,7 +57,7 @@ endif (UNIX)
 
 if (UNIX)
   set (BOOST_ROOT "/opt/boost/current" CACHE PATH "Set to your boost install")
-  find_package(Boost COMPONENTS python python-py35 thread signals system REQUIRED)
+  find_package(Boost COMPONENTS python-py35 thread signals system REQUIRED)
   set(Boost_PYTHON3_LIBRARY_RELEASE ${Boost_PYTHON-PY35_LIBRARY_RELEASE} CACHE FILEPATH "")
   set(Boost_PYTHON3_LIBRARY_DEBUG ${Boost_PYTHON-PY35_LIBRARY_DEBUG} CACHE FILEPATH "")
 elseif (MSVC)
@@ -66,7 +66,7 @@ elseif (MSVC)
   set (Boost_USE_MULTITHREADED ON)
   #set (Boost_USE_STATIC_LIBS ON)
   ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
-  find_package(Boost COMPONENTS python python3 thread signals system REQUIRED)
+  find_package(Boost COMPONENTS python3 thread signals system REQUIRED)
 endif(UNIX)
 
 set (BULLET_ROOT

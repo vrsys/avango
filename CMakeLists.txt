@@ -66,7 +66,7 @@ elseif (MSVC)
   set (Boost_USE_MULTITHREADED ON)
   #set (Boost_USE_STATIC_LIBS ON)
   ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
-  find_package(Boost COMPONENTS python python35 thread signals system REQUIRED)
+  find_package(Boost COMPONENTS python python3 thread signals system REQUIRED)
 endif(UNIX)
 
 set (BULLET_ROOT

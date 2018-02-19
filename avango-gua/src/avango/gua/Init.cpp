@@ -25,7 +25,12 @@
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
 #endif
+
+#if defined(AVANGO_NURBS_SUPPORT)
 #include <avango/gua/scenegraph/NURBSNode.hpp>
+#include <avango/gua/renderer/NURBSLoader.hpp>
+#endif
+
 #include <avango/gua/scenegraph/ScreenNode.hpp>
 #include <avango/gua/scenegraph/LightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
@@ -71,7 +76,7 @@
 #include <avango/gua/renderer/TV_3SurfacePassDescription.hpp>
 #include <avango/gua/renderer/TV_3VolumePassDescription.hpp>
 #endif
-#include <avango/gua/renderer/NURBSLoader.hpp>
+
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/HeadlessSurface.hpp>

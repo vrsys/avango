@@ -1,12 +1,12 @@
-#ifndef AVANGO_GUA_TV_3_SURFACE_PASS_DESCRIPTION_HPP
-#define AVANGO_GUA_TV_3_SURFACE_PASS_DESCRIPTION_HPP
+#ifndef AVANGO_GUA_NURBS_SURFACE_PASS_DESCRIPTION_HPP
+#define AVANGO_GUA_NURBS_SURFACE_PASS_DESCRIPTION_HPP
 
 /**
  * \file
  * \ingroup av_gua
  */
-
-#include <gua/renderer/TV_3SurfacePass.hpp>
+#include <avango/gua/nurbs/Init.hpp>
+#include <gua/renderer/NURBSPass.hpp>
 
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 
@@ -17,54 +17,54 @@ namespace av
 {
   namespace gua
   {
-    namespace tv_3 
+    namespace nurbs 
     {
       /**
-       * Wrapper for ::gua::TV_3SurfacePassDescription
+       * Wrapper for ::gua::NURBSPassDescription
        *
        * \ingroup av_gua
        */
-      class AV_GUA_DLL TV_3SurfacePassDescription : public av::gua::PipelinePassDescription
+      class AV_NURBS_DLL NURBSPassDescription : public av::gua::PipelinePassDescription
       {
         AV_FC_DECLARE();
 
       public:
 
         /**
-         * Constructor. When called without arguments, a new ::gua::TV_3SurfacePassDescription is created.
-         * Otherwise, the given ::gua::TV_3SurfacePassDescription is used.
+         * Constructor. When called without arguments, a new ::gua::NURBSPassDescription is created.
+         * Otherwise, the given ::gua::NURBSPassDescription is used.
          */
-        TV_3SurfacePassDescription(std::shared_ptr< ::gua::TV_3SurfacePassDescription> const& TV_3SurfacePassDescription =
-                                   std::shared_ptr< ::gua::TV_3SurfacePassDescription>(new ::gua::TV_3SurfacePassDescription()) );
+        NURBSPassDescription(std::shared_ptr< ::gua::NURBSPassDescription> const& NURBSPassDescription =
+                             std::shared_ptr< ::gua::NURBSPassDescription>(new ::gua::NURBSPassDescription()) );
 
 
 
       public:
 
         /**
-         * Get the wrapped ::gua::TV_3SurfacePassDescription.
+         * Get the wrapped ::gua::NURBSPassDescription.
          */
-        std::shared_ptr< ::gua::TV_3SurfacePassDescription> const& getGuaTV_3SurfacePassDescription() const;
+        std::shared_ptr< ::gua::NURBSPassDescription> const& getGuaNURBSPassDescription() const;
 
       private:
 
-        std::shared_ptr< ::gua::TV_3SurfacePassDescription> m_guaTV_3SurfacePassDescription;
+        std::shared_ptr< ::gua::NURBSPassDescription> m_guaNURBSPassDescription;
 
 
-        TV_3SurfacePassDescription(const TV_3SurfacePassDescription&);
-        TV_3SurfacePassDescription& operator=(const TV_3SurfacePassDescription&);
+        NURBSPassDescription(const NURBSPassDescription&);
+        NURBSPassDescription& operator=(const NURBSPassDescription&);
       };
 
-      using SFTV_3SurfacePassDescription = SingleField<Link<TV_3SurfacePassDescription> >;
-      using MFTV_3SurfacePassDescription = MultiField<Link<TV_3SurfacePassDescription> >;
+      using SFNURBSPassDescription = SingleField<Link<NURBSPassDescription> >;
+      using MFNURBSPassDescription = MultiField<Link<NURBSPassDescription> >;
     }
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TV_3SurfacePassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TV_3SurfacePassDescription> >;
+  template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSPassDescription> >;
+  template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSPassDescription> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_TV_3_SURFACE_PASS_DESCRIPTION_HPP
+#endif //AVANGO_GUA_NURBS_SURFACE_PASS_DESCRIPTION_HPP

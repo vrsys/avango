@@ -1,5 +1,5 @@
-#include <avango/gua/tv_3/renderer/TV_3Loader.hpp>
-#include <avango/gua/tv_3/scenegraph/TV_3Node.hpp>
+#include <avango/gua/nurbs/renderer/NURBSLoader.hpp>
+#include <avango/gua/nurbs/scenegraph/NURBSNode.hpp>
 #include <avango/gua/scenegraph/TransformNode.hpp>
 #include <avango/Base.h>
 #include <functional>
@@ -7,78 +7,37 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::tv_3::TV_3Loader"));
+  av::Logger& logger(av::getLogger("av::gua::nurbs::NURBSLoader"));
 }
 
-AV_FC_DEFINE(av::gua::tv_3::TV_3Loader);
+AV_FC_DEFINE(av::gua::nurbs::NURBSLoader);
 
-AV_FIELD_DEFINE(av::gua::tv_3::SFTV_3Loader);
-AV_FIELD_DEFINE(av::gua::tv_3::MFTV_3Loader);
+AV_FIELD_DEFINE(av::gua::nurbs::SFNURBSLoader);
+AV_FIELD_DEFINE(av::gua::nurbs::MFNURBSLoader);
 
-av::gua::tv_3::TV_3Loader::TV_3Loader(::gua::TV_3Loader* guaTV_3Loader)
-    : m_guaTV_3Loader(guaTV_3Loader)
-{
-  /*
-  AV_FC_ADD_ADAPTOR_FIELD(UploadBudget,
-                      std::bind(&PLODLoader::getUploadBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setUploadBudgetCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(RenderBudget,
-                      std::bind(&PLODLoader::getRenderBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setRenderBudgetCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(OutOfCoreBudget,
-                      std::bind(&PLODLoader::getOutOfCoreBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setOutOfCoreBudgetCB, this,std::placeholders::_1));
-  */
-}
-
-//av::gua::tv_3::PLODLoader::~PLODLoader()
-//{}
+av::gua::nurbs::NURBSLoader::NURBSLoader(::gua::NURBSLoader* guaNURBSLoader)
+    : m_guaNURBSLoader(guaNURBSLoader)
+{}
 
 av::Link<av::gua::Node>
-av::gua::tv_3::TV_3Loader::load( std::string const& nodeName,
-                           std::string const& fileName,
-                           Flags flags,
-                           int const cpu_budget,
-                           int const gpu_budget) const
-{
-
-    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(
-                                          nodeName, fileName,
-                                          flags, cpu_budget, gpu_budget));
-    auto root(createChildren(gua_node));
-
-    return av::Link<av::gua::Node>(root);
-}
-
-av::Link<av::gua::Node>
-av::gua::tv_3::TV_3Loader::load( std::string const& nodeName,
+av::gua::nurbs::NURBSLoader::load( std::string const& nodeName,
                            std::string const& fileName,
                            av::gua::Material const& fallbackMaterial,
-                           Flags flags,
-                           int const cpu_budget,
-                           int const gpu_budget) const
+                           Flags flags) const
 {
 
-    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(
-                                          nodeName, fileName,
-                                          fallbackMaterial.getGuaMaterial(),
-                                          flags, cpu_budget, gpu_budget));
+    auto gua_node(m_guaNURBSLoader->load_geometry(nodeName, fileName, fallbackMaterial.getGuaMaterial(), flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
 
 
-bool
-av::gua::tv_3::TV_3Loader::is_supported(std::string const& fileName) const
-{
-  return m_guaTV_3Loader->is_supported(fileName);
-}
 
 
 /*
 std::pair<std::string, ::gua::math::vec3>
-av::gua::tv_3::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
+av::gua::nurbs::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
                                                ::gua::math::vec3 const& ray_forward,
                                                float max_distance,
                                                std::set<std::string> const& model_filenames,
@@ -92,8 +51,8 @@ av::gua::tv_3::PLODLoader::pick_plod_bvh(::gua::math::vec3 const& ray_origin,
 
 }
 
-av::gua::tv_3::MFPickResult*
-av::gua::tv_3::PLODLoader::pick_plod_interpolate(
+av::gua::nurbs::MFPickResult*
+av::gua::nurbs::PLODLoader::pick_plod_interpolate(
                                       ::gua::math::vec3 const& bundle_origin,
                                       ::gua::math::vec3 const& bundle_forward,
                                       ::gua::math::vec3 const& bundle_up,
@@ -112,9 +71,9 @@ av::gua::tv_3::PLODLoader::pick_plod_interpolate(
                                                 surfel_skip,
                                                 aabb_scale);
 
-  auto results(new av::gua::tv_3::MFPickResult());
+  auto results(new av::gua::nurbs::MFPickResult());
   for (auto result : gua_results) {
-    results->add1Value(new av::gua::tv_3::PickResult(result));
+    results->add1Value(new av::gua::nurbs::PickResult(result));
   }
 
   return results;
@@ -123,27 +82,27 @@ av::gua::tv_3::PLODLoader::pick_plod_interpolate(
 */
 
 void
-av::gua::tv_3::TV_3Loader::initClass()
+av::gua::nurbs::NURBSLoader::initClass()
 {
     if (!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
-        AV_FC_INIT(av::FieldContainer, av::gua::tv_3::TV_3Loader, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::nurbs::NURBSLoader, true);
 
-        SFTV_3Loader::initClass("av::gua::tv_3::SFTV_3Loader", "av::Field");
-        MFTV_3Loader::initClass("av::gua::tv_3::MFTV_3Loader", "av::Field");
+        SFNURBSLoader::initClass("av::gua::nurbs::SFNURBSLoader", "av::Field");
+        MFNURBSLoader::initClass("av::gua::nurbs::MFNURBSLoader", "av::Field");
     }
 }
 
-::gua::TV_3Loader*
-av::gua::tv_3::TV_3Loader::getGuaTV_3Loader() const
+::gua::NURBSLoader*
+av::gua::nurbs::NURBSLoader::getGuaNURBSLoader() const
 {
-    return m_guaTV_3Loader;
+    return m_guaNURBSLoader;
 }
 
 av::gua::Node*
-av::gua::tv_3::TV_3Loader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
+av::gua::nurbs::NURBSLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
 
   av::gua::Node* av_node(nullptr);
 
@@ -153,9 +112,9 @@ av::gua::tv_3::TV_3Loader::createChildren(std::shared_ptr< ::gua::node::Node> ro
   }
 
   if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::TV_3Node>(root));
+    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::NURBSNode>(root));
     if (geom_cast) {
-      av_node = new av::gua::tv_3::TV_3Node(geom_cast);
+      av_node = new av::gua::nurbs::NURBSNode(geom_cast);
     }
   }
 
@@ -174,37 +133,37 @@ av::gua::tv_3::TV_3Loader::createChildren(std::shared_ptr< ::gua::node::Node> ro
 
 /*
 void
-av::gua::tv_3::PLODLoader::getUploadBudgetCB(const SFInt::GetValueEvent& event)
+av::gua::nurbs::PLODLoader::getUploadBudgetCB(const SFInt::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaPLODLoader->get_upload_budget_in_mb();
 }
 
 void
-av::gua::tv_3::PLODLoader::setUploadBudgetCB(const SFInt::SetValueEvent& event)
+av::gua::nurbs::PLODLoader::setUploadBudgetCB(const SFInt::SetValueEvent& event)
 {
   m_guaPLODLoader->set_upload_budget_in_mb(event.getValue());
 }
 
 void
-av::gua::tv_3::PLODLoader::getRenderBudgetCB(const SFInt::GetValueEvent& event)
+av::gua::nurbs::PLODLoader::getRenderBudgetCB(const SFInt::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaPLODLoader->get_render_budget_in_mb();
 }
 
 void
-av::gua::tv_3::PLODLoader::setRenderBudgetCB(const SFInt::SetValueEvent& event)
+av::gua::nurbs::PLODLoader::setRenderBudgetCB(const SFInt::SetValueEvent& event)
 {
   m_guaPLODLoader->set_render_budget_in_mb(event.getValue());
 }
 
 void
-av::gua::tv_3::PLODLoader::getOutOfCoreBudgetCB(const SFInt::GetValueEvent& event)
+av::gua::nurbs::PLODLoader::getOutOfCoreBudgetCB(const SFInt::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaPLODLoader->get_out_of_core_budget_in_mb();
 }
 
 void
-av::gua::tv_3::PLODLoader::setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event)
+av::gua::nurbs::PLODLoader::setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event)
 {
   m_guaPLODLoader->set_out_of_core_budget_in_mb(event.getValue());
 }

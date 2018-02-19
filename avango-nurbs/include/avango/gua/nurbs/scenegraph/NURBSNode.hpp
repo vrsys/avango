@@ -1,12 +1,13 @@
-#ifndef AVANGO_GUA_TV_3_NODE_HPP
-#define AVANGO_GUA_TV_3_NODE_HPP
+#ifndef AVANGO_GUA_NURBS_NODE_HPP
+#define AVANGO_GUA_NURBS_NODE_HPP
 
 /**
  * \file
  * \ingroup av_gua
  */
 
-#include <gua/node/TV_3Node.hpp>
+#include <avango/gua/nurbs/Init.hpp>
+#include <gua/node/NURBSNode.hpp>
 
 #include <gua/math/math.hpp>
 
@@ -17,50 +18,26 @@ namespace av
 {
   namespace gua
   {
-    namespace tv_3 
+    namespace nurbs
     {
       /**
-       * Wrapper for ::gua::TV_3Node
+       * Wrapper for ::gua::NURBSNode
        *
        * \ingroup av_gua
        */
-      class AV_GUA_DLL TV_3Node : public av::gua::GeometryNode
+      class AV_NURBS_DLL NURBSNode : public av::gua::GeometryNode
       {
         AV_FC_DECLARE();
 
       public:
 
-        enum NodeRenderMode {
-          VOL_ISOSURFACE    = ::gua::node::TV_3Node::VOL_ISOSURFACE,
-          VOL_MAX_INTENSITY = ::gua::node::TV_3Node::VOL_MAX_INTENSITY,
-          VOL_COMPOSITING   = ::gua::node::TV_3Node::VOL_COMPOSITING,
-          VOL_AVG_INTENSITY = ::gua::node::TV_3Node::VOL_AVG_INTENSITY,
-          SUR_PBR           = ::gua::node::TV_3Node::SUR_PBR
-        };
-
-        enum NodeSpatialFilterMode {
-          S_NEAREST = ::gua::node::TV_3Node::S_NEAREST, 
-          S_LINEAR  = ::gua::node::TV_3Node::S_LINEAR
-        };
-
-        enum NodeTemporalFilterMode {
-          T_NEAREST = ::gua::node::TV_3Node::T_NEAREST, 
-          T_LINEAR  = ::gua::node::TV_3Node::T_LINEAR
-        };
-
-        enum NodePlaybackMode {
-          NONE     = ::gua::node::TV_3Node::NONE, 
-          FORWARD  = ::gua::node::TV_3Node::FORWARD,
-          BACKWARD = ::gua::node::TV_3Node::BACKWARD
-        };
-
         /**
-         * Constructor. When called without arguments, a new ::gua::TV_3Node
+         * Constructor. When called without arguments, a new ::gua::NURBSNode
          * is created.
-         * Otherwise, the given ::gua::TV_3Node is used.
+         * Otherwise, the given ::gua::NURBSNode is used.
          */
-        TV_3Node(std::shared_ptr< ::gua::node::TV_3Node> guanode =
-            std::shared_ptr< ::gua::node::TV_3Node>(new ::gua::node::TV_3Node("")));
+        NURBSNode(std::shared_ptr< ::gua::node::NURBSNode> guanode =
+            std::shared_ptr< ::gua::node::NURBSNode>(new ::gua::node::NURBSNode("")));
 
         virtual void on_distribute(av::gua::NetTransform& netNode);
         virtual void on_undistribute(av::gua::NetTransform& netNode);
@@ -70,20 +47,12 @@ namespace av
         /**
          * Destructor made protected to prevent allocation on stack.
          */
-  //      virtual ~TV_3Node();
+  //      virtual ~NURBSNode();
 
       public:
 
         SFString   Geometry;
         SFMaterial Material;
-        SFInt      RenderMode;
-        SFInt      SpatialFilterMode;
-        SFInt      TemporalFilterMode;
-        SFInt      PlaybackMode;
-        SFFloat    IsoValue;
-        SFFloat    TimeCursorPos;
-        SFFloat    PlaybackFPS;
-        //SFBool     EnablePlayback;
 
         virtual void getGeometryCB(const SFString::GetValueEvent& event);
         virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -91,54 +60,30 @@ namespace av
         virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
         virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-        virtual void getRenderModeCB(const SFInt::GetValueEvent& event);
-        virtual void setRenderModeCB(const SFInt::SetValueEvent& event);
-
-        virtual void getSpatialFilterModeCB(const SFInt::GetValueEvent& event);
-        virtual void enableSpatialLinearFilterCB(const SFInt::SetValueEvent& event);
-
-        virtual void getTemporalFilterModeCB(const SFInt::GetValueEvent& event);
-        virtual void enableTemporalLinearFilterCB(const SFInt::SetValueEvent& event);
-
-        virtual void getPlaybackModeCB(const SFInt::GetValueEvent& event);
-        virtual void setPlaybackModeCB(const SFInt::SetValueEvent& event);
-
-        virtual void getIsoValueCB(const SFFloat::GetValueEvent& event);
-        virtual void setIsoValueCB(const SFFloat::SetValueEvent& event);
-
-        virtual void getTimeCursorPosCB(const SFFloat::GetValueEvent& event);
-        virtual void setTimeCursorPosCB(const SFFloat::SetValueEvent& event);
-
-        virtual void getPlaybackFPSCB(const SFFloat::GetValueEvent& event);
-        virtual void setPlaybackFPSCB(const SFFloat::SetValueEvent& event);
-/*
-        virtual void getEnablePlaybackCB(const SFBool::GetValueEvent& event);
-        virtual void setEnablePlaybackCB(const SFBool::SetValueEvent& event);
-*/
         /**
-         * Get the wrapped ::gua::TV_3Node.
+         * Get the wrapped ::gua::NURBSNode.
          */
-        std::shared_ptr< ::gua::node::TV_3Node> getGuaTV_3Node() const;
+        std::shared_ptr< ::gua::node::NURBSNode> getGuaNURBSNode() const;
 
       private:
 
-        std::shared_ptr< ::gua::node::TV_3Node> m_guaTV_3Node;
+        std::shared_ptr< ::gua::node::NURBSNode> m_guaNURBSNode;
         av::Link< av::gua::Material> m_Material;
 
-        TV_3Node(const TV_3Node&);
-        TV_3Node& operator=(const TV_3Node&);
+        NURBSNode(const NURBSNode&);
+        NURBSNode& operator=(const NURBSNode&);
       };
 
-      using SFTV_3Node = SingleField<Link<TV_3Node> >;
-      using MFTV_3Node = MultiField<Link<TV_3Node> >;
+      using SFNURBSNode = SingleField<Link<NURBSNode> >;
+      using MFNURBSNode = MultiField<Link<NURBSNode> >;
     }
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TV_3Node> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TV_3Node> >;
+  template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSNode> >;
+  template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSNode> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_TV_3_NODE_HPP
+#endif //AVANGO_GUA_NURBS_NODE_HPP

@@ -4,10 +4,12 @@
 file(GLOB_RECURSE AVANGO_NURBS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   src/avango/gua/nurbs/scenegraph/NURBSNode.cpp
   src/avango/gua/nurbs/renderer/NURBSLoader.cpp
-  src/avango/gua/nurbs/renderer/NURBSSurfacePassDescription.cpp
+  src/avango/gua/nurbs/renderer/NURBSPassDescription.cpp
+  src/avango/gua/nurbs/Init.cpp
   include/avango/gua/nurbs/scenegraph/NURBSNode.hpp
   include/avango/gua/nurbs/renderer/NURBSLoader.hpp
-  include/avango/gua/nurbs/renderer/NURBSSurfacePassDescription.hpp
+  include/avango/gua/nurbs/renderer/NURBSPassDescription.hpp
+  include/avango/gua/nurbs/Init.hpp
 )
 
 ###############################################################################

@@ -10,6 +10,7 @@
 #include <gua/math.hpp>
 
 #include <avango/gua/Fields.hpp>
+#include <avango/gua/nurbs/Init.hpp>
 #include <avango/gua/nurbs/scenegraph/NURBSNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
 #include <avango/FieldContainer.h>
@@ -28,38 +29,29 @@ namespace av
     *
     * \ingroup av_gua
     */
-    class AV_GUA_DLL NURBSLoader : public av::FieldContainer
+    class AV_NURBS_DLL NURBSLoader : public av::FieldContainer
     {
       AV_FC_DECLARE();
 
     public:
 
       enum Flags {
-        DEFAULTS = ::gua::TV_3Loader::DEFAULTS,
-        MAKE_PICKABLE = ::gua::TV_3Loader::MAKE_PICKABLE,
-        NORMALIZE_SCALE = ::gua::TV_3Loader::NORMALIZE_SCALE,
-        NORMALIZE_POSITION = ::gua::TV_3Loader::NORMALIZE_POSITION,
-        USE_SURFACE_MODE = ::gua::TV_3Loader::USE_SURFACE_MODE
+        DEFAULTS = ::gua::NURBSLoader::DEFAULTS,
+        MAKE_PICKABLE = ::gua::NURBSLoader::MAKE_PICKABLE,
+        NORMALIZE_SCALE = ::gua::NURBSLoader::NORMALIZE_SCALE,
+        NORMALIZE_POSITION = ::gua::NURBSLoader::NORMALIZE_POSITION
       };
 
    /**
-    * Constructor. When called without arguments, a new ::gua::TV_3Loader is created.
-    * Otherwise, the given ::gua::TV_3Loader is used.
+    * Constructor. When called without arguments, a new ::gua::NURBSLoader is created.
+    * Otherwise, the given ::gua::NURBSLoader is used.
     */
       NURBSLoader(::gua::NURBSLoader* guaNURBSLoader = new ::gua::NURBSLoader());
 
       av::Link<av::gua::Node> load( std::string const& nodeName,
                                     std::string const& fileName,
-                                    Flags flags = DEFAULTS,
-                                    int const cpu_budget = 1024,
-                                    int const gpu_budget = 1024) const;
-      av::Link<av::gua::Node> load( std::string const& nodeName,
-                                    std::string const& fileName,
                                     av::gua::Material const& fallbackMaterial,
-                                    Flags flags = DEFAULTS,
-                                    int const cpu_budget = 1024,
-                                    int const gpu_budget = 1024) const;
-      bool is_supported(std::string const& fileName) const;
+                                    Flags flags = DEFAULTS) const;
 
   /*
       std::pair<std::string, ::gua::math::vec3> pick_plod_bvh(
@@ -114,10 +106,10 @@ namespace av
   }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::NURBSLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::NURBSLoader> >;
+  template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSLoader> >;
+  template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSLoader> >;
 #endif
 
 }
 
-#endif //AVANGO_GUA_TV_3_LOADER_HPP
+#endif //AVANGO_GUA_NURBS_LOADER_HPP

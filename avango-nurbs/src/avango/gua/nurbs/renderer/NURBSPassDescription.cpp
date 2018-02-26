@@ -19,7 +19,9 @@ av::gua::nurbs::NURBSPassDescription::NURBSPassDescription(
     : PipelinePassDescription(guaNURBSPassDescription)
     , m_guaNURBSPassDescription(guaNURBSPassDescription)
 {
-
+  AV_FC_ADD_ADAPTOR_FIELD(Pretessellation,
+                        std::bind(&NURBSPassDescription::getPretessellationCB, this,std::placeholders::_1),
+                        std::bind(&NURBSPassDescription::setPretessellationCB, this,std::placeholders::_1));
 }
 
 void

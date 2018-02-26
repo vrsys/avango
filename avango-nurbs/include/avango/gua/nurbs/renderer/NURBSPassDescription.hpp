@@ -41,6 +41,11 @@ namespace av
 
       public:
 
+        SFBool   Pretessellation;
+
+        virtual void getPretessellationCB(const SFBool::GetValueEvent& event);
+        virtual void setPretessellationCB(const SFBool::SetValueEvent& event);
+
         /**
          * Get the wrapped ::gua::NURBSPassDescription.
          */

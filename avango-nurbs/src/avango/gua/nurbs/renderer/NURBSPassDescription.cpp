@@ -44,4 +44,15 @@ av::gua::nurbs::NURBSPassDescription::getGuaNURBSPassDescription() const
     return m_guaNURBSPassDescription;
 }
 
+void
+av::gua::nurbs::NURBSPassDescription::getPretessellationCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNURBSPassDescription->enable_pretessellation();
+}
+
+void
+av::gua::nurbs::NURBSPassDescription::setPretessellationCB(const SFBool::SetValueEvent& event)
+{
+  m_guaNURBSPassDescription->enable_pretessellation(event.getValue());
+}
 

@@ -98,3 +98,13 @@ std::shared_ptr< ::gua::node::NURBSNode>
 av::gua::nurbs::NURBSNode::getGuaNURBSNode() const {
   return m_guaNURBSNode;
 }
+
+void av::gua::nurbs::NURBSNode::getPixelErrorToleranceCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNURBSNode->max_tesselation_error();
+}
+
+void av::gua::nurbs::NURBSNode::setPixelErrorToleranceCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaNURBSNode->max_tesselation_error(event.getValue());
+}

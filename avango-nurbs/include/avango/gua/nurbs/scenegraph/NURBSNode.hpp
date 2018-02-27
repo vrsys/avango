@@ -53,7 +53,9 @@ namespace av
 
         SFString   Geometry;
         SFMaterial Material;
+
         SFFloat    PixelErrorTolerance;
+        SFBool     WireframeMode;
 
         virtual void getGeometryCB(const SFString::GetValueEvent& event);
         virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -63,6 +65,9 @@ namespace av
 
         virtual void getPixelErrorToleranceCB(const SFFloat::GetValueEvent& event);
         virtual void setPixelErrorToleranceCB(const SFFloat::SetValueEvent& event);
+
+        virtual void getWireframeModeCB(const SFBool::GetValueEvent& event);
+        virtual void setWireframeModeCB(const SFBool::SetValueEvent& event);
 
         /**
          * Get the wrapped ::gua::NURBSNode.

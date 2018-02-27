@@ -1,6 +1,7 @@
 import avango
 import avango.script
 import avango.gua
+import avango.gua.nurbs
 from examples_common.GuaVE import GuaVE
 
 import math
@@ -60,10 +61,7 @@ def start():
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     loader = avango.gua.nodes.TriMeshLoader()
-
-    abstract_model = loader.create_geometry_from_file(
-        "abstract_model", "data/objects/sphere_hierarchy.obj",
-        avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    nurbs_loader = avango.gua.nurbs.nodes.NURBSLoader()
 
     monkey1 = loader.create_geometry_from_file(
             "monkey1", "data/objects/monkey.obj",
@@ -73,36 +71,24 @@ def start():
             "monkey2", "data/objects/monkey.obj",
             avango.gua.LoaderFlags.NORMALIZE_SCALE)
 
+    nurbs_model = nurbs_loader.create_geometry_from_file(
+            "abstract_model", "data/objects/part.igs", monkey1.Material.value,
+            avango.gua.LoaderFlags.DEFAULTS )
+   
+    nurbs_model.Material.value.set_uniform("Spheremap", "data/textures/spheremap.jpg")
+    nurbs_model.Material.value.set_uniform("Color", avango.gua.Vec4(0.662, 0.655, 0.784, 1.0))
+    nurbs_model.Material.value.set_uniform("Metalness", 1.0)
+    nurbs_model.Material.value.set_uniform("Opacity", 1.0)
+    nurbs_model.Material.value.set_uniform("Roughness", 0.2)
+
     #hardcode monkey1 & monkey2 material, because there is no associated material files
     #the material names will both be "gua_default_material"
 
-    #metalish blue
-    monkey1.Material.value.set_uniform("Color",
-                                       avango.gua.Vec4(0.662, 0.655, 0.784, 1))
-    monkey1.Material.value.set_uniform("Roughness", 0.3)
-    monkey1.Material.value.set_uniform("Metalness", 1.0)
+    transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.001),
+                                                Children=[nurbs_model])
 
-    #rather matte red
-    monkey2.Material.value.set_uniform("Color",
-                                       avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
-    monkey2.Material.value.set_uniform("Roughness", 0.7)
-    monkey2.Material.value.set_uniform("Metalness", 0.0)
-
-
-    transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
-                                                Children=[abstract_model])
 
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
-
-    transform2 = avango.gua.nodes.TransformNode(
-        Transform=avango.gua.make_trans_mat(-0.66, 0.0, 0.0) * 
-                  avango.gua.make_scale_mat(0.66),
-        Children=[monkey1])
-
-    wireframe_transform = avango.gua.nodes.TransformNode(
-        Transform=avango.gua.make_trans_mat( 0.66, 0.0, 0.0) * 
-                  avango.gua.make_scale_mat(0.66),
-        Children=[monkey2])
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -140,6 +126,7 @@ def start():
 
     pipeline_description = avango.gua.nodes.PipelineDescription(Passes=[
         avango.gua.nodes.TriMeshPassDescription(),
+        avango.gua.nurbs.nodes.NURBSPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         res_pass,
         anti_aliasing,
@@ -154,7 +141,7 @@ def start():
                                          Height=1.5,
                                          Children=[cam])
 
-    graph.Root.value.Children.value = [transform1, transform2, wireframe_transform, light, screen]
+    graph.Root.value.Children.value = [transform1, light, screen]
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()

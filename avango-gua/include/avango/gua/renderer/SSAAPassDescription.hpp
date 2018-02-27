@@ -69,6 +69,9 @@ namespace av
       // 0.0312 - visible limit (slower)
       SFFloat  FxaaThresholdMin;
 
+      // Filter for pinhole error correction
+      SFBool   PinholeErrorCorrection;
+
       virtual void getModeCB(const SFUInt::GetValueEvent& event);
       virtual void setModeCB(const SFUInt::SetValueEvent& event);
 
@@ -81,6 +84,8 @@ namespace av
       virtual void getFxaaThresholdMinCB(const SFFloat::GetValueEvent& event);
       virtual void setFxaaThresholdMinCB(const SFFloat::SetValueEvent& event);
 
+      virtual void getPinholeErrorCorrectionCB(const SFBool::GetValueEvent& event);
+      virtual void setPinholeErrorCorrectionCB(const SFBool::SetValueEvent& event); 
       /**
        * Get the wrapped ::gua::SSAAPassDescription.
        */

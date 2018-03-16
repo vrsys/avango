@@ -248,8 +248,11 @@ IF (${AVANGO_VIDEO3D_SUPPORT})
   list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d)
 ENDIF (${AVANGO_VIDEO3D_SUPPORT})                                                            
 
-IF (${AVANGO_SPOINTS_SUPPORT})                                                            
-  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-spoints)
+IF (${AVANGO_SPOINTS_SUPPORT})
+  target_include_directories(avango_gua SYSTEM BEFORE PUBLIC
+    ${PCC_INCLUDE_DIRS}
+  )                                                   
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-spoints ${PCC_LIBRARY})
 ENDIF (${AVANGO_SPOINTS_SUPPORT})
 
 IF (${AVANGO_PBR_SUPPORT})                                                            

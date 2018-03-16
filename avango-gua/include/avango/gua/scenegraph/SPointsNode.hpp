@@ -52,7 +52,13 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
-      SFFloat     ScreenSpacePointSize;
+      SFFloat    ScreenSpacePointSize;
+      // TODO libpcc extend to add fields
+      SFInt GlobalGridPrecisionX;
+      /*
+      SFInt grid_y;
+      SFInt grid_z;
+      */
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -68,6 +74,9 @@ namespace av
 
       virtual void getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event);
       virtual void setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event);
+
+      virtual void getGlobalGridPrecisionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridPrecisionXCB(const SFInt::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::SPointsNode.

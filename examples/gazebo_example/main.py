@@ -7,6 +7,15 @@ from examples_common.GuaVE import GuaVE
 
 import math
 
+nrp_root = avango.gua.nrp.NRPNode()
+
+
+class AccumulateNetworkInput(avango.script.Script):
+    TimeIn = avango.SFFloat()
+
+    def evaluate(self):
+        nrp_root.pre_draw()
+
 
 def start():
     # setup scenegraph
@@ -14,8 +23,9 @@ def start():
     loader = nodes.TriMeshLoader()
 
     cube = loader.create_geometry_from_file("cube", "data/objects/cube.obj", LoaderFlags.NORMALIZE_SCALE)
+    cube.Transform.value = make_scale_mat(0.5)
 
-    transform_cube = avango.gua.nrp.NRPNode(Transform=make_scale_mat(0.5), Children=[cube])
+    nrp_root.Children.value = [cube]
 
     light = nodes.LightNode(Type=LightType.POINT, Name="light", Color=Color(1.0, 1.0, 1.0), Brightness=100.0,
                             Transform=(make_trans_mat(1, 1, 5) * make_scale_mat(30, 30, 30)))
@@ -44,11 +54,16 @@ def start():
 
     screen = nodes.ScreenNode(Name="screen", Width=2, Height=1.5, Children=[cam])
 
-    graph.Root.value.Children.value = [transform_cube, light, screen]
+    graph.Root.value.Children.value = [nrp_root, light, screen]
 
     viewer = nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
+
+    network_script = AccumulateNetworkInput()
+
+    timer = avango.nodes.TimeSensor()
+    network_script.TimeIn.connect_from(timer.Time)
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

@@ -17,10 +17,12 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
     AV_FC_DECLARE();
 
   public:
-    NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode = std::shared_ptr<::gua::nrp::NRPNode>(new ::gua::nrp::NRPNode("")));
+    NRPNode(::gua::nrp::NRPNode * guanode = new ::gua::nrp::NRPNode(""));
+
+    void pre_draw();
 
   private:
-    std::shared_ptr<::gua::nrp::NRPNode> _nrp_node_ptr;
+    ::gua::nrp::NRPNode* _nrp_node_ptr;
 };
 
 using SFNRPNode = SingleField<Link<NRPNode>>;

@@ -7,7 +7,13 @@ AV_FC_DEFINE(av::gua::nrp::NRPNode);
 AV_FIELD_DEFINE(av::gua::nrp::SFNRPNode);
 AV_FIELD_DEFINE(av::gua::nrp::MFNRPNode);
 
-av::gua::nrp::NRPNode::NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode) : TransformNode(guanode), _nrp_node_ptr(guanode) {}
+av::gua::nrp::NRPNode::NRPNode(::gua::nrp::NRPNode* guanode) : TransformNode(std::shared_ptr< ::gua::nrp::NRPNode>(guanode)){
+    _nrp_node_ptr = guanode;
+}
+
+void av::gua::nrp::NRPNode::pre_draw(){
+    _nrp_node_ptr->pre_draw();
+}
 
 void av::gua::nrp::NRPNode::initClass()
 {

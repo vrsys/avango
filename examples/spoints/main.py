@@ -14,14 +14,36 @@ class TimedRotate(avango.script.Script):
             0.0, -1.0, -2.0) * avango.gua.make_rot_mat(10 * self.TimeIn.value *
                                                        2.0, 0.0, 1.0, 0.0)
 
+def set_grid_dimensions(spoints_geode, dim):
+    if len(dim) == 3:
+        spoints_geode.GlobalGridDimensionX.value = dim[0]
+        spoints_geode.GlobalGridDimensionY.value = dim[1]
+        spoints_geode.GlobalGridDimensionZ.value = dim[2]
+
+def set_point_precision(spoints_geode, prec):
+    if len(prec) == 3:
+        spoints_geode.GlobalPointPrecisionX.value = prec[0]
+        spoints_geode.GlobalPointPrecisionY.value = prec[1]
+        spoints_geode.GlobalPointPrecisionZ.value = prec[2]
+
+def set_compression_settings(spoints_geode, settings):
+    if "point_precision" in settings and "grid_dimension" in settings:
+        set_grid_dimensions(spoints_geode, settings["grid_dimension"]) 
+        set_point_precision(spoints_geode, settings["point_precision"])
 
 def start(filename):
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     loader = avango.gua.nodes.TriMeshLoader()
 
+    compression_settings = {
+        "point_precision" : [4,4,4],
+        "grid_dimension" : [2,2,2]
+    }
+
     spointsloader = avango.gua.nodes.SPointsLoader()
     spoints_geode = spointsloader.load("kinect", filename)
+    set_compression_settings(spoints_geode, compression_settings)
 
     transform1 = avango.gua.nodes.TransformNode(Children=[spoints_geode])
 

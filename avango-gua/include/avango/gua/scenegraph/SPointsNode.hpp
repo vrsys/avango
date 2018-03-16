@@ -54,7 +54,12 @@ namespace av
       SFBool     RenderToStencilBuffer;
       SFFloat    ScreenSpacePointSize;
       // TODO libpcc extend to add fields
-      SFInt GlobalGridPrecisionX;
+      SFInt GlobalGridDimensionX;
+      SFInt GlobalGridDimensionY;
+      SFInt GlobalGridDimensionZ;
+      SFInt GlobalPointPrecisionX;
+      SFInt GlobalPointPrecisionY;
+      SFInt GlobalPointPrecisionZ;
       /*
       SFInt grid_y;
       SFInt grid_z;
@@ -75,9 +80,23 @@ namespace av
       virtual void getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event);
       virtual void setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getGlobalGridPrecisionXCB(const SFInt::GetValueEvent& event);
-      virtual void setGlobalGridPrecisionXCB(const SFInt::SetValueEvent& event);
+      virtual void getGlobalGridDimensionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionXCB(const SFInt::SetValueEvent& event);
 
+      virtual void getGlobalGridDimensionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalGridDimensionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionZCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionXCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionZCB(const SFInt::SetValueEvent& event);
       /**
        * Get the wrapped ::gua::SPointsNode.
        */

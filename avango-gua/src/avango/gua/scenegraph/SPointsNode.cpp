@@ -32,10 +32,30 @@ av::gua::SPointsNode::SPointsNode(std::shared_ptr< ::gua::node::SPointsNode> gua
                       std::bind(&SPointsNode::getScreenSpacePointSizeCB, this,std::placeholders::_1),
                       std::bind(&SPointsNode::setScreenSpacePointSizeCB, this,std::placeholders::_1));
 
-  // TODO libpcc copy connection bindings for each new field
-  AV_FC_ADD_ADAPTOR_FIELD(GlobalGridPrecisionX,
-                      std::bind(&SPointsNode::getGlobalGridPrecisionXCB, this,std::placeholders::_1),
-                      std::bind(&SPointsNode::setGlobalGridPrecisionXCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalGridDimensionX,
+                      std::bind(&SPointsNode::getGlobalGridDimensionXCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalGridDimensionXCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalGridDimensionY,
+                      std::bind(&SPointsNode::getGlobalGridDimensionYCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalGridDimensionYCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalGridDimensionZ,
+                      std::bind(&SPointsNode::getGlobalGridDimensionZCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalGridDimensionZCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalPointPrecisionX,
+                      std::bind(&SPointsNode::getGlobalPointPrecisionXCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalPointPrecisionXCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalPointPrecisionY,
+                      std::bind(&SPointsNode::getGlobalPointPrecisionYCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalPointPrecisionYCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalPointPrecisionZ,
+                      std::bind(&SPointsNode::getGlobalPointPrecisionZCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalPointPrecisionZCB, this,std::placeholders::_1));
+
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -145,19 +165,65 @@ av::gua::SPointsNode::setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& ev
   m_guaSPointsNode->set_screen_space_point_size(event.getValue());
 }
 
-void av::gua::SPointsNode::getGlobalGridPrecisionXCB(const SFInt::GetValueEvent& event)
+void av::gua::SPointsNode::getGlobalGridDimensionXCB(const SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaSPointsNode->get_global_grid_precision_x();
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_grid_dimension_x();
 }
 
-void av::gua::SPointsNode::setGlobalGridPrecisionXCB(const SFInt::SetValueEvent& event)
+void av::gua::SPointsNode::setGlobalGridDimensionXCB(const SFInt::SetValueEvent& event)
 {
-  m_guaSPointsNode->set_global_grid_precision_x(event.getValue());
+  m_guaSPointsNode->set_global_grid_dimension_x(event.getValue());
 }
 
+void av::gua::SPointsNode::getGlobalGridDimensionYCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_grid_dimension_y();
+}
 
-// TODO libpcc implement bindings for new fields
-// m_guaSPointsNode-> call guacamole node functions directly as exposed by gua c++ interface
+void av::gua::SPointsNode::setGlobalGridDimensionYCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_grid_dimension_y(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalGridDimensionZCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_grid_dimension_z();
+}
+
+void av::gua::SPointsNode::setGlobalGridDimensionZCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_grid_dimension_z(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalPointPrecisionXCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_point_precision_x();
+}
+
+void av::gua::SPointsNode::setGlobalPointPrecisionXCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_point_precision_x(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalPointPrecisionYCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_point_precision_y();
+}
+
+void av::gua::SPointsNode::setGlobalPointPrecisionYCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_point_precision_y(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalPointPrecisionZCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_point_precision_z();
+}
+
+void av::gua::SPointsNode::setGlobalPointPrecisionZCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_point_precision_z(event.getValue());
+}
 
 std::shared_ptr< ::gua::node::SPointsNode>
 av::gua::SPointsNode::getGuaSPointsNode() const {

@@ -37,7 +37,7 @@ endif (UNIX)
 
 include(find_compiler)
 include(file_copy_macro)
-
+include(FindRgbd)
 include(find_guacamole)
 
 #if (AVANGO_PBR_SUPPORT)

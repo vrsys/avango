@@ -244,8 +244,9 @@ SET(_AVANGO_GUA_LIBRARIES avango
                           optimized ${SCHISM_GL_UTIL_LIBRARY} debug ${SCHISM_GL_UTIL_LIBRARY_DEBUG}
 )
 # link with plugin libraries only if they are enabled
-IF (${AVANGO_VIDEO3D_SUPPORT})                                                            
-  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d)
+IF (${AVANGO_VIDEO3D_SUPPORT})     
+  target_include_directories(avango_gua SYSTEM BEFORE PUBLIC ${RGBD_INCLUDE_DIRS} ${RGBDDECOMP_INCLUDE_DIRS})                                                       
+  list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d ${RGBD_LIBRARY} ${RGBDDECOMP_LIBRARY})
 ENDIF (${AVANGO_VIDEO3D_SUPPORT})                                                            
 
 IF (${AVANGO_SPOINTS_SUPPORT})                                                            

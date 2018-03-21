@@ -56,6 +56,18 @@ av::gua::SPointsNode::SPointsNode(std::shared_ptr< ::gua::node::SPointsNode> gua
                       std::bind(&SPointsNode::getGlobalPointPrecisionZCB, this,std::placeholders::_1),
                       std::bind(&SPointsNode::setGlobalPointPrecisionZCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalColorPrecisionX,
+                      std::bind(&SPointsNode::getGlobalColorPrecisionXCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalColorPrecisionXCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalColorPrecisionY,
+                      std::bind(&SPointsNode::getGlobalColorPrecisionYCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalColorPrecisionYCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(GlobalColorPrecisionZ,
+                      std::bind(&SPointsNode::getGlobalColorPrecisionZCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setGlobalColorPrecisionZCB, this,std::placeholders::_1));
+
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -223,6 +235,36 @@ void av::gua::SPointsNode::getGlobalPointPrecisionZCB(const SFInt::GetValueEvent
 void av::gua::SPointsNode::setGlobalPointPrecisionZCB(const SFInt::SetValueEvent& event)
 {
   m_guaSPointsNode->set_global_point_precision_z(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalColorPrecisionXCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_color_precision_x();
+}
+
+void av::gua::SPointsNode::setGlobalColorPrecisionXCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_color_precision_x(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalColorPrecisionYCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_color_precision_y();
+}
+
+void av::gua::SPointsNode::setGlobalColorPrecisionYCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_color_precision_y(event.getValue());
+}
+
+void av::gua::SPointsNode::getGlobalColorPrecisionZCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_global_color_precision_z();
+}
+
+void av::gua::SPointsNode::setGlobalColorPrecisionZCB(const SFInt::SetValueEvent& event)
+{
+  m_guaSPointsNode->set_global_color_precision_z(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::SPointsNode>

@@ -60,6 +60,9 @@ namespace av
       SFInt GlobalPointPrecisionX;
       SFInt GlobalPointPrecisionY;
       SFInt GlobalPointPrecisionZ;
+      SFInt GlobalColorPrecisionX;
+      SFInt GlobalColorPrecisionY;
+      SFInt GlobalColorPrecisionZ;
       /*
       SFInt grid_y;
       SFInt grid_z;
@@ -97,6 +100,16 @@ namespace av
 
       virtual void getGlobalPointPrecisionZCB(const SFInt::GetValueEvent& event);
       virtual void setGlobalPointPrecisionZCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionXCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionZCB(const SFInt::SetValueEvent& event);
+      
       /**
        * Get the wrapped ::gua::SPointsNode.
        */

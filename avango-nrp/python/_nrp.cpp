@@ -1,5 +1,8 @@
 #include "NRPNode.hpp"
+#include "NRPPass.hpp"
+
 #include <avango/gua/nrp/NRPNode.hpp>
+#include <avango/gua/nrp/NRPPass.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 
@@ -21,5 +24,7 @@ struct pointee<av::Link<T>>
 BOOST_PYTHON_MODULE(_nrp)
 {
     av::gua::nrp::NRPNode::initClass();
+    av::gua::nrp::NRPPassDescription::initClass();
     init_NRPNode();
+    init_NRPPassDescription();
 }

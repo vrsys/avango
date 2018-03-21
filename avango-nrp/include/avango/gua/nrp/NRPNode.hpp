@@ -17,12 +17,10 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
     AV_FC_DECLARE();
 
   public:
-    NRPNode(::gua::nrp::NRPNode * guanode = new ::gua::nrp::NRPNode(""));
-
-    void pre_draw();
+    NRPNode(::gua::nrp::NRPNode *guanode = new ::gua::nrp::NRPNode(""));
 
   private:
-    ::gua::nrp::NRPNode* _nrp_node_ptr;
+    ::gua::nrp::NRPNode *_nrp_node_ptr;
 };
 
 using SFNRPNode = SingleField<Link<NRPNode>>;
@@ -31,8 +29,8 @@ using MFNRPNode = MultiField<Link<NRPNode>>;
 }
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-template class AV_GUA_DLL SingleField<Link<gua::NRPNode>>;
-template class AV_GUA_DLL MultiField<Link<gua::NRPNode>>;
+template class AV_GUA_DLL SingleField<Link<gua::nrp::NRPNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::nrp::NRPNode>>;
 #endif
 }
 

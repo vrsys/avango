@@ -11,10 +11,6 @@ av::gua::nrp::NRPNode::NRPNode(::gua::nrp::NRPNode* guanode) : TransformNode(std
     _nrp_node_ptr = guanode;
 }
 
-void av::gua::nrp::NRPNode::pre_draw(){
-    _nrp_node_ptr->pre_draw();
-}
-
 void av::gua::nrp::NRPNode::initClass()
 {
     if(!isTypeInitialized())

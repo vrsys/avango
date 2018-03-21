@@ -1,20 +1,9 @@
 import avango
-import avango.script
 import avango.gua
-from avango.gua import *
 import avango.gua.nrp
+import avango.script
+from avango.gua import *
 from examples_common.GuaVE import GuaVE
-
-import math
-
-nrp_root = avango.gua.nrp.NRPNode()
-
-
-class AccumulateNetworkInput(avango.script.Script):
-    TimeIn = avango.SFFloat()
-
-    def evaluate(self):
-        nrp_root.pre_draw()
 
 
 def start():
@@ -25,6 +14,7 @@ def start():
     cube = loader.create_geometry_from_file("cube", "data/objects/cube.obj", LoaderFlags.NORMALIZE_SCALE)
     cube.Transform.value = make_scale_mat(0.5)
 
+    nrp_root = avango.gua.nrp.NRPNode()
     nrp_root.Children.value = [cube]
 
     light = nodes.LightNode(Type=LightType.POINT, Name="light", Color=Color(1.0, 1.0, 1.0), Brightness=100.0,
@@ -46,7 +36,8 @@ def start():
     res_pass.Exposure.value = 1.0
     res_pass.BackgroundColor.value = Color(0.45, 0.5, 0.6)
 
-    cam.PipelineDescription.value = nodes.PipelineDescription(Passes=[nodes.TriMeshPassDescription(),
+    cam.PipelineDescription.value = nodes.PipelineDescription(Passes=[avango.gua.nrp.NRPPassDescription(),
+                                                                      nodes.TriMeshPassDescription(),
                                                                       nodes.LightVisibilityPassDescription(),
                                                                       res_pass])
 
@@ -59,11 +50,6 @@ def start():
     viewer = nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
-
-    network_script = AccumulateNetworkInput()
-
-    timer = avango.nodes.TimeSensor()
-    network_script.TimeIn.connect_from(timer.Time)
 
     guaVE = GuaVE()
     guaVE.start(locals(), globals())

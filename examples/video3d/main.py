@@ -99,4 +99,5 @@ def start(filename):
 
 
 if __name__ == '__main__':
+    print(sys.argv)
     start(sys.argv[1])

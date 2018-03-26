@@ -107,6 +107,11 @@ include(FindSchism)
 
 include(FindZMQ)
 
+################################
+# libpcc
+include(FindPCC)
+################################
+
 if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
 endif(${AVANGO_OCULUS_RIFT_SUPPORT})
@@ -249,6 +254,14 @@ if ( AVANGO_OCULUS_RIFT_SUPPORT  )
   message(STATUS "   include: ${GUACAMOLE_OCULUS_INCLUDE_DIRS}" )
   message(STATUS "" )
 endif ( AVANGO_OCULUS_RIFT_SUPPORT )
+
+if ( AVANGO_SPOINTS_SUPPORT  )
+  message(STATUS " libpcc:" )
+  message(STATUS "   library: ${PCC_LIBRARY}" )
+  message(STATUS "   library path: ${PCC_LIBRARY_DIRS}" )
+  message(STATUS "   include: ${PCC_INCLUDE_DIRS}" )
+  message(STATUS "" )
+endif ( AVANGO_SPOINTS_SUPPORT )
 
 if ( AVANGO_VIVE_SUPPORT  )
   message(STATUS " guacamole-vive:" )

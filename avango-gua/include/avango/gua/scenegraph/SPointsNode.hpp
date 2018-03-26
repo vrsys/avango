@@ -52,7 +52,21 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
-      SFFloat     ScreenSpacePointSize;
+      SFFloat    ScreenSpacePointSize;
+      // TODO libpcc extend to add fields
+      SFInt GlobalGridDimensionX;
+      SFInt GlobalGridDimensionY;
+      SFInt GlobalGridDimensionZ;
+      SFInt GlobalPointPrecisionX;
+      SFInt GlobalPointPrecisionY;
+      SFInt GlobalPointPrecisionZ;
+      SFInt GlobalColorPrecisionX;
+      SFInt GlobalColorPrecisionY;
+      SFInt GlobalColorPrecisionZ;
+      /*
+      SFInt grid_y;
+      SFInt grid_z;
+      */
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -69,6 +83,33 @@ namespace av
       virtual void getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event);
       virtual void setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event);
 
+      virtual void getGlobalGridDimensionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionXCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalGridDimensionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalGridDimensionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalGridDimensionZCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionXCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalPointPrecisionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalPointPrecisionZCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionXCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionXCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionYCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionYCB(const SFInt::SetValueEvent& event);
+
+      virtual void getGlobalColorPrecisionZCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalColorPrecisionZCB(const SFInt::SetValueEvent& event);
+      
       /**
        * Get the wrapped ::gua::SPointsNode.
        */

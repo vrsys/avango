@@ -63,6 +63,7 @@ namespace av
       SFInt GlobalColorPrecisionX;
       SFInt GlobalColorPrecisionY;
       SFInt GlobalColorPrecisionZ;
+      SFString MsgAppendix;
       /*
       SFInt grid_y;
       SFInt grid_z;
@@ -109,6 +110,9 @@ namespace av
 
       virtual void getGlobalColorPrecisionZCB(const SFInt::GetValueEvent& event);
       virtual void setGlobalColorPrecisionZCB(const SFInt::SetValueEvent& event);
+
+      virtual void setMsgAppendixCB(const SFString::SetValueEvent& event);
+      virtual void getMsgAppendixCB(const SFString::GetValueEvent& event);
       
       /**
        * Get the wrapped ::gua::SPointsNode.

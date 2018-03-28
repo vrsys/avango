@@ -2,6 +2,7 @@
 #include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <functional>
+#include <iostream>
 
 AV_FC_DEFINE(av::gua::SPointsNode);
 
@@ -67,6 +68,10 @@ av::gua::SPointsNode::SPointsNode(std::shared_ptr< ::gua::node::SPointsNode> gua
   AV_FC_ADD_ADAPTOR_FIELD(GlobalColorPrecisionZ,
                       std::bind(&SPointsNode::getGlobalColorPrecisionZCB, this,std::placeholders::_1),
                       std::bind(&SPointsNode::setGlobalColorPrecisionZCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(MsgAppendix,
+                        std::bind(&SPointsNode::getMsgAppendixCB, this,std::placeholders::_1),
+                      std::bind(&SPointsNode::setMsgAppendixCB, this,std::placeholders::_1));
 
 
   if (guanode->get_material()) {
@@ -265,6 +270,16 @@ void av::gua::SPointsNode::getGlobalColorPrecisionZCB(const SFInt::GetValueEvent
 void av::gua::SPointsNode::setGlobalColorPrecisionZCB(const SFInt::SetValueEvent& event)
 {
   m_guaSPointsNode->set_global_color_precision_z(event.getValue());
+}
+
+void av::gua::SPointsNode::getMsgAppendixCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSPointsNode->get_message_appendix();
+}
+
+void av::gua::SPointsNode::setMsgAppendixCB(const SFString::SetValueEvent&)
+{
+  std::cout << "av::gua::SPointsNode::setMsgAppendixCB: MsgAppendix cannot be set." << std::endl;
 }
 
 std::shared_ptr< ::gua::node::SPointsNode>

@@ -52,6 +52,7 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
+      SFInt      GlobalCompressionLevel;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -64,6 +65,9 @@ namespace av
 
       virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
       virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
+
+      virtual void getGlobalCompressionLevelCB(const SFInt::GetValueEvent& event);
+      virtual void setGlobalCompressionLevelCB(const SFInt::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::Video3DNode.

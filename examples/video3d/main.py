@@ -15,6 +15,9 @@ class TimedRotate(avango.script.Script):
                                                        2.0, 0.0, 1.0, 0.0)
 
 
+def set_comp_lvl(video_geode, comp_lvl):
+    video_geode.GlobalCompressionLevel.value = comp_lvl
+
 def start(filename):
     # setup scenegraph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
@@ -22,6 +25,7 @@ def start(filename):
 
     videoloader = avango.gua.nodes.Video3DLoader()
     video_geode = videoloader.load("kinect", filename)
+    set_comp_lvl(video_geode, 7)
 
     transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 

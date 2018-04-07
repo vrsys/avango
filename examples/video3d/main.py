@@ -25,7 +25,10 @@ def start(filename):
 
     videoloader = avango.gua.nodes.Video3DLoader()
     video_geode = videoloader.load("kinect", filename)
-    set_comp_lvl(video_geode, 7)
+    video_geode.GlobalCompressionLevel.value = 2
+    print("AWESOME COMPRESSION LVL", video_geode.GlobalCompressionLevel.value)
+
+    #set_comp_lvl(video_geode, 7)
 
     transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 

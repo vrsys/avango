@@ -15,8 +15,10 @@ class TimedRotate(avango.script.Script):
                                                        2.0, 0.0, 1.0, 0.0)
 
 
-def set_comp_lvl(video_geode, comp_lvl):
-    video_geode.GlobalCompressionLevel.value = comp_lvl
+def set_comp_lvl(video_geode, g_comp_lvl, d_comp_lvl, c_comp_lvl):
+    video_geode.GlobalCompressionLevel.value = g_comp_lvl
+    video_geode.DepthCompressionLevel.value = d_comp_lvl
+    video_geode.ColorCompressionLevel.value = c_comp_lvl
 
 def start(filename):
     # setup scenegraph
@@ -25,10 +27,7 @@ def start(filename):
 
     videoloader = avango.gua.nodes.Video3DLoader()
     video_geode = videoloader.load("kinect", filename)
-    video_geode.GlobalCompressionLevel.value = 2
-    print("AWESOME COMPRESSION LVL", video_geode.GlobalCompressionLevel.value)
-
-    #set_comp_lvl(video_geode, 7)
+    set_comp_lvl(video_geode, 7, 0, 0)
 
     transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 

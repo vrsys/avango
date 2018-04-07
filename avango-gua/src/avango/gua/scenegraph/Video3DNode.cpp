@@ -32,6 +32,14 @@ av::gua::Video3DNode::Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> gua
                       std::bind(&Video3DNode::getGlobalCompressionLevelCB, this,std::placeholders::_1),
                       std::bind(&Video3DNode::setGlobalCompressionLevelCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(DepthCompressionLevel,
+                      std::bind(&Video3DNode::getDepthCompressionLevelCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setDepthCompressionLevelCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(ColorCompressionLevel,
+                      std::bind(&Video3DNode::getColorCompressionLevelCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setColorCompressionLevelCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -131,13 +139,37 @@ av::gua::Video3DNode::setRenderToStencilBufferCB(const SFBool::SetValueEvent& ev
 void
 av::gua::Video3DNode::getGlobalCompressionLevelCB(const SFInt::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = m_guaVideo3DNode->get_compression_lvl();
+  *(event.getValuePtr()) = m_guaVideo3DNode->get_global_compression_lvl();
 }
 
 void
 av::gua::Video3DNode::setGlobalCompressionLevelCB(const SFInt::SetValueEvent& event)
 {
-  m_guaVideo3DNode->set_compression_lvl(event.getValue());
+  m_guaVideo3DNode->set_global_compression_lvl(event.getValue());
+}
+
+void
+av::gua::Video3DNode::getDepthCompressionLevelCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaVideo3DNode->get_depth_compression_lvl();
+}
+
+void
+av::gua::Video3DNode::setDepthCompressionLevelCB(const SFInt::SetValueEvent& event)
+{
+  m_guaVideo3DNode->set_depth_compression_lvl(event.getValue());
+}
+
+void
+av::gua::Video3DNode::getColorCompressionLevelCB(const SFInt::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaVideo3DNode->get_color_compression_lvl();
+}
+
+void
+av::gua::Video3DNode::setColorCompressionLevelCB(const SFInt::SetValueEvent& event)
+{
+  m_guaVideo3DNode->set_color_compression_lvl(event.getValue());
 }
 
 std::shared_ptr< ::gua::node::Video3DNode>

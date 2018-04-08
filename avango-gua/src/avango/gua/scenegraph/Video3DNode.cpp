@@ -2,6 +2,7 @@
 #include <avango/gua/network/NetTransform.h>
 #include <avango/Base.h>
 #include <functional>
+#include <iostream>
 
 AV_FC_DEFINE(av::gua::Video3DNode);
 
@@ -39,6 +40,10 @@ av::gua::Video3DNode::Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> gua
   AV_FC_ADD_ADAPTOR_FIELD(ColorCompressionLevel,
                       std::bind(&Video3DNode::getColorCompressionLevelCB, this,std::placeholders::_1),
                       std::bind(&Video3DNode::setColorCompressionLevelCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(DebugMessage,
+                      std::bind(&Video3DNode::getDebugMessageCB, this,std::placeholders::_1),
+                      std::bind(&Video3DNode::setDebugMessageCB, this,std::placeholders::_1));
 
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
@@ -170,6 +175,18 @@ void
 av::gua::Video3DNode::setColorCompressionLevelCB(const SFInt::SetValueEvent& event)
 {
   m_guaVideo3DNode->set_color_compression_lvl(event.getValue());
+}
+
+void
+av::gua::Video3DNode::getDebugMessageCB(const SFString::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaVideo3DNode->get_debug_message();
+}
+
+void
+av::gua::Video3DNode::setDebugMessageCB(const SFString::SetValueEvent& event)
+{
+  std::cout << "av::gua::Video3DNode::setDebugMessageCB: MsgAppendix cannot be set." << std::endl;
 }
 
 std::shared_ptr< ::gua::node::Video3DNode>

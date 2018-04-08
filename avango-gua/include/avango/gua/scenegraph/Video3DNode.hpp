@@ -55,6 +55,7 @@ namespace av
       SFInt      GlobalCompressionLevel;
       SFInt      DepthCompressionLevel;
       SFInt      ColorCompressionLevel;
+      SFString   DebugMessage;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -76,6 +77,9 @@ namespace av
 
       virtual void getColorCompressionLevelCB(const SFInt::GetValueEvent& event);
       virtual void setColorCompressionLevelCB(const SFInt::SetValueEvent& event);
+
+      virtual void getDebugMessageCB(const SFString::GetValueEvent& event);
+      virtual void setDebugMessageCB(const SFString::SetValueEvent& event);
 
       /**
        * Get the wrapped ::gua::Video3DNode.

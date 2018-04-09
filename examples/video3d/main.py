@@ -14,11 +14,10 @@ class TimedRotate(avango.script.Script):
             0.0, -1.0, -2.0) * avango.gua.make_rot_mat(10 * self.TimeIn.value *
                                                        2.0, 0.0, 1.0, 0.0)
 
-        if 0 != video_geode:
-            print("video_geode.DebugMessage.value: " + video_geode.DebugMessage.value + "\n")
+        #if 0 != video_geode:
+            #print("video_geode.DebugMessage.value: " + video_geode.DebugMessage.value + "\n")
     
-
-
+    
 def set_comp_lvl(video_geode, g_comp_lvl, d_comp_lvl, c_comp_lvl):
     video_geode.GlobalCompressionLevel.value = g_comp_lvl
     video_geode.DepthCompressionLevel.value = d_comp_lvl
@@ -33,7 +32,7 @@ def start(filename):
     
     global video_geode
     video_geode = videoloader.load("kinect", filename)
-    set_comp_lvl(video_geode, 7, 0, 0)
+    set_comp_lvl(video_geode, 7, 7, 7)
     
     transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 

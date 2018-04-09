@@ -186,7 +186,7 @@ av::gua::Video3DNode::getDebugMessageCB(const SFString::GetValueEvent& event)
 void
 av::gua::Video3DNode::setDebugMessageCB(const SFString::SetValueEvent& event)
 {
-  std::cout << "av::gua::Video3DNode::setDebugMessageCB: MsgAppendix cannot be set." << std::endl;
+  std::cout << "av::gua::Video3DNode::setDebugMessageCB: DebugMessage cannot be set." << std::endl;
 }
 
 std::shared_ptr< ::gua::node::Video3DNode>

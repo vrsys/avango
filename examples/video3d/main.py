@@ -4,7 +4,7 @@ import avango.gua
 from examples_common.GuaVE import GuaVE
 import sys
 
-
+video_geode = 0
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
@@ -13,6 +13,10 @@ class TimedRotate(avango.script.Script):
         self.MatrixOut.value = avango.gua.make_trans_mat(
             0.0, -1.0, -2.0) * avango.gua.make_rot_mat(10 * self.TimeIn.value *
                                                        2.0, 0.0, 1.0, 0.0)
+
+        if 0 != video_geode:
+            print("video_geode.DebugMessage.value: " + video_geode.DebugMessage.value + "\n")
+    
 
 
 def set_comp_lvl(video_geode, g_comp_lvl, d_comp_lvl, c_comp_lvl):
@@ -26,9 +30,11 @@ def start(filename):
     loader = avango.gua.nodes.TriMeshLoader()
 
     videoloader = avango.gua.nodes.Video3DLoader()
+    
+    global video_geode
     video_geode = videoloader.load("kinect", filename)
     set_comp_lvl(video_geode, 7, 0, 0)
-
+    
     transform1 = avango.gua.nodes.TransformNode(Children=[video_geode])
 
     light = avango.gua.nodes.LightNode(

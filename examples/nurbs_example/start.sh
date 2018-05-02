@@ -3,15 +3,17 @@
 # get directory of script
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-LOCAL_GUACAMOLE="$DIR/../../../guacamole"
-LOCAL_AVANGO="$DIR/../../../avango"
+# assuming a local guacmole version is located properly
+LOCAL_GUACAMOLE="$DIR/../../../guacamole-github-scholli"
+LOCAL_AVANGO="$DIR/../../../avango-github-vrsys"
 
 # if not, this path will be used
-GUACAMOLE=/
-AVANGO=/
+GUACAMOLE=/opt/guacamole/master
+AVANGO=/opt/avango/master
+GPUCAST=/opt/gpucast/
 
 # third party libs
-export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/lamure/install/lib
+export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/lamure/install/lib:$GPUCAST/lib
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/bernste4/src/schism/lib/linux_x86

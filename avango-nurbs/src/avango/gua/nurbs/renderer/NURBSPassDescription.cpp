@@ -19,7 +19,9 @@ av::gua::nurbs::NURBSPassDescription::NURBSPassDescription(
     : PipelinePassDescription(guaNURBSPassDescription)
     , m_guaNURBSPassDescription(guaNURBSPassDescription)
 {
-
+  AV_FC_ADD_ADAPTOR_FIELD(Pretessellation,
+                        std::bind(&NURBSPassDescription::getPretessellationCB, this,std::placeholders::_1),
+                        std::bind(&NURBSPassDescription::setPretessellationCB, this,std::placeholders::_1));
 }
 
 void
@@ -44,4 +46,15 @@ av::gua::nurbs::NURBSPassDescription::getGuaNURBSPassDescription() const
     return m_guaNURBSPassDescription;
 }
 
+void
+av::gua::nurbs::NURBSPassDescription::getPretessellationCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNURBSPassDescription->enable_pretessellation();
+}
+
+void
+av::gua::nurbs::NURBSPassDescription::setPretessellationCB(const SFBool::SetValueEvent& event)
+{
+  m_guaNURBSPassDescription->enable_pretessellation(event.getValue());
+}
 

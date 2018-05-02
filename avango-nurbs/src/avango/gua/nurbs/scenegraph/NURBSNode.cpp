@@ -20,6 +20,14 @@ av::gua::nurbs::NURBSNode::NURBSNode(std::shared_ptr< ::gua::node::NURBSNode> gu
                       std::bind(&NURBSNode::getMaterialCB, this,std::placeholders::_1),
                       std::bind(&NURBSNode::setMaterialCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_ADAPTOR_FIELD(PixelErrorTolerance,
+                      std::bind(&NURBSNode::getPixelErrorToleranceCB, this,std::placeholders::_1),
+                      std::bind(&NURBSNode::setPixelErrorToleranceCB, this,std::placeholders::_1));
+
+  AV_FC_ADD_ADAPTOR_FIELD(WireframeMode,
+                      std::bind(&NURBSNode::getWireframeModeCB, this,std::placeholders::_1),
+                      std::bind(&NURBSNode::setWireframeModeCB, this,std::placeholders::_1));
+
   if (guanode->get_material()) {
     m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
   }
@@ -97,4 +105,27 @@ av::gua::nurbs::NURBSNode::setMaterialCB(const SFMaterial::SetValueEvent& event)
 std::shared_ptr< ::gua::node::NURBSNode>
 av::gua::nurbs::NURBSNode::getGuaNURBSNode() const {
   return m_guaNURBSNode;
+}
+
+void 
+av::gua::nurbs::NURBSNode::getPixelErrorToleranceCB(const SFFloat::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNURBSNode->max_tesselation_error();
+}
+
+void 
+av::gua::nurbs::NURBSNode::setPixelErrorToleranceCB(const SFFloat::SetValueEvent& event)
+{
+  m_guaNURBSNode->max_tesselation_error(event.getValue());
+}
+
+
+void av::gua::nurbs::NURBSNode::getWireframeModeCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaNURBSNode->wireframe(); 
+}
+
+void av::gua::nurbs::NURBSNode::setWireframeModeCB(const SFBool::SetValueEvent& event)
+{
+  m_guaNURBSNode->wireframe(event.getValue());
 }

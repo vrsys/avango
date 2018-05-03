@@ -52,7 +52,7 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
-      SFFloat     ScreenSpacePointSize;
+      SFFloat    ScreenSpacePointSize;
 
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);

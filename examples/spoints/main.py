@@ -33,7 +33,7 @@ def start(filename):
         Transform=(avango.gua.make_trans_mat(1, 1, 5) *
                    avango.gua.make_scale_mat(30, 30, 30)))
 
-    size = avango.gua.Vec2ui(1024, 768)
+    size = avango.gua.Vec2ui(800, 800)
 
     window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
 
@@ -75,7 +75,7 @@ def start(filename):
     screen = avango.gua.nodes.ScreenNode(
         Name="screen",
         Width=2,
-        Height=1.5,
+        Height=2,
         Children=[cam])
 
     graph.Root.value.Children.value = [transform1, light, screen]

@@ -3,14 +3,14 @@
 # get directory of script
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-LOCAL_GUACAMOLE="/home/xaf/guacamole/guacamole"
-LOCAL_AVANGO="/home/xaf/guacamole/avango"
+LOCAL_GUACAMOLE="$DIR/../../../guacamole"
+LOCAL_AVANGO="$DIR/../../../avango"
 
 # third party libs
-export LD_LIBRARY_PATH=/home/xaf/.local/lib:/usr/lib/x86_64-linux-gnu:/home/xaf/guacamole/lamure/install/lib
+export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/lamure/install/lib
 
 # schism
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/xaf/guacamole/schism/lib/linux_x86
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/bernste4/src/schism/lib/linux_x86
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$LD_LIBRARY_PATH

@@ -9,16 +9,8 @@ from examples_common.GuaVE import GuaVE
 def start():
     # setup scenegraph
     graph = nodes.SceneGraph(Name="scenegraph")
-    loader = nodes.TriMeshLoader()
-
-    cube = loader.create_geometry_from_file("cube", "data/objects/cube.obj", LoaderFlags.NORMALIZE_SCALE)
-    cube.Transform.value = make_scale_mat(0.5)
 
     nrp_root = avango.gua.nrp.NRPNode()
-    nrp_root.Children.value = [cube]
-
-    light = nodes.LightNode(Type=LightType.POINT, Name="light", Color=Color(1.0, 1.0, 1.0), Brightness=100.0,
-                            Transform=(make_trans_mat(1, 1, 5) * make_scale_mat(30, 30, 30)))
 
     size = Vec2ui(1024, 768)
 
@@ -39,13 +31,14 @@ def start():
     cam.PipelineDescription.value = nodes.PipelineDescription(Passes=[avango.gua.nrp.NRPPassDescription(),
                                                                       nodes.TriMeshPassDescription(),
                                                                       nodes.LightVisibilityPassDescription(),
-                                                                      res_pass])
+                                                                      res_pass,
+                                                                      nodes.SSAAPassDescription()])
 
     cam.PipelineDescription.value.EnableABuffer.value = True
 
     screen = nodes.ScreenNode(Name="screen", Width=2, Height=1.5, Children=[cam])
 
-    graph.Root.value.Children.value = [nrp_root, light, screen]
+    graph.Root.value.Children.value = [nrp_root, screen]
 
     viewer = nodes.Viewer()
     viewer.SceneGraphs.value = [graph]

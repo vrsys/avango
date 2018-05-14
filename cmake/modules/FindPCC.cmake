@@ -4,22 +4,20 @@
 SET(PCC_INCLUDE_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/libpcc/include
   ${PCC_INCLUDE_DIRS}
-  /opt/libpcc/current/include
-  /home/buda8714/Documents/git/libpcc/include
+  /opt/libpcc/include
 )
 
 SET(PCC_LIBRARY_SEARCH_DIRS
   ${GLOBAL_EXT_DIR}/libpcc/lib
   ${PCC_LIBRARY_DIRS}
-  /opt/libpcc/current/lib
-  /home/buda8714/Documents/git/libpcc/lib
+  /opt/libpcc/lib
 )
 
 ##############################################################################
 # search
 ##############################################################################
 find_path (PCC_INCLUDE_DIRS
-           NAMES PointCloud.hpp
+           NAMES PointCloudGridEncoder.hpp
            HINTS
            ${PCC_INCLUDE_SEARCH_DIRS}
            NO_DEFAULT_PATH

@@ -38,7 +38,7 @@ namespace av
 
 
     public:
-
+      
       /**
        * Get the wrapped ::gua::SPointsPassDescription.
        */

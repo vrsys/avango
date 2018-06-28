@@ -18,9 +18,7 @@ av::gua::SPointsPassDescription::SPointsPassDescription(
   std::shared_ptr< ::gua::SPointsPassDescription> const& guaSPointsPassDescription)
     : PipelinePassDescription(guaSPointsPassDescription)
     , m_guaSPointsPassDescription(guaSPointsPassDescription)
-{
-
-}
+{}
 
 void
 av::gua::SPointsPassDescription::initClass()
@@ -43,3 +41,4 @@ av::gua::SPointsPassDescription::getGuaSPointsPassDescription() const
 {
     return m_guaSPointsPassDescription;
 }
+

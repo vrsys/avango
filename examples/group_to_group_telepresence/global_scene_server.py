@@ -148,7 +148,7 @@ client_cam = avango.gua.nodes.CameraNode(
     LeftScreenPath="/net/screen",
     SceneGraph="scenegraph",
     Resolution=size,
-    OutputWindowName="client_window",
+    OutputWindowName="client_window_weimar",
     Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
     PipelineDescription=pipeline_description)
 

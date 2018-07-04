@@ -66,8 +66,8 @@ size = avango.gua.Vec2ui(800, 600)
 
 window = avango.gua.nodes.GlfwWindow(Size=size,
                                      LeftResolution=size,
-                                     Title="client_window")
-avango.gua.register_window("client_window", window)
+                                     Title="client_window_weimar")
+avango.gua.register_window("client_window_weimar", window)
 
 logger = avango.gua.nodes.Logger(EnableWarning=False)
 
@@ -76,7 +76,7 @@ viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 
 init = NetInit()
-init.WindowName.value = "client_window"
+init.WindowName.value = "client_window_weimar"
 init.Viewer = viewer
 init.NetChildren.connect_from(nettrans.Children)
 

@@ -125,8 +125,8 @@ av::gua::Init::initClass()
 {
     if (!isTypeInitialized())
     {
-        char** argv;
-        ::gua::init(0, argv);
+		char** argv;
+        ::gua::init(1, argv);
         av::gua::initFields();
 
         av::gua::Node::initClass();

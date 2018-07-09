@@ -6,6 +6,7 @@
 
 #include <avango/gua/Types.hpp>
 #include <avango/Base.h>
+#include <iostream>
 #include <functional>
 #include <avango/Logger.h>
 

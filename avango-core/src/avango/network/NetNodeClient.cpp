@@ -25,6 +25,7 @@
 
 #include "NetNodeClient.h"
 
+#include <iostream>
 #include <thread>
 #include <zmq.hpp>
 

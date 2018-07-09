@@ -110,6 +110,8 @@
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/gua/utils/Ray.hpp>
 
+#include <avango/gua/utils/NamedSharedMemoryController.hpp>
+
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
 
@@ -243,6 +245,9 @@ av::gua::Init::initClass()
 
         av::gua::Logger::initClass();
         av::gua::Ray::initClass();
+
+        av::gua::NamedSharedMemoryController::initClass();
+
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

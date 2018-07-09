@@ -95,6 +95,20 @@ void av::gua::LineStripNode::pushVertex(float pos_x, float pos_y, float pos_z,
                                   thickness);
 }
 
+void av::gua::LineStripNode::fillWithParabola(float a, float b, float c,
+											  float sample_distance, float maximal_distance,
+											  float col_r, float col_g, float col_b) {
+	startVertexList();
+	int steps = (int)(maximal_distance / sample_distance);
+	for (int step = 0; step < steps; ++step) {
+		float current_ray_step_width = -step * sample_distance;
+		float height = a * current_ray_step_width * current_ray_step_width +
+			           b * current_ray_step_width + c;
+		enqueueVertex(0.0, height, current_ray_step_width, col_r, col_g, col_b, 1.0, 1.0);
+	}
+	endVertexList();
+}
+
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 

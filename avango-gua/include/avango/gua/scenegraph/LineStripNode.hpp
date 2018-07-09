@@ -48,6 +48,10 @@ namespace av
                       float col_r = 0.0f, float col_g = 0.0f, float col_b = 0.0f, float col_a = 1.0f,
                       float thickness = 1.0f) const;
 
+	  void fillWithParabola(float a, float b, float c,
+							float sample_distance, float maximal_distance,
+							float col_r, float col_g, float col_b);
+
       //void submitVertices();
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)

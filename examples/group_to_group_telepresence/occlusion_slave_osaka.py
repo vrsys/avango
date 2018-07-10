@@ -36,21 +36,78 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "client.log")
 
+class Initializer(avango.script.Script):
 
+  def __init__(self):
+    self.super(Initializer).__init__()
+
+    # scenegraph
+    self.nettrans = avango.gua.nodes.NetTransform(Name="net",
+                                         # specify role, ip, and port
+                                         Groupname="AVCLIENT|141.54.147.52|7432")
+    self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
+    self.graph.Root.value.Children.value = [self.nettrans]
+
+    # viewing setup
+    size = avango.gua.Vec2ui(800, 600)
+
+    self.window = avango.gua.nodes.GlfwWindow(Size=size,
+                                              LeftResolution=size,
+                                              Title="client_window_weimar")
+    avango.gua.register_window("client_window_weimar", self.window)
+
+    logger = avango.gua.nodes.Logger(EnableWarning=False)
+
+    viewer = avango.gua.nodes.Viewer()
+    viewer.SceneGraphs.value = [self.graph]
+    viewer.Windows.value = [self.window]
+
+    # parameters
+    self.is_initialized = False
+    self.always_evaluate(True)
+    viewer.run()
+
+
+
+  def evaluate(self):
+    if not self.is_initialized:
+      if len(self.nettrans.Children.value) > 0:
+        self.on_arrival()
+        self.is_initialized = True
+        #self.always_evaluate(False)
+
+
+  def on_arrival(self):
+    print("I HAVE ARRIVED")
+    print(self.graph["/net/screen/cam"].Name.value)
+
+    occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
+        Passes=[
+            avango.gua.nodes.TriMeshPassDescription(),
+            avango.gua.nodes.LightVisibilityPassDescription(),
+            avango.gua.nodes.SPointsPassDescription(),
+            avango.gua.nodes.OcclusionSlaveResolvePassDescription()
+        ])
+    self.graph["/net/screen/cam"].PipelineDescription.value = occlusion_slave_pipeline_description
+
+
+init = Initializer()
+
+'''
 class NetInit(avango.script.Script):
     NetChildren = avango.gua.MFNode()
     WindowName = avango.SFString()
     Viewer = avango.gua.nodes.Viewer()
-    """
-  @field_has_changed(NetChildren)
-  def update(self):
-    for tmp in self.NetChildren.value:
-      for child in tmp.Children.value:
-        if isinstance(child, avango.gua.CameraNode):
-          if child.OutputWindowName.value == self.WindowName.value:
+  
+  #@field_has_changed(NetChildren)
+  #def update(self):
+  #  for tmp in self.NetChildren.value:
+  #    for child in tmp.Children.value:
+  #      if isinstance(child, avango.gua.CameraNode):
+  #        if child.OutputWindowName.value == self.WindowName.value:
             # self.Viewer.CameraNodes.value = [child]
-            pass
-  """
+  #          pass
+  
 
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
@@ -93,32 +150,16 @@ MemoryController.register_remotely_constructed_object_on_segment("DEPTH_FEEDBACK
 
 curr_val_to_set = 0
 
-# get signal
-while True:
-  #curr_val_to_set+=1
-  #MemoryController.get_value_from_named_object("atomic_semaphor") 
-  #print(MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR"))
 
-  #print("SHARED VALUE: " + str(MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")) )
-  #if MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR") < 1:
-  #  print("Occlusion Slave Waiting For Signal\n")
-  #else:
-  #  print("Starting Occlusion Slave!!")
-  #  break
+gra
+
+# get signal
+while False:
   current_signal_value = MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
   if 0 == current_signal_value:
     print("Rendering Frame!")
     MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
     viewer.frame()
-  viewer.frame()
-#print("::::::")
-  #if MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR") == 0:
-  #  print("Rendering One Frame!")
-  #  MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
-    #viewer.frame()
-  #else:
-  #  print("Resetting counter to 0!")
-  #  MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 0)
 
 
 # avango frame:[
@@ -141,4 +182,5 @@ while True:
   # use gbuffer to perform reconstruction
 #]
 
-#viewer.run()
+viewer.run()
+'''

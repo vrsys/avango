@@ -145,6 +145,7 @@ server_cam = avango.gua.nodes.CameraNode(
 
 client_cam = avango.gua.nodes.CameraNode(
     ViewID=2,
+    Name="cam",
     LeftScreenPath="/net/screen",
     SceneGraph="scenegraph",
     Resolution=size,

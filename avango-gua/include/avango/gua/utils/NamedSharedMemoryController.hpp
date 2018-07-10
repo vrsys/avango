@@ -49,6 +49,11 @@ namespace av
     public:
 
       void add_memory_segment(std::string const& segment_name, uint64_t size_in_byte);
+      void add_read_only_memory_segment(std::string const& segment_name);
+
+
+      void register_remotely_constructed_object_on_segment(std::string const& segment_name,
+                                                           std::string const& object_name);
 
       template <typename INTERNAL_TYPE>
       void construct_named_object_on_segment(std::string const& segment_name, std::string const& object_name) {
@@ -59,6 +64,7 @@ namespace av
       void destroy_named_object(std::string const& object_name) {
         m_guaNamedSharedMemoryController->construct_named_object_on_segment<INTERNAL_TYPE>(object_name);
       }
+
 
       template <typename INTERNAL_TYPE, typename EXTERNAL_TYPE>
       void set_value_for_named_object(std::string const& object_name, EXTERNAL_TYPE const& value){

@@ -95,6 +95,7 @@
 #include "renderer/FullscreenPassDescription.hpp"
 #include "renderer/SSAOPassDescription.hpp"
 #include "renderer/ResolvePassDescription.hpp"
+#include "renderer/OcclusionSlaveResolvePassDescription.hpp"
 #include "renderer/LightVisibilityPassDescription.hpp"
 #include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
@@ -250,6 +251,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SSAOPassDescription();
     init_SSAAPassDescription();
     init_ResolvePassDescription();
+    init_OcclusionSlaveResolvePassDescription();
     init_LightVisibilityPassDescription();
     init_Databases();
     init_TriMeshLoader();

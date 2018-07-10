@@ -101,6 +101,7 @@
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/gua/renderer/SSAAPassDescription.hpp>
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
+#include <avango/gua/renderer/OcclusionSlaveResolvePassDescription.hpp>
 #include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
@@ -221,6 +222,7 @@ av::gua::Init::initClass()
         av::gua::SSAOPassDescription::initClass();
         av::gua::SSAAPassDescription::initClass();
         av::gua::ResolvePassDescription::initClass();
+        av::gua::OcclusionSlaveResolvePassDescription::initClass();
         av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();

@@ -28,6 +28,13 @@ void addMemorySegment(av::gua::NamedSharedMemoryController& memory_controller,
                                        memory_chunk_size_in_bytes);
 }
 
+void addReadOnlyMemorySegment(av::gua::NamedSharedMemoryController& memory_controller,
+                              std::string const& segment_name
+                             ) {
+
+  memory_controller.add_read_only_memory_segment(segment_name);
+}
+
 void constructNamedAtomicIntOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
                                       std::string const& segment_name,
                                       std::string const& object_name) {
@@ -45,6 +52,11 @@ int getValueFromNamedAtomicIntOnSegment(av::gua::NamedSharedMemoryController& me
                                         std::string const& object_name) {
   // first template parameter: internal_type, second template parameter: external_type
   return memory_controller.get_value_from_named_object<std::atomic_int, int>(object_name);
+}
+
+void registerRemotelyConstructedObjectOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
+                                                     std::string const& segment_name, std::string const& object_name) {
+  memory_controller.register_remotely_constructed_object_on_segment(segment_name, object_name);
 }
 
 void init_NamedSharedMemoryController()
@@ -65,9 +77,11 @@ void init_NamedSharedMemoryController()
          av::Link<av::gua::NamedSharedMemoryController>,
          bases<av::FieldContainer>, boost::noncopyable> ("NamedSharedMemoryController", "docstring", no_init)
          .def("add_memory_segment", &addMemorySegment)
+         .def("add_read_only_memory_segment", &addReadOnlyMemorySegment)
          .def("construct_named_atomic_int",  &constructNamedAtomicIntOnSegment)
          .def("set_value_for_named_object",  &setValueForNamedAtomicIntOnSegment)
          .def("get_value_from_named_object", &getValueFromNamedAtomicIntOnSegment)
+         .def("register_remotely_constructed_object_on_segment", &registerRemotelyConstructedObjectOnSegment)
          ;
 
  }

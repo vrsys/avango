@@ -55,48 +55,14 @@ void
 av::gua::NamedSharedMemoryController::add_memory_segment(std::string const& segment_name, uint64_t size_in_byte) {
   m_guaNamedSharedMemoryController->add_memory_segment(segment_name, size_in_byte);
 }
-/*
-av::gua::NamedSharedMemorySegment
-av::gua::NamedSharedMemoryController::get_memory_segment(std::string const& segment_name) {
-  auto retrieved_memory_segment = m_guaNamedSharedMemoryController->get_memory_segment(segment_name);
 
-  return av::gua::NamedSharedMemorySegment(retrieved_memory_segment);
-}
-*/
-/*
-void
-av::gua::NamedSharedMemoryController::getOriginCB(const SFVec3::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaNamedSharedMemoryController->origin_;
+void 
+av::gua::NamedSharedMemoryController::add_read_only_memory_segment(std::string const& segment_name) {
+  m_guaNamedSharedMemoryController->add_read_only_memory_segment(segment_name);
 }
 
-void
-av::gua::NamedSharedMemoryController::setOriginCB(const SFVec3::SetValueEvent& event)
-{
-    m_guaNamedSharedMemoryController->origin_ = event.getValue();
+void 
+av::gua::NamedSharedMemoryController::register_remotely_constructed_object_on_segment(std::string const& segment_name,
+                                                                                      std::string const& object_name) {
+  m_guaNamedSharedMemoryController->register_remotely_constructed_object_on_segment(segment_name, object_name);
 }
-
-void
-av::gua::NamedSharedMemoryController::getDirectionCB(const SFVec3::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaNamedSharedMemoryController->direction_;
-}
-
-void
-av::gua::NamedSharedMemoryController::setDirectionCB(const SFVec3::SetValueEvent& event)
-{
-    m_guaNamedSharedMemoryController->direction_ = event.getValue();
-}
-
-void
-av::gua::NamedSharedMemoryController::getTMaxCB(const SFFloat::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaNamedSharedMemoryController->t_max_;
-}
-
-void
-av::gua::NamedSharedMemoryController::setTMaxCB(const SFFloat::SetValueEvent& event)
-{
-    m_guaNamedSharedMemoryController->t_max_ = event.getValue();
-}
-*/

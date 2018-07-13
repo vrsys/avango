@@ -120,6 +120,8 @@ res_pass = avango.gua.nodes.ResolvePassDescription()
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
 tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 
+occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
+
 #pipeline_description = avango.gua.nodes.PipelineDescription(
 #    EnableABuffer=True,
 #    Passes=[tri_pass, tquad_pass, lvis_pass, res_pass, tscreenspace_pass])
@@ -130,6 +132,14 @@ pipeline_description = avango.gua.nodes.PipelineDescription(
         avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
         res_pass
+    ])
+
+occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
+    Passes=[
+        avango.gua.nodes.TriMeshPassDescription(),
+        avango.gua.nodes.LightVisibilityPassDescription(),
+        avango.gua.nodes.SPointsPassDescription(),
+        occlusion_slave_res_pass
     ])
 
 server_cam = avango.gua.nodes.CameraNode(
@@ -145,7 +155,7 @@ server_cam = avango.gua.nodes.CameraNode(
 
 client_cam = avango.gua.nodes.CameraNode(
     ViewID=2,
-    Name="cam",
+    Name="viewer_0_weimar",
     LeftScreenPath="/net/screen",
     SceneGraph="scenegraph",
     Resolution=size,
@@ -153,7 +163,21 @@ client_cam = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
     PipelineDescription=pipeline_description)
 
-screen.Children.value = [client_cam, server_cam, monkey_transform1]
+occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
+    ViewID=3,
+    Name="os_weimar_v0_osaka",
+    LeftScreenPath="/net/screen",
+    RightScreenPath="/net/screen",
+    SceneGraph="scenegraph",
+    Resolution=size,
+    OutputWindowName="slave_weimar_v0_osaka",
+    Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+    PipelineDescription=occlusion_slave_pipeline_description,
+    #PipelineDescription=pipeline_description,
+    EyeDistance = 0.06,
+    EnableStereo = True)
+
+screen.Children.value = [occlusion_slave_client_cam, client_cam, server_cam, monkey_transform1]
 nettrans.Children.value = [group, screen]
 
 screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
@@ -181,10 +205,14 @@ nettrans.distribute_object(tquad_pass)
 nettrans.distribute_object(lvis_pass)
 nettrans.distribute_object(res_pass)
 nettrans.distribute_object(tscreenspace_pass)
-
+nettrans.distribute_object(occlusion_slave_res_pass)
 for p in pipeline_description.Passes.value:
     nettrans.distribute_object(p)
 nettrans.distribute_object(pipeline_description)
+
+for p in occlusion_slave_pipeline_description.Passes.value:
+    nettrans.distribute_object(p)
+nettrans.distribute_object(occlusion_slave_pipeline_description)
 
 # setup viewing
 window = avango.gua.nodes.GlfwWindow(Size=size,

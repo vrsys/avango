@@ -4,6 +4,8 @@
 #include <avango/python/register_field.h>
 #include <avango/gua/utils/NamedSharedMemoryController.hpp>
 
+#include <array>
+
 using namespace boost::python;
 using namespace av::python;
 
@@ -39,6 +41,30 @@ void constructNamedAtomicIntOnSegment(av::gua::NamedSharedMemoryController& memo
                                       std::string const& segment_name,
                                       std::string const& object_name) {
   memory_controller.construct_named_object_on_segment<std::atomic_int>(segment_name, object_name);
+}
+
+void constructNamed2KBCharBufferOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
+                                          std::string const& segment_name,
+                                          std::string const& object_name) {
+  memory_controller.construct_named_object_on_segment<std::array<char, ::gua::MemAllocSizes::KB2> >(segment_name, object_name);
+}
+
+void constructNamed64KBCharBufferOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
+                                           std::string const& segment_name,
+                                           std::string const& object_name) {
+  memory_controller.construct_named_object_on_segment<std::array<char, ::gua::MemAllocSizes::KB64> >(segment_name, object_name);
+}
+
+void constructNamed1MBCharBufferOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
+                                          std::string const& segment_name,
+                                          std::string const& object_name) {
+  memory_controller.construct_named_object_on_segment<std::array<char, ::gua::MemAllocSizes::MB1> >(segment_name, object_name);
+}
+
+void constructNamed16MBCharBufferOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
+                                           std::string const& segment_name,
+                                           std::string const& object_name) {
+  memory_controller.construct_named_object_on_segment<std::array<char, ::gua::MemAllocSizes::MB16> >(segment_name, object_name);
 }
 
 void setValueForNamedAtomicIntOnSegment(av::gua::NamedSharedMemoryController& memory_controller,
@@ -79,6 +105,10 @@ void init_NamedSharedMemoryController()
          .def("add_memory_segment", &addMemorySegment)
          .def("add_read_only_memory_segment", &addReadOnlyMemorySegment)
          .def("construct_named_atomic_int",  &constructNamedAtomicIntOnSegment)
+         .def("construct_named_2KB_char_buffer", &constructNamed2KBCharBufferOnSegment)
+         .def("construct_named_64KB_char_buffer", &constructNamed64KBCharBufferOnSegment)
+         .def("construct_named_1MB_char_buffer",  &constructNamed1MBCharBufferOnSegment)
+         .def("construct_named_16MB_char_buffer", &constructNamed16MBCharBufferOnSegment)
          .def("set_value_for_named_object",  &setValueForNamedAtomicIntOnSegment)
          .def("get_value_from_named_object", &getValueFromNamedAtomicIntOnSegment)
          .def("register_remotely_constructed_object_on_segment", &registerRemotelyConstructedObjectOnSegment)

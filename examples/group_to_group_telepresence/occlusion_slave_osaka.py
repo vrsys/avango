@@ -53,27 +53,66 @@ class Initializer(avango.script.Script):
 
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
-                                              Title="client_window_weimar")
-    avango.gua.register_window("client_window_weimar", self.window)
+                                              RightResolution=size,
+                                              StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_GREEN,
+                                              Title="slave_weimar_v0_osaka")
+    avango.gua.register_window("slave_weimar_v0_osaka", self.window)
 
     logger = avango.gua.nodes.Logger(EnableWarning=False)
 
-    viewer = avango.gua.nodes.Viewer()
-    viewer.SceneGraphs.value = [self.graph]
-    viewer.Windows.value = [self.window]
+    self.MemoryController = avango.gua.nodes.NamedSharedMemoryController()
+    self.MemoryController.add_read_only_memory_segment("DEPTH_FEEDBACK_SEGMENT")
+
+    self.MemoryController.register_remotely_constructed_object_on_segment("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
+
+
+    print("Before adding shared memory segments")
+    #add shared depth buffer memory
+
+    segment_name_left_eye_3  = "segment_for_DB_3L"
+    segment_name_right_eye_3 = "segment_for_DB_3R"
+    
+    self.MemoryController.add_memory_segment(segment_name_left_eye_3, 1024*4)
+    self.MemoryController.construct_named_2KB_char_buffer(segment_name_left_eye_3, "DB_3L")
+    print("After adding shared memory segment 0")                 
+    self.MemoryController.add_memory_segment(segment_name_right_eye_3, 1024*4)
+    self.MemoryController.construct_named_2KB_char_buffer(segment_name_right_eye_3, "DB_3R")
+    print("After adding shared memory segment 1")
+    #self.MemoryController.add_memory_segment("DB_light", 100*100*4)
+    #print("After adding shared memory segment 2")
+
+    self.viewer = avango.gua.nodes.Viewer()
+    self.viewer.SceneGraphs.value = [self.graph]
+    self.viewer.Windows.value = [self.window]
+
+    while True:
+      depth_feedback_state = self.MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
+      #print("Read State")
+      if 0 == depth_feedback_state:
+        #self.MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
+        self.viewer.frame()
+      elif 2 == depth_feedback_state:
+        pass
+        #print("Depth buffer was successfully written.")
+
+
 
     # parameters
+    print("Before setting is initialized")
     self.is_initialized = False
+    print("always evaluate")
     self.always_evaluate(True)
-    viewer.run()
+    print("after always evaluate")
 
 
 
   def evaluate(self):
+    print("beginning of evaluation")
     if not self.is_initialized:
       if len(self.nettrans.Children.value) > 0:
         self.on_arrival()
         self.is_initialized = True
+
         #self.always_evaluate(False)
 
 
@@ -89,6 +128,9 @@ class Initializer(avango.script.Script):
             avango.gua.nodes.OcclusionSlaveResolvePassDescription()
         ])
     self.graph["/net/screen/cam"].PipelineDescription.value = occlusion_slave_pipeline_description
+
+    print("Reconfigured pipeline")
+
 
 
 init = Initializer()

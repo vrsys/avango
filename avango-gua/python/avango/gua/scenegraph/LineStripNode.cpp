@@ -136,7 +136,6 @@ void init_LineStripNode()
          .def("enqueue_vertex", &enqueueVertex2)
          .def("enqueue_vertex", &enqueueVertex3)
          .def("enqueue_vertex", &enqueueVertex4)
-	     .def("fill_with_parabola", &fillWithParabola)
          .def("start_vertex_list", &startVertexList)
          .def("end_vertex_list", &endVertexList)
          ;

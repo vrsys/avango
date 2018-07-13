@@ -48,6 +48,12 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
                       std::bind(&LineStripNode::getWasCreatedEmptyCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setWasCreatedEmptyCB, this,std::placeholders::_1));
 
+  AV_FC_ADD_FIELD(UseParabolaShape, false);
+
+  AV_FC_ADD_ADAPTOR_FIELD(ParabolaParameters,
+					  std::bind(&LineStripNode::getParabolaParametersCB, this, std::placeholders::_1),
+					  std::bind(&LineStripNode::setParabolaParametersCB, this, std::placeholders::_1));
+
   AV_FC_ADD_ADAPTOR_FIELD(TriggerUpdate,
                       std::bind(&LineStripNode::getTriggerUpdateCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setTriggerUpdateCB, this,std::placeholders::_1));
@@ -98,15 +104,22 @@ void av::gua::LineStripNode::pushVertex(float pos_x, float pos_y, float pos_z,
 void av::gua::LineStripNode::fillWithParabola(float a, float b, float c,
 											  float sample_distance, float maximal_distance,
 											  float col_r, float col_g, float col_b) {
+
 	startVertexList();
-	int steps = (int)(maximal_distance / sample_distance);
-	for (int step = 0; step < steps; ++step) {
-		float current_ray_step_width = -step * sample_distance;
-		float height = a * current_ray_step_width * current_ray_step_width +
-			           b * current_ray_step_width + c;
-		enqueueVertex(0.0, height, current_ray_step_width, col_r, col_g, col_b, 1.0, 1.0);
-	}
+	float current_z = 0.0;
+
+	do {
+		float height = a * current_z * current_z + b * current_z + c;
+		enqueueVertex(0.0, height, current_z, col_r, col_g, col_b, 1.0, 1.0);
+		current_z -= sample_distance;
+	} while (current_z > -maximal_distance);
+
+	float final_height = a * maximal_distance * maximal_distance +
+						 -b * maximal_distance + c;
+	enqueueVertex(0.0, final_height, -maximal_distance, col_r, col_g, col_b, 1.0, 1.0);
+
 	endVertexList();
+	
 }
 
 
@@ -243,6 +256,29 @@ void av::gua::LineStripNode::setWasCreatedEmptyCB(const SFBool::SetValueEvent& e
   m_guaLineStripNode->set_was_created_empty(event.getValue());
 }
 
+void av::gua::LineStripNode::getParabolaParametersCB(const MFFloat::GetValueEvent& event) {
+
+}
+
+void av::gua::LineStripNode::setParabolaParametersCB(const MFFloat::SetValueEvent& event) {
+	
+	if (UseParabolaShape.getValue()) {
+
+		const std::vector<float, std::allocator<float>> values = event.getValue();
+
+		if (values.size() == 8) {
+			fillWithParabola(values.at(0), values.at(1), values.at(2),
+				             values.at(3), values.at(4),
+				             values.at(5), values.at(6), values.at(7));
+		}
+		else {
+			std::cout << "Error: ParabolaParameters must contain eight values:" << std::endl;
+			std::cout << "a, b, c, sample_distance, maximal_distance, col_r, col_g, col_b" << std::endl;
+		}
+	}
+
+}
+
 void av::gua::LineStripNode::getTriggerUpdateCB(const SFBool::GetValueEvent& event)
 {
   *(event.getValuePtr()) = m_guaLineStripNode->get_trigger_update();
@@ -254,11 +290,12 @@ void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& eve
   if(0 == role_server_client_unidentified) {
     m_guaLineStripNode->set_trigger_update(!event.getValue());
 
-    std::string compiled_buffer_string;
-    
-    m_guaLineStripNode->compile_buffer_string(compiled_buffer_string);
+	if (!UseParabolaShape.getValue()) {
+		std::string compiled_buffer_string;
+		m_guaLineStripNode->compile_buffer_string(compiled_buffer_string);
+		privateLineStripData = compiled_buffer_string;
+	}
 
-    privateLineStripData = compiled_buffer_string;
   }
 
 }
@@ -272,10 +309,12 @@ void av::gua::LineStripNode::getPrivateLineStripDataStringCB(const SFString::Get
 void av::gua::LineStripNode::setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event)
 {
   if(1 == role_server_client_unidentified) {
-    std::string compiled_buffer_string = event.getValue(); 
 
-    //m_guaLineStripNode->clear_vertices();
-    m_guaLineStripNode->uncompile_buffer_string(compiled_buffer_string);
+	  if (!UseParabolaShape.getValue()) {
+		  std::string compiled_buffer_string = event.getValue();
+		  m_guaLineStripNode->uncompile_buffer_string(compiled_buffer_string);
+	  }
+
   }
 }
 

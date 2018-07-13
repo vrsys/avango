@@ -75,6 +75,8 @@ namespace av
       SFBool            RenderAsPoints;
       SFFloat           ScreenSpaceLineWidth;
       SFBool            WasCreatedEmpty;
+	  SFBool			UseParabolaShape;
+	  MFFloat			ParabolaParameters;
 
       SFBool            TriggerUpdate;
 
@@ -102,6 +104,9 @@ namespace av
 
       virtual void getWasCreatedEmptyCB(const SFBool::GetValueEvent& event);
       virtual void setWasCreatedEmptyCB(const SFBool::SetValueEvent& event);
+
+	  virtual void getParabolaParametersCB(const MFFloat::GetValueEvent& event);
+	  virtual void setParabolaParametersCB(const MFFloat::SetValueEvent& event);
 
       virtual void getTriggerUpdateCB(const SFBool::GetValueEvent& event);
       virtual void setTriggerUpdateCB(const SFBool::SetValueEvent& event);

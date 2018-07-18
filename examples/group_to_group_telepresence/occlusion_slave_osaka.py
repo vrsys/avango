@@ -72,12 +72,12 @@ class Initializer(avango.script.Script):
     segment_name_left_eye_3  = "segment_for_DB_3L"
     segment_name_right_eye_3 = "segment_for_DB_3R"
     
-    self.MemoryController.add_memory_segment(segment_name_left_eye_3, 1024*4)
-    self.MemoryController.construct_named_2KB_char_buffer(segment_name_left_eye_3, "DB_3L")
-    print("After adding shared memory segment 0")                 
-    self.MemoryController.add_memory_segment(segment_name_right_eye_3, 1024*4)
-    self.MemoryController.construct_named_2KB_char_buffer(segment_name_right_eye_3, "DB_3R")
-    print("After adding shared memory segment 1")
+    #self.MemoryController.add_memory_segment(segment_name_left_eye_3, 1024*4)
+    #self.MemoryController.construct_named_2KB_char_buffer(segment_name_left_eye_3, "DB_3L")
+    #print("After adding shared memory segment 0")                 
+    #self.MemoryController.add_memory_segment(segment_name_right_eye_3, 1024*4)
+    #self.MemoryController.construct_named_2KB_char_buffer(segment_name_right_eye_3, "DB_3R")
+    #print("After adding shared memory segment 1")
     #self.MemoryController.add_memory_segment("DB_light", 100*100*4)
     #print("After adding shared memory segment 2")
 

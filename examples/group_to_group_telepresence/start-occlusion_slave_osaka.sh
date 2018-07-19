@@ -33,7 +33,7 @@ else
 fi
 
 # run program
-cd "$DIR" && python3 ./occlusion_slave_osaka.py
+cd "$DIR" && apitrace trace --api=gl python3 ./occlusion_slave_osaka.py
 
 # kill daemon
 kill %1

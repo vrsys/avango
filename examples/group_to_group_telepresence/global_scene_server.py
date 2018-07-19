@@ -175,7 +175,10 @@ occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
     EyeDistance = 0.06,
-    EnableStereo = True)
+    EnableStereo = True,
+    #BlackList = ["invisible"], 
+    #needs to be invisible as soon as the real render-client comes into play
+    )
 
 screen.Children.value = [occlusion_slave_client_cam, client_cam, server_cam, monkey_transform1]
 nettrans.Children.value = [group, screen]

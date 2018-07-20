@@ -66,6 +66,8 @@ size = avango.gua.Vec2ui(800, 600)
 
 window = avango.gua.nodes.GlfwWindow(Size=size,
                                      LeftResolution=size,
+                                     RightResolution=size,
+                                     StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN,
                                      Title="client_window_weimar")
 avango.gua.register_window("client_window_weimar", window)
 

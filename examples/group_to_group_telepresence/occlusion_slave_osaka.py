@@ -54,7 +54,7 @@ class Initializer(avango.script.Script):
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
                                               RightResolution=size,
-                                              StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_GREEN,
+                                              StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN,
                                               Title="slave_weimar_v0_osaka")
     avango.gua.register_window("slave_weimar_v0_osaka", self.window)
 
@@ -69,8 +69,6 @@ class Initializer(avango.script.Script):
     print("Before adding shared memory segments")
     #add shared depth buffer memory
 
-    segment_name_left_eye_3  = "segment_for_DB_3L"
-    segment_name_right_eye_3 = "segment_for_DB_3R"
     
     #self.MemoryController.add_memory_segment(segment_name_left_eye_3, 1024*4)
     #self.MemoryController.construct_named_2KB_char_buffer(segment_name_left_eye_3, "DB_3L")

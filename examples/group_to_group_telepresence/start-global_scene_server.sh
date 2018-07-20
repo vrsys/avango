@@ -27,7 +27,7 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run program
 if [[ $* == *-d* ]]
 then
-cd "$DIR" && gdb --args python3 ./global_scene_server.py
+cd "$DIR" && python3 ./global_scene_server.py
 else
 cd "$DIR" && python3 ./global_scene_server.py
 fi

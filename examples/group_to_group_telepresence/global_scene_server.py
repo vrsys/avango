@@ -161,7 +161,11 @@ client_cam = avango.gua.nodes.CameraNode(
     Resolution=size,
     OutputWindowName="client_window_weimar",
     Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
-    PipelineDescription=pipeline_description)
+    PipelineDescription=pipeline_description,
+
+    EyeDistance = 0.06,
+    EnableStereo = True,
+    )
 
 occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
     ViewID=3,
@@ -176,7 +180,7 @@ occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
     #PipelineDescription=pipeline_description,
     EyeDistance = 0.06,
     EnableStereo = True,
-    #BlackList = ["invisible"], 
+    BlackList = ["invisible"], 
     #needs to be invisible as soon as the real render-client comes into play
     )
 

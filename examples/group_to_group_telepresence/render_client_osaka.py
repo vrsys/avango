@@ -62,7 +62,7 @@ loader = avango.gua.nodes.TriMeshLoader()
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
-size = avango.gua.Vec2ui(800, 600)
+size = avango.gua.Vec2ui(1600, 1200)
 
 window = avango.gua.nodes.GlfwWindow(Size=size,
                                      LeftResolution=size,

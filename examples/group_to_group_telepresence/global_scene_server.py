@@ -39,7 +39,8 @@ from examples_common.GuaVE import GuaVE
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVSERVER|141.54.147.52|7432")
+                                         # Groupname="AVSERVER|141.54.147.52|7432")
+                                         Groupname="AVSERVER|141.54.147.54|7432")
 
 
 class TimedRotate(avango.script.Script):
@@ -84,7 +85,7 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-spoints_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/spoints/spoints_resource_file.sr")
+spoints_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_andromeda.sr")
 
 transform1 = avango.gua.nodes.TransformNode(Children=[spoints_geode])
 transform2 = avango.gua.nodes.TransformNode(
@@ -111,7 +112,7 @@ group.Children.value = [monkey_transform2, light]
 
 screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
 
-size = avango.gua.Vec2ui(800, 600)
+size = avango.gua.Vec2ui(1600, 1200)
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
@@ -154,9 +155,10 @@ server_cam = avango.gua.nodes.CameraNode(
     )
 
 client_cam = avango.gua.nodes.CameraNode(
-    ViewID=2,
+    ViewID=3,
     Name="viewer_0_weimar",
     LeftScreenPath="/net/screen",
+    RightScreenPath="/net/screen",
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar",

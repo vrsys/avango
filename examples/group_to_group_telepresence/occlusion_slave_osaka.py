@@ -44,12 +44,14 @@ class Initializer(avango.script.Script):
     # scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432")
+                                         #Groupname="AVCLIENT|141.54.147.52|7432")
+                                         Groupname="AVCLIENT|141.54.147.54|7432")
+    
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     self.graph.Root.value.Children.value = [self.nettrans]
 
     # viewing setup
-    size = avango.gua.Vec2ui(800, 600)
+    size = avango.gua.Vec2ui(1600, 1200)
 
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
@@ -68,16 +70,6 @@ class Initializer(avango.script.Script):
 
     print("Before adding shared memory segments")
     #add shared depth buffer memory
-
-    
-    #self.MemoryController.add_memory_segment(segment_name_left_eye_3, 1024*4)
-    #self.MemoryController.construct_named_2KB_char_buffer(segment_name_left_eye_3, "DB_3L")
-    #print("After adding shared memory segment 0")                 
-    #self.MemoryController.add_memory_segment(segment_name_right_eye_3, 1024*4)
-    #self.MemoryController.construct_named_2KB_char_buffer(segment_name_right_eye_3, "DB_3R")
-    #print("After adding shared memory segment 1")
-    #self.MemoryController.add_memory_segment("DB_light", 100*100*4)
-    #print("After adding shared memory segment 2")
 
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
@@ -133,65 +125,7 @@ class Initializer(avango.script.Script):
 
 init = Initializer()
 
-'''
-class NetInit(avango.script.Script):
-    NetChildren = avango.gua.MFNode()
-    WindowName = avango.SFString()
-    Viewer = avango.gua.nodes.Viewer()
-  
-  #@field_has_changed(NetChildren)
-  #def update(self):
-  #  for tmp in self.NetChildren.value:
-  #    for child in tmp.Children.value:
-  #      if isinstance(child, avango.gua.CameraNode):
-  #        if child.OutputWindowName.value == self.WindowName.value:
-            # self.Viewer.CameraNodes.value = [child]
-  #          pass
-  
 
-
-nettrans = avango.gua.nodes.NetTransform(Name="net",
-                                         # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432")
-
-loader = avango.gua.nodes.TriMeshLoader()
-
-graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
-graph.Root.value.Children.value = [nettrans]
-
-size = avango.gua.Vec2ui(800, 600)
-
-window = avango.gua.nodes.GlfwWindow(Size=size,
-                                     LeftResolution=size,
-                                     Title="client_window_weimar")
-avango.gua.register_window("client_window_weimar", window)
-
-logger = avango.gua.nodes.Logger(EnableWarning=False)
-
-viewer = avango.gua.nodes.Viewer()
-viewer.SceneGraphs.value = [graph]
-viewer.Windows.value = [window]
-
-init = NetInit()
-init.WindowName.value = "client_window_weimar"
-init.Viewer = viewer
-init.NetChildren.connect_from(nettrans.Children)
-
-guaVE = GuaVE()
-guaVE.start(locals(), globals())
-
-
-
-MemoryController = avango.gua.nodes.NamedSharedMemoryController()
-MemoryController.add_read_only_memory_segment("DEPTH_FEEDBACK_SEGMENT")
-
-MemoryController.register_remotely_constructed_object_on_segment("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
-
-
-curr_val_to_set = 0
-
-
-gra
 
 # get signal
 while False:
@@ -221,6 +155,3 @@ while False:
   # wait til signal == 2 (request answered)
   # use gbuffer to perform reconstruction
 #]
-
-viewer.run()
-'''

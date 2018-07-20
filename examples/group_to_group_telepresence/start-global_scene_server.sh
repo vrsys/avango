@@ -24,11 +24,17 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-# run program
-if [[ $* == *-d* ]]
+# run daemon
+if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-cd "$DIR" && python3 ./global_scene_server.py
+    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
 else
-cd "$DIR" && python3 ./global_scene_server.py
+    python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
 
+# run program
+cd "$DIR" && python3 ./global_scene_server.py
+
+
+# kill daemon
+kill %1

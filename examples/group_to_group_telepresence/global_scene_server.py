@@ -29,6 +29,7 @@ group "testgroup" should receive this model. (see also simpleviewer-clnt.py)
 import avango
 import avango.script
 import avango.gua
+import avango.gua.lod
 from avango.script import field_has_changed
 
 import examples_common.navigator
@@ -37,10 +38,15 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "server.log")
 
+plodloader = avango.gua.lod.nodes.LodLoader()
+plodloader.UploadBudget.value = 32
+plodloader.RenderBudget.value = 2048
+plodloader.OutOfCoreBudget.value = 4096
+
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         # Groupname="AVSERVER|141.54.147.52|7432")
-                                         Groupname="AVSERVER|141.54.147.54|7432")
+                                          Groupname="AVSERVER|141.54.147.52|7432") # server -> pan
+                                         #Groupname="AVSERVER|141.54.147.54|7432")
 
 
 class TimedRotate(avango.script.Script):
@@ -66,6 +72,7 @@ def make_material_distributable(mat):
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 
+
 teapot = loader.create_geometry_from_file(
     "teapot", "./data/objects/teapot.obj")
 teapot.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
@@ -74,7 +81,13 @@ teapot.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
 teapot.Material.value.set_uniform("Roughness", 0.3)
 teapot.Material.value.set_uniform("Metalness", 1.0)
 
-
+"""
+teapot = plodloader.load_lod_pointcloud(
+                  "/mnt/pitoti/MA_MK/Intermediate_evaluation/test_files/loewe.bvh",
+                  avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
+                  avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
+                  )
+"""
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
 mat_desc.load_from_file("data/materials/SimpleMaterial.gmd")
 avango.gua.register_material_shader(mat_desc, "mat")
@@ -123,6 +136,9 @@ tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 
 occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
 
+plod_pass = avango.gua.lod.nodes.PLodPassDescription()
+plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.HQ_TWO_PASS
+
 #pipeline_description = avango.gua.nodes.PipelineDescription(
 #    EnableABuffer=True,
 #    Passes=[tri_pass, tquad_pass, lvis_pass, res_pass, tscreenspace_pass])
@@ -132,6 +148,7 @@ pipeline_description = avango.gua.nodes.PipelineDescription(
         avango.gua.nodes.TriMeshPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
+        plod_pass,
         res_pass
     ])
 
@@ -140,6 +157,7 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
         avango.gua.nodes.TriMeshPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
+        plod_pass,
         occlusion_slave_res_pass
     ])
 
@@ -215,6 +233,8 @@ nettrans.distribute_object(lvis_pass)
 nettrans.distribute_object(res_pass)
 nettrans.distribute_object(tscreenspace_pass)
 nettrans.distribute_object(occlusion_slave_res_pass)
+nettrans.distribute_object(plod_pass)
+
 for p in pipeline_description.Passes.value:
     nettrans.distribute_object(p)
 nettrans.distribute_object(pipeline_description)

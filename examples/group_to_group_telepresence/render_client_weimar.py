@@ -30,6 +30,7 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
+import avango.gua.lod
 from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
@@ -52,10 +53,14 @@ class NetInit(avango.script.Script):
             pass
   """
 
+plodloader = avango.gua.lod.nodes.LodLoader()
+plodloader.UploadBudget.value = 32
+plodloader.RenderBudget.value = 2048
+plodloader.OutOfCoreBudget.value = 4096
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.54|7432")
+                                         Groupname="AVCLIENT|141.54.147.52|7432")
 
 loader = avango.gua.nodes.TriMeshLoader()
 

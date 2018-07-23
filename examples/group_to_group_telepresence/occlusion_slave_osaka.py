@@ -30,6 +30,7 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
+import avango.gua.lod
 from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
@@ -44,8 +45,8 @@ class Initializer(avango.script.Script):
     # scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         #Groupname="AVCLIENT|141.54.147.52|7432")
-                                         Groupname="AVCLIENT|141.54.147.54|7432")
+                                         Groupname="AVCLIENT|141.54.147.52|7432") # server -> pan
+                                         #Groupname="AVCLIENT|141.54.147.54|7432")
     
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     self.graph.Root.value.Children.value = [self.nettrans]
@@ -121,6 +122,12 @@ class Initializer(avango.script.Script):
 
     print("Reconfigured pipeline")
 
+
+
+plodloader = avango.gua.lod.nodes.LodLoader()
+plodloader.UploadBudget.value = 32
+plodloader.RenderBudget.value = 2048
+plodloader.OutOfCoreBudget.value = 2048
 
 
 init = Initializer()

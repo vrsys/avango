@@ -54,6 +54,12 @@ av::gua::LineStripNode::LineStripNode(std::shared_ptr< ::gua::node::LineStripNod
 					  std::bind(&LineStripNode::getParabolaParametersCB, this, std::placeholders::_1),
 					  std::bind(&LineStripNode::setParabolaParametersCB, this, std::placeholders::_1));
 
+  AV_FC_ADD_FIELD(UseBezierShape, false);
+
+  AV_FC_ADD_ADAPTOR_FIELD(BezierParameters,
+				      std::bind(&LineStripNode::getBezierParametersCB, this, std::placeholders::_1),
+				      std::bind(&LineStripNode::setBezierParametersCB, this, std::placeholders::_1));
+
   AV_FC_ADD_ADAPTOR_FIELD(TriggerUpdate,
                       std::bind(&LineStripNode::getTriggerUpdateCB, this,std::placeholders::_1),
                       std::bind(&LineStripNode::setTriggerUpdateCB, this,std::placeholders::_1));
@@ -118,6 +124,25 @@ void av::gua::LineStripNode::fillWithParabola(float a, float b, float c,
 						 -b * maximal_distance + c;
 	enqueueVertex(0.0, final_height, -maximal_distance, col_r, col_g, col_b, 1.0, 1.0);
 
+	endVertexList();
+	
+}
+
+void av::gua::LineStripNode::fillWithBezier(::gua::math::vec3 const& p0,
+											::gua::math::vec3 const& p1,
+											::gua::math::vec3 const& p2,
+											float col_r, float col_g, float col_b,
+	                                        int num_segments) {
+	
+	startVertexList();
+
+	for (int i = 0; i <= num_segments; ++i) {
+		float t = (1.0 / num_segments) * i;
+		::gua::math::vec3 point = (1-t) * (1-t) * p0 +
+			                      2 * (1-t) * t * p1 + 
+			                      t * t * p2;
+		enqueueVertex(point.x, point.y, point.z, col_r, col_g, col_b, 1.0, 1.0);
+	}
 	endVertexList();
 	
 }
@@ -261,7 +286,6 @@ void av::gua::LineStripNode::getParabolaParametersCB(const MFFloat::GetValueEven
 }
 
 void av::gua::LineStripNode::setParabolaParametersCB(const MFFloat::SetValueEvent& event) {
-	
 	if (UseParabolaShape.getValue()) {
 
 		const std::vector<float, std::allocator<float>> values = event.getValue();
@@ -274,6 +298,29 @@ void av::gua::LineStripNode::setParabolaParametersCB(const MFFloat::SetValueEven
 		else {
 			std::cout << "Error: ParabolaParameters must contain eight values:" << std::endl;
 			std::cout << "a, b, c, sample_distance, maximal_distance, col_r, col_g, col_b" << std::endl;
+		}
+	}
+}
+
+void av::gua::LineStripNode::getBezierParametersCB(const MFFloat::GetValueEvent& event) {
+
+}
+
+void av::gua::LineStripNode::setBezierParametersCB(const MFFloat::SetValueEvent& event) {
+
+	if (UseBezierShape.getValue()) {
+
+		const std::vector<float, std::allocator<float>> values = event.getValue();
+
+		if (values.size() == 13) {
+			fillWithBezier(::gua::math::vec3(values.at(0), values.at(1), values.at(2)),
+						   ::gua::math::vec3(values.at(3), values.at(4), values.at(5)),
+						   ::gua::math::vec3(values.at(6), values.at(7), values.at(8)),
+						   values.at(9), values.at(10), values.at(11), values.at(12));
+		}
+		else {
+			std::cout << "Error: BezierParameters must contain 13 values:" << std::endl;
+			std::cout << "x0, y0, z0, x1, y1, z1, x2, y2, z2, col_r, col_g, col_b, num_segments" << std::endl;
 		}
 	}
 
@@ -290,7 +337,7 @@ void av::gua::LineStripNode::setTriggerUpdateCB(const SFBool::SetValueEvent& eve
   if(0 == role_server_client_unidentified) {
     m_guaLineStripNode->set_trigger_update(!event.getValue());
 
-	if (!UseParabolaShape.getValue()) {
+	if (!UseParabolaShape.getValue() && !UseBezierShape.getValue()) {
 		std::string compiled_buffer_string;
 		m_guaLineStripNode->compile_buffer_string(compiled_buffer_string);
 		privateLineStripData = compiled_buffer_string;
@@ -310,7 +357,7 @@ void av::gua::LineStripNode::setPrivateLineStripDataStringCB(const SFString::Set
 {
   if(1 == role_server_client_unidentified) {
 
-	  if (!UseParabolaShape.getValue()) {
+	  if (!UseParabolaShape.getValue() && !UseBezierShape.getValue()) {
 		  std::string compiled_buffer_string = event.getValue();
 		  m_guaLineStripNode->uncompile_buffer_string(compiled_buffer_string);
 	  }

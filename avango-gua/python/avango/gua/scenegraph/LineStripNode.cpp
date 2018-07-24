@@ -99,14 +99,6 @@ void enqueueVertex4(av::gua::LineStripNode const& node,
                           thickness);
 }
 
-void fillWithParabola(av::gua::LineStripNode& node,
-					  float a, float b, float c,
-					  float sample_distance, float maximal_distance,
-					  float col_r, float col_g, float col_b) {
-	return node.fillWithParabola(a, b, c, sample_distance, maximal_distance,
-		                         col_r, col_g, col_b);
-}
-
 void startVertexList(av::gua::LineStripNode& node) {
   node.startVertexList();
 }

@@ -52,6 +52,12 @@ namespace av
 							float sample_distance, float maximal_distance,
 							float col_r, float col_g, float col_b);
 
+	  void fillWithBezier(::gua::math::vec3 const& p0, 
+		                  ::gua::math::vec3 const& p1, 
+		                  ::gua::math::vec3 const& p2,
+		                  float col_r, float col_g, float col_b,
+						  int num_segments);
+
       //void submitVertices();
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -77,6 +83,8 @@ namespace av
       SFBool            WasCreatedEmpty;
 	  SFBool			UseParabolaShape;
 	  MFFloat			ParabolaParameters;
+	  SFBool			UseBezierShape;
+	  MFFloat			BezierParameters;
 
       SFBool            TriggerUpdate;
 
@@ -107,6 +115,9 @@ namespace av
 
 	  virtual void getParabolaParametersCB(const MFFloat::GetValueEvent& event);
 	  virtual void setParabolaParametersCB(const MFFloat::SetValueEvent& event);
+
+	  virtual void getBezierParametersCB(const MFFloat::GetValueEvent& event);
+	  virtual void setBezierParametersCB(const MFFloat::SetValueEvent& event);
 
       virtual void getTriggerUpdateCB(const SFBool::GetValueEvent& event);
       virtual void setTriggerUpdateCB(const SFBool::SetValueEvent& event);

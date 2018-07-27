@@ -72,7 +72,7 @@ def make_material_distributable(mat):
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 
-
+"""
 teapot = loader.create_geometry_from_file(
     "teapot", "./data/objects/teapot.obj")
 teapot.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
@@ -80,14 +80,16 @@ teapot.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
                                                             1.0))
 teapot.Material.value.set_uniform("Roughness", 0.3)
 teapot.Material.value.set_uniform("Metalness", 1.0)
-
 """
+
 teapot = plodloader.load_lod_pointcloud(
                   "/mnt/pitoti/MA_MK/Intermediate_evaluation/test_files/loewe.bvh",
                   avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
                   avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
                   )
-"""
+
+teapot.Transform.value =  avango.gua.make_rot_mat(10, 0.0, 0.0, 1.0) * avango.gua.make_rot_mat(-45, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(90, 1.0, 0.0, 0.0) * avango.gua.make_trans_mat(-1.0, 0.0, 0.0) *  avango.gua.make_scale_mat(4.0, 4.0, 4.0) * teapot.Transform.value
+
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
 mat_desc.load_from_file("data/materials/SimpleMaterial.gmd")
 avango.gua.register_material_shader(mat_desc, "mat")
@@ -191,7 +193,7 @@ occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
     ViewID=3,
     Name="os_weimar_v0_osaka",
     LeftScreenPath="/net/screen",
-    RightScreenPath="/net/screen",
+    #RightScreenPath="/net/screen",
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka",
@@ -199,7 +201,7 @@ occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
     EyeDistance = 0.06,
-    EnableStereo = True,
+    EnableStereo = False, #render cyclops view
     BlackList = ["invisible"], 
     #needs to be invisible as soon as the real render-client comes into play
     )
@@ -260,7 +262,7 @@ monkey_updater = TimedRotate()
 timer = avango.nodes.TimeSensor()
 monkey_updater.TimeIn.connect_from(timer.Time)
 
-teapot.Transform.connect_from(monkey_updater.MatrixOut)
+#teapot.Transform.connect_from(monkey_updater.MatrixOut)
 
 guaVE = GuaVE()
 guaVE.start(locals(), globals())

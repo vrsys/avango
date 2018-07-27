@@ -67,12 +67,19 @@ loader = avango.gua.nodes.TriMeshLoader()
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
-size = avango.gua.Vec2ui(1600, 1200)
+size = avango.gua.Vec2ui(3200, 1200)
+
+rendering_res = avango.gua.Vec2ui(int(size.x/2), size.y)
+
+left_pos = avango.gua.Vec2ui(0, 0)
+right_pos = avango.gua.Vec2ui(rendering_res.x, 0)
 
 window = avango.gua.nodes.GlfwWindow(Size=size,
-                                     LeftResolution=size,
-                                     RightResolution=size,
-                                     StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN,
+                                     LeftPosition = left_pos,
+                                     RightPosition = right_pos,
+                                     LeftResolution=rendering_res,
+                                     RightResolution=rendering_res,
+                                     StereoMode = avango.gua.StereoMode.SIDE_BY_SIDE,
                                      Title="client_window_weimar")
 avango.gua.register_window("client_window_weimar", window)
 

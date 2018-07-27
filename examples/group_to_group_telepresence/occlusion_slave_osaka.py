@@ -56,8 +56,6 @@ class Initializer(avango.script.Script):
 
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
-                                              RightResolution=size,
-                                              StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN,
                                               Title="slave_weimar_v0_osaka")
     avango.gua.register_window("slave_weimar_v0_osaka", self.window)
 

@@ -12,7 +12,7 @@ GUACAMOLE=/opt/guacamole/master
 AVANGO=/opt/avango/master
 
 # third party libs
-export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/lamure/install/lib
+export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/lamure/install/libs
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86

@@ -57,6 +57,9 @@ class Initializer(avango.script.Script):
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
                                               Title="slave_weimar_v0_osaka")
+
+    self.window.EnableVsync.value = False
+
     avango.gua.register_window("slave_weimar_v0_osaka", self.window)
 
     logger = avango.gua.nodes.Logger(EnableWarning=False)
@@ -74,14 +77,17 @@ class Initializer(avango.script.Script):
     self.viewer.SceneGraphs.value = [self.graph]
     self.viewer.Windows.value = [self.window]
 
-    while True:
-      depth_feedback_state = self.MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
+    self.viewer.DesiredFPS.value = 1000.0
+
+    self.viewer.run()
+    #while True:
+    #  depth_feedback_state = self.MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
       #print("Read State")
-      if 0 == depth_feedback_state:
+      #if 0 == depth_feedback_state:
         #self.MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
-        self.viewer.frame()
-      elif 2 == depth_feedback_state:
-        pass
+    #  self.viewer.frame()
+      #elif 2 == depth_feedback_state:
+      #  pass
         #print("Depth buffer was successfully written.")
 
 
@@ -132,13 +138,16 @@ init = Initializer()
 
 
 
+
+#viewer.run();
+
 # get signal
-while False:
-  current_signal_value = MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
-  if 0 == current_signal_value:
-    print("Rendering Frame!")
-    MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
-    viewer.frame()
+#while False:
+#  current_signal_value = MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
+#  if 0 == current_signal_value:
+#    print("Rendering Frame!")
+#    MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
+#    viewer.frame()
 
 
 # avango frame:[

@@ -67,6 +67,7 @@ namespace av
 
 		HMD_TrackedDevice hmd;
 		std::array<HMD_ControllerDevice, 2> controllers;
+		std::array<HMD_TrackedDevice, 2> baseStations;
 		std::array<HMD_TrackedDevice, 2> trackers;
 	};
 

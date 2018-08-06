@@ -107,7 +107,7 @@ av::daemon::HMDTrack::readLoop()
       {
         mStations[i + 1]->setButton(0, hmdMessage.controllers[i].status);
         if(hmdMessage.controllers[i].status) {
-          mStations[i + 1]->setMatrix(::gua::math::mat4(hmdMessage.controllers[i].matrix));
+            mStations[i + 1]->setMatrix(::gua::math::mat4(hmdMessage.controllers[i].matrix));
         }
         mStations[i + 1]->setValue(0, hmdMessage.controllers[i].id);
         mStations[i + 1]->setButton(1, hmdMessage.controllers[i].appMenuButton);
@@ -121,17 +121,29 @@ av::daemon::HMDTrack::readLoop()
       }
     }
 
-	// Set values for trackers
-    if (!hmdMessage.trackers.empty()) {
+	// Set values for base stations
+    if (!hmdMessage.baseStations.empty()) {
       for (int i = 0 ; i < 2; ++i)
       {
-        mStations[i + 3]->setValue(0, hmdMessage.trackers[i].id);
-        if(hmdMessage.trackers[i].id) {
-          mStations[i + 3]->setMatrix(::gua::math::mat4(hmdMessage.trackers[i].matrix));
+        mStations[i + 3]->setValue(0, hmdMessage.baseStations[i].id);
+        if(hmdMessage.baseStations[i].id) {
+          mStations[i + 3]->setMatrix(::gua::math::mat4(hmdMessage.baseStations[i].matrix));
         }
-        mStations[i + 3]->setButton(0, hmdMessage.trackers[i].status);
+        mStations[i + 3]->setButton(0, hmdMessage.baseStations[i].status);
       }
     }
+
+	// Set values for trackers
+	if (!hmdMessage.trackers.empty()) {
+		for (int i = 0; i < 2; ++i)
+		{
+			mStations[i + 5]->setValue(0, hmdMessage.trackers[i].id);
+			if (hmdMessage.trackers[i].id) {
+				mStations[i + 5]->setMatrix(::gua::math::mat4(hmdMessage.trackers[i].matrix));
+			}
+			mStations[i + 5]->setButton(0, hmdMessage.trackers[i].status);
+		}
+	}
   }
 }
 

@@ -38,10 +38,6 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "server.log")
 
-plodloader = avango.gua.lod.nodes.LodLoader()
-plodloader.UploadBudget.value = 32
-plodloader.RenderBudget.value = 2048
-plodloader.OutOfCoreBudget.value = 4096
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -73,13 +69,24 @@ graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 
 
-teapot = loader.create_geometry_from_file(
-    "teapot", "./data/objects/teapot.obj")
-teapot.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
-teapot.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
-                                                            1.0))
-teapot.Material.value.set_uniform("Roughness", 0.3)
-teapot.Material.value.set_uniform("Metalness", 1.0)
+#teapot = loader.create_geometry_from_file(
+#    "teapot", "./data/objects/teapot.obj")
+
+
+#kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+
+#kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+
+
+#lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/300k_loewe.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+#lion.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(0.8, 0.8, 0.8) 
+
+#kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) 
+#teapot.Transform.value = avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+#teapot.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336,
+#                                                            1.0))
+#teapot.Material.value.set_uniform("Roughness", 0.3)
+#teapot.Material.value.set_uniform("Metalness", 1.0)
 
 """
 teapot = plodloader.load_lod_pointcloud(
@@ -116,7 +123,7 @@ light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
 
 monkey_transform1 = avango.gua.nodes.TransformNode(Name="monkey_transform1")
 monkey_transform1.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
-monkey_transform1.Children.value = [teapot]
+#monkey_transform1.Children.value = [kaisersaal, lion]
 
 monkey_transform2 = avango.gua.nodes.TransformNode(Name="monkey_transform2")
 monkey_transform2.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 0.0)
@@ -150,7 +157,6 @@ pipeline_description = avango.gua.nodes.PipelineDescription(
         avango.gua.nodes.TriMeshPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
-        plod_pass,
         res_pass
     ])
 
@@ -159,7 +165,6 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
         avango.gua.nodes.TriMeshPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
-        plod_pass,
         occlusion_slave_res_pass
     ])
 
@@ -215,11 +220,11 @@ navigator = examples_common.navigator.Navigator()
 navigator.StartLocation.value = screen.Transform.value.get_translate()
 navigator.OutTransform.connect_from(screen.Transform)
 
-navigator.RotationSpeed.value = 0.12/10.0
-navigator.MotionSpeed.value = 0.07/3.0
+navigator.RotationSpeed.value = 0.12/30.0
+navigator.MotionSpeed.value = 0.07/10.0
 
 spoints_geode.Tags.value = ["invisible_osaka_avatar"]
-#spoints_geode.IsServerResource.value = True
+
 
 screen.Transform.connect_from(navigator.OutTransform)
 
@@ -264,7 +269,7 @@ monkey_updater = TimedRotate()
 timer = avango.nodes.TimeSensor()
 monkey_updater.TimeIn.connect_from(timer.Time)
 
-teapot.Transform.connect_from(monkey_updater.MatrixOut)
+#teapot.Transform.connect_from(monkey_updater.MatrixOut)
 
 guaVE = GuaVE()
 guaVE.start(locals(), globals())

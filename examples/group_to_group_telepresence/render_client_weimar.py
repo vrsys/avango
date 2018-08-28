@@ -65,10 +65,6 @@ class NetInit(avango.script.Script):
             pass
   """
 
-plodloader = avango.gua.lod.nodes.LodLoader()
-plodloader.UploadBudget.value = 32
-plodloader.RenderBudget.value = 2048
-plodloader.OutOfCoreBudget.value = 4096
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -86,7 +82,7 @@ rendering_res = avango.gua.Vec2ui(int(size.x/2), size.y)
 left_pos = avango.gua.Vec2ui(0, 0)
 right_pos = avango.gua.Vec2ui(rendering_res.x, 0)
 
-window = avango.gua.nodes.GlfwWindow(Size=size,
+window = avango.gua.nodes.Window(Size=size,
                                      LeftPosition = left_pos,
                                      RightPosition = right_pos,
                                      LeftResolution=rendering_res,

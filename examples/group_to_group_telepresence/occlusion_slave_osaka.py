@@ -56,11 +56,12 @@ class Initializer(avango.script.Script):
 
     self.window = avango.gua.nodes.GlfwWindow(Size=size,
                                               LeftResolution=size,
-                                              Title="slave_weimar_v0_osaka")
+                                              RightResolution=size,
+                                              Title="slave_weimar_v0_osaka_center")
 
     self.window.EnableVsync.value = False
 
-    avango.gua.register_window("slave_weimar_v0_osaka", self.window)
+    avango.gua.register_window("slave_weimar_v0_osaka_center", self.window)
 
     logger = avango.gua.nodes.Logger(EnableWarning=False)
 
@@ -112,26 +113,21 @@ class Initializer(avango.script.Script):
 
 
   def on_arrival(self):
-    print("I HAVE ARRIVED")
-    print(self.graph["/net/screen/cam"].Name.value)
+    pass
+    #print("I HAVE ARRIVED")
+    #print(self.graph["/net/screen/cam"].Name.value)
 
-    occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
-        Passes=[
-            avango.gua.nodes.TriMeshPassDescription(),
-            avango.gua.nodes.LightVisibilityPassDescription(),
-            avango.gua.nodes.SPointsPassDescription(),
-            avango.gua.nodes.OcclusionSlaveResolvePassDescription()
-        ])
-    self.graph["/net/screen/cam"].PipelineDescription.value = occlusion_slave_pipeline_description
+    #occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
+    #    Passes=[
+    #        avango.gua.nodes.TriMeshPassDescription(),
+    #        avango.gua.nodes.LightVisibilityPassDescription(),
+    #        avango.gua.nodes.SPointsPassDescription(),
+    #        avango.gua.nodes.OcclusionSlaveResolvePassDescription()
+    #    ])
+    #self.graph["/net/screen/cam"].PipelineDescription.value = occlusion_slave_pipeline_description
 
-    print("Reconfigured pipeline")
+    #print("Reconfigured pipeline")
 
-
-
-plodloader = avango.gua.lod.nodes.LodLoader()
-plodloader.UploadBudget.value = 32
-plodloader.RenderBudget.value = 2048
-plodloader.OutOfCoreBudget.value = 2048
 
 
 init = Initializer()

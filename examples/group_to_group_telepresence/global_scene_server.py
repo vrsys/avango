@@ -33,6 +33,7 @@ import avango.gua.lod
 from avango.script import field_has_changed
 
 import examples_common.navigator
+import examples_common.default_views
 
 from examples_common.GuaVE import GuaVE
 
@@ -61,12 +62,14 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     walking_speed_units_per_second = 1.666667
 
-    indexed_keyframe_positions = [(0, avango.gua.Vec3(0, 0, -3)), 
-                                  (2000, avango.gua.Vec3(0, -0.40, 5) ),
-                                  (4000, avango.gua.Vec3(0, -0.40, 5) ),
-                                  (6000, avango.gua.Vec3(0, -0.40, 1) ),
-                                  (8000, avango.gua.Vec3(-1.5, 0, 1) ),
-                                  (10000, avango.gua.Vec3(-1.5, 0, 1) )
+    indexed_keyframe_positions = [(0, avango.gua.Vec3(0, 0, -20)),
+                                  (2000, avango.gua.Vec3(0, 0, -20)), 
+                                  (4000, avango.gua.Vec3(0, 0.0, 5) ),
+                                  (6000, avango.gua.Vec3(0, 0.0, 5) ),
+                                  (8000, avango.gua.Vec3(0, 0.0, -1.6) ),
+                                  (9000, avango.gua.Vec3(0, 0.0, -1.6) ),
+                                  (10000, avango.gua.Vec3(-1.5, 0, -1.6) ),
+                                  (12000, avango.gua.Vec3(-1.5, 0, -1.6) )
                                 ]
     
 
@@ -125,13 +128,12 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 2.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0) * avango.gua.make_scale_mat(1.0, 1.0, 4.0) * avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
 
 
 lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-lion.Transform.value = avango.gua.make_trans_mat(-2.5, -1.0, -1.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
+lion.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, -1.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
 
-kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 2.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) 
 
 
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
@@ -144,7 +146,7 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-spoints_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_andromeda.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
 
 light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
                                    Name="light",
@@ -154,19 +156,21 @@ light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
                                    * avango.gua.make_scale_mat(30, 30, 30))
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
-scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
+scene_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
 
 #+++++++++++
-scene_transform.Children.value = [kaisersaal, lion]
 
-spoints_transform = avango.gua.nodes.TransformNode(Name="spoints_transform")
-spoints_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
-spoints_transform.Children.value = [spoints_geode]
+avatar_transform = avango.gua.nodes.TransformNode(Name="avatar_transform")
+avatar_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+avatar_transform.Children.value = [avatar_geode]
 
-group = avango.gua.nodes.TransformNode(Name="group")
-group.Children.value = [spoints_transform, light]
+non_avatar_scene_transform = avango.gua.nodes.TransformNode(Name="non_avatar_scene_transform")
+non_avatar_scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
+non_avatar_scene_transform.Children.value = [kaisersaal, lion, light]
+scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 
-screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
+#screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
+screen = avango.gua.nodes.ScreenNode(Name="screen", Width=0.292, Height=0.22)
 
 size = avango.gua.Vec2ui(1600, 1200)
 
@@ -176,15 +180,8 @@ lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
 res_pass = avango.gua.nodes.ResolvePassDescription()
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
 tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
-
+spoints_pass_description = avango.gua.nodes.SPointsPassDescription()
 occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
-
-plod_pass = avango.gua.lod.nodes.PLodPassDescription()
-plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.HQ_TWO_PASS
-
-#pipeline_description = avango.gua.nodes.PipelineDescription(
-#    EnableABuffer=True,
-#    Passes=[tri_pass, tquad_pass, lvis_pass, res_pass, tscreenspace_pass])
 
 pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes=[
@@ -202,54 +199,106 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
         occlusion_slave_res_pass
     ])
 
+
+eye_height = 1.6
+
+camera_translations_center = avango.gua.Vec3(0.0, 0.0, 0.7)
+camera_translations_left = avango.gua.Vec3(-0.05, 0.0, 0.7)
+
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
-    LeftScreenPath="/net/screen",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="server_window",
-    Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+    Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
     BlackList = ["invisible_osaka_avatar"]
     )
 
-client_cam = avango.gua.nodes.CameraNode(
+
+client_cam_center = avango.gua.nodes.CameraNode(
     ViewID=3,
-    Name="viewer_0_weimar",
-    LeftScreenPath="/net/screen",
-    RightScreenPath="/net/screen",
+    Name="viewer_0_weimar_center",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
     SceneGraph="scenegraph",
     Resolution=size,
-    OutputWindowName="client_window_weimar",
-    Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+    OutputWindowName="client_window_weimar_center",
+    Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
 
     EyeDistance = 0.06,
     EnableStereo = True,
     )
 
-occlusion_slave_client_cam = avango.gua.nodes.CameraNode(
+occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     ViewID=3,
-    Name="os_weimar_v0_osaka",
-    LeftScreenPath="/net/screen",
-    #RightScreenPath="/net/screen",
+    Name="os_weimar_v0_osaka_center",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
     SceneGraph="scenegraph",
     Resolution=size,
-    OutputWindowName="slave_weimar_v0_osaka",
-    Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5),
+    OutputWindowName="slave_weimar_v0_osaka_center",
+    Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
     EyeDistance = 0.06,
-    EnableStereo = False, #render cyclops view
+    EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"], 
     #needs to be invisible as soon as the real render-client comes into play
     )
 
-screen.Children.value = [occlusion_slave_client_cam, client_cam, server_cam, scene_transform]
-nettrans.Children.value = [group, screen]
 
-screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
+client_cam_left = avango.gua.nodes.CameraNode(
+    ViewID=4,
+    Name="viewer_0_weimar_left",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    SceneGraph="scenegraph",
+    Resolution=size,
+    OutputWindowName="client_window_weimar_left",
+    Transform=avango.gua.make_trans_mat(camera_translations_left),
+    PipelineDescription=pipeline_description,
 
+    EyeDistance = 0.06,
+    EnableStereo = True,
+    )
+
+occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
+    ViewID=4,
+    Name="os_weimar_v0_osaka_left",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    SceneGraph="scenegraph",
+    Resolution=size,
+    OutputWindowName="slave_weimar_v0_osaka_left",
+    Transform=avango.gua.make_trans_mat(camera_translations_left),
+    PipelineDescription=occlusion_slave_pipeline_description,
+    #PipelineDescription=pipeline_description,
+    EyeDistance = 0.06,
+    EnableStereo = True,
+    BlackList = ["invisible_osaka_avatar"], 
+    #needs to be invisible as soon as the real render-client comes into play
+    )
+
+
+scene_view_transform = avango.gua.nodes.TransformNode(Name="scene_view_transform")
+#scene_view_transform.Transform.value = avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
+scene_view_transform.Children.value = [scene_transform]
+
+grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
+grouped_view_setups_and_scene.Children.value = [screen, scene_view_transform]
+
+screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, server_cam]
+screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.6, 8.5)
+nettrans.Children.value = [grouped_view_setups_and_scene]
+
+#grouped_view_setups_and_scene.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
+
+
+keyboard_based_default_viewer = examples_common.default_views.DefaultViews()
+scene_view_transform.Transform.connect_from(keyboard_based_default_viewer.OutTransform)
 #navigator = examples_common.navigator.Navigator()
 #navigator.StartLocation.value = screen.Transform.value.get_translate()
 #navigator.OutTransform.connect_from(screen.Transform)
@@ -257,24 +306,35 @@ screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
 #navigator.RotationSpeed.value = 0.12/30.0
 #navigator.MotionSpeed.value = 0.07/10.0
 
-spoints_geode.Tags.value = ["invisible_osaka_avatar"]
+avatar_geode.Tags.value = ["invisible_osaka_avatar"]
 
 
 #screen.Transform.connect_from(navigator.OutTransform)
 
 graph.Root.value.Children.value = [nettrans]
 
-make_node_distributable(group)
+make_node_distributable(grouped_view_setups_and_scene)
+make_node_distributable(non_avatar_scene_transform)
+make_node_distributable(avatar_transform)
+make_node_distributable(scene_view_transform)
 make_node_distributable(scene_transform)
 make_node_distributable(screen)
+
+make_node_distributable(server_cam)
+
+make_node_distributable(client_cam_center)
+make_node_distributable(occlusion_slave_client_cam_center)
+make_node_distributable(client_cam_left)
+make_node_distributable(occlusion_slave_client_cam_left)
 
 nettrans.distribute_object(tri_pass)
 nettrans.distribute_object(tquad_pass)
 nettrans.distribute_object(lvis_pass)
 nettrans.distribute_object(res_pass)
 nettrans.distribute_object(tscreenspace_pass)
+nettrans.distribute_object(spoints_pass_description)
 nettrans.distribute_object(occlusion_slave_res_pass)
-nettrans.distribute_object(plod_pass)
+
 
 for p in pipeline_description.Passes.value:
     nettrans.distribute_object(p)
@@ -302,13 +362,10 @@ viewer.Windows.value = [window]
 
 timer = avango.nodes.TimeSensor()
 
-spoints_path_animator = TimedKeyframePathAnimation()
-spoints_path_animator.TimeIn.connect_from(timer.Time)
-spoints_transform.Transform.connect_from(spoints_path_animator.MatrixOut)
+avatar_path_animator = TimedKeyframePathAnimation()
+avatar_path_animator.TimeIn.connect_from(timer.Time)
+avatar_transform.Transform.connect_from(avatar_path_animator.MatrixOut)
 
-#spoints_updater = TimedRotate()
-#spoints_updater.TimeIn.connect_from(timer.Time)
-#spoints_geode.Transform.connect_from(spoints_updater.MatrixOut)
 
 guaVE = GuaVE()
 guaVE.start(locals(), globals())

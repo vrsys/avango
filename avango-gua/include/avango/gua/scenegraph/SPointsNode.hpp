@@ -5,8 +5,9 @@
  * \file
  * \ingroup av_gua
  */
-
+#include <gua/spoints/spoints_geometry/NetKinectArray.hpp>
 #include <gua/spoints/SPointsNode.hpp>
+
 #include <gua/math/math.hpp>
 
 #include <avango/gua/scenegraph/GeometryNode.hpp>
@@ -16,6 +17,30 @@ namespace av
 {
   namespace gua
   {
+
+
+    struct AV_GUA_DLL SPointsStats {
+
+      SPointsStats() 
+        : m_num_received_triangles(0),
+          m_timestamp_ms(-1.0f),
+          m_reconstruction_time_ms(0.0)
+      {
+
+      }
+
+      explicit SPointsStats(spoints::SPointsStats const& gua_spoints_stats) 
+        : m_num_received_triangles(gua_spoints_stats.m_received_triangles),
+          m_timestamp_ms(gua_spoints_stats.m_received_timestamp_ms),
+          m_reconstruction_time_ms(gua_spoints_stats.m_received_reconstruction_time_ms)
+      {
+
+      }
+      uint32_t m_num_received_triangles = 0;
+      float    m_timestamp_ms = 0.0f;
+      float    m_reconstruction_time_ms = -1.0f;
+    };
+
     /**
      * Wrapper for ::gua::SPointsNode
      *
@@ -54,6 +79,8 @@ namespace av
       SFBool     RenderToStencilBuffer;
       SFFloat    ScreenSpacePointSize;
 
+      SPointsStats LatestSPointsStats;
+
       virtual void getGeometryCB(const SFString::GetValueEvent& event);
       virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
@@ -73,6 +100,22 @@ namespace av
        * Get the wrapped ::gua::SPointsNode.
        */
       std::shared_ptr< ::gua::node::SPointsNode> getGuaSPointsNode() const;
+
+      void fetchLatestSPointsStats() {
+        if(m_guaSPointsNode) {
+          LatestSPointsStats = SPointsStats(m_guaSPointsNode->get_latest_spoints_stats());
+       // LatestSPointsStats.m_num_received_triangles = 6;
+        } else {
+          LatestSPointsStats = SPointsStats();
+          //LatestSPointsStats.m_num_received_triangles = 4;
+        }
+
+        //LatestSPointsStats.m_num_received_triangles = 5;
+      };
+
+      int getStatNumTrianglesReceived() const { return LatestSPointsStats.m_num_received_triangles;}
+      float getStatTimestampReceived() const { return LatestSPointsStats.m_timestamp_ms;}
+      float getStatReconTimeReceived() const { return LatestSPointsStats.m_reconstruction_time_ms;}
 
     private:
 

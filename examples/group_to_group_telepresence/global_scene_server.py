@@ -37,6 +37,9 @@ import examples_common.default_views
 
 from examples_common.GuaVE import GuaVE
 
+import netvaluepy
+from time import sleep
+
 #avango.enable_logging(4, "server.log")
 
 
@@ -46,14 +49,44 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          #Groupname="AVSERVER|141.54.147.54|7432")
 
 
-class TimedRotate(avango.script.Script):
+class TimedKeyToggling(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
 
+    keyboard_events = 0
+    logging_node = 0
+
+    frame_time_dict = dict()
+
+    num_entries = 0
+
+    def set_logging_node(self, ln):
+        self.logging_node = ln
+
+    def set_keyboard_events(self, keyboard):
+        self.keyboard_events = keyboard
+
     @field_has_changed(TimeIn)
     def update(self):
-        self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 30.0,
-                                                       0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0)
+        if (0 != self.logging_node) and (0 != self.keyboard_events):
+            if self.keyboard_events.logging_enabled:
+                print("XXXXXX")
+                self.logging_node.Tags.value = ["X"]
+
+                if self.num_entries == 0:
+                    self.frame_time_dict[4.13123123] = 0.0
+                else:
+                    self.frame_time_dict[4.13123123] += 1.1
+
+                self.num_entries = self.num_entries + 1
+            else:
+                print("OOOOOO")
+                self.logging_node.Tags.value = []
+
+                if self.num_entries != 0:
+                    print("FRAMETIME WAS: " + str(self.frame_time_dict[4.13123123]))          
+        #self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 30.0,
+        #                                               0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0)
 
 
 class TimedKeyframePathAnimation(avango.script.Script):
@@ -76,9 +109,13 @@ class TimedKeyframePathAnimation(avango.script.Script):
     animation_length_in_ms = indexed_keyframe_positions[-1][0]
 
 
+    nv = netvaluepy.NetValue("141.54.147.42:8000") # hier socket passend zu ./play 
+
     @field_has_changed(TimeIn)
     def update(self):
-        current_time_point = int(self.TimeIn.value*1000) % self.animation_length_in_ms
+      #  print("NetValue: " + str(self.nv.getValue()) )
+        #current_time_point = int(self.TimeIn.value*1000) % self.animation_length_in_ms
+        current_time_point = int(self.nv.getValue()*1000) % self.animation_length_in_ms
         print("Time:" + str(current_time_point) )
 
         keyframe_tuple_x = 0
@@ -202,6 +239,7 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.6
 
+camera_translations_right = avango.gua.Vec3( 0.05, 0.0, 0.7)
 camera_translations_center = avango.gua.Vec3(0.0, 0.0, 0.7)
 camera_translations_left = avango.gua.Vec3(-0.05, 0.0, 0.7)
 
@@ -282,15 +320,48 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     #needs to be invisible as soon as the real render-client comes into play
     )
 
+client_cam_right = avango.gua.nodes.CameraNode(
+    ViewID=5,
+    Name="viewer_0_weimar_right",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    SceneGraph="scenegraph",
+    Resolution=size,
+    OutputWindowName="client_window_weimar_right",
+    Transform=avango.gua.make_trans_mat(camera_translations_right),
+    PipelineDescription=pipeline_description,
+
+    EyeDistance = 0.06,
+    EnableStereo = True,
+    )
+
+occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
+    ViewID=5,
+    Name="os_weimar_v0_osaka_right",
+    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    SceneGraph="scenegraph",
+    Resolution=size,
+    OutputWindowName="slave_weimar_v0_osaka_right",
+    Transform=avango.gua.make_trans_mat(camera_translations_right),
+    PipelineDescription=occlusion_slave_pipeline_description,
+    #PipelineDescription=pipeline_description,
+    EyeDistance = 0.06,
+    EnableStereo = True,
+    BlackList = ["invisible_osaka_avatar"], 
+    #needs to be invisible as soon as the real render-client comes into play
+    )
 
 scene_view_transform = avango.gua.nodes.TransformNode(Name="scene_view_transform")
 #scene_view_transform.Transform.value = avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
 scene_view_transform.Children.value = [scene_transform]
 
-grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
-grouped_view_setups_and_scene.Children.value = [screen, scene_view_transform]
+loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 
-screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, server_cam]
+grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
+grouped_view_setups_and_scene.Children.value = [screen, scene_view_transform, loggings_indicator]
+
+screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, occlusion_slave_client_cam_right, client_cam_right, server_cam]
 screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.6, 8.5)
 nettrans.Children.value = [grouped_view_setups_and_scene]
 
@@ -299,6 +370,9 @@ nettrans.Children.value = [grouped_view_setups_and_scene]
 
 keyboard_based_default_viewer = examples_common.default_views.DefaultViews()
 scene_view_transform.Transform.connect_from(keyboard_based_default_viewer.OutTransform)
+
+
+
 #navigator = examples_common.navigator.Navigator()
 #navigator.StartLocation.value = screen.Transform.value.get_translate()
 #navigator.OutTransform.connect_from(screen.Transform)
@@ -326,6 +400,8 @@ make_node_distributable(client_cam_center)
 make_node_distributable(occlusion_slave_client_cam_center)
 make_node_distributable(client_cam_left)
 make_node_distributable(occlusion_slave_client_cam_left)
+make_node_distributable(client_cam_right)
+make_node_distributable(occlusion_slave_client_cam_right)
 
 nettrans.distribute_object(tri_pass)
 nettrans.distribute_object(tquad_pass)
@@ -367,8 +443,13 @@ avatar_path_animator.TimeIn.connect_from(timer.Time)
 avatar_transform.Transform.connect_from(avatar_path_animator.MatrixOut)
 
 
-guaVE = GuaVE()
-guaVE.start(locals(), globals())
+key_event_logger = TimedKeyToggling()
+key_event_logger.TimeIn.connect_from(timer.Time)
+key_event_logger.set_keyboard_events(keyboard_based_default_viewer)
+key_event_logger.set_logging_node(loggings_indicator)
+
+#guaVE = GuaVE()
+#guaVE.start(locals(), globals())
 
 viewer.DesiredFPS.value = 1000.0
 viewer.run()

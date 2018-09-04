@@ -132,36 +132,3 @@ class Initializer(avango.script.Script):
 
 init = Initializer()
 
-
-
-
-#viewer.run();
-
-# get signal
-#while False:
-#  current_signal_value = MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
-#  if 0 == current_signal_value:
-#    print("Rendering Frame!")
-#    MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
-#    viewer.frame()
-
-
-# avango frame:[
-  #while true
-    # if signal == 0 (request state)
-      #-> set signal to 1 (wait state)
-      #-> trigger frame rendering ()
-#]
-
-# guacamole frame:[
-  #render:
-    # for each camera: 
-      #write depth buffer to shared memory
-      #set signal to 2 (g-buffer written)
-#]
-
-# recon server frame:[
-  # set signal to 0 (== request)
-  # wait til signal == 2 (request answered)
-  # use gbuffer to perform reconstruction
-#]

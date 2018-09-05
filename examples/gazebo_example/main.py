@@ -34,8 +34,13 @@ def start():
 
     register_window("window", window)
 
-    cam = nodes.CameraNode(LeftScreenPath="/screen", SceneGraph="scenegraph", Resolution=size,
-                           OutputWindowName="window", Transform=make_trans_mat(0., 0., 2.0))
+    cam = avango.gua.nrp.NRPCameraNode()
+
+    cam.LeftScreenPath.value ="/screen"
+    cam.SceneGraph.value="scenegraph"
+    cam.Resolution.value=size
+    cam.OutputWindowName.value="window"
+    cam.Transform.value=make_trans_mat(0., 0., 2.0)
 
     res_pass = nodes.ResolvePassDescription()
 

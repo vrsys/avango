@@ -70,17 +70,11 @@ elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
 class TimedFPSPrinter(avango.script.Script):
   TimeIn = avango.SFFloat()
   WindowCenter = 0
-  WindowLeft = 0
-  WindowRight = 0
 
   AvatarNode = 0
   
   LoggingIndicatorNode = 0
 
-
-
-  draw_time_left_dict = dict()
-  draw_time_right_dict = dict()
   draw_time_center_dict = dict()
 
   recon_time_dict  = dict()
@@ -90,13 +84,6 @@ class TimedFPSPrinter(avango.script.Script):
 
   num_entries = 0
   num_files_logged = 0
-
-
-  def set_window_left(self, window_left):
-    self.WindowLeft = window_left
-
-  def set_window_right(self, window_right):
-    self.WindowRight = window_right
 
   def set_window_center(self, window_center):
     self.WindowCenter = window_center
@@ -113,7 +100,7 @@ class TimedFPSPrinter(avango.script.Script):
     if self.LoggingIndicatorNode == 0:
       return
 
-    if (self.AvatarNode != 0) and (self.WindowCenter != 0) and (self.WindowLeft != 0) and (self.WindowRight != 0):
+    if (self.AvatarNode != 0) and (self.WindowCenter != 0):
       if len(self.LoggingIndicatorNode.Tags.value) > 0:
         self.AvatarNode.fetch_stats()
 
@@ -121,23 +108,17 @@ class TimedFPSPrinter(avango.script.Script):
         current_tri_count             = self.AvatarNode.get_stats_num_triangles()
         current_recon_time            = self.AvatarNode.get_stats_reconstruction_time()
 
-        if (0 == self.WindowCenter.RenderingFPS.value) and (0 == self.WindowLeft.RenderingFPS.value) and (0 == self.WindowRight.RenderingFPS.value):
+        if (0 == self.WindowCenter.RenderingFPS.value):
           return
 
         current_draw_time_center      = 1.0 / self.WindowCenter.RenderingFPS.value
-        current_draw_time_left        = 1.0 / self.WindowLeft.RenderingFPS.value
-        current_draw_time_right       = 1.0 / self.WindowRight.RenderingFPS.value
 
         if not current_stream_timestamp in self.entry_count_dict:
-          self.draw_time_left_dict[current_stream_timestamp] = 0.0
-          self.draw_time_right_dict[current_stream_timestamp] = 0.0
           self.draw_time_center_dict[current_stream_timestamp] = 0.0
           self.recon_time_dict[current_stream_timestamp] = 0.0
           self.tri_count_dict[current_stream_timestamp] = 0
           self.entry_count_dict[current_stream_timestamp] = 0
 
-        self.draw_time_left_dict[current_stream_timestamp] += current_draw_time_left
-        self.draw_time_right_dict[current_stream_timestamp] += current_draw_time_right
         self.draw_time_center_dict[current_stream_timestamp] += current_draw_time_center
         self.recon_time_dict[current_stream_timestamp] += current_recon_time
         self.tri_count_dict[current_stream_timestamp] += current_tri_count
@@ -156,23 +137,11 @@ class TimedFPSPrinter(avango.script.Script):
             log_recon_times.write(str(key) + " " + str(self.recon_time_dict[key] / value) + "\n" )
           log_recon_times.close()
 
-          log_draw_times_left = open("log_draw_times_left_mode_" + str(self.num_files_logged) , 'w')
-          for key, value in sorted(self.entry_count_dict.items()):
-            log_draw_times_left.write(str(key) + " " + str(self.draw_time_left_dict[key] / value) + "\n" )
-          log_draw_times_left.close()
-
-          log_draw_times_right = open("log_draw_times_right_mode_" + str(self.num_files_logged) , 'w')
-          for key, value in sorted(self.entry_count_dict.items()):
-            log_draw_times_right.write(str(key) + " " + str(self.draw_time_right_dict[key] / value) + "\n" )
-          log_draw_times_right.close()
-
           log_draw_times_center = open("log_draw_times_center_mode_" + str(self.num_files_logged) , 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_draw_times_center.write(str(key) + " " + str(self.draw_time_center_dict[key] / value) + "\n" )
           log_draw_times_center.close()
 
-          self.draw_time_left_dict.clear()
-          self.draw_time_right_dict.clear()
           self.draw_time_center_dict.clear()
 
           self.recon_time_dict.clear()
@@ -181,14 +150,6 @@ class TimedFPSPrinter(avango.script.Script):
           self.num_entries = 0
 
           self.num_files_logged += 1
-            #print(key, value)
-
-          #perform logging
-    #if self.LoggingIndicatorNode != 0:
-    #  if len(self.LoggingIndicatorNode.Tags.value) > 0:
-    #    print("LOGGING ENABLED")
-    #  else:
-    #    print("LOGGING DISABLED")
 
 class Initializer(avango.script.Script):
   def __init__(self):
@@ -205,25 +166,7 @@ class Initializer(avango.script.Script):
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     self.graph.Root.value.Children.value = [self.nettrans]
 
-    # viewing setup
-    #size = avango.gua.Vec2ui(3840, 1080)
 
-    #rendering_res = avango.gua.Vec2ui(int(size.x/2), size.y)
-
-    #left_pos = avango.gua.Vec2ui(0, 0)
-    #right_pos = avango.gua.Vec2ui(rendering_res.x, 0)
-    
-    self.window_left = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                      Display = ":0.3",  # ":0.1",
-                                      LeftPosition = LEFT_VIEWPORT_START,
-                                      RightPosition = RIGHT_VIEWPORT_START,
-                                      LeftResolution=RENDERING_RESOLUTION,
-                                      RightResolution=RENDERING_RESOLUTION,
-                                      StereoMode = STEREO_MODE,
-                                      Title="client_window_weimar_left")
-    self.window_left.EnableVsync.value = False
-    avango.gua.register_window("client_window_weimar_left", self.window_left)
-    
     self.window_center = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
                                  Display = ":0.1",  # ":0.1",
                                  LeftPosition = LEFT_VIEWPORT_START,
@@ -236,22 +179,11 @@ class Initializer(avango.script.Script):
 
     avango.gua.register_window("client_window_weimar_center", self.window_center)
     
-    self.window_right = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                      Display = ":0.0",  # ":0.1",
-                                      LeftPosition = LEFT_VIEWPORT_START,
-                                      RightPosition = RIGHT_VIEWPORT_START,
-                                      LeftResolution=RENDERING_RESOLUTION,
-                                      RightResolution=RENDERING_RESOLUTION,
-                                      StereoMode = STEREO_MODE,
-                                      Title="client_window_weimar_right")
-    self.window_right.EnableVsync.value = False
-    avango.gua.register_window("client_window_weimar_right", self.window_right)
-
     self.logger = avango.gua.nodes.Logger(EnableWarning=False)
 
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
-    self.viewer.Windows.value = [self.window_center, self.window_left, self.window_right]
+    self.viewer.Windows.value = [self.window_center]
 
     self.viewer.DesiredFPS.value = 1000.0
 
@@ -262,21 +194,12 @@ class Initializer(avango.script.Script):
     self.fps_printer.TimeIn.connect_from(self.timer.Time)
 
     self.fps_printer.set_window_center(self.window_center)
-    self.fps_printer.set_window_left(self.window_left)
-    self.fps_printer.set_window_right(self.window_right)
 
     self.is_initialized = False
     self.always_evaluate(True)
-    #self.evaluate()
    
     self.viewer.run()
 
-    # parameters
-    #print("Before setting is initialized")
-
-    #print("always evaluate")
-
-    #print("after always evaluate")
 
   def evaluate(self):
     #print("beginning of evaluation")

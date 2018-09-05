@@ -33,7 +33,7 @@ else
 fi
 
 # run program
-cd "$DIR" && python3 ./occlusion_slave_osaka.py
+cd "$DIR" && python3 ./occlusion_slave_osaka_3_users.py
 
 # kill daemon
 kill %1

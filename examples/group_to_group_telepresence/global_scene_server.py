@@ -70,7 +70,7 @@ class TimedKeyToggling(avango.script.Script):
     def update(self):
         if (0 != self.logging_node) and (0 != self.keyboard_events):
             if self.keyboard_events.logging_enabled:
-                print("XXXXXX")
+                #print("XXXXXX")
                 self.logging_node.Tags.value = ["X"]
 
                 if self.num_entries == 0:
@@ -80,11 +80,12 @@ class TimedKeyToggling(avango.script.Script):
 
                 self.num_entries = self.num_entries + 1
             else:
-                print("OOOOOO")
+                #print("OOOOOO")
                 self.logging_node.Tags.value = []
 
                 if self.num_entries != 0:
-                    print("FRAMETIME WAS: " + str(self.frame_time_dict[4.13123123]))          
+                    pass
+                    #print("FRAMETIME WAS: " + str(self.frame_time_dict[4.13123123]))          
         #self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 30.0,
         #                                               0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0)
 
@@ -95,14 +96,18 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     walking_speed_units_per_second = 1.666667
 
-    indexed_keyframe_positions = [(0, avango.gua.Vec3(0, 0, -20)),
-                                  (2000, avango.gua.Vec3(0, 0, -20)), 
-                                  (4000, avango.gua.Vec3(0, 0.0, 5) ),
-                                  (6000, avango.gua.Vec3(0, 0.0, 5) ),
-                                  (8000, avango.gua.Vec3(0, 0.0, -1.6) ),
-                                  (9000, avango.gua.Vec3(0, 0.0, -1.6) ),
-                                  (10000, avango.gua.Vec3(-1.5, 0, -1.6) ),
-                                  (12000, avango.gua.Vec3(-1.5, 0, -1.6) )
+    indexed_keyframe_positions = [(0, avango.gua.Vec3(0, 0, -10), 0),
+                                  (1000, avango.gua.Vec3(0, 0, -10), 0), 
+                                  (2000, avango.gua.Vec3(0, 0.0, 5), 0 ),
+                                  (3000, avango.gua.Vec3(0, 0.0, 5), 0 ),
+                                  (4000, avango.gua.Vec3(0, 0.0, 2.4), 0 ),
+                                  (5000, avango.gua.Vec3(0, 0.0, 2.4), 0 ),
+                                  (6000, avango.gua.Vec3(-1.5, 0, 2.4), 0 ),
+                                  (8000, avango.gua.Vec3(-1.5, 0, 2.4), 00 ),
+                                  (9000, avango.gua.Vec3(0, 0, 2.4), 30),
+                                  (10000, avango.gua.Vec3(0, 0, 2.4), 90),
+                                  (11500, avango.gua.Vec3(0, 0, -10), 180 ),
+                                  (12000, avango.gua.Vec3(0, 0, -10), 180 )
                                 ]
     
 
@@ -116,7 +121,7 @@ class TimedKeyframePathAnimation(avango.script.Script):
       #  print("NetValue: " + str(self.nv.getValue()) )
         #current_time_point = int(self.TimeIn.value*1000) % self.animation_length_in_ms
         current_time_point = int(self.nv.getValue()*1000) % self.animation_length_in_ms
-        print("Time:" + str(current_time_point) )
+        #print("Time:" + str(current_time_point) )
 
         keyframe_tuple_x = 0
         keyframe_tuple_x_plus_1 = 0
@@ -140,15 +145,102 @@ class TimedKeyframePathAnimation(avango.script.Script):
             current_keyframe_id = current_keyframe_id + 1
 
         interpolation_weight = ((current_time_point) - keyframe_tuple_x[0]) / ((keyframe_tuple_x_plus_1[0]) - keyframe_tuple_x[0])
-        print( str(keyframe_tuple_x[0]) + "; " + str(current_time_point) + "; " + str(keyframe_tuple_x_plus_1[0]) )
-        print("interpolation_weight" + str(interpolation_weight))
+        #print( str(keyframe_tuple_x[0]) + "; " + str(current_time_point) + "; " + str(keyframe_tuple_x_plus_1[0]) )
+        #print("interpolation_weight" + str(interpolation_weight))
 
         interpolated_position = keyframe_tuple_x[1] * (1.0 - interpolation_weight) + keyframe_tuple_x_plus_1[1] * (interpolation_weight)
-
         curr_pos = interpolated_position
-        self.MatrixOut.value = avango.gua.make_trans_mat(curr_pos[0], curr_pos[1], curr_pos[2])
 
+        interpolated_angle = keyframe_tuple_x[2] * (1.0 - interpolation_weight) + keyframe_tuple_x_plus_1[2] * (interpolation_weight)
+        curr_angle_around_y = interpolated_angle
+        self.MatrixOut.value = avango.gua.make_trans_mat(curr_pos[0], curr_pos[1], curr_pos[2]) * avango.gua.make_rot_mat(curr_angle_around_y, 0.0, 1.0, 0.0)
 
+"""
+class FeedbackSender(avango.script.Script):
+    AvatarWorldMatrixIn         = avango.gua.SFMatrix4()
+    ClientCamCenterMatrixIn     = avango.gua.SFMatrix4()
+    ClientCamLeftMatrixIn       = avango.gua.SFMatrix4()
+    ClientCamRightMatrixIn      = avango.gua.SFMatrix4()
+    ClientScreenMatrixIn        = avango.gua.SFMatrix4()
+
+    AvatarFeedbackWorldMatrix = avango.gua.SFMatrix4()
+
+    CamNodeCenter = 0
+    CamNodeLeft   = 0
+    CamNodeRight  = 0
+    SceneGraph    = 0
+
+    ClientCamCenter_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamCenter_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+    ClientCamCenter_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamCenter_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+
+    ClientCamLeft_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamLeft_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+    ClientCamLeft_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamLeft_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+
+    ClientCamRight_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamRight_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+    ClientCamRight_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
+    ClientCamRight_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
+    
+
+    def registerSceneGraph(self, scene_graph):
+        self.SceneGraph = scene_graph
+
+    def registerCamNodeCenter(self, cam_node):
+        self.CamNodeCenter = cam_node
+    #frame_time_dict = dict()
+
+    #num_entries = 0
+
+    @field_has_changed(AvatarWorldMatrixIn)
+    def updateAvatarFeedbackMatrix(self):
+        self.AvatarFeedbackWorldMatrix.value = self.AvatarWorldMatrixIn.value
+
+    @field_has_changed(ClientCamCenterMatrixIn)
+    def updateClientCamCenterMatrices(self):
+        if (0 != self.CamNodeCenter) and (0 != self.SceneGraph)  :
+            CentralUser_LeftEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.LEFT)
+            self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value = CentralUser_LeftEyeFrustum.ViewMatrix.value
+            self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value = CentralUser_LeftEyeFrustum.ProjectionMatrix.value
+            print("View Left")
+            print(self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value)
+            print("Proj Left")
+            print(self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value)
+
+            CentralUser_RightEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.RIGHT)
+            self.ClientCamCenter_RightEyeFeedbackViewMatrix.value = CentralUser_RightEyeFrustum.ViewMatrix.value
+            self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value = CentralUser_RightEyeFrustum.ProjectionMatrix.value
+            print("View Right")
+            print(self.ClientCamCenter_RightEyeFeedbackViewMatrix.value)
+            print("Proj Right")
+            print(self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value)
+
+    @field_has_changed(ClientCamLeftMatrixIn)
+    def updateClientCamLeftMatrices(self):
+        if (0 != self.CamNodeCenter) and (0 != self.SceneGraph)  :
+            CentralUser_LeftEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.LEFT)
+            self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value = CentralUser_LeftEyeFrustum.ViewMatrix.value
+            self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value = CentralUser_LeftEyeFrustum.ProjectionMatrix.value
+            print("View Left")
+            print(self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value)
+            print("Proj Left")
+            print(self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value)
+
+            CentralUser_RightEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.RIGHT)
+            self.ClientCamCenter_RightEyeFeedbackViewMatrix.value = CentralUser_RightEyeFrustum.ViewMatrix.value
+            self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value = CentralUser_RightEyeFrustum.ProjectionMatrix.value
+            print("View Right")
+            print(self.ClientCamCenter_RightEyeFeedbackViewMatrix.value)
+            print("Proj Right")
+            print(self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value)
+    #@field_has_changed(ClientCamCenterMatrixIn)
+    #def printMatrices(self):
+    #    pass
+        #self.AvatarFeedbackWorldMatrix.value = self.AvatarWorldMatrixIn.value
+"""
 def make_node_distributable(node):
     for child in node.Children.value:
         make_node_distributable(child)
@@ -165,11 +257,11 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0) * avango.gua.make_scale_mat(1.0, 1.0, 4.0) * avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
 
 
 lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-lion.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, -1.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
+lion.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
 
 
 
@@ -193,7 +285,7 @@ light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
                                    * avango.gua.make_scale_mat(30, 30, 30))
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
-scene_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+scene_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 4.5)
 
 #+++++++++++
 
@@ -207,9 +299,13 @@ non_avatar_scene_transform.Children.value = [kaisersaal, lion, light]
 scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
-screen = avango.gua.nodes.ScreenNode(Name="screen", Width=0.292, Height=0.22)
+#screen = avango.gua.nodes.ScreenNode(Name="screen", Width=0.292, Height=0.22)
 
-size = avango.gua.Vec2ui(1600, 1200)
+screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4.40, Height=2.70)
+
+size = avango.gua.Vec2ui(1920, 1080)
+#size = avango.gua.Vec2ui(1600, 1200)
+
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
@@ -239,9 +335,9 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.6
 
-camera_translations_right = avango.gua.Vec3( 0.05, 0.0, 0.7)
-camera_translations_center = avango.gua.Vec3(0.0, 0.0, 0.7)
-camera_translations_left = avango.gua.Vec3(-0.05, 0.0, 0.7)
+camera_translations_right = avango.gua.Vec3( 1.0, 0.0, 2.0)
+camera_translations_center = avango.gua.Vec3(0.0, 0.0, 2.0)
+camera_translations_left = avango.gua.Vec3(-1.0, 0.0, 2.0)
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
@@ -256,7 +352,7 @@ server_cam = avango.gua.nodes.CameraNode(
 
 
 client_cam_center = avango.gua.nodes.CameraNode(
-    ViewID=3,
+    ViewID=5,
     Name="viewer_0_weimar_center",
     LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
     RightScreenPath="/net/grouped_view_setups_and_scene/screen",
@@ -271,7 +367,7 @@ client_cam_center = avango.gua.nodes.CameraNode(
     )
 
 occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
-    ViewID=3,
+    ViewID=5,
     Name="os_weimar_v0_osaka_center",
     LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
     RightScreenPath="/net/grouped_view_setups_and_scene/screen",
@@ -321,7 +417,7 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     )
 
 client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=3,
     Name="viewer_0_weimar_right",
     LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
     RightScreenPath="/net/grouped_view_setups_and_scene/screen",
@@ -336,7 +432,7 @@ client_cam_right = avango.gua.nodes.CameraNode(
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=3,
     Name="os_weimar_v0_osaka_right",
     LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
     RightScreenPath="/net/grouped_view_setups_and_scene/screen",
@@ -362,7 +458,7 @@ grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_vie
 grouped_view_setups_and_scene.Children.value = [screen, scene_view_transform, loggings_indicator]
 
 screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, occlusion_slave_client_cam_right, client_cam_right, server_cam]
-screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.6, 8.5)
+screen.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5)
 nettrans.Children.value = [grouped_view_setups_and_scene]
 
 #grouped_view_setups_and_scene.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
@@ -448,6 +544,15 @@ key_event_logger.TimeIn.connect_from(timer.Time)
 key_event_logger.set_keyboard_events(keyboard_based_default_viewer)
 key_event_logger.set_logging_node(loggings_indicator)
 
+"""
+feedback_sender = FeedbackSender()
+
+feedback_sender.registerSceneGraph(graph)
+feedback_sender.registerCamNodeCenter(client_cam_center)
+
+feedback_sender.AvatarWorldMatrixIn.connect_from(avatar_geode.WorldTransform)
+feedback_sender.ClientCamCenterMatrixIn.connect_from(client_cam_center.WorldTransform)
+"""
 #guaVE = GuaVE()
 #guaVE.start(locals(), globals())
 

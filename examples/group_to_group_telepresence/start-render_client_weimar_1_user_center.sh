@@ -12,7 +12,7 @@ GUACAMOLE=/opt/guacamole/master
 AVANGO=/opt/avango/master
 
 # third party libs
-export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib
+export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/lamure/install/libs
 
 # schism
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
@@ -33,7 +33,7 @@ else
 fi
 
 # run program
-cd "$DIR" && python3 ./render_client_osaka.py
+cd "$DIR" && python3 ./render_client_weimar_1_user_center.py
 
 # kill daemon
 kill %1

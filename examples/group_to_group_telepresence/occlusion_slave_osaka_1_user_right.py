@@ -30,7 +30,6 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import avango
 import avango.script
 import avango.gua
-import avango.gua.lod
 from avango.script import field_has_changed
 
 from examples_common.GuaVE import GuaVE
@@ -52,45 +51,37 @@ class Initializer(avango.script.Script):
     self.graph.Root.value.Children.value = [self.nettrans]
 
     # viewing setup
-    size = avango.gua.Vec2ui(1600, 1200)
+    #size = avango.gua.Vec2ui(1600, 1200)
+    #size = avango.gua.Vec2ui(1920, 1080)
+    size = avango.gua.Vec2ui(3840, 2160)
 
-    self.window = avango.gua.nodes.GlfwWindow(Size=size,
+    self.window_right = avango.gua.nodes.GlfwWindow(Size=size,
+                                              Display = ":0.1",  # ":0.1",
                                               LeftResolution=size,
                                               RightResolution=size,
-                                              Title="slave_weimar_v0_osaka_center")
+                                              Title="slave_weimar_v0_osaka_right")
 
-    self.window.EnableVsync.value = False
-
-    avango.gua.register_window("slave_weimar_v0_osaka_center", self.window)
+    self.window_right.EnableVsync.value = False
+    avango.gua.register_window("slave_weimar_v0_osaka_right", self.window_right)
 
     logger = avango.gua.nodes.Logger(EnableWarning=False)
 
-    self.MemoryController = avango.gua.nodes.NamedSharedMemoryController()
-    self.MemoryController.add_read_only_memory_segment("DEPTH_FEEDBACK_SEGMENT")
+    #self.MemoryController = avango.gua.nodes.NamedSharedMemoryController()
+    #self.MemoryController.add_read_only_memory_segment("DEPTH_FEEDBACK_SEGMENT")
 
-    self.MemoryController.register_remotely_constructed_object_on_segment("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
+    #self.MemoryController.register_remotely_constructed_object_on_segment("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
 
 
-    print("Before adding shared memory segments")
+    #print("Before adding shared memory segments")
     #add shared depth buffer memory
 
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
-    self.viewer.Windows.value = [self.window]
+    self.viewer.Windows.value = [self.window_right]
 
     self.viewer.DesiredFPS.value = 1000.0
 
     self.viewer.run()
-    #while True:
-    #  depth_feedback_state = self.MemoryController.get_value_from_named_object("DEPTH_FEEDBACK_SEMAPHOR")
-      #print("Read State")
-      #if 0 == depth_feedback_state:
-        #self.MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 1)
-    #  self.viewer.frame()
-      #elif 2 == depth_feedback_state:
-      #  pass
-        #print("Depth buffer was successfully written.")
-
 
 
     # parameters
@@ -109,25 +100,8 @@ class Initializer(avango.script.Script):
         self.on_arrival()
         self.is_initialized = True
 
-        #self.always_evaluate(False)
-
-
   def on_arrival(self):
     pass
-    #print("I HAVE ARRIVED")
-    #print(self.graph["/net/screen/cam"].Name.value)
-
-    #occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
-    #    Passes=[
-    #        avango.gua.nodes.TriMeshPassDescription(),
-    #        avango.gua.nodes.LightVisibilityPassDescription(),
-    #        avango.gua.nodes.SPointsPassDescription(),
-    #        avango.gua.nodes.OcclusionSlaveResolvePassDescription()
-    #    ])
-    #self.graph["/net/screen/cam"].PipelineDescription.value = occlusion_slave_pipeline_description
-
-    #print("Reconfigured pipeline")
-
 
 
 init = Initializer()

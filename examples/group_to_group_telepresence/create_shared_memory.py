@@ -38,16 +38,30 @@ from examples_common.GuaVE import GuaVE
 MemoryController = avango.gua.nodes.NamedSharedMemoryController()
 MemoryController.add_memory_segment("DEPTH_FEEDBACK_SEGMENT", 1000)
 
+#irrelevant, depth feedback will have resolution 100x100
+#MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_BUFFER_RES_X")
+#MemoryController.set_value_for_named_object("DEPTH_BUFFER_RES_X", 0)
+#MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_BUFFER_RES_Y")
+#MemoryController.set_value_for_named_object("DEPTH_BUFFER_RES_Y", 0)
 
-MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_BUFFER_RES_X")
-MemoryController.set_value_for_named_object("DEPTH_BUFFER_RES_X", 0)
-
-MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_BUFFER_RES_Y")
-MemoryController.set_value_for_named_object("DEPTH_BUFFER_RES_Y", 0)
-
+#we will see about the semaphor later
 MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
 MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 99)
 
+MemoryController.add_memory_segment("segment_for_DB_3L", 65536*2);
+MemoryController.add_memory_segment("segment_for_DB_3R", 65536*2);
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_3L", "DB_3L")
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_3R", "DB_3R")
+
+MemoryController.add_memory_segment("segment_for_DB_4L", 65536*2);
+MemoryController.add_memory_segment("segment_for_DB_4R", 65536*2);
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_4L", "DB_4L")
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_4R", "DB_4R")
+
+MemoryController.add_memory_segment("segment_for_DB_5L", 65536*2);
+MemoryController.add_memory_segment("segment_for_DB_5R", 65536*2);
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_5L", "DB_5L")
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_5R", "DB_5R")
 
 
 print("Successfully created shared memory segment!")

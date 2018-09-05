@@ -36,51 +36,61 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "client.log")
 
+class Initializer(avango.script.Script):
 
-class NetInit(avango.script.Script):
-    NetChildren = avango.gua.MFNode()
-    WindowName = avango.SFString()
-    Viewer = avango.gua.nodes.Viewer()
-    """
-  @field_has_changed(NetChildren)
-  def update(self):
-    for tmp in self.NetChildren.value:
-      for child in tmp.Children.value:
-        if isinstance(child, avango.gua.CameraNode):
-          if child.OutputWindowName.value == self.WindowName.value:
-            # self.Viewer.CameraNodes.value = [child]
-            pass
-  """
+  def __init__(self):
+    self.super(Initializer).__init__()
 
-
-nettrans = avango.gua.nodes.NetTransform(Name="net",
+    # scenegraph
+    self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432")
+                                         Groupname="AVCLIENT|141.54.147.52|7432") # server -> pan
+                                         #Groupname="AVCLIENT|141.54.147.54|7432")
+    
+    self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
+    self.graph.Root.value.Children.value = [self.nettrans]
 
-loader = avango.gua.nodes.TriMeshLoader()
+    # viewing setup
+    #size = avango.gua.Vec2ui(1600, 1200)
+    #size = avango.gua.Vec2ui(1920, 1080)
+    size = avango.gua.Vec2ui(3840, 2160)
+    self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
+                                              Display = ":0.1",  # ":0.1",
+                                              LeftResolution=size,
+                                              RightResolution=size,
+                                              Title="slave_weimar_v0_osaka_center")
 
-graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
-graph.Root.value.Children.value = [nettrans]
+    self.window_center.EnableVsync.value = False
+    avango.gua.register_window("slave_weimar_v0_osaka_center", self.window_center)
 
-size = avango.gua.Vec2ui(1600, 1200)
 
-window = avango.gua.nodes.GlfwWindow(Size=size,
-                                     LeftResolution=size,
-                                     Title="client_window")
-avango.gua.register_window("client_window", window)
+    self.viewer = avango.gua.nodes.Viewer()
+    self.viewer.SceneGraphs.value = [self.graph]
+    self.viewer.Windows.value = [self.window_center]
 
-logger = avango.gua.nodes.Logger(EnableWarning=False)
+    self.viewer.DesiredFPS.value = 1000.0
 
-viewer = avango.gua.nodes.Viewer()
-viewer.SceneGraphs.value = [graph]
-viewer.Windows.value = [window]
+    self.viewer.run()
 
-init = NetInit()
-init.WindowName.value = "client_window"
-init.Viewer = viewer
-init.NetChildren.connect_from(nettrans.Children)
+    # parameters
+    print("Before setting is initialized")
+    self.is_initialized = False
+    print("always evaluate")
+    self.always_evaluate(True)
+    print("after always evaluate")
 
-guaVE = GuaVE()
-guaVE.start(locals(), globals())
 
-viewer.run()
+
+  def evaluate(self):
+    print("beginning of evaluation")
+    if not self.is_initialized:
+      if len(self.nettrans.Children.value) > 0:
+        self.on_arrival()
+        self.is_initialized = True
+
+  def on_arrival(self):
+    pass
+
+
+init = Initializer()
+

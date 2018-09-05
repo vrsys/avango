@@ -3,6 +3,8 @@ import avango.gua
 import avango.gua.nrp
 import avango.script
 from avango.gua import *
+
+import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 
@@ -11,15 +13,29 @@ def start():
     graph = nodes.SceneGraph(Name="scenegraph")
 
     nrp_root = avango.gua.nrp.NRPNode()
+    nrp_root.Transform.value = make_trans_mat(-3.6, -1.05, -6.0)
 
-    size = Vec2ui(1024, 768)
+    nrp_interactive = avango.gua.nrp.NRPInteractiveNode()
+
+    loader = nodes.TriMeshLoader()
+
+    teapot_1 = loader.create_geometry_from_file("teapot_1", "data/objects/teapot.obj", LoaderFlags.NORMALIZE_SCALE)
+    teapot_1.Transform.value = make_trans_mat(1., 0., 0.)
+
+    teapot_2 = loader.create_geometry_from_file("teapot_2", "data/objects/teapot.obj", LoaderFlags.NORMALIZE_SCALE)
+    teapot_2.Transform.value = make_trans_mat(0., 1., 0.)
+
+    teapot_1.Children.value = [teapot_2]
+    nrp_interactive.Children.value = [teapot_1]
+
+    size = Vec2ui(2560, 1440)
 
     window = nodes.GlfwWindow(Size=size, LeftResolution=size)
 
     register_window("window", window)
 
     cam = nodes.CameraNode(LeftScreenPath="/screen", SceneGraph="scenegraph", Resolution=size,
-                           OutputWindowName="window", Transform=make_trans_mat(0.0, 0.0, 3.5))
+                           OutputWindowName="window", Transform=make_trans_mat(0., 0., 2.0))
 
     res_pass = nodes.ResolvePassDescription()
 
@@ -36,9 +52,18 @@ def start():
 
     cam.PipelineDescription.value.EnableABuffer.value = True
 
-    screen = nodes.ScreenNode(Name="screen", Width=2, Height=1.5, Children=[cam])
+    screen = nodes.ScreenNode(Name="screen", Width=2, Height=1.5, Children=[cam, nrp_interactive])
 
     graph.Root.value.Children.value = [nrp_root, screen]
+
+    navigator = examples_common.navigator.Navigator()
+    navigator.StartLocation.value = cam.Transform.value.get_translate()
+    navigator.OutTransform.connect_from(cam.Transform)
+
+    navigator.RotationSpeed.value = 0.2
+    navigator.MotionSpeed.value = 0.04
+
+    cam.Transform.connect_from(navigator.OutTransform)
 
     viewer = nodes.Viewer()
     viewer.SceneGraphs.value = [graph]

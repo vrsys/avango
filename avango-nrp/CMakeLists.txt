@@ -3,9 +3,11 @@
 ###############################################################################
 file(GLOB_RECURSE AVANGO_NRP_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         src/avango/gua/nrp/NRPNode.cpp
+        src/avango/gua/nrp/NRPInteractiveNode.cpp
         src/avango/gua/nrp/NRPCameraNode.cpp
         src/avango/gua/nrp/NRPPass.cpp
         include/avango/gua/nrp/NRPNode.hpp
+        include/avango/gua/nrp/NRPInteractiveNode.hpp
         include/avango/gua/nrp/NRPCameraNode.hpp
         include/avango/gua/nrp/NRPPass.hpp)
 

@@ -3,7 +3,11 @@
 ###############################################################################
 file(GLOB_RECURSE AVANGO_NRP_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
         src/avango/gua/nrp/NRPNode.cpp
-        include/avango/gua/nrp/NRPNode.hpp)
+        src/avango/gua/nrp/NRPCameraNode.cpp
+        src/avango/gua/nrp/NRPPass.cpp
+        include/avango/gua/nrp/NRPNode.hpp
+        include/avango/gua/nrp/NRPCameraNode.hpp
+        include/avango/gua/nrp/NRPPass.hpp)
 
 find_package(gazebo REQUIRED)
 list(APPEND GAZEBO_INCLUDE_DIRS "/usr/include/gazebo-7")

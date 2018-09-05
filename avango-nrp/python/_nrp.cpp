@@ -1,3 +1,4 @@
+#include <python3.5/Python.h>
 #include <boost/python.hpp>
 
 #include "NRPNode.hpp"

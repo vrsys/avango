@@ -11,7 +11,7 @@ set_target_properties(_nrp PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DI
 
 ADD_DEPENDENCIES(_nrp avango_nrp)
 
-TARGET_LINK_LIBRARIES(_nrp debug ${LIBRARIES} avango_nrp optimized ${LIBRARIES} avango_nrp)
+TARGET_LINK_LIBRARIES(_nrp debug ${LIBRARIES} avango_nrp optimized ${LIBRARIES} avango_nrp ${Boost_PYTHON-PY35_LIBRARY_DEBUG} ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
 SET_TARGET_PROPERTIES(_nrp PROPERTIES PREFIX "")
 
 ###############################################################################

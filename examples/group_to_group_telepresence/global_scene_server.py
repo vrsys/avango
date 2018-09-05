@@ -301,7 +301,10 @@ scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=0.292, Height=0.22)
 
-screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4.40, Height=2.70)
+SCREEN_WIDTH  = 4.40
+SCREEN_HEIGHT = 2.70
+
+screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
 
 size = avango.gua.Vec2ui(1920, 1080)
 #size = avango.gua.Vec2ui(1600, 1200)
@@ -333,11 +336,36 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
     ])
 
 
-eye_height = 1.6
+
 
 camera_translations_right = avango.gua.Vec3( 1.0, 0.0, 2.0)
 camera_translations_center = avango.gua.Vec3(0.0, 0.0, 2.0)
 camera_translations_left = avango.gua.Vec3(-1.0, 0.0, 2.0)
+
+eye_height = 1.6
+
+BASE_USER_GEOM_SCALING = 0.2
+USER_GEOM_SCALING = avango.gua.Vec3( BASE_USER_GEOM_SCALING*(1.0/SCREEN_WIDTH), BASE_USER_GEOM_SCALING*(1.0/SCREEN_HEIGHT), BASE_USER_GEOM_SCALING*1.0)
+
+camera_geometry_translations_right = avango.gua.Vec3(camera_translations_right[0]/SCREEN_WIDTH, 0.0, 2.0)
+camera_geometry_translations_center = avango.gua.Vec3(0.0/SCREEN_WIDTH, 0.0, 2.0)
+camera_geometry_translations_left = avango.gua.Vec3(-1.0/SCREEN_WIDTH, 0.0, 2.0)
+
+
+central_user_geometry = loader.create_geometry_from_file("central_user_geom", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/user_position_proxy.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+central_user_geometry.Transform.value = avango.gua.make_trans_mat(camera_geometry_translations_center) * avango.gua.make_scale_mat( USER_GEOM_SCALING )
+
+left_user_geometry = loader.create_geometry_from_file("central_user_geom", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/user_position_proxy.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+left_user_geometry.Transform.value = avango.gua.make_trans_mat(camera_geometry_translations_left) * avango.gua.make_scale_mat( USER_GEOM_SCALING )
+
+right_user_geometry = loader.create_geometry_from_file("central_user_geom", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/user_position_proxy.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+right_user_geometry.Transform.value = avango.gua.make_trans_mat(camera_geometry_translations_right) * avango.gua.make_scale_mat( USER_GEOM_SCALING )
+
+
+screen_geometry = loader.create_geometry_from_file("screen_geometry", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/screen.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+screen_geometry.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5) * avango.gua.make_scale_mat(4.4, 2.7, 1.0)
+screen_geometry.Children.value = [central_user_geometry, left_user_geometry, right_user_geometry]
+
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
@@ -450,7 +478,9 @@ occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
 
 scene_view_transform = avango.gua.nodes.TransformNode(Name="scene_view_transform")
 #scene_view_transform.Transform.value = avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
-scene_view_transform.Children.value = [scene_transform]
+scene_view_transform.Children.value = [scene_transform]#, screen_geometry]
+
+
 
 loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 

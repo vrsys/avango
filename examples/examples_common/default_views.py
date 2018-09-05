@@ -25,7 +25,7 @@ class DefaultViews(avango.script.Script):
     def evaluate(self):
         if self.Keyboard.KeyW.value:
             self.rotation_axis = avango.gua.Vec3(1.0, 0.0, 0.0)
-            self.cam_offset    = avango.gua.Vec3(0.0, 1.5, -20.0)
+            self.cam_offset    = avango.gua.Vec3(0.0, 7.0, -20.0)
 
         if self.Keyboard.KeyS.value:
             self.rotation_axis = avango.gua.Vec3(0.0, 0.0, 0.0)

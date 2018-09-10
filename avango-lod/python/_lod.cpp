@@ -27,11 +27,13 @@
 #include "PLodPassDescription.hpp"
 #include "MLodNode.hpp"
 #include "PLodNode.hpp"
+#include "Aux.hpp"
 #include <avango/gua/lod/renderer/LodLoader.hpp>
 #include <avango/gua/lod/renderer/MLodPassDescription.hpp>
 #include <avango/gua/lod/renderer/PLodPassDescription.hpp>
 #include <avango/gua/lod/scenegraph/MLodNode.hpp>
 #include <avango/gua/lod/scenegraph/PLodNode.hpp>
+#include <avango/gua/lod/renderer/Aux.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 
@@ -56,9 +58,11 @@ BOOST_PYTHON_MODULE(_lod)
   av::gua::lod::PLodPassDescription::initClass();
   av::gua::lod::MLodNode::initClass();
   av::gua::lod::PLodNode::initClass();
+  av::gua::lod::Aux::initClass();
   init_MLodNode();
   init_PLodNode();
   init_MLodPassDescription();
   init_PLodPassDescription();
   init_LodLoader();
+  init_Aux();
 }

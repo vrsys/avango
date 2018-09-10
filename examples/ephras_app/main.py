@@ -17,13 +17,20 @@ def start():
   lod_loader.UploadBudget.value = 64
   lod_loader.RenderBudget.value = 2048
   lod_loader.OutOfCoreBudget.value = 4096
+
+  aux_loader = avango.gua.lod.nodes.Aux()
+  aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
+  aux_loader.test_wrapping()
+  aux_loader.get_filename()
+  aux_loader.get_num_views()
+  aux_loader.get_num_sparse_points()
+  aux_loader.get_num_atlas_tiles()
+  
   
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
 
 
   
-  #aux.test_wrapping()  
-
   plod_node = lod_loader.load_lod_pointcloud(
                   #"/opt/3d_models/point_based/plod/pig_pr.bvh",
                   "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",

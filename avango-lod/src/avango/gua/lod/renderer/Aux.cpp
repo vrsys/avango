@@ -73,6 +73,36 @@ av::gua::lod::Aux::get_num_atlas_tiles() const {
   return m_guaAux->get_num_atlas_tiles(); 
 }
 
+// const av::gua::lod::AuxAtlas
+// av::gua::lod::Aux::get_atlas2 () const {
+//   return av::gua::lod::AuxAtlas(m_guaAux->get_atlas());
+// }
+
+av::Link<av::gua::lod::AuxAtlas>
+av::gua::lod::Aux::get_atlas() const {
+  //return av::Link<av::gua::lod::AuxAtlas>(new av::gua::lod::AuxAtlas(new ::gua::Aux::atlas(m_guaAux->get_atlas())));
+  return av::Link<av::gua::lod::AuxAtlas>(new av::gua::lod::AuxAtlas(m_guaAux->get_atlas()));
+}
+
+
+av::Link<av::gua::lod::AuxAtlasTile>
+av::gua::lod::Aux::get_atlas_tile( uint32_t id) const {
+  return av::Link<av::gua::lod::AuxAtlasTile>(new av::gua::lod::AuxAtlasTile(m_guaAux->get_atlas_tile(id)));
+}
+
+av::Link<av::gua::lod::AuxSparsePoint>
+av::gua::lod::Aux::get_sparse_point( uint32_t id) const {
+  return av::Link<av::gua::lod::AuxSparsePoint>(new av::gua::lod::AuxSparsePoint(m_guaAux->get_sparse_point(id)));
+}
+
+
+
+av::Link<av::gua::lod::AuxView>
+av::gua::lod::Aux::get_view( uint32_t id) const {
+  return av::Link<av::gua::lod::AuxView>(new av::gua::lod::AuxView(m_guaAux->get_view(id)));
+}
+
+
 std::shared_ptr< ::gua::Aux>
 av::gua::lod::Aux::getGuaAux() const {
   return m_guaAux;

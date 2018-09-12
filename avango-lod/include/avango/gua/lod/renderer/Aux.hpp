@@ -15,6 +15,11 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
 
+#include <avango/gua/lod/renderer/AuxAtlas.hpp>
+#include <avango/gua/lod/renderer/AuxAtlasTile.hpp>
+#include <avango/gua/lod/renderer/AuxSparsePoint.hpp>
+#include <avango/gua/lod/renderer/AuxView.hpp>
+
 namespace av
 {
   namespace gua
@@ -62,6 +67,14 @@ namespace av
         const uint32_t      get_num_views() const;
         const uint64_t      get_num_sparse_points() const;
         const uint32_t      get_num_atlas_tiles() const;
+
+        av::Link<av::gua::lod::AuxAtlas> get_atlas() const;
+
+        av::Link<av::gua::lod::AuxAtlasTile> get_atlas_tile(uint32_t id) const;
+        av::Link<av::gua::lod::AuxSparsePoint> get_sparse_point(uint32_t id) const;
+
+        av::Link<av::gua::lod::AuxView> get_view(uint32_t id) const;
+        // const gua::lod::AuxAtlas get_atlas2() const;
 
       private:
 

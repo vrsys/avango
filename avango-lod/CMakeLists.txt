@@ -6,12 +6,20 @@ file(GLOB_RECURSE AVANGO_LOD_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   src/avango/gua/lod/scenegraph/PLodNode.cpp
   src/avango/gua/lod/renderer/LodLoader.cpp
   src/avango/gua/lod/renderer/Aux.cpp
+  src/avango/gua/lod/renderer/AuxAtlas.cpp
+  src/avango/gua/lod/renderer/AuxAtlasTile.cpp
+  src/avango/gua/lod/renderer/AuxSparsePoint.cpp
+  src/avango/gua/lod/renderer/AuxView.cpp
   src/avango/gua/lod/renderer/PLodPassDescription.cpp
   src/avango/gua/lod/renderer/MLodPassDescription.cpp
   include/avango/gua/lod/scenegraph/MLodNode.hpp
   include/avango/gua/lod/scenegraph/PLodNode.hpp
   include/avango/gua/lod/renderer/LodLoader.hpp
   include/avango/gua/lod/renderer/Aux.hpp
+  include/avango/gua/lod/renderer/AuxAtlas.hpp
+  include/avango/gua/lod/renderer/AuxAtlasTile.hpp
+  include/avango/gua/lod/renderer/AuxSparsePoint.hpp
+  include/avango/gua/lod/renderer/AuxView.hpp
   include/avango/gua/lod/renderer/PLodPassDescription.hpp
   include/avango/gua/lod/renderer/MLodPassDescription.hpp
 )

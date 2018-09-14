@@ -329,6 +329,7 @@ avatar_transform.Children.value = [avatar_geode]
 
 non_avatar_scene_transform = avango.gua.nodes.TransformNode(Name="non_avatar_scene_transform")
 non_avatar_scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
+
 non_avatar_scene_transform.Children.value = [street_plane, hauptgebaeude, lion, lion2]
 
 
@@ -360,6 +361,7 @@ def append_trees_to_list(parent_node):
 
 append_trees_to_list(non_avatar_scene_transform)
 
+
 scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
@@ -378,8 +380,10 @@ tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
 lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
 res_pass = avango.gua.nodes.ResolvePassDescription()
+
 res_pass.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/bright_sky.jpg"
+
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
 tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 spoints_pass_description = avango.gua.nodes.SPointsPassDescription()

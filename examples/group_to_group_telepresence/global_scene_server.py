@@ -96,18 +96,39 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     walking_speed_units_per_second = 1.666667
 
-    indexed_keyframe_positions = [(0, avango.gua.Vec3(0, 0, -10), 0),
-                                  (1000, avango.gua.Vec3(0, 0, -10), 0), 
-                                  (2000, avango.gua.Vec3(0, 0.0, 5), 0 ),
-                                  (3000, avango.gua.Vec3(0, 0.0, 5), 0 ),
-                                  (4000, avango.gua.Vec3(0, 0.0, 2.4), 0 ),
-                                  (5000, avango.gua.Vec3(0, 0.0, 2.4), 0 ),
-                                  (6000, avango.gua.Vec3(-1.5, 0, 2.4), 0 ),
-                                  (8000, avango.gua.Vec3(-1.5, 0, 2.4), 00 ),
-                                  (9000, avango.gua.Vec3(0, 0, 2.4), 30),
-                                  (10000, avango.gua.Vec3(0, 0, 2.4), 90),
-                                  (11500, avango.gua.Vec3(0, 0, -10), 180 ),
-                                  (12000, avango.gua.Vec3(0, 0, -10), 180 )
+    right_offset = 1.0
+
+    indexed_keyframe_positions = [(    0, avango.gua.Vec3(0 + right_offset, 0, -8), 180),
+                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 5), 180),
+                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 5), 180),
+                                  (17095, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
+                                  (17695, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),                                  
+                                  (20230, avango.gua.Vec3(-2.2 + right_offset, 0, 2.4), 180),
+                                  (26430, avango.gua.Vec3(-2.2 + right_offset, 0, 2.4), 180),
+                                  (33000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
+                                  (34000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
+                                  (35500, avango.gua.Vec3(0 + right_offset, 0, 2.4), 0),
+                                  (39000, avango.gua.Vec3(0 + right_offset, 0, -8), 0),
+                                  (41000, avango.gua.Vec3(0 + right_offset, 0, -8), 0)
+                                  #(0, avango.gua.Vec3(0, 0, -10), 180),
+                                  #(7000, avango.gua.Vec3(0, 0, 5),180),
+
+                                  #(15000, avango.gua.Vec3(0, 0, 5),180),
+                                  #(18000, avango.gua.Vec3(0, 0.0, 2.4),180 ),
+                                  #(20000, avango.gua.Vec3(-1.5, 0.0, 2.4),180 ),
+                                  #(30000, avango.gua.Vec3(-1.5, 0.0, 2.4),180 ),
+                                  #(2000, avango.gua.Vec3(0, 0.0, 5),180 ),
+                                  
+                                  #(3000, avango.gua.Vec3(0, 0.0, 5),180 ),
+                                  #(4000, avango.gua.Vec3(0, 0.0, 2.4),180 ),
+                                  #(5000, avango.gua.Vec3(0, 0.0, 2.4),180 ),
+                                  #(6000, avango.gua.Vec3(-1.5, 0, 2.4),180 ),
+                                  #(8000, avango.gua.Vec3(-1.5, 0, 2.4), 180 ),
+                                  #(9000, avango.gua.Vec3(0, 0, 2.4), 30),
+                                  #(10000, avango.gua.Vec3(0, 0, 2.4), 90),
+                                  #(11500, avango.gua.Vec3(0, 0, -10), 180 ),
+                                  
+                                  #(12000, avango.gua.Vec3(0, 0, -10), 180 )
                                 ]
     
 
@@ -255,14 +276,34 @@ graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 
 
-kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+#kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+#kaisersaal = loader.create_geometry_from_file("kaisersaal", "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+#/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
+#kaisersaal.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, 1.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
 
-kaisersaal.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+#kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+
+hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
 
-lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-lion.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
 
+"""
+for _child in hauptgebaeude.Children.value:
+    if _child.has_field("Material") == True:
+        _child.Material.value.EnableBackfaceCulling.value = False
+"""
+
+
+lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
+
+lion.Material.value.EnableBackfaceCulling.value = False
+lion.Material.value.set_uniform("Emissivity", 3.0)
+
+lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
 
 
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
@@ -277,15 +318,8 @@ nettrans.distribute_object(mat)
 spointsloader = avango.gua.nodes.SPointsLoader()
 avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
 
-light = avango.gua.nodes.LightNode(Type=avango.gua.LightType.POINT,
-                                   Name="light",
-                                   Color=avango.gua.Color(1.0, 1.0, 1.0),
-                                   Brightness=200.0,
-                                   Transform=avango.gua.make_trans_mat(1, 1, 5)
-                                   * avango.gua.make_scale_mat(30, 30, 30))
-
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
-scene_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 4.5)
+scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
 
 #+++++++++++
 
@@ -295,7 +329,37 @@ avatar_transform.Children.value = [avatar_geode]
 
 non_avatar_scene_transform = avango.gua.nodes.TransformNode(Name="non_avatar_scene_transform")
 non_avatar_scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
-non_avatar_scene_transform.Children.value = [kaisersaal, lion, light]
+non_avatar_scene_transform.Children.value = [street_plane, hauptgebaeude, lion, lion2]
+
+
+
+def append_trees_to_list(parent_node):
+    tm_loader = avango.gua.nodes.TriMeshLoader()
+    
+    depth_offset_pre_tree = 4.0
+
+    tree_label = 0
+    for i in range(3):
+        tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
+        tree_to_append.Transform.value = avango.gua.make_trans_mat(-4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+
+
+        parent_node.Children.value.append(tree_to_append)
+        tree_label += 1
+
+    for i in range(3):
+        tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
+        tree_to_append.Transform.value =  avango.gua.make_trans_mat(4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0)#* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+
+
+        parent_node.Children.value.append(tree_to_append)
+        tree_label += 1
+
+
+append_trees_to_list(non_avatar_scene_transform)
+
 scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
@@ -314,6 +378,8 @@ tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
 lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
 res_pass = avango.gua.nodes.ResolvePassDescription()
+res_pass.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
+res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/bright_sky.jpg"
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
 tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 spoints_pass_description = avango.gua.nodes.SPointsPassDescription()

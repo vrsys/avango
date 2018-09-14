@@ -38,9 +38,9 @@ from examples_common.GuaVE import GuaVE
 import time
 #avango.enable_logging(4, "client.log")
 
-CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
+#CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
 #CLIENT_MODE = "VIDEO_POWERWALL"
-#CLIENT_MODE = "SCREENSHOT_DESKTOP"
+CLIENT_MODE = "SCREENSHOT_DESKTOP"
 
 STEREO_MODE = 0
 WINDOW_RESOLUTION = 0
@@ -225,7 +225,7 @@ class Initializer(avango.script.Script):
     avango.gua.register_window("client_window_weimar_left", self.window_left)
     
     self.window_center = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                 Display = ":0.1",  # ":0.1",
+                                 Display = ":0.0",  # ":0.1",
                                  LeftPosition = LEFT_VIEWPORT_START,
                                  RightPosition = RIGHT_VIEWPORT_START,
                                  LeftResolution=RENDERING_RESOLUTION,
@@ -237,7 +237,7 @@ class Initializer(avango.script.Script):
     avango.gua.register_window("client_window_weimar_center", self.window_center)
     
     self.window_right = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                      Display = ":0.0",  # ":0.1",
+                                      Display = ":0.1",  # ":0.1",
                                       LeftPosition = LEFT_VIEWPORT_START,
                                       RightPosition = RIGHT_VIEWPORT_START,
                                       LeftResolution=RENDERING_RESOLUTION,

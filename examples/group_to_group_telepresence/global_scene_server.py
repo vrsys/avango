@@ -30,6 +30,7 @@ import avango
 import avango.script
 import avango.gua
 import avango.gua.lod
+import avango.daemon
 from avango.script import field_has_changed
 
 import examples_common.navigator
@@ -43,10 +44,53 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
+OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+#OBSERVER_MODE = "3_CLIENTS_LIVE"
+#OBSERVER_MODE = "VIDEO_CAMERA"
+
+
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                           Groupname="AVSERVER|141.54.147.52|7432") # server -> pan
                                          #Groupname="AVSERVER|141.54.147.54|7432")
+
+
+
+
+
+class TimedUpdateTrackingInfo(avango.script.Script):
+    TimeIn = avango.SFFloat()
+    CentralUserMatrixOut = avango.gua.SFMatrix4()
+
+    #CentralUser = avango.gua.SFMatrix4()
+
+    DeviceSensorGlassesA = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    DeviceSensorGlassesA.Station.value = "tracking-dbl-glasses-A"
+    DeviceSensorGlassesA.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+
+
+
+    """
+    keyboard_events = 0
+    logging_node = 0
+
+    frame_time_dict = dict()
+
+    num_entries = 0
+
+    def set_logging_node(self, ln):
+        self.logging_node = ln
+
+    def set_keyboard_events(self, keyboard):
+        self.keyboard_events = keyboard
+    """
+    @field_has_changed(TimeIn)
+    def update(self):
+        self.CentralUserMatrixOut.value = self.DeviceSensorGlassesA.Matrix.value
+        #print("TM: ")
+        #print(self.DeviceSensorGlassesA.Matrix.value)
+        
+
 
 
 class TimedKeyToggling(avango.script.Script):
@@ -316,7 +360,7 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
@@ -367,10 +411,18 @@ scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
 #screen = avango.gua.nodes.ScreenNode(Name="screen", Width=0.292, Height=0.22)
 
-SCREEN_WIDTH  = 4.40
-SCREEN_HEIGHT = 2.70
+#SCREEN_WIDTH  = 4.40
+#SCREEN_HEIGHT = 2.70
+
+#screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
+
+
+SCREEN_WIDTH  = 4.91
+SCREEN_HEIGHT = 2.78
 
 screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
+
+
 
 size = avango.gua.Vec2ui(1920, 1080)
 #size = avango.gua.Vec2ui(1600, 1200)
@@ -407,10 +459,14 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 
 
-
+"""
 camera_translations_right = avango.gua.Vec3( 1.0, 0.0, 2.0)
 camera_translations_center = avango.gua.Vec3(0.0, 0.0, 2.0)
 camera_translations_left = avango.gua.Vec3(-1.0, 0.0, 2.0)
+"""
+camera_translations_right = avango.gua.Vec3( 0.0, 1.70, 0.0)
+camera_translations_center = avango.gua.Vec3( 0.0, 1.70, 0.0)
+camera_translations_left = avango.gua.Vec3( 0.0, 1.70, 0.0)
 
 eye_height = 1.6
 
@@ -437,9 +493,16 @@ screen_geometry.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5
 screen_geometry.Children.value = [central_user_geometry, left_user_geometry, right_user_geometry]
 
 
+screen_path = "/net/grouped_view_setups_and_scene/navigation/screen"
+
+eye_distance = 0.06
+
+if "VIDEO_CAMERA" == OBSERVER_MODE:
+    eye_distance = 0.0
+
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="server_window",
@@ -452,30 +515,30 @@ server_cam = avango.gua.nodes.CameraNode(
 client_cam_center = avango.gua.nodes.CameraNode(
     ViewID=5,
     Name="viewer_0_weimar_center",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar_center",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     )
 
 occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     ViewID=5,
     Name="os_weimar_v0_osaka_center",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka_center",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"], 
     #needs to be invisible as soon as the real render-client comes into play
@@ -485,30 +548,30 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
 client_cam_left = avango.gua.nodes.CameraNode(
     ViewID=4,
     Name="viewer_0_weimar_left",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar_left",
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     )
 
 occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     ViewID=4,
     Name="os_weimar_v0_osaka_left",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka_left",
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"], 
     #needs to be invisible as soon as the real render-client comes into play
@@ -517,34 +580,38 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
 client_cam_right = avango.gua.nodes.CameraNode(
     ViewID=3,
     Name="viewer_0_weimar_right",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar_right",
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
     ViewID=3,
     Name="os_weimar_v0_osaka_right",
-    LeftScreenPath="/net/grouped_view_setups_and_scene/screen",
-    RightScreenPath="/net/grouped_view_setups_and_scene/screen",
+    LeftScreenPath=screen_path,
+    RightScreenPath=screen_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka_right",
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.06,
+    EyeDistance = eye_distance,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"], 
     #needs to be invisible as soon as the real render-client comes into play
     )
+
+
+
+
 
 scene_view_transform = avango.gua.nodes.TransformNode(Name="scene_view_transform")
 #scene_view_transform.Transform.value = avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
@@ -554,11 +621,18 @@ scene_view_transform.Children.value = [scene_transform]#, screen_geometry]
 
 loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 
-grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
-grouped_view_setups_and_scene.Children.value = [screen, scene_view_transform, loggings_indicator]
+navigation = avango.gua.nodes.TransformNode(Name="navigation")
+navigation.Children.value = [screen, server_cam, client_cam_left, client_cam_center, client_cam_right, occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
 
-screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, occlusion_slave_client_cam_right, client_cam_right, server_cam]
-screen.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5)
+navigation.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 11.0)
+
+grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
+grouped_view_setups_and_scene.Children.value = [navigation, scene_view_transform, loggings_indicator]
+
+screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.445, -2.0)
+#screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, occlusion_slave_client_cam_right, client_cam_right, server_cam]
+#screen.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5)
+
 nettrans.Children.value = [grouped_view_setups_and_scene]
 
 #grouped_view_setups_and_scene.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, 2.5)
@@ -584,20 +658,20 @@ avatar_geode.Tags.value = ["invisible_osaka_avatar"]
 graph.Root.value.Children.value = [nettrans]
 
 make_node_distributable(grouped_view_setups_and_scene)
-make_node_distributable(non_avatar_scene_transform)
-make_node_distributable(avatar_transform)
-make_node_distributable(scene_view_transform)
-make_node_distributable(scene_transform)
-make_node_distributable(screen)
+#make_node_distributable(non_avatar_scene_transform)
+#make_node_distributable(avatar_transform)
+#make_node_distributable(scene_view_transform)
+#make_node_distributable(scene_transform)
+#make_node_distributable(screen)
 
-make_node_distributable(server_cam)
+#make_node_distributable(server_cam)
 
-make_node_distributable(client_cam_center)
-make_node_distributable(occlusion_slave_client_cam_center)
-make_node_distributable(client_cam_left)
-make_node_distributable(occlusion_slave_client_cam_left)
-make_node_distributable(client_cam_right)
-make_node_distributable(occlusion_slave_client_cam_right)
+#make_node_distributable(client_cam_center)
+#make_node_distributable(occlusion_slave_client_cam_center)
+#make_node_distributable(client_cam_left)
+#make_node_distributable(occlusion_slave_client_cam_left)
+#make_node_distributable(client_cam_right)
+#make_node_distributable(occlusion_slave_client_cam_right)
 
 nettrans.distribute_object(tri_pass)
 nettrans.distribute_object(tquad_pass)
@@ -643,6 +717,52 @@ key_event_logger = TimedKeyToggling()
 key_event_logger.TimeIn.connect_from(timer.Time)
 key_event_logger.set_keyboard_events(keyboard_based_default_viewer)
 key_event_logger.set_logging_node(loggings_indicator)
+
+
+#tracking_info_updater = TimedUpdateTrackingInfo()
+#tracking_info_updater.TimeIn.connect_from(timer.Time)
+
+
+
+
+if not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE):
+
+    #tracking_target id 18 = video cam
+    DeviceSensorVideoCamera = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    DeviceSensorVideoCamera.Station.value = "tracking-dbl-video-camera"
+    DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+
+    #glasses id=22
+    DeviceSensorGlassesRight = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    DeviceSensorGlassesRight.Station.value = "tracking-dbl-glasses-A"
+    DeviceSensorGlassesRight.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+
+    #glasses id=23
+    DeviceSensorGlassesCenter = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    DeviceSensorGlassesCenter.Station.value = "tracking-dbl-glasses-B"
+    DeviceSensorGlassesCenter.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+
+    #glasses id=24
+    DeviceSensorGlassesLeft = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+    DeviceSensorGlassesLeft.Station.value = "tracking-dbl-glasses-C"
+    DeviceSensorGlassesLeft.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+
+
+
+    if "3_CLIENTS_LIVE" == OBSERVER_MODE:
+        client_cam_right.Transform.connect_from(DeviceSensorGlassesRight.Matrix)
+        occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorGlassesRight.Matrix)
+        client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
+        occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
+        client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+        occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+    else:
+        client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
 
 """
 feedback_sender = FeedbackSender()

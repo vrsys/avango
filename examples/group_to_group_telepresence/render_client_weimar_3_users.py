@@ -39,8 +39,8 @@ import time
 #avango.enable_logging(4, "client.log")
 
 #CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
-#CLIENT_MODE = "VIDEO_POWERWALL"
-CLIENT_MODE = "SCREENSHOT_DESKTOP"
+CLIENT_MODE = "VIDEO_POWERWALL"
+#CLIENT_MODE = "SCREENSHOT_DESKTOP"
 
 
 STEREO_MODE = 0
@@ -58,9 +58,9 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*3840, 2160)
-  RENDERING_RESOLUTION = avango.gua.Vec2ui(WINDOW_RESOLUTION[0]/2, WINDOW_RESOLUTION[1])
+  RENDERING_RESOLUTION = avango.gua.Vec2ui( int(WINDOW_RESOLUTION[0]/2), WINDOW_RESOLUTION[1])
   LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(WINDOW_RESOLUTION[0]/2, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(int(WINDOW_RESOLUTION[0]/2), 0)
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
@@ -215,7 +215,7 @@ class Initializer(avango.script.Script):
     #right_pos = avango.gua.Vec2ui(rendering_res.x, 0)
     
     self.window_left = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                      Display = ":0.3",  # ":0.1",
+                                      Display = ":0.2",  # ":0.1",
                                       LeftPosition = LEFT_VIEWPORT_START,
                                       RightPosition = RIGHT_VIEWPORT_START,
                                       LeftResolution=RENDERING_RESOLUTION,
@@ -226,7 +226,7 @@ class Initializer(avango.script.Script):
     avango.gua.register_window("client_window_weimar_left", self.window_left)
     
     self.window_center = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                 Display = ":0.0",  # ":0.1",
+                                 Display = ":0.1",  # ":0.1",
                                  LeftPosition = LEFT_VIEWPORT_START,
                                  RightPosition = RIGHT_VIEWPORT_START,
                                  LeftResolution=RENDERING_RESOLUTION,
@@ -238,7 +238,7 @@ class Initializer(avango.script.Script):
     avango.gua.register_window("client_window_weimar_center", self.window_center)
     
     self.window_right = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                      Display = ":0.1",  # ":0.1",
+                                      Display = ":0.0",  # ":0.1",
                                       LeftPosition = LEFT_VIEWPORT_START,
                                       RightPosition = RIGHT_VIEWPORT_START,
                                       LeftResolution=RENDERING_RESOLUTION,

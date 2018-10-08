@@ -1,5 +1,5 @@
-#ifndef AVANGO_GUA_LOD_AUXATLAS_HPP
-#define AVANGO_GUA_LOD_AUXATLAS_HPP
+#ifndef AVANGO_GUA_LOD_AUX_ATLAS_HPP
+#define AVANGO_GUA_LOD_AUX_ATLAS_HPP
 
 /**
  * \file
@@ -112,4 +112,4 @@ namespace av
 
 }
 
-#endif //AVANGO_GUA_LOD_AUXATLAS_HPP
+#endif //AVANGO_GUA_LOD_AUX_ATLAS_HPP

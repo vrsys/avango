@@ -3,6 +3,8 @@
 #include <avango/Base.h>
 #include <functional>
 
+#include <avango/gua/lod/renderer/AuxFeature.hpp>
+
 
 
 AV_FC_DEFINE(av::gua::lod::AuxSparsePoint);
@@ -52,6 +54,15 @@ av::gua::lod::AuxSparsePoint::getAlphaCB(const SFUInt::GetValueEvent& event){
   *(event.getValuePtr()) = m_guaAuxSparsePoint->a_;
 }
 
+av::Link<av::gua::lod::AuxFeature> 
+av::gua::lod::AuxSparsePoint::getFeatureById(uint32_t id) const {
+if (m_guaAuxSparsePoint){
+  return av::Link<av::gua::lod::AuxFeature>(new av::gua::lod::AuxFeature(m_guaAuxSparsePoint->getFeatureById(id)));
+}
+  // return m_guaAuxSparsePoint->features_.at(id-1);
+else
+  return av::Link<av::gua::lod::AuxFeature>(new av::gua::lod::AuxFeature(m_guaAuxSparsePoint->getFeatureById(-1)));
+}
 
 std::shared_ptr< ::gua::Aux::sparse_point>
 av::gua::lod::AuxSparsePoint::getGuaAuxSparsePoint() const {

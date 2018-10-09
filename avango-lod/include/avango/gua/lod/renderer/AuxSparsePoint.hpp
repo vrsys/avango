@@ -11,6 +11,17 @@
 
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
+#include "avango/gua/lod/renderer/AuxSparsePoint.hpp"
+
+#include <avango/gua/lod/renderer/AuxFeature.hpp>
+namespace gua {
+namespace renderer {
+  class aux;
+  // namespace aux{
+  struct feature;
+  // }
+}
+}
 
 namespace av
 {
@@ -57,12 +68,14 @@ namespace av
         SFUInt Green;
         SFUInt Blue;
         SFUInt Alpha;
+        //MFMultiField
 
         virtual void getPositionCB(const SFVec3::GetValueEvent& event);
         virtual void getRedCB(const SFUInt::GetValueEvent& event);
         virtual void getGreenCB(const SFUInt::GetValueEvent& event);
         virtual void getBlueCB(const SFUInt::GetValueEvent& event);
         virtual void getAlphaCB(const SFUInt::GetValueEvent& event);
+
 
         inline ::gua::math::vec3 getPosition() {
           if (m_guaAuxSparsePoint)
@@ -102,6 +115,15 @@ namespace av
           else
             return "Features not implemented yet";
         }
+
+        inline uint32_t getNumFeatures() {
+          if (m_guaAuxSparsePoint)
+            return m_guaAuxSparsePoint->features_.size();
+          else
+            return 0;
+        }
+
+        av::Link<av::gua::lod::AuxFeature> getFeatureById(uint32_t id) const;
 
 
       private:

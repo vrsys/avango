@@ -44,29 +44,43 @@ def start():
   #   print("out ", i , tile_id, tile_x, tile_y, tile_w, tile_h)
  
   #### TEST get view worked !
-  # for i in range(v_num):
-  #   view = aux_loader.get_view(i)
-  #   cam_id = view.get_camera_id()
-  #   pos = view.get_position()
-  #   trans = view.get_transform()
-  #   focal = view.get_focal_length()
-  #   dist = view.get_distortion()
-  #   imag_w = view.get_image_width()
-  #   imag_h = view.get_image_height()
-  #   atlas_t_id = view.get_atlas_tile_id()
-  #   image_file = view.get_image_file()
-  #   print("out ", i , cam_id, pos, trans,focal,dist,imag_w, imag_h, atlas_t_id, image_file)
-  # print(atlas.get_width())#
-  # print(atlas.getNumAtlasTilesCB())
+  for i in range(v_num):
+    view = aux_loader.get_view(i)
+    cam_id = view.get_camera_id()
+    pos = view.get_position()
+    trans = view.get_transform()
+    focal = view.get_focal_length()
+    dist = view.get_distortion()
+    imag_w = view.get_image_width()
+    imag_h = view.get_image_height()
+    atlas_t_id = view.get_atlas_tile_id()
+    image_file = view.get_image_file()
+    # print("out ", i , cam_id, pos, trans,focal,dist,imag_w, imag_h, atlas_t_id, image_file)
+    print("out ", i , cam_id,  image_file)
 
-  #### TEST get atlas tile worked !
-  for i in range(sp_num):
-    sp = aux_loader.get_sparse_point(i)
-    pos = sp.get_pos()
-    r = sp.r()
-    g = sp.g()
-    b = sp.b()
-    a = sp.a()
+  #### TEST get sparse points worked !
+  # for i in range(sp_num):
+  #   sp = aux_loader.get_sparse_point(i)
+  #   pos = sp.get_pos()
+  #   r = sp.r()
+  #   g = sp.g()
+  #   b = sp.b()
+  #   a = sp.a()
+    
+
+  # sp = aux_loader.get_sparse_point(1)
+  # feature_number = sp.get_num_features()
+
+  # feature_list = []
+  # for x in range(feature_number):
+  #   feature_list.append(sp.get_feature_by_id(x))
+
+  # for f in feature_list:
+  #   c = f.get_camera_id()
+  #   coords = f.get_coords()
+  #   f_error = f.get_error()
+  #   print('feature', c, coords, f_error)
+    
    
     #print("out ", i , pos, r, g ,b ,a)
   print("Number of sparse points", sp_num)

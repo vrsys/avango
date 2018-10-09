@@ -15,6 +15,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
 
+#include <avango/gua/lod/renderer/AuxFeature.hpp>
 #include <avango/gua/lod/renderer/AuxAtlas.hpp>
 #include <avango/gua/lod/renderer/AuxAtlasTile.hpp>
 #include <avango/gua/lod/renderer/AuxSparsePoint.hpp>

@@ -29,7 +29,7 @@ void init_AuxView()
   class_< av::gua::lod::AuxView,
           av::Link<av::gua::lod::AuxView>,
           bases<av::FieldContainer>, boost::noncopyable>("AuxView", "docstring", no_init)
-          .def("get_camera_id", &av::gua::lod::AuxView::getAtlasTileId)
+          .def("get_camera_id", &av::gua::lod::AuxView::getCameraId)
           .def("get_position", &av::gua::lod::AuxView::getPosition)
           .def("get_transform", &av::gua::lod::AuxView::getTransform)
           .def("get_focal_length", &av::gua::lod::AuxView::getFocalLength)

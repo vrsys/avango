@@ -19,6 +19,11 @@ namespace boost
   }
 }
 
+const av::Link<av::gua::lod::AuxFeature> getFeatureById(av::gua::lod::AuxSparsePoint const& auxSP,
+                                                          uint32_t id) {
+  return auxSP.getFeatureById(id);
+}
+
 void init_AuxSparsePoint()
 {
   register_ptr_to_python<av::Link< av::gua::lod::AuxSparsePoint> >();
@@ -34,6 +39,8 @@ void init_AuxSparsePoint()
           .def("g", &av::gua::lod::AuxSparsePoint::getGreen)
           .def("b", &av::gua::lod::AuxSparsePoint::getBlue)
           .def("a", &av::gua::lod::AuxSparsePoint::getAlpha)
+          .def("get_num_features", &av::gua::lod::AuxSparsePoint::getNumFeatures)
+          .def("get_feature_by_id", &getFeatureById)
     ;
 
   // register_field<av::gua::lod::SFAux>("SFAux");

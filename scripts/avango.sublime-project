@@ -1,20 +1,34 @@
 {
+	"build_systems":
+	[
+		{
+			"cmd":
+			[
+				"./scripts/make.sh"
+			],
+			"file_regex": "^(..[^:]*):(.*)$",
+			"name": "guacamole-project",
+			"working_dir": "${project_path}/.."
+		}
+	],
 	"folders":
 	[
 		{
-			"follow_symlinks": true,
-			"path": "..",
-            "folder_exclude_patterns": ["doc", "build", "lib", "attic"],
-            "file_exclude_patterns": ["*.nfs*"]
+			"file_exclude_patterns":
+			[
+				"*.nfs*"
+			],
+			"folder_exclude_patterns":
+			[
+				"doc",
+				"build",
+				"lib",
+				"attic"
+			],
+			"path": "/home/senu8384/Desktop/master-thesis/avango"
+		},
+		{
+			"path": "/home/senu8384/Desktop/master-thesis/lamure"
 		}
-	],
-	"build_systems":
-	[
-	  {
-	    "name": "guacamole-project",
-	    "file_regex": "^(..[^:]*):(.*)$",
-	    "working_dir": "${project_path}/..",
-	    "cmd":  ["./scripts/make.sh"]
-	  }
 	]
 }

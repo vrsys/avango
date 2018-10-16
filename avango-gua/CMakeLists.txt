@@ -141,6 +141,12 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
 )
 ENDIF (NOT ${AVANGO_SPOINTS_SUPPORT})
 
+IF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp
+  python/avango/gua/renderer/DeferredVirtualTexturingPassDescription.cpp
+)
+ENDIF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
 
 
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})

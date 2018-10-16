@@ -39,6 +39,10 @@ namespace av
       SFBool   EnableBackfaceCulling;
       SFBool   EnableWireframeRendering;
 
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+      SFBool   EnableVirtualTexturing;
+#endif
+
       virtual void getShaderNameCB(const SFString::GetValueEvent& event);
       virtual void setShaderNameCB(const SFString::SetValueEvent& event);
 
@@ -48,6 +52,11 @@ namespace av
       virtual void getEnableWireframeRenderingCB(const SFBool::GetValueEvent& event);
       virtual void setEnableWireframeRenderingCB(const SFBool::SetValueEvent& event);
 
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+      virtual void getEnableVirtualTexturingCB(const SFBool::GetValueEvent& event);
+      virtual void setEnableVirtualTexturingCB(const SFBool::SetValueEvent& event);
+#endif
+      
     public:
 
       template <typename T>

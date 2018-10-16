@@ -26,6 +26,31 @@ def start():
   sp_num = aux_loader.get_num_sparse_points()
   num = aux_loader.get_num_atlas_tiles()
   atlas = aux_loader.get_atlas()
+  number_octree_nodes = aux_loader.get_num_nodes()
+
+  print(' number of octree nodes: ', number_octree_nodes)
+  
+
+  for i in range(number_octree_nodes):
+    octree_node = aux_loader.get_octree_node(i)
+    ci = octree_node.get_child_idx()
+    cm = octree_node.get_child_mask()
+    gmin = octree_node.get_min()
+    gmax = octree_node.get_max()
+    num_fot = octree_node.get_number_fotos()
+    print("octree node ", ci , cm, gmin, gmax, num_fot)
+    
+  octree_node = aux_loader.get_octree_node(number_octree_nodes-1)
+  num_fot = octree_node.get_number_fotos()
+  for i in range(num_fot):
+    print('foto ', octree_node.get_foto_by_id(i))
+    gmin = octree_node.get_min()
+
+    
+  aa = aux_loader.get_octree_query(avango.gua.Vec3(1.0, 1.0, 1.0))
+  print('some octree info ?:', aa)
+
+
   print(atlas)
   print(atlas.get_tiles() )
   print(atlas.get_width() )
@@ -44,19 +69,19 @@ def start():
   #   print("out ", i , tile_id, tile_x, tile_y, tile_w, tile_h)
  
   #### TEST get view worked !
-  for i in range(v_num):
-    view = aux_loader.get_view(i)
-    cam_id = view.get_camera_id()
-    pos = view.get_position()
-    trans = view.get_transform()
-    focal = view.get_focal_length()
-    dist = view.get_distortion()
-    imag_w = view.get_image_width()
-    imag_h = view.get_image_height()
-    atlas_t_id = view.get_atlas_tile_id()
-    image_file = view.get_image_file()
-    # print("out ", i , cam_id, pos, trans,focal,dist,imag_w, imag_h, atlas_t_id, image_file)
-    print("out ", i , cam_id,  image_file)
+  # for i in range(v_num):
+  #   view = aux_loader.get_view(i)
+  #   cam_id = view.get_camera_id()
+  #   pos = view.get_position()
+  #   trans = view.get_transform()
+  #   focal = view.get_focal_length()
+  #   dist = view.get_distortion()
+  #   imag_w = view.get_image_width()
+  #   imag_h = view.get_image_height()
+  #   atlas_t_id = view.get_atlas_tile_id()
+  #   image_file = view.get_image_file()
+  #   # print("out ", i , cam_id, pos, trans,focal,dist,imag_w, imag_h, atlas_t_id, image_file)
+  #   print("out ", i , cam_id,  image_file)
 
   #### TEST get sparse points worked !
   # for i in range(sp_num):

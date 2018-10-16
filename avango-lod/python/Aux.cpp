@@ -45,6 +45,10 @@ const uint32_t get_num_atlas_tiles(av::gua::lod::Aux const& aux) {
   return aux.get_num_atlas_tiles(); 
 }
 
+const uint32_t get_num_nodes(av::gua::lod::Aux const& aux) { 
+  return aux.get_num_nodes(); 
+}
+
 const av::Link<av::gua::lod::AuxAtlas> get_atlas(av::gua::lod::Aux const& aux) {
   return aux.get_atlas();
 }
@@ -64,6 +68,15 @@ const av::Link<av::gua::lod::AuxView> get_view(av::gua::lod::Aux const& aux,
   return aux.get_view(id);
 }
 
+const av::Link<av::gua::lod::OctreeNode> get_octree_node(av::gua::lod::Aux const& aux,
+                                                    uint32_t node_id) {
+  return aux.get_octree_node(node_id);
+}
+
+const uint64_t get_octree_query(av::gua::lod::Aux const& aux,
+                          ::gua::math::vec3 const& pos){
+  return aux.get_octree_query(pos);
+}
 
 // const av::gua::lod::AuxAtlas get_atlas(av::gua::lod::Aux const& aux) {
 //   return aux.get_atlas1();
@@ -90,6 +103,9 @@ void init_Aux()
           .def("get_atlas_tile", &get_atlas_tile)
           .def("get_sparse_point", &get_sparse_point)
           .def("get_view", &get_view)
+          .def("get_octree_node", &get_octree_node)
+          .def("get_num_nodes", &get_num_nodes)
+          .def("get_octree_query", &get_octree_query)
 
     ;
 

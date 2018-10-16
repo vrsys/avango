@@ -67,6 +67,12 @@ av::gua::lod::Aux::get_num_sparse_points() const {
   return m_guaAux->get_num_sparse_points(); 
 }
 
+const uint64_t 
+av::gua::lod::Aux::get_num_nodes() const {
+  std::cout << "Calling gua get num nodes " << m_guaAux->get_num_nodes()<< std::endl;
+  return m_guaAux->get_num_nodes(); 
+}
+
 const uint32_t 
 av::gua::lod::Aux::get_num_atlas_tiles() const { 
   std::cout << "Calling gua get num atlas tiles " << m_guaAux->get_num_atlas_tiles()<< std::endl;
@@ -100,6 +106,17 @@ av::gua::lod::Aux::get_sparse_point( uint32_t id) const {
 av::Link<av::gua::lod::AuxView>
 av::gua::lod::Aux::get_view( uint32_t id) const {
   return av::Link<av::gua::lod::AuxView>(new av::gua::lod::AuxView(m_guaAux->get_view(id)));
+}
+
+uint64_t 
+av::gua::lod::Aux::get_octree_query(::gua::math::vec3 const& pos) const {
+  return m_guaAux->get_octree_query(scm::math::vec3f(pos));
+}
+
+
+av::Link<av::gua::lod::OctreeNode> 
+av::gua::lod::Aux::get_octree_node(uint32_t node_id) const {
+  return av::Link<av::gua::lod::OctreeNode>(new av::gua::lod::OctreeNode(m_guaAux->get_octree_node(node_id)));
 }
 
 

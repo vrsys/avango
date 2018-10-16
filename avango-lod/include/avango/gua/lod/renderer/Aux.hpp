@@ -15,6 +15,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/renderer/Material.hpp>
 
+#include <avango/gua/lod/renderer/OctreeNode.hpp>
 #include <avango/gua/lod/renderer/AuxFeature.hpp>
 #include <avango/gua/lod/renderer/AuxAtlas.hpp>
 #include <avango/gua/lod/renderer/AuxAtlasTile.hpp>
@@ -68,6 +69,7 @@ namespace av
         const uint32_t      get_num_views() const;
         const uint64_t      get_num_sparse_points() const;
         const uint32_t      get_num_atlas_tiles() const;
+        const uint64_t      get_num_nodes() const;
 
         av::Link<av::gua::lod::AuxAtlas> get_atlas() const;
 
@@ -75,7 +77,11 @@ namespace av
         av::Link<av::gua::lod::AuxSparsePoint> get_sparse_point(uint32_t id) const;
 
         av::Link<av::gua::lod::AuxView> get_view(uint32_t id) const;
-        // const gua::lod::AuxAtlas get_atlas2() const;
+
+        uint64_t get_octree_query(::gua::math::vec3 const& pos) const;
+        av::Link<av::gua::lod::OctreeNode> get_octree_node(uint32_t node_id) const;
+
+
 
       private:
 

@@ -34,6 +34,8 @@ void init_OctreeNode()
           .def("get_child_idx", &av::gua::lod::OctreeNode::getChildIdx)
           .def("get_min", &av::gua::lod::OctreeNode::getMin)
           .def("get_max", &av::gua::lod::OctreeNode::getMax)
+          .def("get_number_fotos", &av::gua::lod::OctreeNode::getNumberFotos)
+          .def("get_foto_by_id", &av::gua::lod::OctreeNode::getFotoById)
     ;
 
   // register_field<av::gua::lod::SFAux>("SFAux");

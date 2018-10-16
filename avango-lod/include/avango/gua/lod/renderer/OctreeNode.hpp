@@ -64,43 +64,52 @@ namespace av
         
         virtual void getChildIdxCB(const SFUInt::GetValueEvent& event);
         
-        virtual void getMinCB(const SFUInt::GetValueEvent& event);
+        virtual void getMinCB(const SFVec3::GetValueEvent& event);
 
-        virtual void getMaxCB(const SFUInt::GetValueEvent& event);
+        virtual void getMaxCB(const SFVec3::GetValueEvent& event);
 
 
-        inline uint32_t getIdxCB() {
+        inline uint32_t getIdx() {
           if (m_guaOctreeNode)
             return m_guaOctreeNode->get_idx();
           else
             return 0;
         }
 
-        inline uint32_t getChildMaskCB() {
+        inline uint32_t getChildMask() {
           if (m_guaOctreeNode)
             return m_guaOctreeNode->get_child_mask();
           else
             return 0;
         }
 
-        inline uint32_t getChildIdxCB() {
+        inline uint32_t getChildIdx() {
           if (m_guaOctreeNode)
             return m_guaOctreeNode->get_child_idx();
           else
             return 0;
         }
-        inline uint32_t getMinCB() {
+        inline ::gua::math::vec3 getMin() {
           if (m_guaOctreeNode)
-            return m_guaOctreeNode->get_min();
+            return ::gua::math::vec3(m_guaOctreeNode->get_min());
+          else
+            return ::gua::math::vec3();;
+        }
+        inline ::gua::math::vec3 getMax() {
+          if (m_guaOctreeNode)
+            return ::gua::math::vec3(m_guaOctreeNode->get_max());
+          else
+            return ::gua::math::vec3();
+        }
+
+        inline uint32_t getNumberFotos() {
+          if (m_guaOctreeNode)
+            return m_guaOctreeNode->get_fotos_size();
           else
             return 0;
         }
-        inline uint32_t getMinCB() {
-          if (m_guaOctreeNode)
-            return m_guaOctreeNode->get_max();
-          else
-            return 0;
-        }
+
+        uint32_t getFotoById(uint32_t id) const;
 
 
       private:

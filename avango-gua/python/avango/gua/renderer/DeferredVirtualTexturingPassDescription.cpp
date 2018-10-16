@@ -18,8 +18,7 @@ namespace boost
   }
 }
 
-
-void init_DeferredVirtualTexturingDescription()
+void init_DeferredVirtualTexturingPassDescription()
 {
   register_field<av::gua::SFDeferredVirtualTexturingPassDescription>("SFDeferredVirtualTexturingPassDescription");
   register_multifield<av::gua::MFDeferredVirtualTexturingPassDescription>("MFDeferredVirtualTexturingPassDescription");

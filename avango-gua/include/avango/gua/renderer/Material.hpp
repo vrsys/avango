@@ -56,7 +56,7 @@ namespace av
       virtual void getEnableVirtualTexturingCB(const SFBool::GetValueEvent& event);
       virtual void setEnableVirtualTexturingCB(const SFBool::SetValueEvent& event);
 #endif
-      
+
     public:
 
       template <typename T>

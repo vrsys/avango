@@ -239,7 +239,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_SPointsPassDescription();
     init_SPointsLoader();
 #endif
-#if defined(AVANGO_DEFERRED_VIRTUAL_TEXTURING_SUPPORT)
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
     init_DeferredVirtualTexturingPassDescription();
 #endif
     init_TexturedQuadPassDescription();

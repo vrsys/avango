@@ -21,7 +21,7 @@
 #include <avango/gua/renderer/SPointsLoader.hpp>
 #include <avango/gua/renderer/SPointsPassDescription.hpp>
 #endif
-#if defined(AVANGO_SPOINTS_SUPPORT)
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
 #include <avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp>
 #endif
 #if defined(AVANGO_PBR_SUPPORT)

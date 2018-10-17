@@ -60,7 +60,6 @@ namespace av
          */
         std::shared_ptr< ::gua::Aux> getGuaAux() const;
 
-        void test_wrapping() const;
 
         void load_aux_file(std::string const& filename);
 
@@ -78,7 +77,7 @@ namespace av
 
         av::Link<av::gua::lod::AuxView> get_view(uint32_t id) const;
 
-        uint64_t get_octree_query(::gua::math::vec3 const& pos) const;
+        const uint64_t get_octree_query(::gua::math::vec3 const& pos) const;
         av::Link<av::gua::lod::OctreeNode> get_octree_node(uint32_t node_id) const;
 
 

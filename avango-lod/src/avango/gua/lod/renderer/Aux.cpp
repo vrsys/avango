@@ -35,23 +35,13 @@ av::gua::lod::Aux::initClass()
 }
 
 
-
-
-void
-av::gua::lod::Aux::test_wrapping() const {
-  std::cout << "Calling gua function" << std::endl;
-  m_guaAux->test_wrapping();
-}
-
 void
 av::gua::lod::Aux::load_aux_file(std::string const& filename) {
-  std::cout << "Calling gua 'LOAD AUX FILE' function" << std::endl;
   m_guaAux->load_aux_file(filename);
 }
 
 const std::string
 av::gua::lod::Aux::get_filename() const {
-  std::cout << "Calling gua get filename" << m_guaAux->get_filename()<< std::endl;
   return m_guaAux->get_filename();
 }
 
@@ -79,11 +69,6 @@ av::gua::lod::Aux::get_num_atlas_tiles() const {
   return m_guaAux->get_num_atlas_tiles(); 
 }
 
-// const av::gua::lod::AuxAtlas
-// av::gua::lod::Aux::get_atlas2 () const {
-//   return av::gua::lod::AuxAtlas(m_guaAux->get_atlas());
-// }
-
 av::Link<av::gua::lod::AuxAtlas>
 av::gua::lod::Aux::get_atlas() const {
   //return av::Link<av::gua::lod::AuxAtlas>(new av::gua::lod::AuxAtlas(new ::gua::Aux::atlas(m_guaAux->get_atlas())));
@@ -108,7 +93,7 @@ av::gua::lod::Aux::get_view( uint32_t id) const {
   return av::Link<av::gua::lod::AuxView>(new av::gua::lod::AuxView(m_guaAux->get_view(id)));
 }
 
-uint64_t 
+const uint64_t 
 av::gua::lod::Aux::get_octree_query(::gua::math::vec3 const& pos) const {
   return m_guaAux->get_octree_query(scm::math::vec3f(pos));
 }

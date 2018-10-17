@@ -84,6 +84,9 @@
 #include "renderer/SPointsPassDescription.hpp"
 #include "renderer/SPointsLoader.hpp"
 #endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include "renderer/DeferredVirtualTexturingPassDescription.hpp"
+#endif
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
 #include "renderer/BackgroundPassDescription.hpp"
@@ -235,6 +238,9 @@ BOOST_PYTHON_MODULE(_gua)
 #if defined(AVANGO_SPOINTS_SUPPORT)
     init_SPointsPassDescription();
     init_SPointsLoader();
+#endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+    init_DeferredVirtualTexturingPassDescription();
 #endif
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();

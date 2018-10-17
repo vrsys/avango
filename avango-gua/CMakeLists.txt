@@ -55,6 +55,13 @@ list (REMOVE_ITEM  AVANGO_GUA_SRC
 )
 ENDIF (NOT ${AVANGO_SPOINTS_SUPPORT})
 
+IF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_SRC
+    src/avango/gua/renderer/DeferredVirtualTexturingPassDescription.cpp
+    include/avango/gua/renderer/DeferredVirtualTexturingPassDescription.h
+)
+ENDIF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
+
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})
 list (REMOVE_ITEM  AVANGO_GUA_SRC
   include/avango/gua/physics/BoxShape.hpp
@@ -141,6 +148,12 @@ list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
 )
 ENDIF (NOT ${AVANGO_SPOINTS_SUPPORT})
 
+IF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
+list (REMOVE_ITEM  AVANGO_GUA_PYTHON_SRC
+  python/avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp
+  python/avango/gua/renderer/DeferredVirtualTexturingPassDescription.cpp
+)
+ENDIF (NOT ${AVANGO_VIRTUAL_TEXTURING_SUPPORT})
 
 
 IF (NOT ${AVANGO_PHYSICS_SUPPORT})

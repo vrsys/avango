@@ -70,7 +70,7 @@ def start():
 
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
 
-    line_strip_geode.RenderVolumetric.value = True
+    line_strip_geode.RenderVolumetric.value = False
     line_strip_geode.RenderAsPoints.value = False
     #only has effect if 'RenderVolumetric' is set to 'False'
     #   the effective range of this parameter is [1.0-10.0]

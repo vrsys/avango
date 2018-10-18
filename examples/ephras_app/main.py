@@ -20,7 +20,6 @@ def start():
 
   aux_loader = avango.gua.lod.nodes.Aux()
   aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
-  aux_loader.test_wrapping()
   aux_loader.get_filename()
   v_num = aux_loader.get_num_views()
   sp_num = aux_loader.get_num_sparse_points()

@@ -166,7 +166,8 @@ class Initializer(avango.script.Script):
     #scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432")
+                                         Groupname="AVCLIENT|127.0.0.1|7432")
+                                         #Groupname="AVCLIENT|141.54.147.52|7432")
 
 
 

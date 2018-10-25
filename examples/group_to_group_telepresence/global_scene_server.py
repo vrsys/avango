@@ -53,7 +53,8 @@ SCENE_MODE = "SIMPLE"
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                          Groupname="AVSERVER|141.54.147.52|7432") # server -> pan
+                                         Groupname="AVSERVER|127.0.0.1|7432")
+                                         #Groupname="AVSERVER|141.54.147.52|7432") # server -> pan
                                          #Groupname="AVSERVER|141.54.147.54|7432")
 
 
@@ -180,8 +181,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     animation_length_in_ms = indexed_keyframe_positions[-1][0]
 
-
-    nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
+    nv = netvaluepy.NetValue("127.0.0.1:8000")
+    #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -356,7 +357,7 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_pan_for_pan_without_feedback.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)

@@ -165,6 +165,7 @@ option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 option (AVANGO_RUNTIME_PROGRAM_COMPILATION "Set to enable runtime program compilation." ON)
 option (AVANGO_TV_3_SUPPORT "Compile time-varying volume rendering support.")
 option (AVANGO_VIDEO3D_SUPPORT "Compile Video3d module.")
+option (AVANGO_VIRTUAL_TEXTURING_SUPPORT "Set to enable virtual texturing support (requires lamure-vt and guacamole-vt)." OFF)
 
 IF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGUACAMOLE_RUNTIME_PROGRAM_COMPILATION")

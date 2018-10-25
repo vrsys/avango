@@ -40,7 +40,8 @@ import time
 
 #CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
 #CLIENT_MODE = "VIDEO_POWERWALL"
-CLIENT_MODE = "SCREENSHOT_DESKTOP"
+#CLIENT_MODE = "SCREENSHOT_DESKTOP"
+CLIENT_MODE = "DEVELOPMENT"
 
 STEREO_MODE = 0
 WINDOW_RESOLUTION = 0
@@ -63,6 +64,13 @@ elif "VIDEO_POWERWALL" == CLIENT_MODE:
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+  RENDERING_RESOLUTION = WINDOW_RESOLUTION
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+elif "DEVELOPMENT" == CLIENT_MODE:
+  STEREO_MODE          = avango.gua.StereoMode.MONO
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(491, 278)
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1280, 720)
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
@@ -168,7 +176,7 @@ class Initializer(avango.script.Script):
 
 
     self.window_center = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                 Display = ":0.1",  # ":0.1",
+                                 Display = ":0.0",  # ":0.1",
                                  LeftPosition = LEFT_VIEWPORT_START,
                                  RightPosition = RIGHT_VIEWPORT_START,
                                  LeftResolution=RENDERING_RESOLUTION,

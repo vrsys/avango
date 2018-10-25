@@ -48,6 +48,8 @@ OBSERVER_MODE = "3_CLIENTS_SIMULATED"
 #OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
+#SCENE_MODE = "EVALUATION"
+SCENE_MODE = "SIMPLE"
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -179,7 +181,7 @@ class TimedKeyframePathAnimation(avango.script.Script):
     animation_length_in_ms = indexed_keyframe_positions[-1][0]
 
 
-    nv = netvaluepy.NetValue("141.54.147.42:8000") # hier socket passend zu ./play 
+    nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -328,26 +330,20 @@ loader = avango.gua.nodes.TriMeshLoader()
 #kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+
+if "EVALUATION" == SCENE_MODE:
+    hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
 
+    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
 
-"""
-for _child in hauptgebaeude.Children.value:
-    if _child.has_field("Material") == True:
-        _child.Material.value.EnableBackfaceCulling.value = False
-"""
+    lion.Material.value.EnableBackfaceCulling.value = False
+    lion.Material.value.set_uniform("Emissivity", 3.0)
 
-
-lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
-lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
-
-lion.Material.value.EnableBackfaceCulling.value = False
-lion.Material.value.set_uniform("Emissivity", 3.0)
-
-lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
-lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
+    lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
 
 
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
@@ -360,12 +356,12 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_pan_for_pan_without_feedback.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
 
-#+++++++++++
+
 
 avatar_transform = avango.gua.nodes.TransformNode(Name="avatar_transform")
 avatar_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
@@ -374,9 +370,10 @@ avatar_transform.Children.value = [avatar_geode]
 non_avatar_scene_transform = avango.gua.nodes.TransformNode(Name="non_avatar_scene_transform")
 non_avatar_scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0, 0.0)
 
-non_avatar_scene_transform.Children.value = [street_plane, hauptgebaeude, lion, lion2]
-
-
+if "EVALUATION" == SCENE_MODE:
+    non_avatar_scene_transform.Children.value = [street_plane, hauptgebaeude, lion, lion2]
+else:
+    non_avatar_scene_transform.Children.value = [street_plane]
 
 def append_trees_to_list(parent_node):
     tm_loader = avango.gua.nodes.TriMeshLoader()
@@ -424,7 +421,7 @@ screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=S
 
 
 
-size = avango.gua.Vec2ui(1920, 1080)
+size = avango.gua.Vec2ui(491, 278)
 #size = avango.gua.Vec2ui(1600, 1200)
 
 
@@ -508,7 +505,7 @@ server_cam = avango.gua.nodes.CameraNode(
     OutputWindowName="server_window",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
-    BlackList = ["invisible_osaka_avatar"]
+    #BlackList = ["invisible_osaka_avatar"]
     )
 
 

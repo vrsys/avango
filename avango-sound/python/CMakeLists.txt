@@ -14,13 +14,13 @@ SET_TARGET_PROPERTIES( _sound PROPERTIES PREFIX "")
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_sound ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound/_sound.pyd)
+  post_build_install_target(_sound ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/sound/_sound.pyd)
 ELSEIF (UNIX)
-  post_build_install_target(_sound ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound/_sound.so)
+  post_build_install_target(_sound ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/sound/_sound.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/sound
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/sound
     _sound
 )

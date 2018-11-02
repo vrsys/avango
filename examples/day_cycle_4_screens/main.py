@@ -2,7 +2,6 @@ import avango
 import avango.script
 from avango.script import field_has_changed
 import avango.gua
-import avango.gua.gui
 from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
@@ -23,19 +22,6 @@ def get_azimuth(city, time):
 
 def get_elevation(city, time):
   return a.solar_elevation(time, city.latitude, city.longitude)
-
-class FPSUpdater(avango.script.Script):
-  TimeIn = avango.SFFloat()
-  FPSResource = avango.gua.gui.SFGuiResourceNode()
-  Window = avango.gua.SFWindowBase()
-  Viewer = avango.gua.SFViewer()
-
-  @field_has_changed(TimeIn)
-  def update_fps(self):
-    application_string = "{:5.2f}".format(self.Viewer.value.ApplicationFPS.value)
-    rendering_string = "{:5.2f}".format(self.Window.value.RenderingFPS.value)
-    fps_string = "FPS: " + application_string + " " + rendering_string
-    self.FPSResource.value.call_javascript("set_fps_text", [fps_string])
 
 class SunUpdater(avango.script.Script):
 
@@ -85,23 +71,6 @@ class SunUpdater(avango.script.Script):
 def start():
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   loader = avango.gua.nodes.TriMeshLoader()
-
-  fps_size = avango.gua.Vec2(170, 55)
-
-  fps = avango.gua.gui.nodes.GuiResourceNode()
-  fps.TextureName.value = "fps"
-  fps.URL.value = "asset://gua/data/html/fps.html"
-  fps.Size.value = fps_size
-
-  fps_quad = avango.gua.nodes.TexturedScreenSpaceQuadNode(
-    Name = "fps_quad",
-    Texture = "fps",
-    Width = int(fps_size.x),
-    Height = int(fps_size.y),
-    Anchor = avango.gua.Vec2(1.0, 1.0),
-    Tags = ["fps"]
-  )
-  graph.Root.value.Children.value.append(fps_quad)
 
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE | avango.gua.MaterialCapabilities.ROUGHNESS_VALUE)
   fallback_mat.set_uniform("Roughness", 0.6)
@@ -162,7 +131,7 @@ def start():
 
   camera_tl = avango.gua.nodes.CameraNode(
     Name = "cam_tl",
-    BlackList = ["fps"],
+    BlackList = [],
     LeftScreenPath = "/head/cam_tl/screen_tl",
     RightScreenPath = "/head/cam_tl/screen_tl",
     SceneGraph = "scene",
@@ -201,7 +170,7 @@ def start():
 
   camera_bl = avango.gua.nodes.CameraNode(
     Name = "cam_bl",
-    BlackList = ["fps"],
+    BlackList = [],
     LeftScreenPath = "/head/cam_bl/screen_bl",
     RightScreenPath = "/head/cam_bl/screen_bl",
     SceneGraph = "scene",
@@ -221,7 +190,7 @@ def start():
 
   camera_br = avango.gua.nodes.CameraNode(
     Name = "cam_br",
-    BlackList = ["fps"],
+    BlackList = [],
     LeftScreenPath = "/head/cam_br/screen_br",
     RightScreenPath = "/head/cam_br/screen_br",
     SceneGraph = "scene",
@@ -355,13 +324,6 @@ def start():
   viewer.Windows.value = [window_tl, window_tr, window_bl, window_br]
 
   timer = avango.nodes.TimeSensor()
-
-  fps_updater = FPSUpdater(
-    FPSResource = fps,
-    Window = window_tr,
-    Viewer = viewer
-  )
-  fps_updater.TimeIn.connect_from(timer.Time)
 
   sun_updater = SunUpdater(
     TimeScale = 3500

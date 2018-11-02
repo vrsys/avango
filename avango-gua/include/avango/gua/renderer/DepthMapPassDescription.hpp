@@ -18,7 +18,7 @@ namespace av
   namespace gua
   {
     /**
-     * Wrapper for ::gua::TriMeshPassDescription
+     * Wrapper for ::gua::DepthMapPassDescription
      *
      * \ingroup av_gua
      */
@@ -29,8 +29,8 @@ namespace av
     public:
 
       /**
-       * Constructor. When called without arguments, a new ::gua::TriMeshPassDescription is created.
-       * Otherwise, the given ::gua::TriMeshPassDescription is used.
+       * Constructor. When called without arguments, a new ::gua::DepthMapPassDescription is created.
+       * Otherwise, the given ::gua::DepthMapPassDescription is used.
        */
       DepthMapPassDescription(std::shared_ptr< ::gua::DepthCubeMapPassDesciption> const& DepthCubeMapPassDesciption =
                              std::shared_ptr< ::gua::DepthCubeMapPassDesciption>(new ::gua::DepthCubeMapPassDesciption()) );
@@ -40,7 +40,7 @@ namespace av
     public:
 
       /**
-       * Get the wrapped ::gua::TriMeshPassDescription.
+       * Get the wrapped ::gua::DepthMapPassDescription.
        */
       std::shared_ptr< ::gua::DepthCubeMapPassDesciption> const& getGuaDepthMapPassDescription() const;
 

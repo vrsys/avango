@@ -52,8 +52,8 @@ target_include_directories(avango_script SYSTEM BEFORE PUBLIC
 ###############################################################################
 # set preprocessor configuration
 ###############################################################################
-#SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
-SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY")
+SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY -D BOOST_PYTHON_STATIC_LIB")
+#SET( AVANGO_SCRIPT_BUILD_FLAGS "${BUILD_FLAGS} -D AV_PYTHON_LIBRARY")
 
 set_target_properties(avango_script PROPERTIES COMPILE_FLAGS ${AVANGO_SCRIPT_BUILD_FLAGS})
 set_target_properties(avango_script PROPERTIES COMPILE_DEFINITIONS_DEBUG "_AVANGO_DEBUG=1")
@@ -72,6 +72,10 @@ TARGET_LINK_LIBRARIES( avango_script
                        avango
 )
 
+IF (MSVC)
+  TARGET_LINK_LIBRARIES( avango_script general ${PYTHON_LIBRARY})
+ENDIF (MSVC)
+
 TARGET_LINK_LIBRARIES(_avango avango_script)
 SET_TARGET_PROPERTIES( _avango PROPERTIES PREFIX "")
 
@@ -89,24 +93,24 @@ ENDIF (AVANGO_UNITTESTS)
 # install modules
 ###############################################################################
 IF (MSVC)
-  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script/_script.pyd)
-  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/_avango.pyd)
+  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/script/_script.pyd)
+  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/_avango.pyd)
   post_build_install_target(avango_script ${AVANGO_INSTALL_DIRECTORY}/avango/avango_script.dll)
 ELSEIF (UNIX)
-  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script/_script.so)
-  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/_avango.so)
+  post_build_install_target(_script ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/script/_script.so)
+  post_build_install_target(_avango ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/_avango.so)
   post_build_install_target(avango_script ${AVANGO_INSTALL_DIRECTORY}/avango/libavango_script.so)
 ENDIF (MSVC)
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-python/src/avango
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango
     _avango
 )
 
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_SOURCE_DIR}/avango-python/src/avango/script
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/script
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/script
     _script
 )
 

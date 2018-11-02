@@ -282,12 +282,27 @@ void init_Vec4ui() {
   register_multifield<av::gua::MFVec4ui>("MFVec4ui");
 }
 
+::gua::math::mat4::value_type getMat3Element(::gua::math::mat3 const& mat,
+	int row,
+	int col) {
+	return mat[row + col * 3];
+}
+
+void setMat3Element(::gua::math::mat3& mat,
+	int row,
+	int col,
+	::gua::math::mat3::value_type val) {
+	mat[row + col * 3] = val;
+}
+
 void init_Mat3() {
   // wrapping gua::math::mat3 functionality
   class_< ::gua::math::mat3>("Mat3", no_init)
     .def("__init__", make_constructor(&constructorMat< ::gua::math::mat3>))
     .def(init< ::gua::math::mat3>())
     .def("__repr__", &toString< ::gua::math::mat3>)
+	.def("get_element", getMat3Element)
+	.def("set_element", setMat3Element)
   ;
 
   // register as a field
@@ -295,16 +310,16 @@ void init_Mat3() {
   register_multifield<av::gua::MFMatrix3>("MFMatrix3");
 }
 
-::gua::math::mat4::value_type getMatElement(::gua::math::mat4 const& mat,
-                                            int row,
-                                            int col) {
-  return mat[row + col * 4];
+::gua::math::mat4::value_type getMat4Element(::gua::math::mat4 const& mat,
+	int row,
+	int col) {
+	return mat[row + col * 4];
 }
 
-void setElement(::gua::math::mat4& mat,
-                int row,
-                int col,
-                ::gua::math::mat4::value_type val) {
+void setMat4Element(::gua::math::mat4& mat,
+                    int row,
+                    int col,
+                    ::gua::math::mat4::value_type val) {
   mat[row + col * 4] = val;
 }
 
@@ -434,8 +449,8 @@ void init_Mat4() {
     .def("rotate", rotate2)
     .def("scale", scale1)
     .def("scale", scale2)
-    .def("get_element", getMatElement)
-    .def("set_element", setElement)
+    .def("get_element", getMat4Element)
+    .def("set_element", setMat4Element)
     .def("get_translate", ::gua::math::get_translation)
     .def("set_translate", setTranslate1)
     .def("set_translate", setTranslate2)

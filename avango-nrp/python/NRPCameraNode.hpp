@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_NRP_CAM_NODE_HPP
+#define AV_PYTHON_GUA_NRP_CAM_NODE_HPP
+
+void init_NRPCameraNode();
+
+#endif // AV_PYTHON_GUA_NRP_CAM_NODE_HPP

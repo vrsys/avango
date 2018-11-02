@@ -32,6 +32,9 @@ av::gua::SSAAPassDescription::SSAAPassDescription(
   AV_FC_ADD_ADAPTOR_FIELD(FxaaThresholdMin,
                     std::bind(&SSAAPassDescription::getFxaaThresholdMinCB, this,std::placeholders::_1),
                     std::bind(&SSAAPassDescription::setFxaaThresholdMinCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(PinholeErrorCorrection,
+                    std::bind(&SSAAPassDescription::getPinholeErrorCorrectionCB, this,std::placeholders::_1),
+                    std::bind(&SSAAPassDescription::setPinholeErrorCorrectionCB, this,std::placeholders::_1));
 }
 
 void
@@ -101,4 +104,16 @@ void
 av::gua::SSAAPassDescription::setFxaaThresholdMinCB(const SFFloat::SetValueEvent& event)
 {
   m_guaSSAAPassDescription->fxaa_threshold_min(event.getValue());
+}
+
+void
+av::gua::SSAAPassDescription::getPinholeErrorCorrectionCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaSSAAPassDescription->enable_pinhole_correction();
+}
+
+void
+av::gua::SSAAPassDescription::setPinholeErrorCorrectionCB(const SFBool::SetValueEvent& event)
+{
+  m_guaSSAAPassDescription->enable_pinhole_correction(event.getValue());
 }

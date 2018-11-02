@@ -18,11 +18,16 @@
 #include "scenegraph/ClippingPlaneNode.hpp"
 #include "scenegraph/LODNode.hpp"
 #include "scenegraph/TriMeshNode.hpp"
+#include "scenegraph/LineStripNode.hpp"
 #include "scenegraph/Video3DNode.hpp"
+#include "scenegraph/SPointsNode.hpp"
 #include "scenegraph/DepthMapNode.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "scenegraph/PBRNode.hpp"
 #include "scenegraph/PLODNode.hpp"
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+#include "scenegraph/TV_3Node.hpp"
 #endif
 #include "scenegraph/NURBSNode.hpp"
 #include "scenegraph/ScreenNode.hpp"
@@ -69,10 +74,18 @@
 #include "renderer/PipelinePassDescription.hpp"
 #include "renderer/StencilPassDescription.hpp"
 #include "renderer/TriMeshPassDescription.hpp"
+#include "renderer/LineStripPassDescription.hpp"
 #include "renderer/DepthMapPassDescription.hpp"
 #if defined(AVANGO_VIDEO3D_SUPPORT)
 #include "renderer/Video3DPassDescription.hpp"
 #include "renderer/Video3DLoader.hpp"
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+#include "renderer/SPointsPassDescription.hpp"
+#include "renderer/SPointsLoader.hpp"
+#endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include "renderer/DeferredVirtualTexturingPassDescription.hpp"
 #endif
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
@@ -85,14 +98,21 @@
 #include "renderer/FullscreenPassDescription.hpp"
 #include "renderer/SSAOPassDescription.hpp"
 #include "renderer/ResolvePassDescription.hpp"
+#include "renderer/OcclusionSlaveResolvePassDescription.hpp"
 #include "renderer/LightVisibilityPassDescription.hpp"
 #include "renderer/SSAAPassDescription.hpp"
 #include "renderer/Databases.hpp"
 #include "renderer/TriMeshLoader.hpp"
+#include "renderer/LineStripLoader.hpp"
 #if defined(AVANGO_PBR_SUPPORT)
 #include "renderer/PBRLoader.hpp"
 #include "renderer/PLODLoader.hpp"
 #include "renderer/PLODPassDescription.hpp"
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+#include "renderer/TV_3Loader.hpp"
+#include "renderer/TV_3SurfacePassDescription.hpp"
+#include "renderer/TV_3VolumePassDescription.hpp"
 #endif
 #include "renderer/NURBSLoader.hpp"
 #include "renderer/Texture.hpp"
@@ -103,6 +123,8 @@
 #include "utils/Color.hpp"
 #include "utils/Logger.hpp"
 #include "utils/Ray.hpp"
+#include "utils/NamedSharedMemoryController.hpp"
+
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -152,12 +174,19 @@ BOOST_PYTHON_MODULE(_gua)
     av::gua::network::Init::initClass();
 #endif
     init_TriMeshNode();
+    init_LineStripNode();
     init_DepthMapNode();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DNode();
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsNode();
+#endif
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODNode();
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+    init_TV_3Node();
 #endif
     // init_NURBSNode();
     init_ScreenNode();
@@ -203,10 +232,18 @@ BOOST_PYTHON_MODULE(_gua)
     init_PipelinePassDescription();
     init_StencilPassDescription();
     init_TriMeshPassDescription();
+    init_LineStripPassDescription();
     init_DepthMapPassDescription();
 #if defined(AVANGO_VIDEO3D_SUPPORT)
     init_Video3DPassDescription();
     init_Video3DLoader();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+    init_SPointsPassDescription();
+    init_SPointsLoader();
+#endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+    init_DeferredVirtualTexturingPassDescription();
 #endif
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();
@@ -220,13 +257,20 @@ BOOST_PYTHON_MODULE(_gua)
     init_SSAOPassDescription();
     init_SSAAPassDescription();
     init_ResolvePassDescription();
+    init_OcclusionSlaveResolvePassDescription();
     init_LightVisibilityPassDescription();
     init_Databases();
     init_TriMeshLoader();
+    init_LineStripLoader();
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
     init_PLODPassDescription();
     // init_PBRLoader();
+#endif
+#if defined(AVANGO_TV_3_SUPPORT)
+    init_TV_3Loader();
+    init_TV_3SurfacePassDescription();
+    init_TV_3VolumePassDescription();
 #endif
     // init_NURBSLoader();
     init_Texture();
@@ -236,4 +280,6 @@ BOOST_PYTHON_MODULE(_gua)
 
     init_Logger();
     init_Ray();
+    init_NamedSharedMemoryController();
+
 }

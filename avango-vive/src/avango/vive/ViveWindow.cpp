@@ -23,7 +23,31 @@ av::vive::ViveWindow::ViveWindow(
     m_guaViveWindow(guaViveWindow)
 {
   // store hmd params in according fields
-  AV_FC_ADD_FIELD(SensorOrientation, ::gua::math::mat4());
+  //sensor orientations
+  AV_FC_ADD_FIELD(HMDSensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Controller0SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(Controller1SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(TrackingReference0SensorOrientation, ::gua::math::mat4());
+  AV_FC_ADD_FIELD(TrackingReference1SensorOrientation, ::gua::math::mat4());
+  //binary controller states
+  AV_FC_ADD_FIELD(Controller0TriggerButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller1TriggerButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller0GripButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller1GripButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller0PadButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller1PadButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller0AppMenuButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller1AppMenuButtonPressed, false);
+  AV_FC_ADD_FIELD(Controller0PadTouched, false);
+  AV_FC_ADD_FIELD(Controller1PadTouched, false);
+  //continuous controller states
+  AV_FC_ADD_FIELD(Controller0PadXValue, 0.0f);
+  AV_FC_ADD_FIELD(Controller1PadXValue, 0.0f);
+  AV_FC_ADD_FIELD(Controller0PadYValue, 0.0f);
+  AV_FC_ADD_FIELD(Controller1PadYValue, 0.0f);
+  AV_FC_ADD_FIELD(Controller0TriggerValue, 0.0f);
+  AV_FC_ADD_FIELD(Controller1TriggerValue, 0.0f);
+  //general HMD parameters
   AV_FC_ADD_FIELD(Resolution,m_guaViveWindow->get_window_resolution());
   AV_FC_ADD_FIELD(EyeResolution,m_guaViveWindow->get_window_resolution());
   AV_FC_ADD_FIELD(LeftScreenSize, m_guaViveWindow->get_left_screen_size());
@@ -62,5 +86,50 @@ av::vive::ViveWindow::getGuaViveWindow() const {
 void
 av::vive::ViveWindow::evaluate()
 {
-  SensorOrientation.setValue(m_guaViveWindow->get_hmd_sensor_orientation());
+  //update the state all components of the system
+  m_guaViveWindow->update_sensor_orientations();
+
+  //forward the current sensor orientations
+  HMDSensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::HMD));
+  Controller0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_0));
+  Controller1SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::CONTROLLER_1));
+  TrackingReference0SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0));
+  TrackingReference1SensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1));
+
+  //forward the current binary controller states
+  Controller0TriggerButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                                         ::gua::ViveWindow::ControllerBinaryStates::TRIGGER_BUTTON));
+  Controller1TriggerButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                                         ::gua::ViveWindow::ControllerBinaryStates::TRIGGER_BUTTON));
+  Controller0GripButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                                      ::gua::ViveWindow::ControllerBinaryStates::GRIP_BUTTON));
+  Controller1GripButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                                      ::gua::ViveWindow::ControllerBinaryStates::GRIP_BUTTON));
+  Controller0PadButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                                     ::gua::ViveWindow::ControllerBinaryStates::PAD_BUTTON));
+  Controller1PadButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                                     ::gua::ViveWindow::ControllerBinaryStates::PAD_BUTTON));
+  Controller0AppMenuButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                                         ::gua::ViveWindow::ControllerBinaryStates::APP_MENU_BUTTON));
+  Controller1AppMenuButtonPressed.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                                         ::gua::ViveWindow::ControllerBinaryStates::APP_MENU_BUTTON));
+  Controller0PadTouched.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                               ::gua::ViveWindow::ControllerBinaryStates::PAD_TOUCH));
+  Controller1PadTouched.setValue(m_guaViveWindow->get_controller_button_active(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                               ::gua::ViveWindow::ControllerBinaryStates::PAD_TOUCH));
+
+  //forward the current continuous controller states
+  Controller0PadXValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                      ::gua::ViveWindow::ControllerContinuousStates::PAD_X_VALUE));
+  Controller1PadXValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                      ::gua::ViveWindow::ControllerContinuousStates::PAD_X_VALUE));
+  Controller0PadYValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                      ::gua::ViveWindow::ControllerContinuousStates::PAD_Y_VALUE));
+  Controller1PadYValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                      ::gua::ViveWindow::ControllerContinuousStates::PAD_Y_VALUE));
+  Controller0TriggerValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_0, 
+                                                                         ::gua::ViveWindow::ControllerContinuousStates::TRIGGER_VALUE));
+  Controller1TriggerValue.setValue(m_guaViveWindow->get_controller_value(::gua::ViveWindow::DeviceID::CONTROLLER_1,
+                                                                         ::gua::ViveWindow::ControllerContinuousStates::TRIGGER_VALUE));
+
 }

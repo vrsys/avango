@@ -23,7 +23,7 @@
 *                                                                        *
 \************************************************************************/
 
-#include "dtrack/dtrack.h"
+#include "DTrackSDK/DTrackSDK.hpp"
 #include <errno.h>
 #include <gua/math.hpp>
 #include <avango/Logger.h>
@@ -33,22 +33,17 @@
 #include <string>
 
 
-
 namespace
 {
   av::Logger& logger(av::getLogger("av::daemon::DTrack"));
-
-  const size_t default_udp_bufsize = 10000;
-  const size_t default_udp_timeout = 1000000; // 1 sec
 }
 
 AV_BASE_DEFINE(av::daemon::DTrack);
 
 av::daemon::DTrack::DTrack() :
-  mDTrack(new ::DTrack)
+  mDTrackSDK(nullptr)
 {
   mRequiredFeatures.push_back("port");
-  mRequiredFeatures.push_back("timeout");
 }
 
 av::daemon::DTrack::~DTrack()
@@ -67,31 +62,21 @@ av::daemon::DTrack::initClass()
 /* virtual */ void
 av::daemon::DTrack::startDevice()
 {
-  if (!parseFeatures())
+  if (!parseFeatures()) {
     return;
+  }
 
-  logger.info() << "startDevice: device configured successfully";
-
-  // initialize
-  dtrack_init_type ini;
-
-  ini.udpport = mPort;
-  ini.udpbufsize = default_udp_bufsize;
-  ini.udptimeout_us = mTimeout;
-
-  std::strcpy(ini.remote_ip, "");
-  ini.remote_port = 0;
-
-  if (int err = mDTrack->init(&ini))
-  {
-    logger.error() << "startDevice: dtrack init error: %d", err;
+  if (mPort <= 0 || mPort >= 65536) {
+    logger.error() << "Invalid port for DTrackSDK";
     stopDevice();
     return;
   }
-  else
-  {
-    logger.info() << "startDevice: enabling cameras and calculation";
-    mDTrack->send_udp_command(DTRACK_CMD_CAMERAS_AND_CALC_ON, 1);
+
+  mDTrackSDK = std::shared_ptr<::DTrackSDK>(new ::DTrackSDK(mPort));
+
+  if (!mDTrackSDK->isLocalDataPortValid()) {
+    logger.error() << "DTrackSDK initialization error";
+    return;
   }
 
   logger.info() << "startDevice: device initialized successfully";
@@ -100,76 +85,43 @@ av::daemon::DTrack::startDevice()
 /* virtual */ void
 av::daemon::DTrack::readLoop()
 {
-  unsigned long     framenr;
-  double            timestamp;
-  int               nbodycal;
-  int               nbody;
-  dtrack_body_type* body = 0;
-  unsigned int      max_bodies = 0;
-  int               dummy;
-  unsigned int      max_station_id = 1;
+  if (mDTrackSDK != nullptr) {
+    
+    while (mKeepRunning) {
 
-  while (mKeepRunning)
-  {
-    using station_map_it = NumStationMap::const_iterator;
+      if (mDTrackSDK->receive()) {
+        //success in receiving data
+        DTrack_Body_Type_d body;
+        
+        for (unsigned int bodyId = 0; bodyId < mDTrackSDK->getNumBody(); ++bodyId) {
+          NumStationMap::iterator it = mStations.find(bodyId + 1);
 
-    for (station_map_it current = mStations.begin(); current != mStations.end(); ++current)
-    {
-      if (static_cast<unsigned>(current->first) > max_station_id)
-        max_station_id = (*current).first;
-    }
+          if (it != mStations.end()) {
+            body = *mDTrackSDK->getBody(bodyId);
 
-    if (max_bodies < max_station_id)
-    {
-      if (body)
-        ::free(body);
-
-      max_bodies = max_station_id;
-      body = (dtrack_body_type*) ::malloc(sizeof(dtrack_body_type) * max_bodies);
-    }
-
-    const int err = mDTrack->receive_udp_ascii(&framenr, &timestamp, &nbodycal,
-                                              &nbody, body, max_bodies,
-                                              &dummy, 0,    0,
-                                              &dummy, 0,    0,
-                                              &dummy, 0,    0);
-    if (DTRACK_ERR_NONE != err)
-    {
-      std::string msg;
-
-      switch (err)
-      {
-        case DTRACK_ERR_UDP:     msg = "error handling the udp socket"; break;
-        case DTRACK_ERR_MEM:     msg = "error handling the udp buffer"; break;
-        case DTRACK_ERR_TIMEOUT: msg = "timeout while receiving data"; break;
-        case DTRACK_ERR_CMD:     msg = "error while sending remote command"; break;
-        case DTRACK_ERR_PCK:     msg = "error in udp packet"; break;
-      }
-
-      logger.error() << "readLoop: dtrack: '%s'", msg.c_str();
-      continue;
-    }
-    else
-    {
-      const unsigned int body_limit = std::min(static_cast<unsigned> (nbody), max_bodies);
-
-      for (unsigned int i = 0; i < body_limit; ++i)
-      {
-        logger.trace() << "readLoop: detected body with ID = %s", body[i].id;
-        const int body_idx = body[i].id;
-        NumStationMap::iterator it = mStations.find(body_idx + 1);
-
-        if (it != mStations.end())
-        {
-          ::gua::math::mat4 xform (body[i].rot[0], body[i].rot[1], body[i].rot[2], 0.0f,
-                                   body[i].rot[3], body[i].rot[4], body[i].rot[5], 0.0f,
-                                   body[i].rot[6], body[i].rot[7], body[i].rot[8], 0.0f,
-                                   body[i].loc[0] * 0.001f, body[i].loc[1] * 0.001f, body[i].loc[2] * 0.001f, 1.0f);
-
-          it->second->setMatrix(xform);
-          logger.trace() << "readLoop: set matrix of station number '%s'", body_idx + 1;
+            if (body.quality >= 0) {
+              ::gua::math::mat4 xform (body.rot[0], body.rot[1], body.rot[2], 0.0f,
+                                       body.rot[3], body.rot[4], body.rot[5], 0.0f,
+                                       body.rot[6], body.rot[7], body.rot[8], 0.0f,
+                                       body.loc[0] * 0.001f, body.loc[1] * 0.001f, body.loc[2] * 0.001f, 1.0f);
+              it->second->setMatrix(xform);
+            }
+          }
+          
         }
-        else logger.debug() << "readLoop: can't find station for body #%d (station not configured?)", body_idx;
+      } else {
+        //error in receiving data
+        if (mDTrackSDK->getLastDataError() == DTrackSDK::ERR_TIMEOUT) {
+          logger.info() << "readLoop: timeout while waiting for tracking data";
+        }
+  
+        if (mDTrackSDK->getLastDataError() == DTrackSDK::ERR_NET) {
+          logger.info() << "readLoop: error while receiving tracking data";
+        }
+  
+        if (mDTrackSDK->getLastDataError() == DTrackSDK::ERR_PARSE) {
+          logger.info() << "readLoop: error while parsing tracking data";
+        }
       }
     }
   }
@@ -178,8 +130,7 @@ av::daemon::DTrack::readLoop()
 /* virtual */ void
 av::daemon::DTrack::stopDevice()
 {
-  mDTrack->exit();
-  logger.info() << "stopDevice: done.";
+  logger.info() << "stopDevice: device successfully stopped";
 }
 
 unsigned long int
@@ -238,47 +189,5 @@ av::daemon::DTrack::parseFeatures()
     mPort = convert_charpointer_to_ulong(port.c_str());
   }
 
-  std::string timeout(queryFeature("timeout"));
-  if (timeout == "")
-  {
-    logger.info() << "parseFeatures: feature 'timeout' not specified; using %d usec.",default_udp_timeout;
-    mTimeout = default_udp_timeout;
-  }
-  else mTimeout = convert_charpointer_to_ulong(timeout.c_str());
-
   return true;
 }
-
-// from readLoop
-#if 0
-{
-  logger.debug() << "readLoop: frame: %lu, stamp: %.3f, bodycal: %d, bodies: %d, sticks: %d, tools: %d, marker: %d",
-                 framenr, timestamp, nbodycal, nbody, nflystick, nmeatool, nmarker;
-
-  for (int i=0; i<nbody && i<MAX_NBODY; i++)
-  {
-    logger.debug() << "readLoop: body   %02d: qu[%.3f] pos[%f %f %f]",
-                   body[i].id, body[i].quality, body[i].loc[0], body[i].loc[1], body[i].loc[2];
-  }
-
-  for (int i=0; i<nflystick && i<MAX_NFLYSTICK; i++)
-  {
-    logger.debug() << "readLoop: stick  %02d: qu[%.3f] bt[%lx] pos[%f %f %f]",
-                   flystick[i].id, flystick[i].quality, flystick[i].bt,
-                   flystick[i].loc[0], flystick[i].loc[1], flystick[i].loc[2];
-  }
-  for (int i=0; i<nmeatool && i<MAX_NMEATOOL; i++)
-  {
-    logger.debug() << "readLoop: tool   %02d: qu[%.3f] bt[%lx] pos[%f %f %f]",
-                   meatool[i].id, meatool[i].quality, meatool[i].bt,
-                   meatool[i].loc[0], meatool[i].loc[1], meatool[i].loc[2];
-  }
-
-  for (int i=0; i<nmarker && i<MAX_NMARKER; i++)
-  {
-    logger.debug() << "readLoop: marker %02d: qu[%.3f] pos[%f %f %f]",
-                   marker[i].id, marker[i].quality,
-                   marker[i].loc[0], marker[i].loc[1], marker[i].loc[2];
-  }
-}
-#endif // #if 0

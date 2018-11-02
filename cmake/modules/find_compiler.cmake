@@ -42,12 +42,9 @@ if (UNIX)
                      ARGS --version
                      OUTPUT_VARIABLE _COMPILER_VERSION
         )
-        message(${_COMPILER_VERSION})
         string(REGEX REPLACE ".* ([0-9])\\.([0-9])\\.[0-9].*" "\\1\\2" _COMPILER_VERSION ${_COMPILER_VERSION})
-        message(${_COMPILER_VERSION})
         set (COMPILER_SUFFIX "gcc${_COMPILER_VERSION}")
         #set (COMPILER_SUFFIX "")
-        message(${COMPILER_SUFFIX})
     endif (CMAKE_COMPILER_IS_GNUCXX)
 endif(UNIX)
 

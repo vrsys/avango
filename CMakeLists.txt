@@ -48,7 +48,7 @@ set(GUACAMOLE_EXT_DIR ${GUACAMOLE_INCLUDE_DIRS}/../externals)
 
 if (UNIX)
   pkg_check_modules(JSON REQUIRED jsoncpp)
-  pkg_check_modules(PYTHON3 REQUIRED python-3.4)
+  pkg_check_modules(PYTHON3 REQUIRED python-3.5)
 elseif (WIN32)
   include(findAssimp)
   include(findJson)
@@ -57,22 +57,17 @@ endif (UNIX)
 
 if (UNIX)
   set (BOOST_ROOT "/opt/boost/current" CACHE PATH "Set to your boost install")
+  find_package(Boost COMPONENTS python-py35 thread signals system REQUIRED)
+  set(Boost_PYTHON3_LIBRARY_RELEASE ${Boost_PYTHON-PY35_LIBRARY_RELEASE} CACHE FILEPATH "")
+  set(Boost_PYTHON3_LIBRARY_DEBUG ${Boost_PYTHON-PY35_LIBRARY_DEBUG} CACHE FILEPATH "")
 elseif (MSVC)
   set (BOOST_ROOT ${GLOBAL_EXT_DIR}/boost CACHE PATH "Set to your boost install")
   message(STATUS "Set BOOST_ROOT to ${BOOST_ROOT}")
   set (Boost_USE_MULTITHREADED ON)
   #set (Boost_USE_STATIC_LIBS ON)
   ADD_DEFINITIONS("-DBOOST_ALL_NO_LIB")
-  find_package(Boost COMPONENTS python python3 REQUIRED)
+  find_package(Boost COMPONENTS python3 thread signals system REQUIRED)
 endif(UNIX)
-
-find_package(Boost COMPONENTS
-  python3
-  thread
-  signals
-  system
-  REQUIRED
-)
 
 set (BULLET_ROOT
      /opt/bullet/default
@@ -80,6 +75,33 @@ set (BULLET_ROOT
      CACHE PATH
     "Set to your bullet install path.")
 find_package(Bullet)
+
+ if (UNIX)
+                if (BULLET_COLLISION_LIBRARY)
+                  unset(BULLET_COLLISION_LIBRARY_DEBUG CACHE)
+                  set(BULLET_COLLISION_LIBRARY_DEBUG ${BULLET_COLLISION_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_COLLISION_LIBRARY)
+
+                if (BULLET_HACD_LIBRARY)
+                  unset(BULLET_HACD_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_HACD_LIBRARY_DEBUG ${BULLET_HACD_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_HACD_LIBRARY)
+
+                if (BULLET_DYNAMICS_LIBRARY)
+                  unset(BULLET_DYNAMICS_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_DYNAMICS_LIBRARY_DEBUG ${BULLET_DYNAMICS_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_DYNAMICS_LIBRARY)
+
+                if (BULLET_MATH_LIBRARY)
+                  unset(BULLET_MATH_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_MATH_LIBRARY_DEBUG ${BULLET_MATH_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_MATH_LIBRARY)
+
+                if (BULLET_SOFTBODY_LIBRARY)
+                  unset(BULLET_SOFTBODY_LIBRARY_DEBUG CACHE) 
+                  set(BULLET_SOFTBODY_LIBRARY_DEBUG ${BULLET_SOFTBODY_LIBRARY} CACHE FILEPATH "")
+                endif (BULLET_SOFTBODY_LIBRARY)
+        endif(UNIX)
 
 include(FindSchism)
 
@@ -128,18 +150,23 @@ option (AVANGO_DEBUG "Set to enable avango debugging.")
 option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support." ON)
 option (AVANGO_PBR_SUPPORT "Set to enable point based rendering support.")
 option (AVANGO_LOD_SUPPORT "Set to enable level of detail support.")
+option (AVANGO_NURBS_SUPPORT "Set to enable direct NURBS rendering." OFF)
+option (AVANGO_NRP_SUPPORT "Set to enable interface for the Neurorobotics Platform." OFF)
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
 option (AVANGO_VIVE_SUPPORT "Compile Vive module for Avango.")
 option (AVANGO_VOLUME_SUPPORT "Compile Volume module for Avango.")
 option (AVANGO_SKELANIM_SUPPORT "Compile Skeletal animation module for Avango.")
+option (AVANGO_SPOINTS_SUPPORT "Compile SPoints module.")
 option (AVANGO_OPENAL_SUPPORT "Enable building OpenAL sound module.")
 option (AVANGO_AWESOMIUM_SUPPORT "Enable building Awesomium module.")
 option (AVANGO_DISPLAY_SUPPORT "Enable building display setup module.")
 option (AVANGO_PHYSICS_SUPPORT "Set to enable physics support.")
 option (AVANGO_RUNTIME_PROGRAM_COMPILATION "Set to enable runtime program compilation." ON)
+option (AVANGO_TV_3_SUPPORT "Compile time-varying volume rendering support.")
 option (AVANGO_VIDEO3D_SUPPORT "Compile Video3d module.")
+option (AVANGO_VIRTUAL_TEXTURING_SUPPORT "Set to enable virtual texturing support (requires lamure-vt and guacamole-vt)." OFF)
 
 IF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGUACAMOLE_RUNTIME_PROGRAM_COMPILATION")
@@ -149,7 +176,7 @@ ENDIF (AVANGO_RUNTIME_PROGRAM_COMPILATION)
 # Create libraries
 ################################################################
 file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY})
-file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.4)
+file(MAKE_DIRECTORY ${AVANGO_INSTALL_DIRECTORY}/python3.5)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
@@ -186,9 +213,21 @@ if (AVANGO_AWESOMIUM_SUPPORT)
     add_subdirectory(avango-awesomium)
 endif(AVANGO_AWESOMIUM_SUPPORT)
 
+if (AVANGO_TV_3_SUPPORT)
+  add_subdirectory(avango-tv_3)
+endif(AVANGO_TV_3_SUPPORT)
+
 if (AVANGO_VOLUME_SUPPORT)
     add_subdirectory(avango-volume)
 endif(AVANGO_VOLUME_SUPPORT)
+
+if (AVANGO_NURBS_SUPPORT)
+  add_subdirectory(avango-nurbs)
+endif (AVANGO_NURBS_SUPPORT)
+
+if (AVANGO_NRP_SUPPORT)
+  add_subdirectory(avango-nrp)
+endif (AVANGO_NRP_SUPPORT)
 
 ################################################################
 # Summary

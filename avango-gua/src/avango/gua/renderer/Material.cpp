@@ -33,6 +33,16 @@ av::gua::Material::Material(std::shared_ptr< ::gua::Material> const& guaMaterial
                       std::bind(&Material::getEnableBackfaceCullingCB, this,std::placeholders::_1),
                       std::bind(&Material::setEnableBackfaceCullingCB, this,std::placeholders::_1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(EnableWireframeRendering,
+                      std::bind(&Material::getEnableWireframeRenderingCB, this,std::placeholders::_1),
+                      std::bind(&Material::setEnableWireframeRenderingCB, this,std::placeholders::_1));
+
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+    AV_FC_ADD_ADAPTOR_FIELD(EnableVirtualTexturing,
+                      std::bind(&Material::getEnableVirtualTexturingCB, this,std::placeholders::_1),
+                      std::bind(&Material::setEnableVirtualTexturingCB, this,std::placeholders::_1));
+#endif
+
     AV_FC_ADD_FIELD(m_materialShaderDescription, SFMaterialShaderDescription::ValueType());
     AV_FC_ADD_FIELD(m_serializedUniforms, "");
     AV_FC_ADD_FIELD(m_uniformsDirty, false);
@@ -146,6 +156,31 @@ av::gua::Material::setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event
   m_guaMaterial->set_show_back_faces(!event.getValue());
 }
 
+void
+av::gua::Material::getEnableWireframeRenderingCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaMaterial->get_render_wireframe();
+}
+
+void
+av::gua::Material::setEnableWireframeRenderingCB(const SFBool::SetValueEvent& event)
+{
+  m_guaMaterial->set_render_wireframe(event.getValue());
+}
+
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+void
+av::gua::Material::getEnableVirtualTexturingCB(const SFBool::GetValueEvent& event)
+{
+  *(event.getValuePtr()) = m_guaMaterial->get_enable_virtual_texturing();
+}
+
+void
+av::gua::Material::setEnableVirtualTexturingCB(const SFBool::SetValueEvent& event)
+{
+  m_guaMaterial->set_enable_virtual_texturing(event.getValue());
+}
+#endif
 
 std::shared_ptr< ::gua::Material> const&
 av::gua::Material::getGuaMaterial() const

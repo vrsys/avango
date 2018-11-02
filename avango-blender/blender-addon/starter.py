@@ -31,7 +31,7 @@ class StartAvango(bpy.types.Operator):
 
         #cmd = "gnome-terminal --hide-menubar --working-directory=" + absolute_path + " --command=\"" + command + "\" "
         #cmd = "cd "+tmpdir+"; " + absolute_path + "start.sh " + tmpfilepath
-        cmd = "python3.4 " + absolute_path + "main.py " + tmpfilepath
+        cmd = "python3.5 " + absolute_path + "main.py " + tmpfilepath
         print(cmd)
         try:
             os.system(cmd)

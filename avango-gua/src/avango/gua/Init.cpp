@@ -8,6 +8,7 @@
 #include <avango/gua/scenegraph/GeometryNode.hpp>
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
+#include <avango/gua/scenegraph/LineStripNode.hpp>
 #include <avango/gua/scenegraph/DepthMapNode.hpp>
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -15,11 +16,24 @@
 #include <avango/gua/renderer/Video3DLoader.hpp>
 #include <avango/gua/renderer/Video3DPassDescription.hpp>
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+#include <avango/gua/scenegraph/SPointsNode.hpp>
+#include <avango/gua/renderer/SPointsLoader.hpp>
+#include <avango/gua/renderer/SPointsPassDescription.hpp>
+#endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include <avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp>
+#endif
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
 #endif
+
+#if defined(AVANGO_NURBS_SUPPORT)
 #include <avango/gua/scenegraph/NURBSNode.hpp>
+#include <avango/gua/renderer/NURBSLoader.hpp>
+#endif
+
 #include <avango/gua/scenegraph/ScreenNode.hpp>
 #include <avango/gua/scenegraph/LightNode.hpp>
 #include <avango/gua/scenegraph/RayNode.hpp>
@@ -53,12 +67,19 @@
 
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
+#include <avango/gua/renderer/LineStripLoader.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/renderer/PBRLoader.hpp>
 #include <avango/gua/renderer/PLODLoader.hpp>
 #include <avango/gua/renderer/PLODPassDescription.hpp>
 #endif
-#include <avango/gua/renderer/NURBSLoader.hpp>
+#if defined(AVANGO_TV_3_SUPPORT)
+#include <avango/gua/scenegraph/TV_3Node.hpp>
+#include <avango/gua/renderer/TV_3Renderer.hpp>
+#include <avango/gua/renderer/TV_3SurfacePassDescription.hpp>
+#include <avango/gua/renderer/TV_3VolumePassDescription.hpp>
+#endif
+
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/HeadlessSurface.hpp>
@@ -69,6 +90,7 @@
 #include <avango/gua/renderer/PipelinePassDescription.hpp>
 #include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
+#include <avango/gua/renderer/LineStripPassDescription.hpp>
 #include <avango/gua/renderer/DepthMapPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
@@ -82,6 +104,7 @@
 #include <avango/gua/renderer/SSAOPassDescription.hpp>
 #include <avango/gua/renderer/SSAAPassDescription.hpp>
 #include <avango/gua/renderer/ResolvePassDescription.hpp>
+#include <avango/gua/renderer/OcclusionSlaveResolvePassDescription.hpp>
 #include <avango/gua/renderer/LightVisibilityPassDescription.hpp>
 #include <avango/gua/renderer/PipelineDescription.hpp>
 
@@ -90,6 +113,8 @@
 
 #include <avango/gua/utils/Logger.hpp>
 #include <avango/gua/utils/Ray.hpp>
+
+#include <avango/gua/utils/NamedSharedMemoryController.hpp>
 
 #include <avango/gua/Fields.hpp>
 #include <gua/guacamole.hpp>
@@ -106,8 +131,8 @@ av::gua::Init::initClass()
 {
     if (!isTypeInitialized())
     {
-        char** argv;
-        ::gua::init(0, argv);
+		char** argv;
+        ::gua::init(1, argv);
         av::gua::initFields();
 
         av::gua::Node::initClass();
@@ -115,16 +140,25 @@ av::gua::Init::initClass()
         av::gua::TransformNode::initClass();
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
-        av::gua::TriMeshNode::initClass();        
+        av::gua::TriMeshNode::initClass();
+        av::gua::LineStripNode::initClass();        
         av::gua::DepthMapNode::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DNode::initClass();
 #endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+        av::gua::SPointsNode::initClass();
+#endif
+
         av::gua::CameraNode::initClass();
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRNode::initClass();
         av::gua::PLODNode::initClass();
+#endif
+
+#if defined(AVANGO_TV_3_SUPPORT)
+        av::gua::TV_3Node::initClass();
 #endif
         // av::gua::NURBSNode::initClass();
         av::gua::ScreenNode::initClass();
@@ -168,11 +202,19 @@ av::gua::Init::initClass()
         av::gua::PipelinePassDescription::initClass();
         av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
+        av::gua::LineStripPassDescription::initClass();
         av::gua::DepthMapPassDescription::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
         av::gua::Video3DLoader::initClass();
         av::gua::Video3DPassDescription::initClass();
+#endif
+#if defined(AVANGO_SPOINTS_SUPPORT)
+        av::gua::SPointsLoader::initClass();
+        av::gua::SPointsPassDescription::initClass();
+#endif
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+        av::gua::DeferredVirtualTexturingPassDescription::initClass();
 #endif
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();
@@ -186,9 +228,11 @@ av::gua::Init::initClass()
         av::gua::SSAOPassDescription::initClass();
         av::gua::SSAAPassDescription::initClass();
         av::gua::ResolvePassDescription::initClass();
+        av::gua::OcclusionSlaveResolvePassDescription::initClass();
         av::gua::LightVisibilityPassDescription::initClass();
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
+        av::gua::LineStripLoader::initClass();
 
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();
@@ -197,12 +241,21 @@ av::gua::Init::initClass()
 #endif
         // av::gua::NURBSLoader::initClass();
 
+#if defined(AVANGO_TV_3_SUPPORT)
+        av::gua::TV_3Loader::initClass();
+        av::gua::TV_3SurfacePassDescription::initClass();
+        av::gua::TV_3VolumePassDescription::initClass();
+#endif
+
         av::gua::Viewer::initClass();
 
         av::gua::BlenderViewer::initClass();
 
         av::gua::Logger::initClass();
         av::gua::Ray::initClass();
+
+        av::gua::NamedSharedMemoryController::initClass();
+
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

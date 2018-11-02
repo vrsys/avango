@@ -42,7 +42,31 @@ namespace av
          virtual ~ViveWindow();
 
        public:
-        ::av::gua::SFMatrix                 SensorOrientation;
+        //sensor orientations
+        ::av::gua::SFMatrix                 HMDSensorOrientation;
+        ::av::gua::SFMatrix                 Controller0SensorOrientation;
+        ::av::gua::SFMatrix                 Controller1SensorOrientation;
+        ::av::gua::SFMatrix                 TrackingReference0SensorOrientation;
+        ::av::gua::SFMatrix                 TrackingReference1SensorOrientation;
+        //controller binary states
+        ::av::SFBool                        Controller0TriggerButtonPressed;
+        ::av::SFBool                        Controller1TriggerButtonPressed;
+        ::av::SFBool                        Controller0GripButtonPressed;
+        ::av::SFBool                        Controller1GripButtonPressed;
+        ::av::SFBool                        Controller0PadButtonPressed;
+        ::av::SFBool                        Controller1PadButtonPressed;
+        ::av::SFBool                        Controller0AppMenuButtonPressed;
+        ::av::SFBool                        Controller1AppMenuButtonPressed;
+        ::av::SFBool                        Controller0PadTouched;
+        ::av::SFBool                        Controller1PadTouched;
+        //controller continuous states
+        ::av::SFFloat                       Controller0PadXValue;
+        ::av::SFFloat                       Controller1PadXValue;
+        ::av::SFFloat                       Controller0PadYValue;
+        ::av::SFFloat                       Controller1PadYValue;
+        ::av::SFFloat                       Controller0TriggerValue;
+        ::av::SFFloat                       Controller1TriggerValue;
+        //general HMD properties
         ::av::gua::SFVec2ui                 Resolution;
         ::av::gua::SFVec2ui                 EyeResolution;
         ::av::gua::SFVec2                   LeftScreenSize;

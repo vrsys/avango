@@ -20,10 +20,10 @@ SET_TARGET_PROPERTIES( _lod PROPERTIES PREFIX "")
 ###############################################################################
 IF (MSVC)
   post_build_install_target(_lod
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/lod/_lod.pyd)
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/lod/_lod.pyd)
 ELSEIF (UNIX)
   post_build_install_target(_lod
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/lod/_lod.so)
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/lod/_lod.so)
 ENDIF (MSVC)
 
 ###############################################################################
@@ -31,6 +31,6 @@ ENDIF (MSVC)
 ###############################################################################
 COPY_PYTHON_FILES_INTO_DIRECTORY(
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${AVANGO_INSTALL_DIRECTORY}/python3.4/avango/gua/lod
+    ${AVANGO_INSTALL_DIRECTORY}/python3.5/avango/gua/lod
     _lod
 )

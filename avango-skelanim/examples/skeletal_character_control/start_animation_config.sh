@@ -19,7 +19,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
 
 # avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
-export PYTHONPATH="$LOCAL_AVANGO/lib/python3.4":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.4:$AVANGO/examples
+export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.5:$AVANGO/examples
 
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
@@ -33,17 +33,17 @@ else
 fi
 
 # run daemon
-python3.4 ./Daemon.py > /dev/null &
+python3.5 ./Daemon.py > /dev/null &
 
 # run program
 if [[ $* == *-d* ]]
 then
-cd "$DIR" && gdb --args python3.4 ./main_animation_config.py
+cd "$DIR" && gdb --args python3.5 ./main_animation_config.py
 else
-cd "$DIR" && python3.4 ./main_animation_config.py
+cd "$DIR" && python3.5 ./main_animation_config.py
 fi
 
 # kill daemon
 #kill %1
-killall python3.4
+killall python3.5
 killall python3

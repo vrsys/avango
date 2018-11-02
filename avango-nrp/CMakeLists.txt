@@ -17,11 +17,11 @@ list(APPEND GAZEBO_INCLUDE_DIRS "/usr/include/gazebo-7")
 ###############################################################################
 # set link directories and link dependencies
 ###############################################################################
-LINK_DIRECTORIES(
-        ${LIB_PATHS}
-        ${PYTHON3_LIBRARY_DIRS}
-        ${BULLET_LIBRARY_DIRS}
-        ${GAZEBO_LIBRARIES})
+#LINK_DIRECTORIES(
+#        ${LIB_PATHS}
+#        ${PYTHON3_LIBRARY_DIRS}
+#        ${BULLET_LIBRARY_DIRS}
+#        ${GAZEBO_LIBRARIES})
 
 INCLUDE_DIRECTORIES(
         ${INCLUDE_PATHS}
@@ -30,11 +30,11 @@ INCLUDE_DIRECTORIES(
         ${PYTHON3_INCLUDE_DIRS}
         ${GUACAMOLE_NRP_INCLUDE_DIRS}
         ${GAZEBO_INCLUDE_DIRS}
-        include
-        ../avango-core/include
-        ../avango-python/include
-        ../avango-gua/include)
-
+	include
+	../avango-core/include
+	../avango-python/include
+	../avango-gua/include)
+	
 IF (AVANGO_DISTRIBUTION_SUPPORT)
     include_directories(${ZMQ_INCLUDE_DIRS})
 ENDIF ()

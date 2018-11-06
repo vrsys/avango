@@ -80,6 +80,7 @@ void init_TriMeshLoader()
         .value("NORMALIZE_POSITION", av::gua::TriMeshLoader::NORMALIZE_POSITION)
         .value("NO_SHARED_MATERIALS", av::gua::TriMeshLoader::NO_SHARED_MATERIALS)
         .value("OPTIMIZE_MATERIALS", av::gua::TriMeshLoader::OPTIMIZE_MATERIALS)
+        .value("PARSE_HIERARCHY", av::gua::TriMeshLoader::PARSE_HIERARCHY)
         ;
 
   register_field<av::gua::SFTriMeshLoader>("SFTriMeshLoader");

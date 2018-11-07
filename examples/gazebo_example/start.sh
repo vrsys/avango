@@ -17,11 +17,11 @@ export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomiu
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/bernste4/src/schism/lib/linux_x86
 
 # avango
-export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$LD_LIBRARY_PATH
-export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples"
+export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH
+export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.5:$AVANGO/examples
 
 # guacamole
-export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
 # run program
 if [[ $* == *-d* ]]

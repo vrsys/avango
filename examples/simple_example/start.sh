@@ -7,8 +7,8 @@ LOCAL_GUACAMOLE="$DIR/../../../guacamole"
 LOCAL_AVANGO="$DIR/../../../avango"
 
 # if not, this path will be used
-GUACAMOLE=/
-AVANGO=/
+GUACAMOLE=/opt/guacamole/master
+AVANGO=/opt/avango/master
 
 # third party libs
 export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib:/opt/Awesomium/lib:/opt/lamure/install/lib

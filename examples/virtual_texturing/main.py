@@ -9,9 +9,17 @@ class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
 
+    Window = 0
+
+    def set_window(self, window):
+        self.Window = window
+
+
     def evaluate(self):
         #move the abstract geometry in a pseudo-random manner
-        self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 50.0, 1.0, 1.0, 1.0)
+        self.MatrixOut.value = avango.gua.make_rot_mat(self.TimeIn.value * 25.0, 1.0, 1.0, 1.0)
+        if 0 != self.Window:
+            print("RenderingFPS :" + str(self.Window.RenderingFPS.value) )
 
 def start():
     # setup scenegraph
@@ -52,6 +60,7 @@ def start():
     size = avango.gua.Vec2ui(1600, 1200)
 
     window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window.EnableVsync.value = False
 
     avango.gua.register_window("window", window)
 
@@ -98,8 +107,10 @@ def start():
     viewer = avango.gua.nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
+    viewer.DesiredFPS.value = 500.0
 
     monkey_updater = TimedRotate()
+    monkey_updater.set_window(window)
 
     timer = avango.nodes.TimeSensor()
     monkey_updater.TimeIn.connect_from(timer.Time)

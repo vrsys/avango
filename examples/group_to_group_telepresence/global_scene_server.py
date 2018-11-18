@@ -48,12 +48,21 @@ OBSERVER_MODE = "3_CLIENTS_SIMULATED"
 #OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
-#SCENE_MODE = "EVALUATION"
-SCENE_MODE = "SIMPLE"
+SCENE_MODE = "EVALUATION"
+#SCENE_MODE = "SIMPLE"
+
+
+#USED SERVER IPS
+VR16      = "141.54.147.16"
+PAN       = "141.54.147.52"
+LOCALHOST = "127.0.0.1"
+
+CURRENTLY_USED_SERVER = VR16
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVSERVER|127.0.0.1|7432")
+                                         Groupname="AVSERVER|"+CURRENTLY_USED_SERVER+"|7432")
+                                         #Groupname="AVSERVER|127.0.0.1|7432")
                                          #Groupname="AVSERVER|141.54.147.52|7432") # server -> pan
                                          #Groupname="AVSERVER|141.54.147.54|7432")
 
@@ -127,7 +136,6 @@ class TimedKeyToggling(avango.script.Script):
 
                 self.num_entries = self.num_entries + 1
             else:
-                #print("OOOOOO")
                 self.logging_node.Tags.value = []
 
                 if self.num_entries != 0:
@@ -181,8 +189,9 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     animation_length_in_ms = indexed_keyframe_positions[-1][0]
 
-    nv = netvaluepy.NetValue("127.0.0.1:8000")
+    #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
+    nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -330,12 +339,24 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 #kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+street_plane.Material.value.set_uniform("Emissivity", 3.0)
+
+def set_hauptgebaeude_emissivity(node):
+  children             = node.Children.value
+  current_num_children = len(node.Children.value)
+
+  if current_num_children > 0:
+    for child in children:
+      set_hauptgebaeude_emissivity(child)
+  else:
+    node.Material.value.set_uniform("Emissivity", 3.0)
 
 
 if "EVALUATION" == SCENE_MODE:
     hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
     hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
+    set_hauptgebaeude_emissivity(hauptgebaeude)
 
     lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
@@ -357,7 +378,8 @@ mat = avango.gua.nodes.Material(ShaderName="mat")
 nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
@@ -386,7 +408,9 @@ def append_trees_to_list(parent_node):
         tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value = avango.gua.make_trans_mat(-4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+        tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
 
+        #lion.Material.value.set_uniform("Emissivity", 3.0)
 
         parent_node.Children.value.append(tree_to_append)
         tree_label += 1
@@ -395,7 +419,7 @@ def append_trees_to_list(parent_node):
         tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value =  avango.gua.make_trans_mat(4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0)#* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-
+        tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
 
         parent_node.Children.value.append(tree_to_append)
         tree_label += 1
@@ -506,7 +530,7 @@ server_cam = avango.gua.nodes.CameraNode(
     OutputWindowName="server_window",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
-    #BlackList = ["invisible_osaka_avatar"]
+    BlackList = ["invisible_osaka_avatar"]
     )
 
 

@@ -36,6 +36,12 @@ from examples_common.GuaVE import GuaVE
 
 #avango.enable_logging(4, "client.log")
 
+VR16      = "141.54.147.16"
+PAN       = "141.54.147.52"
+LOCALHOST = "127.0.0.1"
+
+CURRENTLY_USED_SERVER = VR16
+
 class Initializer(avango.script.Script):
 
   def __init__(self):
@@ -44,7 +50,7 @@ class Initializer(avango.script.Script):
     # scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432") # server -> pan
+                                         Groupname="AVCLIENT|"+CURRENTLY_USED_SERVER+"|7432") # server -> pan
                                          #Groupname="AVCLIENT|141.54.147.54|7432")
     
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")

@@ -49,6 +49,12 @@ RENDERING_RESOLUTION = 0
 LEFT_VIEWPORT_START  = 0
 RIGHT_VIEWPORT_START = 0
 
+VR16      = "141.54.147.16"
+PAN       = "141.54.147.52"
+LOCALHOST = "127.0.0.1"
+
+CURRENTLY_USED_SERVER = VR16
+
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
@@ -166,7 +172,7 @@ class Initializer(avango.script.Script):
     #scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|127.0.0.1|7432")
+                                         Groupname="AVCLIENT|"+CURRENTLY_USED_SERVER+"|7432")
                                          #Groupname="AVCLIENT|141.54.147.52|7432")
 
 

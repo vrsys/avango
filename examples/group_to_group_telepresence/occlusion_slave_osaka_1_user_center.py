@@ -59,7 +59,8 @@ class Initializer(avango.script.Script):
     # viewing setup
     #size = avango.gua.Vec2ui(1600, 1200)
     #size = avango.gua.Vec2ui(1920, 1080)
-    size = avango.gua.Vec2ui(3840, 2160)
+    #size = avango.gua.Vec2ui(3840, 2160)
+    size = avango.gua.Vec2ui(100, 100)
     self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
                                               Display = ":0.1",  # ":0.1",
                                               LeftResolution=size,

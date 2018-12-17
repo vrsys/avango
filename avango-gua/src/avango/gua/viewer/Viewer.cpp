@@ -80,10 +80,16 @@ av::gua::Viewer::initClass()
 
 void
 av::gua::Viewer::frame() {
+  // ephra
+  std::cout << "Viewer frame 1.0 " << std::endl;
+  // ephra out
 
   if (!m_renderer) {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
+   // ephra
+  std::cout << "Viewer frame 1.1 " << std::endl;
+  // ephra out
 
 #if 0
   for (auto& window: Windows.getValue()) {
@@ -117,12 +123,18 @@ av::gua::Viewer::frame() {
 #endif
 
   for (auto& window: Windows.getValue()) {
+    std::cout << "Viewer frame 1.35 " << std::endl;
     window->process_events();
+    std::cout << "Viewer frame 1.36 " << std::endl;
 
     if(window->should_close()) {
+      std::cout << "Viewer frame should close " << std::endl;
       window->close();
     }
   }
+   // ephra
+  std::cout << "Viewer frame 1.4 " << std::endl;
+  // ephra out
 }
 
 void
@@ -133,13 +145,19 @@ av::gua::Viewer::run() {
   if (!m_renderer) {
     m_renderer = new av::gua::Renderer(new ::gua::Renderer());
   }
-
+  // ephra
+  std::cout << "Viewer run 1.0 " << std::endl;
+  // ephra out
 
 #if defined(AVANGO_PHYSICS_SUPPORT)
   if (Physics.getValue().isValid()) {
     Physics.getValue()->State.setValue(static_cast<int>(av::gua::Physics::RunningState::RUNNING));
   }
 #endif
+
+  // ephra
+  std::cout << "Viewer run1.1 " << std::endl;
+  // ephra out
 
   //PyThreadState* save_state(PyEval_SaveThread());
 
@@ -150,11 +168,21 @@ av::gua::Viewer::run() {
 
     //save_state = PyEval_SaveThread();
   });
+  // ephra
+  std::cout << "Viewer run 1.2 " << std::endl;
+  // ephra out
 
   m_loop.start();
+
+  // ephra
+  std::cout << "Viewer run 1.3 " << std::endl;
+  // ephra out
 
   for (auto& window: Windows.getValue()) {
     window->close();
   }
 
+  // ephra
+  std::cout << "Viewer 2 " << std::endl;
+  // ephra out
 }

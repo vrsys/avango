@@ -2,6 +2,7 @@
 #define AVANGO_GUA_NRP_NODE_HPP
 
 #include <gua/nrp/nrp_node.hpp>
+
 #include <avango/gua/scenegraph/TransformNode.hpp>
 
 namespace av
@@ -15,14 +16,29 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
     AV_FC_DECLARE();
 
   public:
-    NRPNode(::gua::nrp::NRPNode *guanode = new ::gua::nrp::NRPNode(""));
+    NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode = std::make_shared<::gua::nrp::NRPNode>(""));
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~NRPNode();
+
+  public:
+    /**
+     * Get the wrapped ::gua::nrp::NRPNode.
+     */
+    std::shared_ptr<::gua::node::Node> getGuaNode() const;
 
   private:
-    ::gua::nrp::NRPNode *_nrp_node_ptr;
+    std::shared_ptr<::gua::nrp::NRPNode> m_guaNode;
+
+    NRPNode(const NRPNode &);
+    NRPNode &operator=(const NRPNode &);
 };
 
-using SFNRPNode = av::SingleField<av::Link<av::gua::nrp::NRPNode>>;
-using MFNRPNode = av::MultiField<av::Link<av::gua::nrp::NRPNode>>;
+using SFNRPNode = SingleField<Link<NRPNode>>;
+using MFNRPNode = MultiField<Link<NRPNode>>;
 }
 }
 

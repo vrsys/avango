@@ -1,10 +1,8 @@
-#include <python3.5/Python.h>
-#include <avango/python/register_field.h>
-#include <boost/python.hpp>
-
 #include "NRPNode.hpp"
+
+#include <boost/python.hpp>
+#include <avango/python/register_field.h>
 #include <avango/gua/nrp/NRPNode.hpp>
-#include <avango/gua/scenegraph/TransformNode.hpp>
 
 namespace boost
 {
@@ -24,5 +22,5 @@ void init_NRPNode()
 
     av::python::register_field<av::gua::nrp::SFNRPNode>("SFNRPNode");
     av::python::register_multifield<av::gua::nrp::MFNRPNode>("MFNRPNode");
-    boost::python::class_<av::gua::nrp::NRPNode, av::Link<av::gua::nrp::NRPNode>, boost::python::bases<av::gua::TransformNode>, boost::noncopyable>("NRPNode", "docstring");
+    boost::python::class_<av::gua::nrp::NRPNode, av::Link<av::gua::nrp::NRPNode>, boost::python::bases<av::gua::TransformNode>, boost::noncopyable>("NRPNode", "docstring", boost::python::no_init);
 }

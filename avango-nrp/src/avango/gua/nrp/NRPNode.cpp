@@ -2,12 +2,19 @@
 #include <avango/gua/nrp/NRPNode.hpp>
 #include <boost/bind.hpp>
 
+namespace
+{
+av::Logger &logger(av::getLogger("av::gua::nrp::NRPNode"));
+}
+
 AV_FC_DEFINE(av::gua::nrp::NRPNode);
 
 AV_FIELD_DEFINE(av::gua::nrp::SFNRPNode);
 AV_FIELD_DEFINE(av::gua::nrp::MFNRPNode);
 
-av::gua::nrp::NRPNode::NRPNode(::gua::nrp::NRPNode *guanode) : TransformNode(std::shared_ptr<::gua::nrp::NRPNode>(guanode)) { _nrp_node_ptr = guanode; }
+av::gua::nrp::NRPNode::NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode) : TransformNode(guanode), m_guaNode(guanode) {}
+
+av::gua::nrp::NRPNode::~NRPNode() {}
 
 void av::gua::nrp::NRPNode::initClass()
 {
@@ -23,3 +30,4 @@ void av::gua::nrp::NRPNode::initClass()
         sClassTypeId.setDistributable(true);
     }
 }
+std::shared_ptr<gua::node::Node> av::gua::nrp::NRPNode::getGuaNode() const { return m_guaNode; }

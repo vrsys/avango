@@ -92,7 +92,7 @@ def start():
 
     pick_ray = nodes.RayNode(Name="pick_ray")
     pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 0.0) * \
-                               avango.gua.make_scale_mat(1.0, 1.0, 50.0)
+                                avango.gua.make_scale_mat(1.0, 1.0, 50.0)
 
     loader = nodes.TriMeshLoader()
 

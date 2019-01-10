@@ -4,6 +4,7 @@
 #include <gua/nrp/nrp_node.hpp>
 
 #include <avango/gua/scenegraph/TransformNode.hpp>
+#include <avango/gua/scenegraph/TriMeshNode.hpp>
 
 namespace av
 {
@@ -28,10 +29,13 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
     /**
      * Get the wrapped ::gua::nrp::NRPNode.
      */
-    std::shared_ptr<::gua::node::Node> getGuaNode() const;
+    std::shared_ptr<::gua::nrp::NRPNode> getGuaNode() const;
+    std::mutex& getMutexNode();
+    void createChildren(std::shared_ptr<::gua::node::Node> root, bool not_root = true) const;
 
   private:
     std::shared_ptr<::gua::nrp::NRPNode> m_guaNode;
+    std::mutex m_mutex_node;
 
     NRPNode(const NRPNode &);
     NRPNode &operator=(const NRPNode &);

@@ -19,7 +19,8 @@ def start():
   lod_loader.OutOfCoreBudget.value = 4096
 
   aux_loader = avango.gua.lod.nodes.Aux()
-  aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
+  # aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
+  aux_loader.load_aux_file("data/salem.aux");
   aux_loader.get_filename()
   v_num = aux_loader.get_num_views()
   sp_num = aux_loader.get_num_sparse_points()
@@ -30,24 +31,24 @@ def start():
   print(' number of octree nodes: ', number_octree_nodes)
   
 
-  for i in range(number_octree_nodes):
-    octree_node = aux_loader.get_octree_node(i)
-    ci = octree_node.get_child_idx()
-    cm = octree_node.get_child_mask()
-    gmin = octree_node.get_min()
-    gmax = octree_node.get_max()
-    num_fot = octree_node.get_number_fotos()
-    print("octree node ", ci , cm, gmin, gmax, num_fot)
+  # for i in range(number_octree_nodes):
+  #   octree_node = aux_loader.get_octree_node(i)
+  #   ci = octree_node.get_child_idx()
+  #   cm = octree_node.get_child_mask()
+  #   gmin = octree_node.get_min()
+  #   gmax = octree_node.get_max()
+  #   num_fot = octree_node.get_number_fotos()
+  #   print("octree node ", ci , cm, gmin, gmax, num_fot)
     
-  octree_node = aux_loader.get_octree_node(number_octree_nodes-1)
-  num_fot = octree_node.get_number_fotos()
-  for i in range(num_fot):
-    print('foto ', octree_node.get_foto_by_id(i))
-    gmin = octree_node.get_min()
+  # octree_node = aux_loader.get_octree_node(number_octree_nodes-1)
+  # num_fot = octree_node.get_number_fotos()
+  # for i in range(num_fot):
+  #   print('foto ', octree_node.get_foto_by_id(i))
+  #   gmin = octree_node.get_min()
 
     
-  aa = aux_loader.get_octree_query(avango.gua.Vec3(1.0, 1.0, 1.0))
-  print('some octree info ?:', aa)
+  # aa = aux_loader.get_octree_query(avango.gua.Vec3(1.0, 1.0, 1.0))
+  # print('some octree info ?:', aa)
 
 
   print(atlas)
@@ -56,6 +57,21 @@ def start():
   print(atlas.get_height() )
   print(atlas.get_rotated() )
 
+  DTLoader = avango.gua.nodes.DynamicTriangleLoader()
+
+  line_strip_geode = DTLoader.create_empty_geometry("line_strip_model_1", "empty_name_1.lob")
+  line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0.0) 
+
+  line_strip_geode.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
+  line_strip_geode.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
+  line_strip_geode.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
+
+  # line_strip_geode.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.0, 0.0);
+  # line_strip_geode.push_vertex(-2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.0, 1.0);
+  # line_strip_geode.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 1.0, 0.0);
+
+  graph.Root.value.Children.value.append(line_strip_geode)
+  
 
   #### TEST get atlas tile worked !
   # for i in range(num):
@@ -107,15 +123,14 @@ def start():
     
    
     #print("out ", i , pos, r, g ,b ,a)
-  print("Number of sparse points", sp_num)
+  # print("Number of sparse points", sp_num)
   
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-
-
   
   plod_node = lod_loader.load_lod_pointcloud(
                   #"/opt/3d_models/point_based/plod/pig_pr.bvh",
-                  "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",
+                  # "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",
+                  "data/salem_02.bvh",
                   avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
                   avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
                   )
@@ -136,11 +151,13 @@ def start():
   
   
   plod_node.Transform.value = avango.gua.make_trans_mat(0, 0.3, 0) * \
+                              avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * \
                               avango.gua.make_scale_mat(0.3, 0.3, 0.3)
   
-  graph.Root.value.Children.value.append(plod_node)
+  # graph.Root.value.Children.value.append(plod_node)
+  
   plod_node.ShadowMode.value = 1
-  #graph.Root.value.Children.value.append(new_cube)
+  graph.Root.value.Children.value.append(new_cube)
   #new_cube.ShadowMode.value = 1
 
 
@@ -239,11 +256,12 @@ def start():
   plod_pass = avango.gua.lod.nodes.PLodPassDescription()
   plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.HQ_TWO_PASS
   #plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.LQ_ONE_PASS
-
+  
   pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes = [
       avango.gua.nodes.TriMeshPassDescription(),
       plod_pass,
+      avango.gua.nodes.DynamicTrianglePassDescription(),
       avango.gua.nodes.SkyMapPassDescription(
         OutputTextureName="awesome_skymap"
       ),

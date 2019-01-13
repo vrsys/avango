@@ -18,6 +18,8 @@ export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
 
 # avango
+export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH:/home/ephtron/Projects/lamure/install/lib:/opt/Awesomium/lib
+# avango
 export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH:/home/senu8384/Desktop/master-thesis/lamure/install/lib:/opt/Awesomium/lib
 export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.5:$AVANGO/examples
 

@@ -57,7 +57,7 @@ av::gua::nrp::NRPNode::NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode) : T
         if(this->getGuaNode()->get_should_update_avango())
         {
             std::unique_lock<std::mutex> lock_scene(this->getMutexNode());
-            std::cout << "post pass" << std::endl;
+            // std::cout << "post pass" << std::endl;
             this->createChildren(this->getGuaNode(), true);
 
             this->getGuaNode()->set_should_update_avango(false);

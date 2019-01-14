@@ -88,13 +88,24 @@ def start():
     nrp_root.Transform.value = make_trans_mat(-3.6, -1.05, -6.0)
     nrp_root.Name.value = "nrp_root"
 
-    # TODO: showcase interactivity
+    nrp_interactive = nrp_nodes.NRPInteractiveNode()
+    nrp_interactive.Name.value = "interactive_transform"
+
+    loader = nodes.TriMeshLoader()
+
+    wrapper = nodes.TransformNode(Name="wrapper")
+    baseball = loader.create_geometry_from_file(
+        "baseball",
+        "data/objects/sphere.obj",
+        avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
+    )
+    baseball.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.0) * avango.gua.make_scale_mat(0.1, 0.1, 0.1)
+    wrapper.Children.value.append(baseball)
+    nrp_interactive.Children.value.append(wrapper)
 
     pick_ray = nodes.RayNode(Name="pick_ray")
     pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 0.0) * \
-                                avango.gua.make_scale_mat(1.0, 1.0, 50.0)
-
-    loader = nodes.TriMeshLoader()
+                               avango.gua.make_scale_mat(1.0, 1.0, 50.0)
 
     ray_geom = loader.create_geometry_from_file(
         "ray_geom",
@@ -119,11 +130,7 @@ def start():
     register_window("window", window)
 
     res_pass = nodes.ResolvePassDescription()
-
-    res_pass.EnvironmentLightingColor.value = Color(0.1, 0.1, 0.1)
-    res_pass.ToneMappingMode.value = ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
-    res_pass.BackgroundColor.value = Color(0.45, 0.5, 0.6)
 
     screen = nodes.ScreenNode(Name="screen", Width=4.8, Height=2.7)
     screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
@@ -148,7 +155,7 @@ def start():
 
     cam.PipelineDescription.value.EnableABuffer.value = True
 
-    graph.Root.value.Children.value = [nrp_root, cam]
+    graph.Root.value.Children.value = [nrp_root, cam, nrp_interactive]
 
     navigator = examples_common.navigator.Navigator()
     navigator.StartLocation.value = cam.Transform.value.get_translate()
@@ -157,6 +164,7 @@ def start():
     navigator.RotationSpeed.value = 0.2
     navigator.MotionSpeed.value = 0.04
 
+    wrapper.Transform.connect_from(navigator.OutTransform)
     cam.Transform.connect_from(navigator.OutTransform)
 
     viewer = nodes.Viewer()

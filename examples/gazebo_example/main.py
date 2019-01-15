@@ -95,7 +95,7 @@ def start():
 
     wrapper = nodes.TransformNode(Name="wrapper")
     baseball = loader.create_geometry_from_file(
-        "baseball",
+        "interactive_baseball",
         "data/objects/sphere.obj",
         avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
     )

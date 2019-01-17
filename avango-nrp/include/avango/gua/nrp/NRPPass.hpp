@@ -15,7 +15,7 @@ class AV_GUA_DLL NRPPassDescription : public av::gua::PipelinePassDescription
     AV_FC_DECLARE();
 
   public:
-    NRPPassDescription(std::shared_ptr<::gua::nrp::NRPPassDescription> const &NRPPassDescription = std::shared_ptr<::gua::nrp::NRPPassDescription>(new ::gua::nrp::NRPPassDescription()));
+    explicit NRPPassDescription(std::shared_ptr<::gua::nrp::NRPPassDescription> const &NRPPassDescription = std::shared_ptr<::gua::nrp::NRPPassDescription>(new ::gua::nrp::NRPPassDescription()));
 
   public:
     /**

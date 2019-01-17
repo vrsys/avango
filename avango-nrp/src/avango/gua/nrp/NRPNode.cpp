@@ -7,10 +7,19 @@ namespace
 av::Logger &logger(av::getLogger("av::gua::nrp::NRPNode"));
 }
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+#include <avango/gua/network/NetTransform.h>
+#endif
+
 AV_FC_DEFINE(av::gua::nrp::NRPNode);
 
 AV_FIELD_DEFINE(av::gua::nrp::SFNRPNode);
 AV_FIELD_DEFINE(av::gua::nrp::MFNRPNode);
+
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+void av::gua::nrp::NRPNode::on_distribute(av::gua::NetTransform &netNode) {}
+void av::gua::nrp::NRPNode::on_undistribute(av::gua::NetTransform &netNode) {}
+#endif
 
 std::shared_ptr<gua::nrp::NRPNode> av::gua::nrp::NRPNode::getGuaNode() const { return m_guaNode; }
 std::mutex &av::gua::nrp::NRPNode::getMutexNode() { return m_mutex_node; }
@@ -49,6 +58,22 @@ void av::gua::nrp::NRPNode::createChildren(std::shared_ptr<::gua::node::Node> ro
     }
 }
 
+/// Distribution of NRPNode children is meaningless, as the hierarchy is already pushed through the network
+/*
+void av::gua::nrp::NRPNode::distributeChildren(av::gua::Node *node)
+{
+    // std::cout << node->Children.getSize() << std::endl;
+
+    for(int i = 0; i < node->Children.getSize(); i++)
+    {
+        // std::cout << node->Children.getValue()[i]->Name.getValue() << std::endl;
+        distributeChildren(node->Children.getValue()[i].getPtr());
+    }
+
+    m_net_transform->distributeObject(node);
+}
+*/
+
 av::gua::nrp::NRPNode::NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode) : TransformNode(guanode), m_guaNode(guanode)
 {
     // maintain a hook to pre-update state
@@ -59,13 +84,10 @@ av::gua::nrp::NRPNode::NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode) : T
             std::unique_lock<std::mutex> lock_scene(this->getMutexNode());
             // std::cout << "post pass" << std::endl;
             this->createChildren(this->getGuaNode(), true);
-
             this->getGuaNode()->set_should_update_avango(false);
         }
     });
 }
-
-av::gua::nrp::NRPNode::~NRPNode() {}
 
 void av::gua::nrp::NRPNode::initClass()
 {

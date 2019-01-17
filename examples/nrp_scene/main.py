@@ -95,7 +95,7 @@ def start():
 
     wrapper = nodes.TransformNode(Name="wrapper")
     baseball = loader.create_geometry_from_file(
-        "interactive_baseball",
+        "interactive_baseball_1",
         "data/objects/sphere.obj",
         avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
     )
@@ -125,7 +125,7 @@ def start():
 
     size = Vec2ui(2560, 1440)
 
-    window = nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window = nodes.GlfwWindow(Title="HBP NRP @ BUW: Streaming",Size=size, LeftResolution=size)
 
     register_window("window", window)
 

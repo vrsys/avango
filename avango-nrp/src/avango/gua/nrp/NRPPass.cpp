@@ -26,3 +26,7 @@ void av::gua::nrp::NRPPassDescription::initClass()
         sClassTypeId.setDistributable(true);
     }
 }
+std::shared_ptr<::gua::nrp::NRPPassDescription> const &av::gua::nrp::NRPPassDescription::getGuaPipelinePassDescription() const
+{
+    return m_guaPipelinePassDescription;
+}

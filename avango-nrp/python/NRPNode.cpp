@@ -1,8 +1,9 @@
 #include "NRPNode.hpp"
 
-#include <boost/python.hpp>
-#include <avango/python/register_field.h>
 #include <avango/gua/nrp/NRPNode.hpp>
+#include <avango/gua/network/NetTransform.h>
+#include <avango/python/register_field.h>
+#include <boost/python.hpp>
 
 namespace boost
 {

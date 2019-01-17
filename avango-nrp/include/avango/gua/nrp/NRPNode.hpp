@@ -19,21 +19,28 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
   public:
     NRPNode(std::shared_ptr<::gua::nrp::NRPNode> guanode = std::make_shared<::gua::nrp::NRPNode>(""));
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
+    virtual void on_distribute(av::gua::NetTransform &netNode);
+    virtual void on_undistribute(av::gua::NetTransform &netNode);
+#endif
+
   protected:
     /**
      * Destructor made protected to prevent allocation on stack.
      */
-    virtual ~NRPNode();
+    // virtual ~NRPNode();
 
   public:
     /**
      * Get the wrapped ::gua::nrp::NRPNode.
      */
     std::shared_ptr<::gua::nrp::NRPNode> getGuaNode() const;
-    std::mutex& getMutexNode();
-    void createChildren(std::shared_ptr<::gua::node::Node> root, bool not_root = true) const;
+    std::mutex &getMutexNode();
+    void createChildren(std::shared_ptr<::gua::node::Node> root, bool is_root = true) const;
+    /*void distributeChildren(av::gua::Node *node);*/
 
   private:
+    std::shared_ptr<av::gua::NetTransform> m_net_transform;
     std::shared_ptr<::gua::nrp::NRPNode> m_guaNode;
     std::mutex m_mutex_node;
 

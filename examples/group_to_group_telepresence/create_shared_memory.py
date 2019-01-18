@@ -48,6 +48,10 @@ MemoryController.add_memory_segment("DEPTH_FEEDBACK_SEGMENT", 1000)
 MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
 MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 99)
 
+
+MemoryController.add_memory_segment("segment_for_DB_0L", 65536*2);
+MemoryController.construct_named_64KB_char_buffer("segment_for_DB_0L", "DB_0L")
+
 MemoryController.add_memory_segment("segment_for_DB_3L", 65536*2);
 MemoryController.add_memory_segment("segment_for_DB_3R", 65536*2);
 MemoryController.construct_named_64KB_char_buffer("segment_for_DB_3L", "DB_3L")

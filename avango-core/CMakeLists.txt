@@ -77,6 +77,9 @@ if (AVANGO_DISTRIBUTION_SUPPORT)
   endif(MSVC)
 endif (AVANGO_DISTRIBUTION_SUPPORT)
 
+if (AVANGO_SPOINTS_SUPPORT)
+  target_link_libraries( avango optimized ${TurboJPEG_LIBRARIES} debug ${TurboJPEG_LIBRARIES})
+endif(AVANGO_SPOINTS_SUPPORT)
 
 ###############################################################################
 # targets for unittesting

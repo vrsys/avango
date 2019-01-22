@@ -1,6 +1,8 @@
+import sys
 import avango
 import avango.gua
 import avango.gua.nrp
+import avango.gua.lod
 import avango.script
 from avango.script import field_has_changed
 from avango.gua import *
@@ -30,7 +32,7 @@ def print_fields(node, print_values=False):
             print("  with value '{0}'".format(field.value))
 
 
-def start():
+def start(filename):
 
     # setup scenegraph
     graph = nodes.SceneGraph(Name="scenegraph")
@@ -63,6 +65,8 @@ def start():
 
     register_window("client_window", window)
 
+    logger = avango.gua.nodes.Logger(EnableWarning=False)
+
     nettrans = avango.gua.nodes.NetTransform(Name="net", Groupname="AVCLIENT|127.0.0.1|7432")
 
     graph.Root.value.Children.value = [nettrans, nrp_root, nrp_interactive]
@@ -87,4 +91,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    start(sys.argv[1])

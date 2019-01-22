@@ -34,9 +34,9 @@ fi
 # run program
 if [[ $* == *-d* ]]
 then
-cd "$DIR" && gdb --args python3 ./client.py
+cd "$DIR" && gdb --args python3 ./client.py $1
 else
-cd "$DIR" && python3.5 ./client.py
+cd "$DIR" && python3.5 ./client.py $1
 fi
 
 # kill daemon

@@ -15,10 +15,10 @@ AVANGO=/opt/avango/master
 export LD_LIBRARY_PATH=/opt/boost/current/lib:/opt/zmq/current/lib
 
 # schism
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/schism/current/lib/linux_x86
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ephtron/Projects/schism/lib/linux_x86
 
 # avango
-export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH:/opt/lamure/install/lib:/opt/Awesomium/lib
+export LD_LIBRARY_PATH="$LOCAL_AVANGO/lib":$AVANGO/lib:$LD_LIBRARY_PATH:/home/ephtron/Projects/lamure/install/lib:/opt/Awesomium/lib
 export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO/lib/python3.5:$AVANGO/examples
 
 # guacamole
@@ -27,10 +27,16 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 # run daemon
 if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
 then
-    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
+    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py 
+    # > /dev/null &
 else
     python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
+
+
+# run daemon
+python3.5 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
+
 
 # run program
 cd "$DIR" && python3 ./main.py

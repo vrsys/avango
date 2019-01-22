@@ -124,9 +124,7 @@ av::gua::WindowBase::close() {
 
 void
 av::gua::WindowBase::process_events() {
-  std::cout<< "windowbase cpp process_events 1.0" << std::endl;
   m_guaWindowBase->process_events();
-  std::cout<< "windowbase cpp process_events 1.1" << std::endl;
 }
 
 std::shared_ptr< ::gua::WindowBase> const&

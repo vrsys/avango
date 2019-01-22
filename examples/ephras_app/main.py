@@ -31,25 +31,24 @@ def start():
   print(' number of octree nodes: ', number_octree_nodes)
   
 
-  # for i in range(number_octree_nodes):
-  #   octree_node = aux_loader.get_octree_node(i)
-  #   ci = octree_node.get_child_idx()
-  #   cm = octree_node.get_child_mask()
-  #   gmin = octree_node.get_min()
-  #   gmax = octree_node.get_max()
-  #   num_fot = octree_node.get_number_fotos()
-  #   print("octree node ", ci , cm, gmin, gmax, num_fot)
+  for i in range(number_octree_nodes):
+    octree_node = aux_loader.get_octree_node(i)
+    ci = octree_node.get_child_idx()
+    cm = octree_node.get_child_mask()
+    gmin = octree_node.get_min()
+    gmax = octree_node.get_max()
+    num_fot = octree_node.get_number_fotos()
+    print("octree node ", ci , cm, gmin, gmax, num_fot)
     
-  # octree_node = aux_loader.get_octree_node(number_octree_nodes-1)
-  # num_fot = octree_node.get_number_fotos()
-  # for i in range(num_fot):
-  #   print('foto ', octree_node.get_foto_by_id(i))
-  #   gmin = octree_node.get_min()
+  octree_node = aux_loader.get_octree_node(number_octree_nodes-1)
+  num_fot = octree_node.get_number_fotos()
+  for i in range(num_fot):
+    print('foto ', octree_node.get_foto_by_id(i))
+    gmin = octree_node.get_min()
 
     
-  # aa = aux_loader.get_octree_query(avango.gua.Vec3(1.0, 1.0, 1.0))
-  # print('some octree info ?:', aa)
-
+  aa = aux_loader.get_octree_query(avango.gua.Vec3(1.0, 1.0, 1.0))
+  print('some octree info ?:', aa)
 
   print(atlas)
   print(atlas.get_tiles() )
@@ -62,6 +61,11 @@ def start():
   line_strip_geode = DTLoader.create_empty_geometry("line_strip_model_1", "empty_name_1.lob")
   line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0.0) 
 
+  line_strip_geode.Material.value.set_uniform("Roughness", 1.0)
+  line_strip_geode.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+  line_strip_geode.Material.value.EnableVirtualTexturing.value = True
+
+
   line_strip_geode.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
   line_strip_geode.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
   line_strip_geode.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
@@ -73,15 +77,15 @@ def start():
   graph.Root.value.Children.value.append(line_strip_geode)
   
 
-  #### TEST get atlas tile worked !
-  # for i in range(num):
-  #   atlas_tile = aux_loader.get_atlas_tile(i)
-  #   tile_id = atlas_tile.get_tile_id()
-  #   tile_x = atlas_tile.get_x()
-  #   tile_y = atlas_tile.get_y()
-  #   tile_w = atlas_tile.get_width()
-  #   tile_h = atlas_tile.get_height()
-  #   print("out ", i , tile_id, tile_x, tile_y, tile_w, tile_h)
+  ### TEST get atlas tile worked !
+  for i in range(num):
+    atlas_tile = aux_loader.get_atlas_tile(i)
+    tile_id = atlas_tile.get_tile_id()
+    tile_x = atlas_tile.get_x()
+    tile_y = atlas_tile.get_y()
+    tile_w = atlas_tile.get_width()
+    tile_h = atlas_tile.get_height()
+    print("out ", i , tile_id, tile_x, tile_y, tile_w, tile_h)
  
   #### TEST get view worked !
   # for i in range(v_num):
@@ -148,16 +152,14 @@ def start():
   new_cube.Transform.value = avango.gua.make_trans_mat(-1, 0.3, 0) * \
                              avango.gua.make_scale_mat(0.3, 0.3, 0.3)
   
-  
-  
   plod_node.Transform.value = avango.gua.make_trans_mat(0, 0.3, 0) * \
                               avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * \
                               avango.gua.make_scale_mat(0.3, 0.3, 0.3)
   
-  # graph.Root.value.Children.value.append(plod_node)
+  graph.Root.value.Children.value.append(plod_node)
   
   plod_node.ShadowMode.value = 1
-  graph.Root.value.Children.value.append(new_cube)
+  #graph.Root.value.Children.value.append(new_cube)
   #new_cube.ShadowMode.value = 1
 
 
@@ -262,6 +264,7 @@ def start():
       avango.gua.nodes.TriMeshPassDescription(),
       plod_pass,
       avango.gua.nodes.DynamicTrianglePassDescription(),
+      avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
       avango.gua.nodes.SkyMapPassDescription(
         OutputTextureName="awesome_skymap"
       ),

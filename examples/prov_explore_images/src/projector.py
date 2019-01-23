@@ -4,7 +4,7 @@ import avango.script
 import avango.gua
 from avango.script import field_has_changed
 
-class VTProjector(avango.script.Script):
+class Projector(avango.script.Script):
 
   Material = avango.gua.SFMaterial()
   Transform = avango.gua.SFMatrix4()
@@ -14,8 +14,7 @@ class VTProjector(avango.script.Script):
 
 
   def __init__(self):
-    print('YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEES')
-    self.super(VTProjector).__init__()
+    self.super(Projector).__init__()
     loader = avango.gua.nodes.TriMeshLoader()
 
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
@@ -28,16 +27,16 @@ class VTProjector(avango.script.Script):
     self.group_node.Children.value.append(self.geometry)
 
     self.screen = avango.gua.nodes.ScreenNode(
-      Name = "screen1",
-      Width = 0.4,
-      Height = 0.4,
+      Name = "screen",
+      Width = 0.2,
+      Height = 0.2,
       Transform = avango.gua.make_trans_mat(0.0, 0.0, -1.0)
     )
     self.group_node.Children.value.append(self.screen)
 
     self.cam = avango.gua.nodes.CameraNode(
-      LeftScreenPath = "projector_group/screen1",
-      SceneGraph = "scene",
+      LeftScreenPath = "projector_group/screen",
+      SceneGraph = "scenegraph",
     )
     self.group_node.Children.value.append(self.cam)
 
@@ -48,8 +47,7 @@ class VTProjector(avango.script.Script):
     self.Graph.value = avango.gua.nodes.SceneGraph(Name = "dummy")
 
     proj_mat_desc = avango.gua.nodes.MaterialShaderDescription()
-    proj_mat_desc.load_from_file("data/materials/Projective_VT_Material.gmd")
-    # proj_mat_desc.EnableVirtualTexturing.value = True
+    proj_mat_desc.load_from_file("data/materials/Projective_Texture_Material.gmd")
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
 
 
@@ -62,17 +60,12 @@ class VTProjector(avango.script.Script):
 
     projection_matrix = frustum.ProjectionMatrix.value
     view_matrix = frustum.ViewMatrix.value
-    
+
     self.Material.value.set_uniform("projective_texture_matrix", projection_matrix)
     self.Material.value.set_uniform("view_texture_matrix", view_matrix ) 
-    self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(0.1, 0.1))
-    # self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(1.0, 1.0))
-    self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(0.2, 0.2))
-    
+
 
   @field_has_changed(Texture)
   def update_texture(self):
-    print('updating tex')
     self.Material.value.set_uniform("projective_texture", self.Texture.value)
-    self.Material.value.EnableVirtualTexturing.value = True
 

@@ -7,7 +7,9 @@ from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-from src.vtprojector import Projector
+from src.vtprojector import VTProjector
+from src.projector import Projector
+from src.picker import Picker
 
 
 def append_indicator(loader, fallback_mat, pos, parent):
@@ -111,31 +113,29 @@ def start():
 
     #### Create app logic below here ####
 
-    projector = Projector()
-    projector.Graph.value = graph
-
     # Load Aux file
     aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
 
     # Create dynamic tri node
-    dynamic_tri_node = dynamic_tri_loader.create_empty_geometry("dynamic_triangle_node", "empty_name_1.lob")
+    fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
+    dynamic_tri_node = dynamic_tri_loader.create_empty_geometry("dynamic_triangle_node", "empty_name_1.lob", 
+        avango.gua.LoaderFlags.DEFAULTS | avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.MAKE_PICKABLE)
+    dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
     # dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
     #                                    avango.gua.make_scale_mat(0.6, 0.6, 0.6)
-    
+
     dynamic_tri_node.Material.value.set_uniform("Metalness", 0.0)
     dynamic_tri_node.Material.value.set_uniform("Emissivity", 1.0)
     dynamic_tri_node.Material.value.set_uniform("Roughness", 1.0)
     dynamic_tri_node.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
     dynamic_tri_node.Material.value.EnableVirtualTexturing.value = True
 
-    ### aux functions:
+    # aux functions:
     # aux_loader.get_filename()
     view_num = aux_loader.get_num_views()
     sparse_points_num = aux_loader.get_num_sparse_points()
     atlas_tiles_num = aux_loader.get_num_atlas_tiles()
-    
     octree_nodes_num = aux_loader.get_num_nodes()
-
     view_num = aux_loader.get_num_views()
     atlas = aux_loader.get_atlas()
     # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
@@ -152,15 +152,58 @@ def start():
     transform_node.Children.value.append(dynamic_tri_node)
 
     #### Create app logic above here ####
-    
-
     # config window size
     width = 1920;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
     # setup view
-    cam = setup_camera(graph, size)
+    cam, screen = setup_camera(graph, size)
+
+    # setup pick ray
+    pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
+    pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
+                               avango.gua.make_scale_mat(1.0, 1.0, 50.0)
+
+    ray_geom = mesh_loader.create_geometry_from_file(
+        "ray_geom",
+        "data/objects/cylinder.obj",
+        avango.gua.LoaderFlags.DEFAULTS)
+  
+    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 100)
+    pick_ray.Children.value.append(ray_geom)
+
+    picker = Picker()
+    picker.SceneGraph.value = graph
+    picker.Ray.value = pick_ray
+    cam.Children.value.append(pick_ray)
+
+    # vtprojector = Projector()
+    vtprojector = VTProjector()
+    vtprojector.Graph.value = graph
+    # vtprojector.Texture.value = "data/textures/smiley.jpg"
+    # vtprojector.Texture.value = "data/textures/out.png"
+    vtprojector.Texture.value = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+
+    # add prototyp lense
+    dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+    # dynamic_quad = dynamic_tri_loader.create_empty_geometry("dynamic_quad", "data/objects/plane.obj")
+    # dynamic_quad.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1);
+    # dynamic_quad.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.2);
+    # dynamic_quad.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
+    # dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+    # dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+    # dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
+    dynamic_quad.Material.connect_from(vtprojector.Material)
+    # dynamic_quad.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+    # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+    # tn.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+    
+    # graph.Root.value.Children.value.append(tn)
+    dynamic_quad.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
+    graph.Root.value.Children.value.append(dynamic_quad)
+    graph.Root.value.Children.value.append(vtprojector.group_node)
+
 
     # setup render passes
     setup_render_passes(cam)
@@ -169,7 +212,9 @@ def start():
     win = setup_window(size)
 
     # setup navigator
-    setup_navigator(cam)
+    navi = setup_navigator(cam)
+    # tn.Transform.connect_from(navi.)
+    vtprojector.Transform.connect_from(navi.OutTransform)
 
     # setup viewer with scenegraph
     setup_viewer(graph, win)
@@ -203,12 +248,12 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     floor = mesh_loader.create_geometry_from_file("floor",
                                                   "data/objects/plane.obj",
-                                                  avango.gua.LoaderFlags.DEFAULTS
+                                                  avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
                                                   )
 
     floor.Transform.value = avango.gua.make_scale_mat(4, 1, 4) * avango.gua.make_trans_mat(0, -0.4, 0)
     # floor.ShadowMode.value = 1
-    # graph.Root.value.Children.value.append(floor)
+    graph.Root.value.Children.value.append(floor)
 
     # add light nodes
     spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
@@ -277,7 +322,7 @@ def setup_camera(graph, size):
     graph.Root.value.Children.value.append(camera)
 
 
-    return camera
+    return camera, screen
 
 def setup_render_passes(camera):
     res_pass = avango.gua.nodes.ResolvePassDescription()
@@ -332,6 +377,7 @@ def setup_navigator(camera):
     navigator.MotionSpeed.value = 0.04
 
     camera.Transform.connect_from(navigator.OutTransform)
+    return navigator
 
 def setup_viewer(graph, window):
     viewer = avango.gua.nodes.Viewer()

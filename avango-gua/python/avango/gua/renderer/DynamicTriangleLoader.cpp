@@ -32,13 +32,24 @@ av::Link<av::gua::Node> createEmptyGeometry2(
                                           av::gua::DynamicTriangleLoader const& loader,
                                           std::string const& nodeName,
                                           std::string const& emptyName) {
-   std::cout<< "it works..." <<std::endl;
    // return loader.createEmptyGeometry(nodeName, emptyName,
    //                                   static_cast<av::gua::DynamicTriangleLoader::Flags>(0));
    auto node = loader.createEmptyGeometry(nodeName, emptyName,
                                      static_cast<av::gua::DynamicTriangleLoader::Flags>(0));
 
-   std::cout<< "it worked..." <<std::endl;
+   return node;
+}
+
+av::Link<av::gua::Node> createEmptyGeometry3(
+                                          av::gua::DynamicTriangleLoader const& loader,
+                                          std::string const& nodeName,
+                                          std::string const& emptyName, 
+                                          int flags) {
+   // return loader.createEmptyGeometry(nodeName, emptyName,
+   //                                   static_cast<av::gua::DynamicTriangleLoader::Flags>(0));
+   auto node = loader.createEmptyGeometry(nodeName, emptyName,
+                                     static_cast<av::gua::DynamicTriangleLoader::Flags>(flags));
+
    return node;
 }
 
@@ -51,6 +62,7 @@ void init_DynamicTriangleLoader()
          bases<av::FieldContainer>, boost::noncopyable> ("DynamicTriangleLoader", "docstring", no_init)
          .def("create_empty_geometry", &createEmptyGeometry1)
          .def("create_empty_geometry", &createEmptyGeometry2)
+         .def("create_empty_geometry", &createEmptyGeometry3)
          ;
 
   enum_<av::gua::DynamicTriangleLoader::Flags>("DynamicTriangleLoaderFlags")

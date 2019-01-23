@@ -51,14 +51,14 @@ namespace av
       av::Link<av::gua::Node> createEmptyGeometry(std::string const& nodeName,
                                                   std::string const& emptyName,
                                                   av::gua::Material const& fallbackMaterial,
-                                                  unsigned flags = DEFAULTS) const;
+                                                  Flags flags = DEFAULTS) const;
 
       /**
       *
       */
       av::Link<av::gua::Node> createEmptyGeometry(std::string const& nodeName,
                                                   std::string const& emptyName,
-                                                  unsigned flags = DEFAULTS) const;
+                                                  Flags flags = DEFAULTS) const;
 
     protected:
 

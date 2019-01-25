@@ -193,6 +193,7 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
 
+
     @field_has_changed(TimeIn)
     def update(self):
       #  print("NetValue: " + str(self.nv.getValue()) )

@@ -3,11 +3,11 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
-from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
-from src.vtprojector import VTProjector
+from src.localized_image import LocalizedImageController
+from src.vtprojector import VTProjector, AutoVTProjector
 from src.projector import Projector
 from src.picker import Picker
 
@@ -105,51 +105,57 @@ def start():
     lod_loader = avango.gua.lod.nodes.LodLoader()
 
     # Create special loaders
-    dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
-    aux_loader = avango.gua.lod.nodes.Aux()
+    # dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
+    # aux_loader = avango.gua.lod.nodes.Aux()
 
     # setup scene
     transform_node = setup_scene(graph, mesh_loader, lod_loader)
 
+        # Create localized image controller
+    # controller_node = avango.gua.nodes.TransformNode('LIC')
+    localized_image_controller = LocalizedImageController(transform_node, 
+      "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux")
+    # graph.Root.value.Children.value.append(controller_node)
+
     #### Create app logic below here ####
 
     # Load Aux file
-    aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
+    # aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
 
     # Create dynamic tri node
-    fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-    dynamic_tri_node = dynamic_tri_loader.create_empty_geometry("dynamic_triangle_node", "empty_name_1.lob", 
-        avango.gua.LoaderFlags.DEFAULTS | avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.MAKE_PICKABLE)
-    dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
-    # dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-    #                                    avango.gua.make_scale_mat(0.6, 0.6, 0.6)
-
-    dynamic_tri_node.Material.value.set_uniform("Metalness", 0.0)
-    dynamic_tri_node.Material.value.set_uniform("Emissivity", 1.0)
-    dynamic_tri_node.Material.value.set_uniform("Roughness", 1.0)
-    dynamic_tri_node.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-    dynamic_tri_node.Material.value.EnableVirtualTexturing.value = True
-
-    # aux functions:
-    # aux_loader.get_filename()
-    view_num = aux_loader.get_num_views()
-    sparse_points_num = aux_loader.get_num_sparse_points()
-    atlas_tiles_num = aux_loader.get_num_atlas_tiles()
-    octree_nodes_num = aux_loader.get_num_nodes()
-    view_num = aux_loader.get_num_views()
-    atlas = aux_loader.get_atlas()
     # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-    for i in range(view_num):
-        image_view_id = i
-        view = aux_loader.get_view(i)
-        atlas_tile = aux_loader.get_atlas_tile(i)
-        pos = view.get_position()
-        trans_mat = view.get_transform()
-        
-        # append_indicator(mesh_loader, fallback_mat, trans_mat, transform_node)
-        create_localized_image(dynamic_tri_node, i, view, atlas_tile, atlas)
+    # dynamic_tri_node = dynamic_tri_loader.create_empty_geometry("dynamic_triangle_node", "empty_name_1.lob", 
+    #     avango.gua.LoaderFlags.DEFAULTS | avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.MAKE_PICKABLE)
+    # dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+    # # dynamic_tri_node.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+    # #                                    avango.gua.make_scale_mat(0.6, 0.6, 0.6)
 
-    transform_node.Children.value.append(dynamic_tri_node)
+    # dynamic_tri_node.Material.value.set_uniform("Metalness", 0.0)
+    # dynamic_tri_node.Material.value.set_uniform("Emissivity", 1.0)
+    # dynamic_tri_node.Material.value.set_uniform("Roughness", 1.0)
+    # dynamic_tri_node.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+    # dynamic_tri_node.Material.value.EnableVirtualTexturing.value = True
+
+    # # aux functions:
+    # # aux_loader.get_filename()
+    # view_num = aux_loader.get_num_views()
+    # sparse_points_num = aux_loader.get_num_sparse_points()
+    # atlas_tiles_num = aux_loader.get_num_atlas_tiles()
+    # octree_nodes_num = aux_loader.get_num_nodes()
+    # view_num = aux_loader.get_num_views()
+    # atlas = aux_loader.get_atlas()
+    # # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
+    # for i in range(view_num):
+    #     image_view_id = i
+    #     view = aux_loader.get_view(i)
+    #     atlas_tile = aux_loader.get_atlas_tile(i)
+    #     pos = view.get_position()
+    #     trans_mat = view.get_transform()
+        
+    #     # append_indicator(mesh_loader, fallback_mat, trans_mat, transform_node)
+    #     create_localized_image(dynamic_tri_node, i, view, atlas_tile, atlas)
+
+    # transform_node.Children.value.append(dynamic_tri_node)
 
     #### Create app logic above here ####
     # config window size
@@ -163,14 +169,14 @@ def start():
     # setup pick ray
     pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
     pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
-                               avango.gua.make_scale_mat(1.0, 1.0, 50.0)
+                               avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
     ray_geom = mesh_loader.create_geometry_from_file(
         "ray_geom",
         "data/objects/cylinder.obj",
         avango.gua.LoaderFlags.DEFAULTS)
   
-    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 100)
+    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
     pick_ray.Children.value.append(ray_geom)
 
     picker = Picker()
@@ -179,36 +185,41 @@ def start():
     cam.Children.value.append(pick_ray)
 
     # vtprojector = Projector()
-    vtprojector = VTProjector()
+    vtprojector = AutoVTProjector()
     vtprojector.Graph.value = graph
     # vtprojector.Texture.value = "data/textures/smiley.jpg"
-    # vtprojector.Texture.value = "data/textures/out.png"
     vtprojector.Texture.value = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
 
     # add prototyp lense
     dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+    dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+    dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+    dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
+    dynamic_quad.Material.connect_from(vtprojector.Material)
+    dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.25, 0.0, 2.1) *\
+                                   avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
+                                   avango.gua.make_scale_mat(0.1)
+    screen.Children.value.append(dynamic_quad)
+
     # dynamic_quad = dynamic_tri_loader.create_empty_geometry("dynamic_quad", "data/objects/plane.obj")
     # dynamic_quad.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1);
     # dynamic_quad.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.2);
     # dynamic_quad.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
-    # dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
-    # dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
-    # dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-    dynamic_quad.Material.connect_from(vtprojector.Material)
+
     # dynamic_quad.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
     # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
     # tn.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
     
     # graph.Root.value.Children.value.append(tn)
-    dynamic_quad.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)
-    graph.Root.value.Children.value.append(dynamic_quad)
+    
+    # graph.Root.value.Children.value.append(dynamic_quad)
     graph.Root.value.Children.value.append(vtprojector.group_node)
 
 
     # setup render passes
     setup_render_passes(cam)
 
-    # setup window
+    # setup Window
     win = setup_window(size)
 
     # setup navigator

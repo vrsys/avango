@@ -4,9 +4,12 @@ from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
 
+from src.vtprojector import VTProjector, AutoVTProjector
+
+
 class LocalizedImageController:
 
-    def __init__(self, parent, aux_path):
+    def __init__(self, graph, parent, aux_path, atlas_path):
         self.parent = parent
         self.aux_path = aux_path
 
@@ -22,6 +25,16 @@ class LocalizedImageController:
         self.localized_images = []
 
         self.setup_localized_images()
+
+        self.vtprojector = AutoVTProjector()
+        self.vtprojector.set_localized_image_list(self.localized_images)
+        self.vtprojector.Graph.value = graph
+        # vtprojector.Texture.value = "data/textures/smiley.jpg"
+        # vtprojector.Texture.value = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+        self.vtprojector.Texture.value = atlas_path
+
+        graph.Root.value.Children.value.append(self.vtprojector.group_node)
+
 
     def setup_localized_images(self):
 
@@ -42,7 +55,6 @@ class LocalizedImageController:
         self.atlas_tiles_num = self.aux_loader.get_num_atlas_tiles()
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-        print('go')
         for quad_id in range(self.view_num):
             self.create_localized_quad(quad_id)
             # pass
@@ -50,14 +62,14 @@ class LocalizedImageController:
         self.parent.Children.value.append(self.dynamic_triangle_node)
 
     def create_localized_quad(self, quad_id):
-        print('creat q')
         view = self.aux_loader.get_view(quad_id)
         atlas_tile = self.aux_loader.get_atlas_tile(quad_id)
         atlas = self.aux_loader.get_atlas()
         quad = LocalizedImageQuad(self.dynamic_triangle_node, quad_id, view, atlas_tile, atlas)
         self.localized_images.append(quad)
-        print('JAU')
 
+    def get_projector(self):
+        return self.vtprojector
 
 
 class LocalizedImageQuad:
@@ -65,16 +77,18 @@ class LocalizedImageQuad:
         self.node = node
         self.id = quad_id
         self.view = view
+        self.transform = self.view.get_transform()
+        self.position = self.transform.get_translate()
         self.atlas_tile = atlas_tile
         self.atlas = atlas
         self.quad_vertices = []
-        print('yes')
+        self.min_uv = avango.gua.Vec2(0.0,0.0)
+        self.max_uv = avango.gua.Vec2(1.0,1.0)
 
         self.setup()
         self.create_quad()
 
     def setup(self):
-        print('setup liq')
         self.aspect_ratio = self.view.get_image_height() / self.view.get_image_width()
         # focal_length = view.get_focal_length() // Problem: Return 0 carl said not perfect yet
         self.focal_length = 0.1
@@ -95,7 +109,6 @@ class LocalizedImageQuad:
         self.tile_pos_y = self.atlas_tile.get_y() / self.atlas_tile.get_height() * self.tile_h + (1 - self.factor)
 
     def create_quad(self):
-        print('create q')
         transform = self.view.get_transform()
 
         pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
@@ -109,10 +122,12 @@ class LocalizedImageQuad:
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
         t1_v3 = LocalizedImageVertex(self.node, self.id * 6 + 2, pos, uv)
+        self.max_uv = uv
 
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         t2_v4 = LocalizedImageVertex(self.node, self.id * 6 + 3, pos, uv)
+        self.min_uv = uv
 
         pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
@@ -143,7 +158,6 @@ class LocalizedImageVertex:
         self.color = (1.0, 0.0, 0.0, 1.0)
         self.pos = pos
         self.uv = uv
-        # print('yes', *self.pos, *self.color, *self.uv)
         self.node.push_vertex(self.pos.x, self.pos.y, self.pos.z, 1.0, 0.0, 0.0, 1.0, self.uv.x, self.uv.y)
         # self.node.push_vertex(*self.pos, 1.0, 0.0, 0.0, 1.0, *self.uv)
         # print()
@@ -151,3 +165,24 @@ class LocalizedImageVertex:
     def update(self, pos=None, uv=None):
         pass
     
+
+
+# def get_atlas_scale_factor():
+    
+    # atlas_width  = atlas.get_width()
+    # atlas_height = atlas.get_height()
+    # auto atlas = new vt::pre::AtlasFile(settings_.atlas_file_.c_str());
+    # uint64_t image_width    = atlas->getImageWidth();
+    # uint64_t image_height   = atlas->getImageHeight();
+
+    # // tile's width and height without padding
+    # uint64_t tile_inner_width  = atlas->getInnerTileWidth();
+    # uint64_t tile_inner_height = atlas->getInnerTileHeight();
+
+    # // Quadtree depth counter, ranges from 0 to depth-1
+    # uint64_t depth = atlas->getDepth();
+
+    # double factor_u  = (double) image_width  / (tile_inner_width  * std::pow(2, depth-1));
+    # double factor_v  = (double) image_height / (tile_inner_height * std::pow(2, depth-1));
+
+    # return std::max(factor_u, factor_v);

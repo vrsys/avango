@@ -25,10 +25,5 @@ class Picker(avango.script.Script):
                                                  self.Options.value,
                                                  self.BlackList,
                                                  self.WhiteList)
-        
         if len(results.value) > 0:
-            print('hit ',results.value[0].Distance.value)
-            if results.value[0].Distance.value < 50.0:
-                self.Results.value = results.value
-            else:
-                self.Results.value = []
+            self.Results.value = results.value

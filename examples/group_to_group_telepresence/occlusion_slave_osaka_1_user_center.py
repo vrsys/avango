@@ -39,8 +39,9 @@ from examples_common.GuaVE import GuaVE
 VR16      = "141.54.147.16"
 PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
+DAEDALOS  = "141.54.147.34"
 
-CURRENTLY_USED_SERVER = VR16
+CURRENTLY_USED_SERVER = DAEDALOS
 
 class Initializer(avango.script.Script):
 
@@ -50,7 +51,7 @@ class Initializer(avango.script.Script):
     # scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|"+CURRENTLY_USED_SERVER+"|7432") # server -> pan
+                                         Groupname="AVCLIENT|"+CURRENTLY_USED_SERVER+"|7432") #server
                                          #Groupname="AVCLIENT|141.54.147.54|7432")
     
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")

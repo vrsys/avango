@@ -56,8 +56,11 @@ SCENE_MODE = "EVALUATION"
 VR16      = "141.54.147.16"
 PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
+DAEDALOS  = "141.54.147.34"
 
-CURRENTLY_USED_SERVER = VR16
+HEKATE    = "141.54.147.42"
+
+CURRENTLY_USED_SERVER = DAEDALOS
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -191,8 +194,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
-    nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
-
+    #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
+    nv = netvaluepy.NetValue(HEKATE+":8000")
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -380,7 +383,9 @@ nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
@@ -447,9 +452,9 @@ screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=S
 
 
 
-size = avango.gua.Vec2ui(491, 278)
+#size = avango.gua.Vec2ui(491, 278)
 #size = avango.gua.Vec2ui(1600, 1200)
-
+size = avango.gua.Vec2ui(3840, 2160)
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()

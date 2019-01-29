@@ -49,6 +49,13 @@ RENDERING_RESOLUTION = 0
 LEFT_VIEWPORT_START  = 0
 RIGHT_VIEWPORT_START = 0
 
+VR16      = "141.54.147.16"
+PAN       = "141.54.147.52"
+LOCALHOST = "127.0.0.1"
+DAEDALOS  = "141.54.147.34"
+
+CURRENTLY_USED_SERVER = DAEDALOS
+
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
@@ -121,6 +128,8 @@ class TimedFPSPrinter(avango.script.Script):
         current_stream_timestamp      = round(self.AvatarNode.get_stats_timestamp(), 5)
         current_tri_count             = self.AvatarNode.get_stats_num_triangles()
         current_recon_time            = self.AvatarNode.get_stats_reconstruction_time()
+        current_request_reply_latency = self.AvatarNode.get_stats_request_reply_latency()
+        current_total_message_payload = self.AvatarNode.get_stats_total_message_payload_in_byte()
 
         if (0 == self.WindowCenter.RenderingFPS.value) and (0 == self.WindowLeft.RenderingFPS.value) and (0 == self.WindowRight.RenderingFPS.value):
           return
@@ -134,14 +143,18 @@ class TimedFPSPrinter(avango.script.Script):
           self.draw_time_right_dict[current_stream_timestamp] = 0.0
           self.draw_time_center_dict[current_stream_timestamp] = 0.0
           self.recon_time_dict[current_stream_timestamp] = 0.0
+          self.reply_time_dict[current_stream_timestamp] = 0.0
           self.tri_count_dict[current_stream_timestamp] = 0
+          self.payload_count_dict[current_stream_timestamp] = 0
           self.entry_count_dict[current_stream_timestamp] = 0
 
         self.draw_time_left_dict[current_stream_timestamp] += current_draw_time_left
         self.draw_time_right_dict[current_stream_timestamp] += current_draw_time_right
         self.draw_time_center_dict[current_stream_timestamp] += current_draw_time_center
         self.recon_time_dict[current_stream_timestamp] += current_recon_time
-        self.tri_count_dict[current_stream_timestamp] += current_tri_count
+        self.reply_time_dict[current_stream_timestamp] += current_request_reply_latency
+        self.tri_count_dict[current_stream_timestamp] += current_total_message_payload
+        self.payload_count_dict[current_stream_timestamp] += current_total_message_payload
         self.entry_count_dict[current_stream_timestamp] += 1
 
         self.num_entries = self.num_entries + 1
@@ -152,10 +165,20 @@ class TimedFPSPrinter(avango.script.Script):
             log_tri_count.write(str(key) + " " + str(int(self.tri_count_dict[key] / value) ) + "\n" )
           log_tri_count.close()
 
+          log_payload_count = open("log_payload_count_mode_" + str(self.num_files_logged) , 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_payload_count.write(str(key) + " " + str(int(self.payload_count_dict[key] / value) ) + "\n" )
+          log_payload_count.close()
+
           log_recon_times = open("log_recon_times_mode_" + str(self.num_files_logged) , 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_recon_times.write(str(key) + " " + str(self.recon_time_dict[key] / value) + "\n" )
           log_recon_times.close()
+
+          log_reply_times = open("log_reply_times_mode_" + str(self.num_files_logged) , 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_reply_times.write(str(key) + " " + str(self.reply_time_dict[key] / value) + "\n" )
+          log_reply_times.close()
 
           log_draw_times_left = open("log_draw_times_left_mode_" + str(self.num_files_logged) , 'w')
           for key, value in sorted(self.entry_count_dict.items()):
@@ -177,7 +200,9 @@ class TimedFPSPrinter(avango.script.Script):
           self.draw_time_center_dict.clear()
 
           self.recon_time_dict.clear()
+          self.reply_time_dict.clear()
           self.tri_count_dict.clear()
+          self.payload_count_dict.clear()
           self.entry_count_dict.clear()
           self.num_entries = 0
 
@@ -198,7 +223,7 @@ class Initializer(avango.script.Script):
     #scenegraph
     self.nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.52|7432")
+                                         Groupname="AVCLIENT|"+CURRENTLY_USED_SERVER+"|7432")
 
 
 

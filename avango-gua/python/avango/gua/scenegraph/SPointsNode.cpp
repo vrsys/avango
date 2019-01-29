@@ -58,6 +58,14 @@ float get_stats_reconstruction_time(av::gua::SPointsNode const& node) {
   return node.getStatReconTimeReceived();
 }
 
+float get_stats_request_reply_latency(av::gua::SPointsNode const& node) {
+  return node.getStatRequestReplyLatencyReceived();
+}
+
+int get_stats_total_message_payload_in_byte(av::gua::SPointsNode const& node) {
+  return node.getStatTotaMessagePayloadInByteReceived();
+}
+
 void init_SPointsNode()
 {
   register_field<av::gua::SFSPointsNode>("SFSPointsNode");
@@ -69,5 +77,7 @@ void init_SPointsNode()
     .def("get_stats_num_triangles", &get_stats_num_triangles)
     .def("get_stats_timestamp", &get_stats_timestamp)
     .def("get_stats_reconstruction_time", &get_stats_reconstruction_time)
+    .def("get_stats_request_reply_latency", &get_stats_request_reply_latency)
+    .def("get_stats_total_message_payload_in_byte", &get_stats_total_message_payload_in_byte)
     ;
 }

@@ -711,6 +711,7 @@ device_list = []
 #init_pst_tracking()
 #init_lcd_wall_tracking()
 #init_dlp_wall_tracking()
+print("Executing Init Function")
 init_dbl_tracking()
 
 
@@ -787,7 +788,7 @@ search_and_init_keyboard("device-keyboard")
 
 
 ### init portal camera
-init_portal_camera(get_event_string(1, "portalCam 3.1"), "device-portal-camera-31")
+#init_portal_camera(get_event_string(1, "portalCam 3.1"), "device-portal-camera-31")
 #init_portal_camera(get_event_string(1, "portalCam 3.2"), "device-portal-camera-32")
 
 ### init touch input

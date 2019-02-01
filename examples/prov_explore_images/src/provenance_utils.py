@@ -1,8 +1,9 @@
 import math
 
 def distance(pos1, pos2):
-	d = math.sqrt(pow((pos2.x - pos1.x),2) + pow((pos2.y - pos1.y),2) + pow((pos2.z - pos1.z),2))
-	return d
+	d = pos2 - pos1
+	# d = math.sqrt(pow((pos2.x - pos1.x),2) + pow((pos2.y - pos1.y),2) + pow((pos2.z - pos1.z),2))
+	return d.length()
 
 
 
@@ -38,3 +39,22 @@ def distance(pos1, pos2):
 # p4 (0.60  -1.21  1.23  0.00)
 # p5 (0.63  -1.61  2.67  0.00)
 # p6 (1.60  -1.14  1.22  0.00)
+
+ # image quad  0 (0.030  0.094) (0.000  0.049)
+    # p1 (3.0  4.9)
+    # p2 (0.0  9.4)
+    # p3 (3.0  9.4)
+    # p4 (0.0  4.9)
+    # p5 (0.0  9.4)
+    # p6 (3.0  4.9)
+
+
+######################
+#
+#
+#                1
+#      4
+#
+#                3
+#
+#      2

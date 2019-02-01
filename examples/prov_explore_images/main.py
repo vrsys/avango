@@ -7,7 +7,6 @@ import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 from src.localized_image import LocalizedImageController
-from src.vtprojector import VTProjector, AutoVTProjector
 from src.projector import Projector
 from src.picker import Picker
 
@@ -69,7 +68,7 @@ def start():
     setup_picker(mesh_loader, cam, graph)
 
     # add prototyp lense
-    dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+    dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
     dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
     dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
     dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
@@ -77,22 +76,9 @@ def start():
 
     dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                    avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                   avango.gua.make_scale_mat(0.1)
+                                   avango.gua.make_scale_mat(0.12)
     screen.Children.value.append(dynamic_quad)
-
-    # dynamic_quad = dynamic_tri_loader.create_empty_geometry("dynamic_quad", "data/objects/plane.obj")
-    # dynamic_quad.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1);
-    # dynamic_quad.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.2);
-    # dynamic_quad.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
-
-    # dynamic_quad.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-    # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
-    # tn.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
-    
-    # graph.Root.value.Children.value.append(tn)
-    
-    # graph.Root.value.Children.value.append(dynamic_quad)
-    
+   
     # setup render passes
     setup_render_passes(cam)
 
@@ -111,11 +97,11 @@ def start():
 
 def setup_scene(graph, mesh_loader, lod_loader):
     # add transform node for plod object
-    trans_node = avango.gua.nodes.TransformNode(Name="scene")
+    trans_node = avango.gua.nodes.TransformNode(Name="scene_trans")
     trans_node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 0) * \
                                  avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     plod_trans_node = avango.gua.nodes.TransformNode(Name="scene")
-    plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.5)
+    # plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.0)
     graph.Root.value.Children.value.append(trans_node)
     trans_node.Children.value.append(plod_trans_node)
 
@@ -126,9 +112,9 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh",
-        avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
-        avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
+        # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
     # plod_node.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0))
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
@@ -279,6 +265,7 @@ def setup_window(size):
 def setup_navigator(camera):
     navigator = examples_common.navigator.Navigator()
     navigator.StartLocation.value = camera.Transform.value.get_translate()
+    print('Start Location:', navigator.StartLocation.value)
     navigator.OutTransform.connect_from(camera.Transform)
 
     navigator.RotationSpeed.value = 0.2
@@ -302,4 +289,12 @@ def setup_viewer(graph, window):
 
 
 if __name__ == '__main__':
+
+
+    a = avango.gua.Vec3(1.073,  0.915,  5.322) 
+    b = [avango.gua.Vec3(0.117,  1.234,  -0.167)]
+    b.append(avango.gua.Vec3(0.265,  1.199,  -0.168))
+    b.append(avango.gua.Vec3(0.395,  1.143,  -0.169))
+    b.append(avango.gua.Vec3(0.578,  1.092,  -0.172))
+
     start()

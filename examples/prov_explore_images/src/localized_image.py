@@ -148,35 +148,64 @@ class LocalizedImageQuad:
     def create_quad(self):
         transform = self.view.get_transform()
 
-        pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
+        pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
+        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         t1_v1 = LocalizedImageVertex(self.node, self.id * 6, pos, uv)
-        self.max_uv = uv
-        print('p1', uv)
-
-        pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
-        t1_v2 = LocalizedImageVertex(self.node, self.id * 6 + 1, pos, uv)
         self.min_uv = uv
-        print('p2', uv)
+        print('p1', uv)
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        t1_v2 = LocalizedImageVertex(self.node, self.id * 6 + 1, pos, uv)
+        self.max_uv = uv
+        print('p2', uv)
+
+        pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
+        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
         t1_v3 = LocalizedImageVertex(self.node, self.id * 6 + 2, pos, uv)
         
         print('p3', uv)
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         t2_v4 = LocalizedImageVertex(self.node, self.id * 6 + 3, pos, uv)
-        
         print('p4', uv)
         pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
         t2_v5 = LocalizedImageVertex(self.node, self.id * 6 + 4, pos, uv)
         print('p5', uv)
-        pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
+        pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
+        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
         t2_v6 = LocalizedImageVertex(self.node, self.id * 6 + 5, pos, uv)
         print('p6', uv)
+
+        # pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
+        # t1_v1 = LocalizedImageVertex(self.node, self.id * 6, pos, uv)
+        # self.max_uv = uv
+        # print('p1', uv)
+
+        # pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
+        # t1_v2 = LocalizedImageVertex(self.node, self.id * 6 + 1, pos, uv)
+        # self.min_uv = uv
+        # print('p2', uv)
+        # pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        # t1_v3 = LocalizedImageVertex(self.node, self.id * 6 + 2, pos, uv)
+        
+        # print('p3', uv)
+        # pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        # t2_v4 = LocalizedImageVertex(self.node, self.id * 6 + 3, pos, uv)
+        
+        # print('p4', uv)
+        # pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
+        # t2_v5 = LocalizedImageVertex(self.node, self.id * 6 + 4, pos, uv)
+        # print('p5', uv)
+        # pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
+        # t2_v6 = LocalizedImageVertex(self.node, self.id * 6 + 5, pos, uv)
+        # print('p6', uv)
         # p1_pos = view.get_transform() * avango.gua.Vec3(-img_w_half, img_h_half, -focal_length)
         # p1_uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y)
         # p2_pos = view.get_transform() * avango.gua.Vec3(img_w_half, img_h_half, -focal_length)

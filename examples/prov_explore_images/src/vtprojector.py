@@ -204,7 +204,6 @@ class AutoVTProjector(avango.script.Script):
           # print(self.screen.Width.value, self.screen.Height.value)
           self.localized_image_list[closest_id].set_selected(True)
           self.last_lense_pos = self.Transform2.value.get_translate()
-          print(closest_id, self.min_tex_coords, self.max_tex_coords)
           self.old_closest_id = closest_id
           
     else:

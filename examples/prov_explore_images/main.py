@@ -6,9 +6,15 @@ import avango.gua.lod
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+import subprocess
+
 from src.localized_image import LocalizedImageController
-from src.projector import Projector
 from src.picker import Picker
+
+from src.MultiUserViewingSetup import MultiUserViewingSetup
+
+from src.SpheronInput import DualSpheronInput
+from src.SpheronNavigation import SpheronNavigation
 
 
 def append_indicator(loader, fallback_mat, pos, parent):
@@ -52,47 +58,120 @@ def start():
         transform_node, 
         "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
         "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/home/senu8384/Desktop/master-thesis/data/salem.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
     #### Create app logic above here ####
 
-    # config window size
-    width = 1920;
-    height = int(width * 9.0 / 16.0)
-    size = avango.gua.Vec2ui(width, height)
+    hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
+    hostname = hostname.strip("\n")
+    print("host", hostname)
 
-    # setup view
-    cam, screen = setup_camera(graph, size)
+    if hostname == "hydra":        
+        ## DLP wall 4-user setup
+        viewingSetup = MultiUserViewingSetup(
+            SCENEGRAPH = graph,
+            WINDOW_RESOLUTION = avango.gua.Vec2ui(3840*2, 2160),
+            SCREEN_DIMENSIONS = avango.gua.Vec2(4.91, 2.78),
+            TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.445,2.0),
+            DISPLAY_STRING_LIST = [":0.0", ":0.1", ":0.2", ":0.3"], # number of available GPUs (users)
+            LEFT_POSITION = avango.gua.Vec2ui(0, 0),
+            LEFT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
+            RIGHT_POSITION = avango.gua.Vec2ui(3840, 0),
+            RIGHT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
+            )
+        viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-A")
+        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-B")
+        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-C")
+        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-D")      
 
-    setup_picker(mesh_loader, cam, graph)
 
-    # add prototyp lense
-    dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
-    dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
-    dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
-    dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-    dynamic_quad.Material.connect_from(projector.Material)
+        spheron_input = DualSpheronInput(
+            DEVICE_STATION1 = "device-new-spheron-right",
+            DEVICE_STATION2 = "device-new-spheron-left",
+            TRANSLATION_FACTOR = 0.2,
+            ROTATION_FACTOR = 10.0,
+            #SCALE_FACTOR = 1.0,
+            )
 
-    dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
-                                   avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                   avango.gua.make_scale_mat(0.12)
-    screen.Children.value.append(dynamic_quad)
-   
-    # setup render passes
-    setup_render_passes(cam)
+        navigation = SpheronNavigation(
+            #INITIAL_MODE = 1, # groundfollowing navigation mode
+            REFERENCE_TRACKING_STATION = "tracking-new-spheron",
+            TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,0.045,0.0), # transformation into tracking coordinate system        
+            )
+        navigation.assign_input(spheron_input)  
+        viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
+        
 
-    # setup Window
-    win = setup_window(size)
+        # add prototyp lense
+        dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane2.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
+        dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+        dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+        dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
+        dynamic_quad.Material.connect_from(projector.Material)
 
-    # setup navigator
-    navi = setup_navigator(cam)
-    projector.Transform2.connect_from(navi.OutTransform)
-    # tn.Transform.connect_from(navi.)
-    # vtprojector.Transform.connect_from(navi.OutTransform)
+        dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
+                                       avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
+                                       avango.gua.make_scale_mat(0.15)
 
-    # setup viewer with scenegraph
-    setup_viewer(graph, win)
+
+        pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+        pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
+        pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
+        pointer_tracking_sensor.ReceiverOffset.value = avango.gua.make_identity_mat()
+        
+        pointer_node = avango.gua.nodes.TransformNode(Name = "pointer_node")
+        pointer_node.Transform.connect_from(pointer_tracking_sensor.Matrix)
+        pointer_node.Children.value.append(dynamic_quad)
+        viewingSetup.navigation_node.Children.value.append(pointer_node)
+        projector.Transform2.connect_from(dynamic_quad.WorldTransform)
+        
+
+
+        print_graph(graph.Root.value)
+
+        ## start application/render loop
+        viewingSetup.run(locals(), globals())
+    else:
+        
+        # config window size
+        width = 1920;
+        height = int(width * 9.0 / 16.0)
+        size = avango.gua.Vec2ui(width, height)
+
+        # setup view
+        cam, screen = setup_camera(graph, size)
+
+        setup_picker(mesh_loader, cam, graph)
+
+        # add prototyp lense
+        dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
+        dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+        dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+        dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
+        dynamic_quad.Material.connect_from(projector.Material)
+
+        dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.5) *\
+                                       avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
+                                       avango.gua.make_scale_mat(0.12)
+        screen.Children.value.append(dynamic_quad)
+       
+        # setup render passes
+        setup_render_passes(cam)
+
+        # setup Window
+        win = setup_window(size)
+
+        # setup navigator
+        navi = setup_navigator(cam)
+        projector.Transform2.connect_from(navi.OutTransform)
+        # tn.Transform.connect_from(navi.)
+        # vtprojector.Transform.connect_from(navi.OutTransform)
+
+        # setup viewer with scenegraph
+        setup_viewer(graph, win)
 
 
 def setup_scene(graph, mesh_loader, lod_loader):

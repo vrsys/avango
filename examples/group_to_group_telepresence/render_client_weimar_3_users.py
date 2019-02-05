@@ -41,6 +41,7 @@ import time
 CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
 #CLIENT_MODE = "VIDEO_POWERWALL"
 #CLIENT_MODE = "SCREENSHOT_DESKTOP"
+#CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
 
 DEBUG_MODE = "NONE"
 #DEBUG_MODE = "CENTRAL_USER"
@@ -67,6 +68,9 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0.4"
+  DISPLAY_VARIABLE_CENTER = ":0.2"
+  DISPLAY_VARIABLE_RIGHT  = ":0.1"
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*3840, 2160)
@@ -79,6 +83,20 @@ elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0.4"
+  DISPLAY_VARIABLE_CENTER = ":0.2"
+  DISPLAY_VARIABLE_RIGHT  = ":0.1"
+elif "DEBUG_3_USERS_WEAK_PC" == CLIENT_MODE:
+  STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+  WINDOW_RESOLUTION       = avango.gua.Vec2ui(1964, 1112)
+  RENDERING_RESOLUTION    = WINDOW_RESOLUTION
+  LEFT_VIEWPORT_START     = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START    = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0"
+  DISPLAY_VARIABLE_CENTER = ":0"
+  DISPLAY_VARIABLE_RIGHT  = ":0"
 
 class TimedFPSPrinter(avango.script.Script):
   TimeIn = avango.SFFloat()
@@ -106,7 +124,7 @@ class TimedFPSPrinter(avango.script.Script):
   num_entries = 0
   num_files_logged = 0
 
-
+  frame_counter = 0
   def set_window_left(self, window_left):
     self.WindowLeft = window_left
 
@@ -124,9 +142,13 @@ class TimedFPSPrinter(avango.script.Script):
 
   @field_has_changed(TimeIn)
   def update(self):
+
+    self.frame_counter += 1
+
     if(self.WindowCenter != 0):
       if(0 != self.WindowCenter.RenderingFPS.value):
-        print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
+        if(self.frame_counter % 100 == 0):
+          print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
 
     if self.LoggingIndicatorNode == 0:
       return
@@ -251,7 +273,7 @@ class Initializer(avango.script.Script):
          
     if "CENTRAL_USER" != DEBUG_MODE: 
       self.window_left = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                        Display = ":0.4",  # ":0.1",
+                                        Display = DISPLAY_VARIABLE_LEFT,
                                         LeftPosition = LEFT_VIEWPORT_START,
                                         RightPosition = RIGHT_VIEWPORT_START,
                                         LeftResolution=RENDERING_RESOLUTION,
@@ -263,7 +285,7 @@ class Initializer(avango.script.Script):
     
 
     self.window_center = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                 Display = ":0.1",  # ":0.1",
+                                 Display = DISPLAY_VARIABLE_CENTER,  # ":0.1",
                                  LeftPosition = LEFT_VIEWPORT_START,
                                  RightPosition = RIGHT_VIEWPORT_START,
                                  LeftResolution=RENDERING_RESOLUTION,
@@ -274,10 +296,10 @@ class Initializer(avango.script.Script):
 
     avango.gua.register_window("client_window_weimar_center", self.window_center)
      
-    
+
     if "CENTRAL_USER" != DEBUG_MODE: 
       self.window_right = avango.gua.nodes.Window(Size=WINDOW_RESOLUTION,
-                                        Display = ":0.0",  # ":0.1",
+                                        Display = DISPLAY_VARIABLE_RIGHT,  # ":0.1",
                                         LeftPosition = LEFT_VIEWPORT_START,
                                         RightPosition = RIGHT_VIEWPORT_START,
                                         LeftResolution=RENDERING_RESOLUTION,
@@ -291,12 +313,14 @@ class Initializer(avango.script.Script):
 
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
+    
+    self.viewer.DesiredFPS.value = 1500.0
 
     if "CENTRAL_USER" != DEBUG_MODE: 
       self.viewer.Windows.value = [self.window_center, self.window_left, self.window_right]
     else:
       self.viewer.Windows.value = [self.window_center]
-    self.viewer.DesiredFPS.value = 5000.0
+
 
 
     self.timer = avango.nodes.TimeSensor()

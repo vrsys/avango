@@ -23,7 +23,8 @@ class LocalizedImageController:
         self.atlas_tiles_num = 0
         self.atlas = None
         self.vt_mat = avango.gua.nodes.Material()
-        self.vt_mat.set_uniform("vt_images", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # # self.vt_mat.set_uniform("vt_images", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        self.vt_mat.set_uniform("vt_images", atlas_path)
 
         self.localized_images = []
 
@@ -127,10 +128,14 @@ class LocalizedImageQuad:
 
     def setup(self):
         self.aspect_ratio = self.view.get_image_height() / self.view.get_image_width()
+        print('aspect_ratio', self.aspect_ratio)
+
         # focal_length = view.get_focal_length() // Problem: Return 0 carl said not perfect yet
         self.focal_length = 0.1
         self.img_w_half = self.focal_length * 0.5
         self.img_h_half = self.img_w_half * self.aspect_ratio
+        print('img_w_half', self.img_w_half)
+        print('img_h_half', self.img_h_half)
         
         self.atlas_width  = self.atlas.get_width()
         self.atlas_height = self.atlas.get_height()

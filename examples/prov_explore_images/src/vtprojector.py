@@ -110,12 +110,12 @@ class AutoVTProjector(avango.script.Script):
       avango.gua.LoaderFlags.NORMALIZE_POSITION | 
       avango.gua.LoaderFlags.LOAD_MATERIALS)
     self.geometry.Transform.value = avango.gua.make_scale_mat(0.1)
-    self.group_node.Children.value.append(self.geometry)
+    # self.group_node.Children.value.append(self.geometry)
 
     self.screen = avango.gua.nodes.ScreenNode(
       Name = "screen1",
-      Width = 0.2,
-      Height = 0.2,
+      Width = 1.0,
+      Height = 1.0,
       Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.1)
     )
     self.group_node.Children.value.append(self.screen)
@@ -199,8 +199,8 @@ class AutoVTProjector(avango.script.Script):
           self.Transform.value = self.localized_image_list[closest_id].transform
           self.min_tex_coords = self.localized_image_list[closest_id].min_uv
           self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-          self.screen.Width.value = self.localized_image_list[closest_id].tile_w
-          self.screen.Height.value = self.localized_image_list[closest_id].tile_h
+          # self.screen.Width.value = self.localized_image_list[closest_id].img_w_half
+          # self.screen.Height.value = self.localized_image_list[closest_id].img_h_half
           # print(self.screen.Width.value, self.screen.Height.value)
           self.localized_image_list[closest_id].set_selected(True)
           self.last_lense_pos = self.Transform2.value.get_translate()

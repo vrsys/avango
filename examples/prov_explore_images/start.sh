@@ -26,16 +26,18 @@ export PYTHONPATH="$LOCAL_AVANGO/lib/python3.5":"$LOCAL_AVANGO/examples":$AVANGO
 # guacamole
 export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 
-# run daemon
-if [ -f "$LOCAL_AVANGO/examples/examples_common/daemon.py" ]
+
+if [[ $* == *-d* ]]
 then
-    python3 $LOCAL_AVANGO/examples/examples_common/daemon.py > /dev/null &
+echo "starting daemon"
+python3 daemon.py
 else
-    python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
+echo "starting daemon && application"
+python3 ./daemon.py > /dev/null &
+
+cd "$DIR" && DISPLAY=:0.0 python3 ./main.py
 fi
 
-# run program
-cd "$DIR" && python3 ./main.py
-
-# kill daemon
+# kill daemon & client
 kill %1
+kill %2

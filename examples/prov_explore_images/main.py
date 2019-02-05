@@ -56,10 +56,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        "/home/senu8384/Desktop/master-thesis/data/salem.aux",
-        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/home/senu8384/Desktop/master-thesis/data/salem.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -191,8 +191,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
@@ -366,6 +366,28 @@ def setup_viewer(graph, window):
     guaVE.start(locals(), globals())
 
     viewer.run()
+
+
+### helper functions ###
+
+## print the subgraph under a given node to the console
+def print_graph(root_node):
+    stack = [(root_node, 0)]
+    while stack:
+        node, level = stack.pop()
+        print("│   " * level + "├── {0} <{1}>".format(
+          node.Name.value, node.__class__.__name__))
+        stack.extend(
+          [(child, level + 1) for child in reversed(node.Children.value)])
+
+## print all fields of a fieldcontainer to the console
+def print_fields(node, print_values = False):
+    for i in range(node.get_num_fields()):
+        field = node.get_field(i)
+        print("→ {0} <{1}>".format(field._get_name(), field.__class__.__name__))
+    if print_values:
+        print("  with value '{0}'".format(field.value))
+
 
 
 if __name__ == '__main__':

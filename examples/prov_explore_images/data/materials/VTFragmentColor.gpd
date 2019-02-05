@@ -18,15 +18,17 @@
       
       if ( (abs(proj_texcoord.x) < 1.0) && (abs(proj_texcoord.y) < 1.0) && (view_tex_space_pos.z < 0.0) )
       { 
-        vec2 rescaled_texcoords = ((vec2(0.950787, 0.950787) - proj_texcoord.xy) * view_port_min) + (proj_texcoord.xy * view_port_max);
-        gua_uvs.xy = 0.5 * rescaled_texcoords + 0.5; 
+        vec2 scaled_proj_txcrd = 0.5 * proj_texcoord + 0.5;
+        vec2 rescaled_texcoords = ((vec2(1.0, 1.0) - scaled_proj_txcrd.xy) * view_port_max) + (scaled_proj_txcrd.xy * view_port_min);
+
+        gua_uvs.xy = rescaled_texcoords;
+
         //gua_uvs.xy = 0.5 * proj_texcoord + 0.5; 
-        //c = texture(sampler2D(projective_texture), proj_texcoord.xy);
       } else {
         gua_uvs.z = 0.0;
         gua_uvs.w = 0;
       }
-
+      //gua_emissivity = 1.0;
       //gua_color = c.rgb;
 /*      gua_roughness = 1.0;
       gua_metalness = 1.0;

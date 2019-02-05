@@ -147,8 +147,8 @@ class TimedFPSPrinter(avango.script.Script):
 
     if(self.WindowCenter != 0):
       if(0 != self.WindowCenter.RenderingFPS.value):
-        if(self.frame_counter % 100 == 0):
-          print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
+        #if(self.frame_counter % 100 == 0):
+          #print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
 
     if self.LoggingIndicatorNode == 0:
       return

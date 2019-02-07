@@ -43,7 +43,7 @@ def append_indicator(loader, fallback_mat, pos, parent):
 
 def start():
     # setup scene graph
-    graph = avango.gua.nodes.SceneGraph(Name="scene")
+    graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 
     # Create basic loaders
     mesh_loader = avango.gua.nodes.TriMeshLoader()
@@ -126,7 +126,7 @@ def start():
         viewingSetup.navigation_node.Children.value.append(pointer_node)
         projector.Transform2.connect_from(dynamic_quad.WorldTransform)
 
-        # print_graph(graph.Root.value)
+        print_graph(graph.Root.value)
 
         ## start application/render loop
         viewingSetup.run(locals(), globals())
@@ -149,9 +149,11 @@ def start():
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
         dynamic_quad.Material.connect_from(projector.Material)
 
-        dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.5) *\
+        dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.12)
+        direction_vector = dynamic_quad.WorldTransform.value
+        print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
        
         # setup render passes
@@ -168,6 +170,16 @@ def start():
 
         # setup viewer with scenegraph
         setup_viewer(graph, win)
+
+
+def print_graph(root_node):
+  stack = [(root_node, 0)]
+  while stack:
+    node, level = stack.pop()
+    print("│   " * level + "├── {0} <{1}>".format(
+      node.Name.value, node.__class__.__name__))
+    stack.extend(
+      [(child, level + 1) for child in reversed(node.Children.value)])
 
 
 def setup_scene(graph, mesh_loader, lod_loader):
@@ -263,7 +275,7 @@ def setup_camera(graph, size):
     camera = avango.gua.nodes.CameraNode(Name="cam",
                                          LeftScreenPath="/cam/screen",
                                          RightScreenPath="/cam/screen",
-                                         SceneGraph="scene",
+                                         SceneGraph="scenegraph",
                                          Resolution=size,
                                          OutputWindowName="window",
                                          EyeDistance=0.2,

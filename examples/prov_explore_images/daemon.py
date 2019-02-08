@@ -1009,14 +1009,14 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 ### init desktop devices
 
 # search_and_init_keyboard("device-keyboard")
-# init_keyboard()
+init_keyboard()
 
 #init_keypad(get_event_string(1, "USB Compliant Keypad"), "device-keypad")
 # init_keypad(get_event_string(1, "AT Translated Set 2 keyboard"), "device-keypad")
 
 # search_and_init_mouse("device-mouse0")
 
-# init_mouse()
+init_mouse()
 
 #search_and_init_two_mice()
 # init_mouse(get_event_string(1, "Dell Dell USB Optical Mouse"), "device-mouse0")
@@ -1024,8 +1024,8 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 #init_mouse(get_event_string(1, "Logitech USB-PS/2 Optical Mouse"), "device-mouse1")
 # init_mouse(get_event_string(1, "Logitech Wireless Mouse M560"), "device-mouse1")
 #init_mouse(get_event_string(1, "Logitech USB Optical Mouse"), "device-mouse1")
-init_mouse2()
-init_keyboard2()
+# init_mouse2()
+# init_keyboard2()
 
 
 

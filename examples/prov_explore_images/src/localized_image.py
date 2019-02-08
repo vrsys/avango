@@ -32,7 +32,7 @@ class LocalizedImageController:
         self.setup_localized_images()
 
         self.vtprojector = AutoVTProjector()
-        self.vtprojector.my_constructor()
+        self.vtprojector.my_constructor(self.graph)
         self.vtprojector.set_localized_image_list(self.localized_images)
         # self.vtprojector.set_transform(self.parent.Transform.value)
         self.vtprojector.Graph.value = graph
@@ -63,7 +63,7 @@ class LocalizedImageController:
         self.atlas_tiles_num = self.aux_loader.get_num_atlas_tiles()
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-        for quad_id in range(4):
+        for quad_id in range(1):
 
         # for quad_id in range(self.view_num):
 
@@ -129,8 +129,8 @@ class LocalizedImageQuad:
             # avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) #* avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         screen = avango.gua.nodes.ScreenNode(
           Name = "dummyscreen"+str(self.id),
-          Width = 0.5,#self.img_w_half* 2,
-          Height = 0.5,#self.img_h_half * 2,
+          Width = self.img_w_half,
+          Height = self.img_h_half,
           Transform = screen_transform
         )
         group_node.Children.value.append(screen)

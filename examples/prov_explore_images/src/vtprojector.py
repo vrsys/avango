@@ -22,7 +22,7 @@ class AutoVTProjector(avango.script.Script):
     self.always_evaluate(False)
     self.is_initialized = False
 
-  def my_constructor(self):
+  def my_constructor(self, graph):
     loader = avango.gua.nodes.TriMeshLoader()
 
     self.localized_image_list = []
@@ -32,7 +32,7 @@ class AutoVTProjector(avango.script.Script):
     self.last_lense_pos = None
     self.scene_graph = None
     self.old_closest_id = 0
-
+    self.graph = graph
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
     self.group_node.Transform.connect_from(self.Transform)
 
@@ -69,9 +69,14 @@ class AutoVTProjector(avango.script.Script):
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
+    self.indicator_lt = None
+    self.indicator_rt = None
+    self.indicator_lb = None
+    self.indicator_rb = None
     
 
   def set_scenegraph(self, graph):
+    print('scene graph got set')
     self.scene_graph = graph
 
   def set_localized_image_list(self, localized_image_list):
@@ -82,7 +87,7 @@ class AutoVTProjector(avango.script.Script):
     self.max_tex_coords = self.localized_image_list[self.old_closest_id].max_uv
 
   def find_closest_view(self, criteria):
-
+    closest_id = None
     pos = self.Transform2.value.get_translate()
     _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
@@ -101,24 +106,74 @@ class AutoVTProjector(avango.script.Script):
 
     angle_list.sort(key=lambda tup: tup[1])
     # print(len(angle_list))
-
-    lense_center_pos = self.Transform2.value.get_translate() + avango.gua.Vec3(0.0, 0.0, 0.0)
+    contains_flag = False
+    lense_center_pos = self.Transform2.value.get_translate()
     for tup in angle_list:
       # tup[0].get_frustum()
       if tup[0].frustum.contains(lense_center_pos):
-        print('in frustum')
+        contains_flag = True
         closest_id = tup[0].id
       else:
         closest_id = None
 
     if closest_id is None:
-      # print('was not in frustum')
+      print('not in any frustum')
       if len(angle_list) > 0:
         closest_id = angle_list[0][0].id
       else: 
+        print('no good view available')
         closest_id = 0
 
-    # distance = 10000.0
+
+
+    loader = avango.gua.nodes.TriMeshLoader()
+    mat = avango.gua.nodes.Material()
+    col = avango.gua.Vec4(0.2, 0.9, 1.0, 1.0)
+    mat.set_uniform("Color", col)
+           
+    mat.set_uniform("Roughness", 1.0)
+    mat.set_uniform("Emissivity", 1.0)
+    mat.set_uniform("Metalness", 0.0)
+    if contains_flag:
+      if self.indicator_lt is None:
+        self.indicator_lt = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
+        self.indicator_lt.Material.value = mat
+      if self.indicator_lt in self.graph.Root.value.Children.value:
+        self.indicator_lt.Transform.connect_from(self.Transform2)
+        # self.indicator_lt.Transform.value = avango.gua.make_trans_mat(lense_center_pos) * \
+        #                        avango.gua.make_scale_mat(0.01, 0.01, 0.01)
+        print('update indi')
+      else:
+        self.graph.Root.value.Children.value.append(self.indicator_lt)
+    else:
+      if self.indicator_lt:
+        if self.indicator_lt in self.graph.Root.value.Children.value:
+          pass
+          #self.graph.Root.value.Children.value.remove(self.indicator_lt)
+        self.indicator_lt = None
+
+
+        
+      # self.indicator_rt = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
+      # self.indicator_lb = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
+      # self.indicator_rb = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
+
+      
+      # self.indicator_rt.Material.value = mat
+      # self.indicator_rt.Transform.value = avango.gua.make_trans_mat(pos) * \
+      #                          avango.gua.make_scale_mat(0.001, 0.001, 2.0)
+      # self.indicator_lb.Material.value = mat
+      # self.indicator_lb.Transform.value = avango.gua.make_trans_mat(pos) * \
+      #                          avango.gua.make_scale_mat(0.001, 0.001, 2.0)
+      # self.indicator_rb.Material.value = mat
+      # self.indicator_rb.Transform.value = avango.gua.make_trans_mat(pos) * \
+      #                          avango.gua.make_scale_mat(0.001, 0.001, 2.0)
+
+      # self.graph.Root.value.Children.value.append(self.indicator_lt)
+    # self.graph.Root.value.Children.value.append(self.indicator_rt)
+    # self.graph.Root.value.Children.value.append(self.indicator_lb)
+    # self.graph.Root.value.Children.value.append(self.indicator_rb)
+    # # distance = 10000.0
     # angle = 1000.0
     # closest_id = None
     # image_pos = None
@@ -188,7 +243,7 @@ class AutoVTProjector(avango.script.Script):
     # _vec2.normalize()
     # axis = vec1.cross(vec2)
     # angle = math.acos(vec1*vec2)
-    print(closest_id)
+    
 
     return closest_id# , angle_list
 

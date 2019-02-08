@@ -22,7 +22,9 @@ class AutoVTProjector(avango.script.Script):
     self.always_evaluate(False)
     self.is_initialized = False
 
-  def my_constructor(self):
+  def my_constructor(self, tracked_node):
+    self.tracked_node = tracked_node
+    self.indicator = None
     loader = avango.gua.nodes.TriMeshLoader()
 
     self.localized_image_list = []
@@ -69,8 +71,10 @@ class AutoVTProjector(avango.script.Script):
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
-    
 
+  def set_tracked_node(self, node):
+    self.tracked_node = node
+    
   def set_scenegraph(self, graph):
     self.scene_graph = graph
 
@@ -82,7 +86,7 @@ class AutoVTProjector(avango.script.Script):
     self.max_tex_coords = self.localized_image_list[self.old_closest_id].max_uv
 
   def find_closest_view(self, criteria):
-
+    closest_id = None
     pos = self.Transform2.value.get_translate()
     _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
@@ -101,12 +105,14 @@ class AutoVTProjector(avango.script.Script):
 
     angle_list.sort(key=lambda tup: tup[1])
     # print(len(angle_list))
-
+    contains_flag= False
     lense_center_pos = self.Transform2.value.get_translate() + avango.gua.Vec3(0.0, 0.0, 0.0)
     for tup in angle_list:
       # tup[0].get_frustum()
-      if tup[0].frustum.contains(lense_center_pos):
+      # if tup[0].frustum.contains(lense_center_pos):
+      if self.localized_image_list[0].frustum.contains(lense_center_pos):
         print('in frustum')
+        contains_flag= True
         closest_id = tup[0].id
       else:
         closest_id = None
@@ -118,6 +124,33 @@ class AutoVTProjector(avango.script.Script):
       else: 
         closest_id = 0
 
+    if contains_flag:
+      mat = avango.gua.nodes.Material()
+
+      col = avango.gua.Vec4(0.2, 1.0, 0.0, 1.0)
+      mat.set_uniform("Color", col)
+
+      mat.set_uniform("Roughness", 1.0)
+      mat.set_uniform("Emissivity", 1.0)
+      mat.set_uniform("Metalness", 0.0)
+      
+      if self.indicator == None:
+        loader = avango.gua.nodes.TriMeshLoader()
+        self.indicator = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
+        self.indicator.Material.value = mat
+        self.indicator.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 0.01)
+
+        self.tracked_node.Children.value.append(self.indicator)
+      else:
+        self.indicator.Material.value = mat
+    if contains_flag is False:
+      if self.indicator:
+        mat = avango.gua.nodes.Material()
+        col = avango.gua.Vec4(1.0, 0.0, 0.0, 1.0)
+        mat.set_uniform("Color", col)
+        self.indicator.Material.value = mat
+
+         
     # distance = 10000.0
     # angle = 1000.0
     # closest_id = None
@@ -188,7 +221,7 @@ class AutoVTProjector(avango.script.Script):
     # _vec2.normalize()
     # axis = vec1.cross(vec2)
     # angle = math.acos(vec1*vec2)
-    print(closest_id)
+    # print(closest_id)
 
     return closest_id# , angle_list
 

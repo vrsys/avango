@@ -156,6 +156,7 @@ def start():
         direction_vector = dynamic_quad.WorldTransform.value
         print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
+        localized_image_controller.set_tracked_element(dynamic_quad)
        
         # setup render passes
         setup_render_passes(cam)

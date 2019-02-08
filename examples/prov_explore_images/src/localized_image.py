@@ -9,7 +9,7 @@ from src.vtprojector import AutoVTProjector
 
 class LocalizedImageController:
 
-    def __init__(self, graph, parent, aux_path, atlas_path):
+    def __init__(self, graph, parent,aux_path, atlas_path):
         self.graph = graph
         self.parent = parent
         self.aux_path = aux_path
@@ -32,7 +32,9 @@ class LocalizedImageController:
         self.setup_localized_images()
 
         self.vtprojector = AutoVTProjector()
-        self.vtprojector.my_constructor(self.graph)
+
+        self.tracked_node = None
+        self.vtprojector.my_constructor(self.tracked_node)
         self.vtprojector.set_localized_image_list(self.localized_images)
         # self.vtprojector.set_transform(self.parent.Transform.value)
         self.vtprojector.Graph.value = graph
@@ -63,9 +65,10 @@ class LocalizedImageController:
         self.atlas_tiles_num = self.aux_loader.get_num_atlas_tiles()
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-        for quad_id in range(1):
+        # for quad_id in range(2):
 
-        # for quad_id in range(self.view_num):
+
+        for quad_id in range(self.view_num):
 
             self.create_localized_quad(quad_id)
             # pass
@@ -81,6 +84,10 @@ class LocalizedImageController:
 
     def get_projector(self):
         return self.vtprojector
+
+    def set_tracked_element(self, node):
+        self.tracked_node = node
+        self.vtprojector.set_tracked_node(self.tracked_node)
 
 
 class LocalizedImageQuad:
@@ -105,6 +112,15 @@ class LocalizedImageQuad:
         
         self.frustum = None
         self.indicator = None
+        mat = avango.gua.nodes.Material()
+        loader = avango.gua.nodes.TriMeshLoader()
+        self.indicator = loader.create_geometry_from_file("boob_", "data/objects/cube.obj")
+        self.indicator.Material.value = mat
+        self.indicator.Transform.value = self.transform * \
+                                 avango.gua.make_scale_mat(0.001, 0.001, 2.0)
+
+        self.graph.Root.value.Children.value.append(self.indicator)
+
         
         self.atlas_tile = atlas_tile
         self.atlas = atlas
@@ -163,43 +179,32 @@ class LocalizedImageQuad:
         # print(self.frustum.Corners.value[0], self.frustum.Corners.value[1], self.frustum.Corners.value[2],  self.frustum.Corners.value[3])        
         
 
-    def set_selected(self, flag, show):
-        mat = avango.gua.nodes.Material()
+    def set_selected(self, selected, show):
+        mat = self.indicator.Material.value
 
-        unselected = avango.gua.Vec4(0.2, 0.2, 1.0, 1.0)
-        # unselected.normalize()
+        unselected = avango.gua.Vec4(0.2, 0.9, 1.0, 1.0)
         selected = avango.gua.Vec4(1.0, 0.1, 0.1, 1.0)
-        # selected.normalize()
-
         if show:
-            if self.indicator == None:
-                loader = avango.gua.nodes.TriMeshLoader()
-                self.indicator = loader.create_geometry_from_file("boob_", "data/objects/cube.obj")
-                self.indicator.Material.value = mat
-                self.indicator.Transform.value = self.transform * \
-                                         avango.gua.make_scale_mat(0.001, 0.001, 2.0)
-
-                self.graph.Root.value.Children.value.append(self.indicator)
+            self.indicator.Transform.value = self.transform * \
+                                 avango.gua.make_scale_mat(0.001, 0.001, 2.0)
 
         else:
-            if self.indicator:
-                self.graph.Root.value.Children.value.remove(self.indicator)
-                self.indicator = None
+            self.indicator.Transform.value = self.transform * \
+                                 avango.gua.make_scale_mat(0.001, 0.001, 0.2)
+            
+            unselected = avango.gua.Vec4(0.2, 0.4, 0.0, 1.0)
 
-        if flag:
+        if selected:
             mat.set_uniform("Color", selected)
            
             mat.set_uniform("Roughness", 1.0)
             mat.set_uniform("Emissivity", 1.0)
             mat.set_uniform("Metalness", 0.0)
-            if self.indicator:
-                self.indicator.Material.value = mat
                 
-
         else :
             mat.set_uniform("Color", unselected)
+        self.indicator.Material.value = mat
             
-        
         return mat
 
     def setup(self):

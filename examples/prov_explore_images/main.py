@@ -114,6 +114,7 @@ def start():
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.15)
+        localized_image_controller.set_tracked_element(dynamic_quad)
 
 
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
@@ -124,6 +125,7 @@ def start():
         pointer_node = avango.gua.nodes.TransformNode(Name = "pointer_node")
         pointer_node.Transform.connect_from(pointer_tracking_sensor.Matrix)
         pointer_node.Children.value.append(dynamic_quad)
+
         viewingSetup.navigation_node.Children.value.append(pointer_node)
         projector.Transform2.connect_from(dynamic_quad.WorldTransform)
 
@@ -156,6 +158,7 @@ def start():
         direction_vector = dynamic_quad.WorldTransform.value
         print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
+        localized_image_controller.set_tracked_element(dynamic_quad)
        
         # setup render passes
         setup_render_passes(cam)

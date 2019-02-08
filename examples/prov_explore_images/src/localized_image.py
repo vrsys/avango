@@ -115,14 +115,7 @@ class LocalizedImageQuad:
         self.setup()
         self.create_quad()
         self.init_camera_setup()
-        #self.get_frustum()
 
-        # loader = avango.gua.nodes.TriMeshLoader()
-        # plane = loader.create_geometry_from_file("boob_", "data/objects/plane.obj")
-        # plane.Transform.value = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, 1.0, self.img_h_half)
-
-        # self.graph.Root.value.Children.value.append(plane)
-        # scree
         screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
             avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         # self.frustum = avango.gua.make_perspective_frustum(self.transform, screen_transform, 0.05, 3.0)
@@ -130,31 +123,26 @@ class LocalizedImageQuad:
 
     def init_camera_setup(self):
         group_node = avango.gua.nodes.TransformNode(Name = "quad_"+str(self.id))
-        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
-            avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         self.graph.Root.value.Children.value.append(group_node)
-        
+
+        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) # *\
+            # avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) #* avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         screen = avango.gua.nodes.ScreenNode(
           Name = "dummyscreen"+str(self.id),
-          Width = self.img_w_half,
-          Height = self.img_h_half,
+          Width = 0.5,#self.img_w_half* 2,
+          Height = 0.5,#self.img_h_half * 2,
           Transform = screen_transform
         )
         group_node.Children.value.append(screen)
 
-
-        print('screen', screen.Name.value, screen.Path.value)
-
         cam = avango.gua.nodes.CameraNode(
-          # LeftScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
-          # LeftScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
-          # RightScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
           LeftScreenPath = screen.Path.value,
           RightScreenPath = screen.Path.value,
-          # LeftScreenPath = "scene_trans/projector_group/screen1",
           SceneGraph = "scenegraph",
+          Transform = self.transform
         )
         group_node.Children.value.append(cam)
+        print(cam.Transform.value, screen_transform)
 
         self.frustum = cam.get_frustum(self.graph, avango.gua.CameraMode.CENTER)
         group_node.Children.value.remove(cam)
@@ -165,16 +153,17 @@ class LocalizedImageQuad:
         del group_node
         
 
-
     def get_frustum(self):
         #self.frustum = self.cam.get_frustum(self.graph, avango.gua.CameraMode.CENTER)
         #   print('frusturm exists', self.group_node.Name.value)
-        #print(self.frustum.contains(avango.gua.Vec3(0.0,0.0,0.0)))
-        print(self.frustum.Corners.value[0], self.frustum.Corners.value[1], self.frustum.Corners.value[2],  self.frustum.Corners.value[3])        
+        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -1.1) 
+        pos = screen_transform.get_translate()
+        print(self.frustum.contains(avango.gua.Vec3(0.0,1.0,0.0)))
+        print(self.frustum.contains(pos))
+        # print(self.frustum.Corners.value[0], self.frustum.Corners.value[1], self.frustum.Corners.value[2],  self.frustum.Corners.value[3])        
         
 
     def set_selected(self, flag, show):
-        self.get_frustum()
         mat = avango.gua.nodes.Material()
 
         unselected = avango.gua.Vec4(0.2, 0.2, 1.0, 1.0)
@@ -188,7 +177,7 @@ class LocalizedImageQuad:
                 self.indicator = loader.create_geometry_from_file("boob_", "data/objects/cube.obj")
                 self.indicator.Material.value = mat
                 self.indicator.Transform.value = self.transform * \
-                                         avango.gua.make_scale_mat(0.001, 0.001, 1.0)
+                                         avango.gua.make_scale_mat(0.001, 0.001, 2.0)
 
                 self.graph.Root.value.Children.value.append(self.indicator)
 

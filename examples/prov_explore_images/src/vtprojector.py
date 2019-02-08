@@ -88,16 +88,6 @@ class AutoVTProjector(avango.script.Script):
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
 
-
-    distance = 10000.0
-    angle = 1000.0
-    closest_id = None
-    image_pos = None
-    best_size = 3
-    best_distance_ids = []
-    best_angle_ids = []
-    best_mix_ids = []
-
     angle_list = []
     for img in self.localized_image_list:
       dot = _abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z
@@ -109,32 +99,59 @@ class AutoVTProjector(avango.script.Script):
         tup = (img, a)
         angle_list.append(tup)
 
+    angle_list.sort(key=lambda tup: tup[1])
+    # print(len(angle_list))
+
+    lense_center_pos = self.Transform2.value.get_translate() + avango.gua.Vec3(0.0, 0.0, 0.0)
+    for tup in angle_list:
+      # tup[0].get_frustum()
+      if tup[0].frustum.contains(lense_center_pos):
+        print('in frustum')
+        closest_id = tup[0].id
+      else:
+        closest_id = None
+
+    if closest_id is None:
+      # print('was not in frustum')
+      if len(angle_list) > 0:
+        closest_id = angle_list[0][0].id
+      else: 
+        closest_id = 0
+
+    # distance = 10000.0
+    # angle = 1000.0
+    # closest_id = None
+    # image_pos = None
+    # best_size = 3
+    # best_distance_ids = []
+    # best_angle_ids = []
+    # best_mix_ids = []
 
     # go through all views and find localized image
-    for i_id, img in enumerate(self.localized_image_list):
-        new_distance = pu.distance(img.position, pos)
-        # new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
-        # print(new_distance)
-        if new_distance < distance:
-            distance = new_distance
-            if len(best_distance_ids) > 3:
-                del best_distance_ids[-1]
-                e = (i_id, new_distance)
-                best_distance_ids.append(e)
-                best_distance_ids.sort(key=lambda tup: tup[1])
-                distance = best_distance_ids[-1][1]
-            else:
-                best_distance_ids.append((i_id, new_distance))
-                best_distance_ids.sort(key=lambda tup: tup[1])
-                distance = best_distance_ids[-1][1]
+    # for i_id, img in enumerate(self.localized_image_list):
+    #     new_distance = pu.distance(img.position, pos)
+    #     # new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
+    #     # print(new_distance)
+    #     if new_distance < distance:
+    #         distance = new_distance
+    #         if len(best_distance_ids) > 3:
+    #             del best_distance_ids[-1]
+    #             e = (i_id, new_distance)
+    #             best_distance_ids.append(e)
+    #             best_distance_ids.sort(key=lambda tup: tup[1])
+    #             distance = best_distance_ids[-1][1]
+    #         else:
+    #             best_distance_ids.append((i_id, new_distance))
+    #             best_distance_ids.sort(key=lambda tup: tup[1])
+    #             distance = best_distance_ids[-1][1]
 
-    for tu in best_distance_ids:
-        img_id = tu[0]
-        img = self.localized_image_list[img_id]
-        new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
-        if new_angle < angle:
-            angle = new_angle
-            closest_id = img_id
+    # for tu in best_distance_ids:
+    #     img_id = tu[0]
+    #     img = self.localized_image_list[img_id]
+    #     new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
+    #     if new_angle < angle:
+    #         angle = new_angle
+    #         closest_id = img_id
     # closest_id = 0
 
     # if distance > new_distance and new_angle < angle:
@@ -171,8 +188,9 @@ class AutoVTProjector(avango.script.Script):
     # _vec2.normalize()
     # axis = vec1.cross(vec2)
     # angle = math.acos(vec1*vec2)
+    print(closest_id)
 
-    return closest_id, angle_list
+    return closest_id# , angle_list
 
 
   @field_has_changed(Transform)
@@ -202,7 +220,7 @@ class AutoVTProjector(avango.script.Script):
        or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
         # pos = self.Transform2.value.get_translate()
         # look_at_mat = avango.gua.make_look_at_mat()
-        closest_id, l = self.find_closest_view('angle')
+        closest_id= self.find_closest_view('angle')
         # distance = 10000.0
         # closest_id = None
         # image_pos = None
@@ -228,9 +246,9 @@ class AutoVTProjector(avango.script.Script):
           self.last_lense_pos = self.Transform2.value.get_translate()
           self.old_closest_id = closest_id
 
-        for i, img in enumerate(self.localized_image_list):
-          if i == self.old_closest_id:
-            pass
+        # for i, img in enumerate(self.localized_image_list):
+        #   if i == self.old_closest_id:
+        #     pass
           # elif i in l:
           #   img.set_selected(False, True)
           # else:

@@ -3,6 +3,7 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
+import avango.daemon
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
@@ -58,8 +59,9 @@ def start():
         transform_node, 
         "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
         "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        # "/home/senu8384/Desktop/master-thesis/data/salem.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
         # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+
 
     projector = localized_image_controller.get_projector()
 
@@ -67,7 +69,6 @@ def start():
 
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
-    print("host", hostname)
 
     if hostname == "hydra":        
         ## DLP wall 4-user setup
@@ -87,7 +88,6 @@ def start():
         # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-C")
         # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-D")      
 
-
         spheron_input = DualSpheronInput(
             DEVICE_STATION1 = "device-new-spheron-right",
             DEVICE_STATION2 = "device-new-spheron-left",
@@ -103,7 +103,6 @@ def start():
             )
         navigation.assign_input(spheron_input)  
         viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
-        
 
         # add prototyp lense
         dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane2.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
@@ -127,10 +126,8 @@ def start():
         pointer_node.Children.value.append(dynamic_quad)
         viewingSetup.navigation_node.Children.value.append(pointer_node)
         projector.Transform2.connect_from(dynamic_quad.WorldTransform)
-        
 
-
-        print_graph(graph.Root.value)
+        # print_graph(graph.Root.value)
 
         ## start application/render loop
         viewingSetup.run(locals(), globals())

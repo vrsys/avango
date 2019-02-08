@@ -63,8 +63,8 @@ class LocalizedImageController:
         self.atlas_tiles_num = self.aux_loader.get_num_atlas_tiles()
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
-        # for quad_id in range(4):
-        for quad_id in range(self.view_num):
+        for quad_id in range(4):
+        # for quad_id in range(self.view_num):
             self.create_localized_quad(quad_id)
             # pass
 

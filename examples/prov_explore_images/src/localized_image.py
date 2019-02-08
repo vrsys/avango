@@ -4,7 +4,7 @@ from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
 
-from src.vtprojector import VTProjector, AutoVTProjector
+from src.vtprojector import AutoVTProjector
 
 
 class LocalizedImageController:
@@ -64,7 +64,9 @@ class LocalizedImageController:
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
         for quad_id in range(4):
+
         # for quad_id in range(self.view_num):
+
             self.create_localized_quad(quad_id)
             # pass
 
@@ -84,9 +86,12 @@ class LocalizedImageController:
 class LocalizedImageQuad:
     def __init__(self, graph, node, quad_id, view, atlas_tile, atlas):
         self.node = node
+        self.graph = graph
         self.id = quad_id
         self.view = view
+
         self.transform = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.view.get_transform()
+        self.rotation = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
         # HARDCODED TRANSFORM TODO
         # transform_pos = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.transform.get_translate()
         # transforma = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.transform
@@ -94,12 +99,12 @@ class LocalizedImageQuad:
         self.position = avango.gua.Vec3(self.transform.get_translate()[0], 
                                         self.transform.get_translate()[1], 
                                         self.transform.get_translate()[2])
-        loader = avango.gua.nodes.TriMeshLoader()
-        self.indicator = loader.create_geometry_from_file("boob_", "data/objects/cube.obj")
-        self.indicator.Material.value = self.set_selected(False)
-        self.indicator.Transform.value = self.transform * \
-                                 avango.gua.make_scale_mat(0.001, 0.001, 10.0)
-        graph.Root.value.Children.value.append(self.indicator)
+        _rot_mat = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
+        _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
+        self.direction = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
+        
+        self.frustum = None
+        self.indicator = None
         
         self.atlas_tile = atlas_tile
         self.atlas = atlas
@@ -109,8 +114,67 @@ class LocalizedImageQuad:
 
         self.setup()
         self.create_quad()
+        self.init_camera_setup()
+        #self.get_frustum()
 
-    def set_selected(self, flag):
+        # loader = avango.gua.nodes.TriMeshLoader()
+        # plane = loader.create_geometry_from_file("boob_", "data/objects/plane.obj")
+        # plane.Transform.value = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, 1.0, self.img_h_half)
+
+        # self.graph.Root.value.Children.value.append(plane)
+        # scree
+        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
+            avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
+        # self.frustum = avango.gua.make_perspective_frustum(self.transform, screen_transform, 0.05, 3.0)
+
+
+    def init_camera_setup(self):
+        group_node = avango.gua.nodes.TransformNode(Name = "quad_"+str(self.id))
+        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
+            avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
+        self.graph.Root.value.Children.value.append(group_node)
+        
+        screen = avango.gua.nodes.ScreenNode(
+          Name = "dummyscreen"+str(self.id),
+          Width = self.img_w_half,
+          Height = self.img_h_half,
+          Transform = screen_transform
+        )
+        group_node.Children.value.append(screen)
+
+
+        print('screen', screen.Name.value, screen.Path.value)
+
+        cam = avango.gua.nodes.CameraNode(
+          # LeftScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
+          # LeftScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
+          # RightScreenPath = "/quad_"+str(self.id)+"/dummyscreen"+str(self.id),
+          LeftScreenPath = screen.Path.value,
+          RightScreenPath = screen.Path.value,
+          # LeftScreenPath = "scene_trans/projector_group/screen1",
+          SceneGraph = "scenegraph",
+        )
+        group_node.Children.value.append(cam)
+
+        self.frustum = cam.get_frustum(self.graph, avango.gua.CameraMode.CENTER)
+        group_node.Children.value.remove(cam)
+        del cam
+        group_node.Children.value.remove(screen)
+        del screen
+        self.graph.Root.value.Children.value.remove(group_node)
+        del group_node
+        
+
+
+    def get_frustum(self):
+        #self.frustum = self.cam.get_frustum(self.graph, avango.gua.CameraMode.CENTER)
+        #   print('frusturm exists', self.group_node.Name.value)
+        #print(self.frustum.contains(avango.gua.Vec3(0.0,0.0,0.0)))
+        print(self.frustum.Corners.value[0], self.frustum.Corners.value[1], self.frustum.Corners.value[2],  self.frustum.Corners.value[3])        
+        
+
+    def set_selected(self, flag, show):
+        self.get_frustum()
         mat = avango.gua.nodes.Material()
 
         unselected = avango.gua.Vec4(0.2, 0.2, 1.0, 1.0)
@@ -118,14 +182,35 @@ class LocalizedImageQuad:
         selected = avango.gua.Vec4(1.0, 0.1, 0.1, 1.0)
         # selected.normalize()
 
+        if show:
+            if self.indicator == None:
+                loader = avango.gua.nodes.TriMeshLoader()
+                self.indicator = loader.create_geometry_from_file("boob_", "data/objects/cube.obj")
+                self.indicator.Material.value = mat
+                self.indicator.Transform.value = self.transform * \
+                                         avango.gua.make_scale_mat(0.001, 0.001, 1.0)
+
+                self.graph.Root.value.Children.value.append(self.indicator)
+
+        else:
+            if self.indicator:
+                self.graph.Root.value.Children.value.remove(self.indicator)
+                self.indicator = None
+
         if flag:
             mat.set_uniform("Color", selected)
+           
+            mat.set_uniform("Roughness", 1.0)
+            mat.set_uniform("Emissivity", 1.0)
+            mat.set_uniform("Metalness", 0.0)
+            if self.indicator:
+                self.indicator.Material.value = mat
+                
+
         else :
             mat.set_uniform("Color", unselected)
-        mat.set_uniform("Roughness", 1.0)
-        mat.set_uniform("Emissivity", 1.0)
-        mat.set_uniform("Metalness", 0.0)
-        self.indicator.Material.value = mat
+            
+        
         return mat
 
     def setup(self):

@@ -109,7 +109,7 @@ class AutoVTProjector(avango.script.Script):
         angle_list.append(tup)
 
     angle_list.sort(key=lambda tup: tup[1])
-    print(len(angle_list))
+    # print(len(angle_list))
 
     contains_flag= False
     lense_center_pos = self.Transform2.value.get_translate()
@@ -120,6 +120,7 @@ class AutoVTProjector(avango.script.Script):
         print('in frustum')
         contains_flag= True
         closest_id = tup[0].id
+        return closest_id
       else:
         closest_id = None
 

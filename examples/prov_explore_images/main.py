@@ -18,29 +18,6 @@ from src.SpheronInput import DualSpheronInput
 from src.SpheronNavigation import SpheronNavigation
 
 
-def append_indicator(loader, fallback_mat, pos, parent):
-    indicator_trans = avango.gua.nodes.TransformNode(Name="indicator_trans")
-    indicator_trans.Transform.value = avango.gua.make_trans_mat(0, -0.00, -0.80)
-
-    # pos_indicator_geo = loader.create_geometry_from_file("indicator", "data/objects/cube.obj",
-    #                                                      fallback_mat, avango.gua.LoaderFlags.DEFAULTS)
-
-    # pos_indicator_geo.Transform.value = pos * \
-    #                                     avango.gua.make_scale_mat(0.015, 0.015, 0.015)
-
-    dir_indicator_geo = loader.create_geometry_from_file("indicator", "data/objects/cube.obj",
-                                                         fallback_mat, avango.gua.LoaderFlags.DEFAULTS)
-
-    dir_indicator_geo.Transform.value = pos * \
-                                        avango.gua.make_scale_mat(0.001, 0.001, 1.5)
-    # indicator_geo.Transform.value = avango.gua.make_trans_mat(pos[0], pos[1], pos[2]) * \
-    #                                 avango.gua.make_scale_mat(0.015, 0.015, 0.015)
-
-    parent.Children.value.append(indicator_trans)
-    # indicator_trans.Children.value.append(pos_indicator_geo)
-    indicator_trans.Children.value.append(dir_indicator_geo)
-
-
 def start():
     # setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
@@ -57,11 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
-
+        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -116,7 +92,6 @@ def start():
                                        avango.gua.make_scale_mat(0.15)
         localized_image_controller.set_tracked_element(dynamic_quad)
 
-
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
         pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
         pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
@@ -155,7 +130,6 @@ def start():
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.12)
-        direction_vector = dynamic_quad.WorldTransform.value
         print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
         localized_image_controller.set_tracked_element(dynamic_quad)
@@ -203,8 +177,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
@@ -218,7 +192,7 @@ def setup_scene(graph, mesh_loader, lod_loader):
                                                   avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
                                                   )
 
-    floor.Transform.value = avango.gua.make_scale_mat(4, 1, 4) * avango.gua.make_trans_mat(0, -0.4, 0)
+    floor.Transform.value = avango.gua.make_trans_mat(0, -0.4, 0) * avango.gua.make_scale_mat(4, 1, 4) 
     # floor.ShadowMode.value = 1
     graph.Root.value.Children.value.append(floor)
 
@@ -240,33 +214,6 @@ def setup_scene(graph, mesh_loader, lod_loader):
                                    avango.gua.make_scale_mat(4)
     graph.Root.value.Children.value.append(spot_light_1)
 
-    point_light1 = avango.gua.nodes.LightNode(Name="point_light1",
-                                              Type=avango.gua.LightType.POINT,
-                                              Color=avango.gua.Color(0.2, 1.0, 1.7),
-                                              EnableShadows=True,
-                                              ShadowMapSize=1024,
-                                              ShadowMaxDistance=10,
-                                              ShadowOffset=0.03,
-                                              Falloff=0.5,
-                                              ShadowNearClippingInSunDirection=0.1,
-                                              ShadowFarClippingInSunDirection=10.0,
-                                              Brightness=20)
-    point_light1.Transform.value = avango.gua.make_trans_mat(1.5, 1.0, 1.5) * avango.gua.make_scale_mat(4)
-    # graph.Root.value.Children.value.append(point_light1)
-
-    sun_light = avango.gua.nodes.LightNode(Name="sun_light",
-                                           Type=avango.gua.LightType.SUN,
-                                           Color=avango.gua.Color(1.0, 1.0, 0.7),
-                                           EnableShadows=True,
-                                           ShadowMapSize=1024,
-                                           ShadowOffset=0.0005,
-                                           ShadowCascadedSplits=[0.1, 4, 7, 20],
-                                           ShadowMaxDistance=30,
-                                           ShadowNearClippingInSunDirection=100,
-                                           ShadowFarClippingInSunDirection=100,
-                                           Brightness=2)
-    sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
-    # graph.Root.value.Children.value.append(sun_light)
     return trans_node
 
 

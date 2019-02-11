@@ -9,7 +9,7 @@ from src.vtprojector import AutoVTProjector
 
 class LocalizedImageController:
 
-    def __init__(self, graph, parent,aux_path, atlas_path):
+    def __init__(self, graph, parent, aux_path, atlas_path):
         self.graph = graph
         self.parent = parent
         self.aux_path = aux_path
@@ -36,10 +36,7 @@ class LocalizedImageController:
         self.tracked_node = None
         self.vtprojector.my_constructor(self.tracked_node)
         self.vtprojector.set_localized_image_list(self.localized_images)
-        # self.vtprojector.set_transform(self.parent.Transform.value)
         self.vtprojector.Graph.value = graph
-        # self.vtprojector.Texture.value = "data/textures/smiley.jpg"
-        # vtprojector.Texture.value = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
         self.vtprojector.Texture.value = atlas_path
 
         graph.Root.value.Children.value.append(self.vtprojector.group_node)
@@ -66,8 +63,6 @@ class LocalizedImageController:
         self.atlas = self.aux_loader.get_atlas()
         # fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
         # for quad_id in range(2):
-
-
         for quad_id in range(self.view_num):
 
             self.create_localized_quad(quad_id)
@@ -91,8 +86,8 @@ class LocalizedImageController:
 
 
 class LocalizedImageQuad:
-    def __init__(self, graph, node, quad_id, view, atlas_tile, atlas):
-        self.node = node
+    def __init__(self, graph, dt_node, quad_id, view, atlas_tile, atlas):
+        self.dt_node = dt_node
         self.graph = graph
         self.id = quad_id
         self.view = view
@@ -102,7 +97,7 @@ class LocalizedImageQuad:
         # HARDCODED TRANSFORM TODO
         # transform_pos = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.transform.get_translate()
         # transforma = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.transform
-        # transform_pos = self.node.Transform.value * self.transform.get_translate()
+        # transform_pos = self.dt_node.Transform.value * self.transform.get_translate()
         self.position = avango.gua.Vec3(self.transform.get_translate()[0], 
                                         self.transform.get_translate()[1], 
                                         self.transform.get_translate()[2])
@@ -118,21 +113,22 @@ class LocalizedImageQuad:
         self.indicator.Material.value = mat
         self.indicator.Transform.value = self.transform * \
                                  avango.gua.make_scale_mat(0.001, 0.001, 2.0)
+        self.show_ind_flag = False
+        self.select_ind_flag = False
 
         self.graph.Root.value.Children.value.append(self.indicator)
 
-        
         self.atlas_tile = atlas_tile
         self.atlas = atlas
         self.quad_vertices = []
-        self.min_uv = avango.gua.Vec2(0.0,0.0)
-        self.max_uv = avango.gua.Vec2(1.0,1.0)
+        self.min_uv = avango.gua.Vec2(0.0, 0.0)
+        self.max_uv = avango.gua.Vec2(1.0, 1.0)
 
         self.setup()
         self.create_quad()
         self.init_camera_setup()
 
-        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
+        screen_transform = avango.gua.make_trans_mat(self.position) * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
             avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         # self.frustum = avango.gua.make_perspective_frustum(self.transform, screen_transform, 0.05, 3.0)
 
@@ -190,7 +186,7 @@ class LocalizedImageQuad:
 
         else:
             self.indicator.Transform.value = self.transform * \
-                                 avango.gua.make_scale_mat(0.001, 0.001, 0.2)
+                                 avango.gua.make_scale_mat(0.001, 0.001, 0.001)
             
             unselected = avango.gua.Vec4(0.2, 0.4, 0.0, 1.0)
 
@@ -236,61 +232,61 @@ class LocalizedImageQuad:
 
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
-        t1_v1 = LocalizedImageVertex(self.node, self.id * 6, pos, uv)
+        t1_v1 = LocalizedImageVertex(self.dt_node, self.id * 6, pos, uv)
         self.min_uv = uv
         print('p1', uv)
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-        t1_v2 = LocalizedImageVertex(self.node, self.id * 6 + 1, pos, uv)
+        t1_v2 = LocalizedImageVertex(self.dt_node, self.id * 6 + 1, pos, uv)
         self.max_uv = uv
         print('p2', uv)
 
         pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
-        t1_v3 = LocalizedImageVertex(self.node, self.id * 6 + 2, pos, uv)
+        t1_v3 = LocalizedImageVertex(self.dt_node, self.id * 6 + 2, pos, uv)
         
         print('p3', uv)
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
-        t2_v4 = LocalizedImageVertex(self.node, self.id * 6 + 3, pos, uv)
+        t2_v4 = LocalizedImageVertex(self.dt_node, self.id * 6 + 3, pos, uv)
         print('p4', uv)
         pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
-        t2_v5 = LocalizedImageVertex(self.node, self.id * 6 + 4, pos, uv)
+        t2_v5 = LocalizedImageVertex(self.dt_node, self.id * 6 + 4, pos, uv)
         print('p5', uv)
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-        t2_v6 = LocalizedImageVertex(self.node, self.id * 6 + 5, pos, uv)
+        t2_v6 = LocalizedImageVertex(self.dt_node, self.id * 6 + 5, pos, uv)
         print('p6', uv)
 
         # pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
-        # t1_v1 = LocalizedImageVertex(self.node, self.id * 6, pos, uv)
+        # t1_v1 = LocalizedImageVertex(self.dt_node, self.id * 6, pos, uv)
         # self.max_uv = uv
         # print('p1', uv)
 
         # pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
-        # t1_v2 = LocalizedImageVertex(self.node, self.id * 6 + 1, pos, uv)
+        # t1_v2 = LocalizedImageVertex(self.dt_node, self.id * 6 + 1, pos, uv)
         # self.min_uv = uv
         # print('p2', uv)
         # pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-        # t1_v3 = LocalizedImageVertex(self.node, self.id * 6 + 2, pos, uv)
+        # t1_v3 = LocalizedImageVertex(self.dt_node, self.id * 6 + 2, pos, uv)
         
         # print('p3', uv)
         # pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
-        # t2_v4 = LocalizedImageVertex(self.node, self.id * 6 + 3, pos, uv)
+        # t2_v4 = LocalizedImageVertex(self.dt_node, self.id * 6 + 3, pos, uv)
         
         # print('p4', uv)
         # pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
-        # t2_v5 = LocalizedImageVertex(self.node, self.id * 6 + 4, pos, uv)
+        # t2_v5 = LocalizedImageVertex(self.dt_node, self.id * 6 + 4, pos, uv)
         # print('p5', uv)
         # pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
         # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y)
-        # t2_v6 = LocalizedImageVertex(self.node, self.id * 6 + 5, pos, uv)
+        # t2_v6 = LocalizedImageVertex(self.dt_node, self.id * 6 + 5, pos, uv)
         # print('p6', uv)
         # p1_pos = view.get_transform() * avango.gua.Vec3(-img_w_half, img_h_half, -focal_length)
         # p1_uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y)
@@ -310,12 +306,12 @@ class LocalizedImageQuad:
 class LocalizedImageVertex:
     def __init__(self, node, vertex_id, pos, uv):
         self.vertex_id = vertex_id
-        self.node = node 
+        self.dt_node = node 
         self.color = (1.0, 0.0, 0.0, 1.0)
         self.pos = pos
         self.uv = uv
-        self.node.push_vertex(self.pos.x, self.pos.y, self.pos.z, 1.0, 0.0, 0.0, 1.0, self.uv.x, self.uv.y)
-        # self.node.push_vertex(*self.pos, 1.0, 0.0, 0.0, 1.0, *self.uv)
+        self.dt_node.push_vertex(self.pos.x, self.pos.y, self.pos.z, 1.0, 0.0, 0.0, 1.0, self.uv.x, self.uv.y)
+        # self.dt_node.push_vertex(*self.pos, 1.0, 0.0, 0.0, 1.0, *self.uv)
         # print()
 
     def update(self, pos=None, uv=None):

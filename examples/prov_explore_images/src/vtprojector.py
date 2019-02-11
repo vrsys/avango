@@ -87,148 +87,60 @@ class AutoVTProjector(avango.script.Script):
     self.min_tex_coords = self.localized_image_list[self.old_closest_id].min_uv
     self.max_tex_coords = self.localized_image_list[self.old_closest_id].max_uv
 
-  def find_closest_view(self, criteria):
+  def find_closest_view(self):
     closest_id = None
 
+    # get direction vector of hendheld lense
     pos = self.Transform2.value.get_translate()
     # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
-    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) #* avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
 
     angle_list = []
+    # get angles between hendheld lense and images
     for img in self.localized_image_list:
       dot = _abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z
+      # make sure values are in range for acos
       dot = 1 if dot >= 1 else dot
       dot = -1 if dot <= -1 else dot
-      # print(dot)
       a = math.acos(dot)
+      # filter by angle
       if a < 1:
         tup = (img, a)
+        # if angle between image nad quad is small show img direction indicator 
+        # img.set_selected(False, True)
         angle_list.append(tup)
+      else:
+        # if image and handheld quad angle is too big dont show indicator
+        pass
+        # img.set_selected(False,False)
 
     angle_list.sort(key=lambda tup: tup[1])
-    # print(len(angle_list))
 
-    contains_flag= False
     lense_center_pos = self.Transform2.value.get_translate()
     for tup in angle_list:
-      # tup[0].get_frustum()
+
       if tup[0].frustum.contains(lense_center_pos):
-      # if self.localized_image_list[0].frustum.contains(lense_center_pos):
-        print('in frustum')
-        contains_flag= True
+        # TODO: Might be good ideas:
+        # - adapt frustum size based on distance of hendheld lense 
+        # - check if the corners of the quad are in the frustum
+
+        # print('in frustum')
         closest_id = tup[0].id
         return closest_id
       else:
         closest_id = None
 
+    # if hendheld is in no frustum, get images just by angle
     if closest_id is None:
-      print('not in any frustum')
+      # print('not in any frustum')
       if len(angle_list) > 0:
         closest_id = angle_list[0][0].id
       else: 
-        print('no good view available')
+        print('NO view')
         closest_id = 0
-
-    # if contains_flag:
-    #   mat = avango.gua.nodes.Material()
-
-    #   col = avango.gua.Vec4(0.2, 1.0, 0.0, 1.0)
-    #   mat.set_uniform("Color", col)
-
-    #   mat.set_uniform("Roughness", 1.0)
-    #   mat.set_uniform("Emissivity", 1.0)
-    #   mat.set_uniform("Metalness", 0.0)
-      
-    #   if self.indicator == None:
-    #     loader = avango.gua.nodes.TriMeshLoader()
-    #     self.indicator = loader.create_geometry_from_file("boob_", "data/objects/sphere.obj")
-    #     self.indicator.Material.value = mat
-    #     self.indicator.Transform.value = avango.gua.make_scale_mat(0.05, 0.05, 0.05)
-
-    #     self.tracked_node.Children.value.append(self.indicator)
-    #   else:
-    #     self.indicator.Material.value = mat
-    # if contains_flag is False:
-    #   if self.indicator:
-    #     mat = avango.gua.nodes.Material()
-    #     col = avango.gua.Vec4(1.0, 0.0, 0.0, 1.0)
-    #     mat.set_uniform("Color", col)
-    #     self.indicator.Material.value = mat
-
-         
-    # distance = 10000.0
-    # angle = 1000.0
-    # closest_id = None
-    # image_pos = None
-    # best_size = 3
-    # best_distance_ids = []
-    # best_angle_ids = []
-    # best_mix_ids = []
-
-    # go through all views and find localized image
-    # for i_id, img in enumerate(self.localized_image_list):
-    #     new_distance = pu.distance(img.position, pos)
-    #     # new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
-    #     # print(new_distance)
-    #     if new_distance < distance:
-    #         distance = new_distance
-    #         if len(best_distance_ids) > 3:
-    #             del best_distance_ids[-1]
-    #             e = (i_id, new_distance)
-    #             best_distance_ids.append(e)
-    #             best_distance_ids.sort(key=lambda tup: tup[1])
-    #             distance = best_distance_ids[-1][1]
-    #         else:
-    #             best_distance_ids.append((i_id, new_distance))
-    #             best_distance_ids.sort(key=lambda tup: tup[1])
-    #             distance = best_distance_ids[-1][1]
-
-    # for tu in best_distance_ids:
-    #     img_id = tu[0]
-    #     img = self.localized_image_list[img_id]
-    #     new_angle = math.cos(_abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z)
-    #     if new_angle < angle:
-    #         angle = new_angle
-    #         closest_id = img_id
-    # closest_id = 0
-
-    # if distance > new_distance and new_angle < angle:
-    #     best_mix_ids.append(i_id)
-    #     closest_id = i_id
-
-    # if new_distance < distance:
-    #     distance = new_distance
-    #     best_distance_ids.append((i_id, new_distance))
-
-    # if new_angle < angle:
-    #     angle = new_angle
-    #     best_angle_ids.append((i_id, new_angle))
-
-    # print('@@@@@@@@@@@')
-    # print('mix len', best_mix_ids)
-    # print('dist len', best_distance_ids)
-    # print('angl len', best_angle_ids)
-
-    # closest_id = i_id
-
-    # for i_id, img in enumerate(self.localized_image_list):
-    #     # print(img.direction)
-    #     # print(_abs_dir)
-    #     # new_angle = math.acos(_abs_dir*img.direction)
-    #     new_angle = math.acos(_abs_dir.x*img.direction.x + 
-    #       _abs_dir.y*img.direction.y +
-    #       _abs_dir.z*img.direction.z)
-
-    #     if new_angle < angle:
-    #         angle = new_angle
-    #         print(angle)
-    # _vec1.normalize()
-    # _vec2.normalize()
-    # axis = vec1.cross(vec2)
-    # angle = math.acos(vec1*vec2)
 
     return closest_id
 
@@ -258,45 +170,26 @@ class AutoVTProjector(avango.script.Script):
       if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
        or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
        or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
-        # pos = self.Transform2.value.get_translate()
-        # look_at_mat = avango.gua.make_look_at_mat()
-        closest_id = self.find_closest_view('angle')
-        # distance = 10000.0
-        # closest_id = None
-        # image_pos = None
-        # # go through all views and find localized image
-        # for i_id, i_pos in enumerate(self.position_list):
-        #   new_distance = pu.distance(i_pos, pos)
 
-        #   if distance > new_distance:
-        #     distance = new_distance
-        #     closest_id = i_id
-        #     image_pos = i_pos
-
+        closest_id = self.find_closest_view()
+  
         if closest_id != self.old_closest_id:
           self.localized_image_list[self.old_closest_id].set_selected(False, False)
 
           self.Transform.value = self.localized_image_list[closest_id].transform
           self.min_tex_coords = self.localized_image_list[closest_id].min_uv
           self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-          self.screen.Width.value = self.localized_image_list[closest_id].img_w_half 
-          self.screen.Height.value = self.localized_image_list[closest_id].img_h_half 
+          self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.5
+          self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.5
           
           self.localized_image_list[closest_id].set_selected(True, True)
           self.last_lense_pos = self.Transform2.value.get_translate()
           self.old_closest_id = closest_id
+        # self.localized_image_list[self.old_closest_id].set_selected(True, True)
 
-        # for i, img in enumerate(self.localized_image_list):
-        #   if i == self.old_closest_id:
-        #     pass
-        #   # elif i in li:
-        #   for tup in li:
-        #     if tup[0].id == i:
-        #       img.set_selected(False, True)
-        #     else:
-        #       img.set_selected(False, False)
     else:
       self.last_lense_pos = self.Transform2.value.get_translate()
+      
 
   @field_has_changed(Texture)
   def update_texture(self):

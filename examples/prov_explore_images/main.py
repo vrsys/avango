@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -89,7 +89,7 @@ def start():
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                       avango.gua.make_scale_mat(0.15)
+                                       avango.gua.make_scale_mat(0.25)
         localized_image_controller.set_tracked_element(dynamic_quad)
 
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
@@ -130,7 +130,7 @@ def start():
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.12)
-        print_graph(graph.Root.value)
+        # print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
         localized_image_controller.set_tracked_element(dynamic_quad)
        
@@ -177,8 +177,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
@@ -263,13 +263,13 @@ def setup_render_passes(camera):
     res_pass.SSAOIntensity.value = 3.0
     res_pass.SSAOFalloff.value = 20.0
     res_pass.SSAORadius.value = 10.0
-    res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.1, 0.1)
+    res_pass.EnvironmentLightingColor.value = avango.gua.Color(0.1, 0.7, 0.6)
     res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
-    res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
-    res_pass.BackgroundTexture.value = "awesome_skymap"
-    # res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
-    res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
+    # res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
+    # res_pass.BackgroundTexture.value = "awesome_skymap"
+    res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+    # res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
     plod_pass = avango.gua.lod.nodes.PLodPassDescription()
     plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.HQ_TWO_PASS
@@ -280,7 +280,7 @@ def setup_render_passes(camera):
                 plod_pass,
                 avango.gua.nodes.DynamicTrianglePassDescription(),
                 avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
-                avango.gua.nodes.SkyMapPassDescription(OutputTextureName="awesome_skymap"),
+                # avango.gua.nodes.SkyMapPassDescription(OutputTextureName="awesome_skymap"),
                 avango.gua.nodes.LightVisibilityPassDescription(),
                 res_pass,
                 # avango.gua.nodes.DebugViewPassDescription()

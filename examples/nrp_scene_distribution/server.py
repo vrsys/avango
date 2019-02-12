@@ -77,9 +77,11 @@ def start(filename):
     monkey.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.0)
 
     videoloader = nodes.Video3DLoader()
-    video_geode = videoloader.load("kinect", filename)
+    video_geode = videoloader.load("interactive_dyngeo", filename)
     video_transform = nodes.TransformNode(Name="video_transform", Children=[video_geode])
     video_transform.Transform.value = avango.gua.make_trans_mat(0.0, -2.0, 0.0)
+
+    nrp_interactive.Children.value.append(video_transform)
 
     lod_loader = avango.gua.lod.nodes.LodLoader()
     lod_loader.UploadBudget.value = 64
@@ -163,12 +165,12 @@ def start(filename):
     nettrans.distribute_object(pipeline_description)
 
     make_node_distributable(nettrans, navigation)
-    make_node_distributable(nettrans, video_transform)
+    make_node_distributable(nettrans, nrp_interactive)
 
     nettrans.distribute_object(mat)
     nettrans.distribute_object(monkey)
 
-    nettrans.Children.value = [navigation, monkey, video_transform]
+    nettrans.Children.value = [navigation, monkey, nrp_interactive]
 
     ### NET TRANSFORMATION END
 
@@ -178,7 +180,7 @@ def start(filename):
     # dummy2.Children.value = [nrp_root]
     # dummy1.Children.value = [dummy2]
 
-    graph.Root.value.Children.value = [nettrans, nrp_root, nrp_interactive, lod_transform]
+    graph.Root.value.Children.value = [nettrans, nrp_root, lod_transform]
 
     navigator = examples_common.navigator.Navigator()
     navigator.StartLocation.value = navigation.Transform.value.get_translate()

@@ -24,21 +24,24 @@ namespace av
       SPointsStats() 
         : m_num_received_triangles(0),
           m_timestamp_ms(-1.0f),
-          m_reconstruction_time_ms(0.0)
-      {
-
-      }
+          m_reconstruction_time_ms(0.0f),
+          m_request_reply_latency_ms(-1.0f),
+          m_total_message_payload_in_byte(0)
+      {}
 
       explicit SPointsStats(spoints::SPointsStats const& gua_spoints_stats) 
         : m_num_received_triangles(gua_spoints_stats.m_received_triangles),
           m_timestamp_ms(gua_spoints_stats.m_received_timestamp_ms),
-          m_reconstruction_time_ms(gua_spoints_stats.m_received_reconstruction_time_ms)
-      {
+          m_reconstruction_time_ms(gua_spoints_stats.m_received_reconstruction_time_ms),
+          m_request_reply_latency_ms(gua_spoints_stats.m_request_reply_latency_ms),
+          m_total_message_payload_in_byte(gua_spoints_stats.m_total_message_payload_in_byte)
+      {}
 
-      }
       uint32_t m_num_received_triangles = 0;
       float    m_timestamp_ms = 0.0f;
       float    m_reconstruction_time_ms = -1.0f;
+      float    m_request_reply_latency_ms = -1.0f;
+      uint32_t m_total_message_payload_in_byte = 0;
     };
 
     /**
@@ -77,7 +80,6 @@ namespace av
       SFMaterial Material;
       SFBool     RenderToGBuffer;
       SFBool     RenderToStencilBuffer;
-      SFFloat    ScreenSpacePointSize;
 
       SPointsStats LatestSPointsStats;
 
@@ -93,9 +95,6 @@ namespace av
       virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
       virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
 
-      virtual void getScreenSpacePointSizeCB(const SFFloat::GetValueEvent& event);
-      virtual void setScreenSpacePointSizeCB(const SFFloat::SetValueEvent& event);
-
       /**
        * Get the wrapped ::gua::SPointsNode.
        */
@@ -104,18 +103,16 @@ namespace av
       void fetchLatestSPointsStats() {
         if(m_guaSPointsNode) {
           LatestSPointsStats = SPointsStats(m_guaSPointsNode->get_latest_spoints_stats());
-       // LatestSPointsStats.m_num_received_triangles = 6;
         } else {
           LatestSPointsStats = SPointsStats();
-          //LatestSPointsStats.m_num_received_triangles = 4;
         }
-
-        //LatestSPointsStats.m_num_received_triangles = 5;
       };
 
       int getStatNumTrianglesReceived() const { return LatestSPointsStats.m_num_received_triangles;}
       float getStatTimestampReceived() const { return LatestSPointsStats.m_timestamp_ms;}
       float getStatReconTimeReceived() const { return LatestSPointsStats.m_reconstruction_time_ms;}
+      float getStatRequestReplyLatencyReceived() const { return LatestSPointsStats.m_request_reply_latency_ms;}
+      int getStatTotaMessagePayloadInByteReceived() const { return LatestSPointsStats.m_total_message_payload_in_byte;}
 
     private:
 

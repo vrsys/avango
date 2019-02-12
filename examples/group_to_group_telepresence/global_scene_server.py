@@ -56,8 +56,11 @@ SCENE_MODE = "EVALUATION"
 VR16      = "141.54.147.16"
 PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
+DAEDALOS  = "141.54.147.34"
 
-CURRENTLY_USED_SERVER = VR16
+HEKATE    = "141.54.147.42"
+
+CURRENTLY_USED_SERVER = DAEDALOS
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -153,9 +156,9 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     right_offset = 1.0
 
-    indexed_keyframe_positions = [(    0, avango.gua.Vec3(0 + right_offset, 0, -8), 180),
-                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 5), 180),
-                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 5), 180),
+    indexed_keyframe_positions = [(    0, avango.gua.Vec3(0 + right_offset, 0, -11), 180),
+                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
+                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
                                   (17095, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
                                   (17695, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),                                  
                                   (20230, avango.gua.Vec3(-2.2 + right_offset, 0, 2.4), 180),
@@ -163,8 +166,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
                                   (33000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
                                   (34000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
                                   (35500, avango.gua.Vec3(0 + right_offset, 0, 2.4), 0),
-                                  (39000, avango.gua.Vec3(0 + right_offset, 0, -8), 0),
-                                  (41000, avango.gua.Vec3(0 + right_offset, 0, -8), 0)
+                                  (39000, avango.gua.Vec3(0 + right_offset, 0, -11), 0),
+                                  (41000, avango.gua.Vec3(0 + right_offset, 0, -11), 0)
                                   #(0, avango.gua.Vec3(0, 0, -10), 180),
                                   #(7000, avango.gua.Vec3(0, 0, 5),180),
 
@@ -191,7 +194,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
-    nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
+    #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
+    nv = netvaluepy.NetValue(HEKATE+":8000")
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -379,7 +383,10 @@ nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
 
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
@@ -446,9 +453,11 @@ screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=S
 
 
 
-size = avango.gua.Vec2ui(491, 278)
+#size = avango.gua.Vec2ui(491, 278)
 #size = avango.gua.Vec2ui(1600, 1200)
-
+#size = avango.gua.Vec2ui(1400, 1600) # vive pro
+size = avango.gua.Vec2ui(3840, 2160)
+#size = avango.gua.Vec2ui(4096, 2160)
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
 tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
@@ -481,16 +490,18 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 
 
-"""
-camera_translations_right = avango.gua.Vec3( 1.0, 0.0, 2.0)
-camera_translations_center = avango.gua.Vec3(0.0, 0.0, 2.0)
-camera_translations_left = avango.gua.Vec3(-1.0, 0.0, 2.0)
+eye_height = 1.7
+
+camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 2.0)
+camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
+camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 2.0)
+
 """
 camera_translations_right = avango.gua.Vec3( 0.0, 1.70, 0.0)
 camera_translations_center = avango.gua.Vec3( 0.0, 1.70, 0.0)
 camera_translations_left = avango.gua.Vec3( 0.0, 1.70, 0.0)
+"""
 
-eye_height = 1.6
 
 BASE_USER_GEOM_SCALING = 0.2
 USER_GEOM_SCALING = avango.gua.Vec3( BASE_USER_GEOM_SCALING*(1.0/SCREEN_WIDTH), BASE_USER_GEOM_SCALING*(1.0/SCREEN_HEIGHT), BASE_USER_GEOM_SCALING*1.0)

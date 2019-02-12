@@ -107,6 +107,10 @@ include(FindSchism)
 
 include(FindZMQ)
 
+if (AVANGO_SPOINTS_SUPPORT)
+include(FindTurboJPEG)
+endif (AVANGO_SPOINTS_SUPPORT)
+
 if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
 endif(${AVANGO_OCULUS_RIFT_SUPPORT})

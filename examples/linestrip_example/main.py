@@ -64,17 +64,25 @@ def start():
     line_strip_geode = loader.create_empty_geometry(
         "line_strip_model_1", "empty_name_1.lob")
 
-    line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -5.0)
+    """
+    line_strip_geode_2 = loader.create_geometry_from_file(
+                            "line_strip_model_2", 
+                            "PATH_TO_ANOMALY_FILE",
+                            avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.NORMALIZE_POSITION)
+    """
+
     transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
                                                 Children=[line_strip_geode])
 
     transform1 = avango.gua.nodes.TransformNode(Children=[transform1_additional_scale])
 
-    line_strip_geode.RenderVolumetric.value = True
-    line_strip_geode.RenderAsPoints.value = False
+    #line_strip_geode.RenderVolumetric.value = True
+    #line_strip_geode.RenderAsPoints.value = False
     #only has effect if 'RenderVolumetric' is set to 'False'
     #   the effective range of this parameter is [1.0-10.0]
-    line_strip_geode.ScreenSpaceLineWidth.value = 1.0
+    #line_strip_geode.ScreenSpaceLineWidth.value = 10.0
+
+
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,

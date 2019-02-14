@@ -7,9 +7,9 @@ AV_FC_DEFINE(av::gua::nrp::NRPPassDescription);
 AV_FIELD_DEFINE(av::gua::nrp::SFNRPPassDescription);
 AV_FIELD_DEFINE(av::gua::nrp::MFNRPPassDescription);
 
-av::gua::nrp::NRPPassDescription::NRPPassDescription(::gua::nrp::NRPPassDescription *guapass) : PipelinePassDescription(std::shared_ptr<::gua::nrp::NRPPassDescription>(guapass))
+av::gua::nrp::NRPPassDescription::NRPPassDescription(std::shared_ptr<::gua::nrp::NRPPassDescription> const &guaNRPPassDescription)
+    : PipelinePassDescription(guaNRPPassDescription), m_guaPipelinePassDescription(guaNRPPassDescription)
 {
-    _nrp_pass_ptr = guapass;
 }
 
 void av::gua::nrp::NRPPassDescription::initClass()
@@ -25,4 +25,8 @@ void av::gua::nrp::NRPPassDescription::initClass()
 
         sClassTypeId.setDistributable(true);
     }
+}
+std::shared_ptr<::gua::nrp::NRPPassDescription> const &av::gua::nrp::NRPPassDescription::getGuaPipelinePassDescription() const
+{
+    return m_guaPipelinePassDescription;
 }

@@ -57,6 +57,7 @@ av::vive::ViveWindow::ViveWindow(
   AV_FC_ADD_FIELD(EyeDistance, m_guaViveWindow->get_IPD());
 
   // needs to evaluate every frame to update sensor orientation
+  m_lastHapticPulse = std::chrono::system_clock::now();
   alwaysEvaluate(true);
 }
 
@@ -81,6 +82,18 @@ av::vive::ViveWindow::initClass()
 std::shared_ptr< ::gua::ViveWindow> const&
 av::vive::ViveWindow::getGuaViveWindow() const {
   return m_guaViveWindow;
+}
+
+void 
+av::vive::ViveWindow::triggerHapticPulse(unsigned int controllerId, float strength) const
+{
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - m_lastHapticPulse;
+
+	if (elapsed_seconds.count() > 0.05) {
+		m_guaViveWindow->trigger_haptic_pulse(controllerId, strength);
+		m_lastHapticPulse = now;
+	}
 }
 
 void

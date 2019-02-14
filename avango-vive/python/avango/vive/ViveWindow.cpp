@@ -18,6 +18,11 @@ namespace boost
   }
 }
 
+void triggerHapticPulse(av::vive::ViveWindow const& window,
+	unsigned int controllerId, float strength) {
+	window.triggerHapticPulse(controllerId, strength);
+}
+
 void init_ViveWindow()
 {
   register_ptr_to_python<av::Link<av::vive::ViveWindow> >();
@@ -28,5 +33,6 @@ void init_ViveWindow()
   class_<av::vive::ViveWindow,
        av::Link<av::vive::ViveWindow>,
        bases<av::gua::GlfwWindow>, boost::noncopyable >("ViveWindow", "docstring")
+	   .def("trigger_haptic_pulse", &triggerHapticPulse)
         ;
 }

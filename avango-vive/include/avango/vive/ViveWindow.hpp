@@ -10,6 +10,7 @@
 #include <avango/FieldContainer.h>
 
 #include <avango/vive/windows_specific.hpp>
+#include <chrono>
 
 namespace av
 {
@@ -32,13 +33,6 @@ namespace av
 
          ViveWindow(std::shared_ptr< ::gua::ViveWindow> const& guaViveWindow =
                       std::shared_ptr< ::gua::ViveWindow> (new ::gua::ViveWindow(":0.0")));
-
-       protected:
-
-         /**
-          * Destructor made protected to prevent allocation on stack.
-          */
-
          virtual ~ViveWindow();
 
        public:
@@ -80,9 +74,11 @@ namespace av
           * Get the wrapped ::gua::ViveRift
           */
          std::shared_ptr< ::gua::ViveWindow> const& getGuaViveWindow() const;
+		 void triggerHapticPulse(unsigned int controllerId, float strength) const;
 
        private:
         std::shared_ptr< ::gua::ViveWindow> m_guaViveWindow;
+		mutable std::chrono::system_clock::time_point m_lastHapticPulse;
 
         void evaluate() override;
 

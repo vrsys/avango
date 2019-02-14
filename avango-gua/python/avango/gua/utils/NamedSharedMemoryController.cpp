@@ -20,7 +20,7 @@ namespace boost
    }
  }
 
-
+#if not defined(__WIN32__) && not defined(_WIN32) && not defined(_WIN64)
 void addMemorySegment(av::gua::NamedSharedMemoryController& memory_controller,
                       std::string const& segment_name,
                       int memory_chunk_size_in_bytes
@@ -84,6 +84,7 @@ void registerRemotelyConstructedObjectOnSegment(av::gua::NamedSharedMemoryContro
                                                      std::string const& segment_name, std::string const& object_name) {
   memory_controller.register_remotely_constructed_object_on_segment(segment_name, object_name);
 }
+#endif
 
 void init_NamedSharedMemoryController()
  {
@@ -102,6 +103,7 @@ void init_NamedSharedMemoryController()
   class_<av::gua::NamedSharedMemoryController,
          av::Link<av::gua::NamedSharedMemoryController>,
          bases<av::FieldContainer>, boost::noncopyable> ("NamedSharedMemoryController", "docstring", no_init)
+#if not defined(__WIN32__) && not defined(_WIN32) && not defined(_WIN64)
          .def("add_memory_segment", &addMemorySegment)
          .def("add_read_only_memory_segment", &addReadOnlyMemorySegment)
          .def("construct_named_atomic_int",  &constructNamedAtomicIntOnSegment)
@@ -112,6 +114,7 @@ void init_NamedSharedMemoryController()
          .def("set_value_for_named_object",  &setValueForNamedAtomicIntOnSegment)
          .def("get_value_from_named_object", &getValueFromNamedAtomicIntOnSegment)
          .def("register_remotely_constructed_object_on_segment", &registerRemotelyConstructedObjectOnSegment)
+#endif
          ;
 
  }

@@ -48,6 +48,7 @@ namespace av
 
     public:
 
+#if not defined(__WIN32__) && not defined(_WIN32) && not defined(_WIN64)
       void add_memory_segment(std::string const& segment_name, uint64_t size_in_byte);
       void add_read_only_memory_segment(std::string const& segment_name);
 
@@ -75,6 +76,7 @@ namespace av
       EXTERNAL_TYPE get_value_from_named_object(std::string const& object_name){
       return m_guaNamedSharedMemoryController->get_value_from_named_object<INTERNAL_TYPE, EXTERNAL_TYPE>(object_name);
     }
+#endif
 
     private:
 

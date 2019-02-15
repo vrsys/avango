@@ -44,11 +44,14 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
-OBSERVER_MODE = "3_CLIENTS_SIMULATED"
-#OBSERVER_MODE = "3_CLIENTS_LIVE"
+#OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
 #OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
+
+#CLIENT_MODE = ""
+CLIENT_MODE = "VIDEO_POWERWALL"
 
 SCENE_MODE = "EVALUATION"
 #SCENE_MODE = "ARCHITECTURE"
@@ -56,6 +59,8 @@ SCENE_MODE = "EVALUATION"
 #SCENE_MODE = "SIMPLE"
 #SCENE_MODE = "EMPTY"
 
+RES_MODE = "POWERWALL"
+#RES_MODE = "HMD_LIKE"
 
 #USED SERVER IPS
 VR16      = "141.54.147.16"
@@ -65,7 +70,11 @@ DAEDALOS  = "141.54.147.34"
 
 HEKATE    = "141.54.147.42"
 
-CURRENTLY_USED_SERVER = DAEDALOS
+SPACEMONSTER = "141.54.147.101"
+STEELYGLINT = "141.54.147.102"
+
+CURRENTLY_USED_SERVER = SPACEMONSTER
+#CURRENTLY_USED_SERVER = VR16
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -162,8 +171,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
     right_offset = 1.0
 
     indexed_keyframe_positions = [(    0, avango.gua.Vec3(0 + right_offset, 0, -11), 180),
-                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
-                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
+                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 5.6), 180),
+                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 5.6), 180),
                                   (17095, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),
                                   (17695, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),                                  
                                   (20230, avango.gua.Vec3(-2.0 + right_offset, 0, 2.1), 180),
@@ -200,9 +209,9 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
-    nv = netvaluepy.NetValue(HEKATE+":8000")
+    #nv = netvaluepy.NetValue(HEKATE+":8000")
     #nv = netvaluepy.NetValue(VR16+":8000")
-
+    nv = netvaluepy.NetValue(STEELYGLINT+":8000")
     @field_has_changed(TimeIn)
     def update(self):
       #  print("NetValue: " + str(self.nv.getValue()) )
@@ -264,7 +273,7 @@ loader = avango.gua.nodes.TriMeshLoader()
 
 #kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
 street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-#street_plane.Material.value.set_uniform("Emissivity", 3.0)
+street_plane.Material.value.set_uniform("Emissivity", 3.0)
 
 def set_hauptgebaeude_emissivity(node):
   children             = node.Children.value
@@ -279,23 +288,24 @@ def set_hauptgebaeude_emissivity(node):
 
 if "EVALUATION" == SCENE_MODE:
     hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, -0.2, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
     set_hauptgebaeude_emissivity(hauptgebaeude)
 
+    scale = 1.15
     lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
-    lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+    lion.Transform.value = avango.gua.make_trans_mat(-1.5, -0.05, 3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
     
     if "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE:
       lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
 
     lion.Material.value.EnableBackfaceCulling.value = False
-    #lion.Material.value.set_uniform("Emissivity", 3.0)
+    lion.Material.value.set_uniform("Emissivity", 3.0)
 
     lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
-    #lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
-    lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.25, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) 
+    lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
+    lion2.Transform.value = avango.gua.make_trans_mat(1.5, -0.05, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(scale, scale, scale) 
 
 if "ARCHITECTURE" == SCENE_MODE:
     hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again_joined.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
@@ -307,7 +317,7 @@ if "LIONS" == SCENE_MODE:
     lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
 
     lion.Material.value.EnableBackfaceCulling.value = False
-    #lion.Material.value.set_uniform("Emissivity", 3.0)
+    lion.Material.value.set_uniform("Emissivity", 3.0)
 
     lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
@@ -323,11 +333,12 @@ nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
-
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_steelyglint_for_hydra.sr")
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
 
@@ -365,7 +376,7 @@ def append_trees_to_list(parent_node):
         tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value = avango.gua.make_trans_mat(-4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-        #tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
+        tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
 
         #lion.Material.value.set_uniform("Emissivity", 3.0)
 
@@ -376,7 +387,7 @@ def append_trees_to_list(parent_node):
         tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value =  avango.gua.make_trans_mat(4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0)#* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-        #tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
+        tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
 
         parent_node.Children.value.append(tree_to_append)
         tree_label += 1
@@ -400,8 +411,8 @@ scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 SCREEN_WIDTH  = 4.91
 SCREEN_HEIGHT = 2.78
 
-SCREEN_WIDTH_BACK  = 4.91 * 1.4
-SCREEN_HEIGHT_BACK = 2.78 * 1.4
+SCREEN_WIDTH_BACK  = SCREEN_WIDTH * 1.4
+SCREEN_HEIGHT_BACK = SCREEN_HEIGHT * 1.4
 
 screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
 
@@ -414,6 +425,10 @@ screen_observer_right = avango.gua.nodes.ScreenNode(Name="screen_observer_right"
 #size = avango.gua.Vec2ui(1600, 1200)
 #size = avango.gua.Vec2ui(1400, 1600) # vive pro
 size = avango.gua.Vec2ui(3840, 2160)
+
+if("HMD_LIKE" == RES_MODE):
+  size = avango.gua.Vec2ui(1920, 1080)
+
 #size = avango.gua.Vec2ui(4096, 2160)
 
 if("TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
@@ -421,15 +436,15 @@ if("TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
 
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
 #tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
-#lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
-'''
+lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
+
 res_pass = avango.gua.nodes.ResolvePassDescription()
 
 res_pass.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/bright_sky.jpg"
 
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
-'''
+
 #tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 spoints_pass_description = avango.gua.nodes.SPointsPassDescription()
 occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
@@ -437,9 +452,9 @@ occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription
 pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes=[
         avango.gua.nodes.TriMeshPassDescription(),
-        #avango.gua.nodes.LightVisibilityPassDescription(),
+        avango.gua.nodes.LightVisibilityPassDescription(),
         avango.gua.nodes.SPointsPassDescription(),
-        #res_pass
+        res_pass
     ])
 
 occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
@@ -454,9 +469,9 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.7
 
-camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 2.0)
-camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
-camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 2.0)
+camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
+camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
+camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
 
 # camera_translations_left = avango.gua.Vec3( 1.0, eye_height, 2.0)
 # camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
@@ -510,28 +525,29 @@ screen_path = "/net/grouped_view_setups_and_scene/navigation/screen"
 screen_observer_back_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_back"
 screen_observer_right_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_right"
 
-#eye_distance = 0.06
-eye_distance = 0.0
+eye_distance = 0.064
+#eye_distance = 0.0
 
 if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
-  eye_distance = 0.00
+  eye_distance = 0.0
 
 if "VIDEO_CAMERA" == OBSERVER_MODE:
     eye_distance = 0.0
 
 NEARCLIP = 1.0
 
+server_size = avango.gua.Vec2ui(1920, 1080)
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
     LeftScreenPath=screen_path,
     SceneGraph="scenegraph",
-    Resolution=size,
+    Resolution=server_size,
     OutputWindowName="server_window",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
     BlackList = ["invisible_osaka_avatar"],
-    NearClip = NEARCLIP
+    #NearClip = NEARCLIP
     )
 
 
@@ -548,7 +564,7 @@ client_cam_center = avango.gua.nodes.CameraNode(
 
     EyeDistance = eye_distance,
     EnableStereo = True,
-    NearClip = NEARCLIP
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
@@ -565,7 +581,7 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     EyeDistance = eye_distance,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    NearClip = NEARCLIP,
+    #NearClip = NEARCLIP,
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
@@ -590,7 +606,7 @@ client_cam_left = avango.gua.nodes.CameraNode(
 
     EyeDistance = eye_distance,
     EnableStereo = True,
-    NearClip = NEARCLIP
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
@@ -607,7 +623,7 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     EyeDistance = eye_distance,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    NearClip = NEARCLIP,
+    #NearClip = NEARCLIP,
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
@@ -618,6 +634,11 @@ screen_right_path = screen_path
 if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
   screen_right_path = screen_observer_right_path
 
+
+eye_distance_user_right = eye_distance
+
+if "VIDEO_POWERWALL" == CLIENT_MODE:
+  eye_distance_user_right = 0.0
 
 
 client_cam_right = avango.gua.nodes.CameraNode(
@@ -631,9 +652,9 @@ client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = eye_distance,
+    EyeDistance = eye_distance_user_right,
     EnableStereo = True,
-    NearClip = NEARCLIP
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
@@ -647,16 +668,50 @@ occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = eye_distance,
+    EyeDistance = eye_distance_user_right,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    NearClip = NEARCLIP,
+    #NearClip = NEARCLIP,
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
     )
 
+# client_cam_slot2 = avango.gua.nodes.CameraNode(
+#     ViewID=6,
+#     Name="viewer_0_weimar_cam_slot_2",
+#     LeftScreenPath=screen_right_path,
+#     RightScreenPath=screen_right_path,
+#     SceneGraph="scenegraph",
+#     Resolution=size,
+#     OutputWindowName="client_window_weimar_cam_slot_2",
+#     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
+#     PipelineDescription=pipeline_description,
 
+#     EyeDistance = 0.0,
+#     EnableStereo = True,
+#     #NearClip = NEARCLIP
+#     )
+
+# occlusion_slave_client_cam_slot2 = avango.gua.nodes.CameraNode(
+#     ViewID=6,
+#     Name="os_weimar_v0_osaka_slot_2",
+#     LeftScreenPath=screen_right_path,
+#     RightScreenPath=screen_right_path,
+#     SceneGraph="scenegraph",
+#     Resolution=size,
+#     OutputWindowName="slave_weimar_v0_osaka_cam_slot_2",
+#     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
+#     PipelineDescription=occlusion_slave_pipeline_description,
+#     #PipelineDescription=pipeline_description,
+#     EyeDistance = 0.0,
+#     EnableStereo = True,
+#     BlackList = ["invisible_osaka_avatar"],
+#     #NearClip = NEARCLIP,
+#     #FarClip = FARCLIP,
+#     #NearClip = NEARCLIP
+#     #needs to be invisible as soon as the real render-client comes into play
+#     )
 
 
 
@@ -669,14 +724,14 @@ scene_view_transform.Children.value = [scene_transform]#, screen_geometry]
 loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 
 navigation = avango.gua.nodes.TransformNode(Name="navigation")
-navigation.Children.value = [screen, screen_observer_back, screen_observer_right, server_cam, client_cam_left, client_cam_center, client_cam_right, occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
+navigation.Children.value = [screen, screen_observer_back, screen_observer_right, server_cam, client_cam_left, client_cam_center, client_cam_right,  occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
 
 navigation.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 11.0)
 
 grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
 grouped_view_setups_and_scene.Children.value = [navigation, scene_view_transform, loggings_indicator]
 
-screen.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, -2.0)
+screen.Transform.value = avango.gua.make_trans_mat(0.0, SCREEN_HEIGHT / 2.0 + 0.045, -2.0)
 screen_observer_back.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, -2.0)
 #screen_observer_back.Transform.value = avango.gua.make_trans_mat(0.0, 1.445 + OBSERVER_BACK_DOWN_TRANSLATION, -2.0)
 
@@ -742,13 +797,13 @@ for p in occlusion_slave_pipeline_description.Passes.value:
 nettrans.distribute_object(occlusion_slave_pipeline_description)
 
 # setup viewing
-window = avango.gua.nodes.GlfwWindow(Size=size,
-                                     LeftResolution=size,
+window = avango.gua.nodes.GlfwWindow(Size=server_size,
+                                     LeftResolution=server_size,
                                      Title="server_window")
 
 window.EnableVsync.value = False
 
-#avango.gua.register_window("server_window", window)
+avango.gua.register_window("server_window", window)
 
 #setup viewer
 viewer = avango.gua.nodes.Viewer()
@@ -782,22 +837,25 @@ if (not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE)
     #tracking_target id 18 = video cam
     DeviceSensorVideoCamera = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
     DeviceSensorVideoCamera.Station.value = "tracking-dbl-video-camera"
-    DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=22
     DeviceSensorGlassesRight = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    DeviceSensorGlassesRight.Station.value = "tracking-dbl-glasses-A"
-    DeviceSensorGlassesRight.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    #if "VIDEO_POWERWALL" == CLIENT_MODE:
+    DeviceSensorGlassesRight.Station.value = "tracking-dbl-video-camera"
+    #else:
+    #  DeviceSensorGlassesRight.Station.value = "tracking-dbl-glasses-C"
+    DeviceSensorGlassesRight.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=23
     DeviceSensorGlassesCenter = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
     DeviceSensorGlassesCenter.Station.value = "tracking-dbl-glasses-B"
-    DeviceSensorGlassesCenter.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorGlassesCenter.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=24
     DeviceSensorGlassesLeft = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    DeviceSensorGlassesLeft.Station.value = "tracking-dbl-glasses-C"
-    DeviceSensorGlassesLeft.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorGlassesLeft.Station.value = "tracking-dbl-glasses-A"
+    DeviceSensorGlassesLeft.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
 
 
@@ -808,6 +866,8 @@ if (not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE)
         occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
         client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
         occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+        # client_cam_slot2.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+
     # else:
     #     client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
     #     occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)

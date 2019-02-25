@@ -51,6 +51,7 @@ av::gua::NamedSharedMemoryController::getGuaNamedSharedMemoryController() const
     return m_guaNamedSharedMemoryController;
 }
 
+#if not defined(__WIN32__) && not defined(_WIN32) && not defined(_WIN64)
 void 
 av::gua::NamedSharedMemoryController::add_memory_segment(std::string const& segment_name, uint64_t size_in_byte) {
   m_guaNamedSharedMemoryController->add_memory_segment(segment_name, size_in_byte);
@@ -66,3 +67,4 @@ av::gua::NamedSharedMemoryController::register_remotely_constructed_object_on_se
                                                                                       std::string const& object_name) {
   m_guaNamedSharedMemoryController->register_remotely_constructed_object_on_segment(segment_name, object_name);
 }
+#endif

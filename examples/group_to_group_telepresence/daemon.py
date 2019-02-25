@@ -116,6 +116,8 @@ def init_dbl_tracking():
     #_dtrack.stations[11] = avango.daemon.Station('tracking-dbl-glasses-3_1')
     #_dtrack.stations[10] = avango.daemon.Station('tracking-dbl-glasses-4_1')
 
+    #_dtrack.stations[19] = avango.daemon.Station('tracking-lcd-cam') # new camera shutter
+
     _dtrack.stations[3] = avango.daemon.Station('tracking-dbl-glasses-1_2')
     _dtrack.stations[5] = avango.daemon.Station('tracking-dbl-glasses-3_2')
     _dtrack.stations[4] = avango.daemon.Station('tracking-dbl-glasses-4_2') 

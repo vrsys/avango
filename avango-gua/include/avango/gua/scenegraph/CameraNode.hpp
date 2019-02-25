@@ -57,7 +57,7 @@ namespace av
       /**
        * Destructor made protected to prevent allocation on stack.
        */
-      virtual ~CameraNode() {}
+      // virtual ~CameraNode() {}
 
     public:
 

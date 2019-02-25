@@ -59,16 +59,28 @@ def start():
 
     size = avango.gua.Vec2ui(1600, 1200)
 
-    window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
-    window.EnableVsync.value = False
+    window1 = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window1.EnableVsync.value = False
 
-    avango.gua.register_window("window", window)
+    avango.gua.register_window("window1", window1)
 
-    cam = avango.gua.nodes.CameraNode(
+    cam1 = avango.gua.nodes.CameraNode(
         LeftScreenPath="/screen",
         SceneGraph="scenegraph",
         Resolution=size,
-        OutputWindowName="window",
+        OutputWindowName="window1",
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
+
+    window2 = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window2.EnableVsync.value = False
+
+    avango.gua.register_window("window2", window2)
+
+    cam2 = avango.gua.nodes.CameraNode(
+        LeftScreenPath="/screen",
+        SceneGraph="scenegraph",
+        Resolution=size,
+        OutputWindowName="window2",
         Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
@@ -86,31 +98,34 @@ def start():
 
     pipeline_description = avango.gua.nodes.PipelineDescription(Passes=[
         avango.gua.nodes.TriMeshPassDescription(),
-        avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
         res_pass,
-        #anti_aliasing,
+        anti_aliasing,
     ])
 
-    cam.PipelineDescription.value = pipeline_description
-
-    cam.PipelineDescription.value.EnableABuffer.value = False
+    cam1.PipelineDescription.value = pipeline_description
+    cam2.PipelineDescription.value = pipeline_description
 
     screen = avango.gua.nodes.ScreenNode(Name="screen",
                                          Width=2,
                                          Height=1.5,
-                                         Children=[cam])
+                                         Children=[cam1, cam2])
 
     graph.Root.value.Children.value = [transform2, light, screen]
+
+    vt_backend = avango.gua.VTBackend()
+    vt_backend.add_camera(cam1)
+    vt_backend.add_camera(cam2)
+    vt_backend.start_backend()
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
-    viewer.Windows.value = [window]
+    viewer.Windows.value = [window1, window2]
     viewer.DesiredFPS.value = 500.0
 
     monkey_updater = TimedRotate()
-    monkey_updater.set_window(window)
+    monkey_updater.set_window(window1)
 
     timer = avango.nodes.TimeSensor()
     monkey_updater.TimeIn.connect_from(timer.Time)

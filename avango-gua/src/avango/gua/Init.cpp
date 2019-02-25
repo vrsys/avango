@@ -21,9 +21,6 @@
 #include <avango/gua/renderer/SPointsLoader.hpp>
 #include <avango/gua/renderer/SPointsPassDescription.hpp>
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-#include <avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp>
-#endif
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
@@ -78,6 +75,10 @@
 #include <avango/gua/renderer/TV_3Renderer.hpp>
 #include <avango/gua/renderer/TV_3SurfacePassDescription.hpp>
 #include <avango/gua/renderer/TV_3VolumePassDescription.hpp>
+#endif
+
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include <avango/gua/virtual_texturing/VTBackend.hpp>
 #endif
 
 #include <avango/gua/renderer/WindowBase.hpp>
@@ -213,9 +214,6 @@ av::gua::Init::initClass()
         av::gua::SPointsLoader::initClass();
         av::gua::SPointsPassDescription::initClass();
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-        av::gua::DeferredVirtualTexturingPassDescription::initClass();
-#endif
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
@@ -233,6 +231,10 @@ av::gua::Init::initClass()
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         av::gua::LineStripLoader::initClass();
+
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+        av::gua::VTBackend::initClass();
+#endif
 
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();

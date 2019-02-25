@@ -1,0 +1,6 @@
+#ifndef AV_PYTHON_GUA_VTBACKEND_HPP
+#define AV_PYTHON_GUA_VTBACKEND_HPP
+
+void init_VTBackend();
+
+#endif //AV_PYTHON_GUA_VTBACKEND_HPP

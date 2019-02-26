@@ -25,7 +25,4 @@
 
 shade::types::TypeAccessor::HashValue shade::types::Vec4Accessor::m_hash;
 
-shade::types::TypeAccessor::HashType shade::types::Vec4Accessor::hash(void) const
-{
-  return &m_hash;
-}
+shade::types::TypeAccessor::HashType shade::types::Vec4Accessor::hash(void) const { return &m_hash; }

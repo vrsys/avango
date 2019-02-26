@@ -25,12 +25,6 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Constant, "Constant.glsl", 
-    SHADE_NONE,
-    SHADE_ENV_DEFS(application_stage, (color))
-    )
+SHADE_CLASS_INIT(Constant, "Constant.glsl", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (color)))
 
-shade::vec4<> Constant::shade(void)
-{
-  return invoke< vec4<> >("Constant_shade_impl");
-}
+shade::vec4<> Constant::shade(void) { return invoke<vec4<>>("Constant_shade_impl"); }

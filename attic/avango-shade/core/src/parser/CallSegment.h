@@ -30,28 +30,26 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class CallSegment : public Segment
+namespace parser
+{
+class CallSegment : public Segment
+{
+  public:
+    template <class Iter>
+    CallSegment(const std::string& name, Iter param_begin, Iter param_end, const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) : Segment(begin, end), m_name(name)
     {
-    public:
-
-      template<class Iter> CallSegment(const std::string& name, Iter param_begin, Iter param_end, const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) :
-        Segment(begin, end),
-        m_name(name)
-      {
         std::copy(param_begin, param_end, std::back_inserter(m_parameters));
-      }
+    }
 
-      /*virtual*/ void get_content(formatter::Generator& generator, Scope& scope, const FunctionCall& call, std::ostream& error_log) const;
+    /*virtual*/ void get_content(formatter::Generator& generator, Scope& scope, const FunctionCall& call, std::ostream& error_log) const;
 
-    private:
-      std::string m_name;
-      typedef std::vector<boost::shared_ptr<Segment> > Parameters;
-      Parameters m_parameters;
-    };
+  private:
+    std::string m_name;
+    typedef std::vector<boost::shared_ptr<Segment>> Parameters;
+    Parameters m_parameters;
+};
 
-  }
-}
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_CallSegment_H */

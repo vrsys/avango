@@ -28,17 +28,16 @@
 #include "Vec3Accessor.h"
 #include "local.h"
 
-
 namespace shade
 {
-  template<class Qualifier = Type> class vec3 :
-    public TypeBase<vec3<Qualifier>, Qualifier>,
-    public types::Vec3Accessor
-  {
+template <class Qualifier = Type>
+class vec3 : public TypeBase<vec3<Qualifier>, Qualifier>, public types::Vec3Accessor
+{
   public:
     vec3(void);
     vec3(float x, float y, float z);
-    template<class Q> void copy_value(const vec3<Q>& source);
+    template <class Q>
+    void copy_value(const vec3<Q>& source);
 
     /*virtual*/ void set(float x, float y, float z);
     /*virtual*/ void get(float& x, float& y, float& z) const;
@@ -51,8 +50,8 @@ namespace shade
 
   private:
     float m_x, m_y, m_z;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/vec3_impl.cpp"
 

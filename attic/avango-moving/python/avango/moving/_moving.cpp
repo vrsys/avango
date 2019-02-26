@@ -35,28 +35,28 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_moving)
 {
-  av::moving::Init::initClass();
+    av::moving::Init::initClass();
 
-  register_field<av::moving::SFTrackball>("SFTrackball");
-  register_multifield<av::moving::MFTrackball>("MFTrackball");
+    register_field<av::moving::SFTrackball>("SFTrackball");
+    register_multifield<av::moving::MFTrackball>("MFTrackball");
 
-  register_field<av::moving::SFDesktopFlyer>("SFDesktopFlyer");
-  register_multifield<av::moving::MFDesktopFlyer>("MFDesktopFlyer");
+    register_field<av::moving::SFDesktopFlyer>("SFDesktopFlyer");
+    register_multifield<av::moving::MFDesktopFlyer>("MFDesktopFlyer");
 
-  class_<av::moving::Trackball, av::Link<av::moving::Trackball>, bases<av::osg::MatrixTransform>, boost::noncopyable >("Trackball", "Trackball mover", no_init);
-  class_<av::moving::DesktopFlyer, av::Link<av::moving::DesktopFlyer>, bases<av::osg::MatrixTransform>, boost::noncopyable >("DesktopFlyer", "DesktopFlyer mover", no_init);
+    class_<av::moving::Trackball, av::Link<av::moving::Trackball>, bases<av::osg::MatrixTransform>, boost::noncopyable>("Trackball", "Trackball mover", no_init);
+    class_<av::moving::DesktopFlyer, av::Link<av::moving::DesktopFlyer>, bases<av::osg::MatrixTransform>, boost::noncopyable>("DesktopFlyer", "DesktopFlyer mover", no_init);
 }

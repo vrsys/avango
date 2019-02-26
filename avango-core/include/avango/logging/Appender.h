@@ -33,34 +33,28 @@
 
 namespace av
 {
+namespace logging
+{
+class LoggingEvent;
 
-  namespace logging
-  {
-
-    class LoggingEvent;
-
+/**
+ * Appender abstract base class.
+ * Appenders perform output processing of logging events.
+ */
+class AV_DLL Appender
+{
+  public:
     /**
-     * Appender abstract base class.
-     * Appenders perform output processing of logging events.
+     * Process given logging event.
+     * This function is usually called by the logger.
      */
-    class AV_DLL Appender
-    {
+    virtual void doAppend(LoggingEvent& event) = 0;
 
-    public:
+  protected:
+    virtual ~Appender() {}
+};
 
-      /**
-       * Process given logging event.
-       * This function is usually called by the logger.
-       */
-      virtual void doAppend(LoggingEvent& event) = 0;
-
-    protected:
-
-      virtual ~Appender() {}
-
-    };
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 

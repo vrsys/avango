@@ -33,7 +33,7 @@
 
 int main()
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+    av::getRootLogger().addConsoleAppender();
+    av::ApplicationInstance::get();
+    return UnitTest::RunAllTests();
 }

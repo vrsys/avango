@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_MOVING_DOXYGEN_H)
-

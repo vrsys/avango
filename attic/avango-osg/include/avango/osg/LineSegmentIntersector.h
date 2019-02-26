@@ -33,90 +33,85 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Convenience method for checking line intersection, returns hit point in
+ * global coordinates, if no intersection was found given end point is returned.
+ */
+AV_OSG_DLL ::osg::Vec3 lineIntersect(::osg::Vec3 start, ::osg::Vec3 end, Link<Node> node);
+
+/**
+ * LineSegmentIntersector wraps functionality of ::osg::LineSegmentIntersector
+ * and ::osg::IntersectionVisitor.
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LineSegmentIntersector : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Convenience method for checking line intersection, returns hit point in
-     * global coordinates, if no intersection was found given end point is returned.
+     * Constructor
      */
-    AV_OSG_DLL ::osg::Vec3 lineIntersect(::osg::Vec3 start, ::osg::Vec3 end, Link<Node> node);
-
+    LineSegmentIntersector();
 
     /**
-     * LineSegmentIntersector wraps functionality of ::osg::LineSegmentIntersector
-     * and ::osg::IntersectionVisitor.
-     *
-     * \ingroup av_osg
+     * Entry scenegraph node from which the intersection traversal should start.
      */
-    class AV_OSG_DLL LineSegmentIntersector : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    SFNode RootNode;
 
-    public:
-      /**
-       * Constructor
-       */
-      LineSegmentIntersector();
+    /**
+     * Line segment transformation given in global coordinates (default: identity).
+     */
+    SFMatrix LineMatrix;
 
-      /**
-       * Entry scenegraph node from which the intersection traversal should start.
-       */
-      SFNode RootNode;
+    /**
+     * Length of line segment used for intersection (default: 999)
+     */
+    SFFloat LineLength;
 
-      /**
-       * Line segment transformation given in global coordinates (default: identity).
-       */
-      SFMatrix LineMatrix;
+    /**
+     * Pointing direction given in transformation of 'LineMatrix' (default: Vec3(0,1,0))
+     */
+    SFVec3 LineDirection;
 
-      /**
-       * Length of line segment used for intersection (default: 999)
-       */
-      SFFloat LineLength;
+    /**
+     * Output field: Specifies number of intersections found.
+     */
+    SFInt HitCount;
 
-      /**
-       * Pointing direction given in transformation of 'LineMatrix' (default: Vec3(0,1,0))
-       */
-      SFVec3 LineDirection;
+    /**
+     * Output field: Node path from first hit to root node.
+     */
+    MFNode HitNodePath;
 
-      /**
-       * Output field: Specifies number of intersections found.
-       */
-      SFInt HitCount;
+    /**
+     * Output field: Global coordinates of first hit point.
+     */
+    SFVec3 HitPoint;
 
-      /**
-       * Output field: Node path from first hit to root node.
-       */
-      MFNode HitNodePath;
+    /**
+     * Ouput field: Normal at 'HitPoint' in global coordinates.
+     */
+    SFVec3 HitNormal;
 
-      /**
-       * Output field: Global coordinates of first hit point.
-       */
-      SFVec3   HitPoint;
+    /* virtual */ void evaluate();
+    /* virtual */ void fieldHasChanged(const av::Field& field);
 
-      /**
-       * Ouput field: Normal at 'HitPoint' in global coordinates.
-       */
-      SFVec3   HitNormal;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LineSegmentIntersector();
 
+  private:
+    bool mIntersect;
 
-      /* virtual */ void evaluate();
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-
-    protected:
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LineSegmentIntersector();
-
-    private:
-
-      bool mIntersect;
-
-      std::vector<av::Link<av::osg::Node> > getAvangoNodePath(::osgUtil::LineSegmentIntersector::Intersections i);
-
-    };
-  }
-}
+    std::vector<av::Link<av::osg::Node>> getAvangoNodePath(::osgUtil::LineSegmentIntersector::Intersections i);
+};
+} // namespace osg
+} // namespace av
 
 #endif // #if !defined(AVANGO_OSG_ROOTSERVICE_H)
-

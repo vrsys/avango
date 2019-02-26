@@ -36,56 +36,52 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * SingleSelector class passes one of multiple targets.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL SingleSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * SingleSelector class passes one of multiple targets.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL SingleSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    SingleSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~SingleSelector();
 
-      /**
-       * Constructor.
-       */
-      SingleSelector();
+  public:
+    /**
+     * Defines the input targets from which one is passed to SelectedTargets.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Set to true to pass the last instead of the first target to SelectedTargets.
+     */
+    SFBool LastTarget;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~SingleSelector();
+    /* virtual */ void evaluate();
+};
 
-    public:
-
-      /**
-       * Defines the input targets from which one is passed to SelectedTargets.
-       */
-      MFTargetHolder Targets;
-
-      /**
-       * Set to true to pass the last instead of the first target to SelectedTargets.
-       */
-      SFBool LastTarget;
-
-      /* virtual */ void evaluate();
-
-    };
-
-    using SFSingleSelector = SingleField<Link<SingleSelector> >;
-    using MFSingleSelector = MultiField<Link<SingleSelector> >;
-  }
+using SFSingleSelector = SingleField<Link<SingleSelector>>;
+using MFSingleSelector = MultiField<Link<SingleSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::SingleSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::SingleSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::SingleSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::SingleSelector>>;
 #endif
 
-}
+} // namespace av
 
 #endif

@@ -32,19 +32,20 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGTextureCubeMap(void)
- {
-  register_field<av::osg::SFTextureCubeMap>("SFTextureCubeMap");
-  register_multifield<av::osg::MFTextureCubeMap>("MFTextureCubeMap");
-  class_<av::osg::TextureCubeMap, av::Link<av::osg::TextureCubeMap>, bases<av::osg::Texture>, boost::noncopyable >("TextureCubeMap", "Cubic texture map", no_init);
- }
+{
+    register_field<av::osg::SFTextureCubeMap>("SFTextureCubeMap");
+    register_multifield<av::osg::MFTextureCubeMap>("MFTextureCubeMap");
+    class_<av::osg::TextureCubeMap, av::Link<av::osg::TextureCubeMap>, bases<av::osg::Texture>, boost::noncopyable>("TextureCubeMap", "Cubic texture map", no_init);
+}

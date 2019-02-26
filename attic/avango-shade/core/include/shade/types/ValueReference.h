@@ -28,12 +28,11 @@
 #include "ObjrefAccessor.h"
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  template<template<class> class T, class Q, class P = boost::shared_ptr<Shader> >
-    class ValueReferenceBase : public TypeBase<ValueReferenceBase<T, Q, P>, Type>
-  {
+template <template <class> class T, class Q, class P = boost::shared_ptr<Shader>>
+class ValueReferenceBase : public TypeBase<ValueReferenceBase<T, Q, P>, Type>
+{
   public:
     ValueReferenceBase(void);
 
@@ -42,12 +41,15 @@ namespace shade
     P get(void) const;
     P& operator=(const P& v);
 
-    class NoValueAsReference {};
+    class NoValueAsReference
+    {
+    };
     T<Type> get_value(void);
-    template<class Q2> const T<Q2>& set_value(const T<Q2>& arg);
+    template <class Q2>
+    const T<Q2>& set_value(const T<Q2>& arg);
 
     /*virtual*/ boost::shared_ptr<Type::State> create_state(const PipelineState& ps) const;
-    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void (Shader*)>) const;
+    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void(Shader*)>) const;
     /*virtual*/ void insert_references(boost::shared_ptr<Type::State>, ObjectMap&) const;
     /*virtual*/ std::string get_constructor_str(void) const;
     /*virtual*/ std::string get_uniq_id(void) const;
@@ -58,37 +60,35 @@ namespace shade
 
     class State : public Type::State
     {
-    public:
-      ObjectMap::Index index;
+      public:
+        ObjectMap::Index index;
     };
 
   private:
     P m_ref;
-  };
+};
 
-  template<template<class> class T, class Q, class P = boost::shared_ptr<Shader> >
-  class ValueReference : public ValueReferenceBase<T, Q, P>
-  {
+template <template <class> class T, class Q, class P = boost::shared_ptr<Shader>>
+class ValueReference : public ValueReferenceBase<T, Q, P>
+{
   public:
     using ValueReferenceBase<T, Q, P>::operator->;
     using ValueReferenceBase<T, Q, P>::operator*;
     using ValueReferenceBase<T, Q, P>::operator=;
-  };
+};
 
-  template<template<class> class T, class Q>
-  class ValueReference<T, Q, boost::shared_ptr<Shader> > :
-    public ValueReferenceBase<T, Q, boost::shared_ptr<Shader> >,
-    public types::ObjrefAccessor
-  {
+template <template <class> class T, class Q>
+class ValueReference<T, Q, boost::shared_ptr<Shader>> : public ValueReferenceBase<T, Q, boost::shared_ptr<Shader>>, public types::ObjrefAccessor
+{
   public:
-    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader> >::operator->;
-    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader> >::operator*;
-    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader> >::operator=;
+    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader>>::operator->;
+    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader>>::operator*;
+    using ValueReferenceBase<T, Q, boost::shared_ptr<Shader>>::operator=;
 
     /*virtual*/ void set_generic(boost::shared_ptr<Shader> v);
     /*virtual*/ boost::shared_ptr<Shader> get_generic(void) const;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/ValueReference_impl.cpp"
 

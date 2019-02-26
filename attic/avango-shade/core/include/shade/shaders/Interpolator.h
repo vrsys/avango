@@ -38,30 +38,28 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+template <template <class> class T>
+class Interpolator : public TemplateT<T, Type, Interpolator, Initializeable>
+{
+  public:
+    /*virtual*/ void_<> init_post_geometry(void);
 
-    template<template<class> class T> class Interpolator : public TemplateT<T, Type, Interpolator, Initializeable>
-    {
-    public:
+    ValueReference<T, local> input;
+    ValueReference<T, local> output;
+    objref<boost::shared_ptr<shaders::Geometry>, shade::const_> geometry;
 
-      /*virtual*/ void_<> init_post_geometry(void);
+  private:
+    void init_post_geometry_inline(formatter::Generator& generator) const;
+    void generate_weighting(formatter::Generator& generator, const std::string& component, int index) const;
 
-      ValueReference<T, local> input;
-      ValueReference<T, local> output;
-      objref<boost::shared_ptr<shaders::Geometry>, shade::const_> geometry;
+    SHADE_TEMPLATE_T_DERIVED_DECL(T, Interpolator, Initializeable)
+};
 
-    private:
-
-      void init_post_geometry_inline(formatter::Generator& generator) const;
-      void generate_weighting(formatter::Generator& generator, const std::string& component, int index) const;
-
-      SHADE_TEMPLATE_T_DERIVED_DECL(T, Interpolator, Initializeable)
-    };
-
-    SHADE_TEMPLATE_T_INIT(Interpolator, "", SHADE_NONE, SHADE_DEFS((input)(output)(geometry)))
-  }
-}
+SHADE_TEMPLATE_T_INIT(Interpolator, "", SHADE_NONE, SHADE_DEFS((input)(output)(geometry)))
+} // namespace shaders
+} // namespace shade
 
 #include "impl/Interpolator_impl.cpp"
 

@@ -28,17 +28,16 @@
 #include "Matrix4Accessor.h"
 #include "local.h"
 
-
 namespace shade
 {
-  template<class Qualifier = Type> class matrix4 :
-    public TypeBase<matrix4<Qualifier>, Qualifier>,
-    public types::Matrix4Accessor
-  {
+template <class Qualifier = Type>
+class matrix4 : public TypeBase<matrix4<Qualifier>, Qualifier>, public types::Matrix4Accessor
+{
   public:
     matrix4(void);
-    matrix4(const float* values); 
-    template<class Q> void copy_value(const matrix4<Q>& source);
+    matrix4(const float* values);
+    template <class Q>
+    void copy_value(const matrix4<Q>& source);
 
     /*virtual*/ void set(const float* values);
     /*virtual*/ void get(float* values) const;
@@ -50,8 +49,8 @@ namespace shade
 
   private:
     float m_values[16];
-  };
-}
+};
+} // namespace shade
 
 #include "impl/matrix4_impl.cpp"
 

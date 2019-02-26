@@ -39,63 +39,61 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * An Avango NG device for communication with a Wacom tablet.
+ * the Linux event system will propagate the inputs via /dev/input/wacom.
+ */
+class WacomTablet : public HIDInput
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * An Avango NG device for communication with a Wacom tablet.
-     * the Linux event system will propagate the inputs via /dev/input/wacom.
+     * Constructor
      */
-    class WacomTablet : public HIDInput
-    {
-      AV_BASE_DECLARE();
+    WacomTablet();
 
-    public:
-      /**
-       * Constructor
-       */
-      WacomTablet();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~WacomTablet();
 
+    /**
+     * Inherited from interface av::daemon::Device, used to initialize the device.
+     */
+    void startDevice();
 
-    protected:
+    /**
+     * overrides readloop() from av::daemon::HIDInput, used to create a transformation Matrix
+     * from pen input
+     */
+    void readLoop();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~WacomTablet();
+    /**
+     * overrides normalizeAbsValue from HIDInput, used to perform custom normalization
+     * of some values
+     */
+    float normalizeAbsValue(const input_event& event) const;
 
-      /**
-       * Inherited from interface av::daemon::Device, used to initialize the device.
-       */
-      void startDevice();
+    /**
+     * Retrieves aspect ratio of tablet from maximum absolute values, Ratio is written in Value12
+     */
+    void retrieveAspectRatio();
 
-      /**
-       * overrides readloop() from av::daemon::HIDInput, used to create a transformation Matrix
-       * from pen input
-       */
-      void readLoop();
+    /**
+     * overrides HIDInput::parse_features() to add toggle_reset property
+     */
+    int parse_features();
 
-      /**
-       * overrides normalizeAbsValue from HIDInput, used to perform custom normalization
-       * of some values
-       */
-      float normalizeAbsValue(const input_event& event) const;
-
-      /**
-       * Retrieves aspect ratio of tablet from maximum absolute values, Ratio is written in Value12
-       */
-      void retrieveAspectRatio();
-
-      /**
-       * overrides HIDInput::parse_features() to add toggle_reset property
-       */
-      int parse_features();
-
-      /**
-       * toggle switch to reset absolute axes when pen is lifted up to zero
-       */
-      bool mToggleReset;
-    };
-  }
-}
+    /**
+     * toggle switch to reset absolute axes when pen is lifted up to zero
+     */
+    bool mToggleReset;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

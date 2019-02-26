@@ -30,22 +30,22 @@
 
 namespace shade
 {
-  class Shader;
+class Shader;
 
-  namespace types
-  {
-    class TextureAccessor : public TypeAccessor
-    {
-    public:
-      virtual void set(boost::shared_ptr<Texture> v) = 0;
-      virtual boost::shared_ptr<Texture> get(void) const = 0;
+namespace types
+{
+class TextureAccessor : public TypeAccessor
+{
+  public:
+    virtual void set(boost::shared_ptr<Texture> v) = 0;
+    virtual boost::shared_ptr<Texture> get(void) const = 0;
 
-      /*virtual*/ HashType hash(void) const;
-    private:
-      static HashValue m_hash;
-    };
-  }
-}
+    /*virtual*/ HashType hash(void) const;
 
+  private:
+    static HashValue m_hash;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_TextureAccessor_H */

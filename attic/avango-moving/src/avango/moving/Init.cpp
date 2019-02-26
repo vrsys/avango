@@ -32,19 +32,18 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::moving::Init"));
+av::Logger& logger(av::getLogger("av::moving::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::moving::Init);
 
-/* static */ void
-av::moving::Init::initClass()
+/* static */ void av::moving::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::moving::Trackball::initClass();
-    av::moving::DesktopFlyer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::moving::Trackball::initClass();
+        av::moving::DesktopFlyer::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::moving::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::moving::Init", true);
+    }
 }

@@ -122,7 +122,6 @@
 #include "utils/Ray.hpp"
 #include "utils/NamedSharedMemoryController.hpp"
 
-
 #if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
 #include "virtual_texturing/VTBackend.hpp"
 #endif
@@ -134,22 +133,21 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-       using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_gua)
 {
     PyEval_InitThreads();
-
 
     av::gua::Init::initClass();
 
@@ -282,5 +280,4 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_Ray();
     init_NamedSharedMemoryController();
-
 }

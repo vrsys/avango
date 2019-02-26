@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_SOUND_DOXYGEN_H)
-

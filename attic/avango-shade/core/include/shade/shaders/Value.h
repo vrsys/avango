@@ -33,34 +33,32 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+template <template <class> class T, class Q = local>
+class Value : public TemplateTQ<T, Q, Value, Gettable<T>, Settable<T>>
+{
+  public:
+    /*virtual*/ T<Type> get(void);
+    /*virtual*/ T<Type> set(T<Type> arg);
 
-    template<template<class> class T, class Q = local> class Value : public TemplateTQ<T, Q, Value, Gettable<T>, Settable<T> >
-    {
-    public:
+    T<Q> value;
 
-      /*virtual*/ T<Type> get(void);
-      /*virtual*/ T<Type> set(T<Type> arg);
+  private:
+    void get_deferred_getter(formatter::Generator& generator, bool setter) const;
+    void get_readonly_getter(formatter::Generator& generator) const;
+    void get_default_getter(formatter::Generator& generator, const T<Q>& type) const;
+    void get_getter(formatter::Generator& generator, ShaderEnvironment env, bool setter) const;
 
-      T<Q> value;
+    void get_inline(formatter::Generator& generator) const;
+    void set_inline(formatter::Generator& generator) const;
 
-    private:
+    SHADE_TEMPLATE_T_Q_MULTI_DERIVED_DECL(T, Q, Value, (Gettable<T>)(Settable<T>))
+};
 
-      void get_deferred_getter(formatter::Generator& generator, bool setter) const;
-      void get_readonly_getter(formatter::Generator& generator) const;
-      void get_default_getter(formatter::Generator& generator, const T<Q>& type) const;
-      void get_getter(formatter::Generator& generator, ShaderEnvironment env, bool setter) const;
-
-      void get_inline(formatter::Generator& generator) const;
-      void set_inline(formatter::Generator& generator) const;
-
-      SHADE_TEMPLATE_T_Q_MULTI_DERIVED_DECL(T, Q, Value, (Gettable<T>)(Settable<T>))
-    };
-
-    SHADE_TEMPLATE_T_Q_INIT(Value, "", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (value)))
-  }
-}
+SHADE_TEMPLATE_T_Q_INIT(Value, "", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (value)))
+} // namespace shaders
+} // namespace shade
 
 #include "impl/Value_impl.cpp"
 

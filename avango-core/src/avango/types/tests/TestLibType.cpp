@@ -40,9 +40,9 @@
 
 int main()
 {
-  av::getRootLogger().addConsoleAppender();
+    av::getRootLogger().addConsoleAppender();
 
-  av::Type::init();
+    av::Type::init();
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

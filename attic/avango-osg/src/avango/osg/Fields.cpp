@@ -31,7 +31,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Fields"));
+av::Logger& logger(av::getLogger("av::osg::Fields"));
 }
 
 AV_FIELD_DEFINE(av::osg::SFMatrixf);
@@ -61,36 +61,34 @@ AV_FIELD_DEFINE(av::osg::MFVec4d);
 AV_FIELD_DEFINE(av::osg::SFQuat);
 AV_FIELD_DEFINE(av::osg::MFQuat);
 
-
-void
-av::osg::initFields()
+void av::osg::initFields()
 {
-  LOG_TRACE(logger) << "initFields(): initializing osg related fields";
+    LOG_TRACE(logger) << "initFields(): initializing osg related fields";
 
-  SFMatrixf::initClass("av::osg::SFMatrixf", "av::Field");
-  MFMatrixf::initClass("av::osg::MFMatrixf", "av::Field");
+    SFMatrixf::initClass("av::osg::SFMatrixf", "av::Field");
+    MFMatrixf::initClass("av::osg::MFMatrixf", "av::Field");
 
-  SFMatrixd::initClass("av::osg::SFMatrixd", "av::Field");
-  MFMatrixd::initClass("av::osg::MFMatrixd", "av::Field");
+    SFMatrixd::initClass("av::osg::SFMatrixd", "av::Field");
+    MFMatrixd::initClass("av::osg::MFMatrixd", "av::Field");
 
-  SFVec2f::initClass("av::osg::SFVec2f", "av::Field");
-  MFVec2f::initClass("av::osg::MFVec2f", "av::Field");
+    SFVec2f::initClass("av::osg::SFVec2f", "av::Field");
+    MFVec2f::initClass("av::osg::MFVec2f", "av::Field");
 
-  SFVec2d::initClass("av::osg::SFVec2d", "av::Field");
-  MFVec2d::initClass("av::osg::MFVec2d", "av::Field");
+    SFVec2d::initClass("av::osg::SFVec2d", "av::Field");
+    MFVec2d::initClass("av::osg::MFVec2d", "av::Field");
 
-  SFVec3f::initClass("av::osg::SFVec3f", "av::Field");
-  MFVec3f::initClass("av::osg::MFVec3f", "av::Field");
+    SFVec3f::initClass("av::osg::SFVec3f", "av::Field");
+    MFVec3f::initClass("av::osg::MFVec3f", "av::Field");
 
-  SFVec3d::initClass("av::osg::SFVec3d", "av::Field");
-  MFVec3d::initClass("av::osg::MFVec3d", "av::Field");
+    SFVec3d::initClass("av::osg::SFVec3d", "av::Field");
+    MFVec3d::initClass("av::osg::MFVec3d", "av::Field");
 
-  SFVec4f::initClass("av::osg::SFVec4f", "av::Field");
-  MFVec4f::initClass("av::osg::MFVec4f", "av::Field");
+    SFVec4f::initClass("av::osg::SFVec4f", "av::Field");
+    MFVec4f::initClass("av::osg::MFVec4f", "av::Field");
 
-  SFVec4d::initClass("av::osg::SFVec4d", "av::Field");
-  MFVec4d::initClass("av::osg::MFVec4d", "av::Field");
+    SFVec4d::initClass("av::osg::SFVec4d", "av::Field");
+    MFVec4d::initClass("av::osg::MFVec4d", "av::Field");
 
-  SFQuat::initClass("av::osg::SFQuat", "av::Field");
-  MFQuat::initClass("av::osg::MFQuat", "av::Field");
+    SFQuat::initClass("av::osg::SFQuat", "av::Field");
+    MFQuat::initClass("av::osg::MFQuat", "av::Field");
 }

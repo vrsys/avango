@@ -32,32 +32,31 @@
 
 int main()
 {
-  std::cout << "Reading mouse values ..." << std::endl;
+    std::cout << "Reading mouse values ..." << std::endl;
 
-  av::Logger& logger = av::Logger::getLogger("av::daemon::SharedMemorySegment");
+    av::Logger& logger = av::Logger::getLogger("av::daemon::SharedMemorySegment");
 
-  boost::shared_ptr<av::logging::Appender> console_app = av::logging::ConsoleAppender::getInstanceSharedPtr();
-  logger.addAppender(console_app);
+    boost::shared_ptr<av::logging::Appender> console_app = av::logging::ConsoleAppender::getInstanceSharedPtr();
+    logger.addAppender(console_app);
 
-  osg::Matrixf* identity(new osg::Matrixf());
-  av::daemon::DeviceService* serv = new av::daemon::DeviceService;
-  av::daemon::DeviceSensor* sens = new av::daemon::DeviceSensor();
-  sens->DeviceService.setValue(serv);
-  sens->Station.setValue("mouse-station");
+    osg::Matrixf* identity(new osg::Matrixf());
+    av::daemon::DeviceService* serv = new av::daemon::DeviceService;
+    av::daemon::DeviceSensor* sens = new av::daemon::DeviceSensor();
+    sens->DeviceService.setValue(serv);
+    sens->Station.setValue("mouse-station");
 
-  while(true)
-  {
-    sens->evaluate();
+    while(true)
+    {
+        sens->evaluate();
 
-    // output directly from DeviceService
-    //std::cout << "Service (Value X):  "<< serv->getValue("mouse-station", 0) << std::endl;
-    //std::cout << "Service (Value Y):  "<< serv->getValue("mouse-station", 1) << std::endl;
+        // output directly from DeviceService
+        // std::cout << "Service (Value X):  "<< serv->getValue("mouse-station", 0) << std::endl;
+        // std::cout << "Service (Value Y):  "<< serv->getValue("mouse-station", 1) << std::endl;
 
-    // output coming from DeviceSensor
-    std::cout << "Sensor (Value X):  "<< sens->Value0.getValue() << std::endl;
-    std::cout << "Sensor (Value Y):  "<< sens->Value1.getValue() << std::endl;
-  }
+        // output coming from DeviceSensor
+        std::cout << "Sensor (Value X):  " << sens->Value0.getValue() << std::endl;
+        std::cout << "Sensor (Value Y):  " << sens->Value1.getValue() << std::endl;
+    }
 
-  return 1;
+    return 1;
 }
-

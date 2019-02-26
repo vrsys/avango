@@ -25,18 +25,16 @@
 
 #include <avango/FieldContainerHelper.h>
 
-
-void
-av::disconnectAndClearAllFields(FieldContainer* fieldContainer)
+void av::disconnectAndClearAllFields(FieldContainer* fieldContainer)
 {
-  if (fieldContainer != 0)
-  {
-    std::vector<Field*> &fields = fieldContainer->getFields();
-    for (std::vector<Field*>::iterator field = fields.begin(); field != fields.end(); ++field)
+    if(fieldContainer != 0)
     {
-      (*field)->disconnectAuditors();
-      (*field)->disconnect();
-      (*field)->clear();
+        std::vector<Field*>& fields = fieldContainer->getFields();
+        for(std::vector<Field*>::iterator field = fields.begin(); field != fields.end(); ++field)
+        {
+            (*field)->disconnectAuditors();
+            (*field)->disconnect();
+            (*field)->clear();
+        }
     }
-  }
 }

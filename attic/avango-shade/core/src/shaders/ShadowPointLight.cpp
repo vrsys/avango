@@ -26,16 +26,8 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(ShadowPointLight, "ShadowPointLight.glsl",
-    SHADE_NONE,
-    SHADE_DEFS((position)(color)(shadow_map)(modelview)(transformed_position)(transformed_surface_position)))
+SHADE_CLASS_INIT(ShadowPointLight, "ShadowPointLight.glsl", SHADE_NONE, SHADE_DEFS((position)(color)(shadow_map)(modelview)(transformed_position)(transformed_surface_position)))
 
-void_<> ShadowPointLight::illuminate(objref<> surface, vec3<> position)
-{
-  return invoke< shade::void_<> >("ShadowPointLight_illuminate_impl");
-}
+void_<> ShadowPointLight::illuminate(objref<> surface, vec3<> position) { return invoke<shade::void_<>>("ShadowPointLight_illuminate_impl"); }
 
-void_<> ShadowPointLight::transform(objref<> material)
-{
-  return invoke< shade::void_<> >("ShadowPointLight_transform_impl");
-}
+void_<> ShadowPointLight::transform(objref<> material) { return invoke<shade::void_<>>("ShadowPointLight_transform_impl"); }

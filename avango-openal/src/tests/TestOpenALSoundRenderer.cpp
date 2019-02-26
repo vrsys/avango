@@ -36,25 +36,25 @@
 
 using namespace av;
 
-namespace {
-
-  /// TESTS
-  TEST(TypeCanBeInitialized)
-  {
+namespace
+{
+/// TESTS
+TEST(TypeCanBeInitialized)
+{
     sound::openal::OpenALSoundRenderer::initClass();
     CHECK(Type::getByName("av::sound::openal::OpenALSoundRenderer") != Type::badType());
-  }
+}
 
-  TEST(CanBeDefaultCreated)
-  {
+TEST(CanBeDefaultCreated)
+{
     sound::openal::OpenALSoundRenderer::initClass();
     std::auto_ptr<sound::openal::OpenALSoundRenderer> soundRenderer(new sound::openal::OpenALSoundRenderer());
 
     CHECK(soundRenderer.get() != 0);
-  }
+}
 
-  TEST(DeviceCanBeOpenedAndClosed)
-  {
+TEST(DeviceCanBeOpenedAndClosed)
+{
     sound::openal::OpenALSoundRenderer::initClass();
     std::auto_ptr<sound::openal::OpenALSoundRenderer> soundRenderer(new sound::openal::OpenALSoundRenderer());
 
@@ -62,11 +62,10 @@ namespace {
     CHECK(soundRenderer->deviceOpen() == true);
     soundRenderer->closeDevice();
     CHECK(soundRenderer->deviceOpen() == false);
-  }
+}
 
-
-  TEST(TestDeviceField)
-  {
+TEST(TestDeviceField)
+{
     sound::openal::OpenALSoundRenderer::initClass();
     Link<sound::openal::OpenALSoundRenderer> soundRenderer(new sound::openal::OpenALSoundRenderer());
 
@@ -82,10 +81,6 @@ namespace {
 
     CHECK(soundRenderer->deviceOpen() == false);
     CHECK(soundRenderer->hasContext() == false);
-
-  }
-
-
-
-
 }
+
+} // namespace

@@ -30,20 +30,19 @@
 using namespace boost::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGDrawable(void)
- {
-  // wrapping osg::Drawable functionality
-  class_<av::osg::Drawable, av::Link<av::osg::Drawable>, bases<av::osg::Object>, boost::noncopyable >("Drawable", "docstring", no_init)
-    .def("get_bounding_box", &av::osg::Drawable::getBoundingBox)
-    ;
- }
+{
+    // wrapping osg::Drawable functionality
+    class_<av::osg::Drawable, av::Link<av::osg::Drawable>, bases<av::osg::Object>, boost::noncopyable>("Drawable", "docstring", no_init).def("get_bounding_box", &av::osg::Drawable::getBoundingBox);
+}

@@ -21,11 +21,13 @@
 *                                                                        *
 \************************************************************************/
 
-template<class Qualifier> shade::void_<Qualifier>::void_(void) :
-  TypeBase<void_<Qualifier>, Qualifier>(formatter::Constants::void_)
-{}
-
-template<class Qualifier> std::string shade::void_<Qualifier>::get_uniq_id(void) const
+template <class Qualifier>
+shade::void_<Qualifier>::void_(void) : TypeBase<void_<Qualifier>, Qualifier>(formatter::Constants::void_)
 {
-  return join_names(Qualifier::get_uniq_id(), "void");
+}
+
+template <class Qualifier>
+std::string shade::void_<Qualifier>::get_uniq_id(void) const
+{
+    return join_names(Qualifier::get_uniq_id(), "void");
 }

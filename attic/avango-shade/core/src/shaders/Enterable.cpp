@@ -26,34 +26,31 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Enterable, "", 
-    SHADE_ENV_DEFS(shade::vertex_shader, (enter_vertex))
-    SHADE_ENV_DEFS(shade::fragment_shader, (enter_fragment))
-    SHADE_ENV_DEFS(shade::geometry_shader, (enter_geometry)),
-    SHADE_NONE
-    )
-
+SHADE_CLASS_INIT(Enterable,
+                 "",
+                 SHADE_ENV_DEFS(shade::vertex_shader, (enter_vertex)) SHADE_ENV_DEFS(shade::fragment_shader, (enter_fragment)) SHADE_ENV_DEFS(shade::geometry_shader, (enter_geometry)),
+                 SHADE_NONE)
 
 std::string Enterable::get_entry_name(ShaderEnvironment env)
 {
-  if (env == shade::vertex_shader)
-    return "enter_vertex";
-  else if (env == shade::fragment_shader)
-    return "enter_fragment";
-  else if (env == shade::geometry_shader)
-    return "enter_geometry";
+    if(env == shade::vertex_shader)
+        return "enter_vertex";
+    else if(env == shade::fragment_shader)
+        return "enter_fragment";
+    else if(env == shade::geometry_shader)
+        return "enter_geometry";
 
-  throw std::invalid_argument("Invalid ShaderEnvironment");
+    throw std::invalid_argument("Invalid ShaderEnvironment");
 }
 
 bool Enterable::has_entry(ShaderEnvironment env)
 {
-  if (env == shade::vertex_shader)
-    return enter_vertex().has_function();
-  else if (env == shade::fragment_shader)
-    return enter_fragment().has_function();
-  else if (env == shade::geometry_shader)
-    return enter_geometry().has_function();
+    if(env == shade::vertex_shader)
+        return enter_vertex().has_function();
+    else if(env == shade::fragment_shader)
+        return enter_fragment().has_function();
+    else if(env == shade::geometry_shader)
+        return enter_geometry().has_function();
 
-  return false;
+    return false;
 }

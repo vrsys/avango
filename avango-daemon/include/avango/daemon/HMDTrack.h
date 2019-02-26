@@ -35,87 +35,84 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+struct HMD_TrackedDevice
+{
+    HMD_TrackedDevice() : status(false), id(-1){};
 
-	struct HMD_TrackedDevice {
-		HMD_TrackedDevice() : status(false), id(-1) {};
+    bool status;
+    short id;
+    ::gua::math::mat4f matrix;
+};
 
-		bool status;
-		short id;
-		::gua::math::mat4f matrix;
-	};
+struct HMD_ControllerDevice : HMD_TrackedDevice
+{
+    HMD_ControllerDevice() : HMD_TrackedDevice(), appMenuButton(false), gripButton(false), padTouchButton(false), padButton(false), triggerButton(false), padX(0.0f), padY(0.0f), trigger(0.0f) {}
 
-	struct HMD_ControllerDevice : HMD_TrackedDevice {
-		HMD_ControllerDevice() : HMD_TrackedDevice(),
-			appMenuButton(false), gripButton(false), padTouchButton(false), padButton(false),
-			triggerButton(false), padX(0.0f), padY(0.0f), trigger(0.0f) {}
+    bool appMenuButton;
+    bool gripButton;
+    bool padTouchButton;
+    bool padButton;
+    bool triggerButton;
+    float padX;
+    float padY;
+    float trigger;
+};
 
-		bool appMenuButton;
-		bool gripButton;
-		bool padTouchButton;
-		bool padButton;
-		bool triggerButton;
-		float padX;
-		float padY;
-		float trigger;
-	};
-    
+struct HMD_Message
+{
+    HMD_Message(){};
 
-	struct HMD_Message {
-		HMD_Message() {};
+    HMD_TrackedDevice hmd;
+    std::array<HMD_ControllerDevice, 2> controllers;
+    std::array<HMD_TrackedDevice, 2> baseStations;
+    std::array<HMD_TrackedDevice, 2> trackers;
+};
 
-		HMD_TrackedDevice hmd;
-		std::array<HMD_ControllerDevice, 2> controllers;
-		std::array<HMD_TrackedDevice, 2> baseStations;
-		std::array<HMD_TrackedDevice, 2> trackers;
-	};
+class AV_DAEMON_DLL HMDTrack : public Device
+{
+    AV_BASE_DECLARE();
 
-    class AV_DAEMON_DLL HMDTrack : public Device
-    {
-      AV_BASE_DECLARE();
+  public:
+    /**
+     * Constructor
+     */
+    HMDTrack();
 
-    public:
-      /**
-       * Constructor
-       */
-      HMDTrack();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~HMDTrack() {}
 
-    protected:
+    /**
+     * Inherited from base class, implements the initialization of this device.
+     */
+    void startDevice() override;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~HMDTrack() {}
+    /**
+     * Inherited from base class, implements the loop in which the device is read out.
+     */
+    void readLoop() override;
 
-      /**
-       * Inherited from base class, implements the initialization of this device.
-       */
-      void startDevice() override;
+    /**
+     * Inherited from base class, implements the closing operation of this device.
+     */
+    void stopDevice() override;
 
-      /**
-       * Inherited from base class, implements the loop in which the device is read out.
-       */
-      void readLoop() override;
+    /**
+     * Inherited from base class, returns a list of settable features.
+     */
+    const std::vector<std::string>& queryFeatures() override;
 
-      /**
-       * Inherited from base class, implements the closing operation of this device.
-       */
-      void stopDevice() override;
-
-      /**
-       * Inherited from base class, returns a list of settable features.
-       */
-      const std::vector<std::string>& queryFeatures() override;
-
-    private:
-
-      ::std::vector< ::std::string> mRequiredFeatures;
-      std::string mPort;
-      std::string mServer;
-      bool parseFeatures();
-    };
-  }
-}
+  private:
+    ::std::vector<::std::string> mRequiredFeatures;
+    std::string mPort;
+    std::string mServer;
+    bool parseFeatures();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

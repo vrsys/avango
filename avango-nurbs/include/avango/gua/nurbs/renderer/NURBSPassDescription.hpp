@@ -15,61 +15,54 @@
 
 namespace av
 {
-  namespace gua
-  {
-    namespace nurbs 
-    {
-      /**
-       * Wrapper for ::gua::NURBSPassDescription
-       *
-       * \ingroup av_gua
-       */
-      class AV_NURBS_DLL NURBSPassDescription : public av::gua::PipelinePassDescription
-      {
-        AV_FC_DECLARE();
+namespace gua
+{
+namespace nurbs
+{
+/**
+ * Wrapper for ::gua::NURBSPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_NURBS_DLL NURBSPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::gua::NURBSPassDescription is created.
+     * Otherwise, the given ::gua::NURBSPassDescription is used.
+     */
+    NURBSPassDescription(std::shared_ptr<::gua::NURBSPassDescription> const& NURBSPassDescription = std::shared_ptr<::gua::NURBSPassDescription>(new ::gua::NURBSPassDescription()));
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::NURBSPassDescription is created.
-         * Otherwise, the given ::gua::NURBSPassDescription is used.
-         */
-        NURBSPassDescription(std::shared_ptr< ::gua::NURBSPassDescription> const& NURBSPassDescription =
-                             std::shared_ptr< ::gua::NURBSPassDescription>(new ::gua::NURBSPassDescription()) );
+  public:
+    SFBool Pretessellation;
 
+    virtual void getPretessellationCB(const SFBool::GetValueEvent& event);
+    virtual void setPretessellationCB(const SFBool::SetValueEvent& event);
 
+    /**
+     * Get the wrapped ::gua::NURBSPassDescription.
+     */
+    std::shared_ptr<::gua::NURBSPassDescription> const& getGuaNURBSPassDescription() const;
 
-      public:
+  private:
+    std::shared_ptr<::gua::NURBSPassDescription> m_guaNURBSPassDescription;
 
-        SFBool   Pretessellation;
+    NURBSPassDescription(const NURBSPassDescription&);
+    NURBSPassDescription& operator=(const NURBSPassDescription&);
+};
 
-        virtual void getPretessellationCB(const SFBool::GetValueEvent& event);
-        virtual void setPretessellationCB(const SFBool::SetValueEvent& event);
-
-        /**
-         * Get the wrapped ::gua::NURBSPassDescription.
-         */
-        std::shared_ptr< ::gua::NURBSPassDescription> const& getGuaNURBSPassDescription() const;
-
-      private:
-
-        std::shared_ptr< ::gua::NURBSPassDescription> m_guaNURBSPassDescription;
-
-
-        NURBSPassDescription(const NURBSPassDescription&);
-        NURBSPassDescription& operator=(const NURBSPassDescription&);
-      };
-
-      using SFNURBSPassDescription = SingleField<Link<NURBSPassDescription> >;
-      using MFNURBSPassDescription = MultiField<Link<NURBSPassDescription> >;
-    }
-  }
+using SFNURBSPassDescription = SingleField<Link<NURBSPassDescription>>;
+using MFNURBSPassDescription = MultiField<Link<NURBSPassDescription>>;
+} // namespace nurbs
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSPassDescription> >;
-  template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSPassDescription> >;
+template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSPassDescription>>;
+template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_NURBS_SURFACE_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_NURBS_SURFACE_PASS_DESCRIPTION_HPP

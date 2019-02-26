@@ -26,26 +26,17 @@
 
 using namespace shade::parser;
 
-
-ListValue::ListValue(Index begin, Index end) :
-  m_begin(begin),
-  m_end(end)
-{
-}
+ListValue::ListValue(Index begin, Index end) : m_begin(begin), m_end(end) {}
 
 bool ListValue::less_than(const Value& other) const
 {
-  const ListValue* other_const = dynamic_cast<const ListValue*>(&other);
-  assert(other_const);
+    const ListValue* other_const = dynamic_cast<const ListValue*>(&other);
+    assert(other_const);
 
-  if (m_begin == other_const->m_begin)
-    return m_end < other_const->m_end;
+    if(m_begin == other_const->m_begin)
+        return m_end < other_const->m_end;
 
-  return m_begin < other_const->m_begin;
+    return m_begin < other_const->m_begin;
 }
 
-bool ListValue::is_constant(void) const
-{
-  return true;
-}
-
+bool ListValue::is_constant(void) const { return true; }

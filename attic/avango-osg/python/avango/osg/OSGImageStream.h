@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_IMAGESTREAM
 #define AV_PYTHON_OSG_IMAGESTREAM
 

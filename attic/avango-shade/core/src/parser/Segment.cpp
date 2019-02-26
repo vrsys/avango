@@ -25,54 +25,36 @@
 #include <shade/formatter/Generator.h>
 using namespace shade::parser;
 
-Segment::Segment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) :
-  begin_(begin),
-  end_(end)
-{
-}
+Segment::Segment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) : begin_(begin), end_(end) {}
 
-Segment::operator bool(void) const
-{
-  return begin_ != end_;
-}
+Segment::operator bool(void) const { return begin_ != end_; }
 
-bool Segment::operator<(const Segment& other) const
-{
-  return (this->begin_ < other.begin_);
-}
+bool Segment::operator<(const Segment& other) const { return (this->begin_ < other.begin_); }
 
 LiteralSegment Segment::operator-(const Segment& other) const
 {
-  if (other.end_ > this->begin_)
-    return LiteralSegment(this->end_, this->end_);
+    if(other.end_ > this->begin_)
+        return LiteralSegment(this->end_, this->end_);
 
-  return LiteralSegment(other.end_, this->begin_);
+    return LiteralSegment(other.end_, this->begin_);
 }
 
 LiteralSegment Segment::get_begin_offset(const formatter::MarkBuffer::iterator& begin) const
 {
-  if (begin > this->begin_)
-    return LiteralSegment(this->begin_, this->begin_);
+    if(begin > this->begin_)
+        return LiteralSegment(this->begin_, this->begin_);
 
-  return LiteralSegment(begin, this->begin_);
+    return LiteralSegment(begin, this->begin_);
 }
 
 LiteralSegment Segment::get_end_offset(const formatter::MarkBuffer::iterator& end) const
 {
-  if (this->end_ > end)
-    return LiteralSegment(this->end_, this->end_);
+    if(this->end_ > end)
+        return LiteralSegment(this->end_, this->end_);
 
-  return LiteralSegment(this->end_, end);
+    return LiteralSegment(this->end_, end);
 }
 
+LiteralSegment::LiteralSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) : Segment(begin, end), content_(begin, end) {}
 
-LiteralSegment::LiteralSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) :
-  Segment(begin, end),
-  content_(begin, end)
-{
-}
-
-void LiteralSegment::get_content(formatter::Generator& generator, Scope& scope, const FunctionCall& call, std::ostream& error_log) const
-{
-  generator.handle_verbatim(content_);
-}
+void LiteralSegment::get_content(formatter::Generator& generator, Scope& scope, const FunctionCall& call, std::ostream& error_log) const { generator.handle_verbatim(content_); }

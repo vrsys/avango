@@ -3,4 +3,4 @@
 
 void init_TriMeshLoader();
 
-#endif //AV_PYTHON_GUA_TRI_MESH_LOADER_HPP
+#endif // AV_PYTHON_GUA_TRI_MESH_LOADER_HPP

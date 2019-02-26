@@ -28,12 +28,6 @@ using namespace shade::shaders;
 
 SHADE_CLASS_INIT(UVPointLight, "UVPointLight.glsl", SHADE_NONE, SHADE_DEFS((position)(color)(transformed_position)))
 
-void_<> UVPointLight::illuminate(objref<> surface, vec3<> position)
-{
-  return invoke< shade::void_<> >("UVPointLight_illuminate_impl");
-}
+void_<> UVPointLight::illuminate(objref<> surface, vec3<> position) { return invoke<shade::void_<>>("UVPointLight_illuminate_impl"); }
 
-void_<> UVPointLight::transform(objref<> material)
-{
-  return invoke< shade::void_<> >("UVPointLight_transform_impl");
-}
+void_<> UVPointLight::transform(objref<> material) { return invoke<shade::void_<>>("UVPointLight_transform_impl"); }

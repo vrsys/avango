@@ -25,15 +25,15 @@
 
 std::string shade::get_shader_env_define(ShaderEnvironment env)
 {
-  switch (env)
-  {
-  case shade::vertex_shader:
-    return "SHADE_VERTEX_SHADER";
-  case shade::fragment_shader:
-    return "SHADE_FRAGMENT_SHADER";
-  case shade::geometry_shader:
-    return "SHADE_GEOMETRY_SHADER";
-  default:
-    return "";
-  }
+    switch(env)
+    {
+    case shade::vertex_shader:
+        return "SHADE_VERTEX_SHADER";
+    case shade::fragment_shader:
+        return "SHADE_FRAGMENT_SHADER";
+    case shade::geometry_shader:
+        return "SHADE_GEOMETRY_SHADER";
+    default:
+        return "";
+    }
 }

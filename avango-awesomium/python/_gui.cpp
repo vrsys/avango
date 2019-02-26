@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #include "GuiResourceNode.hpp"
 #include <avango/gua/gui/GuiResourceNode.hpp>
 #include <avango/python/register_field.h>
@@ -33,18 +32,19 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_gui)
 {
-  av::gua::gui::GuiResourceNode::initClass();
-  init_GuiResourceNode();
+    av::gua::gui::GuiResourceNode::initClass();
+    init_GuiResourceNode();
 }

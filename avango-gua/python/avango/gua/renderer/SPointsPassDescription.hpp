@@ -3,4 +3,4 @@
 
 void init_SPointsPassDescription();
 
-#endif //AV_PYTHON_GUA_SPOINTS_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_SPOINTS_PASS_DESCRIPTION_HPP

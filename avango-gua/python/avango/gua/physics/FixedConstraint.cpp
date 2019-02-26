@@ -8,23 +8,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_FixedConstraint()
 {
-  register_field<av::gua::SFFixedConstraint>("SFFixedConstraint");
-  register_multifield<av::gua::MFFixedConstraint>("MFFixedConstraint");
+    register_field<av::gua::SFFixedConstraint>("SFFixedConstraint");
+    register_multifield<av::gua::MFFixedConstraint>("MFFixedConstraint");
 
-  class_<av::gua::FixedConstraint,
-         av::Link<av::gua::FixedConstraint>,
-         bases<av::gua::Constraint>, boost::noncopyable >("FixedConstraint",
-                                                    "docstring", no_init);
+    class_<av::gua::FixedConstraint, av::Link<av::gua::FixedConstraint>, bases<av::gua::Constraint>, boost::noncopyable>("FixedConstraint", "docstring", no_init);
 }

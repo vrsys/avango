@@ -36,51 +36,47 @@
 
 namespace av
 {
-  namespace shade
-  {
+namespace shade
+{
+/**
+ * StateGroup references a State and applies the shader to its subgraph
+ *
+ * \ingroup av_shade
+ */
+class AV_SHADE_DLL StateGroup : public av::osg::Group
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * StateGroup references a State and applies the shader to its subgraph
-     *
-     * \ingroup av_shade
+     * Constructor.
      */
-    class AV_SHADE_DLL StateGroup : public av::osg::Group
+    StateGroup();
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~StateGroup();
+
+  public:
+    /**
+     * State to apply to subgraph
+     */
+    SFState State;
+
+    /* virtual */ void evaluate();
+
+  private:
+    class UpdateCallback : public ::osg::NodeCallback
     {
-      AV_FC_DECLARE();
-
-    public:
-
-      /**
-       * Constructor.
-       */
-      StateGroup();
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~StateGroup();
-
-    public:
-
-      /**
-       * State to apply to subgraph
-       */
-      SFState State;
-
-      /* virtual */ void evaluate();
-
-    private:
-
-      class UpdateCallback : public ::osg::NodeCallback
-      {
-        /*virtual*/ void operator() (::osg::Node *node, ::osg::NodeVisitor *nv);
+        /*virtual*/ void operator()(::osg::Node* node, ::osg::NodeVisitor* nv);
 
       private:
-        void callUpdate(::osg::Node *node) const;
-      };
+        void callUpdate(::osg::Node* node) const;
     };
-  }
-}
+};
+} // namespace shade
+} // namespace av
 
 #endif

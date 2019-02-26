@@ -31,20 +31,15 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class Segment;
+namespace parser
+{
+class Segment;
 
-    typedef std::vector<std::string>::const_iterator ParameterIterator;
-    typedef boost::function
-    <
-      void (const std::string& name,
-          ParameterIterator begin, ParameterIterator end,
-          const std::string& return_type,
-          const std::string& parameters,
-          boost::shared_ptr<Segment> segment)
-    > FunctionHandler;
-  }
-}
+typedef std::vector<std::string>::const_iterator ParameterIterator;
+typedef boost::function<void(
+    const std::string& name, ParameterIterator begin, ParameterIterator end, const std::string& return_type, const std::string& parameters, boost::shared_ptr<Segment> segment)>
+    FunctionHandler;
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_FunctionHandler_H */

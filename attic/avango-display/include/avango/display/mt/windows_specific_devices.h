@@ -33,9 +33,9 @@
 
 #if defined(_MSC_VER)
 #if defined(AV_DISPLAY_MT_LIBRARY)
-#define AV_DISPLAY_MT_DLL __declspec( dllexport )
+#define AV_DISPLAY_MT_DLL __declspec(dllexport)
 #else
-#define AV_DISPLAY_MT_DLL __declspec( dllimport )
+#define AV_DISPLAY_MT_DLL __declspec(dllimport)
 #endif
 #else
 #define AV_DISPLAY_MT_DLL

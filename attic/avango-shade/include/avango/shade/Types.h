@@ -37,29 +37,29 @@
 #include <avango/OutputStream.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  #include <avango/Msg.h>
+#include <avango/Msg.h>
 #endif //#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 namespace av
 {
-  AV_SHADE_DLL OutputStream& operator<<(OutputStream&, const ::osg::Object::DataVariance&);
-  AV_SHADE_DLL InputStream& operator>>(InputStream&, ::osg::Object::DataVariance&);
+AV_SHADE_DLL OutputStream& operator<<(OutputStream&, const ::osg::Object::DataVariance&);
+AV_SHADE_DLL InputStream& operator>>(InputStream&, ::osg::Object::DataVariance&);
 } // namespace av
 
 /// @cond DOXYGEN_SHOULD_SKIP_THIS
-namespace osg {
-
-  // these functions need to be put into the ::osg namespace,
-  // as they are really a part of the interface for the corresponding OSG types.
-  // ADL (Argument Dependant Loopup) takes care that these functions are found in the right namespace
-  // This makes these functions visible to SIngleField<T> and MultiField<T> at the point of template instantiation,
-  // not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
+namespace osg
+{
+// these functions need to be put into the ::osg namespace,
+// as they are really a part of the interface for the corresponding OSG types.
+// ADL (Argument Dependant Loopup) takes care that these functions are found in the right namespace
+// This makes these functions visible to SIngleField<T> and MultiField<T> at the point of template instantiation,
+// not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Object::DataVariance& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Object::DataVariance& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Object::DataVariance& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Object::DataVariance& buf);
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-}
+} // namespace osg
 /// @endcond
 
 #endif

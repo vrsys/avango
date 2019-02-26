@@ -1,32 +1,29 @@
 #ifndef UNITTEST_TESTLIST_H
 #define UNITTEST_TESTLIST_H
 
-
-namespace UnitTest {
-
+namespace UnitTest
+{
 class Test;
 
 class TestList
 {
-public:
+  public:
     TestList();
-    void Add (Test* test);
+    void Add(Test* test);
 
     Test* GetHead() const;
 
-private:
+  private:
     Test* m_head;
     Test* m_tail;
 };
 
-
 class ListAdder
 {
-public:
+  public:
     ListAdder(TestList& list, Test* test);
 };
 
-}
-
+} // namespace UnitTest
 
 #endif

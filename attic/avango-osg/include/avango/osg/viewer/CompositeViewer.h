@@ -40,97 +40,93 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      /**
-       * Wrapper for ::osgViewer::CompositeViewer.
-       * Use it to render more than one scene.
-       * OpenSceneGraph allows only one Viewer in an application!
-       *
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL CompositeViewer : public av::osg::Object
-      {
-        AV_FC_DECLARE();
+namespace osg
+{
+namespace viewer
+{
+/**
+ * Wrapper for ::osgViewer::CompositeViewer.
+ * Use it to render more than one scene.
+ * OpenSceneGraph allows only one Viewer in an application!
+ *
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL CompositeViewer : public av::osg::Object
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. Creates a new ::osgViewer::CompositeViewer for internal use.
+     */
+    CompositeViewer();
 
-        /**
-         * Constructor. Creates a new ::osgViewer::CompositeViewer for internal use.
-         */
-        CompositeViewer();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CompositeViewer();
 
-      protected:
+  public:
+    /**
+     * Views to be rendered.
+     */
+    MFView Views;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~CompositeViewer();
+    /**
+     * Threading model. See osgViewer/ViewerBase for enum values.
+     */
+    SFInt ThreadingModel;
 
-      public:
+    /* virtual */ void fieldHasChangedLocalSideEffect(const Field& field);
 
-        /**
-         * Views to be rendered.
-         */
-        MFView Views;
+    /**
+     * Get the wrapped ::osgViewer::CompositeViewer.
+     */
+    ::osgViewer::CompositeViewer* getOsgCompositeViewer() const;
 
-        /**
-         * Threading model. See osgViewer/ViewerBase for enum values.
-         */
-        SFInt ThreadingModel;
+    /**
+     * Evaluate and renders one frame.
+     */
+    void frame();
 
-        /* virtual */ void fieldHasChangedLocalSideEffect(const Field& field);
+    /**
+     * Start the evaluation and render loop.
+     */
+    bool run();
 
-        /**
-         * Get the wrapped ::osgViewer::CompositeViewer.
-         */
-        ::osgViewer::CompositeViewer* getOsgCompositeViewer() const;
+    /**
+     * Stop the evaluation and render loop.
+     */
+    bool done();
 
-        /**
-         * Evaluate and renders one frame.
-         */
-        void frame();
+    /**
+     * Render callback.
+     */
+    void renderCB();
 
-        /**
-         * Start the evaluation and render loop.
-         */
-        bool run();
+    /**
+     * Triggers the rendering of a frame in the osgViewer without a call of the avango
+     * evaluation loop
+     */
+    void frameWithoutEvaluation();
 
-        /**
-         * Stop the evaluation and render loop.
-         */
-        bool done();
+    virtual void getThreadingModelCB(const SFInt::GetValueEvent& event);
+    virtual void setThreadingModelCB(const SFInt::SetValueEvent& event);
 
-        /**
-         * Render callback.
-         */
-        void renderCB();
+  private:
+    ::osgViewer::CompositeViewer* mOsgCompositeViewer;
+    MFView::ContainerType mLastViews;
+    av::Application::CallbackHandle mRenderCallbackHandle;
+};
 
-        /**
-         * Triggers the rendering of a frame in the osgViewer without a call of the avango
-         * evaluation loop
-         */
-        void frameWithoutEvaluation();
+typedef SingleField<Link<CompositeViewer>> SFCompositeViewer;
 
-        virtual void getThreadingModelCB(const SFInt::GetValueEvent& event);
-        virtual void setThreadingModelCB(const SFInt::SetValueEvent& event);
-
-      private:
-
-        ::osgViewer::CompositeViewer *mOsgCompositeViewer;
-        MFView::ContainerType mLastViews;
-        av::Application::CallbackHandle mRenderCallbackHandle;
-      };
-
-      typedef SingleField<Link<CompositeViewer> > SFCompositeViewer;
-
-    } // namespace viewer
-  } // namespace osg
+} // namespace viewer
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::CompositeViewer> >;
+template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::CompositeViewer>>;
 #endif
 
 } // namespace av

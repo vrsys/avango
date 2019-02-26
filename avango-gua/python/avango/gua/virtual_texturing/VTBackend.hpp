@@ -3,4 +3,4 @@
 
 void init_VTBackend();
 
-#endif //AV_PYTHON_GUA_VTBACKEND_HPP
+#endif // AV_PYTHON_GUA_VTBACKEND_HPP

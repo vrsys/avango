@@ -3,4 +3,4 @@
 
 void init_NamedSharedMemoryController();
 
-#endif //AV_PYTHON_GUA_NAMED_SHARED_MEMORY_CONTROLLER_HPP
+#endif // AV_PYTHON_GUA_NAMED_SHARED_MEMORY_CONTROLLER_HPP

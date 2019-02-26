@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_UNIFORM
 #define AV_PYTHON_OSG_UNIFORM
 

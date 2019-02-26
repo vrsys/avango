@@ -28,12 +28,11 @@
 #if !defined(AVANGO_LOGGING_LEVEL_H)
 #define AVANGO_LOGGING_LEVEL_H
 
-
 #if defined(_WIN32)
-  // MS VS 8 seems to define ERROR, which replaces the ERROR constant in the enum with a 0.
-  #if defined(ERROR)
-    #undef ERROR
-  #endif
+// MS VS 8 seems to define ERROR, which replaces the ERROR constant in the enum with a 0.
+#if defined(ERROR)
+#undef ERROR
+#endif
 #endif // _WIN32
 
 /**
@@ -50,41 +49,40 @@
 
 namespace av
 {
-  namespace logging
-  {
+namespace logging
+{
+// types, exported (class, enum, struct, union, typedef)
 
-    // types, exported (class, enum, struct, union, typedef)
+/**
+ * Avango log levels.
+ *
+ * \ingroup av_logging
+ */
 
-    /**
-     * Avango log levels.
-     *
-     * \ingroup av_logging
-     */
+enum Level
+{
+    FATAL, ///< Severe error that will lead to an application abort.
+    ERROR, ///< Severe error that still allows the application to continue.
+    WARN,  ///< Potentially harmful situtation.
+    INFO,  ///< Informational message that highlights the process of the application.
+    DEBUG, ///< Useful debugging information.
+    TRACE  ///< Application tracing that may disturb even in debug level.
+};
 
-    enum Level
-    {
-      FATAL, ///< Severe error that will lead to an application abort.
-      ERROR, ///< Severe error that still allows the application to continue.
-      WARN,  ///< Potentially harmful situtation.
-      INFO,  ///< Informational message that highlights the process of the application.
-      DEBUG, ///< Useful debugging information.
-      TRACE ///< Application tracing that may disturb even in debug level.
-    };
+// variables, exported (extern)
 
-    // variables, exported (extern)
+// functions, inlined (inline)
 
-    // functions, inlined (inline)
+// functions, exported (extern)
 
-    // functions, exported (extern)
+/**
+ * Avango log level to string conversion
+ *
+ * \ingroup av_logging
+ */
+AV_DLL const std::string& levelToString(Level level);
 
-    /**
-     * Avango log level to string conversion
-     *
-     * \ingroup av_logging
-     */
-    AV_DLL const std::string& levelToString(Level level);
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 

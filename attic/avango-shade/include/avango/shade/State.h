@@ -36,91 +36,87 @@
 
 namespace osg
 {
-  class Node;
+class Node;
 }
 
 namespace shade
 {
-  class Program;
+class Program;
 
-  namespace osg
-  {
-    class Wrapper;
-  }
+namespace osg
+{
+class Wrapper;
 }
+} // namespace shade
 
 namespace av
 {
-  namespace shade
-  {
-    typedef SingleField< ::osg::Object::DataVariance > SFDataVariance;
+namespace shade
+{
+typedef SingleField<::osg::Object::DataVariance> SFDataVariance;
+
+/**
+ * A State represents one compiled shader program
+ *
+ * \ingroup av_shade
+ */
+class AV_SHADE_DLL State : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    State();
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~State();
+
+  public:
+    /**
+     * Root shader
+     */
+    av::SFContainer Shader;
 
     /**
-     * A State represents one compiled shader program
-     *
-     * \ingroup av_shade
+     * Data Variance of OSG StateSet
      */
-    class AV_SHADE_DLL State : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    SFDataVariance DataVariance;
 
-    public:
+    /**
+     * Apply contained ::osg::Shader to given node
+     */
+    void applyState(::osg::Node* node);
 
-      /**
-       * Constructor.
-       */
-      State();
+    /**
+     * Compile shader and upload data
+     */
+    void update(void);
 
-    protected:
+    /* virtual */ void fieldHasChanged(const av::Field& field);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~State();
+  private:
+    void getDataVarianceCB(const SFDataVariance::GetValueEvent& event);
+    void setDataVarianceCB(const SFDataVariance::SetValueEvent& event);
 
-    public:
+    boost::shared_ptr<::shade::Program> mProgram;
+    ::osg::ref_ptr<::osg::StateSet> mOsgStateSet;
+    boost::shared_ptr<::shade::osg::Wrapper> mState;
+};
 
-      /**
-       * Root shader
-       */
-      av::SFContainer Shader;
-
-      /**
-       * Data Variance of OSG StateSet
-       */
-      SFDataVariance DataVariance;
-
-      /**
-       * Apply contained ::osg::Shader to given node
-       */
-      void applyState(::osg::Node* node);
-
-      /**
-       * Compile shader and upload data
-       */
-      void update(void);
-
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-
-    private:
-
-      void getDataVarianceCB(const SFDataVariance::GetValueEvent& event);
-      void setDataVarianceCB(const SFDataVariance::SetValueEvent& event);
-
-      boost::shared_ptr< ::shade::Program > mProgram;
-      ::osg::ref_ptr< ::osg::StateSet > mOsgStateSet;
-      boost::shared_ptr< ::shade::osg::Wrapper > mState;
-    };
-
-    typedef SingleField<Link<State> > SFState;
-    typedef MultiField<Link<State> > MFState;
-  }
+typedef SingleField<Link<State>> SFState;
+typedef MultiField<Link<State>> MFState;
+} // namespace shade
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_SHADE_DLL SingleField< ::osg::Object::DataVariance >;
-  template class AV_SHADE_DLL SingleField<Link<shade::State> >;
-  template class AV_SHADE_DLL MultiField<Link<shade::State> >;
+template class AV_SHADE_DLL SingleField<::osg::Object::DataVariance>;
+template class AV_SHADE_DLL SingleField<Link<shade::State>>;
+template class AV_SHADE_DLL MultiField<Link<shade::State>>;
 #endif
-}
+} // namespace av
 
 #endif

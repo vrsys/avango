@@ -47,105 +47,84 @@ using namespace av::python;
 
 namespace
 {
-  void enable_logging(int level, std::string logfile)
-  {
+void enable_logging(int level, std::string logfile)
+{
     boost::shared_ptr<av::logging::FileAppender> fileapp(new av::logging::FileAppender(logfile));
     av::getRootLogger().addAppender(fileapp);
     av::getRootLogger().setLevel(static_cast<av::logging::Level>(level));
-  }
+}
 
-  void enable_logging(int level)
-  {
+void enable_logging(int level)
+{
     av::getRootLogger().addConsoleAppender();
     av::getRootLogger().setLevel(static_cast<av::logging::Level>(level));
-  }
+}
 
-  void enable_logging(void)
-  {
+void enable_logging(void)
+{
     av::getRootLogger().addConsoleAppender();
     av::getRootLogger().setLevel(av::logging::DEBUG);
-  }
+}
 
-  void (*logging0)(void) = &enable_logging;
-  void (*logging1)(int) = &enable_logging;
-  void (*logging2)(int, std::string) = &enable_logging;
+void (*logging0)(void) = &enable_logging;
+void (*logging1)(int) = &enable_logging;
+void (*logging2)(int, std::string) = &enable_logging;
 
-  void python_log(std::string logger, std::string message)
-  {
+void python_log(std::string logger, std::string message)
+{
     // TODO add proper severity level setting from python
     av::logging::Logger::getLogger(logger)(av::logging::DEBUG) << message;
-  }
+}
 
-  unsigned int get_num_of_registered_field_containers()
-  {
-    return av::ContainerPool::getNumberOfContainers();
-  }
+unsigned int get_num_of_registered_field_containers() { return av::ContainerPool::getNumberOfContainers(); }
 
-  void application_evaluate(void)
-  {
-    av::ApplicationInstance::get().evaluate();
-  }
+void application_evaluate(void) { av::ApplicationInstance::get().evaluate(); }
 
-  bool application_running(void)
-  {
-    return av::ApplicationInstance::get().running();
-  }
+bool application_running(void) { return av::ApplicationInstance::get().running(); }
 
-  bool application_start(void)
-  {
-    return av::ApplicationInstance::get().start();
-  }
+bool application_start(void) { return av::ApplicationInstance::get().start(); }
 
-  bool application_stop(void)
-  {
-    return av::ApplicationInstance::get().stop();
-  }
+bool application_stop(void) { return av::ApplicationInstance::get().stop(); }
 
-  void application_cleanup(void)
-  {
-    return av::ApplicationInstance::get().exit(false);
-  }
+void application_cleanup(void) { return av::ApplicationInstance::get().exit(false); }
 
-  void application_exit(void)
-  {
-    return av::ApplicationInstance::get().exit(true);
-  }
+void application_exit(void) { return av::ApplicationInstance::get().exit(true); }
 
-  void register_exception_translation(void)
-  {
+void register_exception_translation(void)
+{
     // TODO This is _very_ expensive. Double check if really needed
     boost::python::register_exception_translator<av::python::detail::index_exception>(&av::python::detail::translate);
-  }
 }
+} // namespace
 
 BOOST_PYTHON_MODULE(_avango)
 {
-  // Enable avango
-  av::ApplicationInstance::get();
+    // Enable avango
+    av::ApplicationInstance::get();
 
-  // Define further classes
-  register_exception_translation();
-  init_FieldContainer();
-  init_Field();
-  init_InputStream();
-  init_OutputStream();
+    // Define further classes
+    register_exception_translation();
+    init_FieldContainer();
+    init_Field();
+    init_InputStream();
+    init_OutputStream();
 
 #ifdef AVANGO_DISTRIBUTION_SUPPORT
-  av::NetLock::initClass();
-  class_<av::NetLock, av::Link<av::NetLock>, bases<av::FieldContainer>, boost::noncopyable>("NetLock", "Network-wide Lock object", no_init);
+    av::NetLock::initClass();
+    class_<av::NetLock, av::Link<av::NetLock>, bases<av::FieldContainer>, boost::noncopyable>("NetLock", "Network-wide Lock object", no_init);
 #endif
 
-  def("enable_logging", logging0);
-  def("enable_logging", logging1);
-  def("enable_logging", logging2);
-  def("log", python_log);
+    def("enable_logging", logging0);
+    def("enable_logging", logging1);
+    def("enable_logging", logging2);
+    def("log", python_log);
 
-  def("num_registered_field_containers", get_num_of_registered_field_containers);
+    def("num_registered_field_containers", get_num_of_registered_field_containers);
 
-  def("evaluate", application_evaluate);
-  def("running", application_running);
-  def("start", application_start);
-  def("stop", application_stop);
-  def("cleanup", application_cleanup);
-  def("exit", application_exit);
+    def("evaluate", application_evaluate);
+    def("running", application_running);
+    def("start", application_start);
+    def("stop", application_stop);
+    def("cleanup", application_cleanup);
+    def("exit", application_exit);
 }

@@ -32,21 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGMatrixTransform(void)
- {
-  // wrapping osg::Transform functionality
-  register_field<av::osg::SFMatrixTransform>("SFMatrixTransform");
-  register_multifield<av::osg::MFMatrixTransform>("MFMatrixTransform");
-  class_<av::osg::MatrixTransform, av::Link<av::osg::MatrixTransform>, bases<av::osg::Transform>, boost::noncopyable >("MatrixTransform", "docstring", no_init);
-
- }
+{
+    // wrapping osg::Transform functionality
+    register_field<av::osg::SFMatrixTransform>("SFMatrixTransform");
+    register_multifield<av::osg::MFMatrixTransform>("MFMatrixTransform");
+    class_<av::osg::MatrixTransform, av::Link<av::osg::MatrixTransform>, bases<av::osg::Transform>, boost::noncopyable>("MatrixTransform", "docstring", no_init);
+}

@@ -29,9 +29,4 @@
 
 #include <avango/logging/LoggingEvent.h>
 
-
-/* virtual */ void
-av::logging::ConsoleAppender::doAppend(LoggingEvent& event)
-{
-  std::clog << event.getFormattedString() << std::endl;
-}
+/* virtual */ void av::logging::ConsoleAppender::doAppend(LoggingEvent& event) { std::clog << event.getFormattedString() << std::endl; }

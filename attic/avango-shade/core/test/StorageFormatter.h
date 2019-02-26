@@ -24,7 +24,6 @@
 #ifndef shade_StorageFormatter_H
 #define shade_StorageFormatter_H shade_StorageFormatter_H
 
-
 #include <shade/Formatter.h>
 #include <string>
 #include <list>
@@ -33,22 +32,21 @@
 #include <utility>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  namespace formatter
-  {
-    class DumpGenerator;
-  }
+namespace formatter
+{
+class DumpGenerator;
+}
 
-  class StorageFormatter : public Formatter
-  {
+class StorageFormatter : public Formatter
+{
   public:
-
     StorageFormatter(ShaderEnvironment env = vertex_shader);
 
     /*virtual*/ void insert_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
-    /*virtual*/ boost::shared_ptr<formatter::Generator> begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
+    /*virtual*/ boost::shared_ptr<formatter::Generator>
+    begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
     /*virtual*/ void end_insert_init_attribute(void);
     /*virtual*/ void insert_array_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name);
     /*virtual*/ void insert_multiple_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name);
@@ -72,7 +70,8 @@ namespace shade
     /*virtual*/ void begin_multiple_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval);
     /*virtual*/ void begin_deferred_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval);
     /*virtual*/ void insert_property_dispatcher(shade::ObjectMap::Index i, const std::string& obj);
-    /*virtual*/ void insert_deferred_property_dispatcher(shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter);
+    /*virtual*/ void insert_deferred_property_dispatcher(
+        shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter);
     /*virtual*/ boost::shared_ptr<formatter::Generator> set_property_dispatcher_return(void);
     /*virtual*/ void end_property_dispatcher(void);
 
@@ -90,30 +89,22 @@ namespace shade
 
     struct Attribute
     {
-      Attribute() {}
-      Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q) :
-        type(t), qualifier(q), is_array(false), num_copies(1)
-      {}
-      Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, std::string i) :
-        type(t), qualifier(q), initializer(i), is_array(false), num_copies(1)
-      {}
-      Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, bool a) :
-        type(t), qualifier(q), is_array(a), num_copies(1)
-      {}
-      Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, unsigned int c) :
-        type(t), qualifier(q), is_array(false), num_copies(c)
-      {}
+        Attribute() {}
+        Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q) : type(t), qualifier(q), is_array(false), num_copies(1) {}
+        Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, std::string i) : type(t), qualifier(q), initializer(i), is_array(false), num_copies(1) {}
+        Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, bool a) : type(t), qualifier(q), is_array(a), num_copies(1) {}
+        Attribute(formatter::Constants::Type t, formatter::Constants::Qualifier q, unsigned int c) : type(t), qualifier(q), is_array(false), num_copies(c) {}
 
-      formatter::Constants::Type type;
-      formatter::Constants::Qualifier qualifier;
-      std::string initializer;
-      bool is_array;
-      unsigned int num_copies;
+        formatter::Constants::Type type;
+        formatter::Constants::Qualifier qualifier;
+        std::string initializer;
+        bool is_array;
+        unsigned int num_copies;
     };
     bool has_attribute(const std::string& obj, const std::string& name) const;
     Attribute get_attribute(const std::string& obj, const std::string& name) const;
 
-    const std::vector<std::pair<formatter::Constants::Type, std::string> >& get_self_argument(const std::string& name) const;
+    const std::vector<std::pair<formatter::Constants::Type, std::string>>& get_self_argument(const std::string& name) const;
 
     bool has_function(const std::string& class_, const std::string& name) const;
     typedef std::vector<formatter::Constants::Type> arguments;
@@ -125,24 +116,28 @@ namespace shade
 
     enum PropertyDispatchType
     {
-      none,
-      normal, array, multiple, deferred
+        none,
+        normal,
+        array,
+        multiple,
+        deferred
     };
     std::string get_property_dispatch(const std::string& class_, const std::string& name, ObjectMap::Index i) const;
     PropertyDispatchType get_property_dispatch_type(const std::string& class_, const std::string& name) const;
     std::string get_property_dispatch_return(const std::string& class_, const std::string& name) const;
     struct DeferredProperty
     {
-      DeferredProperty() {}
-      DeferredProperty(ObjectMap::Index o, const std::string& ig, const std::string& g, const std::string& is, const std::string& s) :
-        object(o), getter_class(ig), getter_method(g), setter_class(is), setter_method(s)
-      {}
+        DeferredProperty() {}
+        DeferredProperty(ObjectMap::Index o, const std::string& ig, const std::string& g, const std::string& is, const std::string& s)
+            : object(o), getter_class(ig), getter_method(g), setter_class(is), setter_method(s)
+        {
+        }
 
-      ObjectMap::Index object;
-      std::string getter_class;
-      std::string getter_method;
-      std::string setter_class;
-      std::string setter_method;
+        ObjectMap::Index object;
+        std::string getter_class;
+        std::string getter_method;
+        std::string setter_class;
+        std::string setter_method;
     };
     DeferredProperty get_deferred_property_dispatch(const std::string& class_, const std::string& name, ObjectMap::Index i) const;
 
@@ -151,7 +146,7 @@ namespace shade
     const arguments& get_inline_method_args(const std::string& class_, const std::string& name) const;
 
     const std::string& get_invoke(void);
-    const std::vector< std::pair<std::string, shade::ObjectMap::Index> >& get_initializers(void);
+    const std::vector<std::pair<std::string, shade::ObjectMap::Index>>& get_initializers(void);
 
     const std::string& get_imported_sources(void);
 
@@ -163,38 +158,36 @@ namespace shade
     shade::formatter::Constants::Type m_cur_type;
     shade::formatter::Constants::Qualifier m_cur_qualifier;
     std::string m_cur_key;
-    std::map< std::string, Attribute > m_attributes;
+    std::map<std::string, Attribute> m_attributes;
 
     std::string m_cur_self_name;
-    std::map< std::string, std::vector<std::pair<formatter::Constants::Type, std::string> > > m_self_arguments;
+    std::map<std::string, std::vector<std::pair<formatter::Constants::Type, std::string>>> m_self_arguments;
 
     std::string m_cur_fun_name;
     ObjectMap::Index m_cur_dispatch_self;
     std::map<std::string, arguments> m_args;
-    std::map< std::string, std::map< ObjectMap::Index, std::pair<std::string, std::string> > > m_dispatches;
-    std::map< std::string, std::map< ObjectMap::Index, std::vector<std::string> > > m_dispatches_args;
+    std::map<std::string, std::map<ObjectMap::Index, std::pair<std::string, std::string>>> m_dispatches;
+    std::map<std::string, std::map<ObjectMap::Index, std::vector<std::string>>> m_dispatches_args;
     std::map<std::string, std::string> m_dispatches_default_return;
 
     std::string m_cur_property;
-    typedef std::map< std::string, std::map< ObjectMap::Index, std::string > > property_map;
+    typedef std::map<std::string, std::map<ObjectMap::Index, std::string>> property_map;
     property_map m_properties;
     std::map<std::string, PropertyDispatchType> m_property_type;
     std::map<std::string, std::string> m_property_return;
     std::map<std::string, DeferredProperty> m_deferred_properties;
 
     std::string m_cur_inline_method_name;
-    std::map< std::string, std::pair<formatter::Constants::Type, std::string> > m_inline_methods;
-    std::map< std::string, arguments > m_inline_methods_args;
+    std::map<std::string, std::pair<formatter::Constants::Type, std::string>> m_inline_methods;
+    std::map<std::string, arguments> m_inline_methods_args;
 
     std::string m_invoke;
 
     std::string m_cur_initialize_function;
-    std::vector< std::pair<std::string, shade::ObjectMap::Index> > m_initializers;
+    std::vector<std::pair<std::string, shade::ObjectMap::Index>> m_initializers;
 
     std::string m_sources;
-  };
-}
-
+};
+} // namespace shade
 
 #endif /* shade_StorageFormatter_H */
-

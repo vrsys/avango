@@ -39,9 +39,9 @@
 #include <avango/daemon/StationSegment.h>
 
 #ifndef WIN32
-#  include <avango/daemon/WacomTablet.h>
-#  include <avango/daemon/Wiimote.h>
-#  include <avango/daemon/WiimoteActuator.h>
+#include <avango/daemon/WacomTablet.h>
+#include <avango/daemon/Wiimote.h>
+#include <avango/daemon/WiimoteActuator.h>
 #endif
 
 #include <avango/python/register_field.h>
@@ -49,7 +49,7 @@
 #include <boost/mpl/vector.hpp>
 
 #ifdef VRPN_SUPPORT
-#  include <avango/daemon/VRPNClient.h>
+#include <avango/daemon/VRPNClient.h>
 #endif
 
 using namespace boost::python;
@@ -57,217 +57,195 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 namespace
 {
-  boost::shared_ptr<av::daemon::StationSegment> mStationSegment(new av::daemon::StationSegment());
+boost::shared_ptr<av::daemon::StationSegment> mStationSegment(new av::daemon::StationSegment());
 
-  bool
-  doesTypeExist(std::string name)
-  {
-    return (av::Type::getByName(name) != av::Type::badType())? true : false;
-  }
+bool doesTypeExist(std::string name) { return (av::Type::getByName(name) != av::Type::badType()) ? true : false; }
 
-  void
-  addStation(av::daemon::Device* self, int number, std::string name)
-  {
-    if (!mStationSegment)
-      throw std::runtime_error("No StationSegment available.");
+void addStation(av::daemon::Device* self, int number, std::string name)
+{
+    if(!mStationSegment)
+        throw std::runtime_error("No StationSegment available.");
 
     self->addStation(number, mStationSegment->getStation(name));
-  }
+}
 
-  // wrapper for specialized queryFeature calls, required by .add_property
-  // (a better solution would be to use boost::bind, but unfortunately
-  // combining boost::bind with boost::python doesn't work in this case)
-  std::string getTTYFeature(av::daemon::Device* self) { return self->queryFeature("tty"); }
-  std::string getNormAbsFeature(av::daemon::Device* self) { return self->queryFeature("norm-abs"); }
-  std::string getAccumRelFeature(av::daemon::Device* self) { return self->queryFeature("accum-rel-events"); }
-  std::string getResetRelCycleFeature(av::daemon::Device* self) { return self->queryFeature("reset-rel-values-cycle"); }
-  std::string getTimeoutFeature(av::daemon::Device* self) { return self->queryFeature("timeout"); }
-  std::string getPortFeature(av::daemon::Device* self) { return self->queryFeature("port"); }
-  std::string getToggleResetFeature(av::daemon::Device* self) { return self->queryFeature("toggle-reset"); }
-  std::string getServerFeature(av::daemon::Device* self) { return self->queryFeature("server"); }
+// wrapper for specialized queryFeature calls, required by .add_property
+// (a better solution would be to use boost::bind, but unfortunately
+// combining boost::bind with boost::python doesn't work in this case)
+std::string getTTYFeature(av::daemon::Device* self) { return self->queryFeature("tty"); }
+std::string getNormAbsFeature(av::daemon::Device* self) { return self->queryFeature("norm-abs"); }
+std::string getAccumRelFeature(av::daemon::Device* self) { return self->queryFeature("accum-rel-events"); }
+std::string getResetRelCycleFeature(av::daemon::Device* self) { return self->queryFeature("reset-rel-values-cycle"); }
+std::string getTimeoutFeature(av::daemon::Device* self) { return self->queryFeature("timeout"); }
+std::string getPortFeature(av::daemon::Device* self) { return self->queryFeature("port"); }
+std::string getToggleResetFeature(av::daemon::Device* self) { return self->queryFeature("toggle-reset"); }
+std::string getServerFeature(av::daemon::Device* self) { return self->queryFeature("server"); }
 
-  // wrapper for specialized configureFeature calls, required by .add_property
-  std::string parseBoolString(std::string value)
-  {
-    if ((value == "true")||(value=="TRUE")||(value=="True")) return "1";
-    if ((value == "false")||(value=="FALSE")||(value=="False")) return "0";
+// wrapper for specialized configureFeature calls, required by .add_property
+std::string parseBoolString(std::string value)
+{
+    if((value == "true") || (value == "TRUE") || (value == "True"))
+        return "1";
+    if((value == "false") || (value == "FALSE") || (value == "False"))
+        return "0";
     return value;
-  }
-  void setTTYFeature(av::daemon::Device* self, std::string value) { self->configureFeature("tty", value); }
-  void setNormAbsFeature(av::daemon::Device* self, std::string value) { self->configureFeature("norm-abs",parseBoolString(value)); }
-  //void setNormAbsFeature(av::daemon::Device* self, bool value) { (value)?self->configureFeature("norm-abs", "1"):self->configureFeature("norm-abs", "0"); }
-  void setAccumRelFeature(av::daemon::Device* self, std::string value) { self->configureFeature("accum-rel-events", parseBoolString(value)); }
-  void setResetRelCycleFeature(av::daemon::Device* self, std::string value) { self->configureFeature("reset-rel-values-cycle", value); }
-  void setTimeoutFeature(av::daemon::Device* self, std::string value) { self->configureFeature("timeout", value); }
-  void setPortFeature(av::daemon::Device* self, std::string value) { self->configureFeature("port", value); }
-  void setToggleResetFeature(av::daemon::Device* self, std::string value) { self->configureFeature("toggle-reset", parseBoolString(value)); }
-  void setServerFeature(av::daemon::Device* self, std::string value) { self->configureFeature("server", value); }
+}
+void setTTYFeature(av::daemon::Device* self, std::string value) { self->configureFeature("tty", value); }
+void setNormAbsFeature(av::daemon::Device* self, std::string value) { self->configureFeature("norm-abs", parseBoolString(value)); }
+// void setNormAbsFeature(av::daemon::Device* self, bool value) { (value)?self->configureFeature("norm-abs", "1"):self->configureFeature("norm-abs", "0"); }
+void setAccumRelFeature(av::daemon::Device* self, std::string value) { self->configureFeature("accum-rel-events", parseBoolString(value)); }
+void setResetRelCycleFeature(av::daemon::Device* self, std::string value) { self->configureFeature("reset-rel-values-cycle", value); }
+void setTimeoutFeature(av::daemon::Device* self, std::string value) { self->configureFeature("timeout", value); }
+void setPortFeature(av::daemon::Device* self, std::string value) { self->configureFeature("port", value); }
+void setToggleResetFeature(av::daemon::Device* self, std::string value) { self->configureFeature("toggle-reset", parseBoolString(value)); }
+void setServerFeature(av::daemon::Device* self, std::string value) { self->configureFeature("server", value); }
 
-  // set LED states
-  void setLED(av::daemon::HIDInput* self, int number, int value)
-  {
-    mStationSegment->getStation(self->getFirstStation())->setLED(number,value);
-  }
-  void setAllLEDs(av::daemon::HIDInput* self, int value)
-  {
+// set LED states
+void setLED(av::daemon::HIDInput* self, int number, int value) { mStationSegment->getStation(self->getFirstStation())->setLED(number, value); }
+void setAllLEDs(av::daemon::HIDInput* self, int value)
+{
     av::daemon::Station* st = mStationSegment->getStation(self->getFirstStation());
-    for (int i=0; i<av::daemon::Station::sMaxLeds; ++i)
-      st->setLED(i, value);
-  }
+    for(int i = 0; i < av::daemon::Station::sMaxLeds; ++i)
+        st->setLED(i, value);
+}
 
-  // wrapper for mappings
-  void
-  mapToStationButton(av::daemon::HIDInput* self, int number, std::string event)
-  {
+// wrapper for mappings
+void mapToStationButton(av::daemon::HIDInput* self, int number, std::string event)
+{
     std::string feature = self->getFirstStation() + "::STATION_BUTTON::" + boost::lexical_cast<std::string>(number);
     self->configureFeature(feature, event);
-  }
-  void
-  mapToStationValue(av::daemon::HIDInput* self, int number, std::string event)
-  {
+}
+void mapToStationValue(av::daemon::HIDInput* self, int number, std::string event)
+{
     std::string feature = self->getFirstStation() + "::STATION_VALUE::" + boost::lexical_cast<std::string>(number);
     self->configureFeature(feature, event);
-  }
-  void
-  mapToStationLED(av::daemon::HIDInput* self, int number, std::string event)
-  {
+}
+void mapToStationLED(av::daemon::HIDInput* self, int number, std::string event)
+{
     std::string feature = self->getFirstStation() + "::STATION_LED::" + boost::lexical_cast<std::string>(number);
     self->configureFeature(feature, event);
-  }
+}
 
-  void
-  run(object devices)
-  {
+void run(object devices)
+{
     av::Link<av::daemon::DeviceDaemon> daemon(new av::daemon::DeviceDaemon());
     if(!daemon.isValid())
-      throw std::runtime_error("No instance of a DeviceDaemon available.");
+        throw std::runtime_error("No instance of a DeviceDaemon available.");
 
-    for (int i = 0; i != extract<int>(devices.attr("__len__")()); ++i)
+    for(int i = 0; i != extract<int>(devices.attr("__len__")()); ++i)
     {
-      daemon->appendDevice(extract<av::daemon::Device*>(devices[i]));
+        daemon->appendDevice(extract<av::daemon::Device*>(devices[i]));
     }
 
     daemon->run();
-  }
 }
+} // namespace
 
 BOOST_PYTHON_MODULE(_daemon)
 {
-  // initialize Avango Daemon
-  av::daemon::Init::initClass();
+    // initialize Avango Daemon
+    av::daemon::Init::initClass();
 
-  // Avango NG application instances
-  class_<av::daemon::DeviceSensor, av::Link<av::daemon::DeviceSensor>, bases<av::FieldContainer>, boost::noncopyable >("DeviceSensor", "docstring", no_init);
-  class_<av::daemon::DeviceActuator, av::Link<av::daemon::DeviceActuator>, bases<av::FieldContainer>, boost::noncopyable >("_DeviceActuator", "docstring", no_init);
+    // Avango NG application instances
+    class_<av::daemon::DeviceSensor, av::Link<av::daemon::DeviceSensor>, bases<av::FieldContainer>, boost::noncopyable>("DeviceSensor", "docstring", no_init);
+    class_<av::daemon::DeviceActuator, av::Link<av::daemon::DeviceActuator>, bases<av::FieldContainer>, boost::noncopyable>("_DeviceActuator", "docstring", no_init);
 
 #ifndef WIN32
-  class_<av::daemon::WiimoteActuator, av::Link<av::daemon::WiimoteActuator>, bases<av::daemon::DeviceActuator>, boost::noncopyable >("WiimoteActuator", "docstring", no_init)
-    .def("reset", &av::daemon::WiimoteActuator::reset)
-    ;
+    class_<av::daemon::WiimoteActuator, av::Link<av::daemon::WiimoteActuator>, bases<av::daemon::DeviceActuator>, boost::noncopyable>("WiimoteActuator", "docstring", no_init)
+        .def("reset", &av::daemon::WiimoteActuator::reset);
 #endif
 
-  class_<av::daemon::DeviceService, av::Link<av::daemon::DeviceService>, bases<av::Base>, boost::noncopyable >("DeviceService", "docstring")
-    .def("set_led", &av::daemon::DeviceService::setLED)
-    ;
+    class_<av::daemon::DeviceService, av::Link<av::daemon::DeviceService>, bases<av::Base>, boost::noncopyable>("DeviceService", "docstring").def("set_led", &av::daemon::DeviceService::setLED);
 
-  register_field<av::daemon::SFDeviceService>("SFDeviceService");
-  register_multifield<av::daemon::MFDeviceService>("MFDeviceService");
+    register_field<av::daemon::SFDeviceService>("SFDeviceService");
+    register_multifield<av::daemon::MFDeviceService>("MFDeviceService");
 
-  // base classes (this classes cannot be instanciated from Python)
-  class_<av::daemon::Device, av::Link<av::daemon::Device>, bases<av::Base>, boost::noncopyable >("_Device",
-    "Avango Daemon base class for devices", no_init)
-    .def("add_station", &::addStation)
-    ;
-  class_<av::daemon::Station, av::Link<av::daemon::Station>, bases<av::Base>, boost::noncopyable >("_DeviceStation",
-    "An Avango Daemon station", no_init);
+    // base classes (this classes cannot be instanciated from Python)
+    class_<av::daemon::Device, av::Link<av::daemon::Device>, bases<av::Base>, boost::noncopyable>("_Device", "Avango Daemon base class for devices", no_init).def("add_station", &::addStation);
+    class_<av::daemon::Station, av::Link<av::daemon::Station>, bases<av::Base>, boost::noncopyable>("_DeviceStation", "An Avango Daemon station", no_init);
 
-
-  // Avango NG device: HIDInput
-  class_<av::daemon::HIDInput, av::Link<av::daemon::HIDInput>, bases<av::daemon::Device>, boost::noncopyable >("_HIDHelper",
-    "A helper class that provides some basic properties as well as some functions to configure a HIDInput device.")
-    .add_property("device", &::getTTYFeature, &::setTTYFeature)
-    .add_property("norm_abs", &::getNormAbsFeature, &::setNormAbsFeature)
-    .add_property("accum_rel_events", &::getAccumRelFeature, &::setAccumRelFeature)
-    .add_property("reset_rel_values_cycle", &::getResetRelCycleFeature, &::setResetRelCycleFeature)
-    .add_property("timeout", &::getTimeoutFeature, &::setTimeoutFeature)
-    .def("map_to_station_button", &::mapToStationButton)
-    .def("map_to_station_value", &::mapToStationValue)
-    .def("map_to_station_led", &::mapToStationLED)
-    .def("set_led", &::setLED)
-    .def("set_leds", &::setAllLEDs)
-    ;
+    // Avango NG device: HIDInput
+    class_<av::daemon::HIDInput, av::Link<av::daemon::HIDInput>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_HIDHelper", "A helper class that provides some basic properties as well as some functions to configure a HIDInput device.")
+        .add_property("device", &::getTTYFeature, &::setTTYFeature)
+        .add_property("norm_abs", &::getNormAbsFeature, &::setNormAbsFeature)
+        .add_property("accum_rel_events", &::getAccumRelFeature, &::setAccumRelFeature)
+        .add_property("reset_rel_values_cycle", &::getResetRelCycleFeature, &::setResetRelCycleFeature)
+        .add_property("timeout", &::getTimeoutFeature, &::setTimeoutFeature)
+        .def("map_to_station_button", &::mapToStationButton)
+        .def("map_to_station_value", &::mapToStationValue)
+        .def("map_to_station_led", &::mapToStationLED)
+        .def("set_led", &::setLED)
+        .def("set_leds", &::setAllLEDs);
 #ifndef WIN32
-  // Avango NG device: WacomTablet (derived from HIDInput)
-  class_<av::daemon::WacomTablet, av::Link<av::daemon::WacomTablet>, bases<av::daemon::HIDInput>, boost::noncopyable >("_WacomTabletHelper",
-    "A helper class that provides some basic properties and functions inherited from HIDInput.")
-    .add_property("toggle_reset", &::getToggleResetFeature, &::setToggleResetFeature)
-    ;
+    // Avango NG device: WacomTablet (derived from HIDInput)
+    class_<av::daemon::WacomTablet, av::Link<av::daemon::WacomTablet>, bases<av::daemon::HIDInput>, boost::noncopyable>(
+        "_WacomTabletHelper", "A helper class that provides some basic properties and functions inherited from HIDInput.")
+        .add_property("toggle_reset", &::getToggleResetFeature, &::setToggleResetFeature);
 
-  // Avango NG device: Wiimote (derived from HIDInput)
-  class_<av::daemon::Wiimote, av::Link<av::daemon::Wiimote>, bases<av::daemon::HIDInput>, boost::noncopyable >("_WiimoteHelper",
-    "A helper class that provides some basic properties and functions inherited from HIDInput.")
-    ;
+    // Avango NG device: Wiimote (derived from HIDInput)
+    class_<av::daemon::Wiimote, av::Link<av::daemon::Wiimote>, bases<av::daemon::HIDInput>, boost::noncopyable>(
+        "_WiimoteHelper", "A helper class that provides some basic properties and functions inherited from HIDInput.");
 #endif
 
-  // Avango NG device: DTrack
-  class_<av::daemon::DTrack, av::Link<av::daemon::DTrack>, bases<av::daemon::Device>, boost::noncopyable >("_DTrackHelper",
-    "A helper class that provides some basic properties and function inherited from DTrack,"
-    "used to construct a concrete Python device representation.")
-    .add_property("port", &::getPortFeature, &::setPortFeature)
-    ;
+    // Avango NG device: DTrack
+    class_<av::daemon::DTrack, av::Link<av::daemon::DTrack>, bases<av::daemon::Device>, boost::noncopyable>("_DTrackHelper",
+                                                                                                            "A helper class that provides some basic properties and function inherited from DTrack,"
+                                                                                                            "used to construct a concrete Python device representation.")
+        .add_property("port", &::getPortFeature, &::setPortFeature);
 
-  // Avango NG device: SkeletonTrack
-  class_<av::daemon::SkeletonTrack, av::Link<av::daemon::SkeletonTrack>, bases<av::daemon::Device>, boost::noncopyable >("_SkeletonTrackHelper",
-    "A helper class that provides some basic properties and function inherited from SkeletonTrack,"
-    "used to construct a concrete Python device representation.")
-    .add_property("server", &::getServerFeature, &::setServerFeature)
-    .add_property("port", &::getPortFeature, &::setPortFeature)
-    ;
+    // Avango NG device: SkeletonTrack
+    class_<av::daemon::SkeletonTrack, av::Link<av::daemon::SkeletonTrack>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_SkeletonTrackHelper",
+        "A helper class that provides some basic properties and function inherited from SkeletonTrack,"
+        "used to construct a concrete Python device representation.")
+        .add_property("server", &::getServerFeature, &::setServerFeature)
+        .add_property("port", &::getPortFeature, &::setPortFeature);
 
-  // Avango NG device: HMDTrack
-  class_<av::daemon::HMDTrack, av::Link<av::daemon::HMDTrack>, bases<av::daemon::Device>, boost::noncopyable >("_HMDTrackHelper",
-    "A helper class that provides some basic properties and function inherited from HMDTrack,"
-    "used to construct a concrete Python device representation.")
-    .add_property("server", &::getServerFeature, &::setServerFeature)
-    .add_property("port", &::getPortFeature, &::setPortFeature)
-    ;
+    // Avango NG device: HMDTrack
+    class_<av::daemon::HMDTrack, av::Link<av::daemon::HMDTrack>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_HMDTrackHelper",
+        "A helper class that provides some basic properties and function inherited from HMDTrack,"
+        "used to construct a concrete Python device representation.")
+        .add_property("server", &::getServerFeature, &::setServerFeature)
+        .add_property("port", &::getPortFeature, &::setPortFeature);
 
-  // Avango NG device: KinectTrack
-  class_<av::daemon::KinectTrack, av::Link<av::daemon::KinectTrack>, bases<av::daemon::Device>, boost::noncopyable >("_KinectTrackHelper",
-    "A helper class that provides some basic properties and function inherited from KinectTrack,"
-    "used to construct a concrete Python device representation.")
-    .add_property("server", &::getServerFeature, &::setServerFeature)
-    .add_property("port", &::getPortFeature, &::setPortFeature)
-    ;
+    // Avango NG device: KinectTrack
+    class_<av::daemon::KinectTrack, av::Link<av::daemon::KinectTrack>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_KinectTrackHelper",
+        "A helper class that provides some basic properties and function inherited from KinectTrack,"
+        "used to construct a concrete Python device representation.")
+        .add_property("server", &::getServerFeature, &::setServerFeature)
+        .add_property("port", &::getPortFeature, &::setPortFeature);
 
-  class_<av::daemon::TUIOInput, av::Link<av::daemon::TUIOInput>, bases<av::daemon::Device>, boost::noncopyable >("_TUIOInputHelper",
-    "A helper class that provides some basic properties and function inherited from TUIOInput,"
-    "used to construct a concrete Python device representation.")
-    .add_property("port", &::getPortFeature, &::setPortFeature)
-    ;
+    class_<av::daemon::TUIOInput, av::Link<av::daemon::TUIOInput>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_TUIOInputHelper",
+        "A helper class that provides some basic properties and function inherited from TUIOInput,"
+        "used to construct a concrete Python device representation.")
+        .add_property("port", &::getPortFeature, &::setPortFeature);
 
 #ifdef VRPN_SUPPORT
-  // Avango NG device: VRPNClient
-  class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable >("_VRPNClientHelper",
-    "A helper class used to construct a concrete Python VRPN client device representation.")
-    .add_property("server", &::getServerFeature, &::setServerFeature)
-    ;
+    // Avango NG device: VRPNClient
+    class_<av::daemon::VRPNClient, av::Link<av::daemon::VRPNClient>, bases<av::daemon::Device>, boost::noncopyable>(
+        "_VRPNClientHelper", "A helper class used to construct a concrete Python VRPN client device representation.")
+        .add_property("server", &::getServerFeature, &::setServerFeature);
 #endif
 
-  // wrap helper function
-  def("does_type_exist", &::doesTypeExist);
+    // wrap helper function
+    def("does_type_exist", &::doesTypeExist);
 
-  // start the daemon
-  def("run", &::run);
+    // start the daemon
+    def("run", &::run);
 }

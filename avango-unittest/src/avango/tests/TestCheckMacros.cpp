@@ -5,8 +5,8 @@
 
 using namespace std;
 
-namespace {
-
+namespace
+{
 TEST(CheckSucceedsOnTrue)
 {
     bool failure = true;
@@ -14,10 +14,10 @@ TEST(CheckSucceedsOnTrue)
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
 
-		ScopedCurrentTest scopedResults(testResults);
-		CHECK(true);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK(true);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(!failure);
@@ -29,7 +29,7 @@ TEST(CheckFailsOnFalse)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK(false);
         failure = (testResults.GetFailureCount() > 0);
     }
@@ -42,7 +42,7 @@ TEST(FailureReportsCorrectTestName)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK(false);
     }
 
@@ -54,7 +54,7 @@ TEST(CheckFailureIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         const bool yaddayadda = false;
         CHECK(yaddayadda);
     }
@@ -62,10 +62,7 @@ TEST(CheckFailureIncludesCheckContents)
     CHECK(strstr(reporter.lastFailedMessage, "yaddayadda"));
 }
 
-int ThrowingFunction()
-{
-    throw "Doh";
-}
+int ThrowingFunction() { throw "Doh"; }
 
 TEST(CheckFailsOnException)
 {
@@ -73,7 +70,7 @@ TEST(CheckFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK(ThrowingFunction() == 1);
         failure = (testResults.GetFailureCount() > 0);
     }
@@ -86,7 +83,7 @@ TEST(CheckFailureBecauseOfExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK(ThrowingFunction() == 1);
     }
 
@@ -99,7 +96,7 @@ TEST(CheckEqualSucceedsOnEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(1, 1);
         failure = (testResults.GetFailureCount() > 0);
     }
@@ -113,7 +110,7 @@ TEST(CheckEqualFailsOnNotEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(1, 2);
         failure = (testResults.GetFailureCount() > 0);
     }
@@ -127,7 +124,7 @@ TEST(CheckEqualFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(ThrowingFunction(), 1);
         failure = (testResults.GetFailureCount() > 0);
     }
@@ -141,10 +138,11 @@ TEST(CheckEqualFailureContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails const testDetails("testName", "suiteName", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails const testDetails("testName", "suiteName", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		CHECK_EQUAL(1, 123);    line = __LINE__;
+        CHECK_EQUAL(1, 123);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("testName", reporter.lastFailedTest);
@@ -159,10 +157,11 @@ TEST(CheckEqualFailureBecauseOfExceptionContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails const testDetails("testName", "suiteName", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails const testDetails("testName", "suiteName", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		CHECK_EQUAL(ThrowingFunction(), 123);    line = __LINE__;
+        CHECK_EQUAL(ThrowingFunction(), 123);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("testName", reporter.lastFailedTest);
@@ -176,7 +175,7 @@ TEST(CheckEqualFailureBecauseOfExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(ThrowingFunction(), 123);
     }
 
@@ -196,7 +195,7 @@ TEST(CheckEqualDoesNotHaveSideEffectsWhenPassing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(1, FunctionWithSideEffects());
     }
     CHECK_EQUAL(1, g_sideEffect);
@@ -207,12 +206,11 @@ TEST(CheckEqualDoesNotHaveSideEffectsWhenFailing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
         CHECK_EQUAL(2, FunctionWithSideEffects());
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
-
 
 TEST(CheckCloseSucceedsOnEqual)
 {
@@ -220,8 +218,8 @@ TEST(CheckCloseSucceedsOnEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE (1.0f, 1.001f, 0.01f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE(1.0f, 1.001f, 0.01f);
         failure = (testResults.GetFailureCount() > 0);
     }
 
@@ -234,8 +232,8 @@ TEST(CheckCloseFailsOnNotEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE (1.0f, 1.1f, 0.01f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE(1.0f, 1.1f, 0.01f);
         failure = (testResults.GetFailureCount() > 0);
     }
 
@@ -248,8 +246,8 @@ TEST(CheckCloseFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE ((float)ThrowingFunction(), 1.0001f, 0.1f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE((float)ThrowingFunction(), 1.0001f, 0.1f);
         failure = (testResults.GetFailureCount() > 0);
     }
 
@@ -262,10 +260,11 @@ TEST(CheckCloseFailureContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("test", "suite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails testDetails("test", "suite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		CHECK_CLOSE (1.0f, 1.1f, 0.01f);    line = __LINE__;
+        CHECK_CLOSE(1.0f, 1.1f, 0.01f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("test", reporter.lastFailedTest);
@@ -280,9 +279,10 @@ TEST(CheckCloseFailureBecauseOfExceptionContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("closeTest", "closeSuite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
-        CHECK_CLOSE ((float)ThrowingFunction(), 1.0001f, 0.1f);    line = __LINE__;
+        UnitTest::TestDetails testDetails("closeTest", "closeSuite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
+        CHECK_CLOSE((float)ThrowingFunction(), 1.0001f, 0.1f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("closeTest", reporter.lastFailedTest);
@@ -296,8 +296,8 @@ TEST(CheckCloseFailureBecauseOfExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE ((float)ThrowingFunction(), 1.0001f, 0.1f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE((float)ThrowingFunction(), 1.0001f, 0.1f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "(float)ThrowingFunction()"));
@@ -309,8 +309,8 @@ TEST(CheckCloseDoesNotHaveSideEffectsWhenPassing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE (1, FunctionWithSideEffects(), 0.1f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE(1, FunctionWithSideEffects(), 0.1f);
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
@@ -320,22 +320,17 @@ TEST(CheckCloseDoesNotHaveSideEffectsWhenFailing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
-        CHECK_CLOSE (2, FunctionWithSideEffects(), 0.1f);
+        ScopedCurrentTest scopedResults(testResults);
+        CHECK_CLOSE(2, FunctionWithSideEffects(), 0.1f);
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
 
-
 class ThrowingObject
 {
-public:
-    float operator[](int) const
-    {
-        throw "Test throw";
-    }
+  public:
+    float operator[](int) const { throw "Test throw"; }
 };
-
 
 TEST(CheckArrayCloseSucceedsOnEqual)
 {
@@ -343,9 +338,9 @@ TEST(CheckArrayCloseSucceedsOnEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
-        const float data[4] = { 0, 1, 2, 3 };
-        CHECK_ARRAY_CLOSE (data, data, 4, 0.01f);
+        ScopedCurrentTest scopedResults(testResults);
+        const float data[4] = {0, 1, 2, 3};
+        CHECK_ARRAY_CLOSE(data, data, 4, 0.01f);
         failure = (testResults.GetFailureCount() > 0);
     }
 
@@ -358,13 +353,13 @@ TEST(CheckArrayCloseFailsOnNotEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-		CHECK_ARRAY_CLOSE (data1, data2, 4, 0.01f);
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_CLOSE(data1, data2, 4, 0.01f);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -375,11 +370,11 @@ TEST(CheckArrayCloseFailureIncludesCheckExpectedAndActual)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_CLOSE (data1, data2, 4, 0.01f);
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_CLOSE(data1, data2, 4, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "xpected [ 0 1 2 3 ]"));
@@ -392,12 +387,13 @@ TEST(CheckArrayCloseFailureContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("arrayCloseTest", "arrayCloseSuite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails testDetails("arrayCloseTest", "arrayCloseSuite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_CLOSE (data1, data2, 4, 0.01f);     line = __LINE__;
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_CLOSE(data1, data2, 4, 0.01f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("arrayCloseTest", reporter.lastFailedTest);
@@ -412,11 +408,12 @@ TEST(CheckArrayCloseFailureBecauseOfExceptionContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("arrayCloseTest", "arrayCloseSuite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails testDetails("arrayCloseTest", "arrayCloseSuite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		int const data[4] = { 0, 1, 2, 3 };
-        CHECK_ARRAY_CLOSE (data, ThrowingObject(), 4, 0.01f);     line = __LINE__;
+        int const data[4] = {0, 1, 2, 3};
+        CHECK_ARRAY_CLOSE(data, ThrowingObject(), 4, 0.01f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("arrayCloseTest", reporter.lastFailedTest);
@@ -430,16 +427,15 @@ TEST(CheckArrayCloseFailureIncludesTolerance)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		float const data1[4] = { 0, 1, 2, 3 };
-        float const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_CLOSE (data1, data2, 4, 0.01f);
+        float const data1[4] = {0, 1, 2, 3};
+        float const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_CLOSE(data1, data2, 4, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "0.01"));
 }
-
 
 TEST(CheckArrayCloseFailsOnException)
 {
@@ -447,13 +443,13 @@ TEST(CheckArrayCloseFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[4] = { 0, 1, 2, 3 };
+        const float data[4] = {0, 1, 2, 3};
         ThrowingObject obj;
-        CHECK_ARRAY_CLOSE (data, obj, 3, 0.01f);
+        CHECK_ARRAY_CLOSE(data, obj, 3, 0.01f);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -464,17 +460,16 @@ TEST(CheckArrayCloseFailureOnExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[4] = { 0, 1, 2, 3 };
+        const float data[4] = {0, 1, 2, 3};
         ThrowingObject obj;
-        CHECK_ARRAY_CLOSE (data, obj, 3, 0.01f);
+        CHECK_ARRAY_CLOSE(data, obj, 3, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "data"));
     CHECK(strstr(reporter.lastFailedMessage, "obj"));
 }
-
 
 TEST(CheckArrayEqualSuceedsOnEqual)
 {
@@ -482,12 +477,12 @@ TEST(CheckArrayEqualSuceedsOnEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[4] = { 0, 1, 2, 3 };
-        CHECK_ARRAY_EQUAL (data, data, 4);
+        const float data[4] = {0, 1, 2, 3};
+        CHECK_ARRAY_EQUAL(data, data, 4);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(!failure);
@@ -499,13 +494,13 @@ TEST(CheckArrayEqualFailsOnNotEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_EQUAL (data1, data2, 4);
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_EQUAL(data1, data2, 4);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -516,11 +511,11 @@ TEST(CheckArrayEqualFailureIncludesCheckExpectedAndActual)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_EQUAL (data1, data2, 4);
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_EQUAL(data1, data2, 4);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "xpected [ 0 1 2 3 ]"));
@@ -533,11 +528,12 @@ TEST(CheckArrayEqualFailureContainsCorrectInfo)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[4] = { 0, 1, 2, 3 };
-        int const data2[4] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_EQUAL (data1, data2, 4);     line = __LINE__;
+        int const data1[4] = {0, 1, 2, 3};
+        int const data2[4] = {0, 1, 3, 3};
+        CHECK_ARRAY_EQUAL(data1, data2, 4);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("CheckArrayEqualFailureContainsCorrectInfo", reporter.lastFailedTest);
@@ -551,13 +547,13 @@ TEST(CheckArrayEqualFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[4] = { 0, 1, 2, 3 };
+        const float data[4] = {0, 1, 2, 3};
         ThrowingObject obj;
-        CHECK_ARRAY_EQUAL (data, obj, 3);
+        CHECK_ARRAY_EQUAL(data, obj, 3);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -568,11 +564,11 @@ TEST(CheckArrayEqualFailureOnExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[4] = { 0, 1, 2, 3 };
+        const float data[4] = {0, 1, 2, 3};
         ThrowingObject obj;
-        CHECK_ARRAY_EQUAL (data, obj, 3);
+        CHECK_ARRAY_EQUAL(data, obj, 3);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "data"));
@@ -582,7 +578,7 @@ TEST(CheckArrayEqualFailureOnExceptionIncludesCheckContents)
 float const* FunctionWithSideEffects2()
 {
     ++g_sideEffect;
-    static float const data[] = {1,2,3,4};
+    static float const data[] = {1, 2, 3, 4};
     return data;
 }
 
@@ -591,10 +587,10 @@ TEST(CheckArrayCloseDoesNotHaveSideEffectsWhenPassing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[] = { 0, 1, 2, 3 };
-        CHECK_ARRAY_CLOSE (data, FunctionWithSideEffects2(), 4, 0.01f);
+        const float data[] = {0, 1, 2, 3};
+        CHECK_ARRAY_CLOSE(data, FunctionWithSideEffects2(), 4, 0.01f);
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
@@ -604,24 +600,20 @@ TEST(CheckArrayCloseDoesNotHaveSideEffectsWhenFailing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[] = { 0, 1, 3, 3 };
-        CHECK_ARRAY_CLOSE (data, FunctionWithSideEffects2(), 4, 0.01f);
+        const float data[] = {0, 1, 3, 3};
+        CHECK_ARRAY_CLOSE(data, FunctionWithSideEffects2(), 4, 0.01f);
     }
 
-	CHECK_EQUAL(1, g_sideEffect);
+    CHECK_EQUAL(1, g_sideEffect);
 }
 
 class ThrowingObject2D
 {
-public:
-    float* operator[](int) const
-    {
-        throw "Test throw";
-    }
+  public:
+    float* operator[](int) const { throw "Test throw"; }
 };
-
 
 TEST(CheckArray2DCloseSucceedsOnEqual)
 {
@@ -629,12 +621,12 @@ TEST(CheckArray2DCloseSucceedsOnEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[2][2] = { {0, 1}, {2, 3} };
-        CHECK_ARRAY2D_CLOSE (data, data, 2, 2, 0.01f);
+        const float data[2][2] = {{0, 1}, {2, 3}};
+        CHECK_ARRAY2D_CLOSE(data, data, 2, 2, 0.01f);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(!failure);
@@ -646,13 +638,13 @@ TEST(CheckArray2DCloseFailsOnNotEqual)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[2][2] = { {0, 1}, {2, 3} };
-        int const data2[2][2] = { {0, 1}, {3, 3} };
-        CHECK_ARRAY2D_CLOSE (data1, data2, 2, 2, 0.01f);
+        int const data1[2][2] = {{0, 1}, {2, 3}};
+        int const data2[2][2] = {{0, 1}, {3, 3}};
+        CHECK_ARRAY2D_CLOSE(data1, data2, 2, 2, 0.01f);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -663,12 +655,12 @@ TEST(CheckArray2DCloseFailureIncludesCheckExpectedAndActual)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		int const data1[2][2] = { {0, 1}, {2, 3} };
-        int const data2[2][2] = { {0, 1}, {3, 3} };
+        int const data1[2][2] = {{0, 1}, {2, 3}};
+        int const data2[2][2] = {{0, 1}, {3, 3}};
 
-		CHECK_ARRAY2D_CLOSE (data1, data2, 2, 2, 0.01f);
+        CHECK_ARRAY2D_CLOSE(data1, data2, 2, 2, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "xpected [ [ 0 1 ] [ 2 3 ] ]"));
@@ -681,12 +673,13 @@ TEST(CheckArray2DCloseFailureContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("array2DCloseTest", "array2DCloseSuite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails testDetails("array2DCloseTest", "array2DCloseSuite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		int const data1[2][2] = { {0, 1}, {2, 3} };
-        int const data2[2][2] = { {0, 1}, {3, 3} };
-		CHECK_ARRAY2D_CLOSE (data1, data2, 2, 2, 0.01f);     line = __LINE__;
+        int const data1[2][2] = {{0, 1}, {2, 3}};
+        int const data2[2][2] = {{0, 1}, {3, 3}};
+        CHECK_ARRAY2D_CLOSE(data1, data2, 2, 2, 0.01f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("array2DCloseTest", reporter.lastFailedTest);
@@ -701,11 +694,12 @@ TEST(CheckArray2DCloseFailureBecauseOfExceptionContainsCorrectDetails)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		UnitTest::TestDetails testDetails("array2DCloseTest", "array2DCloseSuite", "filename", -1);
-		ScopedCurrentTest scopedResults(testResults, &testDetails);
+        UnitTest::TestDetails testDetails("array2DCloseTest", "array2DCloseSuite", "filename", -1);
+        ScopedCurrentTest scopedResults(testResults, &testDetails);
 
-		const float data[2][2] = { {0, 1}, {2, 3} };
-        CHECK_ARRAY2D_CLOSE (data, ThrowingObject2D(), 2, 2, 0.01f);   line = __LINE__;
+        const float data[2][2] = {{0, 1}, {2, 3}};
+        CHECK_ARRAY2D_CLOSE(data, ThrowingObject2D(), 2, 2, 0.01f);
+        line = __LINE__;
     }
 
     CHECK_EQUAL("array2DCloseTest", reporter.lastFailedTest);
@@ -719,11 +713,11 @@ TEST(CheckArray2DCloseFailureIncludesTolerance)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		float const data1[2][2] = { {0, 1}, {2, 3} };
-        float const data2[2][2] = { {0, 1}, {3, 3} };
-        CHECK_ARRAY2D_CLOSE (data1, data2, 2, 2, 0.01f);
+        float const data1[2][2] = {{0, 1}, {2, 3}};
+        float const data2[2][2] = {{0, 1}, {3, 3}};
+        CHECK_ARRAY2D_CLOSE(data1, data2, 2, 2, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "0.01"));
@@ -735,13 +729,13 @@ TEST(CheckArray2DCloseFailsOnException)
     {
         RecordingReporter reporter;
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[2][2] = { {0, 1}, {2, 3} };
+        const float data[2][2] = {{0, 1}, {2, 3}};
         ThrowingObject2D obj;
-        CHECK_ARRAY2D_CLOSE (data, obj, 2, 2, 0.01f);
+        CHECK_ARRAY2D_CLOSE(data, obj, 2, 2, 0.01f);
 
-		failure = (testResults.GetFailureCount() > 0);
+        failure = (testResults.GetFailureCount() > 0);
     }
 
     CHECK(failure);
@@ -752,11 +746,11 @@ TEST(CheckArray2DCloseFailureOnExceptionIncludesCheckContents)
     RecordingReporter reporter;
     {
         UnitTest::TestResults testResults(&reporter);
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[2][2] = { {0, 1}, {2, 3} };
+        const float data[2][2] = {{0, 1}, {2, 3}};
         ThrowingObject2D obj;
-        CHECK_ARRAY2D_CLOSE (data, obj, 2, 2, 0.01f);
+        CHECK_ARRAY2D_CLOSE(data, obj, 2, 2, 0.01f);
     }
 
     CHECK(strstr(reporter.lastFailedMessage, "data"));
@@ -766,8 +760,8 @@ TEST(CheckArray2DCloseFailureOnExceptionIncludesCheckContents)
 float const* const* FunctionWithSideEffects3()
 {
     ++g_sideEffect;
-    static float const data1[] = {0,1};
-    static float const data2[] = {2,3};
+    static float const data1[] = {0, 1};
+    static float const data2[] = {2, 3};
     static const float* const data[] = {data1, data2};
     return data;
 }
@@ -777,10 +771,10 @@ TEST(CheckArray2DCloseDoesNotHaveSideEffectsWhenPassing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[2][2] = { {0, 1}, {2, 3} };
-        CHECK_ARRAY2D_CLOSE (data, FunctionWithSideEffects3(), 2, 2, 0.01f);
+        const float data[2][2] = {{0, 1}, {2, 3}};
+        CHECK_ARRAY2D_CLOSE(data, FunctionWithSideEffects3(), 2, 2, 0.01f);
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
@@ -790,12 +784,12 @@ TEST(CheckArray2DCloseDoesNotHaveSideEffectsWhenFailing)
     g_sideEffect = 0;
     {
         UnitTest::TestResults testResults;
-		ScopedCurrentTest scopedResults(testResults);
+        ScopedCurrentTest scopedResults(testResults);
 
-		const float data[2][2] = { {0, 1}, {3, 3} };
-        CHECK_ARRAY2D_CLOSE (data, FunctionWithSideEffects3(), 2, 2, 0.01f);
+        const float data[2][2] = {{0, 1}, {3, 3}};
+        CHECK_ARRAY2D_CLOSE(data, FunctionWithSideEffects3(), 2, 2, 0.01f);
     }
     CHECK_EQUAL(1, g_sideEffect);
 }
 
-}
+} // namespace

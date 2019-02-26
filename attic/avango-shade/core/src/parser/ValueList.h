@@ -27,41 +27,36 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class Value;
 
-    class Value;
+class ValueList
+{
+  private:
+    typedef std::vector<boost::shared_ptr<const Value>> Parameters;
+    typedef Parameters::size_type size_type;
+    Parameters m_parameters;
 
-    class ValueList
-    {
-    private:
+  public:
+    void add(boost::shared_ptr<const Value> parameter);
 
-      typedef std::vector<boost::shared_ptr<const Value> > Parameters;
-      typedef Parameters::size_type size_type;
-      Parameters m_parameters;
+    bool operator<(const ValueList& other) const;
 
-    public:
+    bool has_self_parameter(void) const;
+    const Value& get_self_parameter(void) const;
 
-      void add(boost::shared_ptr<const Value> parameter);
+    typedef std::vector<boost::shared_ptr<const Value>>::iterator iterator;
+    typedef std::vector<boost::shared_ptr<const Value>>::const_iterator const_iterator;
 
-      bool operator<(const ValueList& other) const;
+    const_iterator begin(void) const { return m_parameters.begin(); }
+    const_iterator end(void) const { return m_parameters.end(); }
+    size_type size(void) const { return m_parameters.size(); }
+};
 
-      bool has_self_parameter(void) const;
-      const Value& get_self_parameter(void) const;
-
-      typedef std::vector<boost::shared_ptr<const Value> >::iterator iterator;
-      typedef std::vector<boost::shared_ptr<const Value> >::const_iterator const_iterator;
-
-      const_iterator begin(void) const { return m_parameters.begin(); }
-      const_iterator end(void) const { return m_parameters.end(); }
-      size_type size(void) const { return m_parameters.size(); }
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_ValueList_H */

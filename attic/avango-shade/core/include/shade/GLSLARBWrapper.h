@@ -28,8 +28,8 @@
 
 namespace shade
 {
-  class GLSLARBWrapper : public GLSLWrapper
-  {
+class GLSLARBWrapper : public GLSLWrapper
+{
   protected:
     /*virtual*/ Handle CreateShader(ShaderType type);
     /*virtual*/ Handle CreateProgram(void);
@@ -52,7 +52,7 @@ namespace shade
     /*virtual*/ void Uniform3f(Handle index, float x, float y, float z);
     /*virtual*/ void Uniform4f(Handle index, float x, float y, float z, float w);
     /*virtual*/ void UniformMatrix4fv(Handle index, int count, bool transpose, const float* values);
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_GLSLARBWrapper_H */

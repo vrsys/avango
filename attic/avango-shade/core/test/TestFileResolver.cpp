@@ -27,86 +27,86 @@
 
 SUITE(FileResolver)
 {
-  TEST(NoPathAdded)
-  {
-    shade::FileResolver resolver;
-    CHECK_THROW(resolver.load("aword.txt"), shade::FileNotFound);
-  }
-
-  TEST(LocalLoading)
-  {
-    shade::FileResolver resolver;
-    char* testdir = std::getenv("SHADE_TEST_DATA");
-    CHECK(testdir);
-    if (testdir)
+    TEST(NoPathAdded)
     {
-      resolver.append_path(testdir);
-      std::string contents = resolver.load("aword.txt");
-
-      CHECK_EQUAL("bingo\n", contents);
+        shade::FileResolver resolver;
+        CHECK_THROW(resolver.load("aword.txt"), shade::FileNotFound);
     }
-  }
 
-  TEST(LocalLoadingWithoutSlash)
-  {
-    shade::FileResolver resolver;
-    char* testdir = std::getenv("SHADE_TEST_DATA");
-    CHECK(testdir);
-    if (testdir)
+    TEST(LocalLoading)
     {
-      std::string dir(testdir);
-      resolver.append_path(dir.substr(0, dir.size()-1));
-      std::string contents = resolver.load("aword.txt");
+        shade::FileResolver resolver;
+        char* testdir = std::getenv("SHADE_TEST_DATA");
+        CHECK(testdir);
+        if(testdir)
+        {
+            resolver.append_path(testdir);
+            std::string contents = resolver.load("aword.txt");
 
-      CHECK_EQUAL("bingo\n", contents);
+            CHECK_EQUAL("bingo\n", contents);
+        }
     }
-  }
 
-  TEST(LocalLoadingWithMultiplePathes)
-  {
-    shade::FileResolver resolver;
-    char* testdir = std::getenv("SHADE_TEST_DATA");
-    char* testdir2 = std::getenv("SHADE_TEST_DATA2");
-    CHECK(testdir);
-    CHECK(testdir2);
-    if (testdir && testdir2)
+    TEST(LocalLoadingWithoutSlash)
     {
-      resolver.append_path(testdir2);
-      resolver.append_path(testdir);
+        shade::FileResolver resolver;
+        char* testdir = std::getenv("SHADE_TEST_DATA");
+        CHECK(testdir);
+        if(testdir)
+        {
+            std::string dir(testdir);
+            resolver.append_path(dir.substr(0, dir.size() - 1));
+            std::string contents = resolver.load("aword.txt");
 
-      std::string contents = resolver.load("aword.txt");
-      CHECK_EQUAL("bingo\n", contents);
+            CHECK_EQUAL("bingo\n", contents);
+        }
     }
-  }
 
-  TEST(PathLoading)
-  {
-    shade::FileResolver resolver;
-    char* testpath = std::getenv("SHADE_TEST_PATH");
-    CHECK(testpath);
-    if (testpath)
+    TEST(LocalLoadingWithMultiplePathes)
     {
-      shade::append_env_path(resolver, testpath);
+        shade::FileResolver resolver;
+        char* testdir = std::getenv("SHADE_TEST_DATA");
+        char* testdir2 = std::getenv("SHADE_TEST_DATA2");
+        CHECK(testdir);
+        CHECK(testdir2);
+        if(testdir && testdir2)
+        {
+            resolver.append_path(testdir2);
+            resolver.append_path(testdir);
 
-      std::string contents = resolver.load("aword.txt");
-      CHECK_EQUAL("bingo\n", contents);
+            std::string contents = resolver.load("aword.txt");
+            CHECK_EQUAL("bingo\n", contents);
+        }
     }
-  }
 
-  TEST(LocalLoadingWithMultiplePrependedPathes)
-  {
-    shade::FileResolver resolver;
-    char* testdir = std::getenv("SHADE_TEST_DATA");
-    char* testdir2 = std::getenv("SHADE_TEST_DATA2");
-    CHECK(testdir);
-    CHECK(testdir2);
-    if (testdir && testdir2)
+    TEST(PathLoading)
     {
-      resolver.prepend_path(testdir2);
-      resolver.prepend_path(testdir);
+        shade::FileResolver resolver;
+        char* testpath = std::getenv("SHADE_TEST_PATH");
+        CHECK(testpath);
+        if(testpath)
+        {
+            shade::append_env_path(resolver, testpath);
 
-      std::string contents = resolver.load("doubleentry.txt");
-      CHECK_EQUAL("in testdata/\n", contents);
+            std::string contents = resolver.load("aword.txt");
+            CHECK_EQUAL("bingo\n", contents);
+        }
     }
-  }
+
+    TEST(LocalLoadingWithMultiplePrependedPathes)
+    {
+        shade::FileResolver resolver;
+        char* testdir = std::getenv("SHADE_TEST_DATA");
+        char* testdir2 = std::getenv("SHADE_TEST_DATA2");
+        CHECK(testdir);
+        CHECK(testdir2);
+        if(testdir && testdir2)
+        {
+            resolver.prepend_path(testdir2);
+            resolver.prepend_path(testdir);
+
+            std::string contents = resolver.load("doubleentry.txt");
+            CHECK_EQUAL("in testdata/\n", contents);
+        }
+    }
 }

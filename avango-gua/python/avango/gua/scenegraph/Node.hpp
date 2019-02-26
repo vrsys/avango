@@ -3,4 +3,4 @@
 
 void init_Node();
 
-#endif //AV_PYTHON_GUA_NODE_HPP
+#endif // AV_PYTHON_GUA_NODE_HPP

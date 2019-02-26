@@ -24,7 +24,6 @@
 #ifndef shade_GLSLFormatter_H
 #define shade_GLSLFormatter_H shade_GLSLFormatter_H
 
-
 #include <shade/Formatter.h>
 #include <shade/ShaderEnvironment.h>
 #include "GL2Generator.h"
@@ -35,24 +34,23 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 
-
 namespace shade
 {
-  namespace formatter
-  {
-    class Generator;
-  }
+namespace formatter
+{
+class Generator;
+}
 
-  class GLSLFormatter : public Formatter
-  {
+class GLSLFormatter : public Formatter
+{
   public:
-
     GLSLFormatter(ShaderEnvironment st);
     GLSLFormatter(ShaderEnvironment st, const formatter::Generator& generator);
 
     /*virtual*/ void insert_instance_var(formatter::Constants::Type type, const std::string& obj, const std::string& name, ObjectMap::Index ri = -1);
     /*virtual*/ void insert_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
-    /*virtual*/ boost::shared_ptr<formatter::Generator> begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
+    /*virtual*/ boost::shared_ptr<formatter::Generator>
+    begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none);
     /*virtual*/ void end_insert_init_attribute(void);
     /*virtual*/ void insert_array_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name);
     /*virtual*/ void insert_multiple_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name);
@@ -76,7 +74,8 @@ namespace shade
     /*virtual*/ void begin_multiple_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval);
     /*virtual*/ void begin_deferred_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval);
     /*virtual*/ void insert_property_dispatcher(shade::ObjectMap::Index i, const std::string& obj);
-    /*virtual*/ void insert_deferred_property_dispatcher(shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter);
+    /*virtual*/ void insert_deferred_property_dispatcher(
+        shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter);
     /*virtual*/ boost::shared_ptr<formatter::Generator> set_property_dispatcher_return(void);
     /*virtual*/ void end_property_dispatcher(void);
 
@@ -98,7 +97,6 @@ namespace shade
     std::string get_qualifier_str(formatter::Constants::Qualifier qualifier);
 
   private:
-
     void insert_attribute_pre(formatter::Constants::Qualifier qualifier);
     void insert_attribute_post(const std::string& obj, const std::string& name);
 
@@ -153,8 +151,7 @@ namespace shade
     formatter::SelfTranslator m_translator;
 
     std::string m_sources;
-  };
-}
-
+};
+} // namespace shade
 
 #endif /* shade_GLSLFormatter_H */

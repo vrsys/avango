@@ -26,38 +26,29 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Texture2D, "Texture2D.glsl",
-    SHADE_ENV_DEFS(shade::fragment_shader, (get_texture)),
-    SHADE_ENV_DEFS(shade::application_stage, (uv)(texture_unit))
-    )
+SHADE_CLASS_INIT(Texture2D, "Texture2D.glsl", SHADE_ENV_DEFS(shade::fragment_shader, (get_texture)), SHADE_ENV_DEFS(shade::application_stage, (uv)(texture_unit)))
 
-shade::vec4<> Texture2D::get_texture(void)
-{
-  return invoke< shade::vec4<> >("Texture2D_get_texture_impl");
-}
+shade::vec4<> Texture2D::get_texture(void) { return invoke<shade::vec4<>>("Texture2D_get_texture_impl"); }
 
 void Texture2D::get_inline(formatter::Generator& generator)
 {
-  generator.handle_environment_begin(fragment_shader);
-  generator.handle_return_begin();
-  generator.handle_function_call_begin();
-  generator.handle_function_call_name_begin();
-  generator.handle_identifier("Texture2D_get_texture");
-  generator.handle_function_call_name_end();
-  generator.handle_function_call_parameter_list_begin();
-  generator.handle_function_call_parameter_begin();
-  generator.handle_identifier("self");
-  generator.handle_function_call_parameter_end();
-  generator.handle_function_call_parameter_list_end();
-  generator.handle_function_call_end();
-  generator.handle_return_end();
-  generator.handle_environment_end();
-  generator.handle_return_begin();
-  generator.handle_literal_vec4(0, 0, 0, 0);
-  generator.handle_return_end();
+    generator.handle_environment_begin(fragment_shader);
+    generator.handle_return_begin();
+    generator.handle_function_call_begin();
+    generator.handle_function_call_name_begin();
+    generator.handle_identifier("Texture2D_get_texture");
+    generator.handle_function_call_name_end();
+    generator.handle_function_call_parameter_list_begin();
+    generator.handle_function_call_parameter_begin();
+    generator.handle_identifier("self");
+    generator.handle_function_call_parameter_end();
+    generator.handle_function_call_parameter_list_end();
+    generator.handle_function_call_end();
+    generator.handle_return_end();
+    generator.handle_environment_end();
+    generator.handle_return_begin();
+    generator.handle_literal_vec4(0, 0, 0, 0);
+    generator.handle_return_end();
 }
 
-shade::vec4<> Texture2D::get(void)
-{
-  return invoke_inline< vec4<> >(boost::bind(&Texture2D::get_inline, boost::ref(*this), _1));
-}
+shade::vec4<> Texture2D::get(void) { return invoke_inline<vec4<>>(boost::bind(&Texture2D::get_inline, boost::ref(*this), _1)); }

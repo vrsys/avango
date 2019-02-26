@@ -122,17 +122,16 @@
 
 namespace
 {
-    av::Logger& logger(av::getLogger("av::gua::Init"));
+av::Logger& logger(av::getLogger("av::gua::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::gua::Init);
 
-/* static */ void
-av::gua::Init::initClass()
+/* static */ void av::gua::Init::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
-		char** argv;
+        char** argv;
         ::gua::init(1, argv);
         av::gua::initFields();
 
@@ -142,7 +141,7 @@ av::gua::Init::initClass()
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
-        av::gua::LineStripNode::initClass();        
+        av::gua::LineStripNode::initClass();
         av::gua::DepthMapNode::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -257,7 +256,6 @@ av::gua::Init::initClass()
         av::gua::Ray::initClass();
 
         av::gua::NamedSharedMemoryController::initClass();
-
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

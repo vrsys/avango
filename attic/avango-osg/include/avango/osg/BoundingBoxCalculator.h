@@ -36,54 +36,51 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Wrapper for ::osg::BoundingBoxCalculator
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL BoundingBoxCalculator : public Group
+{
+    AV_FC_DECLARE();
+
+  public:
+    BoundingBoxCalculator();
+
+  protected:
     /**
-     * Wrapper for ::osg::BoundingBoxCalculator
-     *
-     * \ingroup av_osg
+     * Destructor made protected to prevent allocation on stack.
      */
-    class AV_OSG_DLL BoundingBoxCalculator : public Group
-    {
-      AV_FC_DECLARE();
+    virtual ~BoundingBoxCalculator();
 
-    public:
+  public:
+    /* virtual */ void evaluate();
 
-      BoundingBoxCalculator();
+    // Fudge factor, which will be used to consider the center and the radius of the bounding box to be equal
+    SFFloat Fudge;
 
-    protected:
+    // Encapsulating the current bounding sphere of this node (including all of its children)
+    SFBoundingSphere BoundingSphere;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~BoundingBoxCalculator();
+  private:
+    ::osg::Vec3 mCenter;
+    float mRadius;
 
-    public:
-      /* virtual */ void evaluate();
+    float mFudge;
+};
 
-      // Fudge factor, which will be used to consider the center and the radius of the bounding box to be equal
-      SFFloat Fudge;
-
-      //Encapsulating the current bounding sphere of this node (including all of its children)
-      SFBoundingSphere BoundingSphere;
-
-    private:
-      ::osg::Vec3 mCenter;
-      float mRadius;
-
-      float mFudge;
-
-    };
-
-    typedef SingleField<Link<BoundingBoxCalculator> > SFBoundingBoxCalculator;
-    typedef MultiField<Link<BoundingBoxCalculator> > MFBoundingBoxCalculator;
-  }
+typedef SingleField<Link<BoundingBoxCalculator>> SFBoundingBoxCalculator;
+typedef MultiField<Link<BoundingBoxCalculator>> MFBoundingBoxCalculator;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::BoundingBoxCalculator> >;
-  template class AV_OSG_DLL MultiField<Link<osg::BoundingBoxCalculator> >;
+template class AV_OSG_DLL SingleField<Link<osg::BoundingBoxCalculator>>;
+template class AV_OSG_DLL MultiField<Link<osg::BoundingBoxCalculator>>;
 #endif
 
-}
+} // namespace av
 
 #endif /* BOUNDINGBOXCALCULATOR_H_ */

@@ -14,71 +14,61 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Ray
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Ray : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Ray
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Ray is created.
+     * Otherwise, the given ::gua::Ray is used.
      */
-    class AV_GUA_DLL Ray : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    Ray(std::shared_ptr<::gua::Ray> guaRay = std::shared_ptr<::gua::Ray>(new ::gua::Ray(::gua::math::vec3(0.f, 0.f, 0.f), ::gua::math::vec3(0.f, 0.f, 0.f), 1.f)));
 
-    public:
+  public:
+    SFVec3 Origin;
+    SFVec3 Direction;
+    SFFloat TMax;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Ray is created.
-       * Otherwise, the given ::gua::Ray is used.
-       */
-      Ray(std::shared_ptr< ::gua::Ray> guaRay =
-          std::shared_ptr< ::gua::Ray>(new ::gua::Ray(
-            ::gua::math::vec3(0.f,0.f,0.f), ::gua::math::vec3(0.f,0.f,0.f), 1.f
-          )));
+    /**
+     * Get the wrapped ::gua::Ray.
+     */
+    std::shared_ptr<::gua::Ray> getGuaRay() const;
 
+  public:
+    virtual void getOriginCB(const SFVec3::GetValueEvent& event);
+    virtual void setOriginCB(const SFVec3::SetValueEvent& event);
 
-    public:
+    virtual void getDirectionCB(const SFVec3::GetValueEvent& event);
+    virtual void setDirectionCB(const SFVec3::SetValueEvent& event);
 
+    virtual void getTMaxCB(const SFFloat::GetValueEvent& event);
+    virtual void setTMaxCB(const SFFloat::SetValueEvent& event);
 
-      SFVec3  Origin;
-      SFVec3  Direction;
-      SFFloat TMax;
+  private:
+    std::shared_ptr<::gua::Ray> m_guaRay;
 
+    Ray(const Ray&);
+    Ray& operator=(const Ray&);
+};
 
-      /**
-       * Get the wrapped ::gua::Ray.
-       */
-      std::shared_ptr< ::gua::Ray> getGuaRay() const;
+using SFRay = SingleField<Link<Ray>>;
+using MFRay = MultiField<Link<Ray>>;
 
-    public:
-
-      virtual void getOriginCB(const SFVec3::GetValueEvent& event);
-      virtual void setOriginCB(const SFVec3::SetValueEvent& event);
-
-      virtual void getDirectionCB(const SFVec3::GetValueEvent& event);
-      virtual void setDirectionCB(const SFVec3::SetValueEvent& event);
-
-      virtual void getTMaxCB(const SFFloat::GetValueEvent& event);
-      virtual void setTMaxCB(const SFFloat::SetValueEvent& event);
-
-    private:
-
-      std::shared_ptr< ::gua::Ray> m_guaRay;
-
-      Ray(const Ray&);
-      Ray& operator=(const Ray&);
-    };
-
-    using SFRay = SingleField<Link<Ray> >;
-    using MFRay = MultiField<Link<Ray> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Ray> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Ray> >;
+template class AV_GUA_DLL SingleField<Link<gua::Ray>>;
+template class AV_GUA_DLL MultiField<Link<gua::Ray>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_RAY_HPP
+#endif // AVANGO_GUA_RAY_HPP

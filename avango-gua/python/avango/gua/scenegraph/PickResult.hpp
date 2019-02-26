@@ -3,4 +3,4 @@
 
 void init_PickResult();
 
-#endif //AV_PYTHON_GUA_PICK_RESULT_HPP
+#endif // AV_PYTHON_GUA_PICK_RESULT_HPP

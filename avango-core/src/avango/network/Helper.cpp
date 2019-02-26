@@ -31,21 +31,20 @@
 #include <avango/StandardFields.h>
 #include <avango/FieldContainer.h>
 
-std::string
-av::getName(const Link<Distributed>& obj)
+std::string av::getName(const Link<Distributed>& obj)
 {
-  if (!obj.isValid())
-  {
-    throw std::invalid_argument("av::getName(): obj not valid");
-  }
+    if(!obj.isValid())
+    {
+        throw std::invalid_argument("av::getName(): obj not valid");
+    }
 
-  FieldContainer* fc = dynamic_cast<FieldContainer*>(obj.getPtr());
-  if (!fc || fc->Name.getValue().empty())
-  {
-    return "unnamed";
-  }
-  else
-  {
-    return fc->Name.getValue();
-  }
+    FieldContainer* fc = dynamic_cast<FieldContainer*>(obj.getPtr());
+    if(!fc || fc->Name.getValue().empty())
+    {
+        return "unnamed";
+    }
+    else
+    {
+        return fc->Name.getValue();
+    }
 }

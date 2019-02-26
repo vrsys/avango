@@ -26,12 +26,6 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(GLLightPosition, "GLLightPosition.glsl",
-    SHADE_NONE,
-    SHADE_ENV_DEFS(application_stage, (index))
-    )
+SHADE_CLASS_INIT(GLLightPosition, "GLLightPosition.glsl", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (index)))
 
-shade::vec4<> GLLightPosition::get(void)
-{
-  return invoke< vec4<> >("GLLightPosition_get_impl");
-}
+shade::vec4<> GLLightPosition::get(void) { return invoke<vec4<>>("GLLightPosition_get_impl"); }

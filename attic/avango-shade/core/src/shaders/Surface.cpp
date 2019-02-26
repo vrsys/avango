@@ -26,31 +26,18 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT
-(
- Surface, "Surface.glsl",
- SHADE_NONE,
- SHADE_ENV_DEFS(application_stage, (material)(geometry))
- )
+SHADE_CLASS_INIT(Surface, "Surface.glsl", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (material)(geometry)))
 
-shade::shaders::Surface::Surface(void)
-{
-}
+shade::shaders::Surface::Surface(void) {}
 
-shade::void_<> Surface::enter_vertex(void)
-{
-  return invoke< shade::void_<> >("Surface_vertex_impl"); 
-}
+shade::void_<> Surface::enter_vertex(void) { return invoke<shade::void_<>>("Surface_vertex_impl"); }
 
 shade::void_<> Surface::enter_geometry(void)
 {
-  if (!geometry)
-    return void_<>();
+    if(!geometry)
+        return void_<>();
 
-  return invoke< shade::void_<> >("Surface_geometry_impl");
+    return invoke<shade::void_<>>("Surface_geometry_impl");
 }
 
-shade::void_<> Surface::enter_fragment(void)
-{
-  return invoke< shade::void_<> >("Surface_fragment_impl");
-}
+shade::void_<> Surface::enter_fragment(void) { return invoke<shade::void_<>>("Surface_fragment_impl"); }

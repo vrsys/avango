@@ -10,20 +10,19 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_VolumeNode()
 {
-  register_field<av::gua::SFVolumeNode>("SFVolumeNode");
-  register_multifield<av::gua::MFVolumeNode>("MFVolumeNode");
-  class_<av::gua::VolumeNode, av::Link<av::gua::VolumeNode>,
-    bases<av::gua::GeometryNode>,
-    boost::noncopyable >("VolumeNode", "docstring", no_init);
+    register_field<av::gua::SFVolumeNode>("SFVolumeNode");
+    register_multifield<av::gua::MFVolumeNode>("MFVolumeNode");
+    class_<av::gua::VolumeNode, av::Link<av::gua::VolumeNode>, bases<av::gua::GeometryNode>, boost::noncopyable>("VolumeNode", "docstring", no_init);
 }

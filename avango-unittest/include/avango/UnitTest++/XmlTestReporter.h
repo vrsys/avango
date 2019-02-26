@@ -7,15 +7,14 @@
 
 namespace UnitTest
 {
-
 class XmlTestReporter : public DeferredTestReporter
 {
-public:
+  public:
     explicit XmlTestReporter(std::ostream& ostream);
 
     virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed);
 
-private:
+  private:
     XmlTestReporter(XmlTestReporter const&);
     XmlTestReporter& operator=(XmlTestReporter const&);
 
@@ -29,6 +28,6 @@ private:
     std::ostream& m_ostream;
 };
 
-}
+} // namespace UnitTest
 
 #endif

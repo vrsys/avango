@@ -3,4 +3,4 @@
 
 void init_Tools();
 
-#endif //AV_PYTHON_TOOLS_TOOLS_HPP
+#endif // AV_PYTHON_TOOLS_TOOLS_HPP

@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::BoundingSphere"));
+av::Logger& logger(av::getLogger("av::osg::BoundingSphere"));
 }
 
 AV_FC_DEFINE(av::osg::BoundingSphere);
@@ -39,24 +39,22 @@ AV_FIELD_DEFINE(av::osg::MFBoundingSphere);
 
 av::osg::BoundingSphere::BoundingSphere()
 {
-  AV_FC_ADD_FIELD(Center,::osg::Vec3(0,0,0));
-  AV_FC_ADD_FIELD(Radius,0.0);
+    AV_FC_ADD_FIELD(Center, ::osg::Vec3(0, 0, 0));
+    AV_FC_ADD_FIELD(Radius, 0.0);
 }
 
 /* virtual */
-av::osg::BoundingSphere::~BoundingSphere()
-{}
+av::osg::BoundingSphere::~BoundingSphere() {}
 
-/* static */ void
-av::osg::BoundingSphere::initClass()
+/* static */ void av::osg::BoundingSphere::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::osg::BoundingSphere, true);
+        AV_FC_INIT(av::FieldContainer, av::osg::BoundingSphere, true);
 
-    SFBoundingSphere::initClass("av::osg::SFBoundingSphere", "av::Field");
-    MFBoundingSphere::initClass("av::osg::MFBoundingSphere", "av::Field");
-  }
+        SFBoundingSphere::initClass("av::osg::SFBoundingSphere", "av::Field");
+        MFBoundingSphere::initClass("av::osg::MFBoundingSphere", "av::Field");
+    }
 }

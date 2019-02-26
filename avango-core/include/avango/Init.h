@@ -35,18 +35,17 @@
 
 namespace av
 {
-
-  /**
-   * Initializes the Avango Core library.
-   * Usage: \code av::Init::initClass(); \endcode
-   *
-   * \ingroup av
-   */
-  class AV_DLL Init
-  {
+/**
+ * Initializes the Avango Core library.
+ * Usage: \code av::Init::initClass(); \endcode
+ *
+ * \ingroup av
+ */
+class AV_DLL Init
+{
     AV_TYPED_DECLARE_ABSTRACT();
-  };
+};
 
-}
+} // namespace av
 
 #endif

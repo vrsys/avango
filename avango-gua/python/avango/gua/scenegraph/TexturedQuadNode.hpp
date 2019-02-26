@@ -3,4 +3,4 @@
 
 void init_TexturedQuadNode();
 
-#endif //AV_PYTHON_GUA_TEXTURED_QUAD_NODE_HPP
+#endif // AV_PYTHON_GUA_TEXTURED_QUAD_NODE_HPP

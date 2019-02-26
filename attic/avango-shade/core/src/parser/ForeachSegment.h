@@ -30,23 +30,22 @@
 
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class ForeachSegment : public Segment
+{
+  public:
+    ForeachSegment(const std::string& index, const std::string& list, boost::shared_ptr<Segment> body, const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end);
 
-    class ForeachSegment : public Segment
-    {
-    public:
-      ForeachSegment(const std::string& index, const std::string& list, boost::shared_ptr<Segment> body, const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end);
+    /*virtual*/ void get_content(formatter::Generator&, Scope&, const FunctionCall&, std::ostream& error_log) const;
 
-      /*virtual*/ void get_content(formatter::Generator&, Scope&, const FunctionCall&, std::ostream& error_log) const;
+  private:
+    std::string m_index;
+    std::string m_list;
+    boost::shared_ptr<Segment> m_body;
+};
 
-    private:
-      std::string m_index;
-      std::string m_list;
-      boost::shared_ptr<Segment> m_body;
-    };
-
-  }
-}
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_ForeachSegment_H */

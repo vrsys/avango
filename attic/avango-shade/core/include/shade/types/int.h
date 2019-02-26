@@ -29,14 +29,14 @@
 
 namespace shade
 {
-  template<class Qualifier = Type> class int_ :
-    public TypeBase<int_<Qualifier>, Qualifier>,
-    public types::IntAccessor
-  {
+template <class Qualifier = Type>
+class int_ : public TypeBase<int_<Qualifier>, Qualifier>, public types::IntAccessor
+{
   public:
     int_(void);
     int_(int v);
-    template<class Q> void copy_value(const int_<Q>& source);
+    template <class Q>
+    void copy_value(const int_<Q>& source);
 
     /*virtual*/ void set(int v);
     /*virtual*/ void get(int& v) const;
@@ -49,8 +49,8 @@ namespace shade
 
   private:
     int m_value;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/int_impl.cpp"
 

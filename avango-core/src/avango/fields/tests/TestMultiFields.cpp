@@ -30,35 +30,33 @@
 
 namespace
 {
-  using namespace av;
+using namespace av;
 
-  class MultiFieldsNode : public av::FieldContainer
-  {
+class MultiFieldsNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     MultiFieldsNode();
     virtual ~MultiFieldsNode();
 
-    MFFloat  FloatField;
+    MFFloat FloatField;
     MFDouble DoubleField;
     MFString StringField;
-    MFBool   BoolField;
-    MFInt    IntField;
-    MFUInt   UIntField;
-    MFLong   LongField;
-    MFULong  ULongField;
+    MFBool BoolField;
+    MFInt IntField;
+    MFUInt UIntField;
+    MFLong LongField;
+    MFULong ULongField;
 
   private:
-
     std::vector<float> mFloats;
-  };
+};
 
-  AV_FC_DEFINE(MultiFieldsNode);
+AV_FC_DEFINE(MultiFieldsNode);
 
-  MultiFieldsNode::MultiFieldsNode()
-  {
+MultiFieldsNode::MultiFieldsNode()
+{
     AV_FC_ADD_FIELD(FloatField, MFFloat::ContainerType());
     FloatField.setMultiPush(true);
     AV_FC_ADD_FIELD(DoubleField, MFDouble::ContainerType());
@@ -75,38 +73,32 @@ namespace
     LongField.setMultiPush(true);
     AV_FC_ADD_FIELD(ULongField, MFULong::ContainerType());
     ULongField.setMultiPush(true);
-  }
+}
 
-  MultiFieldsNode::~MultiFieldsNode()
-  {}
+MultiFieldsNode::~MultiFieldsNode() {}
 
-  void
-  MultiFieldsNode::initClass()
-  {
-    if (!isTypeInitialized())
+void MultiFieldsNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::FieldContainer, MultiFieldsNode, false);
+        AV_FC_INIT(av::FieldContainer, MultiFieldsNode, false);
     }
-  }
+}
 
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
+    InitNodeFixture() { MultiFieldsNode::initClass(); }
+};
 
-      MultiFieldsNode::initClass();
-    }
-  };
-
-  TEST_FIXTURE(InitNodeFixture, connectSameTypeFields)
-  {
+TEST_FIXTURE(InitNodeFixture, connectSameTypeFields)
+{
     Link<MultiFieldsNode> node1(new MultiFieldsNode);
     Link<MultiFieldsNode> node2(new MultiFieldsNode);
 
-    std::vector<float>  values;
+    std::vector<float> values;
     values.push_back(2.0f);
     values.push_back(3.0f);
 
@@ -114,34 +106,34 @@ namespace
     node1->FloatField.setValue(values);
 
     CHECK_ARRAY_EQUAL(values, node2->FloatField.getValue(), values.size());
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, connectIncompatibleTypeFieldsThrow)
-  {
+TEST_FIXTURE(InitNodeFixture, connectIncompatibleTypeFieldsThrow)
+{
     Link<MultiFieldsNode> node1(new MultiFieldsNode);
     Link<MultiFieldsNode> node2(new MultiFieldsNode);
 
     CHECK_THROW(node2->DoubleField.connectFrom(&(node1->StringField)), std::invalid_argument);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsFloatConvert)
-  {
+TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsFloatConvert)
+{
     Link<MultiFieldsNode> node1(new MultiFieldsNode);
     Link<MultiFieldsNode> node2(new MultiFieldsNode);
 
     node2->DoubleField.connectFrom(&(node1->FloatField));
 
-    std::vector<float>  values;
+    std::vector<float> values;
     values.push_back(2.0f);
     values.push_back(3.0f);
 
     node1->FloatField.setValue(values);
 
     CHECK_ARRAY_EQUAL(values, node2->DoubleField.getValue(), values.size());
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsBool)
-  {
+TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsBool)
+{
     Link<MultiFieldsNode> node1(new MultiFieldsNode);
     Link<MultiFieldsNode> node2(new MultiFieldsNode);
 
@@ -153,7 +145,6 @@ namespace
     boolVecFalse.push_back(false);
     boolVecFalse.push_back(false);
 
-
     // check float->bool
     std::vector<float> floatVec;
     floatVec.push_back(2.0f);
@@ -163,7 +154,7 @@ namespace
     CHECK_ARRAY_EQUAL(boolVecTrue, node2->BoolField.getValue(), floatVec.size());
     node2->BoolField.disconnect();
 
-    //check int->bool ( true )
+    // check int->bool ( true )
     std::vector<int32_t> intVec;
     intVec.push_back(2);
     intVec.push_back(3);
@@ -172,7 +163,7 @@ namespace
     CHECK_ARRAY_EQUAL(boolVecTrue, node2->BoolField.getValue(), intVec.size());
     node2->BoolField.disconnect();
 
-    //check int->bool ( false )
+    // check int->bool ( false )
     std::vector<int32_t> intVec2;
     intVec2.push_back(0);
     intVec2.push_back(0);
@@ -180,7 +171,6 @@ namespace
     node1->IntField.setValue(intVec2);
     CHECK_ARRAY_EQUAL(boolVecFalse, node2->BoolField.getValue(), intVec2.size());
     node2->BoolField.disconnect();
-
-  }
+}
 
 } // namespace

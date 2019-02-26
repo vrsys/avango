@@ -13,73 +13,67 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::CollisionShape
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL CollisionShape : public av::FieldContainer
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::CollisionShape
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::CollisionShape is created.
+     * Otherwise, the given ::gua::physics::CollisionShape is used.
      */
-    class AV_GUA_DLL CollisionShape : public av::FieldContainer
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    CollisionShape(::gua::physics::CollisionShape* guashape); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CollisionShape();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::CollisionShape is created.
-       * Otherwise, the given ::gua::physics::CollisionShape is used.
-       */
-      CollisionShape(::gua::physics::CollisionShape* guashape); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFBool IsDynamicShape;
+    SFBool IsStaticShape;
+    SFBool HasIdenticalShapeConstructor;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShape.
+     */
+    ::gua::physics::CollisionShape* getGuaShape() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~CollisionShape();
+  public:
+    virtual void getIsDynamicShapeCB(const SFBool::GetValueEvent& event);
+    virtual void setIsDynamicShapeCB(const SFBool::SetValueEvent& event);
 
-    public:
+    virtual void getIsStaticShapeCB(const SFBool::GetValueEvent& event);
+    virtual void setIsStaticShapeCB(const SFBool::SetValueEvent& event);
 
-      SFBool IsDynamicShape;
-      SFBool IsStaticShape;
-      SFBool HasIdenticalShapeConstructor;
+    virtual void getHasIdenticalShapeConstructorCB(const SFBool::GetValueEvent& event);
+    virtual void setHasIdenticalShapeConstructorCB(const SFBool::SetValueEvent& event);
 
+  private:
+    ::gua::physics::CollisionShape* m_guaShape;
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShape.
-       */
-      ::gua::physics::CollisionShape* getGuaShape() const;
+    CollisionShape(const CollisionShape&);
+    CollisionShape& operator=(const CollisionShape&);
+};
 
-    public:
+using SFCollisionShape = SingleField<Link<CollisionShape>>;
+using MFCollisionShape = MultiField<Link<CollisionShape>>;
 
-      virtual void getIsDynamicShapeCB(const SFBool::GetValueEvent& event);
-      virtual void setIsDynamicShapeCB(const SFBool::SetValueEvent& event);
-
-      virtual void getIsStaticShapeCB(const SFBool::GetValueEvent& event);
-      virtual void setIsStaticShapeCB(const SFBool::SetValueEvent& event);
-
-      virtual void getHasIdenticalShapeConstructorCB(const SFBool::GetValueEvent& event);
-      virtual void setHasIdenticalShapeConstructorCB(const SFBool::SetValueEvent& event);
-
-    private:
-
-      ::gua::physics::CollisionShape *m_guaShape;
-
-      CollisionShape(const CollisionShape&);
-      CollisionShape& operator=(const CollisionShape&);
-    };
-
-    using SFCollisionShape = SingleField<Link<CollisionShape> >;
-    using MFCollisionShape = MultiField<Link<CollisionShape> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::CollisionShape> >;
-  template class AV_GUA_DLL MultiField<Link<gua::CollisionShape> >;
+template class AV_GUA_DLL SingleField<Link<gua::CollisionShape>>;
+template class AV_GUA_DLL MultiField<Link<gua::CollisionShape>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_COLLISION_SHAPE_HPP
+#endif // AVANGO_GUA_COLLISION_SHAPE_HPP

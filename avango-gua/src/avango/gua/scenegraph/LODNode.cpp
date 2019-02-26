@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::LODNode"));
+av::Logger& logger(av::getLogger("av::gua::LODNode"));
 }
 
 AV_FC_DEFINE(av::gua::LODNode);
@@ -14,23 +14,16 @@ AV_FC_DEFINE(av::gua::LODNode);
 AV_FIELD_DEFINE(av::gua::SFLODNode);
 AV_FIELD_DEFINE(av::gua::MFLODNode);
 
-av::gua::LODNode::LODNode(std::shared_ptr< ::gua::node::LODNode> guanode)
-  : TransformNode(guanode),
-    m_guaNode(std::dynamic_pointer_cast< ::gua::node::LODNode> (Node::getGuaNode()))
+av::gua::LODNode::LODNode(std::shared_ptr<::gua::node::LODNode> guanode) : TransformNode(guanode), m_guaNode(std::dynamic_pointer_cast<::gua::node::LODNode>(Node::getGuaNode()))
 {
-    AV_FC_ADD_ADAPTOR_FIELD(LODDistances,
-                          std::bind(&LODNode::getLODDistancesCB, this,std::placeholders::_1),
-                          std::bind(&LODNode::setLODDistancesCB, this,std::placeholders::_1));
-
+    AV_FC_ADD_ADAPTOR_FIELD(LODDistances, std::bind(&LODNode::getLODDistancesCB, this, std::placeholders::_1), std::bind(&LODNode::setLODDistancesCB, this, std::placeholders::_1));
 }
 
-av::gua::LODNode::~LODNode()
-{}
+av::gua::LODNode::~LODNode() {}
 
-void
-av::gua::LODNode::initClass()
+void av::gua::LODNode::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::TransformNode::initClass();
 
@@ -43,20 +36,8 @@ av::gua::LODNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::node::LODNode>
-av::gua::LODNode::getGuaNode() const
-{
-    return m_guaNode;
-}
+std::shared_ptr<::gua::node::LODNode> av::gua::LODNode::getGuaNode() const { return m_guaNode; }
 
-void
-av::gua::LODNode::getLODDistancesCB(const MFFloat::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaNode->data.lod_distances();
-}
+void av::gua::LODNode::getLODDistancesCB(const MFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaNode->data.lod_distances(); }
 
-void
-av::gua::LODNode::setLODDistancesCB(const MFFloat::SetValueEvent& event)
-{
-    m_guaNode->data.lod_distances() = event.getValue();
-}
+void av::gua::LODNode::setLODDistancesCB(const MFFloat::SetValueEvent& event) { m_guaNode->data.lod_distances() = event.getValue(); }

@@ -8,24 +8,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_CylinderShape()
 {
-  register_field<av::gua::SFCylinderShape>("SFCylinderShape");
-  register_multifield<av::gua::MFCylinderShape>("MFCylinderShape");
+    register_field<av::gua::SFCylinderShape>("SFCylinderShape");
+    register_multifield<av::gua::MFCylinderShape>("MFCylinderShape");
 
-  class_<av::gua::CylinderShape,
-         av::Link<av::gua::CylinderShape>,
-         bases<av::gua::CollisionShape>, boost::noncopyable >("CylinderShape",
-                                                              "docstring",
-                                                              no_init);
+    class_<av::gua::CylinderShape, av::Link<av::gua::CylinderShape>, bases<av::gua::CollisionShape>, boost::noncopyable>("CylinderShape", "docstring", no_init);
 }

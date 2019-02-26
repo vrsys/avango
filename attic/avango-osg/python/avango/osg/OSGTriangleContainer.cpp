@@ -32,24 +32,28 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGTriangleContainer(void)
- {
-  // wrapping osg::TriangleContainer functionality
-  register_field<av::osg::SFTriangleContainer>("SFTriangleContainer");
-  register_multifield<av::osg::MFTriangleContainer>("MFTriangleContainer");
-  class_<av::osg::TriangleContainer, av::Link<av::osg::TriangleContainer>, bases<av::osg::Geometry>, boost::noncopyable >("TriangleContainer", "renders triangles in its multifield.\n"
-      "Fields:  MFVec3 Vertices; MFVec4 Colors; MFVec3 Normals; SFInt Mode\n"
-      "Supported modes: 0: GL_POINTS 1: GL_LINES 2: GL_LINE_LOOP 3: GL_LINE_STRIP 4: GL_TRIANGLES 5: GL_TRIANGLE_STRIP 6: GL_TRIANGLE_FAN 7: GL_QUADS 8: GL_QUAD_STRIP 9: GL_POLYGON", no_init)
-      .def("getTriangleCount", &av::osg::TriangleContainer::getTriangleCount)
-      .def("getNormalCount", &av::osg::TriangleContainer::getNormalCount);
- }
+{
+    // wrapping osg::TriangleContainer functionality
+    register_field<av::osg::SFTriangleContainer>("SFTriangleContainer");
+    register_multifield<av::osg::MFTriangleContainer>("MFTriangleContainer");
+    class_<av::osg::TriangleContainer, av::Link<av::osg::TriangleContainer>, bases<av::osg::Geometry>, boost::noncopyable>(
+        "TriangleContainer",
+        "renders triangles in its multifield.\n"
+        "Fields:  MFVec3 Vertices; MFVec4 Colors; MFVec3 Normals; SFInt Mode\n"
+        "Supported modes: 0: GL_POINTS 1: GL_LINES 2: GL_LINE_LOOP 3: GL_LINE_STRIP 4: GL_TRIANGLES 5: GL_TRIANGLE_STRIP 6: GL_TRIANGLE_FAN 7: GL_QUADS 8: GL_QUAD_STRIP 9: GL_POLYGON",
+        no_init)
+        .def("getTriangleCount", &av::osg::TriangleContainer::getTriangleCount)
+        .def("getNormalCount", &av::osg::TriangleContainer::getNormalCount);
+}

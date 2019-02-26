@@ -13,64 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::TriangleMeshShape
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL TriangleMeshShape : public av::gua::CollisionShape
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::TriangleMeshShape
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::TriangleMeshShape is created.
+     * Otherwise, the given ::gua::physics::TriangleMeshShape is used.
      */
-    class AV_GUA_DLL TriangleMeshShape : public av::gua::CollisionShape
-    {
-      AV_FC_DECLARE();
+    TriangleMeshShape(::gua::physics::TriangleMeshShape* guashape = new ::gua::physics::TriangleMeshShape()); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~TriangleMeshShape();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::TriangleMeshShape is created.
-       * Otherwise, the given ::gua::physics::TriangleMeshShape is used.
-       */
-      TriangleMeshShape(::gua::physics::TriangleMeshShape* guashape =
-                        new ::gua::physics::TriangleMeshShape()); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFVec3 Scaling;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShape.
+     */
+    ::gua::physics::TriangleMeshShape* getGuaShape() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~TriangleMeshShape();
+  public:
+    virtual void getScalingCB(const SFVec3::GetValueEvent& event);
+    virtual void setScalingCB(const SFVec3::SetValueEvent& event);
 
-    public:
+  private:
+    ::gua::physics::TriangleMeshShape* m_guaShape;
 
-      SFVec3 Scaling;
+    TriangleMeshShape(const TriangleMeshShape&);
+    TriangleMeshShape& operator=(const TriangleMeshShape&);
+};
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShape.
-       */
-      ::gua::physics::TriangleMeshShape* getGuaShape() const;
+using SFTriangleMeshShape = SingleField<Link<TriangleMeshShape>>;
+using MFTriangleMeshShape = MultiField<Link<TriangleMeshShape>>;
 
-    public:
-
-      virtual void getScalingCB(const SFVec3::GetValueEvent& event);
-      virtual void setScalingCB(const SFVec3::SetValueEvent& event);
-
-    private:
-      ::gua::physics::TriangleMeshShape *m_guaShape;
-
-      TriangleMeshShape(const TriangleMeshShape&);
-      TriangleMeshShape& operator=(const TriangleMeshShape&);
-    };
-
-    using SFTriangleMeshShape = SingleField<Link<TriangleMeshShape> >;
-    using MFTriangleMeshShape = MultiField<Link<TriangleMeshShape> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TriangleMeshShape> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TriangleMeshShape> >;
+template class AV_GUA_DLL SingleField<Link<gua::TriangleMeshShape>>;
+template class AV_GUA_DLL MultiField<Link<gua::TriangleMeshShape>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_TRIANGLE_MESH_SHAPE_HPP
+#endif // AVANGO_GUA_TRIANGLE_MESH_SHAPE_HPP

@@ -37,61 +37,57 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Node that creates a Quad as Drawable
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Quad : public Geometry
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Node that creates a Quad as Drawable
-     *
-     * \ingroup av_osg
+     * Constructor.
      */
-    class AV_OSG_DLL Quad : public Geometry
-    {
-      AV_FC_DECLARE();
+    Quad();
 
-    public:
+    SFFloat Width;
+    SFFloat Height;
+    SFVec4 Color;
+    SFVec3 Position;
 
-      /**
-       * Constructor.
-       */
-      Quad();
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-      SFFloat Width;
-      SFFloat Height;
-      SFVec4 Color;
-      SFVec3 Position;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Quad();
 
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
+  private:
+    bool mGeometryChanged;
+    bool mColorChanged;
+    bool mFirstFrame;
 
-    protected:
+    ::osg::ref_ptr<::osg::Vec3Array> mVertexArray;
+    ::osg::ref_ptr<::osg::Vec3Array> mNormals;
+    ::osg::ref_ptr<::osg::Vec4Array> mColors;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Quad();
+    void updateGeometry();
+    void updateColor();
+};
 
-    private:
-
-      bool mGeometryChanged;
-      bool mColorChanged;
-      bool mFirstFrame;
-
-      ::osg::ref_ptr< ::osg::Vec3Array> mVertexArray;
-      ::osg::ref_ptr< ::osg::Vec3Array> mNormals;
-      ::osg::ref_ptr< ::osg::Vec4Array> mColors;
-
-      void updateGeometry();
-      void updateColor();
-
-    };
-
-    typedef SingleField<Link<Quad> > SFQuad;
-    typedef MultiField<Link<Quad> > MFQuad;
-  } // namespace osg
+typedef SingleField<Link<Quad>> SFQuad;
+typedef MultiField<Link<Quad>> MFQuad;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Quad> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Quad> >;
+template class AV_OSG_DLL SingleField<Link<osg::Quad>>;
+template class AV_OSG_DLL MultiField<Link<osg::Quad>>;
 #endif
 
 } // namespace av

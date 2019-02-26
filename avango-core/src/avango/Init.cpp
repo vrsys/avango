@@ -32,21 +32,20 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::Init"));
+av::Logger& logger(av::getLogger("av::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::Init);
 
-/* static */ void
-av::Init::initClass()
+/* static */ void av::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::Type::init();
-    av::initStandardFields();
+    if(!isTypeInitialized())
+    {
+        av::Type::init();
+        av::initStandardFields();
 
-    av::TimeSensor::initClass();
+        av::TimeSensor::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::Init", true);
+    }
 }

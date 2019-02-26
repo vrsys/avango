@@ -43,103 +43,96 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+class FragmentGroup;
+class SharedContainerHolder;
+/**
+ *  \container_doc
+ *   this works like fpDCS exept that the children are sorted by creator.
+ *   each creator has an own group node here which is well known.
+ *  \end_container_doc
+ */
+class NetMatrixTransform : public MatrixTransform, public NetNode
+{
+    AV_FC_DECLARE();
 
+  public:
+    typedef std::tr1::unordered_map<std::string, Link<FragmentGroup>> EIDGrpMap;
+    NetMatrixTransform();
+    virtual ~NetMatrixTransform();
 
-    class FragmentGroup;
-    class SharedContainerHolder;
+    // the fields for the network part
+
     /**
-     *  \container_doc
-     *   this works like fpDCS exept that the children are sorted by creator.
-     *   each creator has an own group node here which is well known.
-     *  \end_container_doc
+     *  The Groupname field specifies the string identifier for the distribution
+     *  group this node will represent. The empty string will result in no distribution.
      */
-    class NetMatrixTransform : public MatrixTransform, public NetNode {
+    SFString Groupname; ///< distribution group name
 
-      AV_FC_DECLARE();
+    /**
+     *  The Members field gives the endponit identifiers for all processes
+     *  currently participating in this distribution group.
+     */
+    MFString Members;             ///< distribution group members
+    MFString NewMembers;          ///< newly added members since last update
+    MFString DepartedMembers;     ///< departed members since last update
+    SFString NetId;               ///< endpoint id of the current process
+    MFContainer SharedContainers; ///< list of containers shared by all members
 
-    public:
+    // tell our clients we joined ( virtual from NetNode )
+    /* virtual */ void _join(const std::string& fragment);
 
-      typedef std::tr1::unordered_map<std::string,
-                                      Link<FragmentGroup> >           EIDGrpMap;
-      NetMatrixTransform();
-      virtual ~NetMatrixTransform();
+    // overloaded from NetNode to react to view changes
+    /* virtual */ void _acceptNewView(const std::vector<std::string>&, const std::vector<std::string>&, const std::vector<std::string>&);
 
-      // the fields for the network part
+    // overloaded to participate in state transfers
+    /* virtual */ void _getStateFragment(const std::string& fragment, Msg& stateMsg);
+    /* virtual */ void _setStateFragment(const std::string& fragment, Msg& stateMsg);
+    /* virtual */ void _removeStateFragment(const std::string& fragment);
 
-      /**
-       *  The Groupname field specifies the string identifier for the distribution
-       *  group this node will represent. The empty string will result in no distribution.
-       */
-      SFString Groupname;       ///< distribution group name
+    // notification uplink from fragment groups
+    void fragmentChildrenChanged();
+    // notification uplink from shared containers node
+    void sharedContainersChanged();
 
-      /**
-       *  The Members field gives the endponit identifiers for all processes
-       *  currently participating in this distribution group.
-       */
-      MFString Members;         ///< distribution group members
-      MFString NewMembers;      ///< newly added members since last update
-      MFString DepartedMembers; ///< departed members since last update
-      SFString NetId;           ///< endpoint id of the current process
-      MFContainer SharedContainers; ///< list of containers shared by all members
+  protected:
+    /// function description
+    /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
 
-      // tell our clients we joined ( virtual from NetNode )
-      /* virtual */ void _join(const std::string& fragment);
+    /// function description
+    /* virtual */ void evaluate();
 
-      // overloaded from NetNode to react to view changes
-      /* virtual */ void _acceptNewView(const std::vector<std::string>&,
-                                        const std::vector<std::string>&,
-                                        const std::vector<std::string>&);
+    // virtual from av::osg::Group
+    /* virtual */ void getChildrenCB(const av::osg::MFNode::GetValueEvent& event);
+    /* virtual */ void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
 
-      // overloaded to participate in state transfers
-      /* virtual */ void _getStateFragment(const std::string& fragment, Msg& stateMsg);
-      /* virtual */ void _setStateFragment(const std::string& fragment, Msg& stateMsg);
-      /* virtual */ void _removeStateFragment(const std::string& fragment);
+  protected:
+    // reimplemented as no-op
+    /* virtual */ void refImpl();
+    /* virtual */ void unrefImpl();
+    /* virtual */ int refCountImpl();
 
-      // notification uplink from fragment groups
-      void fragmentChildrenChanged();
-      // notification uplink from shared containers node
-      void sharedContainersChanged();
-    protected:
+    virtual void getSharedContainersCB(const MFContainer::GetValueEvent& event);
+    virtual void setSharedContainersCB(const MFContainer::SetValueEvent& event);
 
-      /// function description
-      /* virtual */  void fieldHasChangedLocalSideEffect(const Field&);
+  private:
+    // the current view, meaning the current set of participants in this group
+    EIDGrpMap mGroupMap;
 
-      /// function description
-      /* virtual */  void evaluate();
+    // all nodes which are not distributed are added here
+    FragmentGroup* mLocalGroups;
+    typedef std::tr1::unordered_map<std::string, Link<SharedContainerHolder>> SharedContainerMap;
+    SharedContainerMap mSharedContainerMap;
 
-      // virtual from av::osg::Group
-      /* virtual */ void getChildrenCB(const av::osg::MFNode::GetValueEvent& event);
-      /* virtual */ void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
+    Application::CallbackHandle mPreEvalHandle;
+    Application::CallbackHandle mPostEvalHandle;
+};
 
-    protected:
+typedef SingleField<Link<NetMatrixTransform>> SFNetMatrixTransform;
+typedef MultiField<Link<NetMatrixTransform>> MFNetMatrixTransform;
 
-      // reimplemented as no-op
-      /* virtual */ void refImpl();
-      /* virtual */ void unrefImpl();
-      /* virtual */ int  refCountImpl();
-
-      virtual void getSharedContainersCB(const MFContainer::GetValueEvent& event);
-      virtual void setSharedContainersCB(const MFContainer::SetValueEvent& event);
-
-    private:
-      // the current view, meaning the current set of participants in this group
-      EIDGrpMap mGroupMap;
-
-      // all nodes which are not distributed are added here
-      FragmentGroup* mLocalGroups;
-      typedef std::tr1::unordered_map<std::string, Link<SharedContainerHolder> > SharedContainerMap;
-      SharedContainerMap mSharedContainerMap;
-
-      Application::CallbackHandle mPreEvalHandle;
-      Application::CallbackHandle mPostEvalHandle;
-    };
-
-    typedef SingleField<Link<NetMatrixTransform> > SFNetMatrixTransform;
-    typedef MultiField<Link<NetMatrixTransform> > MFNetMatrixTransform;
-
-  } // namespace osg
+} // namespace osg
 
 } // namespace av
 

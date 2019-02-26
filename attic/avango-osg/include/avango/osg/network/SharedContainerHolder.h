@@ -35,29 +35,30 @@
 
 namespace av
 {
-  namespace osg
-  {
-    class NetMatrixTransform;
+namespace osg
+{
+class NetMatrixTransform;
 
-    class SharedContainerHolder : public av::FieldContainer {
+class SharedContainerHolder : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-      AV_FC_DECLARE();
+  public:
+    SharedContainerHolder();
+    virtual ~SharedContainerHolder();
 
-    public:
-      SharedContainerHolder();
-      virtual ~SharedContainerHolder();
+    MFContainer SharedContainers;
 
-      MFContainer SharedContainers;
+    void fieldHasChangedLocalSideEffect(const Field&);
+    void evaluateLocalSideEffect();
 
-      void fieldHasChangedLocalSideEffect(const Field&);
-      void evaluateLocalSideEffect();
+    void registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform);
 
-      void registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform);
-    private:
-      NetMatrixTransform* mNetMatrixTransform;
-      bool      mContainersChanged;
-    };
-  } // namespace osg
+  private:
+    NetMatrixTransform* mNetMatrixTransform;
+    bool mContainersChanged;
+};
+} // namespace osg
 
 } // namespace av
 

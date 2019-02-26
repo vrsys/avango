@@ -15,66 +15,60 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::SSAOPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL SSAOPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::SSAOPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::SSAOPassDescription is created.
+     * Otherwise, the given ::gua::SSAOPassDescription is used.
      */
-    class AV_GUA_DLL SSAOPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    SSAOPassDescription(std::shared_ptr<::gua::SSAOPassDescription> const& SSAOPassDescription = std::shared_ptr<::gua::SSAOPassDescription>(new ::gua::SSAOPassDescription()));
 
-    public:
+  public:
+    SFFloat Radius;
+    SFFloat Intensity;
+    SFFloat Falloff;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::SSAOPassDescription is created.
-       * Otherwise, the given ::gua::SSAOPassDescription is used.
-       */
-      SSAOPassDescription(std::shared_ptr< ::gua::SSAOPassDescription> const& SSAOPassDescription =
-                                std::shared_ptr< ::gua::SSAOPassDescription>(new ::gua::SSAOPassDescription()) );
+    virtual void getRadiusCB(const SFFloat::GetValueEvent& event);
+    virtual void setRadiusCB(const SFFloat::SetValueEvent& event);
 
+    virtual void getIntensityCB(const SFFloat::GetValueEvent& event);
+    virtual void setIntensityCB(const SFFloat::SetValueEvent& event);
 
-    public:
+    virtual void getFalloffCB(const SFFloat::GetValueEvent& event);
+    virtual void setFalloffCB(const SFFloat::SetValueEvent& event);
 
-      SFFloat Radius;
-      SFFloat Intensity;
-      SFFloat Falloff;
+    /**
+     * Get the wrapped ::gua::SSAOPassDescription.
+     */
+    std::shared_ptr<::gua::SSAOPassDescription> const& getGuaSSAOPassDescription() const;
 
-      virtual void getRadiusCB(const SFFloat::GetValueEvent& event);
-      virtual void setRadiusCB(const SFFloat::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::SSAOPassDescription> m_guaSSAOPassDescription;
 
-      virtual void getIntensityCB(const SFFloat::GetValueEvent& event);
-      virtual void setIntensityCB(const SFFloat::SetValueEvent& event);
+    SSAOPassDescription(const SSAOPassDescription&);
+    SSAOPassDescription& operator=(const SSAOPassDescription&);
+};
 
-      virtual void getFalloffCB(const SFFloat::GetValueEvent& event);
-      virtual void setFalloffCB(const SFFloat::SetValueEvent& event);
+using SFSSAOPassDescription = SingleField<Link<SSAOPassDescription>>;
+using MFSSAOPassDescription = MultiField<Link<SSAOPassDescription>>;
 
-      /**
-       * Get the wrapped ::gua::SSAOPassDescription.
-       */
-      std::shared_ptr< ::gua::SSAOPassDescription> const& getGuaSSAOPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::SSAOPassDescription> m_guaSSAOPassDescription;
-
-
-      SSAOPassDescription(const SSAOPassDescription&);
-      SSAOPassDescription& operator=(const SSAOPassDescription&);
-    };
-
-    using SFSSAOPassDescription = SingleField<Link<SSAOPassDescription> >;
-    using MFSSAOPassDescription = MultiField<Link<SSAOPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SSAOPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SSAOPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::SSAOPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::SSAOPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SSAO_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_SSAO_PASS_DESCRIPTION_HPP

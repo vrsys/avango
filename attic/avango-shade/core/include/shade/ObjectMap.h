@@ -24,18 +24,15 @@
 #ifndef shade_ObjectMap_H
 #define shade_ObjectMap_H shade_ObjectMap_H
 
-
 #include <vector>
 #include <map>
 
-
 namespace shade
 {
+class Shader;
 
-  class Shader;
-
-  class ObjectMap
-  {
+class ObjectMap
+{
   public:
     typedef std::vector<Shader*>::size_type Index;
 
@@ -51,8 +48,8 @@ namespace shade
   private:
     std::vector<Shader*> m_objects;
     std::map<Shader*, Index> m_indices;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_ObjectMap_H */

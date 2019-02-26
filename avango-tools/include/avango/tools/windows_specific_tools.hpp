@@ -32,13 +32,13 @@
  */
 
 #if defined(_MSC_VER)
-  #if defined(AV_TOOLS_LIBRARY)
-    #define AV_TOOLS_DLL __declspec( dllexport )
-  #else
-    #define AV_TOOLS_DLL __declspec( dllimport )
-  #endif
+#if defined(AV_TOOLS_LIBRARY)
+#define AV_TOOLS_DLL __declspec(dllexport)
 #else
-  #define AV_TOOLS_DLL
+#define AV_TOOLS_DLL __declspec(dllimport)
+#endif
+#else
+#define AV_TOOLS_DLL
 #endif // #if defined(_MSC_VER)
 
 #endif // #if !defined(AV_WINDOWS_SPECIFIC_TOOLS_H)

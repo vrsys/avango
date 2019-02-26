@@ -31,63 +31,58 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 namespace
 {
-  // TODO this should be defined globally and used as field type
+// TODO this should be defined globally and used as field type
 
-  enum ClearMask
-  {
-    COLOR_BUFFER_BIT=GL_COLOR_BUFFER_BIT,
-    DEPTH_BUFFER_BIT=GL_DEPTH_BUFFER_BIT,
-    ACCUM_BUFFER_BIT=GL_ACCUM_BUFFER_BIT,
-    STENCIL_BUFFER_BIT=GL_STENCIL_BUFFER_BIT
-  };
-}
+enum ClearMask
+{
+    COLOR_BUFFER_BIT = GL_COLOR_BUFFER_BIT,
+    DEPTH_BUFFER_BIT = GL_DEPTH_BUFFER_BIT,
+    ACCUM_BUFFER_BIT = GL_ACCUM_BUFFER_BIT,
+    STENCIL_BUFFER_BIT = GL_STENCIL_BUFFER_BIT
+};
+} // namespace
 
 void init_ClearMask(void)
 {
-  // TODO this should be defined globally and used as field type
+    // TODO this should be defined globally and used as field type
 
-  enum_<ClearMask>("ClearMask")
-    .value("GL_COLOR_BUFFER_BIT", COLOR_BUFFER_BIT)
-    .value("GL_DEPTH_BUFFER_BIT", DEPTH_BUFFER_BIT)
-    .value("GL_ACCUM_BUFFER_BIT", ACCUM_BUFFER_BIT)
-    .value("GL_STENCIL_BUFFER_BIT", STENCIL_BUFFER_BIT)
-    ;
+    enum_<ClearMask>("ClearMask")
+        .value("GL_COLOR_BUFFER_BIT", COLOR_BUFFER_BIT)
+        .value("GL_DEPTH_BUFFER_BIT", DEPTH_BUFFER_BIT)
+        .value("GL_ACCUM_BUFFER_BIT", ACCUM_BUFFER_BIT)
+        .value("GL_STENCIL_BUFFER_BIT", STENCIL_BUFFER_BIT);
 }
 
 void init_OSGCamera(void)
- {
-  register_field<av::osg::SFCamera>("SFCamera");
-  register_multifield<av::osg::MFCamera>("MFCamera");
+{
+    register_field<av::osg::SFCamera>("SFCamera");
+    register_multifield<av::osg::MFCamera>("MFCamera");
 
-  class_<av::osg::Camera, av::Link<av::osg::Camera>, bases<av::osg::Transform>, boost::noncopyable >(
-      "Camera",
-      "Low-level wrapper of osg::Camera. Mostly used for pre-render effects",
-    no_init);
+    class_<av::osg::Camera, av::Link<av::osg::Camera>, bases<av::osg::Transform>, boost::noncopyable>("Camera", "Low-level wrapper of osg::Camera. Mostly used for pre-render effects", no_init);
 
-  init_ClearMask();
+    init_ClearMask();
 
-  enum_< ::osg::Camera::RenderOrder >("RenderOrder")
-    .value("PRE_RENDER", ::osg::Camera::PRE_RENDER)
-    .value("NESTED_RENDER", ::osg::Camera::NESTED_RENDER)
-    .value("POST_RENDER", ::osg::Camera::POST_RENDER)
-    ;
+    enum_<::osg::Camera::RenderOrder>("RenderOrder")
+        .value("PRE_RENDER", ::osg::Camera::PRE_RENDER)
+        .value("NESTED_RENDER", ::osg::Camera::NESTED_RENDER)
+        .value("POST_RENDER", ::osg::Camera::POST_RENDER);
 
-  enum_< ::osg::Camera::RenderTargetImplementation >("RenderTargetImplementation")
-    .value("FRAME_BUFFER_OBJECT", ::osg::Camera::FRAME_BUFFER_OBJECT)
-    .value("PIXEL_BUFFER_RTT", ::osg::Camera::PIXEL_BUFFER_RTT)
-    .value("PIXEL_BUFFER", ::osg::Camera::PIXEL_BUFFER)
-    .value("FRAME_BUFFER", ::osg::Camera::FRAME_BUFFER)
-    .value("SEPERATE_WINDOW", ::osg::Camera::SEPERATE_WINDOW)
-     ;
- }
+    enum_<::osg::Camera::RenderTargetImplementation>("RenderTargetImplementation")
+        .value("FRAME_BUFFER_OBJECT", ::osg::Camera::FRAME_BUFFER_OBJECT)
+        .value("PIXEL_BUFFER_RTT", ::osg::Camera::PIXEL_BUFFER_RTT)
+        .value("PIXEL_BUFFER", ::osg::Camera::PIXEL_BUFFER)
+        .value("FRAME_BUFFER", ::osg::Camera::FRAME_BUFFER)
+        .value("SEPERATE_WINDOW", ::osg::Camera::SEPERATE_WINDOW);
+}

@@ -34,96 +34,98 @@
 using namespace boost::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 namespace av
- {
-  namespace python
+{
+namespace python
+{
+namespace detail
+{
+void distributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
+{
+    av::Base* av_value = boost::python::extract<av::Base*>(obj);
+
     {
-     namespace detail
-      {
-
-        void distributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
+        av::Link<av::gua::Node> tmp = dynamic_cast<av::gua::Node*>(av_value);
+        if(tmp.isValid())
         {
-          av::Base* av_value = boost::python::extract<av::Base*>(obj);
-
-          {
-            av::Link<av::gua::Node> tmp = dynamic_cast<av::gua::Node*>(av_value);
-            if (tmp.isValid()) {
-              tmp->on_distribute(self);
-              self.distributeFieldContainer(tmp);
-              return;
-            }
-          }
-
-          {
-            av::Link<av::gua::Material> tmp = dynamic_cast<av::gua::Material*>(av_value);
-            if (tmp.isValid()) {
-              tmp->on_distribute(self);
-              self.distributeFieldContainer(tmp);
-              return;
-            }
-          }
-
-          // default
-          {
-            av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+            tmp->on_distribute(self);
             self.distributeFieldContainer(tmp);
             return;
-          }
         }
+    }
 
-        void undistributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
+    {
+        av::Link<av::gua::Material> tmp = dynamic_cast<av::gua::Material*>(av_value);
+        if(tmp.isValid())
         {
-          av::Base* av_value = boost::python::extract<av::Base*>(obj);
-
-          {
-            av::Link<av::gua::Node> tmp = dynamic_cast<av::gua::Node*>(av_value);
-            if (tmp.isValid()) {
-              tmp->on_undistribute(self);
-              self.undistributeFieldContainer(tmp);
-              return;
-            }
-          }
-
-          {
-            av::Link<av::gua::Material> tmp = dynamic_cast<av::gua::Material*>(av_value);
-            if (tmp.isValid()) {
-              tmp->on_undistribute(self);
-              self.undistributeFieldContainer(tmp);
-              return;
-            }
-          }
-
-          // default
-
-          {
-            av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
-            self.undistributeFieldContainer(tmp);
-            av::Base* av_value = boost::python::extract<av::Base*>(obj);
-          }
+            tmp->on_distribute(self);
+            self.distributeFieldContainer(tmp);
+            return;
         }
+    }
 
-      } // namespace detail
-    } // namespace python
- } // namespace av
+    // default
+    {
+        av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+        self.distributeFieldContainer(tmp);
+        return;
+    }
+}
 
+void undistributeFieldContainerHelper(av::gua::NetTransform& self, object& obj)
+{
+    av::Base* av_value = boost::python::extract<av::Base*>(obj);
+
+    {
+        av::Link<av::gua::Node> tmp = dynamic_cast<av::gua::Node*>(av_value);
+        if(tmp.isValid())
+        {
+            tmp->on_undistribute(self);
+            self.undistributeFieldContainer(tmp);
+            return;
+        }
+    }
+
+    {
+        av::Link<av::gua::Material> tmp = dynamic_cast<av::gua::Material*>(av_value);
+        if(tmp.isValid())
+        {
+            tmp->on_undistribute(self);
+            self.undistributeFieldContainer(tmp);
+            return;
+        }
+    }
+
+    // default
+
+    {
+        av::Link<av::FieldContainer> tmp = dynamic_cast<FieldContainer*>(av_value);
+        self.undistributeFieldContainer(tmp);
+        av::Base* av_value = boost::python::extract<av::Base*>(obj);
+    }
+}
+
+} // namespace detail
+} // namespace python
+} // namespace av
 
 void init_NetTransform(void)
 {
-  class_<av::gua::NetTransform, av::Link<av::gua::NetTransform>, bases<av::gua::TransformNode>, boost::noncopyable >("NetTransform", "docstring", no_init)
-    //.def("distribute_object", &av::gua::NetTransform::distributeFieldContainer)
-    .def("distribute_object", av::python::detail::distributeFieldContainerHelper)
-    //.def("undistribute_object", &av::gua::NetTransform::undistributeFieldContainer)
-    .def("undistribute_object", av::python::detail::undistributeFieldContainerHelper)
-    ;
-  def("set_ensemble_option", av::NetNode::setEnsOption);
+    class_<av::gua::NetTransform, av::Link<av::gua::NetTransform>, bases<av::gua::TransformNode>, boost::noncopyable>("NetTransform", "docstring", no_init)
+        //.def("distribute_object", &av::gua::NetTransform::distributeFieldContainer)
+        .def("distribute_object", av::python::detail::distributeFieldContainerHelper)
+        //.def("undistribute_object", &av::gua::NetTransform::undistributeFieldContainer)
+        .def("undistribute_object", av::python::detail::undistributeFieldContainerHelper);
+    def("set_ensemble_option", av::NetNode::setEnsOption);
 }

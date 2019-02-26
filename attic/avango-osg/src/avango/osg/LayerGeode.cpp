@@ -30,7 +30,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::LayerGeode"));
+av::Logger& logger(av::getLogger("av::osg::LayerGeode"));
 }
 
 AV_FC_DEFINE(av::osg::LayerGeode);
@@ -38,181 +38,167 @@ AV_FC_DEFINE(av::osg::LayerGeode);
 AV_FIELD_DEFINE(av::osg::SFLayerGeode);
 AV_FIELD_DEFINE(av::osg::MFLayerGeode);
 
-av::osg::LayerGeode::LayerGeode(::osg::Geode* osggeode) :
-  Geode(osggeode),
-  mLayerModeChanged(false),
-  mDrawablesChanged(false)
+av::osg::LayerGeode::LayerGeode(::osg::Geode* osggeode) : Geode(osggeode), mLayerModeChanged(false), mDrawablesChanged(false) { AV_FC_ADD_FIELD(LayerMode, STENCIL); }
+
+av::osg::LayerGeode::~LayerGeode() {}
+
+void av::osg::LayerGeode::initClass()
 {
-  AV_FC_ADD_FIELD(LayerMode, STENCIL);
-}
-
-av::osg::LayerGeode::~LayerGeode()
-{}
-
-void
-av::osg::LayerGeode::initClass()
-{
-  if (!isTypeInitialized())
-  {
-    av::osg::Node::initClass();
-
-    AV_FC_INIT(av::osg::Node, av::osg::LayerGeode, true);
-
-    SFLayerGeode::initClass("av::osg::SFLayerGeode", "av::Field");
-    MFLayerGeode::initClass("av::osg::MFLayerGeode", "av::Field");
-
-    sClassTypeId.setDistributable(true);
-  }
-}
-
-/* virtual */ void
-av::osg::LayerGeode::fieldHasChangedLocalSideEffect(const av::Field& field)
-{
-  Node::fieldHasChangedLocalSideEffect(field);
-
-  if (&field == &LayerMode)
-  {
-    mLayerModeChanged = true;
-  }
-}
-
-/* virtual */ void
-av::osg::LayerGeode::evaluateLocalSideEffect()
-{
-  Node::evaluateLocalSideEffect();
-
-  if (mLayerModeChanged || mDrawablesChanged)
-  {
-    updateDrawCallbacks();
-    mLayerModeChanged = false;
-    mDrawablesChanged = false;
-  }
-}
-
-/* virtual */ void
-av::osg::LayerGeode::setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event)
-{
-  Geode::setDrawablesCB(event);
-  mDrawablesChanged = true;
-}
-
-void
-av::osg::LayerGeode::updateDrawCallbacks()
-{
-  const ::osg::Geode::DrawableList& drawablelist = getOsgGeode()->getDrawableList();
-  if (drawablelist.size()>1 && LayerMode.getValue()!=OFF)
-  {
-    drawablelist[0]->setDrawCallback(new DrawCallbackBaseLayer(this,LayerMode.getValue()));
-    drawablelist[0]->setUseDisplayList(false);
-    for (::osg::Geode::DrawableList::const_iterator itr=drawablelist.begin()+1; itr!=drawablelist.end(); ++itr)
+    if(!isTypeInitialized())
     {
-      (*itr)->setDrawCallback(new DrawCallbackDisableDraw());
+        av::osg::Node::initClass();
+
+        AV_FC_INIT(av::osg::Node, av::osg::LayerGeode, true);
+
+        SFLayerGeode::initClass("av::osg::SFLayerGeode", "av::Field");
+        MFLayerGeode::initClass("av::osg::MFLayerGeode", "av::Field");
+
+        sClassTypeId.setDistributable(true);
     }
-  }
-  else
-  {
-    for (::osg::Geode::DrawableList::const_iterator itr=drawablelist.begin(); itr!=drawablelist.end(); ++itr)
+}
+
+/* virtual */ void av::osg::LayerGeode::fieldHasChangedLocalSideEffect(const av::Field& field)
+{
+    Node::fieldHasChangedLocalSideEffect(field);
+
+    if(&field == &LayerMode)
     {
-      (*itr)->setDrawCallback(0);
+        mLayerModeChanged = true;
     }
-  }
+}
+
+/* virtual */ void av::osg::LayerGeode::evaluateLocalSideEffect()
+{
+    Node::evaluateLocalSideEffect();
+
+    if(mLayerModeChanged || mDrawablesChanged)
+    {
+        updateDrawCallbacks();
+        mLayerModeChanged = false;
+        mDrawablesChanged = false;
+    }
+}
+
+/* virtual */ void av::osg::LayerGeode::setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event)
+{
+    Geode::setDrawablesCB(event);
+    mDrawablesChanged = true;
+}
+
+void av::osg::LayerGeode::updateDrawCallbacks()
+{
+    const ::osg::Geode::DrawableList& drawablelist = getOsgGeode()->getDrawableList();
+    if(drawablelist.size() > 1 && LayerMode.getValue() != OFF)
+    {
+        drawablelist[0]->setDrawCallback(new DrawCallbackBaseLayer(this, LayerMode.getValue()));
+        drawablelist[0]->setUseDisplayList(false);
+        for(::osg::Geode::DrawableList::const_iterator itr = drawablelist.begin() + 1; itr != drawablelist.end(); ++itr)
+        {
+            (*itr)->setDrawCallback(new DrawCallbackDisableDraw());
+        }
+    }
+    else
+    {
+        for(::osg::Geode::DrawableList::const_iterator itr = drawablelist.begin(); itr != drawablelist.end(); ++itr)
+        {
+            (*itr)->setDrawCallback(0);
+        }
+    }
 }
 
 // implementation of DrawCallbackBaseLayer
 
-av::osg::LayerGeode::DrawCallbackBaseLayer::DrawCallbackBaseLayer(av::osg::LayerGeode* geode, int mode) :
-  mGeode(geode->getOsgGeode()),
-  mMode(mode)
-{}
+av::osg::LayerGeode::DrawCallbackBaseLayer::DrawCallbackBaseLayer(av::osg::LayerGeode* geode, int mode) : mGeode(geode->getOsgGeode()), mMode(mode) {}
 
-/* virtual */ void
-av::osg::LayerGeode::DrawCallbackBaseLayer::drawImplementation(::osg::RenderInfo& renderInfo, const ::osg::Drawable*) const
+/* virtual */ void av::osg::LayerGeode::DrawCallbackBaseLayer::drawImplementation(::osg::RenderInfo& renderInfo, const ::osg::Drawable*) const
 {
-  switch(mMode)
-  {
+    switch(mMode)
+    {
     case STENCIL:
-      drawWithStencil(renderInfo);
-      break;
+        drawWithStencil(renderInfo);
+        break;
     case NO_DEPTH_TEST:
-      drawWithNoDepthTest(renderInfo);
-      break;
+        drawWithNoDepthTest(renderInfo);
+        break;
     default:
-      drawWithStencil(renderInfo);
-  }
+        drawWithStencil(renderInfo);
+    }
 }
 
-void
-av::osg::LayerGeode::DrawCallbackBaseLayer::drawWithStencil(::osg::RenderInfo& renderInfo) const
+void av::osg::LayerGeode::DrawCallbackBaseLayer::drawWithStencil(::osg::RenderInfo& renderInfo) const
 {
-  const ::osg::Geode::DrawableList& drawablelist = mGeode->getDrawableList();
+    const ::osg::Geode::DrawableList& drawablelist = mGeode->getDrawableList();
 
-  // get state from renderInfo
-  ::osg::ref_ptr< ::osg::State> state = renderInfo.getState();
+    // get state from renderInfo
+    ::osg::ref_ptr<::osg::State> state = renderInfo.getState();
 
-  // clear stencil buffer, enable depth and stencil test, write 1 to stencil buffer
-  glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-  glClearStencil(0);
-  glClear(GL_STENCIL_BUFFER_BIT);
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_STENCIL_TEST);
-  glStencilFunc(GL_ALWAYS, 1, 1);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    // clear stencil buffer, enable depth and stencil test, write 1 to stencil buffer
+    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearStencil(0);
+    glClear(GL_STENCIL_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-  // because the displaylist is switched off, we need to manually apply the StateSet
-  if (mGeode->getStateSet() != 0) state->pushStateSet(mGeode->getStateSet());
-  state->apply();
-
-  // apply Drawable's stateset,
-  // then draw base layer in frame buffer and stencil buffer
-  state->apply(drawablelist[0]->getStateSet());
-  drawablelist[0]->drawImplementation(renderInfo);
-  state->apply();
-
-  // disable depth test, write colors where stencil buffer is 1, keep stencil buffer unchanged
-  glDisable(GL_DEPTH_TEST);
-  glStencilFunc(GL_EQUAL, 1, 1);
-  glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-
-  // then draw all decals in list order with their statesets applied
-  for (::osg::Geode::DrawableList::const_iterator itr=drawablelist.begin()+1; itr!=drawablelist.end(); ++itr)
-  {
-    state->apply((*itr)->getStateSet());
-    (*itr)->drawImplementation(renderInfo);
+    // because the displaylist is switched off, we need to manually apply the StateSet
+    if(mGeode->getStateSet() != 0)
+        state->pushStateSet(mGeode->getStateSet());
     state->apply();
-  }
 
-  if (mGeode->getStateSet() != 0) state->popStateSet();
-  state->apply();
+    // apply Drawable's stateset,
+    // then draw base layer in frame buffer and stencil buffer
+    state->apply(drawablelist[0]->getStateSet());
+    drawablelist[0]->drawImplementation(renderInfo);
+    state->apply();
 
-  glPopAttrib();
+    // disable depth test, write colors where stencil buffer is 1, keep stencil buffer unchanged
+    glDisable(GL_DEPTH_TEST);
+    glStencilFunc(GL_EQUAL, 1, 1);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+    // then draw all decals in list order with their statesets applied
+    for(::osg::Geode::DrawableList::const_iterator itr = drawablelist.begin() + 1; itr != drawablelist.end(); ++itr)
+    {
+        state->apply((*itr)->getStateSet());
+        (*itr)->drawImplementation(renderInfo);
+        state->apply();
+    }
+
+    if(mGeode->getStateSet() != 0)
+        state->popStateSet();
+    state->apply();
+
+    glPopAttrib();
 }
 
-void
-av::osg::LayerGeode::DrawCallbackBaseLayer::drawWithNoDepthTest(::osg::RenderInfo& renderInfo) const
+void av::osg::LayerGeode::DrawCallbackBaseLayer::drawWithNoDepthTest(::osg::RenderInfo& renderInfo) const
 {
-  const ::osg::Geode::DrawableList& drawablelist = mGeode->getDrawableList();
+    const ::osg::Geode::DrawableList& drawablelist = mGeode->getDrawableList();
 
-  // get state from renderInfo
-  ::osg::ref_ptr< ::osg::State> state = renderInfo.getState();
+    // get state from renderInfo
+    ::osg::ref_ptr<::osg::State> state = renderInfo.getState();
 
-  // disable depth test
-  glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glDisable(GL_DEPTH_TEST);
+    // disable depth test
+    glPushAttrib(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
 
-  // because the displaylist is switched off, we need to manually apply the StateSet
-  if (mGeode->getStateSet() != 0) state->pushStateSet(mGeode->getStateSet());
-  state->apply();
-
-  // draw all layers in list order with their statesets applied
-  for (::osg::Geode::DrawableList::const_iterator itr=drawablelist.begin(); itr!=drawablelist.end(); ++itr)
-  {
-    state->apply((*itr)->getStateSet());
-    (*itr)->drawImplementation(renderInfo);
+    // because the displaylist is switched off, we need to manually apply the StateSet
+    if(mGeode->getStateSet() != 0)
+        state->pushStateSet(mGeode->getStateSet());
     state->apply();
-  }
 
-  if (mGeode->getStateSet() != 0) state->popStateSet();
-  state->apply();
+    // draw all layers in list order with their statesets applied
+    for(::osg::Geode::DrawableList::const_iterator itr = drawablelist.begin(); itr != drawablelist.end(); ++itr)
+    {
+        state->apply((*itr)->getStateSet());
+        (*itr)->drawImplementation(renderInfo);
+        state->apply();
+    }
 
-  glPopAttrib();
+    if(mGeode->getStateSet() != 0)
+        state->popStateSet();
+    state->apply();
+
+    glPopAttrib();
 }

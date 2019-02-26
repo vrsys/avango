@@ -31,19 +31,20 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLoadImage(void)
 {
-  // wrapping osg::LoadImage functionality
-  register_field<av::osg::SFLoadImage>("SFLoadImage");
-  register_multifield<av::osg::MFLoadImage>("MFLoadImage");
-  class_<av::osg::LoadImage, av::Link<av::osg::LoadImage>, bases<av::FieldContainer>, boost::noncopyable >("LoadImage", "docstring", no_init);
+    // wrapping osg::LoadImage functionality
+    register_field<av::osg::SFLoadImage>("SFLoadImage");
+    register_multifield<av::osg::MFLoadImage>("MFLoadImage");
+    class_<av::osg::LoadImage, av::Link<av::osg::LoadImage>, bases<av::FieldContainer>, boost::noncopyable>("LoadImage", "docstring", no_init);
 }

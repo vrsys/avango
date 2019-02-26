@@ -3,4 +3,4 @@
 
 void init_LodLoader();
 
-#endif //AV_PYTHON_GUA_LOD_LOADER_HPP
+#endif // AV_PYTHON_GUA_LOD_LOADER_HPP

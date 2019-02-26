@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TexturedScreenSpaceQuadPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::TexturedScreenSpaceQuadPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::TexturedScreenSpaceQuadPassDescription);
@@ -14,16 +14,14 @@ AV_FC_DEFINE(av::gua::TexturedScreenSpaceQuadPassDescription);
 AV_FIELD_DEFINE(av::gua::SFTexturedScreenSpaceQuadPassDescription);
 AV_FIELD_DEFINE(av::gua::MFTexturedScreenSpaceQuadPassDescription);
 
-av::gua::TexturedScreenSpaceQuadPassDescription::TexturedScreenSpaceQuadPassDescription(
-  std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription> const& guaTexturedScreenSpaceQuadPassDescription)
-    : PipelinePassDescription(guaTexturedScreenSpaceQuadPassDescription)
-    , m_guaTexturedScreenSpaceQuadPassDescription(guaTexturedScreenSpaceQuadPassDescription)
-{}
-
-void
-av::gua::TexturedScreenSpaceQuadPassDescription::initClass()
+av::gua::TexturedScreenSpaceQuadPassDescription::TexturedScreenSpaceQuadPassDescription(std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription> const& guaTexturedScreenSpaceQuadPassDescription)
+    : PipelinePassDescription(guaTexturedScreenSpaceQuadPassDescription), m_guaTexturedScreenSpaceQuadPassDescription(guaTexturedScreenSpaceQuadPassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::TexturedScreenSpaceQuadPassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -35,10 +33,7 @@ av::gua::TexturedScreenSpaceQuadPassDescription::initClass()
     }
 }
 
-std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription> const&
-av::gua::TexturedScreenSpaceQuadPassDescription::getGuaTexturedScreenSpaceQuadPassDescription() const
+std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription> const& av::gua::TexturedScreenSpaceQuadPassDescription::getGuaTexturedScreenSpaceQuadPassDescription() const
 {
     return m_guaTexturedScreenSpaceQuadPassDescription;
 }
-
-

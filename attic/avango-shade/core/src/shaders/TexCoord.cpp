@@ -26,22 +26,16 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(TexCoord, "",
-    SHADE_NONE,
-    SHADE_ENV_DEFS(application_stage, (index))
-    )
+SHADE_CLASS_INIT(TexCoord, "", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (index)))
 
-shade::vec4<> TexCoord::get_vertex(void)
-{
-  return invoke_inline< vec4<> >(boost::bind(&TexCoord::get_vertex_inline, boost::ref(*this), _1));
-}
+shade::vec4<> TexCoord::get_vertex(void) { return invoke_inline<vec4<>>(boost::bind(&TexCoord::get_vertex_inline, boost::ref(*this), _1)); }
 
 void TexCoord::get_vertex_inline(formatter::Generator& generator)
 {
-  int index_value;
-  index.get(index_value);
+    int index_value;
+    index.get(index_value);
 
-  generator.handle_return_begin();
-  generator.handle_identifier("gl_MultiTexCoord"+boost::lexical_cast<std::string>(index_value));
-  generator.handle_return_end();
+    generator.handle_return_begin();
+    generator.handle_identifier("gl_MultiTexCoord" + boost::lexical_cast<std::string>(index_value));
+    generator.handle_return_end();
 }

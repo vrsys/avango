@@ -28,15 +28,15 @@
 
 boost::shared_ptr<shade::GLSLWrapper> shade::create_GLSL_wrapper(void)
 {
-  if (GLEW_VERSION_2_0)
-  {
-    return boost::shared_ptr<GLSLWrapper>(new GLSLGL2Wrapper);
-  }
+    if(GLEW_VERSION_2_0)
+    {
+        return boost::shared_ptr<GLSLWrapper>(new GLSLGL2Wrapper);
+    }
 
-  if (glewIsSupported("GL_ARB_shader_objects GL_ARB_vertex_shader GL_ARB_fragment_shader GL_ARB_shading_language_100"))
-  {
-    return boost::shared_ptr<GLSLWrapper>(new GLSLARBWrapper);
-  }
+    if(glewIsSupported("GL_ARB_shader_objects GL_ARB_vertex_shader GL_ARB_fragment_shader GL_ARB_shading_language_100"))
+    {
+        return boost::shared_ptr<GLSLWrapper>(new GLSLARBWrapper);
+    }
 
-  throw NotSupported();
+    throw NotSupported();
 }

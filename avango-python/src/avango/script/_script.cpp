@@ -27,7 +27,7 @@
 
 BOOST_PYTHON_MODULE(_script)
 {
-  av::script::register_object();
-  av::script::register_object_fields();
-  av::script::register_script();
+    av::script::register_object();
+    av::script::register_object_fields();
+    av::script::register_script();
 }

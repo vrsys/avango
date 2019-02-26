@@ -38,75 +38,65 @@
 
 namespace
 {
-  using namespace av;
+using namespace av;
 
-  class FieldNodeMultiPush : public av::FieldContainer {
+class FieldNodeMultiPush : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     FieldNodeMultiPush();
     virtual ~FieldNodeMultiPush();
 
-    SFInt    IntField;
-    SFInt    OutField;
+    SFInt IntField;
+    SFInt OutField;
 
     void fieldHasChanged(const av::Field& field);
 
   private:
     unsigned int mTriggered;
+};
 
-  };
+AV_FC_DEFINE(FieldNodeMultiPush);
 
-  AV_FC_DEFINE(FieldNodeMultiPush);
-
-  FieldNodeMultiPush::FieldNodeMultiPush()
-    : mTriggered(0)
-  {
+FieldNodeMultiPush::FieldNodeMultiPush() : mTriggered(0)
+{
     AV_FC_ADD_FIELD(IntField, 0);
     AV_FC_ADD_FIELD(OutField, 0);
-  }
+}
 
-  FieldNodeMultiPush::~FieldNodeMultiPush()
-  {}
+FieldNodeMultiPush::~FieldNodeMultiPush() {}
 
-  void
-  FieldNodeMultiPush::initClass()
-  {
-    if (!isTypeInitialized())
+void FieldNodeMultiPush::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::FieldContainer, FieldNodeMultiPush, false);
+        AV_FC_INIT(av::FieldContainer, FieldNodeMultiPush, false);
     }
-  }
+}
 
-  void
-  FieldNodeMultiPush::fieldHasChanged(const av::Field& field)
-  {
-    if (&field == &IntField)
+void FieldNodeMultiPush::fieldHasChanged(const av::Field& field)
+{
+    if(&field == &IntField)
     {
-//       mTriggered++;
-//       if (mTriggered < 2)
-//       {
+        //       mTriggered++;
+        //       if (mTriggered < 2)
+        //       {
         OutField.setValue(3);
-//       }
+        //       }
     }
+}
 
-  }
-
-
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
-      FieldNodeMultiPush::initClass();
-    }
-  };
+    InitNodeFixture() { FieldNodeMultiPush::initClass(); }
+};
 
-  TEST_FIXTURE(InitNodeFixture, defaultIsMultiPush)
-  {
+TEST_FIXTURE(InitNodeFixture, defaultIsMultiPush)
+{
     Link<FieldNodeMultiPush> node1(new FieldNodeMultiPush);
     Link<FieldNodeMultiPush> node2(new FieldNodeMultiPush);
 
@@ -117,11 +107,10 @@ namespace
 
     node1->IntField.setValue(3);
     CHECK_EQUAL(3, node2->IntField.getValue());
+}
 
-  }
-
-  TEST_FIXTURE(InitNodeFixture, throwIfFieldIsTriggeredTwice)
-  {
+TEST_FIXTURE(InitNodeFixture, throwIfFieldIsTriggeredTwice)
+{
     Link<FieldNodeMultiPush> node1(new FieldNodeMultiPush);
     Link<FieldNodeMultiPush> node2(new FieldNodeMultiPush);
 
@@ -129,8 +118,7 @@ namespace
     CHECK_THROW(node1->IntField.connectFrom(&(node2->IntField)), std::runtime_error);
 
     // CHECK_THROW(node1->IntField.setValue(2), std::runtime_error);
-
-  }
+}
 
 } // namespace
 

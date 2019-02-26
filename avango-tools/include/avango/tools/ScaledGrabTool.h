@@ -37,64 +37,60 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * ScaledGrabTool class
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL ScaledGrabTool : public Tool
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * ScaledGrabTool class
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL ScaledGrabTool : public Tool
-    {
-      AV_FC_DECLARE();
+    ScaledGrabTool();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ScaledGrabTool();
 
-      /**
-       * Constructor.
-       */
-      ScaledGrabTool();
+  public:
+    /**
+     * Defines the device transformation relative to the root node coordinate system.
+     */
+    av::osg::SFMatrix DeviceTransform;
 
-    protected:
+    /**
+     * Defines the head transformation relative to the root node coordinate system.
+     */
+    av::osg::SFMatrix HeadTransform;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ScaledGrabTool();
+  protected:
+    /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
+    /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
 
-    public:
+    ::osg::Matrix mTargetMat, mTargetRotMat, mTargetTransMat;
+    ::osg::Matrix mDeviceInvMat;
+    ::osg::Matrix mPivotMat, mPivotInvMat;
+    ::osg::Vec3 mDevicePos;
+    double mScale;
+};
 
-      /**
-       * Defines the device transformation relative to the root node coordinate system.
-       */
-      av::osg::SFMatrix DeviceTransform;
-
-      /**
-       * Defines the head transformation relative to the root node coordinate system.
-       */
-      av::osg::SFMatrix HeadTransform;
-
-    protected:
-
-      /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
-      /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
-
-      ::osg::Matrix mTargetMat, mTargetRotMat, mTargetTransMat;
-      ::osg::Matrix mDeviceInvMat;
-      ::osg::Matrix mPivotMat, mPivotInvMat;
-      ::osg::Vec3 mDevicePos;
-      double mScale;
-    };
-
-    using SFScaledGrabTool = SingleField<Link<ScaledGrabTool> >;
-    using MFScaledGrabTool = MultiField<Link<ScaledGrabTool> >;
-  }
+using SFScaledGrabTool = SingleField<Link<ScaledGrabTool>>;
+using MFScaledGrabTool = MultiField<Link<ScaledGrabTool>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool>>;
 #endif
 
-}
+} // namespace av
 
 #endif

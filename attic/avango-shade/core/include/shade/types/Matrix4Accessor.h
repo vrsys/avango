@@ -28,20 +28,20 @@
 
 namespace shade
 {
-  namespace types
-  {
-    class Matrix4Accessor : public TypeAccessor
-    {
-    public:
-      virtual void set(const float* v) = 0;
-      virtual void get(float* v) const = 0;
+namespace types
+{
+class Matrix4Accessor : public TypeAccessor
+{
+  public:
+    virtual void set(const float* v) = 0;
+    virtual void get(float* v) const = 0;
 
-      /*virtual*/ HashType hash(void) const;
-    private:
-      static HashValue m_hash;
-    };
-  }
-}
+    /*virtual*/ HashType hash(void) const;
 
+  private:
+    static HashValue m_hash;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_Matrix4Accessor_H */

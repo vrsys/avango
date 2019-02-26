@@ -32,11 +32,11 @@
 
 int main()
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
-  av::osg::Init::initClass();
-  av::utils::initMultiValueFields();
-  av::utils::initMultiValueOSGFields();
+    av::getRootLogger().addConsoleAppender();
+    av::ApplicationInstance::get();
+    av::osg::Init::initClass();
+    av::utils::initMultiValueFields();
+    av::utils::initMultiValueOSGFields();
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

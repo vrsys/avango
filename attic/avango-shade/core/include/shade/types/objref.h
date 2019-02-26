@@ -31,8 +31,9 @@
 
 namespace shade
 {
-  template<class P = Shader*, class Qualifier = Type> class objref_base : public TypeBase<objref_base<P, Qualifier>, Qualifier>
-  {
+template <class P = Shader*, class Qualifier = Type>
+class objref_base : public TypeBase<objref_base<P, Qualifier>, Qualifier>
+{
   public:
     objref_base(void);
 
@@ -42,7 +43,7 @@ namespace shade
     operator bool(void);
 
     /*virtual*/ boost::shared_ptr<Type::State> create_state(const PipelineState& ps) const;
-    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void (Shader*)>) const;
+    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void(Shader*)>) const;
     /*virtual*/ void insert_references(boost::shared_ptr<Type::State>, ObjectMap&) const;
     /*virtual*/ std::string get_constructor_str(void) const;
     /*virtual*/ std::string get_constructor_str(boost::shared_ptr<Type::State> state) const;
@@ -52,31 +53,31 @@ namespace shade
 
     class State : public Type::State
     {
-    public:
-      ObjectMap::Index index;
+      public:
+        ObjectMap::Index index;
     };
 
   private:
     P m_ref;
-  };
+};
 
-  template<class P = Shader*, class Qualifier = Type> class objref : public objref_base<P, Qualifier>
-  {
+template <class P = Shader*, class Qualifier = Type>
+class objref : public objref_base<P, Qualifier>
+{
   public:
     using objref_base<P, Qualifier>::operator=;
-  };
+};
 
-  template<class T, class Qualifier> class objref<boost::shared_ptr<T>, Qualifier> :
-    public objref_base<boost::shared_ptr<T>, Qualifier>,
-    public types::ObjrefAccessor
-  {
+template <class T, class Qualifier>
+class objref<boost::shared_ptr<T>, Qualifier> : public objref_base<boost::shared_ptr<T>, Qualifier>, public types::ObjrefAccessor
+{
   public:
     using objref_base<boost::shared_ptr<T>, Qualifier>::operator=;
 
     /*virtual*/ void set_generic(boost::shared_ptr<Shader> v);
     /*virtual*/ boost::shared_ptr<Shader> get_generic(void) const;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/objref_impl.cpp"
 

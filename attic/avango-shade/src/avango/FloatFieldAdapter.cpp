@@ -28,57 +28,41 @@
 
 namespace
 {
-  class FloatGetter
-  {
+class FloatGetter
+{
   public:
+    FloatGetter(shade::types::FloatAccessor* accessor) : mAccessor(accessor) {}
 
-    FloatGetter(shade::types::FloatAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
-
-    void operator()(const av::SFFloat::GetValueEvent& event)
-    {
-      mAccessor->get(*event.getValuePtr());
-    }
+    void operator()(const av::SFFloat::GetValueEvent& event) { mAccessor->get(*event.getValuePtr()); }
 
   private:
     shade::types::FloatAccessor* mAccessor;
-  };
+};
 
-  class FloatSetter
-  {
+class FloatSetter
+{
   public:
+    FloatSetter(shade::types::FloatAccessor* accessor) : mAccessor(accessor) {}
 
-    FloatSetter(shade::types::FloatAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
-
-    void operator()(const av::SFFloat::SetValueEvent& event)
-    {
-      mAccessor->set(event.getValue());
-    }
+    void operator()(const av::SFFloat::SetValueEvent& event) { mAccessor->set(event.getValue()); }
 
   private:
     shade::types::FloatAccessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::FloatFieldAdapter::hash(void) const
+{
+    static ::shade::float_<> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::FloatFieldAdapter::hash(void) const
+void av::shade::FloatFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::float_<> value;
-  return value.hash();
-}
+    ::shade::types::FloatAccessor* float_accessor(dynamic_cast<::shade::types::FloatAccessor*>(type));
+    if(float_accessor == 0)
+        return;
 
-void
-av::shade::FloatFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::FloatAccessor* float_accessor(dynamic_cast< ::shade::types::FloatAccessor*>(type));
-  if (float_accessor == 0)
-    return;
-
-  av::SFFloat* field= new av::SFFloat;
-  field->bind(container, name, true, FloatGetter(float_accessor), FloatSetter(float_accessor));
+    av::SFFloat* field = new av::SFFloat;
+    field->bind(container, name, true, FloatGetter(float_accessor), FloatSetter(float_accessor));
 }

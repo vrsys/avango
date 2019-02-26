@@ -30,23 +30,22 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class Value;
+namespace parser
+{
+class Value;
 
-    class ScopeLayer
-    {
-    public:
+class ScopeLayer
+{
+  public:
+    void add_value(const std::string& var, boost::shared_ptr<const Value> value);
 
-      void add_value(const std::string& var, boost::shared_ptr<const Value> value);
+    boost::shared_ptr<const Value> get_value(const std::string& var) const;
+    boost::shared_ptr<const Value> get_raw_value(const std::string& var) const;
 
-      boost::shared_ptr<const Value> get_value(const std::string& var) const;
-      boost::shared_ptr<const Value> get_raw_value(const std::string& var) const;
-
-    private:
-      std::map<std::string, boost::shared_ptr<const Value> > values_;
-    };
-  }
-}
+  private:
+    std::map<std::string, boost::shared_ptr<const Value>> values_;
+};
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_ScopeLayer_H */

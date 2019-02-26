@@ -25,30 +25,21 @@
 
 using namespace shade::parser;
 
-SingleAssignmentString::SingleAssignmentString(void) :
-  valid_(false)
-{
-}
+SingleAssignmentString::SingleAssignmentString(void) : valid_(false) {}
 
-bool SingleAssignmentString::valid(void) const
-{
-  return valid_;
-}
+bool SingleAssignmentString::valid(void) const { return valid_; }
 
-std::string SingleAssignmentString::get(void) const
-{
-  return content_;
-}
+std::string SingleAssignmentString::get(void) const { return content_; }
 
 void SingleAssignmentString::set(const std::string& value)
 {
-  if (valid_)
-  {
-    content_ = "";
-  }
-  else
-  {
-    content_ = value;
-    valid_ = true;
-  }
+    if(valid_)
+    {
+        content_ = "";
+    }
+    else
+    {
+        content_ = value;
+        valid_ = true;
+    }
 }

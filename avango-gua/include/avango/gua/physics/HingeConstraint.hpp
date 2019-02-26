@@ -13,105 +13,98 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::HingeConstraint
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL HingeConstraint : public av::gua::Constraint
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::HingeConstraint
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::HingeConstraint is created.
+     * Otherwise, the given ::gua::physics::HingeConstraint is used.
      */
-    class AV_GUA_DLL HingeConstraint : public av::gua::Constraint
-    {
-      AV_FC_DECLARE();
+    HingeConstraint(::gua::physics::HingeConstraint* guaconstraint = new ::gua::physics::HingeConstraint(nullptr,
+                                                                                                         nullptr,
+                                                                                                         ::gua::math::vec3(),
+                                                                                                         ::gua::math::vec3(),
+                                                                                                         ::gua::math::vec3(),
+                                                                                                         ::gua::math::vec3())); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~HingeConstraint();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::HingeConstraint is created.
-       * Otherwise, the given ::gua::physics::HingeConstraint is used.
-       */
-      HingeConstraint(::gua::physics::HingeConstraint* guaconstraint =
-                        new ::gua::physics::HingeConstraint(nullptr, nullptr,
-                                                            ::gua::math::vec3(),
-                                                            ::gua::math::vec3(),
-                                                            ::gua::math::vec3(),
-                                                            ::gua::math::vec3())); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFVec3 PivotA;
+    SFVec3 PivotB;
+    SFVec3 AxisA;
+    SFVec3 AxisB;
 
-    protected:
+    SFFloat UpperLimit;
+    SFFloat LowerLimit;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~HingeConstraint();
+    SFBool MotorEnabled;
+    SFFloat MotorTargetVelocity;
+    SFFloat MotorMaxImpulse;
 
-    public:
+    /**
+     * Get the wrapped ::gua::physics::HingeConstraint.
+     */
+    ::gua::physics::HingeConstraint* getGuaConstraint() const;
 
-      SFVec3  PivotA;
-      SFVec3  PivotB;
-      SFVec3  AxisA;
-      SFVec3  AxisB;
+  public:
+    virtual void getPivotACB(const SFVec3::GetValueEvent& event);
+    virtual void setPivotACB(const SFVec3::SetValueEvent& event);
 
-      SFFloat UpperLimit;
-      SFFloat LowerLimit;
+    virtual void getPivotBCB(const SFVec3::GetValueEvent& event);
+    virtual void setPivotBCB(const SFVec3::SetValueEvent& event);
 
-      SFBool  MotorEnabled;
-      SFFloat MotorTargetVelocity;
-      SFFloat MotorMaxImpulse;
+    virtual void getAxisACB(const SFVec3::GetValueEvent& event);
+    virtual void setAxisACB(const SFVec3::SetValueEvent& event);
 
+    virtual void getAxisBCB(const SFVec3::GetValueEvent& event);
+    virtual void setAxisBCB(const SFVec3::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::physics::HingeConstraint.
-       */
-      ::gua::physics::HingeConstraint* getGuaConstraint() const;
+    virtual void getUpperLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setUpperLimitCB(const SFFloat::SetValueEvent& event);
 
-    public:
+    virtual void getLowerLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setLowerLimitCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getPivotACB(const SFVec3::GetValueEvent& event);
-      virtual void setPivotACB(const SFVec3::SetValueEvent& event);
+    virtual void getMotorEnabledCB(const SFBool::GetValueEvent& event);
+    virtual void setMotorEnabledCB(const SFBool::SetValueEvent& event);
 
-      virtual void getPivotBCB(const SFVec3::GetValueEvent& event);
-      virtual void setPivotBCB(const SFVec3::SetValueEvent& event);
+    virtual void getMotorTargetVelocityCB(const SFFloat::GetValueEvent& event);
+    virtual void setMotorTargetVelocityCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getAxisACB(const SFVec3::GetValueEvent& event);
-      virtual void setAxisACB(const SFVec3::SetValueEvent& event);
+    virtual void getMotorMaxImpulseCB(const SFFloat::GetValueEvent& event);
+    virtual void setMotorMaxImpulseCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getAxisBCB(const SFVec3::GetValueEvent& event);
-      virtual void setAxisBCB(const SFVec3::SetValueEvent& event);
+  private:
+    ::gua::physics::HingeConstraint* m_guaConstraint;
 
-      virtual void getUpperLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setUpperLimitCB(const SFFloat::SetValueEvent& event);
+    HingeConstraint(const HingeConstraint&);
+    HingeConstraint& operator=(const HingeConstraint&);
+};
 
-      virtual void getLowerLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setLowerLimitCB(const SFFloat::SetValueEvent& event);
+using SFHingeConstraint = SingleField<Link<HingeConstraint>>;
+using MFHingeConstraint = MultiField<Link<HingeConstraint>>;
 
-      virtual void getMotorEnabledCB(const SFBool::GetValueEvent& event);
-      virtual void setMotorEnabledCB(const SFBool::SetValueEvent& event);
-
-      virtual void getMotorTargetVelocityCB(const SFFloat::GetValueEvent& event);
-      virtual void setMotorTargetVelocityCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getMotorMaxImpulseCB(const SFFloat::GetValueEvent& event);
-      virtual void setMotorMaxImpulseCB(const SFFloat::SetValueEvent& event);
-
-
-    private:
-
-      ::gua::physics::HingeConstraint *m_guaConstraint;
-
-      HingeConstraint(const HingeConstraint&);
-      HingeConstraint& operator=(const HingeConstraint&);
-    };
-
-    using SFHingeConstraint = SingleField<Link<HingeConstraint> >;
-    using MFHingeConstraint = MultiField<Link<HingeConstraint> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::HingeConstraint> >;
-  template class AV_GUA_DLL MultiField<Link<gua::HingeConstraint> >;
+template class AV_GUA_DLL SingleField<Link<gua::HingeConstraint>>;
+template class AV_GUA_DLL MultiField<Link<gua::HingeConstraint>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_HINGE_CONSTRAINT_HPP
+#endif // AVANGO_GUA_HINGE_CONSTRAINT_HPP

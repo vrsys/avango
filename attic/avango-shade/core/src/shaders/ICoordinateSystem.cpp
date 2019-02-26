@@ -25,8 +25,4 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(ICoordinateSystem, "", 
-    SHADE_ENV_DEFS(shade::vertex_shader, (transform))
-    SHADE_ENV_DEFS(shade::fragment_shader, (get_transformed_normal)(get_transformed_eyepoint)),
-    SHADE_NONE
-    )
+SHADE_CLASS_INIT(ICoordinateSystem, "", SHADE_ENV_DEFS(shade::vertex_shader, (transform)) SHADE_ENV_DEFS(shade::fragment_shader, (get_transformed_normal)(get_transformed_eyepoint)), SHADE_NONE)

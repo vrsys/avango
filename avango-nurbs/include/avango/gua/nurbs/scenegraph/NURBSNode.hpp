@@ -16,83 +16,78 @@
 
 namespace av
 {
-  namespace gua
-  {
-    namespace nurbs
-    {
-      /**
-       * Wrapper for ::gua::NURBSNode
-       *
-       * \ingroup av_gua
-       */
-      class AV_NURBS_DLL NURBSNode : public av::gua::GeometryNode
-      {
-        AV_FC_DECLARE();
+namespace gua
+{
+namespace nurbs
+{
+/**
+ * Wrapper for ::gua::NURBSNode
+ *
+ * \ingroup av_gua
+ */
+class AV_NURBS_DLL NURBSNode : public av::gua::GeometryNode
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::gua::NURBSNode
+     * is created.
+     * Otherwise, the given ::gua::NURBSNode is used.
+     */
+    NURBSNode(std::shared_ptr<::gua::node::NURBSNode> guanode = std::shared_ptr<::gua::node::NURBSNode>(new ::gua::node::NURBSNode("")));
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::NURBSNode
-         * is created.
-         * Otherwise, the given ::gua::NURBSNode is used.
-         */
-        NURBSNode(std::shared_ptr< ::gua::node::NURBSNode> guanode =
-            std::shared_ptr< ::gua::node::NURBSNode>(new ::gua::node::NURBSNode("")));
+    virtual void on_distribute(av::gua::NetTransform& netNode);
+    virtual void on_undistribute(av::gua::NetTransform& netNode);
 
-        virtual void on_distribute(av::gua::NetTransform& netNode);
-        virtual void on_undistribute(av::gua::NetTransform& netNode);
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~NURBSNode();
 
-      protected:
+  public:
+    SFString Geometry;
+    SFMaterial Material;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-  //      virtual ~NURBSNode();
+    SFFloat PixelErrorTolerance;
+    SFBool WireframeMode;
 
-      public:
+    virtual void getGeometryCB(const SFString::GetValueEvent& event);
+    virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
-        SFString   Geometry;
-        SFMaterial Material;
+    virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+    virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-        SFFloat    PixelErrorTolerance;
-        SFBool     WireframeMode;
+    virtual void getPixelErrorToleranceCB(const SFFloat::GetValueEvent& event);
+    virtual void setPixelErrorToleranceCB(const SFFloat::SetValueEvent& event);
 
-        virtual void getGeometryCB(const SFString::GetValueEvent& event);
-        virtual void setGeometryCB(const SFString::SetValueEvent& event);
+    virtual void getWireframeModeCB(const SFBool::GetValueEvent& event);
+    virtual void setWireframeModeCB(const SFBool::SetValueEvent& event);
 
-        virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
-        virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+    /**
+     * Get the wrapped ::gua::NURBSNode.
+     */
+    std::shared_ptr<::gua::node::NURBSNode> getGuaNURBSNode() const;
 
-        virtual void getPixelErrorToleranceCB(const SFFloat::GetValueEvent& event);
-        virtual void setPixelErrorToleranceCB(const SFFloat::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::node::NURBSNode> m_guaNURBSNode;
+    av::Link<av::gua::Material> m_Material;
 
-        virtual void getWireframeModeCB(const SFBool::GetValueEvent& event);
-        virtual void setWireframeModeCB(const SFBool::SetValueEvent& event);
+    NURBSNode(const NURBSNode&);
+    NURBSNode& operator=(const NURBSNode&);
+};
 
-        /**
-         * Get the wrapped ::gua::NURBSNode.
-         */
-        std::shared_ptr< ::gua::node::NURBSNode> getGuaNURBSNode() const;
-
-      private:
-
-        std::shared_ptr< ::gua::node::NURBSNode> m_guaNURBSNode;
-        av::Link< av::gua::Material> m_Material;
-
-        NURBSNode(const NURBSNode&);
-        NURBSNode& operator=(const NURBSNode&);
-      };
-
-      using SFNURBSNode = SingleField<Link<NURBSNode> >;
-      using MFNURBSNode = MultiField<Link<NURBSNode> >;
-    }
-  }
+using SFNURBSNode = SingleField<Link<NURBSNode>>;
+using MFNURBSNode = MultiField<Link<NURBSNode>>;
+} // namespace nurbs
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSNode> >;
-  template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSNode> >;
+template class AV_NURBS_DLL SingleField<Link<gua::nurbs::NURBSNode>>;
+template class AV_NURBS_DLL MultiField<Link<gua::nurbs::NURBSNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_NURBS_NODE_HPP
+#endif // AVANGO_GUA_NURBS_NODE_HPP

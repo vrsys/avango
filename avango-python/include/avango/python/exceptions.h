@@ -33,18 +33,19 @@
 
 namespace av
 {
-  namespace python
-  {
+namespace python
+{
+namespace detail
+{
+class index_exception
+{
+};
 
-    namespace detail
-    {
-      class index_exception {};
+void translate(index_exception const& e);
+} // namespace detail
 
-      void translate(index_exception const& e);
-    }
+} // namespace python
 
-  }
-
-}
+} // namespace av
 
 #endif

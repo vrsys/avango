@@ -13,102 +13,94 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::TexturedScreenSpaceQuadNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL TexturedScreenSpaceQuadNode : public av::gua::Node
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::TexturedScreenSpaceQuadNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::TexturedScreenSpaceQuadNode is created.
+     * Otherwise, the given ::gua::TexturedScreenSpaceQuadNode is used.
      */
-    class AV_GUA_DLL TexturedScreenSpaceQuadNode : public av::gua::Node
-    {
-      AV_FC_DECLARE();
+    TexturedScreenSpaceQuadNode(
+        std::shared_ptr<::gua::node::TexturedScreenSpaceQuadNode> guanode = std::shared_ptr<::gua::node::TexturedScreenSpaceQuadNode>(new ::gua::node::TexturedScreenSpaceQuadNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~TexturedScreenSpaceQuadNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::TexturedScreenSpaceQuadNode is created.
-       * Otherwise, the given ::gua::TexturedScreenSpaceQuadNode is used.
-       */
-      TexturedScreenSpaceQuadNode(std::shared_ptr< ::gua::node::TexturedScreenSpaceQuadNode> guanode = std::shared_ptr< ::gua::node::TexturedScreenSpaceQuadNode>(new ::gua::node::TexturedScreenSpaceQuadNode("")));
+  public:
+    SFString Texture;
 
-    protected:
+    SFInt Width;
+    SFInt Height;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~TexturedScreenSpaceQuadNode();
+    SFVec2 Anchor;
+    SFVec2 Offset;
 
-    public:
+    SFFloat Opacity;
 
+    SFBool FlipX;
+    SFBool FlipY;
 
-      SFString Texture;
+    /**
+     * Get the wrapped ::gua::TexturedScreenSpaceQuadNode.
+     */
+    std::shared_ptr<::gua::node::TexturedScreenSpaceQuadNode> getGuaNode() const;
 
-      SFInt   Width;
-      SFInt   Height;
+  public:
+    virtual void getTextureCB(const SFString::GetValueEvent& event);
+    virtual void setTextureCB(const SFString::SetValueEvent& event);
 
-      SFVec2   Anchor;
-      SFVec2   Offset;
+    virtual void getWidthCB(const SFInt::GetValueEvent& event);
+    virtual void setWidthCB(const SFInt::SetValueEvent& event);
 
-      SFFloat  Opacity;
+    virtual void getHeightCB(const SFInt::GetValueEvent& event);
+    virtual void setHeightCB(const SFInt::SetValueEvent& event);
 
-      SFBool   FlipX;
-      SFBool   FlipY;
+    virtual void getAnchorCB(const SFVec2::GetValueEvent& event);
+    virtual void setAnchorCB(const SFVec2::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::TexturedScreenSpaceQuadNode.
-       */
-      std::shared_ptr< ::gua::node::TexturedScreenSpaceQuadNode> getGuaNode() const;
+    virtual void getOffsetCB(const SFVec2::GetValueEvent& event);
+    virtual void setOffsetCB(const SFVec2::SetValueEvent& event);
 
-    public:
+    virtual void getOpacityCB(const SFFloat::GetValueEvent& event);
+    virtual void setOpacityCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getTextureCB(const SFString::GetValueEvent& event);
-      virtual void setTextureCB(const SFString::SetValueEvent& event);
+    virtual void getFlipXCB(const SFBool::GetValueEvent& event);
+    virtual void setFlipXCB(const SFBool::SetValueEvent& event);
 
-      virtual void getWidthCB(const SFInt::GetValueEvent& event);
-      virtual void setWidthCB(const SFInt::SetValueEvent& event);
+    virtual void getFlipYCB(const SFBool::GetValueEvent& event);
+    virtual void setFlipYCB(const SFBool::SetValueEvent& event);
 
-      virtual void getHeightCB(const SFInt::GetValueEvent& event);
-      virtual void setHeightCB(const SFInt::SetValueEvent& event);
+    bool pixel_to_texcoords(::gua::math::vec2 const& pixel, ::gua::math::vec2ui const& screen_size, ::gua::math::vec2& result) const;
 
-      virtual void getAnchorCB(const SFVec2::GetValueEvent& event);
-      virtual void setAnchorCB(const SFVec2::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::node::TexturedScreenSpaceQuadNode> m_guaNode;
 
-      virtual void getOffsetCB(const SFVec2::GetValueEvent& event);
-      virtual void setOffsetCB(const SFVec2::SetValueEvent& event);
+    TexturedScreenSpaceQuadNode(const TexturedScreenSpaceQuadNode&);
+    TexturedScreenSpaceQuadNode& operator=(const TexturedScreenSpaceQuadNode&);
+};
 
-      virtual void getOpacityCB(const SFFloat::GetValueEvent& event);
-      virtual void setOpacityCB(const SFFloat::SetValueEvent& event);
+using SFTexturedScreenSpaceQuadNode = SingleField<Link<TexturedScreenSpaceQuadNode>>;
+using MFTexturedScreenSpaceQuadNode = MultiField<Link<TexturedScreenSpaceQuadNode>>;
 
-      virtual void getFlipXCB(const SFBool::GetValueEvent& event);
-      virtual void setFlipXCB(const SFBool::SetValueEvent& event);
-
-      virtual void getFlipYCB(const SFBool::GetValueEvent& event);
-      virtual void setFlipYCB(const SFBool::SetValueEvent& event);
-
-      bool pixel_to_texcoords(::gua::math::vec2 const& pixel,
-                              ::gua::math::vec2ui const& screen_size,
-                              ::gua::math::vec2& result) const;
-
-
-    private:
-
-      std::shared_ptr< ::gua::node::TexturedScreenSpaceQuadNode> m_guaNode;
-
-      TexturedScreenSpaceQuadNode(const TexturedScreenSpaceQuadNode&);
-      TexturedScreenSpaceQuadNode& operator=(const TexturedScreenSpaceQuadNode&);
-    };
-
-    using SFTexturedScreenSpaceQuadNode = SingleField<Link<TexturedScreenSpaceQuadNode> >;
-    using MFTexturedScreenSpaceQuadNode = MultiField<Link<TexturedScreenSpaceQuadNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TexturedScreenSpaceQuadNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TexturedScreenSpaceQuadNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::TexturedScreenSpaceQuadNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::TexturedScreenSpaceQuadNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_TEXTURED_SCREEN_SPACE_QUAD_NODE_HPP
+#endif // AVANGO_GUA_TEXTURED_SCREEN_SPACE_QUAD_NODE_HPP

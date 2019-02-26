@@ -37,24 +37,18 @@
 
 namespace av
 {
-  /**
-   * Unique ID for every node in a net group.
-   * It consists of the endpoint id and a number.
-   */
-  class AV_DLL NetID
-  {
-
+/**
+ * Unique ID for every node in a net group.
+ * It consists of the endpoint id and a number.
+ */
+class AV_DLL NetID
+{
   public:
-
     class Hasher
     {
-    public:
-
-      // this is a very poor hash function. improve it!
-      size_t operator()(const NetID& id) const
-      {
-        return std::hash<std::string>()(id.getEID()) + id.getNum();
-      }
+      public:
+        // this is a very poor hash function. improve it!
+        size_t operator()(const NetID& id) const { return std::hash<std::string>()(id.getEID()) + id.getNum(); }
     };
 
     NetID();
@@ -75,7 +69,7 @@ namespace av
     void setNull();
     static NetID nullID();
 
-    friend std::ostream& operator<< (std::ostream& os, const NetID&);
+    friend std::ostream& operator<<(std::ostream& os, const NetID&);
     static const int sNetGroupRootNode;
     static const int sNetGroupContainerHolder;
 
@@ -83,12 +77,12 @@ namespace av
     static const int sWellKnownBase;
 
     std::string mCreator;
-    int         mNumber;
-  };
+    int mNumber;
+};
 
-  std::ostream& operator<< (std::ostream& os, const NetID&);
+std::ostream& operator<<(std::ostream& os, const NetID&);
 
-  using NetID_set = std::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID> >;
+using NetID_set = std::unordered_set<NetID, NetID::Hasher, std::equal_to<NetID>>;
 
 } // namespace av
 

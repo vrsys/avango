@@ -36,19 +36,19 @@
 
 namespace av
 {
-  namespace moving
-  {
-    /**
-     * Initializes the Avango Moving library.
-     * Usage: \code av::moving::Init::initClass(); \endcode
-     *
-     * \ingroup av_moving
-     */
-    class AV_MOVING_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace moving
+{
+/**
+ * Initializes the Avango Moving library.
+ * Usage: \code av::moving::Init::initClass(); \endcode
+ *
+ * \ingroup av_moving
+ */
+class AV_MOVING_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace moving
+} // namespace av
 
 #endif

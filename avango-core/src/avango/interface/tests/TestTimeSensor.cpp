@@ -39,8 +39,8 @@
 
 namespace
 {
-  TEST(TimeSensor)
-  {
+TEST(TimeSensor)
+{
     av::TimeSensor::initClass();
     av::Link<av::TimeSensor> time_sensor(new av::TimeSensor);
     av::ApplicationInstance::get().evaluate();
@@ -56,13 +56,13 @@ namespace
     real_time = time_sensor->RealTime.getValue();
     av::getRootLogger().info() << "real_time - old_time : " << real_time - old_time;
     CHECK(old_time < real_time);
-  }
 }
+} // namespace
 
 int main()
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
+    av::getRootLogger().addConsoleAppender();
+    av::ApplicationInstance::get();
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

@@ -32,13 +32,13 @@
  */
 
 #if defined(_MSC_VER)
-  #if defined(AV_OSG_LIBRARY)
-    #define AV_OSG_DLL __declspec( dllexport )
-  #else
-    #define AV_OSG_DLL __declspec( dllimport )
-  #endif
+#if defined(AV_OSG_LIBRARY)
+#define AV_OSG_DLL __declspec(dllexport)
 #else
-  #define AV_OSG_DLL
+#define AV_OSG_DLL __declspec(dllimport)
+#endif
+#else
+#define AV_OSG_DLL
 #endif // #if defined(_MSC_VER)
 
 #endif // #if !defined(AV_WINDOWS_SPECIFIC_OSG_H)

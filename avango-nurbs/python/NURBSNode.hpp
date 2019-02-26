@@ -3,4 +3,4 @@
 
 void init_NURBSNode();
 
-#endif //AV_PYTHON_GUA_NURBS_NODE_HPP
+#endif // AV_PYTHON_GUA_NURBS_NODE_HPP

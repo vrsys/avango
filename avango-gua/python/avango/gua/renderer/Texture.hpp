@@ -3,4 +3,4 @@
 
 void init_Texture();
 
-#endif //AV_PYTHON_GUA_TEXTURE_HPP
+#endif // AV_PYTHON_GUA_TEXTURE_HPP

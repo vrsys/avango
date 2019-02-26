@@ -3,4 +3,4 @@
 
 void init_Databases();
 
-#endif //AV_PYTHON_GUA_DATABASES_HPP
+#endif // AV_PYTHON_GUA_DATABASES_HPP

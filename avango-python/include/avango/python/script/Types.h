@@ -49,28 +49,27 @@
 
 namespace av
 {
-
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  class Msg;
+class Msg;
 
-  void av_popMsg(av::Msg&, boost::python::api::object&);
-  void av_pushMsg(av::Msg&, boost::python::api::object&);
+void av_popMsg(av::Msg&, boost::python::api::object&);
+void av_pushMsg(av::Msg&, boost::python::api::object&);
 
 #endif
 
-  AV_PYTHON_DLL InputStream& operator>>(InputStream&, boost::python::api::object&);
-  AV_PYTHON_DLL OutputStream& operator<<(OutputStream&, const boost::python::api::object&);
+AV_PYTHON_DLL InputStream& operator>>(InputStream&, boost::python::api::object&);
+AV_PYTHON_DLL OutputStream& operator<<(OutputStream&, const boost::python::api::object&);
 
-  namespace script
-  {
-    using SFObject = SingleField<boost::python::object>;
-    using MFObject = MultiField<boost::python::object>;
-  }
+namespace script
+{
+using SFObject = SingleField<boost::python::object>;
+using MFObject = MultiField<boost::python::object>;
+} // namespace script
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_PYTHON_DLL SingleField<boost::python::object>;
-  template class AV_PYTHON_DLL MultiField<boost::python::object>;
+template class AV_PYTHON_DLL SingleField<boost::python::object>;
+template class AV_PYTHON_DLL MultiField<boost::python::object>;
 #endif
 
 } // namespace av

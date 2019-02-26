@@ -37,72 +37,67 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Depth OsgDepth;
+namespace osg
+{
+typedef ::osg::Depth OsgDepth;
+
+/**
+ * Wrapper for ::osg::Depth
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Depth : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Depth is created.
+     * Otherwise, the given ::osg::Depth is used.
+     */
+    Depth(OsgDepth* osgdepth = new OsgDepth());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Depth();
+
+  public:
+    SFInt Function;
+    SFDouble ZNear;
+    SFDouble ZFar;
+    SFBool WriteMask;
 
     /**
-     * Wrapper for ::osg::Depth
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Depth.
      */
-    class AV_OSG_DLL Depth : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::Depth* getOsgDepth() const;
 
-    public:
+  protected:
+    virtual void getFunctionCB(const av::SFInt::GetValueEvent& event);
+    virtual void setFunctionCB(const av::SFInt::SetValueEvent& event);
+    virtual void getZNearCB(const av::SFDouble::GetValueEvent& event);
+    virtual void setZNearCB(const av::SFDouble::SetValueEvent& event);
+    virtual void getZFarCB(const av::SFDouble::GetValueEvent& event);
+    virtual void setZFarCB(const av::SFDouble::SetValueEvent& event);
+    virtual void getWriteMaskCB(const av::SFBool::GetValueEvent& event);
+    virtual void setWriteMaskCB(const av::SFBool::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Depth is created.
-       * Otherwise, the given ::osg::Depth is used.
-       */
-      Depth(OsgDepth* osgdepth = new OsgDepth());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::Depth* mOsgDepth;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Depth();
-
-    public:
-
-      SFInt Function;
-      SFDouble ZNear;
-      SFDouble ZFar;
-      SFBool WriteMask;
-
-      /**
-       * Get the wrapped ::osg::Depth.
-       */
-      ::osg::Depth* getOsgDepth() const;
-
-    protected:
-
-      virtual void getFunctionCB(const av::SFInt::GetValueEvent& event);
-      virtual void setFunctionCB(const av::SFInt::SetValueEvent& event);
-      virtual void getZNearCB(const av::SFDouble::GetValueEvent& event);
-      virtual void setZNearCB(const av::SFDouble::SetValueEvent& event);
-      virtual void getZFarCB(const av::SFDouble::GetValueEvent& event);
-      virtual void setZFarCB(const av::SFDouble::SetValueEvent& event);
-      virtual void getWriteMaskCB(const av::SFBool::GetValueEvent& event);
-      virtual void setWriteMaskCB(const av::SFBool::SetValueEvent& event);
-
-    private:
-
-      ::osg::Depth *mOsgDepth;
-    };
-
-    typedef SingleField<Link<Depth> > SFDepth;
-    typedef MultiField<Link<Depth> > MFDepth;
-  }
+typedef SingleField<Link<Depth>> SFDepth;
+typedef MultiField<Link<Depth>> MFDepth;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Depth> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Depth> >;
+template class AV_OSG_DLL SingleField<Link<osg::Depth>>;
+template class AV_OSG_DLL MultiField<Link<osg::Depth>>;
 #endif
 
-}
+} // namespace av
 
 #endif

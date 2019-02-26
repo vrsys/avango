@@ -31,30 +31,24 @@
 #include "../types/vec4.h"
 #include "../types/void.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class ICoordinateSystem : public ShaderBase<ICoordinateSystem>
+{
+  public:
+    virtual vec4<> transform(vec4<>) { return vec4<>(); };
 
-    class ICoordinateSystem : public ShaderBase<ICoordinateSystem>
-    {
-    public:
+    virtual vec3<> get_transformed_normal(void) { return vec3<>(); };
 
-      virtual vec4<> transform(vec4<>)
-      { return vec4<>(); };
+    virtual vec3<> get_transformed_eyepoint(void) { return vec3<>(); };
 
-      virtual vec3<> get_transformed_normal(void)
-      { return vec3<>(); };
+  private:
+    SHADE_BASE_DECL(ICoordinateSystem)
+};
 
-      virtual vec3<> get_transformed_eyepoint(void)
-      { return vec3<>(); };
-
-    private:
-      SHADE_BASE_DECL(ICoordinateSystem)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_ICoordinateSystem_H */

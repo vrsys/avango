@@ -8,25 +8,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_SSAOPassDescription()
- {
-   register_ptr_to_python<av::Link<av::gua::SSAOPassDescription> >();
-  register_field<av::gua::SFSSAOPassDescription>("SFSSAOPassDescription");
-  register_multifield<av::gua::MFSSAOPassDescription>("MFSSAOPassDescription");
-  class_<av::gua::SSAOPassDescription,
-         av::Link<av::gua::SSAOPassDescription>,
-         bases<av::gua::PipelinePassDescription>, boost::noncopyable >("SSAOPassDescription", "docstring", no_init)
-         ;
- }
-
+{
+    register_ptr_to_python<av::Link<av::gua::SSAOPassDescription>>();
+    register_field<av::gua::SFSSAOPassDescription>("SFSSAOPassDescription");
+    register_multifield<av::gua::MFSSAOPassDescription>("MFSSAOPassDescription");
+    class_<av::gua::SSAOPassDescription, av::Link<av::gua::SSAOPassDescription>, bases<av::gua::PipelinePassDescription>, boost::noncopyable>("SSAOPassDescription", "docstring", no_init);
+}

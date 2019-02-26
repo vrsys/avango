@@ -13,19 +13,19 @@
 
 namespace av
 {
-  namespace gua
-  {
-    /**
-     * Initializes the Avango guacamole library.
-     * Usage: \code av::gua::Init::initClass(); \endcode
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace gua
+{
+/**
+ * Initializes the Avango guacamole library.
+ * Usage: \code av::gua::Init::initClass(); \endcode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace gua
+} // namespace av
 
-#endif //AVANGO_GUA_INIT_HPP
+#endif // AVANGO_GUA_INIT_HPP

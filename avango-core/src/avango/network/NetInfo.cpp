@@ -39,65 +39,51 @@
 
 // internal unnamed namespace
 
-namespace {
-  av::Logger &logger(av::getLogger("av::NetInfo"));
-} // namespace {
+namespace
+{
+av::Logger& logger(av::getLogger("av::NetInfo"));
+} // namespace
 
-av::NetInfo::NetInfo(const NetID& a, const NetNode* b)
-  : mId (a),
-    mNode (const_cast<NetNode*> (b))
+av::NetInfo::NetInfo(const NetID& a, const NetNode* b) : mId(a), mNode(const_cast<NetNode*>(b))
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "NetInfo::NetInfo: "
-                 << " @" << this
-                 << " id: " << mId
-                 << " node: @" << mNode;
+    LOG_TRACE(logger) << "NetInfo::NetInfo: "
+                      << " @" << this << " id: " << mId << " node: @" << mNode;
 #endif
 }
 
 av::NetInfo::~NetInfo()
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "NetInfo::~NetInfo: "
-                 << " @" << this
-                 << " id: " << mId
-                 << " node: @" << mNode;
+    LOG_TRACE(logger) << "NetInfo::~NetInfo: "
+                      << " @" << this << " id: " << mId << " node: @" << mNode;
 #endif
 }
 
-const av::NetID&
-av::NetInfo::getId() const
+const av::NetID& av::NetInfo::getId() const
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "NetInfo::get_id: "
-                 << " @" << this
-                 << " id: " << mId
-                 << " node: @" << mNode;
+    LOG_TRACE(logger) << "NetInfo::get_id: "
+                      << " @" << this << " id: " << mId << " node: @" << mNode;
 #endif
 
-  return mId;
+    return mId;
 }
 
-const av::NetNode*
-av::NetInfo::getNode() const
+const av::NetNode* av::NetInfo::getNode() const
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "NetInfo::get_node: "
-                 << " @" << this
-                 << " id: " << mId
-                 << " node: @" << mNode;
+    LOG_TRACE(logger) << "NetInfo::get_node: "
+                      << " @" << this << " id: " << mId << " node: @" << mNode;
 #endif
-  return mNode;
+    return mNode;
 }
 
-av::NetNode*
-av::NetInfo::getNode()
+av::NetNode* av::NetInfo::getNode()
 {
 #ifdef AVANGO_DEBUG
-  LOG_TRACE(logger) << "NetInfo::get_node: "
-                 << " @" << this
-                 << " id: " << mId
-                 << " node: @" << mNode;
+    LOG_TRACE(logger) << "NetInfo::get_node: "
+                      << " @" << this << " id: " << mId << " node: @" << mNode;
 #endif
-  return mNode;
+    return mNode;
 }

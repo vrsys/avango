@@ -28,8 +28,8 @@
 
 namespace shade
 {
-  class uniform : public Type
-  {
+class uniform : public Type
+{
   public:
     uniform(formatter::Constants::Type type);
     /*virtual*/ bool is_writable(const ShaderEnvironment& se) const;
@@ -37,8 +37,8 @@ namespace shade
     /*virtual*/ LinkIndex get_link_index(boost::shared_ptr<GLSLWrapper>, const std::string& name) const;
     /*virtual*/ void upload(boost::shared_ptr<GLSLWrapper>, LinkIndex) const;
     /*virtual*/ void output_attribute(boost::shared_ptr<Type::State>, Formatter* fmt, const std::string& obj, const std::string& name) const;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_types_uniform_H */

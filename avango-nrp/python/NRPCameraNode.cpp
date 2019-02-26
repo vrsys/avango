@@ -15,8 +15,8 @@ struct pointee<av::Link<T>>
 {
     typedef T type;
 };
-}
-}
+} // namespace python
+} // namespace boost
 
 void init_NRPCameraNode()
 {
@@ -24,5 +24,6 @@ void init_NRPCameraNode()
 
     av::python::register_field<av::gua::nrp::SFNRPCameraNode>("SFNRPCameraNode");
     av::python::register_multifield<av::gua::nrp::MFNRPCameraNode>("MFNRPCameraNode");
-    boost::python::class_<av::gua::nrp::NRPCameraNode, av::Link<av::gua::nrp::NRPCameraNode>, boost::python::bases<av::gua::CameraNode>, boost::noncopyable>("NRPCameraNode", "docstring", boost::python::no_init);
+    boost::python::class_<av::gua::nrp::NRPCameraNode, av::Link<av::gua::nrp::NRPCameraNode>, boost::python::bases<av::gua::CameraNode>, boost::noncopyable>("NRPCameraNode", "docstring",
+                                                                                                                                                             boost::python::no_init);
 }

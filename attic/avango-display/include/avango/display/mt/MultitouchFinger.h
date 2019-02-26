@@ -32,57 +32,53 @@
 
 namespace av
 {
-  namespace display
-  {
-    namespace mt
-    {
-      typedef ::osg::Vec2 OsgVec2;
+namespace display
+{
+namespace mt
+{
+typedef ::osg::Vec2 OsgVec2;
 
-      class AV_DISPLAY_MT_DLL MultitouchFinger : public FieldContainer
-      {
-        AV_FC_DECLARE();
+class AV_DISPLAY_MT_DLL MultitouchFinger : public FieldContainer
+{
+    AV_FC_DECLARE();
 
-      public:
-        MultitouchFinger(int _id = -1, OsgVec2 _position = OsgVec2(), float _creationTime= 0.0, float _angle = 0.0, float _width = 0.0, float _height = 0.0, float _area = 0.0, int _user_id = -1);
-        virtual ~MultitouchFinger();
+  public:
+    MultitouchFinger(int _id = -1, OsgVec2 _position = OsgVec2(), float _creationTime = 0.0, float _angle = 0.0, float _width = 0.0, float _height = 0.0, float _area = 0.0, int _user_id = -1);
+    virtual ~MultitouchFinger();
 
-        av::SFInt Identifier, UserID;
-        av::osg::SFVec2 Position;
-		av::SFFloat Angle, Width, Height, Area;
-        av::SFFloat CreationTime;
+    av::SFInt Identifier, UserID;
+    av::osg::SFVec2 Position;
+    av::SFFloat Angle, Width, Height, Area;
+    av::SFFloat CreationTime;
+};
 
-      };
+typedef SingleField<Link<MultitouchFinger>> SFMultitouchFinger;
+typedef MultiField<Link<MultitouchFinger>> MFMultitouchFinger;
 
-      typedef SingleField<Link<MultitouchFinger> > SFMultitouchFinger;
-      typedef MultiField<Link<MultitouchFinger> > MFMultitouchFinger;
+class AV_DISPLAY_MT_DLL MultitouchUser : public FieldContainer
+{
+    AV_FC_DECLARE();
 
+  public:
+    MultitouchUser(int _id = -1, float _creationTime = 0.0);
+    virtual ~MultitouchUser();
 
-	  class AV_DISPLAY_MT_DLL MultitouchUser : public FieldContainer
-      {
-        AV_FC_DECLARE();
+    av::SFInt Identifier;
+    av::SFFloat CreationTime;
+};
 
-      public:
-        MultitouchUser(int _id = -1, float _creationTime= 0.0);
-        virtual ~MultitouchUser();
-
-        av::SFInt Identifier;
-        av::SFFloat CreationTime;
-
-      };
-
-      typedef SingleField<Link<MultitouchUser> > SFMultitouchUser;
-      typedef MultiField<Link<MultitouchUser> > MFMultitouchUser;
-    }
-  }
+typedef SingleField<Link<MultitouchUser>> SFMultitouchUser;
+typedef MultiField<Link<MultitouchUser>> MFMultitouchUser;
+} // namespace mt
+} // namespace display
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-template class AV_DISPLAY_MT_DLL SingleField<Link<display::mt::MultitouchFinger> >;
-template class AV_DISPLAY_MT_DLL MultiField<Link<display::mt::MultitouchFinger> >;
+template class AV_DISPLAY_MT_DLL SingleField<Link<display::mt::MultitouchFinger>>;
+template class AV_DISPLAY_MT_DLL MultiField<Link<display::mt::MultitouchFinger>>;
 
-template class AV_DISPLAY_MT_DLL SingleField<Link<display::mt::MultitouchUser> >;
-template class AV_DISPLAY_MT_DLL MultiField<Link<display::mt::MultitouchUser> >;
+template class AV_DISPLAY_MT_DLL SingleField<Link<display::mt::MultitouchUser>>;
+template class AV_DISPLAY_MT_DLL MultiField<Link<display::mt::MultitouchUser>>;
 #endif
-}
+} // namespace av
 
 #endif
-

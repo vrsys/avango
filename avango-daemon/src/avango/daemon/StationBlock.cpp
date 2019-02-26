@@ -30,42 +30,39 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::StationBlock"));
+av::Logger& logger(av::getLogger("av::daemon::StationBlock"));
 }
 
-av::daemon::StationBlock::StationBlock()
-  : mNumStations(0),
-    mMutex()
-{}
+av::daemon::StationBlock::StationBlock() : mNumStations(0), mMutex() {}
 
-av::daemon::Station*
-av::daemon::StationBlock::getStation(const char* name)
+av::daemon::Station* av::daemon::StationBlock::getStation(const char* name)
 {
-  // very simple and inefficient for now
-  Station* station = nullptr;
+    // very simple and inefficient for now
+    Station* station = nullptr;
 
-  std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<std::mutex> lock(mMutex);
 
-  int i = 0;
+    int i = 0;
 
-  for (i=0; i<mNumStations; i++)
-  {
-    if (std::strcmp(name, mStations[i].getName()) == 0)
+    for(i = 0; i < mNumStations; i++)
     {
-      station = &mStations[i];
-      LOG_TRACE(logger) << "getStation(): referenced station '" << name << "', " << station;
+        if(std::strcmp(name, mStations[i].getName()) == 0)
+        {
+            station = &mStations[i];
+            LOG_TRACE(logger) << "getStation(): referenced station '" << name << "', " << station;
 
-      break;
+            break;
+        }
     }
-  }
 
-  if (!station && i < sMaxStationNum) {
-    station = new (&mStations[i]) Station;
-    station->setName(name);
-    logger.debug() << "getStation(): created station '" << name << "', " << station;
+    if(!station && i < sMaxStationNum)
+    {
+        station = new(&mStations[i]) Station;
+        station->setName(name);
+        logger.debug() << "getStation(): created station '" << name << "', " << station;
 
-    mNumStations++;
-  }
+        mNumStations++;
+    }
 
-  return station;
+    return station;
 }

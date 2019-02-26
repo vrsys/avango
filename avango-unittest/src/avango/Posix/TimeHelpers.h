@@ -3,26 +3,24 @@
 
 #include <sys/time.h>
 
-namespace UnitTest {
-
+namespace UnitTest
+{
 class Timer
 {
-public:
+  public:
     Timer();
     void Start();
-    int GetTimeInMs() const;    
+    int GetTimeInMs() const;
 
-private:
-    struct timeval m_startTime;    
+  private:
+    struct timeval m_startTime;
 };
-
 
 namespace TimeHelpers
 {
-void SleepMs (int ms);
+void SleepMs(int ms);
 }
 
-
-}
+} // namespace UnitTest
 
 #endif

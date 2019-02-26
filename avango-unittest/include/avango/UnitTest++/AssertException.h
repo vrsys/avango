@@ -3,12 +3,11 @@
 
 #include <exception>
 
-
-namespace UnitTest {
-
+namespace UnitTest
+{
 class AssertException : public std::exception
 {
-public:
+  public:
     AssertException(char const* description, char const* filename, int lineNumber);
     virtual ~AssertException() throw();
 
@@ -17,12 +16,12 @@ public:
     char const* Filename() const;
     int LineNumber() const;
 
-private:
+  private:
     char m_description[512];
     char m_filename[256];
     int m_lineNumber;
 };
 
-}
+} // namespace UnitTest
 
 #endif

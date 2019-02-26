@@ -26,25 +26,22 @@
 
 using namespace shade::parser;
 
-void shade::parser::ScopeLayer::add_value(const std::string& var, boost::shared_ptr<const Value> value)
-{
-  values_[var] = value;
-}
+void shade::parser::ScopeLayer::add_value(const std::string& var, boost::shared_ptr<const Value> value) { values_[var] = value; }
 
 boost::shared_ptr<const Value> shade::parser::ScopeLayer::get_raw_value(const std::string& var) const
 {
-  std::map<std::string, boost::shared_ptr<const Value> >::const_iterator i(values_.find(var));
-  if (i == values_.end())
-    return boost::shared_ptr<const Value>();
-  return i->second;
+    std::map<std::string, boost::shared_ptr<const Value>>::const_iterator i(values_.find(var));
+    if(i == values_.end())
+        return boost::shared_ptr<const Value>();
+    return i->second;
 }
 
 boost::shared_ptr<const Value> shade::parser::ScopeLayer::get_value(const std::string& var) const
 {
-  boost::shared_ptr<const Value> result(get_raw_value(var));
-  if (!result)
-  {
-    result = boost::shared_ptr<const Value>(new Value());
-  }
-  return result;
+    boost::shared_ptr<const Value> result(get_raw_value(var));
+    if(!result)
+    {
+        result = boost::shared_ptr<const Value>(new Value());
+    }
+    return result;
 }

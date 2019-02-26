@@ -45,22 +45,20 @@
 
 namespace av
 {
-
-  /**
-   * We need to add a few things to Maestro_EndpID for the STL.
-   */
-  class MaestroEID : public Maestro_EndpID
-  {
-
+/**
+ * We need to add a few things to Maestro_EndpID for the STL.
+ */
+class MaestroEID : public Maestro_EndpID
+{
   public:
-
     // for the STL hash containers
     class Hasher
     {
-    public:
-      size_t operator() (const MaestroEID& eid) const;
-    private:
-      std::tr1::hash<std::string> mHasher;
+      public:
+        size_t operator()(const MaestroEID& eid) const;
+
+      private:
+        std::tr1::hash<std::string> mHasher;
     };
 
     MaestroEID(Maestro_ErrorHandler* error_handler = 0);
@@ -69,9 +67,9 @@ namespace av
     MaestroEID(const Maestro_EndpID& eid);
 
     // support sorted STL container
-    bool operator<(const MaestroEID &eid) const;
-    bool operator==(const MaestroEID &eid) const;
-    bool operator!=(const MaestroEID &eid) const;
+    bool operator<(const MaestroEID& eid) const;
+    bool operator==(const MaestroEID& eid) const;
+    bool operator!=(const MaestroEID& eid) const;
 
     // assignment
     const MaestroEID& operator=(const MaestroEID& eid);
@@ -80,55 +78,47 @@ namespace av
     // get the C string
     const char* c_str() const;
 
-    friend Maestro_Message& operator<<(Maestro_Message &msg, const MaestroEID& eid);
-    friend Maestro_Message& operator>>(Maestro_Message &msg, MaestroEID& eid);
+    friend Maestro_Message& operator<<(Maestro_Message& msg, const MaestroEID& eid);
+    friend Maestro_Message& operator>>(Maestro_Message& msg, MaestroEID& eid);
+};
 
-  };
+std::ostream& operator<<(std::ostream& os, const MaestroEID& eid);
 
-  std::ostream& operator<<(std::ostream& os, const MaestroEID& eid);
+// typedef for common containers
+typedef std::tr1::unordered_map<MaestroEID, int, MaestroEID::Hasher> MaestroEID_int_map;
+typedef std::tr1::unordered_set<MaestroEID, MaestroEID::Hasher> MaestroEID_hset;
+typedef std::set<MaestroEID> MaestroEID_set;
+typedef std::vector<MaestroEID> MaestroEID_vec;
 
-  // typedef for common containers
-  typedef std::tr1::unordered_map<MaestroEID, int, MaestroEID::Hasher> MaestroEID_int_map;
-  typedef std::tr1::unordered_set<MaestroEID, MaestroEID::Hasher>      MaestroEID_hset;
-  typedef std::set<MaestroEID>                                         MaestroEID_set;
-  typedef std::vector<MaestroEID>                                      MaestroEID_vec;
-
-  class MaestroEID_list : public MaestroEID_set
-  {
-
+class MaestroEID_list : public MaestroEID_set
+{
   public:
-
     MaestroEID_list();
     MaestroEID_list(const MaestroEID_list& l);
     MaestroEID_list(const Maestro_EndpList& l);
     virtual ~MaestroEID_list();
 
     const MaestroEID_list& operator=(const Maestro_EndpList& l);
+};
 
-  };
+Maestro_Message& operator<<(Maestro_Message& msg, const MaestroEID_list& l);
+Maestro_Message& operator>>(Maestro_Message& msg, MaestroEID_list& l);
+std::ostream& operator<<(std::ostream& os, const MaestroEID_list& l);
 
-  Maestro_Message& operator<< (Maestro_Message &msg, const MaestroEID_list& l);
-  Maestro_Message& operator>> (Maestro_Message &msg, MaestroEID_list& l);
-  std::ostream& operator<<(std::ostream& os, const MaestroEID_list& l);
+typedef std::tr1::unordered_map<MaestroEID, MaestroEID_list, MaestroEID::Hasher> MaestroEID_eidlist_map_base;
 
-  typedef std::tr1::unordered_map<MaestroEID, MaestroEID_list, MaestroEID::Hasher>
-  MaestroEID_eidlist_map_base;
-
-  // a MaestroEID to MaestroEID_list map
-  class MaestroEID_eidlist_map : public MaestroEID_eidlist_map_base
-  {
-
+// a MaestroEID to MaestroEID_list map
+class MaestroEID_eidlist_map : public MaestroEID_eidlist_map_base
+{
   public:
-
     MaestroEID_eidlist_map();
     MaestroEID_eidlist_map(const MaestroEID_eidlist_map& m);
     virtual ~MaestroEID_eidlist_map();
+};
 
-  };
-
-  Maestro_Message& operator<< (Maestro_Message &msg, const MaestroEID_eidlist_map& m);
-  Maestro_Message& operator>> (Maestro_Message &msg, MaestroEID_eidlist_map& m);
-  std::ostream& operator<<(std::ostream& os, const MaestroEID_eidlist_map& m);
+Maestro_Message& operator<<(Maestro_Message& msg, const MaestroEID_eidlist_map& m);
+Maestro_Message& operator>>(Maestro_Message& msg, MaestroEID_eidlist_map& m);
+std::ostream& operator<<(std::ostream& os, const MaestroEID_eidlist_map& m);
 
 } // namespace av
 

@@ -50,37 +50,36 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::Init"));
+av::Logger& logger(av::getLogger("av::tools::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::tools::Init);
 
-/* static */ void
-av::tools::Init::initClass()
+/* static */ void av::tools::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::tools::ChangeSelector::initClass();
-    av::tools::InjectSelector::initClass();
-    av::tools::ObjectSelector::initClass();
-    av::tools::NameSelector::initClass();
-    av::tools::FieldSelector::initClass();
-    av::tools::Selector::initClass();
-    av::tools::SingleSelector::initClass();
-    av::tools::TargetHolder::initClass();
-    av::tools::Tool::initClass();
-    av::tools::TriggerSelector::initClass();
-    av::tools::TypeSelector::initClass();
-    av::tools::UnionSelector::initClass();
+    if(!isTypeInitialized())
+    {
+        av::tools::ChangeSelector::initClass();
+        av::tools::InjectSelector::initClass();
+        av::tools::ObjectSelector::initClass();
+        av::tools::NameSelector::initClass();
+        av::tools::FieldSelector::initClass();
+        av::tools::Selector::initClass();
+        av::tools::SingleSelector::initClass();
+        av::tools::TargetHolder::initClass();
+        av::tools::Tool::initClass();
+        av::tools::TriggerSelector::initClass();
+        av::tools::TypeSelector::initClass();
+        av::tools::UnionSelector::initClass();
 
-//#if defined(AVANGO_TOOLS_GUA_SUPPORT)
-    av::tools::DragTool::initClass();
-    //av::tools::IntersectionTargetHolder::initClass();
-    //av::tools::NodePathTargetHolder::initClass();
-    av::tools::ProximitySelector::initClass();
-    av::tools::ScaledGrabTool::initClass();
-//#endif
+        //#if defined(AVANGO_TOOLS_GUA_SUPPORT)
+        av::tools::DragTool::initClass();
+        // av::tools::IntersectionTargetHolder::initClass();
+        // av::tools::NodePathTargetHolder::initClass();
+        av::tools::ProximitySelector::initClass();
+        av::tools::ScaledGrabTool::initClass();
+        //#endif
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::tools::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::tools::Init", true);
+    }
 }

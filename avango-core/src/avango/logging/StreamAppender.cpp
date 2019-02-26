@@ -27,16 +27,9 @@
 
 #include <avango/logging/LoggingEvent.h>
 
-av::logging::StreamAppender::StreamAppender(std::ostream& os) :
-  mStream(os)
-{}
+av::logging::StreamAppender::StreamAppender(std::ostream& os) : mStream(os) {}
 
 /* virtual */
-av::logging::StreamAppender::~StreamAppender()
-{}
+av::logging::StreamAppender::~StreamAppender() {}
 
-/* virtual */ void
-av::logging::StreamAppender::doAppend(LoggingEvent& event)
-{
-  mStream << event.getFormattedString() << std::endl;
-}
+/* virtual */ void av::logging::StreamAppender::doAppend(LoggingEvent& event) { mStream << event.getFormattedString() << std::endl; }

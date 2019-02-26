@@ -34,84 +34,80 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * FieldSelector class selects targets containing given field.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL FieldSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * FieldSelector class selects targets containing given field.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL FieldSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    FieldSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~FieldSelector();
 
-      /**
-       * Constructor.
-       */
-      FieldSelector();
+  public:
+    /**
+     * Defines the input targets from which the named objects are selected.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Defines the name which is used to select targets. The output is in SelectedTargets.
+     */
+    SFString SelectableFieldName;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~FieldSelector();
+    /**
+     * Set to false if also objects should be selectable, which contain the given names
+     * as substring. Otherwise only equal names are selectable, which is the default.
+     */
+    SFBool EqualNameOnly;
 
-    public:
+    /**
+     * Specify, if the given strings in SelectableNames and SelectableTargetNames should be treated
+     * as regular expressions. Default value: False.
+     * If EqualNameOnly and TreatAsRegularExpression are both set to True, each regular expression is
+     * surrounded by .*<Expression>.*
+     */
+    SFBool TreatAsRegularExpression;
 
-      /**
-       * Defines the input targets from which the named objects are selected.
-       */
-      MFTargetHolder Targets;
+    /**
+     * Set to true if the selectable names should also be searched in the OSG node paths
+     * found in NodePathTargetHolder objects.
+     */
+    SFBool SearchTargetHolderNodePaths;
 
-      /**
-       * Defines the name which is used to select targets. The output is in SelectedTargets.
-       */
-      SFString SelectableFieldName;
+    /**
+     * Set to true if the selectable names should also be searched in the OSG node paths.
+     */
+    SFBool SearchOSGNodePaths;
 
-      /**
-       * Set to false if also objects should be selectable, which contain the given names
-       * as substring. Otherwise only equal names are selectable, which is the default.
-       */
-      SFBool EqualNameOnly;
+    /* virtual */ void evaluate();
 
-      /**
-       * Specify, if the given strings in SelectableNames and SelectableTargetNames should be treated
-       * as regular expressions. Default value: False.
-       * If EqualNameOnly and TreatAsRegularExpression are both set to True, each regular expression is
-       * surrounded by .*<Expression>.*
-       */
-      SFBool TreatAsRegularExpression;
+  protected:
+    bool isSelectable(av::FieldContainer& object);
+};
 
-      /**
-       * Set to true if the selectable names should also be searched in the OSG node paths
-       * found in NodePathTargetHolder objects.
-       */
-      SFBool SearchTargetHolderNodePaths;
-
-      /**
-       * Set to true if the selectable names should also be searched in the OSG node paths.
-       */
-      SFBool SearchOSGNodePaths;
-
-      /* virtual */ void evaluate();
-
-    protected:
-
-      bool isSelectable(av::FieldContainer& object);
-    };
-
-    using SFFieldSelector = SingleField<Link<FieldSelector> >;
-    using MFFieldSelector = MultiField<Link<FieldSelector> >;
-  }
+using SFFieldSelector = SingleField<Link<FieldSelector>>;
+using MFFieldSelector = MultiField<Link<FieldSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::FieldSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::FieldSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::FieldSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::FieldSelector>>;
 #endif
 
-}
+} // namespace av
 
 #endif

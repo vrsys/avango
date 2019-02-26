@@ -29,30 +29,30 @@
 
 namespace osg
 {
-  class Texture;
-  class StateSet;
-}
+class Texture;
+class StateSet;
+} // namespace osg
 
 namespace shade
 {
-  namespace osg
-  {
-    class Texture : public ::shade::Texture
-    {
-    public:
-      Texture(::osg::Texture* texture);
+namespace osg
+{
+class Texture : public ::shade::Texture
+{
+  public:
+    Texture(::osg::Texture* texture);
 
-      bool operator==(const Texture& other) const;
-      bool operator!=(const Texture& other) const;
+    bool operator==(const Texture& other) const;
+    bool operator!=(const Texture& other) const;
 
-      void bind(::osg::StateSet* state, unsigned int unit) const;
+    void bind(::osg::StateSet* state, unsigned int unit) const;
 
-      ::osg::Texture* get(void) const;
+    ::osg::Texture* get(void) const;
 
-    private:
-      ::osg::ref_ptr< ::osg::Texture> m_texture;
-    };
-  }
-}
+  private:
+    ::osg::ref_ptr<::osg::Texture> m_texture;
+};
+} // namespace osg
+} // namespace shade
 
 #endif /* shade_osg_Texture_H */

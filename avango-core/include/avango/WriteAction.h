@@ -43,22 +43,19 @@
 
 namespace av
 {
+class Base;
 
-  class Base;
+// types, exported (class, enum, struct, union, typedef)
 
-  // types, exported (class, enum, struct, union, typedef)
-
-  /**
-   * Write node hierarchies to a file.
-   * \ingroup av
-   */
-  class AV_DLL WriteAction : public Action
-  {
-
+/**
+ * Write node hierarchies to a file.
+ * \ingroup av
+ */
+class AV_DLL WriteAction : public Action
+{
     AV_BASE_DECLARE();
 
   public:
-
     /**
      * Constructor
      */
@@ -70,19 +67,16 @@ namespace av
     WriteAction(const std::string& name);
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
     virtual ~WriteAction();
 
   public:
-
     /**
      * Sets the file name.
      */
     void setFileName(const std::string& name);
-
 
     /**
      * Returns the output stream associated to the WriteAction.
@@ -119,11 +113,10 @@ namespace av
     /* virtual */ void traverse(Link<Base> node);
 
   private:
-
     std::string getNewId();
     std::string depthIndent();
 
-    using BaseStringMap = std::map<Link<Base>, std::string, std::less<Link<Base> > >;
+    using BaseStringMap = std::map<Link<Base>, std::string, std::less<Link<Base>>>;
 
     BaseStringMap mIdMap;
 
@@ -132,15 +125,14 @@ namespace av
     int mTravDepth;
     std::string mName;
     OutputStream mOutStream;
+};
 
-  };
+// variables, exported (extern)
 
-  // variables, exported (extern)
+// functions, inlined (inline)
 
-  // functions, inlined (inline)
+// functions, exported (extern)
 
-  // functions, exported (extern)
-
-}
+} // namespace av
 
 #endif // #if !defined(AV_WRITEACTION_H)

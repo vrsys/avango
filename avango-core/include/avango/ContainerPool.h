@@ -40,17 +40,14 @@
 
 namespace av
 {
-
-  /**
-   * All field containers are registered here.
-   *
-   * \ingroup av
-   */
-  class AV_DLL ContainerPool
-  {
-
+/**
+ * All field containers are registered here.
+ *
+ * \ingroup av
+ */
+class AV_DLL ContainerPool
+{
   public:
-
     using FieldContainerID = FieldContainer::IDType;
 
     using InstancePoolType = std::map<FieldContainerID, FieldContainer*>;
@@ -62,48 +59,48 @@ namespace av
 
     struct FieldHasChangedReg
     {
-      FieldHasChangedReg(FieldHasChangedCallback c, Field* f, void* ud);
-      FieldHasChangedCallback mCb;
-      Field* mField;
-      void* mUserData;
+        FieldHasChangedReg(FieldHasChangedCallback c, Field* f, void* ud);
+        FieldHasChangedCallback mCb;
+        Field* mField;
+        void* mUserData;
     };
 
-    using NodeCreationCallbacksType = std::list<std::pair<NodeCreationCallback, void*> >   ;
-    using NodeDeletionCallbacksType = std::list<std::pair<NodeDeletionCallback, void*> >   ;
-    using FieldConnectCallbacksType = std::list<std::pair<FieldConnectCallback, void*> >   ;
-    using FieldDisconnectCallbacksType = std::list<std::pair<FieldDisconnectCallback, void*> >;
-    using FieldHasChangedCallbacksType = std::list<FieldHasChangedReg>                        ;
+    using NodeCreationCallbacksType = std::list<std::pair<NodeCreationCallback, void*>>;
+    using NodeDeletionCallbacksType = std::list<std::pair<NodeDeletionCallback, void*>>;
+    using FieldConnectCallbacksType = std::list<std::pair<FieldConnectCallback, void*>>;
+    using FieldDisconnectCallbacksType = std::list<std::pair<FieldDisconnectCallback, void*>>;
+    using FieldHasChangedCallbacksType = std::list<FieldHasChangedReg>;
 
-    static unsigned int getNumberOfContainers() {return sContainerPool.size();};
+    static unsigned int getNumberOfContainers() { return sContainerPool.size(); };
 
-    static const InstancePoolType& getContainerPool () {return sContainerPool;};
+    static const InstancePoolType& getContainerPool() { return sContainerPool; };
     static FieldContainerID registerInstance(FieldContainer*);
     static void unregisterInstance(FieldContainer*);
 
-    static void              setNameForInstance(FieldContainer* fc, const std::string& name);
-    static void              setNameForInstance(FieldContainer* fc, const char*        name);
-    static void              removeNameForInstance(FieldContainer* fc);
-    static FieldContainer*   getInstanceByName(const std::string& name);
-    static std::string       getNameByInstance(FieldContainer* fc);
-    static FieldContainer*   getContainerById(FieldContainerID id);
+    static void setNameForInstance(FieldContainer* fc, const std::string& name);
+    static void setNameForInstance(FieldContainer* fc, const char* name);
+    static void removeNameForInstance(FieldContainer* fc);
+    static FieldContainer* getInstanceByName(const std::string& name);
+    static std::string getNameByInstance(FieldContainer* fc);
+    static FieldContainer* getContainerById(FieldContainerID id);
 
-    static void              notifyConnect(Field* field);
-    static void              notifyDisconnect(Field* field);
+    static void notifyConnect(Field* field);
+    static void notifyDisconnect(Field* field);
 
-    static void              notifyFieldHasChanged( Field* field);
-    static void              notifyCreation(FieldContainer* fc);
-    static void              notifyDeletion(FieldContainer* fc);
+    static void notifyFieldHasChanged(Field* field);
+    static void notifyCreation(FieldContainer* fc);
+    static void notifyDeletion(FieldContainer* fc);
 
     class NodeCreationCallbackID
     {
-      friend class ContainerPool;
+        friend class ContainerPool;
 
-    public:
-      NodeCreationCallbackID();
+      public:
+        NodeCreationCallbackID();
 
-    private:
-      NodeCreationCallbackID(NodeCreationCallbacksType::iterator);
-      NodeCreationCallbacksType::iterator mCallbackIter;
+      private:
+        NodeCreationCallbackID(NodeCreationCallbacksType::iterator);
+        NodeCreationCallbacksType::iterator mCallbackIter;
     };
 
     static NodeCreationCallbackID registerNodeCreationCallback(NodeCreationCallback, void*);
@@ -111,14 +108,14 @@ namespace av
 
     class NodeDeletionCallbackID
     {
-      friend class ContainerPool;
+        friend class ContainerPool;
 
-    public:
-      NodeDeletionCallbackID();
+      public:
+        NodeDeletionCallbackID();
 
-    private:
-      NodeDeletionCallbackID(NodeDeletionCallbacksType::iterator);
-      NodeDeletionCallbacksType::iterator mCallbackIter;
+      private:
+        NodeDeletionCallbackID(NodeDeletionCallbacksType::iterator);
+        NodeDeletionCallbacksType::iterator mCallbackIter;
     };
 
     static NodeDeletionCallbackID registerNodeDeletionCallback(NodeDeletionCallback, void*);
@@ -126,14 +123,14 @@ namespace av
 
     class FieldConnectCallbackID
     {
-      friend class ContainerPool;
+        friend class ContainerPool;
 
-    public:
-      FieldConnectCallbackID();
+      public:
+        FieldConnectCallbackID();
 
-    private:
-      FieldConnectCallbackID(FieldConnectCallbacksType::iterator);
-      FieldConnectCallbacksType::iterator mCallbackIter;
+      private:
+        FieldConnectCallbackID(FieldConnectCallbacksType::iterator);
+        FieldConnectCallbacksType::iterator mCallbackIter;
     };
 
     static FieldConnectCallbackID registerFieldConnectCallback(FieldConnectCallback, void*);
@@ -141,41 +138,39 @@ namespace av
 
     class FieldDisconnectCallbackID
     {
-      friend class ContainerPool;
+        friend class ContainerPool;
 
-    public:
-      FieldDisconnectCallbackID();
+      public:
+        FieldDisconnectCallbackID();
 
-    private:
-      FieldDisconnectCallbackID(FieldDisconnectCallbacksType::iterator);
-      FieldDisconnectCallbacksType::iterator mCallbackIter;
+      private:
+        FieldDisconnectCallbackID(FieldDisconnectCallbacksType::iterator);
+        FieldDisconnectCallbacksType::iterator mCallbackIter;
     };
 
-    static FieldDisconnectCallbackID registerFieldDisconnectCallback(
-      FieldDisconnectCallback, void*);
+    static FieldDisconnectCallbackID registerFieldDisconnectCallback(FieldDisconnectCallback, void*);
     static void unregisterFieldDisconnectCallback(FieldDisconnectCallbackID);
 
     class FieldHasChangedCallbackID
     {
-      friend class ContainerPool;
+        friend class ContainerPool;
 
-    public:
-      FieldHasChangedCallbackID();
+      public:
+        FieldHasChangedCallbackID();
 
-    private:
-      FieldHasChangedCallbackID(FieldHasChangedCallbacksType::iterator);
-      FieldHasChangedCallbacksType::iterator mCallbackIter;
+      private:
+        FieldHasChangedCallbackID(FieldHasChangedCallbacksType::iterator);
+        FieldHasChangedCallbacksType::iterator mCallbackIter;
     };
 
-    static FieldHasChangedCallbackID registerFieldHasChangedCallback(
-      FieldHasChangedCallback, Field*, void*);
+    static FieldHasChangedCallbackID registerFieldHasChangedCallback(FieldHasChangedCallback, Field*, void*);
     static void unregisterFieldHasChangedCallback(FieldHasChangedCallbackID);
 
   private:
-    static InstancePoolType           sContainerPool;
-    static NodeCreationCallbacksType  sCreationCallbacks;
-    static NodeDeletionCallbacksType  sDeletionCallbacks;
-    static FieldConnectCallbacksType  sConnectCallbacks;
+    static InstancePoolType sContainerPool;
+    static NodeCreationCallbacksType sCreationCallbacks;
+    static NodeDeletionCallbacksType sDeletionCallbacks;
+    static FieldConnectCallbacksType sConnectCallbacks;
     static FieldDisconnectCallbacksType sDisconnectCallbacks;
     static FieldHasChangedCallbacksType sFieldHasChangedCallbacks;
 
@@ -193,8 +188,7 @@ namespace av
 
     // Holds the last assigned id value for a FieldContainer entering the pool.
     static FieldContainerID sLastId;
-
-  };
+};
 
 } // namespace av
 

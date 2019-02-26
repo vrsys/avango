@@ -25,7 +25,4 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(IMaterial, "", 
-    SHADE_ENV_DEFS(shade::fragment_shader, (shade)),
-    SHADE_NONE
-    )
+SHADE_CLASS_INIT(IMaterial, "", SHADE_ENV_DEFS(shade::fragment_shader, (shade)), SHADE_NONE)

@@ -33,27 +33,24 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class UVPointLight : public ShaderBase<UVPointLight, ILight>
+{
+  public:
+    /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
+    /*virtual*/ void_<> transform(objref<> coordinate_system);
 
-    class UVPointLight : public ShaderBase<UVPointLight, ILight>
-    {
-    public:
+    vec3<uniform> position;
+    vec3<uniform> color;
 
-      /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
-      /*virtual*/ void_<> transform(objref<> coordinate_system);
+  private:
+    Varying<vec3> transformed_position;
 
-      vec3<uniform> position;
-      vec3<uniform> color;
+    SHADE_DERIVED_DECL(UVPointLight, ILight)
+};
 
-    private:
-
-      Varying<vec3> transformed_position;
-
-      SHADE_DERIVED_DECL(UVPointLight, ILight)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_UVPointLight_H */

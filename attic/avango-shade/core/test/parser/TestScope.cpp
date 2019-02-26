@@ -30,38 +30,38 @@ using namespace shade::parser;
 
 SUITE(TestScope)
 {
-  TEST(SettingLocals)
-  {
-    std::string name("value");
-    boost::shared_ptr<ReferenceValue> value(new ReferenceValue(42));
+    TEST(SettingLocals)
+    {
+        std::string name("value");
+        boost::shared_ptr<ReferenceValue> value(new ReferenceValue(42));
 
-    ScopeLayer global;
-    Scope scope(global);
+        ScopeLayer global;
+        Scope scope(global);
 
-    scope.add_value(name, value);
+        scope.add_value(name, value);
 
-    const ReferenceValue* set_value = dynamic_cast<const ReferenceValue*>(scope.get_value(name).get());
-    CHECK(set_value);
-    if (set_value)
-      CHECK_EQUAL(42u, set_value->get());
+        const ReferenceValue* set_value = dynamic_cast<const ReferenceValue*>(scope.get_value(name).get());
+        CHECK(set_value);
+        if(set_value)
+            CHECK_EQUAL(42u, set_value->get());
 
-    const ReferenceValue* unset_value = dynamic_cast<const ReferenceValue*>(global.get_value(name).get());
-    CHECK(!unset_value);
-  }
+        const ReferenceValue* unset_value = dynamic_cast<const ReferenceValue*>(global.get_value(name).get());
+        CHECK(!unset_value);
+    }
 
-  TEST(GettingGlobals)
-  {
-    std::string name("value");
-    boost::shared_ptr<ReferenceValue> value(new ReferenceValue(42));
+    TEST(GettingGlobals)
+    {
+        std::string name("value");
+        boost::shared_ptr<ReferenceValue> value(new ReferenceValue(42));
 
-    ScopeLayer global;
-    Scope scope(global);
+        ScopeLayer global;
+        Scope scope(global);
 
-    global.add_value(name, value);
+        global.add_value(name, value);
 
-    const ReferenceValue* set_value = dynamic_cast<const ReferenceValue*>(scope.get_value(name).get());
-    CHECK(set_value);
-    if (set_value)
-      CHECK_EQUAL(42u, set_value->get());
-  }
+        const ReferenceValue* set_value = dynamic_cast<const ReferenceValue*>(scope.get_value(name).get());
+        CHECK(set_value);
+        if(set_value)
+            CHECK_EQUAL(42u, set_value->get());
+    }
 }

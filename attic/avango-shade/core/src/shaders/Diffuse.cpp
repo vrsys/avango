@@ -26,12 +26,6 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Diffuse, "Diffuse.glsl",
-    SHADE_ENV_DEFS(shade::fragment_shader, (illuminance)),
-    SHADE_DEFS((color))
-    )
+SHADE_CLASS_INIT(Diffuse, "Diffuse.glsl", SHADE_ENV_DEFS(shade::fragment_shader, (illuminance)), SHADE_DEFS((color)))
 
-void_<> Diffuse::illuminance(vec3<> color, vec3<> direction)
-{
-  return invoke< shade::void_<> >("Diffuse_illuminance_impl");
-}
+void_<> Diffuse::illuminance(vec3<> color, vec3<> direction) { return invoke<shade::void_<>>("Diffuse_illuminance_impl"); }

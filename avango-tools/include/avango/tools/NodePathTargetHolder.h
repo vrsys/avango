@@ -35,55 +35,50 @@
 #include <avango/osg/Node.h>
 #include "windows_specific_tools.h"
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * NodePathTargetHolder class.
+ *
+ * A TargetHolder that holds a NodePath.
+ * Sets the Keep value to true by default.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL NodePathTargetHolder : public TargetHolder
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * NodePathTargetHolder class.
-     *
-     * A TargetHolder that holds a NodePath.
-     * Sets the Keep value to true by default.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL NodePathTargetHolder : public TargetHolder
-    {
-      AV_FC_DECLARE();
+    NodePathTargetHolder();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~NodePathTargetHolder();
 
-      /**
-       * Constructor.
-       */
-      NodePathTargetHolder();
+  public:
+    /**
+     * Outputs node path from root node to intersected node.
+     */
+    av::osg::MFNode NodePath;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~NodePathTargetHolder();
-
-    public:
-
-      /**
-       * Outputs node path from root node to intersected node.
-       */
-      av::osg::MFNode NodePath;
-
-    };
-
-    using SFNodePathTargetHolder = SingleField<Link<NodePathTargetHolder> >;
-    using MFNodePathTargetHolder = MultiField<Link<NodePathTargetHolder> >;
-  }
+using SFNodePathTargetHolder = SingleField<Link<NodePathTargetHolder>>;
+using MFNodePathTargetHolder = MultiField<Link<NodePathTargetHolder>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::NodePathTargetHolder> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::NodePathTargetHolder> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::NodePathTargetHolder>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::NodePathTargetHolder>>;
 #endif
 
-}
+} // namespace av
 
 #endif

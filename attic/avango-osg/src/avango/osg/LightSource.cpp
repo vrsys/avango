@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #include <boost/bind.hpp>
 #include <avango/osg/LightSource.h>
 
@@ -31,7 +30,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::LightSource"));
+av::Logger& logger(av::getLogger("av::osg::LightSource"));
 }
 
 AV_FC_DEFINE(av::osg::LightSource);
@@ -39,64 +38,39 @@ AV_FC_DEFINE(av::osg::LightSource);
 AV_FIELD_DEFINE(av::osg::SFLightSource);
 AV_FIELD_DEFINE(av::osg::MFLightSource);
 
-av::osg::LightSource::LightSource(::osg::LightSource* osglightsource) :
-  Group(osglightsource),
-  mOsgLightSource(osglightsource)
+av::osg::LightSource::LightSource(::osg::LightSource* osglightsource) : Group(osglightsource), mOsgLightSource(osglightsource)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Light,
-			  boost::bind(&LightSource::getLightCB, this, _1),
-			  boost::bind(&LightSource::setLightCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Light, boost::bind(&LightSource::getLightCB, this, _1), boost::bind(&LightSource::setLightCB, this, _1));
 }
 
-av::osg::LightSource::~LightSource()
-{}
+av::osg::LightSource::~LightSource() {}
 
-void
-av::osg::LightSource::initClass()
+void av::osg::LightSource::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Group::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Group::initClass();
 
-    AV_FC_INIT(av::osg::Group, av::osg::LightSource, true);
+        AV_FC_INIT(av::osg::Group, av::osg::LightSource, true);
 
-    SFLightSource::initClass("av::osg::SFLightSource", "av::Field");
-    MFLightSource::initClass("av::osg::MFLightSource", "av::Field");
-  }
+        SFLightSource::initClass("av::osg::SFLightSource", "av::Field");
+        MFLightSource::initClass("av::osg::MFLightSource", "av::Field");
+    }
 }
 
+::osg::LightSource* av::osg::LightSource::getOsgLightSource() const { return mOsgLightSource; }
 
-
-::osg::LightSource*
-av::osg::LightSource::getOsgLightSource() const
+/* virtual */ void av::osg::LightSource::getLightCB(const av::osg::SFLight::GetValueEvent& event)
 {
-  return mOsgLightSource;
+    *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Light>(mOsgLightSource->getLight());
 }
 
-/* virtual */ void
-av::osg::LightSource::getLightCB(const av::osg::SFLight::GetValueEvent& event)
+/* virtual */ void av::osg::LightSource::setLightCB(const av::osg::SFLight::SetValueEvent& event)
 {
-  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Light>(mOsgLightSource->getLight());
+    mOsgLightSource->setLight(event.getValue()->getOsgLight());
+    mOsgLightSource->setLocalStateSetModes(::osg::StateAttribute::ON);
+
+    // mOsgLightSource->setStateSetModes(*rootStateSet,osg::StateAttribute::ON);
 }
 
-/* virtual */ void
-av::osg::LightSource::setLightCB(const av::osg::SFLight::SetValueEvent& event)
-{
-  mOsgLightSource->setLight(event.getValue()->getOsgLight());
-  mOsgLightSource->setLocalStateSetModes(::osg::StateAttribute::ON); 
-
-  //mOsgLightSource->setStateSetModes(*rootStateSet,osg::StateAttribute::ON);
-
-
-}
-
-
-
-
-
-
-void
-av::osg::LightSource::touchFields()
-{
-  Light.touch();
-}
+void av::osg::LightSource::touchFields() { Light.touch(); }

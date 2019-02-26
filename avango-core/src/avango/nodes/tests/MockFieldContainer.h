@@ -34,26 +34,24 @@
  */
 class MockFieldContainer : public av::FieldContainer
 {
-  AV_FC_DECLARE();
+    AV_FC_DECLARE();
 
-public:
+  public:
+    /**
+     * Constructor
+     */
+    MockFieldContainer();
 
-  /**
-   * Constructor
-   */
-  MockFieldContainer();
+    /**
+     * Destructor
+     */
+    virtual ~MockFieldContainer();
 
-  /**
-   * Destructor
-   */
-  virtual ~MockFieldContainer();
-
-private:
-
-  av::SFInt AnIntField;
-  av::SFDouble ADoubleField;
-  av::SFString AStringField;
-  av::MFInt AnIntMultiField;
+  private:
+    av::SFInt AnIntField;
+    av::SFDouble ADoubleField;
+    av::SFString AStringField;
+    av::MFInt AnIntMultiField;
 };
 
 #endif // #if !defined(AV_MOCKFIELDCONTAINER_H)

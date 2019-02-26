@@ -38,46 +38,40 @@
 
 namespace av
 {
-
-  namespace logging
-  {
+namespace logging
+{
+/**
+ * Appender for printing log messages to a file.
+ *
+ * \todo Error handling
+ * \todo Make it thread-safe
+ */
+class AV_DLL FileAppender : public Appender
+{
+  public:
+    /**
+     * Create a file appender which logs to filename.
+     */
+    FileAppender(const std::string& filename);
 
     /**
-     * Appender for printing log messages to a file.
-     *
-     * \todo Error handling
-     * \todo Make it thread-safe
+     * Destructor
      */
-    class AV_DLL FileAppender : public Appender
-    {
+    virtual ~FileAppender();
 
-    public:
+    /**
+     * Returns the filename of the file we are logging to.
+     */
+    const std::string& getFilename() const;
 
-      /**
-       * Create a file appender which logs to filename.
-       */
-      FileAppender(const std::string& filename);
+    virtual void doAppend(LoggingEvent& event);
 
-      /**
-       * Destructor
-       */
-      virtual ~FileAppender();
+  private:
+    const std::string mFilename;
+    std::ofstream mLogFile;
+};
 
-      /**
-       * Returns the filename of the file we are logging to.
-       */
-      const std::string& getFilename() const;
-
-      virtual void doAppend(LoggingEvent& event);
-
-    private:
-
-      const std::string mFilename;
-      std::ofstream mLogFile;
-
-    };
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 

@@ -29,12 +29,14 @@
 
 namespace shade
 {
-  template<class Qualifier = Type> class float_ : public TypeBase<float_<Qualifier>, Qualifier>, public types::FloatAccessor
-  {
+template <class Qualifier = Type>
+class float_ : public TypeBase<float_<Qualifier>, Qualifier>, public types::FloatAccessor
+{
   public:
     float_(void);
     float_(float v);
-    template<class Q> void copy_value(const float_<Q>& source);
+    template <class Q>
+    void copy_value(const float_<Q>& source);
 
     /*virtual*/ void set(float v);
     /*virtual*/ void get(float& v) const;
@@ -47,8 +49,8 @@ namespace shade
 
   private:
     float m_value;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/float_impl.cpp"
 

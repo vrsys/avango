@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGBlendFunc(void)
- {
-  // wrapping osg::BlendFunc functionality
-  register_field<av::osg::SFBlendFunc>("SFBlendFunc");
-  register_multifield<av::osg::MFBlendFunc>("MFBlendFunc");
-  class_<av::osg::BlendFunc, av::Link<av::osg::BlendFunc>, bases<av::osg::Object>, boost::noncopyable >("BlendFunc", "docstring", no_init);
- }
+{
+    // wrapping osg::BlendFunc functionality
+    register_field<av::osg::SFBlendFunc>("SFBlendFunc");
+    register_multifield<av::osg::MFBlendFunc>("MFBlendFunc");
+    class_<av::osg::BlendFunc, av::Link<av::osg::BlendFunc>, bases<av::osg::Object>, boost::noncopyable>("BlendFunc", "docstring", no_init);
+}

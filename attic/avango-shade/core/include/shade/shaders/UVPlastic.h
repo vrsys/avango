@@ -32,31 +32,29 @@
 #include "../types/uniform.h"
 #include "../types/float.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class UVPlastic : public ShaderBase<UVPlastic, IlluminatedMaterial>
+{
+  public:
+    UVPlastic(float diffuse = 1., float specular = 0.);
 
-    class UVPlastic : public ShaderBase<UVPlastic, IlluminatedMaterial>
-    {
-    public:
-      UVPlastic(float diffuse = 1., float specular = 0.);
+    /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
+    void_<> illuminance_uv(vec3<> color, vec3<> direction);
 
-      /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
-      void_<> illuminance_uv(vec3<> color, vec3<> direction);
+    ValueReference<vec4, uniform> color;
+    ValueReference<vec4, uniform> uv_color;
 
-      ValueReference<vec4, uniform> color;
-      ValueReference<vec4, uniform> uv_color;
+  private:
+    float_<uniform> diffuse;
+    float_<uniform> specular;
 
-    private:
-      float_<uniform> diffuse;
-      float_<uniform> specular;
+    SHADE_DERIVED_DECL(UVPlastic, IlluminatedMaterial)
+};
 
-      SHADE_DERIVED_DECL(UVPlastic, IlluminatedMaterial)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_UVPlastic_H */

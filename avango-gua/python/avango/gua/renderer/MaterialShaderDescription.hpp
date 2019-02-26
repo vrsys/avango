@@ -3,4 +3,4 @@
 
 void init_MaterialShaderDescription();
 
-#endif //AV_PYTHON_GUA_MATERIAL_SHADER_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_MATERIAL_SHADER_DESCRIPTION_HPP

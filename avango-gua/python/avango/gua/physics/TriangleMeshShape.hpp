@@ -3,4 +3,4 @@
 
 void init_TriangleMeshShape();
 
-#endif //AV_PYTHON_GUA_TRIANGLE_MESH_SHAPE_HPP
+#endif // AV_PYTHON_GUA_TRIANGLE_MESH_SHAPE_HPP

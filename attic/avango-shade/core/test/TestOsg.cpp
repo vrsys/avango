@@ -28,12 +28,12 @@
 
 SUITE(TestOsg)
 {
-  TEST(ComparingTextures)
-  {
-    ::osg::ref_ptr< ::osg::Texture> tex1(new ::osg::Texture2D);
-    ::osg::ref_ptr< ::osg::Texture> tex2(new ::osg::Texture2D);
+    TEST(ComparingTextures)
+    {
+        ::osg::ref_ptr<::osg::Texture> tex1(new ::osg::Texture2D);
+        ::osg::ref_ptr<::osg::Texture> tex2(new ::osg::Texture2D);
 
-    CHECK(shade::osg::Texture(tex1.get()) == shade::osg::Texture(tex1.get()));
-    CHECK(shade::osg::Texture(tex1.get()) != shade::osg::Texture(tex2.get()));
-  }
+        CHECK(shade::osg::Texture(tex1.get()) == shade::osg::Texture(tex1.get()));
+        CHECK(shade::osg::Texture(tex1.get()) != shade::osg::Texture(tex2.get()));
+    }
 }

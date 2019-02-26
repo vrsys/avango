@@ -35,64 +35,59 @@
 #include <avango/daemon/windows_specific_daemon.h>
 
 #ifdef WIN32
-  #include <boost/interprocess/managed_windows_shared_memory.hpp>
+#include <boost/interprocess/managed_windows_shared_memory.hpp>
 #endif
 
 namespace av
 {
-  namespace daemon
-  {
-    class Station;
-    class StationBlock;
-    class SharedMemorySegment;
+namespace daemon
+{
+class Station;
+class StationBlock;
+class SharedMemorySegment;
+
+/**
+ * Class for handling a shared memory segment.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL StationSegment
+{
+  public:
+    StationSegment();
+    virtual ~StationSegment();
 
     /**
-     * Class for handling a shared memory segment.
-     *
-     * \ingroup av_daemon
+     * Returns station of given name.
      */
-    class AV_DAEMON_DLL StationSegment {
+    Station* getStation(const char*);
 
+    /**
+     * Returns station of given name.
+     */
+    Station* getStation(const ::std::string&);
 
-    public:
+  private:
+    /**
+     * Made private to prevent copying construction.
+     */
+    StationSegment(const StationSegment&);
 
-      StationSegment();
-      virtual ~StationSegment();
-
-      /**
-       * Returns station of given name.
-       */
-      Station* getStation(const char*);
-
-      /**
-       * Returns station of given name.
-       */
-      Station* getStation(const ::std::string&);
-
-
-    private:
-
-      /**
-       * Made private to prevent copying construction.
-       */
-      StationSegment(const StationSegment&);
-
-      /**
-       * Made private to prevent assignment.
-       */
-      const StationSegment& operator=(const StationSegment&);
+    /**
+     * Made private to prevent assignment.
+     */
+    const StationSegment& operator=(const StationSegment&);
 
 #ifdef WIN32
-      boost::interprocess::managed_windows_shared_memory* mSegment;
-      std::string          mShmName;
+    boost::interprocess::managed_windows_shared_memory* mSegment;
+    std::string mShmName;
 #else
-      SharedMemorySegment* mSharedMem;
+    SharedMemorySegment* mSharedMem;
 #endif
 
-      StationBlock*        mStationBlock;
-
-    };
-  }
-}
+    StationBlock* mStationBlock;
+};
+} // namespace daemon
+} // namespace av
 
 #endif // #if !defined(AV_OSG_STATIONSEGMENT_H)

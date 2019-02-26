@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_TEXTUREDQUAD
 #define AV_PYTHON_OSG_TEXTUREDQUAD
 

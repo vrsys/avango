@@ -44,22 +44,22 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace network
-    {
-      /**
-       * Initializes the Avango OpenSceneGraph library.
-       * Usage: \code av::osg::network::Init::initClass(); \endcode
-       *
-       * \ingroup av_osg
-       */
-      class Init
-      {
-        AV_TYPED_DECLARE_ABSTRACT();
-      };
-    }
-  }
-}
+namespace osg
+{
+namespace network
+{
+/**
+ * Initializes the Avango OpenSceneGraph library.
+ * Usage: \code av::osg::network::Init::initClass(); \endcode
+ *
+ * \ingroup av_osg
+ */
+class Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace network
+} // namespace osg
+} // namespace av
 
 #endif

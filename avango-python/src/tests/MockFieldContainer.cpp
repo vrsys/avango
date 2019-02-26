@@ -29,34 +29,27 @@ AV_FC_DEFINE(MockFieldContainer);
 
 MockFieldContainer::MockFieldContainer()
 {
-  AV_FC_ADD_FIELD(AnIntField, 0);
-  AV_FC_ADD_FIELD(ADoubleField, 0.);
-  AV_FC_ADD_FIELD(ABoolField, false);
-  AV_FC_ADD_FIELD(AStringField, "value");
-  AV_FC_ADD_FIELD(AnIntMultiField, std::vector<int>());
-  AV_FC_ADD_FIELD(AFieldContainer, 0);
+    AV_FC_ADD_FIELD(AnIntField, 0);
+    AV_FC_ADD_FIELD(ADoubleField, 0.);
+    AV_FC_ADD_FIELD(ABoolField, false);
+    AV_FC_ADD_FIELD(AStringField, "value");
+    AV_FC_ADD_FIELD(AnIntMultiField, std::vector<int>());
+    AV_FC_ADD_FIELD(AFieldContainer, 0);
 }
 
-/* virtual */ MockFieldContainer::~MockFieldContainer()
-{}
+/* virtual */ MockFieldContainer::~MockFieldContainer() {}
 
-/* virtual */ void MockFieldContainer::refImpl()
-{}
+/* virtual */ void MockFieldContainer::refImpl() {}
 
-/* virtual */ void MockFieldContainer::unrefImpl()
-{}
+/* virtual */ void MockFieldContainer::unrefImpl() {}
 
-/* virtual */ int MockFieldContainer::refCountImpl()
-{
-  return 1;
-}
+/* virtual */ int MockFieldContainer::refCountImpl() { return 1; }
 
 /* static */ void MockFieldContainer::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, MockFieldContainer, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, MockFieldContainer, true);
+    }
 }
-

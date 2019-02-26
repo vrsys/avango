@@ -39,26 +39,27 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_lod)
 {
-  av::gua::lod::LodLoader::initClass();
-  av::gua::lod::MLodPassDescription::initClass();
-  av::gua::lod::PLodPassDescription::initClass();
-  av::gua::lod::MLodNode::initClass();
-  av::gua::lod::PLodNode::initClass();
-  init_MLodNode();
-  init_PLodNode();
-  init_MLodPassDescription();
-  init_PLodPassDescription();
-  init_LodLoader();
+    av::gua::lod::LodLoader::initClass();
+    av::gua::lod::MLodPassDescription::initClass();
+    av::gua::lod::PLodPassDescription::initClass();
+    av::gua::lod::MLodNode::initClass();
+    av::gua::lod::PLodNode::initClass();
+    init_MLodNode();
+    init_PLodNode();
+    init_MLodPassDescription();
+    init_PLodPassDescription();
+    init_LodLoader();
 }

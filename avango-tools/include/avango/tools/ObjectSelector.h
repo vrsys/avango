@@ -32,75 +32,70 @@
 #include <avango/tools/Selector.h>
 #include "windows_specific_tools.h"
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * ObjectSelector class selects targets from given av::FieldContainers.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL ObjectSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * ObjectSelector class selects targets from given av::FieldContainers.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL ObjectSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    ObjectSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ObjectSelector();
 
-      /**
-       * Constructor.
-       */
-      ObjectSelector();
+  public:
+    /**
+     * Defines the input targets from which the objects are selected.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Defines the objects which may be selected. The output is in SelectedTargets.
+     */
+    MFContainer SelectableObjects;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ObjectSelector();
+    /**
+     * Defines additional selectable objects wihch may come as output from another Selector.
+     */
+    MFTargetHolder SelectableTargets;
 
-    public:
+    /**
+     * Set to true if the selectable objects should also be searched in the OSG node paths
+     * found in NodePathTargetHolder objects.
+     */
+    SFBool SearchTargetHolderNodePaths;
 
-      /**
-       * Defines the input targets from which the objects are selected.
-       */
-      MFTargetHolder Targets;
+    /**
+     * Set to true if the selectable objects should also be searched in the OSG node paths.
+     */
+    SFBool SearchOSGNodePaths;
 
-      /**
-       * Defines the objects which may be selected. The output is in SelectedTargets.
-       */
-      MFContainer SelectableObjects;
+    /* virtual */ void evaluate();
+};
 
-      /**
-       * Defines additional selectable objects wihch may come as output from another Selector.
-       */
-      MFTargetHolder SelectableTargets;
-
-      /**
-       * Set to true if the selectable objects should also be searched in the OSG node paths
-       * found in NodePathTargetHolder objects.
-       */
-      SFBool SearchTargetHolderNodePaths;
-
-      /**
-       * Set to true if the selectable objects should also be searched in the OSG node paths.
-       */
-      SFBool SearchOSGNodePaths;
-
-      /* virtual */ void evaluate();
-
-    };
-
-    using SFObjectSelector = SingleField<Link<ObjectSelector> >;
-    using MFObjectSelector = MultiField<Link<ObjectSelector> >;
-  }
+using SFObjectSelector = SingleField<Link<ObjectSelector>>;
+using MFObjectSelector = MultiField<Link<ObjectSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::ObjectSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::ObjectSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::ObjectSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::ObjectSelector>>;
 #endif
 
-}
+} // namespace av
 
 #endif

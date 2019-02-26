@@ -28,57 +28,41 @@
 
 namespace
 {
-  class IntGetter
-  {
+class IntGetter
+{
   public:
+    IntGetter(shade::types::IntAccessor* accessor) : mAccessor(accessor) {}
 
-    IntGetter(shade::types::IntAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
-
-    void operator()(const av::SFInt::GetValueEvent& event)
-    {
-      mAccessor->get(*event.getValuePtr());
-    }
+    void operator()(const av::SFInt::GetValueEvent& event) { mAccessor->get(*event.getValuePtr()); }
 
   private:
     shade::types::IntAccessor* mAccessor;
-  };
+};
 
-  class IntSetter
-  {
+class IntSetter
+{
   public:
+    IntSetter(shade::types::IntAccessor* accessor) : mAccessor(accessor) {}
 
-    IntSetter(shade::types::IntAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
-
-    void operator()(const av::SFInt::SetValueEvent& event)
-    {
-      mAccessor->set(event.getValue());
-    }
+    void operator()(const av::SFInt::SetValueEvent& event) { mAccessor->set(event.getValue()); }
 
   private:
     shade::types::IntAccessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::IntFieldAdapter::hash(void) const
+{
+    static ::shade::int_<> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::IntFieldAdapter::hash(void) const
+void av::shade::IntFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::int_<> value;
-  return value.hash();
-}
+    ::shade::types::IntAccessor* int_accessor(dynamic_cast<::shade::types::IntAccessor*>(type));
+    if(int_accessor == 0)
+        return;
 
-void
-av::shade::IntFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::IntAccessor* int_accessor(dynamic_cast< ::shade::types::IntAccessor*>(type));
-  if (int_accessor == 0)
-    return;
-
-  av::SFInt* field= new av::SFInt;
-  field->bind(container, name, true, IntGetter(int_accessor), IntSetter(int_accessor));
+    av::SFInt* field = new av::SFInt;
+    field->bind(container, name, true, IntGetter(int_accessor), IntSetter(int_accessor));
 }

@@ -26,24 +26,22 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Initializeable, "", 
-    SHADE_ENV_DEFS(shade::vertex_shader, (init_vertex))
-    SHADE_ENV_DEFS(shade::fragment_shader, (init_fragment))
-    SHADE_ENV_DEFS(shade::geometry_shader, (init_geometry)(init_post_geometry)),
-    SHADE_NONE
-    )
-
+SHADE_CLASS_INIT(Initializeable,
+                 "",
+                 SHADE_ENV_DEFS(shade::vertex_shader, (init_vertex)) SHADE_ENV_DEFS(shade::fragment_shader, (init_fragment))
+                     SHADE_ENV_DEFS(shade::geometry_shader, (init_geometry)(init_post_geometry)),
+                 SHADE_NONE)
 
 std::string Initializeable::get_method_name(ShaderEnvironment env)
 {
-  if (env == shade::vertex_shader)
-    return "init_vertex";
-  else if (env == shade::fragment_shader)
-    return "init_fragment";
-  else if (env == shade::geometry_shader)
-    return "init_geometry";
-  else if (env == shade::post_geometry_shader)
-    return "init_post_geometry";
+    if(env == shade::vertex_shader)
+        return "init_vertex";
+    else if(env == shade::fragment_shader)
+        return "init_fragment";
+    else if(env == shade::geometry_shader)
+        return "init_geometry";
+    else if(env == shade::post_geometry_shader)
+        return "init_post_geometry";
 
-  throw std::invalid_argument("Given ShaderEnvironment does not support initializers");
+    throw std::invalid_argument("Given ShaderEnvironment does not support initializers");
 }

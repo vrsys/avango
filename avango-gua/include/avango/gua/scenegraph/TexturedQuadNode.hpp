@@ -13,92 +13,85 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::TexturedQuadNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL TexturedQuadNode : public av::gua::Node
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::TexturedQuadNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::TexturedQuadNode is created.
+     * Otherwise, the given ::gua::TexturedQuadNode is used.
      */
-    class AV_GUA_DLL TexturedQuadNode : public av::gua::Node
-    {
-      AV_FC_DECLARE();
+    TexturedQuadNode(std::shared_ptr<::gua::node::TexturedQuadNode> guanode = std::shared_ptr<::gua::node::TexturedQuadNode>(new ::gua::node::TexturedQuadNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~TexturedQuadNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::TexturedQuadNode is created.
-       * Otherwise, the given ::gua::TexturedQuadNode is used.
-       */
-      TexturedQuadNode(std::shared_ptr< ::gua::node::TexturedQuadNode> guanode = std::shared_ptr< ::gua::node::TexturedQuadNode>(new ::gua::node::TexturedQuadNode("")));
+  public:
+    SFString Texture;
+    SFFloat Width;
+    SFFloat Height;
 
-    protected:
+    SFBool FlipX;
+    SFBool FlipY;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~TexturedQuadNode();
+    SFMatrix ScaledTransform;
+    SFMatrix ScaledWorldTransform;
 
-    public:
+    /**
+     * Get the wrapped ::gua::TexturedQuadNode.
+     */
+    std::shared_ptr<::gua::node::TexturedQuadNode> getGuaNode() const;
 
+  public:
+    virtual void getTextureCB(const SFString::GetValueEvent& event);
+    virtual void setTextureCB(const SFString::SetValueEvent& event);
 
-      SFString Texture;
-      SFFloat  Width;
-      SFFloat  Height;
+    virtual void getWidthCB(const SFFloat::GetValueEvent& event);
+    virtual void setWidthCB(const SFFloat::SetValueEvent& event);
 
-      SFBool   FlipX;
-      SFBool   FlipY;
+    virtual void getHeightCB(const SFFloat::GetValueEvent& event);
+    virtual void setHeightCB(const SFFloat::SetValueEvent& event);
 
-      SFMatrix ScaledTransform;
-      SFMatrix ScaledWorldTransform;
+    virtual void getFlipXCB(const SFBool::GetValueEvent& event);
+    virtual void setFlipXCB(const SFBool::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::TexturedQuadNode.
-       */
-      std::shared_ptr< ::gua::node::TexturedQuadNode> getGuaNode() const;
+    virtual void getFlipYCB(const SFBool::GetValueEvent& event);
+    virtual void setFlipYCB(const SFBool::SetValueEvent& event);
 
-    public:
+    virtual void getScaledTransformCB(const SFMatrix::GetValueEvent& event);
+    virtual void setScaledTransformCB(const SFMatrix::SetValueEvent& event);
 
-      virtual void getTextureCB(const SFString::GetValueEvent& event);
-      virtual void setTextureCB(const SFString::SetValueEvent& event);
+    virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
+    virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
 
-      virtual void getWidthCB(const SFFloat::GetValueEvent& event);
-      virtual void setWidthCB(const SFFloat::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::node::TexturedQuadNode> m_guaNode;
 
-      virtual void getHeightCB(const SFFloat::GetValueEvent& event);
-      virtual void setHeightCB(const SFFloat::SetValueEvent& event);
+    TexturedQuadNode(const TexturedQuadNode&);
+    TexturedQuadNode& operator=(const TexturedQuadNode&);
+};
 
-      virtual void getFlipXCB(const SFBool::GetValueEvent& event);
-      virtual void setFlipXCB(const SFBool::SetValueEvent& event);
+using SFTexturedQuadNode = SingleField<Link<TexturedQuadNode>>;
+using MFTexturedQuadNode = MultiField<Link<TexturedQuadNode>>;
 
-      virtual void getFlipYCB(const SFBool::GetValueEvent& event);
-      virtual void setFlipYCB(const SFBool::SetValueEvent& event);
-
-      virtual void getScaledTransformCB(const SFMatrix::GetValueEvent& event);
-      virtual void setScaledTransformCB(const SFMatrix::SetValueEvent& event);
-
-      virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
-      virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
-
-
-    private:
-
-      std::shared_ptr< ::gua::node::TexturedQuadNode> m_guaNode;
-
-      TexturedQuadNode(const TexturedQuadNode&);
-      TexturedQuadNode& operator=(const TexturedQuadNode&);
-    };
-
-    using SFTexturedQuadNode = SingleField<Link<TexturedQuadNode> >;
-    using MFTexturedQuadNode = MultiField<Link<TexturedQuadNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TexturedQuadNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TexturedQuadNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::TexturedQuadNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::TexturedQuadNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_TEXTURED_QUAD_NODE_HPP
+#endif // AVANGO_GUA_TEXTURED_QUAD_NODE_HPP

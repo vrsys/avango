@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::EmissivePassDescription"));
+av::Logger& logger(av::getLogger("av::gua::EmissivePassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::EmissivePassDescription);
@@ -14,16 +14,14 @@ AV_FC_DEFINE(av::gua::EmissivePassDescription);
 AV_FIELD_DEFINE(av::gua::SFEmissivePassDescription);
 AV_FIELD_DEFINE(av::gua::MFEmissivePassDescription);
 
-av::gua::EmissivePassDescription::EmissivePassDescription(
-  std::shared_ptr< ::gua::EmissivePassDescription> const& guaEmissivePassDescription)
-    : PipelinePassDescription(guaEmissivePassDescription)
-    , m_guaEmissivePassDescription(guaEmissivePassDescription)
-{}
-
-void
-av::gua::EmissivePassDescription::initClass()
+av::gua::EmissivePassDescription::EmissivePassDescription(std::shared_ptr<::gua::EmissivePassDescription> const& guaEmissivePassDescription)
+    : PipelinePassDescription(guaEmissivePassDescription), m_guaEmissivePassDescription(guaEmissivePassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::EmissivePassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -35,10 +33,4 @@ av::gua::EmissivePassDescription::initClass()
     }
 }
 
-std::shared_ptr< ::gua::EmissivePassDescription> const&
-av::gua::EmissivePassDescription::getGuaEmissivePassDescription() const
-{
-    return m_guaEmissivePassDescription;
-}
-
-
+std::shared_ptr<::gua::EmissivePassDescription> const& av::gua::EmissivePassDescription::getGuaEmissivePassDescription() const { return m_guaEmissivePassDescription; }

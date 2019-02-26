@@ -15,108 +15,59 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
+
+av::Link<av::gua::Node> load(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, int flags, int const cpu_budget, int const gpu_budget)
+{
+    return loader.load(nodeName, fileName, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), cpu_budget, gpu_budget);
 }
 
-av::Link<av::gua::Node> load(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    int flags, int const cpu_budget, int const gpu_budget
-    ) {
-   return loader.load( nodeName, fileName
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     cpu_budget, gpu_budget);
+av::Link<av::gua::Node> load2(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, int flags, int const cpu_budget)
+{
+    return loader.load(nodeName, fileName, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), cpu_budget, 1024);
 }
 
-av::Link<av::gua::Node> load2(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    int flags, int const cpu_budget
-    ) {
-   return loader.load( nodeName, fileName
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     cpu_budget, 1024);
+av::Link<av::gua::Node> load3(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, int flags)
+{
+    return loader.load(nodeName, fileName, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), 1024, 1024);
 }
 
-av::Link<av::gua::Node> load3(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    int flags
-    ) {
-   return loader.load( nodeName, fileName
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     1024, 1024);
-}
-
-av::Link<av::gua::Node> load4(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName
-    ) {
-   return loader.load( nodeName, fileName
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(0),
-                     1024, 1024);
+av::Link<av::gua::Node> load4(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName)
+{
+    return loader.load(nodeName, fileName, static_cast<av::gua::tv_3::TV_3Loader::Flags>(0), 1024, 1024);
 }
 
 av::Link<av::gua::Node> load5(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    av::gua::Material const& fallbackMaterial,
-    int flags, int const cpu_budget, int const gpu_budget
-    ) {
-   return loader.load( nodeName, fileName, fallbackMaterial
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     cpu_budget, gpu_budget);
+    av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, int flags, int const cpu_budget, int const gpu_budget)
+{
+    return loader.load(nodeName, fileName, fallbackMaterial, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), cpu_budget, gpu_budget);
 }
 
-av::Link<av::gua::Node> load6(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    av::gua::Material const& fallbackMaterial,
-    int flags, int const cpu_budget
-    ) {
-   return loader.load( nodeName, fileName, fallbackMaterial
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     cpu_budget, 1024);
+av::Link<av::gua::Node>
+load6(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, int flags, int const cpu_budget)
+{
+    return loader.load(nodeName, fileName, fallbackMaterial, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), cpu_budget, 1024);
 }
 
-av::Link<av::gua::Node> load7(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    av::gua::Material const& fallbackMaterial,
-    int flags
-    ) {
-   return loader.load( nodeName, fileName, fallbackMaterial
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags),
-                     1024, 1024);
+av::Link<av::gua::Node> load7(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, int flags)
+{
+    return loader.load(nodeName, fileName, fallbackMaterial, static_cast<av::gua::tv_3::TV_3Loader::Flags>(flags), 1024, 1024);
 }
 
-av::Link<av::gua::Node> load8(
-    av::gua::tv_3::TV_3Loader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    av::gua::Material const& fallbackMaterial
-    ) {
-   return loader.load( nodeName, fileName, fallbackMaterial
-                     , static_cast<av::gua::tv_3::TV_3Loader::Flags>(0),
-                     1024, 1024);
+av::Link<av::gua::Node> load8(av::gua::tv_3::TV_3Loader const& loader, std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial)
+{
+    return loader.load(nodeName, fileName, fallbackMaterial, static_cast<av::gua::tv_3::TV_3Loader::Flags>(0), 1024, 1024);
 }
 
-bool is_supported(av::gua::tv_3::TV_3Loader const& loader, std::string const& file) {
-   return loader.is_supported(file);
-}
+bool is_supported(av::gua::tv_3::TV_3Loader const& loader, std::string const& file) { return loader.is_supported(file); }
 
 /*
 boost::python::tuple pick_plod2(
@@ -166,41 +117,37 @@ av::gua::tv_3::MFPickResult* pick_plod(av::gua::tv_3::PLODLoader const& loader,
 */
 void init_TV_3Loader()
 {
-  register_ptr_to_python<av::Link<av::gua::tv_3::TV_3Loader> >();
+    register_ptr_to_python<av::Link<av::gua::tv_3::TV_3Loader>>();
 
-  class_<av::gua::tv_3::TV_3Loader,
-         av::Link<av::gua::tv_3::TV_3Loader>,
-         bases<av::FieldContainer>, boost::noncopyable> ("TV_3Loader", "docstring", no_init)
-         .def("load", &load)
-         .def("load", &load2)
-         .def("load", &load3)
-         .def("load", &load4)
-         .def("load", &load5)
-         .def("load", &load6)
-         .def("load", &load7)
-         .def("load", &load8)
-         .def("create_geometry_from_file", &load)
-         .def("create_geometry_from_file", &load2)
-         .def("create_geometry_from_file", &load3)
-         .def("create_geometry_from_file", &load4)
-         .def("create_geometry_from_file", &load5)
-         .def("create_geometry_from_file", &load6)
-         .def("create_geometry_from_file", &load7)
-         .def("create_geometry_from_file", &load8)
-         .def("is_supported", &is_supported)
-         //.def("pick_plod_bvh", &pick_plod2)
-         //.def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
-         ;
+    class_<av::gua::tv_3::TV_3Loader, av::Link<av::gua::tv_3::TV_3Loader>, bases<av::FieldContainer>, boost::noncopyable>("TV_3Loader", "docstring", no_init)
+        .def("load", &load)
+        .def("load", &load2)
+        .def("load", &load3)
+        .def("load", &load4)
+        .def("load", &load5)
+        .def("load", &load6)
+        .def("load", &load7)
+        .def("load", &load8)
+        .def("create_geometry_from_file", &load)
+        .def("create_geometry_from_file", &load2)
+        .def("create_geometry_from_file", &load3)
+        .def("create_geometry_from_file", &load4)
+        .def("create_geometry_from_file", &load5)
+        .def("create_geometry_from_file", &load6)
+        .def("create_geometry_from_file", &load7)
+        .def("create_geometry_from_file", &load8)
+        .def("is_supported", &is_supported)
+        //.def("pick_plod_bvh", &pick_plod2)
+        //.def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
+        ;
 
-  enum_<av::gua::tv_3::TV_3Loader::Flags>("LoaderFlags")
-    .value("DEFAULTS", av::gua::tv_3::TV_3Loader::DEFAULTS)
-    .value("MAKE_PICKABLE", av::gua::tv_3::TV_3Loader::MAKE_PICKABLE)
-    .value("NORMALIZE_POSITION", av::gua::tv_3::TV_3Loader::NORMALIZE_POSITION)
-    .value("NORMALIZE_SCALE", av::gua::tv_3::TV_3Loader::NORMALIZE_SCALE)
-    .value("USE_SURFACE_MODE", av::gua::tv_3::TV_3Loader::USE_SURFACE_MODE)
-    ;
+    enum_<av::gua::tv_3::TV_3Loader::Flags>("LoaderFlags")
+        .value("DEFAULTS", av::gua::tv_3::TV_3Loader::DEFAULTS)
+        .value("MAKE_PICKABLE", av::gua::tv_3::TV_3Loader::MAKE_PICKABLE)
+        .value("NORMALIZE_POSITION", av::gua::tv_3::TV_3Loader::NORMALIZE_POSITION)
+        .value("NORMALIZE_SCALE", av::gua::tv_3::TV_3Loader::NORMALIZE_SCALE)
+        .value("USE_SURFACE_MODE", av::gua::tv_3::TV_3Loader::USE_SURFACE_MODE);
 
-
-  register_field<av::gua::tv_3::SFTV_3Loader>("SFTV_3Loader");
-  register_multifield<av::gua::tv_3::MFTV_3Loader>("MFTV_3Loader");
+    register_field<av::gua::tv_3::SFTV_3Loader>("SFTV_3Loader");
+    register_multifield<av::gua::tv_3::MFTV_3Loader>("MFTV_3Loader");
 }

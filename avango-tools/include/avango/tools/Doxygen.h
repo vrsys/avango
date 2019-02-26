@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_TOOLS_DOXYGEN_H)
-

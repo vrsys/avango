@@ -14,8 +14,8 @@
 #include <io.h>
 
 union sock_addr_union {
-  struct sockaddr s_gen;
-  struct sockaddr_in s_inet;
+    struct sockaddr s_gen;
+    struct sockaddr_in s_inet;
 };
 
 #endif

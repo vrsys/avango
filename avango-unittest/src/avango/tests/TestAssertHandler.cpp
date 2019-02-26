@@ -4,8 +4,8 @@
 
 using namespace UnitTest;
 
-namespace {
-
+namespace
+{
 TEST(ReportAssertThrowsAssertException)
 {
     bool caught = false;
@@ -19,7 +19,7 @@ TEST(ReportAssertThrowsAssertException)
         caught = true;
     }
 
-    CHECK (true == caught);
+    CHECK(true == caught);
 }
 
 TEST(ReportAssertSetsCorrectInfoInException)
@@ -40,5 +40,4 @@ TEST(ReportAssertSetsCorrectInfoInException)
     }
 }
 
-
-}
+} // namespace

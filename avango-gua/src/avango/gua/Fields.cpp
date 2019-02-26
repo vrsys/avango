@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::Fields"));
+av::Logger& logger(av::getLogger("av::gua::Fields"));
 }
 
 AV_FIELD_DEFINE(av::gua::SFMatrix4);
@@ -40,10 +40,8 @@ AV_FIELD_DEFINE(av::gua::MFVec2ui);
 AV_FIELD_DEFINE(av::gua::SFColor);
 AV_FIELD_DEFINE(av::gua::MFColor);
 
-void
-av::gua::initFields()
+void av::gua::initFields()
 {
-
     SFMatrix4::initClass("av::gua::SFMatrix4", "av::Field");
     MFMatrix4::initClass("av::gua::MFMatrix4", "av::Field");
     SFMatrix3::initClass("av::gua::SFMatrix3", "av::Field");
@@ -73,7 +71,5 @@ av::gua::initFields()
     MFVec2ui::initClass("av::gua::MFVec2ui", "av::Field");
 
     SFColor::initClass("av::gua::SFColor", "av::Field");
-//    MFColor::initClass("av::gua::MFColor", "av::Field");
+    //    MFColor::initClass("av::gua::MFColor", "av::Field");
 }
-
-

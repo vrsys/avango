@@ -25,12 +25,6 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Vec4ToVec2, "Vec4ToVec2.glsl",
-    SHADE_NONE,
-    SHADE_ENV_DEFS(application_stage, (value))
-    )
+SHADE_CLASS_INIT(Vec4ToVec2, "Vec4ToVec2.glsl", SHADE_NONE, SHADE_ENV_DEFS(application_stage, (value)))
 
-shade::vec2<> Vec4ToVec2::get(void)
-{
-  return invoke< vec2<> >("Vec4ToVec2_get_impl");
-}
+shade::vec2<> Vec4ToVec2::get(void) { return invoke<vec2<>>("Vec4ToVec2_get_impl"); }

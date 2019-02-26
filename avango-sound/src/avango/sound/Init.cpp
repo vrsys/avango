@@ -9,21 +9,20 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::sound::Init"));
+av::Logger& logger(av::getLogger("av::sound::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::sound::Init);
 
-/* static */ void
-av::sound::Init::initClass()
+/* static */ void av::sound::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::sound::SampleBuffer::initClass();
-    av::sound::SoundSource::initClass();
-    av::sound::SoundRenderer::initClass();
-    av::sound::SoundTraverser::initClass();
+    if(!isTypeInitialized())
+    {
+        av::sound::SampleBuffer::initClass();
+        av::sound::SoundSource::initClass();
+        av::sound::SoundRenderer::initClass();
+        av::sound::SoundTraverser::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::sound::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::sound::Init", true);
+    }
 }

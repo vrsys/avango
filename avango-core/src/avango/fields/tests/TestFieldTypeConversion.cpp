@@ -38,35 +38,33 @@
 
 namespace
 {
-  using namespace av;
+using namespace av;
 
-  class FieldsNode : public av::FieldContainer {
+class FieldsNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     FieldsNode();
     virtual ~FieldsNode();
 
-    SFFloat  FloatField;
+    SFFloat FloatField;
     SFDouble DoubleField;
     SFString StringField;
-    SFBool   BoolField;
-    SFInt    IntField;
-    SFUInt   UIntField;
-    SFLong   LongField;
-    SFULong  ULongField;
+    SFBool BoolField;
+    SFInt IntField;
+    SFUInt UIntField;
+    SFLong LongField;
+    SFULong ULongField;
 
   private:
-
     float mFloat;
-  };
+};
 
-  AV_FC_DEFINE(FieldsNode);
+AV_FC_DEFINE(FieldsNode);
 
-  FieldsNode::FieldsNode()
-    : mFloat(0.0f)
-  {
+FieldsNode::FieldsNode() : mFloat(0.0f)
+{
     AV_FC_ADD_FIELD(FloatField, 0.0f);
     FloatField.setMultiPush(true);
     AV_FC_ADD_FIELD(DoubleField, 0.0);
@@ -83,34 +81,28 @@ namespace
     LongField.setMultiPush(true);
     AV_FC_ADD_FIELD(ULongField, 0);
     ULongField.setMultiPush(true);
-  }
+}
 
-  FieldsNode::~FieldsNode()
-  {}
+FieldsNode::~FieldsNode() {}
 
-  void
-  FieldsNode::initClass()
-  {
-    if (!isTypeInitialized())
+void FieldsNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::FieldContainer, FieldsNode, false);
+        AV_FC_INIT(av::FieldContainer, FieldsNode, false);
     }
-  }
+}
 
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
+    InitNodeFixture() { FieldsNode::initClass(); }
+};
 
-      FieldsNode::initClass();
-    }
-  };
-
-  TEST_FIXTURE(InitNodeFixture, connectSameTypeFields)
-  {
+TEST_FIXTURE(InitNodeFixture, connectSameTypeFields)
+{
     Link<FieldsNode> node1(new FieldsNode);
     Link<FieldsNode> node2(new FieldsNode);
 
@@ -119,18 +111,18 @@ namespace
     node1->FloatField.setValue(2.0f);
 
     CHECK_EQUAL(node1->FloatField.getValue(), node2->FloatField.getValue());
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, connectIncompatibleTypeFieldsThrow)
-  {
+TEST_FIXTURE(InitNodeFixture, connectIncompatibleTypeFieldsThrow)
+{
     Link<FieldsNode> node1(new FieldsNode);
     Link<FieldsNode> node2(new FieldsNode);
 
     CHECK_THROW(node2->DoubleField.connectFrom(&(node1->StringField)), std::invalid_argument);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsFloatConvert)
-  {
+TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsFloatConvert)
+{
     Link<FieldsNode> node1(new FieldsNode);
     Link<FieldsNode> node2(new FieldsNode);
 
@@ -139,63 +131,65 @@ namespace
     node1->FloatField.setValue(2);
 
     CHECK_EQUAL(node1->FloatField.getValue(), node2->DoubleField.getValue());
+}
 
-  }
-
-  TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsBool)
-  {
+TEST_FIXTURE(InitNodeFixture, connectDifferentTypeFieldsBool)
+{
     Link<FieldsNode> node1(new FieldsNode);
     Link<FieldsNode> node2(new FieldsNode);
-
 
     // check float->bool (true)
     node2->BoolField.connectFrom(&(node1->FloatField));
     node1->FloatField.setValue(2.0f);
     CHECK_EQUAL(true, node2->BoolField.getValue());
-    node2->BoolField.disconnect(); node2->BoolField.setValue(false);
+    node2->BoolField.disconnect();
+    node2->BoolField.setValue(false);
 
     // check float->bool (false)
     node2->BoolField.connectFrom(&(node1->FloatField));
     node1->FloatField.setValue(0.0f);
     CHECK_EQUAL(false, node2->BoolField.getValue());
-    node2->BoolField.disconnect(); node2->BoolField.setValue(false);
+    node2->BoolField.disconnect();
+    node2->BoolField.setValue(false);
 
-    //check int->bool ( true )
+    // check int->bool ( true )
     node2->BoolField.connectFrom(&(node1->IntField));
     node1->IntField.setValue(2);
     CHECK_EQUAL(true, node2->BoolField.getValue());
-    node2->BoolField.disconnect(); node2->BoolField.setValue(false);
+    node2->BoolField.disconnect();
+    node2->BoolField.setValue(false);
 
-    //check int->bool ( false )
+    // check int->bool ( false )
     node2->BoolField.connectFrom(&(node1->IntField));
     node1->IntField.setValue(0);
     CHECK_EQUAL(false, node2->BoolField.getValue());
-    node2->BoolField.disconnect(); node2->BoolField.setValue(false);
+    node2->BoolField.disconnect();
+    node2->BoolField.setValue(false);
 
-    //check bool->int ( true )
+    // check bool->int ( true )
     node2->IntField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(true);
     CHECK_EQUAL(1, node2->IntField.getValue());
     node2->IntField.disconnect();
 
-    //check bool->int ( false )
+    // check bool->int ( false )
     node2->IntField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(false);
     CHECK_EQUAL(0, node2->IntField.getValue());
     node2->IntField.disconnect();
 
-    //check bool->float ( true )
+    // check bool->float ( true )
     node2->FloatField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(true);
     CHECK_EQUAL(1.0f, node2->FloatField.getValue());
     node2->FloatField.disconnect();
 
-    //check bool->float ( false )
+    // check bool->float ( false )
     node2->FloatField.connectFrom(&(node1->BoolField));
     node1->BoolField.setValue(false);
     CHECK_EQUAL(0.0f, node2->FloatField.getValue());
     node2->FloatField.disconnect();
-  }
+}
 
 } // namespace
 

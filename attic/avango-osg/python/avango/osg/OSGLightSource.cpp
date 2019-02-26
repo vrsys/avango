@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLightSource(void)
- {
-  // wrapping osg::LightSource functionality
-  register_field<av::osg::SFLightSource>("SFLightSource");
-  register_multifield<av::osg::MFLightSource>("MFLightSource");
-  class_<av::osg::LightSource, av::Link<av::osg::LightSource>, bases<av::osg::Object>, boost::noncopyable >("LightSource", "docstring", no_init);
- }
+{
+    // wrapping osg::LightSource functionality
+    register_field<av::osg::SFLightSource>("SFLightSource");
+    register_multifield<av::osg::MFLightSource>("MFLightSource");
+    class_<av::osg::LightSource, av::Link<av::osg::LightSource>, bases<av::osg::Object>, boost::noncopyable>("LightSource", "docstring", no_init);
+}

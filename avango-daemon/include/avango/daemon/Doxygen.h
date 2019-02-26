@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_DAEMON_DOXYGEN_H)
-

@@ -34,33 +34,29 @@
 #include "windows_specific.h"
 
 #if defined(_MSC_VER)
-  #include "stdint_replacement.h"
+#include "stdint_replacement.h"
 #else
-  #include <inttypes.h>
+#include <inttypes.h>
 #endif // _MSC_VER
 
 #include <istream>
 #include <utility>
 #include <vector>
 
-
 namespace av
 {
+class Reader;
 
-  class Reader;
+/**
+ * Class for reading Avango Objects from a stream. This is used
+ * for persistence and network distribution.
+ *
+ * \ingroup av
+ */
 
-  /**
-   * Class for reading Avango Objects from a stream. This is used
-   * for persistence and network distribution.
-   *
-   * \ingroup av
-   */
-
-  class AV_DLL InputStream : public std::istream
-  {
-
+class AV_DLL InputStream : public std::istream
+{
   public:
-
     /**
      * Constructor
      */
@@ -107,49 +103,49 @@ namespace av
     Reader* getReader();
 
   private:
-
     bool mBinary;
     Reader* mReader;
+};
 
-  };
+// basic types
 
-  // basic types
+AV_DLL InputStream& operator>>(InputStream& is, int16_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, uint16_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, int32_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, uint32_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, int64_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, uint64_t& value);
+AV_DLL InputStream& operator>>(InputStream& is, float& value);
+AV_DLL InputStream& operator>>(InputStream& is, double& value);
+AV_DLL InputStream& operator>>(InputStream& is, bool& value);
+AV_DLL InputStream& operator>>(InputStream& is, std::string& value);
 
-  AV_DLL InputStream& operator>>(InputStream& is, int16_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, uint16_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, int32_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, uint32_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, int64_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, uint64_t& value);
-  AV_DLL InputStream& operator>>(InputStream& is, float& value);
-  AV_DLL InputStream& operator>>(InputStream& is, double& value);
-  AV_DLL InputStream& operator>>(InputStream& is, bool& value);
-  AV_DLL InputStream& operator>>(InputStream& is, std::string& value);
-
-  template <typename T1, typename T2> InputStream&
-    operator>>(InputStream& is, std::pair<T1, T2>& value)
-  {
+template <typename T1, typename T2>
+InputStream& operator>>(InputStream& is, std::pair<T1, T2>& value)
+{
     return is >> value.first >> value.second;
-  }
+}
 
-  template <typename T> InputStream& operator>>(InputStream& is, std::vector<T>& value)
-  {
+template <typename T>
+InputStream& operator>>(InputStream& is, std::vector<T>& value)
+{
     size_t count;
 
     is >> count;
 
-    while (count) {
-      T tmp;
+    while(count)
+    {
+        T tmp;
 
-      is >> tmp;
-      value.push_back(tmp);
+        is >> tmp;
+        value.push_back(tmp);
 
-      --count;
+        --count;
     }
 
     return is;
-  }
-
 }
+
+} // namespace av
 
 #endif // #if !defined(AV_INPUTSTREAM_H)

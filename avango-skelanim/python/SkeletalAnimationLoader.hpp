@@ -3,4 +3,4 @@
 
 void init_SkeletalAnimationLoader();
 
-#endif //AV_PYTHON_GUA_SKELETAL_ANIMATION_LOADER_HPP
+#endif // AV_PYTHON_GUA_SKELETAL_ANIMATION_LOADER_HPP

@@ -15,54 +15,47 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::StencilPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL StencilPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::StencilPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::StencilPassDescription is created.
+     * Otherwise, the given ::gua::StencilPassDescription is used.
      */
-    class AV_GUA_DLL StencilPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    StencilPassDescription(std::shared_ptr<::gua::StencilPassDescription> const& StencilPassDescription = std::shared_ptr<::gua::StencilPassDescription>(new ::gua::StencilPassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::StencilPassDescription.
+     */
+    std::shared_ptr<::gua::StencilPassDescription> const& getGuaStencilPassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::StencilPassDescription is created.
-       * Otherwise, the given ::gua::StencilPassDescription is used.
-       */
-      StencilPassDescription(std::shared_ptr< ::gua::StencilPassDescription> const& StencilPassDescription =
-                             std::shared_ptr< ::gua::StencilPassDescription>(new ::gua::StencilPassDescription()) );
+  private:
+    std::shared_ptr<::gua::StencilPassDescription> m_guaStencilPassDescription;
 
+    StencilPassDescription(const StencilPassDescription&);
+    StencilPassDescription& operator=(const StencilPassDescription&);
+};
 
+using SFStencilPassDescription = SingleField<Link<StencilPassDescription>>;
+using MFStencilPassDescription = MultiField<Link<StencilPassDescription>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::StencilPassDescription.
-       */
-      std::shared_ptr< ::gua::StencilPassDescription> const& getGuaStencilPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::StencilPassDescription> m_guaStencilPassDescription;
-
-
-      StencilPassDescription(const StencilPassDescription&);
-      StencilPassDescription& operator=(const StencilPassDescription&);
-    };
-
-    using SFStencilPassDescription = SingleField<Link<StencilPassDescription> >;
-    using MFStencilPassDescription = MultiField<Link<StencilPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::StencilPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::StencilPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::StencilPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::StencilPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_STENCIL_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_STENCIL_PASS_DESCRIPTION_HPP

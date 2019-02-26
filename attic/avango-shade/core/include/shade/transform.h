@@ -29,8 +29,8 @@
 
 namespace shade
 {
-  std::string transform(std::string input, ShaderEnvironment env);
-  extern const char* python_transform_path;
-}
+std::string transform(std::string input, ShaderEnvironment env);
+extern const char* python_transform_path;
+} // namespace shade
 
 #endif /* shade_transform_H */

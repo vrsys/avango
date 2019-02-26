@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_CULLFACE
 #define AV_PYTHON_OSG_CULLFACE
 

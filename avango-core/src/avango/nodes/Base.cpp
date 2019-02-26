@@ -44,15 +44,15 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  bool delete_on_unref = 1;
+bool delete_on_unref = 1;
 
-  av::Logger& logger(av::getLogger("av::Base"));
+av::Logger& logger(av::getLogger("av::Base"));
 
-  // functions, internal
+// functions, internal
 
 } // namespace
 
@@ -62,179 +62,140 @@ namespace
 
 AV_TYPED_DEFINE_ABSTRACT(av::Base);
 
-av::Base::Base()
-  : mRefCount(0), mHasFloatingRef(false)
-{
-  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("Base(): @0x%1%") % this));
-}
+av::Base::Base() : mRefCount(0), mHasFloatingRef(false) { AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("Base(): @0x%1%") % this)); }
 
 /* virtual */
-av::Base::~Base()
+av::Base::~Base() { AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("~Base(): @0x%1%") % this)); }
+
+/* static */ void av::Base::initClass()
 {
-  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("~Base(): @0x%1%") % this));
-}
-
-/* static */ void
-av::Base::initClass()
-{
-  if (!isTypeInitialized()) {
-    av::Typed::initClass();
-
-    AV_TYPED_INIT_ABSTRACT(av::Typed, av::Base, true);
-
-    delete_on_unref = (0 == ::getenv("AVANGO_NO_DELETE_ON_UNREF"));
-
-    if (!delete_on_unref)
+    if(!isTypeInitialized())
     {
-      AVANGO_LOG(logger,logging::INFO , "initClass: disabling 'delete this' when reference count goes to zero!");
+        av::Typed::initClass();
+
+        AV_TYPED_INIT_ABSTRACT(av::Typed, av::Base, true);
+
+        delete_on_unref = (0 == ::getenv("AVANGO_NO_DELETE_ON_UNREF"));
+
+        if(!delete_on_unref)
+        {
+            AVANGO_LOG(logger, logging::INFO, "initClass: disabling 'delete this' when reference count goes to zero!");
+        }
     }
-  }
 }
 
-av::Base*
-av::Base::castTo(Type type)
+av::Base* av::Base::castTo(Type type)
 {
-  if (getTypeId().isOfType(type))
-    return this;
+    if(getTypeId().isOfType(type))
+        return this;
 
-  return 0;
-}
-
-/* static */ av::Base*
-av::Base::castTo(Type type, Base* objectToCast)
-{
-  if (!objectToCast) {
     return 0;
-  }
-  return objectToCast->castTo(type);
 }
 
-void
-av::Base::reference()
+/* static */ av::Base* av::Base::castTo(Type type, Base* objectToCast)
 {
-  refImpl();
-
-  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% after ref") % getTypeId().getName().c_str() % this % referenceCount()))
-
+    if(!objectToCast)
+    {
+        return 0;
+    }
+    return objectToCast->castTo(type);
 }
 
-void
-av::Base::unreference()
+void av::Base::reference()
 {
-  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
+    refImpl();
 
-  unrefImpl();
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% after ref") % getTypeId().getName().c_str() % this % referenceCount()))
 }
 
-void
-av::Base::unreferenceWithoutDeletion()
+void av::Base::unreference()
 {
-  AVANGO_LOG(logger,logging::TRACE , boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
 
-  unrefWithoutDeletionImpl();
+    unrefImpl();
 }
 
-int
-av::Base::referenceCount()
+void av::Base::unreferenceWithoutDeletion()
 {
-  return refCountImpl();
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("reference(): '%1%' @0x%2% refcount = %3% before unref") % getTypeId().getName().c_str() % this % referenceCount()))
+
+    unrefWithoutDeletionImpl();
 }
 
-void
-av::Base::setFloatingReference()
+int av::Base::referenceCount() { return refCountImpl(); }
+
+void av::Base::setFloatingReference() { setFloatingRefImpl(); }
+
+/* virtual */ void av::Base::refImpl()
 {
-  setFloatingRefImpl();
+    ++mRefCount;
+    mHasFloatingRef = false;
 }
 
-/* virtual */ void
-av::Base::refImpl()
+/* virtual */ void av::Base::unrefImpl()
 {
-  ++mRefCount;
-  mHasFloatingRef = false;
+    assert(mRefCount > 0);
+
+    --mRefCount;
+
+    if(delete_on_unref && !mHasFloatingRef && (mRefCount == 0))
+    {
+        delete this;
+    }
 }
 
-/* virtual */ void
-av::Base::unrefImpl()
+/* virtual */ void av::Base::unrefWithoutDeletionImpl()
 {
-  assert(mRefCount > 0);
+    assert(mRefCount > 0);
 
-  --mRefCount;
-
-  if (delete_on_unref && !mHasFloatingRef && (mRefCount == 0))
-  {
-    delete this;
-  }
+    --mRefCount;
 }
 
-/* virtual */ void
-av::Base::unrefWithoutDeletionImpl()
-{
-  assert(mRefCount > 0);
+/* virtual */ int av::Base::refCountImpl() { return mRefCount; }
 
-  --mRefCount;
+/*virtual*/ void av::Base::setFloatingRefImpl() { mHasFloatingRef = true; }
+
+/* virtual */ void av::Base::doAction(Action&) {}
+
+/* virtual */ void av::Base::doWriteAction(WriteAction& action)
+{
+    if(action.getStream().isBinaryEnabled())
+    {
+        writeToBinaryStream(action);
+    }
+    else
+    {
+        writeToASCIIStream(action);
+    }
 }
 
-/* virtual */ int
-av::Base::refCountImpl()
+void av::Base::writeToBinaryStream(WriteAction& action)
 {
-  return mRefCount;
+    action.getStream() << getTypeId().getName();
+    action.getStream() << action.lookupObjectId(this);
+    operator<<(action.getStream(), this);
 }
 
-/*virtual*/ void
-av::Base::setFloatingRefImpl()
+void av::Base::writeToASCIIStream(WriteAction& action)
 {
-  mHasFloatingRef = true;
+    (std::ostream&)(action.getStream() << getTypeId().getName()) << " ";
+    action.getStream() << action.lookupObjectId(this) << std::endl;
+    operator<<(action.getStream(), this);
+    action.getStream() << std::endl;
 }
 
-/* virtual */ void
-av::Base::doAction(Action&)
-{}
+/* virtual */ void av::Base::read(InputStream&) {}
 
-/* virtual */ void
-av::Base::doWriteAction(WriteAction& action)
+/* virtual */ void av::Base::write(OutputStream&) {}
+
+av::InputStream& av::operator>>(InputStream& is, Base* obj)
 {
-  if (action.getStream().isBinaryEnabled()) {
-    writeToBinaryStream(action);
-  } else {
-    writeToASCIIStream(action);
-  }
+    obj->read(is);
+    return is;
 }
 
-void
-av::Base::writeToBinaryStream(WriteAction& action)
+av::OutputStream& av::operator<<(OutputStream& os, Base* obj)
 {
-  action.getStream() << getTypeId().getName();
-  action.getStream() << action.lookupObjectId(this);
-  operator<<(action.getStream(), this);
-}
-
-void
-av::Base::writeToASCIIStream(WriteAction& action)
-{
-  (std::ostream&)(action.getStream() << getTypeId().getName()) << " ";
-  action.getStream() << action.lookupObjectId(this) << std::endl;
-  operator<<(action.getStream(), this);
-  action.getStream() << std::endl;
-}
-
-/* virtual */ void
-av::Base::read(InputStream&)
-{}
-
-/* virtual */ void
-av::Base::write(OutputStream&)
-{}
-
-av::InputStream&
-av::operator>>(InputStream& is, Base* obj)
-{
-  obj->read(is);
-  return is;
-}
-
-av::OutputStream&
-av::operator<<(OutputStream& os, Base* obj)
-{
-  obj->write(os);
-  return os;
+    obj->write(os);
+    return os;
 }

@@ -20,62 +20,58 @@
 
 namespace av
 {
-  namespace gua
-  {
-    /**
-     * Wrapper for ::gua::Viewer
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL Viewer : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Viewer
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Viewer : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    public:
+  public:
+    Viewer();
 
-      Viewer();
-
-      MFSceneGraph SceneGraphs;
-      MFWindowBase Windows;
+    MFSceneGraph SceneGraphs;
+    MFWindowBase Windows;
 #if defined(AVANGO_PHYSICS_SUPPORT)
-      SFPhysics    Physics;
+    SFPhysics Physics;
 #endif
-      SFFloat      DesiredFPS;
+    SFFloat DesiredFPS;
 
-      SFFloat      ApplicationFPS;
+    SFFloat ApplicationFPS;
 
-      void run();
-      void frame();
+    void run();
+    void frame();
 
-    protected:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Viewer();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Viewer();
+  private:
+    mutable av::gua::Renderer* m_renderer;
 
+    mutable ::gua::events::MainLoop m_loop;
+    mutable ::gua::events::Ticker m_ticker;
 
-    private:
+    Viewer(const Viewer&);
+    Viewer& operator=(const Viewer&);
+};
 
-      mutable av::gua::Renderer *m_renderer;
+using SFViewer = SingleField<Link<Viewer>>;
+using MFViewer = MultiField<Link<Viewer>>;
 
-      mutable ::gua::events::MainLoop m_loop;
-      mutable ::gua::events::Ticker m_ticker;
-
-      Viewer(const Viewer&);
-      Viewer& operator=(const Viewer&);
-    };
-
-    using SFViewer = SingleField<Link<Viewer> >;
-    using MFViewer = MultiField<Link<Viewer> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Viewer> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Viewer> >;
+template class AV_GUA_DLL SingleField<Link<gua::Viewer>>;
+template class AV_GUA_DLL MultiField<Link<gua::Viewer>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_VIEWER_HPP
+#endif // AVANGO_GUA_VIEWER_HPP

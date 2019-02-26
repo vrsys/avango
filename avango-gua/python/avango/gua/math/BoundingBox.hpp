@@ -3,4 +3,4 @@
 
 void init_BoundingBox();
 
-#endif //AV_PYTHON_GUA_BOUNDING_BOX_HPP
+#endif // AV_PYTHON_GUA_BOUNDING_BOX_HPP

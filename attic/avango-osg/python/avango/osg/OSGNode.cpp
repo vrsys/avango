@@ -43,61 +43,54 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
-
-namespace {
-  osg::BoundingBox CalcBoundingBox(av::osg::Node* node)
-  {
+namespace
+{
+osg::BoundingBox CalcBoundingBox(av::osg::Node* node)
+{
     ::osg::ComputeBoundsVisitor cbbv(::osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
     node->getOsgNode()->accept(cbbv);
     return cbbv.getBoundingBox();
-  }
-
-  void WriteNodeFile(av::osg::Node * node, std::string filename)
-  {
-    osgDB::writeNodeFile(*(node->getOsgNode()),filename);
-  }
-
-  void OptimizeSceneGraph(av::osg::Node * node)
-  {
-    osgUtil::Optimizer optimizer;
-    optimizer.optimize(node->getOsgNode());
-  }
-
-  void RecalculateSmoothNormals(av::osg::Node * node)
-  {
-    osgUtil::SmoothingVisitor sv;
-    node->getOsgNode()->accept(sv);
-  }
-
-
 }
 
+void WriteNodeFile(av::osg::Node* node, std::string filename) { osgDB::writeNodeFile(*(node->getOsgNode()), filename); }
 
+void OptimizeSceneGraph(av::osg::Node* node)
+{
+    osgUtil::Optimizer optimizer;
+    optimizer.optimize(node->getOsgNode());
+}
 
+void RecalculateSmoothNormals(av::osg::Node* node)
+{
+    osgUtil::SmoothingVisitor sv;
+    node->getOsgNode()->accept(sv);
+}
+
+} // namespace
 
 void init_OSGNode(void)
 {
-// wrapping osg::Node functionality
-register_field<av::osg::SFNode>("SFNode");
-register_multifield<av::osg::MFNode>("MFNode");
-class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::noncopyable >("Node", "docstring", no_init)
-  .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
-  .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
-  .def("get_absolute_transform_halt_at_node", &av::osg::Node::getAbsoluteTransformHaltAtNode)
-  ;
+    // wrapping osg::Node functionality
+    register_field<av::osg::SFNode>("SFNode");
+    register_multifield<av::osg::MFNode>("MFNode");
+    class_<av::osg::Node, av::Link<av::osg::Node>, bases<av::osg::Object>, boost::noncopyable>("Node", "docstring", no_init)
+        .def("get_bounding_sphere", &av::osg::Node::getBoundingSphere)
+        .def("get_absolute_transform", &av::osg::Node::getAbsoluteTransform)
+        .def("get_absolute_transform_halt_at_node", &av::osg::Node::getAbsoluteTransformHaltAtNode);
 
-def("calc_bounding_box", CalcBoundingBox);
-def("write_node_file", WriteNodeFile);
-def("optimize_scene_graph", OptimizeSceneGraph);
-def("recalculate_smooth_normals",RecalculateSmoothNormals);
+    def("calc_bounding_box", CalcBoundingBox);
+    def("write_node_file", WriteNodeFile);
+    def("optimize_scene_graph", OptimizeSceneGraph);
+    def("recalculate_smooth_normals", RecalculateSmoothNormals);
 }

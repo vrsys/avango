@@ -38,15 +38,13 @@
 
 namespace av
 {
+class NetID;
+class NetNode;
+class UpcallSerializer;
 
-  class NetID;
-  class NetNode;
-  class UpcallSerializer;
-
-  class Upcall {
-
+class Upcall
+{
   public:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer) = 0;
     // called from app process
@@ -55,142 +53,105 @@ namespace av
     virtual ~Upcall();
 
   protected:
-
     Upcall();
+};
 
-
-  };
-
-  class JoinUpcall : public Upcall {
-
+class JoinUpcall : public Upcall
+{
   public:
-
-    JoinUpcall(const std::string& eid)
-      : mEID(eid) {}
+    JoinUpcall(const std::string& eid) : mEID(eid) {}
     ~JoinUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* net_node, UpcallSerializer& serializer);
 
   private:
+    std::string mEID;
+};
 
-    std::string  mEID;
-
-  };
-
-  class GetStateUpcall : public Upcall {
-
+class GetStateUpcall : public Upcall
+{
   public:
-
-    GetStateUpcall(const std::string& fragment)
-      : mFragment(fragment) {}
+    GetStateUpcall(const std::string& fragment) : mFragment(fragment) {}
     ~GetStateUpcall() {}
 
-    Msg stateMsg()
-    {
-      return mStateMsg;
-    }
+    Msg stateMsg() { return mStateMsg; }
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* net_node, UpcallSerializer& serializer);
 
   private:
+    std::string mFragment;
+    Msg mStateMsg;
+};
 
-    std::string  mFragment;
-    Msg          mStateMsg;
-
-  };
-
-  class SetStateUpcall : public Upcall {
-
+class SetStateUpcall : public Upcall
+{
   public:
-
-    SetStateUpcall(const std::string& fragment, Msg& stateMsg)
-      : mFragment(fragment), mStateMsg(stateMsg) {}
+    SetStateUpcall(const std::string& fragment, Msg& stateMsg) : mFragment(fragment), mStateMsg(stateMsg) {}
     ~SetStateUpcall() {}
 
-    const Msg& stateMsg()
-    {
-      return mStateMsg;
-    }
+    const Msg& stateMsg() { return mStateMsg; }
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
 
   private:
+    std::string mFragment;
+    Msg mStateMsg;
+};
 
-    std::string  mFragment;
-    Msg          mStateMsg;
-
-  };
-
-  class RemoveStateUpcall : public Upcall {
-
+class RemoveStateUpcall : public Upcall
+{
   public:
-
-    RemoveStateUpcall(const std::string& fragment)
-      : mFragment(fragment) {}
+    RemoveStateUpcall(const std::string& fragment) : mFragment(fragment) {}
     ~RemoveStateUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
 
   private:
+    std::string mFragment;
+};
 
-    std::string  mFragment;
-
-  };
-
-  class MessageUpcall : public Upcall {
-
+class MessageUpcall : public Upcall
+{
   public:
-
-    MessageUpcall(Msg& msg)
-      : mMsg(msg) {}
+    MessageUpcall(Msg& msg) : mMsg(msg) {}
     ~MessageUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
 
   private:
+    Msg mMsg;
+};
 
-    Msg  mMsg;
-
-  };
-
-  class AcceptedViewUpcall : public Upcall {
-
+class AcceptedViewUpcall : public Upcall
+{
   public:
-
-    AcceptedViewUpcall(const std::vector<std::string>& members,
-                       const std::vector<std::string>& newMembers,
-                       const std::vector<std::string>& departedMembers,
-                       Msg &msg)
-      : mMembers(members), mNewMembers(newMembers), mDepartedMembers(departedMembers), mMsg(msg) {}
+    AcceptedViewUpcall(const std::vector<std::string>& members, const std::vector<std::string>& newMembers, const std::vector<std::string>& departedMembers, Msg& msg)
+        : mMembers(members), mNewMembers(newMembers), mDepartedMembers(departedMembers), mMsg(msg)
+    {
+    }
     ~AcceptedViewUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
@@ -200,62 +161,51 @@ namespace av
     std::vector<std::string> mMembers;
     std::vector<std::string> mNewMembers;
     std::vector<std::string> mDepartedMembers;
-    Msg                      mMsg;
-  };
+    Msg mMsg;
+};
 
-  class BlockUpcall : public Upcall {
-
+class BlockUpcall : public Upcall
+{
   public:
-
     BlockUpcall() {}
     ~BlockUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
+};
 
-  };
-
-  class UnblockUpcall : public Upcall {
-
+class UnblockUpcall : public Upcall
+{
   public:
-
     UnblockUpcall() {}
     ~UnblockUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
+};
 
-  };
-
-  class ExitUpcall : public Upcall {
-
+class ExitUpcall : public Upcall
+{
   public:
-
     ExitUpcall() {}
     ~ExitUpcall() {}
 
   protected:
-
     // called from net process
     virtual void upcallQueued(UpcallSerializer& serializer);
     // called from app process
     virtual void handle(NetNode* netNode, UpcallSerializer& serializer);
+};
 
-  };
-
-
-  class UpcallSerializer {
-
+class UpcallSerializer
+{
   public:
-
     UpcallSerializer();
     ~UpcallSerializer();
 
@@ -268,17 +218,14 @@ namespace av
     void signalWait();
 
   protected:
-
     // called from app process
     void handleUpcall(boost::shared_ptr<Upcall> upcall, NetNode* netNode);
 
   private:
-
-    boost::mutex        mUpcallQueueLock;
-    std::deque<boost::shared_ptr<Upcall> > mUpcallQueue;
-    Semaphore           mSyncSema;
-
-  };
+    boost::mutex mUpcallQueueLock;
+    std::deque<boost::shared_ptr<Upcall>> mUpcallQueue;
+    Semaphore mSyncSema;
+};
 
 } // namespace av
 

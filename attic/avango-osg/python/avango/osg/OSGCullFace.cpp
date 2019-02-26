@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGCullFace(void)
- {
-  // wrapping osg::CullFace functionality
-  register_field<av::osg::SFCullFace>("SFCullFace");
-  register_multifield<av::osg::MFCullFace>("MFCullFace");
-  class_<av::osg::CullFace, av::Link<av::osg::CullFace>, bases<av::osg::Object>, boost::noncopyable >("CullFace", "docstring", no_init);
- }
+{
+    // wrapping osg::CullFace functionality
+    register_field<av::osg::SFCullFace>("SFCullFace");
+    register_multifield<av::osg::MFCullFace>("MFCullFace");
+    class_<av::osg::CullFace, av::Link<av::osg::CullFace>, bases<av::osg::Object>, boost::noncopyable>("CullFace", "docstring", no_init);
+}

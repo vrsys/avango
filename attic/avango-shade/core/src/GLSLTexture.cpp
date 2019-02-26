@@ -24,34 +24,16 @@
 #include <shade/GLSLTexture.h>
 using namespace shade;
 
+GLSLTexture::GLSLTexture(GLenum target) : m_enable_target(target), m_bind_target(target) { glGenTextures(1, &m_name); }
 
-GLSLTexture::GLSLTexture(GLenum target) :
-  m_enable_target(target),
-  m_bind_target(target)
-{
-  glGenTextures(1, &m_name);
-}
+GLSLTexture::GLSLTexture(GLenum enable_target, GLenum bind_target) : m_enable_target(enable_target), m_bind_target(bind_target) { glGenTextures(1, &m_name); }
 
-GLSLTexture::GLSLTexture(GLenum enable_target, GLenum bind_target) :
-  m_enable_target(enable_target),
-  m_bind_target(bind_target)
-{
-  glGenTextures(1, &m_name);
-}
+GLSLTexture::~GLSLTexture(void) { glDeleteTextures(1, &m_name); }
 
-GLSLTexture::~GLSLTexture(void)
-{
-  glDeleteTextures(1, &m_name);
-}
-
-void GLSLTexture::bind(void) const
-{
-  glBindTexture(m_bind_target, m_name);
-}
+void GLSLTexture::bind(void) const { glBindTexture(m_bind_target, m_name); }
 
 void GLSLTexture::enable(void) const
 {
-  glEnable(m_enable_target);
-  bind();
+    glEnable(m_enable_target);
+    bind();
 }
-

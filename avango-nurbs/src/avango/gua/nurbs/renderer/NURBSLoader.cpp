@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::nurbs::NURBSLoader"));
+av::Logger& logger(av::getLogger("av::gua::nurbs::NURBSLoader"));
 }
 
 AV_FC_DEFINE(av::gua::nurbs::NURBSLoader);
@@ -15,25 +15,15 @@ AV_FC_DEFINE(av::gua::nurbs::NURBSLoader);
 AV_FIELD_DEFINE(av::gua::nurbs::SFNURBSLoader);
 AV_FIELD_DEFINE(av::gua::nurbs::MFNURBSLoader);
 
-av::gua::nurbs::NURBSLoader::NURBSLoader(::gua::NURBSLoader* guaNURBSLoader)
-    : m_guaNURBSLoader(guaNURBSLoader)
-{}
+av::gua::nurbs::NURBSLoader::NURBSLoader(::gua::NURBSLoader* guaNURBSLoader) : m_guaNURBSLoader(guaNURBSLoader) {}
 
-av::Link<av::gua::Node>
-av::gua::nurbs::NURBSLoader::load( std::string const& nodeName,
-                           std::string const& fileName,
-                           av::gua::Material const& fallbackMaterial,
-                           Flags flags) const
+av::Link<av::gua::Node> av::gua::nurbs::NURBSLoader::load(std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, Flags flags) const
 {
-
     auto gua_node(m_guaNURBSLoader->load_geometry(nodeName, fileName, fallbackMaterial.getGuaMaterial(), flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
-
-
-
 
 /*
 std::pair<std::string, ::gua::math::vec3>
@@ -81,10 +71,9 @@ av::gua::nurbs::PLODLoader::pick_plod_interpolate(
 
 */
 
-void
-av::gua::nurbs::NURBSLoader::initClass()
+void av::gua::nurbs::NURBSLoader::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -95,40 +84,42 @@ av::gua::nurbs::NURBSLoader::initClass()
     }
 }
 
-::gua::NURBSLoader*
-av::gua::nurbs::NURBSLoader::getGuaNURBSLoader() const
+::gua::NURBSLoader* av::gua::nurbs::NURBSLoader::getGuaNURBSLoader() const { return m_guaNURBSLoader; }
+
+av::gua::Node* av::gua::nurbs::NURBSLoader::createChildren(std::shared_ptr<::gua::node::Node> root) const
 {
-    return m_guaNURBSLoader;
-}
+    av::gua::Node* av_node(nullptr);
 
-av::gua::Node*
-av::gua::nurbs::NURBSLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
-
-  av::gua::Node* av_node(nullptr);
-
-  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
-  if (group_cast) {
-    av_node = new av::gua::TransformNode(group_cast);
-  }
-
-  if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::NURBSNode>(root));
-    if (geom_cast) {
-      av_node = new av::gua::nurbs::NURBSNode(geom_cast);
+    auto group_cast(std::dynamic_pointer_cast<::gua::node::TransformNode>(root));
+    if(group_cast)
+    {
+        av_node = new av::gua::TransformNode(group_cast);
     }
-  }
 
-  if (av_node) {
-    av_node->addToParentChildren();
-  } else {
-    std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
-  }
+    if(!av_node)
+    {
+        auto geom_cast(std::dynamic_pointer_cast<::gua::node::NURBSNode>(root));
+        if(geom_cast)
+        {
+            av_node = new av::gua::nurbs::NURBSNode(geom_cast);
+        }
+    }
 
-  for (auto c : root->get_children()) {
-    createChildren(c);
-  }
+    if(av_node)
+    {
+        av_node->addToParentChildren();
+    }
+    else
+    {
+        std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
+    }
 
-  return av_node;
+    for(auto c : root->get_children())
+    {
+        createChildren(c);
+    }
+
+    return av_node;
 }
 
 /*

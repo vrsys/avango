@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::StateAttribute"));
+av::Logger& logger(av::getLogger("av::osg::StateAttribute"));
 }
 
 AV_FC_DEFINE_ABSTRACT(av::osg::StateAttribute);
@@ -37,30 +37,21 @@ AV_FC_DEFINE_ABSTRACT(av::osg::StateAttribute);
 AV_FIELD_DEFINE(av::osg::SFStateAttribute);
 AV_FIELD_DEFINE(av::osg::MFStateAttribute);
 
-av::osg::StateAttribute::StateAttribute(::osg::StateAttribute* osgstateattribute) :
-  Object(osgstateattribute),
-  mOsgStateAttribute(osgstateattribute)
-{}
+av::osg::StateAttribute::StateAttribute(::osg::StateAttribute* osgstateattribute) : Object(osgstateattribute), mOsgStateAttribute(osgstateattribute) {}
 
-av::osg::StateAttribute::~StateAttribute()
-{}
+av::osg::StateAttribute::~StateAttribute() {}
 
-void
-av::osg::StateAttribute::initClass()
+void av::osg::StateAttribute::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Object::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Object::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::StateAttribute, true);
+        AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::StateAttribute, true);
 
-    SFStateAttribute::initClass("av::osg::SFStateAttribute", "av::Field");
-    MFStateAttribute::initClass("av::osg::MFStateAttribute", "av::Field");
-  }
+        SFStateAttribute::initClass("av::osg::SFStateAttribute", "av::Field");
+        MFStateAttribute::initClass("av::osg::MFStateAttribute", "av::Field");
+    }
 }
 
-::osg::StateAttribute*
-av::osg::StateAttribute::getOsgStateAttribute() const
-{
-  return mOsgStateAttribute;
-}
+::osg::StateAttribute* av::osg::StateAttribute::getOsgStateAttribute() const { return mOsgStateAttribute; }

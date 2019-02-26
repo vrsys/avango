@@ -3,4 +3,4 @@
 
 void init_SkyMapPassDescription();
 
-#endif //AV_PYTHON_GUA_SKY_MAP_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_SKY_MAP_PASS_DESCRIPTION_HPP

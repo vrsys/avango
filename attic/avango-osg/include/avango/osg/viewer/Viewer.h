@@ -39,82 +39,78 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      /**
-       * Wrapper for ::osgViewer::Viewer.
-       * OpenSceneGraph allows only one Viewer in an application!
-       *
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL Viewer : public View
-      {
-        AV_FC_DECLARE();
+namespace osg
+{
+namespace viewer
+{
+/**
+ * Wrapper for ::osgViewer::Viewer.
+ * OpenSceneGraph allows only one Viewer in an application!
+ *
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL Viewer : public View
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. Creates a new ::osgViewer::Viewer for internal use.
+     */
+    Viewer();
 
-        /**
-         * Constructor. Creates a new ::osgViewer::Viewer for internal use.
-         */
-        Viewer();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Viewer();
 
-      protected:
+  public:
+    /**
+     * Threading model. See osgViewer/ViewerBase for enum values.
+     */
+    SFInt ThreadingModel;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~Viewer();
+    /**
+     * Get the wrapped ::osgViewer::Viewer.
+     */
+    ::osgViewer::Viewer* getOsgViewer() const;
 
-      public:
+    /**
+     * Evaluate and renders one frame.
+     */
+    void frame();
 
-        /**
-         * Threading model. See osgViewer/ViewerBase for enum values.
-         */
-        SFInt ThreadingModel;
+    /**
+     * Start the evaluation and render loop.
+     */
+    bool run();
 
-        /**
-         * Get the wrapped ::osgViewer::Viewer.
-         */
-        ::osgViewer::Viewer* getOsgViewer() const;
+    /**
+     * Stop the evaluation and render loop.
+     */
+    bool done();
 
-        /**
-         * Evaluate and renders one frame.
-         */
-        void frame();
+    /**
+     * Render callback.
+     */
+    void renderCB();
 
-        /**
-         * Start the evaluation and render loop.
-         */
-        bool run();
+    virtual void getThreadingModelCB(const SFInt::GetValueEvent& event);
+    virtual void setThreadingModelCB(const SFInt::SetValueEvent& event);
 
-        /**
-         * Stop the evaluation and render loop.
-         */
-        bool done();
+  private:
+    ::osgViewer::Viewer* mOsgViewer;
+    av::Application::CallbackHandle mRenderCallbackHandle;
+};
 
-        /**
-         * Render callback.
-         */
-        void renderCB();
+typedef SingleField<Link<Viewer>> SFViewer;
 
-        virtual void getThreadingModelCB(const SFInt::GetValueEvent& event);
-        virtual void setThreadingModelCB(const SFInt::SetValueEvent& event);
-
-      private:
-
-        ::osgViewer::Viewer *mOsgViewer;
-        av::Application::CallbackHandle mRenderCallbackHandle;
-      };
-
-      typedef SingleField<Link<Viewer> > SFViewer;
-
-    } // namespace viewer
-  } // namespace osg
+} // namespace viewer
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::Viewer> >;
+template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::Viewer>>;
 #endif
 
 } // namespace av

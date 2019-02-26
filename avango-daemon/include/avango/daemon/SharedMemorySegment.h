@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #if !defined(AVANGO_DAEMON_SHAREDMEMORYSEGMENT_H)
 #define AVANGO_DAEMON_SHAREDMEMORYSEGMENT_H
 
@@ -35,56 +34,51 @@
 #include <boost/noncopyable.hpp>
 #include <cstddef>
 
-
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Represents a shared memory segment.
+ *
+ * \ingroup av_daemon
+ */
+class SharedMemorySegment : private boost::noncopyable
+{
+  public:
+    /**
+     * Constructor.
+     */
+    SharedMemorySegment(int /* key */, int /* size */);
 
     /**
-     * Represents a shared memory segment.
-     *
-     * \ingroup av_daemon
+     * Destructor.
      */
-    class SharedMemorySegment : private boost::noncopyable {
+    ~SharedMemorySegment();
 
-    public:
+    /**
+     * Create segment.
+     */
+    void* segment() const;
 
-      /**
-       * Constructor.
-       */
-      SharedMemorySegment(int /* key */, int /* size */);
+    /**
+     * Returns size of segment.
+     */
+    size_t size() const;
 
-      /**
-       * Destructor.
-       */
-      ~SharedMemorySegment();
+    /**
+     * Returns true if segment was created.
+     */
+    bool created() const;
 
-      /**
-       * Create segment.
-       */
-      void*  segment() const;
-
-      /**
-       * Returns size of segment.
-       */
-      size_t size() const;
-
-      /**
-       * Returns true if segment was created.
-       */
-      bool   created() const;
-
-    private:
-
-      bool   mCreated;
-      int    mSegmentKey;
-      int    mSegmentId;
-      void*  mSegment;
-      size_t mSegmentSize;
-
-    };
-  }
-}
+  private:
+    bool mCreated;
+    int mSegmentKey;
+    int mSegmentId;
+    void* mSegment;
+    size_t mSegmentSize;
+};
+} // namespace daemon
+} // namespace av
 
 #endif // #if !defined(AVANGO_DAEMON_SHAREDMEMORYSEGMENT_H)

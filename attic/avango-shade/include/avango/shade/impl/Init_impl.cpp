@@ -28,46 +28,40 @@
 
 namespace av
 {
-  namespace shade
-  {
-    namespace detail
+namespace shade
+{
+namespace detail
+{
+template <class T, class W>
+class ShaderCreate : public Create
+{
+  public:
+    ShaderCreate(const std::string& name) { mType = av::Type::createType(FieldContainer::getClassTypeId(), name, this, true); }
+
+    /*virtual*/ av::Typed* makeInstance() const
     {
-      template<class T, class W>
-      class ShaderCreate : public Create
-      {
-      public:
-
-        ShaderCreate(const std::string& name)
-        {
-          mType = av::Type::createType(FieldContainer::getClassTypeId(), name, this, true);
-        }
-
-        /*virtual*/ av::Typed* makeInstance() const
-        {
-          boost::shared_ptr<T> shade_shader(new T());
-          W* shader = new W(mType, shade_shader);
-          return shader;
-        }
-
-      private:
-        av::Type mType;
-      };
+        boost::shared_ptr<T> shade_shader(new T());
+        W* shader = new W(mType, shade_shader);
+        return shader;
     }
-  }
+
+  private:
+    av::Type mType;
+};
+} // namespace detail
+} // namespace shade
+} // namespace av
+
+template <class Shader>
+/*static*/ void av::shade::Init::registerShader(const std::string& name)
+{
+    registerWrappedShader<Shader, ::av::shade::Shader>(name);
 }
 
-template<class Shader>
-/*static*/ void
-av::shade::Init::registerShader(const std::string& name)
+template <class Shader, class Wrapper>
+/*static*/ void av::shade::Init::registerWrappedShader(const std::string& name)
 {
-  registerWrappedShader<Shader, ::av::shade::Shader>(name);
-}
-
-template<class Shader, class Wrapper>
-/*static*/ void
-av::shade::Init::registerWrappedShader(const std::string& name)
-{
-  FieldContainer::initClass();
-  // Object registers itself and is thus not leaked
-  new detail::ShaderCreate<Shader, Wrapper>(name);
+    FieldContainer::initClass();
+    // Object registers itself and is thus not leaked
+    new detail::ShaderCreate<Shader, Wrapper>(name);
 }

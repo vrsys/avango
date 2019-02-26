@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::HeadlessSurface"));
+av::Logger& logger(av::getLogger("av::gua::HeadlessSurface"));
 }
 
 AV_FC_DEFINE(av::gua::HeadlessSurface);
@@ -14,15 +14,11 @@ AV_FC_DEFINE(av::gua::HeadlessSurface);
 AV_FIELD_DEFINE(av::gua::SFHeadlessSurface);
 AV_FIELD_DEFINE(av::gua::MFHeadlessSurface);
 
-av::gua::HeadlessSurface::HeadlessSurface(std::shared_ptr< ::gua::HeadlessSurface> const& guaWindow)
-    : av::gua::WindowBase(guaWindow)
-    , m_guaWindow(guaWindow)
-{}
+av::gua::HeadlessSurface::HeadlessSurface(std::shared_ptr<::gua::HeadlessSurface> const& guaWindow) : av::gua::WindowBase(guaWindow), m_guaWindow(guaWindow) {}
 
-void
-av::gua::HeadlessSurface::initClass()
+void av::gua::HeadlessSurface::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::WindowBase::initClass();
 
@@ -33,8 +29,4 @@ av::gua::HeadlessSurface::initClass()
     }
 }
 
-std::shared_ptr< ::gua::HeadlessSurface> const&
-av::gua::HeadlessSurface::getGuaWindow() const
-{
-    return m_guaWindow;
-}
+std::shared_ptr<::gua::HeadlessSurface> const& av::gua::HeadlessSurface::getGuaWindow() const { return m_guaWindow; }

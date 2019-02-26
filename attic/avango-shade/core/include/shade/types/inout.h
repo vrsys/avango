@@ -28,9 +28,9 @@
 
 namespace shade
 {
-  template<ShaderEnvironment output = invariant_shader, ShaderEnvironment input = invariant_shader>
-    class inout : public Type
-  {
+template <ShaderEnvironment output = invariant_shader, ShaderEnvironment input = invariant_shader>
+class inout : public Type
+{
   public:
     inout(formatter::Constants::Type type);
     /*virtual*/ bool is_writable(const ShaderEnvironment& se) const;
@@ -38,11 +38,11 @@ namespace shade
     /*virtual*/ std::string get_uniq_id(void) const;
     /*virtual*/ void output_attribute(boost::shared_ptr<Type::State>, Formatter* fmt, const std::string& obj, const std::string& name) const;
     /*virtual*/ bool output_begin_property_dispatcher(Formatter* fmt, const std::string& obj, const std::string name) const;
-  };
+};
 
-  typedef inout<invariant_shader, vertex_shader> raw_attribute;
-  typedef inout<vertex_shader, fragment_shader> raw_varying;
-}
+typedef inout<invariant_shader, vertex_shader> raw_attribute;
+typedef inout<vertex_shader, fragment_shader> raw_varying;
+} // namespace shade
 
 #include "impl/inout_impl.cpp"
 

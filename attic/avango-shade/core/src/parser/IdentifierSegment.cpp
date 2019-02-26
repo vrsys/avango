@@ -25,13 +25,6 @@
 #include <shade/formatter/Generator.h>
 using namespace shade::parser;
 
-IdentifierSegment::IdentifierSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) :
-  Segment(begin, end),
-  m_id(begin, end)
-{
-}
+IdentifierSegment::IdentifierSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end) : Segment(begin, end), m_id(begin, end) {}
 
-void IdentifierSegment::get_content(formatter::Generator&generator, Scope&, const FunctionCall&, std::ostream& error_log) const
-{
-  generator.handle_identifier(m_id);
-}
+void IdentifierSegment::get_content(formatter::Generator& generator, Scope&, const FunctionCall&, std::ostream& error_log) const { generator.handle_identifier(m_id); }

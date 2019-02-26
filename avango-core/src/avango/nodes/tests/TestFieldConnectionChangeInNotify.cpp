@@ -33,58 +33,54 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("TestFieldConnectionChangeInNotify"));
+av::Logger& logger(av::getLogger("TestFieldConnectionChangeInNotify"));
 
-  class MyObject : public av::IntObject
-  {
+class MyObject : public av::IntObject
+{
     AV_FC_DECLARE();
 
   public:
-
     MyObject() {}
     MyObject(av::Field* field);
     void fieldHasChanged(const av::Field& field);
 
   private:
     av::Field* mOtherField;
-  };
+};
 
-  AV_FC_DEFINE(MyObject);
+AV_FC_DEFINE(MyObject);
 
-  /* static */ void MyObject::initClass()
-  {
-    if (!isTypeInitialized())
+/* static */ void MyObject::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::IntObject::initClass();
-      AV_FC_INIT(av::IntObject, MyObject, true);
+        av::IntObject::initClass();
+        AV_FC_INIT(av::IntObject, MyObject, true);
     }
-  }
+}
 
-  MyObject::MyObject(av::Field* field) :
-    mOtherField(field)
-  {
-  }
+MyObject::MyObject(av::Field* field) : mOtherField(field) {}
 
-  void MyObject::fieldHasChanged(const av::Field& field)
-  {
-    if (Value.getValue() == 1)
+void MyObject::fieldHasChanged(const av::Field& field)
+{
+    if(Value.getValue() == 1)
     {
-      AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting from source field");
-      Value.enableNotify(false);
-      Value.disconnectFrom(mOtherField);
-      Value.enableNotify(true);
+        AVANGO_LOG(logger, av::logging::INFO, "fieldHasChanged: disconnecting from source field");
+        Value.enableNotify(false);
+        Value.disconnectFrom(mOtherField);
+        Value.enableNotify(true);
     }
-    if (Value.getValue() == 3)
+    if(Value.getValue() == 3)
     {
-      AVANGO_LOG(logger,av::logging::INFO , "fieldHasChanged: disconnecting all fields from source field");
-      Value.enableNotify(false);
-      mOtherField->disconnectAuditors();
-      Value.enableNotify(true);
+        AVANGO_LOG(logger, av::logging::INFO, "fieldHasChanged: disconnecting all fields from source field");
+        Value.enableNotify(false);
+        mOtherField->disconnectAuditors();
+        Value.enableNotify(true);
     }
-  }
+}
 
-  TEST(fieldConnectionChangeInNotify)
-  {
+TEST(fieldConnectionChangeInNotify)
+{
     MyObject::initClass();
 
     av::Link<av::IntObject> src(new av::IntObject);
@@ -117,5 +113,5 @@ namespace
     CHECK_EQUAL(3, dst2->Value.getValue());
 
     av::ApplicationInstance::get().evaluate();
-  }
 }
+} // namespace

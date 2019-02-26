@@ -28,35 +28,30 @@
 #include <shade/ObjectMap.h>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class ListValue : public Value
+{
+  public:
+    typedef ObjectMap::Index Index;
 
-    class ListValue : public Value
-    {
-    public:
+    ListValue(Index begin, Index end);
 
-      typedef ObjectMap::Index Index;
+    Index begin(void) const { return m_begin; }
+    Index end(void) const { return m_end; }
 
-      ListValue(Index begin, Index end);
+    /*virtual*/ bool is_constant(void) const;
 
-      Index begin(void) const { return m_begin; }
-      Index end(void) const { return m_end; }
+  private:
+    /*virtual*/ bool less_than(const Value& other) const;
 
-      /*virtual*/ bool is_constant(void) const;
+    Index m_begin;
+    Index m_end;
+};
 
-    private:
-
-      /*virtual*/ bool less_than(const Value& other) const;
-
-      Index m_begin;
-      Index m_end;
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_ListValue */

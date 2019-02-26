@@ -10,20 +10,20 @@
 
 namespace av
 {
-  namespace vive
-  {
-    /**
-     * Initializes the Avango vive library.
-     * Usage: \code av::vive::Init::initClass(); \endcode
-     *
-     * \ingroup av_vive
-     */
+namespace vive
+{
+/**
+ * Initializes the Avango vive library.
+ * Usage: \code av::vive::Init::initClass(); \endcode
+ *
+ * \ingroup av_vive
+ */
 
-    class AV_VIVE_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+class AV_VIVE_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace vive
+} // namespace av
 
-#endif //AVANGO_VIVE_INIT_HPP
+#endif // AVANGO_VIVE_INIT_HPP

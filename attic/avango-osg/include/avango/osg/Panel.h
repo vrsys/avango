@@ -38,73 +38,67 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Node that creates a Panel geometry as Drawable
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Panel : public Geometry
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Node that creates a Panel geometry as Drawable
-     *
-     * \ingroup av_osg
+     * Constructor.
      */
-    class AV_OSG_DLL Panel : public Geometry
-    {
-      AV_FC_DECLARE();
+    Panel();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Panel();
 
-      /**
-       * Constructor.
-       */
-      Panel();
+  public:
+    SFFloat Width;
+    SFFloat Height;
+    SFFloat EdgeRadius;
+    SFInt EdgeSmooth;
+    SFVec4 PanelColor;
+    SFVec4 BorderColor;
+    SFFloat BorderWidth;
+    SFVec3 Position;
+    // Indicates the visibility of the panel interior
+    SFBool ShowPanel;
+    // Indicates the visibility of the panel border
+    SFBool ShowBorder;
+    // Set the centering of the panel
+    // 0 = the value of the Position field corresponds the center of the panel (default)
+    // 1 = the value of the Position field corresponds the upper left corner of the panel
+    SFInt Centering;
 
-    protected:
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Panel();
+  private:
+    bool mGeometryChanged;
+    bool mColorChanged;
+    bool mVisibilityChanged;
 
-    public:
+    void updateGeometry();
+    void updateColor();
+    void updatePanelVisibility();
+};
 
-      SFFloat Width;
-      SFFloat Height;
-      SFFloat EdgeRadius;
-      SFInt EdgeSmooth;
-      SFVec4 PanelColor;
-      SFVec4 BorderColor;
-      SFFloat BorderWidth;
-      SFVec3 Position;
-      //Indicates the visibility of the panel interior
-      SFBool ShowPanel;
-      //Indicates the visibility of the panel border
-      SFBool ShowBorder;
-      //Set the centering of the panel
-      //0 = the value of the Position field corresponds the center of the panel (default)
-      //1 = the value of the Position field corresponds the upper left corner of the panel
-      SFInt Centering;
-
-
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
-
-    private:
-
-      bool mGeometryChanged;
-      bool mColorChanged;
-      bool mVisibilityChanged;
-
-      void updateGeometry();
-      void updateColor();
-      void updatePanelVisibility();
-
-    };
-
-    typedef SingleField<Link<Panel> > SFPanel;
-    typedef MultiField<Link<Panel> > MFPanel;
-  } // namespace osg
+typedef SingleField<Link<Panel>> SFPanel;
+typedef MultiField<Link<Panel>> MFPanel;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Panel> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Panel> >;
+template class AV_OSG_DLL SingleField<Link<osg::Panel>>;
+template class AV_OSG_DLL MultiField<Link<osg::Panel>>;
 #endif
 
 } // namespace av

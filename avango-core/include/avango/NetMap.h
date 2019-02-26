@@ -40,14 +40,13 @@
 
 namespace av
 {
-  class NetID;
+class NetID;
 
-  // a catalog of all objects playing in netland, exept well-kowns
+// a catalog of all objects playing in netland, exept well-kowns
 
-  class NetMap {
-
+class NetMap
+{
   public:
-
     NetMap();
     virtual ~NetMap();
 
@@ -59,10 +58,10 @@ namespace av
     void unregisterObj(const Link<Distributed>& obj);
 
     bool lookup(const NetID& id, Link<Distributed>& result) const;
-    bool lookup(const std::string& eid, std::vector<Link<Distributed> >& result) const;
-    bool lookup(std::vector<Link<Distributed> >& result) const;
+    bool lookup(const std::string& eid, std::vector<Link<Distributed>>& result) const;
+    bool lookup(std::vector<Link<Distributed>>& result) const;
 
-    bool lookupExcept(const std::string& eid, std::vector<Link<Distributed> >& result) const;
+    bool lookupExcept(const std::string& eid, std::vector<Link<Distributed>>& result) const;
 
     void removeAllSlots();
     void removeAllSlotsExcept(const std::string& eid);
@@ -74,13 +73,11 @@ namespace av
     void dump(std::ostream& os) const;
 
   private:
-
-    using IntDstMap = std::tr1::unordered_map<int, Link<Distributed> >;
+    using IntDstMap = std::tr1::unordered_map<int, Link<Distributed>>;
     using EIDMapMap = std::tr1::unordered_map<std::string, IntDstMap>;
 
     EIDMapMap mEIDMap;
-
-  };
+};
 
 } // namespace av
 

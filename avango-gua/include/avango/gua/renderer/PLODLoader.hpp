@@ -16,97 +16,86 @@
 #include <avango/gua/scenegraph/PickResult.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
 
-
 namespace av
 {
-  namespace gua
-  {
- /**
-  * Wrapper for ::gua::PLODLoader
-  *
-  * \ingroup av_gua
-  */
-  class AV_GUA_DLL PLODLoader : public av::FieldContainer
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::PLODLoader
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL PLODLoader : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
-    enum Flags {
-      DEFAULTS = ::gua::PLODLoader::DEFAULTS,
-      MAKE_PICKABLE = ::gua::PLODLoader::MAKE_PICKABLE,
-      NORMALIZE_SCALE = ::gua::PLODLoader::NORMALIZE_SCALE,
-      NORMALIZE_POSITION = ::gua::PLODLoader::NORMALIZE_POSITION
+    enum Flags
+    {
+        DEFAULTS = ::gua::PLODLoader::DEFAULTS,
+        MAKE_PICKABLE = ::gua::PLODLoader::MAKE_PICKABLE,
+        NORMALIZE_SCALE = ::gua::PLODLoader::NORMALIZE_SCALE,
+        NORMALIZE_POSITION = ::gua::PLODLoader::NORMALIZE_POSITION
     };
 
- /**
-  * Constructor. When called without arguments, a new ::gua::PLODLoader is created.
-  * Otherwise, the given ::gua::PLODLoader is used.
-  */
+    /**
+     * Constructor. When called without arguments, a new ::gua::PLODLoader is created.
+     * Otherwise, the given ::gua::PLODLoader is used.
+     */
     PLODLoader(::gua::PLODLoader* guaPLODLoader = new ::gua::PLODLoader());
 
-    av::Link<av::gua::Node> load( std::string const& fileName,
-                                  Flags flags = DEFAULTS) const;
-    av::Link<av::gua::Node> load( std::string const& nodeName,
-                                  std::string const& fileName,
-                                  av::gua::Material const& fallbackMaterial,
-                                  Flags flags = DEFAULTS) const;
+    av::Link<av::gua::Node> load(std::string const& fileName, Flags flags = DEFAULTS) const;
+    av::Link<av::gua::Node> load(std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, Flags flags = DEFAULTS) const;
     bool is_supported(std::string const& fileName) const;
 
-    std::pair<std::string, ::gua::math::vec3> pick_plod_bvh(
-                              ::gua::math::vec3 const& ray_origin,
-                              ::gua::math::vec3 const& ray_forward,
-                              float max_distance,
-                              std::set<std::string> const& model_filenames,
-                              float aabb_scale) const;
+    std::pair<std::string, ::gua::math::vec3>
+    pick_plod_bvh(::gua::math::vec3 const& ray_origin, ::gua::math::vec3 const& ray_forward, float max_distance, std::set<std::string> const& model_filenames, float aabb_scale) const;
 
-    av::gua::MFPickResult* pick_plod_interpolate(
-                                  ::gua::math::vec3 const& bundle_origin,
-                                  ::gua::math::vec3 const& bundle_forward,
-                                  ::gua::math::vec3 const& bundle_up,
-                                  float bundle_radius,
-                                  float max_distance,
-                                  unsigned int max_depth,
-                                  unsigned int surfel_skip,
-                                  float aabb_scale) const;
+    av::gua::MFPickResult* pick_plod_interpolate(::gua::math::vec3 const& bundle_origin,
+                                                 ::gua::math::vec3 const& bundle_forward,
+                                                 ::gua::math::vec3 const& bundle_up,
+                                                 float bundle_radius,
+                                                 float max_distance,
+                                                 unsigned int max_depth,
+                                                 unsigned int surfel_skip,
+                                                 float aabb_scale) const;
+
   public:
+    SFInt UploadBudget;
+    SFInt RenderBudget;
+    SFInt OutOfCoreBudget;
 
-      SFInt   UploadBudget;
-      SFInt   RenderBudget;
-      SFInt   OutOfCoreBudget;
+    /**
+     * Get the wrapped ::gua::PLODLoader.
+     */
+    ::gua::PLODLoader* getGuaPLODLoader() const;
 
-      /**
-       * Get the wrapped ::gua::PLODLoader.
-       */
-      ::gua::PLODLoader* getGuaPLODLoader() const;
+    virtual void getUploadBudgetCB(const SFInt::GetValueEvent& event);
+    virtual void setUploadBudgetCB(const SFInt::SetValueEvent& event);
+    virtual void getRenderBudgetCB(const SFInt::GetValueEvent& event);
+    virtual void setRenderBudgetCB(const SFInt::SetValueEvent& event);
+    virtual void getOutOfCoreBudgetCB(const SFInt::GetValueEvent& event);
+    virtual void setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event);
 
-      virtual void getUploadBudgetCB(const SFInt::GetValueEvent& event);
-      virtual void setUploadBudgetCB(const SFInt::SetValueEvent& event);
-      virtual void getRenderBudgetCB(const SFInt::GetValueEvent& event);
-      virtual void setRenderBudgetCB(const SFInt::SetValueEvent& event);
-      virtual void getOutOfCoreBudgetCB(const SFInt::GetValueEvent& event);
-      virtual void setOutOfCoreBudgetCB(const SFInt::SetValueEvent& event);
+  private:
+    ::gua::PLODLoader* m_guaPLODLoader;
 
-    private:
+    av::gua::Node* createChildren(std::shared_ptr<::gua::node::Node> root) const;
 
-      ::gua::PLODLoader *m_guaPLODLoader;
+    PLODLoader(const PLODLoader&);
+    PLODLoader& operator=(const PLODLoader&);
+};
 
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
+using SFPLODLoader = SingleField<Link<PLODLoader>>;
+using MFPLODLoader = MultiField<Link<PLODLoader>>;
 
-      PLODLoader(const PLODLoader&);
-      PLODLoader& operator=(const PLODLoader&);
-    };
-
-    using SFPLODLoader = SingleField<Link<PLODLoader> >;
-    using MFPLODLoader = MultiField<Link<PLODLoader> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::PLODLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::PLODLoader> >;
+template class AV_GUA_DLL SingleField<Link<gua::PLODLoader>>;
+template class AV_GUA_DLL MultiField<Link<gua::PLODLoader>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_PLOD_LOADER_HPP
+#endif // AVANGO_GUA_PLOD_LOADER_HPP

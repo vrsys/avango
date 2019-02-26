@@ -23,10 +23,8 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef CLIPPLANE_H_
 #define CLIPPLANE_H_
-
 
 /**
  * \file
@@ -39,65 +37,60 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::ClipPlane OsgClipPlane;
+namespace osg
+{
+typedef ::osg::ClipPlane OsgClipPlane;
+
+/**
+ * Wrapper for ::osg::ClipPlane
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL ClipPlane : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::ClipPlane is created.
+     * Otherwise, the given ::osg::ClipPlane is used.
+     */
+    ClipPlane(OsgClipPlane* osgClipPlane = new OsgClipPlane());
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ClipPlane();
+
+  public:
+    SFInt PlaneNumber;
+    osg::SFVec4 Plane;
 
     /**
-     * Wrapper for ::osg::ClipPlane
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::ClipPlane.
      */
-    class AV_OSG_DLL ClipPlane : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::ClipPlane* getOsgClipPlane() const;
 
-    public:
+  protected:
+    virtual void getPlaneNumberCB(const av::SFInt::GetValueEvent& event);
+    virtual void setPlaneNumberCB(const av::SFInt::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::ClipPlane is created.
-       * Otherwise, the given ::osg::ClipPlane is used.
-       */
-      ClipPlane(OsgClipPlane* osgClipPlane = new OsgClipPlane());
+    virtual void getPlaneCB(const av::osg::SFVec4::GetValueEvent& event);
+    virtual void setPlaneCB(const av::osg::SFVec4::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::ClipPlane* mOsgClipPlane;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ClipPlane();
-
-    public:
-
-      SFInt PlaneNumber;
-      osg::SFVec4 Plane;
-
-      /**
-       * Get the wrapped ::osg::ClipPlane.
-       */
-      ::osg::ClipPlane* getOsgClipPlane() const;
-
-    protected:
-
-      virtual void getPlaneNumberCB(const av::SFInt::GetValueEvent& event);
-      virtual void setPlaneNumberCB(const av::SFInt::SetValueEvent& event);
-
-      virtual void getPlaneCB(const av::osg::SFVec4::GetValueEvent& event);
-      virtual void setPlaneCB(const av::osg::SFVec4::SetValueEvent& event);
-
-    private:
-
-      ::osg::ClipPlane *mOsgClipPlane;
-    };
-
-    typedef SingleField<Link<ClipPlane> > SFClipPlane;
-    typedef MultiField<Link<ClipPlane> > MFClipPlane;
-  }
+typedef SingleField<Link<ClipPlane>> SFClipPlane;
+typedef MultiField<Link<ClipPlane>> MFClipPlane;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::ClipPlane> >;
-  template class AV_OSG_DLL MultiField<Link<osg::ClipPlane> >;
+template class AV_OSG_DLL SingleField<Link<osg::ClipPlane>>;
+template class AV_OSG_DLL MultiField<Link<osg::ClipPlane>>;
 #endif
 
-}
+} // namespace av
 #endif /* CLIPPLANE_H_ */

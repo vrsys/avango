@@ -49,39 +49,37 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::Init"));
+av::Logger& logger(av::getLogger("av::daemon::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::daemon::Init);
 
-/* static */ void
-av::daemon::Init::initClass()
+/* static */ void av::daemon::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::daemon::Device::initClass();
-    av::daemon::DeviceActuator::initClass();
-    av::daemon::DeviceDaemon::initClass();
-    av::daemon::DeviceSensor::initClass();
-    av::daemon::DeviceService::initClass();
-    av::daemon::DTrack::initClass();
-    av::daemon::KinectTrack::initClass();
-    av::daemon::SkeletonTrack::initClass();
-    av::daemon::HMDTrack::initClass();
-    av::daemon::TUIOInput::initClass();
+    if(!isTypeInitialized())
+    {
+        av::daemon::Device::initClass();
+        av::daemon::DeviceActuator::initClass();
+        av::daemon::DeviceDaemon::initClass();
+        av::daemon::DeviceSensor::initClass();
+        av::daemon::DeviceService::initClass();
+        av::daemon::DTrack::initClass();
+        av::daemon::KinectTrack::initClass();
+        av::daemon::SkeletonTrack::initClass();
+        av::daemon::HMDTrack::initClass();
+        av::daemon::TUIOInput::initClass();
 
-
-    av::daemon::HIDInput::initClass();
+        av::daemon::HIDInput::initClass();
 #ifndef WIN32
-    av::daemon::WacomTablet::initClass();
-    av::daemon::Wiimote::initClass();
-    av::daemon::WiimoteActuator::initClass();
+        av::daemon::WacomTablet::initClass();
+        av::daemon::Wiimote::initClass();
+        av::daemon::WiimoteActuator::initClass();
 #endif
 
 #ifdef VRPN_SUPPORT
-    av::daemon::VRPNClient::initClass();
+        av::daemon::VRPNClient::initClass();
 #endif
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::daemon::Init", true);
+    }
 }

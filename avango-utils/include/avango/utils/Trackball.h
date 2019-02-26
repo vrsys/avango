@@ -38,161 +38,157 @@
 
 namespace av
 {
-  namespace utils
-  {
+namespace utils
+{
+/**
+ * Trackball mover
+ *
+ * \ingroup av_utils
+ */
+class AV_UTILS_DLL Trackball : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Trackball mover
-     *
-     * \ingroup av_utils
+     * Constructor.
      */
-    class AV_UTILS_DLL Trackball : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    Trackball();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Trackball();
 
-      /**
-       * Constructor.
-       */
-      Trackball();
+  public:
+    /**
+     * The trackball rotation will be written into this field.
+     * Connect this matrix to the Camera/Viewer Transform
+     */
+    av::gua::SFMatrix Matrix;
 
-    protected:
+    /**
+     * Connect this to a TimeSensor. Needed for the spinning calculation.
+     */
+    av::SFDouble TimeIn;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Trackball();
+    /**
+     * Direction of trackball movement.
+     * Typically connected from the MousePositionNorm field of a GraphicsWindow.
+     */
+    av::gua::SFVec2 Direction;
 
-    public:
+    /**
+     * Trigger for rotating and panning.
+     * Typically connected from one of the mouse button fields of a GraphicsWindow.
+     */
+    SFBool RotateTrigger;
+    SFBool ZoomTrigger;
+    SFBool PanTrigger;
 
-      /**
-       * The trackball rotation will be written into this field.
-       * Connect this matrix to the Camera/Viewer Transform
-       */
-      av::gua::SFMatrix Matrix;
+    /**
+     * Reset the current transformation of the trackball
+     */
+    av::SFBool ResetTrigger;
 
-      /**
-       * Connect this to a TimeSensor. Needed for the spinning calculation.
-       */
-      av::SFDouble TimeIn;
+    /**
+     * Enable or disable the trackball
+     * Default: true
+     */
+    av::SFBool Enable;
 
-      /**
-       * Direction of trackball movement.
-       * Typically connected from the MousePositionNorm field of a GraphicsWindow.
-       */
-      av::gua::SFVec2 Direction;
+    /**
+     * If set to true, the specified center transform will automatically be adjusted
+     * so that the trackball still rotates around the specified object, regardless of any applied zoom
+     * Default: True
+     */
+    av::SFBool AutoAdjustCenterTransform;
 
-      /**
-       * Trigger for rotating and panning.
-       * Typically connected from one of the mouse button fields of a GraphicsWindow.
-       */
-      SFBool RotateTrigger;
-      SFBool ZoomTrigger;
-      SFBool PanTrigger;
+    /**
+     * Flag to enable/disable the spinning of the model
+     * Default: true
+     */
+    av::SFBool EnableSpinning;
 
-      /**
-       * Reset the current transformation of the trackball
-       */
-      av::SFBool ResetTrigger;
+    /**
+     * All rotation interactions whose duration (in seconds) is below this threshold trigger a spinning
+     * Default: 0.3
+     */
+    av::SFFloat SpinningTimeThreshold;
 
-      /**
-       * Enable or disable the trackball
-       * Default: true
-       */
-      av::SFBool Enable;
+    /**
+     * Wheighting factor which multiplied with all previous rotations to calculate the spinning rotation.
+     * Default: 0.97
+     */
+    av::SFFloat SpinningWeightingCoefficient;
 
-      /**
-       * If set to true, the specified center transform will automatically be adjusted
-       * so that the trackball still rotates around the specified object, regardless of any applied zoom
-       * Default: True
-       */
-      av::SFBool AutoAdjustCenterTransform;
+    /**
+     * Defines the orientation and translation of the rotation center relative
+     * to the local coordinate system.
+     */
+    av::gua::SFMatrix CenterTransform;
 
-      /**
-       * Flag to enable/disable the spinning of the model
-       * Default: true
-       */
-      av::SFBool EnableSpinning;
+    /**
+     * BoundingSphere to which the Trackball should be centered.
+     */
+    av::gua::SFBoundingSphere BoundingSphere;
 
-      /**
-       * All rotation interactions whose duration (in seconds) is below this threshold trigger a spinning
-       * Default: 0.3
-       */
-      av::SFFloat SpinningTimeThreshold;
+    /**
+     * Flag indicating if the Trackball should be centered to the given BoundingSphere.
+     * Default: false
+     */
+    av::SFBool CenterToBoundingSphere;
 
-      /**
-       * Wheighting factor which multiplied with all previous rotations to calculate the spinning rotation.
-       * Default: 0.97
-       */
-      av::SFFloat SpinningWeightingCoefficient;
+    /**
+     * Offset which is used to automatically calculate the CenterTransform from the BoundingSphere.
+     * To the offset in z direction, a dynamic offset depending on the radius of the bounding sphere
+     * and the CenterTransformOffsetZCoefficient will be added.
+     * Default is: (0.0, -1.7, 0.0)
+     */
+    av::gua::SFVec3 CenterTransformOffset;
 
-      /**
-       * Defines the orientation and translation of the rotation center relative
-       * to the local coordinate system.
-       */
-      av::gua::SFMatrix CenterTransform;
+    /**
+     * Factor that will be multiplied with the radius of the BoundingSphere and added to the z center offset.
+     * This acts as a zomm.
+     * Default is: 17.0 (an object with radius 1 is fully visible)
+     */
+    av::SFFloat CenterTransformOffsetZCoefficient;
 
-      /**
-       * BoundingSphere to which the Trackball should be centered.
-       */
-      av::gua::SFBoundingSphere BoundingSphere;
+    /**
+     * Scale factor for the zoom and pan interaction
+     * Default: 2.0
+     */
+    av::SFFloat ZoomPanFactor;
 
-      /**
-       * Flag indicating if the Trackball should be centered to the given BoundingSphere.
-       * Default: false
-       */
-      av::SFBool CenterToBoundingSphere;
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
 
-      /**
-       * Offset which is used to automatically calculate the CenterTransform from the BoundingSphere.
-       * To the offset in z direction, a dynamic offset depending on the radius of the bounding sphere
-       * and the CenterTransformOffsetZCoefficient will be added.
-       * Default is: (0.0, -1.7, 0.0)
-       */
-      av::gua::SFVec3 CenterTransformOffset;
+  private:
+    float mTimeLastMovement;
+    ::gua::math::mat4 mRotation;
 
-      /**
-       * Factor that will be multiplied with the radius of the BoundingSphere and added to the z center offset.
-       * This acts as a zomm.
-       * Default is: 17.0 (an object with radius 1 is fully visible)
-       */
-      av::SFFloat CenterTransformOffsetZCoefficient;
+    ::gua::math::vec2 mLastDirection;
+    ::gua::math::vec3 mLastProjected;
+    bool mDragging;
+    bool mSpinning;
+    bool mReset;
+    ::gua::math::mat4 mCenterTransInv;
 
-      /**
-       * Scale factor for the zoom and pan interaction
-       * Default: 2.0
-       */
-      av::SFFloat ZoomPanFactor;
+    /**
+     * Reset the trackball to the default state
+     */
+    void reset();
+};
 
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
-
-    private:
-
-      float mTimeLastMovement;
-      ::gua::math::mat4 mRotation;
-
-      ::gua::math::vec2 mLastDirection;
-      ::gua::math::vec3 mLastProjected;
-      bool mDragging;
-      bool mSpinning;
-      bool mReset;
-      ::gua::math::mat4 mCenterTransInv;
-
-      /**
-       * Reset the trackball to the default state
-       */
-      void reset();
-    };
-
-    using SFTrackball = SingleField<Link<Trackball> >;
-    using MFTrackball = MultiField<Link<Trackball> >;
-  }
+using SFTrackball = SingleField<Link<Trackball>>;
+using MFTrackball = MultiField<Link<Trackball>>;
+} // namespace utils
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_UTILS_DLL SingleField<Link<utils::Trackball> >;
-  template class AV_UTILS_DLL MultiField<Link<utils::Trackball> >;
+template class AV_UTILS_DLL SingleField<Link<utils::Trackball>>;
+template class AV_UTILS_DLL MultiField<Link<utils::Trackball>>;
 #endif
-}
+} // namespace av
 
 #endif

@@ -35,79 +35,73 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/StateAttribute.h>
 
-
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Fog OsgFog;
+namespace osg
+{
+typedef ::osg::Fog OsgFog;
+
+/**
+ * Wrapper for ::osg::Fog
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Fog : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Fog is created.
+     * Otherwise, the given ::osg::Fog is used.
+     */
+    Fog(OsgFog* osgfog = new OsgFog()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Fog();
+
+  public:
+    SFInt Mode;
+    SFFloat Density;
+    SFFloat Start;
+    SFFloat End;
+    SFVec4 Color;
 
     /**
-     * Wrapper for ::osg::Fog
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Fog.
      */
-    class AV_OSG_DLL Fog : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::Fog* getOsgFog() const;
 
-    public:
+    void touchFields();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Fog is created.
-       * Otherwise, the given ::osg::Fog is used.
-       */
-      Fog(OsgFog *osgfog = new OsgFog()); // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getDensityCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setDensityCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getStartCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setStartCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getEndCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setEndCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getColorCB(const av::osg::SFVec4::GetValueEvent& event);
+    virtual void setColorCB(const av::osg::SFVec4::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::Fog* mOsgFog;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Fog();
-
-    public:
-
-      SFInt Mode;
-      SFFloat Density;
-      SFFloat Start;
-      SFFloat End;
-      SFVec4 Color;
-
-      /**
-       * Get the wrapped ::osg::Fog.
-       */
-      ::osg::Fog* getOsgFog() const;
-
-      void touchFields();
-
-    protected:
-
-      virtual void getModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getDensityCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setDensityCB(const av::SFFloat::SetValueEvent& event);
-      virtual void getStartCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setStartCB(const av::SFFloat::SetValueEvent& event);
-      virtual void getEndCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setEndCB(const av::SFFloat::SetValueEvent& event);
-      virtual void getColorCB(const av::osg::SFVec4::GetValueEvent& event);
-      virtual void setColorCB(const av::osg::SFVec4::SetValueEvent& event);
-
-    private:
-
-      ::osg::Fog *mOsgFog;
-    };
-
-    typedef SingleField<Link<Fog> > SFFog;
-    typedef MultiField<Link<Fog> > MFFog;
-  }
+typedef SingleField<Link<Fog>> SFFog;
+typedef MultiField<Link<Fog>> MFFog;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Fog> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Fog> >;
+template class AV_OSG_DLL SingleField<Link<osg::Fog>>;
+template class AV_OSG_DLL MultiField<Link<osg::Fog>>;
 #endif
 
-}
+} // namespace av
 
 #endif

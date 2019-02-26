@@ -27,11 +27,9 @@
 #include <regex>
 #include <iostream>
 
-
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::FieldSelector"));
+av::Logger& logger(av::getLogger("av::tools::FieldSelector"));
 }
 
 AV_FC_DEFINE(av::tools::FieldSelector);
@@ -41,48 +39,44 @@ AV_FIELD_DEFINE(av::tools::MFFieldSelector);
 
 av::tools::FieldSelector::FieldSelector()
 {
-  AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
-  AV_FC_ADD_FIELD(SelectableFieldName, "");
-  AV_FC_ADD_FIELD(EqualNameOnly, true);
-  AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
+    AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
+    AV_FC_ADD_FIELD(SelectableFieldName, "");
+    AV_FC_ADD_FIELD(EqualNameOnly, true);
+    AV_FC_ADD_FIELD(TreatAsRegularExpression, false);
 }
 
-av::tools::FieldSelector::~FieldSelector()
-{}
+av::tools::FieldSelector::~FieldSelector() {}
 
-void
-av::tools::FieldSelector::initClass()
+void av::tools::FieldSelector::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::tools::Selector::initClass();
-
-    AV_FC_INIT(av::tools::Selector, av::tools::FieldSelector, true);
-
-    SFFieldSelector::initClass("av::tools::SFFieldSelector", "av::Field");
-    MFFieldSelector::initClass("av::tools::MFFieldSelector", "av::Field");
-  }
-}
-
-/* virtual */ void
-av::tools::FieldSelector::evaluate()
-{
-  av::tools::Selector::evaluate();
-
-  MFTargetHolder::ContainerType selected_targets;
-
-  const MFTargetHolder::ContainerType &targets = Targets.getValue();
-  for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
-       holder != targets.end(); ++holder)
-  {
-    const SFContainer::ValueType &target = (*holder)->Target.getValue();
-    bool found = false;
-
-    if (isSelectable(*target))
+    if(!isTypeInitialized())
     {
-      selected_targets.push_back(*holder);
-      found = true;
+        av::tools::Selector::initClass();
+
+        AV_FC_INIT(av::tools::Selector, av::tools::FieldSelector, true);
+
+        SFFieldSelector::initClass("av::tools::SFFieldSelector", "av::Field");
+        MFFieldSelector::initClass("av::tools::MFFieldSelector", "av::Field");
     }
+}
+
+/* virtual */ void av::tools::FieldSelector::evaluate()
+{
+    av::tools::Selector::evaluate();
+
+    MFTargetHolder::ContainerType selected_targets;
+
+    const MFTargetHolder::ContainerType& targets = Targets.getValue();
+    for(MFTargetHolder::ContainerType::const_iterator holder = targets.begin(); holder != targets.end(); ++holder)
+    {
+        const SFContainer::ValueType& target = (*holder)->Target.getValue();
+        bool found = false;
+
+        if(isSelectable(*target))
+        {
+            selected_targets.push_back(*holder);
+            found = true;
+        }
 
 #if 0 // defined(AVANGO_TOOLS_OSG_SUPPORT)
 
@@ -140,44 +134,43 @@ av::tools::FieldSelector::evaluate()
     }
 
 #endif
-  }
+    }
 
-  if (!selected_targets.empty() || !SelectedTargets.isEmpty())
-    SelectedTargets.setValue(selected_targets);
+    if(!selected_targets.empty() || !SelectedTargets.isEmpty())
+        SelectedTargets.setValue(selected_targets);
 }
 
-bool
-av::tools::FieldSelector::isSelectable(av::FieldContainer& object)
+bool av::tools::FieldSelector::isSelectable(av::FieldContainer& object)
 {
-  const std::string field_name = SelectableFieldName.getValue();
-  const std::vector<Field*> &fields = object.getFields();
-  std::vector<Field*>::const_iterator field = fields.end();
+    const std::string field_name = SelectableFieldName.getValue();
+    const std::vector<Field*>& fields = object.getFields();
+    std::vector<Field*>::const_iterator field = fields.end();
 
-  if (!TreatAsRegularExpression.getValue() )
-  {
-    if (EqualNameOnly.getValue())
-      for (field = fields.begin();field!=fields.end();++field)
-      {
-        if ((*field)->getName() == field_name)
-          break;
-      }
+    if(!TreatAsRegularExpression.getValue())
+    {
+        if(EqualNameOnly.getValue())
+            for(field = fields.begin(); field != fields.end(); ++field)
+            {
+                if((*field)->getName() == field_name)
+                    break;
+            }
+        else
+        {
+            field = fields.begin();
+            while(field != fields.end() && field_name.find((*field)->getName()) == std::string::npos)
+                ++field;
+        }
+    }
     else
     {
-      field = fields.begin();
-      while (field != fields.end() && field_name.find((*field)->getName()) == std::string::npos)
-        ++field;
+        for(field = fields.begin(); field != fields.end(); ++field)
+        {
+            const std::string expr = EqualNameOnly.getValue() ? (".*" + (*field)->getName() + ".*") : (*field)->getName();
+            std::regex e(expr);
+            if(regex_match(field_name, e))
+                break;
+        }
     }
-  }
-  else
-  {
-    for (field = fields.begin();field!=fields.end();++field)
-    {
-      const std::string expr = EqualNameOnly.getValue() ? (".*" + (*field)->getName() + ".*") : (*field)->getName();
-      std::regex e(expr);
-      if(regex_match(field_name, e))
-        break;
-    }
-  }
 
-  return (field != fields.end());
+    return (field != fields.end());
 }

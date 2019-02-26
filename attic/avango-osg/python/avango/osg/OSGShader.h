@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_SHADER
 #define AV_PYTHON_OSG_SHADER
 

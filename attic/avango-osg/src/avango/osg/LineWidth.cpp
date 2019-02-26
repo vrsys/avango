@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::LineWidth"));
+av::Logger& logger(av::getLogger("av::osg::LineWidth"));
 }
 
 AV_FC_DEFINE(av::osg::LineWidth);
@@ -37,51 +37,30 @@ AV_FC_DEFINE(av::osg::LineWidth);
 AV_FIELD_DEFINE(av::osg::SFLineWidth);
 AV_FIELD_DEFINE(av::osg::MFLineWidth);
 
-av::osg::LineWidth::LineWidth(::osg::LineWidth* osglinewidth) :
-  StateAttribute(osglinewidth),
-  mOsgLineWidth(osglinewidth)
+av::osg::LineWidth::LineWidth(::osg::LineWidth* osglinewidth) : StateAttribute(osglinewidth), mOsgLineWidth(osglinewidth)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Width,
-                            boost::bind(&LineWidth::getWidthCB, this, _1),
-                            boost::bind(&LineWidth::setWidthCB, this, _1));
-
+    AV_FC_ADD_ADAPTOR_FIELD(Width, boost::bind(&LineWidth::getWidthCB, this, _1), boost::bind(&LineWidth::setWidthCB, this, _1));
 }
 
-av::osg::LineWidth::~LineWidth()
-{}
+av::osg::LineWidth::~LineWidth() {}
 
-void
-av::osg::LineWidth::initClass()
+void av::osg::LineWidth::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::StateAttribute::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::StateAttribute::initClass();
 
-    AV_FC_INIT(av::osg::StateAttribute, av::osg::LineWidth, true);
+        AV_FC_INIT(av::osg::StateAttribute, av::osg::LineWidth, true);
 
-    SFLineWidth::initClass("av::osg::SFLineWidth", "av::Field");
-    MFLineWidth::initClass("av::osg::MFLineWidth", "av::Field");
+        SFLineWidth::initClass("av::osg::SFLineWidth", "av::Field");
+        MFLineWidth::initClass("av::osg::MFLineWidth", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::LineWidth*
-av::osg::LineWidth::getOsgLineWidth() const
-{
-  return mOsgLineWidth;
-}
+::osg::LineWidth* av::osg::LineWidth::getOsgLineWidth() const { return mOsgLineWidth; }
 
-/* virtual */ void
-av::osg::LineWidth::getWidthCB(const av::SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgLineWidth->getWidth();
-}
+/* virtual */ void av::osg::LineWidth::getWidthCB(const av::SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = mOsgLineWidth->getWidth(); }
 
-/* virtual */ void
-av::osg::LineWidth::setWidthCB(const av::SFFloat::SetValueEvent& event)
-{
-  mOsgLineWidth->setWidth((GLenum)(event.getValue()));
-}
-
-
+/* virtual */ void av::osg::LineWidth::setWidthCB(const av::SFFloat::SetValueEvent& event) { mOsgLineWidth->setWidth((GLenum)(event.getValue())); }

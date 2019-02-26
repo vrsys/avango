@@ -42,11 +42,11 @@
 
 namespace av
 {
-  namespace script
-  {
-    void AV_PYTHON_DLL register_object(void);
-    void AV_PYTHON_DLL register_object_fields(void);
-  }
+namespace script
+{
+void AV_PYTHON_DLL register_object(void);
+void AV_PYTHON_DLL register_object_fields(void);
+} // namespace script
 } // namespace av
 
 #endif // #if !defined(AVANGO_PYTHON_INIT_H)

@@ -25,8 +25,6 @@
 
 #include <avango/TimeSensor.h>
 
-
-
 #if defined(_WIN32)
 #include <sys/types.h>
 #include <sys/timeb.h>
@@ -40,54 +38,48 @@
 
 namespace
 {
-  av::Logger& logger(av::Logger::getLogger("av::TimeSensor"));
+av::Logger& logger(av::Logger::getLogger("av::TimeSensor"));
 
-  void getRealTime(const av::SFDouble::GetValueEvent& event)
-  {
+void getRealTime(const av::SFDouble::GetValueEvent& event)
+{
 #if defined(_WIN32)
     struct _timeb t;
     _ftime_s(&t);
-    (*event.getValuePtr()) = t.time + (t.millitm/1000.0);
+    (*event.getValuePtr()) = t.time + (t.millitm / 1000.0);
 #else
     timeval t;
     gettimeofday(&t, 0);
-    (*event.getValuePtr()) = t.tv_sec + (t.tv_usec/1000000.0);
+    (*event.getValuePtr()) = t.tv_sec + (t.tv_usec / 1000000.0);
 #endif
-  }
-
-  void setRealTime(const av::SFDouble::SetValueEvent&)
-  {
-    AVANGO_LOG(logger, av::logging::WARN, "RealTime is read-only")
-  }
 }
+
+void setRealTime(const av::SFDouble::SetValueEvent&) { AVANGO_LOG(logger, av::logging::WARN, "RealTime is read-only") }
+} // namespace
 
 AV_FC_DEFINE(av::TimeSensor);
 
 av::TimeSensor::TimeSensor()
 {
-  AV_FC_ADD_ADAPTOR_FIELD(RealTime, &getRealTime, &setRealTime);
-  AV_FC_ADD_FIELD(ReferenceTime, RealTime.getValue());
-  AV_FC_ADD_FIELD(Time, 0);
+    AV_FC_ADD_ADAPTOR_FIELD(RealTime, &getRealTime, &setRealTime);
+    AV_FC_ADD_FIELD(ReferenceTime, RealTime.getValue());
+    AV_FC_ADD_FIELD(Time, 0);
 
-  alwaysEvaluate(true);
+    alwaysEvaluate(true);
 }
 
-av::TimeSensor::~TimeSensor()
-{}
+av::TimeSensor::~TimeSensor() {}
 
-void
-av::TimeSensor::initClass()
+void av::TimeSensor::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, av::TimeSensor, true);
-  }
+    if(!isTypeInitialized())
+    {
+        FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, av::TimeSensor, true);
+    }
 }
 
-/* virtual */ void
-av::TimeSensor::evaluate()
+/* virtual */ void av::TimeSensor::evaluate()
 {
-  Time.setValue(RealTime.getValue()-ReferenceTime.getValue());
-  RealTime.touch();
+    Time.setValue(RealTime.getValue() - ReferenceTime.getValue());
+    RealTime.touch();
 }

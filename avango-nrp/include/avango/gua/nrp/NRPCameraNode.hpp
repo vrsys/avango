@@ -23,13 +23,13 @@ class AV_GUA_DLL NRPCameraNode : public av::gua::CameraNode
 
 using SFNRPCameraNode = av::SingleField<av::Link<av::gua::nrp::NRPCameraNode>>;
 using MFNRPCameraNode = av::MultiField<av::Link<av::gua::nrp::NRPCameraNode>>;
-}
-}
+} // namespace nrp
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
 template class AV_GUA_DLL av::SingleField<av::Link<gua::nrp::NRPCameraNode>>;
 template class AV_GUA_DLL av::MultiField<av::Link<gua::nrp::NRPCameraNode>>;
 #endif
-}
+} // namespace av
 
 #endif // AVANGO_GUA_NRP_CAM_NODE_HPP

@@ -28,20 +28,20 @@
 
 namespace shade
 {
-  namespace types
-  {
-    class Vec4Accessor : public TypeAccessor
-    {
-    public:
-      virtual void set(float x, float y, float z, float w) = 0;
-      virtual void get(float& x, float& y, float& z, float& w) const = 0;
+namespace types
+{
+class Vec4Accessor : public TypeAccessor
+{
+  public:
+    virtual void set(float x, float y, float z, float w) = 0;
+    virtual void get(float& x, float& y, float& z, float& w) const = 0;
 
-      /*virtual*/ HashType hash(void) const;
-    private:
-      static HashValue m_hash;
-    };
-  }
-}
+    /*virtual*/ HashType hash(void) const;
 
+  private:
+    static HashValue m_hash;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_Vec4Accessor_H */

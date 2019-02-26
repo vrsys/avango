@@ -11,57 +11,53 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * InjectSelector class adds or replaces input target holders with given target holders,
+ * if the targets match.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL InjectSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * InjectSelector class adds or replaces input target holders with given target holders,
-     * if the targets match.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL InjectSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    InjectSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~InjectSelector();
 
-      /**
-       * Constructor.
-       */
-      InjectSelector();
+  public:
+    /**
+     * Defines the input targets.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Defines target holder which replace or which are added to the input targets.
+     */
+    MFTargetHolder InjectTargets;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~InjectSelector();
+    /* virtual */ void evaluate();
+};
 
-    public:
-
-      /**
-       * Defines the input targets.
-       */
-      MFTargetHolder Targets;
-
-      /**
-       * Defines target holder which replace or which are added to the input targets.
-       */
-      MFTargetHolder InjectTargets;
-
-      /* virtual */ void evaluate();
-
-    };
-
-    using SFInjectSelector = SingleField<Link<InjectSelector> >;
-    using MFInjectSelector = MultiField<Link<InjectSelector> >;
-  }
+using SFInjectSelector = SingleField<Link<InjectSelector>>;
+using MFInjectSelector = MultiField<Link<InjectSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::InjectSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::InjectSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::InjectSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::InjectSelector>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_TOOLS_INJECTSELECTOR_HPP
+#endif // AVANGO_TOOLS_INJECTSELECTOR_HPP

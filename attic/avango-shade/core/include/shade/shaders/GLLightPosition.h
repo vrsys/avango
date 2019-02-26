@@ -31,25 +31,22 @@
 #include "../types/int.h"
 #include "../types/const.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class GLLightPosition : public ShaderBase<GLLightPosition, Gettable<vec4>>
+{
+  public:
+    /*virtual*/ vec4<> get(void);
 
-    class GLLightPosition : public ShaderBase<GLLightPosition, Gettable<vec4> >
-    {
-    public:
+    int_<const_> index;
 
-      /*virtual*/ vec4<> get(void);
+  private:
+    SHADE_DERIVED_DECL(GLLightPosition, Gettable<vec4>)
+};
 
-      int_<const_> index;
-
-    private:
-      SHADE_DERIVED_DECL(GLLightPosition, Gettable<vec4>)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_GLLightPosition_H */

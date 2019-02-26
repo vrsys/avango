@@ -28,15 +28,15 @@
 
 namespace shade
 {
-  class const_ : public Type
-  {
+class const_ : public Type
+{
   public:
     const_(formatter::Constants::Type type);
     /*virtual*/ bool requires_initializer(void) const;
     /*virtual*/ bool is_writable(const ShaderEnvironment& se) const;
     /*virtual*/ std::string get_uniq_id(void) const;
     /*virtual*/ void output_attribute(boost::shared_ptr<Type::State>, Formatter* fmt, const std::string& obj, const std::string& name) const;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_types_const_H */

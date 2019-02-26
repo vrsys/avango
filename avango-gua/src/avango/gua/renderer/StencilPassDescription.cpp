@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::StencilPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::StencilPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::StencilPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::StencilPassDescription);
 AV_FIELD_DEFINE(av::gua::SFStencilPassDescription);
 AV_FIELD_DEFINE(av::gua::MFStencilPassDescription);
 
-av::gua::StencilPassDescription::StencilPassDescription(
-  std::shared_ptr< ::gua::StencilPassDescription> const& guaStencilPassDescription)
-    : PipelinePassDescription(guaStencilPassDescription)
-    , m_guaStencilPassDescription(guaStencilPassDescription)
+av::gua::StencilPassDescription::StencilPassDescription(std::shared_ptr<::gua::StencilPassDescription> const& guaStencilPassDescription)
+    : PipelinePassDescription(guaStencilPassDescription), m_guaStencilPassDescription(guaStencilPassDescription)
 {
-
 }
 
-void
-av::gua::StencilPassDescription::initClass()
+void av::gua::StencilPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::StencilPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::StencilPassDescription> const&
-av::gua::StencilPassDescription::getGuaStencilPassDescription() const
-{
-    return m_guaStencilPassDescription;
-}
-
-
+std::shared_ptr<::gua::StencilPassDescription> const& av::gua::StencilPassDescription::getGuaStencilPassDescription() const { return m_guaStencilPassDescription; }

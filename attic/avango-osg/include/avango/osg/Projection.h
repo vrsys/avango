@@ -38,55 +38,53 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Projection OsgProjection;
+namespace osg
+{
+typedef ::osg::Projection OsgProjection;
+
+/**
+ * Wrapper for ::osg::MatrixTransform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Projection : public Group
+{
+    AV_FC_DECLARE();
+
+  public:
+    Projection(OsgProjection* osgprojection = new OsgProjection());
 
     /**
-     * Wrapper for ::osg::MatrixTransform
-     *
-     * \ingroup av_osg
+     * Matrix directly sets and gets the Matrix of the wrapped ::osg::Projection.
      */
-    class AV_OSG_DLL Projection  : public Group
-    {
-      AV_FC_DECLARE();
+    SFMatrix Matrix;
 
-      public:
-        Projection(OsgProjection* osgprojection = new OsgProjection());
+    /**
+     * Get the wrapped ::osg::Projection.
+     */
+    ::osg::Projection* getOsgProjection() const;
 
-        /**
-         * Matrix directly sets and gets the Matrix of the wrapped ::osg::Projection.
-         */
-        SFMatrix Matrix;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Projection();
 
-        /**
-         * Get the wrapped ::osg::Projection.
-         */
-        ::osg::Projection* getOsgProjection() const;
+    virtual void getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event);
+    virtual void setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event);
 
-      protected:
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~Projection();
+  private:
+    ::osg::Projection* mOsgProjection;
+};
 
-        virtual void getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event);
-        virtual void setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event);
-
-
-      private:
-
-        ::osg::Projection *mOsgProjection;
-    };
-
-    typedef SingleField<Link<Projection> > SFProjection;
-    typedef MultiField<Link<Projection> > MFProjection;
-  }
+typedef SingleField<Link<Projection>> SFProjection;
+typedef MultiField<Link<Projection>> MFProjection;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Projection> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Projection> >;
+template class AV_OSG_DLL SingleField<Link<osg::Projection>>;
+template class AV_OSG_DLL MultiField<Link<osg::Projection>>;
 #endif
-}
+} // namespace av
 
 #endif /* AVANGO_OSG_PROJECTION_H_ */

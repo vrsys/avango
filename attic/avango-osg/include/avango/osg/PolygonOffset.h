@@ -37,66 +37,61 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::PolygonOffset OsgPolygonOffset;
+namespace osg
+{
+typedef ::osg::PolygonOffset OsgPolygonOffset;
+
+/**
+ * Wrapper for ::osg::PolygonOffset
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL PolygonOffset : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::PolygonOffset is created.
+     * Otherwise, the given ::osg::PolygonOffset is used.
+     */
+    PolygonOffset(OsgPolygonOffset* osgpolygonoffset = new OsgPolygonOffset());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~PolygonOffset();
+
+  public:
+    SFFloat Factor;
+    SFFloat Units;
 
     /**
-     * Wrapper for ::osg::PolygonOffset
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::PolygonOffset.
      */
-    class AV_OSG_DLL PolygonOffset : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::PolygonOffset* getOsgPolygonOffset() const;
 
-    public:
+  protected:
+    virtual void getFactorCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setFactorCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getUnitsCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setUnitsCB(const av::SFFloat::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::PolygonOffset is created.
-       * Otherwise, the given ::osg::PolygonOffset is used.
-       */
-      PolygonOffset(OsgPolygonOffset* osgpolygonoffset = new OsgPolygonOffset());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::PolygonOffset* mOsgPolygonOffset;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~PolygonOffset();
-
-    public:
-
-      SFFloat Factor;
-      SFFloat Units;
-
-      /**
-       * Get the wrapped ::osg::PolygonOffset.
-       */
-      ::osg::PolygonOffset* getOsgPolygonOffset() const;
-
-    protected:
-
-      virtual void getFactorCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setFactorCB(const av::SFFloat::SetValueEvent& event);
-      virtual void getUnitsCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setUnitsCB(const av::SFFloat::SetValueEvent& event);
-
-    private:
-
-      ::osg::PolygonOffset *mOsgPolygonOffset;
-    };
-
-    typedef SingleField<Link<PolygonOffset> > SFPolygonOffset;
-    typedef MultiField<Link<PolygonOffset> > MFPolygonOffset;
-  }
+typedef SingleField<Link<PolygonOffset>> SFPolygonOffset;
+typedef MultiField<Link<PolygonOffset>> MFPolygonOffset;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::PolygonOffset> >;
-  template class AV_OSG_DLL MultiField<Link<osg::PolygonOffset> >;
+template class AV_OSG_DLL SingleField<Link<osg::PolygonOffset>>;
+template class AV_OSG_DLL MultiField<Link<osg::PolygonOffset>>;
 #endif
 
-}
+} // namespace av
 
 #endif

@@ -15,8 +15,8 @@ struct pointee<av::Link<T>>
 {
     typedef T type;
 };
-}
-}
+} // namespace python
+} // namespace boost
 
 void init_NRPInteractiveNode()
 {
@@ -24,5 +24,6 @@ void init_NRPInteractiveNode()
 
     av::python::register_field<av::gua::nrp::SFNRPInteractiveNode>("SFNRPInteractiveNode");
     av::python::register_multifield<av::gua::nrp::MFNRPInteractiveNode>("MFNRPInteractiveNode");
-    boost::python::class_<av::gua::nrp::NRPInteractiveNode, av::Link<av::gua::nrp::NRPInteractiveNode>, boost::python::bases<av::gua::TransformNode>, boost::noncopyable>("NRPInteractiveNode", "docstring");
+    boost::python::class_<av::gua::nrp::NRPInteractiveNode, av::Link<av::gua::nrp::NRPInteractiveNode>, boost::python::bases<av::gua::TransformNode>, boost::noncopyable>("NRPInteractiveNode",
+                                                                                                                                                                          "docstring");
 }

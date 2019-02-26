@@ -32,16 +32,16 @@
 
 using namespace av::daemon;
 
-namespace {
-
-  TEST(ServiceCanBeInitialized)
-  {
+namespace
+{
+TEST(ServiceCanBeInitialized)
+{
     av::daemon::DeviceService::initClass();
     CHECK(av::Type::getByName("av::daemon::DeviceService") != av::Type::badType());
-  }
-  TEST(SensorCanBeInitialized)
-  {
+}
+TEST(SensorCanBeInitialized)
+{
     av::daemon::DeviceSensor::initClass();
     CHECK(av::Type::getByName("av::daemon::DeviceSensor") != av::Type::badType());
-  }
 }
+} // namespace

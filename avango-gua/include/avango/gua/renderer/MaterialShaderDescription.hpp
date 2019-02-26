@@ -14,71 +14,67 @@
 
 namespace av
 {
-  namespace gua
-  {
-    class NetTransform;
+namespace gua
+{
+class NetTransform;
+/**
+ * Wrapper for ::gua::MaterialShaderDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL MaterialShaderDescription : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::MaterialShaderDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::MaterialShaderDescription is created.
+     * Otherwise, the given ::gua::MaterialShaderDescription is used.
      */
-    class AV_GUA_DLL MaterialShaderDescription : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
-
-    public:
-
-      /**
-       * Constructor. When called without arguments, a new ::gua::MaterialShaderDescription is created.
-       * Otherwise, the given ::gua::MaterialShaderDescription is used.
-       */
-      MaterialShaderDescription(std::shared_ptr< ::gua::MaterialShaderDescription> const& guaMaterialShaderDescription =
-                                std::shared_ptr< ::gua::MaterialShaderDescription>(new ::gua::MaterialShaderDescription()));
+    MaterialShaderDescription(
+        std::shared_ptr<::gua::MaterialShaderDescription> const& guaMaterialShaderDescription = std::shared_ptr<::gua::MaterialShaderDescription>(new ::gua::MaterialShaderDescription()));
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-      virtual void on_distribute(av::gua::NetTransform& netNode);
-      virtual void on_undistribute(av::gua::NetTransform& netNode);
+    virtual void on_distribute(av::gua::NetTransform& netNode);
+    virtual void on_undistribute(av::gua::NetTransform& netNode);
 #endif
-    public:
+  public:
+    MFMaterialShaderMethod VertexMethods;
+    MFMaterialShaderMethod FragmentMethods;
 
-      MFMaterialShaderMethod VertexMethods;
-      MFMaterialShaderMethod FragmentMethods;
+    virtual void getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
+    virtual void setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
 
-      virtual void getVertexMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
-      virtual void setVertexMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
+    virtual void getFragmentMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
+    virtual void setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
 
-      virtual void getFragmentMethodsCB(const MFMaterialShaderMethod::GetValueEvent& event);
-      virtual void setFragmentMethodsCB(const MFMaterialShaderMethod::SetValueEvent& event);
+    void load_from_file(std::string const& file);
+    void load_from_json(std::string const& json);
+    /**
+     * Get the wrapped ::gua::MaterialShaderDescription.
+     */
+    std::shared_ptr<::gua::MaterialShaderDescription> const& getGuaMaterialShaderDescription() const;
 
-      void load_from_file(std::string const& file);
-      void load_from_json(std::string const& json);
-      /**
-       * Get the wrapped ::gua::MaterialShaderDescription.
-       */
-      std::shared_ptr< ::gua::MaterialShaderDescription> const& getGuaMaterialShaderDescription() const;
+  private:
+    std::shared_ptr<::gua::MaterialShaderDescription> m_guaMaterialShaderDescription;
 
-    private:
+    MFMaterialShaderMethod::ContainerType m_vertexMethods;
+    MFMaterialShaderMethod::ContainerType m_fragmentMethods;
 
-      std::shared_ptr< ::gua::MaterialShaderDescription> m_guaMaterialShaderDescription;
+    // MaterialShaderDescription(const MaterialShaderDescription&);
+    MaterialShaderDescription& operator=(const MaterialShaderDescription&);
+};
 
-      MFMaterialShaderMethod::ContainerType m_vertexMethods;
-      MFMaterialShaderMethod::ContainerType m_fragmentMethods;
+using SFMaterialShaderDescription = SingleField<Link<MaterialShaderDescription>>;
+using MFMaterialShaderDescription = MultiField<Link<MaterialShaderDescription>>;
 
-
-      // MaterialShaderDescription(const MaterialShaderDescription&);
-      MaterialShaderDescription& operator=(const MaterialShaderDescription&);
-    };
-
-    using SFMaterialShaderDescription = SingleField<Link<MaterialShaderDescription> >;
-    using MFMaterialShaderDescription = MultiField<Link<MaterialShaderDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::MaterialShaderDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::MaterialShaderDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::MaterialShaderDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::MaterialShaderDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_MATERIAL_SHADER_DESCRIPTION_HPP
+#endif // AVANGO_GUA_MATERIAL_SHADER_DESCRIPTION_HPP

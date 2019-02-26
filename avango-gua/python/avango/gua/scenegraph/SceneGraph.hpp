@@ -3,4 +3,4 @@
 
 void init_SceneGraph();
 
-#endif //AV_PYTHON_GUA_SCENE_GRAPH_HPP
+#endif // AV_PYTHON_GUA_SCENE_GRAPH_HPP

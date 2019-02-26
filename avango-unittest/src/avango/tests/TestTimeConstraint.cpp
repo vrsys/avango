@@ -8,12 +8,11 @@ using namespace UnitTest;
 
 namespace
 {
-
 TEST(TimeConstraintSucceedsWithFastTest)
 {
     TestResults result;
     {
-		ScopedCurrentTest scopedResult(result);
+        ScopedCurrentTest scopedResult(result);
         TimeConstraint t(200, TestDetails("", "", "", 0));
         TimeHelpers::SleepMs(5);
     }
@@ -24,7 +23,7 @@ TEST(TimeConstraintFailsWithSlowTest)
 {
     TestResults result;
     {
-		ScopedCurrentTest scopedResult(result);
+        ScopedCurrentTest scopedResult(result);
         TimeConstraint t(10, TestDetails("", "", "", 0));
         TimeHelpers::SleepMs(20);
     }
@@ -36,16 +35,16 @@ TEST(TimeConstraintFailureIncludesCorrectData)
     RecordingReporter reporter;
     TestResults result(&reporter);
     {
-		ScopedCurrentTest scopedResult(result);
+        ScopedCurrentTest scopedResult(result);
 
-		TestDetails const details("testname", "suitename", "filename", 10);
+        TestDetails const details("testname", "suitename", "filename", 10);
         TimeConstraint t(10, details);
         TimeHelpers::SleepMs(20);
     }
 
-	using namespace std;
+    using namespace std;
 
-	CHECK(strstr(reporter.lastFailedFile, "filename"));
+    CHECK(strstr(reporter.lastFailedFile, "filename"));
     CHECK_EQUAL(10, reporter.lastFailedLine);
     CHECK(strstr(reporter.lastFailedTest, "testname"));
 }
@@ -55,15 +54,15 @@ TEST(TimeConstraintFailureIncludesTimeoutInformation)
     RecordingReporter reporter;
     TestResults result(&reporter);
     {
-		ScopedCurrentTest scopedResult(result);
+        ScopedCurrentTest scopedResult(result);
         TimeConstraint t(10, TestDetails("", "", "", 0));
         TimeHelpers::SleepMs(20);
     }
 
-	using namespace std;
+    using namespace std;
 
-	CHECK(strstr(reporter.lastFailedMessage, "ime constraint"));
+    CHECK(strstr(reporter.lastFailedMessage, "ime constraint"));
     CHECK(strstr(reporter.lastFailedMessage, "under 10ms"));
 }
 
-}
+} // namespace

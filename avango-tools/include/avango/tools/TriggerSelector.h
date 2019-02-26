@@ -34,68 +34,62 @@
 #include <avango/tools/Selector.h>
 #include "windows_specific_tools.h"
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * TriggerSelector class passes targets if triggered.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL TriggerSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * TriggerSelector class passes targets if triggered.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL TriggerSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    TriggerSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~TriggerSelector();
 
-      /**
-       * Constructor.
-       */
-      TriggerSelector();
+  public:
+    /**
+     * Defines the input targets which are passed to SelectedTargets.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Set to true to pass Targets to SelectedTargets.
+     */
+    SFBool Trigger;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~TriggerSelector();
+    /**
+     * Set to true, if SelectedTargets should only be updated on Trigger transitions.
+     */
+    SFBool TransitionOnly;
 
-    public:
+    /* virtual */ void evaluate();
 
-      /**
-       * Defines the input targets which are passed to SelectedTargets.
-       */
-      MFTargetHolder Targets;
+  protected:
+    bool mLastTrigger;
+};
 
-      /**
-       * Set to true to pass Targets to SelectedTargets.
-       */
-      SFBool Trigger;
-
-      /**
-       * Set to true, if SelectedTargets should only be updated on Trigger transitions.
-       */
-      SFBool TransitionOnly;
-
-      /* virtual */ void evaluate();
-
-    protected:
-
-      bool mLastTrigger;
-
-    };
-
-    using SFTriggerSelector = SingleField<Link<TriggerSelector> >;
-    using MFTriggerSelector = MultiField<Link<TriggerSelector> >;
-  }
+using SFTriggerSelector = SingleField<Link<TriggerSelector>>;
+using MFTriggerSelector = MultiField<Link<TriggerSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::TriggerSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::TriggerSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::TriggerSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::TriggerSelector>>;
 #endif
 
-}
+} // namespace av
 
 #endif

@@ -26,26 +26,23 @@
 
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class Value
+{
+  public:
+    virtual ~Value(void) {}
 
-    class Value
-    {
-    public:
-      virtual ~Value(void) {}
+    bool operator<(const Value& other) const;
+    virtual bool is_constant(void) const;
 
-      bool operator<(const Value& other) const;
-      virtual bool is_constant(void) const;
+  protected:
+    virtual bool less_than(const Value& other) const;
+};
 
-    protected:
-      virtual bool less_than(const Value& other) const;
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_Value_H */

@@ -44,13 +44,13 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  av::logging::Logger& logger(av::logging::Logger::getLogger("av::Typed"));
+av::logging::Logger& logger(av::logging::Logger::getLogger("av::Typed"));
 
-  // functions, internal
+// functions, internal
 
 } // namespace
 
@@ -60,34 +60,29 @@ namespace
 
 /* static */ av::Type av::Typed::sClassTypeId = av::Type::badType();
 
-av::Typed::Typed()
-{}
+av::Typed::Typed() {}
 
 /* virtual */
-av::Typed::~Typed()
-{}
+av::Typed::~Typed() {}
 
-/* static */ void
-av::Typed::initClass()
+/* static */ void av::Typed::initClass()
 {
-  if (Type::badType() == sClassTypeId) {
-    sClassTypeId = Type::createAbstractType(Type::badType(), "av::Typed",
-                                            false);
+    if(Type::badType() == sClassTypeId)
+    {
+        sClassTypeId = Type::createAbstractType(Type::badType(), "av::Typed", false);
 
-    AV_ASSERT(Type::badType() != sClassTypeId);
-
-  }
+        AV_ASSERT(Type::badType() != sClassTypeId);
+    }
 }
 
-/* static */ av::Type
-av::Typed::getClassTypeId()
+/* static */ av::Type av::Typed::getClassTypeId()
 {
-  if (Type::badType() == sClassTypeId) {
+    if(Type::badType() == sClassTypeId)
+    {
+        AVANGO_LOG(logger, logging::WARN, "getClassTypeId(): returning 'bad_type'!")
 
-    AVANGO_LOG(logger,logging::WARN , "getClassTypeId(): returning 'bad_type'!")
+        return Type::badType();
+    }
 
-    return Type::badType();
-  }
-
-  return sClassTypeId;
+    return sClassTypeId;
 }

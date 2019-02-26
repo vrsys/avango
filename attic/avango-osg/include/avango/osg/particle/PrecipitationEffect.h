@@ -38,108 +38,101 @@
 #include <avango/osg/Fog.h>
 #include <avango/osg/particle/windows_specific_osg_particle.h>
 
-
 namespace av
 {
-  namespace osg
-  {
-    namespace particle
-    {
-      /**
-       * Wrapper for ::osgParticle::PrecipitationEffect
-       *
-       * \ingroup av_osg
-       */
-      class AV_OSG_PARTICLE_DLL PrecipitationEffect : public Node
-      {
-        AV_FC_DECLARE();
+namespace osg
+{
+namespace particle
+{
+/**
+ * Wrapper for ::osgParticle::PrecipitationEffect
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_PARTICLE_DLL PrecipitationEffect : public Node
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::PrecipitationEffect is created.
+     * Otherwise, the given ::osg::PrecipitationEffect is used.
+     */
+    PrecipitationEffect(::osgParticle::PrecipitationEffect* osgprecipitationeffect = new ::osgParticle::PrecipitationEffect());
 
-        /**
-         * Constructor. When called without arguments, a new ::osg::PrecipitationEffect is created.
-         * Otherwise, the given ::osg::PrecipitationEffect is used.
-         */
-        PrecipitationEffect(::osgParticle::PrecipitationEffect* osgprecipitationeffect =
-                              new ::osgParticle::PrecipitationEffect());
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~PrecipitationEffect();
 
-      protected:
+  public:
+    SFFloat Rain;
+    SFFloat Snow;
+    SFVec3 Wind;
+    SFVec3 Position;
+    SFVec3 CellSize;
+    SFFloat ParticleSpeed;
+    SFFloat ParticleSize;
+    SFVec4 ParticleColor;
+    SFFloat NearTransition;
+    SFFloat FarTransition;
+    SFFloat MaximumParticleDensity;
+    SFBool UseFarLineSegments;
+    SFFog Fog;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~PrecipitationEffect();
+    /**
+     * Get the wrapped ::osg::PrecipitationEffect.
+     */
+    ::osgParticle::PrecipitationEffect* getOsgPrecipitationEffect() const;
 
-      public:
+  protected:
+    virtual void getRainCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setRainCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getSnowCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setSnowCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getWindCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setWindCB(const av::osg::SFVec3::SetValueEvent& event);
+    virtual void getPositionCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setPositionCB(const av::osg::SFVec3::SetValueEvent& event);
+    virtual void getCellSizeCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setCellSizeCB(const av::osg::SFVec3::SetValueEvent& event);
+    virtual void getParticleSpeedCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setParticleSpeedCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getParticleSizeCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setParticleSizeCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getParticleColorCB(const av::osg::SFVec4::GetValueEvent& event);
+    virtual void setParticleColorCB(const av::osg::SFVec4::SetValueEvent& event);
+    virtual void getNearTransitionCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setNearTransitionCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getFarTransitionCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setFarTransitionCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getMaximumParticleDensityCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setMaximumParticleDensityCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getUseFarLineSegmentsCB(const av::SFBool::GetValueEvent& event);
+    virtual void setUseFarLineSegmentsCB(const av::SFBool::SetValueEvent& event);
+    virtual void getFogCB(const av::osg::SFFog::GetValueEvent& event);
+    virtual void setFogCB(const av::osg::SFFog::SetValueEvent& event);
 
-        SFFloat Rain;
-        SFFloat Snow;
-        SFVec3 Wind;
-        SFVec3 Position;
-        SFVec3 CellSize;
-        SFFloat ParticleSpeed;
-        SFFloat ParticleSize;
-        SFVec4 ParticleColor;
-        SFFloat NearTransition;
-        SFFloat FarTransition;
-        SFFloat MaximumParticleDensity;
-        SFBool UseFarLineSegments;
-        SFFog Fog;
+  private:
+    ::osgParticle::PrecipitationEffect* mOsgPrecipitationEffect;
 
-        /**
-         * Get the wrapped ::osg::PrecipitationEffect.
-         */
-        ::osgParticle::PrecipitationEffect* getOsgPrecipitationEffect() const;
+    float mRain;
+    float mSnow;
 
-      protected:
+    void touchFields();
+};
 
-        virtual void getRainCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setRainCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getSnowCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setSnowCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getWindCB(const av::osg::SFVec3::GetValueEvent& event);
-        virtual void setWindCB(const av::osg::SFVec3::SetValueEvent& event);
-        virtual void getPositionCB(const av::osg::SFVec3::GetValueEvent& event);
-        virtual void setPositionCB(const av::osg::SFVec3::SetValueEvent& event);
-        virtual void getCellSizeCB(const av::osg::SFVec3::GetValueEvent& event);
-        virtual void setCellSizeCB(const av::osg::SFVec3::SetValueEvent& event);
-        virtual void getParticleSpeedCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setParticleSpeedCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getParticleSizeCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setParticleSizeCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getParticleColorCB(const av::osg::SFVec4::GetValueEvent& event);
-        virtual void setParticleColorCB(const av::osg::SFVec4::SetValueEvent& event);
-        virtual void getNearTransitionCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setNearTransitionCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getFarTransitionCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setFarTransitionCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getMaximumParticleDensityCB(const av::SFFloat::GetValueEvent& event);
-        virtual void setMaximumParticleDensityCB(const av::SFFloat::SetValueEvent& event);
-        virtual void getUseFarLineSegmentsCB(const av::SFBool::GetValueEvent& event);
-        virtual void setUseFarLineSegmentsCB(const av::SFBool::SetValueEvent& event);
-        virtual void getFogCB(const av::osg::SFFog::GetValueEvent& event);
-        virtual void setFogCB(const av::osg::SFFog::SetValueEvent& event);
-
-      private:
-
-        ::osgParticle::PrecipitationEffect *mOsgPrecipitationEffect;
-
-        float mRain;
-        float mSnow;
-
-        void touchFields();
-      };
-
-      typedef SingleField<Link<PrecipitationEffect> > SFPrecipitationEffect;
-      typedef MultiField<Link<PrecipitationEffect> > MFPrecipitationEffect;
-    }
-  }
+typedef SingleField<Link<PrecipitationEffect>> SFPrecipitationEffect;
+typedef MultiField<Link<PrecipitationEffect>> MFPrecipitationEffect;
+} // namespace particle
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_PARTICLE_DLL SingleField<Link<osg::particle::PrecipitationEffect> >;
-  template class AV_OSG_PARTICLE_DLL MultiField<Link<osg::particle::PrecipitationEffect> >;
+template class AV_OSG_PARTICLE_DLL SingleField<Link<osg::particle::PrecipitationEffect>>;
+template class AV_OSG_PARTICLE_DLL MultiField<Link<osg::particle::PrecipitationEffect>>;
 #endif
 
-}
+} // namespace av
 
 #endif

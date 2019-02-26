@@ -31,30 +31,31 @@
 
 namespace shade
 {
-  template<class Container, class Qualifier = Type> class list_base :
-    public TypeBase<list_base<Container, Qualifier>, Qualifier>
-  {
+template <class Container, class Qualifier = Type>
+class list_base : public TypeBase<list_base<Container, Qualifier>, Qualifier>
+{
   public:
     list_base(void);
 
     class Accessor
     {
-    public:
-      Accessor(list_base<Container, Qualifier>& l);
-      ~Accessor(void);
-      Container& operator*(void);
-      const Container& operator*(void) const;
-      Container* operator->(void);
-      const Container* operator->(void) const;
-    private:
-      list_base<Container, Qualifier>& m_list;
-      bool m_touched;
+      public:
+        Accessor(list_base<Container, Qualifier>& l);
+        ~Accessor(void);
+        Container& operator*(void);
+        const Container& operator*(void)const;
+        Container* operator->(void);
+        const Container* operator->(void)const;
+
+      private:
+        list_base<Container, Qualifier>& m_list;
+        bool m_touched;
     };
 
-    const Container* operator->(void) const;
+    const Container* operator->(void)const;
 
     /*virtual*/ boost::shared_ptr<Type::State> create_state(const PipelineState& ps) const;
-    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void (Shader*)>) const;
+    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void(Shader*)>) const;
     /*virtual*/ void insert_references(boost::shared_ptr<Type::State>, ObjectMap&) const;
     /*virtual*/ std::string get_constructor_str(void) const;
     /*virtual*/ std::string get_constructor_str(boost::shared_ptr<Type::State> state) const;
@@ -64,28 +65,27 @@ namespace shade
 
     class State : public Type::State
     {
-    public:
-      ObjectMap::Index index;
+      public:
+        ObjectMap::Index index;
     };
 
   protected:
     Container m_container;
-  };
+};
 
-  template<class Container, class Qualifier = Type> class list :
-    public list_base<Container, Qualifier>
-  {
+template <class Container, class Qualifier = Type>
+class list : public list_base<Container, Qualifier>
+{
   public:
     using list_base<Container, Qualifier>::operator->;
-  };
+};
 
-  template<class T, class Qualifier> class list<std::vector<boost::shared_ptr<T> >, Qualifier> :
-    public list_base<std::vector<boost::shared_ptr<T> >, Qualifier>,
-    public types::ListAccessor
-  {
+template <class T, class Qualifier>
+class list<std::vector<boost::shared_ptr<T>>, Qualifier> : public list_base<std::vector<boost::shared_ptr<T>>, Qualifier>, public types::ListAccessor
+{
   public:
-    using list_base<std::vector<boost::shared_ptr<T> >, Qualifier>::operator->;
-    using list_base<std::vector<boost::shared_ptr<T> >, Qualifier>::m_container;
+    using list_base<std::vector<boost::shared_ptr<T>>, Qualifier>::operator->;
+    using list_base<std::vector<boost::shared_ptr<T>>, Qualifier>::m_container;
 
     /*virtual*/ OutIterator set(void);
     /*virtual*/ Range get(void) const;
@@ -93,33 +93,33 @@ namespace shade
   private:
     class ListInIteratorImpl : public InIteratorImpl
     {
-    public:
-      ListInIteratorImpl(typename std::vector<boost::shared_ptr<T> >::const_iterator iter);
-      /*virtual*/ InIteratorImpl* clone(void);
-      /*virtual*/ const boost::shared_ptr<Shader> dereference(void) const;
-      /*virtual*/ void increment(void);
-      /*virtual*/ bool equals(const InIteratorImpl& other) const;
-    private:
-      typename std::vector<boost::shared_ptr<T> >::const_iterator m_iter;
+      public:
+        ListInIteratorImpl(typename std::vector<boost::shared_ptr<T>>::const_iterator iter);
+        /*virtual*/ InIteratorImpl* clone(void);
+        /*virtual*/ const boost::shared_ptr<Shader> dereference(void) const;
+        /*virtual*/ void increment(void);
+        /*virtual*/ bool equals(const InIteratorImpl& other) const;
+
+      private:
+        typename std::vector<boost::shared_ptr<T>>::const_iterator m_iter;
     };
 
     class ListOutIteratorImpl : public OutIteratorImpl
     {
-    public:
-      ListOutIteratorImpl(std::vector<boost::shared_ptr<T> >& container);
-      /*virtual*/ OutIteratorImpl* clone(void);
-      /*virtual*/ boost::shared_ptr<Shader>& dereference(void);
-      /*virtual*/ void increment(void);
-    private:
-      boost::shared_ptr<Shader> m_value;
-      std::vector<boost::shared_ptr<T> >& m_container;
+      public:
+        ListOutIteratorImpl(std::vector<boost::shared_ptr<T>>& container);
+        /*virtual*/ OutIteratorImpl* clone(void);
+        /*virtual*/ boost::shared_ptr<Shader>& dereference(void);
+        /*virtual*/ void increment(void);
+
+      private:
+        boost::shared_ptr<Shader> m_value;
+        std::vector<boost::shared_ptr<T>>& m_container;
     };
-  };
+};
 
-}
-
+} // namespace shade
 
 #include "impl/list_impl.cpp"
 
 #endif /* shade_types_list_H */
-

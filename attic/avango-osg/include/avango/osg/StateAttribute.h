@@ -37,49 +37,46 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Abstract Wrapper for ::osg::StateAttribute
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL StateAttribute : public Object
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Abstract Wrapper for ::osg::StateAttribute
-     *
-     * \ingroup av_osg
+     * Constructor.
      */
-    class AV_OSG_DLL StateAttribute : public Object
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    StateAttribute(::osg::StateAttribute* osgstateattribute);
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~StateAttribute();
 
-      /**
-       * Constructor.
-       */
-      StateAttribute(::osg::StateAttribute* osgstateattribute);
+  public:
+    /**
+     * Get the wrapped ::osg::Object.
+     */
+    ::osg::StateAttribute* getOsgStateAttribute() const;
 
-    protected:
+  private:
+    ::osg::StateAttribute* mOsgStateAttribute;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~StateAttribute();
-
-    public:
-      /**
-       * Get the wrapped ::osg::Object.
-       */
-      ::osg::StateAttribute* getOsgStateAttribute() const;
-
-    private:
-
-      ::osg::StateAttribute *mOsgStateAttribute;
-    };
-
-    typedef SingleField<Link<StateAttribute> > SFStateAttribute;
-    typedef MultiField<Link<StateAttribute> > MFStateAttribute;
-  } // namespace osg
+typedef SingleField<Link<StateAttribute>> SFStateAttribute;
+typedef MultiField<Link<StateAttribute>> MFStateAttribute;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::StateAttribute> >;
-  template class AV_OSG_DLL MultiField<Link<osg::StateAttribute> >;
+template class AV_OSG_DLL SingleField<Link<osg::StateAttribute>>;
+template class AV_OSG_DLL MultiField<Link<osg::StateAttribute>>;
 #endif
 
 } // namespace av

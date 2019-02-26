@@ -28,38 +28,34 @@
 #include <avango/SingleField.h>
 #include <avango/Logger.h>
 
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::DeviceActuator"));
+av::Logger& logger(av::getLogger("av::daemon::DeviceActuator"));
 }
 
 AV_FC_DEFINE(av::daemon::DeviceActuator);
 
 av::daemon::DeviceActuator::DeviceActuator()
 {
-  AV_FC_ADD_FIELD(DeviceService, 0);
-  AV_FC_ADD_FIELD(Station,       ::std::string());
+    AV_FC_ADD_FIELD(DeviceService, 0);
+    AV_FC_ADD_FIELD(Station, ::std::string());
 }
 
-av::daemon::DeviceActuator::~DeviceActuator()
-{}
+av::daemon::DeviceActuator::~DeviceActuator() {}
 
-void
-av::daemon::DeviceActuator::initClass()
+void av::daemon::DeviceActuator::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, av::daemon::DeviceActuator, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, av::daemon::DeviceActuator, true);
+    }
 }
 
-/* virtual */ void
-av::daemon::DeviceActuator::fieldHasChanged(const av::Field& field)
+/* virtual */ void av::daemon::DeviceActuator::fieldHasChanged(const av::Field& field)
 {
-  if (&field == &DeviceService)
-    mService = DeviceService.getValue();
-  else if (&field == &Station)
-    mStation = Station.getValue();
+    if(&field == &DeviceService)
+        mService = DeviceService.getValue();
+    else if(&field == &Station)
+        mStation = Station.getValue();
 }

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_BLEND_FUNC
 #define AV_PYTHON_OSG_BLEND_FUNC
 

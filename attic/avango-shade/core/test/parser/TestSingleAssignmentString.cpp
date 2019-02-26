@@ -27,37 +27,36 @@ using namespace shade::parser;
 
 SUITE(TestSingleAssignmentString)
 {
-  TEST(Construction)
-  {
-    SingleAssignmentString i;
-    CHECK(!i.valid());
-    CHECK_EQUAL("", i.get());
-  }
+    TEST(Construction)
+    {
+        SingleAssignmentString i;
+        CHECK(!i.valid());
+        CHECK_EQUAL("", i.get());
+    }
 
-  TEST(SingleAssignment)
-  {
-    SingleAssignmentString i;
-    i.set("ABC");
-    CHECK(i.valid());
-    CHECK_EQUAL("ABC", i.get());
-  }
+    TEST(SingleAssignment)
+    {
+        SingleAssignmentString i;
+        i.set("ABC");
+        CHECK(i.valid());
+        CHECK_EQUAL("ABC", i.get());
+    }
 
-  TEST(DoubleAssignment)
-  {
-    SingleAssignmentString i;
-    i.set("ABC");
-    i.set("DFG");
-    CHECK(i.valid());
-    CHECK_EQUAL("", i.get());
-  }
+    TEST(DoubleAssignment)
+    {
+        SingleAssignmentString i;
+        i.set("ABC");
+        i.set("DFG");
+        CHECK(i.valid());
+        CHECK_EQUAL("", i.get());
+    }
 
-  TEST(Copy)
-  {
-    SingleAssignmentString i;
-    i.set("ABC");
-    SingleAssignmentString j(i);
-    CHECK(j.valid());
-    CHECK_EQUAL("ABC", j.get());
-  }
-
+    TEST(Copy)
+    {
+        SingleAssignmentString i;
+        i.set("ABC");
+        SingleAssignmentString j(i);
+        CHECK(j.valid());
+        CHECK_EQUAL("ABC", j.get());
+    }
 }

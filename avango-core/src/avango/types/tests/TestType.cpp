@@ -42,73 +42,68 @@
 
 namespace
 {
-
-  class CleanTypeSystemFixture {
+class CleanTypeSystemFixture
+{
   public:
     CleanTypeSystemFixture() { av::Type::init(); }
     virtual ~CleanTypeSystemFixture() {}
-  };
+};
 
-  TEST_FIXTURE(CleanTypeSystemFixture, checkBadType)
-  {
+TEST_FIXTURE(CleanTypeSystemFixture, checkBadType)
+{
     av::Type bad_type = av::Type::badType();
     CHECK_EQUAL(0U, bad_type.getId());
     CHECK_EQUAL("BAD_TYPE", bad_type.getName());
-  }
+}
 
-  class HierarchyFixture : public CleanTypeSystemFixture {
+class HierarchyFixture : public CleanTypeSystemFixture
+{
   public:
     HierarchyFixture()
-      : mParent(av::Type::createAbstractType(av::Type::badType(),
-                                             "Parent",
-                                             true)),
-        mChild1(av::Type::createAbstractType( mParent, "Child1", true)),
-        mChild2(av::Type::createAbstractType( mParent, "Child2", true))
-    {}
+        : mParent(av::Type::createAbstractType(av::Type::badType(), "Parent", true)), mChild1(av::Type::createAbstractType(mParent, "Child1", true)),
+          mChild2(av::Type::createAbstractType(mParent, "Child2", true))
+    {
+    }
 
   protected:
     av::Type mParent;
     av::Type mChild1;
     av::Type mChild2;
-  };
+};
 
-  TEST_FIXTURE(HierarchyFixture, checkTypesValid)
-  {
+TEST_FIXTURE(HierarchyFixture, checkTypesValid)
+{
     CHECK(!mParent.isBad());
     CHECK(!mChild1.isBad());
     CHECK(!mChild2.isBad());
-  }
+}
 
-  TEST_FIXTURE(HierarchyFixture, checkIsDerivedFrom)
-  {
+TEST_FIXTURE(HierarchyFixture, checkIsDerivedFrom)
+{
     CHECK(mChild1.isDerivedFrom(mParent));
     CHECK(mChild2.isDerivedFrom(mParent));
     CHECK(!mChild2.isDerivedFrom(mChild1));
     CHECK(!mChild2.isDerivedFrom(mChild2));
     CHECK(!mParent.isDerivedFrom(mChild1));
-  }
+}
 
-
-  TEST_FIXTURE(HierarchyFixture, checkIsOfType)
-  {
+TEST_FIXTURE(HierarchyFixture, checkIsOfType)
+{
     CHECK(mParent.isOfType(mParent));
     CHECK(mChild2.isOfType(mParent));
     CHECK(!mChild2.isOfType(mChild1));
-  }
+}
 
-  TEST_FIXTURE(HierarchyFixture, checkAllDerived)
-  {
-    CHECK_EQUAL(2U, mParent.getAllDerivedFrom().size());
-  }
+TEST_FIXTURE(HierarchyFixture, checkAllDerived) { CHECK_EQUAL(2U, mParent.getAllDerivedFrom().size()); }
 
-  TEST_FIXTURE(HierarchyFixture, checkIds)
-  {
+TEST_FIXTURE(HierarchyFixture, checkIds)
+{
     av::Type a(mParent);
     av::Type b(mParent.getId());
 
     CHECK_EQUAL(mParent.getId(), a.getId());
     CHECK_EQUAL(mParent, b);
-  }
+}
 
 } // namespace
 

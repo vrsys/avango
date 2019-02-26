@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::skelanim::SkeletalAnimationLoader"));
+av::Logger& logger(av::getLogger("av::gua::skelanim::SkeletalAnimationLoader"));
 }
 
 AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationLoader);
@@ -15,44 +15,31 @@ AV_FC_DEFINE(av::gua::skelanim::SkeletalAnimationLoader);
 AV_FIELD_DEFINE(av::gua::skelanim::SFSkeletalAnimationLoader);
 AV_FIELD_DEFINE(av::gua::skelanim::MFSkeletalAnimationLoader);
 
-av::gua::skelanim::SkeletalAnimationLoader::SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader)
-    : m_guaSkeletalAnimationLoader(guaSkeletalAnimationLoader)
-{}
+av::gua::skelanim::SkeletalAnimationLoader::SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader) : m_guaSkeletalAnimationLoader(guaSkeletalAnimationLoader) {}
 
-//av::gua::skelanim::SkeletalAnimationLoader::~SkeletalAnimationLoader()
+// av::gua::skelanim::SkeletalAnimationLoader::~SkeletalAnimationLoader()
 //{}
 
 av::Link<av::gua::Node>
-av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
-                                               std::string const& fileName,
-                                               av::Link<av::gua::Material> const& fallbackMaterial,
-                                               Flags flags) const
+av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName, std::string const& fileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags) const
 {
-
-    auto gua_node(m_guaSkeletalAnimationLoader->create_geometry_from_file(
-                                            nodeName, fileName, fallbackMaterial->getGuaMaterial(), flags));
+    auto gua_node(m_guaSkeletalAnimationLoader->create_geometry_from_file(nodeName, fileName, fallbackMaterial->getGuaMaterial(), flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
 
-av::Link<av::gua::Node>
-av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName,
-                                               std::string const& fileName,
-                                               Flags flags) const
+av::Link<av::gua::Node> av::gua::skelanim::SkeletalAnimationLoader::createGeometryFromFile(std::string const& nodeName, std::string const& fileName, Flags flags) const
 {
-
-    auto gua_node(m_guaSkeletalAnimationLoader->create_geometry_from_file(
-                                            nodeName, fileName, flags));
+    auto gua_node(m_guaSkeletalAnimationLoader->create_geometry_from_file(nodeName, fileName, flags));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
 
-void
-av::gua::skelanim::SkeletalAnimationLoader::initClass()
+void av::gua::skelanim::SkeletalAnimationLoader::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -63,46 +50,47 @@ av::gua::skelanim::SkeletalAnimationLoader::initClass()
     }
 }
 
-::gua::SkeletalAnimationLoader*
-av::gua::skelanim::SkeletalAnimationLoader::getGuaSkeletalAnimationLoader() const
+::gua::SkeletalAnimationLoader* av::gua::skelanim::SkeletalAnimationLoader::getGuaSkeletalAnimationLoader() const { return m_guaSkeletalAnimationLoader; }
+
+av::gua::Node* av::gua::skelanim::SkeletalAnimationLoader::createChildren(std::shared_ptr<::gua::node::Node> root) const
 {
-    return m_guaSkeletalAnimationLoader;
-}
+    av::gua::Node* av_node(nullptr);
 
-av::gua::Node*
-av::gua::skelanim::SkeletalAnimationLoader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
-
-  av::gua::Node* av_node(nullptr);
-
-  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
-  if (group_cast) {
-    av_node = new av::gua::TransformNode(group_cast);
-  }
-
-  // if (!av_node) {
-  //   auto vol_cast(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(root));
-  //   if (vol_cast) {
-  //     av_node = new av::gua::VolumeNode(vol_cast);
-  //   }
-  // }
-
-  if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::SkeletalAnimationNode>(root));
-    if (geom_cast) {
-      av_node = new av::gua::skelanim::SkeletalAnimationNode(geom_cast);
+    auto group_cast(std::dynamic_pointer_cast<::gua::node::TransformNode>(root));
+    if(group_cast)
+    {
+        av_node = new av::gua::TransformNode(group_cast);
     }
-  }
 
-  if (av_node) {
-    av_node->addToParentChildren();
-  } else {
-    std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
-  }
+    // if (!av_node) {
+    //   auto vol_cast(std::dynamic_pointer_cast< ::gua::node::VolumeNode>(root));
+    //   if (vol_cast) {
+    //     av_node = new av::gua::VolumeNode(vol_cast);
+    //   }
+    // }
 
+    if(!av_node)
+    {
+        auto geom_cast(std::dynamic_pointer_cast<::gua::node::SkeletalAnimationNode>(root));
+        if(geom_cast)
+        {
+            av_node = new av::gua::skelanim::SkeletalAnimationNode(geom_cast);
+        }
+    }
 
-  for (auto c : root->get_children()) {
-    createChildren(c);
-  }
+    if(av_node)
+    {
+        av_node->addToParentChildren();
+    }
+    else
+    {
+        std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
+    }
 
-  return av_node;
+    for(auto c : root->get_children())
+    {
+        createChildren(c);
+    }
+
+    return av_node;
 }

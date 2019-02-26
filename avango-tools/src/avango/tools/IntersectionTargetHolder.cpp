@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::IntersectionTargetHolder"));
+av::Logger& logger(av::getLogger("av::tools::IntersectionTargetHolder"));
 }
 
 AV_FC_DEFINE(av::tools::IntersectionTargetHolder);
@@ -39,26 +39,24 @@ AV_FIELD_DEFINE(av::tools::MFIntersectionTargetHolder);
 
 av::tools::IntersectionTargetHolder::IntersectionTargetHolder()
 {
-  AV_FC_ADD_FIELD(Intersection, 0);
+    AV_FC_ADD_FIELD(Intersection, 0);
 
-  if (!Keep.getValue())
-    Keep.setValue(true);
+    if(!Keep.getValue())
+        Keep.setValue(true);
 }
 
-av::tools::IntersectionTargetHolder::~IntersectionTargetHolder()
-{}
+av::tools::IntersectionTargetHolder::~IntersectionTargetHolder() {}
 
-void
-av::tools::IntersectionTargetHolder::initClass()
+void av::tools::IntersectionTargetHolder::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::tools::NodePathTargetHolder::initClass();
-    av::osg::Intersection::initClass();
+    if(!isTypeInitialized())
+    {
+        av::tools::NodePathTargetHolder::initClass();
+        av::osg::Intersection::initClass();
 
-    AV_FC_INIT(av::tools::NodePathTargetHolder, av::tools::IntersectionTargetHolder, true);
+        AV_FC_INIT(av::tools::NodePathTargetHolder, av::tools::IntersectionTargetHolder, true);
 
-    SFIntersectionTargetHolder::initClass("av::tools::SFIntersectionTargetHolder", "av::Field");
-    MFIntersectionTargetHolder::initClass("av::tools::MFIntersectionTargetHolder", "av::Field");
-  }
+        SFIntersectionTargetHolder::initClass("av::tools::SFIntersectionTargetHolder", "av::Field");
+        MFIntersectionTargetHolder::initClass("av::tools::MFIntersectionTargetHolder", "av::Field");
+    }
 }

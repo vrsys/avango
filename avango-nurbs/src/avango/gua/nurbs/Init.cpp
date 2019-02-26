@@ -5,10 +5,9 @@
 
 AV_TYPED_DEFINE_ABSTRACT(av::gua::nurbs::Init);
 
-/* static */ void
-av::gua::nurbs::Init::initClass()
+/* static */ void av::gua::nurbs::Init::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         char** argv;
         ::gua::init(0, argv);

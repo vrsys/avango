@@ -31,36 +31,35 @@
 #include "../include/avango/utils/MultiValueField.h"
 
 #ifdef PCL_SUPPORT
-  #include "../include/avango/utils/PCLPointCloud.h"
+#include "../include/avango/utils/PCLPointCloud.h"
 #endif
 
 #include <avango/Logger.h>
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::utils::Init"));
+av::Logger& logger(av::getLogger("av::utils::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::utils::Init);
 
-/* static */ void
-av::utils::Init::initClass()
+/* static */ void av::utils::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::utils::ProximitySensor::initClass();
-    av::utils::Bool2Or::initClass();
-    av::utils::Bool2And::initClass();
-    av::utils::Bool3Or::initClass();
-    av::utils::Bool3And::initClass();
-    //av::utils::Trackball::initClass();
-    av::utils::initMultiValueFields();
-    av::utils::initMultiValueOSGFields();
+    if(!isTypeInitialized())
+    {
+        av::utils::ProximitySensor::initClass();
+        av::utils::Bool2Or::initClass();
+        av::utils::Bool2And::initClass();
+        av::utils::Bool3Or::initClass();
+        av::utils::Bool3And::initClass();
+        // av::utils::Trackball::initClass();
+        av::utils::initMultiValueFields();
+        av::utils::initMultiValueOSGFields();
 
-    #ifdef PCL_SUPPORT
-      av::utils::PCLPointCloud::initClass();
-    #endif
+#ifdef PCL_SUPPORT
+        av::utils::PCLPointCloud::initClass();
+#endif
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::utils::Init", true);
+    }
 }

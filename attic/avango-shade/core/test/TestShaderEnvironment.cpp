@@ -27,15 +27,7 @@
 
 SUITE(TestShaderEnvironment)
 {
+    TEST(CheckVertexDefine) { CHECK_EQUAL("SHADE_VERTEX_SHADER", shade::get_shader_env_define(shade::vertex_shader)); }
 
-  TEST(CheckVertexDefine)
-  {
-    CHECK_EQUAL("SHADE_VERTEX_SHADER", shade::get_shader_env_define(shade::vertex_shader));
-  }
-
-  TEST(CheckFragmentDefine)
-  {
-    CHECK_EQUAL("SHADE_FRAGMENT_SHADER", shade::get_shader_env_define(shade::fragment_shader));
-  }
-
+    TEST(CheckFragmentDefine) { CHECK_EQUAL("SHADE_FRAGMENT_SHADER", shade::get_shader_env_define(shade::fragment_shader)); }
 }

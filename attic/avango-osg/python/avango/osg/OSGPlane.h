@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_PLANE
 #define AV_PYTHON_OSG_PLANE
 

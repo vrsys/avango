@@ -26,17 +26,8 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(DirectionalLight, "DirectionalLight.glsl",
-    SHADE_NONE,
-    SHADE_ENV_DEFS(shade::application_stage, (direction)(color))
-    SHADE_DEFS((transformed_direction)))
+SHADE_CLASS_INIT(DirectionalLight, "DirectionalLight.glsl", SHADE_NONE, SHADE_ENV_DEFS(shade::application_stage, (direction)(color)) SHADE_DEFS((transformed_direction)))
 
-void_<> DirectionalLight::illuminate(objref<> surface, vec3<> position)
-{
-  return invoke< shade::void_<> >("DirectionalLight_illuminate_impl");
-}
+void_<> DirectionalLight::illuminate(objref<> surface, vec3<> position) { return invoke<shade::void_<>>("DirectionalLight_illuminate_impl"); }
 
-void_<> DirectionalLight::transform(objref<> material)
-{
-  return invoke< shade::void_<> >("DirectionalLight_transform_impl");
-}
+void_<> DirectionalLight::transform(objref<> material) { return invoke<shade::void_<>>("DirectionalLight_transform_impl"); }

@@ -35,13 +35,12 @@
 
 namespace av
 {
-  class FieldContainer;
-  class Field;
+class FieldContainer;
+class Field;
 
-  class AV_DLL FieldRef
-  {
+class AV_DLL FieldRef
+{
   public:
-
     FieldRef();
     FieldRef(const FieldRef&);
     FieldRef(Field*);
@@ -52,12 +51,8 @@ namespace av
     Field* getField();
 
     Link<FieldContainer> mFC; // field container
-    unsigned int         mFi; // field index
-  };
-}
+    unsigned int mFi;         // field index
+};
+} // namespace av
 
 #endif
-
-
-
-

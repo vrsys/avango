@@ -5,94 +5,79 @@
 
 using namespace UnitTest;
 
-namespace {
-
+namespace
+{
 TEST(PassingTestHasNoFailures)
 {
     class PassingTest : public Test
     {
-    public:
+      public:
         PassingTest() : Test("passing") {}
-        virtual void RunImpl() const
-        {
-            CHECK(true);
-        }
+        virtual void RunImpl() const { CHECK(true); }
     };
 
     TestResults results;
-	{
-		ScopedCurrentTest scopedResults(results);
-		PassingTest().Run();
-	}
+    {
+        ScopedCurrentTest scopedResults(results);
+        PassingTest().Run();
+    }
 
     CHECK_EQUAL(0, results.GetFailureCount());
 }
-
 
 TEST(FailingTestHasFailures)
 {
     class FailingTest : public Test
     {
-    public:
+      public:
         FailingTest() : Test("failing") {}
-        virtual void RunImpl() const
-        {
-            CHECK(false);
-        }
+        virtual void RunImpl() const { CHECK(false); }
     };
 
     TestResults results;
-	{
-		ScopedCurrentTest scopedResults(results);
-		FailingTest().Run();
-	}
+    {
+        ScopedCurrentTest scopedResults(results);
+        FailingTest().Run();
+    }
 
     CHECK_EQUAL(1, results.GetFailureCount());
 }
-
 
 TEST(ThrowingTestsAreReportedAsFailures)
 {
     class CrashingTest : public Test
     {
-    public:
+      public:
         CrashingTest() : Test("throwing") {}
-        virtual void RunImpl() const
-        {
-            throw "Blah";
-        }
+        virtual void RunImpl() const { throw "Blah"; }
     };
- 
+
     TestResults results;
-	{
-		ScopedCurrentTest scopedResult(results);
-		CrashingTest().Run();
-	}
+    {
+        ScopedCurrentTest scopedResult(results);
+        CrashingTest().Run();
+    }
 
-	CHECK_EQUAL(1, results.GetFailureCount());
+    CHECK_EQUAL(1, results.GetFailureCount());
 }
-
 
 #ifndef UNITTEST_MINGW
 TEST(CrashingTestsAreReportedAsFailures)
 {
     class CrashingTest : public Test
     {
-    public:
+      public:
         CrashingTest() : Test("crashing") {}
-        virtual void RunImpl() const
-        {
-            reinterpret_cast< void (*)() >(0)();
-        }
+        virtual void RunImpl() const { reinterpret_cast<void (*)()>(0)(); }
     };
 
     TestResults results;
-	{
-		ScopedCurrentTest scopedResult(results);
-		CrashingTest().Run();
-	}
+    {
+        ScopedCurrentTest scopedResult(results);
+        CrashingTest().Run();
+    }
 
-	CHECK_EQUAL(1, results.GetFailureCount());
+    CHECK_EQUAL(1, results.GetFailureCount());
 }
 #endif
 
@@ -110,20 +95,17 @@ TEST(TestReflectsSpecifiedSuiteName)
     CHECK_EQUAL("testSuite", test.m_details.suiteName);
 }
 
-void Fail()
-{
-	CHECK(false);
-}
+void Fail() { CHECK(false); }
 
 TEST(OutOfCoreCHECKMacrosCanFailTests)
 {
-	TestResults results;
-	{
-		ScopedCurrentTest scopedResult(results);
-		Fail();
-	}
+    TestResults results;
+    {
+        ScopedCurrentTest scopedResult(results);
+        Fail();
+    }
 
-	CHECK_EQUAL(1, results.GetFailureCount());
+    CHECK_EQUAL(1, results.GetFailureCount());
 }
 
-}
+} // namespace

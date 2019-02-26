@@ -30,42 +30,39 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::BufferBlock"));
+av::Logger& logger(av::getLogger("av::daemon::BufferBlock"));
 }
 
-av::daemon::BufferBlock::BufferBlock()
-  : mNumBuffers(0),
-    mMutex()
-{}
+av::daemon::BufferBlock::BufferBlock() : mNumBuffers(0), mMutex() {}
 
-av::daemon::Buffer*
-av::daemon::BufferBlock::getBuffer(const char* name)
+av::daemon::Buffer* av::daemon::BufferBlock::getBuffer(const char* name)
 {
-  // very simple and inefficient for now
-  Buffer* buffer_ptr = nullptr;
+    // very simple and inefficient for now
+    Buffer* buffer_ptr = nullptr;
 
-  std::lock_guard<std::mutex> lock(mMutex);
+    std::lock_guard<std::mutex> lock(mMutex);
 
-  int i = 0;
+    int i = 0;
 
-  for (i=0; i<mNumBuffers; i++)
-  {
-    if (std::strcmp(name, mBuffers[i].getName()) == 0)
+    for(i = 0; i < mNumBuffers; i++)
     {
-      buffer_ptr = &mBuffers[i];
-      LOG_TRACE(logger) << "getBuffer(): referenced buffer '" << name << "', " << buffer_ptr;
+        if(std::strcmp(name, mBuffers[i].getName()) == 0)
+        {
+            buffer_ptr = &mBuffers[i];
+            LOG_TRACE(logger) << "getBuffer(): referenced buffer '" << name << "', " << buffer_ptr;
 
-      break;
+            break;
+        }
     }
-  }
 
-  if (!buffer_ptr && i < sMaxBufferNum) {
-    buffer_ptr = new (&mBuffers[i]) Buffer;
-    buffer_ptr->setName(name);
-    logger.debug() << "getBuffer(): created buffer '" << name << "', " << buffer_ptr;
+    if(!buffer_ptr && i < sMaxBufferNum)
+    {
+        buffer_ptr = new(&mBuffers[i]) Buffer;
+        buffer_ptr->setName(name);
+        logger.debug() << "getBuffer(): created buffer '" << name << "', " << buffer_ptr;
 
-    mNumBuffers++;
-  }
+        mNumBuffers++;
+    }
 
-  return buffer_ptr;
+    return buffer_ptr;
 }

@@ -84,72 +84,71 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Init"));
+av::Logger& logger(av::getLogger("av::osg::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::osg::Init);
 
-/* static */ void
-av::osg::Init::initClass()
+/* static */ void av::osg::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::initFields();
+    if(!isTypeInitialized())
+    {
+        av::osg::initFields();
 
-    av::osg::AbsoluteTransform::initClass();
-    av::osg::AutoTransform::initClass();
-    av::osg::Billboard::initClass();
-    av::osg::Camera::initClass();
-    av::osg::CameraAttachment::initClass();
-    av::osg::ClipPlane::initClass();
-    av::osg::ClipNode::initClass();
-    av::osg::CullFace::initClass();
-    av::osg::Depth::initClass();
-    av::osg::BlendFunc::initClass();
-    av::osg::BoundingBoxCalculator::initClass();
-    av::osg::BoundingSphere::initClass();
-    av::osg::Drawable::initClass();
-    av::osg::Fog::initClass();
-    av::osg::Shader::initClass();
-    av::osg::Program::initClass();
-    av::osg::Uniform::initClass();
-    av::osg::Light::initClass();
-    av::osg::LightSource::initClass();
-    av::osg::LineWidth::initClass();
-    av::osg::Geode::initClass();
-    av::osg::Geometry::initClass();
-    av::osg::Group::initClass();
-    av::osg::Image::initClass();
-    av::osg::ImageStream::initClass();
-    av::osg::Intersection::initClass();
-    av::osg::LayerGeode::initClass();
-    av::osg::LayerGroup::initClass();
-    av::osg::LineSegmentIntersector::initClass();
-    av::osg::LoadFile::initClass();
-    av::osg::LoadImage::initClass();
-    av::osg::LoadImageStream::initClass();
-    av::osg::MatrixTransform::initClass();
-    av::osg::Node::initClass();
-    av::osg::Panel::initClass();
-    av::osg::PolygonOffset::initClass();
-    av::osg::Projection::initClass();
-    av::osg::Quad::initClass();
-    av::osg::Sphere::initClass();
-    av::osg::Box::initClass();
-    av::osg::Capsule::initClass();
-    av::osg::StateAttribute::initClass();
-    av::osg::StateSet::initClass();
-    av::osg::Switch::initClass();
-    av::osg::Text::initClass();
-    av::osg::Texture::initClass();
-    av::osg::Texture1D::initClass();
-    av::osg::Texture2D::initClass();
-    av::osg::Texture2DArray::initClass();
-    av::osg::TextureCubeMap::initClass();
-    av::osg::TexturedQuad::initClass();
-    av::osg::Transform::initClass();
-    av::osg::TriangleContainer::initClass();
+        av::osg::AbsoluteTransform::initClass();
+        av::osg::AutoTransform::initClass();
+        av::osg::Billboard::initClass();
+        av::osg::Camera::initClass();
+        av::osg::CameraAttachment::initClass();
+        av::osg::ClipPlane::initClass();
+        av::osg::ClipNode::initClass();
+        av::osg::CullFace::initClass();
+        av::osg::Depth::initClass();
+        av::osg::BlendFunc::initClass();
+        av::osg::BoundingBoxCalculator::initClass();
+        av::osg::BoundingSphere::initClass();
+        av::osg::Drawable::initClass();
+        av::osg::Fog::initClass();
+        av::osg::Shader::initClass();
+        av::osg::Program::initClass();
+        av::osg::Uniform::initClass();
+        av::osg::Light::initClass();
+        av::osg::LightSource::initClass();
+        av::osg::LineWidth::initClass();
+        av::osg::Geode::initClass();
+        av::osg::Geometry::initClass();
+        av::osg::Group::initClass();
+        av::osg::Image::initClass();
+        av::osg::ImageStream::initClass();
+        av::osg::Intersection::initClass();
+        av::osg::LayerGeode::initClass();
+        av::osg::LayerGroup::initClass();
+        av::osg::LineSegmentIntersector::initClass();
+        av::osg::LoadFile::initClass();
+        av::osg::LoadImage::initClass();
+        av::osg::LoadImageStream::initClass();
+        av::osg::MatrixTransform::initClass();
+        av::osg::Node::initClass();
+        av::osg::Panel::initClass();
+        av::osg::PolygonOffset::initClass();
+        av::osg::Projection::initClass();
+        av::osg::Quad::initClass();
+        av::osg::Sphere::initClass();
+        av::osg::Box::initClass();
+        av::osg::Capsule::initClass();
+        av::osg::StateAttribute::initClass();
+        av::osg::StateSet::initClass();
+        av::osg::Switch::initClass();
+        av::osg::Text::initClass();
+        av::osg::Texture::initClass();
+        av::osg::Texture1D::initClass();
+        av::osg::Texture2D::initClass();
+        av::osg::Texture2DArray::initClass();
+        av::osg::TextureCubeMap::initClass();
+        av::osg::TexturedQuad::initClass();
+        av::osg::Transform::initClass();
+        av::osg::TriangleContainer::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::Init", true);
+    }
 }

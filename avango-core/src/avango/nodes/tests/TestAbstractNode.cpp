@@ -36,102 +36,82 @@
 
 // internal unnamed namespace
 
-namespace {
-  using namespace av;
+namespace
+{
+using namespace av;
 
-  class AbstractNode : public av::FieldContainer {
+class AbstractNode : public av::FieldContainer
+{
     AV_FC_DECLARE_ABSTRACT();
 
   public:
-
     AbstractNode();
     virtual ~AbstractNode();
 
-    MFFloat  FloatField;
+    MFFloat FloatField;
 
     virtual void pureVirtualFunction() = 0;
+};
 
-  };
+AV_FC_DEFINE_ABSTRACT(AbstractNode);
 
-  AV_FC_DEFINE_ABSTRACT(AbstractNode);
+AbstractNode::AbstractNode() { AV_FC_ADD_FIELD(FloatField, MFFloat::ContainerType()); }
 
-  AbstractNode::AbstractNode()
-  {
-    AV_FC_ADD_FIELD(FloatField, MFFloat::ContainerType());
-  }
+AbstractNode::~AbstractNode() {}
 
-  AbstractNode::~AbstractNode()
-  {}
-
-  void
-  AbstractNode::initClass()
-  {
-    if (!isTypeInitialized())
+void AbstractNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT_ABSTRACT(av::FieldContainer, AbstractNode, false);
+        AV_FC_INIT_ABSTRACT(av::FieldContainer, AbstractNode, false);
     }
-  }
+}
 
-  class ConcreteNode : public AbstractNode {
+class ConcreteNode : public AbstractNode
+{
     AV_FC_DECLARE();
 
   public:
-
     ConcreteNode();
     virtual ~ConcreteNode();
 
-    MFFloat  FloatField2;
+    MFFloat FloatField2;
 
     void pureVirtualFunction();
+};
 
+AV_FC_DEFINE(ConcreteNode);
 
-  };
+ConcreteNode::ConcreteNode() { AV_FC_ADD_FIELD(FloatField2, MFFloat::ContainerType()); }
 
-  AV_FC_DEFINE(ConcreteNode);
+ConcreteNode::~ConcreteNode() {}
 
-  ConcreteNode::ConcreteNode()
-  {
-    AV_FC_ADD_FIELD(FloatField2, MFFloat::ContainerType());
-  }
+void ConcreteNode::pureVirtualFunction() {}
 
-  ConcreteNode::~ConcreteNode()
-  {}
-
-  void
-  ConcreteNode::pureVirtualFunction()
-  {}
-
-  void
-  ConcreteNode::initClass()
-  {
-    if (!isTypeInitialized())
+void ConcreteNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      AbstractNode::initClass();
+        AbstractNode::initClass();
 
-      AV_FC_INIT(AbstractNode, ConcreteNode, false);
+        AV_FC_INIT(AbstractNode, ConcreteNode, false);
     }
-  }
+}
 
-
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
+    InitNodeFixture() { ConcreteNode::initClass(); }
+};
 
-      ConcreteNode::initClass();
-    }
-  };
-
-  TEST_FIXTURE(InitNodeFixture, createConcreteNode)
-  {
+TEST_FIXTURE(InitNodeFixture, createConcreteNode)
+{
     Link<ConcreteNode> node1(dynamic_cast<ConcreteNode*>(av::Type::createInstanceOfType("ConcreteNode")));
 
     CHECK(node1.isValid());
-
-  }
+}
 
 } // namespace
 

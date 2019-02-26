@@ -3,4 +3,4 @@
 
 void init_ScreenNode();
 
-#endif //AV_PYTHON_GUA_SCREEN_NODE_HPP
+#endif // AV_PYTHON_GUA_SCREEN_NODE_HPP

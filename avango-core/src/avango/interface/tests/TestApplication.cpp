@@ -32,92 +32,83 @@
 
 namespace
 {
-  bool my_object_destroyed = true;
+bool my_object_destroyed = true;
 
-  class MyObject : public av::IntObject
-  {
+class MyObject : public av::IntObject
+{
     AV_FC_DECLARE();
 
   public:
-
     MyObject();
     ~MyObject();
 
     virtual void evaluate();
 
   private:
-
     int mEvaluateCount;
-  };
+};
 
-  AV_FC_DEFINE(MyObject);
+AV_FC_DEFINE(MyObject);
 
-  MyObject::MyObject() :
-    mEvaluateCount(10)
-  {
-    my_object_destroyed = false;
-  }
+MyObject::MyObject() : mEvaluateCount(10) { my_object_destroyed = false; }
 
-  MyObject::~MyObject()
-  {
-    my_object_destroyed = true;
-  }
+MyObject::~MyObject() { my_object_destroyed = true; }
 
-  void MyObject::evaluate()
-  {
+void MyObject::evaluate()
+{
     Value.setValue(42);
 
-    if (--mEvaluateCount <= 0)
+    if(--mEvaluateCount <= 0)
     {
-      av::ApplicationInstance::get().exit(false);
+        av::ApplicationInstance::get().exit(false);
     }
-  }
+}
 
-  void MyObject::initClass()
-  {
-    if (!isTypeInitialized())
+void MyObject::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::IntObject::initClass();
-      AV_FC_INIT(av::IntObject, MyObject, true);
+        av::IntObject::initClass();
+        AV_FC_INIT(av::IntObject, MyObject, true);
     }
-  }
+}
 
-  TEST(ApplicationEvaluate)
-  {
+TEST(ApplicationEvaluate)
+{
     av::Link<MyObject> my_obj(new MyObject());
     my_obj->touch();
     av::ApplicationInstance::get().evaluate();
     CHECK_EQUAL(42, my_obj->Value.getValue());
     my_obj.clear();
     CHECK(my_object_destroyed);
-  }
+}
 
-  TEST(ApplicationExit)
-  {
+TEST(ApplicationExit)
+{
     av::Link<MyObject> my_obj(new MyObject());
     my_obj->touch();
     my_obj.clear();
     av::ApplicationInstance::get().exit(false);
     CHECK(my_object_destroyed);
-  }
+}
 
-  TEST(ApplicationExitFromMainLoop)
-  {
+TEST(ApplicationExitFromMainLoop)
+{
     av::Link<MyObject> my_obj(AV_NEW(MyObject));
     my_obj->alwaysEvaluate(true);
     av::ApplicationInstance::get().start();
     my_obj.clear();
     CHECK(my_object_destroyed);
-  }
 }
+} // namespace
 
 int main()
 {
-  av::getLogger("av::Application").addConsoleAppender();
-  av::getLogger("av::Application").setLevel(av::logging::DEBUG);
+    av::getLogger("av::Application").addConsoleAppender();
+    av::getLogger("av::Application").setLevel(av::logging::DEBUG);
 
-  av::ApplicationInstance::get();
-  MyObject::initClass();
+    av::ApplicationInstance::get();
+    MyObject::initClass();
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

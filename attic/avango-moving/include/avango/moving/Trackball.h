@@ -37,72 +37,68 @@
 
 namespace av
 {
-  namespace moving
-  {
+namespace moving
+{
+/**
+ * Trackball mover
+ *
+ * \ingroup av_moving
+ */
+class AV_MOVING_DLL Trackball : public av::osg::MatrixTransform
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Trackball mover
-     *
-     * \ingroup av_moving
+     * Constructor.
      */
-    class AV_MOVING_DLL Trackball : public av::osg::MatrixTransform
-    {
-      AV_FC_DECLARE();
+    Trackball();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Trackball();
 
-      /**
-       * Constructor.
-       */
-      Trackball();
+  public:
+    /**
+     * Direction of trackball movement.
+     * Typically connected from the MousePositionNorm field of a GraphicsWindow.
+     */
+    av::osg::SFVec2 Direction;
 
-    protected:
+    /**
+     * Trigger for rotating and panning.
+     * Typically connected from one of the mouse button fields of a GraphicsWindow.
+     */
+    SFBool RotateTrigger;
+    SFBool ZoomTrigger;
+    SFBool PanTrigger;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Trackball();
+    /**
+     * Defines the orientation and translation of the rotation center relative
+     * to the local coordinate system. Default is 0.6 meter in front of it.
+     */
+    av::osg::SFMatrix CenterTransform;
 
-    public:
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
 
-      /**
-       * Direction of trackball movement.
-       * Typically connected from the MousePositionNorm field of a GraphicsWindow.
-       */
-      av::osg::SFVec2 Direction;
+  private:
+    ::osg::Vec2 mLastDirection;
+    ::osg::Vec3 mLastProjected;
+    bool mDragging;
+    ::osg::Matrix mCenterTransInv;
+};
 
-      /**
-       * Trigger for rotating and panning.
-       * Typically connected from one of the mouse button fields of a GraphicsWindow.
-       */
-      SFBool RotateTrigger;
-      SFBool ZoomTrigger;
-      SFBool PanTrigger;
-
-      /**
-       * Defines the orientation and translation of the rotation center relative
-       * to the local coordinate system. Default is 0.6 meter in front of it.
-       */
-      av::osg::SFMatrix CenterTransform;
-
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
-
-    private:
-
-      ::osg::Vec2 mLastDirection;
-      ::osg::Vec3 mLastProjected;
-      bool mDragging;
-      ::osg::Matrix mCenterTransInv;
-    };
-
-    typedef SingleField<Link<Trackball> > SFTrackball;
-    typedef MultiField<Link<Trackball> > MFTrackball;
-  }
+typedef SingleField<Link<Trackball>> SFTrackball;
+typedef MultiField<Link<Trackball>> MFTrackball;
+} // namespace moving
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_MOVING_DLL SingleField<Link<moving::Trackball> >;
-  template class AV_MOVING_DLL MultiField<Link<moving::Trackball> >;
+template class AV_MOVING_DLL SingleField<Link<moving::Trackball>>;
+template class AV_MOVING_DLL MultiField<Link<moving::Trackball>>;
 #endif
-}
+} // namespace av
 
 #endif

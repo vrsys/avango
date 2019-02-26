@@ -3,4 +3,4 @@
 
 void init_SkeletalAnimationNode();
 
-#endif //AV_PYTHON_GUA_SKELETAL_ANIMATION_NODE_HPP
+#endif // AV_PYTHON_GUA_SKELETAL_ANIMATION_NODE_HPP

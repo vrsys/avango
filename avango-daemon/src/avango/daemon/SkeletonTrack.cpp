@@ -36,119 +36,112 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::SkeletonTrack"));
+av::Logger& logger(av::getLogger("av::daemon::SkeletonTrack"));
 }
 
 AV_BASE_DEFINE(av::daemon::SkeletonTrack);
 
-av::daemon::SkeletonTrack::SkeletonTrack()
-  : Device()
-  , mRequiredFeatures({ "port", "server" })
-  , mPort("7700")
-  , mServer("127.0.0.1")
-{}
+av::daemon::SkeletonTrack::SkeletonTrack() : Device(), mRequiredFeatures({"port", "server"}), mPort("7700"), mServer("127.0.0.1") {}
 
-void
-av::daemon::SkeletonTrack::initClass()
+void av::daemon::SkeletonTrack::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::daemon::Device::initClass();
-    AV_BASE_INIT(av::daemon::Device, av::daemon::SkeletonTrack, true);
-  }
-}
-
-/* virtual */ void
-av::daemon::SkeletonTrack::startDevice()
-{
-  if (!parseFeatures())
-    return;
-
-  // initialize
-
-  logger.info() << "startDevice: device initialized successfully";
-  std::cout << "SkeletonTrack::startDevice\n";
-}
-
-/* virtual */ void
-av::daemon::SkeletonTrack::readLoop()
-{
-  std::string mServer = queryFeature("server");
-  std::string mPort = queryFeature("port");
-  std::string address = mServer + ":" + mPort; // {"127.0.0.1:7000"};
-  logger.info() << "readLoop: start";
-  std::cout << "SkeletonTrack::readLoop " << address << "\n";
-
-  zmq::context_t ctx(1); // means single threaded
-  zmq::socket_t  socket(ctx, ZMQ_SUB); // means a subscriber
-  socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-#if ZMQ_VERSION_MAJOR < 3
-  uint64_t hwm = 1;
-  socket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
-#else
-  uint32_t hwm = 1;
-  socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
-#endif
-  std::string endpoint("tcp://" + address);
-  socket.connect(endpoint.c_str());
-
-  // stations[0] |-> head
-
-  while (mKeepRunning) {
-    zmq::message_t message(25*sizeof(Message));
-    socket.recv(&message);
-    // ::gua::math::mat4f pose;
-    // std::memcpy( &pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
-    std::array<Message,25> skeleton;
-    std::memcpy( &skeleton, reinterpret_cast<std::array<Message,25>*>(message.data()),
-      sizeof(std::array<Message,25>));
-    // mStations[0]->setMatrix(::gua::math::mat4(pose));
-    // mStations[0]->setMatrix(::gua::math::mat4(skeleton[11].matrix));
-    for(int i = 0; i < 25; i++) {
-      mStations[i]->setMatrix(::gua::math::mat4(skeleton[i].matrix));
-      mStations[i]->setValue(0, skeleton[i].id);
-      mStations[i]->setButton(0, skeleton[i].status);
+    if(!isTypeInitialized())
+    {
+        av::daemon::Device::initClass();
+        AV_BASE_INIT(av::daemon::Device, av::daemon::SkeletonTrack, true);
     }
-    mStations[7]->setButton(1, skeleton[7].grab);
-    mStations[11]->setButton(1, skeleton[11].grab);
-  }
 }
 
-/* virtual */ void
-av::daemon::SkeletonTrack::stopDevice()
+/* virtual */ void av::daemon::SkeletonTrack::startDevice()
+{
+    if(!parseFeatures())
+        return;
+
+    // initialize
+
+    logger.info() << "startDevice: device initialized successfully";
+    std::cout << "SkeletonTrack::startDevice\n";
+}
+
+/* virtual */ void av::daemon::SkeletonTrack::readLoop()
+{
+    std::string mServer = queryFeature("server");
+    std::string mPort = queryFeature("port");
+    std::string address = mServer + ":" + mPort; // {"127.0.0.1:7000"};
+    logger.info() << "readLoop: start";
+    std::cout << "SkeletonTrack::readLoop " << address << "\n";
+
+    zmq::context_t ctx(1);              // means single threaded
+    zmq::socket_t socket(ctx, ZMQ_SUB); // means a subscriber
+    socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+#if ZMQ_VERSION_MAJOR < 3
+    uint64_t hwm = 1;
+    socket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
+#else
+    uint32_t hwm = 1;
+    socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
+#endif
+    std::string endpoint("tcp://" + address);
+    socket.connect(endpoint.c_str());
+
+    // stations[0] |-> head
+
+    while(mKeepRunning)
+    {
+        zmq::message_t message(25 * sizeof(Message));
+        socket.recv(&message);
+        // ::gua::math::mat4f pose;
+        // std::memcpy( &pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
+        std::array<Message, 25> skeleton;
+        std::memcpy(&skeleton, reinterpret_cast<std::array<Message, 25>*>(message.data()), sizeof(std::array<Message, 25>));
+        // mStations[0]->setMatrix(::gua::math::mat4(pose));
+        // mStations[0]->setMatrix(::gua::math::mat4(skeleton[11].matrix));
+        for(int i = 0; i < 25; i++)
+        {
+            mStations[i]->setMatrix(::gua::math::mat4(skeleton[i].matrix));
+            mStations[i]->setValue(0, skeleton[i].id);
+            mStations[i]->setButton(0, skeleton[i].status);
+        }
+        mStations[7]->setButton(1, skeleton[7].grab);
+        mStations[11]->setButton(1, skeleton[11].grab);
+    }
+}
+
+/* virtual */ void av::daemon::SkeletonTrack::stopDevice()
 {
 #if 0
   mSkeletonTrack->exit();
 #endif
-  logger.info() << "stopDevice: done.";
+    logger.info() << "stopDevice: done.";
 }
 
-const std::vector<std::string>&
-av::daemon::SkeletonTrack::queryFeatures()
+const std::vector<std::string>& av::daemon::SkeletonTrack::queryFeatures() { return mRequiredFeatures; }
+
+bool av::daemon::SkeletonTrack::parseFeatures()
 {
-  return mRequiredFeatures;
-}
+    mPort = queryFeature("port");
+    if(mPort == "")
+    {
+        logger.warn() << "parseFeatures: feature 'port' not specified";
+        return false;
+    }
+    else
+    {
+        logger.info() << "parseFeatures: configured feature 'port' = %s", mPort;
+    }
 
-bool
-av::daemon::SkeletonTrack::parseFeatures()
-{
-  mPort = queryFeature("port");
-  if (mPort == "") {
-    logger.warn() << "parseFeatures: feature 'port' not specified";
-    return false;
-  } else {
-    logger.info() << "parseFeatures: configured feature 'port' = %s", mPort;
-  }
+    mServer = queryFeature("server");
+    if(mServer == "")
+    {
+        logger.warn() << "parseFeatures: feature 'server' not specified";
+        return false;
+    }
+    else
+    {
+        logger.info() << "parseFeatures: configured feature 'server' = %s", mServer;
+    }
 
-  mServer = queryFeature("server");
-  if (mServer == "") {
-    logger.warn() << "parseFeatures: feature 'server' not specified";
-    return false;
-  } else {
-    logger.info() << "parseFeatures: configured feature 'server' = %s", mServer;
-  }
-
-  return true;
+    return true;
 }
 
 // from readLoop

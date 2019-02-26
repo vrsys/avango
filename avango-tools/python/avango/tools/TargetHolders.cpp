@@ -10,44 +10,39 @@ using namespace av::python;
 
 namespace
 {
-  list
-  TargetHolderFind(av::tools::TargetHolder& holder, av::tools::TargetHolder* type)
-  {
+list TargetHolderFind(av::tools::TargetHolder& holder, av::tools::TargetHolder* type)
+{
     list py_holders;
 
-    if (type != 0)
+    if(type != 0)
     {
-      av::tools::TargetHolder::FindList found_holders = holder.find(type->getTypeId());
-      for (av::tools::TargetHolder::FindList::iterator found_holder = found_holders.begin();
-           found_holder != found_holders.end(); ++found_holder)
-      {
-        py_holders.append(*found_holder);
-      }
+        av::tools::TargetHolder::FindList found_holders = holder.find(type->getTypeId());
+        for(av::tools::TargetHolder::FindList::iterator found_holder = found_holders.begin(); found_holder != found_holders.end(); ++found_holder)
+        {
+            py_holders.append(*found_holder);
+        }
     }
 
     return py_holders;
-  }
 }
+} // namespace
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_TargetHolders()
 {
+    register_field<av::tools::SFTargetHolder>("SFTargetHolder");
+    register_multifield<av::tools::MFTargetHolder>("MFTargetHolder");
 
-  register_field<av::tools::SFTargetHolder>("SFTargetHolder");
-  register_multifield<av::tools::MFTargetHolder>("MFTargetHolder");
-
-  class_<av::tools::TargetHolder, av::Link<av::tools::TargetHolder>, bases<av::FieldContainer>, boost::noncopyable >("TargetHolder", "TargetHolder base class", no_init)
-    .def("find", TargetHolderFind)
-    ;
+    class_<av::tools::TargetHolder, av::Link<av::tools::TargetHolder>, bases<av::FieldContainer>, boost::noncopyable>("TargetHolder", "TargetHolder base class", no_init).def("find", TargetHolderFind);
 }
-

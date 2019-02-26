@@ -49,21 +49,19 @@
 
 namespace av
 {
-  class NetGroup;
+class NetGroup;
 
-  using NetIDDstMap = std::tr1::unordered_map<NetID, Link<Distributed>, NetID::Hasher>;
-  using MsgDeq = std::deque<Msg>;
-  using MaestroStateUpdateList = std::vector<std::pair<std::string, Msg> >;
+using NetIDDstMap = std::tr1::unordered_map<NetID, Link<Distributed>, NetID::Hasher>;
+using MsgDeq = std::deque<Msg>;
+using MaestroStateUpdateList = std::vector<std::pair<std::string, Msg>>;
 
-  /**
-   * This class is the link between avango and the group communication toolkit. It represents the avango process in the named group
-   * this NetNode joins.
-   */
-  class AV_DLL NetNode
-  {
-
+/**
+ * This class is the link between avango and the group communication toolkit. It represents the avango process in the named group
+ * this NetNode joins.
+ */
+class AV_DLL NetNode
+{
   public:
-
     /**
      * Create a new group member and join the group
      * @param groupName The group to join
@@ -144,22 +142,18 @@ namespace av
     void queueStateFragment(const std::string& fragment, Msg& stateMsg);
     void queueRemoveFragment(const std::string& fragment);
     void setStateFragment(const std::string& fragment, Msg& stateMsg);
-    void getStateFragment(const std::string& fragment, Msg&stateMsg);
+    void getStateFragment(const std::string& fragment, Msg& stateMsg);
     void removeStateFragment(const std::string& fragment);
     void receiveMessage(const std::string& origin, Msg& msg);
     void exitCompleted();
-    void acceptNewView(const std::vector<std::string>& members,
-                       const std::vector<std::string>& newMembers,
-                       const std::vector<std::string>& departedMembers,
-                       Msg& msg);
+    void acceptNewView(const std::vector<std::string>& members, const std::vector<std::string>& newMembers, const std::vector<std::string>& departedMembers, Msg& msg);
 
     // return the enpoint id of the group we joined
-    const std::string& netEID() const ;
+    const std::string& netEID() const;
 
     void consumeMessage(Msg& msg);
 
   protected:
-
     // hide ctor and dtor
     NetNode();
     virtual ~NetNode();
@@ -201,17 +195,14 @@ namespace av
     virtual void _join(const std::string& fragment) {}
 
     // overloaded from NetNode to react to view changes
-    virtual void _acceptNewView(const std::vector<std::string>& members,
-                                const std::vector<std::string>& newMembers,
-                                const std::vector<std::string>& departedMembers) {}
+    virtual void _acceptNewView(const std::vector<std::string>& members, const std::vector<std::string>& newMembers, const std::vector<std::string>& departedMembers) {}
 
     // overloaded to participate in state transfers
-    virtual void _getStateFragment(const std::string& , Msg& ) {}
-    virtual void _setStateFragment(const std::string& , Msg& ) {}
-    virtual void _removeStateFragment(const std::string& ) {}
+    virtual void _getStateFragment(const std::string&, Msg&) {}
+    virtual void _setStateFragment(const std::string&, Msg&) {}
+    virtual void _removeStateFragment(const std::string&) {}
 
   private:
-
     // don't allow copy ctor and assignment otor
     NetNode(const NetNode&);
     NetNode& operator=(const NetNode&);
@@ -231,7 +222,7 @@ namespace av
 
     // the actual group member, derived from some maestro class
     NetGroup* mMember;
-    int       mNumMembers;
+    int mNumMembers;
 
     // all well-known objects in a map for fast lookup by id
     NetIDDstMap mWellKnownObjects;
@@ -250,11 +241,11 @@ namespace av
     DistributedSet mPendingDeletes;
 
     // messages we receive while not being a server are stacked up here for later processing
-    MsgDeq    mReceivedMessages;
+    MsgDeq mReceivedMessages;
     boost::mutex mMessageMutex;
-    bool         mBlocked;
+    bool mBlocked;
 
-    using StateUpdateList = std::vector<std::pair<std::string, Msg> >;
+    using StateUpdateList = std::vector<std::pair<std::string, Msg>>;
     using StateRemoveList = std::vector<std::string>;
 
     StateUpdateList mStateUpdates;
@@ -264,17 +255,14 @@ namespace av
     // ensemble command line option interface
 
   protected:
-
-    static std::map<std::string, std::string, std::less<std::string> > sEnsOptions;
-    static char**                                                      sEnsOptionsArgv;
+    static std::map<std::string, std::string, std::less<std::string>> sEnsOptions;
+    static char** sEnsOptionsArgv;
     static char** getEnsOptionsArgv();
 
   public:
-
     static void setEnsOption(const std::string& option, const std::string& value);
     static bool getEnsOption(const std::string& option, std::string& value);
-
-  };
+};
 
 } // namespace av
 

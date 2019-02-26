@@ -3,14 +3,14 @@
 
 #include "TestDetails.h"
 
-namespace UnitTest {
-
+namespace UnitTest
+{
 class TestResults;
 class TestList;
 
 class Test
 {
-public:
+  public:
     explicit Test(char const* testName, char const* suiteName = "DefaultSuite", char const* filename = "", int lineNumber = 0);
     virtual ~Test();
     void Run();
@@ -23,12 +23,11 @@ public:
 
     virtual void RunImpl() const;
 
-private:
-	Test(Test const&);
-    Test& operator =(Test const&);
+  private:
+    Test(Test const&);
+    Test& operator=(Test const&);
 };
 
-
-}
+} // namespace UnitTest
 
 #endif

@@ -30,28 +30,28 @@
 
 namespace shade
 {
-  class Shader;
+class Shader;
 
-  namespace types
-  {
-    class ObjrefAccessor : public TypeAccessor
+namespace types
+{
+class ObjrefAccessor : public TypeAccessor
+{
+  public:
+    virtual void set_generic(boost::shared_ptr<Shader> v) = 0;
+    virtual boost::shared_ptr<Shader> get_generic(void) const = 0;
+
+    class BadCast : public std::bad_cast
     {
-    public:
-      virtual void set_generic(boost::shared_ptr<Shader> v) = 0;
-      virtual boost::shared_ptr<Shader> get_generic(void) const = 0;
-
-      class BadCast : public std::bad_cast
-      {
       public:
         /*virtual*/ const char* what(void) const throw();
-      };
-
-      /*virtual*/ HashType hash(void) const;
-    private:
-      static HashValue m_hash;
     };
-  }
-}
 
+    /*virtual*/ HashType hash(void) const;
+
+  private:
+    static HashValue m_hash;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_ObjrefAccessor_H */

@@ -30,24 +30,20 @@
 #include "../types/vec4.h"
 #include "../types/const.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class IMaterial : public ShaderBase<IMaterial>
+{
+  public:
+    virtual vec4<> shade(void) { return vec4<>(); }
 
-    class IMaterial : public ShaderBase<IMaterial>
-    {
-    public:
+  private:
+    SHADE_BASE_DECL(IMaterial)
+};
 
-      virtual vec4<> shade(void)
-      { return vec4<>(); }
-
-    private:
-      SHADE_BASE_DECL(IMaterial)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_IMaterial_H */

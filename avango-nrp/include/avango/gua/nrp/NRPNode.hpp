@@ -50,13 +50,13 @@ class AV_GUA_DLL NRPNode : public av::gua::TransformNode
 
 using SFNRPNode = SingleField<Link<NRPNode>>;
 using MFNRPNode = MultiField<Link<NRPNode>>;
-}
-}
+} // namespace nrp
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
 template class AV_GUA_DLL av::SingleField<av::Link<gua::nrp::NRPNode>>;
 template class AV_GUA_DLL av::MultiField<av::Link<gua::nrp::NRPNode>>;
 #endif
-}
+} // namespace av
 
 #endif // AVANGO_GUA_NRP_NODE_HPP

@@ -23,30 +23,17 @@
 
 #include <shade/types/const.h>
 
+shade::const_::const_(formatter::Constants::Type type) : Type(type) {}
 
-shade::const_::const_(formatter::Constants::Type type) :
-  Type(type)
-{
-}
+bool shade::const_::requires_initializer(void) const { return true; }
 
-bool shade::const_::requires_initializer(void) const
-{
-  return true;
-}
-
-bool shade::const_::is_writable(const ShaderEnvironment& se) const
-{
-  return false;
-}
+bool shade::const_::is_writable(const ShaderEnvironment& se) const { return false; }
 
 void shade::const_::output_attribute(boost::shared_ptr<Type::State> state, Formatter* fmt, const std::string& obj, const std::string& name) const
 {
-  boost::shared_ptr<formatter::Generator> generator(fmt->begin_insert_init_attribute(m_type, obj, name, formatter::Constants::const_));
-  this->generate_constructor(*generator, state);
-  fmt->end_insert_init_attribute();
+    boost::shared_ptr<formatter::Generator> generator(fmt->begin_insert_init_attribute(m_type, obj, name, formatter::Constants::const_));
+    this->generate_constructor(*generator, state);
+    fmt->end_insert_init_attribute();
 }
 
-std::string shade::const_::get_uniq_id(void) const
-{
-  return "const";
-}
+std::string shade::const_::get_uniq_id(void) const { return "const"; }

@@ -25,7 +25,4 @@
 
 shade::types::TypeAccessor::HashValue shade::types::IntAccessor::m_hash;
 
-shade::types::TypeAccessor::HashType shade::types::IntAccessor::hash(void) const
-{
-  return &m_hash;
-}
+shade::types::TypeAccessor::HashType shade::types::IntAccessor::hash(void) const { return &m_hash; }

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #if !defined(AVANGO_NETNODECLIENT_H)
 #define AVANGO_NETNODECLIENT_H
 
@@ -32,13 +31,11 @@
 
 namespace av
 {
-  class NetNode;
+class NetNode;
 
-  class NetNodeClient
-  {
-
+class NetNodeClient
+{
   public:
-
     NetNodeClient(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se);
 
     ~NetNodeClient();
@@ -49,19 +46,17 @@ namespace av
     void stop();
 
   private:
-
     // the thread loop
     void loop();
 
-    std::string     mHost;
-    std::string     mPort;
-    std::thread     mThread;
-    bool            mRunning;
-    av::NetNode*    mNetNode;
-    std::string     mClientEndpoint;
-    std::string     mServerEndpoint;
-
-  };
+    std::string mHost;
+    std::string mPort;
+    std::thread mThread;
+    bool mRunning;
+    av::NetNode* mNetNode;
+    std::string mClientEndpoint;
+    std::string mServerEndpoint;
+};
 
 } // namespace av
 

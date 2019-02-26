@@ -25,37 +25,36 @@
 #include <sstream>
 #include <boost/tokenizer.hpp>
 
-
 std::string shade::io::parse_input(std::istream& hin, std::map<std::string, std::string>& keywords)
 {
-  std::ostringstream contents;
-  while (hin.good())
-  {
-    std::string line;
-    std::getline(hin, line);
-    contents << line;
-    if (line.size()) contents << "\n";
-
-    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
-    boost::char_separator<char> sep(" ");
-    tokenizer tokens(line, sep);
-    tokenizer::iterator tok_iter = tokens.begin();
-    if (    (tok_iter != tokens.end()) && (*(tok_iter++) == "//")
-        &&  (tok_iter != tokens.end()) && (*(tok_iter++) == "SHADE") )
+    std::ostringstream contents;
+    while(hin.good())
     {
-      for (; tok_iter != tokens.end(); ++tok_iter)
-      {
-        std::string::size_type split = tok_iter->find(':');
-        std::string key = tok_iter->substr(0, split);
-        std::string value;
-        if (split != std::string::npos)
-        {
-          value = tok_iter->substr(split+1, std::string::npos);
-        }
-        keywords[key] = value;
-      }
-    }
-  }
+        std::string line;
+        std::getline(hin, line);
+        contents << line;
+        if(line.size())
+            contents << "\n";
 
-  return contents.str();
+        typedef boost::tokenizer<boost::char_separator<char>> tokenizer;
+        boost::char_separator<char> sep(" ");
+        tokenizer tokens(line, sep);
+        tokenizer::iterator tok_iter = tokens.begin();
+        if((tok_iter != tokens.end()) && (*(tok_iter++) == "//") && (tok_iter != tokens.end()) && (*(tok_iter++) == "SHADE"))
+        {
+            for(; tok_iter != tokens.end(); ++tok_iter)
+            {
+                std::string::size_type split = tok_iter->find(':');
+                std::string key = tok_iter->substr(0, split);
+                std::string value;
+                if(split != std::string::npos)
+                {
+                    value = tok_iter->substr(split + 1, std::string::npos);
+                }
+                keywords[key] = value;
+            }
+        }
+    }
+
+    return contents.str();
 }

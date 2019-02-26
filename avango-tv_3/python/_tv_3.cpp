@@ -37,26 +37,25 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_tv_3)
 {
-
-  av::gua::tv_3::TV_3Loader::initClass();
-  av::gua::tv_3::TV_3SurfacePassDescription::initClass();
-  av::gua::tv_3::TV_3VolumePassDescription::initClass();
-  av::gua::tv_3::TV_3Node::initClass();
-  init_TV_3Node();
-  init_TV_3SurfacePassDescription();
-  init_TV_3VolumePassDescription();
-  init_TV_3Loader();
-  
+    av::gua::tv_3::TV_3Loader::initClass();
+    av::gua::tv_3::TV_3SurfacePassDescription::initClass();
+    av::gua::tv_3::TV_3VolumePassDescription::initClass();
+    av::gua::tv_3::TV_3Node::initClass();
+    init_TV_3Node();
+    init_TV_3SurfacePassDescription();
+    init_TV_3VolumePassDescription();
+    init_TV_3Loader();
 }

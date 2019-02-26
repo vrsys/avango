@@ -28,60 +28,50 @@
 
 namespace
 {
-  class Vec4Getter
-  {
+class Vec4Getter
+{
   public:
-
-    Vec4Getter(shade::types::Vec4Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    Vec4Getter(shade::types::Vec4Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFVec4::GetValueEvent& event)
     {
-      ::osg::Vec4 result;
-      mAccessor->get(result.x(), result.y(), result.z(), result.w());
-      *event.getValuePtr() = result;
+        ::osg::Vec4 result;
+        mAccessor->get(result.x(), result.y(), result.z(), result.w());
+        *event.getValuePtr() = result;
     }
 
   private:
     shade::types::Vec4Accessor* mAccessor;
-  };
+};
 
-  class Vec4Setter
-  {
+class Vec4Setter
+{
   public:
-
-    Vec4Setter(shade::types::Vec4Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    Vec4Setter(shade::types::Vec4Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFVec4::SetValueEvent& event)
     {
-      ::osg::Vec4 value(event.getValue());
-      mAccessor->set(value.x(), value.y(), value.z(), value.w());
+        ::osg::Vec4 value(event.getValue());
+        mAccessor->set(value.x(), value.y(), value.z(), value.w());
     }
 
   private:
     shade::types::Vec4Accessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::Vec4FieldAdapter::hash(void) const
+{
+    static ::shade::vec4<> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::Vec4FieldAdapter::hash(void) const
+void av::shade::Vec4FieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::vec4<> value;
-  return value.hash();
-}
+    ::shade::types::Vec4Accessor* vec4_accessor(dynamic_cast<::shade::types::Vec4Accessor*>(type));
+    if(vec4_accessor == 0)
+        return;
 
-void
-av::shade::Vec4FieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::Vec4Accessor* vec4_accessor(dynamic_cast< ::shade::types::Vec4Accessor*>(type));
-  if (vec4_accessor == 0)
-    return;
-
-  av::osg::SFVec4* field= new av::osg::SFVec4;
-  field->bind(container, name, true, Vec4Getter(vec4_accessor), Vec4Setter(vec4_accessor));
+    av::osg::SFVec4* field = new av::osg::SFVec4;
+    field->bind(container, name, true, Vec4Getter(vec4_accessor), Vec4Setter(vec4_accessor));
 }

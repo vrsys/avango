@@ -25,29 +25,23 @@
 #include <string>
 #include <sstream>
 
-
-boost::shared_ptr<shade::Type> shade::Shader::call(const MethodAccessor& method)
-{
-  return method.invoke(this);
-}
-
+boost::shared_ptr<shade::Type> shade::Shader::call(const MethodAccessor& method) { return method.invoke(this); }
 
 std::string shade::Shader::get_class_name(void) const
 {
-  static std::string empty("empty");
-  return empty;
+    static std::string empty("empty");
+    return empty;
 }
 
 const std::string& shade::Shader::get_source_name(void) const
 {
-  static std::string empty("");
-  return empty;
+    static std::string empty("");
+    return empty;
 }
 
 std::string shade::Shader::get_uniq_id(void) const
 {
-  std::ostringstream out;
-  out << "obj_" << this;
-  return out.str();
+    std::ostringstream out;
+    out << "obj_" << this;
+    return out.str();
 }
-

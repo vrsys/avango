@@ -28,17 +28,13 @@
 #include <istream>
 #include <map>
 
-
 namespace shade
 {
-
-  namespace io
-  {
-
-    std::string parse_input(std::istream& hin, std::map<std::string, std::string>& keywords);
-
-  }
-
+namespace io
+{
+std::string parse_input(std::istream& hin, std::map<std::string, std::string>& keywords);
 }
+
+} // namespace shade
 
 #endif /* shade_io_H */

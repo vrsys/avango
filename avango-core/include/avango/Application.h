@@ -43,26 +43,24 @@
 
 namespace av
 {
-
-  /**
-   * The Application class initializes the Avango runtime system and
-   * encapsulates the Avango main loop.
-   *
-   * There is exactly one Application object per application which can be
-   * accessed through the getInstance() function.
-   *
-   * \ingroup av
-   */
-  //typedef Singleton<Application>
-  class AV_DLL Application /* : public Singleton<Application>*/
-  {
-    //friend class Singleton<Application>;
+/**
+ * The Application class initializes the Avango runtime system and
+ * encapsulates the Avango main loop.
+ *
+ * There is exactly one Application object per application which can be
+ * accessed through the getInstance() function.
+ *
+ * \ingroup av
+ */
+// typedef Singleton<Application>
+class AV_DLL Application /* : public Singleton<Application>*/
+{
+    // friend class Singleton<Application>;
 
     /**
      * Constructor made private to prevent multiple instantiation.
      */
   public:
-
     Application();
     /**
      * Destructor made private to prevent deletion.
@@ -106,7 +104,7 @@ namespace av
      */
     void exit(bool realExit = true);
 
-    using VoidCallbackSignal = boost::signals2::signal<void ()>;
+    using VoidCallbackSignal = boost::signals2::signal<void()>;
     using VoidCallback = VoidCallbackSignal::slot_type;
     using CallbackHandle = boost::signals2::connection;
 
@@ -132,7 +130,6 @@ namespace av
     static void removeCallback(const CallbackHandle& handle);
 
   private:
-
     void disconnectAllFields();
     void cleanExit();
 
@@ -149,12 +146,11 @@ namespace av
     VoidCallbackSignal mPreEvaluateContainerCallbackSignal;
     VoidCallbackSignal mPostEvaluateContainerCallbackSignal;
     VoidCallbackSignal mRenderCallbackSignal;
+};
 
-  };
+using ApplicationInstance = Singleton<Application>;
 
-  using ApplicationInstance = Singleton<Application>;
-
-}
+} // namespace av
 
 #endif // #if !defined(AV_APPLICATION_H)
 

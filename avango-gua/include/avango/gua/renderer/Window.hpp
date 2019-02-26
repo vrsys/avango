@@ -13,65 +13,57 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Window
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Window : public av::gua::WindowBase
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Window
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Window is created.
+     * Otherwise, the given ::gua::Window is used.
      */
-    class AV_GUA_DLL Window : public av::gua::WindowBase
-    {
-      AV_FC_DECLARE();
+    Window(std::shared_ptr<::gua::Window> const& guaWindow = std::shared_ptr<::gua::Window>(new ::gua::Window()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::Window.
+     */
+    std::shared_ptr<::gua::Window> const& getGuaWindow() const;
 
+  public:
+    SFUInt SwapGroup;
+    SFUInt SwapBarrier;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Window is created.
-       * Otherwise, the given ::gua::Window is used.
-       */
-      Window(std::shared_ptr< ::gua::Window> const& guaWindow =
-             std::shared_ptr< ::gua::Window> (new ::gua::Window()));
+    virtual void getSwapGroupCB(const SFUInt::GetValueEvent& event);
+    virtual void setSwapGroupCB(const SFUInt::SetValueEvent& event);
 
+    virtual void getSwapBarrierCB(const SFUInt::GetValueEvent& event);
+    virtual void setSwapBarrierCB(const SFUInt::SetValueEvent& event);
 
-    public:
+  private:
+    std::shared_ptr<::gua::Window> m_guaWindow;
 
-      /**
-       * Get the wrapped ::gua::Window.
-       */
-      std::shared_ptr< ::gua::Window> const& getGuaWindow() const;
+    Window(const Window&);
+    Window& operator=(const Window&);
+};
 
-    public:
+using SFWindow = SingleField<Link<Window>>;
+using MFWindow = MultiField<Link<Window>>;
 
-      SFUInt   SwapGroup;
-      SFUInt   SwapBarrier;
-
-      virtual void getSwapGroupCB(const SFUInt::GetValueEvent& event);
-      virtual void setSwapGroupCB(const SFUInt::SetValueEvent& event);
-
-      virtual void getSwapBarrierCB(const SFUInt::GetValueEvent& event);
-      virtual void setSwapBarrierCB(const SFUInt::SetValueEvent& event);
-
-
-    private:
-
-      std::shared_ptr< ::gua::Window> m_guaWindow;
-
-      Window(const Window&);
-      Window& operator=(const Window&);
-    };
-
-    using SFWindow = SingleField<Link<Window> >;
-    using MFWindow = MultiField<Link<Window> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Window> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Window> >;
+template class AV_GUA_DLL SingleField<Link<gua::Window>>;
+template class AV_GUA_DLL MultiField<Link<gua::Window>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_WINDOW_HPP
+#endif // AVANGO_GUA_WINDOW_HPP

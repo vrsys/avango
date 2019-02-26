@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #if !defined(AV_DAEMON_STATIONBLOCK_H)
 #define AV_DAEMON_STATIONBLOCK_H
 
@@ -38,63 +37,60 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Helper class for getting a station from av-daemon (used by av::daemon::StationSegment).
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL StationBlock
+{
+  public:
     /**
-     * Helper class for getting a station from av-daemon (used by av::daemon::StationSegment).
-     *
-     * \ingroup av_daemon
+     * Constructor
      */
-    class AV_DAEMON_DLL StationBlock {
+    StationBlock();
 
-    public:
-
-      /**
-       * Constructor
-       */
-      StationBlock();
-
-      /**
-       * Get a station by given name.
-       */
-      Station* getStation(const char* name);
+    /**
+     * Get a station by given name.
+     */
+    Station* getStation(const char* name);
 
     // Boost managed_shared_memory requires public destructor
-    //protected:
+    // protected:
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~StationBlock() = default;
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~StationBlock() = default;
 
-    private:
+  private:
+    /**
+     * Builtin declaration here; definition is in impl. unit w/o value!
+     * needed because of the array size for mStations!!!
+     */
+    static const int sMaxStationNum = 64;
 
-      /**
-       * Builtin declaration here; definition is in impl. unit w/o value!
-       * needed because of the array size for mStations!!!
-       */
-      static const int sMaxStationNum = 64;
+    /**
+     * Retain static memory layout since it gets put into a shared
+     * memory segment not autogrowable!
+     */
+    Station mStations[sMaxStationNum];
+    int mNumStations;
+    std::mutex mMutex;
 
-      /**
-       * Retain static memory layout since it gets put into a shared
-       * memory segment not autogrowable!
-       */
-      Station mStations[sMaxStationNum];
-      int       mNumStations;
-      std::mutex  mMutex;
+    /**
+     * Made private to prevent copying construction.
+     */
+    StationBlock(const StationBlock&);
 
-      /**
-       * Made private to prevent copying construction.
-       */
-      StationBlock(const StationBlock&);
-
-      /**
-       * Made private to prevent assignment.
-       */
-      const StationBlock& operator=(const StationBlock&);
-
-    };
-  }
-}
+    /**
+     * Made private to prevent assignment.
+     */
+    const StationBlock& operator=(const StationBlock&);
+};
+} // namespace daemon
+} // namespace av
 
 #endif // #if !defined(AV_DAEMON_STATIONBLOCK_H)

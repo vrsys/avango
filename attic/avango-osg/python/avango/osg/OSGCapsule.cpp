@@ -33,20 +33,20 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGCapsule(void)
 {
-  // wrapping osg::Sphere functionality
-  register_field<av::osg::SFCapsule>("SFCapusle");
-  register_multifield<av::osg::MFCapsule>("MFCapsule");
-  class_<av::osg::Capsule, av::Link<av::osg::Capsule>, bases<av::osg::MatrixTransform>, boost::noncopyable >("Capsule", "docstring", no_init);
-
+    // wrapping osg::Sphere functionality
+    register_field<av::osg::SFCapsule>("SFCapusle");
+    register_multifield<av::osg::MFCapsule>("MFCapsule");
+    class_<av::osg::Capsule, av::Link<av::osg::Capsule>, bases<av::osg::MatrixTransform>, boost::noncopyable>("Capsule", "docstring", no_init);
 }

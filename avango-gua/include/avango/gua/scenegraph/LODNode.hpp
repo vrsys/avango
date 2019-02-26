@@ -13,65 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::LODNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL LODNode : public av::gua::TransformNode
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::LODNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::LODNode is created.
+     * Otherwise, the given ::gua::LODNode is used.
      */
-    class AV_GUA_DLL LODNode : public av::gua::TransformNode
-    {
-      AV_FC_DECLARE();
+    LODNode(std::shared_ptr<::gua::node::LODNode> guanode = std::shared_ptr<::gua::node::LODNode>(new ::gua::node::LODNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LODNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::LODNode is created.
-       * Otherwise, the given ::gua::LODNode is used.
-       */
-      LODNode(std::shared_ptr< ::gua::node::LODNode> guanode = std::shared_ptr< ::gua::node::LODNode>(new ::gua::node::LODNode("")));
+  public:
+    MFFloat LODDistances;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::LODNode.
+     */
+    std::shared_ptr<::gua::node::LODNode> getGuaNode() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LODNode();
+  public:
+    virtual void getLODDistancesCB(const MFFloat::GetValueEvent& event);
+    virtual void setLODDistancesCB(const MFFloat::SetValueEvent& event);
 
-    public:
+  private:
+    std::shared_ptr<::gua::node::LODNode> m_guaNode;
 
-      MFFloat LODDistances;
+    LODNode(const LODNode&);
+    LODNode& operator=(const LODNode&);
+};
 
-      /**
-       * Get the wrapped ::gua::LODNode.
-       */
-      std::shared_ptr< ::gua::node::LODNode> getGuaNode() const;
+using SFLODNode = SingleField<Link<LODNode>>;
+using MFLODNode = MultiField<Link<LODNode>>;
 
-    public:
-
-      virtual void getLODDistancesCB(const MFFloat::GetValueEvent& event);
-      virtual void setLODDistancesCB(const MFFloat::SetValueEvent& event);
-
-
-    private:
-
-      std::shared_ptr< ::gua::node::LODNode> m_guaNode;
-
-      LODNode(const LODNode&);
-      LODNode& operator=(const LODNode&);
-    };
-
-    using SFLODNode = SingleField<Link<LODNode> >;
-    using MFLODNode = MultiField<Link<LODNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::LODNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::LODNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::LODNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::LODNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_LOD_NODE_HPP
+#endif // AVANGO_GUA_LOD_NODE_HPP

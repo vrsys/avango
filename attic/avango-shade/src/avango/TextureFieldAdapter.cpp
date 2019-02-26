@@ -30,61 +30,48 @@
 
 namespace
 {
-  class TextureGetter
-  {
+class TextureGetter
+{
   public:
-
-    TextureGetter(shade::types::TextureAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    TextureGetter(shade::types::TextureAccessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFTexture::GetValueEvent& event)
     {
-      boost::shared_ptr< ::shade::osg::Texture> shade_tex(boost::dynamic_pointer_cast< ::shade::osg::Texture>(mAccessor->get()));
-      if (!shade_tex)
-        return;
-      ::osg::Texture* osg_tex = shade_tex->get();
-      *event.getValuePtr() = av::osg::get_from_osg_object<av::osg::Texture>(osg_tex);
+        boost::shared_ptr<::shade::osg::Texture> shade_tex(boost::dynamic_pointer_cast<::shade::osg::Texture>(mAccessor->get()));
+        if(!shade_tex)
+            return;
+        ::osg::Texture* osg_tex = shade_tex->get();
+        *event.getValuePtr() = av::osg::get_from_osg_object<av::osg::Texture>(osg_tex);
     }
 
   private:
     shade::types::TextureAccessor* mAccessor;
-  };
+};
 
-  class TextureSetter
-  {
+class TextureSetter
+{
   public:
+    TextureSetter(shade::types::TextureAccessor* accessor) : mAccessor(accessor) {}
 
-    TextureSetter(shade::types::TextureAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
-
-    void operator()(const av::osg::SFTexture::SetValueEvent& event)
-    {
-      mAccessor->set(boost::shared_ptr< ::shade::osg::Texture>(new ::shade::osg::Texture(event.getValue()->getOsgTexture())));
-    }
+    void operator()(const av::osg::SFTexture::SetValueEvent& event) { mAccessor->set(boost::shared_ptr<::shade::osg::Texture>(new ::shade::osg::Texture(event.getValue()->getOsgTexture()))); }
 
   private:
     shade::types::TextureAccessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::TextureFieldAdapter::hash(void) const
+{
+    static ::shade::sampler2D value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::TextureFieldAdapter::hash(void) const
+void av::shade::TextureFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::sampler2D value;
-  return value.hash();
-}
+    ::shade::types::TextureAccessor* texture_accessor(dynamic_cast<::shade::types::TextureAccessor*>(type));
+    if(texture_accessor == 0)
+        return;
 
-void
-av::shade::TextureFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::TextureAccessor* texture_accessor(dynamic_cast< ::shade::types::TextureAccessor*>(type));
-  if (texture_accessor == 0)
-    return;
-
-  av::osg::SFTexture* field= new av::osg::SFTexture;
-  field->bind(container, name, true, TextureGetter(texture_accessor), TextureSetter(texture_accessor));
+    av::osg::SFTexture* field = new av::osg::SFTexture;
+    field->bind(container, name, true, TextureGetter(texture_accessor), TextureSetter(texture_accessor));
 }

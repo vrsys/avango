@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::CullFace"));
+av::Logger& logger(av::getLogger("av::osg::CullFace"));
 }
 
 AV_FC_DEFINE(av::osg::CullFace);
@@ -37,48 +37,30 @@ AV_FC_DEFINE(av::osg::CullFace);
 AV_FIELD_DEFINE(av::osg::SFCullFace);
 AV_FIELD_DEFINE(av::osg::MFCullFace);
 
-av::osg::CullFace::CullFace(::osg::CullFace* osgcullface) :
-  StateAttribute(osgcullface),
-  mOsgCullFace(osgcullface)
+av::osg::CullFace::CullFace(::osg::CullFace* osgcullface) : StateAttribute(osgcullface), mOsgCullFace(osgcullface)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Mode,
-                            boost::bind(&CullFace::getModeCB, this, _1),
-                            boost::bind(&CullFace::setModeCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Mode, boost::bind(&CullFace::getModeCB, this, _1), boost::bind(&CullFace::setModeCB, this, _1));
 }
 
-av::osg::CullFace::~CullFace()
-{}
+av::osg::CullFace::~CullFace() {}
 
-void
-av::osg::CullFace::initClass()
+void av::osg::CullFace::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::StateAttribute::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::StateAttribute::initClass();
 
-    AV_FC_INIT(av::osg::StateAttribute, av::osg::CullFace, true);
+        AV_FC_INIT(av::osg::StateAttribute, av::osg::CullFace, true);
 
-    SFCullFace::initClass("av::osg::SFCullFace", "av::Field");
-    MFCullFace::initClass("av::osg::MFCullFace", "av::Field");
+        SFCullFace::initClass("av::osg::SFCullFace", "av::Field");
+        MFCullFace::initClass("av::osg::MFCullFace", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::CullFace*
-av::osg::CullFace::getOsgCullFace() const
-{
-  return mOsgCullFace;
-}
+::osg::CullFace* av::osg::CullFace::getOsgCullFace() const { return mOsgCullFace; }
 
-/* virtual */ void
-av::osg::CullFace::getModeCB(const av::SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgCullFace->getMode();
-}
+/* virtual */ void av::osg::CullFace::getModeCB(const av::SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgCullFace->getMode(); }
 
-/* virtual */ void
-av::osg::CullFace::setModeCB(const av::SFInt::SetValueEvent& event)
-{
-  mOsgCullFace->setMode((::osg::CullFace::Mode)(event.getValue()));
-}
+/* virtual */ void av::osg::CullFace::setModeCB(const av::SFInt::SetValueEvent& event) { mOsgCullFace->setMode((::osg::CullFace::Mode)(event.getValue())); }

@@ -28,25 +28,24 @@
 
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class SingleAssignmentString
+{
+  public:
+    SingleAssignmentString(void);
 
-    class SingleAssignmentString
-    {
-    public:
-      SingleAssignmentString(void);
+    bool valid(void) const;
 
-      bool valid(void) const;
+    std::string get(void) const;
+    void set(const std::string& value);
 
-      std::string get(void) const;
-      void set(const std::string& value);
+  private:
+    bool valid_;
+    std::string content_;
+};
 
-    private:
-      bool valid_;
-      std::string content_;
-    };
-
-  }
-}
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_SingleAssignmentString_H */

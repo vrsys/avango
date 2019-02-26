@@ -33,17 +33,15 @@
 #include <boost/mpl/front.hpp>
 #include <boost/mpl/vector.hpp>
 
-
 namespace shade
 {
+class Shader;
+class MethodArgumentList;
+class MethodArgumentIterator;
+class MethodCaller;
 
-  class Shader;
-  class MethodArgumentList;
-  class MethodArgumentIterator;
-  class MethodCaller;
-
-  class MethodAccessor
-  {
+class MethodAccessor
+{
   public:
     MethodAccessor(void);
     MethodAccessor(boost::shared_ptr<MethodArgumentList> args, boost::shared_ptr<MethodCaller> caller, std::string name, ShaderEnvironment env);
@@ -61,126 +59,127 @@ namespace shade
     boost::shared_ptr<MethodCaller> m_caller;
     std::string m_name;
     ShaderEnvironment m_env;
-  };
+};
 
-
-  class MethodArgumentList
-  {
+class MethodArgumentList
+{
   public:
     virtual ~MethodArgumentList(void) {}
     virtual int size(void) const = 0;
     virtual Type* create_type(int pos) const = 0;
-  };
+};
 
-  template<class Args>
-  class MethodArgumentList_impl : public MethodArgumentList
-  {
+template <class Args>
+class MethodArgumentList_impl : public MethodArgumentList
+{
   public:
-
     int size(void) const { return boost::mpl::size<Args>::value; }
 
-    template<int pos, bool> struct create_type_impl
+    template <int pos, bool>
+    struct create_type_impl
     {
-      typedef typename boost::mpl::at< Args, boost::mpl::int_<pos> >::type rettype;
-      operator Type* (void) { return new rettype; }
+        typedef typename boost::mpl::at<Args, boost::mpl::int_<pos>>::type rettype;
+        operator Type*(void) { return new rettype; }
     };
 
-    template<int pos> struct create_type_impl<pos, false>
+    template <int pos>
+    struct create_type_impl<pos, false>
     {
-      operator Type* (void) { return 0; }
+        operator Type*(void) { return 0; }
     };
 
     Type* create_type(int pos) const
     {
-      const int size = boost::mpl::size<Args>::value;
-      if (pos == 0)
-        return create_type_impl< 0, (0<size) > ();
-      else if (pos == 1)
-        return create_type_impl< 1, (1<size) > ();
-      else if (pos == 2)
-        return create_type_impl< 2, (2<size) > ();
-      else if (pos == 3)
-        return create_type_impl< 3, (3<size) > ();
-      else if (pos == 4)
-        return create_type_impl< 4, (4<size) > ();
-      return 0;
+        const int size = boost::mpl::size<Args>::value;
+        if(pos == 0)
+            return create_type_impl<0, (0 < size)>();
+        else if(pos == 1)
+            return create_type_impl<1, (1 < size)>();
+        else if(pos == 2)
+            return create_type_impl<2, (2 < size)>();
+        else if(pos == 3)
+            return create_type_impl<3, (3 < size)>();
+        else if(pos == 4)
+            return create_type_impl<4, (4 < size)>();
+        return 0;
     }
+};
 
-  };
-
-
-  class MethodCaller
-  {
+class MethodCaller
+{
   public:
     virtual ~MethodCaller(void) {}
     virtual Type* invoke(Shader* obj) const = 0;
-  };
+};
 
-  template<class Base, class RetVal>
-  class MethodCaller_impl0 : public MethodCaller
-  {
+template <class Base, class RetVal>
+class MethodCaller_impl0 : public MethodCaller
+{
   public:
-    MethodCaller_impl0(RetVal (Base::* mem)(void)) : m_mem(mem) {}
+    MethodCaller_impl0(RetVal (Base::*mem)(void)) : m_mem(mem) {}
     Type* invoke(Shader* obj) const
     {
-      RetVal* retval = new RetVal;
-      *retval = (dynamic_cast<Base*>(obj)->*m_mem)();
-      return retval;
+        RetVal* retval = new RetVal;
+        *retval = (dynamic_cast<Base*>(obj)->*m_mem)();
+        return retval;
     }
-  private:
-    RetVal (Base::* m_mem)();
-  };
 
-  template<class Base, class RetVal, class Arg0>
-  class MethodCaller_impl1 : public MethodCaller
-  {
+  private:
+    RetVal (Base::*m_mem)();
+};
+
+template <class Base, class RetVal, class Arg0>
+class MethodCaller_impl1 : public MethodCaller
+{
   public:
-    MethodCaller_impl1(RetVal (Base::* mem)(Arg0)) : m_mem(mem) {}
+    MethodCaller_impl1(RetVal (Base::*mem)(Arg0)) : m_mem(mem) {}
     Type* invoke(Shader* obj) const
     {
-      RetVal* retval = new RetVal;
-      *retval = (dynamic_cast<Base*>(obj)->*m_mem)(Arg0());
-      return retval;
+        RetVal* retval = new RetVal;
+        *retval = (dynamic_cast<Base*>(obj)->*m_mem)(Arg0());
+        return retval;
     }
-  private:
-    RetVal (Base::* m_mem)(Arg0);
-  };
 
-  template<class Base, class RetVal, class Arg0, class Arg1>
-  class MethodCaller_impl2 : public MethodCaller
-  {
+  private:
+    RetVal (Base::*m_mem)(Arg0);
+};
+
+template <class Base, class RetVal, class Arg0, class Arg1>
+class MethodCaller_impl2 : public MethodCaller
+{
   public:
-    MethodCaller_impl2(RetVal (Base::* mem)(Arg0, Arg1)) : m_mem(mem) {}
+    MethodCaller_impl2(RetVal (Base::*mem)(Arg0, Arg1)) : m_mem(mem) {}
     Type* invoke(Shader* obj) const
     {
-      RetVal* retval = new RetVal;
-      Base* base = dynamic_cast<Base*>(obj);
-      if (base)
-        *retval = (base->*m_mem)(Arg0(), Arg1());
-      return retval;
+        RetVal* retval = new RetVal;
+        Base* base = dynamic_cast<Base*>(obj);
+        if(base)
+            *retval = (base->*m_mem)(Arg0(), Arg1());
+        return retval;
     }
-  private:
-    RetVal (Base::* m_mem)(Arg0, Arg1);
-  };
 
-  template<class Base, class RetVal, class Arg0, class Arg1, class Arg2>
-  class MethodCaller_impl3 : public MethodCaller
-  {
+  private:
+    RetVal (Base::*m_mem)(Arg0, Arg1);
+};
+
+template <class Base, class RetVal, class Arg0, class Arg1, class Arg2>
+class MethodCaller_impl3 : public MethodCaller
+{
   public:
-    MethodCaller_impl3(RetVal (Base::* mem)(Arg0, Arg1, Arg2)) : m_mem(mem) {}
+    MethodCaller_impl3(RetVal (Base::*mem)(Arg0, Arg1, Arg2)) : m_mem(mem) {}
     Type* invoke(Shader* obj) const
     {
-      RetVal* retval = new RetVal;
-      *retval = (dynamic_cast<Base*>(obj)->*m_mem)(Arg0(), Arg1(), Arg2());
-      return retval;
+        RetVal* retval = new RetVal;
+        *retval = (dynamic_cast<Base*>(obj)->*m_mem)(Arg0(), Arg1(), Arg2());
+        return retval;
     }
+
   private:
-    RetVal (Base::* m_mem)(Arg0, Arg1, Arg2);
-  };
+    RetVal (Base::*m_mem)(Arg0, Arg1, Arg2);
+};
 
-
-  class MethodArgumentIterator
-  {
+class MethodArgumentIterator
+{
   public:
     MethodArgumentIterator(const MethodArgumentList& args);
 
@@ -188,7 +187,7 @@ namespace shade
     void check(void);
 
     MethodArgumentIterator& operator++(void);
-    const Type& operator*(void) const;
+    const Type& operator*(void)const;
     Type& operator*(void);
     bool operator==(const MethodArgumentIterator& a);
     bool operator!=(const MethodArgumentIterator& a);
@@ -197,8 +196,8 @@ namespace shade
     const MethodArgumentList& m_args;
     int m_pos;
     boost::shared_ptr<Type> m_type;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_MethodAccessor_H */

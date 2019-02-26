@@ -35,27 +35,24 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class PointLight : public ShaderBase<PointLight, ILight>
+{
+  public:
+    /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
+    /*virtual*/ void_<> transform(objref<> coordinate_system);
 
-    class PointLight : public ShaderBase<PointLight, ILight>
-    {
-    public:
+    ValueReference<vec3, uniform> position;
+    ValueReference<vec3, uniform> color;
 
-      /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
-      /*virtual*/ void_<> transform(objref<> coordinate_system);
+  private:
+    Varying<vec3, InverseTransformInterpolator> transformed_position;
 
-      ValueReference<vec3, uniform> position;
-      ValueReference<vec3, uniform> color;
+    SHADE_DERIVED_DECL(PointLight, ILight)
+};
 
-    private:
-
-      Varying<vec3, InverseTransformInterpolator> transformed_position;
-
-      SHADE_DERIVED_DECL(PointLight, ILight)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_PointLight_H */

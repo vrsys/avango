@@ -41,207 +41,201 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      typedef ::osg::Camera OsgCamera;
+namespace osg
+{
+namespace viewer
+{
+typedef ::osg::Camera OsgCamera;
 
-      /**
-       * Wrapper for ::osg::Camera
-       * In the viewer directory because it depends on GraphicsWindow
-       * Derived from av::osg::Object to prevent usage in the scene graph,
-       * because OSG uses it internally as root node.
-       *
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL Camera : public av::osg::Object
-      {
-        AV_FC_DECLARE();
+/**
+ * Wrapper for ::osg::Camera
+ * In the viewer directory because it depends on GraphicsWindow
+ * Derived from av::osg::Object to prevent usage in the scene graph,
+ * because OSG uses it internally as root node.
+ *
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL Camera : public av::osg::Object
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Camera is created.
+     * Otherwise, the given ::osg::Camera is used.
+     */
+    Camera(OsgCamera* osgcamera = new OsgCamera());
 
-        /**
-         * Constructor. When called without arguments, a new ::osg::Camera is created.
-         * Otherwise, the given ::osg::Camera is used.
-         */
-        Camera(OsgCamera* osgcamera = new OsgCamera());
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Camera();
 
-      protected:
+  public:
+    /**
+     * Window indirectly sets and gets the GraphicsContext of the wrapped ::osg::Camera.
+     */
+    SFGraphicsWindow Window;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~Camera();
+    /**
+     * Defines the viewport in normalized window coordinates.
+     * PositionX, positionY, width and height.
+     * Initial values are 0, 0, 1, 1.
+     */
+    SFVec4 Viewport;
 
-      public:
+    /**
+     * Defines the distance to the near and far OpenGL clipping plane.
+     */
+    SFDouble Near;
+    SFDouble Far;
 
-        /**
-         * Window indirectly sets and gets the GraphicsContext of the wrapped ::osg::Camera.
-         */
-        SFGraphicsWindow Window;
+    /**
+     * Configure culling
+     */
+    SFUInt CullMask;
 
-        /**
-         * Defines the viewport in normalized window coordinates.
-         * PositionX, positionY, width and height.
-         * Initial values are 0, 0, 1, 1.
-         */
-        SFVec4 Viewport;
+    /**
+     * Configure inheritancemask
+     */
+    SFInt InheritanceMask;
 
-        /**
-         * Defines the distance to the near and far OpenGL clipping plane.
-         */
-        SFDouble Near;
-        SFDouble Far;
+    /**
+     * Defines the background color.
+     * Default is Vec4(0,0,0,1).
+     */
+    SFVec4 BackgroundColor;
 
-        /**
-         * Configure culling
-         */
-        SFUInt CullMask;
+    /**
+     * Defines the orientation and translation of the viewer
+     * relative to the root node coordinate system.
+     * Default is 0.6 meter behind the center.
+     */
+    SFMatrix ViewerTransform;
 
-        /**
-         * Configure inheritancemask
-         */
-        SFInt InheritanceMask;
+    /**
+     * Defines the orientation and translation of the screen (centered x-y-plane).
+     * Default is 0.6 meter in front of the viewer coordinate system.
+     */
+    SFMatrix ScreenTransform;
 
-        /**
-         * Defines the background color.
-         * Default is Vec4(0,0,0,1).
-         */
-        SFVec4 BackgroundColor;
+    /**
+     * True if ScreenTransform is relative to the viewer coordinate system (default).
+     * False if ScreenTransform is relative to the root node coordinate system.
+     */
+    SFBool ScreenRelativeToViewer;
 
-        /**
-         * Defines the orientation and translation of the viewer
-         * relative to the root node coordinate system.
-         * Default is 0.6 meter behind the center.
-         */
-        SFMatrix ViewerTransform;
+    /**
+     * Defines the orientation and translation of the eyes.
+     * Default is the center of the viewer coordinate system.
+     */
+    SFMatrix EyeTransform;
 
-        /**
-         * Defines the orientation and translation of the screen (centered x-y-plane).
-         * Default is 0.6 meter in front of the viewer coordinate system.
-         */
-        SFMatrix ScreenTransform;
+    /**
+     * True if EyeTransform is relative to the viewer coordinate system (default).
+     * False if EyeTransform is relative to the root node coordinate system.
+     */
+    SFBool EyeRelativeToViewer;
 
-        /**
-         * True if ScreenTransform is relative to the viewer coordinate system (default).
-         * False if ScreenTransform is relative to the root node coordinate system.
-         */
-        SFBool ScreenRelativeToViewer;
+    /**
+     * Defines the additional eye offset for stereo. Default is 0.
+     * Use 0.03 for right eye and -0.03 for left eye in passive stereo setup.
+     * Use 0.03 for active stereo setup.
+     */
+    SFDouble EyeOffset;
 
-        /**
-         * Defines the orientation and translation of the eyes.
-         * Default is the center of the viewer coordinate system.
-         */
-        SFMatrix EyeTransform;
+    /**
+     * Outputs the ModelViewProjection matrix.
+     * For active stereo setups, the clip space for both eyes is
+     * combined to produce correct view frustum clipping.
+     */
+    SFMatrix ModelViewProjection;
 
-        /**
-         * True if EyeTransform is relative to the viewer coordinate system (default).
-         * False if EyeTransform is relative to the root node coordinate system.
-         */
-        SFBool EyeRelativeToViewer;
+    /**
+     * Outputs the transformation of the mouse pointer position
+     * on the screen in 3D relative to the root node coordinate system.
+     * The direction is along the perspective viewing direction.
+     */
+    SFMatrix MouseTransform;
 
-        /**
-         * Defines the additional eye offset for stereo. Default is 0.
-         * Use 0.03 for right eye and -0.03 for left eye in passive stereo setup.
-         * Use 0.03 for active stereo setup.
-         */
-        SFDouble EyeOffset;
+    /**
+     * Outputs the transformation of the mouse pointer position
+     * on the screen in 3D relative to the viewer coordinate system.
+     * The direction is along the perspective viewing direction.
+     */
+    SFMatrix MouseViewerTransform;
 
-        /**
-         * Outputs the ModelViewProjection matrix.
-         * For active stereo setups, the clip space for both eyes is
-         * combined to produce correct view frustum clipping.
-         */
-        SFMatrix ModelViewProjection;
+    /**
+     * Outputs the transformation of the mouse pointer position
+     * on the near clipping plane in 3D relative to the root node coordinate system.
+     * The direction is along the perspective viewing direction.
+     */
+    SFMatrix MouseNearTransform;
 
-        /**
-         * Outputs the transformation of the mouse pointer position
-         * on the screen in 3D relative to the root node coordinate system.
-         * The direction is along the perspective viewing direction.
-         */
-        SFMatrix MouseTransform;
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
+    /* virtual */ void evaluate();
 
-        /**
-         * Outputs the transformation of the mouse pointer position
-         * on the screen in 3D relative to the viewer coordinate system.
-         * The direction is along the perspective viewing direction.
-         */
-        SFMatrix MouseViewerTransform;
+    /**
+     * Outputs the projection matrix of the osg camera
+     */
+    SFMatrix ProjectionMatrix;
 
-        /**
-         * Outputs the transformation of the mouse pointer position
-         * on the near clipping plane in 3D relative to the root node coordinate system.
-         * The direction is along the perspective viewing direction.
-         */
-        SFMatrix MouseNearTransform;
+    /**
+     * Outputs the view matrix (modelview) of the osg camera
+     */
+    SFMatrix ViewMatrix;
 
-        /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-        /* virtual */ void evaluateLocalSideEffect();
-        /* virtual */ void evaluate();
+    /**
+     * Autocompute near/far plane
+     */
+    SFBool EnableAutoComputeNearFarPlane;
 
-        /**
-         * Outputs the projection matrix of the osg camera
-         */
-        SFMatrix ProjectionMatrix;
+    /**
+     * Get the wrapped ::osg::Camera.
+     */
+    ::osg::Camera* getOsgCamera() const;
 
-        /**
-         * Outputs the view matrix (modelview) of the osg camera
-         */
-        SFMatrix ViewMatrix;
+    /**
+     * Get screen and eye transformation relative to the viewer coordinate system.
+     */
+    void getScreenAndEyeTrans(::osg::Matrix& screenTrans, ::osg::Matrix& eyeTrans);
 
-        /**
-         * Autocompute near/far plane
-         */
-        SFBool EnableAutoComputeNearFarPlane;
+    /**
+     * Compute projection matrix from screen and eye transformation.
+     */
+    ::osg::Matrix calcProjectionMatrix(const ::osg::Matrix& screenTrans, const ::osg::Matrix& eyeTrans);
 
-        /**
-         * Get the wrapped ::osg::Camera.
-         */
-        ::osg::Camera* getOsgCamera() const;
+  protected:
+    virtual void windowChangedCB();
+    virtual void sizeChangedCB();
 
-        /**
-         * Get screen and eye transformation relative to the viewer coordinate system.
-         */
-        void getScreenAndEyeTrans(::osg::Matrix& screenTrans, ::osg::Matrix& eyeTrans);
+    virtual void getEnableAutoComputeNearFarPlaneCB(const av::SFBool::GetValueEvent& event);
+    virtual void setEnableAutoComputeNearFarPlaneCB(const av::SFBool::SetValueEvent& event);
+    void getCullMaskCB(const av::SFUInt::GetValueEvent& event);
+    void setCullMaskCB(const av::SFUInt::SetValueEvent& event);
+    void getInheritanceMaskCB(const av::SFInt::GetValueEvent& event);
+    void setInheritanceMaskCB(const av::SFInt::SetValueEvent& event);
 
-        /**
-         * Compute projection matrix from screen and eye transformation.
-         */
-        ::osg::Matrix calcProjectionMatrix(const ::osg::Matrix& screenTrans,
-                                           const ::osg::Matrix& eyeTrans);
+  private:
+    ::osg::Camera* mOsgCamera;
+    Link<av::osg::viewer::GraphicsWindow> mWindow;
+    ::osg::ref_ptr<::osgUtil::SceneView::ComputeStereoMatricesCallback> mStereoCallback;
+    av::osg::viewer::GraphicsWindow::CallbackHandle mWindowCallbackHandle, mSizeCallbackHandle;
+    bool mViewportChanged;
+};
 
-      protected:
+typedef SingleField<Link<Camera>> SFCamera;
+typedef MultiField<Link<Camera>> MFCamera;
 
-        virtual void windowChangedCB();
-        virtual void sizeChangedCB();
+} // namespace viewer
 
-        virtual void getEnableAutoComputeNearFarPlaneCB(const av::SFBool::GetValueEvent& event);
-        virtual void setEnableAutoComputeNearFarPlaneCB(const av::SFBool::SetValueEvent& event);
-        void getCullMaskCB(const av::SFUInt::GetValueEvent& event);
-        void setCullMaskCB(const av::SFUInt::SetValueEvent& event);
-        void getInheritanceMaskCB(const av::SFInt::GetValueEvent& event);
-        void setInheritanceMaskCB(const av::SFInt::SetValueEvent& event);
-
-      private:
-
-        ::osg::Camera *mOsgCamera;
-        Link<av::osg::viewer::GraphicsWindow> mWindow;
-        ::osg::ref_ptr< ::osgUtil::SceneView::ComputeStereoMatricesCallback> mStereoCallback;
-        av::osg::viewer::GraphicsWindow::CallbackHandle mWindowCallbackHandle, mSizeCallbackHandle;
-        bool mViewportChanged;
-      };
-
-      typedef SingleField<Link<Camera> > SFCamera;
-      typedef MultiField<Link<Camera> > MFCamera;
-
-    } // namespace viewer
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::Camera> >;
-  template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::Camera> >;
+template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::Camera>>;
+template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::Camera>>;
 #endif
 
 } // namespace av

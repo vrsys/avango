@@ -13,65 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::CollisionShapeNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL CollisionShapeNode : public av::gua::TransformNode
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::CollisionShapeNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::CollisionShapeNode is created.
+     * Otherwise, the given ::gua::physics::CollisionShapeNode is used.
      */
-    class AV_GUA_DLL CollisionShapeNode : public av::gua::TransformNode
-    {
-      AV_FC_DECLARE();
+    CollisionShapeNode(std::shared_ptr<::gua::physics::CollisionShapeNode> guanode = std::shared_ptr<::gua::physics::CollisionShapeNode>(new ::gua::physics::CollisionShapeNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CollisionShapeNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::CollisionShapeNode is created.
-       * Otherwise, the given ::gua::physics::CollisionShapeNode is used.
-       */
-      CollisionShapeNode(std::shared_ptr< ::gua::physics::CollisionShapeNode> guanode = std::shared_ptr< ::gua::physics::CollisionShapeNode>(new ::gua::physics::CollisionShapeNode("")));
+  public:
+    SFString ShapeName;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShapeNode.
+     */
+    std::shared_ptr<::gua::physics::CollisionShapeNode> getGuaNode() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~CollisionShapeNode();
+  public:
+    virtual void getShapeNameCB(const SFString::GetValueEvent& event);
+    virtual void setShapeNameCB(const SFString::SetValueEvent& event);
 
-    public:
+  private:
+    std::shared_ptr<::gua::physics::CollisionShapeNode> m_guaNode;
 
-      SFString ShapeName;
+    CollisionShapeNode(const CollisionShapeNode&);
+    CollisionShapeNode& operator=(const CollisionShapeNode&);
+};
 
+using SFCollisionShapeNode = SingleField<Link<CollisionShapeNode>>;
+using MFCollisionShapeNode = MultiField<Link<CollisionShapeNode>>;
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShapeNode.
-       */
-      std::shared_ptr< ::gua::physics::CollisionShapeNode>  getGuaNode() const;
-
-    public:
-
-      virtual void getShapeNameCB(const SFString::GetValueEvent& event);
-      virtual void setShapeNameCB(const SFString::SetValueEvent& event);
-
-    private:
-
-      std::shared_ptr< ::gua::physics::CollisionShapeNode> m_guaNode;
-
-      CollisionShapeNode(const CollisionShapeNode&);
-      CollisionShapeNode& operator=(const CollisionShapeNode&);
-    };
-
-    using SFCollisionShapeNode = SingleField<Link<CollisionShapeNode> >;
-    using MFCollisionShapeNode = MultiField<Link<CollisionShapeNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::CollisionShapeNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::CollisionShapeNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::CollisionShapeNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::CollisionShapeNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_COLLISION_SHAPE_NODE_HPP
+#endif // AVANGO_GUA_COLLISION_SHAPE_NODE_HPP

@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::AbsoluteTransform"));
+av::Logger& logger(av::getLogger("av::osg::AbsoluteTransform"));
 }
 
 AV_FC_DEFINE(av::osg::AbsoluteTransform);
@@ -39,33 +39,30 @@ AV_FIELD_DEFINE(av::osg::MFAbsoluteTransform);
 
 av::osg::AbsoluteTransform::AbsoluteTransform()
 {
-  AV_FC_ADD_FIELD(AbsoluteMatrix, ::osg::Matrix());
+    AV_FC_ADD_FIELD(AbsoluteMatrix, ::osg::Matrix());
 
-  alwaysEvaluate(true);
+    alwaysEvaluate(true);
 }
 
 /* virtual */
-av::osg::AbsoluteTransform::~AbsoluteTransform()
-{}
+av::osg::AbsoluteTransform::~AbsoluteTransform() {}
 
-/* static */ void
-av::osg::AbsoluteTransform::initClass()
+/* static */ void av::osg::AbsoluteTransform::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Node::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Node::initClass();
 
-    AV_FC_INIT(av::osg::Node, av::osg::AbsoluteTransform, false);
+        AV_FC_INIT(av::osg::Node, av::osg::AbsoluteTransform, false);
 
-    SFAbsoluteTransform::initClass("av::osg::SFAbsoluteTransform", "av::Field");
-    MFAbsoluteTransform::initClass("av::osg::MFAbsoluteTransform", "av::Field");
-  }
+        SFAbsoluteTransform::initClass("av::osg::SFAbsoluteTransform", "av::Field");
+        MFAbsoluteTransform::initClass("av::osg::MFAbsoluteTransform", "av::Field");
+    }
 }
 
-/* virtual */ void
-av::osg::AbsoluteTransform::evaluate()
+/* virtual */ void av::osg::AbsoluteTransform::evaluate()
 {
-  ::osg::Matrix abs_mat = getAbsoluteTransform(this);
-  if (AbsoluteMatrix.getValue() != abs_mat)
-    AbsoluteMatrix.setValue(abs_mat);
+    ::osg::Matrix abs_mat = getAbsoluteTransform(this);
+    if(AbsoluteMatrix.getValue() != abs_mat)
+        AbsoluteMatrix.setValue(abs_mat);
 }

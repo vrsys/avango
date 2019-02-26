@@ -31,25 +31,22 @@
 #include "../types/ValueReference.h"
 #include "../types/uniform.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Diffuse : public ShaderBase<Diffuse, IlluminatedMaterial>
+{
+  public:
+    /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
 
-    class Diffuse : public ShaderBase<Diffuse, IlluminatedMaterial>
-    {
-    public:
-      /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
+    ValueReference<vec4, uniform> color;
 
-      ValueReference<vec4, uniform> color;
+  private:
+    SHADE_DERIVED_DECL(Diffuse, IlluminatedMaterial)
+};
 
-    private:
-
-      SHADE_DERIVED_DECL(Diffuse, IlluminatedMaterial)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Diffuse_H */

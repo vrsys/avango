@@ -37,12 +37,12 @@
 
 int main()
 {
-  av::ApplicationInstance::get();
-  av::osg::Init::initClass();
+    av::ApplicationInstance::get();
+    av::osg::Init::initClass();
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  av::osg::network::Init::initClass();
+    av::osg::network::Init::initClass();
 #endif
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

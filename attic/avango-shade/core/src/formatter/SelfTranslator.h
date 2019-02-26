@@ -31,45 +31,44 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    class SelfTranslator
-    {
-    public:
+namespace formatter
+{
+class SelfTranslator
+{
+  public:
+    SelfTranslator(void);
 
-      SelfTranslator(void);
+    void handle_self_begin(void);
+    void handle_self_name_begin(void);
+    void handle_self_name_end(void);
+    void handle_self_parameter_list_begin(void);
+    void handle_self_parameter_type_begin(void);
+    void handle_self_parameter_type_end(void);
+    void handle_self_parameter_name_begin(void);
+    void handle_self_parameter_name_end(void);
+    void handle_self_parameter_list_end(void);
+    void handle_self_end(void);
+    void handle_identifier(const std::string& id);
+    void handle_type(Constants::Type type);
 
-      void handle_self_begin(void);
-      void handle_self_name_begin(void);
-      void handle_self_name_end(void);
-      void handle_self_parameter_list_begin(void);
-      void handle_self_parameter_type_begin(void);
-      void handle_self_parameter_type_end(void);
-      void handle_self_parameter_name_begin(void);
-      void handle_self_parameter_name_end(void);
-      void handle_self_parameter_list_end(void);
-      void handle_self_end(void);
-      void handle_identifier(const std::string& id);
-      void handle_type(Constants::Type type);
+    void generate(Generator& generator, const std::string& name) const;
+    void append(const SelfTranslator& other);
 
-      void generate(Generator& generator, const std::string& name) const;
-      void append(const SelfTranslator& other);
+  private:
+    bool m_store_self_name;
+    bool m_store_type;
+    bool m_store_name;
 
-    private:
-      bool m_store_self_name;
-      bool m_store_type;
-      bool m_store_name;
+    std::string m_cur_self_name;
+    Constants::Type m_cur_type;
+    std::string m_cur_name;
 
-      std::string m_cur_self_name;
-      Constants::Type m_cur_type;
-      std::string m_cur_name;
-
-      typedef std::pair<Constants::Type, std::string> Parameter;
-      typedef std::vector<Parameter> ParameterList;
-      typedef std::map<std::string, ParameterList> NamedParameterLists;
-      NamedParameterLists m_parameters;
-    };
-  }
-}
+    typedef std::pair<Constants::Type, std::string> Parameter;
+    typedef std::vector<Parameter> ParameterList;
+    typedef std::map<std::string, ParameterList> NamedParameterLists;
+    NamedParameterLists m_parameters;
+};
+} // namespace formatter
+} // namespace shade
 
 #endif /* shade_formatter_SelfTranslator_H */

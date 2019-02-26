@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::BoundingSphere"));
+av::Logger& logger(av::getLogger("av::gua::BoundingSphere"));
 }
 
 AV_FC_DEFINE(av::gua::BoundingSphere);
@@ -14,62 +14,33 @@ AV_FC_DEFINE(av::gua::BoundingSphere);
 AV_FIELD_DEFINE(av::gua::SFBoundingSphere);
 AV_FIELD_DEFINE(av::gua::MFBoundingSphere);
 
-av::gua::BoundingSphere::BoundingSphere(::gua::math::BoundingSphere< ::gua::math::vec3>* guaBoundingSphere)
-  : m_guaBoundingSphere(guaBoundingSphere)
+av::gua::BoundingSphere::BoundingSphere(::gua::math::BoundingSphere<::gua::math::vec3>* guaBoundingSphere) : m_guaBoundingSphere(guaBoundingSphere)
 {
-
-  AV_FC_ADD_ADAPTOR_FIELD(Center,
-                        std::bind(&BoundingSphere::getCenterCB, this,std::placeholders::_1),
-                        std::bind(&BoundingSphere::setCenterCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(Radius,
-                        std::bind(&BoundingSphere::getRadiusCB, this,std::placeholders::_1),
-                        std::bind(&BoundingSphere::setRadiusCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(Center, std::bind(&BoundingSphere::getCenterCB, this, std::placeholders::_1), std::bind(&BoundingSphere::setCenterCB, this, std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(Radius, std::bind(&BoundingSphere::getRadiusCB, this, std::placeholders::_1), std::bind(&BoundingSphere::setRadiusCB, this, std::placeholders::_1));
 }
 
-av::gua::BoundingSphere::~BoundingSphere()
-{}
+av::gua::BoundingSphere::~BoundingSphere() {}
 
-void
-av::gua::BoundingSphere::initClass()
+void av::gua::BoundingSphere::initClass()
 {
-  if (!isTypeInitialized()) {
-    av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::gua::BoundingSphere, true);
+        AV_FC_INIT(av::FieldContainer, av::gua::BoundingSphere, true);
 
-    SFBoundingSphere::initClass("av::gua::SFBoundingSphere", "av::Field");
-    MFBoundingSphere::initClass("av::gua::MFBoundingSphere", "av::Field");
-  }
+        SFBoundingSphere::initClass("av::gua::SFBoundingSphere", "av::Field");
+        MFBoundingSphere::initClass("av::gua::MFBoundingSphere", "av::Field");
+    }
 }
 
-::gua::math::BoundingSphere< ::gua::math::vec3>*
-av::gua::BoundingSphere::getGuaBoundingSphere() const
-{
-    return m_guaBoundingSphere;
-}
+::gua::math::BoundingSphere<::gua::math::vec3>* av::gua::BoundingSphere::getGuaBoundingSphere() const { return m_guaBoundingSphere; }
 
-/* virtual */ void
-av::gua::BoundingSphere::getCenterCB(const av::gua::SFVec3::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaBoundingSphere->center;
-}
+/* virtual */ void av::gua::BoundingSphere::getCenterCB(const av::gua::SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = m_guaBoundingSphere->center; }
 
-/* virtual */ void
-av::gua::BoundingSphere::setCenterCB(const av::gua::SFVec3::SetValueEvent& event)
-{
-  m_guaBoundingSphere->center = event.getValue();
-}
+/* virtual */ void av::gua::BoundingSphere::setCenterCB(const av::gua::SFVec3::SetValueEvent& event) { m_guaBoundingSphere->center = event.getValue(); }
 
-/* virtual */ void
-av::gua::BoundingSphere::getRadiusCB(const av::SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaBoundingSphere->radius;
-}
+/* virtual */ void av::gua::BoundingSphere::getRadiusCB(const av::SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaBoundingSphere->radius; }
 
-/* virtual */ void
-av::gua::BoundingSphere::setRadiusCB(const av::SFFloat::SetValueEvent& event)
-{
-  m_guaBoundingSphere->radius = event.getValue();
-}
-
-
+/* virtual */ void av::gua::BoundingSphere::setRadiusCB(const av::SFFloat::SetValueEvent& event) { m_guaBoundingSphere->radius = event.getValue(); }

@@ -3,26 +3,25 @@
 
 using namespace UnitTest;
 
-namespace {
-
-
-TEST (TestListIsEmptyByDefault)
+namespace
+{
+TEST(TestListIsEmptyByDefault)
 {
     TestList list;
-    CHECK (list.GetHead() == 0);
+    CHECK(list.GetHead() == 0);
 }
 
-TEST (AddingTestSetsHeadToTest)
+TEST(AddingTestSetsHeadToTest)
 {
     Test test("test");
     TestList list;
     list.Add(&test);
 
-    CHECK (list.GetHead() == &test);
-    CHECK (test.next == 0);
+    CHECK(list.GetHead() == &test);
+    CHECK(test.next == 0);
 }
 
-TEST (AddingSecondTestAddsItToEndOfList)
+TEST(AddingSecondTestAddsItToEndOfList)
 {
     Test test1("test1");
     Test test2("test2");
@@ -31,20 +30,20 @@ TEST (AddingSecondTestAddsItToEndOfList)
     list.Add(&test1);
     list.Add(&test2);
 
-    CHECK (list.GetHead() == &test1);
-    CHECK (test1.next == &test2);
-    CHECK (test2.next == 0);
+    CHECK(list.GetHead() == &test1);
+    CHECK(test1.next == &test2);
+    CHECK(test2.next == 0);
 }
 
-TEST (ListAdderAddsTestToList)
+TEST(ListAdderAddsTestToList)
 {
     TestList list;
 
-    Test test("");    
+    Test test("");
     ListAdder adder(list, &test);
 
-    CHECK (list.GetHead() == &test);
-    CHECK (test.next == 0);
+    CHECK(list.GetHead() == &test);
+    CHECK(test.next == 0);
 }
 
-}
+} // namespace

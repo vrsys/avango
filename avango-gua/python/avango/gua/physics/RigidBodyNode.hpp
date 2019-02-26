@@ -3,4 +3,4 @@
 
 void init_RigidBodyNode();
 
-#endif //AV_PYTHON_GUA_RIGID_BODY_NODE_HPP
+#endif // AV_PYTHON_GUA_RIGID_BODY_NODE_HPP

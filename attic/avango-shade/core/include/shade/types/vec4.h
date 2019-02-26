@@ -30,14 +30,14 @@
 
 namespace shade
 {
-  template<class Qualifier = Type> class vec4 :
-    public TypeBase<vec4<Qualifier>, Qualifier>,
-    public types::Vec4Accessor
-  {
+template <class Qualifier = Type>
+class vec4 : public TypeBase<vec4<Qualifier>, Qualifier>, public types::Vec4Accessor
+{
   public:
     vec4(void);
     vec4(float x, float y, float z, float w);
-    template<class Q> void copy_value(const vec4<Q>& source);
+    template <class Q>
+    void copy_value(const vec4<Q>& source);
 
     /*virtual*/ void set(float x, float y, float z, float w);
     /*virtual*/ void get(float& x, float& y, float& z, float& w) const;
@@ -50,8 +50,8 @@ namespace shade
 
   private:
     float m_x, m_y, m_z, m_w;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/vec4_impl.cpp"
 

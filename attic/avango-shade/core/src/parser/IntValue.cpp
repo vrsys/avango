@@ -26,22 +26,14 @@
 
 using namespace shade::parser;
 
-
-IntValue::IntValue(int value) :
-  m_value(value)
-{
-}
+IntValue::IntValue(int value) : m_value(value) {}
 
 bool IntValue::less_than(const Value& other) const
 {
-  const IntValue* other_const = dynamic_cast<const IntValue*>(&other);
-  assert(other_const);
+    const IntValue* other_const = dynamic_cast<const IntValue*>(&other);
+    assert(other_const);
 
-  return m_value < other_const->m_value;
+    return m_value < other_const->m_value;
 }
 
-bool IntValue::is_constant(void) const
-{
-  return true;
-}
-
+bool IntValue::is_constant(void) const { return true; }

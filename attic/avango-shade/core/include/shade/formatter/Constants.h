@@ -26,43 +26,63 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    struct Constants
+namespace formatter
+{
+struct Constants
+{
+    enum Qualifier
     {
-      enum Qualifier
-      {
         none,
-        uniform, const_,
-        input, output
-      };
-
-      enum Type
-      {
-        float_, vec2, vec3, vec4, matrix4,
-        sampler2D, sampler2DShadow, sampler2DArray, usampler2D,
-        samplerCube,
-        objref, list,
-        void_, int_
-      };
-
-      enum Primitive
-      {
-        points,
-        lines, lines_adjacency,
-        triangles, triangles_adjacency
-      };
-
-      enum Operator
-      {
-        pre_increment, post_increment,
-        equal, not_equal,
-        assignment, array_access, component_access,
-        multiply, divide, add, subtract,
-        assignment_add
-      };
+        uniform,
+        const_,
+        input,
+        output
     };
-  }
-}
+
+    enum Type
+    {
+        float_,
+        vec2,
+        vec3,
+        vec4,
+        matrix4,
+        sampler2D,
+        sampler2DShadow,
+        sampler2DArray,
+        usampler2D,
+        samplerCube,
+        objref,
+        list,
+        void_,
+        int_
+    };
+
+    enum Primitive
+    {
+        points,
+        lines,
+        lines_adjacency,
+        triangles,
+        triangles_adjacency
+    };
+
+    enum Operator
+    {
+        pre_increment,
+        post_increment,
+        equal,
+        not_equal,
+        assignment,
+        array_access,
+        component_access,
+        multiply,
+        divide,
+        add,
+        subtract,
+        assignment_add
+    };
+};
+} // namespace formatter
+} // namespace shade
 
 #endif /* shade_formatter_Constants_H */

@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TriMeshPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::TriMeshPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::TriMeshPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::TriMeshPassDescription);
 AV_FIELD_DEFINE(av::gua::SFTriMeshPassDescription);
 AV_FIELD_DEFINE(av::gua::MFTriMeshPassDescription);
 
-av::gua::TriMeshPassDescription::TriMeshPassDescription(
-  std::shared_ptr< ::gua::TriMeshPassDescription> const& guaTriMeshPassDescription)
-    : PipelinePassDescription(guaTriMeshPassDescription)
-    , m_guaTriMeshPassDescription(guaTriMeshPassDescription)
+av::gua::TriMeshPassDescription::TriMeshPassDescription(std::shared_ptr<::gua::TriMeshPassDescription> const& guaTriMeshPassDescription)
+    : PipelinePassDescription(guaTriMeshPassDescription), m_guaTriMeshPassDescription(guaTriMeshPassDescription)
 {
-
 }
 
-void
-av::gua::TriMeshPassDescription::initClass()
+void av::gua::TriMeshPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::TriMeshPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::TriMeshPassDescription> const&
-av::gua::TriMeshPassDescription::getGuaTriMeshPassDescription() const
-{
-    return m_guaTriMeshPassDescription;
-}
-
-
+std::shared_ptr<::gua::TriMeshPassDescription> const& av::gua::TriMeshPassDescription::getGuaTriMeshPassDescription() const { return m_guaTriMeshPassDescription; }

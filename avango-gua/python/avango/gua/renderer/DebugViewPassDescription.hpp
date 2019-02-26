@@ -3,4 +3,4 @@
 
 void init_DebugViewPassDescription();
 
-#endif //AV_PYTHON_GUA_DEBUG_VIEW_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_DEBUG_VIEW_PASS_DESCRIPTION_HPP

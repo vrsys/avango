@@ -25,7 +25,4 @@
 
 shade::types::TypeAccessor::HashValue shade::types::FloatAccessor::m_hash;
 
-shade::types::TypeAccessor::HashType shade::types::FloatAccessor::hash(void) const
-{
-  return &m_hash;
-}
+shade::types::TypeAccessor::HashType shade::types::FloatAccessor::hash(void) const { return &m_hash; }

@@ -29,19 +29,19 @@
 using namespace boost::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_mockfieldcontainer)
 {
-  MockFieldContainer::initClass();
-  class_<MockFieldContainer, av::Link<MockFieldContainer>, bases<av::FieldContainer>, boost::noncopyable >("MockFieldContainer", "docstring", no_init);
+    MockFieldContainer::initClass();
+    class_<MockFieldContainer, av::Link<MockFieldContainer>, bases<av::FieldContainer>, boost::noncopyable>("MockFieldContainer", "docstring", no_init);
 }

@@ -37,38 +37,32 @@
 
 namespace av
 {
-
-  namespace logging
-  {
+namespace logging
+{
+/**
+ * Appender for printing log messages to a stream.
+ * \todo Make it thread-safe
+ */
+class AV_DLL StreamAppender : public Appender
+{
+  public:
+    /**
+     * Constructor made private to prevent multiple instantiation.
+     */
+    StreamAppender(std::ostream& os);
 
     /**
-     * Appender for printing log messages to a stream.
-     * \todo Make it thread-safe
+     * Destructor
      */
-    class AV_DLL StreamAppender : public Appender
-    {
+    virtual ~StreamAppender();
 
-    public:
+    /* virtual */ void doAppend(LoggingEvent& event);
 
-      /**
-       * Constructor made private to prevent multiple instantiation.
-       */
-      StreamAppender(std::ostream& os);
+  private:
+    std::ostream& mStream;
+};
 
-      /**
-       * Destructor
-       */
-      virtual ~StreamAppender();
-
-      /* virtual */ void doAppend(LoggingEvent& event);
-
-    private:
-
-      std::ostream &mStream;
-
-    };
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 

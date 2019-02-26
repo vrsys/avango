@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::sound::SampleBuffer"));
+av::Logger& logger(av::getLogger("av::sound::SampleBuffer"));
 }
 
 AV_FC_DEFINE(av::sound::SampleBuffer)
@@ -37,87 +37,51 @@ AV_FC_DEFINE(av::sound::SampleBuffer)
 AV_FIELD_DEFINE(av::sound::SFSampleBuffer);
 AV_FIELD_DEFINE(av::sound::MFSampleBuffer);
 
-
-av::sound::SampleBuffer::SampleBuffer()
-    : mBuffer(new SampleType[0]), mNumSamples(0), mSampleRate(0)
-{
-  
-  throw std::logic_error("Default Constructor of av::sound::SampleBuffer::SampleBuffer called");
-}
-
+av::sound::SampleBuffer::SampleBuffer() : mBuffer(new SampleType[0]), mNumSamples(0), mSampleRate(0) { throw std::logic_error("Default Constructor of av::sound::SampleBuffer::SampleBuffer called"); }
 
 av::sound::SampleBuffer::SampleBuffer(boost::shared_array<SampleType> buffer, unsigned int numberOfSamples, bool stereo)
     : mBuffer(buffer), mNumSamples(numberOfSamples), mStereo(stereo), mSampleRate(0)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(NumSamples, std::bind(&av::sound::SampleBuffer::getNumSamplesCB, this, std::placeholders::_1),
-                          std::bind(&av::sound::SampleBuffer::setNumSamplesCB, this, std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(IsStereo, std::bind(&av::sound::SampleBuffer::getIsStereoCB, this, std::placeholders::_1),
-                          std::bind(&av::sound::SampleBuffer::setIsStereoCB, this, std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(
+        NumSamples, std::bind(&av::sound::SampleBuffer::getNumSamplesCB, this, std::placeholders::_1), std::bind(&av::sound::SampleBuffer::setNumSamplesCB, this, std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(IsStereo, std::bind(&av::sound::SampleBuffer::getIsStereoCB, this, std::placeholders::_1), std::bind(&av::sound::SampleBuffer::setIsStereoCB, this, std::placeholders::_1));
 }
 
 /* virtual */
-av::sound::SampleBuffer::~SampleBuffer()
-{}
+av::sound::SampleBuffer::~SampleBuffer() {}
 
-unsigned int
-av::sound::SampleBuffer::getNumSamples() const
+unsigned int av::sound::SampleBuffer::getNumSamples() const { return mNumSamples; }
+
+boost::shared_array<av::sound::SampleBuffer::SampleType> av::sound::SampleBuffer::getSamples() const { return mBuffer; }
+
+unsigned int av::sound::SampleBuffer::getSampleRate() const { return mSampleRate; }
+
+void av::sound::SampleBuffer::setSampleRate(unsigned int sampleRate) { mSampleRate = sampleRate; }
+
+/*static*/ void av::sound::SampleBuffer::initClass()
 {
-  return mNumSamples;
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+
+        AV_FC_INIT(av::FieldContainer, av::sound::SampleBuffer, true);
+        SFSampleBuffer::initClass("av::sound::SFSampleBuffer", "av::Field");
+        MFSampleBuffer::initClass("av::sound::MFSampleBuffer", "av::Field");
+    }
 }
 
-boost::shared_array<av::sound::SampleBuffer::SampleType>
-av::sound::SampleBuffer::getSamples() const
+/* virtual */ void av::sound::SampleBuffer::getNumSamplesCB(const av::SFUInt::GetValueEvent& event)
 {
-  return mBuffer;
+    av::SFUInt::ValueType& value(*event.getValuePtr());
+    value = mNumSamples;
 }
 
-unsigned int
-av::sound::SampleBuffer::getSampleRate() const
+/* virtual */ void av::sound::SampleBuffer::setNumSamplesCB(const av::SFUInt::SetValueEvent&) {}
+
+/* virtual */ void av::sound::SampleBuffer::getIsStereoCB(const av::SFBool::GetValueEvent& event)
 {
-    return mSampleRate;
+    av::SFBool::ValueType& value(*event.getValuePtr());
+    value = mStereo;
 }
 
-void
-av::sound::SampleBuffer::setSampleRate( unsigned int sampleRate)
-{
-    mSampleRate = sampleRate;
-}
-
-/*static*/ void
-av::sound::SampleBuffer::initClass()
-{
-  if (!isTypeInitialized()) {
-    av::FieldContainer::initClass();
-
-    AV_FC_INIT(av::FieldContainer,
-               av::sound::SampleBuffer,
-               true);
-    SFSampleBuffer::initClass("av::sound::SFSampleBuffer", "av::Field");
-    MFSampleBuffer::initClass("av::sound::MFSampleBuffer", "av::Field");
-  }
-}
-
-/* virtual */ void
-av::sound::SampleBuffer::getNumSamplesCB(const av::SFUInt::GetValueEvent& event)
-{
-  av::SFUInt::ValueType &value(*event.getValuePtr());
-  value = mNumSamples;
-}
-
-/* virtual */ void
-av::sound::SampleBuffer::setNumSamplesCB(const av::SFUInt::SetValueEvent& )
-{
-}
-
-/* virtual */ void
-av::sound::SampleBuffer::getIsStereoCB(const av::SFBool::GetValueEvent& event)
-{
-  av::SFBool::ValueType &value(*event.getValuePtr());
-  value = mStereo;
-}
-
-/* virtual */ void
-av::sound::SampleBuffer::setIsStereoCB(const av::SFBool::SetValueEvent& )
-{
-}
-
+/* virtual */ void av::sound::SampleBuffer::setIsStereoCB(const av::SFBool::SetValueEvent&) {}

@@ -28,20 +28,20 @@
 
 namespace shade
 {
-  namespace types
-  {
-    class IntAccessor : public TypeAccessor
-    {
-    public:
-      virtual void set(int v) = 0;
-      virtual void get(int& v) const = 0;
+namespace types
+{
+class IntAccessor : public TypeAccessor
+{
+  public:
+    virtual void set(int v) = 0;
+    virtual void get(int& v) const = 0;
 
-      /*virtual*/ HashType hash(void) const;
-    private:
-      static HashValue m_hash;
-    };
-  }
-}
+    /*virtual*/ HashType hash(void) const;
 
+  private:
+    static HashValue m_hash;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_IntAccessor_H */

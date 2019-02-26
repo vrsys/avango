@@ -46,25 +46,25 @@
 
 namespace
 {
-  const char* build_filename(void)
-  {
+const char* build_filename(void)
+{
     static const char* fallback = "log-file.txt";
     const char* envname = std::getenv("AVANGO_TEST_LOG");
-    if (envname != 0)
-      return envname;
+    if(envname != 0)
+        return envname;
     else
-      return fallback;
-  }
-  std::string filename(build_filename());
+        return fallback;
+}
+std::string filename(build_filename());
 
-  void clearFile()
-  {
+void clearFile()
+{
     std::ofstream output(filename.c_str(), std::ios_base::trunc);
     output.close();
-  }
+}
 
-  TEST(useLogger)
-  {
+TEST(useLogger)
+{
     clearFile();
     av::Logger& z = av::Logger::getLogger("useLogger::Group");
     av::Logger& y = av::Logger::getLogger("useLogger::Node");
@@ -79,7 +79,7 @@ namespace
 
     x.info("log message using log() method");
     x.info() << "streamed log message";
-    x.info() << "before -- %s %x %.1f -- after" , "1", 42, 5.45;
+    x.info() << "before -- %s %x %.1f -- after", "1", 42, 5.45;
 
     x.removeAllAppenders();
 
@@ -92,28 +92,28 @@ namespace
 
     while(!input.eof())
     {
-      getline(input, line);
-      count++;
+        getline(input, line);
+        count++;
 
-      if(count == 1)
-      {
-        CHECK( (std::string::npos != line.find("log message using log() method", 0)) );
-      }
-      else if (count == 2)
-      {
-        CHECK( (std::string::npos != line.find("streamed log message", 0)) );
-      }
-      else if (count == 3)
-      {
-        CHECK( (std::string::npos != line.find("before -- 1 2a 5.5 -- after", 0)) );
-      }
+        if(count == 1)
+        {
+            CHECK((std::string::npos != line.find("log message using log() method", 0)));
+        }
+        else if(count == 2)
+        {
+            CHECK((std::string::npos != line.find("streamed log message", 0)));
+        }
+        else if(count == 3)
+        {
+            CHECK((std::string::npos != line.find("before -- 1 2a 5.5 -- after", 0)));
+        }
     }
 
     input.close();
-  }
+}
 
-  TEST(useLoggerHierarchy)
-  {
+TEST(useLoggerHierarchy)
+{
     clearFile();
 
     av::Logger& z = av::Logger::getLogger("useLoggerHierarchy::Group");
@@ -140,21 +140,19 @@ namespace
 
     std::string line;
     int count = 0;
-    while (!input.eof())
+    while(!input.eof())
     {
-      getline(input, line);
-      count++;
+        getline(input, line);
+        count++;
 
-      if (count == 1)
-      {
-        CHECK( (std::string::npos != line.find(
-                    "error message that should appear once", 0)));
-      }
-      else if (count == 2|| count == 3)
-      {
-        CHECK( (std::string::npos != line.find(
-                    "error message that should appear two times", 0)));
-      }
+        if(count == 1)
+        {
+            CHECK((std::string::npos != line.find("error message that should appear once", 0)));
+        }
+        else if(count == 2 || count == 3)
+        {
+            CHECK((std::string::npos != line.find("error message that should appear two times", 0)));
+        }
     }
 
     input.close();
@@ -162,10 +160,10 @@ namespace
     x.removeAllAppenders();
     y.removeAllAppenders();
     z.removeAllAppenders();
-  }
+}
 
-  TEST(useLoggerStream)
-  {
+TEST(useLoggerStream)
+{
     av::Logger& logger = av::Logger::getLogger("useLoggerStream");
 
     std::ostringstream os;
@@ -180,19 +178,19 @@ namespace
     logger.removeAppender(stream_app);
 
     CHECK(os.str().find("test message") != std::string::npos);
-  }
+}
 
-  TEST(addConsoleAppender)
-  {
+TEST(addConsoleAppender)
+{
     av::Logger& logger = av::Logger::getLogger("consoleLogger");
     av::Logger::getRootLogger().addConsoleAppender();
     av::Logger::getRootLogger().addConsoleAppender();
     logger.info() << "consoleLogger: added console appender two times";
     CHECK(av::Logger::getRootLogger().getAppenders().size() == 1);
-  }
+}
 
-  TEST(isActive)
-  {
+TEST(isActive)
+{
     av::Logger& child = av::Logger::getLogger("useLoggerHierarchy::Node");
     av::Logger& parent = av::Logger::getLogger("useLoggerHierarchy");
 
@@ -203,10 +201,10 @@ namespace
     child.setLevel(av::logging::FATAL);
 
     CHECK(child.isActive(av::logging::ERROR));
-  }
+}
 
-  TEST(LOGMacroSuccessfulLogging)
-  {
+TEST(LOGMacroSuccessfulLogging)
+{
     av::Logger& logger = av::Logger::getLogger("useLoggerHierarchy");
     std::ostringstream os;
     boost::shared_ptr<av::logging::Appender> stream_app(new av::logging::StreamAppender(os));
@@ -216,10 +214,10 @@ namespace
     AVANGO_LOG(logger, av::logging::ERROR, "Test");
 
     CHECK(!os.str().empty());
-  }
+}
 
-  TEST(LOGMacroUnsuccessfulLogging)
-  {
+TEST(LOGMacroUnsuccessfulLogging)
+{
     av::Logger& logger = av::Logger::getLogger("useLoggerHierarchy");
     std::ostringstream os;
     boost::shared_ptr<av::logging::Appender> stream_app(new av::logging::StreamAppender(os));
@@ -229,13 +227,10 @@ namespace
     AVANGO_LOG(logger, av::logging::WARN, "Test");
 
     CHECK(os.str().empty());
-  }
+}
 
 } // namespace
 
 // functions, exported
 
-int main()
-{
-  return UnitTest::RunAllTests();
-}
+int main() { return UnitTest::RunAllTests(); }

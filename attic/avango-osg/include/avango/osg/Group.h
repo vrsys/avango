@@ -39,63 +39,58 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Group OsgGroup;
+namespace osg
+{
+typedef ::osg::Group OsgGroup;
+
+/**
+ * Wrapper for ::osg::Group
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Group : public av::osg::Node
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Group is created.
+     * Otherwise, the given ::osg::Group is used.
+     */
+    Group(OsgGroup* osggroup = new OsgGroup()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Group();
+
+  public:
+    /**
+     * The children of this node.
+     */
+    MFNode Children;
 
     /**
-     * Wrapper for ::osg::Group
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Group.
      */
-    class AV_OSG_DLL Group : public av::osg::Node
-    {
-      AV_FC_DECLARE();
+    ::osg::Group* getOsgGroup() const;
 
-    public:
+  protected:
+    virtual void getChildrenCB(const av::osg::MFNode::GetValueEvent& event);
+    virtual void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Group is created.
-       * Otherwise, the given ::osg::Group is used.
-       */
-      Group(OsgGroup* osggroup = new OsgGroup()); // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::Group* mOsgGroup;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Group();
-
-    public:
-
-      /**
-       * The children of this node.
-       */
-      MFNode Children;
-
-      /**
-       * Get the wrapped ::osg::Group.
-       */
-      ::osg::Group* getOsgGroup() const;
-
-    protected:
-
-      virtual void getChildrenCB(const av::osg::MFNode::GetValueEvent& event);
-      virtual void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
-
-    private:
-
-      ::osg::Group *mOsgGroup;
-    };
-
-    typedef SingleField<Link<Group> > SFGroup;
-    typedef MultiField<Link<Group> > MFGroup;
-  } // namespace osg
+typedef SingleField<Link<Group>> SFGroup;
+typedef MultiField<Link<Group>> MFGroup;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Group> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Group> >;
+template class AV_OSG_DLL SingleField<Link<osg::Group>>;
+template class AV_OSG_DLL MultiField<Link<osg::Group>>;
 #endif
 
 } // namespace av

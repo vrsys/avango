@@ -34,213 +34,178 @@
 #include <boost/python.hpp>
 using namespace boost::python;
 
-
 av::Type av::script::Script::sType;
 object av::script::Script::sHandler;
 
+av::script::Script::Script(PyObject* self, av::Type type) : mSelf(self), mType(type), mIsFloatingRef(false), mHasFieldHasChangedEnabled(false) {}
 
-av::script::Script::Script(PyObject* self, av::Type type) :
-  mSelf(self),
-  mType(type),
-  mIsFloatingRef(false),
-  mHasFieldHasChangedEnabled(false)
-{
-}
+/*virtual*/ av::Type av::script::Script::getTypeId() const { return mType; }
 
-/*virtual*/ av::Type av::script::Script::getTypeId() const
-{
-  return mType;
-}
+::av::Type av::script::Script::getClassTypeId(void) { return sType; }
 
-::av::Type av::script::Script::getClassTypeId(void)
-{
-  return sType;
-}
-
-void av::script::Script::initClass(void)
-{
-  sType = av::Type::createAbstractType(av::FieldContainer::getClassTypeId(), "av::script::_Script", true);
-}
+void av::script::Script::initClass(void) { sType = av::Type::createAbstractType(av::FieldContainer::getClassTypeId(), "av::script::_Script", true); }
 
 /*virtual*/ void av::script::Script::refImpl()
 {
-  if (mIsFloatingRef)
-  {
-    mIsFloatingRef = false;
-  }
-  else
-  {
-    Py_INCREF(mSelf);
-  }
+    if(mIsFloatingRef)
+    {
+        mIsFloatingRef = false;
+    }
+    else
+    {
+        Py_INCREF(mSelf);
+    }
 }
 
-/*virtual*/ void av::script::Script::unrefImpl()
-{
-  Py_DECREF(mSelf);
-}
+/*virtual*/ void av::script::Script::unrefImpl() { Py_DECREF(mSelf); }
 
 /*virtual*/ void av::script::Script::unrefWithoutDeletionImpl()
 {
-  // TODO fixme
+    // TODO fixme
 }
 
 /*virtual*/ int av::script::Script::refCountImpl()
 {
-  // TODO fixme
-  return 42;
+    // TODO fixme
+    return 42;
 }
 
 /*virtual*/ void av::script::Script::setFloatingRefImpl()
 {
-  Py_INCREF(mSelf);
-  mIsFloatingRef = true;
+    Py_INCREF(mSelf);
+    mIsFloatingRef = true;
 }
 
 /*virtual*/ void av::script::Script::evaluate()
 {
-  try
-  {
-    call_method<void>(mSelf, "evaluate");
-  }
-  catch(...)
-  {
-    handle_exception();
-  }
+    try
+    {
+        call_method<void>(mSelf, "evaluate");
+    }
+    catch(...)
+    {
+        handle_exception();
+    }
 }
 
 /*virtual*/ void av::script::Script::fieldHasChanged(const Field& field)
 {
-  if (mHasFieldHasChangedEnabled)
-    call_method<void>(mSelf, "_Script__fieldHasChanged", boost::ref(field));
+    if(mHasFieldHasChangedEnabled)
+        call_method<void>(mSelf, "_Script__fieldHasChanged", boost::ref(field));
 }
 
-void av::script::Script::enableFieldHasChanged(void)
-{
-  mHasFieldHasChangedEnabled = true;
-}
+void av::script::Script::enableFieldHasChanged(void) { mHasFieldHasChangedEnabled = true; }
 
-PyObject* av::script::Script::getSelf(void) const
-{
-  return mSelf;
-}
+PyObject* av::script::Script::getSelf(void) const { return mSelf; }
 
-void av::script::Script::register_exception_handler(object handler)
-{
-  sHandler = handler;
-}
+void av::script::Script::register_exception_handler(object handler) { sHandler = handler; }
 
 void av::script::Script::handle_exception(void)
 {
-  // TODO This was called during method invocation or fieldHasChanged
-  // callbacks. See if this still applies. Otherwise remove.
-  if (!sHandler)
-    throw_error_already_set();
+    // TODO This was called during method invocation or fieldHasChanged
+    // callbacks. See if this still applies. Otherwise remove.
+    if(!sHandler)
+        throw_error_already_set();
 
-  PyObject* type;
-  PyObject* value;
-  PyObject* traceback;
-  PyErr_Fetch(&type, &value, &traceback);
+    PyObject* type;
+    PyObject* value;
+    PyObject* traceback;
+    PyErr_Fetch(&type, &value, &traceback);
 
-  sHandler(handle<>(type), handle<>(value), handle<>(traceback));
+    sHandler(handle<>(type), handle<>(value), handle<>(traceback));
 }
-
 
 namespace
 {
-  class ScriptCreator : public av::Create
-  {
+class ScriptCreator : public av::Create
+{
   public:
-
-    ScriptCreator(object creator) :
-      mCreator(creator)
-    {
-    }
+    ScriptCreator(object creator) : mCreator(creator) {}
 
     /*virtual*/ av::Typed* makeInstance() const
     {
-      object sc(mCreator());
-      av::Link<av::script::Script> script((extract<av::script::Script*>(sc)()));
-      script->setFloatingReference();
-      return script.getBasePtr();
+        object sc(mCreator());
+        av::Link<av::script::Script> script((extract<av::script::Script*>(sc)()));
+        script->setFloatingReference();
+        return script.getBasePtr();
     }
 
   private:
     object mCreator;
-  };
+};
 
-  av::Type create_type(const std::string& name, object creator)
-  {
+av::Type create_type(const std::string& name, object creator)
+{
     ScriptCreator* script_creator = new ScriptCreator(creator);
     av::Type type = av::Type::createType(av::script::Script::getClassTypeId(), name, script_creator, true);
     return type;
-  }
+}
 
-  struct ScriptLinkConverter
-  {
+struct ScriptLinkConverter
+{
     static PyObject* convert(av::Link<av::script::Script> const& script)
     {
-      PyObject* result(script->getSelf());
-      Py_INCREF(result);
-      return result;
+        PyObject* result(script->getSelf());
+        Py_INCREF(result);
+        return result;
     }
     static PyObject* convert(av::script::Script const& script)
     {
-      PyObject* result(script.getSelf());
-      Py_INCREF(result);
-      return result;
+        PyObject* result(script.getSelf());
+        Py_INCREF(result);
+        return result;
     }
-  };
+};
 
-}
+} // namespace
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-    template <> struct has_back_reference<av::script::Script>
-      : mpl::true_
-    {
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+template <>
+struct has_back_reference<av::script::Script> : mpl::true_
+{
+};
+} // namespace python
+} // namespace boost
 
 namespace
 {
-  int num_py_references(av::script::Script* self)
-  {
-    PyObject * sys = PyImport_ImportModule("sys");
-    //PyObject * method = PyString_FromString("getrefcount");
-    PyObject * method = PyUnicode_FromString("getrefcount");
-    PyObject * result = PyObject_CallMethodObjArgs(sys, method, self->getSelf(), NULL);
-    //int res = (int)PyInt_AsLong(result);
+int num_py_references(av::script::Script* self)
+{
+    PyObject* sys = PyImport_ImportModule("sys");
+    // PyObject * method = PyString_FromString("getrefcount");
+    PyObject* method = PyUnicode_FromString("getrefcount");
+    PyObject* result = PyObject_CallMethodObjArgs(sys, method, self->getSelf(), NULL);
+    // int res = (int)PyInt_AsLong(result);
     int res = (int)PyLong_AsLong(result);
     if(PyErr_Occurred())
-      return -1;
+        return -1;
     else
-      return res;
-  }
+        return res;
 }
+} // namespace
 
 void av::script::register_script(void)
 {
-  av::FieldContainer::initClass();
-  Script::initClass();
+    av::FieldContainer::initClass();
+    Script::initClass();
 
-  def("_create_type", create_type);
-  def("register_exception_handler", &Script::register_exception_handler);
+    def("_create_type", create_type);
+    def("register_exception_handler", &Script::register_exception_handler);
 
-  class_<Script, bases<av::FieldContainer>, boost::noncopyable>
-    ("_Script", "Internal base class for Script nodes", init<av::Type>())
-    .def("_Script__enable_field_has_changed", &Script::enableFieldHasChanged)
-    .def("reference_count", num_py_references)
-    ;
+    class_<Script, bases<av::FieldContainer>, boost::noncopyable>("_Script", "Internal base class for Script nodes", init<av::Type>())
+        .def("_Script__enable_field_has_changed", &Script::enableFieldHasChanged)
+        .def("reference_count", num_py_references);
 
-  class_<av::Type>("_Type");
+    class_<av::Type>("_Type");
 
-  to_python_converter<av::Link<Script>, ScriptLinkConverter>();
-  to_python_converter<Script, ScriptLinkConverter>();
+    to_python_converter<av::Link<Script>, ScriptLinkConverter>();
+    to_python_converter<Script, ScriptLinkConverter>();
 }

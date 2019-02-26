@@ -15,53 +15,48 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::TexturedScreenSpaceQuadPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL TexturedScreenSpaceQuadPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::TexturedScreenSpaceQuadPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::TexturedScreenSpaceQuadPassDescription is created.
+     * Otherwise, the given ::gua::TexturedScreenSpaceQuadPassDescription is used.
      */
-    class AV_GUA_DLL TexturedScreenSpaceQuadPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    TexturedScreenSpaceQuadPassDescription(std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription> const& TexturedScreenSpaceQuadPassDescription =
+                                               std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription>(new ::gua::TexturedScreenSpaceQuadPassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::TexturedScreenSpaceQuadPassDescription.
+     */
+    std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription> const& getGuaTexturedScreenSpaceQuadPassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::TexturedScreenSpaceQuadPassDescription is created.
-       * Otherwise, the given ::gua::TexturedScreenSpaceQuadPassDescription is used.
-       */
-      TexturedScreenSpaceQuadPassDescription(std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription> const& TexturedScreenSpaceQuadPassDescription =
-                                std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription>(new ::gua::TexturedScreenSpaceQuadPassDescription()) );
+  private:
+    std::shared_ptr<::gua::TexturedScreenSpaceQuadPassDescription> m_guaTexturedScreenSpaceQuadPassDescription;
 
+    TexturedScreenSpaceQuadPassDescription(const TexturedScreenSpaceQuadPassDescription&);
+    TexturedScreenSpaceQuadPassDescription& operator=(const TexturedScreenSpaceQuadPassDescription&);
+};
 
-    public:
+using SFTexturedScreenSpaceQuadPassDescription = SingleField<Link<TexturedScreenSpaceQuadPassDescription>>;
+using MFTexturedScreenSpaceQuadPassDescription = MultiField<Link<TexturedScreenSpaceQuadPassDescription>>;
 
-      /**
-       * Get the wrapped ::gua::TexturedScreenSpaceQuadPassDescription.
-       */
-      std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription> const& getGuaTexturedScreenSpaceQuadPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::TexturedScreenSpaceQuadPassDescription> m_guaTexturedScreenSpaceQuadPassDescription;
-
-
-      TexturedScreenSpaceQuadPassDescription(const TexturedScreenSpaceQuadPassDescription&);
-      TexturedScreenSpaceQuadPassDescription& operator=(const TexturedScreenSpaceQuadPassDescription&);
-    };
-
-    using SFTexturedScreenSpaceQuadPassDescription = SingleField<Link<TexturedScreenSpaceQuadPassDescription> >;
-    using MFTexturedScreenSpaceQuadPassDescription = MultiField<Link<TexturedScreenSpaceQuadPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TexturedScreenSpaceQuadPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TexturedScreenSpaceQuadPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::TexturedScreenSpaceQuadPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::TexturedScreenSpaceQuadPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_TEXTURED_SCREEN_SPACE_QUAD_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_TEXTURED_SCREEN_SPACE_QUAD_PASS_DESCRIPTION_HPP

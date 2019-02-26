@@ -48,19 +48,19 @@ using namespace boost::python;
 
 namespace
 {
-  class EvaluateCallback : public osg::NodeCallback
-  {
-    /*virtual*/ void operator() (osg::Node *node, osg::NodeVisitor *nv)
+class EvaluateCallback : public osg::NodeCallback
+{
+    /*virtual*/ void operator()(osg::Node* node, osg::NodeVisitor* nv)
     {
-      av::ApplicationInstance::get().evaluate();
-      traverse(node,nv);
+        av::ApplicationInstance::get().evaluate();
+        traverse(node, nv);
     }
-  };
+};
 
-  osg::ref_ptr<osgViewer::Viewer> viewer(0);
+osg::ref_ptr<osgViewer::Viewer> viewer(0);
 
-  void setupViewer(osgViewer::Viewer* viewer, av::osg::Node* root)
-  {
+void setupViewer(osgViewer::Viewer* viewer, av::osg::Node* root)
+{
     // camera manipulator
     viewer->setCameraManipulator(new osgGA::TrackballManipulator());
 
@@ -91,78 +91,68 @@ namespace
 
     // add Avango root not to our root
     viewer_root->addChild(root->getOsgNode());
-  }
+}
 
-  class EmbeddedViewer
-  {
+class EmbeddedViewer
+{
   public:
-
     EmbeddedViewer(av::osg::Node* root, int x, int y, int width, int height)
     {
-      mViewer = new osgViewer::Viewer;
-      mViewer->setSceneData(root->getOsgNode());
-      mGraphicsWindow = mViewer->setUpViewerAsEmbeddedInWindow (x, y, width, height);
+        mViewer = new osgViewer::Viewer;
+        mViewer->setSceneData(root->getOsgNode());
+        mGraphicsWindow = mViewer->setUpViewerAsEmbeddedInWindow(x, y, width, height);
     }
 
     void resized(int x, int y, int width, int height)
     {
-      if (!mGraphicsWindow)
-        return;
+        if(!mGraphicsWindow)
+            return;
 
-      mGraphicsWindow->resized(x, y, width, height);
+        mGraphicsWindow->resized(x, y, width, height);
     }
 
-    void frame(void)
-    {
-      mViewer->frame();
-    }
+    void frame(void) { mViewer->frame(); }
 
   private:
     osg::ref_ptr<osgViewer::Viewer> mViewer;
     osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> mGraphicsWindow;
-  };
-}
+};
+} // namespace
 
 void run(av::osg::Node* root)
 {
-  viewer = new osgViewer::Viewer;
-  setupViewer(viewer.get(), root);
-  EvaluateCallback* ec = new EvaluateCallback();
-  viewer->getSceneData()->setUpdateCallback(ec);
-  viewer->run();
+    viewer = new osgViewer::Viewer;
+    setupViewer(viewer.get(), root);
+    EvaluateCallback* ec = new EvaluateCallback();
+    viewer->getSceneData()->setUpdateCallback(ec);
+    viewer->run();
 }
 
 void realize(av::osg::Node* root)
 {
-  viewer = new osgViewer::Viewer;
-  setupViewer(viewer.get(), root);
-  EvaluateCallback* ec = new EvaluateCallback();
-  viewer->getSceneData()->setUpdateCallback(ec);
-  viewer->realize();
+    viewer = new osgViewer::Viewer;
+    setupViewer(viewer.get(), root);
+    EvaluateCallback* ec = new EvaluateCallback();
+    viewer->getSceneData()->setUpdateCallback(ec);
+    viewer->realize();
 }
 
 void frame()
 {
-  if (viewer.valid() && !viewer->done())
-  {
-    viewer->frame();
-  }
+    if(viewer.valid() && !viewer->done())
+    {
+        viewer->frame();
+    }
 }
 
-bool done()
-{
-  return viewer->done();
-}
+bool done() { return viewer->done(); }
 
 BOOST_PYTHON_MODULE(_simpleviewer)
 {
-  def("run", run);
-  def("realize", realize);
-  def("frame", frame);
-  def("done", done);
+    def("run", run);
+    def("realize", realize);
+    def("frame", frame);
+    def("done", done);
 
-  class_<EmbeddedViewer>("EmbeddedViewer", init<av::osg::Node*, int, int, int, int>())
-    .def("resized", &EmbeddedViewer::resized)
-    .def("frame", &EmbeddedViewer::frame)
-    ;
+    class_<EmbeddedViewer>("EmbeddedViewer", init<av::osg::Node*, int, int, int, int>()).def("resized", &EmbeddedViewer::resized).def("frame", &EmbeddedViewer::frame);
 }

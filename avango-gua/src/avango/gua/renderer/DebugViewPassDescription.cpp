@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::DebugViewPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::DebugViewPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::DebugViewPassDescription);
@@ -14,16 +14,14 @@ AV_FC_DEFINE(av::gua::DebugViewPassDescription);
 AV_FIELD_DEFINE(av::gua::SFDebugViewPassDescription);
 AV_FIELD_DEFINE(av::gua::MFDebugViewPassDescription);
 
-av::gua::DebugViewPassDescription::DebugViewPassDescription(
-  std::shared_ptr< ::gua::DebugViewPassDescription> const& guaDebugViewPassDescription)
-    : PipelinePassDescription(guaDebugViewPassDescription)
-    , m_guaDebugViewPassDescription(guaDebugViewPassDescription)
-{}
-
-void
-av::gua::DebugViewPassDescription::initClass()
+av::gua::DebugViewPassDescription::DebugViewPassDescription(std::shared_ptr<::gua::DebugViewPassDescription> const& guaDebugViewPassDescription)
+    : PipelinePassDescription(guaDebugViewPassDescription), m_guaDebugViewPassDescription(guaDebugViewPassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::DebugViewPassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -35,10 +33,4 @@ av::gua::DebugViewPassDescription::initClass()
     }
 }
 
-std::shared_ptr< ::gua::DebugViewPassDescription> const&
-av::gua::DebugViewPassDescription::getGuaDebugViewPassDescription() const
-{
-    return m_guaDebugViewPassDescription;
-}
-
-
+std::shared_ptr<::gua::DebugViewPassDescription> const& av::gua::DebugViewPassDescription::getGuaDebugViewPassDescription() const { return m_guaDebugViewPassDescription; }

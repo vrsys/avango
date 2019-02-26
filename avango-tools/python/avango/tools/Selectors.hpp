@@ -3,4 +3,4 @@
 
 void init_Selectors();
 
-#endif //AV_PYTHON_TOOLS_SELECTORS_HPP
+#endif // AV_PYTHON_TOOLS_SELECTORS_HPP

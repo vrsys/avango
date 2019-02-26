@@ -38,83 +38,78 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Billboard OsgBillboard;
+namespace osg
+{
+typedef ::osg::Billboard OsgBillboard;
+
+/**
+ * Wrapper for ::osg::Billboard
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Billboard : public Geode
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Billboard is created.
+     * Otherwise, the given ::osg::Billboard is used.
+     */
+    Billboard(OsgBillboard* osgbillboard = new OsgBillboard());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Billboard();
+
+  public:
+    /**
+     * Billboard-modes:
+     * 0 = POINT_ROT_EYE,
+     * 1 = POINT_ROT_WORLD,
+     * 2 = AXIAL_ROT
+     */
+    SFUInt Mode;
 
     /**
-     * Wrapper for ::osg::Billboard
-     *
-     * \ingroup av_osg
+     * Axis to rotate around. Used with AXIAL_ROT
      */
-    class AV_OSG_DLL Billboard : public Geode
-    {
-      AV_FC_DECLARE();
+    SFVec3 Axis;
 
-    public:
+    /**
+     * Normal of geometry that should be aligned with viewing direction
+     */
+    SFVec3 Normal;
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Billboard is created.
-       * Otherwise, the given ::osg::Billboard is used.
-       */
-      Billboard(OsgBillboard* osgbillboard = new OsgBillboard());
-      // use defined type to circumvent compiler bug in VS8
+    /**
+     * Get the wrapped ::osg::Geometry.
+     */
+    OsgBillboard* getOsgBillboard() const;
 
-    protected:
+  protected:
+    virtual void getModeCB(const SFUInt::GetValueEvent& event);
+    virtual void setModeCB(const SFUInt::SetValueEvent& event);
+    virtual void getAxisCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setAxisCB(const av::osg::SFVec3::SetValueEvent& event);
+    virtual void getNormalCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setNormalCB(const av::osg::SFVec3::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Billboard();
+  private:
+    OsgBillboard* mOsgBillboard;
+};
 
-    public:
-
-      /**
-       * Billboard-modes:
-       * 0 = POINT_ROT_EYE,
-       * 1 = POINT_ROT_WORLD,
-       * 2 = AXIAL_ROT
-       */
-      SFUInt Mode;
-
-      /**
-       * Axis to rotate around. Used with AXIAL_ROT
-       */
-      SFVec3 Axis;
-
-      /**
-       * Normal of geometry that should be aligned with viewing direction
-       */
-      SFVec3 Normal;
-
-      /**
-       * Get the wrapped ::osg::Geometry.
-       */
-      OsgBillboard* getOsgBillboard() const;
-
-    protected:
-
-      virtual void getModeCB(const SFUInt::GetValueEvent& event);
-      virtual void setModeCB(const SFUInt::SetValueEvent& event);
-      virtual void getAxisCB(const av::osg::SFVec3::GetValueEvent& event);
-      virtual void setAxisCB(const av::osg::SFVec3::SetValueEvent& event);
-      virtual void getNormalCB(const av::osg::SFVec3::GetValueEvent& event);
-      virtual void setNormalCB(const av::osg::SFVec3::SetValueEvent& event);
-
-    private:
-
-      OsgBillboard *mOsgBillboard;
-    };
-
-    typedef SingleField<Link<Billboard> > SFBillboard;
-    typedef MultiField<Link<Billboard> > MFBillboard;
-  }
+typedef SingleField<Link<Billboard>> SFBillboard;
+typedef MultiField<Link<Billboard>> MFBillboard;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Billboard> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Billboard> >;
+template class AV_OSG_DLL SingleField<Link<osg::Billboard>>;
+template class AV_OSG_DLL MultiField<Link<osg::Billboard>>;
 #endif
 
-}
+} // namespace av
 
 #endif

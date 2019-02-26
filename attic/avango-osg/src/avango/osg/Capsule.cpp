@@ -33,115 +33,100 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Capsule"));
+av::Logger& logger(av::getLogger("av::osg::Capsule"));
 }
 
 AV_FC_DEFINE(av::osg::Capsule);
 AV_FIELD_DEFINE(av::osg::SFCapsule);
 AV_FIELD_DEFINE(av::osg::MFCapsule);
 
-av::osg::Capsule::Capsule() :
-  MatrixTransform(),
-  mGeode(new ::osg::Geode),
-  mRadiusChanged(false),
-  mHeightChanged(false)
+av::osg::Capsule::Capsule() : MatrixTransform(), mGeode(new ::osg::Geode), mRadiusChanged(false), mHeightChanged(false)
 {
-  AV_FC_ADD_FIELD(Radius, 1.0f);
-  AV_FC_ADD_FIELD(Height, 1.0f);
-  
-  AV_FC_ADD_FIELD(Color, ::osg::Vec4(1, 1, 1, 1));
+    AV_FC_ADD_FIELD(Radius, 1.0f);
+    AV_FC_ADD_FIELD(Height, 1.0f);
 
-  mCapsule = new ::osg::Capsule(::osg::Vec3(), Radius.getValue(), Height.getValue());
+    AV_FC_ADD_FIELD(Color, ::osg::Vec4(1, 1, 1, 1));
 
-  mShapeDrawable = new ::osg::ShapeDrawable(mCapsule.get());
-  mShapeDrawable.get()->setColor(Color.getValue());
+    mCapsule = new ::osg::Capsule(::osg::Vec3(), Radius.getValue(), Height.getValue());
 
-  mGeode.get()->addDrawable(mShapeDrawable.get());
-
-  getOsgMatrixTransform()->addChild(mGeode.get());
-}
-
-av::osg::Capsule::~Capsule()
-{}
-
-void
-av::osg::Capsule::initClass()
-{
-  if (!isTypeInitialized())
-  {
-    av::osg::MatrixTransform::initClass();
-
-    AV_FC_INIT(av::osg::MatrixTransform, av::osg::Capsule, true);
-
-    SFCapsule::initClass("av::osg::SFCapsule", "av::Field");
-    MFCapsule::initClass("av::osg::MFCapsule", "av::Field");
-  }
-}
-
-
-/* virtual */ void
-av::osg::Capsule::fieldHasChangedLocalSideEffect(const av::Field& field)
-{
-  MatrixTransform::fieldHasChangedLocalSideEffect(field);
-  AVANGO_LOG(logger, av::logging::TRACE, "fieldHasChangedLocalSideEffect()");
-
-  if (&field == &Radius)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Radius changed to %1%") % Radius.getValue()));
-    mRadiusChanged = true;
-  }
-
-  if (&field == &Height)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Height changed to %1%") % Height.getValue()));
-    mHeightChanged = true;
-  }
-
-  if (&field == &Color)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Color changed to %1%") % &Color.getValue()));
-    mColorChanged = true;
-  }
-}
-
-/* virtual */ void
-av::osg::Capsule::evaluateLocalSideEffect()
-{
-  MatrixTransform::evaluateLocalSideEffect();
-  LOG_TRACE(logger) << "evaluateLocalSideEffect()";
-
-  if (mHeightChanged)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new height %1%") % Height.getValue()));
-    mCapsule->setHeight(Height.getValue());
-    mShapeDrawable->dirtyDisplayList();
-    mShapeDrawable->dirtyBound();
-    mHeightChanged = false;
-  }
-
-  if (mRadiusChanged)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new radius %1%") % Radius.getValue()));
-    mCapsule->setRadius(Radius.getValue());
-    mShapeDrawable->dirtyDisplayList();
-    mShapeDrawable->dirtyBound();
-    mRadiusChanged = false;
-  }
-
-  if (mColorChanged)
-  {
-    AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new Color %1%") % &Color.getValue()));
+    mShapeDrawable = new ::osg::ShapeDrawable(mCapsule.get());
     mShapeDrawable.get()->setColor(Color.getValue());
-    mColorChanged = false;
-  }
+
+    mGeode.get()->addDrawable(mShapeDrawable.get());
+
+    getOsgMatrixTransform()->addChild(mGeode.get());
 }
 
-::osg::ref_ptr< ::osg::Capsule >
-av::osg::Capsule::getOsgCapsule() const {
-  return mCapsule;
+av::osg::Capsule::~Capsule() {}
+
+void av::osg::Capsule::initClass()
+{
+    if(!isTypeInitialized())
+    {
+        av::osg::MatrixTransform::initClass();
+
+        AV_FC_INIT(av::osg::MatrixTransform, av::osg::Capsule, true);
+
+        SFCapsule::initClass("av::osg::SFCapsule", "av::Field");
+        MFCapsule::initClass("av::osg::MFCapsule", "av::Field");
+    }
 }
 
-::osg::ref_ptr< ::osg::ShapeDrawable >
-av::osg::Capsule::getOsgShapeDrawable() const {
-  return mShapeDrawable;
+/* virtual */ void av::osg::Capsule::fieldHasChangedLocalSideEffect(const av::Field& field)
+{
+    MatrixTransform::fieldHasChangedLocalSideEffect(field);
+    AVANGO_LOG(logger, av::logging::TRACE, "fieldHasChangedLocalSideEffect()");
+
+    if(&field == &Radius)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Radius changed to %1%") % Radius.getValue()));
+        mRadiusChanged = true;
+    }
+
+    if(&field == &Height)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Height changed to %1%") % Height.getValue()));
+        mHeightChanged = true;
+    }
+
+    if(&field == &Color)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fieldHadChangedLocalSideEffect(): Color changed to %1%") % &Color.getValue()));
+        mColorChanged = true;
+    }
 }
+
+/* virtual */ void av::osg::Capsule::evaluateLocalSideEffect()
+{
+    MatrixTransform::evaluateLocalSideEffect();
+    LOG_TRACE(logger) << "evaluateLocalSideEffect()";
+
+    if(mHeightChanged)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new height %1%") % Height.getValue()));
+        mCapsule->setHeight(Height.getValue());
+        mShapeDrawable->dirtyDisplayList();
+        mShapeDrawable->dirtyBound();
+        mHeightChanged = false;
+    }
+
+    if(mRadiusChanged)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new radius %1%") % Radius.getValue()));
+        mCapsule->setRadius(Radius.getValue());
+        mShapeDrawable->dirtyDisplayList();
+        mShapeDrawable->dirtyBound();
+        mRadiusChanged = false;
+    }
+
+    if(mColorChanged)
+    {
+        AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("evaluateLocalSideEffect(): got new Color %1%") % &Color.getValue()));
+        mShapeDrawable.get()->setColor(Color.getValue());
+        mColorChanged = false;
+    }
+}
+
+::osg::ref_ptr<::osg::Capsule> av::osg::Capsule::getOsgCapsule() const { return mCapsule; }
+
+::osg::ref_ptr<::osg::ShapeDrawable> av::osg::Capsule::getOsgShapeDrawable() const { return mShapeDrawable; }

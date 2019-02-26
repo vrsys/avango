@@ -29,65 +29,65 @@ using namespace shade::parser;
 
 SUITE(TestValue)
 {
-  TEST(TestEqualValueComparison)
-  {
-    ReferenceValue a(1);
-    ReferenceValue b(1);
+    TEST(TestEqualValueComparison)
+    {
+        ReferenceValue a(1);
+        ReferenceValue b(1);
 
-    CHECK(!(a < b));
-    CHECK(!(b < a));
-  }
+        CHECK(!(a < b));
+        CHECK(!(b < a));
+    }
 
-  TEST(TestUnequalValueComparison)
-  {
-    ReferenceValue a(1);
-    ReferenceValue b(2);
+    TEST(TestUnequalValueComparison)
+    {
+        ReferenceValue a(1);
+        ReferenceValue b(2);
 
-    CHECK(a < b);
-    CHECK(!(b < a));
-  }
+        CHECK(a < b);
+        CHECK(!(b < a));
+    }
 
-  TEST(TestDifferentValueTypesComparison)
-  {
-    ReferenceValue a(1);
-    Value b;
+    TEST(TestDifferentValueTypesComparison)
+    {
+        ReferenceValue a(1);
+        Value b;
 
-    CHECK((a < b) || (b < a));
-  }
+        CHECK((a < b) || (b < a));
+    }
 
-  TEST(TestEqualValueListComparison)
-  {
-    boost::shared_ptr<ReferenceValue> a1(new ReferenceValue(1));
-    boost::shared_ptr<ReferenceValue> a2(new ReferenceValue(2));
-    ValueList pl1;
-    pl1.add(a1);
-    pl1.add(a2);
+    TEST(TestEqualValueListComparison)
+    {
+        boost::shared_ptr<ReferenceValue> a1(new ReferenceValue(1));
+        boost::shared_ptr<ReferenceValue> a2(new ReferenceValue(2));
+        ValueList pl1;
+        pl1.add(a1);
+        pl1.add(a2);
 
-    boost::shared_ptr<ReferenceValue> b1(new ReferenceValue(1));
-    boost::shared_ptr<ReferenceValue> b2(new ReferenceValue(2));
-    ValueList pl2;
-    pl2.add(b1);
-    pl2.add(b2);
+        boost::shared_ptr<ReferenceValue> b1(new ReferenceValue(1));
+        boost::shared_ptr<ReferenceValue> b2(new ReferenceValue(2));
+        ValueList pl2;
+        pl2.add(b1);
+        pl2.add(b2);
 
-    CHECK(!(pl1 < pl2));
-    CHECK(!(pl2 < pl1));
-  }
+        CHECK(!(pl1 < pl2));
+        CHECK(!(pl2 < pl1));
+    }
 
-  TEST(TestUnequalValueListComparison)
-  {
-    boost::shared_ptr<ReferenceValue> a1(new ReferenceValue(1));
-    boost::shared_ptr<ReferenceValue> a2(new ReferenceValue(1));
-    ValueList pl1;
-    pl1.add(a1);
-    pl1.add(a2);
+    TEST(TestUnequalValueListComparison)
+    {
+        boost::shared_ptr<ReferenceValue> a1(new ReferenceValue(1));
+        boost::shared_ptr<ReferenceValue> a2(new ReferenceValue(1));
+        ValueList pl1;
+        pl1.add(a1);
+        pl1.add(a2);
 
-    boost::shared_ptr<ReferenceValue> b1(new ReferenceValue(1));
-    boost::shared_ptr<ReferenceValue> b2(new ReferenceValue(2));
-    ValueList pl2;
-    pl2.add(b1);
-    pl2.add(b2);
+        boost::shared_ptr<ReferenceValue> b1(new ReferenceValue(1));
+        boost::shared_ptr<ReferenceValue> b2(new ReferenceValue(2));
+        ValueList pl2;
+        pl2.add(b1);
+        pl2.add(b2);
 
-    CHECK(pl1 < pl2);
-    CHECK(!(pl2 < pl1));
-  }
+        CHECK(pl1 < pl2);
+        CHECK(!(pl2 < pl1));
+    }
 }

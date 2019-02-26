@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_AUTOTRANSFORM
 #define AV_PYTHON_OSG_AUTOTRANSFORM
 

@@ -28,15 +28,13 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
+class Shader;
+class AttributeType;
 
-  class Shader;
-  class AttributeType;
-
-  class AttributeAccessor
-  {
+class AttributeAccessor
+{
   public:
     AttributeAccessor(void);
     AttributeAccessor(boost::shared_ptr<AttributeType> impl, const std::string& name);
@@ -48,44 +46,36 @@ namespace shade
   private:
     boost::shared_ptr<AttributeType> m_impl;
     std::string m_name;
-  };
+};
 
-
-  class AttributeType
-  {
+class AttributeType
+{
   public:
     virtual ~AttributeType(void) {}
     virtual const Type& get_type(const Shader* obj) const = 0;
     virtual Type* get_public_type(Shader* obj) const = 0;
-  };
+};
 
-  template<class Base, class T>
-    class AttributeType_impl : public AttributeType
-  {
+template <class Base, class T>
+class AttributeType_impl : public AttributeType
+{
   public:
-    AttributeType_impl(T Base::* mem, bool public_ = false) :
-      m_mem(mem),
-      m_public(public_)
-    {
-    }
+    AttributeType_impl(T Base::*mem, bool public_ = false) : m_mem(mem), m_public(public_) {}
 
-    /*virtual*/ const Type& get_type(const Shader* obj) const
-    {
-      return dynamic_cast<const Base*>(obj)->*m_mem;
-    }
+    /*virtual*/ const Type& get_type(const Shader* obj) const { return dynamic_cast<const Base*>(obj)->*m_mem; }
 
     /*virtual*/ Type* get_public_type(Shader* obj) const
     {
-      if (!m_public)
-        return 0;
-      return &(dynamic_cast<Base*>(obj)->*m_mem);
+        if(!m_public)
+            return 0;
+        return &(dynamic_cast<Base*>(obj)->*m_mem);
     }
 
   private:
-    T Base::* m_mem;
+    T Base::*m_mem;
     bool m_public;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_AttributeAccessor_H */

@@ -26,31 +26,19 @@
 
 using namespace shade::parser;
 
-Scope::Scope(const ScopeLayer& global) :
-  m_global(global)
-{
-}
+Scope::Scope(const ScopeLayer& global) : m_global(global) {}
 
-void shade::parser::Scope::add_value(const std::string& var, boost::shared_ptr<const Value> value)
-{
-  m_local.add_value(var, value);
-}
+void shade::parser::Scope::add_value(const std::string& var, boost::shared_ptr<const Value> value) { m_local.add_value(var, value); }
 
 boost::shared_ptr<const Value> shade::parser::Scope::get_value(const std::string& var) const
 {
-  boost::shared_ptr<const Value> result(m_local.get_raw_value(var));
-  if (result)
-    return result;
+    boost::shared_ptr<const Value> result(m_local.get_raw_value(var));
+    if(result)
+        return result;
 
-  return m_global.get_value(var);
+    return m_global.get_value(var);
 }
 
-const ScopeLayer& shade::parser::Scope::get_global(void) const
-{
-  return m_global;
-}
+const ScopeLayer& shade::parser::Scope::get_global(void) const { return m_global; }
 
-const ScopeLayer& shade::parser::Scope::get_local(void) const
-{
-  return m_local;
-}
+const ScopeLayer& shade::parser::Scope::get_local(void) const { return m_local; }

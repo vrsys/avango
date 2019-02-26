@@ -1,16 +1,15 @@
 #include "Checks.h"
 #include <cstring>
 
-namespace UnitTest {
-
-namespace {
-
-void CheckStringsEqual(TestResults& results, char const* expected, char const* actual, 
-                       TestDetails const& details)
+namespace UnitTest
 {
-	using namespace std;
+namespace
+{
+void CheckStringsEqual(TestResults& results, char const* expected, char const* actual, TestDetails const& details)
+{
+    using namespace std;
 
-    if (strcmp(expected, actual))
+    if(strcmp(expected, actual))
     {
         UnitTest::MemoryOutStream stream;
         stream << "Expected " << expected << " but was " << actual;
@@ -19,32 +18,14 @@ void CheckStringsEqual(TestResults& results, char const* expected, char const* a
     }
 }
 
-}
+} // namespace
 
+void CheckEqual(TestResults& results, char const* expected, char const* actual, TestDetails const& details) { CheckStringsEqual(results, expected, actual, details); }
 
-void CheckEqual(TestResults& results, char const* expected, char const* actual,
-                TestDetails const& details)
-{
-    CheckStringsEqual(results, expected, actual, details);
-}
+void CheckEqual(TestResults& results, char* expected, char* actual, TestDetails const& details) { CheckStringsEqual(results, expected, actual, details); }
 
-void CheckEqual(TestResults& results, char* expected, char* actual,
-                TestDetails const& details)
-{
-    CheckStringsEqual(results, expected, actual, details);
-}
+void CheckEqual(TestResults& results, char* expected, char const* actual, TestDetails const& details) { CheckStringsEqual(results, expected, actual, details); }
 
-void CheckEqual(TestResults& results, char* expected, char const* actual,
-                TestDetails const& details)
-{
-    CheckStringsEqual(results, expected, actual, details);
-}
+void CheckEqual(TestResults& results, char const* expected, char* actual, TestDetails const& details) { CheckStringsEqual(results, expected, actual, details); }
 
-void CheckEqual(TestResults& results, char const* expected, char* actual,
-                TestDetails const& details)
-{
-    CheckStringsEqual(results, expected, actual, details);
-}
-
-
-}
+} // namespace UnitTest

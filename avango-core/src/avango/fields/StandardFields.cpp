@@ -51,29 +51,29 @@ AV_FIELD_DEFINE(av::MFString)
 
 void av::initStandardFields()
 {
-  av::Field::initClass();
+    av::Field::initClass();
 
-  av::SFBool::initClass("av::SFBool", "av::Field");
-  av::MFBool::initClass("av::MFBool", "av::Field");
+    av::SFBool::initClass("av::SFBool", "av::Field");
+    av::MFBool::initClass("av::MFBool", "av::Field");
 
-  av::SFDouble::initClass("av::SFDouble", "av::Field");
-  av::MFDouble::initClass("av::MFDouble", "av::Field");
+    av::SFDouble::initClass("av::SFDouble", "av::Field");
+    av::MFDouble::initClass("av::MFDouble", "av::Field");
 
-  av::SFFloat::initClass("av::SFFloat", "av::Field");
-  av::MFFloat::initClass("av::MFFloat", "av::Field");
+    av::SFFloat::initClass("av::SFFloat", "av::Field");
+    av::MFFloat::initClass("av::MFFloat", "av::Field");
 
-  av::SFInt::initClass("av::SFInt", "av::Field");
-  av::MFInt::initClass("av::MFInt", "av::Field");
+    av::SFInt::initClass("av::SFInt", "av::Field");
+    av::MFInt::initClass("av::MFInt", "av::Field");
 
-  av::SFLong::initClass("av::SFLong", "av::Field");
-  av::MFLong::initClass("av::MFLong", "av::Field");
+    av::SFLong::initClass("av::SFLong", "av::Field");
+    av::MFLong::initClass("av::MFLong", "av::Field");
 
-  av::SFUInt::initClass("av::SFUInt", "av::Field");
-  av::MFUInt::initClass("av::MFUInt", "av::Field");
+    av::SFUInt::initClass("av::SFUInt", "av::Field");
+    av::MFUInt::initClass("av::MFUInt", "av::Field");
 
-  av::SFULong::initClass("av::SFULong", "av::Field");
-  av::MFULong::initClass("av::MFULong", "av::Field");
+    av::SFULong::initClass("av::SFULong", "av::Field");
+    av::MFULong::initClass("av::MFULong", "av::Field");
 
-  av::SFString::initClass("av::SFString", "av::Field");
-  av::MFString::initClass("av::MFString", "av::Field");
+    av::SFString::initClass("av::SFString", "av::Field");
+    av::MFString::initClass("av::MFString", "av::Field");
 }

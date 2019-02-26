@@ -28,64 +28,54 @@
 
 namespace
 {
-  class MatrixGetter
-  {
+class MatrixGetter
+{
   public:
-
-    MatrixGetter(shade::types::Matrix4Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    MatrixGetter(shade::types::Matrix4Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFMatrix::GetValueEvent& event)
     {
-      float values[16];
-      mAccessor->get(values);
-      ::osg::Matrix result(values);
-      *event.getValuePtr() = result;
+        float values[16];
+        mAccessor->get(values);
+        ::osg::Matrix result(values);
+        *event.getValuePtr() = result;
     }
 
   private:
     shade::types::Matrix4Accessor* mAccessor;
-  };
+};
 
-  class MatrixSetter
-  {
+class MatrixSetter
+{
   public:
-
-    MatrixSetter(shade::types::Matrix4Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    MatrixSetter(shade::types::Matrix4Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFMatrix::SetValueEvent& event)
     {
-      ::osg::Matrix value(event.getValue());
-      float vs[16];
-      for (int i = 0; i != 16; ++i)
-        vs[i] = value.ptr()[i];
-      mAccessor->set(vs);
+        ::osg::Matrix value(event.getValue());
+        float vs[16];
+        for(int i = 0; i != 16; ++i)
+            vs[i] = value.ptr()[i];
+        mAccessor->set(vs);
     }
 
   private:
     shade::types::Matrix4Accessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::MatrixFieldAdapter::hash(void) const
+{
+    static ::shade::matrix4<> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::MatrixFieldAdapter::hash(void) const
+void av::shade::MatrixFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::matrix4<> value;
-  return value.hash();
-}
+    ::shade::types::Matrix4Accessor* mat4_accessor(dynamic_cast<::shade::types::Matrix4Accessor*>(type));
+    if(mat4_accessor == 0)
+        return;
 
-void
-av::shade::MatrixFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::Matrix4Accessor* mat4_accessor(dynamic_cast< ::shade::types::Matrix4Accessor*>(type));
-  if (mat4_accessor == 0)
-    return;
-
-  av::osg::SFMatrix* field = new av::osg::SFMatrix;
-  field->bind(container, name, true, MatrixGetter(mat4_accessor), MatrixSetter(mat4_accessor));
+    av::osg::SFMatrix* field = new av::osg::SFMatrix;
+    field->bind(container, name, true, MatrixGetter(mat4_accessor), MatrixSetter(mat4_accessor));
 }

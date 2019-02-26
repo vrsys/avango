@@ -35,42 +35,38 @@
 #include "../types/vec4.h"
 #include "../types/void.h"
 
-
 namespace shade
 {
-  namespace formatter
-  {
-    class Generator;
-  }
-
-  namespace shaders
-  {
-
-    class CameraSpace : public ShaderBase<CameraSpace, ICoordinateSystem, Initializeable, Gettable<vec3> >
-    {
-    public:
-
-      /*virtual*/ vec4<> transform(vec4<>);
-
-      /*virtual*/ void_<> init_vertex(void);
-
-      /*virtual*/ vec3<Type> get(void);
-
-      /*virtual*/ vec3<> get_transformed_normal(void);
-
-      /*virtual*/ vec3<> get_transformed_eyepoint(void);
-
-    private:
-
-      void get_inline(formatter::Generator& generator);
-
-      Varying<vec3> position;
-      Varying<vec3> normal;
-
-      SHADE_MULTI_DERIVED_DECL(CameraSpace, (ICoordinateSystem)(Initializeable)(Gettable<vec3>))
-    };
-
-  }
+namespace formatter
+{
+class Generator;
 }
+
+namespace shaders
+{
+class CameraSpace : public ShaderBase<CameraSpace, ICoordinateSystem, Initializeable, Gettable<vec3>>
+{
+  public:
+    /*virtual*/ vec4<> transform(vec4<>);
+
+    /*virtual*/ void_<> init_vertex(void);
+
+    /*virtual*/ vec3<Type> get(void);
+
+    /*virtual*/ vec3<> get_transformed_normal(void);
+
+    /*virtual*/ vec3<> get_transformed_eyepoint(void);
+
+  private:
+    void get_inline(formatter::Generator& generator);
+
+    Varying<vec3> position;
+    Varying<vec3> normal;
+
+    SHADE_MULTI_DERIVED_DECL(CameraSpace, (ICoordinateSystem)(Initializeable)(Gettable<vec3>))
+};
+
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_CameraSpace_H */

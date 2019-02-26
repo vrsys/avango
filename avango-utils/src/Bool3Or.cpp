@@ -25,44 +25,40 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::utils::Bool3Or"));
+av::Logger& logger(av::getLogger("av::utils::Bool3Or"));
 }
 
 AV_FC_DEFINE(av::utils::Bool3Or);
 
 av::utils::Bool3Or::Bool3Or()
 {
-    AV_FC_ADD_FIELD(Input1,false);
-    AV_FC_ADD_FIELD(Input2,false);
-    AV_FC_ADD_FIELD(Input3,false);
-    AV_FC_ADD_FIELD(Output,false);
+    AV_FC_ADD_FIELD(Input1, false);
+    AV_FC_ADD_FIELD(Input2, false);
+    AV_FC_ADD_FIELD(Input3, false);
+    AV_FC_ADD_FIELD(Output, false);
 
     Name.setValue("Bool3Or");
 }
 
-av::utils::Bool3Or::~Bool3Or()
-{}
+av::utils::Bool3Or::~Bool3Or() {}
 
-void
-av::utils::Bool3Or::initClass()
+void av::utils::Bool3Or::initClass()
 {
-  if (isTypeInitialized())
-    return;
+    if(isTypeInitialized())
+        return;
 
-  av::FieldContainer::initClass();
-  AV_FC_INIT(av::FieldContainer, av::utils::Bool3Or, true);
+    av::FieldContainer::initClass();
+    AV_FC_INIT(av::FieldContainer, av::utils::Bool3Or, true);
 }
 
-/* virtual */ void
-av::utils::Bool3Or::evaluate()
+/* virtual */ void av::utils::Bool3Or::evaluate()
 {
-  if ( Input1.getValue() || Input2.getValue() || Input3.getValue() )
-  {
-    Output.setValue(true);
-  }
-  else
-  {
-    Output.setValue(false);
-  }
-
+    if(Input1.getValue() || Input2.getValue() || Input3.getValue())
+    {
+        Output.setValue(true);
+    }
+    else
+    {
+        Output.setValue(false);
+    }
 }

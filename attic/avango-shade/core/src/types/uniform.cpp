@@ -24,33 +24,17 @@
 #include <shade/types/uniform.h>
 #include <shade/GLSLInstance.h>
 
+shade::uniform::uniform(formatter::Constants::Type type) : Type(type) {}
 
-shade::uniform::uniform(formatter::Constants::Type type) :
-  Type(type)
-{
-}
+bool shade::uniform::is_writable(const ShaderEnvironment& se) const { return false; }
 
-bool shade::uniform::is_writable(const ShaderEnvironment& se) const
-{
-  return false;
-}
+shade::Type::LinkIndex shade::uniform::get_link_index(boost::shared_ptr<GLSLWrapper> wrapper, const std::string& name) const { return wrapper->get_link_name(name); }
 
-shade::Type::LinkIndex shade::uniform::get_link_index(boost::shared_ptr<GLSLWrapper> wrapper, const std::string& name) const
-{
-  return wrapper->get_link_name(name);
-}
-
-void shade::uniform::upload(boost::shared_ptr<GLSLWrapper> wrapper, LinkIndex index) const
-{
-  upload_uniform(wrapper, index);
-}
+void shade::uniform::upload(boost::shared_ptr<GLSLWrapper> wrapper, LinkIndex index) const { upload_uniform(wrapper, index); }
 
 void shade::uniform::output_attribute(boost::shared_ptr<Type::State> state, Formatter* fmt, const std::string& obj, const std::string& name) const
 {
-  fmt->insert_attribute(m_type, obj, name, formatter::Constants::uniform);
+    fmt->insert_attribute(m_type, obj, name, formatter::Constants::uniform);
 }
 
-std::string shade::uniform::get_uniq_id(void) const
-{
-  return "uniform";
-}
+std::string shade::uniform::get_uniq_id(void) const { return "uniform"; }

@@ -29,22 +29,20 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+template <template <class> class T>
+class Gettable : public TemplateT<T, Type, Gettable>
+{
+  public:
+    virtual T<Type> get(void) { return T<Type>(); };
 
-    template<template<class> class T> class Gettable : public TemplateT<T, Type, Gettable>
-    {
-    public:
+  private:
+    SHADE_TEMPLATE_T_BASE_DECL(T, Gettable)
+};
 
-      virtual T<Type> get(void)
-      { return T<Type>(); };
-
-    private:
-      SHADE_TEMPLATE_T_BASE_DECL(T, Gettable)
-    };
-
-    SHADE_TEMPLATE_T_INIT(Gettable, "", SHADE_DEFS((get)), SHADE_NONE)
-  }
-}
+SHADE_TEMPLATE_T_INIT(Gettable, "", SHADE_DEFS((get)), SHADE_NONE)
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Gettable_H */

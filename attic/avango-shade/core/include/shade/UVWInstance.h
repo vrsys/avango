@@ -31,17 +31,19 @@
 
 namespace shade
 {
-  class UVWInstance
-  {
+class UVWInstance
+{
   public:
     static void init(void);
-    static boost::shared_ptr<shaders::Value<vec3, local> > get(void);
+    static boost::shared_ptr<shaders::Value<vec3, local>> get(void);
 
-    class NotInitialized {};
+    class NotInitialized
+    {
+    };
 
   private:
-    static boost::shared_ptr<shaders::Value<vec3, local> > m_value;
-  };
-}
+    static boost::shared_ptr<shaders::Value<vec3, local>> m_value;
+};
+} // namespace shade
 
 #endif /* shade_UVWInstance_H */

@@ -34,51 +34,38 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
-
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_sound)
 {
-  av::sound::Init::initClass();
+    av::sound::Init::initClass();
 
-  av::sound::SoundTraverser::initClass();
-  av::sound::SoundRenderer::initClass();
-  av::sound::SoundSource::initClass();
-  av::sound::SampleBuffer::initClass();
-  
-  register_field<av::sound::SFSoundRenderer>("SFSoundRenderer");
-  register_multifield<av::sound::MFSoundRenderer>("MFSoundRenderer");
+    av::sound::SoundTraverser::initClass();
+    av::sound::SoundRenderer::initClass();
+    av::sound::SoundSource::initClass();
+    av::sound::SampleBuffer::initClass();
 
-  register_field<av::sound::SFSampleBuffer>("SFSampleBuffer");
-  register_multifield<av::sound::MFSampleBuffer>("MFSampleBuffer");
+    register_field<av::sound::SFSoundRenderer>("SFSoundRenderer");
+    register_multifield<av::sound::MFSoundRenderer>("MFSoundRenderer");
 
-  class_<av::sound::SoundTraverser, 
-         av::Link<av::sound::SoundTraverser>, 
-         bases<av::FieldContainer>, 
-         boost::noncopyable>("SoundTraverser", "docstring");
+    register_field<av::sound::SFSampleBuffer>("SFSampleBuffer");
+    register_multifield<av::sound::MFSampleBuffer>("MFSampleBuffer");
 
-  class_<av::sound::SoundRenderer, 
-         av::Link<av::sound::SoundRenderer>, 
-         bases<av::FieldContainer>,
-         boost::noncopyable >("SoundRenderer", "docstring", no_init);
+    class_<av::sound::SoundTraverser, av::Link<av::sound::SoundTraverser>, bases<av::FieldContainer>, boost::noncopyable>("SoundTraverser", "docstring");
 
-  class_<av::sound::SampleBuffer, 
-         av::Link<av::sound::SampleBuffer>, 
-         bases<av::FieldContainer>, 
-         boost::noncopyable >("SampleBuffer", "docstring", no_init);
+    class_<av::sound::SoundRenderer, av::Link<av::sound::SoundRenderer>, bases<av::FieldContainer>, boost::noncopyable>("SoundRenderer", "docstring", no_init);
 
-  class_<av::sound::SoundSource, 
-         av::Link<av::sound::SoundSource>, 
-         bases<av::gua::TransformNode>, 
-         boost::noncopyable >("SoundSource", "docstring");
+    class_<av::sound::SampleBuffer, av::Link<av::sound::SampleBuffer>, bases<av::FieldContainer>, boost::noncopyable>("SampleBuffer", "docstring", no_init);
+
+    class_<av::sound::SoundSource, av::Link<av::sound::SoundSource>, bases<av::gua::TransformNode>, boost::noncopyable>("SoundSource", "docstring");
 }

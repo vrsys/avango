@@ -24,7 +24,6 @@
 // #include <shade/PipelineState.h>
 // #include <shade/Shader.h>
 
-
 // shade::PipelineState::PipelineState(void) :
 //   m_has_geometry_shader(false)
 // {
@@ -49,4 +48,3 @@
 // {
 //   return m_root_object;
 // }
-

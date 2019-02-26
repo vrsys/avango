@@ -41,169 +41,149 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  av::Logger& logger(av::getLogger("av::WriteAction"));
+av::Logger& logger(av::getLogger("av::WriteAction"));
 
-  const int ID_COUNTER_INIT_VALUE = 0;
-  const int BINARY_INIT_VALUE = true;
+const int ID_COUNTER_INIT_VALUE = 0;
+const int BINARY_INIT_VALUE = true;
 
-  const int DEPTH_INDENT_SPACES = 4;
+const int DEPTH_INDENT_SPACES = 4;
 
 // functions, internal
 
 } // namespace
 
-AV_BASE_DEFINE(av::WriteAction)
-;
+AV_BASE_DEFINE(av::WriteAction);
 
-av::WriteAction::WriteAction() :
-  mIdCounter(ID_COUNTER_INIT_VALUE), mBinary(BINARY_INIT_VALUE)
-{
-}
+av::WriteAction::WriteAction() : mIdCounter(ID_COUNTER_INIT_VALUE), mBinary(BINARY_INIT_VALUE) {}
 
-av::WriteAction::WriteAction(const std::string& fileName) :
-  mIdCounter(ID_COUNTER_INIT_VALUE), mBinary(BINARY_INIT_VALUE)
-{
-  setFileName(fileName);
-}
+av::WriteAction::WriteAction(const std::string& fileName) : mIdCounter(ID_COUNTER_INIT_VALUE), mBinary(BINARY_INIT_VALUE) { setFileName(fileName); }
 
 /* virtual */
-av::WriteAction::~WriteAction()
-{
-}
+av::WriteAction::~WriteAction() {}
 
 void av::WriteAction::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::Action::initClass();
+    if(!isTypeInitialized())
+    {
+        av::Action::initClass();
 
-    AV_BASE_INIT(av::Action, av::WriteAction, true);
-  }
+        AV_BASE_INIT(av::Action, av::WriteAction, true);
+    }
 }
 
 void av::WriteAction::setFileName(const std::string& fileName)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("setFileName(): file name is '%1%'") % mName))
-  mName = fileName;
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("setFileName(): file name is '%1%'") % mName))
+    mName = fileName;
 }
 
-/* virtual */void av::WriteAction::apply(av::Link<av::Base> node)
+/* virtual */ void av::WriteAction::apply(av::Link<av::Base> node)
 {
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): writing to ''%1%'") % mName))
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): writing to ''%1%'") % mName))
 
-  std::ofstream file(mName.c_str());
+    std::ofstream file(mName.c_str());
 
-  if (file.fail())
-  {
-    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("apply(): can't open file ''%1%'") % mName))
-    return;
-  }
+    if(file.fail())
+    {
+        AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("apply(): can't open file ''%1%'") % mName))
+        return;
+    }
 
-  mIdMap.clear();
-  mIdCounter = 0;
-  mOutStream = file;
-  mOutStream.setWriteAction(this);
-  mOutStream.enableBinary(mBinary);
+    mIdMap.clear();
+    mIdCounter = 0;
+    mOutStream = file;
+    mOutStream.setWriteAction(this);
+    mOutStream.enableBinary(mBinary);
 
-  mTravDepth = -1;
-  traverse(node);
+    mTravDepth = -1;
+    traverse(node);
 
-  mIdMap.clear();
+    mIdMap.clear();
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): closing file ''%1%'") % mName))
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("apply(): closing file ''%1%'") % mName))
 }
 
-/* virtual */void av::WriteAction::traverse(av::Link<av::Base> node)
+/* virtual */ void av::WriteAction::traverse(av::Link<av::Base> node)
 {
-  ++mTravDepth;
+    ++mTravDepth;
 
-  AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("traverse(): %snode: 0x%x (%s)")
-        % depthIndent() % node.getPtr() % node->getTypeId().getName().c_str()))
+    AVANGO_LOG(logger, logging::TRACE, boost::str(boost::format("traverse(): %snode: 0x%x (%s)") % depthIndent() % node.getPtr() % node->getTypeId().getName().c_str()))
 
-  if (node.isValid())
-  {
-    node->doWriteAction(*this);
-  }
-  --mTravDepth;
+    if(node.isValid())
+    {
+        node->doWriteAction(*this);
+    }
+    --mTravDepth;
 }
 
-void av::WriteAction::enableBinary(bool bin)
-{
-  mBinary = bin;
-}
+void av::WriteAction::enableBinary(bool bin) { mBinary = bin; }
 
-bool av::WriteAction::isBinaryEnabled()
-{
-  return mBinary;
-}
+bool av::WriteAction::isBinaryEnabled() { return mBinary; }
 
-av::OutputStream& av::WriteAction::getStream()
-{
-  return mOutStream;
-}
+av::OutputStream& av::WriteAction::getStream() { return mOutStream; }
 
 std::string av::WriteAction::getNewId()
 {
-  std::ostringstream new_id_string;
+    std::ostringstream new_id_string;
 
-  new_id_string << "object" << mIdCounter;
-  mIdCounter++;
-  return new_id_string.str();
+    new_id_string << "object" << mIdCounter;
+    mIdCounter++;
+    return new_id_string.str();
 }
 
 std::string av::WriteAction::lookupObjectId(av::Link<av::Base> obj)
 {
-  if (!obj.isValid())
-  {
-    return "null";
-  }
+    if(!obj.isValid())
+    {
+        return "null";
+    }
 
-  BaseStringMap::iterator object_id = mIdMap.find(obj);
-  if (object_id != mIdMap.end())
-  {
-    return (*object_id).second;
-  }
-  else
-  {
-    std::string id = getNewId();
-    mIdMap.insert(BaseStringMap::value_type(obj, id));
-    return id;
-  }
+    BaseStringMap::iterator object_id = mIdMap.find(obj);
+    if(object_id != mIdMap.end())
+    {
+        return (*object_id).second;
+    }
+    else
+    {
+        std::string id = getNewId();
+        mIdMap.insert(BaseStringMap::value_type(obj, id));
+        return id;
+    }
 }
 
 bool av::WriteAction::isObjectWritten(av::Link<av::Base> obj)
 {
-  if (!obj.isValid())
-  {
-    throw std::invalid_argument("av::Link is not valid");
-  }
+    if(!obj.isValid())
+    {
+        throw std::invalid_argument("av::Link is not valid");
+    }
 
-  BaseStringMap::iterator object_id = mIdMap.find(obj);
-  if (object_id != mIdMap.end())
-  {
-    return true;
-  }
-  else
-  {
-    std::string id = getNewId();
-    mIdMap.insert(BaseStringMap::value_type(obj, id));
-    return false;
-  }
+    BaseStringMap::iterator object_id = mIdMap.find(obj);
+    if(object_id != mIdMap.end())
+    {
+        return true;
+    }
+    else
+    {
+        std::string id = getNewId();
+        mIdMap.insert(BaseStringMap::value_type(obj, id));
+        return false;
+    }
 }
 
 std::string av::WriteAction::depthIndent()
 {
-  if (mTravDepth == -1)
-  {
-    return "";
-  }
+    if(mTravDepth == -1)
+    {
+        return "";
+    }
 
-  // create a string with mTravDepth * DEPTH_INDENT_SPACES spaces
-  std::string indent_string(mTravDepth * DEPTH_INDENT_SPACES, ' ');
+    // create a string with mTravDepth * DEPTH_INDENT_SPACES spaces
+    std::string indent_string(mTravDepth * DEPTH_INDENT_SPACES, ' ');
 
-  return indent_string;
+    return indent_string;
 }

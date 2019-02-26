@@ -32,21 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGBoundingBoxCalculator(void)
- {
-  // wrapping osg::BoundingBoxCalculator functionality
-  register_field<av::osg::SFBoundingBoxCalculator>("SFBoundingBoxCalculator");
-  register_multifield<av::osg::MFBoundingBoxCalculator>("MFBoundingBoxCalculator");
-  class_<av::osg::BoundingBoxCalculator, av::Link<av::osg::BoundingBoxCalculator>, bases<av::osg::Group>, boost::noncopyable >("BoundingBoxCalculator", "docstring", no_init)
-  ;
- }
+{
+    // wrapping osg::BoundingBoxCalculator functionality
+    register_field<av::osg::SFBoundingBoxCalculator>("SFBoundingBoxCalculator");
+    register_multifield<av::osg::MFBoundingBoxCalculator>("MFBoundingBoxCalculator");
+    class_<av::osg::BoundingBoxCalculator, av::Link<av::osg::BoundingBoxCalculator>, bases<av::osg::Group>, boost::noncopyable>("BoundingBoxCalculator", "docstring", no_init);
+}

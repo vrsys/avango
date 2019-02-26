@@ -3,4 +3,4 @@
 
 void init_BlenderViewer();
 
-#endif //AV_PYTHON_GUA_BLENDER_VIEWER_HPP
+#endif // AV_PYTHON_GUA_BLENDER_VIEWER_HPP

@@ -3,4 +3,4 @@
 
 void init_VolumeLoader();
 
-#endif //AV_PYTHON_GUA_VOLUME_LOADER_HPP
+#endif // AV_PYTHON_GUA_VOLUME_LOADER_HPP

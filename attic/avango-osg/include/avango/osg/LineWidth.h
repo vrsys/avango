@@ -37,62 +37,57 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::LineWidth OsgLineWidth;
+namespace osg
+{
+typedef ::osg::LineWidth OsgLineWidth;
 
+/**
+ * Wrapper for ::osg::LineWidth
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LineWidth : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::osg::LineWidth
-     *
-     * \ingroup av_osg
+     * Constructor. When called without arguments, a new ::osg::LineWidth is created.
+     * Otherwise, the given ::osg::LineWidth is used.
      */
-    class AV_OSG_DLL LineWidth : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    LineWidth(OsgLineWidth* osglinewidth = new OsgLineWidth());
+    // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LineWidth();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::LineWidth is created.
-       * Otherwise, the given ::osg::LineWidth is used.
-       */
-      LineWidth(OsgLineWidth* osglinewidth = new OsgLineWidth());
-      // use defined type to circumvent compiler bug in VS8
+  public:
+    SFFloat Width;
+    /**
+     * Get the wrapped ::osg::LineWidth.
+     */
+    ::osg::LineWidth* getOsgLineWidth() const;
 
-    protected:
+  protected:
+    virtual void getWidthCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setWidthCB(const av::SFFloat::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LineWidth();
+  private:
+    ::osg::LineWidth* mOsgLineWidth;
+};
 
-    public:
-
-      SFFloat Width;
-      /**
-       * Get the wrapped ::osg::LineWidth.
-       */
-      ::osg::LineWidth* getOsgLineWidth() const;
-
-    protected:
-
-      virtual void getWidthCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setWidthCB(const av::SFFloat::SetValueEvent& event);
-
-    private:
-
-      ::osg::LineWidth *mOsgLineWidth;
-    };
-
-    typedef SingleField<Link<LineWidth> > SFLineWidth;
-    typedef MultiField<Link<LineWidth> > MFLineWidth;
-  }
+typedef SingleField<Link<LineWidth>> SFLineWidth;
+typedef MultiField<Link<LineWidth>> MFLineWidth;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::LineWidth> >;
-  template class AV_OSG_DLL MultiField<Link<osg::LineWidth> >;
+template class AV_OSG_DLL SingleField<Link<osg::LineWidth>>;
+template class AV_OSG_DLL MultiField<Link<osg::LineWidth>>;
 #endif
 
-}
+} // namespace av
 
 #endif

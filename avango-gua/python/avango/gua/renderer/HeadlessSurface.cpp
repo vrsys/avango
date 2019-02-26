@@ -9,26 +9,21 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_HeadlessSurface()
 {
-  register_ptr_to_python<av::Link<av::gua::HeadlessSurface> >();
+    register_ptr_to_python<av::Link<av::gua::HeadlessSurface>>();
 
-  register_field<av::gua::SFHeadlessSurface>("SFHeadlessSurface");
-  register_multifield<av::gua::MFHeadlessSurface>("MFHeadlessSurface");
-  class_<
-      av::gua::HeadlessSurface,
-      av::Link<av::gua::HeadlessSurface>,
-      bases<av::gua::WindowBase>,
-      boost::noncopyable
-  >("HeadlessSurface", "docstring", no_init)
-      ;
+    register_field<av::gua::SFHeadlessSurface>("SFHeadlessSurface");
+    register_multifield<av::gua::MFHeadlessSurface>("MFHeadlessSurface");
+    class_<av::gua::HeadlessSurface, av::Link<av::gua::HeadlessSurface>, bases<av::gua::WindowBase>, boost::noncopyable>("HeadlessSurface", "docstring", no_init);
 }

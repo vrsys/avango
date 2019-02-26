@@ -37,28 +37,27 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Convenience class for converting a linux event type, given as string,
+ * into the corresponding event code. (see /usr/include/linux/input.h).
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL LinuxEvent : public ::std::map<std::string, unsigned long>
+{
+  public:
     /**
-     * Convenience class for converting a linux event type, given as string,
-     * into the corresponding event code. (see /usr/include/linux/input.h).
-     *
-     * \ingroup av_daemon
+     * Returns the event code of a given event type. (e.g. "KEY_DOWN" = 108).
      */
-    class AV_DAEMON_DLL LinuxEvent : public ::std::map<std::string, unsigned long>
-    {
-    public:
-      /**
-       * Returns the event code of a given event type. (e.g. "KEY_DOWN" = 108).
-       */
-      static unsigned long getEventCode(const std::string& eventType);
-      /**
-       * Constructor
-       */
-      LinuxEvent();
-
-    };
-  }
-}
+    static unsigned long getEventCode(const std::string& eventType);
+    /**
+     * Constructor
+     */
+    LinuxEvent();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

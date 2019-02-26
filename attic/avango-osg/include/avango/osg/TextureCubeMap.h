@@ -37,69 +37,63 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::TextureCubeMap OsgTextureCubeMap;
+namespace osg
+{
+typedef ::osg::TextureCubeMap OsgTextureCubeMap;
+
+/**
+ * Abstract Wrapper for ::osg::TextureCubeMap
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL TextureCubeMap : public Texture
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    TextureCubeMap(OsgTextureCubeMap* osgtexture = new OsgTextureCubeMap());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~TextureCubeMap();
+
+  public:
+    MFImage Images;
+
+    SFInt TextureWidth;
+    SFInt TextureHeight;
 
     /**
-     * Abstract Wrapper for ::osg::TextureCubeMap
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::TextureCubeMap object.
+     * \return a pointer to the texture object
      */
-    class AV_OSG_DLL TextureCubeMap : public Texture
-    {
-      AV_FC_DECLARE();
+    ::osg::TextureCubeMap* getOsgTextureCubeMap() const;
 
-    public:
+  private:
+    ::osg::TextureCubeMap* mOsgTextureCubeMap;
 
-      /**
-       * Constructor.
-       */
-      TextureCubeMap(OsgTextureCubeMap* osgtexture = new OsgTextureCubeMap());
-      // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getImagesCB(const av::osg::MFImage::GetValueEvent& event);
+    virtual void setImagesCB(const av::osg::MFImage::SetValueEvent& event);
+    virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+    virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~TextureCubeMap();
-
-    public:
-
-      MFImage Images;
-
-      SFInt TextureWidth;
-      SFInt TextureHeight;
-
-      /**
-       * Get the wrapped ::osg::TextureCubeMap object.
-       * \return a pointer to the texture object
-       */
-      ::osg::TextureCubeMap* getOsgTextureCubeMap() const;
-
-    private:
-
-      ::osg::TextureCubeMap* mOsgTextureCubeMap;
-
-    protected:
-
-      virtual void getImagesCB(const av::osg::MFImage::GetValueEvent& event);
-      virtual void setImagesCB(const av::osg::MFImage::SetValueEvent& event);
-      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
-      virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<TextureCubeMap> > SFTextureCubeMap;
-    typedef MultiField<Link<TextureCubeMap> > MFTextureCubeMap;
-  } // namespace osg
+typedef SingleField<Link<TextureCubeMap>> SFTextureCubeMap;
+typedef MultiField<Link<TextureCubeMap>> MFTextureCubeMap;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::TextureCubeMap> >;
-  template class AV_OSG_DLL MultiField<Link<osg::TextureCubeMap> >;
+template class AV_OSG_DLL SingleField<Link<osg::TextureCubeMap>>;
+template class AV_OSG_DLL MultiField<Link<osg::TextureCubeMap>>;
 #endif
 
 } // namespace av

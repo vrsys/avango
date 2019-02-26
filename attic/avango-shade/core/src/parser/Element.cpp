@@ -25,7 +25,4 @@
 #include "../parser/Value.h"
 using namespace shade::parser;
 
-boost::shared_ptr<const Value> Element::evaluate(const Scope&) const
-{
-  return boost::shared_ptr<const Value>(new Value());
-}
+boost::shared_ptr<const Value> Element::evaluate(const Scope&) const { return boost::shared_ptr<const Value>(new Value()); }

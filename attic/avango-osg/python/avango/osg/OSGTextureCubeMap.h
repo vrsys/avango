@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_TEXTURE_CUBE_MAP
 #define AV_PYTHON_OSG_TEXTURE_CUBE_MAP
 

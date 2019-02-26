@@ -28,11 +28,10 @@
 #include <string>
 #include <set>
 
-
 namespace shade
 {
-  class FileAccumulator
-  {
+class FileAccumulator
+{
   public:
     FileAccumulator(const FileResolver& resolver);
 
@@ -48,7 +47,7 @@ namespace shade
     std::string m_content;
     int m_glsl_version;
     bool m_requires_gpu_shader4_ext;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_FileAccumulator_H */

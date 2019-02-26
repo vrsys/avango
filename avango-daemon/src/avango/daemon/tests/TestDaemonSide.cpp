@@ -33,21 +33,21 @@
 
 using namespace av::daemon;
 
-namespace {
-
-  TEST(HIDInputCanBeInitialized)
-  {
+namespace
+{
+TEST(HIDInputCanBeInitialized)
+{
     av::daemon::HIDInput::initClass();
     CHECK(av::Type::getByName("av::daemon::HIDInput") != av::Type::badType());
-  }
-  TEST(DTrackCanBeInitialized)
-  {
+}
+TEST(DTrackCanBeInitialized)
+{
     av::daemon::DTrack::initClass();
     CHECK(av::Type::getByName("av::daemon::DTrack") != av::Type::badType());
-  }
-  TEST(WiimoteCanBeInitialized)
-  {
+}
+TEST(WiimoteCanBeInitialized)
+{
     av::daemon::Wiimote::initClass();
     CHECK(av::Type::getByName("av::daemon::Wiimote") != av::Type::badType());
-  }
 }
+} // namespace

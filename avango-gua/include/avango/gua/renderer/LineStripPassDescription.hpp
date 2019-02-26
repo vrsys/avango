@@ -15,54 +15,48 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::LineStripPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL LineStripPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::LineStripPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::LineStripPassDescription is created.
+     * Otherwise, the given ::gua::LineStripPassDescription is used.
      */
-    class AV_GUA_DLL LineStripPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    LineStripPassDescription(
+        std::shared_ptr<::gua::LineStripPassDescription> const& LineStripPassDescription = std::shared_ptr<::gua::LineStripPassDescription>(new ::gua::LineStripPassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::LineStripPassDescription.
+     */
+    std::shared_ptr<::gua::LineStripPassDescription> const& getGuaLineStripPassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::LineStripPassDescription is created.
-       * Otherwise, the given ::gua::LineStripPassDescription is used.
-       */
-      LineStripPassDescription(std::shared_ptr< ::gua::LineStripPassDescription> const& LineStripPassDescription =
-                             std::shared_ptr< ::gua::LineStripPassDescription>(new ::gua::LineStripPassDescription()) );
+  private:
+    std::shared_ptr<::gua::LineStripPassDescription> m_guaLineStripPassDescription;
 
+    LineStripPassDescription(const LineStripPassDescription&);
+    LineStripPassDescription& operator=(const LineStripPassDescription&);
+};
 
+using SFLineStripPassDescription = SingleField<Link<LineStripPassDescription>>;
+using MFLineStripPassDescription = MultiField<Link<LineStripPassDescription>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::LineStripPassDescription.
-       */
-      std::shared_ptr< ::gua::LineStripPassDescription> const& getGuaLineStripPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::LineStripPassDescription> m_guaLineStripPassDescription;
-
-
-      LineStripPassDescription(const LineStripPassDescription&);
-      LineStripPassDescription& operator=(const LineStripPassDescription&);
-    };
-
-    using SFLineStripPassDescription = SingleField<Link<LineStripPassDescription> >;
-    using MFLineStripPassDescription = MultiField<Link<LineStripPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::LineStripPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::LineStripPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::LineStripPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::LineStripPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_LINE_STRIP_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_LINE_STRIP_PASS_DESCRIPTION_HPP

@@ -15,22 +15,19 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
-av::Link<av::gua::Node> load(
-    av::gua::nurbs::NURBSLoader const& loader,
-    std::string const& nodeName,
-    std::string const& fileName,
-    av::gua::Material const& fallbackMaterial,
-    int flags) {
-   return loader.load( nodeName, fileName, fallbackMaterial, static_cast<av::gua::nurbs::NURBSLoader::Flags>(flags));
+av::Link<av::gua::Node> load(av::gua::nurbs::NURBSLoader const& loader, std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, int flags)
+{
+    return loader.load(nodeName, fileName, fallbackMaterial, static_cast<av::gua::nurbs::NURBSLoader::Flags>(flags));
 }
 
 /*
@@ -81,25 +78,21 @@ av::gua::nurbs::MFPickResult* pick_plod(av::gua::nurbs::PLODLoader const& loader
 */
 void init_NURBSLoader()
 {
-  register_ptr_to_python<av::Link<av::gua::nurbs::NURBSLoader> >();
+    register_ptr_to_python<av::Link<av::gua::nurbs::NURBSLoader>>();
 
-  class_<av::gua::nurbs::NURBSLoader,
-         av::Link<av::gua::nurbs::NURBSLoader>,
-         bases<av::FieldContainer>, boost::noncopyable> ("NURBSLoader", "docstring", no_init)
-         .def("load", &load)
-         .def("create_geometry_from_file", &load)
-         //.def("pick_plod_bvh", &pick_plod2)
-         //.def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
-         ;
+    class_<av::gua::nurbs::NURBSLoader, av::Link<av::gua::nurbs::NURBSLoader>, bases<av::FieldContainer>, boost::noncopyable>("NURBSLoader", "docstring", no_init)
+        .def("load", &load)
+        .def("create_geometry_from_file", &load)
+        //.def("pick_plod_bvh", &pick_plod2)
+        //.def("pick_plod_interpolate", &pick_plod, return_value_policy<manage_new_object>())
+        ;
 
-  enum_<av::gua::nurbs::NURBSLoader::Flags>("LoaderFlags")
-    .value("DEFAULTS", av::gua::nurbs::NURBSLoader::DEFAULTS)
-    .value("MAKE_PICKABLE", av::gua::nurbs::NURBSLoader::MAKE_PICKABLE)
-    .value("NORMALIZE_POSITION", av::gua::nurbs::NURBSLoader::NORMALIZE_POSITION)
-    .value("NORMALIZE_SCALE", av::gua::nurbs::NURBSLoader::NORMALIZE_SCALE)
-    ;
+    enum_<av::gua::nurbs::NURBSLoader::Flags>("LoaderFlags")
+        .value("DEFAULTS", av::gua::nurbs::NURBSLoader::DEFAULTS)
+        .value("MAKE_PICKABLE", av::gua::nurbs::NURBSLoader::MAKE_PICKABLE)
+        .value("NORMALIZE_POSITION", av::gua::nurbs::NURBSLoader::NORMALIZE_POSITION)
+        .value("NORMALIZE_SCALE", av::gua::nurbs::NURBSLoader::NORMALIZE_SCALE);
 
-
-  register_field<av::gua::nurbs::SFNURBSLoader>("SFNURBSLoader");
-  register_multifield<av::gua::nurbs::MFNURBSLoader>("MFNURBSLoader");
+    register_field<av::gua::nurbs::SFNURBSLoader>("SFNURBSLoader");
+    register_multifield<av::gua::nurbs::MFNURBSLoader>("MFNURBSLoader");
 }

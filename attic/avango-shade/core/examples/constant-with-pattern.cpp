@@ -33,56 +33,54 @@
 #include "Texture.h"
 #include "example.h"
 
-
-namespace shaders=shade::shaders;
+namespace shaders = shade::shaders;
 
 namespace
 {
-  boost::shared_ptr<shaders::Surface> shader;
-  boost::shared_ptr<shade::Program> program;
-  boost::shared_ptr<shade::GLSLWrapper> state;
-}
+boost::shared_ptr<shaders::Surface> shader;
+boost::shared_ptr<shade::Program> program;
+boost::shared_ptr<shade::GLSLWrapper> state;
+} // namespace
 
 void init(void)
 {
-  shader = boost::shared_ptr<shaders::Surface> (new shaders::Surface);
-  state = shade::create_GLSL_wrapper();
-  program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
+    shader = boost::shared_ptr<shaders::Surface>(new shaders::Surface);
+    state = shade::create_GLSL_wrapper();
+    program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
 
-  boost::shared_ptr<shade::shaders::Constant> material(new shade::shaders::Constant);
-  boost::shared_ptr<shade::shaders::ObjectSpace> object_space(new shade::shaders::ObjectSpace);
-  boost::shared_ptr<shade::shaders::Checkboard> checkboard(new shade::shaders::Checkboard);
-  shader->material = material;
-  material->color = checkboard;
-  checkboard->scale.set(10., 10., 10.);
-  checkboard->color1.set_value(shade::vec4<>(0., 0., 0., 1.));
-  checkboard->color2.set_value(shade::vec4<>(1., 1., 1., 1.));
-  checkboard->position = object_space;
+    boost::shared_ptr<shade::shaders::Constant> material(new shade::shaders::Constant);
+    boost::shared_ptr<shade::shaders::ObjectSpace> object_space(new shade::shaders::ObjectSpace);
+    boost::shared_ptr<shade::shaders::Checkboard> checkboard(new shade::shaders::Checkboard);
+    shader->material = material;
+    material->color = checkboard;
+    checkboard->scale.set(10., 10., 10.);
+    checkboard->color1.set_value(shade::vec4<>(0., 0., 0., 1.));
+    checkboard->color2.set_value(shade::vec4<>(1., 1., 1., 1.));
+    checkboard->position = object_space;
 }
 
 void display(void)
 {
-  if (program->requires_compilation())
-    program->compile();
+    if(program->requires_compilation())
+        program->compile();
 
-  state->make_current();
+    state->make_current();
 
-  if (program->requires_upload())
-    program->upload();
+    if(program->requires_upload())
+        program->upload();
 
-  example::setup_camera();
+    example::setup_camera();
 
-  example::draw_default_scene();
+    example::draw_default_scene();
 }
-
 
 int main(int argc, char* argv[])
 {
-  example::init(argc, argv, "SHADE Constant Material with Pattern");
-  example::set_display_func(display);
+    example::init(argc, argv, "SHADE Constant Material with Pattern");
+    example::set_display_func(display);
 
-  init();
+    init();
 
-  example::run_main_loop();
-  return 0;
+    example::run_main_loop();
+    return 0;
 }

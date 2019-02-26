@@ -31,7 +31,4 @@
 
 using namespace boost::python;
 
-BOOST_PYTHON_MODULE(_particle)
-{
-  av::osg::particle::Init::initClass();
-}
+BOOST_PYTHON_MODULE(_particle) { av::osg::particle::Init::initClass(); }

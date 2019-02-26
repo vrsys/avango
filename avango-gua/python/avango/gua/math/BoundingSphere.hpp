@@ -3,4 +3,4 @@
 
 void init_BoundingSphere();
 
-#endif //AV_PYTHON_GUA_BOUNDING_SPHERE_HPP
+#endif // AV_PYTHON_GUA_BOUNDING_SPHERE_HPP

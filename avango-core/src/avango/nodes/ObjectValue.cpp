@@ -25,23 +25,23 @@
 
 //  specialization of the members
 
-template <> const std::string
-av::ObjectValue<bool>::sClassTypeName = "av::BoolObject";
+template <>
+const std::string av::ObjectValue<bool>::sClassTypeName = "av::BoolObject";
 
-template <> const std::string
-av::ObjectValue<int>::sClassTypeName = "av::IntObject";
+template <>
+const std::string av::ObjectValue<int>::sClassTypeName = "av::IntObject";
 
-template <> const std::string
-av::ObjectValue<unsigned int>::sClassTypeName = "av::UIntObject";
+template <>
+const std::string av::ObjectValue<unsigned int>::sClassTypeName = "av::UIntObject";
 
-template <> const std::string
-av::ObjectValue<float>::sClassTypeName = "av::FloatObject";
+template <>
+const std::string av::ObjectValue<float>::sClassTypeName = "av::FloatObject";
 
-template <> const std::string
-av::ObjectValue<double>::sClassTypeName = "av::DoubleObject";
+template <>
+const std::string av::ObjectValue<double>::sClassTypeName = "av::DoubleObject";
 
-template <> const std::string
-av::ObjectValue<av::Link<av::FieldContainer> >::sClassTypeName = "av::FieldContainerObject";
+template <>
+const std::string av::ObjectValue<av::Link<av::FieldContainer>>::sClassTypeName = "av::FieldContainerObject";
 
-template <> const std::string
-av::ObjectValue<std::string>::sClassTypeName = "av::StringObject";
+template <>
+const std::string av::ObjectValue<std::string>::sClassTypeName = "av::StringObject";

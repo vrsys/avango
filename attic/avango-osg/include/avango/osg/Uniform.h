@@ -35,73 +35,67 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/StateAttribute.h>
 
-
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Uniform OsgUniform;
+namespace osg
+{
+typedef ::osg::Uniform OsgUniform;
+
+/**
+ * Wrapper for ::osg::Uniform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Uniform : public Object
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Uniform is created.
+     * Otherwise, the given ::osg::Uniform is used.
+     */
+    Uniform(OsgUniform* osguniform = new OsgUniform()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Uniform();
+
+  public:
+    MFFloat Values;
+    SFInt Type;
+    SFString UniformName;
 
     /**
-     * Wrapper for ::osg::Uniform
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Uniform.
      */
-    class AV_OSG_DLL Uniform : public Object
-    {
-      AV_FC_DECLARE();
+    ::osg::Uniform* getOsgUniform() const;
 
-    public:
+    void touchFields();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Uniform is created.
-       * Otherwise, the given ::osg::Uniform is used.
-       */
-      Uniform(OsgUniform *osguniform = new OsgUniform()); // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getTypeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTypeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getValuesCB(const av::MFFloat::GetValueEvent& event);
+    virtual void setValuesCB(const av::MFFloat::SetValueEvent& event);
+    virtual void getUniformNameCB(const av::SFString::GetValueEvent& event);
+    virtual void setUniformNameCB(const av::SFString::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::Uniform* mOsgUniform;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Uniform();
-
-    public:
-
-      MFFloat Values;
-      SFInt Type;
-      SFString UniformName;
-
-      /**
-       * Get the wrapped ::osg::Uniform.
-       */
-      ::osg::Uniform* getOsgUniform() const;
-
-      void touchFields();
-
-    protected:
-
-      virtual void getTypeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTypeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getValuesCB(const av::MFFloat::GetValueEvent& event);
-      virtual void setValuesCB(const av::MFFloat::SetValueEvent& event);
-      virtual void getUniformNameCB(const av::SFString::GetValueEvent& event);
-      virtual void setUniformNameCB(const av::SFString::SetValueEvent& event);
-
-    private:
-
-      ::osg::Uniform *mOsgUniform;
-    };
-
-    typedef SingleField<Link<Uniform> > SFUniform;
-    typedef MultiField<Link<Uniform> > MFUniform;
-  }
+typedef SingleField<Link<Uniform>> SFUniform;
+typedef MultiField<Link<Uniform>> MFUniform;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Uniform> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Uniform> >;
+template class AV_OSG_DLL SingleField<Link<osg::Uniform>>;
+template class AV_OSG_DLL MultiField<Link<osg::Uniform>>;
 #endif
 
-}
+} // namespace av
 
 #endif

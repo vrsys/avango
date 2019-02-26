@@ -33,7 +33,7 @@
 //#include <osg/Version>
 
 #ifdef PCL_SUPPORT
-  #include "UTILSPcd.h"
+#include "UTILSPcd.h"
 #endif
 
 #include "../include/avango/utils/Init.h"
@@ -55,108 +55,112 @@ using namespace boost::python;
 // TODO can we move this somewhere else?
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 template <typename A, typename B>
 std::pair<B, A> flip(std::pair<A, B> const& p)
 {
-  return std::make_pair(p.second, p.first);
+    return std::make_pair(p.second, p.first);
 }
 
 template <typename T, typename U>
 std::multimap<U, T> converseMap(const std::map<T, U>& o)
 {
-  std::multimap<U, T> result;
-  for (auto const& pair : o)
-    result.insert(flip(pair));
-  return result;
+    std::multimap<U, T> result;
+    for(auto const& pair : o)
+        result.insert(flip(pair));
+    return result;
 }
 
 gua::math::vec3 CalcHpr(const gua::math::mat4& mat)
 {
-  //if(mat(1,0)>0.998) { // (row, column)
-  if (mat.row(1)[0] > 0.998f) {
-    float heading = atan2(mat.row(0)[2],mat.row(2)[2]);
-    float attitude = 3.14f/2.0f;
-    float bank = 0;
-    return gua::math::vec3(heading,attitude,bank);
-  }
+    // if(mat(1,0)>0.998) { // (row, column)
+    if(mat.row(1)[0] > 0.998f)
+    {
+        float heading = atan2(mat.row(0)[2], mat.row(2)[2]);
+        float attitude = 3.14f / 2.0f;
+        float bank = 0;
+        return gua::math::vec3(heading, attitude, bank);
+    }
 
-  if (mat.row(1)[0] < -0.998f) {
-    float heading = atan2(mat.row(0)[2],mat.row(2)[2]);
-    float attitude = -3.14f/2.0f;
-    float bank = 0;
-    return gua::math::vec3(heading,attitude,bank);
-  }
+    if(mat.row(1)[0] < -0.998f)
+    {
+        float heading = atan2(mat.row(0)[2], mat.row(2)[2]);
+        float attitude = -3.14f / 2.0f;
+        float bank = 0;
+        return gua::math::vec3(heading, attitude, bank);
+    }
 
-  float heading = atan2(-mat.row(2)[0], mat.row(0)[0]);
-  float attitude = atan2(-mat.row(1)[2], mat.row(1)[1]);
-  float bank = sin(mat.row(1)[0]);
-  return gua::math::vec3(heading,attitude,bank);
+    float heading = atan2(-mat.row(2)[0], mat.row(0)[0]);
+    float attitude = atan2(-mat.row(1)[2], mat.row(1)[1]);
+    float bank = sin(mat.row(1)[0]);
+    return gua::math::vec3(heading, attitude, bank);
 }
 
 void print_actual_registered_field_containers()
 {
-  const std::map<av::FieldContainer::IDType, av::FieldContainer*>& containers =
-    av::ContainerPool::getContainerPool();
-  std::map<std::string,int> m;
-  int maxLength = 0;
-  for (auto const& c : containers) {
-//    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
-//    std::string type = iter->second->Name.getValue();
-    std::string type = c.second->getTypeId().getName();
+    const std::map<av::FieldContainer::IDType, av::FieldContainer*>& containers = av::ContainerPool::getContainerPool();
+    std::map<std::string, int> m;
+    int maxLength = 0;
+    for(auto const& c : containers)
+    {
+        //    std::string type = ::av::ContainerPool::getNameByInstance(iter->second);
+        //    std::string type = iter->second->Name.getValue();
+        std::string type = c.second->getTypeId().getName();
 
-    int l = type.length();
-    if (l > maxLength)
-      maxLength = l;
-    m[type]++;
-  }
+        int l = type.length();
+        if(l > maxLength)
+            maxLength = l;
+        m[type]++;
+    }
 
-  std::ostringstream ss;
-  std::multimap<int, std::string> conversedMap = converseMap(m);
-  for (auto const& pair : conversedMap) {
-    int l = maxLength - pair.second.length();
-    ss <<"\""<< pair.second << "\" ";
-    for(int n=0;n<l;++n)
-      ss << " ";
-    ss << pair.first << std::endl;
-  }
-  for (int n=0; n<maxLength+2; ++n)
-      ss << " ";
-  ss << "-------"<<std::endl;
-  std::string total_desc = "Total number of containers:";
-  int l = maxLength - total_desc.length();
-  ss <<"\""<< total_desc << "\" ";
-  for(int n=0;n<l;++n)
-    ss << " ";
-  ss<< av::ContainerPool::getNumberOfContainers() << std::endl;
-  std::cout << ss.str();
+    std::ostringstream ss;
+    std::multimap<int, std::string> conversedMap = converseMap(m);
+    for(auto const& pair : conversedMap)
+    {
+        int l = maxLength - pair.second.length();
+        ss << "\"" << pair.second << "\" ";
+        for(int n = 0; n < l; ++n)
+            ss << " ";
+        ss << pair.first << std::endl;
+    }
+    for(int n = 0; n < maxLength + 2; ++n)
+        ss << " ";
+    ss << "-------" << std::endl;
+    std::string total_desc = "Total number of containers:";
+    int l = maxLength - total_desc.length();
+    ss << "\"" << total_desc << "\" ";
+    for(int n = 0; n < l; ++n)
+        ss << " ";
+    ss << av::ContainerPool::getNumberOfContainers() << std::endl;
+    std::cout << ss.str();
 }
 
 void init_MultiValueFields()
 {
-  av::python::register_multivaluefield<av::utils::MVFBool>("MVFBool");
-  av::python::register_multivaluefield<av::utils::MVFDouble>("MVFDouble");
-  av::python::register_multivaluefield<av::utils::MVFFloat>("MVFFloat");
-  av::python::register_multivaluefield<av::utils::MVFInt>("MVFInt");
-  av::python::register_multivaluefield<av::utils::MVFLong>("MVFLong");
-  av::python::register_multivaluefield<av::utils::MVFUInt>("MVFUInt");
-  av::python::register_multivaluefield<av::utils::MVFULong>("MVFULong");
-  av::python::register_multivaluefield<av::utils::MVFString>("MVFString");
+    av::python::register_multivaluefield<av::utils::MVFBool>("MVFBool");
+    av::python::register_multivaluefield<av::utils::MVFDouble>("MVFDouble");
+    av::python::register_multivaluefield<av::utils::MVFFloat>("MVFFloat");
+    av::python::register_multivaluefield<av::utils::MVFInt>("MVFInt");
+    av::python::register_multivaluefield<av::utils::MVFLong>("MVFLong");
+    av::python::register_multivaluefield<av::utils::MVFUInt>("MVFUInt");
+    av::python::register_multivaluefield<av::utils::MVFULong>("MVFULong");
+    av::python::register_multivaluefield<av::utils::MVFString>("MVFString");
 
-  // gua related multi value fields
-  av::python::register_multivaluefield<av::utils::MVFMatrix>("MVFMatrix");
-  av::python::register_multivaluefield<av::utils::MVFVec2>("MVFVec2");
-  av::python::register_multivaluefield<av::utils::MVFVec3>("MVFVec3");
-  av::python::register_multivaluefield<av::utils::MVFVec4>("MVFVec4");
-  av::python::register_multivaluefield<av::utils::MVFQuat>("MVFQuat");
+    // gua related multi value fields
+    av::python::register_multivaluefield<av::utils::MVFMatrix>("MVFMatrix");
+    av::python::register_multivaluefield<av::utils::MVFVec2>("MVFVec2");
+    av::python::register_multivaluefield<av::utils::MVFVec3>("MVFVec3");
+    av::python::register_multivaluefield<av::utils::MVFVec4>("MVFVec4");
+    av::python::register_multivaluefield<av::utils::MVFQuat>("MVFQuat");
 }
 
 // #if OSG_VERSION_MAJOR == 3
@@ -167,7 +171,7 @@ void init_MultiValueFields()
 //   scnsvr->startCapture();
 //   view->addEventHandler(scnsvr);
 // }
-//elif OSG_VERSION_MAJOR == 2
+// elif OSG_VERSION_MAJOR == 2
 // void addScreenCaptureHandler(av::osg::viewer::View * avView, std::string folder, std::string filename, int numFrames) {
 //   std::cerr << "addScreenCaptureHandler::ERROR Screen capture functionality is currently only supported with osg3.x" << std::endl;
 // }
@@ -175,48 +179,26 @@ void init_MultiValueFields()
 
 BOOST_PYTHON_MODULE(_utils)
 {
-  av::utils::Init::initClass();
+    av::utils::Init::initClass();
 
-  class_<av::utils::Bool2Or
-      , av::Link<av::utils::Bool2Or>
-      , bases<av::FieldContainer>
-      , boost::noncopyable
-      >("Bool2Or", "docstring", no_init);
-  class_<av::utils::Bool2And
-      , av::Link<av::utils::Bool2And>
-      , bases<av::FieldContainer>
-      , boost::noncopyable
-      >("Bool2And", "docstring", no_init);
-  class_<av::utils::Bool3Or
-      , av::Link<av::utils::Bool3Or>
-      , bases<av::FieldContainer>
-      , boost::noncopyable
-      >("Bool3Or", "docstring", no_init);
-  class_<av::utils::Bool3And
-      , av::Link<av::utils::Bool3And>
-      , bases<av::FieldContainer>
-      , boost::noncopyable
-      >("Bool3And", "docstring", no_init);
+    class_<av::utils::Bool2Or, av::Link<av::utils::Bool2Or>, bases<av::FieldContainer>, boost::noncopyable>("Bool2Or", "docstring", no_init);
+    class_<av::utils::Bool2And, av::Link<av::utils::Bool2And>, bases<av::FieldContainer>, boost::noncopyable>("Bool2And", "docstring", no_init);
+    class_<av::utils::Bool3Or, av::Link<av::utils::Bool3Or>, bases<av::FieldContainer>, boost::noncopyable>("Bool3Or", "docstring", no_init);
+    class_<av::utils::Bool3And, av::Link<av::utils::Bool3And>, bases<av::FieldContainer>, boost::noncopyable>("Bool3And", "docstring", no_init);
 
-  class_<av::utils::Trackball
-       , av::Link<av::utils::Trackball>
-       , bases<av::FieldContainer>
-       , boost::noncopyable
-       >("Trackball", "docstring", no_init);
+    class_<av::utils::Trackball, av::Link<av::utils::Trackball>, bases<av::FieldContainer>, boost::noncopyable>("Trackball", "docstring", no_init);
 
-  def("calc_hpr", CalcHpr);
+    def("calc_hpr", CalcHpr);
 
-  def("print_registered_field_containers"
-      ,print_actual_registered_field_containers);
+    def("print_registered_field_containers", print_actual_registered_field_containers);
 
-  //def("add_screen_capture_handler",addScreenCaptureHandler);
+    // def("add_screen_capture_handler",addScreenCaptureHandler);
 
-  av::utils::initMultiValueFields();
-  av::utils::initMultiValueOSGFields();
-  init_MultiValueFields();
+    av::utils::initMultiValueFields();
+    av::utils::initMultiValueOSGFields();
+    init_MultiValueFields();
 
 #ifdef PCL_SUPPORT
-  init_PCD();
+    init_PCD();
 #endif
-
 }

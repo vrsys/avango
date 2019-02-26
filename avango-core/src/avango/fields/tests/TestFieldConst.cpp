@@ -34,42 +34,40 @@
 
 namespace
 {
-  class MyConstObject : public av::BoolObject
-  {
+class MyConstObject : public av::BoolObject
+{
     AV_FC_DECLARE();
 
   public:
-
     av::MFBool BoolValues;
     av::SFBool BoolValue;
 
     MyConstObject()
     {
-      AV_FC_ADD_FIELD(BoolValues, av::MFBool::ContainerType());
-      AV_FC_ADD_FIELD(BoolValue, false);
-
+        AV_FC_ADD_FIELD(BoolValues, av::MFBool::ContainerType());
+        AV_FC_ADD_FIELD(BoolValue, false);
     }
 
     void testConstness() const
     {
-      BoolValues.getValue();
-      BoolValue.getValue();
+        BoolValues.getValue();
+        BoolValue.getValue();
     }
-  };
+};
 
-  AV_FC_DEFINE(MyConstObject);
+AV_FC_DEFINE(MyConstObject);
 
-  void MyConstObject::initClass()
-  {
-    if (!isTypeInitialized())
+void MyConstObject::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::BoolObject::initClass();
-      AV_FC_INIT(av::BoolObject, MyConstObject, true);
+        av::BoolObject::initClass();
+        AV_FC_INIT(av::BoolObject, MyConstObject, true);
     }
-  }
+}
 
-  TEST(fieldGetConst)
-  {
+TEST(fieldGetConst)
+{
     MyConstObject::initClass();
     av::Link<MyConstObject> obj(new MyConstObject);
     av::MFBool::ContainerType testArray(10, true);
@@ -77,6 +75,6 @@ namespace
     obj->BoolValues.setValue(testArray);
 
     CHECK_ARRAY_EQUAL(testArray, obj->BoolValues.getValue(), testArray.size());
-  }
+}
 
 } // namespace

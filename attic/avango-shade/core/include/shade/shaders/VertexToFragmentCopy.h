@@ -37,29 +37,27 @@
 
 namespace shade
 {
-  namespace shaders
-  {
-    template<template<class> class T> class VertexToFragmentCopy :
-      public TemplateT<T, Type, VertexToFragmentCopy, Initializeable, PerStageGettable<T> >
-    {
-    public:
+namespace shaders
+{
+template <template <class> class T>
+class VertexToFragmentCopy : public TemplateT<T, Type, VertexToFragmentCopy, Initializeable, PerStageGettable<T>>
+{
+  public:
+    /*virtual*/ void_<> init_vertex(void);
+    /*virtual*/ T<Type> get_fragment(void);
 
-      /*virtual*/ void_<> init_vertex(void);
-      /*virtual*/ T<Type> get_fragment(void);
+    objref<boost::shared_ptr<Gettable<T>>, const_> value;
 
-      objref<boost::shared_ptr<Gettable<T> >, const_> value;
+  private:
+    Varying<T> copy;
 
-    private:
+    void get_fragment_inline(formatter::Generator& generator) const;
+    void init_vertex_inline(formatter::Generator& generator) const;
 
-      Varying<T> copy;
-
-      void get_fragment_inline(formatter::Generator& generator) const;
-      void init_vertex_inline(formatter::Generator& generator) const;
-
-      SHADE_TEMPLATE_T_MULTI_DERIVED_DECL(T, VertexToFragmentCopy, (Initializeable)(PerStageGettable<T>))
-    };
-  }
-}
+    SHADE_TEMPLATE_T_MULTI_DERIVED_DECL(T, VertexToFragmentCopy, (Initializeable)(PerStageGettable<T>))
+};
+} // namespace shaders
+} // namespace shade
 
 #include "impl/VertexToFragmentCopy_impl.cpp"
 

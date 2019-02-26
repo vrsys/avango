@@ -27,18 +27,17 @@ using namespace shade::parser;
 
 void CallSegment::get_content(formatter::Generator& generator, Scope& scope, const FunctionCall& call, std::ostream& error_log) const
 {
-  generator.handle_function_call_begin();
-  generator.handle_function_call_name_begin();
-  generator.handle_identifier(m_name);
-  generator.handle_function_call_name_end();
-  generator.handle_function_call_parameter_list_begin();
-  for (Parameters::const_iterator param = m_parameters.begin(); param != m_parameters.end(); ++param)
-  {
-    generator.handle_function_call_parameter_begin();
-    (*param)->get_content(generator, scope, call, error_log);
-    generator.handle_function_call_parameter_end();
-  }
-  generator.handle_function_call_parameter_list_end();
-  generator.handle_function_call_end();
+    generator.handle_function_call_begin();
+    generator.handle_function_call_name_begin();
+    generator.handle_identifier(m_name);
+    generator.handle_function_call_name_end();
+    generator.handle_function_call_parameter_list_begin();
+    for(Parameters::const_iterator param = m_parameters.begin(); param != m_parameters.end(); ++param)
+    {
+        generator.handle_function_call_parameter_begin();
+        (*param)->get_content(generator, scope, call, error_log);
+        generator.handle_function_call_parameter_end();
+    }
+    generator.handle_function_call_parameter_list_end();
+    generator.handle_function_call_end();
 }
-

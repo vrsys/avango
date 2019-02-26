@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_OBJECT
 #define AV_PYTHON_OSG_OBJECT
 

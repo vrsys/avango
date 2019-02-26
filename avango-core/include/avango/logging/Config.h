@@ -43,4 +43,3 @@
  */
 
 #endif // #if !defined(AVANGO_LOGGING_CONFIG_H)
-

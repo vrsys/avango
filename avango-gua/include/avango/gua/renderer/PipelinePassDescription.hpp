@@ -13,53 +13,49 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::PipelinePassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL PipelinePassDescription : public av::FieldContainer
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Wrapper for ::gua::PipelinePassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::PipelinePassDescription is created.
+     * Otherwise, the given ::gua::PipelinePassDescription is used.
      */
-    class AV_GUA_DLL PipelinePassDescription : public av::FieldContainer
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    PipelinePassDescription(std::shared_ptr<::gua::PipelinePassDescription> const& PipelinePassDescription);
 
-    public:
+    // virtual ~PipelinePassDescription() {}
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::PipelinePassDescription is created.
-       * Otherwise, the given ::gua::PipelinePassDescription is used.
-       */
-      PipelinePassDescription(std::shared_ptr< ::gua::PipelinePassDescription> const& PipelinePassDescription);
+  public:
+    /**
+     * Get the wrapped ::gua::PipelinePassDescription.
+     */
+    std::shared_ptr<::gua::PipelinePassDescription> const& getGuaPipelinePassDescription() const;
 
-      // virtual ~PipelinePassDescription() {}
+  private:
+    std::shared_ptr<::gua::PipelinePassDescription> m_guaPipelinePassDescription;
 
-    public:
+    PipelinePassDescription(const PipelinePassDescription&);
+    PipelinePassDescription& operator=(const PipelinePassDescription&);
+};
 
-      /**
-       * Get the wrapped ::gua::PipelinePassDescription.
-       */
-      std::shared_ptr< ::gua::PipelinePassDescription> const& getGuaPipelinePassDescription() const;
+using SFPipelinePassDescription = SingleField<Link<PipelinePassDescription>>;
+using MFPipelinePassDescription = MultiField<Link<PipelinePassDescription>>;
 
-    private:
-
-      std::shared_ptr< ::gua::PipelinePassDescription> m_guaPipelinePassDescription;
-
-
-      PipelinePassDescription(const PipelinePassDescription&);
-      PipelinePassDescription& operator=(const PipelinePassDescription&);
-    };
-
-    using SFPipelinePassDescription = SingleField<Link<PipelinePassDescription> >;
-    using MFPipelinePassDescription = MultiField<Link<PipelinePassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::PipelinePassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::PipelinePassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::PipelinePassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::PipelinePassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_PIPELINE_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_PIPELINE_PASS_DESCRIPTION_HPP

@@ -14,7 +14,6 @@
 
 // #include <avango/gua/windows_specific_gua.hpp>
 
-
 // namespace av
 // {
 //   namespace gua
@@ -53,7 +52,6 @@
 //        * Get the wrapped ::gua::PBRLoader.
 //        */
 //       ::gua::PBRLoader* getGuaPBRLoader() const;
-
 
 //     private:
 

@@ -32,87 +32,82 @@
 #include <avango/tools/Selector.h>
 #include "windows_specific_tools.h"
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * TypeSelector class selects targets from the types of given av::FieldContainers.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL TypeSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * TypeSelector class selects targets from the types of given av::FieldContainers.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL TypeSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    TypeSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~TypeSelector();
 
-      /**
-       * Constructor.
-       */
-      TypeSelector();
+  public:
+    /**
+     * Defines the input targets from which the objects are selected.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Defines types by objects which may be selected. The output is in SelectedTargets.
+     */
+    MFContainer SelectableTypes;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~TypeSelector();
+    /**
+     * Defines additional types by objects which may come as output from another Selector.
+     */
+    MFTargetHolder SelectableTargetTypes;
 
-    public:
+    /**
+     * Set to true if only equal types should be selectable.
+     * Otherwise also derived types are selectable, which is the default.
+     */
+    SFBool EqualTypeOnly;
 
-      /**
-       * Defines the input targets from which the objects are selected.
-       */
-      MFTargetHolder Targets;
+    /**
+     * Set to true if the selectable types should also be searched in the OSG node paths
+     * found in NodePathTargetHolder objects.
+     */
+    SFBool SearchTargetHolderNodePaths;
 
-      /**
-       * Defines types by objects which may be selected. The output is in SelectedTargets.
-       */
-      MFContainer SelectableTypes;
+    /**
+     * Set to true if the selectable types should also be searched in the OSG node paths.
+     */
+    SFBool SearchOSGNodePaths;
 
-      /**
-       * Defines additional types by objects which may come as output from another Selector.
-       */
-      MFTargetHolder SelectableTargetTypes;
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
 
-      /**
-       * Set to true if only equal types should be selectable.
-       * Otherwise also derived types are selectable, which is the default.
-       */
-      SFBool EqualTypeOnly;
+  protected:
+    bool isSelectable(const av::FieldContainer& object);
 
-      /**
-       * Set to true if the selectable types should also be searched in the OSG node paths
-       * found in NodePathTargetHolder objects.
-       */
-      SFBool SearchTargetHolderNodePaths;
+    std::set<Type> mTypes;
+    bool mTypesDirty;
+};
 
-      /**
-       * Set to true if the selectable types should also be searched in the OSG node paths.
-       */
-      SFBool SearchOSGNodePaths;
-
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
-
-    protected:
-
-      bool isSelectable(const av::FieldContainer& object);
-
-      std::set<Type> mTypes;
-      bool mTypesDirty;
-    };
-
-    using SFTypeSelector = SingleField<Link<TypeSelector> >;
-    using MFTypeSelector = MultiField<Link<TypeSelector> >;
-  }
+using SFTypeSelector = SingleField<Link<TypeSelector>>;
+using MFTypeSelector = MultiField<Link<TypeSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::TypeSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::TypeSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::TypeSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::TypeSelector>>;
 #endif
-}
+} // namespace av
 
 #endif

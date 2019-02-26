@@ -32,13 +32,13 @@
 
 namespace shade
 {
-  class Texture;
+class Texture;
 
-  class GLSLWrapper
-  {
+class GLSLWrapper
+{
   public:
     GLSLWrapper(void);
-    virtual ~GLSLWrapper(void) {};
+    virtual ~GLSLWrapper(void){};
 
     void init(void);
     bool has_shader(ShaderEnvironment env) const;
@@ -55,15 +55,15 @@ namespace shade
 
     enum ShaderType
     {
-      fragment_shader = 0x8B30,
-      vertex_shader = 0x8B31,
-      geometry_shader = 0x8DD9
+        fragment_shader = 0x8B30,
+        vertex_shader = 0x8B31,
+        geometry_shader = 0x8DD9
     };
     enum GeometryParameter
     {
-      geometry_vertices_out = 0x8DDA,
-      geometry_input_type = 0x8DDB,
-      geometry_output_type = 0x8DDC
+        geometry_vertices_out = 0x8DDA,
+        geometry_input_type = 0x8DDB,
+        geometry_output_type = 0x8DDC
     };
 
     virtual boost::shared_ptr<Texture> make_canvas_texture(void) const = 0;
@@ -102,7 +102,7 @@ namespace shade
     TextureIndexMap m_textures;
 
     static ShaderType m_env_to_gl[shade::num_shader_environment];
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_GLSLWrapper_H */

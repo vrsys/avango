@@ -27,7 +27,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::shade::Types"));
+av::Logger& logger(av::getLogger("av::shade::Types"));
 }
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -35,38 +35,34 @@ namespace
 #include <rpc/rpc.h>
 #include <avango/Msg.h>
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Object::DataVariance& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Object::DataVariance& buf)
 {
-  int value(static_cast<int>(buf));
-  osg::av_pushMsg(netMsg, value);
+    int value(static_cast<int>(buf));
+    osg::av_pushMsg(netMsg, value);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Object::DataVariance& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Object::DataVariance& buf)
 {
-  int value;
-  osg::av_popMsg(netMsg, value);
-  buf = static_cast<::osg::Object::DataVariance>(value);
+    int value;
+    osg::av_popMsg(netMsg, value);
+    buf = static_cast<::osg::Object::DataVariance>(value);
 }
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Object::DataVariance& buf)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Object::DataVariance& buf)
 {
-  int value(static_cast<int>(buf));
-  os << value;
+    int value(static_cast<int>(buf));
+    os << value;
 
-  return os;
+    return os;
 }
 
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Object::DataVariance& buf)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Object::DataVariance& buf)
 {
-  int value;
-  is >> value;
-  buf = static_cast< ::osg::Object::DataVariance >(value);
+    int value;
+    is >> value;
+    buf = static_cast<::osg::Object::DataVariance>(value);
 
-  return is;
+    return is;
 }

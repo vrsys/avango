@@ -32,13 +32,13 @@
  */
 
 #if defined(_MSC_VER)
-  #if defined(AV_MOVING_LIBRARY)
-    #define AV_MOVING_DLL __declspec( dllexport )
-  #else
-    #define AV_MOVING_DLL __declspec( dllimport )
-  #endif
+#if defined(AV_MOVING_LIBRARY)
+#define AV_MOVING_DLL __declspec(dllexport)
 #else
-  #define AV_MOVING_DLL
+#define AV_MOVING_DLL __declspec(dllimport)
+#endif
+#else
+#define AV_MOVING_DLL
 #endif // #if defined(_MSC_VER)
 
 #endif // #if !defined(AV_WINDOWS_SPECIFIC_MOVING_H)

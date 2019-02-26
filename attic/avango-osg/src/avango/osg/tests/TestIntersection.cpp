@@ -30,8 +30,8 @@
 
 namespace
 {
-  TEST(LineSegmentIntersection)
-  {
+TEST(LineSegmentIntersection)
+{
     av::Link<av::osg::Sphere> sphere = new av::osg::Sphere;
     av::Link<av::osg::LineSegmentIntersector> lsi = new av::osg::LineSegmentIntersector;
 
@@ -39,10 +39,10 @@ namespace
     lsi->evaluate();
 
     CHECK(lsi->HitCount.getValue() > 0);
-  }
+}
 
-  TEST(HitNodePath)
-  {
+TEST(HitNodePath)
+{
     av::Link<av::osg::Group> root = new av::osg::Group;
     av::Link<av::osg::Group> group1 = new av::osg::Group;
     av::Link<av::osg::Group> group2 = new av::osg::Group;
@@ -58,12 +58,12 @@ namespace
 
     // should be 3 excluding the root node
     CHECK_EQUAL(3u, lsi->HitNodePath.getValue().size());
-  }
-
-  TEST(ConvenienceMethod)
-  {
-    av::Link<av::osg::Node> sphere = new av::osg::Sphere;
-    ::osg::Vec3 hitpoint = av::osg::lineIntersect(::osg::Vec3(0,0,0), ::osg::Vec3(0,10,0), sphere);
-    CHECK(hitpoint != ::osg::Vec3(0,10,0));
-  }
 }
+
+TEST(ConvenienceMethod)
+{
+    av::Link<av::osg::Node> sphere = new av::osg::Sphere;
+    ::osg::Vec3 hitpoint = av::osg::lineIntersect(::osg::Vec3(0, 0, 0), ::osg::Vec3(0, 10, 0), sphere);
+    CHECK(hitpoint != ::osg::Vec3(0, 10, 0));
+}
+} // namespace

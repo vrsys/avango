@@ -29,75 +29,68 @@
 #include <avango/daemon/BufferBlock.h>
 
 #ifdef WIN32
-#  include <boost/interprocess/managed_shared_memory.hpp>
-#  include <boost/interprocess/mapped_region.hpp>
-#  include <avango/Logger.h>
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/mapped_region.hpp>
+#include <avango/Logger.h>
 
-  namespace
-  {
-    av::Logger& logger(av::getLogger("av::daemon::BufferSegment"));
-  }
+namespace
+{
+av::Logger& logger(av::getLogger("av::daemon::BufferSegment"));
+}
 
 #else
-#  include <avango/daemon/SharedMemorySegment.h>
+#include <avango/daemon/SharedMemorySegment.h>
 #endif
 
 av::daemon::BufferSegment::BufferSegment()
 {
-
 #ifndef WIN32
-  mSharedMem = new SharedMemorySegment (0xc3, sizeof(BufferBlock));
+    mSharedMem = new SharedMemorySegment(0xc3, sizeof(BufferBlock));
 
-  AV_ASSERT(mSharedMem);
-  AV_ASSERT(mSharedMem->segment());
+    AV_ASSERT(mSharedMem);
+    AV_ASSERT(mSharedMem->segment());
 
-  if (mSharedMem->created()) {
-    mBufferBlock = new (mSharedMem->segment()) BufferBlock;
-  } else {
-    mBufferBlock = static_cast<BufferBlock*>(mSharedMem->segment());
-  }
+    if(mSharedMem->created())
+    {
+        mBufferBlock = new(mSharedMem->segment()) BufferBlock;
+    }
+    else
+    {
+        mBufferBlock = static_cast<BufferBlock*>(mSharedMem->segment());
+    }
 #else
-  mShmName = "AvDaemon";
-  using namespace boost::interprocess;
-  
-  // a dirty trick to calculate required segment size
-  const std::size_t shmSize = sizeof(BufferBlock) * 8;
+    mShmName = "AvDaemon";
+    using namespace boost::interprocess;
 
-  // construct managed shared memory
-  mSegment = new managed_windows_shared_memory(open_or_create, mShmName.c_str(), shmSize);
-  
-  if (mSegment->get_size() < shmSize)
-  {
-    delete mSegment;
-    boost::interprocess::shared_memory_object::remove(mShmName.c_str());
-    mSegment = new managed_windows_shared_memory(create_only, mShmName.c_str(), shmSize);
-    logger.warn() << "BufferSegment(): Shared memory segment has been rebuilt with new size "
-                  << "because the old size was less that required.";
-  }
+    // a dirty trick to calculate required segment size
+    const std::size_t shmSize = sizeof(BufferBlock) * 8;
 
-  mBufferBlock = mSegment->find_or_construct<BufferBlock>("BufferBlock")();
-  AV_ASSERT(mBufferBlock);
+    // construct managed shared memory
+    mSegment = new managed_windows_shared_memory(open_or_create, mShmName.c_str(), shmSize);
+
+    if(mSegment->get_size() < shmSize)
+    {
+        delete mSegment;
+        boost::interprocess::shared_memory_object::remove(mShmName.c_str());
+        mSegment = new managed_windows_shared_memory(create_only, mShmName.c_str(), shmSize);
+        logger.warn() << "BufferSegment(): Shared memory segment has been rebuilt with new size "
+                      << "because the old size was less that required.";
+    }
+
+    mBufferBlock = mSegment->find_or_construct<BufferBlock>("BufferBlock")();
+    AV_ASSERT(mBufferBlock);
 #endif
-
 }
 
 av::daemon::BufferSegment::~BufferSegment()
 {
 #ifndef WIN32
-  delete mSharedMem;
+    delete mSharedMem;
 #else
-  delete mSegment;
+    delete mSegment;
 #endif
 }
 
-av::daemon::Buffer*
-av::daemon::BufferSegment::getBuffer(const char* name)
-{
-  return (mBufferBlock) ? mBufferBlock->getBuffer(name) : 0;
-}
+av::daemon::Buffer* av::daemon::BufferSegment::getBuffer(const char* name) { return (mBufferBlock) ? mBufferBlock->getBuffer(name) : 0; }
 
-av::daemon::Buffer*
-av::daemon::BufferSegment::getBuffer(const std::string& name)
-{
-  return getBuffer(name.c_str());
-}
+av::daemon::Buffer* av::daemon::BufferSegment::getBuffer(const std::string& name) { return getBuffer(name.c_str()); }

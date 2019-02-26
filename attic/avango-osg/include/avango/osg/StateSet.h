@@ -46,125 +46,122 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::StateSet OsgStateSet;
+namespace osg
+{
+typedef ::osg::StateSet OsgStateSet;
+
+/**
+ * Wrapper for ::osg::StateSet
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL StateSet : public Object
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    StateSet(OsgStateSet* osgstateset = new OsgStateSet()); // use defined type to circumvent compiler bug in VS8
+
+    SFFog Fog;
+    SFInt FogMode;
+    SFInt LightingMode;
+    SFInt BlendMode;
+    SFPolygonOffset PolygonOffset;
+    SFInt PolygonOffsetMode;
+    SFInt WireframeMode;
+    SFInt RenderingHint;
+    SFInt RenderBin;
+    SFCullFace CullFace;
+    SFInt CullFaceMode;
+    SFDepth Depth;
+    SFBlendFunc BlendFunc;
+    SFInt RescaleNormalMode;
+    SFInt NormalizeMode;
+    SFInt DepthTestMode;
+    SFLineWidth LineWidth;
+
+    SFTexture Texture0;
+    SFTexture Texture1;
+    SFProgram Program;
+    MFUniform Uniforms;
 
     /**
-     * Wrapper for ::osg::StateSet
-     *
-     * \ingroup av_osg
+     * Destructor made protected to prevent allocation on stack.
      */
-    class AV_OSG_DLL StateSet : public Object
-    {
-      AV_FC_DECLARE();
+    virtual ~StateSet();
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::osg::StateSet.
+     */
+    ::osg::StateSet* getOsgStateSet() const;
 
-      /**
-       * Constructor.
-       */
-      StateSet(OsgStateSet* osgstateset = new OsgStateSet()); // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getFogCB(const av::osg::SFFog::GetValueEvent& event);
+    virtual void setFogCB(const av::osg::SFFog::SetValueEvent& event);
+    virtual void getFogModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setFogModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getLightingModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setLightingModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getBlendModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setBlendModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getWireframeModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setWireframeModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getPolygonOffsetCB(const av::osg::SFPolygonOffset::GetValueEvent& event);
+    virtual void setPolygonOffsetCB(const av::osg::SFPolygonOffset::SetValueEvent& event);
+    virtual void getPolygonOffsetModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setPolygonOffsetModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getRenderingHintCB(const av::SFInt::GetValueEvent& event);
+    virtual void setRenderingHintCB(const av::SFInt::SetValueEvent& event);
+    virtual void getRenderBinCB(const av::SFInt::GetValueEvent& event);
+    virtual void setRenderBinCB(const av::SFInt::SetValueEvent& event);
+    virtual void getCullFaceCB(const av::osg::SFCullFace::GetValueEvent& event);
+    virtual void setCullFaceCB(const av::osg::SFCullFace::SetValueEvent& event);
+    virtual void getCullFaceModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setCullFaceModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getDepthCB(const av::osg::SFDepth::GetValueEvent& event);
+    virtual void setDepthCB(const av::osg::SFDepth::SetValueEvent& event);
+    virtual void getBlendFuncCB(const av::osg::SFBlendFunc::GetValueEvent& event);
+    virtual void setBlendFuncCB(const av::osg::SFBlendFunc::SetValueEvent& event);
+    virtual void getRescaleNormalModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
 
-      SFFog Fog;
-      SFInt FogMode;
-      SFInt LightingMode;
-      SFInt BlendMode;
-      SFPolygonOffset PolygonOffset;
-      SFInt PolygonOffsetMode;
-      SFInt WireframeMode;
-      SFInt RenderingHint;
-      SFInt RenderBin;
-      SFCullFace CullFace;
-      SFInt CullFaceMode;
-      SFDepth Depth;
-      SFBlendFunc BlendFunc;
-      SFInt RescaleNormalMode;
-      SFInt NormalizeMode;
-      SFInt DepthTestMode;
-      SFLineWidth LineWidth;
+    virtual void getTextureCB(const av::osg::SFTexture::GetValueEvent& event);
+    virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
+    virtual void getTextureCB1(const av::osg::SFTexture::GetValueEvent& event);
+    virtual void setTextureCB1(const av::osg::SFTexture::SetValueEvent& event);
 
-      SFTexture Texture0;
-      SFTexture Texture1;
-      SFProgram Program;
-      MFUniform Uniforms;
+    virtual void getDepthTestModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setDepthTestModeCB(const av::SFInt::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~StateSet();
+    virtual void getProgramCB(const av::osg::SFProgram::GetValueEvent& event);
+    virtual void setProgramCB(const av::osg::SFProgram::SetValueEvent& event);
 
-    public:
-      /**
-       * Get the wrapped ::osg::StateSet.
-       */
-      ::osg::StateSet* getOsgStateSet() const;
+    virtual void getUniformsCB(const av::osg::MFUniform::GetValueEvent& event);
+    virtual void setUniformsCB(const av::osg::MFUniform::SetValueEvent& event);
 
-    protected:
+    virtual void getLineWidthCB(const av::osg::SFLineWidth::GetValueEvent& event);
+    virtual void setLineWidthCB(const av::osg::SFLineWidth::SetValueEvent& event);
 
-      virtual void getFogCB(const av::osg::SFFog::GetValueEvent& event);
-      virtual void setFogCB(const av::osg::SFFog::SetValueEvent& event);
-      virtual void getFogModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setFogModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getLightingModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setLightingModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getBlendModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setBlendModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getWireframeModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setWireframeModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getPolygonOffsetCB(const av::osg::SFPolygonOffset::GetValueEvent& event);
-      virtual void setPolygonOffsetCB(const av::osg::SFPolygonOffset::SetValueEvent& event);
-      virtual void getPolygonOffsetModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setPolygonOffsetModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getRenderingHintCB(const av::SFInt::GetValueEvent& event);
-      virtual void setRenderingHintCB(const av::SFInt::SetValueEvent& event);
-      virtual void getRenderBinCB(const av::SFInt::GetValueEvent& event);
-      virtual void setRenderBinCB(const av::SFInt::SetValueEvent& event);
-      virtual void getCullFaceCB(const av::osg::SFCullFace::GetValueEvent& event);
-      virtual void setCullFaceCB(const av::osg::SFCullFace::SetValueEvent& event);
-      virtual void getCullFaceModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setCullFaceModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getDepthCB(const av::osg::SFDepth::GetValueEvent& event);
-      virtual void setDepthCB(const av::osg::SFDepth::SetValueEvent& event);
-      virtual void getBlendFuncCB(const av::osg::SFBlendFunc::GetValueEvent& event);
-      virtual void setBlendFuncCB(const av::osg::SFBlendFunc::SetValueEvent& event);
-      virtual void getRescaleNormalModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setRescaleNormalModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getNormalizeModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setNormalizeModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getTextureCBUnit(const av::osg::SFTexture::GetValueEvent& event, int unit);
+    virtual void setTextureCBUnit(const av::osg::SFTexture::SetValueEvent& event, int unit);
 
-      virtual void getTextureCB(const av::osg::SFTexture::GetValueEvent& event);
-      virtual void setTextureCB(const av::osg::SFTexture::SetValueEvent& event);
-      virtual void getTextureCB1(const av::osg::SFTexture::GetValueEvent& event);
-      virtual void setTextureCB1(const av::osg::SFTexture::SetValueEvent& event);
+  private:
+    ::osg::StateSet* mOsgStateSet;
+};
 
-      virtual void getDepthTestModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setDepthTestModeCB(const av::SFInt::SetValueEvent& event);
-
-      virtual void getProgramCB(const av::osg::SFProgram::GetValueEvent& event);
-      virtual void setProgramCB(const av::osg::SFProgram::SetValueEvent& event);
-
-      virtual void getUniformsCB(const av::osg::MFUniform::GetValueEvent& event);
-      virtual void setUniformsCB(const av::osg::MFUniform::SetValueEvent& event);
-
-      virtual void getLineWidthCB(const av::osg::SFLineWidth::GetValueEvent& event);
-      virtual void setLineWidthCB(const av::osg::SFLineWidth::SetValueEvent& event);
-
-      virtual void getTextureCBUnit(const av::osg::SFTexture::GetValueEvent& event, int unit);
-      virtual void setTextureCBUnit(const av::osg::SFTexture::SetValueEvent& event, int unit);
-
-    private:
-
-      ::osg::StateSet *mOsgStateSet;
-    };
-
-    typedef SingleField<Link<StateSet> > SFStateSet;
-    typedef MultiField<Link<StateSet> > MFStateSet;
-  } // namespace osg
+typedef SingleField<Link<StateSet>> SFStateSet;
+typedef MultiField<Link<StateSet>> MFStateSet;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::StateSet> >;
-  template class AV_OSG_DLL MultiField<Link<osg::StateSet> >;
+template class AV_OSG_DLL SingleField<Link<osg::StateSet>>;
+template class AV_OSG_DLL MultiField<Link<osg::StateSet>>;
 #endif
 
 } // namespace av

@@ -30,32 +30,26 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Initializeable : public ShaderBase<Initializeable>
+{
+  public:
+    std::string get_method_name(ShaderEnvironment env);
 
-    class Initializeable : public ShaderBase<Initializeable>
-    {
-    public:
+    virtual void_<> init_vertex(void) { return void_<>(); };
 
-      std::string get_method_name(ShaderEnvironment env);
+    virtual void_<> init_fragment(void) { return void_<>(); };
 
-      virtual void_<> init_vertex(void)
-      { return void_<>(); };
+    virtual void_<> init_geometry(void) { return void_<>(); };
 
-      virtual void_<> init_fragment(void)
-      { return void_<>(); };
+    virtual void_<> init_post_geometry(void) { return void_<>(); };
 
-      virtual void_<> init_geometry(void)
-      { return void_<>(); };
+  private:
+    SHADE_BASE_DECL(Initializeable)
+};
 
-      virtual void_<> init_post_geometry(void)
-      { return void_<>(); };
-
-    private:
-      SHADE_BASE_DECL(Initializeable)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Initializeable_H */

@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SphereShape"));
+av::Logger& logger(av::getLogger("av::gua::SphereShape"));
 }
 
 AV_FC_DEFINE(av::gua::SphereShape);
@@ -15,23 +15,16 @@ AV_FC_DEFINE(av::gua::SphereShape);
 AV_FIELD_DEFINE(av::gua::SFSphereShape);
 AV_FIELD_DEFINE(av::gua::MFSphereShape);
 
-av::gua::SphereShape::SphereShape(::gua::physics::SphereShape* guashape)
-  : CollisionShape(guashape),
-    m_guaShape(reinterpret_cast< ::gua::physics::SphereShape*>(CollisionShape::getGuaShape()))
+av::gua::SphereShape::SphereShape(::gua::physics::SphereShape* guashape) : CollisionShape(guashape), m_guaShape(reinterpret_cast<::gua::physics::SphereShape*>(CollisionShape::getGuaShape()))
 {
-    AV_FC_ADD_ADAPTOR_FIELD(Radius,
-                        std::bind(&SphereShape::getRadiusCB, this,std::placeholders::_1),
-                        std::bind(&SphereShape::setRadiusCB, this,std::placeholders::_1));
-
+    AV_FC_ADD_ADAPTOR_FIELD(Radius, std::bind(&SphereShape::getRadiusCB, this, std::placeholders::_1), std::bind(&SphereShape::setRadiusCB, this, std::placeholders::_1));
 }
 
-av::gua::SphereShape::~SphereShape()
-{}
+av::gua::SphereShape::~SphereShape() {}
 
-void
-av::gua::SphereShape::initClass()
+void av::gua::SphereShape::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::CollisionShape::initClass();
 
@@ -42,19 +35,8 @@ av::gua::SphereShape::initClass()
     }
 }
 
-::gua::physics::SphereShape*
-av::gua::SphereShape::getGuaShape() const {
-    return m_guaShape;
-}
+::gua::physics::SphereShape* av::gua::SphereShape::getGuaShape() const { return m_guaShape; }
 
-void
-av::gua::SphereShape::getRadiusCB(const SFFloat::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaShape->get_radius();
-}
+void av::gua::SphereShape::getRadiusCB(const SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaShape->get_radius(); }
 
-void
-av::gua::SphereShape::setRadiusCB(const SFFloat::SetValueEvent& event)
-{
-    m_guaShape->set_radius(event.getValue());
-}
+void av::gua::SphereShape::setRadiusCB(const SFFloat::SetValueEvent& event) { m_guaShape->set_radius(event.getValue()); }

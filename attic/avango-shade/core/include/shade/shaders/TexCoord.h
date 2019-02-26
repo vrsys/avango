@@ -34,28 +34,24 @@
 #include "../types/void.h"
 #include "../types/const.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class TexCoord : public ShaderBase<TexCoord, PerStageGettable<vec4>>
+{
+  public:
+    /*virtual*/ vec4<> get_vertex(void);
 
-    class TexCoord : public ShaderBase<TexCoord, PerStageGettable<vec4> >
-    {
-    public:
+    int_<const_> index;
 
-      /*virtual*/ vec4<> get_vertex(void);
+  private:
+    void get_vertex_inline(formatter::Generator&);
 
-      int_<const_> index;
+    SHADE_DERIVED_DECL(TexCoord, PerStageGettable<vec4>)
+};
 
-    private:
-
-      void get_vertex_inline(formatter::Generator&);
-
-      SHADE_DERIVED_DECL(TexCoord, PerStageGettable<vec4>)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_TexCoord_H */

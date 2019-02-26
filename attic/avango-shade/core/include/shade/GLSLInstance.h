@@ -29,9 +29,11 @@
 
 namespace shade
 {
-  class NotSupported {};
+class NotSupported
+{
+};
 
-  boost::shared_ptr<GLSLWrapper> create_GLSL_wrapper(void);
-}
+boost::shared_ptr<GLSLWrapper> create_GLSL_wrapper(void);
+} // namespace shade
 
 #endif /* shade_GLSLInstance_H */

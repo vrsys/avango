@@ -4,15 +4,14 @@
 
 using namespace UnitTest;
 
-namespace {
-
+namespace
+{
 TestDetails const details("testname", "suitename", "filename", 123);
-
 
 TEST(StartsWithNoTestsRun)
 {
     TestResults results;
-    CHECK_EQUAL (0, results.GetTotalTestCount());
+    CHECK_EQUAL(0, results.GetTotalTestCount());
 }
 
 TEST(RecordsNumbersOfTests)
@@ -27,7 +26,7 @@ TEST(RecordsNumbersOfTests)
 TEST(StartsWithNoTestsFailing)
 {
     TestResults results;
-    CHECK_EQUAL (0, results.GetFailureCount());
+    CHECK_EQUAL(0, results.GetFailureCount());
 }
 
 TEST(RecordsNumberOfFailures)
@@ -52,7 +51,7 @@ TEST(RecordsNumberOfFailedTests)
     results.OnTestFailure(details, "");
     results.OnTestFinish(details, 0);
 
-    CHECK_EQUAL (2, results.GetFailedTestCount());
+    CHECK_EQUAL(2, results.GetFailedTestCount());
 }
 
 TEST(NotifiesReporterOfTestStartWithCorrectInfo)
@@ -61,9 +60,9 @@ TEST(NotifiesReporterOfTestStartWithCorrectInfo)
     TestResults results(&reporter);
     results.OnTestStart(details);
 
-    CHECK_EQUAL (1, reporter.testRunCount);
-    CHECK_EQUAL ("suitename", reporter.lastStartedSuite);
-    CHECK_EQUAL ("testname", reporter.lastStartedTest);
+    CHECK_EQUAL(1, reporter.testRunCount);
+    CHECK_EQUAL("suitename", reporter.lastStartedSuite);
+    CHECK_EQUAL("testname", reporter.lastStartedTest);
 }
 
 TEST(NotifiesReporterOfTestFailureWithCorrectInfo)
@@ -72,12 +71,12 @@ TEST(NotifiesReporterOfTestFailureWithCorrectInfo)
     TestResults results(&reporter);
 
     results.OnTestFailure(details, "failurestring");
-    CHECK_EQUAL (1, reporter.testFailedCount);
-    CHECK_EQUAL ("filename", reporter.lastFailedFile);
-    CHECK_EQUAL (123, reporter.lastFailedLine);
-    CHECK_EQUAL ("suitename", reporter.lastFailedSuite);
-    CHECK_EQUAL ("testname", reporter.lastFailedTest);
-    CHECK_EQUAL ("failurestring", reporter.lastFailedMessage);
+    CHECK_EQUAL(1, reporter.testFailedCount);
+    CHECK_EQUAL("filename", reporter.lastFailedFile);
+    CHECK_EQUAL(123, reporter.lastFailedLine);
+    CHECK_EQUAL("suitename", reporter.lastFailedSuite);
+    CHECK_EQUAL("testname", reporter.lastFailedTest);
+    CHECK_EQUAL("failurestring", reporter.lastFailedMessage);
 }
 
 TEST(NotifiesReporterOfCheckFailureWithCorrectInfo)
@@ -86,13 +85,13 @@ TEST(NotifiesReporterOfCheckFailureWithCorrectInfo)
     TestResults results(&reporter);
 
     results.OnTestFailure(details, "failurestring");
-    CHECK_EQUAL (1, reporter.testFailedCount);
+    CHECK_EQUAL(1, reporter.testFailedCount);
 
-    CHECK_EQUAL ("filename", reporter.lastFailedFile);
-    CHECK_EQUAL (123, reporter.lastFailedLine);
-    CHECK_EQUAL ("testname", reporter.lastFailedTest);
-    CHECK_EQUAL ("suitename", reporter.lastFailedSuite);
-    CHECK_EQUAL ("failurestring", reporter.lastFailedMessage);
+    CHECK_EQUAL("filename", reporter.lastFailedFile);
+    CHECK_EQUAL(123, reporter.lastFailedLine);
+    CHECK_EQUAL("testname", reporter.lastFailedTest);
+    CHECK_EQUAL("suitename", reporter.lastFailedSuite);
+    CHECK_EQUAL("failurestring", reporter.lastFailedMessage);
 }
 
 TEST(NotifiesReporterOfTestEnd)
@@ -101,11 +100,10 @@ TEST(NotifiesReporterOfTestEnd)
     TestResults results(&reporter);
 
     results.OnTestFinish(details, 0.1234f);
-    CHECK_EQUAL (1, reporter.testFinishedCount);
-    CHECK_EQUAL ("testname", reporter.lastFinishedTest);
-    CHECK_EQUAL ("suitename", reporter.lastFinishedSuite);
-    CHECK_CLOSE (0.1234f, reporter.lastFinishedTestTime, 0.0001f);
+    CHECK_EQUAL(1, reporter.testFinishedCount);
+    CHECK_EQUAL("testname", reporter.lastFinishedTest);
+    CHECK_EQUAL("suitename", reporter.lastFinishedSuite);
+    CHECK_CLOSE(0.1234f, reporter.lastFinishedTestTime, 0.0001f);
 }
 
-
-}
+} // namespace

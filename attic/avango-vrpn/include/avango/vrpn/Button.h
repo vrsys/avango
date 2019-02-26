@@ -7,42 +7,37 @@
 
 namespace av
 {
-  namespace vrpn
-  {
+namespace vrpn
+{
+class AV_VRPN_DLL Button : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_VRPN_DLL Button : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    Button();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Button();
 
-      Button();
+  public:
+    // Number of the button (Given by the VRPN numbering)
+    SFInt Number;
+    // Trigger state of the button
+    SFBool State;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Button();
-
-    public:
-
-      //Number of the button (Given by the VRPN numbering)
-      SFInt Number;
-      //Trigger state of the button
-      SFBool State;
-
-    };
-
-    typedef SingleField<Link<Button> > SFButton;
-    typedef MultiField<Link<Button> > MFButton;
-  }
+typedef SingleField<Link<Button>> SFButton;
+typedef MultiField<Link<Button>> MFButton;
+} // namespace vrpn
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_VRPN_DLL SingleField< Link<av::vrpn::Button> >;
-  template class AV_VRPN_DLL MultiField< Link<av::vrpn::Button> >;
+template class AV_VRPN_DLL SingleField<Link<av::vrpn::Button>>;
+template class AV_VRPN_DLL MultiField<Link<av::vrpn::Button>>;
 #endif
 
-}
+} // namespace av
 
 #endif

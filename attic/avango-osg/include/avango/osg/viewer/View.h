@@ -42,95 +42,91 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      /**
-       * Wrapper for ::osgViewer::View.
-       *
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL View : public av::osg::Object
-      {
-        AV_FC_DECLARE();
+namespace osg
+{
+namespace viewer
+{
+/**
+ * Wrapper for ::osgViewer::View.
+ *
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL View : public av::osg::Object
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osgViewer::View is created.
+     * Otherwise, the given ::osgViewer::View is used.
+     */
+    View(::osgViewer::View* osgview = new ::osgViewer::View);
 
-        /**
-         * Constructor. When called without arguments, a new ::osgViewer::View is created.
-         * Otherwise, the given ::osgViewer::View is used.
-         */
-        View(::osgViewer::View* osgview = new ::osgViewer::View);
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~View();
 
-      protected:
+  public:
+    /**
+     * So called master camera (see ::osg::View documentation)
+     */
+    SFCamera MasterCamera;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~View();
+    /**
+     * Slave cameras that can render the scene from another position.
+     */
+    MFCamera SlaveCameras;
 
-      public:
+    /**
+     * Scene to render. Required for the opening of the windows.
+     */
+    SFNode Scene;
 
-        /**
-         * So called master camera (see ::osg::View documentation)
-         */
-        SFCamera MasterCamera;
+    /**
+     * Sets the displayed statistics mode:
+     * 0 = No statistics
+     * 1 = Frame rate only
+     * 2 = Full statistics
+     *
+     * See StatsHandler::StatsType in OpenSceneGraph/include/osgViewer/ViewerEventHandlers
+     */
+    SFInt StatsMode;
 
-        /**
-         * Slave cameras that can render the scene from another position.
-         */
-        MFCamera SlaveCameras;
+    /* virtual */ void fieldHasChangedLocalSideEffect(const Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-        /**
-         * Scene to render. Required for the opening of the windows.
-         */
-        SFNode Scene;
+    /**
+     * Get the wrapped ::osgViewer::View.
+     */
+    ::osgViewer::View* getOsgView() const;
 
-        /**
-         * Sets the displayed statistics mode:
-         * 0 = No statistics
-         * 1 = Frame rate only
-         * 2 = Full statistics
-         * 
-         * See StatsHandler::StatsType in OpenSceneGraph/include/osgViewer/ViewerEventHandlers
-         */
-        SFInt StatsMode;
+    virtual void getMasterCameraCB(const SFCamera::GetValueEvent& event);
+    virtual void setMasterCameraCB(const SFCamera::SetValueEvent& event);
 
-        /* virtual */ void fieldHasChangedLocalSideEffect(const Field& field);
-        /* virtual */ void evaluateLocalSideEffect();
+    virtual void getSceneCB(const SFNode::GetValueEvent& event);
+    virtual void setSceneCB(const SFNode::SetValueEvent& event);
 
-        /**
-         * Get the wrapped ::osgViewer::View.
-         */
-        ::osgViewer::View* getOsgView() const;
+  private:
+    ::osgViewer::View* mOsgView;
+    ::osg::ref_ptr<::osgGA::StateSetManipulator> mOsgStateSetManipulator;
+    ::osg::ref_ptr<::osgViewer::StatsHandler> mOsgStatsHandler;
+    ::osg::ref_ptr<::osgGA::GUIEventAdapter> mOsgStatsToggle;
 
-        virtual void getMasterCameraCB(const SFCamera::GetValueEvent& event);
-        virtual void setMasterCameraCB(const SFCamera::SetValueEvent& event);
+    int mStatsMode;
+};
 
-        virtual void getSceneCB(const SFNode::GetValueEvent& event);
-        virtual void setSceneCB(const SFNode::SetValueEvent& event);
+typedef SingleField<Link<View>> SFView;
+typedef MultiField<Link<View>> MFView;
 
-      private:
+} // namespace viewer
 
-        ::osgViewer::View *mOsgView;
-        ::osg::ref_ptr< ::osgGA::StateSetManipulator> mOsgStateSetManipulator;
-        ::osg::ref_ptr< ::osgViewer::StatsHandler> mOsgStatsHandler;
-        ::osg::ref_ptr< ::osgGA::GUIEventAdapter> mOsgStatsToggle;
-
-        int mStatsMode;
-      };
-
-      typedef SingleField<Link<View> > SFView;
-      typedef MultiField<Link<View> > MFView;
-
-    } // namespace viewer
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::View> >;
-  template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::View> >;
+template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::View>>;
+template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::View>>;
 #endif
 
 } // namespace av

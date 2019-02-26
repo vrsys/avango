@@ -5,15 +5,15 @@
 #include <sstream>
 #include <string>
 
-using std::string;
-using std::ostringstream;
 using std::ostream;
+using std::ostringstream;
+using std::string;
 
-namespace {
-
+namespace
+{
 void ReplaceChar(string& str, char c, string const& replacement)
 {
-    for (size_t pos = str.find(c); pos != string::npos; pos = str.find(c, pos + 1))
+    for(size_t pos = str.find(c); pos != string::npos; pos = str.find(c, pos + 1))
         str.replace(pos, 1, replacement);
 }
 
@@ -26,7 +26,7 @@ string XmlEscape(string const& value)
     ReplaceChar(escaped, '>', "&gt;");
     ReplaceChar(escaped, '\'', "&apos;");
     ReplaceChar(escaped, '\"', "&quot;");
- 
+
     return escaped;
 }
 
@@ -37,28 +37,24 @@ string BuildFailureMessage(string const& file, int line, string const& message)
     return failureMessage.str();
 }
 
-}
+} // namespace
 
-namespace UnitTest {
-
-XmlTestReporter::XmlTestReporter(ostream& ostream)
-    : m_ostream(ostream)
+namespace UnitTest
 {
-}
+XmlTestReporter::XmlTestReporter(ostream& ostream) : m_ostream(ostream) {}
 
-void XmlTestReporter::ReportSummary(int totalTestCount, int failedTestCount,
-                                    int failureCount, float secondsElapsed)
+void XmlTestReporter::ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed)
 {
     AddXmlElement(m_ostream, NULL);
 
     BeginResults(m_ostream, totalTestCount, failedTestCount, failureCount, secondsElapsed);
 
     DeferredTestResultList const& results = GetResults();
-    for (DeferredTestResultList::const_iterator i = results.begin(); i != results.end(); ++i)
+    for(DeferredTestResultList::const_iterator i = results.begin(); i != results.end(); ++i)
     {
         BeginTest(m_ostream, *i);
 
-        if (i->failed)
+        if(i->failed)
             AddFailure(m_ostream, *i);
 
         EndTest(m_ostream, *i);
@@ -71,39 +67,35 @@ void XmlTestReporter::AddXmlElement(ostream& os, char const* encoding)
 {
     os << "<?xml version=\"1.0\"";
 
-    if (encoding != NULL)
+    if(encoding != NULL)
         os << " encoding=\"" << encoding << "\"";
 
     os << "?>";
 }
 
-void XmlTestReporter::BeginResults(std::ostream& os, int totalTestCount, int failedTestCount, 
-                                   int failureCount, float secondsElapsed)
+void XmlTestReporter::BeginResults(std::ostream& os, int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed)
 {
-   os << "<unittest-results"
-       << " tests=\"" << totalTestCount << "\"" 
-       << " failedtests=\"" << failedTestCount << "\"" 
-       << " failures=\"" << failureCount << "\"" 
+    os << "<unittest-results"
+       << " tests=\"" << totalTestCount << "\""
+       << " failedtests=\"" << failedTestCount << "\""
+       << " failures=\"" << failureCount << "\""
        << " time=\"" << secondsElapsed << "\""
        << ">";
 }
 
-void XmlTestReporter::EndResults(std::ostream& os)
-{
-    os << "</unittest-results>";
-}
+void XmlTestReporter::EndResults(std::ostream& os) { os << "</unittest-results>"; }
 
 void XmlTestReporter::BeginTest(std::ostream& os, DeferredTestResult const& result)
 {
     os << "<test"
-        << " suite=\"" << result.suiteName << "\"" 
-        << " name=\"" << result.testName << "\""
-        << " time=\"" << result.timeElapsed << "\"";
+       << " suite=\"" << result.suiteName << "\""
+       << " name=\"" << result.testName << "\""
+       << " time=\"" << result.timeElapsed << "\"";
 }
 
 void XmlTestReporter::EndTest(std::ostream& os, DeferredTestResult const& result)
 {
-    if (result.failed)
+    if(result.failed)
         os << "</test>";
     else
         os << "/>";
@@ -113,15 +105,15 @@ void XmlTestReporter::AddFailure(std::ostream& os, DeferredTestResult const& res
 {
     os << ">"; // close <test> element
 
-    for (DeferredTestResult::FailureVec::const_iterator it = result.failures.begin(); 
-         it != result.failures.end(); 
-         ++it)
+    for(DeferredTestResult::FailureVec::const_iterator it = result.failures.begin(); it != result.failures.end(); ++it)
     {
         string const escapedMessage = XmlEscape(it->second);
         string const message = BuildFailureMessage(result.failureFile, it->first, escapedMessage);
 
-        os << "<failure" << " message=\"" << message << "\"" << "/>";
+        os << "<failure"
+           << " message=\"" << message << "\""
+           << "/>";
     }
 }
 
-}
+} // namespace UnitTest

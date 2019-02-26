@@ -31,77 +31,62 @@
 
 namespace
 {
-  class RegisterFields
-   {
-   public:
-
-     RegisterFields(av::shade::Shader* shader) :
-       mShader(shader)
-     {
-     }
-
-     void operator()(shade::Type* type, const std::string& name)
-     {
-       shade::types::TypeAccessor* accessor(dynamic_cast<shade::types::TypeAccessor*>(type));
-       if (accessor == 0)
-         return;
-
-       boost::shared_ptr<av::shade::FieldAdapter> adapter(av::shade::Init::getFieldAdapter(accessor->hash()));
-       if (!adapter)
-         return;
-
-       adapter->bindField(type, name, mShader);
-     }
-    
-   private:
-    av::shade::Shader* mShader;
-   };
-}
-
-av::shade::Shader::Shader(av::Type type, boost::shared_ptr< ::shade::Shader> shader) :
-  mType(type),
-  mShader(shader)
+class RegisterFields
 {
-  if (!mWrapper)
-  {
-    mWrapper = new Wrapper;
-  }
+  public:
+    RegisterFields(av::shade::Shader* shader) : mShader(shader) {}
 
-  shader->traverse_public_attributes(RegisterFields(this));
-  (*mWrapper)[mShader.get()] = this;
+    void operator()(shade::Type* type, const std::string& name)
+    {
+        shade::types::TypeAccessor* accessor(dynamic_cast<shade::types::TypeAccessor*>(type));
+        if(accessor == 0)
+            return;
+
+        boost::shared_ptr<av::shade::FieldAdapter> adapter(av::shade::Init::getFieldAdapter(accessor->hash()));
+        if(!adapter)
+            return;
+
+        adapter->bindField(type, name, mShader);
+    }
+
+  private:
+    av::shade::Shader* mShader;
+};
+} // namespace
+
+av::shade::Shader::Shader(av::Type type, boost::shared_ptr<::shade::Shader> shader) : mType(type), mShader(shader)
+{
+    if(!mWrapper)
+    {
+        mWrapper = new Wrapper;
+    }
+
+    shader->traverse_public_attributes(RegisterFields(this));
+    (*mWrapper)[mShader.get()] = this;
 }
 
 av::shade::Shader::~Shader(void)
 {
-  mWrapper->erase(mShader.get());
+    mWrapper->erase(mShader.get());
 
-  if (mWrapper->empty())
-  {
-    delete mWrapper;
-    mWrapper = 0;
-  }
+    if(mWrapper->empty())
+    {
+        delete mWrapper;
+        mWrapper = 0;
+    }
 }
 
-av::Type
-av::shade::Shader::getTypeId() const
-{
-  return mType;
-}
+av::Type av::shade::Shader::getTypeId() const { return mType; }
 
-boost::shared_ptr< ::shade::Shader>
-av::shade::Shader::getShader() const
-{
-  return mShader;
-}
+boost::shared_ptr<::shade::Shader> av::shade::Shader::getShader() const { return mShader; }
 
-/*static*/ av::shade::Shader*
-av::shade::Shader::getWrapper(::shade::Shader* shader)
+/*static*/ av::shade::Shader* av::shade::Shader::getWrapper(::shade::Shader* shader)
 {
-  Shader* result(0);
-  Wrapper::const_iterator av_shader(mWrapper->find(shader));
-  if (av_shader != mWrapper->end())
-    result = av_shader->second;
-  return result;
+    Shader* result(0);
+    Wrapper::const_iterator av_shader(mWrapper->find(shader));
+    if(av_shader != mWrapper->end())
+        result = av_shader->second;
+    return result;
 }
 
 /*static*/ av::shade::Shader::Wrapper* av::shade::Shader::mWrapper = 0;

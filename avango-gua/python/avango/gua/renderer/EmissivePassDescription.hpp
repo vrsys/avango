@@ -3,4 +3,4 @@
 
 void init_EmissivePassDescription();
 
-#endif //AV_PYTHON_GUA_EMISSIVE_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_EMISSIVE_PASS_DESCRIPTION_HPP

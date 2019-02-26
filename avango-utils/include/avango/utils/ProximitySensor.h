@@ -36,53 +36,49 @@
 
 namespace av
 {
-  namespace utils
-  {
+namespace utils
+{
+class AV_UTILS_DLL ProximitySensor : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_UTILS_DLL ProximitySensor : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    ProximitySensor();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ProximitySensor();
 
-      ProximitySensor();
+  public:
+    /** Distance where Proximity reaches 1. */
+    av::SFDouble MinDistance;
 
-    protected:
+    /** Distance where Proximity starts to increase from 0. */
+    av::SFDouble MaxDistance;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ProximitySensor();
+    /** Center of Sensor */
+    av::gua::SFMatrix ReferencePosition;
 
-    public:
+    /** Current postion of target */
+    av::gua::SFMatrix CurrentPosition;
 
-      /** Distance where Proximity reaches 1. */
-      av::SFDouble MinDistance;
+    /** Proximity of target expressed in intervall [0, 1] */
+    av::SFDouble Proximity;
 
-      /** Distance where Proximity starts to increase from 0. */
-      av::SFDouble MaxDistance;
+    /** If ProximitySensor is triggered outputs 0, -1 otherwise */
+    av::SFInt Switch;
 
-      /** Center of Sensor */
-      av::gua::SFMatrix ReferencePosition;
+    /* virtual */ void evaluate();
 
-      /** Current postion of target */
-      av::gua::SFMatrix CurrentPosition;
+  private:
+    void set_proximity_value(double proximity);
+    void set_switch_value(int switch_);
+    double smooth(double x);
+};
 
-      /** Proximity of target expressed in intervall [0, 1] */
-      av::SFDouble Proximity;
-
-      /** If ProximitySensor is triggered outputs 0, -1 otherwise */
-      av::SFInt Switch;
-
-      /* virtual */ void evaluate();
-
-    private:
-      void set_proximity_value(double proximity);
-      void set_switch_value(int switch_);
-      double smooth(double x);
-    };
-
-  }
-}
+} // namespace utils
+} // namespace av
 
 #endif

@@ -30,25 +30,25 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    bool is_token(const std::string& code);
-    bool is_end_token(const std::string& code);
+namespace formatter
+{
+bool is_token(const std::string& code);
+bool is_end_token(const std::string& code);
 
-    std::pair<std::string, std::string> get_next_token(const std::string& code);
+std::pair<std::string, std::string> get_next_token(const std::string& code);
 
-    std::vector<std::string> split_toplevel(const std::string& code);
+std::vector<std::string> split_toplevel(const std::string& code);
 
-    std::string diff_dump(const std::string& codeA, const std::string& codeB);
-    std::string diff_dump(const std::string& codeA, const std::string& codeB, int& diff_count);
+std::string diff_dump(const std::string& codeA, const std::string& codeB);
+std::string diff_dump(const std::string& codeA, const std::string& codeB, int& diff_count);
 
-    std::string partial_diff_dump(const std::string& fragment, const std::string& code, bool& match);
+std::string partial_diff_dump(const std::string& fragment, const std::string& code, bool& match);
 
-    bool check_dump_output(const std::string& expected, const std::string& output);
-    bool check_partial_dump_output(const std::string& expected, const std::string& output);
+bool check_dump_output(const std::string& expected, const std::string& output);
+bool check_partial_dump_output(const std::string& expected, const std::string& output);
 
-    std::string strip_levels(const std::string& code, int levels);
-  }
-}
+std::string strip_levels(const std::string& code, int levels);
+} // namespace formatter
+} // namespace shade
 
 #endif /* shade_formatter_diff_dump_H */

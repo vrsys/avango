@@ -3,4 +3,4 @@
 
 void init_HingeConstraint();
 
-#endif //AV_PYTHON_GUA_HINGE_CONSTRAINT_HPP
+#endif // AV_PYTHON_GUA_HINGE_CONSTRAINT_HPP

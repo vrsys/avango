@@ -13,77 +13,71 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::ScreenNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL ScreenNode : public av::gua::Node
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::ScreenNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::ScreenNode is created.
+     * Otherwise, the given ::gua::ScreenNode is used.
      */
-    class AV_GUA_DLL ScreenNode : public av::gua::Node
-    {
-      AV_FC_DECLARE();
+    ScreenNode(std::shared_ptr<::gua::node::ScreenNode> guanode = std::shared_ptr<::gua::node::ScreenNode>(new ::gua::node::ScreenNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ScreenNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::ScreenNode is created.
-       * Otherwise, the given ::gua::ScreenNode is used.
-       */
-      ScreenNode(std::shared_ptr< ::gua::node::ScreenNode> guanode = std::shared_ptr< ::gua::node::ScreenNode>(new ::gua::node::ScreenNode("")));
+  public:
+    /**
+     * Children field is read only!
+     */
+    SFFloat Width;
+    SFFloat Height;
 
-    protected:
+    SFMatrix ScaledWorldTransform;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ScreenNode();
+    /**
+     * Get the wrapped ::gua::ScreenNode.
+     */
+    std::shared_ptr<::gua::node::ScreenNode> getGuaNode() const;
 
-    public:
+  public:
+    virtual void getWidthCB(const SFFloat::GetValueEvent& event);
+    virtual void setWidthCB(const SFFloat::SetValueEvent& event);
 
-      /**
-       * Children field is read only!
-       */
-      SFFloat Width;
-      SFFloat Height;
+    virtual void getHeightCB(const SFFloat::GetValueEvent& event);
+    virtual void setHeightCB(const SFFloat::SetValueEvent& event);
 
-      SFMatrix ScaledWorldTransform;
+    virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
+    virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
 
+  private:
+    std::shared_ptr<::gua::node::ScreenNode> m_guaNode;
 
-      /**
-       * Get the wrapped ::gua::ScreenNode.
-       */
-      std::shared_ptr< ::gua::node::ScreenNode> getGuaNode() const;
+    ScreenNode(const ScreenNode&);
+    ScreenNode& operator=(const ScreenNode&);
+};
 
-    public:
+using SFScreenNode = SingleField<Link<ScreenNode>>;
+using MFScreenNode = MultiField<Link<ScreenNode>>;
 
-      virtual void getWidthCB(const SFFloat::GetValueEvent& event);
-      virtual void setWidthCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getHeightCB(const SFFloat::GetValueEvent& event);
-      virtual void setHeightCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getScaledWorldTransformCB(const SFMatrix::GetValueEvent& event);
-      virtual void setScaledWorldTransformCB(const SFMatrix::SetValueEvent& event);
-
-    private:
-
-      std::shared_ptr< ::gua::node::ScreenNode> m_guaNode;
-
-      ScreenNode(const ScreenNode&);
-      ScreenNode& operator=(const ScreenNode&);
-    };
-
-    using SFScreenNode = SingleField<Link<ScreenNode> >;
-    using MFScreenNode = MultiField<Link<ScreenNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ScreenNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ScreenNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::ScreenNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::ScreenNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SCREEN_NODE_HPP
+#endif // AVANGO_GUA_SCREEN_NODE_HPP

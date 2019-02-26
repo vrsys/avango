@@ -13,64 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::CylinderShape
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL CylinderShape : public av::gua::CollisionShape
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::CylinderShape
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::CylinderShape is created.
+     * Otherwise, the given ::gua::physics::CylinderShape is used.
      */
-    class AV_GUA_DLL CylinderShape : public av::gua::CollisionShape
-    {
-      AV_FC_DECLARE();
+    CylinderShape(::gua::physics::CylinderShape* guashape = new ::gua::physics::CylinderShape(::gua::math::vec3(0.5f, 0.5f, 0.5f))); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CylinderShape();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::CylinderShape is created.
-       * Otherwise, the given ::gua::physics::CylinderShape is used.
-       */
-      CylinderShape(::gua::physics::CylinderShape* guashape =
-               new ::gua::physics::CylinderShape(::gua::math::vec3(0.5f, 0.5f, 0.5f))); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFVec3 HalfExtents;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShape.
+     */
+    ::gua::physics::CylinderShape* getGuaShape() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~CylinderShape();
+  public:
+    virtual void getHalfExtentsCB(const SFVec3::GetValueEvent& event);
+    virtual void setHalfExtentsCB(const SFVec3::SetValueEvent& event);
 
-    public:
+  private:
+    ::gua::physics::CylinderShape* m_guaShape;
 
-      SFVec3 HalfExtents;
+    CylinderShape(const CylinderShape&);
+    CylinderShape& operator=(const CylinderShape&);
+};
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShape.
-       */
-      ::gua::physics::CylinderShape* getGuaShape() const;
+using SFCylinderShape = SingleField<Link<CylinderShape>>;
+using MFCylinderShape = MultiField<Link<CylinderShape>>;
 
-    public:
-
-      virtual void getHalfExtentsCB(const SFVec3::GetValueEvent& event);
-      virtual void setHalfExtentsCB(const SFVec3::SetValueEvent& event);
-
-    private:
-      ::gua::physics::CylinderShape *m_guaShape;
-
-      CylinderShape(const CylinderShape&);
-      CylinderShape& operator=(const CylinderShape&);
-    };
-
-    using SFCylinderShape = SingleField<Link<CylinderShape> >;
-    using MFCylinderShape = MultiField<Link<CylinderShape> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::CylinderShape> >;
-  template class AV_GUA_DLL MultiField<Link<gua::CylinderShape> >;
+template class AV_GUA_DLL SingleField<Link<gua::CylinderShape>>;
+template class AV_GUA_DLL MultiField<Link<gua::CylinderShape>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_CYLINDER_SHAPE_HPP
+#endif // AVANGO_GUA_CYLINDER_SHAPE_HPP

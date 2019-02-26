@@ -9,22 +9,17 @@ AV_FC_DEFINE(av::gua::ClippingPlaneNode);
 AV_FIELD_DEFINE(av::gua::SFClippingPlaneNode);
 AV_FIELD_DEFINE(av::gua::MFClippingPlaneNode);
 
-av::gua::ClippingPlaneNode::ClippingPlaneNode(std::shared_ptr< ::gua::node::ClippingPlaneNode> guanode)
-    : av::gua::Node(guanode),
-      m_guaNode(std::dynamic_pointer_cast< ::gua::node::ClippingPlaneNode>(Node::getGuaNode()))
+av::gua::ClippingPlaneNode::ClippingPlaneNode(std::shared_ptr<::gua::node::ClippingPlaneNode> guanode)
+    : av::gua::Node(guanode), m_guaNode(std::dynamic_pointer_cast<::gua::node::ClippingPlaneNode>(Node::getGuaNode()))
 {
-    AV_FC_ADD_ADAPTOR_FIELD(ViewIDs,
-                          std::bind(&ClippingPlaneNode::getViewIDsCB, this,std::placeholders::_1),
-                          std::bind(&ClippingPlaneNode::setViewIDsCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(ViewIDs, std::bind(&ClippingPlaneNode::getViewIDsCB, this, std::placeholders::_1), std::bind(&ClippingPlaneNode::setViewIDsCB, this, std::placeholders::_1));
 }
 
-av::gua::ClippingPlaneNode::~ClippingPlaneNode()
-{}
+av::gua::ClippingPlaneNode::~ClippingPlaneNode() {}
 
-void
-av::gua::ClippingPlaneNode::initClass()
+void av::gua::ClippingPlaneNode::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::Node::initClass();
 
@@ -37,20 +32,8 @@ av::gua::ClippingPlaneNode::initClass()
     }
 }
 
-std::shared_ptr< ::gua::node::ClippingPlaneNode>
-av::gua::ClippingPlaneNode::getGuaNode() const
-{
-    return m_guaNode;
-}
+std::shared_ptr<::gua::node::ClippingPlaneNode> av::gua::ClippingPlaneNode::getGuaNode() const { return m_guaNode; }
 
-void
-av::gua::ClippingPlaneNode::getViewIDsCB(const MFInt::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaNode->config.view_ids();
-}
+void av::gua::ClippingPlaneNode::getViewIDsCB(const MFInt::GetValueEvent& event) { *(event.getValuePtr()) = m_guaNode->config.view_ids(); }
 
-void
-av::gua::ClippingPlaneNode::setViewIDsCB(const MFInt::SetValueEvent& event)
-{
-    m_guaNode->config.view_ids() = event.getValue();
-}
+void av::gua::ClippingPlaneNode::setViewIDsCB(const MFInt::SetValueEvent& event) { m_guaNode->config.view_ids() = event.getValue(); }

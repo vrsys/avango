@@ -25,43 +25,39 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::utils::Bool2And"));
+av::Logger& logger(av::getLogger("av::utils::Bool2And"));
 }
 
 AV_FC_DEFINE(av::utils::Bool2And);
 
 av::utils::Bool2And::Bool2And()
 {
-    AV_FC_ADD_FIELD(Input1,false);
-    AV_FC_ADD_FIELD(Input2,false);
-    AV_FC_ADD_FIELD(Output,false);
+    AV_FC_ADD_FIELD(Input1, false);
+    AV_FC_ADD_FIELD(Input2, false);
+    AV_FC_ADD_FIELD(Output, false);
 
     Name.setValue("Bool2And");
 }
 
-av::utils::Bool2And::~Bool2And()
-{}
+av::utils::Bool2And::~Bool2And() {}
 
-void
-av::utils::Bool2And::initClass()
+void av::utils::Bool2And::initClass()
 {
-  if (isTypeInitialized())
-    return;
+    if(isTypeInitialized())
+        return;
 
-  av::FieldContainer::initClass();
-  AV_FC_INIT(av::FieldContainer, av::utils::Bool2And, true);
+    av::FieldContainer::initClass();
+    AV_FC_INIT(av::FieldContainer, av::utils::Bool2And, true);
 }
 
-/* virtual */ void
-av::utils::Bool2And::evaluate()
+/* virtual */ void av::utils::Bool2And::evaluate()
 {
-  if ( Input1.getValue() && Input2.getValue() )
-  {
-    Output.setValue(true);
-  }
-  else
-  {
-    Output.setValue(false);
-  }
-
+    if(Input1.getValue() && Input2.getValue())
+    {
+        Output.setValue(true);
+    }
+    else
+    {
+        Output.setValue(false);
+    }
 }

@@ -13,54 +13,48 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::HeadlessSurface
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL HeadlessSurface : public av::gua::WindowBase
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::HeadlessSurface
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new
+     * ::gua::HeadlessSurface is created. Otherwise, the given
+     * ::gua::HeadlessSurface is used.
      */
-    class AV_GUA_DLL HeadlessSurface : public av::gua::WindowBase
-    {
-      AV_FC_DECLARE();
+    HeadlessSurface(std::shared_ptr<::gua::HeadlessSurface> const& guaWindow = std::shared_ptr<::gua::HeadlessSurface>(new ::gua::HeadlessSurface()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::HeadlessSurface.
+     */
+    std::shared_ptr<::gua::HeadlessSurface> const& getGuaWindow() const;
 
+  private:
+    std::shared_ptr<::gua::HeadlessSurface> m_guaWindow;
 
-      /**
-       * Constructor. When called without arguments, a new
-       * ::gua::HeadlessSurface is created. Otherwise, the given
-       * ::gua::HeadlessSurface is used.
-       */
-      HeadlessSurface(std::shared_ptr< ::gua::HeadlessSurface> const& guaWindow =
-             std::shared_ptr< ::gua::HeadlessSurface> (new ::gua::HeadlessSurface()));
+    HeadlessSurface(const HeadlessSurface&) = delete;
+    HeadlessSurface& operator=(const HeadlessSurface&) = delete;
+};
 
+using SFHeadlessSurface = SingleField<Link<HeadlessSurface>>;
+using MFHeadlessSurface = MultiField<Link<HeadlessSurface>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::HeadlessSurface.
-       */
-      std::shared_ptr< ::gua::HeadlessSurface> const& getGuaWindow() const;
-
-    private:
-
-      std::shared_ptr< ::gua::HeadlessSurface> m_guaWindow;
-
-      HeadlessSurface(const HeadlessSurface&) = delete;
-      HeadlessSurface& operator=(const HeadlessSurface&) = delete;
-    };
-
-    using SFHeadlessSurface = SingleField<Link<HeadlessSurface> >;
-    using MFHeadlessSurface = MultiField<Link<HeadlessSurface> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::HeadlessSurface> >;
-  template class AV_GUA_DLL MultiField<Link<gua::HeadlessSurface> >;
+template class AV_GUA_DLL SingleField<Link<gua::HeadlessSurface>>;
+template class AV_GUA_DLL MultiField<Link<gua::HeadlessSurface>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_HEADLESS_SURFACE_HPP
+#endif // AVANGO_GUA_HEADLESS_SURFACE_HPP

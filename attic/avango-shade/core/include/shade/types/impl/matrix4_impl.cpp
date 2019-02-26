@@ -23,62 +23,70 @@
 
 #include "../../GLSLInstance.h"
 
-template<class Qualifier> shade::matrix4<Qualifier>::matrix4(void) :
-  TypeBase<matrix4<Qualifier>, Qualifier>(formatter::Constants::matrix4)
-{}
-
-template<class Qualifier> shade::matrix4<Qualifier>::matrix4(const float* values) :
-  TypeBase<matrix4<Qualifier>, Qualifier>(formatter::Constants::matrix4)
+template <class Qualifier>
+shade::matrix4<Qualifier>::matrix4(void) : TypeBase<matrix4<Qualifier>, Qualifier>(formatter::Constants::matrix4)
 {
-  this->set(values);
-} 
-
-template<class Qualifier> void shade::matrix4<Qualifier>::set(const float* values)
-{
-  for (int i = 0; i != 16; ++i)
-  {
-    m_values[i] = values[i];
-  }
-  this->touch();
 }
 
-template<class Qualifier> void shade::matrix4<Qualifier>::get(float* values) const
+template <class Qualifier>
+shade::matrix4<Qualifier>::matrix4(const float* values) : TypeBase<matrix4<Qualifier>, Qualifier>(formatter::Constants::matrix4)
 {
-  for (int i = 0; i != 16; ++i)
-  {
-    values[i] = m_values[i];
-  }
+    this->set(values);
 }
 
-template<class Qualifier>
-template<class Q> void shade::matrix4<Qualifier>::copy_value(const matrix4<Q>& source)
+template <class Qualifier>
+void shade::matrix4<Qualifier>::set(const float* values)
 {
-  source.get(m_values);
-  this->touch();
+    for(int i = 0; i != 16; ++i)
+    {
+        m_values[i] = values[i];
+    }
+    this->touch();
 }
 
-template<class Qualifier> std::string shade::matrix4<Qualifier>::get_constructor_str(void) const
+template <class Qualifier>
+void shade::matrix4<Qualifier>::get(float* values) const
 {
-  return "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0";
+    for(int i = 0; i != 16; ++i)
+    {
+        values[i] = m_values[i];
+    }
 }
 
-template<class Qualifier> std::string shade::matrix4<Qualifier>::get_constructor_str(boost::shared_ptr<Type::State>) const
+template <class Qualifier>
+template <class Q>
+void shade::matrix4<Qualifier>::copy_value(const matrix4<Q>& source)
 {
-  std::ostringstream out;
-  for (int i = 0; i != 15; ++i)
-  {
-    out << m_values[i] << ", ";
-  }
-  out << m_values[15];
-  return out.str();
+    source.get(m_values);
+    this->touch();
 }
 
-template<class Qualifier> void shade::matrix4<Qualifier>::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
+template <class Qualifier>
+std::string shade::matrix4<Qualifier>::get_constructor_str(void) const
 {
-  wrapper->UniformMatrix4fv(index, 1, false, m_values);
+    return "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0";
 }
 
-template<class Qualifier> std::string shade::matrix4<Qualifier>::get_uniq_id(void) const
+template <class Qualifier>
+std::string shade::matrix4<Qualifier>::get_constructor_str(boost::shared_ptr<Type::State>) const
 {
-  return join_names(Qualifier::get_uniq_id(), "mat4");
+    std::ostringstream out;
+    for(int i = 0; i != 15; ++i)
+    {
+        out << m_values[i] << ", ";
+    }
+    out << m_values[15];
+    return out.str();
+}
+
+template <class Qualifier>
+void shade::matrix4<Qualifier>::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
+{
+    wrapper->UniformMatrix4fv(index, 1, false, m_values);
+}
+
+template <class Qualifier>
+std::string shade::matrix4<Qualifier>::get_uniq_id(void) const
+{
+    return join_names(Qualifier::get_uniq_id(), "mat4");
 }

@@ -13,64 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::BoxShape
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL BoxShape : public av::gua::CollisionShape
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::BoxShape
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::BoxShape is created.
+     * Otherwise, the given ::gua::physics::BoxShape is used.
      */
-    class AV_GUA_DLL BoxShape : public av::gua::CollisionShape
-    {
-      AV_FC_DECLARE();
+    BoxShape(::gua::physics::BoxShape* guashape = new ::gua::physics::BoxShape(0.5f)); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~BoxShape();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::BoxShape is created.
-       * Otherwise, the given ::gua::physics::BoxShape is used.
-       */
-      BoxShape(::gua::physics::BoxShape* guashape =
-               new ::gua::physics::BoxShape(0.5f)); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFVec3 HalfExtents;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShape.
+     */
+    ::gua::physics::BoxShape* getGuaShape() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~BoxShape();
+  public:
+    virtual void getHalfExtentsCB(const SFVec3::GetValueEvent& event);
+    virtual void setHalfExtentsCB(const SFVec3::SetValueEvent& event);
 
-    public:
+  private:
+    ::gua::physics::BoxShape* m_guaShape;
 
-      SFVec3 HalfExtents;
+    BoxShape(const BoxShape&);
+    BoxShape& operator=(const BoxShape&);
+};
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShape.
-       */
-      ::gua::physics::BoxShape* getGuaShape() const;
+using SFBoxShape = SingleField<Link<BoxShape>>;
+using MFBoxShape = MultiField<Link<BoxShape>>;
 
-    public:
-
-      virtual void getHalfExtentsCB(const SFVec3::GetValueEvent& event);
-      virtual void setHalfExtentsCB(const SFVec3::SetValueEvent& event);
-
-    private:
-      ::gua::physics::BoxShape *m_guaShape;
-
-      BoxShape(const BoxShape&);
-      BoxShape& operator=(const BoxShape&);
-    };
-
-    using SFBoxShape = SingleField<Link<BoxShape> >;
-    using MFBoxShape = MultiField<Link<BoxShape> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::BoxShape> >;
-  template class AV_GUA_DLL MultiField<Link<gua::BoxShape> >;
+template class AV_GUA_DLL SingleField<Link<gua::BoxShape>>;
+template class AV_GUA_DLL MultiField<Link<gua::BoxShape>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_BOX_SHAPE_HPP
+#endif // AVANGO_GUA_BOX_SHAPE_HPP

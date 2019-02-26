@@ -31,18 +31,11 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::ObjectLink"));
+av::Logger& logger(av::getLogger("av::osg::ObjectLink"));
 }
 
-av::osg::ObjectLink::ObjectLink(av::osg::Object* object) :
-  mObject(object)
-{}
+av::osg::ObjectLink::ObjectLink(av::osg::Object* object) : mObject(object) {}
 
-av::osg::ObjectLink::~ObjectLink()
-{}
+av::osg::ObjectLink::~ObjectLink() {}
 
-av::osg::Object*
-av::osg::ObjectLink::getObject() const
-{
-  return mObject;
-}
+av::osg::Object* av::osg::ObjectLink::getObject() const { return mObject; }

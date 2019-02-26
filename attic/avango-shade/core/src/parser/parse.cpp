@@ -40,9 +40,9 @@ using namespace phoenix;
 
 bool shade::parser::parse(const std::string& source, formatter::Generator& generator, const formatter::SelfTranslator& translator)
 {
-  shade::formatter::MarkBuffer buffer;
-  buffer.append(source);
+    shade::formatter::MarkBuffer buffer;
+    buffer.append(source);
 
-  Function function(generator, translator);
-  return parse(buffer.begin(), buffer.end(), *(function) >> end_p, space_p | comment_p("/*", "*/") | comment_p("//")).full;
+    Function function(generator, translator);
+    return parse(buffer.begin(), buffer.end(), *(function) >> end_p, space_p | comment_p("/*", "*/") | comment_p("//")).full;
 }

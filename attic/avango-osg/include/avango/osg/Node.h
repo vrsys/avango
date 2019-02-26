@@ -38,96 +38,91 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Node OsgNode;
+namespace osg
+{
+typedef ::osg::Node OsgNode;
 
-    class Group;
+class Group;
+
+/**
+ * Wrapper for ::osg::Node
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Node : public Object
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Node is created.
+     * Otherwise, the given ::osg::Node is used.
+     */
+    Node(OsgNode* osgnode = new OsgNode()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Node();
+
+  public:
+    /**
+     * Parents field is read only!
+     */
+    MultiField<Link<Group>> Parents;
+
+    SFStateSet StateSet;
+
+    SFBool CullingActive;
+    SFUInt NodeMask;
 
     /**
-     * Wrapper for ::osg::Node
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Node.
      */
-    class AV_OSG_DLL Node : public Object
-    {
-      AV_FC_DECLARE();
+    ::osg::Node* getOsgNode() const;
 
-    public:
+    const ::osg::BoundingSphere getBoundingSphere() const { return mOsgNode->getBound(); }
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Node is created.
-       * Otherwise, the given ::osg::Node is used.
-       */
-      Node(OsgNode* osgnode = new OsgNode()); // use defined type to circumvent compiler bug in VS8
+    /**
+     * Computes the absolute transformation matrix to the root coordinate system.
+     * Define the caller object, if called from an evaluate function,
+     * to call evaluate on all nodes on the traversal to the root node.
+     */
+    ::osg::Matrix getAbsoluteTransform(av::FieldContainer* caller = 0) const;
 
-    protected:
+    ::osg::Matrix getAbsoluteTransformHaltAtNode(av::FieldContainer* caller = 0, av::osg::Node* haltTraversalAtNode = 0) const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Node();
+  protected:
+    virtual void getParentsCB(const MultiField<Link<Group>>::GetValueEvent& event);
+    virtual void setParentsCB(const MultiField<Link<Group>>::SetValueEvent& event);
 
-    public:
+    virtual void getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event);
+    virtual void setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event);
 
-      /**
-       * Parents field is read only!
-       */
-      MultiField<Link<Group> > Parents;
+    virtual void getCullingActiveCB(const av::SFBool::GetValueEvent& event);
+    virtual void setCullingActiveCB(const av::SFBool::SetValueEvent& event);
 
-      SFStateSet StateSet;
+    virtual void getNodeMaskCB(const av::SFUInt::GetValueEvent& event);
+    virtual void setNodeMaskCB(const av::SFUInt::SetValueEvent& event);
 
-      SFBool CullingActive;
-      SFUInt NodeMask;
+  private:
+    ::osg::Node* mOsgNode;
 
-      /**
-       * Get the wrapped ::osg::Node.
-       */
-      ::osg::Node* getOsgNode() const;
+    Node(const Node&);
+    Node& operator=(const Node&);
+};
 
-      const ::osg::BoundingSphere getBoundingSphere() const { return mOsgNode->getBound(); }
-
-      /**
-       * Computes the absolute transformation matrix to the root coordinate system.
-       * Define the caller object, if called from an evaluate function,
-       * to call evaluate on all nodes on the traversal to the root node.
-       */
-      ::osg::Matrix getAbsoluteTransform(av::FieldContainer* caller = 0) const;
-
-      ::osg::Matrix getAbsoluteTransformHaltAtNode(av::FieldContainer* caller = 0, av::osg::Node * haltTraversalAtNode = 0) const;
-
-    protected:
-
-      virtual void getParentsCB(const MultiField<Link<Group> >::GetValueEvent& event);
-      virtual void setParentsCB(const MultiField<Link<Group> >::SetValueEvent& event);
-
-      virtual void getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event);
-      virtual void setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event);
-
-      virtual void getCullingActiveCB(const av::SFBool::GetValueEvent& event);
-      virtual void setCullingActiveCB(const av::SFBool::SetValueEvent& event);
-
-      virtual void getNodeMaskCB(const av::SFUInt::GetValueEvent& event);
-      virtual void setNodeMaskCB(const av::SFUInt::SetValueEvent& event);
-
-    private:
-
-      ::osg::Node *mOsgNode;
-
-      Node(const Node&);
-      Node& operator=(const Node&);
-    };
-
-    typedef SingleField<Link<Node> > SFNode;
-    typedef MultiField<Link<Node> > MFNode;
-  }
+typedef SingleField<Link<Node>> SFNode;
+typedef MultiField<Link<Node>> MFNode;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Node> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Node> >;
+template class AV_OSG_DLL SingleField<Link<osg::Node>>;
+template class AV_OSG_DLL MultiField<Link<osg::Node>>;
 #endif
 
-}
+} // namespace av
 
 #include <avango/osg/Group.h>
 

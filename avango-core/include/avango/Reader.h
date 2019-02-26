@@ -33,21 +33,19 @@
 
 namespace av
 {
-  class Field;
-  class InputStream;
-  class Base;
+class Field;
+class InputStream;
+class Base;
 
-  /**
-   * Reads Avango objects from a file or an InputStream.
-   */
-  class AV_DLL Reader
-  {
-
+/**
+ * Reads Avango objects from a file or an InputStream.
+ */
+class AV_DLL Reader
+{
   public:
-
-    using BaseLinkVec = std::vector<Link<Base> >;
-    using StringBaseMap = std::map<std::string, Link<Base> >;
-    using ConnectionMap = std::map<Field*, std::pair<std::string, int> >;
+    using BaseLinkVec = std::vector<Link<Base>>;
+    using StringBaseMap = std::map<std::string, Link<Base>>;
+    using ConnectionMap = std::map<Field*, std::pair<std::string, int>>;
 
     Reader();
     ~Reader();
@@ -56,19 +54,18 @@ namespace av
     Base* readObject(InputStream&);
 
     Base* lookupObject(const std::string& id);
-    void  addConnection(Field* toField, const std::string& fromId, int fromIndex);
+    void addConnection(Field* toField, const std::string& fromId, int fromIndex);
 
     void enableBinary(bool bin);
     bool isBinaryEnabled();
 
   private:
-
     bool mBinary;
 
     StringBaseMap mObjectMap;
     ConnectionMap mConnectionMap;
-  };
+};
 
-}
+} // namespace av
 
 #endif // #if !defined(AVANGO_LIBFP_LIBFP_FPREADER_H)

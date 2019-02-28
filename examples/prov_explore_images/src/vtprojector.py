@@ -14,6 +14,7 @@ class AutoVTProjector(avango.script.Script):
   Transform = avango.gua.SFMatrix4()
   Transform2 = avango.gua.SFMatrix4()
   Graph = avango.gua.SFSceneGraph()
+  Button0 = avango.SFBool()
 
   Texture = avango.SFString()
 
@@ -30,11 +31,13 @@ class AutoVTProjector(avango.script.Script):
 
     self.localized_image_list = []
     self.position_list = []
+    self.projection_object = None
     self.min_tex_coords = avango.gua.Vec2(0.0, 0.0)
     self.max_tex_coords = avango.gua.Vec2(1.0, 1.0)
     self.last_lense_pos = None
     self.scene_graph = None
     self.old_closest_id = 0
+    self.button0_pressed = False
     
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
     self.group_node.Transform.connect_from(self.Transform)
@@ -80,6 +83,12 @@ class AutoVTProjector(avango.script.Script):
     print('scene graph got set')
     self.scene_graph = graph
 
+  def set_projection_object(self, obj):
+    if self.projection_object is not None:
+      self.projection_object.Material.disconnect_from(self.Material)
+    self.projection_object = obj
+    self.projection_object.Material.connect_from(self.Material)
+
   def set_localized_image_list(self, localized_image_list):
     self.localized_image_list = localized_image_list
     self.position_list = [li.position for li in self.localized_image_list]
@@ -93,8 +102,8 @@ class AutoVTProjector(avango.script.Script):
     # get direction vector of hendheld lense
     pos = self.Transform2.value.get_translate()
     # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
-    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
 
@@ -147,45 +156,47 @@ class AutoVTProjector(avango.script.Script):
 
   @field_has_changed(Transform)
   def update_matrices(self):
-    self.group_node.Transform.value = self.Transform.value
-    # print('changed', self.Transform.value, self.group_node.Transform.value)
-    frustum = self.cam.get_frustum(self.Graph.value, avango.gua.CameraMode.CENTER)
+    if self.button0_pressed:
+      self.group_node.Transform.value = self.Transform.value
+      # print('changed', self.Transform.value, self.group_node.Transform.value)
+      frustum = self.cam.get_frustum(self.Graph.value, avango.gua.CameraMode.CENTER)
 
-    projection_matrix = frustum.ProjectionMatrix.value
-    view_matrix = frustum.ViewMatrix.value
-    # frustum.contains(pos)
-    
-    self.Material.value.set_uniform("projective_texture_matrix", projection_matrix)
-    # self.Material.value.set_uniform("projective_texture", self.Texture.value)
-    self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
-    self.Material.value.set_uniform("Emissivity", 1.0)
-    self.Material.value.set_uniform("Roughness", 1.0)
-    self.Material.value.set_uniform("Metalness", 0.0)
-    self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
-    self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(self.max_tex_coords))
+      projection_matrix = frustum.ProjectionMatrix.value
+      view_matrix = frustum.ViewMatrix.value
+      # frustum.contains(pos)
+      
+      self.Material.value.set_uniform("projective_texture_matrix", projection_matrix)
+      # self.Material.value.set_uniform("projective_texture", self.Texture.value)
+      self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
+      self.Material.value.set_uniform("Emissivity", 1.0)
+      self.Material.value.set_uniform("Roughness", 1.0)
+      self.Material.value.set_uniform("Metalness", 0.0)
+      self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
+      self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(self.max_tex_coords))
 
   @field_has_changed(Transform2)
   def updated_lens_position(self):
     if self.last_lense_pos:
-      if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
-       or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
-       or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
+      if self.button0_pressed:
+        if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
+         or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
+         or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
 
-        closest_id = self.find_closest_view()
-  
-        if closest_id != self.old_closest_id:
-          self.localized_image_list[self.old_closest_id].set_selected(False, False)
+          closest_id = self.find_closest_view()
+    
+          if closest_id != self.old_closest_id:
+            self.localized_image_list[self.old_closest_id].set_selected(False, False)
 
-          self.Transform.value = self.localized_image_list[closest_id].transform
-          self.min_tex_coords = self.localized_image_list[closest_id].min_uv
-          self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-          self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.5
-          self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.5
-          
-          self.localized_image_list[closest_id].set_selected(True, True)
-          self.last_lense_pos = self.Transform2.value.get_translate()
-          self.old_closest_id = closest_id
-        # self.localized_image_list[self.old_closest_id].set_selected(True, True)
+            self.Transform.value = self.localized_image_list[closest_id].transform
+            self.min_tex_coords = self.localized_image_list[closest_id].min_uv
+            self.max_tex_coords = self.localized_image_list[closest_id].max_uv
+            self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.5
+            self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.5
+            
+            self.localized_image_list[closest_id].set_selected(True, True)
+            self.last_lense_pos = self.Transform2.value.get_translate()
+            self.old_closest_id = closest_id
+          # self.localized_image_list[self.old_closest_id].set_selected(True, True)
 
     else:
       self.last_lense_pos = self.Transform2.value.get_translate()
@@ -197,6 +208,18 @@ class AutoVTProjector(avango.script.Script):
     self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("Emissivity", 1.0)
     self.Material.value.EnableVirtualTexturing.value = True
+
+  @field_has_changed(Button0)
+  def button0_changed(self):
+    # print('clicked', self.Button0.value)
+    if self.Button0.value:
+      self.button0_pressed = True
+    else:
+      if self.button0_pressed:
+        # TODO: create offset and move projector according to object position
+        self.freeze_projection = True
+        self.projection_object.Material.disconnect_from(self.Material)
+      self.button0_pressed = False
 
   def evaluate(self):
     pass

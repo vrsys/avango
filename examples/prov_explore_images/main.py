@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -125,11 +125,12 @@ def start():
         dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
         dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-        dynamic_quad.Material.connect_from(projector.Material)
+        projector.set_projection_object(dynamic_quad)
+        # dynamic_quad.Material.connect_from(projector.Material)
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                       avango.gua.make_scale_mat(0.12)
+                                       avango.gua.make_scale_mat(0.2)
         # print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
         localized_image_controller.set_tracked_element(dynamic_quad)
@@ -142,7 +143,9 @@ def start():
 
         # setup navigator
         navi = setup_navigator(cam)
+        print(navi.Mouse.ButtonLeft)
         projector.Transform2.connect_from(navi.OutTransform)
+        projector.Button0.connect_from(navi.Mouse.ButtonLeft)
         # tn.Transform.connect_from(navi.)
         # vtprojector.Transform.connect_from(navi.OutTransform)
 
@@ -177,8 +180,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 

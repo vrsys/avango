@@ -1,3 +1,4 @@
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 #include "VTBackend.hpp"
 
 #include <avango/gua/virtual_texturing/VTBackend.hpp>
@@ -37,3 +38,5 @@ void init_VTBackend()
     register_field<av::gua::SFVTBackend>("SFVTBackend");
     register_multifield<av::gua::MFVTBackend>("MFVTBackend");
 }
+
+#endif

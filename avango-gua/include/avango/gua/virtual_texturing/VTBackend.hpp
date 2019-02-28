@@ -1,3 +1,5 @@
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
+
 #ifndef AVANGO_GUA_VTBACKEND_HPP
 #define AVANGO_GUA_VTBACKEND_HPP
 
@@ -44,3 +46,4 @@ template class AV_GUA_DLL MultiField<Link<gua::VTBackend>>;
 } // namespace av
 
 #endif // AVANGO_GUA_VTBACKEND_HPP
+#endif // AVANGO_VIRTUAL_TEXTURING_SUPPORT

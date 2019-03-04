@@ -1,4 +1,3 @@
-#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 
 #ifndef AVANGO_GUA_VTBACKEND_HPP
 #define AVANGO_GUA_VTBACKEND_HPP
@@ -14,6 +13,8 @@
 
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
+
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 
 namespace av
 {

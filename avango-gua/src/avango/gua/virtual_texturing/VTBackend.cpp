@@ -1,8 +1,8 @@
-#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
-
 #include <avango/Base.h>
 #include <avango/Logger.h>
 #include <avango/gua/virtual_texturing/VTBackend.hpp>
+
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 
 namespace
 {

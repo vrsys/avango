@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_INTERACTION
 #define AV_PYTHON_OSG_INTERACTION
 

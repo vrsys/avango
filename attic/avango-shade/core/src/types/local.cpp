@@ -25,26 +25,22 @@
 #include <shade/formatter/Generator.h>
 #include <boost/shared_ptr.hpp>
 
-
-shade::local::local(formatter::Constants::Type type) :
-  Type(type)
-{
-}
+shade::local::local(formatter::Constants::Type type) : Type(type) {}
 
 void shade::local::output_attribute(boost::shared_ptr<Type::State> state, Formatter* fmt, const std::string& obj, const std::string& name) const
 {
-  if (fmt->get_shader_env() == geometry_shader)
-    fmt->insert_multiple_attribute(m_type, obj, name);
-  else
-    fmt->insert_attribute(m_type, obj, name);
+    if(fmt->get_shader_env() == geometry_shader)
+        fmt->insert_multiple_attribute(m_type, obj, name);
+    else
+        fmt->insert_attribute(m_type, obj, name);
 }
 
 bool shade::local::output_begin_property_dispatcher(Formatter* fmt, const std::string& obj, const std::string name) const
 {
-  if (fmt->get_shader_env() == geometry_shader)
-    fmt->begin_multiple_property_dispatcher(obj, name, m_type);
-  else
-    fmt->begin_property_dispatcher(obj, name, m_type);
+    if(fmt->get_shader_env() == geometry_shader)
+        fmt->begin_multiple_property_dispatcher(obj, name, m_type);
+    else
+        fmt->begin_property_dispatcher(obj, name, m_type);
 
-  return true;
+    return true;
 }

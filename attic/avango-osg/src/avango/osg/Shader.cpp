@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Shader"));
+av::Logger& logger(av::getLogger("av::osg::Shader"));
 }
 
 AV_FC_DEFINE(av::osg::Shader);
@@ -37,86 +37,47 @@ AV_FC_DEFINE(av::osg::Shader);
 AV_FIELD_DEFINE(av::osg::SFShader);
 AV_FIELD_DEFINE(av::osg::MFShader);
 
-av::osg::Shader::Shader(::osg::Shader* osgshader) :
-  Object(osgshader),
-  mOsgShader(osgshader)
+av::osg::Shader::Shader(::osg::Shader* osgshader) : Object(osgshader), mOsgShader(osgshader)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Type,
-                            boost::bind(&Shader::getTypeCB, this, _1),
-                            boost::bind(&Shader::setTypeCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(ShaderSource,
-                            boost::bind(&Shader::getShaderSourceCB, this, _1),
-                            boost::bind(&Shader::setShaderSourceCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(FileName,
-                            boost::bind(&Shader::getFileNameCB, this, _1),
-                            boost::bind(&Shader::setFileNameCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Type, boost::bind(&Shader::getTypeCB, this, _1), boost::bind(&Shader::setTypeCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(ShaderSource, boost::bind(&Shader::getShaderSourceCB, this, _1), boost::bind(&Shader::setShaderSourceCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(FileName, boost::bind(&Shader::getFileNameCB, this, _1), boost::bind(&Shader::setFileNameCB, this, _1));
 }
 
-av::osg::Shader::~Shader()
-{}
+av::osg::Shader::~Shader() {}
 
-void
-av::osg::Shader::initClass()
+void av::osg::Shader::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Object::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Object::initClass();
 
-    AV_FC_INIT(av::osg::Object, av::osg::Shader, true);
+        AV_FC_INIT(av::osg::Object, av::osg::Shader, true);
 
-    SFShader::initClass("av::osg::SFShader", "av::Field");
-    MFShader::initClass("av::osg::MFShader", "av::Field");
+        SFShader::initClass("av::osg::SFShader", "av::Field");
+        MFShader::initClass("av::osg::MFShader", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::Shader*
-av::osg::Shader::getOsgShader() const
-{
-  return mOsgShader;
-}
+::osg::Shader* av::osg::Shader::getOsgShader() const { return mOsgShader; }
 
-/* virtual */ void
-av::osg::Shader::getTypeCB(const av::SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgShader->getType();
-}
+/* virtual */ void av::osg::Shader::getTypeCB(const av::SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgShader->getType(); }
 
-/* virtual */ void
-av::osg::Shader::setTypeCB(const av::SFInt::SetValueEvent& event)
-{
-  mOsgShader->setType(static_cast< ::osg::Shader::Type>(event.getValue()));
-}
+/* virtual */ void av::osg::Shader::setTypeCB(const av::SFInt::SetValueEvent& event) { mOsgShader->setType(static_cast<::osg::Shader::Type>(event.getValue())); }
 
-/* virtual */ void
-av::osg::Shader::getShaderSourceCB(const av::SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgShader->getShaderSource();
-}
+/* virtual */ void av::osg::Shader::getShaderSourceCB(const av::SFString::GetValueEvent& event) { *(event.getValuePtr()) = mOsgShader->getShaderSource(); }
 
-/* virtual */ void
-av::osg::Shader::setShaderSourceCB(const av::SFString::SetValueEvent& event)
-{
-  mOsgShader->setShaderSource(event.getValue());
-}
+/* virtual */ void av::osg::Shader::setShaderSourceCB(const av::SFString::SetValueEvent& event) { mOsgShader->setShaderSource(event.getValue()); }
 
-/* virtual */ void
-av::osg::Shader::getFileNameCB(const av::SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgShader->getFileName();
-}
+/* virtual */ void av::osg::Shader::getFileNameCB(const av::SFString::GetValueEvent& event) { *(event.getValuePtr()) = mOsgShader->getFileName(); }
 
-/* virtual */ void
-av::osg::Shader::setFileNameCB(const av::SFString::SetValueEvent& event)
-{
-  mOsgShader->loadShaderSourceFromFile(event.getValue());
-}
+/* virtual */ void av::osg::Shader::setFileNameCB(const av::SFString::SetValueEvent& event) { mOsgShader->loadShaderSourceFromFile(event.getValue()); }
 
-void
-av::osg::Shader::touchFields()
+void av::osg::Shader::touchFields()
 {
-  Type.touch();
-  ShaderSource.touch();
-  FileName.touch();
+    Type.touch();
+    ShaderSource.touch();
+    FileName.touch();
 }

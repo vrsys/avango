@@ -35,50 +35,49 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * An Avango NG device for communication with a Nintendo Wiimote control.
+ * To use this device it is necessary to install the cwiid library.
+ * (http://abstrakraft.org/cwiid/ under GPL license)
+ * with patches #34 #35 and #36 (see tickets under cwiid webhome).
+ * In conjunction with a running wminput daemon started like this:
+ * "wminput [ma:ca:dd:re:ss:01] &"
+ * the Linux event system will propagate the inputs via /dev/input/.
+ */
+class Wiimote : public HIDInput
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * An Avango NG device for communication with a Nintendo Wiimote control.
-     * To use this device it is necessary to install the cwiid library.
-     * (http://abstrakraft.org/cwiid/ under GPL license)
-     * with patches #34 #35 and #36 (see tickets under cwiid webhome).
-     * In conjunction with a running wminput daemon started like this:
-     * "wminput [ma:ca:dd:re:ss:01] &"
-     * the Linux event system will propagate the inputs via /dev/input/.
+     * Constructor
      */
-    class Wiimote : public HIDInput
-    {
-      AV_BASE_DECLARE();
+    Wiimote();
 
-    public:
-      /**
-       * Constructor
-       */
-      Wiimote();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Wiimote();
 
-    protected:
+    /**
+     * Inherited from interface av::daemon::Device, used to initialize the device.
+     */
+    void startDevice();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Wiimote();
+    /**
+     * Implements updating LEDs.
+     */
+    void updateLED(unsigned short eventCode, bool on);
 
-      /**
-       * Inherited from interface av::daemon::Device, used to initialize the device.
-       */
-      void startDevice();
-
-      /**
-       * Implements updating LEDs.
-       */
-      void updateLED(unsigned short eventCode, bool on);
-
-      /**
-       * Implements stopping LEDs.
-       */
-      void stopLEDs();
-    };
-  }
-}
+    /**
+     * Implements stopping LEDs.
+     */
+    void stopLEDs();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

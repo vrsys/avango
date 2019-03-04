@@ -35,12 +35,11 @@
 
 class Splitter : public shade::ShaderBase<Splitter, shade::shaders::Geometry>
 {
-public:
+  public:
+    /*virtual*/ shade::void_<> enter(void);
 
-  /*virtual*/ shade::void_<> enter(void);
-
-private:
-  SHADE_DERIVED_DECL(Splitter, shade::shaders::Geometry)
+  private:
+    SHADE_DERIVED_DECL(Splitter, shade::shaders::Geometry)
 };
 
 #endif /* Splitter_H */

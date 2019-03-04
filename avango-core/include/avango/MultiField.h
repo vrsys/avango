@@ -38,21 +38,18 @@
 #include <avango/OutputStream.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-#  include <avango/Msg.h>
+#include <avango/Msg.h>
 #endif
 
 namespace av
 {
-
-  /**
-   * Multi value holder to be put into a FieldContainer
-   */
-  template <typename Value>
-  class MultiField : public Field
-  {
-
+/**
+ * Multi value holder to be put into a FieldContainer
+ */
+template <typename Value>
+class MultiField : public Field
+{
   public:
-
     using SuperType = Field;
     using ContainerType = std::vector<Value>;
     using ValueType = Value;
@@ -60,240 +57,212 @@ namespace av
     /**
      * Event class for field getValue events.
      */
-    class  GetValueEvent : public Event
+    class GetValueEvent : public Event
     {
-      friend class MultiField;
+        friend class MultiField;
 
-    public:
+      public:
+        /**
+         * Get the pointer to write the new value to.
+         * Don't access the pointer outside the callback.
+         */
+        ContainerType* getValuePtr() const { return mValuePtr; }
 
-      /**
-       * Get the pointer to write the new value to.
-       * Don't access the pointer outside the callback.
-       */
-      ContainerType* getValuePtr() const { return mValuePtr; }
+      protected:
+        GetValueEvent(const Field* field, ContainerType* value_ptr) : Event(field), mValuePtr(value_ptr) {}
 
-    protected:
-      GetValueEvent(const Field *field, ContainerType* value_ptr) :
-        Event(field), mValuePtr(value_ptr) {}
-
-    private:
-      ContainerType* mValuePtr;
+      private:
+        ContainerType* mValuePtr;
     };
 
     /**
      * Event class for field setValue events.
      */
-    class  SetValueEvent : public Event
+    class SetValueEvent : public Event
     {
-      friend class MultiField;
+        friend class MultiField;
 
-    public:
+      public:
+        /**
+         * Get the new value.
+         * A reference to the new value is returned to avoid copying.
+         * Don't access it outside the callback.
+         */
+        const ContainerType& getValue() const { return mValue; }
 
-      /**
-       * Get the new value.
-       * A reference to the new value is returned to avoid copying.
-       * Don't access it outside the callback.
-       */
-      const ContainerType& getValue() const { return mValue; }
+      protected:
+        SetValueEvent(Field* field, const ContainerType& value) : Event(field), mValue(value) {}
 
-    protected:
-      SetValueEvent(Field *field, const ContainerType& value) :
-        Event(field), mValue(value) {}
-
-    private:
-      const ContainerType& mValue;
+      private:
+        const ContainerType& mValue;
     };
 
-    using GetValueCallback = boost::function<void (const GetValueEvent&)>;
-    using SetValueCallback = boost::function<void (const SetValueEvent&)>;
+    using GetValueCallback = boost::function<void(const GetValueEvent&)>;
+    using SetValueCallback = boost::function<void(const SetValueEvent&)>;
 
-    MultiField() :
-      Field(),
-      mHasGetValueCallback(false),
-      mHasSetValueCallback(false)
-    {}
+    MultiField() : Field(), mHasGetValueCallback(false), mHasSetValueCallback(false) {}
 
-    MultiField(const MultiField&) : Field()
-    {}
+    MultiField(const MultiField&) : Field() {}
 
-    virtual ~MultiField()
-    {}
+    virtual ~MultiField() {}
 
     static void initClass(const std::string& classname, const std::string& parentname)
     {
-      if (Type::badType() == sClassTypeId) {
-        sClassTypeId = Field::registerType(classname, parentname,
-                                           new CreateA<MultiField<Value> >());
-      }
+        if(Type::badType() == sClassTypeId)
+        {
+            sClassTypeId = Field::registerType(classname, parentname, new CreateA<MultiField<Value>>());
+        }
     }
 
-    static Type getClassTypeId()
+    static Type getClassTypeId() { return sClassTypeId; }
+
+    virtual Type getTypeId() const { return sClassTypeId; }
+
+    void bind(FieldContainer* container, const std::string& name, bool owned, const ContainerType& init)
     {
-      return sClassTypeId;
+        Field::bind(container, name, owned);
+        mValue = init;
+        if(mHasSetValueCallback)
+            mSetValueCallback(SetValueEvent(this, mValue));
     }
 
-    virtual Type getTypeId() const
+    void bind(FieldContainer* container, const std::string& name, bool owned, const GetValueCallback& get_cb, const SetValueCallback& set_cb)
     {
-      return sClassTypeId;
+        if(!isBound())
+        {
+            SuperType::bind(container, name, owned);
+        }
+
+        addGetValueCallback(get_cb);
+        addSetValueCallback(set_cb);
+
+        getValue();
     }
 
-    void bind(FieldContainer* container, const std::string& name,
-              bool owned, const ContainerType& init)
+    void bind(FieldContainer* container, const std::string& name, bool owned, const GetValueCallback& get_cb, const SetValueCallback& set_cb, const ContainerType& init)
     {
-      Field::bind(container, name, owned);
-      mValue = init;
-      if (mHasSetValueCallback)
-        mSetValueCallback(SetValueEvent(this, mValue));
+        addGetValueCallback(get_cb);
+        addSetValueCallback(set_cb);
+
+        bind(container, name, owned, init);
     }
 
-    void bind(FieldContainer* container, const std::string& name, bool owned,
-              const GetValueCallback& get_cb, const SetValueCallback& set_cb)
-    {
-      if (!isBound())
-      {
-        SuperType::bind(container, name, owned);
-      }
-
-      addGetValueCallback(get_cb);
-      addSetValueCallback(set_cb);
-
-      getValue();
-    }
-
-    void bind(FieldContainer* container, const std::string& name, bool owned,
-              const GetValueCallback& get_cb, const SetValueCallback& set_cb,
-              const ContainerType& init)
-    {
-      addGetValueCallback(get_cb);
-      addSetValueCallback(set_cb);
-
-      bind(container, name, owned, init);
-    }
-
-    virtual void setValue(const ContainerType& v)
-    {
-      setValue(v, 0);
-    }
+    virtual void setValue(const ContainerType& v) { setValue(v, 0); }
 
     virtual const ContainerType& getValue() const
     {
-      if (mHasGetValueCallback)
-        mGetValueCallback(GetValueEvent(this, &mValue));
-      return mValue;
+        if(mHasGetValueCallback)
+            mGetValueCallback(GetValueEvent(this, &mValue));
+        return mValue;
     }
 
     virtual void add1Value(const Value& v)
     {
-      getValue();
-      mValue.push_back(v);
-      if (mHasSetValueCallback)
-        mSetValueCallback(SetValueEvent(this, mValue));
-      fieldChanged(false);
+        getValue();
+        mValue.push_back(v);
+        if(mHasSetValueCallback)
+            mSetValueCallback(SetValueEvent(this, mValue));
+        fieldChanged(false);
     }
 
     virtual void remove1Value(const Value& v)
     {
-      getValue();
+        getValue();
 
-      typename ContainerType::iterator f(std::find(mValue.begin(), mValue.end(), v));
+        typename ContainerType::iterator f(std::find(mValue.begin(), mValue.end(), v));
 
-      if (f != mValue.end())
-      {
-        mValue.erase(f);
-        if (mHasSetValueCallback)
-          mSetValueCallback(SetValueEvent(this, mValue));
-        fieldChanged(false);
-      }
+        if(f != mValue.end())
+        {
+            mValue.erase(f);
+            if(mHasSetValueCallback)
+                mSetValueCallback(SetValueEvent(this, mValue));
+            fieldChanged(false);
+        }
     }
 
     virtual bool has1Value(const Value& v)
     {
-      getValue();
-      return (std::find(mValue.begin(), mValue.end(), v) != mValue.end());
+        getValue();
+        return (std::find(mValue.begin(), mValue.end(), v) != mValue.end());
     }
 
     /* virtual */ void clear()
     {
-      mValue.clear();
-      if (mHasSetValueCallback)
-        mSetValueCallback(SetValueEvent(this, mValue));
-      fieldChanged(false);
+        mValue.clear();
+        if(mHasSetValueCallback)
+            mSetValueCallback(SetValueEvent(this, mValue));
+        fieldChanged(false);
     }
 
-    virtual int getSize()
-    {
-      return static_cast<int>(getValue().size());
-    }
+    virtual int getSize() { return static_cast<int>(getValue().size()); }
 
-    virtual bool isEmpty()
-    {
-      return getValue().empty();
-    }
+    virtual bool isEmpty() { return getValue().empty(); }
 
     virtual void read(InputStream& is)
     {
-      int count;
+        int count;
 
-      is >> count;
-      if (!is)
-      {
-        return;
-      }
+        is >> count;
+        if(!is)
+        {
+            return;
+        }
 
-      ContainerType vec;
-      for (int i=0; i<count; ++i)
-      {
-        Value val;
-        is >> val;
-        vec.push_back(val);
-      }
-      setValue(vec);
+        ContainerType vec;
+        for(int i = 0; i < count; ++i)
+        {
+            Value val;
+            is >> val;
+            vec.push_back(val);
+        }
+        setValue(vec);
     }
 
     virtual void write(OutputStream& os)
     {
-      getValue();
+        getValue();
 
 #if defined(__APPLE__)
-      os.operator<<(static_cast< typename std::vector<Value>::size_type>(mValue.size()));
+        os.operator<<(static_cast<typename std::vector<Value>::size_type>(mValue.size()));
 #endif
 #if defined(_WIN32)
-    // cl of VS 8 apparently not able to resolve os << mValue.size()
-    os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
+        // cl of VS 8 apparently not able to resolve os << mValue.size()
+        os.operator<<(static_cast<std::vector<Value>::size_type>(mValue.size()));
 #endif
 #if defined(__linux__)
-    os << mValue.size();
+        os << mValue.size();
 #endif
 
-      typename ContainerType::const_iterator i(mValue.begin());
+        typename ContainerType::const_iterator i(mValue.begin());
 
-      if (os.isBinaryEnabled())
-      {
-        while (i != mValue.end())
+        if(os.isBinaryEnabled())
         {
-          os << (*i);
-          ++i;
+            while(i != mValue.end())
+            {
+                os << (*i);
+                ++i;
+            }
         }
-      }
-      else
-      {
-        (std::ostream&) os << ' ';
+        else
+        {
+            (std::ostream&)os << ' ';
 
-        while (i != mValue.end())
-        {
-          os << (*i);
-          (std::ostream&) os << ' ';
-          ++i;
+            while(i != mValue.end())
+            {
+                os << (*i);
+                (std::ostream&)os << ' ';
+                ++i;
+            }
         }
-      }
     }
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-     virtual void push(Msg& msg);
-     virtual void pop(Msg& msg);
+    virtual void push(Msg& msg);
+    virtual void pop(Msg& msg);
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-    template <typename T> friend bool operator==(const MultiField<T>&, const MultiField<T>&);
+    template <typename T>
+    friend bool operator==(const MultiField<T>&, const MultiField<T>&);
 
     /**
      * Register callback invoked for a getValue called on this field.
@@ -301,8 +270,8 @@ namespace av
      */
     void addGetValueCallback(const GetValueCallback& callback)
     {
-      mHasGetValueCallback = true;
-      mGetValueCallback = callback;
+        mHasGetValueCallback = true;
+        mGetValueCallback = callback;
     }
 
     /**
@@ -310,8 +279,8 @@ namespace av
      */
     void removeGetValueCallback(void)
     {
-      mHasGetValueCallback = false;
-      mGetValueCallback = 0;
+        mHasGetValueCallback = false;
+        mGetValueCallback = 0;
     }
 
     /**
@@ -320,8 +289,8 @@ namespace av
      */
     void addSetValueCallback(const SetValueCallback& callback)
     {
-      mHasSetValueCallback = true;
-      mSetValueCallback = callback;
+        mHasSetValueCallback = true;
+        mSetValueCallback = callback;
     }
 
     /**
@@ -329,36 +298,31 @@ namespace av
      */
     void removeSetValueCallback(void)
     {
-      mHasSetValueCallback = false;
-      mSetValueCallback = 0;
+        mHasSetValueCallback = false;
+        mSetValueCallback = 0;
     }
 
-     /*virtual*/ Field* clone(void) const
+    /*virtual*/ Field* clone(void) const
     {
-      MultiField<Value>* cloned_field = new MultiField<Value>;
-      cloned_field->mValue = mValue;
-      return cloned_field;
+        MultiField<Value>* cloned_field = new MultiField<Value>;
+        cloned_field->mValue = mValue;
+        return cloned_field;
     }
 
   protected:
-
     virtual void setValue(const ContainerType& v, Field* triggered_from)
     {
-      mValue = v;
-      if (mHasSetValueCallback)
-        mSetValueCallback(SetValueEvent(this, mValue));
-      fieldChanged(false, triggered_from);
+        mValue = v;
+        if(mHasSetValueCallback)
+            mSetValueCallback(SetValueEvent(this, mValue));
+        fieldChanged(false, triggered_from);
     }
 
-    virtual void pullValue(Field* fromField)
-    {
-      pullValueImpl(fromField);
-    }
+    virtual void pullValue(Field* fromField) { pullValueImpl(fromField); }
 
     mutable ContainerType mValue;
 
   private:
-
     void pullValueImpl(Field* fromField);
 
     static Type sClassTypeId;
@@ -371,56 +335,60 @@ namespace av
     // important here.
     bool mHasGetValueCallback;
     bool mHasSetValueCallback;
-  };
+};
 
-  template<typename Value>
-  void av::MultiField<Value>::pullValueImpl(av::Field* fromField)
-  {
-    if (!fromField->getTypeId().isOfType(MultiField<Value>::getClassTypeId()))
+template <typename Value>
+void av::MultiField<Value>::pullValueImpl(av::Field* fromField)
+{
+    if(!fromField->getTypeId().isOfType(MultiField<Value>::getClassTypeId()))
     {
-      throw std::invalid_argument("pullValue: type mismatch. " +
-                                  getTypeId().getName() +
-                                  " <--> " +
-                                  fromField->getTypeId().getName());
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
     }
     setValue(dynamic_cast<MultiField<Value>*>(fromField)->getValue(), fromField);
-  }
+}
 
-  template<> AV_DLL void av::MultiField<double>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<float>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<int32_t>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<int64_t>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<uint32_t>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<uint64_t>::pullValueImpl(av::Field* fromField);
-  template<> AV_DLL void av::MultiField<bool>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<double>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<float>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<int32_t>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<int64_t>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<uint32_t>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<uint64_t>::pullValueImpl(av::Field* fromField);
+template <>
+AV_DLL void av::MultiField<bool>::pullValueImpl(av::Field* fromField);
 
-  template <typename Value> bool
-  operator==(const MultiField<Value>& a, const MultiField<Value>& b)
-  {
+template <typename Value>
+bool operator==(const MultiField<Value>& a, const MultiField<Value>& b)
+{
     return a.getValue() == b.getValue();
-  }
+}
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  template<typename Value> inline void
-  MultiField<Value>::push(Msg& msg)
-  {
+template <typename Value>
+inline void MultiField<Value>::push(Msg& msg)
+{
     getValue();
 
     typename ContainerType::const_iterator i(mValue.begin());
 
-    while (i != mValue.end())
+    while(i != mValue.end())
     {
-      av_pushMsg(msg, *i);
-      ++i;
+        av_pushMsg(msg, *i);
+        ++i;
     }
 
     av_pushMsg(msg, static_cast<uint32_t>(mValue.size()));
-  }
+}
 
-  template<typename Value> inline void
-  MultiField<Value>::pop(Msg& msg)
-  {
+template <typename Value>
+inline void MultiField<Value>::pop(Msg& msg)
+{
     uint32_t count;
 
     av_popMsg(msg, count);
@@ -431,32 +399,44 @@ namespace av
 
     Value val;
 
-    for (uint32_t i = count; i > 0; --i)
+    for(uint32_t i = count; i > 0; --i)
     {
-      av_popMsg(msg, val);
-      mValue[i-1] = val;
+        av_popMsg(msg, val);
+        mValue[i - 1] = val;
     }
 
-    if (mHasSetValueCallback)
-      mSetValueCallback(SetValueEvent(this, mValue));
+    if(mHasSetValueCallback)
+        mSetValueCallback(SetValueEvent(this, mValue));
     fieldChanged(true);
-  }
+}
 
-  template<> void MultiField<float>::push(Msg&);
-  template<> void MultiField<float>::pop(Msg&);
-  template<> void MultiField<double>::push(Msg&);
-  template<> void MultiField<double>::pop(Msg&);
-  template<> void MultiField<int32_t>::push(Msg&);
-  template<> void MultiField<int32_t>::pop(Msg&);
-  template<> void MultiField<uint32_t>::push(Msg&);
-  template<> void MultiField<uint32_t>::pop(Msg&);
-  template<> void MultiField<int64_t>::push(Msg&);
-  template<> void MultiField<int64_t>::pop(Msg&);
-  template<> void MultiField<uint64_t>::push(Msg&);
-  template<> void MultiField<uint64_t>::pop(Msg&);
+template <>
+void MultiField<float>::push(Msg&);
+template <>
+void MultiField<float>::pop(Msg&);
+template <>
+void MultiField<double>::push(Msg&);
+template <>
+void MultiField<double>::pop(Msg&);
+template <>
+void MultiField<int32_t>::push(Msg&);
+template <>
+void MultiField<int32_t>::pop(Msg&);
+template <>
+void MultiField<uint32_t>::push(Msg&);
+template <>
+void MultiField<uint32_t>::pop(Msg&);
+template <>
+void MultiField<int64_t>::push(Msg&);
+template <>
+void MultiField<int64_t>::pop(Msg&);
+template <>
+void MultiField<uint64_t>::push(Msg&);
+template <>
+void MultiField<uint64_t>::pop(Msg&);
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-}
+} // namespace av
 
 #endif // #if !defined(AVANGO_MULTIFIELD_H)

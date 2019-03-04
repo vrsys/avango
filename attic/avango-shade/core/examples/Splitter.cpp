@@ -25,7 +25,4 @@
 
 SHADE_CLASS_INIT(Splitter, "Splitter.glsl", SHADE_NONE, SHADE_NONE)
 
-shade::void_<> Splitter::enter(void)
-{
-  return invoke< shade::void_<> >("Splitter_enter_impl");
-}
+shade::void_<> Splitter::enter(void) { return invoke<shade::void_<>>("Splitter_enter_impl"); }

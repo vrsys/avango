@@ -28,47 +28,40 @@
 
 namespace
 {
-  class CopyNode : public av::FieldContainer
-  {
+class CopyNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     CopyNode();
 
     av::SFInt FieldIn;
     av::SFInt FieldOut;
 
     /* virtual */ void evaluate();
-  };
+};
 
-  AV_FC_DEFINE(CopyNode);
+AV_FC_DEFINE(CopyNode);
 
-  CopyNode::CopyNode()
-  {
+CopyNode::CopyNode()
+{
     AV_FC_ADD_FIELD(FieldIn, 0);
     AV_FC_ADD_FIELD(FieldOut, 0);
-  }
+}
 
-  void
-  CopyNode::initClass()
-  {
-    if (!isTypeInitialized())
+void CopyNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
-      AV_FC_INIT(av::FieldContainer, CopyNode, false);
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, CopyNode, false);
     }
-  }
+}
 
-  /* virtual */ void
-  CopyNode::evaluate()
-  {
-    FieldOut.setValue(FieldIn.getValue());
-  }
+/* virtual */ void CopyNode::evaluate() { FieldOut.setValue(FieldIn.getValue()); }
 
-
-  TEST(ConstantSizeOfEvaluationLoop)
-  {
+TEST(ConstantSizeOfEvaluationLoop)
+{
     CopyNode::initClass();
     av::FieldContainer::unscheduleEvaluationForAllContainers();
 
@@ -91,5 +84,5 @@ namespace
 
     node1->FieldIn.disconnect();
     node2->FieldIn.disconnect();
-  }
 }
+} // namespace

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_GROUP
 #define AV_PYTHON_OSG_GROUP
 

@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::PLODPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::PLODPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::PLODPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::PLODPassDescription);
 AV_FIELD_DEFINE(av::gua::SFPLODPassDescription);
 AV_FIELD_DEFINE(av::gua::MFPLODPassDescription);
 
-av::gua::PLODPassDescription::PLODPassDescription(
-  std::shared_ptr< ::gua::PLODPassDescription> const& guaPLODPassDescription)
-    : PipelinePassDescription(guaPLODPassDescription)
-    , m_guaPLODPassDescription(guaPLODPassDescription)
+av::gua::PLODPassDescription::PLODPassDescription(std::shared_ptr<::gua::PLODPassDescription> const& guaPLODPassDescription)
+    : PipelinePassDescription(guaPLODPassDescription), m_guaPLODPassDescription(guaPLODPassDescription)
 {
-
 }
 
-void
-av::gua::PLODPassDescription::initClass()
+void av::gua::PLODPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::PLODPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::PLODPassDescription> const&
-av::gua::PLODPassDescription::getGuaPLODPassDescription() const
-{
-    return m_guaPLODPassDescription;
-}
-
-
+std::shared_ptr<::gua::PLODPassDescription> const& av::gua::PLODPassDescription::getGuaPLODPassDescription() const { return m_guaPLODPassDescription; }

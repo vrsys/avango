@@ -35,14 +35,14 @@
 
 namespace av
 {
-  /**
-   * Helper function to disconnect all field connections from and to
-   * the given FieldContainer, and to clear all field values.
-   * Useful to avoid reference loops.
-   *
-   * \ingroup av
-   */
-  AV_DLL void disconnectAndClearAllFields(FieldContainer* fieldContainer);
-}
+/**
+ * Helper function to disconnect all field connections from and to
+ * the given FieldContainer, and to clear all field values.
+ * Useful to avoid reference loops.
+ *
+ * \ingroup av
+ */
+AV_DLL void disconnectAndClearAllFields(FieldContainer* fieldContainer);
+} // namespace av
 
 #endif

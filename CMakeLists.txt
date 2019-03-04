@@ -107,6 +107,10 @@ include(FindSchism)
 
 include(FindZMQ)
 
+if (AVANGO_SPOINTS_SUPPORT)
+include(FindTurboJPEG)
+endif (AVANGO_SPOINTS_SUPPORT)
+
 if (${AVANGO_OCULUS_RIFT_SUPPORT})
   include(findOVR)
 endif(${AVANGO_OCULUS_RIFT_SUPPORT})
@@ -151,6 +155,7 @@ option (AVANGO_DISTRIBUTION_SUPPORT "Set to enable distribution support." ON)
 option (AVANGO_PBR_SUPPORT "Set to enable point based rendering support.")
 option (AVANGO_LOD_SUPPORT "Set to enable level of detail support.")
 option (AVANGO_NURBS_SUPPORT "Set to enable direct NURBS rendering." OFF)
+option (AVANGO_NRP_SUPPORT "Set to enable interface for the Neurorobotics Platform." OFF)
 option (AVANGO_PCL_SUPPORT "Use PCL.")
 option (AVANGO_UNITTESTS "Compile Unittests for Avango.")
 option (AVANGO_OCULUS_RIFT_SUPPORT "Compile Oculus Rift module for Avango.")
@@ -223,6 +228,10 @@ endif(AVANGO_VOLUME_SUPPORT)
 if (AVANGO_NURBS_SUPPORT)
   add_subdirectory(avango-nurbs)
 endif (AVANGO_NURBS_SUPPORT)
+
+if (AVANGO_NRP_SUPPORT)
+  add_subdirectory(avango-nrp)
+endif (AVANGO_NRP_SUPPORT)
 
 ################################################################
 # Summary

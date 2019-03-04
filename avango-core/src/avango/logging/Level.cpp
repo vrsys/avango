@@ -27,18 +27,16 @@
 
 #include <string>
 
-const std::string&
-av::logging::levelToString(Level level)
+const std::string& av::logging::levelToString(Level level)
 {
-  static std::string sLevelString[] =
-    {
-      "FATAL",
-      "ERROR",
-      "WARN ",
-      "INFO ",
-      "DEBUG",
-      "TRACE",
+    static std::string sLevelString[] = {
+        "FATAL",
+        "ERROR",
+        "WARN ",
+        "INFO ",
+        "DEBUG",
+        "TRACE",
     };
 
-  return sLevelString[level];
+    return sLevelString[level];
 }

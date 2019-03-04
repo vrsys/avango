@@ -14,89 +14,85 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+namespace lod
+{
+/**
+ * Wrapper for ::gua::PLodNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
+{
+    AV_FC_DECLARE();
 
-    namespace lod {
-      /**
-       * Wrapper for ::gua::PLodNode
-       *
-       * \ingroup av_gua
-       */
-      class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
-      {
-        AV_FC_DECLARE();
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::gua::PLodNode is created.
+     * Otherwise, the given ::gua::PLodNode is used.
+     */
+    PLodNode(std::shared_ptr<::gua::node::PLodNode> guanode = std::shared_ptr<::gua::node::PLodNode>(new ::gua::node::PLodNode("")));
 
-      public:
+    virtual void on_distribute(av::gua::NetTransform& netNode);
+    virtual void on_undistribute(av::gua::NetTransform& netNode);
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::PLodNode is created.
-         * Otherwise, the given ::gua::PLodNode is used.
-         */
-        PLodNode(std::shared_ptr< ::gua::node::PLodNode> guanode =
-            std::shared_ptr< ::gua::node::PLodNode>(new ::gua::node::PLodNode("")));
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~PLodNode();
 
-        virtual void on_distribute(av::gua::NetTransform& netNode);
-        virtual void on_undistribute(av::gua::NetTransform& netNode);
+  public:
+    /**
+     * Get the wrapped ::gua::PLodNode.
+     */
+    std::shared_ptr<::gua::node::PLodNode> getGuaPLodNode() const;
 
-      protected:
+    SFString Geometry;
+    SFMaterial Material;
+    SFFloat RadiusScale;
+    SFFloat MaxSurfelRadius;
+    SFFloat ErrorThreshold;
+    SFBool EnableBackfaceCulling;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-  //      virtual ~PLodNode();
+    virtual void setGeometryCB(const SFString::SetValueEvent& event);
+    virtual void getGeometryCB(const SFString::GetValueEvent& event);
 
-      public:
-        /**
-         * Get the wrapped ::gua::PLodNode.
-         */
-        std::shared_ptr< ::gua::node::PLodNode> getGuaPLodNode() const;
+    virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+    virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
 
-        SFString Geometry;
-        SFMaterial Material;
-        SFFloat RadiusScale;
-        SFFloat MaxSurfelRadius;
-        SFFloat ErrorThreshold;
-        SFBool EnableBackfaceCulling;
+    virtual void setRadiusScaleCB(const SFFloat::SetValueEvent& event);
+    virtual void getRadiusScaleCB(const SFFloat::GetValueEvent& event);
 
-        virtual void setGeometryCB(const SFString::SetValueEvent& event);
-        virtual void getGeometryCB(const SFString::GetValueEvent& event);
+    virtual void setMaxSurfelRadiusCB(const SFFloat::SetValueEvent& event);
+    virtual void getMaxSurfelRadiusCB(const SFFloat::GetValueEvent& event);
 
-        virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
-        virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+    virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
+    virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
 
-        virtual void setRadiusScaleCB(const SFFloat::SetValueEvent& event);
-        virtual void getRadiusScaleCB(const SFFloat::GetValueEvent& event);
+    virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
+    virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
 
-        virtual void setMaxSurfelRadiusCB(const SFFloat::SetValueEvent& event);
-        virtual void getMaxSurfelRadiusCB(const SFFloat::GetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::node::PLodNode> m_guaPLodNode;
+    av::Link<av::gua::Material> m_Material;
 
-        virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
-        virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
+    PLodNode(const PLodNode&);
+    PLodNode& operator=(const PLodNode&);
+};
 
-        virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
-        virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
+typedef SingleField<Link<PLodNode>> SFPLodNode;
+typedef MultiField<Link<PLodNode>> MFPLodNode;
+} // namespace lod
 
-      private:
-
-        std::shared_ptr< ::gua::node::PLodNode> m_guaPLodNode;
-        av::Link< av::gua::Material> m_Material;
-
-        PLodNode(const PLodNode&);
-        PLodNode& operator=(const PLodNode&);
-      };
-
-      typedef SingleField<Link<PLodNode> > SFPLodNode;
-      typedef MultiField<Link<PLodNode> > MFPLodNode;
-    }
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::PLodNode> >;
-  template class AV_GUA_LOD_DLL MultiField<Link<gua::lod::PLodNode> >;
+template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::PLodNode>>;
+template class AV_GUA_LOD_DLL MultiField<Link<gua::lod::PLodNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_LOD_PLOD_NODE_HPP
+#endif // AVANGO_GUA_LOD_PLOD_NODE_HPP

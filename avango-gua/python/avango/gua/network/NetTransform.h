@@ -25,5 +25,4 @@
 
 #include <avango/Link.h>
 
-
 void init_NetTransform(void);

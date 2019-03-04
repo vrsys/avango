@@ -26,20 +26,17 @@
 
 #include "Value.h"
 
-
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class IntConvertableValue : public Value
+{
+  public:
+    virtual int get_int(void) const = 0;
+};
 
-    class IntConvertableValue : public Value
-    {
-    public:
-      virtual int get_int(void) const = 0;
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_IntConvertableValue_H */

@@ -27,11 +27,10 @@
 #include <string>
 #include <list>
 
-
 namespace shade
 {
-  class FileResolver
-  {
+class FileResolver
+{
   public:
     void append_path(const std::string& path);
     void prepend_path(const std::string& path);
@@ -39,12 +38,13 @@ namespace shade
 
   private:
     std::list<std::string> m_path;
-  };
+};
 
-  class FileNotFound
-  {};
+class FileNotFound
+{
+};
 
-  void append_env_path(FileResolver& resolver, const std::string& env_path);
-}
+void append_env_path(FileResolver& resolver, const std::string& env_path);
+} // namespace shade
 
 #endif /* shade_FileResolver_H */

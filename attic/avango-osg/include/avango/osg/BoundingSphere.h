@@ -36,54 +36,50 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * \ingroup av_osg
+ * Something that can be added as a leaf node to a scene graph in order
+ * to compute the absolute transform of the path to the root. Moreover,
+ * the evaluation of all nodes of that path is triggered from here.
+ *
+ */
+class AV_OSG_DLL BoundingSphere : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * \ingroup av_osg
-     * Something that can be added as a leaf node to a scene graph in order
-     * to compute the absolute transform of the path to the root. Moreover,
-     * the evaluation of all nodes of that path is triggered from here.
-     *
+     * Constructor.
      */
-    class AV_OSG_DLL BoundingSphere : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    BoundingSphere();
 
-    public:
+    /**
+     * Center of the bounding sphere
+     */
+    SFVec3 Center;
 
-      /**
-       * Constructor.
-       */
-      BoundingSphere();
+    /**
+     * Radius of the bounding sphere
+     */
+    SFFloat Radius;
 
-      /**
-       * Center of the bounding sphere
-       */
-      SFVec3 Center;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~BoundingSphere();
+};
 
-      /**
-       * Radius of the bounding sphere
-       */
-      SFFloat Radius;
+typedef SingleField<Link<BoundingSphere>> SFBoundingSphere;
+typedef MultiField<Link<BoundingSphere>> MFBoundingSphere;
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~BoundingSphere();
-
-
-    };
-
-    typedef SingleField<Link<BoundingSphere> > SFBoundingSphere;
-    typedef MultiField<Link<BoundingSphere> > MFBoundingSphere;
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::BoundingSphere> >;
-  template class AV_OSG_DLL MultiField<Link<osg::BoundingSphere> >;
+template class AV_OSG_DLL SingleField<Link<osg::BoundingSphere>>;
+template class AV_OSG_DLL MultiField<Link<osg::BoundingSphere>>;
 #endif
 
 } // namespace av

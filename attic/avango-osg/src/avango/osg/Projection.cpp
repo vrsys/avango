@@ -31,7 +31,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Projection"));
+av::Logger& logger(av::getLogger("av::osg::Projection"));
 }
 
 AV_FC_DEFINE(av::osg::Projection);
@@ -39,51 +39,31 @@ AV_FC_DEFINE(av::osg::Projection);
 AV_FIELD_DEFINE(av::osg::SFProjection);
 AV_FIELD_DEFINE(av::osg::MFProjection);
 
-av::osg::Projection::Projection(::osg::Projection* osgprojection) :
-  Group(osgprojection),
-  mOsgProjection(osgprojection)
+av::osg::Projection::Projection(::osg::Projection* osgprojection) : Group(osgprojection), mOsgProjection(osgprojection)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Matrix,
-                          boost::bind(&Projection::getMatrixCB, this, _1),
-                          boost::bind(&Projection::setMatrixCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Matrix, boost::bind(&Projection::getMatrixCB, this, _1), boost::bind(&Projection::setMatrixCB, this, _1));
 }
 
 /* virtual */
-av::osg::Projection::~Projection()
-{}
+av::osg::Projection::~Projection() {}
 
-/* static */ void
-av::osg::Projection::initClass()
+/* static */ void av::osg::Projection::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Group::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Group::initClass();
 
-    AV_FC_INIT(av::osg::Group, av::osg::Projection, true);
+        AV_FC_INIT(av::osg::Group, av::osg::Projection, true);
 
-    SFProjection::initClass("av::osg::SFProjection", "av::Field");
-    MFProjection::initClass("av::osg::MFProjection", "av::Field");
+        SFProjection::initClass("av::osg::SFProjection", "av::Field");
+        MFProjection::initClass("av::osg::MFProjection", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
+::osg::Projection* av::osg::Projection::getOsgProjection() const { return mOsgProjection; }
 
-::osg::Projection*
-av::osg::Projection::getOsgProjection() const
-{
-  return mOsgProjection;
-}
+/* virtual */ void av::osg::Projection::getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event) { *(event.getValuePtr()) = mOsgProjection->getMatrix(); }
 
-/* virtual */ void
-av::osg::Projection::getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgProjection->getMatrix();
-}
-
-
-/* virtual */ void
-av::osg::Projection::setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event)
-{
-  mOsgProjection->setMatrix(event.getValue());
-}
+/* virtual */ void av::osg::Projection::setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event) { mOsgProjection->setMatrix(event.getValue()); }

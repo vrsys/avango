@@ -32,29 +32,28 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGImageStream(void)
- {
-  // wrapping osg::ImageStream functionality
-  register_field<av::osg::SFImageStream>("SFImageStream");
-  register_multifield<av::osg::MFImageStream>("MFImageStream");
-  class_<av::osg::ImageStream, av::Link<av::osg::ImageStream>, bases<av::osg::Image>, boost::noncopyable >("ImageStream", "docstring", no_init);
+{
+    // wrapping osg::ImageStream functionality
+    register_field<av::osg::SFImageStream>("SFImageStream");
+    register_multifield<av::osg::MFImageStream>("MFImageStream");
+    class_<av::osg::ImageStream, av::Link<av::osg::ImageStream>, bases<av::osg::Image>, boost::noncopyable>("ImageStream", "docstring", no_init);
 
-  enum_<osg::ImageStream::StreamStatus>("streamstatus")
-    .value("invalid",   ::osg::ImageStream::INVALID)
-    .value("playing",   ::osg::ImageStream::PLAYING)
-    .value("paused",    ::osg::ImageStream::PAUSED)
-    .value("rewinding", ::osg::ImageStream::REWINDING)
-    .export_values()
-    ;
-
- }
+    enum_<osg::ImageStream::StreamStatus>("streamstatus")
+        .value("invalid", ::osg::ImageStream::INVALID)
+        .value("playing", ::osg::ImageStream::PLAYING)
+        .value("paused", ::osg::ImageStream::PAUSED)
+        .value("rewinding", ::osg::ImageStream::REWINDING)
+        .export_values();
+}

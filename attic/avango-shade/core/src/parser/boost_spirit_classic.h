@@ -28,14 +28,14 @@
 // Define our own classic namespace when using older version of boost::spirit
 namespace boost
 {
-  namespace spirit
-  {
-    namespace classic
-    {
-      using namespace boost::spirit;
-    }
-  }
+namespace spirit
+{
+namespace classic
+{
+using namespace boost::spirit;
 }
+} // namespace spirit
+} // namespace boost
 #endif
 
 #endif /* boost_spirit_classic_H */

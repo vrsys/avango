@@ -3,4 +3,4 @@
 
 void init_TriMeshPassDescription();
 
-#endif //AV_PYTHON_GUA_TRI_MESH_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_TRI_MESH_PASS_DESCRIPTION_HPP

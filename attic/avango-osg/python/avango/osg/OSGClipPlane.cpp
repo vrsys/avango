@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGClipPlane(void)
- {
-  // wrapping osg::ClipPlane functionality
-  register_field<av::osg::SFClipPlane>("SFClipPlane");
-  register_multifield<av::osg::MFClipPlane>("MFClipPlane");
-  class_<av::osg::ClipPlane, av::Link<av::osg::ClipPlane>, bases<av::osg::Object>, boost::noncopyable >("ClipPlane", "docstring", no_init);
- }
+{
+    // wrapping osg::ClipPlane functionality
+    register_field<av::osg::SFClipPlane>("SFClipPlane");
+    register_multifield<av::osg::MFClipPlane>("MFClipPlane");
+    class_<av::osg::ClipPlane, av::Link<av::osg::ClipPlane>, bases<av::osg::Object>, boost::noncopyable>("ClipPlane", "docstring", no_init);
+}

@@ -3,4 +3,4 @@
 
 void init_MLodPassDescription();
 
-#endif //AV_PYTHON_GUA_MLOD_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_MLOD_PASS_DESCRIPTION_HPP

@@ -27,7 +27,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::Tool"));
+av::Logger& logger(av::getLogger("av::tools::Tool"));
 }
 
 AV_FC_DEFINE_ABSTRACT(av::tools::Tool);
@@ -35,67 +35,51 @@ AV_FC_DEFINE_ABSTRACT(av::tools::Tool);
 AV_FIELD_DEFINE(av::tools::SFTool);
 AV_FIELD_DEFINE(av::tools::MFTool);
 
-av::tools::Tool::Tool()
+av::tools::Tool::Tool() { AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType()); }
+
+av::tools::Tool::~Tool() {}
+
+void av::tools::Tool::initClass()
 {
-  AV_FC_ADD_FIELD(Targets, MFTargetHolder::ContainerType());
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        av::tools::TargetHolder::initClass();
+
+        AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Tool, true);
+
+        SFTool::initClass("av::tools::SFTool", "av::Field");
+        MFTool::initClass("av::tools::MFTool", "av::Field");
+    }
 }
 
-av::tools::Tool::~Tool()
-{}
-
-void
-av::tools::Tool::initClass()
+/* virtual */ void av::tools::Tool::evaluate()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    av::tools::TargetHolder::initClass();
+    av::FieldContainer::evaluate();
 
-    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::tools::Tool, true);
+    const MFTargetHolder::ContainerType& targets = Targets.getValue();
+    for(MFTargetHolder::ContainerType::const_iterator last_holder = mLastTargets.begin(); last_holder != mLastTargets.end(); ++last_holder)
+    {
+        if(!hasTarget(targets, (*last_holder)->Target.getValue()))
+            evaluateRemovedTarget(**last_holder);
+    }
 
-    SFTool::initClass("av::tools::SFTool", "av::Field");
-    MFTool::initClass("av::tools::MFTool", "av::Field");
-  }
+    for(MFTargetHolder::ContainerType::const_iterator holder = targets.begin(); holder != targets.end(); ++holder)
+    {
+        evaluateTarget(**holder);
+        if(hasTarget(mLastTargets, (*holder)->Target.getValue()))
+            evaluateKeptTarget(**holder);
+        else
+            evaluateAddedTarget(**holder);
+    }
+
+    mLastTargets = targets;
 }
 
-/* virtual */ void
-av::tools::Tool::evaluate()
-{
-  av::FieldContainer::evaluate();
+/* virtual */ void av::tools::Tool::evaluateTarget(TargetHolder&) {}
 
-  const MFTargetHolder::ContainerType &targets = Targets.getValue();
-  for (MFTargetHolder::ContainerType::const_iterator last_holder = mLastTargets.begin();
-       last_holder != mLastTargets.end(); ++last_holder)
-  {
-    if (!hasTarget(targets, (*last_holder)->Target.getValue()))
-      evaluateRemovedTarget(**last_holder);
-  }
+/* virtual */ void av::tools::Tool::evaluateAddedTarget(TargetHolder&) {}
 
-  for (MFTargetHolder::ContainerType::const_iterator holder = targets.begin();
-       holder != targets.end(); ++holder)
-  {
-    evaluateTarget(**holder);
-    if (hasTarget(mLastTargets, (*holder)->Target.getValue()))
-      evaluateKeptTarget(**holder);
-    else
-      evaluateAddedTarget(**holder);
-  }
+/* virtual */ void av::tools::Tool::evaluateKeptTarget(TargetHolder& holder) {}
 
-  mLastTargets = targets;
-}
-
-/* virtual */ void
-av::tools::Tool::evaluateTarget(TargetHolder&)
-{}
-
-/* virtual */ void
-av::tools::Tool::evaluateAddedTarget(TargetHolder&)
-{}
-
-/* virtual */ void
-av::tools::Tool::evaluateKeptTarget(TargetHolder& holder)
-{}
-
-/* virtual */ void
-av::tools::Tool::evaluateRemovedTarget(TargetHolder& holder)
-{}
+/* virtual */ void av::tools::Tool::evaluateRemovedTarget(TargetHolder& holder) {}

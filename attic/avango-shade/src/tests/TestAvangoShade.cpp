@@ -29,9 +29,9 @@
 
 int main()
 {
-  av::ApplicationInstance::get();
-  av::osg::Init::initClass();
-  av::shade::Init::initClass();
+    av::ApplicationInstance::get();
+    av::osg::Init::initClass();
+    av::shade::Init::initClass();
 
-  return UnitTest::RunAllTests();
+    return UnitTest::RunAllTests();
 }

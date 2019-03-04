@@ -25,7 +25,6 @@
 #ifndef AUTOTRANSFORM_H_
 #define AUTOTRANSFORM_H_
 
-
 /**
  * \file
  * \ingroup av_osg
@@ -38,128 +37,122 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::AutoTransform OsgAutoTransform;
+namespace osg
+{
+typedef ::osg::AutoTransform OsgAutoTransform;
+
+/**
+ * Wrapper for ::osg::AutoTransform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL AutoTransform : public Transform
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::AutoTransform is created.
+     * Otherwise, the given ::osg::AutoTransform is used.
+     */
+    AutoTransform(OsgAutoTransform* osgAutoTransform = new OsgAutoTransform());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~AutoTransform();
+
+  public:
+    typedef enum
+    {
+        NO_ROTATION = ::osg::AutoTransform::NO_ROTATION,
+        ROTATE_TO_SCREEN = ::osg::AutoTransform::ROTATE_TO_SCREEN,
+        ROTATE_TO_CAMERA = ::osg::AutoTransform::ROTATE_TO_CAMERA
+    } RotationModeType;
+    /**
+     * Set the AutoTransform rotation mode
+     */
+    SFUInt AutoRotateMode;
 
     /**
-     * Wrapper for ::osg::AutoTransform
-     *
-     * \ingroup av_osg
+     * Minimal scale of the children
      */
-    class AV_OSG_DLL AutoTransform : public Transform
-    {
-      AV_FC_DECLARE();
+    SFDouble MinimumScale;
 
-    public:
+    /**
+     * Scale
+     */
+    SFVec3 Scale;
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::AutoTransform is created.
-       * Otherwise, the given ::osg::AutoTransform is used.
-       */
-      AutoTransform(OsgAutoTransform* osgAutoTransform = new OsgAutoTransform());
-      // use defined type to circumvent compiler bug in VS8
+    /**
+     * Maximal scale of the children
+     */
+    SFDouble MaximumScale;
 
-    protected:
+    /**
+     * AutoScaleToScreen
+     */
+    SFBool AutoScaleToScreen;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~AutoTransform();
+    /**
+     * Set the position
+     */
+    SFVec3 Position;
 
-    public:
+    /**
+     * Set the pivot point
+     */
+    SFVec3 PivotPoint;
 
-      typedef enum {
-          NO_ROTATION      = ::osg::AutoTransform::NO_ROTATION,
-          ROTATE_TO_SCREEN = ::osg::AutoTransform::ROTATE_TO_SCREEN,
-          ROTATE_TO_CAMERA = ::osg::AutoTransform::ROTATE_TO_CAMERA
-      } RotationModeType;
-      /**
-       * Set the AutoTransform rotation mode
-       */
-      SFUInt AutoRotateMode;
+    /**
+     * Set the AutoScaleTransitionWidthRatio
+     */
+    SFFloat AutoScaleTransitionWidthRatio;
 
-      /**
-       * Minimal scale of the children
-       */
-      SFDouble MinimumScale;
+    /**
+     * Get the wrapped ::osg::Geometry.
+     */
+    OsgAutoTransform* getOsgAutoTransform() const;
 
-      /**
-       * Scale
-       */
-      SFVec3 Scale;
+  protected:
+    virtual void getScaleCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setScaleCB(const av::osg::SFVec3::SetValueEvent& event);
 
-      /**
-       * Maximal scale of the children
-       */
-      SFDouble MaximumScale;
+    virtual void getMinimumScaleCB(const av::SFDouble::GetValueEvent& event);
+    virtual void setMinimumScaleCB(const av::SFDouble::SetValueEvent& event);
 
-      /**
-       * AutoScaleToScreen
-       */
-      SFBool AutoScaleToScreen;
+    virtual void getMaximumScaleCB(const av::SFDouble::GetValueEvent& event);
+    virtual void setMaximumScaleCB(const av::SFDouble::SetValueEvent& event);
 
-      /**
-       * Set the position
-       */
-      SFVec3 Position;
+    virtual void getAutoRotateModeCB(const SFUInt::GetValueEvent& event);
+    virtual void setAutoRotateModeCB(const SFUInt::SetValueEvent& event);
 
-      /**
-       * Set the pivot point
-       */
-      SFVec3 PivotPoint;
+    virtual void getAutoScaleToScreenCB(const SFBool::GetValueEvent& event);
+    virtual void setAutoScaleToScreenCB(const SFBool::SetValueEvent& event);
 
-      /**
-       * Set the AutoScaleTransitionWidthRatio
-       */
-      SFFloat AutoScaleTransitionWidthRatio;
+    virtual void getPositionCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setPositionCB(const av::osg::SFVec3::SetValueEvent& event);
 
+    virtual void getPivotPointCB(const av::osg::SFVec3::GetValueEvent& event);
+    virtual void setPivotPointCB(const av::osg::SFVec3::SetValueEvent& event);
 
+    virtual void getAutoScaleTransitionWidthRatioCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setAutoScaleTransitionWidthRatioCB(const av::SFFloat::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::osg::Geometry.
-       */
-      OsgAutoTransform* getOsgAutoTransform() const;
+  private:
+    OsgAutoTransform* mOsgAutoTransform;
+};
 
-    protected:
-
-      virtual void getScaleCB(const av::osg::SFVec3::GetValueEvent& event);
-      virtual void setScaleCB(const av::osg::SFVec3::SetValueEvent& event);
-
-      virtual void getMinimumScaleCB(const av::SFDouble::GetValueEvent& event);
-      virtual void setMinimumScaleCB(const av::SFDouble::SetValueEvent& event);
-
-      virtual void getMaximumScaleCB(const av::SFDouble::GetValueEvent& event);
-      virtual void setMaximumScaleCB(const av::SFDouble::SetValueEvent& event);
-
-      virtual void getAutoRotateModeCB(const SFUInt::GetValueEvent& event);
-      virtual void setAutoRotateModeCB(const SFUInt::SetValueEvent& event);
-
-      virtual void getAutoScaleToScreenCB(const SFBool::GetValueEvent& event);
-      virtual void setAutoScaleToScreenCB(const SFBool::SetValueEvent& event);
-
-      virtual void getPositionCB(const av::osg::SFVec3::GetValueEvent& event);
-      virtual void setPositionCB(const av::osg::SFVec3::SetValueEvent& event);
-
-      virtual void getPivotPointCB(const av::osg::SFVec3::GetValueEvent& event);
-      virtual void setPivotPointCB(const av::osg::SFVec3::SetValueEvent& event);
-
-      virtual void getAutoScaleTransitionWidthRatioCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setAutoScaleTransitionWidthRatioCB(const av::SFFloat::SetValueEvent& event);
-
-    private:
-
-      OsgAutoTransform *mOsgAutoTransform;
-    };
-
-    typedef SingleField<Link<AutoTransform> > SFAutoTransform;
-    typedef MultiField<Link<AutoTransform> > MFAutoTransform;
-  }
+typedef SingleField<Link<AutoTransform>> SFAutoTransform;
+typedef MultiField<Link<AutoTransform>> MFAutoTransform;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::AutoTransform> >;
-  template class AV_OSG_DLL MultiField<Link<osg::AutoTransform> >;
+template class AV_OSG_DLL SingleField<Link<osg::AutoTransform>>;
+template class AV_OSG_DLL MultiField<Link<osg::AutoTransform>>;
 #endif
-}
+} // namespace av
 
 #endif /* AUTOTRANSFORM_H_ */

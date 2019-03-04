@@ -3,17 +3,13 @@
 
 #include <cassert>
 
-namespace UnitTest {
-
-TestList::TestList() 
-    : m_head(0)
-    , m_tail(0)
+namespace UnitTest
 {
-}
+TestList::TestList() : m_head(0), m_tail(0) {}
 
 void TestList::Add(Test* test)
 {
-    if (m_tail == 0)
+    if(m_tail == 0)
     {
         assert(m_head == 0);
         m_head = test;
@@ -26,14 +22,8 @@ void TestList::Add(Test* test)
     }
 }
 
-Test* TestList::GetHead() const
-{
-    return m_head;
-}
+Test* TestList::GetHead() const { return m_head; }
 
-ListAdder::ListAdder(TestList& list, Test* test)
-{
-    list.Add(test);
-}
+ListAdder::ListAdder(TestList& list, Test* test) { list.Add(test); }
 
-}
+} // namespace UnitTest

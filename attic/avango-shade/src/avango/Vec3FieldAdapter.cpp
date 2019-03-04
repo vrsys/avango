@@ -28,60 +28,50 @@
 
 namespace
 {
-  class Vec3Getter
-  {
+class Vec3Getter
+{
   public:
-
-    Vec3Getter(shade::types::Vec3Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    Vec3Getter(shade::types::Vec3Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFVec3::GetValueEvent& event)
     {
-      ::osg::Vec3 result;
-      mAccessor->get(result.x(), result.y(), result.z());
-      *event.getValuePtr() = result;
+        ::osg::Vec3 result;
+        mAccessor->get(result.x(), result.y(), result.z());
+        *event.getValuePtr() = result;
     }
 
   private:
     shade::types::Vec3Accessor* mAccessor;
-  };
+};
 
-  class Vec3Setter
-  {
+class Vec3Setter
+{
   public:
-
-    Vec3Setter(shade::types::Vec3Accessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    Vec3Setter(shade::types::Vec3Accessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::osg::SFVec3::SetValueEvent& event)
     {
-      ::osg::Vec3 value(event.getValue());
-      mAccessor->set(value.x(), value.y(), value.z());
+        ::osg::Vec3 value(event.getValue());
+        mAccessor->set(value.x(), value.y(), value.z());
     }
 
   private:
     shade::types::Vec3Accessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::Vec3FieldAdapter::hash(void) const
+{
+    static ::shade::vec3<> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::Vec3FieldAdapter::hash(void) const
+void av::shade::Vec3FieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::vec3<> value;
-  return value.hash();
-}
+    ::shade::types::Vec3Accessor* vec3_accessor(dynamic_cast<::shade::types::Vec3Accessor*>(type));
+    if(vec3_accessor == 0)
+        return;
 
-void
-av::shade::Vec3FieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::Vec3Accessor* vec3_accessor(dynamic_cast< ::shade::types::Vec3Accessor*>(type));
-  if (vec3_accessor == 0)
-    return;
-
-  av::osg::SFVec3* field= new av::osg::SFVec3;
-  field->bind(container, name, true, Vec3Getter(vec3_accessor), Vec3Setter(vec3_accessor));
+    av::osg::SFVec3* field = new av::osg::SFVec3;
+    field->bind(container, name, true, Vec3Getter(vec3_accessor), Vec3Setter(vec3_accessor));
 }

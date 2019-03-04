@@ -34,64 +34,41 @@
 #include <sys/time.h>
 #endif
 
-av::logging::LoggingEvent::LoggingEvent(Logger& logger,
-                                        Level level,
-                                        const std::string& msg) :
-  mLogger(logger),
-  mMsg(msg),
-  mLevel(level)
+av::logging::LoggingEvent::LoggingEvent(Logger& logger, Level level, const std::string& msg) : mLogger(logger), mMsg(msg), mLevel(level)
 {
 #if defined(_WIN32)
-  struct _timeb now;
-  _ftime_s(&now);
-  mTimeStamp = now.time + (now.millitm/1000.0);
+    struct _timeb now;
+    _ftime_s(&now);
+    mTimeStamp = now.time + (now.millitm / 1000.0);
 #else
-  timeval now;
-  gettimeofday(&now,NULL);
-  mTimeStamp = now.tv_sec + (now.tv_usec/1000000.);
+    timeval now;
+    gettimeofday(&now, NULL);
+    mTimeStamp = now.tv_sec + (now.tv_usec / 1000000.);
 #endif
 }
 
-av::logging::LoggingEvent::~LoggingEvent()
-{}
+av::logging::LoggingEvent::~LoggingEvent() {}
 
-av::logging::Logger&
-av::logging::LoggingEvent::getLogger()
+av::logging::Logger& av::logging::LoggingEvent::getLogger() { return mLogger; }
+
+const std::string& av::logging::LoggingEvent::getMessage() const { return mMsg; }
+
+double av::logging::LoggingEvent::getTimeStamp() const { return mTimeStamp; }
+
+av::logging::Level av::logging::LoggingEvent::getLevel() { return mLevel; }
+
+std::string av::logging::LoggingEvent::getFormattedString()
 {
-  return mLogger;
-}
+    std::ostringstream os;
 
-const std::string&
-av::logging::LoggingEvent::getMessage() const
-{
-  return mMsg;
-}
+    os << "[" << levelToString(mLevel);
 
-double
-av::logging::LoggingEvent::getTimeStamp() const
-{
-  return mTimeStamp;
-}
+    if(!getLogger().getName().empty())
+    {
+        os << " " << getLogger().getName();
+    }
 
-av::logging::Level
-av::logging::LoggingEvent::getLevel()
-{
-  return mLevel;
-}
+    os << "] " << getMessage();
 
-std::string
-av::logging::LoggingEvent::getFormattedString()
-{
-  std::ostringstream os;
-
-  os << "[" << levelToString(mLevel);
-
-  if (!getLogger().getName().empty())
-  {
-    os << " " << getLogger().getName();
-  }
-
-  os << "] " << getMessage();
-
-  return os.str();
+    return os.str();
 }

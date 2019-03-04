@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::lod::PLodPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::lod::PLodPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::lod::PLodPassDescription);
@@ -14,21 +14,16 @@ AV_FC_DEFINE(av::gua::lod::PLodPassDescription);
 AV_FIELD_DEFINE(av::gua::lod::SFPLodPassDescription);
 AV_FIELD_DEFINE(av::gua::lod::MFPLodPassDescription);
 
-av::gua::lod::PLodPassDescription::PLodPassDescription(
-  std::shared_ptr< ::gua::PLodPassDescription> const& guaPLodPassDescription)
-    : PipelinePassDescription(guaPLodPassDescription)
-    , m_guaPLodPassDescription(guaPLodPassDescription)
+av::gua::lod::PLodPassDescription::PLodPassDescription(std::shared_ptr<::gua::PLodPassDescription> const& guaPLodPassDescription)
+    : PipelinePassDescription(guaPLodPassDescription), m_guaPLodPassDescription(guaPLodPassDescription)
 {
-
- AV_FC_ADD_ADAPTOR_FIELD(SurfelRenderMode,
-   std::bind(&PLodPassDescription::getSurfelRenderModeCB, this,std::placeholders::_1),
-   std::bind(&PLodPassDescription::setSurfelRenderModeCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(
+        SurfelRenderMode, std::bind(&PLodPassDescription::getSurfelRenderModeCB, this, std::placeholders::_1), std::bind(&PLodPassDescription::setSurfelRenderModeCB, this, std::placeholders::_1));
 }
 
-void
-av::gua::lod::PLodPassDescription::initClass()
+void av::gua::lod::PLodPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -39,24 +34,12 @@ av::gua::lod::PLodPassDescription::initClass()
     }
 }
 
+std::shared_ptr<::gua::PLodPassDescription> const& av::gua::lod::PLodPassDescription::getGuaPLodPassDescription() const { return m_guaPLodPassDescription; }
 
-std::shared_ptr< ::gua::PLodPassDescription> const&
-av::gua::lod::PLodPassDescription::getGuaPLodPassDescription() const
+void av::gua::lod::PLodPassDescription::getSurfelRenderModeCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = (int)m_guaPLodPassDescription->mode(); }
+
+void av::gua::lod::PLodPassDescription::setSurfelRenderModeCB(const SFInt::SetValueEvent& event)
 {
-    return m_guaPLodPassDescription;
+    m_guaPLodPassDescription->mode((::gua::PLodPassDescription::SurfelRenderMode)event.getValue());
+    m_guaPLodPassDescription->touch();
 }
-
-void
-av::gua::lod::PLodPassDescription::getSurfelRenderModeCB(const SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = (int)m_guaPLodPassDescription->mode();
-}
-
-void
-av::gua::lod::PLodPassDescription::setSurfelRenderModeCB(const SFInt::SetValueEvent& event)
-{
-  m_guaPLodPassDescription->mode((::gua::PLodPassDescription::SurfelRenderMode)event.getValue());
-  m_guaPLodPassDescription->touch();
-}
-
-

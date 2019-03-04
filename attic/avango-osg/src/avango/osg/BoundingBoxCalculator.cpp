@@ -31,94 +31,87 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::BoundingBoxCalculator"));
+av::Logger& logger(av::getLogger("av::osg::BoundingBoxCalculator"));
 
-  bool inRange(float refValue,float testValue,float range)
-  {
-    if (testValue > refValue-range && testValue < refValue+range)
-      return true;
+bool inRange(float refValue, float testValue, float range)
+{
+    if(testValue > refValue - range && testValue < refValue + range)
+        return true;
     else
-      return false;
-  }
-
-  bool inRange(::osg::Vec3 refVec, ::osg::Vec3 testVec, float range)
-  {
-    return inRange(refVec[0],testVec[0],range) && inRange(refVec[1],testVec[1],range) && inRange(refVec[2],testVec[2],range);
-  }
+        return false;
 }
+
+bool inRange(::osg::Vec3 refVec, ::osg::Vec3 testVec, float range) { return inRange(refVec[0], testVec[0], range) && inRange(refVec[1], testVec[1], range) && inRange(refVec[2], testVec[2], range); }
+} // namespace
 
 AV_FC_DEFINE(av::osg::BoundingBoxCalculator);
 
 AV_FIELD_DEFINE(av::osg::SFBoundingBoxCalculator);
 AV_FIELD_DEFINE(av::osg::MFBoundingBoxCalculator);
 
-av::osg::BoundingBoxCalculator::BoundingBoxCalculator(): mCenter(::osg::Vec3(0,0,0)),mRadius(0), mFudge(0.001)
+av::osg::BoundingBoxCalculator::BoundingBoxCalculator() : mCenter(::osg::Vec3(0, 0, 0)), mRadius(0), mFudge(0.001)
 {
-  av::Link< ::av::osg::BoundingSphere > b = new ::av::osg::BoundingSphere();
+    av::Link<::av::osg::BoundingSphere> b = new ::av::osg::BoundingSphere();
 
-  AV_FC_ADD_FIELD(Fudge,0.001);
-  AV_FC_ADD_FIELD(BoundingSphere, b);
+    AV_FC_ADD_FIELD(Fudge, 0.001);
+    AV_FC_ADD_FIELD(BoundingSphere, b);
 
-
-  alwaysEvaluate(true);
+    alwaysEvaluate(true);
 }
 
-av::osg::BoundingBoxCalculator::~BoundingBoxCalculator()
-{}
+av::osg::BoundingBoxCalculator::~BoundingBoxCalculator() {}
 
-void
-av::osg::BoundingBoxCalculator::initClass()
+void av::osg::BoundingBoxCalculator::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Group::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Group::initClass();
 
-    AV_FC_INIT(av::osg::Group, av::osg::BoundingBoxCalculator, true);
+        AV_FC_INIT(av::osg::Group, av::osg::BoundingBoxCalculator, true);
 
-    SFBoundingBoxCalculator::initClass("av::osg::SFBoundingBoxCalculator", "av::Field");
-    MFBoundingBoxCalculator::initClass("av::osg::MFBoundingBoxCalculator", "av::Field");
-  }
+        SFBoundingBoxCalculator::initClass("av::osg::SFBoundingBoxCalculator", "av::Field");
+        MFBoundingBoxCalculator::initClass("av::osg::MFBoundingBoxCalculator", "av::Field");
+    }
 }
 
-/* virtual */ void
-av::osg::BoundingBoxCalculator::evaluate()
+/* virtual */ void av::osg::BoundingBoxCalculator::evaluate()
 {
-  const ::osg::BoundingSphere approximateBounds = getOsgGroup()->getBound();
+    const ::osg::BoundingSphere approximateBounds = getOsgGroup()->getBound();
 
-  const ::osg::Vec3 approximateCenter = approximateBounds.center();
-  const float approximateRadius = approximateBounds.radius();
-  const bool valid = approximateBounds.valid();
+    const ::osg::Vec3 approximateCenter = approximateBounds.center();
+    const float approximateRadius = approximateBounds.radius();
+    const bool valid = approximateBounds.valid();
 
-  mFudge = Fudge.getValue();
+    mFudge = Fudge.getValue();
 
-  if( (! inRange(mRadius, approximateRadius, mFudge) || ! inRange(mCenter, approximateCenter, mFudge)) && valid )
-  {
-    // get the exact bounds of the node. The bounds used for culling are only "fast" approximations
-    ::osg::ComputeBoundsVisitor cbbv(::osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
-    getOsgGroup()->accept(cbbv);
-    ::osg::BoundingBox bounds = cbbv.getBoundingBox();
-    const ::osg::Vec3 center = bounds.center();
-
-    const float d_x = bounds.xMax() - bounds.xMin();
-    const float d_y = bounds.yMax() - bounds.yMin();
-    const float d_z = bounds.zMax() - bounds.zMin();
-
-    float radius = d_x;
-    if (radius < d_y)
+    if((!inRange(mRadius, approximateRadius, mFudge) || !inRange(mCenter, approximateCenter, mFudge)) && valid)
     {
-      radius = d_y;
-    }
-    if (radius < d_z)
-    {
-      radius = d_z;
-    }
-    radius *= 0.5;
+        // get the exact bounds of the node. The bounds used for culling are only "fast" approximations
+        ::osg::ComputeBoundsVisitor cbbv(::osg::NodeVisitor::TRAVERSE_ACTIVE_CHILDREN);
+        getOsgGroup()->accept(cbbv);
+        ::osg::BoundingBox bounds = cbbv.getBoundingBox();
+        const ::osg::Vec3 center = bounds.center();
 
-    BoundingSphere.getValue()->Radius.setValue(radius);
-    BoundingSphere.getValue()->Center.setValue(center);
-    BoundingSphere.touch();
+        const float d_x = bounds.xMax() - bounds.xMin();
+        const float d_y = bounds.yMax() - bounds.yMin();
+        const float d_z = bounds.zMax() - bounds.zMin();
 
-    mRadius = approximateRadius;
-    mCenter = approximateCenter;
-  }
+        float radius = d_x;
+        if(radius < d_y)
+        {
+            radius = d_y;
+        }
+        if(radius < d_z)
+        {
+            radius = d_z;
+        }
+        radius *= 0.5;
+
+        BoundingSphere.getValue()->Radius.setValue(radius);
+        BoundingSphere.getValue()->Center.setValue(center);
+        BoundingSphere.touch();
+
+        mRadius = approximateRadius;
+        mCenter = approximateCenter;
+    }
 }

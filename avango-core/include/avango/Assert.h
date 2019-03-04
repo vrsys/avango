@@ -36,8 +36,7 @@
 
 namespace av
 {
-  AV_DLL void assert_fail(const char* assertion, const char* file,
-                   unsigned int line, const char* function);
+AV_DLL void assert_fail(const char* assertion, const char* file, unsigned int line, const char* function);
 }
 
 /**
@@ -66,22 +65,18 @@ namespace av
 
 #ifdef NDEBUG
 
-# define AV_ASSERT(expr) (static_cast<void>(0))
+#define AV_ASSERT(expr) (static_cast<void>(0))
 
 #else // #ifdef NDEBUG
 
-# define AV_ASSERT(expr)                                                \
-  ((expr)                                                               \
-   ? static_cast<void>(0)                                               \
-   : (::av::assert_fail(#expr, __FILE__, __LINE__, AV_ASSERT_FUNCTION), \
-      static_cast<void>(0)))
+#define AV_ASSERT(expr) ((expr) ? static_cast<void>(0) : (::av::assert_fail(#expr, __FILE__, __LINE__, AV_ASSERT_FUNCTION), static_cast<void>(0)))
 
 // use GLIBC __ASSERT_FUNCTION whenever possible
-# if defined __ASSERT_FUNCTION
-#  define AV_ASSERT_FUNCTION __ASSERT_FUNCTION
-# else
-#  define AV_ASSERT_FUNCTION ((const char *) 0)
-# endif
+#if defined __ASSERT_FUNCTION
+#define AV_ASSERT_FUNCTION __ASSERT_FUNCTION
+#else
+#define AV_ASSERT_FUNCTION ((const char*)0)
+#endif
 
 #endif // #ifdef NDEBUG
 

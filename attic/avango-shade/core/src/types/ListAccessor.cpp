@@ -25,13 +25,10 @@
 
 shade::types::TypeAccessor::HashValue shade::types::ListAccessor::m_hash;
 
-shade::types::TypeAccessor::HashType shade::types::ListAccessor::hash(void) const
-{
-  return &m_hash;
-}
+shade::types::TypeAccessor::HashType shade::types::ListAccessor::hash(void) const { return &m_hash; }
 
 const char* shade::types::ListAccessor::BadCast::what(void) const throw()
 {
-  static const char* msg = "shade::types::ListAccessor::BadCast: objref expected a different Shader type.";
-  return msg;
+    static const char* msg = "shade::types::ListAccessor::BadCast: objref expected a different Shader type.";
+    return msg;
 }

@@ -25,7 +25,4 @@
 
 #include <avango/python/exceptions.h>
 
-void av::python::detail::translate(index_exception const&)
-{
-  PyErr_SetString(PyExc_IndexError, "index out of range");
-}
+void av::python::detail::translate(index_exception const&) { PyErr_SetString(PyExc_IndexError, "index out of range"); }

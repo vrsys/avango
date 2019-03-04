@@ -30,13 +30,13 @@
 #include <avango/StandardFields.h>
 
 #if defined(_MSC_VER)
-  #if defined(AV_MOCKUP_LIBRARY)
-    #define AV_MOCKUP_DLL __declspec( dllexport )
-  #else
-    #define AV_MOCKUP_DLL __declspec( dllimport )
-  #endif
+#if defined(AV_MOCKUP_LIBRARY)
+#define AV_MOCKUP_DLL __declspec(dllexport)
 #else
-  #define AV_MOCKUP_DLL
+#define AV_MOCKUP_DLL __declspec(dllimport)
+#endif
+#else
+#define AV_MOCKUP_DLL
 #endif // #if defined(_MSC_VER)
 
 /**
@@ -44,38 +44,34 @@
  */
 class AV_MOCKUP_DLL MockFieldContainer : public av::FieldContainer
 {
-  AV_FC_DECLARE();
+    AV_FC_DECLARE();
 
-public:
+  public:
+    /**
+     * Constructor
+     */
+    MockFieldContainer();
 
-  /**
-   * Constructor
-   */
-  MockFieldContainer();
+    /**
+     * Destructor
+     */
+    virtual ~MockFieldContainer();
 
-  /**
-   * Destructor
-   */
-  virtual ~MockFieldContainer();
+  protected:
+    /**
+     * inherited by av::Base
+     */
+    virtual void refImpl();
+    virtual void unrefImpl();
+    virtual int refCountImpl();
 
-protected:
-
-  /**
-   * inherited by av::Base
-   */
-  virtual void refImpl();
-  virtual void unrefImpl();
-  virtual int  refCountImpl();
-
-private:
-
-  av::SFInt AnIntField;
-  av::SFDouble ADoubleField;
-  av::SFBool ABoolField;
-  av::SFString AStringField;
-  av::MFInt AnIntMultiField;
-  av::SFContainer AFieldContainer;
+  private:
+    av::SFInt AnIntField;
+    av::SFDouble ADoubleField;
+    av::SFBool ABoolField;
+    av::SFString AStringField;
+    av::MFInt AnIntMultiField;
+    av::SFContainer AFieldContainer;
 };
 
 #endif // #if !defined(AV_MOCKFIELDCONTAINER_H)
-

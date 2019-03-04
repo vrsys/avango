@@ -36,14 +36,14 @@ AV_FIELD_DEFINE(av::script::MFObject);
 
 void av::script::register_object(void)
 {
-  // FIXME name should contain hint that Python objects are stored
-  av::script::SFObject::initClass("av::script::SFObject", "av::Field");
-  av::script::MFObject::initClass("av::script::MFObject", "av::Field");
-  av::script::Update::initClass();
+    // FIXME name should contain hint that Python objects are stored
+    av::script::SFObject::initClass("av::script::SFObject", "av::Field");
+    av::script::MFObject::initClass("av::script::MFObject", "av::Field");
+    av::script::Update::initClass();
 }
 
 void av::script::register_object_fields(void)
 {
-  register_field<av::script::SFObject>("SFObject");
-  register_multifield<av::script::MFObject>("MFObject");
+    register_field<av::script::SFObject>("SFObject");
+    register_multifield<av::script::MFObject>("MFObject");
 }

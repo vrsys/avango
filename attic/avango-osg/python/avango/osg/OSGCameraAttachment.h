@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_CAMERA_ATTACHMENT
 #define AV_PYTHON_OSG_CAMERA_ATTACHMENT
 

@@ -31,15 +31,15 @@
 
 namespace example
 {
-  void init(int argc, char* argv[], std::string name, int width = 640, int height = 480);
-  void setup_camera(void);
-  void draw_default_scene(bool clear = true);
-  void set_display_func(boost::function<void (void)> func);
-  void set_distance(double dist);
-  void set_still_camera(void);
-  void run_main_loop(void);
+void init(int argc, char* argv[], std::string name, int width = 640, int height = 480);
+void setup_camera(void);
+void draw_default_scene(bool clear = true);
+void set_display_func(boost::function<void(void)> func);
+void set_distance(double dist);
+void set_still_camera(void);
+void run_main_loop(void);
 
-  boost::shared_ptr<shade::GLSLTexture> make_texture(const std::string& fname);
-}
+boost::shared_ptr<shade::GLSLTexture> make_texture(const std::string& fname);
+} // namespace example
 
 #endif

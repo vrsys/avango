@@ -8,26 +8,22 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-       using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_PhysicallyBasedShadingPassDescription()
- {
-   register_ptr_to_python<av::Link<av::gua::PhysicallyBasedShadingPassDescription> >();
-  register_field<av::gua::SFPhysicallyBasedShadingPassDescription>("SFPhysicallyBasedShadingPassDescription");
-  register_multifield<av::gua::MFPhysicallyBasedShadingPassDescription>("MFPhysicallyBasedShadingPassDescription");
-  class_<av::gua::PhysicallyBasedShadingPassDescription,
-         av::Link<av::gua::PhysicallyBasedShadingPassDescription>,
-         bases<av::gua::PipelinePassDescription>, boost::noncopyable >("PhysicallyBasedShadingPassDescription", "docstring", no_init)
-         ;
-
- }
-
+{
+    register_ptr_to_python<av::Link<av::gua::PhysicallyBasedShadingPassDescription>>();
+    register_field<av::gua::SFPhysicallyBasedShadingPassDescription>("SFPhysicallyBasedShadingPassDescription");
+    register_multifield<av::gua::MFPhysicallyBasedShadingPassDescription>("MFPhysicallyBasedShadingPassDescription");
+    class_<av::gua::PhysicallyBasedShadingPassDescription, av::Link<av::gua::PhysicallyBasedShadingPassDescription>, bases<av::gua::PipelinePassDescription>, boost::noncopyable>(
+        "PhysicallyBasedShadingPassDescription", "docstring", no_init);
+}

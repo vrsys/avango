@@ -1,13 +1,13 @@
 #ifndef UNITTEST_TESTREPORTER_H
 #define UNITTEST_TESTREPORTER_H
 
-namespace UnitTest {
-
+namespace UnitTest
+{
 class TestDetails;
 
 class TestReporter
 {
-public:
+  public:
     virtual ~TestReporter();
 
     virtual void ReportTestStart(TestDetails const& test) = 0;
@@ -16,5 +16,5 @@ public:
     virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed) = 0;
 };
 
-}
+} // namespace UnitTest
 #endif

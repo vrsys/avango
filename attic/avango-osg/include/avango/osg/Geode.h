@@ -37,67 +37,62 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Geode OsgGeode;
+namespace osg
+{
+typedef ::osg::Geode OsgGeode;
+
+/**
+ * Wrapper for ::osg::Geode
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Geode : public Node
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Geode is created.
+     * Otherwise, the given ::osg::Geode is used.
+     */
+    Geode(OsgGeode* osggeode = new OsgGeode());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    ~Geode();
+
+  public:
+    MFDrawable Drawables;
 
     /**
-     * Wrapper for ::osg::Geode
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Geode.
      */
-    class AV_OSG_DLL Geode : public Node
-    {
-      AV_FC_DECLARE();
+    ::osg::Geode* getOsgGeode() const;
+    const ::osg::BoundingBox getBoundingBox() const { return mOsgGeode->getBoundingBox(); }
 
-    public:
+  private:
+    Geode(const Geode&);
+    Geode& operator=(const Geode&);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Geode is created.
-       * Otherwise, the given ::osg::Geode is used.
-       */
-      Geode(OsgGeode* osggeode = new OsgGeode());
-      // use defined type to circumvent compiler bug in VS8
+    ::osg::Geode* mOsgGeode;
 
-    protected:
+  protected:
+    virtual void getDrawablesCB(const av::osg::MFDrawable::GetValueEvent& event);
+    virtual void setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event);
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      ~Geode();
-
-    public:
-
-      MFDrawable Drawables;
-
-      /**
-       * Get the wrapped ::osg::Geode.
-       */
-      ::osg::Geode* getOsgGeode() const;
-      const ::osg::BoundingBox getBoundingBox() const { return mOsgGeode->getBoundingBox(); }
-
-    private:
-      Geode(const Geode&);
-      Geode& operator=(const Geode&);
-
-      ::osg::Geode *mOsgGeode;
-
-    protected:
-
-      virtual void getDrawablesCB(const av::osg::MFDrawable::GetValueEvent& event);
-      virtual void setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Geode> > SFGeode;
-    typedef MultiField<Link<Geode> > MFGeode;
-  }
+typedef SingleField<Link<Geode>> SFGeode;
+typedef MultiField<Link<Geode>> MFGeode;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Geode> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Geode> >;
+template class AV_OSG_DLL SingleField<Link<osg::Geode>>;
+template class AV_OSG_DLL MultiField<Link<osg::Geode>>;
 #endif
 
-}
+} // namespace av
 
 #endif

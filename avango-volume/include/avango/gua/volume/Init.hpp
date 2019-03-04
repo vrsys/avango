@@ -11,20 +11,20 @@
 
 namespace av
 {
-  namespace volume
-  {
-    /**
-     * Initializes the Avango volume library.
-     * Usage: \code av::volume::Init::initClass(); \endcode
-     *
-     * \ingroup av_volume
-     */
+namespace volume
+{
+/**
+ * Initializes the Avango volume library.
+ * Usage: \code av::volume::Init::initClass(); \endcode
+ *
+ * \ingroup av_volume
+ */
 
-    class AV_VOLUME_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+class AV_VOLUME_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace volume
+} // namespace av
 
-#endif //AVANGO_VOLUME_INIT_HPP
+#endif // AVANGO_VOLUME_INIT_HPP

@@ -9,10 +9,10 @@ AV_FIELD_DEFINE(av::gua::MFPickResult);
 
 av::gua::PickResult::PickResult(::gua::PickResult const& result)
 {
-
     av::Link<av::gua::Node> node(nullptr);
-    if (result.object && result.object->get_user_data(0)) {
-      node = static_cast<av::gua::Node*>(result.object->get_user_data(0));
+    if(result.object && result.object->get_user_data(0))
+    {
+        node = static_cast<av::gua::Node*>(result.object->get_user_data(0));
     }
 
     AV_FC_ADD_FIELD(Distance, result.distance);
@@ -22,16 +22,13 @@ av::gua::PickResult::PickResult(::gua::PickResult const& result)
     AV_FC_ADD_FIELD(Normal, result.normal);
     AV_FC_ADD_FIELD(WorldNormal, result.world_normal);
     AV_FC_ADD_FIELD(TextureCoords, result.texture_coords);
-
 }
 
-av::gua::PickResult::~PickResult()
-{}
+av::gua::PickResult::~PickResult() {}
 
-void
-av::gua::PickResult::initClass()
+void av::gua::PickResult::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 

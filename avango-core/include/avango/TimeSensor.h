@@ -30,36 +30,32 @@
 
 namespace av
 {
-
-  /**
-   * Simple time sensor.
-   * The reference time is initialized with the current real time on
-   * instantiation but may be set to a user-defined value.
-   *
-   * RealTime is an adaptor for gettimeofday() always containg
-   * the current time and is touched in evaluate().
-   *
-   * Time is updated in evaluate().
-   *
-   * \ingroup av
-   */
-  class AV_DLL TimeSensor : public FieldContainer
-  {
+/**
+ * Simple time sensor.
+ * The reference time is initialized with the current real time on
+ * instantiation but may be set to a user-defined value.
+ *
+ * RealTime is an adaptor for gettimeofday() always containg
+ * the current time and is touched in evaluate().
+ *
+ * Time is updated in evaluate().
+ *
+ * \ingroup av
+ */
+class AV_DLL TimeSensor : public FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     TimeSensor();
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
     virtual ~TimeSensor();
 
   public:
-
     /// Time in seconds since 1970-01-01 00:00:00 UTC
     SFDouble RealTime;
 
@@ -70,7 +66,7 @@ namespace av
     SFDouble Time;
 
     virtual void evaluate();
-  };
+};
 
 } // namespace av
 

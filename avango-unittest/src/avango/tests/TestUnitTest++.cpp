@@ -6,8 +6,8 @@
 
 // These are sample tests that show the different features of the framework
 
-namespace {
-
+namespace
+{
 TEST(ValidCheckSucceeds)
 {
     bool const b = true;
@@ -16,7 +16,7 @@ TEST(ValidCheckSucceeds)
 
 TEST(CheckWorksWithPointers)
 {
-    void* p = (void *)0x100;
+    void* p = (void*)0x100;
     CHECK(p);
     CHECK(p != 0);
 }
@@ -30,7 +30,7 @@ TEST(ValidCheckEqualSucceeds)
 
 TEST(CheckEqualWorksWithPointers)
 {
-    void* p = (void *)0;
+    void* p = (void*)0;
     CHECK_EQUAL((void*)0, p);
 }
 
@@ -47,10 +47,10 @@ TEST(ArrayCloseSucceeds)
     CHECK_ARRAY_CLOSE(a1, a2, 3, 0.1f);
 }
 
-TEST (CheckArrayCloseWorksWithVectors)
+TEST(CheckArrayCloseWorksWithVectors)
 {
-    std::vector< float > a(4);
-    for (int i = 0; i < 4; ++i)
+    std::vector<float> a(4);
+    for(int i = 0; i < 4; ++i)
         a[i] = (float)i;
 
     CHECK_ARRAY_CLOSE(a, a, (int)a.size(), 0.0001f);
@@ -58,99 +58,72 @@ TEST (CheckArrayCloseWorksWithVectors)
 
 TEST(CheckThrowMacroSucceedsOnCorrectException)
 {
-    struct TestException {};
+    struct TestException
+    {
+    };
     CHECK_THROW(throw TestException(), TestException);
 }
 
-TEST(CheckAssertSucceeds)
-{
-    CHECK_ASSERT(UnitTest::ReportAssert("desc", "file", 0));
-}
+TEST(CheckAssertSucceeds) { CHECK_ASSERT(UnitTest::ReportAssert("desc", "file", 0)); }
 
 TEST(CheckThrowMacroFailsOnMissingException)
 {
     class NoThrowTest : public UnitTest::Test
     {
-    public:
+      public:
         NoThrowTest() : Test("nothrow") {}
-        void DontThrow() const
-        {
-        }
+        void DontThrow() const {}
 
-        virtual void RunImpl() const
-        {
-            CHECK_THROW(DontThrow(), int);
-        }
+        virtual void RunImpl() const { CHECK_THROW(DontThrow(), int); }
     };
 
     UnitTest::TestResults results;
-	{
-		ScopedCurrentTest scopedResults(results);
+    {
+        ScopedCurrentTest scopedResults(results);
 
-		NoThrowTest test;
-		test.Run();
-	}
+        NoThrowTest test;
+        test.Run();
+    }
 
-	CHECK_EQUAL(1, results.GetFailureCount());
+    CHECK_EQUAL(1, results.GetFailureCount());
 }
 
 TEST(CheckThrowMacroFailsOnWrongException)
 {
     class WrongThrowTest : public UnitTest::Test
     {
-    public:
+      public:
         WrongThrowTest() : Test("wrongthrow") {}
-        virtual void RunImpl() const
-        {
-            CHECK_THROW(throw "oops", int);
-        }
+        virtual void RunImpl() const { CHECK_THROW(throw "oops", int); }
     };
 
     UnitTest::TestResults results;
-	{
-		ScopedCurrentTest scopedResults(results);
+    {
+        ScopedCurrentTest scopedResults(results);
 
-		WrongThrowTest test;
-		test.Run();
-	}
+        WrongThrowTest test;
+        test.Run();
+    }
 
-	CHECK_EQUAL(1, results.GetFailureCount());
+    CHECK_EQUAL(1, results.GetFailureCount());
 }
 
 struct SimpleFixture
 {
-    SimpleFixture()
-    {
-        ++instanceCount;
-    }
-    ~SimpleFixture()
-    {
-        --instanceCount;
-    }
+    SimpleFixture() { ++instanceCount; }
+    ~SimpleFixture() { --instanceCount; }
 
     static int instanceCount;
 };
 
 int SimpleFixture::instanceCount = 0;
 
-TEST_FIXTURE(SimpleFixture, DefaultFixtureCtorIsCalled)
-{
-    CHECK(SimpleFixture::instanceCount > 0);
-}
+TEST_FIXTURE(SimpleFixture, DefaultFixtureCtorIsCalled) { CHECK(SimpleFixture::instanceCount > 0); }
 
-TEST_FIXTURE(SimpleFixture, OnlyOneFixtureAliveAtATime)
-{
-    CHECK_EQUAL(1, SimpleFixture::instanceCount);
-}
+TEST_FIXTURE(SimpleFixture, OnlyOneFixtureAliveAtATime) { CHECK_EQUAL(1, SimpleFixture::instanceCount); }
 
-void CheckBool(const bool b)
-{
-	CHECK(b);
-}
+void CheckBool(const bool b) { CHECK(b); }
 
-TEST(CanCallCHECKOutsideOfTestFunction)
-{
-	CheckBool(true);
-}
+TEST(CanCallCHECKOutsideOfTestFunction) { CheckBool(true); }
 
-}
+} // namespace

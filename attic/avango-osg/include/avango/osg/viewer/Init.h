@@ -44,22 +44,22 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      /**
-       * Initializes the Avango OpenSceneGraph library.
-       * Usage: \code av::osg::viewer::Init::initClass(); \endcode
-       *
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL Init
-      {
-        AV_TYPED_DECLARE_ABSTRACT();
-      };
-    }
-  }
-}
+namespace osg
+{
+namespace viewer
+{
+/**
+ * Initializes the Avango OpenSceneGraph library.
+ * Usage: \code av::osg::viewer::Init::initClass(); \endcode
+ *
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace viewer
+} // namespace osg
+} // namespace av
 
 #endif

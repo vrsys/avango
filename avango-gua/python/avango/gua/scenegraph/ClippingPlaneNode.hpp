@@ -3,4 +3,4 @@
 
 void init_ClippingPlaneNode();
 
-#endif //AV_PYTHON_GUA_CLIPPING_PLANE_NODE_HPP
+#endif // AV_PYTHON_GUA_CLIPPING_PLANE_NODE_HPP

@@ -25,22 +25,14 @@
 #include "../../core/include/shade/ShaderEnvironment.h"
 #include "../include/avango/shade/Init.h"
 
-SHADE_CLASS_INIT(DummyShader, "",
-                 SHADE_NONE,
-                 SHADE_ENV_DEFS(shade::application_stage,
-                   (diffuse)(specular)(color)(light)
-                   (vec3value)(vec2value)(intvalue)
-                   (mat4value)
-                   (listvalue)(texturevalue)
-                   )
-                 )
+SHADE_CLASS_INIT(DummyShader, "", SHADE_NONE, SHADE_ENV_DEFS(shade::application_stage, (diffuse)(specular)(color)(light)(vec3value)(vec2value)(intvalue)(mat4value)(listvalue)(texturevalue)))
 
 void initDummyShader(void)
 {
-  static bool once = true;
-  if (once)
-  {
-    once = false;
-    av::shade::Init::registerShader<DummyShader>("DummyShader");
-  }
+    static bool once = true;
+    if(once)
+    {
+        once = false;
+        av::shade::Init::registerShader<DummyShader>("DummyShader");
+    }
 }

@@ -10,10 +10,8 @@
  * some native form.
  */
 #include <winsock2.h>
-typedef WSABUF ce_iovec_t ;
+typedef WSABUF ce_iovec_t;
 #define Iov_len(iov) (iov).len
 #define Iov_buf(iov) (iov).buf
 
 #endif
-
-

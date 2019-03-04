@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGStateSet(void)
- {
-  // wrapping osg::StateSet functionality
-  register_field<av::osg::SFStateSet>("SFStateSet");
-  register_multifield<av::osg::MFStateSet>("MFStateSet");
-  class_<av::osg::StateSet, av::Link<av::osg::StateSet>, bases<av::osg::Object>, boost::noncopyable >("StateSet", "docstring", no_init);
- }
+{
+    // wrapping osg::StateSet functionality
+    register_field<av::osg::SFStateSet>("SFStateSet");
+    register_multifield<av::osg::MFStateSet>("MFStateSet");
+    class_<av::osg::StateSet, av::Link<av::osg::StateSet>, bases<av::osg::Object>, boost::noncopyable>("StateSet", "docstring", no_init);
+}

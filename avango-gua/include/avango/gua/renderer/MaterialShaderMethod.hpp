@@ -14,88 +14,78 @@
 
 namespace av
 {
-  namespace gua
-  {
-    class NetTransform;
+namespace gua
+{
+class NetTransform;
+/**
+ * Wrapper for ::gua::MaterialShaderMethod
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL MaterialShaderMethod : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::MaterialShaderMethod
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::MaterialShaderMethod is created.
+     * Otherwise, the given ::gua::MaterialShaderMethod is used.
      */
-    class AV_GUA_DLL MaterialShaderMethod : public av::FieldContainer
+    MaterialShaderMethod(std::shared_ptr<::gua::MaterialShaderMethod> const& guaMaterialShaderMethod = std::shared_ptr<::gua::MaterialShaderMethod>(new ::gua::MaterialShaderMethod()));
+
+  public:
+    SFString Source;
+    SFString Name;
+
+    virtual void getNameCB(const SFString::GetValueEvent& event);
+    virtual void setNameCB(const SFString::SetValueEvent& event);
+
+    virtual void getSourceCB(const SFString::GetValueEvent& event);
+    virtual void setSourceCB(const SFString::SetValueEvent& event);
+
+    /**
+     * Get the wrapped ::gua::MaterialShaderMethod.
+     */
+
+    template <typename T>
+    void set_uniform(std::string const& name, T const& value)
     {
-      AV_FC_DECLARE();
-
-    public:
-
-      /**
-       * Constructor. When called without arguments, a new ::gua::MaterialShaderMethod is created.
-       * Otherwise, the given ::gua::MaterialShaderMethod is used.
-       */
-      MaterialShaderMethod(std::shared_ptr< ::gua::MaterialShaderMethod> const& guaMaterialShaderMethod =
-                           std::shared_ptr< ::gua::MaterialShaderMethod>(new ::gua::MaterialShaderMethod()));
-
-
-
-    public:
-
-      SFString Source;
-      SFString Name;
-
-      virtual void getNameCB(const SFString::GetValueEvent& event);
-      virtual void setNameCB(const SFString::SetValueEvent& event);
-
-      virtual void getSourceCB(const SFString::GetValueEvent& event);
-      virtual void setSourceCB(const SFString::SetValueEvent& event);
-
-
-
-      /**
-       * Get the wrapped ::gua::MaterialShaderMethod.
-       */
-
-      template <typename T>
-      void set_uniform(std::string const& name, T const& value) {
         m_guaMaterialShaderMethod->set_uniform(name, ::gua::uniform_compatible_type(value));
         m_uniformsDirty.setValue(true);
-      }
+    }
 
-      void load_from_file(std::string const& file) {
-        m_guaMaterialShaderMethod->load_from_file(file);
-      }
+    void load_from_file(std::string const& file) { m_guaMaterialShaderMethod->load_from_file(file); }
 
-      void load_from_json(std::string const& json) {
-        m_guaMaterialShaderMethod->load_from_json(json);
-      }
+    void load_from_json(std::string const& json) { m_guaMaterialShaderMethod->load_from_json(json); }
 
-      virtual void on_distribute(av::gua::NetTransform& netNode);
-      virtual void on_undistribute(av::gua::NetTransform& netNode);
+    virtual void on_distribute(av::gua::NetTransform& netNode);
+    virtual void on_undistribute(av::gua::NetTransform& netNode);
 
-      std::shared_ptr< ::gua::MaterialShaderMethod> const& getGuaMaterialShaderMethod() const;
+    std::shared_ptr<::gua::MaterialShaderMethod> const& getGuaMaterialShaderMethod() const;
 
-    private:
-      /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
+  private:
+    /*virtual*/ void fieldHasChangedLocalSideEffect(Field const& field);
 
-      std::shared_ptr< ::gua::MaterialShaderMethod> m_guaMaterialShaderMethod;
+    std::shared_ptr<::gua::MaterialShaderMethod> m_guaMaterialShaderMethod;
 
-      SFString m_serializedUniforms;
-      bool m_distributed;
-      SFBool m_uniformsDirty;
+    SFString m_serializedUniforms;
+    bool m_distributed;
+    SFBool m_uniformsDirty;
 
-      MaterialShaderMethod(const MaterialShaderMethod&);
-      MaterialShaderMethod& operator=(const MaterialShaderMethod&);
-    };
+    MaterialShaderMethod(const MaterialShaderMethod&);
+    MaterialShaderMethod& operator=(const MaterialShaderMethod&);
+};
 
-    using SFMaterialShaderMethod = SingleField<Link<MaterialShaderMethod> >;
-    using MFMaterialShaderMethod = MultiField<Link<MaterialShaderMethod> >;
+using SFMaterialShaderMethod = SingleField<Link<MaterialShaderMethod>>;
+using MFMaterialShaderMethod = MultiField<Link<MaterialShaderMethod>>;
 
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::MaterialShaderMethod> >;
-  template class AV_GUA_DLL MultiField<Link<gua::MaterialShaderMethod> >;
+template class AV_GUA_DLL SingleField<Link<gua::MaterialShaderMethod>>;
+template class AV_GUA_DLL MultiField<Link<gua::MaterialShaderMethod>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_MATERIAL_SHADER_METHOD_HPP
+#endif // AVANGO_GUA_MATERIAL_SHADER_METHOD_HPP

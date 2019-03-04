@@ -31,92 +31,59 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::viewer::Viewer"));
+av::Logger& logger(av::getLogger("av::osg::viewer::Viewer"));
 }
 
 AV_FC_DEFINE(av::osg::viewer::Viewer);
 
 AV_FIELD_DEFINE(av::osg::viewer::SFViewer);
 
-av::osg::viewer::Viewer::Viewer() :
-  View(new ::osgViewer::Viewer),
-  mOsgViewer(dynamic_cast< ::osgViewer::Viewer*>(getOsgView()))
+av::osg::viewer::Viewer::Viewer() : View(new ::osgViewer::Viewer), mOsgViewer(dynamic_cast<::osgViewer::Viewer*>(getOsgView()))
 {
-  AV_FC_ADD_ADAPTOR_FIELD(ThreadingModel,
-                          boost::bind(&av::osg::viewer::Viewer::getThreadingModelCB, this, _1),
-                          boost::bind(&av::osg::viewer::Viewer::setThreadingModelCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(ThreadingModel, boost::bind(&av::osg::viewer::Viewer::getThreadingModelCB, this, _1), boost::bind(&av::osg::viewer::Viewer::setThreadingModelCB, this, _1));
 
-  mRenderCallbackHandle = av::ApplicationInstance::get().
-    addRenderCallback(boost::bind(&av::osg::viewer::Viewer::renderCB, this));
+    mRenderCallbackHandle = av::ApplicationInstance::get().addRenderCallback(boost::bind(&av::osg::viewer::Viewer::renderCB, this));
 }
 
 /* virtual */
-av::osg::viewer::Viewer::~Viewer()
+av::osg::viewer::Viewer::~Viewer() { av::ApplicationInstance::get().removeCallback(mRenderCallbackHandle); }
+
+/* static */ void av::osg::viewer::Viewer::initClass()
 {
-  av::ApplicationInstance::get().removeCallback(mRenderCallbackHandle);
+    if(!isTypeInitialized())
+    {
+        av::osg::viewer::View::initClass();
+
+        AV_FC_INIT(av::osg::viewer::View, av::osg::viewer::Viewer, false);
+
+        SFViewer::initClass("av::osg::viewer::SFViewer", "av::Field");
+    }
 }
 
-/* static */ void
-av::osg::viewer::Viewer::initClass()
+::osgViewer::Viewer* av::osg::viewer::Viewer::getOsgViewer() const { return mOsgViewer; }
+
+void av::osg::viewer::Viewer::frame() { av::ApplicationInstance::get().evaluate(); }
+
+bool av::osg::viewer::Viewer::run() { return av::ApplicationInstance::get().start(); }
+
+bool av::osg::viewer::Viewer::done() { return av::ApplicationInstance::get().stop(); }
+
+void av::osg::viewer::Viewer::renderCB()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::viewer::View::initClass();
-
-    AV_FC_INIT(av::osg::viewer::View, av::osg::viewer::Viewer, false);
-
-    SFViewer::initClass("av::osg::viewer::SFViewer", "av::Field");
-  }
+    if(mOsgViewer->done())
+    {
+        mOsgViewer->setDone(false);
+        av::ApplicationInstance::get().stop();
+    }
+    else if(mOsgViewer->getCamera() != 0 && mOsgViewer->getSceneData() != 0)
+        mOsgViewer->frame();
 }
 
-::osgViewer::Viewer*
-av::osg::viewer::Viewer::getOsgViewer() const
-{
-  return mOsgViewer;
-}
+/* virtual */ void av::osg::viewer::Viewer::getThreadingModelCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgViewer->getThreadingModel(); }
 
-void
-av::osg::viewer::Viewer::frame()
+/* virtual */ void av::osg::viewer::Viewer::setThreadingModelCB(const SFInt::SetValueEvent& event)
 {
-  av::ApplicationInstance::get().evaluate();
-}
-
-bool
-av::osg::viewer::Viewer::run()
-{
-  return av::ApplicationInstance::get().start();
-}
-
-bool
-av::osg::viewer::Viewer::done()
-{
-  return av::ApplicationInstance::get().stop();
-}
-
-void
-av::osg::viewer::Viewer::renderCB()
-{
-  if (mOsgViewer->done())
-  {
-    mOsgViewer->setDone(false);
-    av::ApplicationInstance::get().stop();
-  }
-  else if (mOsgViewer->getCamera() != 0 && mOsgViewer->getSceneData() != 0)
-    mOsgViewer->frame();
-}
-
-/* virtual */ void
-av::osg::viewer::Viewer::getThreadingModelCB(const SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgViewer->getThreadingModel();
-}
-
-/* virtual */ void
-av::osg::viewer::Viewer::setThreadingModelCB(const SFInt::SetValueEvent& event)
-{
-  mOsgViewer->
-    setThreadingModel(static_cast< ::osgViewer::ViewerBase::ThreadingModel>(event.getValue()));
+    mOsgViewer->setThreadingModel(static_cast<::osgViewer::ViewerBase::ThreadingModel>(event.getValue()));
 }

@@ -33,7 +33,7 @@ else
 fi
 
 # run program
-cd "$DIR" && python3 ./main.py
+cd "$DIR" && python3 ./main.py $1
 
 # kill daemon
 kill %1

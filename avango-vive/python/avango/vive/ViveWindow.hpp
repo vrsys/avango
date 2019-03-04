@@ -3,4 +3,4 @@
 
 void init_ViveWindow();
 
-#endif //AV_PYTHON_VIVE_VIVEWINDOW_HPP
+#endif // AV_PYTHON_VIVE_VIVEWINDOW_HPP

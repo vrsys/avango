@@ -15,73 +15,68 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::Constraint
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Constraint : public av::FieldContainer
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::Constraint
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::Constraint is created.
+     * Otherwise, the given ::gua::physics::Constraint is used.
      */
-    class AV_GUA_DLL Constraint : public av::FieldContainer
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    Constraint(::gua::physics::Constraint* guaconstraint); // use defined type to circumvent compiler bug in VS8
 
-    public:
+    virtual ~Constraint();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::Constraint is created.
-       * Otherwise, the given ::gua::physics::Constraint is used.
-       */
-      Constraint(::gua::physics::Constraint* guaconstraint); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFRigidBodyNode BodyA;
+    SFRigidBodyNode BodyB;
+    SFBool Enabled;
+    SFFloat BreakingImpulseThreshold;
+    SFBool DisableCollisionBetweenLinkedBodies;
 
-      virtual ~Constraint();
+    /**
+     * Get the wrapped ::gua::physics::Constraint.
+     */
+    ::gua::physics::Constraint* getGuaConstraint() const;
 
-    public:
+  public:
+    virtual void getBodyACB(const SFRigidBodyNode::GetValueEvent& event);
+    virtual void setBodyACB(const SFRigidBodyNode::SetValueEvent& event);
 
-      SFRigidBodyNode BodyA;
-      SFRigidBodyNode BodyB;
-      SFBool          Enabled;
-      SFFloat         BreakingImpulseThreshold;
-      SFBool          DisableCollisionBetweenLinkedBodies;
+    virtual void getBodyBCB(const SFRigidBodyNode::GetValueEvent& event);
+    virtual void setBodyBCB(const SFRigidBodyNode::SetValueEvent& event);
 
+    virtual void getEnabledCB(const SFBool::GetValueEvent& event);
+    virtual void setEnabledCB(const SFBool::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::physics::Constraint.
-       */
-      ::gua::physics::Constraint* getGuaConstraint() const;
+    virtual void getBreakingImpulseThresholdCB(const SFFloat::GetValueEvent& event);
+    virtual void setBreakingImpulseThresholdCB(const SFFloat::SetValueEvent& event);
 
-    public:
+  private:
+    ::gua::physics::Constraint* m_guaConstraint;
 
-      virtual void getBodyACB(const SFRigidBodyNode::GetValueEvent& event);
-      virtual void setBodyACB(const SFRigidBodyNode::SetValueEvent& event);
+    Constraint(const Constraint&);
+    Constraint& operator=(const Constraint&);
+};
 
-      virtual void getBodyBCB(const SFRigidBodyNode::GetValueEvent& event);
-      virtual void setBodyBCB(const SFRigidBodyNode::SetValueEvent& event);
+using SFConstraint = SingleField<Link<Constraint>>;
+using MFConstraint = MultiField<Link<Constraint>>;
 
-      virtual void getEnabledCB(const SFBool::GetValueEvent& event);
-      virtual void setEnabledCB(const SFBool::SetValueEvent& event);
-
-      virtual void getBreakingImpulseThresholdCB(const SFFloat::GetValueEvent& event);
-      virtual void setBreakingImpulseThresholdCB(const SFFloat::SetValueEvent& event);
-
-    private:
-
-      ::gua::physics::Constraint *m_guaConstraint;
-
-      Constraint(const Constraint&);
-      Constraint& operator=(const Constraint&);
-    };
-
-    using SFConstraint = SingleField<Link<Constraint> >;
-    using MFConstraint = MultiField<Link<Constraint> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Constraint> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Constraint> >;
+template class AV_GUA_DLL SingleField<Link<gua::Constraint>>;
+template class AV_GUA_DLL MultiField<Link<gua::Constraint>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_CONSTRAINT_HPP
+#endif // AVANGO_GUA_CONSTRAINT_HPP

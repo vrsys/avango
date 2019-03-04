@@ -26,7 +26,6 @@
 #if !defined(AV_DAEMON_WIIMOTEACTUATOR_H)
 #define AV_DAEMON_WIIMOTEACTUATOR_H
 
-
 /**
  * \file
  * \ingroup av_daemon
@@ -36,52 +35,50 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Inherited from av::daemon::DeviceActuator. Immplements a
+ * concrete actuator to set LED states and different Rumble modes
+ * of an associated Nintendo Wiimote.
+ *
+ * \ingroup av_daemon
+ */
+class WiimoteActuator : public DeviceActuator
+{
+    AV_FC_DECLARE();
+
+  public:
+    WiimoteActuator();
+    ~WiimoteActuator();
+
     /**
-     * Inherited from av::daemon::DeviceActuator. Immplements a
-     * concrete actuator to set LED states and different Rumble modes
-     * of an associated Nintendo Wiimote.
-     *
-     * \ingroup av_daemon
+     * Set LEDs of the connected Wiimote.
      */
-    class WiimoteActuator : public DeviceActuator
-    {
+    SFBool LED0;
+    SFBool LED1;
+    SFBool LED2;
+    SFBool LED3;
 
-      AV_FC_DECLARE();
+    /**
+     * Set Rumble mode of the connected Wiimote.
+     */
+    SFBool Rumble0;
+    SFBool Rumble1;
+    SFBool Rumble2;
+    SFBool Rumble3;
+    SFBool Rumble4;
+    SFBool Rumble5;
+    SFBool Rumble6;
 
-    public:
+    /**
+     * Resets the state of all LEDs and Rumble modes to their initial values.
+     */
+    void reset();
 
-      WiimoteActuator();
-      ~WiimoteActuator();
-
-      /**
-       * Set LEDs of the connected Wiimote.
-       */
-      SFBool   LED0;
-      SFBool   LED1;
-      SFBool   LED2;
-      SFBool   LED3;
-
-      /**
-       * Set Rumble mode of the connected Wiimote.
-       */
-      SFBool   Rumble0;
-      SFBool   Rumble1;
-      SFBool   Rumble2;
-      SFBool   Rumble3;
-      SFBool   Rumble4;
-      SFBool   Rumble5;
-      SFBool   Rumble6;
-
-      /**
-       * Resets the state of all LEDs and Rumble modes to their initial values.
-       */
-      void reset();
-
-      /* virtual */ void evaluate();
-    };
-  }
-}
+    /* virtual */ void evaluate();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

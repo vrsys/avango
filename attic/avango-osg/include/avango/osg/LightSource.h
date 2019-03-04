@@ -38,69 +38,60 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::LightSource OsgLightSource;
+namespace osg
+{
+typedef ::osg::LightSource OsgLightSource;
+
+/**
+ * Wrapper for ::osg::LightSource
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LightSource : public Group
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::LightSource is created.
+     * Otherwise, the given ::osg::LightSource is used.
+     */
+    LightSource(OsgLightSource* osglightsource = new OsgLightSource());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LightSource();
+
+  public:
+    av::osg::SFLight Light;
 
     /**
-     * Wrapper for ::osg::LightSource
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::LightSource.
      */
-    class AV_OSG_DLL LightSource : public Group
-    {
-      AV_FC_DECLARE();
+    ::osg::LightSource* getOsgLightSource() const;
 
-    public:
+    void touchFields();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::LightSource is created.
-       * Otherwise, the given ::osg::LightSource is used.
-       */
-      LightSource(OsgLightSource* osglightsource = new OsgLightSource());
-      // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getLightCB(const av::osg::SFLight::GetValueEvent& event);
+    virtual void setLightCB(const av::osg::SFLight::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::LightSource* mOsgLightSource;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LightSource();
-
-    public:
-
-
-      av::osg::SFLight Light;
-
-
-      /**
-       * Get the wrapped ::osg::LightSource.
-       */
-      ::osg::LightSource* getOsgLightSource() const;
-
-
-      void touchFields();
-
-    protected:
-
-      virtual void getLightCB(const av::osg::SFLight::GetValueEvent& event);
-      virtual void setLightCB(const av::osg::SFLight::SetValueEvent& event);
-
-
-    private:
-
-      ::osg::LightSource *mOsgLightSource;
-    };
-
-    typedef SingleField<Link<LightSource> > SFLightSource;
-    typedef MultiField<Link<LightSource> > MFLightSource;
-  }
+typedef SingleField<Link<LightSource>> SFLightSource;
+typedef MultiField<Link<LightSource>> MFLightSource;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::LightSource> >;
-  template class AV_OSG_DLL MultiField<Link<osg::LightSource> >;
+template class AV_OSG_DLL SingleField<Link<osg::LightSource>>;
+template class AV_OSG_DLL MultiField<Link<osg::LightSource>>;
 #endif
 
-}
+} // namespace av
 
 #endif

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #if !defined(AV_DAEMON_VRPNCLIENT_H)
 #define AV_DAEMON_VRPNCLIENT_H
 
@@ -41,83 +40,81 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * An Avango NG device for processing packets sent by a VRPN server.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL VRPNClient : public Device
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * An Avango NG device for processing packets sent by a VRPN server.
-     *
-     * \ingroup av_daemon
+     * Constructor
      */
-    class AV_DAEMON_DLL VRPNClient : public Device
-    {
-      AV_BASE_DECLARE();
+    VRPNClient();
 
-    public:
-      /**
-       * Constructor
-       */
-      VRPNClient();
+    /*
+     * Callback handler for analog devices, such as joysticks.
+     */
+    void handleAnalog(const vrpn_ANALOGCB a);
 
-      /*
-       * Callback handler for analog devices, such as joysticks.
-       */
-      void handleAnalog(const vrpn_ANALOGCB a);
+    /*
+     * Callback handler for button devices.
+     */
+    void handleButton(const vrpn_BUTTONCB b);
 
-      /*
-       * Callback handler for button devices.
-       */
-      void handleButton(const vrpn_BUTTONCB b);
+    /**
+     * Callback handler for tracking data (positions, orientations, accelerations, etc.)
+     */
+    void handleTracker(const vrpn_TRACKERCB t);
 
-      /**
-       * Callback handler for tracking data (positions, orientations, accelerations, etc.)
-       */
-      void handleTracker(const vrpn_TRACKERCB t);
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~VRPNClient();
 
-    protected:
+    /**
+     * Inherited from base class, implements the initialization of this device.
+     */
+    void startDevice();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~VRPNClient();
+    /**
+     * Inherited from base class, implements the main loop for processing data.
+     */
+    void readLoop();
 
-      /**
-       * Inherited from base class, implements the initialization of this device.
-       */
-      void startDevice();
+    /**
+     * Inherited from base class, implements the closing operation of this device.
+     */
+    void stopDevice();
 
-      /**
-       * Inherited from base class, implements the main loop for processing data.
-       */
-      void readLoop();
+    /**
+     * Inherited from base class, returns a list of settable features.
+     */
+    const std::vector<std::string>& queryFeatures();
 
-      /**
-       * Inherited from base class, implements the closing operation of this device.
-       */
-      void stopDevice();
+    /**
+     * Before the device is started this method ensures that the required and
+     * optional features are set properly. In case of an error the device will
+     * not start.
+     */
+    bool parseFeatures();
 
-      /**
-       * Inherited from base class, returns a list of settable features.
-       */
-      const std::vector<std::string>& queryFeatures();
-      
-      /**
-       * Before the device is started this method ensures that the required and
-       * optional features are set properly. In case of an error the device will
-       * not start.
-       */
-      bool parseFeatures();
+  private:
+    std::string mVRPNServer;
+    std::vector<std::string> mRequiredFeatures;
+    bool mStopped;
 
-    private:
-
-      std::string          mVRPNServer;
-      std::vector<std::string> mRequiredFeatures;
-      bool                 mStopped;
-
-      vrpn_Analog_Remote*  mVRPNAnalog;
-      vrpn_Button_Remote*  mVRPNButton;
-      vrpn_Tracker_Remote* mVRPNTracker;
-    };
-  }
-}
+    vrpn_Analog_Remote* mVRPNAnalog;
+    vrpn_Button_Remote* mVRPNButton;
+    vrpn_Tracker_Remote* mVRPNTracker;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

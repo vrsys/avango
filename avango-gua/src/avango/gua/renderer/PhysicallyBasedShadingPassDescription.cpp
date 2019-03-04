@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::PhysicallyBasedShadingPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::PhysicallyBasedShadingPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::PhysicallyBasedShadingPassDescription);
@@ -14,16 +14,14 @@ AV_FC_DEFINE(av::gua::PhysicallyBasedShadingPassDescription);
 AV_FIELD_DEFINE(av::gua::SFPhysicallyBasedShadingPassDescription);
 AV_FIELD_DEFINE(av::gua::MFPhysicallyBasedShadingPassDescription);
 
-av::gua::PhysicallyBasedShadingPassDescription::PhysicallyBasedShadingPassDescription(
-  std::shared_ptr< ::gua::PhysicallyBasedShadingPassDescription> const& guaPhysicallyBasedShadingPassDescription)
-    : PipelinePassDescription(guaPhysicallyBasedShadingPassDescription)
-    , m_guaPhysicallyBasedShadingPassDescription(guaPhysicallyBasedShadingPassDescription)
-{}
-
-void
-av::gua::PhysicallyBasedShadingPassDescription::initClass()
+av::gua::PhysicallyBasedShadingPassDescription::PhysicallyBasedShadingPassDescription(std::shared_ptr<::gua::PhysicallyBasedShadingPassDescription> const& guaPhysicallyBasedShadingPassDescription)
+    : PipelinePassDescription(guaPhysicallyBasedShadingPassDescription), m_guaPhysicallyBasedShadingPassDescription(guaPhysicallyBasedShadingPassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::PhysicallyBasedShadingPassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -35,10 +33,7 @@ av::gua::PhysicallyBasedShadingPassDescription::initClass()
     }
 }
 
-std::shared_ptr< ::gua::PhysicallyBasedShadingPassDescription> const&
-av::gua::PhysicallyBasedShadingPassDescription::getGuaPhysicallyBasedShadingPassDescription() const
+std::shared_ptr<::gua::PhysicallyBasedShadingPassDescription> const& av::gua::PhysicallyBasedShadingPassDescription::getGuaPhysicallyBasedShadingPassDescription() const
 {
     return m_guaPhysicallyBasedShadingPassDescription;
 }
-
-

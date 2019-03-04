@@ -3,4 +3,4 @@
 
 void init_LightNode();
 
-#endif  // AV_PYTHON_GUA_LIGHT_NODE_HPP
+#endif // AV_PYTHON_GUA_LIGHT_NODE_HPP

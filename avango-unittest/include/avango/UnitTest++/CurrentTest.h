@@ -1,17 +1,17 @@
 #ifndef UNITTEST_CURRENTTESTRESULTS_H
 #define UNITTEST_CURRENTTESTRESULTS_H
 
-namespace UnitTest {
-
+namespace UnitTest
+{
 class TestResults;
 class TestDetails;
 
 namespace CurrentTest
 {
-	TestResults*& Results();
-	const TestDetails*& Details();
-}
+TestResults*& Results();
+const TestDetails*& Details();
+} // namespace CurrentTest
 
-}
+} // namespace UnitTest
 
 #endif

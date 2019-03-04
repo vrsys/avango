@@ -40,134 +40,129 @@
 
 namespace av
 {
-  namespace moving
-  {
+namespace moving
+{
+/**
+ * DesktopFlyer mover
+ *
+ * \ingroup av_moving
+ */
+class AV_MOVING_DLL DesktopFlyer : public av::osg::MatrixTransform
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * DesktopFlyer mover
-     *
-     * \ingroup av_moving
+     * Constructor.
      */
-    class AV_MOVING_DLL DesktopFlyer : public av::osg::MatrixTransform
-    {
-      AV_FC_DECLARE();
+    DesktopFlyer();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~DesktopFlyer();
 
-      /**
-       * Constructor.
-       */
-      DesktopFlyer();
+  public:
+    /**
+     * Input Fields to connect from nomalized mouse axes fields of a GraphicsWindow
+     */
+    av::osg::SFVec2 MouseIn;
 
-    protected:
+    /**
+     * Trigger for rotating and panning.
+     * Typically connected from one of the mouse button fields of a GraphicsWindow.
+     */
+    SFBool RotateXYTrigger;
+    SFBool MoveYRotateZTrigger;
+    SFBool MoveZRotateZTrigger;
+    SFBool MoveXZTrigger;
+    SFBool MoveXYTrigger;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~DesktopFlyer();
+    /**
+     * Input Fields to be typically connected from keyboard fields of a GraphicsWindow
+     */
+    SFBool MoveForward;
+    SFBool MoveBackward;
+    SFBool MoveLeft;
+    SFBool MoveRight;
+    SFBool MoveUp;
+    SFBool MoveDown;
+    SFBool RotateUp;
+    SFBool RotateDown;
+    SFBool RotateLeft;
+    SFBool RotateRight;
+    SFBool RotateCW;
+    SFBool RotateCCW;
 
-    public:
+    /**
+     * Time Input field to allow frame independent speeds, connect with Time Sensor Time
+     */
+    SFDouble TimeIn;
 
-      /**
-       * Input Fields to connect from nomalized mouse axes fields of a GraphicsWindow
-       */
-      av::osg::SFVec2 MouseIn;
+    /**
+     * Output Trigger to be connected to the FixedMouse field of a Graphics Window
+     * deactivates mouse pointer while mouse interaction to generate relative input
+     */
+    SFBool RelativeMouseTrigger;
 
-      /**
-       * Trigger for rotating and panning.
-       * Typically connected from one of the mouse button fields of a GraphicsWindow.
-       */
-      SFBool RotateXYTrigger;
-      SFBool MoveYRotateZTrigger;
-      SFBool MoveZRotateZTrigger;
-      SFBool MoveXZTrigger;
-      SFBool MoveXYTrigger;
+    /**
+     * controls if halt movement on release, should be switched off with acceleration control
+     * default true
+     */
+    SFBool HaltOnClutch;
 
-      /**
-       * Input Fields to be typically connected from keyboard fields of a GraphicsWindow
-       */
-      SFBool MoveForward;
-      SFBool MoveBackward;
-      SFBool MoveLeft;
-      SFBool MoveRight;
-      SFBool MoveUp;
-      SFBool MoveDown;
-      SFBool RotateUp;
-      SFBool RotateDown;
-      SFBool RotateLeft;
-      SFBool RotateRight;
-      SFBool RotateCW;
-      SFBool RotateCCW;
+    /**
+     * change speed behaviour of DesktopFlyer:
+     * MoveSpeed default is 27.78 m/s = 50 km/h, MoveAcceleration default is 0
+     * MoveBreak only breaks when Acceleration > 0, default is 5 m/s^2
+     * default MaxSpeed is 55.56 m/s 200 Km/H, default RotationSpeed is 3.14/s = 180deg/s
+     *
+     */
+    SFFloat MoveSpeed;
+    SFFloat MoveAcceleration;
+    SFFloat MoveBreak;
+    SFFloat MaxSpeed;
+    SFFloat RotationSpeed;
+    SFFloat MouseSpeed;
 
-      /**
-       * Time Input field to allow frame independent speeds, connect with Time Sensor Time
-       */
-      SFDouble TimeIn;
+    /**
+     * Invert Y Rotation Axis, default is false
+     */
+    SFBool InvertYMouseAxis;
 
-      /**
-       * Output Trigger to be connected to the FixedMouse field of a Graphics Window
-       * deactivates mouse pointer while mouse interaction to generate relative input
-       */
-      SFBool RelativeMouseTrigger;
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
 
-      /**
-       * controls if halt movement on release, should be switched off with acceleration control
-       * default true
-       */
-      SFBool HaltOnClutch;
+  private:
+    float mOldSpeedX;
+    float mOldSpeedY;
+    float mOldSpeedZ;
 
-      /**
-       * change speed behaviour of DesktopFlyer:
-       * MoveSpeed default is 27.78 m/s = 50 km/h, MoveAcceleration default is 0
-       * MoveBreak only breaks when Acceleration > 0, default is 5 m/s^2
-       * default MaxSpeed is 55.56 m/s 200 Km/H, default RotationSpeed is 3.14/s = 180deg/s
-       *
-       */
-      SFFloat MoveSpeed;
-      SFFloat MoveAcceleration;
-      SFFloat MoveBreak;
-      SFFloat MaxSpeed;
-      SFFloat RotationSpeed;
-      SFFloat MouseSpeed;
+    double mCurrentTime;
+    double mOldTime;
+    double mFrameTime;
 
-      /**
-       * Invert Y Rotation Axis, default is false
-       */
-      SFBool InvertYMouseAxis;
+    float mRotX;
+    float mRotY;
+    float mRotZ;
 
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
+    float mMoveX;
+    float mMoveY;
+    float mMoveZ;
 
-    private:
+    int mModeChangeCounter;
+};
 
-      float mOldSpeedX;
-      float mOldSpeedY;
-      float mOldSpeedZ;
-
-      double mCurrentTime;
-      double mOldTime;
-      double mFrameTime;
-
-      float mRotX;
-      float mRotY;
-      float mRotZ;
-
-      float mMoveX;
-      float mMoveY;
-      float mMoveZ;
-
-      int mModeChangeCounter;
-
-    };
-
-    typedef SingleField<Link<DesktopFlyer> > SFDesktopFlyer;
-    typedef MultiField<Link<DesktopFlyer> > MFDesktopFlyer;
-  }
+typedef SingleField<Link<DesktopFlyer>> SFDesktopFlyer;
+typedef MultiField<Link<DesktopFlyer>> MFDesktopFlyer;
+} // namespace moving
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_MOVING_DLL SingleField<Link<moving::DesktopFlyer> >;
-  template class AV_MOVING_DLL MultiField<Link<moving::DesktopFlyer> >;
+template class AV_MOVING_DLL SingleField<Link<moving::DesktopFlyer>>;
+template class AV_MOVING_DLL MultiField<Link<moving::DesktopFlyer>>;
 #endif
-}
+} // namespace av
 
 #endif
 

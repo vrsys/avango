@@ -9,55 +9,50 @@
 #include <avango/tools/Selector.hpp>
 #include <avango/tools/windows_specific_tools.hpp>
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * UnionSelector class passes the union of two sets of targets.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL UnionSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * UnionSelector class passes the union of two sets of targets.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL UnionSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    UnionSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~UnionSelector();
 
-      /**
-       * Constructor.
-       */
-      UnionSelector();
+  public:
+    /**
+     * Defines the input target sets whose union is passed to SelectedTargets.
+     */
+    MFTargetHolder TargetSet1;
+    MFTargetHolder TargetSet2;
 
-    protected:
+    /* virtual */ void evaluate();
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~UnionSelector();
-
-    public:
-
-      /**
-       * Defines the input target sets whose union is passed to SelectedTargets.
-       */
-      MFTargetHolder TargetSet1;
-      MFTargetHolder TargetSet2;
-
-      /* virtual */ void evaluate();
-
-    };
-
-    using SFUnionSelector = SingleField<Link<UnionSelector> >;
-    using MFUnionSelector = MultiField<Link<UnionSelector> >;
-  }
+using SFUnionSelector = SingleField<Link<UnionSelector>>;
+using MFUnionSelector = MultiField<Link<UnionSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::UnionSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::UnionSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::UnionSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::UnionSelector>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_TOOLS_UNIONSELECTOR_HPP
+#endif // AVANGO_TOOLS_UNIONSELECTOR_HPP

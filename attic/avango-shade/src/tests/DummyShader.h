@@ -42,24 +42,23 @@
 
 class DummyShader : public shade::ShaderBase<DummyShader>
 {
-public:
+  public:
+    shade::float_<shade::uniform> diffuse;
+    shade::float_<shade::uniform> specular;
+    shade::vec4<shade::uniform> color;
+    shade::objref<boost::shared_ptr<DummyShader>, shade::uniform> light;
 
-  shade::float_<shade::uniform> diffuse;
-  shade::float_<shade::uniform> specular;
-  shade::vec4<shade::uniform> color;
-  shade::objref<boost::shared_ptr<DummyShader>, shade::uniform> light;
+    shade::vec3<shade::uniform> vec3value;
+    shade::vec2<shade::uniform> vec2value;
+    shade::int_<shade::uniform> intvalue;
+    shade::matrix4<shade::uniform> mat4value;
+    shade::sampler2D texturevalue;
 
-  shade::vec3<shade::uniform> vec3value;
-  shade::vec2<shade::uniform> vec2value;
-  shade::int_<shade::uniform> intvalue;
-  shade::matrix4<shade::uniform> mat4value;
-  shade::sampler2D texturevalue;
+    typedef shade::list<std::vector<boost::shared_ptr<DummyShader>>, shade::const_> ListType;
+    ListType listvalue;
 
-  typedef shade::list<std::vector<boost::shared_ptr<DummyShader> >, shade::const_> ListType;
-  ListType listvalue;
-
-private:
-  SHADE_BASE_DECL(DummyShader)
+  private:
+    SHADE_BASE_DECL(DummyShader)
 };
 
 void initDummyShader(void);

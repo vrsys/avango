@@ -29,22 +29,22 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    class FileMark : public Mark
-    {
-    public:
-      FileMark(void);
-      FileMark(const std::string& filename, unsigned int line_number = 0);
+namespace formatter
+{
+class FileMark : public Mark
+{
+  public:
+    FileMark(void);
+    FileMark(const std::string& filename, unsigned int line_number = 0);
 
-      const std::string& get_filename(void) const { return m_filename; }
-      unsigned int get_line_number(void) const { return m_line_number; }
+    const std::string& get_filename(void) const { return m_filename; }
+    unsigned int get_line_number(void) const { return m_line_number; }
 
-    private:
-      const std::string m_filename;
-      const unsigned int m_line_number;
-    };
-  }
-}
+  private:
+    const std::string m_filename;
+    const unsigned int m_line_number;
+};
+} // namespace formatter
+} // namespace shade
 
 #endif /* shade_formatter_FileMark */

@@ -36,33 +36,31 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Surface : public ShaderBase<Surface, Enterable>
+{
+  public:
+    Surface(void);
 
-    class Surface : public ShaderBase<Surface, Enterable>
-    {
-    public:
-      Surface(void);
+    /*virtual*/ shade::void_<> enter_vertex(void);
+    /*virtual*/ shade::void_<> enter_geometry(void);
+    /*virtual*/ shade::void_<> enter_fragment(void);
 
-      /*virtual*/ shade::void_<> enter_vertex(void);
-      /*virtual*/ shade::void_<> enter_geometry(void);
-      /*virtual*/ shade::void_<> enter_fragment(void);
+    typedef boost::shared_ptr<shaders::IMaterial> MaterialPtr;
+    typedef shade::objref<MaterialPtr, shade::const_> MaterialRef;
 
-      typedef boost::shared_ptr<shaders::IMaterial> MaterialPtr;
-      typedef shade::objref<MaterialPtr, shade::const_> MaterialRef;
+    typedef boost::shared_ptr<shaders::Geometry> GeometryPtr;
+    typedef shade::objref<GeometryPtr, shade::const_> GeometryRef;
 
-      typedef boost::shared_ptr<shaders::Geometry> GeometryPtr;
-      typedef shade::objref<GeometryPtr, shade::const_> GeometryRef;
+    MaterialRef material;
+    GeometryRef geometry;
 
-      MaterialRef material;
-      GeometryRef geometry;
+  private:
+    SHADE_DERIVED_DECL(Surface, Enterable)
+};
 
-    private:
-
-      SHADE_DERIVED_DECL(Surface, Enterable)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Surface_H */

@@ -3,4 +3,4 @@
 
 void init_CameraNode();
 
-#endif //AV_PYTHON_GUA_CAMERA_NODE_HPP
+#endif // AV_PYTHON_GUA_CAMERA_NODE_HPP

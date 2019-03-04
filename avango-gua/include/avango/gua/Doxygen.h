@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_GUA_DOXYGEN_H)
-

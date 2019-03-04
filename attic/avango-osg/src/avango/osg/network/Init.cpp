@@ -33,20 +33,19 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::network::Init"));
+av::Logger& logger(av::getLogger("av::osg::network::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::osg::network::Init);
 
-/* static */ void
-av::osg::network::Init::initClass()
+/* static */ void av::osg::network::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::FragmentGroup::initClass();
-    av::osg::NetMatrixTransform::initClass();
-    av::osg::SharedContainerHolder::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::FragmentGroup::initClass();
+        av::osg::NetMatrixTransform::initClass();
+        av::osg::SharedContainerHolder::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::network::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::network::Init", true);
+    }
 }

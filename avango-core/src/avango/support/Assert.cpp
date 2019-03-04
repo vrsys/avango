@@ -39,29 +39,25 @@
 #include <sstream>
 #include <iostream>
 
-AV_DLL void av::assert_fail(const char* assertion, const char* file,
-                     unsigned int line, const char* function)
+AV_DLL void av::assert_fail(const char* assertion, const char* file, unsigned int line, const char* function)
 {
-  std::cerr << "Assertion \"" << assertion << "\" failed in file " << file
-            << ", line " << line << ", function " << function << std::endl;
+    std::cerr << "Assertion \"" << assertion << "\" failed in file " << file << ", line " << line << ", function " << function << std::endl;
 
-  const char* debugger = ::getenv("AV_DEBUGGER");
-  if (debugger)
-  {
+    const char* debugger = ::getenv("AV_DEBUGGER");
+    if(debugger)
+    {
 #if defined(_WIN32)
-    int my_pid = ::_getpid();
+        int my_pid = ::_getpid();
 #else
-    pid_t my_pid = ::getpid();
+        pid_t my_pid = ::getpid();
 #endif
 
-    std::ostringstream os;
+        std::ostringstream os;
 
-    os << debugger << " /proc/" << my_pid << "/exe " << my_pid
-      << std::ends;
+        os << debugger << " /proc/" << my_pid << "/exe " << my_pid << std::ends;
 
-    ::system(os.str().c_str());
+        ::system(os.str().c_str());
+    }
 
-  }
-
-  ::abort();
+    ::abort();
 }

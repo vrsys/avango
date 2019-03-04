@@ -36,67 +36,61 @@
 #include <avango/osg/Fields.h>
 #include <avango/osg/StateAttribute.h>
 
-
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Program OsgProgram;
+namespace osg
+{
+typedef ::osg::Program OsgProgram;
+
+/**
+ * Wrapper for ::osg::Program
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Program : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Program is created.
+     * Otherwise, the given ::osg::Program is used.
+     */
+    Program(OsgProgram* osgprogram = new OsgProgram()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Program();
+
+  public:
+    MFShader ShaderList;
 
     /**
-     * Wrapper for ::osg::Program
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Program.
      */
-    class AV_OSG_DLL Program : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::Program* getOsgProgram() const;
 
-    public:
+    void touchFields();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Program is created.
-       * Otherwise, the given ::osg::Program is used.
-       */
-      Program(OsgProgram *osgprogram = new OsgProgram()); // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getShaderListCB(const av::osg::MFShader::GetValueEvent& event);
+    virtual void setShaderListCB(const av::osg::MFShader::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::Program* mOsgProgram;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Program();
-
-    public:
-
-      MFShader ShaderList;
-
-      /**
-       * Get the wrapped ::osg::Program.
-       */
-      ::osg::Program* getOsgProgram() const;
-
-      void touchFields();
-
-    protected:
-
-      virtual void getShaderListCB(const av::osg::MFShader::GetValueEvent& event);
-      virtual void setShaderListCB(const av::osg::MFShader::SetValueEvent& event);
-
-    private:
-
-      ::osg::Program *mOsgProgram;
-    };
-
-    typedef SingleField<Link<Program> > SFProgram;
-    typedef MultiField<Link<Program> > MFProgram;
-  }
+typedef SingleField<Link<Program>> SFProgram;
+typedef MultiField<Link<Program>> MFProgram;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Program> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Program> >;
+template class AV_OSG_DLL SingleField<Link<osg::Program>>;
+template class AV_OSG_DLL MultiField<Link<osg::Program>>;
 #endif
 
-}
+} // namespace av
 
 #endif

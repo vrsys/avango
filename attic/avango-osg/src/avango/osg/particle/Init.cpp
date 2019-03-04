@@ -31,18 +31,17 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::particle::Init"));
+av::Logger& logger(av::getLogger("av::osg::particle::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::osg::particle::Init);
 
-/* static */ void
-av::osg::particle::Init::initClass()
+/* static */ void av::osg::particle::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::particle::PrecipitationEffect::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::particle::PrecipitationEffect::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::particle::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::particle::Init", true);
+    }
 }

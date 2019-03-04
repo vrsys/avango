@@ -30,32 +30,31 @@
 
 namespace shade
 {
-  class Shader;
+class Shader;
 }
 
 namespace av
 {
-  namespace shade
-  {
-    class AV_SHADE_DLL Shader : public av::FieldContainer
-    {
-    public:
+namespace shade
+{
+class AV_SHADE_DLL Shader : public av::FieldContainer
+{
+  public:
+    Shader(av::Type type, boost::shared_ptr<::shade::Shader> shader);
+    ~Shader(void);
 
-      Shader(av::Type type, boost::shared_ptr< ::shade::Shader> shader);
-      ~Shader(void);
+    /*virtual*/ av::Type getTypeId() const;
 
-      /*virtual*/ av::Type getTypeId() const;
+    boost::shared_ptr<::shade::Shader> getShader() const;
+    static Shader* getWrapper(::shade::Shader* shader);
 
-      boost::shared_ptr< ::shade::Shader> getShader() const;
-      static Shader* getWrapper(::shade::Shader* shader);
-
-    private:
-      av::Type mType;
-      boost::shared_ptr< ::shade::Shader> mShader;
-      typedef std::map< ::shade::Shader*, Shader*> Wrapper;
-      static Wrapper* mWrapper;
-    };
-  }
-}
+  private:
+    av::Type mType;
+    boost::shared_ptr<::shade::Shader> mShader;
+    typedef std::map<::shade::Shader*, Shader*> Wrapper;
+    static Wrapper* mWrapper;
+};
+} // namespace shade
+} // namespace av
 
 #endif

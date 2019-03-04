@@ -12,57 +12,53 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * Drag tool class
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL DragTool : public Tool
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Drag tool class
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL DragTool : public Tool
-    {
-      AV_FC_DECLARE();
+    DragTool();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~DragTool();
 
-      /**
-       * Constructor.
-       */
-      DragTool();
+  public:
+    /**
+     * Defines the dragging transformation relative to the root node coordinate system.
+     */
+    av::gua::SFMatrix4 DragTransform;
 
-    protected:
+    /* virtual */ void evaluate();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~DragTool();
+  protected:
+    /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
 
-    public:
+    ::gua::math::mat4 mLastDragMat, mDragDiffMat;
+    bool mDragged;
+};
 
-      /**
-       * Defines the dragging transformation relative to the root node coordinate system.
-       */
-      av::gua::SFMatrix4 DragTransform;
-
-      /* virtual */ void evaluate();
-
-    protected:
-
-      /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
-
-      ::gua::math::mat4 mLastDragMat, mDragDiffMat;
-      bool mDragged;
-    };
-
-    using SFDragTool = SingleField<Link<DragTool> >;
-    using MFDragTool = MultiField<Link<DragTool> >;
-  }
+using SFDragTool = SingleField<Link<DragTool>>;
+using MFDragTool = MultiField<Link<DragTool>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link< ::av::tools::DragTool> >;
-  template class AV_TOOLS_DLL MultiField<Link< ::av::tools::DragTool> >;
+template class AV_TOOLS_DLL SingleField<Link<::av::tools::DragTool>>;
+template class AV_TOOLS_DLL MultiField<Link<::av::tools::DragTool>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_TOOLS_DRAGTOOL_HPP
+#endif // AVANGO_TOOLS_DRAGTOOL_HPP

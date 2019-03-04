@@ -23,7 +23,7 @@ def start(filename):
     spointsloader = avango.gua.nodes.SPointsLoader()
     spoints_geode = spointsloader.load("kinect", filename)
 
-    transform1 = avango.gua.nodes.TransformNode(Children=[spoints_geode])
+    transform1 = avango.gua.nodes.TransformNode(Name = "kinect_transform", Children=[spoints_geode])
 
     light = avango.gua.nodes.LightNode(
         Type=avango.gua.LightType.POINT,
@@ -31,9 +31,9 @@ def start(filename):
         Color=avango.gua.Color(1.0, 1.0, 1.0),
         Brightness=100.0,
         Transform=(avango.gua.make_trans_mat(1, 1, 5) *
-                   avango.gua.make_scale_mat(30, 30, 30)))
+                   avango.gua.make_scale_mat(160, 160, 160)))
 
-    size = avango.gua.Vec2ui(800, 800)
+    size = avango.gua.Vec2ui(1080, 1200)
 
     window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
 
@@ -44,7 +44,7 @@ def start(filename):
         SceneGraph="scenegraph",
         Resolution=size,
         OutputWindowName="window",
-        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 5.5))
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
     res_pass.EnableSSAO.value = True

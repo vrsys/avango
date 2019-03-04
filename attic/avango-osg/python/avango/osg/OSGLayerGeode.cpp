@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLayerGeode(void)
- {
-  // wrapping osg::LayerGeode functionality
-  register_field<av::osg::SFLayerGeode>("SFLayerGeode");
-  register_multifield<av::osg::MFLayerGeode>("MFLayerGeode");
-  class_<av::osg::LayerGeode, av::Link<av::osg::LayerGeode>, bases<av::osg::Geode>, boost::noncopyable >("LayerGeode", "docstring", no_init);
- }
+{
+    // wrapping osg::LayerGeode functionality
+    register_field<av::osg::SFLayerGeode>("SFLayerGeode");
+    register_multifield<av::osg::MFLayerGeode>("MFLayerGeode");
+    class_<av::osg::LayerGeode, av::Link<av::osg::LayerGeode>, bases<av::osg::Geode>, boost::noncopyable>("LayerGeode", "docstring", no_init);
+}

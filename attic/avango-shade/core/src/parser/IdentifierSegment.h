@@ -29,19 +29,19 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class IdentifierSegment : public Segment
-    {
-    public:
-      IdentifierSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end);
+namespace parser
+{
+class IdentifierSegment : public Segment
+{
+  public:
+    IdentifierSegment(const formatter::MarkBuffer::iterator& begin, const formatter::MarkBuffer::iterator& end);
 
-      /*virtual*/ void get_content(formatter::Generator&generator, Scope&, const FunctionCall&, std::ostream& error_log) const;
+    /*virtual*/ void get_content(formatter::Generator& generator, Scope&, const FunctionCall&, std::ostream& error_log) const;
 
-    private:
-      std::string m_id;
-    };
-  }
-}
+  private:
+    std::string m_id;
+};
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_IdentifierSegment_H */

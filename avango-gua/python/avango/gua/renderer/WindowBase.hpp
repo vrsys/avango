@@ -3,4 +3,4 @@
 
 void init_WindowBase();
 
-#endif //AV_PYTHON_GUA_WINDOW_BASE_HPP
+#endif // AV_PYTHON_GUA_WINDOW_BASE_HPP

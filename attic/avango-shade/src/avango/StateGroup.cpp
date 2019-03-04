@@ -27,62 +27,57 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::shade::StateGroup"));
+av::Logger& logger(av::getLogger("av::shade::StateGroup"));
 }
 
 AV_FC_DEFINE(av::shade::StateGroup);
 
 av::shade::StateGroup::StateGroup()
 {
-  AV_FC_ADD_FIELD(State, 0);
+    AV_FC_ADD_FIELD(State, 0);
 
-  UpdateCallback* uc = new UpdateCallback();
-  getOsgNode()->setUpdateCallback(uc);
+    UpdateCallback* uc = new UpdateCallback();
+    getOsgNode()->setUpdateCallback(uc);
 }
 
-av::shade::StateGroup::~StateGroup()
-{}
+av::shade::StateGroup::~StateGroup() {}
 
-void
-av::shade::StateGroup::initClass()
+void av::shade::StateGroup::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Group::initClass();
-    av::shade::State::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Group::initClass();
+        av::shade::State::initClass();
 
-    AV_FC_INIT(av::osg::Group, av::shade::StateGroup, true);
-  }
+        AV_FC_INIT(av::osg::Group, av::shade::StateGroup, true);
+    }
 }
 
-/* virtual */ void
-av::shade::StateGroup::evaluate()
+/* virtual */ void av::shade::StateGroup::evaluate()
 {
-  av::osg::Group::evaluate();
+    av::osg::Group::evaluate();
 
-  if (!State.getValue().isValid())
-    return;
+    if(!State.getValue().isValid())
+        return;
 
-  State.getValue()->applyState(getOsgNode());
+    State.getValue()->applyState(getOsgNode());
 }
 
-/*virtual*/ void
-av::shade::StateGroup::UpdateCallback::operator() (::osg::Node *node, ::osg::NodeVisitor *nv)
+/*virtual*/ void av::shade::StateGroup::UpdateCallback::operator()(::osg::Node* node, ::osg::NodeVisitor* nv)
 {
-  callUpdate(node);
-  traverse(node, nv);
+    callUpdate(node);
+    traverse(node, nv);
 }
 
-/*virtual*/ void
-av::shade::StateGroup::UpdateCallback::callUpdate(::osg::Node *node) const
+/*virtual*/ void av::shade::StateGroup::UpdateCallback::callUpdate(::osg::Node* node) const
 {
-  av::Link<av::shade::StateGroup> state_group(av::osg::get_from_osg_object<av::shade::StateGroup>(node));
-  if (!state_group.isValid())
-    return;
+    av::Link<av::shade::StateGroup> state_group(av::osg::get_from_osg_object<av::shade::StateGroup>(node));
+    if(!state_group.isValid())
+        return;
 
-  av::Link<av::shade::State> state(state_group->State.getValue());
-  if (!state.isValid())
-    return;
-  
-  state->update();
+    av::Link<av::shade::State> state(state_group->State.getValue());
+    if(!state.isValid())
+        return;
+
+    state->update();
 }

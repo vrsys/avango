@@ -30,56 +30,52 @@
 
 namespace av
 {
-  namespace script
-  {
+namespace script
+{
+class AV_PYTHON_DLL Script : public av::FieldContainer, public boost::python::wrapper<Script>
+{
+  public:
+    Script(PyObject* self, av::Type type);
 
-    class AV_PYTHON_DLL Script : public av::FieldContainer, public boost::python::wrapper<Script>
-    {
-    public:
-      Script(PyObject* self, av::Type type);
+    /*virtual*/ av::Type getTypeId() const;
+    static ::av::Type getClassTypeId(void);
 
-      /*virtual*/ av::Type getTypeId() const;
-      static ::av::Type getClassTypeId(void);
+    static void initClass(void);
 
-      static void initClass(void);
+    /*virtual*/ void refImpl();
+    /*virtual*/ void unrefImpl();
+    /*virtual*/ void unrefWithoutDeletionImpl();
+    /*virtual*/ int refCountImpl();
+    /*virtual*/ void setFloatingRefImpl();
 
-      /*virtual*/ void refImpl();
-      /*virtual*/ void unrefImpl();
-      /*virtual*/ void unrefWithoutDeletionImpl();
-      /*virtual*/ int refCountImpl();
-      /*virtual*/ void setFloatingRefImpl();
+    PyObject* getSelf(void) const;
 
-      PyObject* getSelf(void) const;
+    void enableFieldHasChanged(void);
 
-      void enableFieldHasChanged(void);
+    static void register_exception_handler(boost::python::object handler);
 
-      static void register_exception_handler(boost::python::object handler);
+  protected:
+    /*virtual*/ void evaluate();
+    /*virtual*/ void fieldHasChanged(const Field& field);
 
-    protected:
+  private:
+    static void handle_exception(void);
 
-      /*virtual*/ void evaluate();
-      /*virtual*/ void fieldHasChanged(const Field& field);
+    /* Forbid copy constructor and operator */
+    Script(const Script&) {}
+    void operator=(const Script&) {}
 
-    private:
+    PyObject* mSelf;
+    av::Type mType;
+    bool mIsFloatingRef;
+    bool mHasFieldHasChangedEnabled;
+    static av::Type sType;
+    static boost::python::object sHandler;
+};
 
-      static void handle_exception(void);
+void AV_PYTHON_DLL register_script(void);
 
-      /* Forbid copy constructor and operator */
-      Script(const Script&) {}
-      void operator=(const Script&) {}
-
-      PyObject* mSelf;
-      av::Type mType;
-      bool mIsFloatingRef;
-      bool mHasFieldHasChangedEnabled;
-      static av::Type sType;
-      static boost::python::object sHandler;
-    };
-
-   void AV_PYTHON_DLL register_script(void);
-
-  }
-}
+} // namespace script
+} // namespace av
 
 #endif // #if !defined(AV_SCRIPT_SCRIPT_H)
-

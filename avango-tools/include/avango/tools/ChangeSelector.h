@@ -36,66 +36,61 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * ChangeSelector class passes targets which were added since the last evaluate
+ * and additional outputs removed targets.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL ChangeSelector : public Selector
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * ChangeSelector class passes targets which were added since the last evaluate
-     * and additional outputs removed targets.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL ChangeSelector : public Selector
-    {
-      AV_FC_DECLARE();
+    ChangeSelector();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ChangeSelector();
 
-      /**
-       * Constructor.
-       */
-      ChangeSelector();
+  public:
+    /**
+     * Defines the input targets whose added targets are passed to SelectedTargets.
+     */
+    MFTargetHolder Targets;
 
-    protected:
+    /**
+     * Outputs the targets which were removed from Targets since the last evaluate.
+     */
+    MFTargetHolder KeptTargets;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ChangeSelector();
+    /**
+     * Outputs the targets which were removed from Targets since the last evaluate.
+     */
+    MFTargetHolder RemovedTargets;
 
-    public:
+    /* virtual */ void evaluate();
 
-      /**
-       * Defines the input targets whose added targets are passed to SelectedTargets.
-       */
-      MFTargetHolder Targets;
+  protected:
+    MFTargetHolder::ContainerType mLastTargets;
+};
 
-      /**
-       * Outputs the targets which were removed from Targets since the last evaluate.
-       */
-      MFTargetHolder KeptTargets;
-
-      /**
-       * Outputs the targets which were removed from Targets since the last evaluate.
-       */
-      MFTargetHolder RemovedTargets;
-
-      /* virtual */ void evaluate();
-
-    protected:
-
-      MFTargetHolder::ContainerType mLastTargets;
-
-    };
-
-    using SFChangeSelector = SingleField<Link<ChangeSelector> >;
-    using MFChangeSelector = MultiField<Link<ChangeSelector> >;
-  }
+using SFChangeSelector = SingleField<Link<ChangeSelector>>;
+using MFChangeSelector = MultiField<Link<ChangeSelector>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::ChangeSelector> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::ChangeSelector> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::ChangeSelector>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::ChangeSelector>>;
 #endif
 
-}
+} // namespace av
 
 #endif

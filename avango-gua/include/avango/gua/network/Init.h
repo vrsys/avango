@@ -44,22 +44,22 @@
 
 namespace av
 {
-  namespace gua
-  {
-    namespace network
-    {
-      /**
-       * Initializes the Avango OpenSceneGraph library.
-       * Usage: \code av::gua::network::Init::initClass(); \endcode
-       *
-       * \ingroup av_gua
-       */
-      class AV_GUA_DLL Init
-      {
-        AV_TYPED_DECLARE_ABSTRACT();
-      };
-    }
-  }
-}
+namespace gua
+{
+namespace network
+{
+/**
+ * Initializes the Avango OpenSceneGraph library.
+ * Usage: \code av::gua::network::Init::initClass(); \endcode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace network
+} // namespace gua
+} // namespace av
 
 #endif

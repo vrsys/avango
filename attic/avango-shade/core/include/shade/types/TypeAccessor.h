@@ -24,23 +24,21 @@
 #ifndef shade_types_TypeAccessor_H
 #define shade_types_TypeAccessor_H shade_types_TypeAccessor_H
 
-
 namespace shade
 {
-  namespace types
-  {
-    class TypeAccessor
-    {
-    public:
-      virtual ~TypeAccessor(void) {}
+namespace types
+{
+class TypeAccessor
+{
+  public:
+    virtual ~TypeAccessor(void) {}
 
-      typedef int HashValue;
-      typedef HashValue* HashType;
+    typedef int HashValue;
+    typedef HashValue* HashType;
 
-      virtual HashType hash(void) const = 0;
-    };
-  }
-}
-
+    virtual HashType hash(void) const = 0;
+};
+} // namespace types
+} // namespace shade
 
 #endif /* shade_types_TypeAccessor_H */

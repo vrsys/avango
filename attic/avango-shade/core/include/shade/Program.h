@@ -24,7 +24,6 @@
 #ifndef shade_Program_H
 #define shade_Program_H shade_Program_H
 
-
 #include "Shader.h"
 #include "ShaderEnvironment.h"
 #include "FileResolver.h"
@@ -32,16 +31,13 @@
 #include <string>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
+class Component;
 
-  class Component;
-
-  class Program
-  {
+class Program
+{
   public:
-
     Program(boost::shared_ptr<Shader> shader, boost::shared_ptr<GLSLWrapper> wrapper);
 
     // Setup environment
@@ -63,8 +59,8 @@ namespace shade
     boost::shared_ptr<GLSLWrapper> m_wrapper;
     shade::FileResolver m_resolver;
     boost::shared_ptr<shade::Component> m_component;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_Program_H */

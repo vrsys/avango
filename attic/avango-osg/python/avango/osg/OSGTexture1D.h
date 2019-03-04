@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_TEXTURE1D
 #define AV_PYTHON_OSG_TEXTURE1D
 

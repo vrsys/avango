@@ -8,7 +8,6 @@
 #include <map>
 #include <avango/daemon/windows_specific_daemon.h>
 
-
 /**
  * \file
  * \ingroup av_daemon
@@ -16,38 +15,33 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL WindowsEventMapping
+{
+  public:
     /**
-     * \ingroup av_daemon
+     * Constructor
      */
-    class AV_DAEMON_DLL WindowsEventMapping
-    {
-    public:
-      /**
-       * Constructor
-       */
-      WindowsEventMapping();
+    WindowsEventMapping();
 
-      using EventPair = std::pair<unsigned short, unsigned short>;
+    using EventPair = std::pair<unsigned short, unsigned short>;
 
-      static unsigned long mapKeyboardEvent(USHORT VKey);
+    static unsigned long mapKeyboardEvent(USHORT VKey);
 
-      static bool mapHidButtonEvent(unsigned short usagePage, unsigned short usageId,
-                                    unsigned short appUsagePage, unsigned short appUsageId,
-                                    EventPair& ev);
+    static bool mapHidButtonEvent(unsigned short usagePage, unsigned short usageId, unsigned short appUsagePage, unsigned short appUsageId, EventPair& ev);
 
-      static bool mapHidValueEvent(unsigned short usagePage, unsigned short usageId,
-                                    unsigned short appUsagePage, unsigned short appUsageId,
-                                    EventPair& ev);
-    private:
+    static bool mapHidValueEvent(unsigned short usagePage, unsigned short usageId, unsigned short appUsagePage, unsigned short appUsageId, EventPair& ev);
 
-      ::std::map<USHORT, unsigned long> mKeyboardVkey;
-      ::std::map<unsigned short, EventPair > mHidMappingConsumer;
-      ::std::map<std::pair<unsigned short, unsigned short>, EventPair > mHidMappingValue;
-
-    };
-  }
-}
+  private:
+    ::std::map<USHORT, unsigned long> mKeyboardVkey;
+    ::std::map<unsigned short, EventPair> mHidMappingConsumer;
+    ::std::map<std::pair<unsigned short, unsigned short>, EventPair> mHidMappingValue;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

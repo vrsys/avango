@@ -36,29 +36,28 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::viewer::Init"));
+av::Logger& logger(av::getLogger("av::osg::viewer::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::osg::viewer::Init);
 
-/* static */ void
-av::osg::viewer::Init::initClass()
+/* static */ void av::osg::viewer::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
+    if(!isTypeInitialized())
+    {
 #if !defined(_WIN32)
-    // OSG should not change near and far clipping planes,
-    // because this could clip away geometry from draw callbacks
-    ::setenv("OSG_COMPUTE_NEAR_FAR_MODE", "DO_NOT_COMPUTE_NEAR_FAR", 1);
+        // OSG should not change near and far clipping planes,
+        // because this could clip away geometry from draw callbacks
+        ::setenv("OSG_COMPUTE_NEAR_FAR_MODE", "DO_NOT_COMPUTE_NEAR_FAR", 1);
 #endif
 
-    av::osg::viewer::Camera::initClass();
-    av::osg::viewer::CompositeViewer::initClass();
-    av::osg::viewer::GraphicsWindow::initClass();
-    av::osg::viewer::EventFields::initClass();
-    av::osg::viewer::View::initClass();
-    av::osg::viewer::Viewer::initClass();
+        av::osg::viewer::Camera::initClass();
+        av::osg::viewer::CompositeViewer::initClass();
+        av::osg::viewer::GraphicsWindow::initClass();
+        av::osg::viewer::EventFields::initClass();
+        av::osg::viewer::View::initClass();
+        av::osg::viewer::Viewer::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::viewer::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::osg::viewer::Init", true);
+    }
 }

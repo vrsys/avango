@@ -38,80 +38,75 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Class representing a station of Avango NG daemon.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL Station : public Base
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * Class representing a station of Avango NG daemon.
-     *
-     * \ingroup av_daemon
+     * Constructor
      */
-    class AV_DAEMON_DLL Station : public Base {
+    Station();
 
-      AV_BASE_DECLARE();
+    /**
+     * Destructor
+     */
+    virtual ~Station() = default;
 
-    public:
+    Station(const Station&) = delete;
+    const Station& operator=(const Station&) = delete;
 
-      /**
-       * Constructor
-       */
-      Station();
+  public:
+    const char* getName() const;
+    const ::gua::math::mat4& getMatrix() const;
 
-      /**
-       * Destructor
-       */
-      virtual ~Station() = default;
+    int getButton(int which) const;
+    const ::std::vector<int> getButtons() const;
 
-      Station(const Station&) = delete;
-      const Station& operator=(const Station&) = delete;
+    float getValue(int which) const;
+    const ::std::vector<float> getValues() const;
 
-    public:
+    bool getLED(int which) const;
+    const ::std::vector<bool> getLEDs() const;
 
-      const char* getName() const;
-      const ::gua::math::mat4& getMatrix() const;
+    void setName(const char* name);
+    void setMatrix(const ::gua::math::mat4& matrix);
+    void setButton(int which, int on);
+    void setValue(int which, float val);
+    void setLED(int which, bool on);
+    void setUsage(bool matrix = 0, int buttons = 0, int values = 0, int leds = 0);
 
-      int getButton(int which) const;
-      const ::std::vector<int> getButtons() const;
+    bool getMatrixUsed() const;
+    int getButtonsUsed() const;
+    int getValuesUsed() const;
+    int getLEDsUsed() const;
 
-      float getValue(int which) const;
-      const ::std::vector<float> getValues() const;
+    static const int sMaxNameLength = 128;
+    static const int sMaxButtons = 32;
+    static const int sMaxValues = 256;
+    static const int sMaxLeds = 16;
 
-      bool getLED(int which) const;
-      const ::std::vector<bool> getLEDs() const;
-
-      void setName(const char* name);
-      void setMatrix(const ::gua::math::mat4& matrix);
-      void setButton(int which, int on);
-      void setValue(int which, float val);
-      void setLED(int which, bool on);
-      void setUsage(bool matrix = 0, int buttons = 0, int values = 0, int leds = 0);
-
-      bool getMatrixUsed() const;
-      int  getButtonsUsed() const;
-      int  getValuesUsed() const;
-      int  getLEDsUsed() const;
-
-      static const int sMaxNameLength = 128;
-      static const int sMaxButtons = 32;
-      static const int sMaxValues = 256;
-      static const int sMaxLeds = 16;
-
-    private:
-
-      // retain static memory layout since it gets put into a shared
-      // memory segment not autogrowable!
-      char     mName[sMaxNameLength];
-      ::gua::math::mat4 mMatrix;               // this should work since fpMatrix has the same memory layout float[4][4]
-      int      mButton[sMaxButtons];
-      float    mValue[sMaxValues];
-      bool     mLed[sMaxLeds];
-      bool     mMatrixUsed;
-      int      mButtonsUsed;
-      int      mValuesUsed;
-      int      mLedsUsed;
-
-    };
-  }
-}
-
+  private:
+    // retain static memory layout since it gets put into a shared
+    // memory segment not autogrowable!
+    char mName[sMaxNameLength];
+    ::gua::math::mat4 mMatrix; // this should work since fpMatrix has the same memory layout float[4][4]
+    int mButton[sMaxButtons];
+    float mValue[sMaxValues];
+    bool mLed[sMaxLeds];
+    bool mMatrixUsed;
+    int mButtonsUsed;
+    int mValuesUsed;
+    int mLedsUsed;
+};
+} // namespace daemon
+} // namespace av
 
 #endif // #if !defined(AV_OSG_STATION_H)

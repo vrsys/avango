@@ -3,4 +3,4 @@
 
 void init_NURBSLoader();
 
-#endif //AV_PYTHON_GUA_NURBS_LOADER_HPP
+#endif // AV_PYTHON_GUA_NURBS_LOADER_HPP

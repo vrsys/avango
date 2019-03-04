@@ -37,69 +37,63 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Texture2DArray OsgTexture2DArray;
+namespace osg
+{
+typedef ::osg::Texture2DArray OsgTexture2DArray;
+
+/**
+ * Abstract Wrapper for ::osg::Texture
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Texture2DArray : public Texture
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    Texture2DArray(OsgTexture2DArray* osgtexture = new OsgTexture2DArray());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Texture2DArray();
+
+  public:
+    MFImage Image;
+
+    SFInt TextureWidth;
+    SFInt TextureHeight;
 
     /**
-     * Abstract Wrapper for ::osg::Texture
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Texture2DArray object.
+     * \return a pointer to the texture object
      */
-    class AV_OSG_DLL Texture2DArray : public Texture
-    {
-      AV_FC_DECLARE();
+    ::osg::Texture2DArray* getOsgTexture2DArray() const;
 
-    public:
+  private:
+    ::osg::Texture2DArray* mOsgTexture2DArray;
 
-      /**
-       * Constructor.
-       */
-      Texture2DArray(OsgTexture2DArray* osgtexture = new OsgTexture2DArray());
-      // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getImageCB(const av::osg::MFImage::GetValueEvent& event);
+    virtual void setImageCB(const av::osg::MFImage::SetValueEvent& event);
+    virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+    virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Texture2DArray();
-
-    public:
-
-      MFImage Image;
-
-      SFInt TextureWidth;
-      SFInt TextureHeight;
-
-      /**
-       * Get the wrapped ::osg::Texture2DArray object.
-       * \return a pointer to the texture object
-       */
-      ::osg::Texture2DArray* getOsgTexture2DArray() const;
-
-    private:
-
-      ::osg::Texture2DArray* mOsgTexture2DArray;
-
-    protected:
-
-      virtual void getImageCB(const av::osg::MFImage::GetValueEvent& event);
-      virtual void setImageCB(const av::osg::MFImage::SetValueEvent& event);
-      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
-      virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Texture2DArray> > SFTexture2DArray;
-    typedef MultiField<Link<Texture2DArray> > MFTexture2DArray;
-  } // namespace osg
+typedef SingleField<Link<Texture2DArray>> SFTexture2DArray;
+typedef MultiField<Link<Texture2DArray>> MFTexture2DArray;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Texture2DArray> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Texture2DArray> >;
+template class AV_OSG_DLL SingleField<Link<osg::Texture2DArray>>;
+template class AV_OSG_DLL MultiField<Link<osg::Texture2DArray>>;
 #endif
 
 } // namespace av

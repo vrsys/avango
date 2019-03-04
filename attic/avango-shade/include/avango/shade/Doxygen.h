@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_SHADE_DOXYGEN_H)
-

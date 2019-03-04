@@ -33,33 +33,29 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_shade)
 {
-  av::shade::Init::initClass();
+    av::shade::Init::initClass();
 
-  register_field<av::shade::SFDataVariance>("SFDataVariance");
-  register_field<av::shade::SFState>("SFState");
-  register_multifield<av::shade::MFState>("MFState");
+    register_field<av::shade::SFDataVariance>("SFDataVariance");
+    register_field<av::shade::SFState>("SFState");
+    register_multifield<av::shade::MFState>("MFState");
 
-  class_<av::shade::State, av::Link<av::shade::State>, bases<av::FieldContainer>, boost::noncopyable >("State", "A State represents one compiled shader program", no_init);
+    class_<av::shade::State, av::Link<av::shade::State>, bases<av::FieldContainer>, boost::noncopyable>("State", "A State represents one compiled shader program", no_init);
 
-  def("append_search_path", av::shade::Init::appendSearchPath, "Append given path to search path for shader code");
+    def("append_search_path", av::shade::Init::appendSearchPath, "Append given path to search path for shader code");
 
-  enum_< ::osg::Object::DataVariance >("DataVariance")
-    .value("unspecified", ::osg::Object::UNSPECIFIED)
-    .value("static", ::osg::Object::STATIC)
-    .value("dynamic", ::osg::Object::DYNAMIC)
-    ;
+    enum_<::osg::Object::DataVariance>("DataVariance").value("unspecified", ::osg::Object::UNSPECIFIED).value("static", ::osg::Object::STATIC).value("dynamic", ::osg::Object::DYNAMIC);
 }

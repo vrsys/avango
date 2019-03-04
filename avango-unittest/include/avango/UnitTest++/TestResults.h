@@ -1,14 +1,14 @@
 #ifndef UNITTEST_TESTRESULTS_H
 #define UNITTEST_TESTRESULTS_H
 
-namespace UnitTest {
-
+namespace UnitTest
+{
 class TestReporter;
 class TestDetails;
 
 class TestResults
 {
-public:
+  public:
     explicit TestResults(TestReporter* reporter = 0);
 
     void OnTestStart(TestDetails const& test);
@@ -19,7 +19,7 @@ public:
     int GetFailedTestCount() const;
     int GetFailureCount() const;
 
-private:
+  private:
     TestReporter* m_testReporter;
     int m_totalTestCount;
     int m_failedTestCount;
@@ -28,9 +28,9 @@ private:
     bool m_currentTestFailed;
 
     TestResults(TestResults const&);
-    TestResults& operator =(TestResults const&);
+    TestResults& operator=(TestResults const&);
 };
 
-}
+} // namespace UnitTest
 
 #endif

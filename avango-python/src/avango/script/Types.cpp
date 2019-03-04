@@ -27,7 +27,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::python::Types"));
+av::Logger& logger(av::getLogger("av::python::Types"));
 }
 
 // TODO: Do some useful stream and network stuff for boost::python::api::object
@@ -36,28 +36,18 @@ namespace
 
 #include <avango/Msg.h>
 
-void
-av::av_popMsg(av::Msg&, boost::python::api::object&)
+void av::av_popMsg(av::Msg&, boost::python::api::object&)
 {
-  // TODO: Implement proper Python pickle support
+    // TODO: Implement proper Python pickle support
 }
 
-void
-av::av_pushMsg(av::Msg&, boost::python::api::object&)
+void av::av_pushMsg(av::Msg&, boost::python::api::object&)
 {
-  // TODO: Implement proper Python pickle support
+    // TODO: Implement proper Python pickle support
 }
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const boost::python::api::object&)
-{
-  return os;
-}
+av::OutputStream& av::operator<<(av::OutputStream& os, const boost::python::api::object&) { return os; }
 
-av::InputStream&
-av::operator>>(av::InputStream& is, boost::python::api::object&)
-{
-  return is;
-}
+av::InputStream& av::operator>>(av::InputStream& is, boost::python::api::object&) { return is; }

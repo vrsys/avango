@@ -39,82 +39,77 @@
 
 namespace av
 {
-  namespace shade
-  {
-    class Shader;
-    typedef ::osg::LightSource OsgLightSource;
+namespace shade
+{
+class Shader;
+typedef ::osg::LightSource OsgLightSource;
+
+/**
+ * Wrapper for ::osg::LightSource and ::osg::Light
+ *
+ * \ingroup av_shade
+ */
+class AV_SHADE_DLL LightSource : public av::osg::Node
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::LightSource is created.
+     * Otherwise, the given ::osg::LightSource is used.
+     */
+    LightSource(OsgLightSource* osglightsource = new ::osg::LightSource());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LightSource();
+
+  public:
+    /**
+     * Light source number
+     */
+    SFInt LightNum;
 
     /**
-     * Wrapper for ::osg::LightSource and ::osg::Light
-     *
-     * \ingroup av_shade
+     * Light source position or direction
      */
-    class AV_SHADE_DLL LightSource : public av::osg::Node
-    {
-      AV_FC_DECLARE();
+    av::osg::SFVec4 Position;
 
-    public:
+    /**
+     * Light source position or direction gettable from a shader
+     */
+    av::SFContainer Shader;
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::LightSource is created.
-       * Otherwise, the given ::osg::LightSource is used.
-       */
-      LightSource(OsgLightSource* osglightsource = new ::osg::LightSource());
-      // use defined type to circumvent compiler bug in VS8
+    /**
+     * Get the wrapped ::osg::LightSource.
+     */
+    ::osg::LightSource* getOsgLightSource() const;
 
-    protected:
+  protected:
+    virtual void getLightNumCB(const av::SFInt::GetValueEvent& event);
+    virtual void setLightNumCB(const av::SFInt::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LightSource();
+    virtual void getPositionCB(const av::osg::SFVec4::GetValueEvent& event);
+    virtual void setPositionCB(const av::osg::SFVec4::SetValueEvent& event);
 
-    public:
+  private:
+    int getLightNum(void);
+    void setLightNum(int num);
 
-      /**
-       * Light source number
-       */
-      SFInt LightNum;
+    ::osg::LightSource* mOsgLightSource;
+    av::Link<av::shade::Shader> mGLLightPosition;
+};
 
-      /**
-       * Light source position or direction
-       */
-      av::osg::SFVec4 Position;
-
-      /**
-       * Light source position or direction gettable from a shader
-       */
-      av::SFContainer Shader;
-
-      /**
-       * Get the wrapped ::osg::LightSource.
-       */
-      ::osg::LightSource* getOsgLightSource() const;
-
-    protected:
-
-      virtual void getLightNumCB(const av::SFInt::GetValueEvent& event);
-      virtual void setLightNumCB(const av::SFInt::SetValueEvent& event);
-
-      virtual void getPositionCB(const av::osg::SFVec4::GetValueEvent& event);
-      virtual void setPositionCB(const av::osg::SFVec4::SetValueEvent& event);
-
-    private:
-
-      int getLightNum(void);
-      void setLightNum(int num);
-
-      ::osg::LightSource *mOsgLightSource;
-      av::Link<av::shade::Shader> mGLLightPosition;
-    };
-
-    typedef SingleField<Link<LightSource> > SFLightSource;
-    typedef MultiField<Link<LightSource> > MFLightSource;
-  } // namespace shade
+typedef SingleField<Link<LightSource>> SFLightSource;
+typedef MultiField<Link<LightSource>> MFLightSource;
+} // namespace shade
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<shade::LightSource> >;
-  template class AV_OSG_DLL MultiField<Link<shade::LightSource> >;
+template class AV_OSG_DLL SingleField<Link<shade::LightSource>>;
+template class AV_OSG_DLL MultiField<Link<shade::LightSource>>;
 #endif
 
 } // namespace av

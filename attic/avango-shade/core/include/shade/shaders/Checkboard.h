@@ -33,32 +33,28 @@
 #include "../types/ValueReference.h"
 #include "../types/uniform.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Checkboard : public ShaderBase<Checkboard, Gettable<vec4>>
+{
+  public:
+    /*virtual*/ vec4<Type> get(void);
+    vec4<> get_pattern(void);
 
-    class Checkboard : public ShaderBase<Checkboard, Gettable<vec4> >
-    {
-    public:
+    ValueReference<vec3, uniform> position;
+    vec3<uniform> scale;
+    ValueReference<vec4, uniform> color1;
+    ValueReference<vec4, uniform> color2;
 
-      /*virtual*/ vec4<Type> get(void);
-      vec4<> get_pattern(void);
+  private:
+    void get_inline(formatter::Generator& generator);
 
-      ValueReference<vec3, uniform> position;
-      vec3<uniform> scale;
-      ValueReference<vec4, uniform> color1;
-      ValueReference<vec4, uniform> color2;
+    SHADE_DERIVED_DECL(Checkboard, Gettable<vec4>)
+};
 
-    private:
-
-      void get_inline(formatter::Generator& generator);
-
-      SHADE_DERIVED_DECL(Checkboard, Gettable<vec4>)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Checkboard_H */

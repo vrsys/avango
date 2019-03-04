@@ -10,22 +10,21 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      using type = T;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_TriMeshNode()
 {
-  register_ptr_to_python<av::Link<av::gua::TriMeshNode> >();
+    register_ptr_to_python<av::Link<av::gua::TriMeshNode>>();
 
-  register_field<av::gua::SFTriMeshNode>("SFTriMeshNode");
-  register_multifield<av::gua::MFTriMeshNode>("MFTriMeshNode");
-  class_<av::gua::TriMeshNode, av::Link<av::gua::TriMeshNode>,
-    bases<av::gua::GeometryNode>,
-    boost::noncopyable >("TriMeshNode", "docstring", no_init);
+    register_field<av::gua::SFTriMeshNode>("SFTriMeshNode");
+    register_multifield<av::gua::MFTriMeshNode>("MFTriMeshNode");
+    class_<av::gua::TriMeshNode, av::Link<av::gua::TriMeshNode>, bases<av::gua::GeometryNode>, boost::noncopyable>("TriMeshNode", "docstring", no_init);
 }

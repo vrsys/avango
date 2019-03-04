@@ -14,66 +14,59 @@
 
 #include <avango/gua/windows_specific_gua.hpp>
 
-
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::SPointsLoader
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL SPointsLoader : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::SPointsLoader
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::SPointsLoader is created.
+     * Otherwise, the given ::gua::SPointsLoader is used.
      */
-    class AV_GUA_DLL SPointsLoader : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    SPointsLoader(::gua::SPointsLoader* guaSPointsLoader = new ::gua::SPointsLoader());
 
-    public:
+    av::Link<av::gua::Node> load(std::string const& nodename, std::string const& fileName) const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::SPointsLoader is created.
-       * Otherwise, the given ::gua::SPointsLoader is used.
-       */
-      SPointsLoader(::gua::SPointsLoader* guaSPointsLoader = new ::gua::SPointsLoader());
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~SPointsLoader();
 
-      av::Link<av::gua::Node> load( std::string const& nodename,
-                                    std::string const& fileName) const;
+  public:
+    /**
+     * Get the wrapped ::gua::SPointsLoader.
+     */
+    ::gua::SPointsLoader* getGuaSPointsLoader() const;
 
-    protected:
+  private:
+    ::gua::SPointsLoader* m_guaSPointsLoader;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~SPointsLoader();
+    av::gua::Node* createChildren(std::shared_ptr<::gua::node::Node> root) const;
 
-    public:
+    SPointsLoader(const SPointsLoader&);
+    SPointsLoader& operator=(const SPointsLoader&);
+};
 
-      /**
-       * Get the wrapped ::gua::SPointsLoader.
-       */
-      ::gua::SPointsLoader* getGuaSPointsLoader() const;
+using SFSPointsLoader = SingleField<Link<SPointsLoader>>;
+using MFSPointsLoader = MultiField<Link<SPointsLoader>>;
 
-
-    private:
-
-      ::gua::SPointsLoader *m_guaSPointsLoader;
-
-      av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
-
-      SPointsLoader(const SPointsLoader&);
-      SPointsLoader& operator=(const SPointsLoader&);
-    };
-
-    using SFSPointsLoader = SingleField<Link<SPointsLoader> >;
-    using MFSPointsLoader = MultiField<Link<SPointsLoader> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SPointsLoader> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SPointsLoader> >;
+template class AV_GUA_DLL SingleField<Link<gua::SPointsLoader>>;
+template class AV_GUA_DLL MultiField<Link<gua::SPointsLoader>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SPOINTS_LOADER_HPP
+#endif // AVANGO_GUA_SPOINTS_LOADER_HPP

@@ -32,171 +32,142 @@
 #include <avango/Reader.h>
 #include <avango/WriteAction.h>
 
-namespace {
-  av::Logger& logger(av::getLogger("av::Link"));
-}
-
-bool
-av::AnyLink::isValid() const
+namespace
 {
-  return mBasePtr != 0;
+av::Logger& logger(av::getLogger("av::Link"));
 }
 
-void
-av::AnyLink::clear()
+bool av::AnyLink::isValid() const { return mBasePtr != 0; }
+
+void av::AnyLink::clear() { AnyLink::setBasePtr(0); }
+
+av::Base* av::AnyLink::getBasePtr() const { return mBasePtr; }
+
+bool av::AnyLink::setBasePtr(Base* base)
 {
-  AnyLink::setBasePtr(0);
+    if(base && !base->getTypeId().isOfType(mTypeId))
+    {
+        return false;
+    }
+
+    if(mBasePtr)
+    {
+        mBasePtr->unreference();
+        mBasePtr = 0;
+    }
+    mBasePtr = base;
+    if(mBasePtr)
+    {
+        mBasePtr->reference();
+    }
+
+    return true;
 }
 
-av::Base*
-av::AnyLink::getBasePtr() const
-{
-  return mBasePtr;
-}
-
-bool
-av::AnyLink::setBasePtr(Base* base)
-{
-  if (base && !base->getTypeId().isOfType(mTypeId)) {
-    return false;
-  }
-
-  if (mBasePtr)
-  {
-    mBasePtr->unreference();
-    mBasePtr = 0;
-  }
-  mBasePtr = base;
-  if (mBasePtr)
-  {
-    mBasePtr->reference();
-  }
-
-  return true;
-}
-
-av::AnyLink::AnyLink(av::Base* base, av::Type typeId)
-  : mBasePtr(0), mTypeId(typeId)
-{
-  setBasePtr(base);
-}
+av::AnyLink::AnyLink(av::Base* base, av::Type typeId) : mBasePtr(0), mTypeId(typeId) { setBasePtr(base); }
 
 /* virtual */
 av::AnyLink::~AnyLink()
 {
-  if (mBasePtr)
-  {
-    mBasePtr->unreference();
-  }
-}
-
-bool
-av::operator==(const av::AnyLink& a, const av::AnyLink& b)
-{
-  return a.getBasePtr() == b.getBasePtr();
-}
-
-bool
-av::operator!=(const av::AnyLink& a, const av::AnyLink& b)
-{
-  return a.getBasePtr() != b.getBasePtr();
-}
-
-bool
-av::operator<(const av::AnyLink& a, const av::AnyLink& b)
-{
-  return a.getBasePtr() < b.getBasePtr();
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, av::AnyLink& bl)
-{
-  if (is.isBinaryEnabled())
-  {
-    if (is.getReader())
+    if(mBasePtr)
     {
-      char reference_flag;
-      (std::istream&) is >> reference_flag;
-      if (reference_flag == 'R') {
-        // object is already there, resolve reference
-        std::string obj_id;
-        is >> obj_id;
+        mBasePtr->unreference();
+    }
+}
 
-        LOG_TRACE(logger) << "operator>>(av::InputStream&, av::AnyLink&): "
-                                   << "resolving reference: "
-                                   << obj_id;
-        if (!bl.setBasePtr(is.getReader()->lookupObject(obj_id)))
+bool av::operator==(const av::AnyLink& a, const av::AnyLink& b) { return a.getBasePtr() == b.getBasePtr(); }
+
+bool av::operator!=(const av::AnyLink& a, const av::AnyLink& b) { return a.getBasePtr() != b.getBasePtr(); }
+
+bool av::operator<(const av::AnyLink& a, const av::AnyLink& b) { return a.getBasePtr() < b.getBasePtr(); }
+
+av::InputStream& av::operator>>(av::InputStream& is, av::AnyLink& bl)
+{
+    if(is.isBinaryEnabled())
+    {
+        if(is.getReader())
         {
-          AVANGO_LOG(logger,logging::WARN , boost::str(boost::format("operator>>(av::InputStream&, av::AnyLink&): type clash %1%") % obj_id))
+            char reference_flag;
+            (std::istream&)is >> reference_flag;
+            if(reference_flag == 'R')
+            {
+                // object is already there, resolve reference
+                std::string obj_id;
+                is >> obj_id;
+
+                LOG_TRACE(logger) << "operator>>(av::InputStream&, av::AnyLink&): "
+                                  << "resolving reference: " << obj_id;
+                if(!bl.setBasePtr(is.getReader()->lookupObject(obj_id)))
+                {
+                    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("operator>>(av::InputStream&, av::AnyLink&): type clash %1%") % obj_id))
+                }
+            }
+            else
+            {
+                // object is new, load it
+                LOG_TRACE(logger) << "operator>>(av::InputStream&, av::AnyLink&): reading object";
+                if(!bl.setBasePtr(is.getReader()->readObject(is)))
+                {
+                    AVANGO_LOG(logger, logging::WARN, "operator>>(av::InputStream&, av::AnyLink&): type clash.")
+                }
+            }
         }
-      }
-      else
-      {
-        // object is new, load it
-        LOG_TRACE(logger) << "operator>>(av::InputStream&, av::AnyLink&): reading object";
-        if (!bl.setBasePtr(is.getReader()->readObject(is)))
-        {
-          AVANGO_LOG(logger,logging::WARN , "operator>>(av::InputStream&, av::AnyLink&): type clash.")
-        }
-      }
+        // is.getReader()->addLink(&bl, obj_id);
     }
-    //is.getReader()->addLink(&bl, obj_id);
-  }
-  return is;
+    return is;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const av::AnyLink& bl)
+av::OutputStream& av::operator<<(av::OutputStream& os, const av::AnyLink& bl)
 {
-  Base* blptr;
-  if (bl.isValid())
-  {
-    blptr = bl.getBasePtr();
-  }
-  else
-  {
-    blptr = 0;
-  }
+    Base* blptr;
+    if(bl.isValid())
+    {
+        blptr = bl.getBasePtr();
+    }
+    else
+    {
+        blptr = 0;
+    }
 
-  if (os.isBinaryEnabled())
-  {
-    if (os.getWriteAction())
+    if(os.isBinaryEnabled())
     {
-      if (os.getWriteAction()->isObjectWritten(blptr))
-      {
-        // object is alraedy in file, only add reference
-        (std::ostream&) os << 'R';
-        os << os.getWriteAction()->lookupObjectId(blptr);
-      }
-      else
-      {
-        // object is not written, write it.
-        (std::ostream&) os << 'O';
-        // this will recurse write actions on base links
-        os.getWriteAction()->traverse(blptr);
-      }
+        if(os.getWriteAction())
+        {
+            if(os.getWriteAction()->isObjectWritten(blptr))
+            {
+                // object is alraedy in file, only add reference
+                (std::ostream&)os << 'R';
+                os << os.getWriteAction()->lookupObjectId(blptr);
+            }
+            else
+            {
+                // object is not written, write it.
+                (std::ostream&)os << 'O';
+                // this will recurse write actions on base links
+                os.getWriteAction()->traverse(blptr);
+            }
+        }
     }
-  }
-  else
-  {
-    if (os.getWriteAction())
+    else
     {
-      if (os.getWriteAction()->isObjectWritten(blptr))
-      {
-        // object is alraedy in file, only add reference
-        (std::ostream&) os << 'R';
-        (std::ostream&) os << " ";
-        (std::ostream&) os << os.getWriteAction()->lookupObjectId(blptr).c_str();
-      }
-      else
-      {
-        // object is not written, write it.
-        (std::ostream&) os << 'O';
-        (std::ostream&) os << " ";
-        // this will recurse write actions on base links
-        os.getWriteAction()->traverse(blptr);
-      }
+        if(os.getWriteAction())
+        {
+            if(os.getWriteAction()->isObjectWritten(blptr))
+            {
+                // object is alraedy in file, only add reference
+                (std::ostream&)os << 'R';
+                (std::ostream&)os << " ";
+                (std::ostream&)os << os.getWriteAction()->lookupObjectId(blptr).c_str();
+            }
+            else
+            {
+                // object is not written, write it.
+                (std::ostream&)os << 'O';
+                (std::ostream&)os << " ";
+                // this will recurse write actions on base links
+                os.getWriteAction()->traverse(blptr);
+            }
+        }
     }
-  }
-  return os;
+    return os;
 }

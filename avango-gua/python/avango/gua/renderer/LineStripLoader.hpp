@@ -3,4 +3,4 @@
 
 void init_LineStripLoader();
 
-#endif //AV_PYTHON_GUA_LINE_STRIP_LOADER_HPP
+#endif // AV_PYTHON_GUA_LINE_STRIP_LOADER_HPP

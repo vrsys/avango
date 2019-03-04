@@ -8,26 +8,22 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-       using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_TV_3SurfacePassDescription()
- {
-
-  register_ptr_to_python<av::Link<av::gua::tv_3::TV_3SurfacePassDescription> >();
-  register_field<av::gua::tv_3::SFTV_3SurfacePassDescription>("SFTV_3SurfacePassDescription");
-  register_multifield<av::gua::tv_3::MFTV_3SurfacePassDescription>("MFTV_3SurfacePassDescription");
-  class_<av::gua::tv_3::TV_3SurfacePassDescription,
-         av::Link<av::gua::tv_3::TV_3SurfacePassDescription>,
-         bases<av::gua::PipelinePassDescription>, boost::noncopyable >("TV_3SurfacePassDescription", "docstring", no_init)
-         ;
- }
-
+{
+    register_ptr_to_python<av::Link<av::gua::tv_3::TV_3SurfacePassDescription>>();
+    register_field<av::gua::tv_3::SFTV_3SurfacePassDescription>("SFTV_3SurfacePassDescription");
+    register_multifield<av::gua::tv_3::MFTV_3SurfacePassDescription>("MFTV_3SurfacePassDescription");
+    class_<av::gua::tv_3::TV_3SurfacePassDescription, av::Link<av::gua::tv_3::TV_3SurfacePassDescription>, bases<av::gua::PipelinePassDescription>, boost::noncopyable>(
+        "TV_3SurfacePassDescription", "docstring", no_init);
+}

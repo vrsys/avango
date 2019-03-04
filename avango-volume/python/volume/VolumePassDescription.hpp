@@ -3,4 +3,4 @@
 
 void init_VolumePassDescription();
 
-#endif //AV_PYTHON_GUA_VOLUME_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_VOLUME_PASS_DESCRIPTION_HPP

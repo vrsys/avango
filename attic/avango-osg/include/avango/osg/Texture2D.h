@@ -37,69 +37,63 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Texture2D OsgTexture2D;
+namespace osg
+{
+typedef ::osg::Texture2D OsgTexture2D;
+
+/**
+ * Abstract Wrapper for ::osg::Texture
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Texture2D : public Texture
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    Texture2D(OsgTexture2D* osgtexture = new OsgTexture2D());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Texture2D();
+
+  public:
+    SFImage Image;
+
+    SFInt TextureWidth;
+    SFInt TextureHeight;
 
     /**
-     * Abstract Wrapper for ::osg::Texture
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Texture2D object.
+     * \return a pointer to the texture object
      */
-    class AV_OSG_DLL Texture2D : public Texture
-    {
-      AV_FC_DECLARE();
+    ::osg::Texture2D* getOsgTexture2D() const;
 
-    public:
+  private:
+    ::osg::Texture2D* mOsgTexture2D;
 
-      /**
-       * Constructor.
-       */
-      Texture2D(OsgTexture2D* osgtexture = new OsgTexture2D());
-      // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getImageCB(const av::osg::SFImage::GetValueEvent& event);
+    virtual void setImageCB(const av::osg::SFImage::SetValueEvent& event);
+    virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+    virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Texture2D();
-
-    public:
-
-      SFImage Image;
-
-      SFInt TextureWidth;
-      SFInt TextureHeight;
-
-      /**
-       * Get the wrapped ::osg::Texture2D object.
-       * \return a pointer to the texture object
-       */
-      ::osg::Texture2D* getOsgTexture2D() const;
-
-    private:
-
-      ::osg::Texture2D* mOsgTexture2D;
-
-    protected:
-
-      virtual void getImageCB(const av::osg::SFImage::GetValueEvent& event);
-      virtual void setImageCB(const av::osg::SFImage::SetValueEvent& event);
-      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
-      virtual void getTextureHeightCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureHeightCB(const av::SFInt::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Texture2D> > SFTexture2D;
-    typedef MultiField<Link<Texture2D> > MFTexture2D;
-  } // namespace osg
+typedef SingleField<Link<Texture2D>> SFTexture2D;
+typedef MultiField<Link<Texture2D>> MFTexture2D;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Texture2D> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Texture2D> >;
+template class AV_OSG_DLL SingleField<Link<osg::Texture2D>>;
+template class AV_OSG_DLL MultiField<Link<osg::Texture2D>>;
 #endif
 
 } // namespace av

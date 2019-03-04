@@ -3,4 +3,4 @@
 
 void init_FixedConstraint();
 
-#endif //AV_PYTHON_GUA_FIXED_CONSTRAINT_HPP
+#endif // AV_PYTHON_GUA_FIXED_CONSTRAINT_HPP

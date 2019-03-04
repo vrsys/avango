@@ -34,27 +34,23 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGShader(void)
- {
-  // wrapping osg::Shader functionality
-  register_field<av::osg::SFShader>("SFShader");
-  register_multifield<av::osg::MFShader>("MFShader");
-  class_<av::osg::Shader, av::Link<av::osg::Shader>, bases<av::osg::Object>, boost::noncopyable >("Shader", "docstring", no_init);
+{
+    // wrapping osg::Shader functionality
+    register_field<av::osg::SFShader>("SFShader");
+    register_multifield<av::osg::MFShader>("MFShader");
+    class_<av::osg::Shader, av::Link<av::osg::Shader>, bases<av::osg::Object>, boost::noncopyable>("Shader", "docstring", no_init);
 
-  enum_<osg::Shader::Type>("shadertype")
-    .value("VERTEX",::osg::Shader::VERTEX)
-    .value("FRAGMENT",::osg::Shader::FRAGMENT)
-    .value("GEOMETRY",::osg::Shader::GEOMETRY)
-    .export_values()
-    ;
- }
+    enum_<osg::Shader::Type>("shadertype").value("VERTEX", ::osg::Shader::VERTEX).value("FRAGMENT", ::osg::Shader::FRAGMENT).value("GEOMETRY", ::osg::Shader::GEOMETRY).export_values();
+}

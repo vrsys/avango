@@ -19,71 +19,66 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::PipelineDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL PipelineDescription : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::PipelineDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::PipelineDescription is created.
+     * Otherwise, the given ::gua::PipelineDescription is used.
      */
-    class AV_GUA_DLL PipelineDescription : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    PipelineDescription(std::shared_ptr<::gua::PipelineDescription> const& PipelineDescription = std::shared_ptr<::gua::PipelineDescription>(new ::gua::PipelineDescription()));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~PipelineDescription();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::PipelineDescription is created.
-       * Otherwise, the given ::gua::PipelineDescription is used.
-       */
-      PipelineDescription(std::shared_ptr< ::gua::PipelineDescription> const& PipelineDescription =
-                          std::shared_ptr< ::gua::PipelineDescription>(new ::gua::PipelineDescription()));
+  public:
+    SFBool EnableABuffer;
+    SFInt ABufferSize;
+    MultiField<Link<PipelinePassDescription>> Passes;
 
-    protected:
+    virtual void getEnableABufferCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableABufferCB(const SFBool::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~PipelineDescription();
+    virtual void getABufferSizeCB(const SFInt::GetValueEvent& event);
+    virtual void setABufferSizeCB(const SFInt::SetValueEvent& event);
 
-    public:
+    virtual void getPassesCB(const MultiField<Link<PipelinePassDescription>>::GetValueEvent& event);
+    virtual void setPassesCB(const MultiField<Link<PipelinePassDescription>>::SetValueEvent& event);
 
-      SFBool EnableABuffer;
-      SFInt  ABufferSize;
-      MultiField<Link<PipelinePassDescription>>    Passes;
+    /**
+     * Get the wrapped ::gua::PipelineDescription.
+     */
+    std::shared_ptr<::gua::PipelineDescription> const& getGuaPipelineDescription() const;
 
-      virtual void getEnableABufferCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableABufferCB(const SFBool::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::PipelineDescription> m_guaPipelineDescription;
 
-      virtual void getABufferSizeCB(const SFInt::GetValueEvent& event);
-      virtual void setABufferSizeCB(const SFInt::SetValueEvent& event);
+    PipelineDescription(const PipelineDescription&);
+    PipelineDescription& operator=(const PipelineDescription&);
+};
 
-      virtual void getPassesCB(const MultiField<Link<PipelinePassDescription> >::GetValueEvent& event);
-      virtual void setPassesCB(const MultiField<Link<PipelinePassDescription> >::SetValueEvent& event);
+using SFPipelineDescription = SingleField<Link<PipelineDescription>>;
+using MFPipelineDescription = MultiField<Link<PipelineDescription>>;
 
-      /**
-       * Get the wrapped ::gua::PipelineDescription.
-       */
-      std::shared_ptr< ::gua::PipelineDescription> const& getGuaPipelineDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::PipelineDescription> m_guaPipelineDescription;
-
-      PipelineDescription(const PipelineDescription&);
-      PipelineDescription& operator=(const PipelineDescription&);
-    };
-
-    using SFPipelineDescription = SingleField<Link<PipelineDescription> >;
-    using MFPipelineDescription = MultiField<Link<PipelineDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::PipelineDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::PipelineDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::PipelineDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::PipelineDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_PIPELINE_DESCRIPTION_HPP
+#endif // AVANGO_GUA_PIPELINE_DESCRIPTION_HPP

@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::PolygonOffset"));
+av::Logger& logger(av::getLogger("av::osg::PolygonOffset"));
 }
 
 AV_FC_DEFINE(av::osg::PolygonOffset);
@@ -37,63 +37,35 @@ AV_FC_DEFINE(av::osg::PolygonOffset);
 AV_FIELD_DEFINE(av::osg::SFPolygonOffset);
 AV_FIELD_DEFINE(av::osg::MFPolygonOffset);
 
-av::osg::PolygonOffset::PolygonOffset(::osg::PolygonOffset* osgpolygonoffset) :
-  StateAttribute(osgpolygonoffset),
-  mOsgPolygonOffset(osgpolygonoffset)
+av::osg::PolygonOffset::PolygonOffset(::osg::PolygonOffset* osgpolygonoffset) : StateAttribute(osgpolygonoffset), mOsgPolygonOffset(osgpolygonoffset)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Factor,
-                            boost::bind(&PolygonOffset::getFactorCB, this, _1),
-                            boost::bind(&PolygonOffset::setFactorCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(Units,
-                            boost::bind(&PolygonOffset::getUnitsCB, this, _1),
-                            boost::bind(&PolygonOffset::setUnitsCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Factor, boost::bind(&PolygonOffset::getFactorCB, this, _1), boost::bind(&PolygonOffset::setFactorCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Units, boost::bind(&PolygonOffset::getUnitsCB, this, _1), boost::bind(&PolygonOffset::setUnitsCB, this, _1));
 }
 
-av::osg::PolygonOffset::~PolygonOffset()
-{}
+av::osg::PolygonOffset::~PolygonOffset() {}
 
-void
-av::osg::PolygonOffset::initClass()
+void av::osg::PolygonOffset::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::StateAttribute::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::StateAttribute::initClass();
 
-    AV_FC_INIT(av::osg::StateAttribute, av::osg::PolygonOffset, true);
+        AV_FC_INIT(av::osg::StateAttribute, av::osg::PolygonOffset, true);
 
-    SFPolygonOffset::initClass("av::osg::SFPolygonOffset", "av::Field");
-    MFPolygonOffset::initClass("av::osg::MFPolygonOffset", "av::Field");
+        SFPolygonOffset::initClass("av::osg::SFPolygonOffset", "av::Field");
+        MFPolygonOffset::initClass("av::osg::MFPolygonOffset", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::PolygonOffset*
-av::osg::PolygonOffset::getOsgPolygonOffset() const
-{
-  return mOsgPolygonOffset;
-}
+::osg::PolygonOffset* av::osg::PolygonOffset::getOsgPolygonOffset() const { return mOsgPolygonOffset; }
 
-/* virtual */ void
-av::osg::PolygonOffset::getFactorCB(const av::SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgPolygonOffset->getFactor();
-}
+/* virtual */ void av::osg::PolygonOffset::getFactorCB(const av::SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = mOsgPolygonOffset->getFactor(); }
 
-/* virtual */ void
-av::osg::PolygonOffset::setFactorCB(const av::SFFloat::SetValueEvent& event)
-{
-  mOsgPolygonOffset->setFactor(event.getValue());
-}
+/* virtual */ void av::osg::PolygonOffset::setFactorCB(const av::SFFloat::SetValueEvent& event) { mOsgPolygonOffset->setFactor(event.getValue()); }
 
-/* virtual */ void
-av::osg::PolygonOffset::getUnitsCB(const av::SFFloat::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgPolygonOffset->getUnits();
-}
+/* virtual */ void av::osg::PolygonOffset::getUnitsCB(const av::SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = mOsgPolygonOffset->getUnits(); }
 
-/* virtual */ void
-av::osg::PolygonOffset::setUnitsCB(const av::SFFloat::SetValueEvent& event)
-{
-  mOsgPolygonOffset->setUnits(event.getValue());
-}
+/* virtual */ void av::osg::PolygonOffset::setUnitsCB(const av::SFFloat::SetValueEvent& event) { mOsgPolygonOffset->setUnits(event.getValue()); }

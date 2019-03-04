@@ -29,21 +29,19 @@ AV_FC_DEFINE(MockFieldContainer);
 
 MockFieldContainer::MockFieldContainer()
 {
-  AV_FC_ADD_FIELD(AnIntField, 0);
-  AV_FC_ADD_FIELD(ADoubleField, 0.);
-  AV_FC_ADD_FIELD(AStringField, "value");
-  AV_FC_ADD_FIELD(AnIntMultiField, std::vector<int>());
+    AV_FC_ADD_FIELD(AnIntField, 0);
+    AV_FC_ADD_FIELD(ADoubleField, 0.);
+    AV_FC_ADD_FIELD(AStringField, "value");
+    AV_FC_ADD_FIELD(AnIntMultiField, std::vector<int>());
 }
 
-/* virtual */ MockFieldContainer::~MockFieldContainer()
-{}
+/* virtual */ MockFieldContainer::~MockFieldContainer() {}
 
 /* static */ void MockFieldContainer::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, MockFieldContainer, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, MockFieldContainer, true);
+    }
 }
-

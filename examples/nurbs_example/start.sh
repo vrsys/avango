@@ -4,8 +4,8 @@
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 # assuming a local guacmole version is located properly
-LOCAL_GUACAMOLE="$DIR/../../../guacamole-github-scholli"
-LOCAL_AVANGO="$DIR/../../../avango-github-vrsys"
+#LOCAL_GUACAMOLE="$DIR/../../../guacamole-github-scholli"
+#LOCAL_AVANGO="$DIR/../../../avango-github-vrsys"
 
 # if not, this path will be used
 GUACAMOLE=/opt/guacamole/master

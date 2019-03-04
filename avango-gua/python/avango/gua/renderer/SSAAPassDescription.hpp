@@ -3,4 +3,4 @@
 
 void init_SSAAPassDescription();
 
-#endif //AV_PYTHON_GUA_SSAA_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_SSAA_PASS_DESCRIPTION_HPP

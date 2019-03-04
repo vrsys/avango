@@ -36,254 +36,147 @@
 #include <avango/logging/LoggingEvent.h>
 #include <avango/logging/LoggerManager.h>
 
-av::logging::Logger&
-av::logging::Logger::getRootLogger()
+av::logging::Logger& av::logging::Logger::getRootLogger() { return LoggerManagerInstance::get().getRootLogger(); }
+
+av::logging::Logger& av::logging::Logger::getLogger(const std::string& name) { return LoggerManagerInstance::get().getLogger(name); }
+
+av::logging::Logger::Logger(const std::string& name, Level level) : mName(name), mLevel(level), mParent(0) {}
+
+void av::logging::Logger::setParent(Logger* parent)
 {
-  return LoggerManagerInstance::get().getRootLogger();
+    AV_ASSERT(parent);
+    mParent = parent;
 }
 
-av::logging::Logger&
-av::logging::Logger::getLogger(const std::string& name)
+av::logging::Logger::Stream av::logging::Logger::operator()(Level level) { return Stream(*this, level); }
+
+void av::logging::Logger::log(Level level, const std::string& msg)
 {
-  return LoggerManagerInstance::get().getLogger(name);
+    LoggingEvent event(*this, level, msg);
+    passMessage(event);
 }
 
-av::logging::Logger::Logger(const std::string& name, Level level) :
-  mName(name),
-  mLevel(level),
-  mParent(0)
-{}
+void av::logging::Logger::fatal(const std::string& msg) { log(FATAL, msg); }
 
-void
-av::logging::Logger::setParent(Logger* parent)
+av::logging::Logger::Stream av::logging::Logger::fatal() { return Stream(*this, FATAL); }
+
+void av::logging::Logger::error(const std::string& msg) { log(ERROR, msg); }
+
+av::logging::Logger::Stream av::logging::Logger::error() { return Stream(*this, ERROR); }
+
+void av::logging::Logger::warn(const std::string& msg) { log(WARN, msg); }
+
+av::logging::Logger::Stream av::logging::Logger::warn() { return Stream(*this, WARN); }
+
+void av::logging::Logger::info(const std::string& msg) { log(INFO, msg); }
+
+av::logging::Logger::Stream av::logging::Logger::info() { return Stream(*this, INFO); }
+
+void av::logging::Logger::debug(const std::string& msg) { log(DEBUG, msg); }
+
+av::Logger::Stream av::logging::Logger::debug() { return Stream(*this, DEBUG); }
+
+void av::logging::Logger::trace(const std::string& msg) { log(TRACE, msg); }
+
+av::logging::Logger::Stream av::logging::Logger::trace() { return Stream(*this, TRACE); }
+
+void av::logging::Logger::passMessage(LoggingEvent& event)
 {
-  AV_ASSERT(parent);
-  mParent = parent;
+    size_t listSize = mAppenders.size();
+    if(event.getLevel() <= mLevel)
+    {
+        std::lock_guard<std::mutex> lock(mAppenderMutex);
+        if(listSize == mAppenders.size())
+        {
+            std::for_each(mAppenders.begin(), mAppenders.end(), std::bind(&Appender::doAppend, std::placeholders::_1, event));
+        }
+    }
+    if(mParent)
+    {
+        mParent->passMessage(event);
+    }
 }
 
-av::logging::Logger::Stream
-av::logging::Logger::operator()(Level level)
+const std::string& av::logging::Logger::getName() const { return mName; }
+
+bool av::logging::Logger::hasParent() const { return mParent; }
+
+const av::logging::Logger& av::logging::Logger::getParent() const
 {
-  return Stream(*this, level);
+    if(mParent)
+    {
+        return *mParent;
+    }
+    else
+    {
+        AV_ASSERT(this == &getRootLogger());
+        throw std::logic_error("av::logging::Logger::getParent: Logger has no parent.");
+        return *this;
+    }
 }
 
-void
-av::logging::Logger::log(Level level, const std::string& msg)
+av::logging::Logger& av::logging::Logger::getParent()
 {
-  LoggingEvent event(*this, level, msg);
-  passMessage(event);
+    if(mParent)
+    {
+        return *mParent;
+    }
+    else
+    {
+        AV_ASSERT(this == &getRootLogger());
+        throw std::logic_error("av::logging::Logger::getParent: Logger has no parent.");
+        return *this;
+    }
 }
 
-void
-av::logging::Logger::fatal(const std::string& msg)
-{
-  log(FATAL, msg);
-}
+av::logging::Level av::logging::Logger::getLevel() const { return mLevel; }
 
-av::logging::Logger::Stream av::logging::Logger::fatal()
-{
-  return Stream(*this, FATAL);
-}
+void av::logging::Logger::setLevel(Level level) { mLevel = level; }
 
-void
-av::logging::Logger::error(const std::string& msg)
+void av::logging::Logger::addAppender(boost::shared_ptr<Appender> appender)
 {
-  log(ERROR, msg);
-}
-
-av::logging::Logger::Stream av::logging::Logger::error()
-{
-  return Stream(*this, ERROR);
-}
-
-void
-av::logging::Logger::warn(const std::string& msg)
-{
-  log(WARN, msg);
-}
-
-av::logging::Logger::Stream av::logging::Logger::warn()
-{
-  return Stream(*this, WARN);
-}
-
-void
-av::logging::Logger::info(const std::string& msg)
-{
-  log(INFO, msg);
-}
-
-av::logging::Logger::Stream av::logging::Logger::info()
-{
-  return Stream(*this, INFO);
-}
-
-void
-av::logging::Logger::debug(const std::string& msg)
-{
-  log(DEBUG, msg);
-}
-
-av::Logger::Stream av::logging::Logger::debug()
-{
-  return Stream(*this, DEBUG);
-}
-
-void
-av::logging::Logger::trace(const std::string& msg)
-{
-  log(TRACE, msg);
-}
-
-av::logging::Logger::Stream av::logging::Logger::trace()
-{
-  return Stream(*this, TRACE);
-}
-
-void
-av::logging::Logger::passMessage(LoggingEvent& event)
-{
-  size_t listSize = mAppenders.size();
-  if (event.getLevel() <= mLevel)
-  {
     std::lock_guard<std::mutex> lock(mAppenderMutex);
-    if (listSize == mAppenders.size())
+    mAppenders.insert(appender);
+}
+
+void av::logging::Logger::addConsoleAppender() { addAppender(ConsoleAppenderInstance::getAsSharedPtr()); }
+
+void av::logging::Logger::removeAppender(boost::shared_ptr<Appender> appender)
+{
+    std::lock_guard<std::mutex> lock(mAppenderMutex);
+    mAppenders.erase(appender);
+}
+
+void av::logging::Logger::removeConsoleAppender() { removeAppender(ConsoleAppenderInstance::getAsSharedPtr()); }
+
+void av::logging::Logger::removeAllAppenders()
+{
+    std::lock_guard<std::mutex> lock(mAppenderMutex);
+    mAppenders.clear();
+}
+
+bool av::logging::Logger::isActive(Level level) const { return ((!mAppenders.empty() && level <= mLevel) || (hasParent() && getParent().isActive(level))); }
+
+const std::set<boost::shared_ptr<av::logging::Appender>, av::logging::Logger::compareSharedPtrs>& av::logging::Logger::getAppenders() const { return mAppenders; }
+
+av::logging::Logger::Stream::Stream(Logger& logger, Level level) : mLogger(logger), mLevel(level), mBuf() {}
+
+av::logging::Logger::Stream::~Stream() { flush(); }
+
+void av::logging::Logger::Stream::flush()
+{
+    if(0 == mFormatter.size())
     {
-      std::for_each(mAppenders.begin(), mAppenders.end(),
-                    std::bind(&Appender::doAppend, std::placeholders::_1, event));
+        if(0 != mBuf.str().size())
+        {
+            mLogger.log(mLevel, mBuf.str());
+        }
     }
-  }
-  if (mParent)
-  {
-    mParent->passMessage(event);
-  }
-}
-
-const std::string&
-av::logging::Logger::getName() const
-{
-  return mName;
-}
-
-bool
-av::logging::Logger::hasParent() const
-{
-  return mParent;
-}
-
-const av::logging::Logger&
-av::logging::Logger::getParent() const
-{
-  if (mParent)
-  {
-    return *mParent;
-  }
-  else
-  {
-    AV_ASSERT(this == &getRootLogger());
-    throw std::logic_error("av::logging::Logger::getParent: Logger has no parent.");
-    return *this;
-  }
-}
-
-av::logging::Logger&
-av::logging::Logger::getParent()
-{
-  if (mParent)
-  {
-    return *mParent;
-  }
-  else
-  {
-    AV_ASSERT(this == &getRootLogger());
-    throw std::logic_error("av::logging::Logger::getParent: Logger has no parent.");
-    return *this;
-  }
-}
-
-av::logging::Level
-av::logging::Logger::getLevel() const
-{
-  return mLevel;
-}
-
-void
-av::logging::Logger::setLevel(Level level)
-{
-  mLevel = level;
-}
-
-void
-av::logging::Logger::addAppender(boost::shared_ptr<Appender> appender)
-{
-  std::lock_guard<std::mutex> lock(mAppenderMutex);
-  mAppenders.insert(appender);
-}
-
-void
-av::logging::Logger::addConsoleAppender()
-{
-  addAppender(ConsoleAppenderInstance::getAsSharedPtr());
-}
-
-void
-av::logging::Logger::removeAppender(boost::shared_ptr<Appender> appender)
-{
-  std::lock_guard<std::mutex> lock(mAppenderMutex);
-  mAppenders.erase(appender);
-}
-
-void
-av::logging::Logger::removeConsoleAppender()
-{
-  removeAppender(ConsoleAppenderInstance::getAsSharedPtr());
-}
-
-void
-av::logging::Logger::removeAllAppenders()
-{
-  std::lock_guard<std::mutex> lock(mAppenderMutex);
-  mAppenders.clear();
-}
-
-bool
-av::logging::Logger::isActive(Level level) const
-{
-  return ( (!mAppenders.empty() && level <= mLevel) || ( hasParent() && getParent().isActive(level)));
-}
-
-const std::set<boost::shared_ptr<av::logging::Appender>, av::logging::Logger::compareSharedPtrs >&
-av::logging::Logger::getAppenders() const
-{
-  return mAppenders;
-}
-
-av::logging::Logger::Stream::Stream(Logger& logger, Level level) :
-  mLogger(logger),
-  mLevel(level),
-  mBuf()
-{}
-
-av::logging::Logger::Stream::~Stream()
-{
-  flush();
-}
-
-void
-av::logging::Logger::Stream::flush()
-{
-  if (0 == mFormatter.size())
-  {
-    if (0 != mBuf.str().size())
+    else
     {
-      mLogger.log(mLevel, mBuf.str());
+        mLogger.log(mLevel, mFormatter.str());
     }
-  }
-  else
-  {
-    mLogger.log(mLevel, mFormatter.str());
-  }
-  mBuf.clear();
-  mBuf.str("");
-  mFormatter.clear();
+    mBuf.clear();
+    mBuf.str("");
+    mFormatter.clear();
 }

@@ -10,20 +10,20 @@
 
 namespace av
 {
-  namespace oculus
-  {
-    /**
-     * Initializes the Avango oculus library.
-     * Usage: \code av::oculus::Init::initClass(); \endcode
-     *
-     * \ingroup av_oculus
-     */
+namespace oculus
+{
+/**
+ * Initializes the Avango oculus library.
+ * Usage: \code av::oculus::Init::initClass(); \endcode
+ *
+ * \ingroup av_oculus
+ */
 
-    class AV_OCULUS_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+class AV_OCULUS_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace oculus
+} // namespace av
 
-#endif //AVANGO_OCULUS_INIT_HPP
+#endif // AVANGO_OCULUS_INIT_HPP

@@ -93,7 +93,6 @@
 #include "OSGUniform.h"
 #include "OSGVectors.h"
 
-
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "NetMatrixTransform.h"
 #endif
@@ -101,106 +100,103 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 namespace
 {
-  GLint GetMaximumTextureSize()
-  {
+GLint GetMaximumTextureSize()
+{
     GLint maxTextureSize;
-    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
     return maxTextureSize;
-  }
 }
-
+} // namespace
 
 BOOST_PYTHON_MODULE(_osg)
 {
-  init_OSGVec2();
-  init_OSGVec3();
-  init_OSGVec4();
-  init_OSGQuat();
-  init_OSGMatrix();
-  init_OSGBoundingBox();
-  init_OSGBoundingSphere();
-  init_OSGPlane();
+    init_OSGVec2();
+    init_OSGVec3();
+    init_OSGVec4();
+    init_OSGQuat();
+    init_OSGMatrix();
+    init_OSGBoundingBox();
+    init_OSGBoundingSphere();
+    init_OSGPlane();
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  init_NetMatrixTransform();
-  av::osg::network::Init::initClass();
+    init_NetMatrixTransform();
+    av::osg::network::Init::initClass();
 #endif
 
-  av::osg::Init::initClass();
+    av::osg::Init::initClass();
 
-  def("line_intersect", av::osg::lineIntersect);
+    def("line_intersect", av::osg::lineIntersect);
 
-  def("get_maximum_texture_size",GetMaximumTextureSize);
+    def("get_maximum_texture_size", GetMaximumTextureSize);
 
+    register_field<av::osg::SFDrawable>("SFDrawable");
+    register_multifield<av::osg::MFDrawable>("MFDrawable");
 
-  register_field<av::osg::SFDrawable>("SFDrawable");
-  register_multifield<av::osg::MFDrawable>("MFDrawable");
+    init_OSGIntersection();
+    init_OSGObject();
+    init_OSGNode();
 
-  init_OSGIntersection();
-  init_OSGObject();
-  init_OSGNode();
+    init_OSGGroup();
+    init_OSGTransform();
 
-  init_OSGGroup();
-  init_OSGTransform();
-
-  init_OSGCamera();
-  init_OSGCameraAttachment();
-  init_OSGCullFace();
-  init_OSGClipPlane();
-  init_OSGClipNode();
-  init_OSGDepth();
-  init_OSGBlendFunc();
-  init_OSGBoundingBoxCalculator();
-  init_OSGDrawable();
-  init_OSGGeometry();
-  init_OSGText();
-  init_OSGPanel();
-  init_OSGTexturedQuad();
-  init_OSGFog();
-  init_OSGShader();
-  init_OSGProgram();
-  init_OSGUniform();
-  init_OSGLight();
-  init_OSGLightSource();
-  init_OSGLineWidth();
-  init_OSGPolygonOffset();
-  init_OSGQuad();
-  init_OSGStateAttribute();
-  init_OSGStateSet();
-  init_OSGGeode();
-  init_OSGLayerGeode();
-  init_OSGLayerGroup();
-  init_OSGSwitch();
-  init_OSGMatrixTransform();
-  init_OSGLoadFile();
-  init_OSGSphere();
-  init_OSGBox();
-  init_OSGCapsule();
-  init_OSGAbsoluteTransform();
-  init_OSGTriangleContainer();
-  init_OSGProjection();
-  init_OSGLineSegmentIntersector();
-  init_OSGImage();
-  init_OSGImageStream();
-  init_OSGLoadImage();
-  init_OSGLoadImageStream();
-  init_OSGTexture();
-  init_OSGTexture2D();
-  init_OSGTexture2DArray();
-  init_OSGTextureCubeMap();
-
+    init_OSGCamera();
+    init_OSGCameraAttachment();
+    init_OSGCullFace();
+    init_OSGClipPlane();
+    init_OSGClipNode();
+    init_OSGDepth();
+    init_OSGBlendFunc();
+    init_OSGBoundingBoxCalculator();
+    init_OSGDrawable();
+    init_OSGGeometry();
+    init_OSGText();
+    init_OSGPanel();
+    init_OSGTexturedQuad();
+    init_OSGFog();
+    init_OSGShader();
+    init_OSGProgram();
+    init_OSGUniform();
+    init_OSGLight();
+    init_OSGLightSource();
+    init_OSGLineWidth();
+    init_OSGPolygonOffset();
+    init_OSGQuad();
+    init_OSGStateAttribute();
+    init_OSGStateSet();
+    init_OSGGeode();
+    init_OSGLayerGeode();
+    init_OSGLayerGroup();
+    init_OSGSwitch();
+    init_OSGMatrixTransform();
+    init_OSGLoadFile();
+    init_OSGSphere();
+    init_OSGBox();
+    init_OSGCapsule();
+    init_OSGAbsoluteTransform();
+    init_OSGTriangleContainer();
+    init_OSGProjection();
+    init_OSGLineSegmentIntersector();
+    init_OSGImage();
+    init_OSGImageStream();
+    init_OSGLoadImage();
+    init_OSGLoadImageStream();
+    init_OSGTexture();
+    init_OSGTexture2D();
+    init_OSGTexture2DArray();
+    init_OSGTextureCubeMap();
 }

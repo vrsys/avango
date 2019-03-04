@@ -3,4 +3,4 @@
 
 void init_TexturedQuadPassDescription();
 
-#endif //AV_PYTHON_GUA_TEXTURED_QUAD_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_TEXTURED_QUAD_PASS_DESCRIPTION_HPP

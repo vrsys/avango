@@ -6,8 +6,8 @@
 using namespace UnitTest;
 using namespace std;
 
-namespace {
-
+namespace
+{
 TEST(DefaultIsEmptyString)
 {
     MemoryOutStream const stream;
@@ -25,7 +25,9 @@ TEST(StreamingTextCopiesCharacters)
 TEST(StreamingMultipleTimesConcatenatesResult)
 {
     MemoryOutStream stream;
-    stream << "Bork" << "Foo" << "Bar";
+    stream << "Bork"
+           << "Foo"
+           << "Bar";
     CHECK_EQUAL("BorkFooBar", stream.GetText());
 }
 
@@ -61,14 +63,14 @@ TEST(StreamingFloatWritesCorrectCharacters)
 {
     MemoryOutStream stream;
     stream << 3.1415f;
-	CHECK(strstr(stream.GetText(), "3.1415"));
+    CHECK(strstr(stream.GetText(), "3.1415"));
 }
 
 TEST(StreamingDoubleWritesCorrectCharacters)
 {
-	MemoryOutStream stream;
-	stream << 3.1415;
-	CHECK(strstr(stream.GetText(), "3.1415"));
+    MemoryOutStream stream;
+    stream << 3.1415;
+    CHECK(strstr(stream.GetText(), "3.1415"));
 }
 
 TEST(StreamingPointerWritesCorrectCharacters)
@@ -101,7 +103,6 @@ TEST(StreamInitialCapacityIsMultipleOfGrowChunkSize)
     CHECK_EQUAL((int)MemoryOutStream::GROW_CHUNK_SIZE * 2, stream.GetCapacity());
 }
 
-
 TEST(ExceedingCapacityGrowsBuffer)
 {
     MemoryOutStream stream(MemoryOutStream::GROW_CHUNK_SIZE);
@@ -128,14 +129,16 @@ TEST(WritingStringLongerThanCapacityFitsInNewBuffer)
 TEST(WritingIntLongerThanCapacityFitsInNewBuffer)
 {
     MemoryOutStream stream(8);
-    stream << "aaaa" << 123456;;
+    stream << "aaaa" << 123456;
+    ;
     CHECK_EQUAL("aaaa123456", stream.GetText());
 }
 
 TEST(WritingFloatLongerThanCapacityFitsInNewBuffer)
 {
     MemoryOutStream stream(8);
-    stream << "aaaa" << 123456.0f;;
+    stream << "aaaa" << 123456.0f;
+    ;
     CHECK_EQUAL("aaaa123456.000000f", stream.GetText());
 }
 
@@ -148,4 +151,4 @@ TEST(WritingSizeTLongerThanCapacityFitsInNewBuffer)
 
 #endif
 
-}
+} // namespace

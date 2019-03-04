@@ -30,17 +30,16 @@
 
 namespace av
 {
-  class Distributed;
-  class NetNode;
+class Distributed;
+class NetNode;
 
-  // per node bookkeeping
+// per node bookkeeping
 
-  class NetInfo {
-
+class NetInfo
+{
     friend class Distributed;
 
   public:
-
     NetInfo(const NetID&, const NetNode*);
     ~NetInfo();
 
@@ -49,16 +48,14 @@ namespace av
     NetNode* getNode();
 
   private:
-
-    NetID    mId;
+    NetID mId;
     NetNode* mNode;
 
     // declared but never defined
     NetInfo();
     NetInfo(const NetInfo&);
     const NetInfo& operator=(const NetInfo&);
-
-  };
+};
 
 } // namespace av
 

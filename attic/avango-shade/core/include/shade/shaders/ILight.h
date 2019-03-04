@@ -31,27 +31,22 @@
 #include "../types/vec3.h"
 #include "../types/void.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class ILight : public ShaderBase<ILight>
+{
+  public:
+    virtual void_<> illuminate(objref<> material, vec3<> position) { return void_<>(); };
 
-    class ILight : public ShaderBase<ILight>
-    {
-    public:
+    virtual void_<> transform(objref<> coordinate_system) { return void_<>(); };
 
-      virtual void_<> illuminate(objref<> material, vec3<> position)
-      { return void_<>(); };
+  private:
+    SHADE_BASE_DECL(ILight)
+};
 
-      virtual void_<> transform(objref<> coordinate_system)
-      { return void_<>(); };
-
-    private:
-      SHADE_BASE_DECL(ILight)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_ILight_H */

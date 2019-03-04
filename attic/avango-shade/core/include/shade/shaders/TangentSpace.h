@@ -40,42 +40,38 @@
 #include "../types/const.h"
 #include "../types/ValueReference.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class TangentSpace : public ShaderBase<TangentSpace, ICoordinateSystem, Initializeable, Gettable<vec3>>
+{
+  public:
+    TangentSpace(void);
 
-    class TangentSpace : public ShaderBase<TangentSpace, ICoordinateSystem, Initializeable, Gettable<vec3> >
-    {
-    public:
+    /*virtual*/ vec4<> transform(vec4<>);
 
-      TangentSpace(void);
+    /*virtual*/ void_<> init_vertex(void);
 
-      /*virtual*/ vec4<> transform(vec4<>);
+    /*virtual*/ vec3<Type> get(void);
 
-      /*virtual*/ void_<> init_vertex(void);
+    /*virtual*/ vec3<> get_transformed_normal(void);
 
-      /*virtual*/ vec3<Type> get(void);
+    /*virtual*/ vec3<> get_transformed_eyepoint(void);
 
-      /*virtual*/ vec3<> get_transformed_normal(void);
+    ValueReference<vec4, const_> normal_map;
 
-      /*virtual*/ vec3<> get_transformed_eyepoint(void);
+  private:
+    Varying<vec3> position;
+    Varying<vec3, InverseTransformInterpolator> eyepoint;
+    vec3<local> tangent;
+    vec3<local> bitangent;
+    vec3<local> normal;
 
-      ValueReference<vec4, const_> normal_map;
+    SHADE_MULTI_DERIVED_DECL(TangentSpace, (ICoordinateSystem)(Initializeable)(Gettable<vec3>))
+};
 
-    private:
-
-      Varying<vec3> position;
-      Varying<vec3, InverseTransformInterpolator> eyepoint;
-      vec3<local> tangent;
-      vec3<local> bitangent;
-      vec3<local> normal;
-
-      SHADE_MULTI_DERIVED_DECL(TangentSpace, (ICoordinateSystem)(Initializeable)(Gettable<vec3>))
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_TangentSpace_H */

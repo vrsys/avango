@@ -35,32 +35,25 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
-
-void write_image_file(av::osg::Image* image, const std::string& name)
+namespace python
 {
-  osgDB::writeImageFile(*(image->getOsgImage()), name);
-}
-
-av::Link< av::osg::Image> read_image_file(const std::string& name)
+template <class T>
+struct pointee<av::Link<T>>
 {
-  return av::Link< av::osg::Image>(new av::osg::Image( ::osgDB::readImageFile(name) ) );
-}
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
+
+void write_image_file(av::osg::Image* image, const std::string& name) { osgDB::writeImageFile(*(image->getOsgImage()), name); }
+
+av::Link<av::osg::Image> read_image_file(const std::string& name) { return av::Link<av::osg::Image>(new av::osg::Image(::osgDB::readImageFile(name))); }
 
 void init_OSGImage(void)
 {
-  // wrapping osg::Image functionality
-  register_field<av::osg::SFImage>("SFImage");
-  register_multifield<av::osg::MFImage>("MFImage");
-  class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable >("Image", "docstring", no_init)
-    .def("write_file", write_image_file)
-    ;
-  def("read_image_file", read_image_file);
+    // wrapping osg::Image functionality
+    register_field<av::osg::SFImage>("SFImage");
+    register_multifield<av::osg::MFImage>("MFImage");
+    class_<av::osg::Image, av::Link<av::osg::Image>, bases<av::osg::Object>, boost::noncopyable>("Image", "docstring", no_init).def("write_file", write_image_file);
+    def("read_image_file", read_image_file);
 }

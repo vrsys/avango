@@ -15,84 +15,74 @@
 
 #include <avango/gua/windows_specific_gua.hpp>
 
-
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+namespace skelanim
+{
+/**
+ * Wrapper for ::gua::SkeletalAnimationLoader
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_ANIM_DLL SkeletalAnimationLoader : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    namespace skelanim {
-      /**
-       * Wrapper for ::gua::SkeletalAnimationLoader
-       *
-       * \ingroup av_gua
-       */
-      class AV_GUA_ANIM_DLL SkeletalAnimationLoader : public av::FieldContainer
-      {
-        AV_FC_DECLARE();
+  public:
+    enum Flags
+    {
+        DEFAULTS = ::gua::SkeletalAnimationLoader::DEFAULTS,
+        LOAD_MATERIALS = ::gua::SkeletalAnimationLoader::LOAD_MATERIALS,
+        OPTIMIZE_GEOMETRY = ::gua::SkeletalAnimationLoader::OPTIMIZE_GEOMETRY,
+        MAKE_PICKABLE = ::gua::SkeletalAnimationLoader::MAKE_PICKABLE,
+        NORMALIZE_SCALE = ::gua::SkeletalAnimationLoader::NORMALIZE_SCALE,
+        NORMALIZE_POSITION = ::gua::SkeletalAnimationLoader::NORMALIZE_POSITION
+    };
 
-      public:
+    /**
+     * Constructor. When called without arguments, a new ::gua::SkeletalAnimationLoader is created.
+     * Otherwise, the given ::gua::SkeletalAnimationLoader is used.
+     */
+    SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader = new ::gua::SkeletalAnimationLoader());
 
-        enum Flags {
-          DEFAULTS = ::gua::SkeletalAnimationLoader::DEFAULTS,
-          LOAD_MATERIALS = ::gua::SkeletalAnimationLoader::LOAD_MATERIALS,
-          OPTIMIZE_GEOMETRY = ::gua::SkeletalAnimationLoader::OPTIMIZE_GEOMETRY,
-          MAKE_PICKABLE = ::gua::SkeletalAnimationLoader::MAKE_PICKABLE,
-          NORMALIZE_SCALE = ::gua::SkeletalAnimationLoader::NORMALIZE_SCALE,
-          NORMALIZE_POSITION = ::gua::SkeletalAnimationLoader::NORMALIZE_POSITION
-        };
+    av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName, std::string const& fileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags = DEFAULTS) const;
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::SkeletalAnimationLoader is created.
-         * Otherwise, the given ::gua::SkeletalAnimationLoader is used.
-         */
-        SkeletalAnimationLoader(::gua::SkeletalAnimationLoader* guaSkeletalAnimationLoader = new ::gua::SkeletalAnimationLoader());
+    av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName, std::string const& fileName, Flags flags = DEFAULTS) const;
 
-        av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                       std::string const& fileName,
-                                                       av::Link<av::gua::Material> const& fallbackMaterial,
-                                                       Flags flags = DEFAULTS) const;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~SkeletalAnimationLoader();
 
-        av::Link<av::gua::Node> createGeometryFromFile(std::string const& nodeName,
-                                                       std::string const& fileName,
-                                                       Flags flags = DEFAULTS) const;
+  public:
+    /**
+     * Get the wrapped ::gua::SkeletalAnimationLoader.
+     */
+    ::gua::SkeletalAnimationLoader* getGuaSkeletalAnimationLoader() const;
 
-      protected:
+  private:
+    ::gua::SkeletalAnimationLoader* m_guaSkeletalAnimationLoader;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-  //      virtual ~SkeletalAnimationLoader();
+    av::gua::Node* createChildren(std::shared_ptr<::gua::node::Node> root) const;
 
-      public:
+    SkeletalAnimationLoader(const SkeletalAnimationLoader&);
+    SkeletalAnimationLoader& operator=(const SkeletalAnimationLoader&);
+};
 
-        /**
-         * Get the wrapped ::gua::SkeletalAnimationLoader.
-         */
-        ::gua::SkeletalAnimationLoader* getGuaSkeletalAnimationLoader() const;
+typedef SingleField<Link<SkeletalAnimationLoader>> SFSkeletalAnimationLoader;
+typedef MultiField<Link<SkeletalAnimationLoader>> MFSkeletalAnimationLoader;
 
-
-      private:
-
-        ::gua::SkeletalAnimationLoader *m_guaSkeletalAnimationLoader;
-
-        av::gua::Node* createChildren(std::shared_ptr< ::gua::node::Node> root) const;
-
-        SkeletalAnimationLoader(const SkeletalAnimationLoader&);
-        SkeletalAnimationLoader& operator=(const SkeletalAnimationLoader&);
-      };
-
-      typedef SingleField<Link<SkeletalAnimationLoader> > SFSkeletalAnimationLoader;
-      typedef MultiField<Link<SkeletalAnimationLoader> > MFSkeletalAnimationLoader;
-        
-    }
-  }
+} // namespace skelanim
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_ANIM_DLL SingleField<Link<gua::skelanim::SkeletalAnimationLoader> >;
-  template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::SkeletalAnimationLoader> >;
+template class AV_GUA_ANIM_DLL SingleField<Link<gua::skelanim::SkeletalAnimationLoader>>;
+template class AV_GUA_ANIM_DLL MultiField<Link<gua::skelanim::SkeletalAnimationLoader>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SKELETAL_ANIMATION_LOADER_HPP
+#endif // AVANGO_GUA_SKELETAL_ANIMATION_LOADER_HPP

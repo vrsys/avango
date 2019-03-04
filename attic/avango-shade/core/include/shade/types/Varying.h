@@ -29,17 +29,16 @@
 #include "../shaders/Interpolator.h"
 #include "inout.h"
 
-
 namespace shade
 {
-  template<template<class> class T, template<template<class> class> class I = shaders::Interpolator>
-  class Varying : public TypeBase<Varying<T, I>, Type>
-  {
+template <template <class> class T, template <template <class> class> class I = shaders::Interpolator>
+class Varying : public TypeBase<Varying<T, I>, Type>
+{
   public:
     Varying(void);
 
     /*virtual*/ boost::shared_ptr<Type::State> create_state(const PipelineState& ps) const;
-    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void (Shader*)>) const;
+    /*virtual*/ void collect_references(boost::shared_ptr<Type::State> state, boost::function<void(Shader*)>) const;
     /*virtual*/ void insert_references(boost::shared_ptr<Type::State>, ObjectMap&) const;
     /*virtual*/ std::string get_constructor_str(void) const;
     /*virtual*/ std::string get_uniq_id(void) const;
@@ -49,27 +48,25 @@ namespace shade
     /*virtual*/ void output_insert_property_dispatcher(boost::shared_ptr<Type::State>, Formatter* fmt, ObjectMap::Index index, const std::string& obj) const;
 
   private:
-
     class State : public Type::State
     {
-    public:
-      State(const PipelineState& ps);
+      public:
+        State(const PipelineState& ps);
 
-      ObjectMap::Index index;
-      ObjectMap::Index vertex_to_geometry_index;
-      ObjectMap::Index geometry_to_fragment_index;
+        ObjectMap::Index index;
+        ObjectMap::Index vertex_to_geometry_index;
+        ObjectMap::Index geometry_to_fragment_index;
 
-      typedef shaders::Value<T, inout<vertex_shader, fragment_shader> > VertexToFragmentValue;
-      typedef shaders::Value<T, inout<vertex_shader, geometry_shader> > VertexToGeometryValue;
-      typedef shaders::Value<T, inout<geometry_shader, fragment_shader> > GeometryToFragmentValue;
-      boost::shared_ptr<VertexToFragmentValue> vertex_to_fragment_value;
-      boost::shared_ptr<VertexToGeometryValue> vertex_to_geometry_value;
-      boost::shared_ptr<GeometryToFragmentValue> geometry_to_fragment_value;
-      boost::shared_ptr<I<T> > interpolator_value;
+        typedef shaders::Value<T, inout<vertex_shader, fragment_shader>> VertexToFragmentValue;
+        typedef shaders::Value<T, inout<vertex_shader, geometry_shader>> VertexToGeometryValue;
+        typedef shaders::Value<T, inout<geometry_shader, fragment_shader>> GeometryToFragmentValue;
+        boost::shared_ptr<VertexToFragmentValue> vertex_to_fragment_value;
+        boost::shared_ptr<VertexToGeometryValue> vertex_to_geometry_value;
+        boost::shared_ptr<GeometryToFragmentValue> geometry_to_fragment_value;
+        boost::shared_ptr<I<T>> interpolator_value;
     };
-
-  };
-}
+};
+} // namespace shade
 
 #include "impl/Varying_impl.cpp"
 

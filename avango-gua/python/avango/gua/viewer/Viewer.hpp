@@ -3,4 +3,4 @@
 
 void init_Viewer();
 
-#endif //AV_PYTHON_GUA_VIEWER_HPP
+#endif // AV_PYTHON_GUA_VIEWER_HPP

@@ -37,19 +37,19 @@
 
 namespace av
 {
-  namespace osg
-  {
-    /**
-     * Initializes the Avango OpenSceneGraph library.
-     * Usage: \code av::osg::Init::initClass(); \endcode
-     *
-     * \ingroup av_osg
-     */
-    class AV_OSG_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace osg
+{
+/**
+ * Initializes the Avango OpenSceneGraph library.
+ * Usage: \code av::osg::Init::initClass(); \endcode
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace osg
+} // namespace av
 
 #endif

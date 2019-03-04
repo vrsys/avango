@@ -45,7 +45,6 @@
 //         .value("NORMALIZE_POSITION", av::gua::NURBSLoader::NORMALIZE_POSITION)
 //         ;
 
-
 //   register_field<av::gua::SFNURBSLoader>("SFNURBSLoader");
 //   register_multifield<av::gua::MFNURBSLoader>("MFNURBSLoader");
 

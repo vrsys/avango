@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Texture2D"));
+av::Logger& logger(av::getLogger("av::osg::Texture2D"));
 }
 
 AV_FC_DEFINE(av::osg::Texture2D);
@@ -37,81 +37,47 @@ AV_FC_DEFINE(av::osg::Texture2D);
 AV_FIELD_DEFINE(av::osg::SFTexture2D);
 AV_FIELD_DEFINE(av::osg::MFTexture2D);
 
-av::osg::Texture2D::Texture2D(::osg::Texture2D* osgtexture) :
-  Texture(osgtexture),
-  mOsgTexture2D(osgtexture)
+av::osg::Texture2D::Texture2D(::osg::Texture2D* osgtexture) : Texture(osgtexture), mOsgTexture2D(osgtexture)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Image,
-                          boost::bind(&Texture2D::getImageCB, this, _1),
-                          boost::bind(&Texture2D::setImageCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(TextureWidth,
-                          boost::bind(&Texture2D::getTextureWidthCB, this, _1),
-                          boost::bind(&Texture2D::setTextureWidthCB, this, _1));
-  AV_FC_ADD_ADAPTOR_FIELD(TextureHeight,
-                          boost::bind(&Texture2D::getTextureHeightCB, this, _1),
-                          boost::bind(&Texture2D::setTextureHeightCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Image, boost::bind(&Texture2D::getImageCB, this, _1), boost::bind(&Texture2D::setImageCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(TextureWidth, boost::bind(&Texture2D::getTextureWidthCB, this, _1), boost::bind(&Texture2D::setTextureWidthCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(TextureHeight, boost::bind(&Texture2D::getTextureHeightCB, this, _1), boost::bind(&Texture2D::setTextureHeightCB, this, _1));
 }
 
 /* virtual */
-av::osg::Texture2D::~Texture2D()
-{}
+av::osg::Texture2D::~Texture2D() {}
 
-/* static */ void
-av::osg::Texture2D::initClass()
+/* static */ void av::osg::Texture2D::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Object::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Object::initClass();
 
-    AV_FC_INIT(av::osg::Texture, av::osg::Texture2D, true);
+        AV_FC_INIT(av::osg::Texture, av::osg::Texture2D, true);
 
-    SFTexture2D::initClass("av::osg::SFTexture2D", "av::Field");
-    MFTexture2D::initClass("av::osg::MFTexture2D", "av::Field");
+        SFTexture2D::initClass("av::osg::SFTexture2D", "av::Field");
+        MFTexture2D::initClass("av::osg::MFTexture2D", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::Texture2D*
-av::osg::Texture2D::getOsgTexture2D() const {
-  return mOsgTexture2D;
-}
+::osg::Texture2D* av::osg::Texture2D::getOsgTexture2D() const { return mOsgTexture2D; }
 
-/* virtual */ void
-av::osg::Texture2D::getImageCB(const av::osg::SFImage::GetValueEvent& event)
+/* virtual */ void av::osg::Texture2D::getImageCB(const av::osg::SFImage::GetValueEvent& event) { *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Image>(mOsgTexture2D->getImage()); }
+
+/* virtual */ void av::osg::Texture2D::setImageCB(const av::osg::SFImage::SetValueEvent& event)
 {
-  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::Image>(mOsgTexture2D->getImage());
+    if(event.getValue().isValid())
+    {
+        mOsgTexture2D->setImage(event.getValue()->getOsgImage());
+    }
 }
 
-/* virtual */ void
-av::osg::Texture2D::setImageCB(const av::osg::SFImage::SetValueEvent& event)
-{
-  if (event.getValue().isValid())
-  {
-    mOsgTexture2D->setImage(event.getValue()->getOsgImage());
-  }
-}
+/* virtual */ void av::osg::Texture2D::getTextureWidthCB(const av::SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth(); }
 
-/* virtual */ void
-av::osg::Texture2D::getTextureWidthCB(const av::SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth();
-}
+/* virtual */ void av::osg::Texture2D::setTextureWidthCB(const av::SFInt::SetValueEvent& event) { mOsgTexture2D->setTextureWidth(event.getValue()); }
 
-/* virtual */ void
-av::osg::Texture2D::setTextureWidthCB(const av::SFInt::SetValueEvent& event)
-{
-  mOsgTexture2D->setTextureWidth(event.getValue());
-}
+/* virtual */ void av::osg::Texture2D::getTextureHeightCB(const av::SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth(); }
 
-/* virtual */ void
-av::osg::Texture2D::getTextureHeightCB(const av::SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgTexture2D->getTextureWidth();
-}
-
-/* virtual */ void
-av::osg::Texture2D::setTextureHeightCB(const av::SFInt::SetValueEvent& event)
-{
-  mOsgTexture2D->setTextureHeight(event.getValue());
-}
+/* virtual */ void av::osg::Texture2D::setTextureHeightCB(const av::SFInt::SetValueEvent& event) { mOsgTexture2D->setTextureHeight(event.getValue()); }

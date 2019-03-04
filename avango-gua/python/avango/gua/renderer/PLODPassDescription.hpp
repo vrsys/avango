@@ -3,4 +3,4 @@
 
 void init_PLODPassDescription();
 
-#endif //AV_PYTHON_GUA_PLOD_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_PLOD_PASS_DESCRIPTION_HPP

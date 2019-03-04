@@ -29,18 +29,16 @@
 
 namespace
 {
-  class NetLockFixture {
-    public:
-      NetLockFixture() { av::NetLock::initClass(); }
-  };
+class NetLockFixture
+{
+  public:
+    NetLockFixture() { av::NetLock::initClass(); }
+};
 
-  TEST_FIXTURE(NetLockFixture, InitializeNetLock)
-  {
-    CHECK(av::Type::getByName("av::NetLock") != av::Type::badType());
-  }
+TEST_FIXTURE(NetLockFixture, InitializeNetLock) { CHECK(av::Type::getByName("av::NetLock") != av::Type::badType()); }
 
-  TEST_FIXTURE(NetLockFixture, CheckProtocol)
-  {
+TEST_FIXTURE(NetLockFixture, CheckProtocol)
+{
     av::Link<av::NetLock> lock(new av::NetLock);
 
     // Lock is initially not granted, we are the first one
@@ -67,7 +65,6 @@ namespace
     lock->Request.setValue("Test2");
     av::ApplicationInstance::get().evaluate();
     CHECK_EQUAL(std::string("Test2"), lock->Granted.getValue());
-  }
-
-
 }
+
+} // namespace

@@ -8,23 +8,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_CollisionShape()
 {
-  register_field<av::gua::SFCollisionShape>("SFCollisionShape");
-  register_multifield<av::gua::MFCollisionShape>("MFCollisionShape");
+    register_field<av::gua::SFCollisionShape>("SFCollisionShape");
+    register_multifield<av::gua::MFCollisionShape>("MFCollisionShape");
 
-  class_<av::gua::CollisionShape,
-         av::Link<av::gua::CollisionShape>,
-         bases<av::FieldContainer>, boost::noncopyable >("CollisionShape",
-                                                    "docstring", no_init);
+    class_<av::gua::CollisionShape, av::Link<av::gua::CollisionShape>, bases<av::FieldContainer>, boost::noncopyable>("CollisionShape", "docstring", no_init);
 }

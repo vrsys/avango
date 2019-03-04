@@ -24,7 +24,6 @@
 #ifndef shade_Component_H
 #define shade_Component_H shade_Component_H
 
-
 #include <shade/Formatter.h>
 #include <shade/Type.h>
 #include <shade/Shader.h>
@@ -37,14 +36,11 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-
-  class Component
-  {
+class Component
+{
   public:
-
     Component(boost::shared_ptr<Shader> shader);
 
     bool has_entry(ShaderEnvironment env);
@@ -61,10 +57,9 @@ namespace shade
     void upload(boost::shared_ptr<GLSLWrapper>);
     bool requires_upload(void);
 
-    typedef std::map< const std::type_info*, std::list<int> > Classbins;
+    typedef std::map<const std::type_info*, std::list<int>> Classbins;
 
   private:
-
     void output_attribute(Formatter& fmt, const Type&) const;
     void output_property_dispatcher(Formatter& fmt, std::pair<const Type*, ObjectMap::Index>) const;
 
@@ -81,12 +76,12 @@ namespace shade
 
     struct TypeState
     {
-      shade::Type::connection connection;
-      std::string obj_id;
-      std::string name;
-      std::string full_name;
-      shade::Type::LinkIndex link_index;
-      boost::shared_ptr<Type::State> state;
+        shade::Type::connection connection;
+        std::string obj_id;
+        std::string name;
+        std::string full_name;
+        shade::Type::LinkIndex link_index;
+        boost::shared_ptr<Type::State> state;
     };
 
     typedef std::map<const shade::Type*, TypeState> attribute_map;
@@ -97,8 +92,8 @@ namespace shade
     PipelineState m_pipeline_state;
 
     std::string m_sources;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_Component_H */

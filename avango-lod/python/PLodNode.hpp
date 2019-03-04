@@ -3,4 +3,4 @@
 
 void init_PLodNode();
 
-#endif //AV_PYTHON_GUA_LOD_PLOD_NODE_HPP
+#endif // AV_PYTHON_GUA_LOD_PLOD_NODE_HPP

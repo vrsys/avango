@@ -15,75 +15,70 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::SceneGraph
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL SceneGraph : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::SceneGraph
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Node is created.
+     * Otherwise, the given ::gua::Node is used.
      */
-    class AV_GUA_DLL SceneGraph : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    SceneGraph(::gua::SceneGraph* guaSceneGraph = new ::gua::SceneGraph());
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    // virtual ~SceneGraph();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Node is created.
-       * Otherwise, the given ::gua::Node is used.
-       */
-      SceneGraph(::gua::SceneGraph* guaSceneGraph = new ::gua::SceneGraph());
+  public:
+    /**
+     * Children field is read only!
+     */
+    SingleField<Link<Node>> Root;
 
-    protected:
+    SFString Name;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      //virtual ~SceneGraph();
+    void updateCache() const;
 
-    public:
+    /**
+     * Get the wrapped ::gua::Node.
+     */
+    ::gua::SceneGraph* getGuaSceneGraph() const;
 
-      /**
-       * Children field is read only!
-       */
-      SingleField<Link<Node>> Root;
+  public:
+    virtual void getRootCB(const SingleField<Link<Node>>::GetValueEvent& event);
+    virtual void setRootCB(const SingleField<Link<Node>>::SetValueEvent& event);
 
-      SFString Name;
+    virtual void getNameCB(const SFString::GetValueEvent& event);
+    virtual void setNameCB(const SFString::SetValueEvent& event);
 
-      void updateCache() const;
+  private:
+    ::gua::SceneGraph* m_guaSceneGraph;
+    av::Link<av::gua::Node> m_root;
 
-      /**
-       * Get the wrapped ::gua::Node.
-       */
-      ::gua::SceneGraph* getGuaSceneGraph() const;
+    SceneGraph(const SceneGraph&);
+    SceneGraph& operator=(const SceneGraph&);
+};
 
-    public:
+using SFSceneGraph = SingleField<Link<SceneGraph>>;
+using MFSceneGraph = MultiField<Link<SceneGraph>>;
 
-      virtual void getRootCB(const SingleField<Link<Node> >::GetValueEvent& event);
-      virtual void setRootCB(const SingleField<Link<Node> >::SetValueEvent& event);
-
-      virtual void getNameCB(const SFString::GetValueEvent& event);
-      virtual void setNameCB(const SFString::SetValueEvent& event);
-
-    private:
-
-      ::gua::SceneGraph *m_guaSceneGraph;
-      av::Link<av::gua::Node> m_root;
-
-      SceneGraph(const SceneGraph&);
-      SceneGraph& operator=(const SceneGraph&);
-    };
-
-    using SFSceneGraph = SingleField<Link<SceneGraph> >;
-    using MFSceneGraph = MultiField<Link<SceneGraph> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SceneGraph> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SceneGraph> >;
+template class AV_GUA_DLL SingleField<Link<gua::SceneGraph>>;
+template class AV_GUA_DLL MultiField<Link<gua::SceneGraph>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SCENEGRAPH_HPP
+#endif // AVANGO_GUA_SCENEGRAPH_HPP

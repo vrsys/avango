@@ -30,22 +30,20 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+template <template <class> class T>
+class Settable : public TemplateT<T, Type, Settable>
+{
+  public:
+    virtual T<Type> set(T<Type> arg) { return T<Type>(); };
 
-    template<template<class> class T> class Settable : public TemplateT<T, Type, Settable>
-    {
-    public:
+  private:
+    SHADE_TEMPLATE_T_BASE_DECL(T, Settable)
+};
 
-      virtual T<Type> set(T<Type> arg)
-      { return T<Type>(); };
-
-    private:
-      SHADE_TEMPLATE_T_BASE_DECL(T, Settable)
-    };
-
-    SHADE_TEMPLATE_T_INIT(Settable, "", SHADE_DEFS((set)), SHADE_NONE)
-  }
-}
+SHADE_TEMPLATE_T_INIT(Settable, "", SHADE_DEFS((set)), SHADE_NONE)
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Settable_H */

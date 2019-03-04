@@ -8,20 +8,16 @@
 
 struct RecordingReporter : public UnitTest::TestReporter
 {
-private:
-    enum { kMaxStringLength = 256 };
+  private:
+    enum
+    {
+        kMaxStringLength = 256
+    };
 
-public:
+  public:
     RecordingReporter()
-        : testRunCount(0)
-        , testFailedCount(0)
-        , lastFailedLine(0)
-        , testFinishedCount(0)
-        , lastFinishedTestTime(0)
-        , summaryTotalTestCount(0)
-        , summaryFailedTestCount(0)
-        , summaryFailureCount(0)
-        , summarySecondsElapsed(0)
+        : testRunCount(0), testFailedCount(0), lastFailedLine(0), testFinishedCount(0), lastFinishedTestTime(0), summaryTotalTestCount(0), summaryFailedTestCount(0), summaryFailureCount(0),
+          summarySecondsElapsed(0)
     {
         lastStartedSuite[0] = '\0';
         lastStartedTest[0] = '\0';
@@ -35,7 +31,7 @@ public:
 
     virtual void ReportTestStart(UnitTest::TestDetails const& test)
     {
-		using namespace std;
+        using namespace std;
 
         ++testRunCount;
         strcpy(lastStartedSuite, test.suiteName);
@@ -44,9 +40,9 @@ public:
 
     virtual void ReportFailure(UnitTest::TestDetails const& test, char const* failure)
     {
-		using namespace std;
+        using namespace std;
 
-		++testFailedCount;
+        ++testFailedCount;
         strcpy(lastFailedFile, test.filename);
         lastFailedLine = test.lineNumber;
         strcpy(lastFailedSuite, test.suiteName);
@@ -56,15 +52,15 @@ public:
 
     virtual void ReportTestFinish(UnitTest::TestDetails const& test, float testDuration)
     {
-		using namespace std;
+        using namespace std;
 
-		++testFinishedCount;
+        ++testFinishedCount;
         strcpy(lastFinishedSuite, test.suiteName);
         strcpy(lastFinishedTest, test.testName);
         lastFinishedTestTime = testDuration;
     }
 
-    virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed) 
+    virtual void ReportSummary(int totalTestCount, int failedTestCount, int failureCount, float secondsElapsed)
     {
         summaryTotalTestCount = totalTestCount;
         summaryFailedTestCount = failedTestCount;
@@ -93,6 +89,5 @@ public:
     int summaryFailureCount;
     float summarySecondsElapsed;
 };
-
 
 #endif

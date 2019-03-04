@@ -41,29 +41,26 @@
 
 namespace av
 {
+// types, exported (class, enum, struct, union, typedef)
 
-  // types, exported (class, enum, struct, union, typedef)
-
-  /**
-   * Abstract base class for all classes who wish to run under the
-   * runtime type system. The Typed class is an abstract base class.
-   * It provides runtime typing for derived classes.
-   *
-   * The Typed class provides a complex macro package which must
-   * be used by derived classes in order for runtime typing to work.
-   *
-   * \see AV_TYPED_DECLARE()
-   *
-   * \todo Use ::abort, ::exit, libfp::clean_exit or exceptions?
-   * \bug AV_TYPED_DECLAREd functions are undocumented
-   *
-   * \ingroup av
-   */
-  class AV_DLL Typed
-  {
-
+/**
+ * Abstract base class for all classes who wish to run under the
+ * runtime type system. The Typed class is an abstract base class.
+ * It provides runtime typing for derived classes.
+ *
+ * The Typed class provides a complex macro package which must
+ * be used by derived classes in order for runtime typing to work.
+ *
+ * \see AV_TYPED_DECLARE()
+ *
+ * \todo Use ::abort, ::exit, libfp::clean_exit or exceptions?
+ * \bug AV_TYPED_DECLAREd functions are undocumented
+ *
+ * \ingroup av
+ */
+class AV_DLL Typed
+{
   public:
-
     /**
      * Constructor
      */
@@ -93,18 +90,16 @@ namespace av
     virtual Type getTypeId() const = 0;
 
   private:
-
     static Type sClassTypeId;
+};
 
-  };
+// variables, exported (extern)
 
-  // variables, exported (extern)
+// functions, inlined (inline)
 
-  // functions, inlined (inline)
+// functions, exported (extern)
 
-  // functions, exported (extern)
-
-}
+} // namespace av
 
 // subclassing macros
 
@@ -114,14 +109,15 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_TYPED_DECLARE()                      \
-  public:                                       \
-  static void initClass();                      \
-  static ::av::Type getClassTypeId();             \
-  static bool isTypeInitialized();              \
-  ::av::Type    getTypeId() const;                \
-private:                                        \
-static ::av::Type sClassTypeId
+#define AV_TYPED_DECLARE()                                                                                                                                                                             \
+  public:                                                                                                                                                                                              \
+    static void initClass();                                                                                                                                                                           \
+    static ::av::Type getClassTypeId();                                                                                                                                                                \
+    static bool isTypeInitialized();                                                                                                                                                                   \
+    ::av::Type getTypeId() const;                                                                                                                                                                      \
+                                                                                                                                                                                                       \
+  private:                                                                                                                                                                                             \
+    static ::av::Type sClassTypeId
 
 /**
  * This macro must be called in the definition of all abstract classes
@@ -129,13 +125,14 @@ static ::av::Type sClassTypeId
  *
  * \ingroup av
  */
-#define AV_TYPED_DECLARE_ABSTRACT()             \
-  public:                                       \
-  static void      initClass();                 \
-  static ::av::Type  getClassTypeId();            \
-  static bool      isTypeInitialized();         \
-private:                                        \
-static ::av::Type sClassTypeId
+#define AV_TYPED_DECLARE_ABSTRACT()                                                                                                                                                                    \
+  public:                                                                                                                                                                                              \
+    static void initClass();                                                                                                                                                                           \
+    static ::av::Type getClassTypeId();                                                                                                                                                                \
+    static bool isTypeInitialized();                                                                                                                                                                   \
+                                                                                                                                                                                                       \
+  private:                                                                                                                                                                                             \
+    static ::av::Type sClassTypeId
 
 /**
  * This macro must be called at toplevel for all abstract classes
@@ -145,19 +142,14 @@ static ::av::Type sClassTypeId
  *
  * \ingroup av
  */
-#define AV_TYPED_DEFINE_ABSTRACT(thisClass)                     \
-  ::av::Type                                                      \
-  thisClass::getClassTypeId()                                   \
-  {                                                             \
-    AV_ASSERT(::av::Type::badType() != sClassTypeId);             \
-    return sClassTypeId;                                        \
-  }                                                             \
-  bool                                                          \
-  thisClass::isTypeInitialized()                                \
-  {                                                             \
-    return ::av::Type::badType() != sClassTypeId;                 \
-  }                                                             \
-  ::av::Type thisClass::sClassTypeId = ::av::Type::badType();
+#define AV_TYPED_DEFINE_ABSTRACT(thisClass)                                                                                                                                                            \
+    ::av::Type thisClass::getClassTypeId()                                                                                                                                                             \
+    {                                                                                                                                                                                                  \
+        AV_ASSERT(::av::Type::badType() != sClassTypeId);                                                                                                                                              \
+        return sClassTypeId;                                                                                                                                                                           \
+    }                                                                                                                                                                                                  \
+    bool thisClass::isTypeInitialized() { return ::av::Type::badType() != sClassTypeId; }                                                                                                              \
+    ::av::Type thisClass::sClassTypeId = ::av::Type::badType();
 
 /**
  * This macro must be called at toplevel for all concrete classes
@@ -167,14 +159,13 @@ static ::av::Type sClassTypeId
  *
  * \ingroup av
  */
-#define AV_TYPED_DEFINE(thisClass)                      \
-  ::av::Type                                              \
-  thisClass::getTypeId() const                          \
-  {                                                     \
-    AV_ASSERT(::av::Type::badType() != sClassTypeId);     \
-    return sClassTypeId;                                \
-  }                                                     \
-  AV_TYPED_DEFINE_ABSTRACT(thisClass)
+#define AV_TYPED_DEFINE(thisClass)                                                                                                                                                                     \
+    ::av::Type thisClass::getTypeId() const                                                                                                                                                            \
+    {                                                                                                                                                                                                  \
+        AV_ASSERT(::av::Type::badType() != sClassTypeId);                                                                                                                                              \
+        return sClassTypeId;                                                                                                                                                                           \
+    }                                                                                                                                                                                                  \
+    AV_TYPED_DEFINE_ABSTRACT(thisClass)
 
 /**
  * This macro must be called in DerivedClass::initClass() for all
@@ -186,17 +177,15 @@ static ::av::Type sClassTypeId
  *
  * \ingroup av
  */
-#define AV_TYPED_INIT(parentClass, thisClass, create, isPublic) \
-  do {                                                          \
-    if (::av::Type::badType() == sClassTypeId) {                  \
-      sClassTypeId =                                            \
-        ::av::Type::createType(::av::Type::getByName(#parentClass), \
-                               #thisClass,                        \
-                               create,                            \
-                               isPublic);                         \
-      AV_ASSERT(::av::Type::badType() != sClassTypeId);           \
-    }                                                           \
-  } while (0)
+#define AV_TYPED_INIT(parentClass, thisClass, create, isPublic)                                                                                                                                        \
+    do                                                                                                                                                                                                 \
+    {                                                                                                                                                                                                  \
+        if(::av::Type::badType() == sClassTypeId)                                                                                                                                                      \
+        {                                                                                                                                                                                              \
+            sClassTypeId = ::av::Type::createType(::av::Type::getByName(#parentClass), #thisClass, create, isPublic);                                                                                  \
+            AV_ASSERT(::av::Type::badType() != sClassTypeId);                                                                                                                                          \
+        }                                                                                                                                                                                              \
+    } while(0)
 
 /**
  * This macro must be called in DerivedClass::initClass() for all
@@ -208,15 +197,14 @@ static ::av::Type sClassTypeId
  *
  * \ingroup av
  */
-#define AV_TYPED_INIT_ABSTRACT(parentClass, thisClass, isPublic)        \
-  do {                                                                  \
-    if (::av::Type::badType() == sClassTypeId) {                          \
-      sClassTypeId =                                                    \
-        ::av::Type::createAbstractType(::av::Type::getByName(#parentClass), \
-                                       #thisClass,                        \
-                                       isPublic);                         \
-      AV_ASSERT(::av::Type::badType() != sClassTypeId);                   \
-    }                                                                   \
-  } while (0)
+#define AV_TYPED_INIT_ABSTRACT(parentClass, thisClass, isPublic)                                                                                                                                       \
+    do                                                                                                                                                                                                 \
+    {                                                                                                                                                                                                  \
+        if(::av::Type::badType() == sClassTypeId)                                                                                                                                                      \
+        {                                                                                                                                                                                              \
+            sClassTypeId = ::av::Type::createAbstractType(::av::Type::getByName(#parentClass), #thisClass, isPublic);                                                                                  \
+            AV_ASSERT(::av::Type::badType() != sClassTypeId);                                                                                                                                          \
+        }                                                                                                                                                                                              \
+    } while(0)
 
 #endif // #if !defined(AV_TYPED_H)

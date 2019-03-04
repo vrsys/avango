@@ -37,72 +37,67 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::BlendFunc OsgBlendFunc;
+namespace osg
+{
+typedef ::osg::BlendFunc OsgBlendFunc;
+
+/**
+ * Wrapper for ::osg::BlendFunc
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL BlendFunc : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::BlendFunc is created.
+     * Otherwise, the given ::osg::BlendFunc is used.
+     */
+    BlendFunc(OsgBlendFunc* osgblendfunc = new OsgBlendFunc());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~BlendFunc();
+
+  public:
+    SFInt SourceRGB;
+    SFInt SourceAlpha;
+    SFInt DestinationRGB;
+    SFInt DestinationAlpha;
 
     /**
-     * Wrapper for ::osg::BlendFunc
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::BlendFunc.
      */
-    class AV_OSG_DLL BlendFunc : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::BlendFunc* getOsgBlendFunc() const;
 
-    public:
+  protected:
+    virtual void getSourceRGBCB(const av::SFInt::GetValueEvent& event);
+    virtual void setSourceRGBCB(const av::SFInt::SetValueEvent& event);
+    virtual void getSourceAlphaCB(const av::SFInt::GetValueEvent& event);
+    virtual void setSourceAlphaCB(const av::SFInt::SetValueEvent& event);
+    virtual void getDestinationRGBCB(const av::SFInt::GetValueEvent& event);
+    virtual void setDestinationRGBCB(const av::SFInt::SetValueEvent& event);
+    virtual void getDestinationAlphaCB(const av::SFInt::GetValueEvent& event);
+    virtual void setDestinationAlphaCB(const av::SFInt::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::BlendFunc is created.
-       * Otherwise, the given ::osg::BlendFunc is used.
-       */
-      BlendFunc(OsgBlendFunc* osgblendfunc = new OsgBlendFunc());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::BlendFunc* mOsgBlendFunc;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~BlendFunc();
-
-    public:
-
-      SFInt SourceRGB;
-      SFInt SourceAlpha;
-      SFInt DestinationRGB;
-      SFInt DestinationAlpha;
-
-      /**
-       * Get the wrapped ::osg::BlendFunc.
-       */
-      ::osg::BlendFunc* getOsgBlendFunc() const;
-
-    protected:
-
-      virtual void getSourceRGBCB(const av::SFInt::GetValueEvent& event);
-      virtual void setSourceRGBCB(const av::SFInt::SetValueEvent& event);
-      virtual void getSourceAlphaCB(const av::SFInt::GetValueEvent& event);
-      virtual void setSourceAlphaCB(const av::SFInt::SetValueEvent& event);
-      virtual void getDestinationRGBCB(const av::SFInt::GetValueEvent& event);
-      virtual void setDestinationRGBCB(const av::SFInt::SetValueEvent& event);
-      virtual void getDestinationAlphaCB(const av::SFInt::GetValueEvent& event);
-      virtual void setDestinationAlphaCB(const av::SFInt::SetValueEvent& event);
-
-    private:
-
-      ::osg::BlendFunc *mOsgBlendFunc;
-    };
-
-    typedef SingleField<Link<BlendFunc> > SFBlendFunc;
-    typedef MultiField<Link<BlendFunc> > MFBlendFunc;
-  }
+typedef SingleField<Link<BlendFunc>> SFBlendFunc;
+typedef MultiField<Link<BlendFunc>> MFBlendFunc;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::BlendFunc> >;
-  template class AV_OSG_DLL MultiField<Link<osg::BlendFunc> >;
+template class AV_OSG_DLL SingleField<Link<osg::BlendFunc>>;
+template class AV_OSG_DLL MultiField<Link<osg::BlendFunc>>;
 #endif
 
-}
+} // namespace av
 
 #endif

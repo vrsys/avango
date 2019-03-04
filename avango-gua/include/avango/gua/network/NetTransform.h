@@ -39,95 +39,89 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+class SharedContainerHolder;
+/**
+ *  \container_doc
+ *   this works like fpDCS exept that the children are sorted by creator.
+ *   each creator has an own group node here which is well known.
+ *  \end_container_doc
+ */
+class AV_GUA_DLL NetTransform : public TransformNode, public NetNode
+{
+    AV_FC_DECLARE();
 
+  public:
+    using EIDGrpMap = std::unordered_set<std::string>;
+    NetTransform();
+    virtual ~NetTransform();
 
-    class SharedContainerHolder;
+    // the fields for the network part
+
     /**
-     *  \container_doc
-     *   this works like fpDCS exept that the children are sorted by creator.
-     *   each creator has an own group node here which is well known.
-     *  \end_container_doc
+     *  The Groupname field specifies the string identifier for the distribution
+     *  group this node will represent. The empty string will result in no distribution.
      */
-    class AV_GUA_DLL NetTransform : public TransformNode, public NetNode {
+    SFString Groupname; ///< distribution group name
 
-      AV_FC_DECLARE();
+    /**
+     *  The Members field gives the endponit identifiers for all processes
+     *  currently participating in this distribution group.
+     */
+    MFString Members;             ///< distribution group members
+    MFString NewMembers;          ///< newly added members since last update
+    MFString DepartedMembers;     ///< departed members since last update
+    SFString NetId;               ///< endpoint id of the current process
+    MFContainer SharedContainers; ///< list of containers shared by all members
 
-    public:
+    // tell our clients we joined ( virtual from NetNode )
+    /* virtual */ void _join(const std::string& fragment);
 
-      using EIDGrpMap = std::unordered_set<std::string>;
-      NetTransform();
-      virtual ~NetTransform();
+    // overloaded from NetNode to react to view changes
+    /* virtual */ void _acceptNewView(const std::vector<std::string>&, const std::vector<std::string>&, const std::vector<std::string>&);
 
-      // the fields for the network part
+    // overloaded to participate in state transfers
+    /* virtual */ void _getStateFragment(const std::string& fragment, Msg& stateMsg);
+    /* virtual */ void _setStateFragment(const std::string& fragment, Msg& stateMsg);
+    /* virtual */ void _removeStateFragment(const std::string& fragment);
 
-      /**
-       *  The Groupname field specifies the string identifier for the distribution
-       *  group this node will represent. The empty string will result in no distribution.
-       */
-      SFString Groupname;       ///< distribution group name
+    // notification uplink from fragment groups
+    void fragmentChildrenChanged();
+    // notification uplink from shared containers node
+    void sharedContainersChanged();
 
-      /**
-       *  The Members field gives the endponit identifiers for all processes
-       *  currently participating in this distribution group.
-       */
-      MFString Members;         ///< distribution group members
-      MFString NewMembers;      ///< newly added members since last update
-      MFString DepartedMembers; ///< departed members since last update
-      SFString NetId;           ///< endpoint id of the current process
-      MFContainer SharedContainers; ///< list of containers shared by all members
+  protected:
+    /// function description
+    /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
 
-      // tell our clients we joined ( virtual from NetNode )
-      /* virtual */ void _join(const std::string& fragment);
+    /// function description
+    /* virtual */ void evaluate();
 
-      // overloaded from NetNode to react to view changes
-      /* virtual */ void _acceptNewView(const std::vector<std::string>&,
-                                        const std::vector<std::string>&,
-                                        const std::vector<std::string>&);
+  protected:
+    // reimplemented as no-op
+    /* virtual */ void refImpl();
+    /* virtual */ void unrefImpl();
+    /* virtual */ int refCountImpl();
 
-      // overloaded to participate in state transfers
-      /* virtual */ void _getStateFragment(const std::string& fragment, Msg& stateMsg);
-      /* virtual */ void _setStateFragment(const std::string& fragment, Msg& stateMsg);
-      /* virtual */ void _removeStateFragment(const std::string& fragment);
+    virtual void getSharedContainersCB(const MFContainer::GetValueEvent& event);
+    virtual void setSharedContainersCB(const MFContainer::SetValueEvent& event);
 
-      // notification uplink from fragment groups
-      void fragmentChildrenChanged();
-      // notification uplink from shared containers node
-      void sharedContainersChanged();
-    protected:
+  private:
+    // the current view, meaning the current set of participants in this group
+    EIDGrpMap mGroupMap;
 
-      /// function description
-      /* virtual */  void fieldHasChangedLocalSideEffect(const Field&);
+    using SharedContainerMap = std::unordered_map<std::string, Link<SharedContainerHolder>>;
+    SharedContainerMap mSharedContainerMap;
 
-      /// function description
-      /* virtual */  void evaluate();
+    Application::CallbackHandle mPreEvalHandle;
+    Application::CallbackHandle mPostEvalHandle;
+};
 
-    protected:
+using SFNetTransform = SingleField<Link<NetTransform>>;
+using MFNetTransform = MultiField<Link<NetTransform>>;
 
-      // reimplemented as no-op
-      /* virtual */ void refImpl();
-      /* virtual */ void unrefImpl();
-      /* virtual */ int  refCountImpl();
-
-      virtual void getSharedContainersCB(const MFContainer::GetValueEvent& event);
-      virtual void setSharedContainersCB(const MFContainer::SetValueEvent& event);
-
-    private:
-      // the current view, meaning the current set of participants in this group
-      EIDGrpMap mGroupMap;
-
-      using SharedContainerMap = std::unordered_map<std::string, Link<SharedContainerHolder> >;
-      SharedContainerMap mSharedContainerMap;
-
-      Application::CallbackHandle mPreEvalHandle;
-      Application::CallbackHandle mPostEvalHandle;
-    };
-
-    using SFNetTransform = SingleField<Link<NetTransform> >;
-    using MFNetTransform = MultiField<Link<NetTransform> >;
-
-  } // namespace gua
+} // namespace gua
 
 } // namespace av
 

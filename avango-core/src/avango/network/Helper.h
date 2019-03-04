@@ -33,7 +33,7 @@
 
 namespace av
 {
-  std::string getName(const Link<Distributed>&);
+std::string getName(const Link<Distributed>&);
 }
 
 #endif // #if !defined(AVANGO_HELPER_H)

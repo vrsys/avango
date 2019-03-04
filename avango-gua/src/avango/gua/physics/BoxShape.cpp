@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::BoxShape"));
+av::Logger& logger(av::getLogger("av::gua::BoxShape"));
 }
 
 AV_FC_DEFINE(av::gua::BoxShape);
@@ -15,23 +15,16 @@ AV_FC_DEFINE(av::gua::BoxShape);
 AV_FIELD_DEFINE(av::gua::SFBoxShape);
 AV_FIELD_DEFINE(av::gua::MFBoxShape);
 
-av::gua::BoxShape::BoxShape(::gua::physics::BoxShape* guashape)
-  : CollisionShape(guashape),
-    m_guaShape(reinterpret_cast< ::gua::physics::BoxShape*>(CollisionShape::getGuaShape()))
+av::gua::BoxShape::BoxShape(::gua::physics::BoxShape* guashape) : CollisionShape(guashape), m_guaShape(reinterpret_cast<::gua::physics::BoxShape*>(CollisionShape::getGuaShape()))
 {
-    AV_FC_ADD_ADAPTOR_FIELD(HalfExtents,
-                        std::bind(&BoxShape::getHalfExtentsCB, this,std::placeholders::_1),
-                        std::bind(&BoxShape::setHalfExtentsCB, this,std::placeholders::_1));
-
+    AV_FC_ADD_ADAPTOR_FIELD(HalfExtents, std::bind(&BoxShape::getHalfExtentsCB, this, std::placeholders::_1), std::bind(&BoxShape::setHalfExtentsCB, this, std::placeholders::_1));
 }
 
-av::gua::BoxShape::~BoxShape()
-{}
+av::gua::BoxShape::~BoxShape() {}
 
-void
-av::gua::BoxShape::initClass()
+void av::gua::BoxShape::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::CollisionShape::initClass();
 
@@ -42,19 +35,8 @@ av::gua::BoxShape::initClass()
     }
 }
 
-::gua::physics::BoxShape*
-av::gua::BoxShape::getGuaShape() const {
-    return m_guaShape;
-}
+::gua::physics::BoxShape* av::gua::BoxShape::getGuaShape() const { return m_guaShape; }
 
-void
-av::gua::BoxShape::getHalfExtentsCB(const SFVec3::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaShape->get_half_extents();
-}
+void av::gua::BoxShape::getHalfExtentsCB(const SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = m_guaShape->get_half_extents(); }
 
-void
-av::gua::BoxShape::setHalfExtentsCB(const SFVec3::SetValueEvent& event)
-{
-    m_guaShape->set_half_extents(event.getValue());
-}
+void av::gua::BoxShape::setHalfExtentsCB(const SFVec3::SetValueEvent& event) { m_guaShape->set_half_extents(event.getValue()); }

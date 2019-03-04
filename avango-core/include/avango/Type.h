@@ -34,9 +34,9 @@
 #include "windows_specific.h"
 
 #if defined(_MSC_VER)
-  #include "stdint_replacement.h"
+#include "stdint_replacement.h"
 #else
-  #include <inttypes.h>
+#include <inttypes.h>
 #endif // _MSC_VER
 
 #include <cstddef>
@@ -46,43 +46,36 @@
 #include <avango/InputStream.h>
 #include <avango/OutputStream.h>
 
-
 namespace av
 {
+class Typed;
+class Create;
 
-  class Typed;
-  class Create;
-
-  /**
-   * Encapsulates the type information for runtime typing.
-   * The Type class keeps track of runtime type information in Avango.
-   * Each type is associated with a given name, so lookup is possible in
-   * either direction.
-   *
-   * Many Avango classes request a unique Type when they are initialized.
-   * This type can then be used to find out the actual class of an
-   * instance when only its base class is known, or to obtain an instance
-   * of a particular class given its type or name.
-   *
-   * \todo Check if mTypeSpec can be changed to be a normal c++ class
-   *
-   * \ingroup av
-   */
-  class AV_DLL Type
-  {
-
+/**
+ * Encapsulates the type information for runtime typing.
+ * The Type class keeps track of runtime type information in Avango.
+ * Each type is associated with a given name, so lookup is possible in
+ * either direction.
+ *
+ * Many Avango classes request a unique Type when they are initialized.
+ * This type can then be used to find out the actual class of an
+ * instance when only its base class is known, or to obtain an instance
+ * of a particular class given its type or name.
+ *
+ * \todo Check if mTypeSpec can be changed to be a normal c++ class
+ *
+ * \ingroup av
+ */
+class AV_DLL Type
+{
   public:
-
     /**
      * Hash Functor for using Type in hash_map.
      */
     class Hasher
     {
-    public:
-      inline size_t operator()(const Type& t) const
-      {
-        return t.getId();
-      }
+      public:
+        inline size_t operator()(const Type& t) const { return t.getId(); }
     };
 
     /**
@@ -137,15 +130,12 @@ namespace av
     /**
      * %Create and register new type.
      */
-    static Type createType(Type parentType, const std::string& typeName,
-                           Create* creator, bool typeIsPublic);
+    static Type createType(Type parentType, const std::string& typeName, Create* creator, bool typeIsPublic);
 
     /**
      * %Create and register new abstract type.
      */
-    static Type createAbstractType(Type parentType,
-                                   const std::string& typeName,
-                                   bool typeIsPublic);
+    static Type createAbstractType(Type parentType, const std::string& typeName, bool typeIsPublic);
 
     /**
      * Returns \c true if the type is a bad type.
@@ -243,8 +233,7 @@ namespace av
      * \see ModuleManager
      * \todo Library namespaces vs. shared object file names
      */
-    static Typed* createInstanceOfType(const std::string& typeName,
-                                       bool unloadable = true);
+    static Typed* createInstanceOfType(const std::string& typeName, bool unloadable = true);
 
     /**
      * Allow instances of this type to be network distributed if \true.
@@ -263,7 +252,6 @@ namespace av
     static void dumpTypeMap();
 
   private:
-
     /**
      * Return index of the type in type map
      */
@@ -271,36 +259,32 @@ namespace av
 
     static bool isTypeRegistered(const std::string& typeName);
 
-    static Type allocateNewType(bool isPublic, bool canCreate,
-                                bool isAdaptor);
+    static Type allocateNewType(bool isPublic, bool canCreate, bool isAdaptor);
 
-    static void registerNewType(const std::string& typeName,
-                                Type parentType, Type newType,
-                                Create* creator);
+    static void registerNewType(const std::string& typeName, Type parentType, Type newType, Create* creator);
 
     static void initRegistry();
 
     // make this class small, it will be a member of almost everything
-    union
-    {
-      struct {
-        uint32_t mIndex:29;    // index into the type table
-        bool     mIsPublic:1;  // for quick checks without table lookup
-        bool     mCanCreate:1; // for quick checks without table lookup
-        bool     mIsAdaptor:1; // connection to Performer class hierarchy
-      } mStorage;
-      uint32_t mId;
+    union {
+        struct
+        {
+            uint32_t mIndex : 29; // index into the type table
+            bool mIsPublic : 1;   // for quick checks without table lookup
+            bool mCanCreate : 1;  // for quick checks without table lookup
+            bool mIsAdaptor : 1;  // connection to Performer class hierarchy
+        } mStorage;
+        uint32_t mId;
     } mTypeSpec;
+};
 
-  };
+/**
+ * An Alias for Type::TypeList
+ */
+using TypeList = Type::TypeList;
 
-  /**
-   * An Alias for Type::TypeList
-   */
-  using TypeList = Type::TypeList;
-
-  InputStream& operator>>(InputStream& is, Type& value);
-  OutputStream& operator<<(OutputStream& os, const Type& value);
+InputStream& operator>>(InputStream& is, Type& value);
+OutputStream& operator<<(OutputStream& os, const Type& value);
 
 } // namespace av
 

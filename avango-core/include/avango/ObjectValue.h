@@ -31,90 +31,76 @@
 
 namespace av
 {
-  /**
-   * The ObjectValue template encapsulates a single value in an AVANGO field
-   * container.
-   */
-  template <typename T> class ObjectValue : public FieldContainer
-  {
-
+/**
+ * The ObjectValue template encapsulates a single value in an AVANGO field
+ * container.
+ */
+template <typename T>
+class ObjectValue : public FieldContainer
+{
   public:
-
     using ValueType = T;
 
     SingleField<ValueType> Value;
 
-    ObjectValue()
-    {
-      AV_FC_ADD_FIELD(Value, ValueType());
-    }
+    ObjectValue() { AV_FC_ADD_FIELD(Value, ValueType()); }
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
-    virtual ~ObjectValue()
-    {}
+    virtual ~ObjectValue() {}
 
   public:
-
     static void initClass()
     {
-      if (!isTypeInitialized())
-      {
-        FieldContainer::initClass();
+        if(!isTypeInitialized())
+        {
+            FieldContainer::initClass();
 
-        sClassTypeId = Type::createType(FieldContainer::getClassTypeId(),
-                                        sClassTypeName,
-                                        new CreateA<ObjectValue<T> >,
-                                        true);
+            sClassTypeId = Type::createType(FieldContainer::getClassTypeId(), sClassTypeName, new CreateA<ObjectValue<T>>, true);
 
-        sClassTypeId.setDistributable(true);
-      }
+            sClassTypeId.setDistributable(true);
+        }
     }
 
     static Type getClassTypeId()
     {
-      AV_ASSERT(Type::badType() != sClassTypeId);
-      return sClassTypeId;
+        AV_ASSERT(Type::badType() != sClassTypeId);
+        return sClassTypeId;
     }
 
-    static bool isTypeInitialized()
-    {
-      return Type::badType() != sClassTypeId;
-    }
+    static bool isTypeInitialized() { return Type::badType() != sClassTypeId; }
 
     Type getTypeId() const
     {
-      AV_ASSERT(Type::badType() != sClassTypeId);
-      return sClassTypeId;
+        AV_ASSERT(Type::badType() != sClassTypeId);
+        return sClassTypeId;
     }
 
   private:
-
     static Type sClassTypeId;
     static const std::string sClassTypeName; // initialized in specialization
+};
 
-  };
+template <typename T>
+Type ObjectValue<T>::sClassTypeId = Type::badType();
 
-  template <typename T> Type ObjectValue<T>::sClassTypeId = Type::badType();
+template class AV_DLL ObjectValue<bool>;
+template class AV_DLL ObjectValue<int>;
+template class AV_DLL ObjectValue<unsigned int>;
+template class AV_DLL ObjectValue<float>;
+template class AV_DLL ObjectValue<double>;
+template class AV_DLL ObjectValue<Link<FieldContainer>>;
+template class AV_DLL ObjectValue<std::string>;
 
-  template class AV_DLL ObjectValue<bool>;
-  template class AV_DLL ObjectValue<int>;
-  template class AV_DLL ObjectValue<unsigned int>;
-  template class AV_DLL ObjectValue<float>;
-  template class AV_DLL ObjectValue<double>;
-  template class AV_DLL ObjectValue<Link<FieldContainer> >;
-  template class AV_DLL ObjectValue<std::string>;
-
-  using BoolObject = ObjectValue<bool>;
-  using IntObject = ObjectValue<int>;
-  using UIntObject = ObjectValue<unsigned int>;
-  using FloatObject = ObjectValue<float>;
-  using DoubleObject = ObjectValue<double>;
-  using ObjectObject = ObjectValue<Link<FieldContainer> >;
-  using StringObject = ObjectValue<std::string>;
-}
+using BoolObject = ObjectValue<bool>;
+using IntObject = ObjectValue<int>;
+using UIntObject = ObjectValue<unsigned int>;
+using FloatObject = ObjectValue<float>;
+using DoubleObject = ObjectValue<double>;
+using ObjectObject = ObjectValue<Link<FieldContainer>>;
+using StringObject = ObjectValue<std::string>;
+} // namespace av
 
 #endif // #if !defined(AVANGO_OBJECTVALUE_H)

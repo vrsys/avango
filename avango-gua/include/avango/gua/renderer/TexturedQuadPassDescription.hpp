@@ -15,54 +15,48 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::TexturedQuadPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL TexturedQuadPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::TexturedQuadPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::TexturedQuadPassDescription is created.
+     * Otherwise, the given ::gua::TexturedQuadPassDescription is used.
      */
-    class AV_GUA_DLL TexturedQuadPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    TexturedQuadPassDescription(
+        std::shared_ptr<::gua::TexturedQuadPassDescription> const& TexturedQuadPassDescription = std::shared_ptr<::gua::TexturedQuadPassDescription>(new ::gua::TexturedQuadPassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::TexturedQuadPassDescription.
+     */
+    std::shared_ptr<::gua::TexturedQuadPassDescription> const& getGuaTexturedQuadPassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::TexturedQuadPassDescription is created.
-       * Otherwise, the given ::gua::TexturedQuadPassDescription is used.
-       */
-      TexturedQuadPassDescription(std::shared_ptr< ::gua::TexturedQuadPassDescription> const& TexturedQuadPassDescription =
-                             std::shared_ptr< ::gua::TexturedQuadPassDescription>(new ::gua::TexturedQuadPassDescription()) );
+  private:
+    std::shared_ptr<::gua::TexturedQuadPassDescription> m_guaTexturedQuadPassDescription;
 
+    TexturedQuadPassDescription(const TexturedQuadPassDescription&);
+    TexturedQuadPassDescription& operator=(const TexturedQuadPassDescription&);
+};
 
+using SFTexturedQuadPassDescription = SingleField<Link<TexturedQuadPassDescription>>;
+using MFTexturedQuadPassDescription = MultiField<Link<TexturedQuadPassDescription>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::TexturedQuadPassDescription.
-       */
-      std::shared_ptr< ::gua::TexturedQuadPassDescription> const& getGuaTexturedQuadPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::TexturedQuadPassDescription> m_guaTexturedQuadPassDescription;
-
-
-      TexturedQuadPassDescription(const TexturedQuadPassDescription&);
-      TexturedQuadPassDescription& operator=(const TexturedQuadPassDescription&);
-    };
-
-    using SFTexturedQuadPassDescription = SingleField<Link<TexturedQuadPassDescription> >;
-    using MFTexturedQuadPassDescription = MultiField<Link<TexturedQuadPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::TexturedQuadPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::TexturedQuadPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::TexturedQuadPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::TexturedQuadPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_TEXTURED_QUAD_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_TEXTURED_QUAD_PASS_DESCRIPTION_HPP

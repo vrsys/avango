@@ -24,7 +24,6 @@
 #ifndef shade_MethodInstantiator_H
 #define shade_MethodInstantiator_H shade_MethodInstantiator_H
 
-
 #include "MethodTemplate.h"
 #include "ValueList.h"
 #include <boost/shared_ptr.hpp>
@@ -36,45 +35,41 @@
 #include <utility>
 #include <boost/function.hpp>
 
-
 namespace shade
 {
-  namespace formatter
-  {
-    class Generator;
-  }
-
-  namespace parser
-  {
-    class ScopeLayer;
-
-    class MethodInstantiator
-    {
-    public:
-
-      void add_method(boost::shared_ptr<MethodTemplate> method);
-      void append(const MethodInstantiator& other);
-      bool build(formatter::Generator& generator, const ScopeLayer& scope, std::ostream& error_log) const;
-
-    private:
-
-      std::string call_method(const std::string& name, const ValueList& parameters, const ScopeLayer& scope, std::ostream& error_log) const;
-      std::string get_unique_function_name(const std::string& name) const;
-
-      typedef std::map< std::string, boost::shared_ptr<MethodTemplate> > Methods;
-      Methods m_methods;
-
-      typedef std::pair<std::string, ValueList> Signature;
-      typedef std::map< Signature, std::string> InstantiatedMethodNames;
-      mutable InstantiatedMethodNames m_instantiated_method_names;
-
-      mutable formatter::Generator* result_generator;
-      mutable std::set<Signature> m_seen;
-      mutable std::map<std::string, int> m_instantiations;
-    };
-
-  }
+namespace formatter
+{
+class Generator;
 }
 
+namespace parser
+{
+class ScopeLayer;
+
+class MethodInstantiator
+{
+  public:
+    void add_method(boost::shared_ptr<MethodTemplate> method);
+    void append(const MethodInstantiator& other);
+    bool build(formatter::Generator& generator, const ScopeLayer& scope, std::ostream& error_log) const;
+
+  private:
+    std::string call_method(const std::string& name, const ValueList& parameters, const ScopeLayer& scope, std::ostream& error_log) const;
+    std::string get_unique_function_name(const std::string& name) const;
+
+    typedef std::map<std::string, boost::shared_ptr<MethodTemplate>> Methods;
+    Methods m_methods;
+
+    typedef std::pair<std::string, ValueList> Signature;
+    typedef std::map<Signature, std::string> InstantiatedMethodNames;
+    mutable InstantiatedMethodNames m_instantiated_method_names;
+
+    mutable formatter::Generator* result_generator;
+    mutable std::set<Signature> m_seen;
+    mutable std::map<std::string, int> m_instantiations;
+};
+
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_MethodInstantiator_H */

@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::ConvexHullShape"));
+av::Logger& logger(av::getLogger("av::gua::ConvexHullShape"));
 }
 
 AV_FC_DEFINE(av::gua::ConvexHullShape);
@@ -15,19 +15,15 @@ AV_FIELD_DEFINE(av::gua::SFConvexHullShape);
 AV_FIELD_DEFINE(av::gua::MFConvexHullShape);
 
 av::gua::ConvexHullShape::ConvexHullShape(::gua::physics::ConvexHullShape* guashape)
-  : CollisionShape(guashape),
-    m_guaShape(reinterpret_cast< ::gua::physics::ConvexHullShape*>(CollisionShape::getGuaShape()))
+    : CollisionShape(guashape), m_guaShape(reinterpret_cast<::gua::physics::ConvexHullShape*>(CollisionShape::getGuaShape()))
 {
-
 }
 
-av::gua::ConvexHullShape::~ConvexHullShape()
-{}
+av::gua::ConvexHullShape::~ConvexHullShape() {}
 
-void
-av::gua::ConvexHullShape::initClass()
+void av::gua::ConvexHullShape::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::CollisionShape::initClass();
 
@@ -38,7 +34,4 @@ av::gua::ConvexHullShape::initClass()
     }
 }
 
-::gua::physics::ConvexHullShape*
-av::gua::ConvexHullShape::getGuaShape() const {
-    return m_guaShape;
-}
+::gua::physics::ConvexHullShape* av::gua::ConvexHullShape::getGuaShape() const { return m_guaShape; }

@@ -3,4 +3,4 @@
 
 void init_BoxShape();
 
-#endif //AV_PYTHON_GUA_BOX_SHAPE_HPP
+#endif // AV_PYTHON_GUA_BOX_SHAPE_HPP

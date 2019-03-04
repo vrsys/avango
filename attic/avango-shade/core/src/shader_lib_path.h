@@ -23,5 +23,5 @@
 
 namespace shade
 {
-  extern const char* shader_lib_path;
+extern const char* shader_lib_path;
 };

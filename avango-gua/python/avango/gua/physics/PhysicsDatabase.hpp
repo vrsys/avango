@@ -3,4 +3,4 @@
 
 void init_PhysicsDatabase();
 
-#endif //AV_PYTHON_GUA_PHYSICS_DATABASE_HPP
+#endif // AV_PYTHON_GUA_PHYSICS_DATABASE_HPP

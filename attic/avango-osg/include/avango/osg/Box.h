@@ -39,80 +39,75 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Node that creates an ::osg::Box as Child of a MatrixTransform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Box : public MatrixTransform
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Node that creates an ::osg::Box as Child of a MatrixTransform
-     *
-     * \ingroup av_osg
+     * Constructor. Note that this is not a simple Wrapper for ::osg::Box
      */
-    class AV_OSG_DLL Box : public MatrixTransform
-    {
-      AV_FC_DECLARE();
+    Box();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Box();
 
-      /**
-       * Constructor. Note that this is not a simple Wrapper for ::osg::Box
-       */
-      Box();
+  public:
+    /**
+     * Radius and DetailRatio (Tesselation) of the Box
+     */
+    SFFloat Radius;
+    SFFloat Width;
+    SFFloat Height;
+    SFFloat Length;
 
-    protected:
+    SFVec4 Color;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Box();
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-    public:
+    /**
+     * Get the ::osg::Box object.
+     * \return an osg::ref pointer to the Box object
+     */
+    ::osg::ref_ptr<::osg::Box> getOsgBox() const;
 
-      /**
-       * Radius and DetailRatio (Tesselation) of the Box
-       */
-      SFFloat Radius;
-      SFFloat Width;
-      SFFloat Height;
-      SFFloat Length;
+    /**
+     * Get the ::osg::ShapeDrawable object.
+     * \return an osg::ref pointer to the ShapeDrawable object
+     */
+    ::osg::ref_ptr<::osg::ShapeDrawable> getOsgShapeDrawable() const;
 
-      SFVec4 Color;
+  private:
+    ::osg::ref_ptr<::osg::ShapeDrawable> mShapeDrawable;
+    //::osg::ref_ptr< ::osg::TessellationHints> mHints;
+    ::osg::ref_ptr<::osg::Box> mBox;
+    ::osg::ref_ptr<::osg::Geode> mGeode;
 
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
+    bool mDimChanged;
+    // bool mDetailRatioChanged;
+    bool mColorChanged;
+};
 
-      /**
-       * Get the ::osg::Box object.
-       * \return an osg::ref pointer to the Box object
-       */
-      ::osg::ref_ptr< ::osg::Box> getOsgBox() const;
-
-      /**
-       * Get the ::osg::ShapeDrawable object.
-       * \return an osg::ref pointer to the ShapeDrawable object
-       */
-      ::osg::ref_ptr< ::osg::ShapeDrawable> getOsgShapeDrawable() const;
-
-    private:
-
-      ::osg::ref_ptr< ::osg::ShapeDrawable> mShapeDrawable;
-      //::osg::ref_ptr< ::osg::TessellationHints> mHints;
-      ::osg::ref_ptr< ::osg::Box> mBox;
-      ::osg::ref_ptr< ::osg::Geode> mGeode;
-
-      bool mDimChanged;
-      //bool mDetailRatioChanged;
-      bool mColorChanged;
-
-    };
-
-    typedef SingleField<Link<Box> > SFBox;
-    typedef MultiField<Link<Box> > MFBox;
-  }
+typedef SingleField<Link<Box>> SFBox;
+typedef MultiField<Link<Box>> MFBox;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Box> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Box> >;
+template class AV_OSG_DLL SingleField<Link<osg::Box>>;
+template class AV_OSG_DLL MultiField<Link<osg::Box>>;
 #endif
 
-}
+} // namespace av
 
 #endif

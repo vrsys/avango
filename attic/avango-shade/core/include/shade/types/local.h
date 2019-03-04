@@ -28,14 +28,13 @@
 
 namespace shade
 {
-  class local : public Type
-  {
+class local : public Type
+{
   public:
     local(formatter::Constants::Type type);
     /*virtual*/ void output_attribute(boost::shared_ptr<Type::State>, Formatter* fmt, const std::string& obj, const std::string& name) const;
     /*virtual*/ bool output_begin_property_dispatcher(Formatter* fmt, const std::string& obj, const std::string name) const;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_types_local_H */
-

@@ -8,27 +8,25 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_LightVisibilityPassDescription()
- {
-   register_ptr_to_python<av::Link<av::gua::LightVisibilityPassDescription> >();
+{
+    register_ptr_to_python<av::Link<av::gua::LightVisibilityPassDescription>>();
 
-  register_field<av::gua::SFLightVisibilityPassDescription>("SFLightVisibilityPassDescription");
-  register_multifield<av::gua::MFLightVisibilityPassDescription>("MFLightVisibilityPassDescription");
-  class_<av::gua::LightVisibilityPassDescription,
-         av::Link<av::gua::LightVisibilityPassDescription>,
-         bases<av::gua::PipelinePassDescription>, boost::noncopyable >("LightVisibilityPassDescription", "docstring", no_init)
-         ;
+    register_field<av::gua::SFLightVisibilityPassDescription>("SFLightVisibilityPassDescription");
+    register_multifield<av::gua::MFLightVisibilityPassDescription>("MFLightVisibilityPassDescription");
+    class_<av::gua::LightVisibilityPassDescription, av::Link<av::gua::LightVisibilityPassDescription>, bases<av::gua::PipelinePassDescription>, boost::noncopyable>(
+        "LightVisibilityPassDescription", "docstring", no_init);
 
     enum_<av::gua::LightVisibilityPassDescription::RasterizationModeEnum>("RasterizationMode")
         .value("AUTO", av::gua::LightVisibilityPassDescription::AUTO)
@@ -38,8 +36,5 @@ void init_LightVisibilityPassDescription()
         .value("MULTISAMPLED_4", av::gua::LightVisibilityPassDescription::MULTISAMPLED_4)
         .value("MULTISAMPLED_8", av::gua::LightVisibilityPassDescription::MULTISAMPLED_8)
         .value("MULTISAMPLED_16", av::gua::LightVisibilityPassDescription::MULTISAMPLED_16)
-        .value("FULLSCREEN_FALLBACK", av::gua::LightVisibilityPassDescription::FULLSCREEN_FALLBACK)
-        ;
-
- }
-
+        .value("FULLSCREEN_FALLBACK", av::gua::LightVisibilityPassDescription::FULLSCREEN_FALLBACK);
+}

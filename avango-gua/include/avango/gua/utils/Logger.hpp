@@ -13,78 +13,71 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Logger
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Logger : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Logger
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Logger is created.
+     * Otherwise, the given ::gua::Logger is used.
      */
-    class AV_GUA_DLL Logger : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    Logger();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    // virtual ~Logger();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Logger is created.
-       * Otherwise, the given ::gua::Logger is used.
-       */
-      Logger();
+  public:
+    SFBool EnableDebug;
+    SFBool EnableMessage;
+    SFBool EnableWarning;
+    SFBool EnableError;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::Logger.
+     */
+    // std::shared_ptr< ::gua::Logger> getGuaNode() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-     // virtual ~Logger();
+  public:
+    virtual void getEnableDebugCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableDebugCB(const SFBool::SetValueEvent& event);
 
-    public:
+    virtual void getEnableMessageCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableMessageCB(const SFBool::SetValueEvent& event);
 
+    virtual void getEnableWarningCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableWarningCB(const SFBool::SetValueEvent& event);
 
-      SFBool EnableDebug;
-      SFBool EnableMessage;
-      SFBool EnableWarning;
-      SFBool EnableError;
+    virtual void getEnableErrorCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableErrorCB(const SFBool::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::Logger.
-       */
-      // std::shared_ptr< ::gua::Logger> getGuaNode() const;
+  private:
+    // std::shared_ptr< ::gua::Logger> m_guaNode;
 
-    public:
+    Logger(const Logger&);
+    Logger& operator=(const Logger&);
+};
 
-      virtual void getEnableDebugCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableDebugCB(const SFBool::SetValueEvent& event);
+using SFLogger = SingleField<Link<Logger>>;
+using MFLogger = MultiField<Link<Logger>>;
 
-      virtual void getEnableMessageCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableMessageCB(const SFBool::SetValueEvent& event);
-
-      virtual void getEnableWarningCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableWarningCB(const SFBool::SetValueEvent& event);
-
-      virtual void getEnableErrorCB(const SFBool::GetValueEvent& event);
-      virtual void setEnableErrorCB(const SFBool::SetValueEvent& event);
-
-
-    private:
-
-      // std::shared_ptr< ::gua::Logger> m_guaNode;
-
-      Logger(const Logger&);
-      Logger& operator=(const Logger&);
-    };
-
-    using SFLogger = SingleField<Link<Logger> >;
-    using MFLogger = MultiField<Link<Logger> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Logger> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Logger> >;
+template class AV_GUA_DLL SingleField<Link<gua::Logger>>;
+template class AV_GUA_DLL MultiField<Link<gua::Logger>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_LOGGER_HPP
+#endif // AVANGO_GUA_LOGGER_HPP

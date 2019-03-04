@@ -3,4 +3,4 @@
 
 void init_TriMeshNode();
 
-#endif //AV_PYTHON_GUA_TRI_MESH_NODE_HPP
+#endif // AV_PYTHON_GUA_TRI_MESH_NODE_HPP

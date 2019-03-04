@@ -3,4 +3,4 @@
 
 void init_BBoxPassDescription();
 
-#endif //AV_PYTHON_GUA_BBOX_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_BBOX_PASS_DESCRIPTION_HPP

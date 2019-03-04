@@ -44,26 +44,24 @@
 
 class Displacement : public shade::ShaderBase<Displacement, shade::shaders::Geometry, shade::shaders::Initializeable>
 {
-public:
+  public:
+    /*virtual*/ shade::void_<> enter(void);
+    /*virtual*/ shade::vec3<> transform_inverse(shade::vec3<>);
 
-  /*virtual*/ shade::void_<> enter(void);
-  /*virtual*/ shade::vec3<> transform_inverse(shade::vec3<>);
+    /*virtual*/ shade::void_<> init_vertex(void);
 
-  /*virtual*/ shade::void_<> init_vertex(void);
+    shade::void_<> interpolate(shade::vec3<>);
 
-  shade::void_<> interpolate(shade::vec3<>);
+    shade::objref<shade::shaders::TangentSpace*, shade::const_> coordinate_system;
+    shade::sampler2D texture_unit;
 
-  shade::objref<shade::shaders::TangentSpace*, shade::const_> coordinate_system;
-  shade::sampler2D texture_unit;
+  private:
+    shade::vec4<shade::inout<shade::vertex_shader, shade::geometry_shader>> normal;
+    shade::vec4<shade::inout<shade::vertex_shader, shade::geometry_shader>> light_normal;
+    shade::vec2<shade::inout<shade::vertex_shader, shade::geometry_shader>> uvcoord;
+    shade::vec4<shade::local> interpolated_light_normal;
 
-private:
-
-  shade::vec4<shade::inout<shade::vertex_shader, shade::geometry_shader> > normal;
-  shade::vec4<shade::inout<shade::vertex_shader, shade::geometry_shader> > light_normal;
-  shade::vec2<shade::inout<shade::vertex_shader, shade::geometry_shader> > uvcoord;
-  shade::vec4<shade::local> interpolated_light_normal;
-
-  SHADE_MULTI_DERIVED_DECL(Displacement, (shade::shaders::Geometry)(shade::shaders::Initializeable))
+    SHADE_MULTI_DERIVED_DECL(Displacement, (shade::shaders::Geometry)(shade::shaders::Initializeable))
 };
 
 #endif /* Displacement_H */

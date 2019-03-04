@@ -1,4 +1,4 @@
-// $Header$  
+// $Header$
 
 /***************************************************************/
 //
@@ -15,8 +15,7 @@
 
 // define this to have run-time typechecking on messages:
 // NOTE:  This should NEVER be defined if building for CORBA applications.
-// #define MAESTRO_MESSAGE_TYPECHECKING 1     
-
+// #define MAESTRO_MESSAGE_TYPECHECKING 1
 
 /*************************** default values *********************************/
 

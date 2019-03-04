@@ -25,10 +25,9 @@
 
 namespace shade
 {
-  using boost::get_pointer;
+using boost::get_pointer;
 
-  class Shader;
+class Shader;
 
-  Shader* get_pointer(Shader& v);
-}
-
+Shader* get_pointer(Shader& v);
+} // namespace shade

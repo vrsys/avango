@@ -31,137 +31,95 @@
 #include <avango/Application.h>
 #include <avango/Logger.h>
 
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::viewer::CompositeViewer"));
+av::Logger& logger(av::getLogger("av::osg::viewer::CompositeViewer"));
 
-  inline bool
-  find(const av::osg::viewer::MFView::ContainerType& views,
-       const av::osg::viewer::MFView::ValueType& view)
-  {
-    return (std::find(views.begin(), views.end(), view) != views.end());
-  }
-}
-
+inline bool find(const av::osg::viewer::MFView::ContainerType& views, const av::osg::viewer::MFView::ValueType& view) { return (std::find(views.begin(), views.end(), view) != views.end()); }
+} // namespace
 
 AV_FC_DEFINE(av::osg::viewer::CompositeViewer);
 
 AV_FIELD_DEFINE(av::osg::viewer::SFCompositeViewer);
 
-av::osg::viewer::CompositeViewer::CompositeViewer() :
-  Object(new ::osgViewer::CompositeViewer),
-  mOsgCompositeViewer(dynamic_cast< ::osgViewer::CompositeViewer*>(getOsgObject()))
+av::osg::viewer::CompositeViewer::CompositeViewer() : Object(new ::osgViewer::CompositeViewer), mOsgCompositeViewer(dynamic_cast<::osgViewer::CompositeViewer*>(getOsgObject()))
 {
-  AV_FC_ADD_FIELD(Views, MFView::ContainerType());
+    AV_FC_ADD_FIELD(Views, MFView::ContainerType());
 
-  AV_FC_ADD_ADAPTOR_FIELD(ThreadingModel,
-    boost::bind(&av::osg::viewer::CompositeViewer::getThreadingModelCB, this, _1),
-    boost::bind(&av::osg::viewer::CompositeViewer::setThreadingModelCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(
+        ThreadingModel, boost::bind(&av::osg::viewer::CompositeViewer::getThreadingModelCB, this, _1), boost::bind(&av::osg::viewer::CompositeViewer::setThreadingModelCB, this, _1));
 
-  mRenderCallbackHandle = av::ApplicationInstance::get().
-    addRenderCallback(boost::bind(&av::osg::viewer::CompositeViewer::renderCB, this));
+    mRenderCallbackHandle = av::ApplicationInstance::get().addRenderCallback(boost::bind(&av::osg::viewer::CompositeViewer::renderCB, this));
 }
 
 /* virtual */
-av::osg::viewer::CompositeViewer::~CompositeViewer()
+av::osg::viewer::CompositeViewer::~CompositeViewer() { av::ApplicationInstance::get().removeCallback(mRenderCallbackHandle); }
+
+/* static */ void av::osg::viewer::CompositeViewer::initClass()
 {
-  av::ApplicationInstance::get().removeCallback(mRenderCallbackHandle);
-}
-
-/* static */ void
-av::osg::viewer::CompositeViewer::initClass()
-{
-  if (!isTypeInitialized())
-  {
-    av::osg::Object::initClass();
-    av::osg::viewer::View::initClass();
-
-    AV_FC_INIT(av::osg::Object, av::osg::viewer::CompositeViewer, false);
-
-    SFCompositeViewer::initClass("av::osg::viewer::SFCompositeViewer", "av::Field");
-  }
-}
-
-/* virtual */ void
-av::osg::viewer::CompositeViewer::fieldHasChangedLocalSideEffect(const Field& field)
-{
-  av::osg::Object::fieldHasChangedLocalSideEffect(field);
-
-  if (&field == &Views)
-  {
-    const MFView::ContainerType &views = Views.getValue();
-
-    for (MFView::ContainerType::const_iterator last_view = mLastViews.begin();
-         last_view != mLastViews.end(); ++last_view)
+    if(!isTypeInitialized())
     {
-      if (!find(views, *last_view))
-        mOsgCompositeViewer->removeView((*last_view)->getOsgView());
-    }
+        av::osg::Object::initClass();
+        av::osg::viewer::View::initClass();
 
-    for (MFView::ContainerType::const_iterator view = views.begin();
-         view != views.end(); ++view)
+        AV_FC_INIT(av::osg::Object, av::osg::viewer::CompositeViewer, false);
+
+        SFCompositeViewer::initClass("av::osg::viewer::SFCompositeViewer", "av::Field");
+    }
+}
+
+/* virtual */ void av::osg::viewer::CompositeViewer::fieldHasChangedLocalSideEffect(const Field& field)
+{
+    av::osg::Object::fieldHasChangedLocalSideEffect(field);
+
+    if(&field == &Views)
     {
-      if (!find(mLastViews, *view))
-        mOsgCompositeViewer->addView((*view)->getOsgView());
+        const MFView::ContainerType& views = Views.getValue();
+
+        for(MFView::ContainerType::const_iterator last_view = mLastViews.begin(); last_view != mLastViews.end(); ++last_view)
+        {
+            if(!find(views, *last_view))
+                mOsgCompositeViewer->removeView((*last_view)->getOsgView());
+        }
+
+        for(MFView::ContainerType::const_iterator view = views.begin(); view != views.end(); ++view)
+        {
+            if(!find(mLastViews, *view))
+                mOsgCompositeViewer->addView((*view)->getOsgView());
+        }
+
+        mLastViews = views;
     }
-
-    mLastViews = views;
-  }
 }
 
-::osgViewer::CompositeViewer*
-av::osg::viewer::CompositeViewer::getOsgCompositeViewer() const
+::osgViewer::CompositeViewer* av::osg::viewer::CompositeViewer::getOsgCompositeViewer() const { return mOsgCompositeViewer; }
+
+void av::osg::viewer::CompositeViewer::frame() { av::ApplicationInstance::get().evaluate(); }
+
+bool av::osg::viewer::CompositeViewer::run() { return av::ApplicationInstance::get().start(); }
+
+bool av::osg::viewer::CompositeViewer::done() { return av::ApplicationInstance::get().stop(); }
+
+void av::osg::viewer::CompositeViewer::renderCB()
 {
-  return mOsgCompositeViewer;
+    if(mOsgCompositeViewer->done())
+    {
+        mOsgCompositeViewer->setDone(false);
+        av::ApplicationInstance::get().stop();
+    }
+    else if(mOsgCompositeViewer->getNumViews() != 0u)
+        mOsgCompositeViewer->frame();
 }
 
-void
-av::osg::viewer::CompositeViewer::frame()
+void av::osg::viewer::CompositeViewer::frameWithoutEvaluation()
 {
-  av::ApplicationInstance::get().evaluate();
+    if(mOsgCompositeViewer->getNumViews() != 0u)
+        mOsgCompositeViewer->frame();
 }
 
-bool
-av::osg::viewer::CompositeViewer::run()
-{
-  return av::ApplicationInstance::get().start();
-}
+/* virtual */ void av::osg::viewer::CompositeViewer::getThreadingModelCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgCompositeViewer->getThreadingModel(); }
 
-bool
-av::osg::viewer::CompositeViewer::done()
+/* virtual */ void av::osg::viewer::CompositeViewer::setThreadingModelCB(const SFInt::SetValueEvent& event)
 {
-  return av::ApplicationInstance::get().stop();
-}
-
-void
-av::osg::viewer::CompositeViewer::renderCB()
-{
-  if (mOsgCompositeViewer->done())
-  {
-    mOsgCompositeViewer->setDone(false);
-    av::ApplicationInstance::get().stop();
-  }
-  else if (mOsgCompositeViewer->getNumViews() != 0u)
-    mOsgCompositeViewer->frame();
-}
-
-void
-av::osg::viewer::CompositeViewer::frameWithoutEvaluation()
-{
-  if (mOsgCompositeViewer->getNumViews() != 0u)
-    mOsgCompositeViewer->frame();
-}
-
-/* virtual */ void
-av::osg::viewer::CompositeViewer::getThreadingModelCB(const SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgCompositeViewer->getThreadingModel();
-}
-
-/* virtual */ void
-av::osg::viewer::CompositeViewer::setThreadingModelCB(const SFInt::SetValueEvent& event)
-{
-  mOsgCompositeViewer->
-    setThreadingModel(static_cast< ::osgViewer::ViewerBase::ThreadingModel>(event.getValue()));
+    mOsgCompositeViewer->setThreadingModel(static_cast<::osgViewer::ViewerBase::ThreadingModel>(event.getValue()));
 }

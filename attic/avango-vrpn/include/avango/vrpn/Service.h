@@ -9,42 +9,37 @@
 
 namespace av
 {
-  namespace vrpn
-  {
+namespace vrpn
+{
+class AV_VRPN_DLL Service : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_VRPN_DLL Service : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    Service();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Service();
 
-      Service();
+  public:
+    MFDevice Devices;
 
-    protected:
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Service();
-
-    public:
-
-      MFDevice Devices;
-
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
-
-    };
-
-    typedef SingleField<Link<Service> > SFService;
-    typedef MultiField<Link<Service> > MFService;
-  }
+typedef SingleField<Link<Service>> SFService;
+typedef MultiField<Link<Service>> MFService;
+} // namespace vrpn
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_VRPN_DLL SingleField<Link<av::vrpn::Service> >;
-  template class AV_VRPN_DLL MultiField<Link<av::vrpn::Service> >;
+template class AV_VRPN_DLL SingleField<Link<av::vrpn::Service>>;
+template class AV_VRPN_DLL MultiField<Link<av::vrpn::Service>>;
 #endif
 
-}
+} // namespace av
 
 #endif

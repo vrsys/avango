@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::BoundingBox"));
+av::Logger& logger(av::getLogger("av::gua::BoundingBox"));
 }
 
 AV_FC_DEFINE(av::gua::BoundingBox);
@@ -14,25 +14,17 @@ AV_FC_DEFINE(av::gua::BoundingBox);
 AV_FIELD_DEFINE(av::gua::SFBoundingBox);
 AV_FIELD_DEFINE(av::gua::MFBoundingBox);
 
-av::gua::BoundingBox::BoundingBox(::gua::math::BoundingBox< ::gua::math::vec3>* guaBoundingBox)
-  : m_guaBoundingBox(guaBoundingBox)
+av::gua::BoundingBox::BoundingBox(::gua::math::BoundingBox<::gua::math::vec3>* guaBoundingBox) : m_guaBoundingBox(guaBoundingBox)
 {
-
-  AV_FC_ADD_ADAPTOR_FIELD(Min,
-                        std::bind(&BoundingBox::getMinCB, this, std::placeholders::_1),
-                        std::bind(&BoundingBox::setMinCB, this, std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(Max,
-                        std::bind(&BoundingBox::getMaxCB, this, std::placeholders::_1),
-                        std::bind(&BoundingBox::setMaxCB, this, std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(Min, std::bind(&BoundingBox::getMinCB, this, std::placeholders::_1), std::bind(&BoundingBox::setMinCB, this, std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(Max, std::bind(&BoundingBox::getMaxCB, this, std::placeholders::_1), std::bind(&BoundingBox::setMaxCB, this, std::placeholders::_1));
 }
 
-av::gua::BoundingBox::~BoundingBox()
-{}
+av::gua::BoundingBox::~BoundingBox() {}
 
-void
-av::gua::BoundingBox::initClass()
+void av::gua::BoundingBox::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -43,38 +35,12 @@ av::gua::BoundingBox::initClass()
     }
 }
 
-::gua::math::BoundingBox< ::gua::math::vec3>*
-av::gua::BoundingBox::getGuaBoundingBox() const
-{
-    return m_guaBoundingBox;
-}
+::gua::math::BoundingBox<::gua::math::vec3>* av::gua::BoundingBox::getGuaBoundingBox() const { return m_guaBoundingBox; }
 
+/* virtual */ void av::gua::BoundingBox::getMinCB(const av::gua::SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = m_guaBoundingBox->min; }
 
-/* virtual */ void
-av::gua::BoundingBox::getMinCB(const av::gua::SFVec3::GetValueEvent& event)
-{
+/* virtual */ void av::gua::BoundingBox::setMinCB(const av::gua::SFVec3::SetValueEvent& event) { m_guaBoundingBox->min = event.getValue(); }
 
-  *(event.getValuePtr()) = m_guaBoundingBox->min;
-}
+/* virtual */ void av::gua::BoundingBox::getMaxCB(const av::gua::SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = m_guaBoundingBox->max; }
 
-/* virtual */ void
-av::gua::BoundingBox::setMinCB(const av::gua::SFVec3::SetValueEvent& event)
-{
-
-  m_guaBoundingBox->min = event.getValue();
-}
-
-/* virtual */ void
-av::gua::BoundingBox::getMaxCB(const av::gua::SFVec3::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaBoundingBox->max;
-}
-
-/* virtual */ void
-av::gua::BoundingBox::setMaxCB(const av::gua::SFVec3::SetValueEvent& event)
-{
-
-  m_guaBoundingBox->max = event.getValue();
-}
-
-
+/* virtual */ void av::gua::BoundingBox::setMaxCB(const av::gua::SFVec3::SetValueEvent& event) { m_guaBoundingBox->max = event.getValue(); }

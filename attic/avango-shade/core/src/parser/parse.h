@@ -29,18 +29,20 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    class Generator;
-    class SelfTranslator;
-  }
+namespace formatter
+{
+class Generator;
+class SelfTranslator;
+} // namespace formatter
 
-  namespace parser
-  {
-    class ParseError {};
+namespace parser
+{
+class ParseError
+{
+};
 
-    bool parse(const std::string& source, formatter::Generator& generator, const formatter::SelfTranslator& translator);
-  }
-}
+bool parse(const std::string& source, formatter::Generator& generator, const formatter::SelfTranslator& translator);
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_parse_H */

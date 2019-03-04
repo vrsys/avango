@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::CylinderShape"));
+av::Logger& logger(av::getLogger("av::gua::CylinderShape"));
 }
 
 AV_FC_DEFINE(av::gua::CylinderShape);
@@ -15,23 +15,16 @@ AV_FC_DEFINE(av::gua::CylinderShape);
 AV_FIELD_DEFINE(av::gua::SFCylinderShape);
 AV_FIELD_DEFINE(av::gua::MFCylinderShape);
 
-av::gua::CylinderShape::CylinderShape(::gua::physics::CylinderShape* guashape)
-  : CollisionShape(guashape),
-    m_guaShape(reinterpret_cast< ::gua::physics::CylinderShape*>(CollisionShape::getGuaShape()))
+av::gua::CylinderShape::CylinderShape(::gua::physics::CylinderShape* guashape) : CollisionShape(guashape), m_guaShape(reinterpret_cast<::gua::physics::CylinderShape*>(CollisionShape::getGuaShape()))
 {
-    AV_FC_ADD_ADAPTOR_FIELD(HalfExtents,
-                        std::bind(&CylinderShape::getHalfExtentsCB, this,std::placeholders::_1),
-                        std::bind(&CylinderShape::setHalfExtentsCB, this,std::placeholders::_1));
-
+    AV_FC_ADD_ADAPTOR_FIELD(HalfExtents, std::bind(&CylinderShape::getHalfExtentsCB, this, std::placeholders::_1), std::bind(&CylinderShape::setHalfExtentsCB, this, std::placeholders::_1));
 }
 
-av::gua::CylinderShape::~CylinderShape()
-{}
+av::gua::CylinderShape::~CylinderShape() {}
 
-void
-av::gua::CylinderShape::initClass()
+void av::gua::CylinderShape::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::CollisionShape::initClass();
 
@@ -42,19 +35,8 @@ av::gua::CylinderShape::initClass()
     }
 }
 
-::gua::physics::CylinderShape*
-av::gua::CylinderShape::getGuaShape() const {
-    return m_guaShape;
-}
+::gua::physics::CylinderShape* av::gua::CylinderShape::getGuaShape() const { return m_guaShape; }
 
-void
-av::gua::CylinderShape::getHalfExtentsCB(const SFVec3::GetValueEvent& event)
-{
-    *(event.getValuePtr()) = m_guaShape->get_half_extents();
-}
+void av::gua::CylinderShape::getHalfExtentsCB(const SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = m_guaShape->get_half_extents(); }
 
-void
-av::gua::CylinderShape::setHalfExtentsCB(const SFVec3::SetValueEvent& event)
-{
-    m_guaShape->set_half_extents(event.getValue());
-}
+void av::gua::CylinderShape::setHalfExtentsCB(const SFVec3::SetValueEvent& event) { m_guaShape->set_half_extents(event.getValue()); }

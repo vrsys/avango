@@ -35,24 +35,23 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_nurbs)
 {
-
-  av::gua::nurbs::NURBSLoader::initClass();
-  av::gua::nurbs::NURBSPassDescription::initClass();
-  av::gua::nurbs::NURBSNode::initClass();
-  init_NURBSNode();
-  init_NURBSPassDescription();
-  init_NURBSLoader();
-  
+    av::gua::nurbs::NURBSLoader::initClass();
+    av::gua::nurbs::NURBSPassDescription::initClass();
+    av::gua::nurbs::NURBSNode::initClass();
+    init_NURBSNode();
+    init_NURBSPassDescription();
+    init_NURBSLoader();
 }

@@ -13,90 +13,84 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::SliderConstraint
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL SliderConstraint : public av::gua::Constraint
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::SliderConstraint
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::SliderConstraint is created.
+     * Otherwise, the given ::gua::physics::SliderConstraint is used.
      */
-    class AV_GUA_DLL SliderConstraint : public av::gua::Constraint
-    {
-      AV_FC_DECLARE();
+    SliderConstraint(::gua::physics::SliderConstraint* guaconstraint = new ::gua::physics::SliderConstraint(nullptr,
+                                                                                                            nullptr,
+                                                                                                            ::gua::math::mat4::identity(),
+                                                                                                            ::gua::math::mat4::identity())); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~SliderConstraint();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::SliderConstraint is created.
-       * Otherwise, the given ::gua::physics::SliderConstraint is used.
-       */
-      SliderConstraint(::gua::physics::SliderConstraint* guaconstraint =
-                        new ::gua::physics::SliderConstraint(nullptr, nullptr,
-                                                            ::gua::math::mat4::identity(),
-                                                            ::gua::math::mat4::identity())); // use defined type to circumvent compiler bug in VS8
+  public:
+    SFMatrix4 FrameA;
+    SFMatrix4 FrameB;
 
-    protected:
+    SFFloat LowerLinearLimit;
+    SFFloat UpperLinearLimit;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~SliderConstraint();
+    SFFloat LowerAngularLimit;
+    SFFloat UpperAngularLimit;
 
-    public:
+    /**
+     * Get the wrapped ::gua::physics::SliderConstraint.
+     */
+    ::gua::physics::SliderConstraint* getGuaConstraint() const;
 
-      SFMatrix4  FrameA;
-      SFMatrix4  FrameB;
+  public:
+    virtual void getFrameACB(const SFMatrix4::GetValueEvent& event);
+    virtual void setFrameACB(const SFMatrix4::SetValueEvent& event);
 
-      SFFloat LowerLinearLimit;
-      SFFloat UpperLinearLimit;
+    virtual void getFrameBCB(const SFMatrix4::GetValueEvent& event);
+    virtual void setFrameBCB(const SFMatrix4::SetValueEvent& event);
 
-      SFFloat LowerAngularLimit;
-      SFFloat UpperAngularLimit;
+    virtual void getLowerLinearLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setLowerLinearLimitCB(const SFFloat::SetValueEvent& event);
 
+    virtual void getUpperLinearLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setUpperLinearLimitCB(const SFFloat::SetValueEvent& event);
 
-      /**
-       * Get the wrapped ::gua::physics::SliderConstraint.
-       */
-      ::gua::physics::SliderConstraint* getGuaConstraint() const;
+    virtual void getLowerAngularLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setLowerAngularLimitCB(const SFFloat::SetValueEvent& event);
 
-    public:
+    virtual void getUpperAngularLimitCB(const SFFloat::GetValueEvent& event);
+    virtual void setUpperAngularLimitCB(const SFFloat::SetValueEvent& event);
 
-      virtual void getFrameACB(const SFMatrix4::GetValueEvent& event);
-      virtual void setFrameACB(const SFMatrix4::SetValueEvent& event);
+  private:
+    ::gua::physics::SliderConstraint* m_guaConstraint;
 
-      virtual void getFrameBCB(const SFMatrix4::GetValueEvent& event);
-      virtual void setFrameBCB(const SFMatrix4::SetValueEvent& event);
+    SliderConstraint(const SliderConstraint&);
+    SliderConstraint& operator=(const SliderConstraint&);
+};
 
-      virtual void getLowerLinearLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setLowerLinearLimitCB(const SFFloat::SetValueEvent& event);
+using SFSliderConstraint = SingleField<Link<SliderConstraint>>;
+using MFSliderConstraint = MultiField<Link<SliderConstraint>>;
 
-      virtual void getUpperLinearLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setUpperLinearLimitCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getLowerAngularLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setLowerAngularLimitCB(const SFFloat::SetValueEvent& event);
-
-      virtual void getUpperAngularLimitCB(const SFFloat::GetValueEvent& event);
-      virtual void setUpperAngularLimitCB(const SFFloat::SetValueEvent& event);
-
-    private:
-
-      ::gua::physics::SliderConstraint *m_guaConstraint;
-
-      SliderConstraint(const SliderConstraint&);
-      SliderConstraint& operator=(const SliderConstraint&);
-    };
-
-    using SFSliderConstraint = SingleField<Link<SliderConstraint> >;
-    using MFSliderConstraint = MultiField<Link<SliderConstraint> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::SliderConstraint> >;
-  template class AV_GUA_DLL MultiField<Link<gua::SliderConstraint> >;
+template class AV_GUA_DLL SingleField<Link<gua::SliderConstraint>>;
+template class AV_GUA_DLL MultiField<Link<gua::SliderConstraint>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_SLIDER_CONSTRAINT_HPP
+#endif // AVANGO_GUA_SLIDER_CONSTRAINT_HPP

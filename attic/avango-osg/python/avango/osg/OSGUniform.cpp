@@ -34,34 +34,34 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGUniform(void)
- {
-  // wrapping osg::Uniform functionality
-  register_field<av::osg::SFUniform>("SFUniform");
-  register_multifield<av::osg::MFUniform>("MFUniform");
-  class_<av::osg::Uniform, av::Link<av::osg::Uniform>, bases<av::osg::Object>, boost::noncopyable >("Uniform", "docstring", no_init);
+{
+    // wrapping osg::Uniform functionality
+    register_field<av::osg::SFUniform>("SFUniform");
+    register_multifield<av::osg::MFUniform>("MFUniform");
+    class_<av::osg::Uniform, av::Link<av::osg::Uniform>, bases<av::osg::Object>, boost::noncopyable>("Uniform", "docstring", no_init);
 
-  enum_<osg::Uniform::Type>("uniformtype")
-    .value("FLOAT",::osg::Uniform::FLOAT)
-    .value("FLOAT_VEC2",::osg::Uniform::FLOAT_VEC2)
-    .value("FLOAT_VEC3",::osg::Uniform::FLOAT_VEC3)
-    .value("FLOAT_VEC4",::osg::Uniform::FLOAT_VEC4)
-    .value("INT",::osg::Uniform::INT)
-    .value("INT_VEC2",::osg::Uniform::INT_VEC2)
-    .value("INT_VEC3",::osg::Uniform::INT_VEC3)
-    .value("INT_VEC4",::osg::Uniform::INT_VEC4)
-    .value("SAMPLER_2D",::osg::Uniform::SAMPLER_2D)
-    .value("FLOAT_MAT4",::osg::Uniform::FLOAT_MAT4)
-    .export_values()
-    ;
- }
+    enum_<osg::Uniform::Type>("uniformtype")
+        .value("FLOAT", ::osg::Uniform::FLOAT)
+        .value("FLOAT_VEC2", ::osg::Uniform::FLOAT_VEC2)
+        .value("FLOAT_VEC3", ::osg::Uniform::FLOAT_VEC3)
+        .value("FLOAT_VEC4", ::osg::Uniform::FLOAT_VEC4)
+        .value("INT", ::osg::Uniform::INT)
+        .value("INT_VEC2", ::osg::Uniform::INT_VEC2)
+        .value("INT_VEC3", ::osg::Uniform::INT_VEC3)
+        .value("INT_VEC4", ::osg::Uniform::INT_VEC4)
+        .value("SAMPLER_2D", ::osg::Uniform::SAMPLER_2D)
+        .value("FLOAT_MAT4", ::osg::Uniform::FLOAT_MAT4)
+        .export_values();
+}

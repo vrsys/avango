@@ -50,13 +50,13 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  av::logging::Logger& logger(av::logging::Logger::getLogger("av::Distributed"));
+av::logging::Logger& logger(av::logging::Logger::getLogger("av::Distributed"));
 
-  // functions, internal
+// functions, internal
 
 } // namespace
 
@@ -68,101 +68,78 @@ AV_BASE_DEFINE_ABSTRACT(av::Distributed)
 
 av::Distributed::Distributed()
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  : mNetInfo(0)
+    : mNetInfo(0)
 #endif
-{}
+{
+}
 
 /* virtual */
-av::Distributed::~Distributed()
-{}
+av::Distributed::~Distributed() {}
 
-/* static */ void
-av::Distributed::initClass()
+/* static */ void av::Distributed::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    Base::initClass();
+    if(!isTypeInitialized())
+    {
+        Base::initClass();
 
-    AV_BASE_INIT_ABSTRACT(av::Base, av::Distributed, true);
-  }
+        AV_BASE_INIT_ABSTRACT(av::Base, av::Distributed, true);
+    }
 }
 
-bool
-av::Distributed::isOwned() const
+bool av::Distributed::isOwned() const
 {
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  return (!isDistributed() || (netCreator() == netNode()->netEID()));
+    return (!isDistributed() || (netCreator() == netNode()->netEID()));
 #else
-  return true;
+    return true;
 #endif
 }
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-bool
-av::Distributed::isDistributed() const
+bool av::Distributed::isDistributed() const { return (mNetInfo != 0); }
+
+av::NetInfo* av::Distributed::getNetInfo() { return mNetInfo; }
+
+void av::Distributed::setNetInfo(NetInfo* netInfo) { mNetInfo = netInfo; }
+
+void av::Distributed::notifyLocalChange()
 {
-  return (mNetInfo != 0);
+    if(!isDistributed())
+    {
+        return;
+    }
+
+    Link<Distributed> tmp(this);
+    mNetInfo->mNode->updateDistributedObject(tmp);
 }
 
-av::NetInfo*
-av::Distributed::getNetInfo()
+const av::NetID& av::Distributed::netID() const
 {
-  return mNetInfo;
+    AV_ASSERT(mNetInfo);
+    return mNetInfo->getId();
 }
 
-void
-av::Distributed::setNetInfo(NetInfo* netInfo)
+const std::string& av::Distributed::netCreator() const
 {
-  mNetInfo = netInfo;
+    AV_ASSERT(mNetInfo);
+    return mNetInfo->getId().getEID();
 }
 
-void
-av::Distributed::notifyLocalChange()
+const av::NetNode* av::Distributed::netNode() const
 {
-  if (!isDistributed())
-  {
-    return;
-  }
-
-  Link<Distributed> tmp(this);
-  mNetInfo->mNode->updateDistributedObject(tmp);
+    AV_ASSERT(mNetInfo);
+    return mNetInfo->getNode();
 }
 
-const av::NetID&
-av::Distributed::netID() const
+av::NetNode* av::Distributed::netNode()
 {
-  AV_ASSERT(mNetInfo);
-  return mNetInfo->getId();
+    AV_ASSERT(mNetInfo);
+    return mNetInfo->getNode();
 }
 
-const std::string&
-av::Distributed::netCreator() const
-{
-  AV_ASSERT(mNetInfo);
-  return mNetInfo->getId().getEID();
-}
+/* virtual */ void av::Distributed::becomingDistributed() {}
 
-const av::NetNode*
-av::Distributed::netNode() const
-{
-  AV_ASSERT(mNetInfo);
-  return mNetInfo->getNode();
-}
-
-av::NetNode*
-av::Distributed::netNode()
-{
-  AV_ASSERT(mNetInfo);
-  return mNetInfo->getNode();
-}
-
-/* virtual */ void
-av::Distributed::becomingDistributed()
-{}
-
-/* virtual */ void
-av::Distributed::becomingUndistributed()
-{}
+/* virtual */ void av::Distributed::becomingUndistributed() {}
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)

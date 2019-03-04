@@ -33,14 +33,13 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/signal.hpp>
 
-
 namespace shade
 {
-  class Shader;
-  class ObjectMap;
+class Shader;
+class ObjectMap;
 
-  class Type
-  {
+class Type
+{
   public:
     Type(formatter::Constants::Type type);
     virtual ~Type(void);
@@ -64,14 +63,13 @@ namespace shade
      */
     class State
     {
-    public:
-      virtual ~State(void) {}
+      public:
+        virtual ~State(void) {}
     };
 
     virtual boost::shared_ptr<State> create_state(const PipelineState& ps) const;
 
     //@}
-
 
     /**
      * @name Traits
@@ -133,7 +131,6 @@ namespace shade
 
     //@}
 
-
     /**
      * @name Invocation
      */
@@ -157,13 +154,12 @@ namespace shade
      * @param ti Type-info of class to invoke this function on
      * @param env Shader-Environment in which this method exists
      */
-    void invoke_inline(boost::function<void (formatter::Generator&)> generator, const std::type_info* ti);
+    void invoke_inline(boost::function<void(formatter::Generator&)> generator, const std::type_info* ti);
 
     /**
      * Generates a previously set method body.
      */
     void generate_inline(formatter::Generator&) const;
-
 
     /**
      * Returns a previously set function call name.
@@ -187,17 +183,15 @@ namespace shade
     bool has_inline_function(void) const;
     //@}
 
-
     /**
      * @name Traversing and Collecting
      * Methods used by the compilation stage to find and enumerate all
      * referenced @ref Shader objects.
      */
-    virtual void collect_references(boost::shared_ptr<Type::State> state, boost::function<void (Shader*)>) const;
+    virtual void collect_references(boost::shared_ptr<Type::State> state, boost::function<void(Shader*)>) const;
     virtual void insert_references(boost::shared_ptr<Type::State>, ObjectMap&) const;
 
     //@}
-
 
     /**
      * @name OpenGL bindings
@@ -222,38 +216,35 @@ namespace shade
 
     //@}
 
-
     /**
      * @name Observer
      */
     //@{
 
-    typedef boost::signal<void (const Type*)> signal;
-    typedef boost::signals::connection  connection;
+    typedef boost::signal<void(const Type*)> signal;
+    typedef boost::signals::connection connection;
     shade::Type::connection register_notify(signal::slot_function_type) const;
 
-protected:
-
+  protected:
     void touch(void);
 
     virtual void upload_uniform(boost::shared_ptr<GLSLWrapper>, LinkIndex) const;
 
     //@}
 
-
-protected:
+  protected:
     formatter::Constants::Type m_type;
 
     std::string join_names(const std::string& a, const std::string& b) const;
 
-private:
+  private:
     std::string m_invoke;
-    boost::function<void (formatter::Generator&)> m_invoke_generator;
-    bool m_invoke_is_inline; 
+    boost::function<void(formatter::Generator&)> m_invoke_generator;
+    bool m_invoke_is_inline;
     const std::type_info* m_invoke_ti;
     mutable signal m_modified_cb;
 };
 
-}
+} // namespace shade
 
 #endif /* shade_Type_H */

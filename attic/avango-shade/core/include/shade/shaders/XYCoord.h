@@ -34,30 +34,26 @@
 #include "../types/vec2.h"
 #include "../types/void.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class XYCoord : public ShaderBase<XYCoord, Initializeable, Gettable<vec2>>
+{
+  public:
+    /*virtual*/ void_<> init_vertex(void);
 
-    class XYCoord : public ShaderBase<XYCoord, Initializeable, Gettable<vec2> >
-    {
-    public:
+    /*virtual*/ vec2<> get(void);
 
-      /*virtual*/ void_<> init_vertex(void);
+  private:
+    void get_inline(formatter::Generator& generator);
 
-      /*virtual*/ vec2<> get(void);
+    Varying<vec2> xy_coord;
 
-    private:
+    SHADE_MULTI_DERIVED_DECL(XYCoord, (Initializeable)(Gettable<vec2>))
+};
 
-      void get_inline(formatter::Generator& generator);
-
-      Varying<vec2> xy_coord;
-
-      SHADE_MULTI_DERIVED_DECL(XYCoord, (Initializeable)(Gettable<vec2>))
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_XYCoord_H */

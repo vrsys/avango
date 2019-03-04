@@ -34,39 +34,32 @@
 #include <avango/Singleton.h>
 #include <avango/windows_specific.h>
 
-
 namespace av
 {
+namespace logging
+{
+/**
+ * Appender for printing log messages to std::clog.
+ * ConsoleAppender is a singleton.
+ *
+ * \todo Make it thread-safe
+ */
 
-  namespace logging
-  {
+class AV_DLL ConsoleAppender : public Appender
+{
+    // friend class Singleton<ConsoleAppender>;
 
-    /**
-     * Appender for printing log messages to std::clog.
-     * ConsoleAppender is a singleton.
-     *
-     * \todo Make it thread-safe
-     */
+  public:
+    /* virtual */ void doAppend(LoggingEvent& event);
+    ConsoleAppender() {}
+    virtual ~ConsoleAppender() {}
 
-    class AV_DLL ConsoleAppender : public Appender
-    {
+  protected:
+};
+using ConsoleAppenderInstance = Singleton<ConsoleAppender>;
 
-      //friend class Singleton<ConsoleAppender>;
-
-    public:
-
-      /* virtual */ void doAppend(LoggingEvent& event);
-      ConsoleAppender() {}
-      virtual ~ConsoleAppender() {}
-    protected:
-
-
-    };
-    using ConsoleAppenderInstance = Singleton<ConsoleAppender>;
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 
 #endif // #if !defined(AVANGO_LOGGING_CONSOLEAPPENDER_H)
-

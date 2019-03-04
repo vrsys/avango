@@ -39,39 +39,35 @@
 
 namespace av
 {
-
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  class NetID;
-  class NetInfo;
-  class Msg;
-  class NetNode;
+class NetID;
+class NetInfo;
+class Msg;
+class NetNode;
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  /**
-   * The Distributed class is the base class for all classes that can be distributed.
-   * It provides a simple public interface to some of the internals of the distribution.
-   * Although, normally the application programmer should not need to be concerned with such
-   * details.
-   *
-   * \ingroup av
-   *
-   */
-  class AV_DLL Distributed : public Base
-  {
-
+/**
+ * The Distributed class is the base class for all classes that can be distributed.
+ * It provides a simple public interface to some of the internals of the distribution.
+ * Although, normally the application programmer should not need to be concerned with such
+ * details.
+ *
+ * \ingroup av
+ *
+ */
+class AV_DLL Distributed : public Base
+{
     AV_BASE_DECLARE_ABSTRACT();
 
   public:
-
     /**
      * Constructor
      */
     Distributed();
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
@@ -87,7 +83,6 @@ namespace av
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
   public:
-
     /**
      * Returns \c true if this node is distributed.
      */
@@ -125,7 +120,6 @@ namespace av
     virtual void pop(Msg& netMsg) = 0;
 
   protected:
-
     friend class NetNode;
     void setNetInfo(NetInfo* netInfo);
     NetInfo* getNetInfo();
@@ -138,16 +132,12 @@ namespace av
     virtual void becomingUndistributed();
 
   private:
-
     NetInfo* mNetInfo;
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
+};
 
-  };
-
-  using DistributedSet = std::unordered_set<Link<Distributed>,
-                                            AnyLink::Hasher,
-                                            std::equal_to<AnyLink> >;
-}
+using DistributedSet = std::unordered_set<Link<Distributed>, AnyLink::Hasher, std::equal_to<AnyLink>>;
+} // namespace av
 
 #endif // #if !defined(AVANGO_DISTRIBUTED_H)

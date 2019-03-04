@@ -26,7 +26,6 @@
 #if !defined(AV_DAEMON_DEVICEACTUATOR_H)
 #define AV_DAEMON_DEVICEACTUATOR_H
 
-
 /**
  * \file
  * \ingroup av_daemon
@@ -40,49 +39,45 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Communicates with DeviceService and provides shared data
+ * of a device the associated DeviceService is connected with.
+ * This class should be the base class for specific actuator
+ * implementations used to send commands or set states of a
+ * specific device. (An example can be found in WiimoteActuator.)
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL DeviceActuator : public FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
+    DeviceActuator();
+    ~DeviceActuator();
+
     /**
-     * Communicates with DeviceService and provides shared data
-     * of a device the associated DeviceService is connected with.
-     * This class should be the base class for specific actuator
-     * implementations used to send commands or set states of a
-     * specific device. (An example can be found in WiimoteActuator.)
-     *
-     * \ingroup av_daemon
+     * Name of device service to communicate with.
      */
-    class AV_DAEMON_DLL DeviceActuator : public FieldContainer
-    {
+    SFDeviceService DeviceService;
 
-      AV_FC_DECLARE();
+    /**
+     * Name of station to connect with.
+     */
+    SFString Station;
 
-    public:
+    /**
+     * Inherited from av::FieldContainer.
+     */
+    /* virtual */ void fieldHasChanged(const av::Field& field);
 
-      DeviceActuator();
-      ~DeviceActuator();
-
-      /**
-       * Name of device service to communicate with.
-       */
-      SFDeviceService DeviceService;
-
-      /**
-       * Name of station to connect with.
-       */
-      SFString Station;
-
-      /**
-       * Inherited from av::FieldContainer.
-       */
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-
-    protected:
-
-      std::string mStation;
-      av::Link<av::daemon::DeviceService> mService;
-
-    };
-  }
-}
+  protected:
+    std::string mStation;
+    av::Link<av::daemon::DeviceService> mService;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

@@ -23,7 +23,4 @@
 
 #include <shade/types/impl/get_pointer.h>
 
-shade::Shader* shade::get_pointer(Shader& v)
-{
-  return &v;
-}
+shade::Shader* shade::get_pointer(Shader& v) { return &v; }

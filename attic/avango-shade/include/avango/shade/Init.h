@@ -40,39 +40,40 @@
 
 namespace shade
 {
-  class Program;
+class Program;
 }
 
 namespace av
 {
-  namespace shade
-  {
-    /**
-     * Initializes the AVANGO SHADE Integration library.
-     *
-     * \ingroup av_shade
-     */
-    class AV_SHADE_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
+namespace shade
+{
+/**
+ * Initializes the AVANGO SHADE Integration library.
+ *
+ * \ingroup av_shade
+ */
+class AV_SHADE_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
 
-    public:
+  public:
+    template <class Shader>
+    static void registerShader(const std::string& name);
+    template <class Shader, class Wrapper>
+    static void registerWrappedShader(const std::string& name);
 
-      template<class Shader> static void registerShader(const std::string& name);
-      template<class Shader, class Wrapper> static void registerWrappedShader(const std::string& name);
+    static void registerFieldAdapter(boost::shared_ptr<FieldAdapter> adapter);
+    static boost::shared_ptr<FieldAdapter> getFieldAdapter(::shade::types::TypeAccessor::HashType hash);
 
-      static void registerFieldAdapter(boost::shared_ptr<FieldAdapter> adapter);
-      static boost::shared_ptr<FieldAdapter> getFieldAdapter(::shade::types::TypeAccessor::HashType hash);
+    static void initProgram(boost::shared_ptr<::shade::Program> program);
+    static void appendSearchPath(const std::string& path);
 
-      static void initProgram(boost::shared_ptr< ::shade::Program> program);
-      static void appendSearchPath(const std::string& path);
-
-    private:
-      static std::map< ::shade::types::TypeAccessor::HashType, boost::shared_ptr<FieldAdapter> > mFieldAdapters;
-      static std::vector<std::string> mSearchPaths;
-    };
-  }
-}
+  private:
+    static std::map<::shade::types::TypeAccessor::HashType, boost::shared_ptr<FieldAdapter>> mFieldAdapters;
+    static std::vector<std::string> mSearchPaths;
+};
+} // namespace shade
+} // namespace av
 
 #include "impl/Init_impl.cpp"
 

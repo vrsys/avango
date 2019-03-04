@@ -26,56 +26,43 @@
 #include <avango/gua/network/SharedContainerHolder.h>
 #include <avango/gua/network/NetTransform.h>
 
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SharedContainerHolder"));
+av::Logger& logger(av::getLogger("av::gua::SharedContainerHolder"));
 }
 
 AV_FC_DEFINE(av::gua::SharedContainerHolder);
 
-av::gua::SharedContainerHolder::SharedContainerHolder()
-{
-  AV_FC_ADD_FIELD(SharedContainers, std::vector<av::Link<av::FieldContainer> >());
-}
+av::gua::SharedContainerHolder::SharedContainerHolder() { AV_FC_ADD_FIELD(SharedContainers, std::vector<av::Link<av::FieldContainer>>()); }
 
 /* virtual */
-av::gua::SharedContainerHolder::~SharedContainerHolder()
+av::gua::SharedContainerHolder::~SharedContainerHolder() {}
+
+/* static */ void av::gua::SharedContainerHolder::initClass()
 {
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, av::gua::SharedContainerHolder, true);
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-/* static */ void
-av::gua::SharedContainerHolder::initClass()
+/* virtual */ void av::gua::SharedContainerHolder::fieldHasChangedLocalSideEffect(const Field& field)
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, av::gua::SharedContainerHolder, true);
-    sClassTypeId.setDistributable(true);
-  }
+    FieldContainer::fieldHasChangedLocalSideEffect(field);
+
+    mContainersChanged = (&field == &SharedContainers);
 }
 
-/* virtual */ void
-av::gua::SharedContainerHolder::fieldHasChangedLocalSideEffect(const Field& field)
+void av::gua::SharedContainerHolder::evaluateLocalSideEffect()
 {
-  FieldContainer::fieldHasChangedLocalSideEffect(field);
+    FieldContainer::evaluateLocalSideEffect();
 
-  mContainersChanged = (&field == &SharedContainers);
+    if(mContainersChanged && mNetTransform)
+    {
+        mNetTransform->sharedContainersChanged();
+    }
 }
 
-void
-av::gua::SharedContainerHolder::evaluateLocalSideEffect()
-{
-  FieldContainer::evaluateLocalSideEffect();
-
-  if (mContainersChanged && mNetTransform) {
-    mNetTransform->sharedContainersChanged();
-  }
-}
-
-void
-av::gua::SharedContainerHolder::registerNetTransform(av::gua::NetTransform* netMatrixTransform)
-{
-  mNetTransform = netMatrixTransform;
-}
-
+void av::gua::SharedContainerHolder::registerNetTransform(av::gua::NetTransform* netMatrixTransform) { mNetTransform = netMatrixTransform; }

@@ -40,65 +40,60 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::ClipNode OsgClipNode;
+namespace osg
+{
+typedef ::osg::ClipNode OsgClipNode;
+
+/**
+ * Wrapper for ::osg::ClipNode
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL ClipNode : public av::osg::Group
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::ClipNode is created.
+     * Otherwise, the given ::osg::ClipNode is used.
+     */
+    ClipNode(OsgClipNode* osggroup = new OsgClipNode()); // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ClipNode();
+
+  public:
+    MFClipPlane ClipPlanes;
 
     /**
-     * Wrapper for ::osg::ClipNode
-     *
-     * \ingroup av_osg
+     * Creates six clip planes corresponding to the given BoundingBox, specified by min and max
      */
-    class AV_OSG_DLL ClipNode : public av::osg::Group
-    {
-      AV_FC_DECLARE();
+    void createClipBox(::osg::Vec3 min, ::osg::Vec3 max);
 
-    public:
+    /**
+     * Get the wrapped ::osg::ClipNode.
+     */
+    ::osg::ClipNode* getOsgClipNode() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::ClipNode is created.
-       * Otherwise, the given ::osg::ClipNode is used.
-       */
-      ClipNode(OsgClipNode* osggroup = new OsgClipNode()); // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getClipPlaneCB(const av::osg::MFClipPlane::GetValueEvent& event);
+    virtual void setClipPlaneCB(const av::osg::MFClipPlane::SetValueEvent& event);
 
-    protected:
+  private:
+    ::osg::ClipNode* mOsgClipNode;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ClipNode();
-
-    public:
-
-      MFClipPlane ClipPlanes;
-
-      /**
-       * Creates six clip planes corresponding to the given BoundingBox, specified by min and max
-       */
-      void createClipBox(::osg::Vec3 min, ::osg::Vec3 max);
-
-      /**
-       * Get the wrapped ::osg::ClipNode.
-       */
-      ::osg::ClipNode* getOsgClipNode() const;
-
-    protected:
-
-      virtual void getClipPlaneCB(const av::osg::MFClipPlane::GetValueEvent& event);
-      virtual void setClipPlaneCB(const av::osg::MFClipPlane::SetValueEvent& event);
-
-    private:
-
-      ::osg::ClipNode *mOsgClipNode;
-    };
-
-    typedef SingleField<Link<ClipNode> > SFClipNode;
-    typedef MultiField<Link<ClipNode> > MFClipNode;
-  } // namespace osg
+typedef SingleField<Link<ClipNode>> SFClipNode;
+typedef MultiField<Link<ClipNode>> MFClipNode;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::ClipNode> >;
-  template class AV_OSG_DLL MultiField<Link<osg::ClipNode> >;
+template class AV_OSG_DLL SingleField<Link<osg::ClipNode>>;
+template class AV_OSG_DLL MultiField<Link<osg::ClipNode>>;
 #endif
 
 } // namespace av

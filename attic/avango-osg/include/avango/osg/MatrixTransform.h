@@ -39,64 +39,59 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::MatrixTransform OsgMatrixTransform;
+namespace osg
+{
+typedef ::osg::MatrixTransform OsgMatrixTransform;
+
+/**
+ * Wrapper for ::osg::MatrixTransform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL MatrixTransform : public Transform
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::MatrixTransform is created.
+     * Otherwise, the given ::osg::MatrixTransform is used.
+     */
+    MatrixTransform(OsgMatrixTransform* osgmatrixtransform = new OsgMatrixTransform());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~MatrixTransform();
+
+  public:
+    /**
+     * Matrix directly sets and gets the Matrix of the wrapped ::osg::MatrixTransform.
+     */
+    SFMatrix Matrix;
 
     /**
-     * Wrapper for ::osg::MatrixTransform
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::MatrixTransform.
      */
-    class AV_OSG_DLL MatrixTransform : public Transform
-    {
-      AV_FC_DECLARE();
+    ::osg::MatrixTransform* getOsgMatrixTransform() const;
 
-    public:
+  protected:
+    virtual void getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event);
+    virtual void setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::MatrixTransform is created.
-       * Otherwise, the given ::osg::MatrixTransform is used.
-       */
-      MatrixTransform(OsgMatrixTransform* osgmatrixtransform = new OsgMatrixTransform());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::MatrixTransform* mOsgMatrixTransform;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~MatrixTransform();
-
-    public:
-
-      /**
-       * Matrix directly sets and gets the Matrix of the wrapped ::osg::MatrixTransform.
-       */
-      SFMatrix Matrix;
-
-      /**
-       * Get the wrapped ::osg::MatrixTransform.
-       */
-      ::osg::MatrixTransform* getOsgMatrixTransform() const;
-
-    protected:
-
-      virtual void getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event);
-      virtual void setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event);
-
-    private:
-
-      ::osg::MatrixTransform *mOsgMatrixTransform;
-    };
-
-    typedef SingleField<Link<MatrixTransform> > SFMatrixTransform;
-    typedef MultiField<Link<MatrixTransform> > MFMatrixTransform;
-  } // namespace osg
+typedef SingleField<Link<MatrixTransform>> SFMatrixTransform;
+typedef MultiField<Link<MatrixTransform>> MFMatrixTransform;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::MatrixTransform> >;
-  template class AV_OSG_DLL MultiField<Link<osg::MatrixTransform> >;
+template class AV_OSG_DLL SingleField<Link<osg::MatrixTransform>>;
+template class AV_OSG_DLL MultiField<Link<osg::MatrixTransform>>;
 #endif
 
 } // namespace av

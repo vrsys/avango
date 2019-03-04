@@ -3,4 +3,4 @@
 
 void init_SPointsLoader();
 
-#endif //AV_PYTHON_GUA_SPoints_LOADER_HPP
+#endif // AV_PYTHON_GUA_SPoints_LOADER_HPP

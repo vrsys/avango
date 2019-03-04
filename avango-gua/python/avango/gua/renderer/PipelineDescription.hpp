@@ -3,4 +3,4 @@
 
 void init_PipelineDescription();
 
-#endif //AV_PYTHON_GUA_PIPELINE_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_PIPELINE_DESCRIPTION_HPP

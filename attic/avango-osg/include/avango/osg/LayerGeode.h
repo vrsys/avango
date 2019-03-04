@@ -37,107 +37,101 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Geode osgGeode;
+namespace osg
+{
+typedef ::osg::Geode osgGeode;
 
+/**
+ * Wrapper for ::osg::Geode with additional layering feature
+ *
+ * A LayerGeode is a group node for Drawables. With LayerMode=OFF, the Geode behaves mostly like an osg::Geode.
+ * With LayerMode=STENCIL (default) or NO_DEPTH_TEST, the DrawCallbacks of all drawables are replaced by an empty
+ * Callback, that simply skips drawing of the appropriate Drawable. Only the DrawCallback of the first Drawable
+ * in list is hijacked to achieve the layering effect.
+ *
+ * How it works:
+ * When the first Drawable's DrawCallback is called with STENCIL mode on, a stencil buffer is set up and the
+ * Drawables drawImplementation is called, with depth test and stencil writing enabled. After that, all
+ * subsequent Drawables are painted with depth test disabled, but stencil test enabled. This technique
+ * eliminates z-fighting and preserves correct depth values and transparency. For transparency effects,
+ * this node must be placed in a depth sorted render bin. With NO_DEPTH_TEST mode on, the stencil test is
+ * skipped and all Drawables are painted without depth test.
+ *
+ * Known issues:
+ * - In some cases, StateSets are not inherited correctly
+ * - The Drawables DrawCallbacks are replaced, so previously assigned DrawCallbacks will not work.
+ * - The first Drawables useDisplayList property will be changed to false.
+ * - As DisplayList and DrawCallback settings are changed, it is not possible to share Drawables
+ *   between multiple LayerGeode or Geode nodes.
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LayerGeode : public Geode
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::osg::Geode with additional layering feature
-     *
-     * A LayerGeode is a group node for Drawables. With LayerMode=OFF, the Geode behaves mostly like an osg::Geode.
-     * With LayerMode=STENCIL (default) or NO_DEPTH_TEST, the DrawCallbacks of all drawables are replaced by an empty
-     * Callback, that simply skips drawing of the appropriate Drawable. Only the DrawCallback of the first Drawable
-     * in list is hijacked to achieve the layering effect.
-     *
-     * How it works:
-     * When the first Drawable's DrawCallback is called with STENCIL mode on, a stencil buffer is set up and the
-     * Drawables drawImplementation is called, with depth test and stencil writing enabled. After that, all
-     * subsequent Drawables are painted with depth test disabled, but stencil test enabled. This technique
-     * eliminates z-fighting and preserves correct depth values and transparency. For transparency effects,
-     * this node must be placed in a depth sorted render bin. With NO_DEPTH_TEST mode on, the stencil test is
-     * skipped and all Drawables are painted without depth test.
-     *
-     * Known issues:
-     * - In some cases, StateSets are not inherited correctly
-     * - The Drawables DrawCallbacks are replaced, so previously assigned DrawCallbacks will not work.
-     * - The first Drawables useDisplayList property will be changed to false.
-     * - As DisplayList and DrawCallback settings are changed, it is not possible to share Drawables
-     *   between multiple LayerGeode or Geode nodes.
-     *
-     * \ingroup av_osg
+     * Constructor. When called without arguments, a new ::osg::Geode is created.
+     * Otherwise, the given ::osg::Geode is used.
      */
-    class AV_OSG_DLL LayerGeode : public Geode
+    LayerGeode(osgGeode* osggeode = new osgGeode());
+
+    enum LayerModes
     {
-      AV_FC_DECLARE();
-
-    public:
-
-      /**
-       * Constructor. When called without arguments, a new ::osg::Geode is created.
-       * Otherwise, the given ::osg::Geode is used.
-       */
-      LayerGeode(osgGeode* osggeode = new osgGeode());
-
-      enum LayerModes
-      {
         OFF = 0,
         STENCIL,
         NO_DEPTH_TEST
-      };
+    };
 
-      SFInt LayerMode;
+    SFInt LayerMode;
 
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-    private:
+  private:
+    bool mLayerModeChanged;
+    bool mDrawablesChanged;
+    void updateDrawCallbacks();
 
-      bool mLayerModeChanged;
-      bool mDrawablesChanged;
-      void updateDrawCallbacks();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LayerGeode();
 
-    protected:
+    virtual void setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LayerGeode();
-
-      virtual void setDrawablesCB(const av::osg::MFDrawable::SetValueEvent& event);
-
-      struct DrawCallbackBaseLayer : public ::osg::Drawable::DrawCallback
-      {
-      public :
-
+    struct DrawCallbackBaseLayer : public ::osg::Drawable::DrawCallback
+    {
+      public:
         DrawCallbackBaseLayer(av::osg::LayerGeode* geode, int mode);
         virtual void drawImplementation(::osg::RenderInfo& renderInfo, const ::osg::Drawable* drawable) const;
         void drawWithStencil(::osg::RenderInfo& renderInfo) const;
         void drawWithNoDepthTest(::osg::RenderInfo& renderInfo) const;
 
-      private :
-
+      private:
         ::osg::Geode* mGeode;
         int mMode;
-      };
-
-      struct DrawCallbackDisableDraw : public ::osg::Drawable::DrawCallback
-      {
-      public :
-
-        DrawCallbackDisableDraw() {};
-        virtual void drawImplementation(::osg::RenderInfo& renderInfo, const ::osg::Drawable* drawable) const {};
-      };
     };
 
-    typedef SingleField<Link<LayerGeode> > SFLayerGeode;
-    typedef MultiField<Link<LayerGeode> > MFLayerGeode;
-  }
+    struct DrawCallbackDisableDraw : public ::osg::Drawable::DrawCallback
+    {
+      public:
+        DrawCallbackDisableDraw(){};
+        virtual void drawImplementation(::osg::RenderInfo& renderInfo, const ::osg::Drawable* drawable) const {};
+    };
+};
+
+typedef SingleField<Link<LayerGeode>> SFLayerGeode;
+typedef MultiField<Link<LayerGeode>> MFLayerGeode;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::LayerGeode> >;
-  template class AV_OSG_DLL MultiField<Link<osg::LayerGeode> >;
+template class AV_OSG_DLL SingleField<Link<osg::LayerGeode>>;
+template class AV_OSG_DLL MultiField<Link<osg::LayerGeode>>;
 #endif
 
-}
+} // namespace av
 
 #endif

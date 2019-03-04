@@ -35,52 +35,47 @@
 
 namespace av
 {
-  namespace osg
-  {
-    class NetMatrixTransform;
+namespace osg
+{
+class NetMatrixTransform;
 
+/**
+ * Wrapper for ::osg::Group
+ *
+ * \ingroup av_osg
+ */
+class FragmentGroup : public av::osg::Group
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::osg::Group
-     *
-     * \ingroup av_osg
+     * Constructor. When called without arguments, a new ::osg::Group is created.
+     * Otherwise, the given ::osg::Group is used.
      */
-    class FragmentGroup : public av::osg::Group
-    {
-      AV_FC_DECLARE();
+    FragmentGroup();
 
-    public:
+    void fieldHasChangedLocalSideEffect(const Field&);
+    void evaluateLocalSideEffect();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Group is created.
-       * Otherwise, the given ::osg::Group is used.
-       */
-      FragmentGroup();
+    void registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform);
 
-      void fieldHasChangedLocalSideEffect(const Field&);
-      void evaluateLocalSideEffect();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~FragmentGroup();
 
-      void registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform);
+  private:
+    NetMatrixTransform* mNetMatrixTransform;
+    bool mChildrenChanged;
+};
 
-    protected:
+typedef SingleField<Link<FragmentGroup>> SFFragmentGroup;
+typedef MultiField<Link<FragmentGroup>> MFFragmentGroup;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~FragmentGroup();
-
-    private:
-
-      NetMatrixTransform* mNetMatrixTransform;
-      bool      mChildrenChanged;
-
-    };
-
-    typedef SingleField<Link<FragmentGroup> > SFFragmentGroup;
-    typedef MultiField<Link<FragmentGroup> > MFFragmentGroup;
-
-  } // namespace osg
+} // namespace osg
 
 } // namespace av
 
 #endif
-

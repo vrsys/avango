@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::Video3DPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::Video3DPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::Video3DPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::Video3DPassDescription);
 AV_FIELD_DEFINE(av::gua::SFVideo3DPassDescription);
 AV_FIELD_DEFINE(av::gua::MFVideo3DPassDescription);
 
-av::gua::Video3DPassDescription::Video3DPassDescription(
-  std::shared_ptr< ::gua::Video3DPassDescription> const& guaVideo3DPassDescription)
-    : PipelinePassDescription(guaVideo3DPassDescription)
-    , m_guaVideo3DPassDescription(guaVideo3DPassDescription)
+av::gua::Video3DPassDescription::Video3DPassDescription(std::shared_ptr<::gua::Video3DPassDescription> const& guaVideo3DPassDescription)
+    : PipelinePassDescription(guaVideo3DPassDescription), m_guaVideo3DPassDescription(guaVideo3DPassDescription)
 {
-
 }
 
-void
-av::gua::Video3DPassDescription::initClass()
+void av::gua::Video3DPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,9 +33,4 @@ av::gua::Video3DPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::Video3DPassDescription> const&
-av::gua::Video3DPassDescription::getGuaVideo3DPassDescription() const
-{
-    return m_guaVideo3DPassDescription;
-}
+std::shared_ptr<::gua::Video3DPassDescription> const& av::gua::Video3DPassDescription::getGuaVideo3DPassDescription() const { return m_guaVideo3DPassDescription; }

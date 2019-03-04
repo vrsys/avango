@@ -261,6 +261,7 @@ IF (${AVANGO_VIDEO3D_SUPPORT})
   list(APPEND _AVANGO_GUA_LIBRARIES guacamole-video3d)
 ENDIF (${AVANGO_VIDEO3D_SUPPORT})                                                            
 
+
 IF (${AVANGO_SPOINTS_SUPPORT})                                                            
   list(APPEND _AVANGO_GUA_LIBRARIES guacamole-spoints)
 ENDIF (${AVANGO_SPOINTS_SUPPORT})

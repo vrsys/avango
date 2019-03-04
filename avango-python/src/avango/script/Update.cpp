@@ -27,48 +27,47 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::script::Update"));
+av::Logger& logger(av::getLogger("av::script::Update"));
 }
 
 AV_FC_DEFINE(av::script::Update);
 
 void av::script::Update::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, av::script::Update, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, av::script::Update, true);
+    }
 }
 
 av::script::Update::Update(void)
 {
-  AV_FC_ADD_FIELD(Callback, SFObject::ValueType());
-  AV_FC_ADD_FIELD(Active, false);
+    AV_FC_ADD_FIELD(Callback, SFObject::ValueType());
+    AV_FC_ADD_FIELD(Active, false);
 }
 
-av::script::Update::~Update()
-{}
+av::script::Update::~Update() {}
 
 void av::script::Update::evaluate(void)
 {
-  const bool active = Active.getValue();
+    const bool active = Active.getValue();
 
-  if (active)
-  {
-    SFObject::ValueType callback = Callback.getValue();
-    if (callback.ptr() != Py_None)
+    if(active)
     {
-      try
-      {
-        callback();
-      }
-      catch (...)
-      {
-        logger.warn() << "invalid callback in Callback field";
-      }
+        SFObject::ValueType callback = Callback.getValue();
+        if(callback.ptr() != Py_None)
+        {
+            try
+            {
+                callback();
+            }
+            catch(...)
+            {
+                logger.warn() << "invalid callback in Callback field";
+            }
+        }
     }
-  }
 
-  alwaysEvaluate(active);
+    alwaysEvaluate(active);
 }

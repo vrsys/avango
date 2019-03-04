@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGAbsoluteTransform(void)
- {
-  // wrapping osg::AbsoluteTransform functionality
-  register_field<av::osg::SFAbsoluteTransform>("SFAbsoluteTransform");
-  register_multifield<av::osg::MFAbsoluteTransform>("MFAbsoluteTransform");
-  class_<av::osg::AbsoluteTransform, av::Link<av::osg::AbsoluteTransform>, bases<av::osg::Node>, boost::noncopyable >("AbsoluteTransform", "docstring", no_init);
- }
+{
+    // wrapping osg::AbsoluteTransform functionality
+    register_field<av::osg::SFAbsoluteTransform>("SFAbsoluteTransform");
+    register_multifield<av::osg::MFAbsoluteTransform>("MFAbsoluteTransform");
+    class_<av::osg::AbsoluteTransform, av::Link<av::osg::AbsoluteTransform>, bases<av::osg::Node>, boost::noncopyable>("AbsoluteTransform", "docstring", no_init);
+}

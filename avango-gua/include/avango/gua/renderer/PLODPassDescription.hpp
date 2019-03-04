@@ -15,54 +15,47 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::PLODPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL PLODPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::PLODPassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::PLODPassDescription is created.
+     * Otherwise, the given ::gua::PLODPassDescription is used.
      */
-    class AV_GUA_DLL PLODPassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    PLODPassDescription(std::shared_ptr<::gua::PLODPassDescription> const& PLODPassDescription = std::shared_ptr<::gua::PLODPassDescription>(new ::gua::PLODPassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::PLODPassDescription.
+     */
+    std::shared_ptr<::gua::PLODPassDescription> const& getGuaPLODPassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::PLODPassDescription is created.
-       * Otherwise, the given ::gua::PLODPassDescription is used.
-       */
-      PLODPassDescription(std::shared_ptr< ::gua::PLODPassDescription> const& PLODPassDescription =
-                             std::shared_ptr< ::gua::PLODPassDescription>(new ::gua::PLODPassDescription()) );
+  private:
+    std::shared_ptr<::gua::PLODPassDescription> m_guaPLODPassDescription;
 
+    PLODPassDescription(const PLODPassDescription&);
+    PLODPassDescription& operator=(const PLODPassDescription&);
+};
 
+using SFPLODPassDescription = SingleField<Link<PLODPassDescription>>;
+using MFPLODPassDescription = MultiField<Link<PLODPassDescription>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::PLODPassDescription.
-       */
-      std::shared_ptr< ::gua::PLODPassDescription> const& getGuaPLODPassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::PLODPassDescription> m_guaPLODPassDescription;
-
-
-      PLODPassDescription(const PLODPassDescription&);
-      PLODPassDescription& operator=(const PLODPassDescription&);
-    };
-
-    using SFPLODPassDescription = SingleField<Link<PLODPassDescription> >;
-    using MFPLODPassDescription = MultiField<Link<PLODPassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::PLODPassDescription> >;
-  template class AV_GUA_DLL MultiField<Link<gua::PLODPassDescription> >;
+template class AV_GUA_DLL SingleField<Link<gua::PLODPassDescription>>;
+template class AV_GUA_DLL MultiField<Link<gua::PLODPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_PLOD_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_PLOD_PASS_DESCRIPTION_HPP

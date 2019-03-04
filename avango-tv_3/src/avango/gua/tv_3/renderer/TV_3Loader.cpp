@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::tv_3::TV_3Loader"));
+av::Logger& logger(av::getLogger("av::gua::tv_3::TV_3Loader"));
 }
 
 AV_FC_DEFINE(av::gua::tv_3::TV_3Loader);
@@ -15,66 +15,42 @@ AV_FC_DEFINE(av::gua::tv_3::TV_3Loader);
 AV_FIELD_DEFINE(av::gua::tv_3::SFTV_3Loader);
 AV_FIELD_DEFINE(av::gua::tv_3::MFTV_3Loader);
 
-av::gua::tv_3::TV_3Loader::TV_3Loader(::gua::TV_3Loader* guaTV_3Loader)
-    : m_guaTV_3Loader(guaTV_3Loader)
+av::gua::tv_3::TV_3Loader::TV_3Loader(::gua::TV_3Loader* guaTV_3Loader) : m_guaTV_3Loader(guaTV_3Loader)
 {
-  /*
-  AV_FC_ADD_ADAPTOR_FIELD(UploadBudget,
-                      std::bind(&PLODLoader::getUploadBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setUploadBudgetCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(RenderBudget,
-                      std::bind(&PLODLoader::getRenderBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setRenderBudgetCB, this,std::placeholders::_1));
-  AV_FC_ADD_ADAPTOR_FIELD(OutOfCoreBudget,
-                      std::bind(&PLODLoader::getOutOfCoreBudgetCB, this,std::placeholders::_1),
-                      std::bind(&PLODLoader::setOutOfCoreBudgetCB, this,std::placeholders::_1));
-  */
+    /*
+    AV_FC_ADD_ADAPTOR_FIELD(UploadBudget,
+                        std::bind(&PLODLoader::getUploadBudgetCB, this,std::placeholders::_1),
+                        std::bind(&PLODLoader::setUploadBudgetCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(RenderBudget,
+                        std::bind(&PLODLoader::getRenderBudgetCB, this,std::placeholders::_1),
+                        std::bind(&PLODLoader::setRenderBudgetCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(OutOfCoreBudget,
+                        std::bind(&PLODLoader::getOutOfCoreBudgetCB, this,std::placeholders::_1),
+                        std::bind(&PLODLoader::setOutOfCoreBudgetCB, this,std::placeholders::_1));
+    */
 }
 
-//av::gua::tv_3::PLODLoader::~PLODLoader()
+// av::gua::tv_3::PLODLoader::~PLODLoader()
 //{}
 
-av::Link<av::gua::Node>
-av::gua::tv_3::TV_3Loader::load( std::string const& nodeName,
-                           std::string const& fileName,
-                           Flags flags,
-                           int const cpu_budget,
-                           int const gpu_budget) const
+av::Link<av::gua::Node> av::gua::tv_3::TV_3Loader::load(std::string const& nodeName, std::string const& fileName, Flags flags, int const cpu_budget, int const gpu_budget) const
 {
-
-    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(
-                                          nodeName, fileName,
-                                          flags, cpu_budget, gpu_budget));
+    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(nodeName, fileName, flags, cpu_budget, gpu_budget));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
 
 av::Link<av::gua::Node>
-av::gua::tv_3::TV_3Loader::load( std::string const& nodeName,
-                           std::string const& fileName,
-                           av::gua::Material const& fallbackMaterial,
-                           Flags flags,
-                           int const cpu_budget,
-                           int const gpu_budget) const
+av::gua::tv_3::TV_3Loader::load(std::string const& nodeName, std::string const& fileName, av::gua::Material const& fallbackMaterial, Flags flags, int const cpu_budget, int const gpu_budget) const
 {
-
-    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(
-                                          nodeName, fileName,
-                                          fallbackMaterial.getGuaMaterial(),
-                                          flags, cpu_budget, gpu_budget));
+    auto gua_node(m_guaTV_3Loader->create_geometry_from_file(nodeName, fileName, fallbackMaterial.getGuaMaterial(), flags, cpu_budget, gpu_budget));
     auto root(createChildren(gua_node));
 
     return av::Link<av::gua::Node>(root);
 }
 
-
-bool
-av::gua::tv_3::TV_3Loader::is_supported(std::string const& fileName) const
-{
-  return m_guaTV_3Loader->is_supported(fileName);
-}
-
+bool av::gua::tv_3::TV_3Loader::is_supported(std::string const& fileName) const { return m_guaTV_3Loader->is_supported(fileName); }
 
 /*
 std::pair<std::string, ::gua::math::vec3>
@@ -122,10 +98,9 @@ av::gua::tv_3::PLODLoader::pick_plod_interpolate(
 
 */
 
-void
-av::gua::tv_3::TV_3Loader::initClass()
+void av::gua::tv_3::TV_3Loader::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -136,40 +111,42 @@ av::gua::tv_3::TV_3Loader::initClass()
     }
 }
 
-::gua::TV_3Loader*
-av::gua::tv_3::TV_3Loader::getGuaTV_3Loader() const
+::gua::TV_3Loader* av::gua::tv_3::TV_3Loader::getGuaTV_3Loader() const { return m_guaTV_3Loader; }
+
+av::gua::Node* av::gua::tv_3::TV_3Loader::createChildren(std::shared_ptr<::gua::node::Node> root) const
 {
-    return m_guaTV_3Loader;
-}
+    av::gua::Node* av_node(nullptr);
 
-av::gua::Node*
-av::gua::tv_3::TV_3Loader::createChildren(std::shared_ptr< ::gua::node::Node> root) const {
-
-  av::gua::Node* av_node(nullptr);
-
-  auto group_cast(std::dynamic_pointer_cast< ::gua::node::TransformNode>(root));
-  if (group_cast) {
-    av_node = new av::gua::TransformNode(group_cast);
-  }
-
-  if (!av_node) {
-    auto geom_cast(std::dynamic_pointer_cast< ::gua::node::TV_3Node>(root));
-    if (geom_cast) {
-      av_node = new av::gua::tv_3::TV_3Node(geom_cast);
+    auto group_cast(std::dynamic_pointer_cast<::gua::node::TransformNode>(root));
+    if(group_cast)
+    {
+        av_node = new av::gua::TransformNode(group_cast);
     }
-  }
 
-  if (av_node) {
-    av_node->addToParentChildren();
-  } else {
-    std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
-  }
+    if(!av_node)
+    {
+        auto geom_cast(std::dynamic_pointer_cast<::gua::node::TV_3Node>(root));
+        if(geom_cast)
+        {
+            av_node = new av::gua::tv_3::TV_3Node(geom_cast);
+        }
+    }
 
-  for (auto c : root->get_children()) {
-    createChildren(c);
-  }
+    if(av_node)
+    {
+        av_node->addToParentChildren();
+    }
+    else
+    {
+        std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
+    }
 
-  return av_node;
+    for(auto c : root->get_children())
+    {
+        createChildren(c);
+    }
+
+    return av_node;
 }
 
 /*

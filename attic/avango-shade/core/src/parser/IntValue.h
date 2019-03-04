@@ -28,30 +28,26 @@
 
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class IntValue : public IntConvertableValue
+{
+  public:
+    IntValue(int value);
 
-    class IntValue : public IntConvertableValue
-    {
-    public:
+    int get(void) const { return m_value; }
 
-      IntValue(int value);
+    /*virtual*/ int get_int(void) const { return get(); }
 
-      int get(void) const { return m_value; }
+    /*virtual*/ bool is_constant(void) const;
 
-      /*virtual*/ int get_int(void) const { return get(); }
+  private:
+    /*virtual*/ bool less_than(const Value& other) const;
 
-      /*virtual*/ bool is_constant(void) const;
+    int m_value;
+};
 
-    private:
-
-      /*virtual*/ bool less_than(const Value& other) const;
-
-      int m_value;
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_IntValue */

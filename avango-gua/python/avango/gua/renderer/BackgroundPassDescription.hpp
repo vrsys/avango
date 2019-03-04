@@ -3,4 +3,4 @@
 
 void init_BackgroundPassDescription();
 
-#endif //AV_PYTHON_GUA_BACKGROUND_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_BACKGROUND_PASS_DESCRIPTION_HPP

@@ -34,19 +34,19 @@
 
 namespace av
 {
-  namespace sound
-  {
-    /**
-     * Initializes the AVANGO utility library.
-     * Usage: \code av::sound::Init::initClass(); \endcode
-     *
-     * \ingroup av_utils
-     */
-    class AV_SOUND_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace sound
+{
+/**
+ * Initializes the AVANGO utility library.
+ * Usage: \code av::sound::Init::initClass(); \endcode
+ *
+ * \ingroup av_utils
+ */
+class AV_SOUND_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace sound
+} // namespace av
 
 #endif

@@ -27,7 +27,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Intersection"));
+av::Logger& logger(av::getLogger("av::osg::Intersection"));
 }
 
 AV_FC_DEFINE(av::osg::Intersection);
@@ -37,27 +37,25 @@ AV_FIELD_DEFINE(av::osg::MFIntersection);
 
 av::osg::Intersection::Intersection()
 {
-  AV_FC_ADD_FIELD(NodePath, MFNode::ContainerType());
-  AV_FC_ADD_FIELD(Point, ::osg::Vec3(0.0, 0.0, 0.0));
-  AV_FC_ADD_FIELD(Normal, ::osg::Vec3(0.0, 0.0, 0.0));
-  AV_FC_ADD_FIELD(IndexList, std::vector<unsigned int>());
-  AV_FC_ADD_FIELD(RatioList, std::vector<double>());
+    AV_FC_ADD_FIELD(NodePath, MFNode::ContainerType());
+    AV_FC_ADD_FIELD(Point, ::osg::Vec3(0.0, 0.0, 0.0));
+    AV_FC_ADD_FIELD(Normal, ::osg::Vec3(0.0, 0.0, 0.0));
+    AV_FC_ADD_FIELD(IndexList, std::vector<unsigned int>());
+    AV_FC_ADD_FIELD(RatioList, std::vector<double>());
 }
 
 /* virtual */
-av::osg::Intersection::~Intersection()
-{}
+av::osg::Intersection::~Intersection() {}
 
-/* static */ void
-av::osg::Intersection::initClass()
+/* static */ void av::osg::Intersection::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::osg::Intersection, true);
+        AV_FC_INIT(av::FieldContainer, av::osg::Intersection, true);
 
-    SFIntersection::initClass("av::osg::SFIntersection", "av::Field");
-    MFIntersection::initClass("av::osg::MFIntersection", "av::Field");
-  }
+        SFIntersection::initClass("av::osg::SFIntersection", "av::Field");
+        MFIntersection::initClass("av::osg::MFIntersection", "av::Field");
+    }
 }

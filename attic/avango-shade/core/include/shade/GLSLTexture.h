@@ -29,8 +29,8 @@
 
 namespace shade
 {
-  class GLSLTexture : public Texture
-  {
+class GLSLTexture : public Texture
+{
   public:
     GLSLTexture(GLenum target);
     GLSLTexture(GLenum enable_target, GLenum bind_target);
@@ -45,7 +45,7 @@ namespace shade
     GLenum m_enable_target;
     GLenum m_bind_target;
     GLuint m_name;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_GLSLTexture_H */

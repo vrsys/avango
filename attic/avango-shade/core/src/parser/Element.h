@@ -30,24 +30,24 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    class Generator;
-  }
-
-  namespace parser
-  {
-    class Scope;
-    class Value;
-
-    class Element
-    {
-    public:
-      virtual ~Element(void) {}
-      virtual void get_content(formatter::Generator&, Scope&, const FunctionCall&, std::ostream& error_log) const = 0;
-      virtual boost::shared_ptr<const Value> evaluate(const Scope&) const;
-    };
-  }
+namespace formatter
+{
+class Generator;
 }
+
+namespace parser
+{
+class Scope;
+class Value;
+
+class Element
+{
+  public:
+    virtual ~Element(void) {}
+    virtual void get_content(formatter::Generator&, Scope&, const FunctionCall&, std::ostream& error_log) const = 0;
+    virtual boost::shared_ptr<const Value> evaluate(const Scope&) const;
+};
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_Element_H */

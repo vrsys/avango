@@ -34,59 +34,54 @@
 #include <avango/osg/Image.h>
 #include "windows_specific_osg.h"
 
-
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Convenience node supposed to load an image,
+ * using the osgDB::readImageFile() mechanism
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LoadImage : public ::av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Convenience node supposed to load an image,
-     * using the osgDB::readImageFile() mechanism
-     *
-     * \ingroup av_osg
+     * Constructor. Note that there is no counterpart in osg for an av::osg::LoadImage.
      */
-    class AV_OSG_DLL LoadImage : public ::av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    LoadImage();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LoadImage();
 
-      /**
-       * Constructor. Note that there is no counterpart in osg for an av::osg::LoadImage.
-       */
-      LoadImage();
+  public:
+    /**
+     * File name of the image file to load.
+     */
+    SFString Filename;
 
-    protected:
+    /**
+     * Loaded image
+     */
+    SFImage Image;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LoadImage();
+    /* virtual */ void evaluateLocalSideEffect();
+};
 
-    public:
+typedef SingleField<Link<LoadImage>> SFLoadImage;
+typedef MultiField<Link<LoadImage>> MFLoadImage;
 
-      /**
-       * File name of the image file to load.
-       */
-      SFString Filename;
-
-      /**
-       * Loaded image
-       */
-      SFImage Image;
-
-      /* virtual */ void evaluateLocalSideEffect();
-
-    };
-
-    typedef SingleField<Link<LoadImage> > SFLoadImage;
-    typedef MultiField<Link<LoadImage> > MFLoadImage;
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::LoadImage> >;
-  template class AV_OSG_DLL MultiField<Link<osg::LoadImage> >;
+template class AV_OSG_DLL SingleField<Link<osg::LoadImage>>;
+template class AV_OSG_DLL MultiField<Link<osg::LoadImage>>;
 #endif
 
 } // namespace av

@@ -3,10 +3,8 @@
 
 using namespace UnitTest;
 
-
-namespace {
-
-
+namespace
+{
 TEST(CheckEqualWithUnsignedLong)
 {
     TestResults results;
@@ -77,7 +75,7 @@ TEST(CheckEqualFailureIncludesCheckExpectedAndActual)
     const int something = 2;
     CheckEqual(results, 1, something, TestDetails("", "", "", 0));
 
-	using namespace std;
+    using namespace std;
     CHECK(strstr(reporter.lastFailedMessage, "xpected 1"));
     CHECK(strstr(reporter.lastFailedMessage, "was 2"));
 }
@@ -119,8 +117,7 @@ TEST(CheckCloseWithZeroEpsilonWorksForSameNumber)
 
 TEST(CheckCloseWithNaNFails)
 {
-    union
-    {
+    union {
         unsigned int bitpattern;
         float nan;
     };
@@ -132,8 +129,7 @@ TEST(CheckCloseWithNaNFails)
 
 TEST(CheckCloseWithNaNAgainstItselfFails)
 {
-    union
-    {
+    union {
         unsigned int bitpattern;
         float nan;
     };
@@ -151,7 +147,7 @@ TEST(CheckCloseFailureIncludesCheckExpectedAndActual)
     const float actual = 1.1f;
     CheckClose(results, expected, actual, 0.01f, TestDetails("", "", "", 0));
 
-	using namespace std;
+    using namespace std;
     CHECK(strstr(reporter.lastFailedMessage, "xpected 0.9"));
     CHECK(strstr(reporter.lastFailedMessage, "was 1.1"));
 }
@@ -162,7 +158,7 @@ TEST(CheckCloseFailureIncludesTolerance)
     TestResults results(&reporter);
     CheckClose(results, 2, 3, 0.01f, TestDetails("", "", "", 0));
 
-	using namespace std;
+    using namespace std;
     CHECK(strstr(reporter.lastFailedMessage, "0.01"));
 }
 
@@ -180,12 +176,11 @@ TEST(CheckCloseFailureIncludesDetails)
     CHECK_EQUAL(10, reporter.lastFailedLine);
 }
 
-
 TEST(CheckArrayEqualTrue)
 {
     TestResults results;
 
-    int const array[3] = { 1, 2, 3 };
+    int const array[3] = {1, 2, 3};
     CheckArrayEqual(results, array, array, 3, TestDetails("", "", "", 0));
     CHECK_EQUAL(0, results.GetFailureCount());
 }
@@ -194,8 +189,8 @@ TEST(CheckArrayEqualFalse)
 {
     TestResults results;
 
-    int const array1[3] = { 1, 2, 3 };
-    int const array2[3] = { 1, 2, 2 };
+    int const array1[3] = {1, 2, 3};
+    int const array2[3] = {1, 2, 2};
     CheckArrayEqual(results, array1, array2, 3, TestDetails("", "", "", 0));
     CHECK_EQUAL(1, results.GetFailureCount());
 }
@@ -204,8 +199,8 @@ TEST(CheckArrayCloseTrue)
 {
     TestResults results;
 
-    float const array1[3] = { 1.0f, 1.5f, 2.0f };
-    float const array2[3] = { 1.01f, 1.51f, 2.01f };
+    float const array1[3] = {1.0f, 1.5f, 2.0f};
+    float const array2[3] = {1.01f, 1.51f, 2.01f};
     CheckArrayClose(results, array1, array2, 3, 0.02f, TestDetails("", "", "", 0));
     CHECK_EQUAL(0, results.GetFailureCount());
 }
@@ -214,8 +209,8 @@ TEST(CheckArrayCloseFalse)
 {
     TestResults results;
 
-    float const array1[3] = { 1.0f, 1.5f, 2.0f };
-    float const array2[3] = { 1.01f, 1.51f, 2.01f };
+    float const array1[3] = {1.0f, 1.5f, 2.0f};
+    float const array2[3] = {1.01f, 1.51f, 2.01f};
     CheckArrayClose(results, array1, array2, 3, 0.001f, TestDetails("", "", "", 0));
     CHECK_EQUAL(1, results.GetFailureCount());
 }
@@ -226,8 +221,8 @@ TEST(CheckArrayCloseFailureIncludesDetails)
     TestResults results(&reporter);
     TestDetails const details("arrayCloseTest", "arrayCloseSuite", "file", 1337);
 
-    float const array1[3] = { 1.0f, 1.5f, 2.0f };
-    float const array2[3] = { 1.01f, 1.51f, 2.01f };
+    float const array1[3] = {1.0f, 1.5f, 2.0f};
+    float const array2[3] = {1.01f, 1.51f, 2.01f};
     CheckArrayClose(results, array1, array2, 3, 0.001f, details);
 
     CHECK_EQUAL("arrayCloseTest", reporter.lastFailedTest);
@@ -236,17 +231,12 @@ TEST(CheckArrayCloseFailureIncludesDetails)
     CHECK_EQUAL(1337, reporter.lastFailedLine);
 }
 
-
 TEST(CheckArray2DCloseTrue)
 {
     TestResults results;
 
-    float const array1[3][3] = { { 1.0f, 1.5f, 2.0f },
-                                 { 2.0f, 2.5f, 3.0f },
-                                 { 3.0f, 3.5f, 4.0f } };
-    float const array2[3][3] = { { 1.01f, 1.51f, 2.01f },
-                                 { 2.01f, 2.51f, 3.01f },
-                                 { 3.01f, 3.51f, 4.01f } };
+    float const array1[3][3] = {{1.0f, 1.5f, 2.0f}, {2.0f, 2.5f, 3.0f}, {3.0f, 3.5f, 4.0f}};
+    float const array2[3][3] = {{1.01f, 1.51f, 2.01f}, {2.01f, 2.51f, 3.01f}, {3.01f, 3.51f, 4.01f}};
     CheckArray2DClose(results, array1, array2, 3, 3, 0.02f, TestDetails("", "", "", 0));
     CHECK_EQUAL(0, results.GetFailureCount());
 }
@@ -255,20 +245,13 @@ TEST(CheckArray2DCloseFalse)
 {
     TestResults results;
 
-    float const array1[3][3] = { { 1.0f, 1.5f, 2.0f },
-                                 { 2.0f, 2.5f, 3.0f },
-                                 { 3.0f, 3.5f, 4.0f } };
-    float const array2[3][3] = { { 1.01f, 1.51f, 2.01f },
-                                 { 2.01f, 2.51f, 3.01f },
-                                 { 3.01f, 3.51f, 4.01f } };
+    float const array1[3][3] = {{1.0f, 1.5f, 2.0f}, {2.0f, 2.5f, 3.0f}, {3.0f, 3.5f, 4.0f}};
+    float const array2[3][3] = {{1.01f, 1.51f, 2.01f}, {2.01f, 2.51f, 3.01f}, {3.01f, 3.51f, 4.01f}};
     CheckArray2DClose(results, array1, array2, 3, 3, 0.001f, TestDetails("", "", "", 0));
     CHECK_EQUAL(1, results.GetFailureCount());
 }
 
-TEST(CheckCloseWithDoublesSucceeds)
-{
-    CHECK_CLOSE(0.5, 0.5, 0.0001);
-}
+TEST(CheckCloseWithDoublesSucceeds) { CHECK_CLOSE(0.5, 0.5, 0.0001); }
 
 TEST(CheckArray2DCloseFailureIncludesDetails)
 {
@@ -276,12 +259,8 @@ TEST(CheckArray2DCloseFailureIncludesDetails)
     TestResults results(&reporter);
     TestDetails const details("array2DCloseTest", "array2DCloseSuite", "file", 1234);
 
-    float const array1[3][3] = { { 1.0f, 1.5f, 2.0f },
-                                 { 2.0f, 2.5f, 3.0f },
-                                 { 3.0f, 3.5f, 4.0f } };
-    float const array2[3][3] = { { 1.01f, 1.51f, 2.01f },
-                                 { 2.01f, 2.51f, 3.01f },
-                                 { 3.01f, 3.51f, 4.01f } };
+    float const array1[3][3] = {{1.0f, 1.5f, 2.0f}, {2.0f, 2.5f, 3.0f}, {3.0f, 3.5f, 4.0f}};
+    float const array2[3][3] = {{1.01f, 1.51f, 2.01f}, {2.01f, 2.51f, 3.01f}, {3.01f, 3.51f, 4.01f}};
     CheckArray2DClose(results, array1, array2, 3, 3, 0.001f, details);
 
     CHECK_EQUAL("array2DCloseTest", reporter.lastFailedTest);
@@ -290,4 +269,4 @@ TEST(CheckArray2DCloseFailureIncludesDetails)
     CHECK_EQUAL(1234, reporter.lastFailedLine);
 }
 
-}
+} // namespace

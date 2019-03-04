@@ -38,79 +38,73 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Abstract Wrapper for ::osg::Texture
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Texture : public Object
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Abstract Wrapper for ::osg::Texture
-     *
-     * \ingroup av_osg
+     * Constructor.
      */
-    class AV_OSG_DLL Texture : public Object
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    Texture(::osg::Texture* osgtexture);
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Texture();
 
-      /**
-       * Constructor.
-       */
-      Texture(::osg::Texture* osgtexture);
+  public:
+    SFInt WrapS;
+    SFInt WrapT;
+    SFInt WrapR;
+    SFInt MinFilter;
+    SFInt MagFilter;
+    SFInt InternalFormatMode;
+    SFInt InternalFormat;
+    SFFloat MaxAnisotropy;
+    SFBool ResizeNonPowerOfTwoHint;
 
-    protected:
+    /**
+     * Get the wrapped ::osg::Texture object.
+     * \return a pointer to the texture object
+     */
+    ::osg::Texture* getOsgTexture() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Texture();
+  private:
+    ::osg::Texture* mOsgTexture;
 
-    public:
+  protected:
+    virtual void getWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::GetValueEvent& event);
+    virtual void setWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::SetValueEvent& event);
+    virtual void getMinFilterCB(const av::SFInt::GetValueEvent& event);
+    virtual void setMinFilterCB(const av::SFInt::SetValueEvent& event);
+    virtual void getMagFilterCB(const av::SFInt::GetValueEvent& event);
+    virtual void setMagFilterCB(const av::SFInt::SetValueEvent& event);
+    virtual void getInternalFormatModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setInternalFormatModeCB(const av::SFInt::SetValueEvent& event);
+    virtual void getInternalFormat(const av::SFInt::GetValueEvent& event);
+    virtual void setInternalFormat(const av::SFInt::SetValueEvent& event);
+    virtual void getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event);
+    virtual void setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event);
+    virtual void getResizeNonPowerOfTwoHint(const av::SFBool::GetValueEvent& event);
+    virtual void setResizeNonPowerOfTwoHint(const av::SFBool::SetValueEvent& event);
+};
 
-      SFInt WrapS;
-      SFInt WrapT;
-      SFInt WrapR;
-      SFInt MinFilter;
-      SFInt MagFilter;
-      SFInt InternalFormatMode;
-      SFInt InternalFormat;
-      SFFloat MaxAnisotropy;
-      SFBool ResizeNonPowerOfTwoHint;
-
-      /**
-       * Get the wrapped ::osg::Texture object.
-       * \return a pointer to the texture object
-       */
-      ::osg::Texture* getOsgTexture() const;
-
-    private:
-
-      ::osg::Texture* mOsgTexture;
-
-    protected:
-
-      virtual void getWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::GetValueEvent& event);
-      virtual void setWrapCB(::osg::Texture::WrapParameter param, const av::SFInt::SetValueEvent& event);
-      virtual void getMinFilterCB(const av::SFInt::GetValueEvent& event);
-      virtual void setMinFilterCB(const av::SFInt::SetValueEvent& event);
-      virtual void getMagFilterCB(const av::SFInt::GetValueEvent& event);
-      virtual void setMagFilterCB(const av::SFInt::SetValueEvent& event);
-      virtual void getInternalFormatModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setInternalFormatModeCB(const av::SFInt::SetValueEvent& event);
-      virtual void getInternalFormat(const av::SFInt::GetValueEvent& event);
-      virtual void setInternalFormat(const av::SFInt::SetValueEvent& event);
-      virtual void getMaxAnisotropyCB(const av::SFFloat::GetValueEvent& event);
-      virtual void setMaxAnisotropyCB(const av::SFFloat::SetValueEvent& event);
-      virtual void getResizeNonPowerOfTwoHint(const av::SFBool::GetValueEvent& event);
-      virtual void setResizeNonPowerOfTwoHint(const av::SFBool::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Texture> > SFTexture;
-    typedef MultiField<Link<Texture> > MFTexture;
-  } // namespace osg
+typedef SingleField<Link<Texture>> SFTexture;
+typedef MultiField<Link<Texture>> MFTexture;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Texture> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Texture> >;
+template class AV_OSG_DLL SingleField<Link<osg::Texture>>;
+template class AV_OSG_DLL MultiField<Link<osg::Texture>>;
 #endif
 
 } // namespace av

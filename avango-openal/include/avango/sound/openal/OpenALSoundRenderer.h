@@ -47,81 +47,84 @@
 
 namespace av
 {
-  namespace sound
-  {
-    class SampleBuffer;
+namespace sound
+{
+class SampleBuffer;
 
-    namespace openal
+namespace openal
+{
+class OpenALSoundRenderer : public SoundRenderer
+{
+    AV_FC_DECLARE();
+
+  public:
+    OpenALSoundRenderer();
+    /* virtual */ ~OpenALSoundRenderer();
+    SFString Device;
+
+    void openDevice(const std::string& deviceName);
+    void closeDevice();
+    bool deviceOpen() const;
+
+    void createContext();
+    void destroyContext();
+    bool hasContext() const;
+
+    // inherited from SoundRenderer
+    /* virtual */ boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
+    // this node is not distributable !
+    /* virtual */ void fieldHasChanged(const Field& field);
+
+  protected:
+    /* virtual */ void setListenerPosition(const ::gua::math::mat4& position);
+    /* virtual */ ::gua::math::mat4 getListenerPosition() const;
+
+    class OpenALLocalSource : public SoundSource::LocalSource
     {
-      class OpenALSoundRenderer : public SoundRenderer {
-        AV_FC_DECLARE();
-        public:
-          OpenALSoundRenderer();
-          /* virtual */~OpenALSoundRenderer();
-          SFString Device;
+      public:
+        OpenALLocalSource(SoundRenderer* soundRenderer);
+        ~OpenALLocalSource();
 
-          void openDevice(const std::string& deviceName);
-          void closeDevice();
-          bool deviceOpen() const;
+        /* virtual */ void setWorldTransform(const ::gua::math::mat4& worldMatrix);
+        /* virtual */ void setLooping(bool loop);
+        /* virtual */ void setURL(const std::string& soundURL);
 
-          void createContext();
-          void destroyContext();
-          bool hasContext() const;
+        /* virtual */ void setVelocity(const ::gua::math::vec3& velocity);
+        /* virtual */ void setGain(float gain);
+        /* virtual */ void setPitch(float pitch);
 
-          // inherited from SoundRenderer
-          /* virtual */ boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
-          // this node is not distributable !
-          /* virtual */ void fieldHasChanged(const Field& field);
+        /* virtual */ void play();
+        /* virtual */ void pause();
+        /* virtual */ void stop();
+        /* virtual */ void rewind();
+        /* virtual */ bool donePlaying() const;
 
-        protected:
+        virtual double getPlayTime() const { return mPlayTime; }
+        /* virtual */ void enqueueSampleBuffer(Link<SampleBuffer> buffer);
 
-          /* virtual */ void setListenerPosition(const ::gua::math::mat4& position);
-          /* virtual */ ::gua::math::mat4 getListenerPosition() const;
+      private:
+        void removeStaticBufferFromSource();
+        ALuint getNewStreamingBuffer();
+        void freeUnusedStreamingBuffers();
+        void flushBufferQueue();
+        ALuint mSource;
+        bool mHaveSource;
+        ALuint mBuffer;
+        using BufferQueue = std::deque<ALuint>;
+        BufferQueue mBufferQueue;
+        bool mHaveBuffer;
+        double mPlayTime;
+        bool mIsPlaying;
+    };
 
-          class OpenALLocalSource : public SoundSource::LocalSource {
-            public:
-              OpenALLocalSource(SoundRenderer* soundRenderer);
-              ~OpenALLocalSource();
-
-              /* virtual */ void setWorldTransform(const ::gua::math::mat4& worldMatrix);
-              /* virtual */ void setLooping(bool loop );
-              /* virtual */ void setURL(const std::string& soundURL );
-
-              /* virtual */ void setVelocity( const ::gua::math::vec3& velocity);
-              /* virtual */ void setGain(float gain);
-              /* virtual */ void setPitch(float pitch);
-
-              /* virtual */ void play();
-              /* virtual */ void pause();
-              /* virtual */ void stop();
-              /* virtual */ void rewind();
-              /* virtual */ bool donePlaying() const;
-
-              virtual double getPlayTime() const { return mPlayTime; }
-              /* virtual */ void enqueueSampleBuffer(Link<SampleBuffer> buffer);
-            private:
-              void removeStaticBufferFromSource();
-              ALuint getNewStreamingBuffer();
-              void freeUnusedStreamingBuffers();
-              void flushBufferQueue();
-              ALuint mSource;
-              bool   mHaveSource;
-              ALuint mBuffer;
-              using BufferQueue = std::deque<ALuint>;
-              BufferQueue mBufferQueue;
-              bool   mHaveBuffer;
-              double mPlayTime;
-              bool       mIsPlaying;
-          };
-
-          ALCdevice* mDevice;
-          std::string mDeviceName;
-          ALCcontext* mContext;
-          ::gua::math::mat4 mPosition;
-          static unsigned int gAlutOpenCount;
-      };
-    }
-  }
-}
+    ALCdevice* mDevice;
+    std::string mDeviceName;
+    ALCcontext* mContext;
+    ::gua::math::mat4 mPosition;
+    static unsigned int gAlutOpenCount;
+};
+} // namespace openal
+} // namespace sound
+} // namespace av
 
 #endif /*AV_SOUND_OPENALSOUNDRENDERER_H*/

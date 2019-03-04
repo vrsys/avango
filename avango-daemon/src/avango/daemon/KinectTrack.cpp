@@ -35,109 +35,102 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::KinectTrack"));
+av::Logger& logger(av::getLogger("av::daemon::KinectTrack"));
 }
 
 AV_BASE_DEFINE(av::daemon::KinectTrack);
 
-av::daemon::KinectTrack::KinectTrack()
-  : Device()
-  , mRequiredFeatures({ "port", "server" })
-  , mPort("7000")
-  , mServer("127.0.0.1")
-{}
+av::daemon::KinectTrack::KinectTrack() : Device(), mRequiredFeatures({"port", "server"}), mPort("7000"), mServer("127.0.0.1") {}
 
-void
-av::daemon::KinectTrack::initClass()
+void av::daemon::KinectTrack::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::daemon::Device::initClass();
-    AV_BASE_INIT(av::daemon::Device, av::daemon::KinectTrack, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::daemon::Device::initClass();
+        AV_BASE_INIT(av::daemon::Device, av::daemon::KinectTrack, true);
+    }
 }
 
-/* virtual */ void
-av::daemon::KinectTrack::startDevice()
+/* virtual */ void av::daemon::KinectTrack::startDevice()
 {
-  if (!parseFeatures())
-    return;
+    if(!parseFeatures())
+        return;
 
-  // initialize
+    // initialize
 
-  logger.info() << "startDevice: device initialized successfully";
-  std::cout << "KinectTrack::startDevice\n";
+    logger.info() << "startDevice: device initialized successfully";
+    std::cout << "KinectTrack::startDevice\n";
 }
 
-/* virtual */ void
-av::daemon::KinectTrack::readLoop()
+/* virtual */ void av::daemon::KinectTrack::readLoop()
 {
-  std::string mServer = queryFeature("server");
-  std::string mPort = queryFeature("port");
-  std::string address = mServer + ":" + mPort; // {"127.0.0.1:7000"};
-  logger.info() << "readLoop: start";
-  std::cout << "KinectTrack::readLoop " << address << "\n";
+    std::string mServer = queryFeature("server");
+    std::string mPort = queryFeature("port");
+    std::string address = mServer + ":" + mPort; // {"127.0.0.1:7000"};
+    logger.info() << "readLoop: start";
+    std::cout << "KinectTrack::readLoop " << address << "\n";
 
-  zmq::context_t ctx(1); // means single threaded
-  zmq::socket_t  socket(ctx, ZMQ_SUB); // means a publisher
-  socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
+    zmq::context_t ctx(1);              // means single threaded
+    zmq::socket_t socket(ctx, ZMQ_SUB); // means a publisher
+    socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
 #if ZMQ_VERSION_MAJOR < 3
-  uint64_t hwm = 1;
-  socket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
+    uint64_t hwm = 1;
+    socket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
 #else
-  uint32_t hwm = 1;
-  socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
+    uint32_t hwm = 1;
+    socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
 #endif
-  std::string endpoint("tcp://" + address);
-  socket.connect(endpoint.c_str());
+    std::string endpoint("tcp://" + address);
+    socket.connect(endpoint.c_str());
 
-  // stations[0] |-> head
+    // stations[0] |-> head
 
-  while (mKeepRunning) {
-    zmq::message_t message(16*sizeof(float));
-    socket.recv(&message);
-    // * TODO Use port and server property to set address
-    ::gua::math::mat4f pose;
-    std::memcpy( &pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
-    mStations[0]->setMatrix(::gua::math::mat4(pose));
-  }
+    while(mKeepRunning)
+    {
+        zmq::message_t message(16 * sizeof(float));
+        socket.recv(&message);
+        // * TODO Use port and server property to set address
+        ::gua::math::mat4f pose;
+        std::memcpy(&pose, reinterpret_cast<::gua::math::mat4f*>(message.data()), sizeof(::gua::math::mat4f));
+        mStations[0]->setMatrix(::gua::math::mat4(pose));
+    }
 }
 
-/* virtual */ void
-av::daemon::KinectTrack::stopDevice()
+/* virtual */ void av::daemon::KinectTrack::stopDevice()
 {
 #if 0
   mKinectTrack->exit();
 #endif
-  logger.info() << "stopDevice: done.";
+    logger.info() << "stopDevice: done.";
 }
 
-const std::vector<std::string>&
-av::daemon::KinectTrack::queryFeatures()
+const std::vector<std::string>& av::daemon::KinectTrack::queryFeatures() { return mRequiredFeatures; }
+
+bool av::daemon::KinectTrack::parseFeatures()
 {
-  return mRequiredFeatures;
-}
+    mPort = queryFeature("port");
+    if(mPort == "")
+    {
+        logger.warn() << "parseFeatures: feature 'port' not specified";
+        return false;
+    }
+    else
+    {
+        logger.info() << "parseFeatures: configured feature 'port' = %s", mPort;
+    }
 
-bool
-av::daemon::KinectTrack::parseFeatures()
-{
-  mPort = queryFeature("port");
-  if (mPort == "") {
-    logger.warn() << "parseFeatures: feature 'port' not specified";
-    return false;
-  } else {
-    logger.info() << "parseFeatures: configured feature 'port' = %s", mPort;
-  }
+    mServer = queryFeature("server");
+    if(mServer == "")
+    {
+        logger.warn() << "parseFeatures: feature 'server' not specified";
+        return false;
+    }
+    else
+    {
+        logger.info() << "parseFeatures: configured feature 'server' = %s", mServer;
+    }
 
-  mServer = queryFeature("server");
-  if (mServer == "") {
-    logger.warn() << "parseFeatures: feature 'server' not specified";
-    return false;
-  } else {
-    logger.info() << "parseFeatures: configured feature 'server' = %s", mServer;
-  }
-
-  return true;
+    return true;
 }
 
 // from readLoop

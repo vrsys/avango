@@ -39,31 +39,28 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class ShadowPointLight : public ShaderBase<ShadowPointLight, ILight>
+{
+  public:
+    /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
+    /*virtual*/ void_<> transform(objref<> coordinate_system);
 
-    class ShadowPointLight : public ShaderBase<ShadowPointLight, ILight>
-    {
-    public:
+    ValueReference<vec3, uniform> position;
+    ValueReference<vec3, uniform> color;
 
-      /*virtual*/ void_<> illuminate(objref<>, vec3<> position);
-      /*virtual*/ void_<> transform(objref<> coordinate_system);
+    sampler2DShadow shadow_map;
+    matrix4<uniform> modelview;
 
-      ValueReference<vec3, uniform> position;
-      ValueReference<vec3, uniform> color;
+  private:
+    Varying<vec3, InverseTransformInterpolator> transformed_position;
+    vec4<raw_varying> transformed_surface_position;
 
-      sampler2DShadow shadow_map;
-      matrix4<uniform> modelview;
+    SHADE_DERIVED_DECL(ShadowPointLight, ILight)
+};
 
-    private:
-
-      Varying<vec3, InverseTransformInterpolator> transformed_position;
-      vec4<raw_varying> transformed_surface_position;
-
-      SHADE_DERIVED_DECL(ShadowPointLight, ILight)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_ShadowPointLight_H */

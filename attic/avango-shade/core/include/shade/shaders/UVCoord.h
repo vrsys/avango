@@ -34,28 +34,24 @@
 #include "../types/vec2.h"
 #include "../types/void.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class UVCoord : public ShaderBase<UVCoord, Initializeable, PerStageGettable<vec2>>
+{
+  public:
+    /*virtual*/ void_<> init_vertex(void);
 
-    class UVCoord : public ShaderBase<UVCoord, Initializeable, PerStageGettable<vec2> >
-    {
-    public:
+    /*virtual*/ vec2<> get_fragment(void);
 
-      /*virtual*/ void_<> init_vertex(void);
+  private:
+    Varying<vec2> uv_coord;
 
-      /*virtual*/ vec2<> get_fragment(void);
+    SHADE_MULTI_DERIVED_DECL(UVCoord, (Initializeable)(PerStageGettable<vec2>))
+};
 
-    private:
-
-      Varying<vec2> uv_coord;
-
-      SHADE_MULTI_DERIVED_DECL(UVCoord, (Initializeable)(PerStageGettable<vec2>))
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_UVCoord_H */

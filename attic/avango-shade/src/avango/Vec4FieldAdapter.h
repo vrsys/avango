@@ -33,20 +33,20 @@
 
 namespace av
 {
-  namespace shade
-  {
-    /**
-     * Registers a vec4 field with appropriate getter and setter functions
-     *
-     * \ingroup av_shade
-     */
-    class Vec4FieldAdapter : public FieldAdapter
-    {
-    public:
-      /*virtual*/ ::shade::types::TypeAccessor::HashType hash(void) const;
-      /*virtual*/ void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const;
-    };
-  }
-}
+namespace shade
+{
+/**
+ * Registers a vec4 field with appropriate getter and setter functions
+ *
+ * \ingroup av_shade
+ */
+class Vec4FieldAdapter : public FieldAdapter
+{
+  public:
+    /*virtual*/ ::shade::types::TypeAccessor::HashType hash(void) const;
+    /*virtual*/ void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const;
+};
+} // namespace shade
+} // namespace av
 
 #endif

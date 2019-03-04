@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Drawable"));
+av::Logger& logger(av::getLogger("av::osg::Drawable"));
 }
 
 AV_FC_DEFINE_ABSTRACT(av::osg::Drawable);
@@ -37,51 +37,39 @@ AV_FC_DEFINE_ABSTRACT(av::osg::Drawable);
 AV_FIELD_DEFINE(av::osg::SFDrawable);
 AV_FIELD_DEFINE(av::osg::MFDrawable);
 
-av::osg::Drawable::Drawable(::osg::Drawable* osgdrawable) :
-  Object(osgdrawable),
-  mOsgDrawable(osgdrawable)
+av::osg::Drawable::Drawable(::osg::Drawable* osgdrawable) : Object(osgdrawable), mOsgDrawable(osgdrawable)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(StateSet,
-                            boost::bind(&Drawable::getStateSetCB, this, _1),
-                            boost::bind(&Drawable::setStateSetCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(StateSet, boost::bind(&Drawable::getStateSetCB, this, _1), boost::bind(&Drawable::setStateSetCB, this, _1));
 }
 
-av::osg::Drawable::~Drawable()
-{}
+av::osg::Drawable::~Drawable() {}
 
-void
-av::osg::Drawable::initClass()
+void av::osg::Drawable::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Object::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Object::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::Drawable, true);
+        AV_FC_INIT_ABSTRACT(av::osg::Object, av::osg::Drawable, true);
 
-    SFDrawable::initClass("av::osg::SFDrawable", "av::Field");
-    MFDrawable::initClass("av::osg::MFDrawable", "av::Field");
-  }
+        SFDrawable::initClass("av::osg::SFDrawable", "av::Field");
+        MFDrawable::initClass("av::osg::MFDrawable", "av::Field");
+    }
 }
 
-::osg::Drawable*
-av::osg::Drawable::getOsgDrawable() const
+::osg::Drawable* av::osg::Drawable::getOsgDrawable() const { return mOsgDrawable; }
+
+/* virtual */ void av::osg::Drawable::getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event)
 {
-  return mOsgDrawable;
+    *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::StateSet>(mOsgDrawable->getStateSet());
 }
 
-/* virtual */ void
-av::osg::Drawable::getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event)
+/* virtual */ void av::osg::Drawable::setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event)
 {
-  *(event.getValuePtr()) = av::osg::get_from_osg_object<av::osg::StateSet>(mOsgDrawable->getStateSet());
-}
+    if(!event.getValue().isValid())
+    {
+        return;
+    }
 
-/* virtual */ void
-av::osg::Drawable::setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event)
-{
-  if (!event.getValue().isValid())
-  {
-    return;
-  }
-
-  mOsgDrawable->setStateSet(event.getValue()->getOsgStateSet());
+    mOsgDrawable->setStateSet(event.getValue()->getOsgStateSet());
 }

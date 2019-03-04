@@ -46,22 +46,22 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace particle
-    {
-     /**
-       * Initializes the Avango OpenSceneGraph library.
-       * Usage: \code av::osg::particle::Init::initClass(); \endcode
-       *
-       * \ingroup av_osg
-       */
-      class AV_OSG_PARTICLE_DLL Init
-      {
-        AV_TYPED_DECLARE_ABSTRACT();
-      };
-    }
-  }
-}
+namespace osg
+{
+namespace particle
+{
+/**
+ * Initializes the Avango OpenSceneGraph library.
+ * Usage: \code av::osg::particle::Init::initClass(); \endcode
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_PARTICLE_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace particle
+} // namespace osg
+} // namespace av
 
 #endif

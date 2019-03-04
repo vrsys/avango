@@ -25,38 +25,29 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(XYCoord, "XYCoord.glsl",
-    SHADE_NONE,
-    SHADE_DEFS((xy_coord))
-    )
+SHADE_CLASS_INIT(XYCoord, "XYCoord.glsl", SHADE_NONE, SHADE_DEFS((xy_coord)))
 
 void XYCoord::get_inline(formatter::Generator& generator)
 {
-  generator.handle_environment_begin(fragment_shader);
-  generator.handle_return_begin();
-  generator.handle_function_call_begin();
-  generator.handle_function_call_name_begin();
-  generator.handle_identifier("XYCoord_get_xy_coord");
-  generator.handle_function_call_name_end();
-  generator.handle_function_call_parameter_list_begin();
-  generator.handle_function_call_parameter_begin();
-  generator.handle_identifier("self");
-  generator.handle_function_call_parameter_end();
-  generator.handle_function_call_parameter_list_end();
-  generator.handle_function_call_end();
-  generator.handle_return_end();
-  generator.handle_environment_end();
-  generator.handle_return_begin();
-  generator.handle_literal_vec2(0, 0);
-  generator.handle_return_end();
+    generator.handle_environment_begin(fragment_shader);
+    generator.handle_return_begin();
+    generator.handle_function_call_begin();
+    generator.handle_function_call_name_begin();
+    generator.handle_identifier("XYCoord_get_xy_coord");
+    generator.handle_function_call_name_end();
+    generator.handle_function_call_parameter_list_begin();
+    generator.handle_function_call_parameter_begin();
+    generator.handle_identifier("self");
+    generator.handle_function_call_parameter_end();
+    generator.handle_function_call_parameter_list_end();
+    generator.handle_function_call_end();
+    generator.handle_return_end();
+    generator.handle_environment_end();
+    generator.handle_return_begin();
+    generator.handle_literal_vec2(0, 0);
+    generator.handle_return_end();
 }
 
-shade::vec2<> XYCoord::get(void)
-{
-  return invoke_inline< vec2<> >(boost::bind(&XYCoord::get_inline, boost::ref(*this), _1));
-}
+shade::vec2<> XYCoord::get(void) { return invoke_inline<vec2<>>(boost::bind(&XYCoord::get_inline, boost::ref(*this), _1)); }
 
-shade::void_<> XYCoord::init_vertex(void)
-{
-  return invoke< void_<> >("XYCoord_init_vertex_impl");
-}
+shade::void_<> XYCoord::init_vertex(void) { return invoke<void_<>>("XYCoord_init_vertex_impl"); }

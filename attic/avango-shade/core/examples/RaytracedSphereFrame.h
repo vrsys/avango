@@ -36,34 +36,30 @@
 #include <shade/types/vec4.h>
 #include <shade/types/void.h>
 
-
-class RaytracedSphereFrame : public shade::ShaderBase<RaytracedSphereFrame, shade::shaders::ICoordinateSystem, shade::shaders::Initializeable, shade::shaders::Gettable<shade::vec3> >
+class RaytracedSphereFrame : public shade::ShaderBase<RaytracedSphereFrame, shade::shaders::ICoordinateSystem, shade::shaders::Initializeable, shade::shaders::Gettable<shade::vec3>>
 {
-public:
+  public:
+    /*virtual*/ shade::vec4<> transform(shade::vec4<>);
 
-  /*virtual*/ shade::vec4<> transform(shade::vec4<>);
+    /*virtual*/ shade::void_<> init_vertex(void);
+    /*virtual*/ shade::void_<> init_fragment(void);
 
-  /*virtual*/ shade::void_<> init_vertex(void);
-  /*virtual*/ shade::void_<> init_fragment(void);
+    /*virtual*/ shade::vec3<shade::Type> get(void);
 
-  /*virtual*/ shade::vec3<shade::Type> get(void);
+    /*virtual*/ shade::vec3<> get_transformed_normal(void);
 
-  /*virtual*/ shade::vec3<> get_transformed_normal(void);
+    /*virtual*/ shade::vec3<> get_transformed_eyepoint(void);
 
-  /*virtual*/ shade::vec3<> get_transformed_eyepoint(void);
+  private:
+    void get_inline(shade::formatter::Generator& generator);
 
-private:
+    shade::Varying<shade::vec3> position;
+    shade::Varying<shade::vec3> eyepoint;
+    shade::Varying<shade::vec3> normal;
 
-  void get_inline(shade::formatter::Generator& generator);
+    shade::vec3<shade::local> sphere_position;
 
-  shade::Varying<shade::vec3> position;
-  shade::Varying<shade::vec3> eyepoint;
-  shade::Varying<shade::vec3> normal;
-
-  shade::vec3<shade::local> sphere_position;
-
-  SHADE_MULTI_DERIVED_DECL(RaytracedSphereFrame, (shade::shaders::ICoordinateSystem)(shade::shaders::Initializeable)(shade::shaders::Gettable<shade::vec3>))
+    SHADE_MULTI_DERIVED_DECL(RaytracedSphereFrame, (shade::shaders::ICoordinateSystem)(shade::shaders::Initializeable)(shade::shaders::Gettable<shade::vec3>))
 };
-
 
 #endif /* RaytracedSphereFrame_H */

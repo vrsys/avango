@@ -11,73 +11,68 @@
 
 #include <avango/gua/windows_specific_gua.hpp>
 
-namespace gua {
-  namespace node {
-    class CameraNode;
-  }
+namespace gua
+{
+namespace node
+{
+class CameraNode;
 }
+} // namespace gua
 
 namespace av
 {
-  namespace gua
-  {
-    class CameraNode;
-    class SceneGraph;
+namespace gua
+{
+class CameraNode;
+class SceneGraph;
 
+/**
+ * Wrapper for ::gua::Renderer
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Renderer : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Renderer
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Renderer is created.
+     * Otherwise, the given ::gua::Renderer is used.
      */
-    class AV_GUA_DLL Renderer : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer());
 
-    public:
+    void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Renderer is created.
-       * Otherwise, the given ::gua::Renderer is used.
-       */
-      Renderer(::gua::Renderer* guaRenderer = new ::gua::Renderer());
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~Renderer();
 
+  public:
+    /**
+     * Get the wrapped ::gua::Renderer.
+     */
+    ::gua::Renderer* getGuaRenderer() const;
 
-      void queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const;
+  private:
+    ::gua::Renderer* m_guaRenderer;
 
-    protected:
+    Renderer(const Renderer&);
+    Renderer& operator=(const Renderer&);
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~Renderer();
+using SFRenderer = SingleField<Link<Renderer>>;
+using MFRenderer = MultiField<Link<Renderer>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::Renderer.
-       */
-      ::gua::Renderer* getGuaRenderer() const;
-
-
-    private:
-
-      ::gua::Renderer *m_guaRenderer;
-
-      Renderer(const Renderer&);
-      Renderer& operator=(const Renderer&);
-    };
-
-    using SFRenderer = SingleField<Link<Renderer> >;
-    using MFRenderer = MultiField<Link<Renderer> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Renderer> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Renderer> >;
+template class AV_GUA_DLL SingleField<Link<gua::Renderer>>;
+template class AV_GUA_DLL MultiField<Link<gua::Renderer>>;
 #endif
 
-}
+} // namespace av
 
-
-#endif //AVANGO_GUA_RENDERER_HPP
+#endif // AVANGO_GUA_RENDERER_HPP

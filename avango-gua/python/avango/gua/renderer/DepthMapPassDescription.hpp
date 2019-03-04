@@ -3,4 +3,4 @@
 
 void init_DepthMapPassDescription();
 
-#endif //AV_PYTHON_GUA_DEPTH_MAP_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_DEPTH_MAP_PASS_DESCRIPTION_HPP

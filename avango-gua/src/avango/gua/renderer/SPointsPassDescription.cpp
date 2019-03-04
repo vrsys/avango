@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::SPointsPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::SPointsPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::SPointsPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::SPointsPassDescription);
 AV_FIELD_DEFINE(av::gua::SFSPointsPassDescription);
 AV_FIELD_DEFINE(av::gua::MFSPointsPassDescription);
 
-av::gua::SPointsPassDescription::SPointsPassDescription(
-  std::shared_ptr< ::gua::SPointsPassDescription> const& guaSPointsPassDescription)
-    : PipelinePassDescription(guaSPointsPassDescription)
-    , m_guaSPointsPassDescription(guaSPointsPassDescription)
+av::gua::SPointsPassDescription::SPointsPassDescription(std::shared_ptr<::gua::SPointsPassDescription> const& guaSPointsPassDescription)
+    : PipelinePassDescription(guaSPointsPassDescription), m_guaSPointsPassDescription(guaSPointsPassDescription)
 {
-
 }
 
-void
-av::gua::SPointsPassDescription::initClass()
+void av::gua::SPointsPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,9 +33,4 @@ av::gua::SPointsPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::SPointsPassDescription> const&
-av::gua::SPointsPassDescription::getGuaSPointsPassDescription() const
-{
-    return m_guaSPointsPassDescription;
-}
+std::shared_ptr<::gua::SPointsPassDescription> const& av::gua::SPointsPassDescription::getGuaSPointsPassDescription() const { return m_guaSPointsPassDescription; }

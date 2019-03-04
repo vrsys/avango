@@ -3,4 +3,4 @@
 
 void init_CollisionShapeNode();
 
-#endif //AV_PYTHON_GUA_COLLISION_SHAPE_NODE_HPP
+#endif // AV_PYTHON_GUA_COLLISION_SHAPE_NODE_HPP

@@ -30,70 +30,60 @@
 
 namespace
 {
-  class ListGetter
-  {
+class ListGetter
+{
   public:
-
-    ListGetter(shade::types::ListAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    ListGetter(shade::types::ListAccessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::MFContainer::GetValueEvent& event)
     {
-      av::MFContainer::ContainerType& container(*event.getValuePtr());
-      ::shade::types::ListAccessor::Range range(mAccessor->get());
-      for (::shade::types::ListAccessor::InIterator in = range.first; in != range.second; ++in)
-      {
-        container.push_back(av::shade::Shader::getWrapper((*in).get()));
-      }
+        av::MFContainer::ContainerType& container(*event.getValuePtr());
+        ::shade::types::ListAccessor::Range range(mAccessor->get());
+        for(::shade::types::ListAccessor::InIterator in = range.first; in != range.second; ++in)
+        {
+            container.push_back(av::shade::Shader::getWrapper((*in).get()));
+        }
     }
 
   private:
     shade::types::ListAccessor* mAccessor;
-  };
+};
 
-  class ListSetter
-  {
+class ListSetter
+{
   public:
-
-    ListSetter(shade::types::ListAccessor* accessor) :
-      mAccessor(accessor)
-    {
-    }
+    ListSetter(shade::types::ListAccessor* accessor) : mAccessor(accessor) {}
 
     void operator()(const av::MFContainer::SetValueEvent& event)
     {
-      const av::MFContainer::ContainerType& container(event.getValue());
-      ::shade::types::ListAccessor::OutIterator out(mAccessor->set());
-      for (av::MFContainer::ContainerType::const_iterator in = container.begin(); in != container.end(); ++in, ++out)
-      {
-        av::shade::Shader* shader(dynamic_cast<av::shade::Shader*>(in->getBasePtr()));
-        if (!shader)
-          continue;
-        *out = shader->getShader();
-      }
+        const av::MFContainer::ContainerType& container(event.getValue());
+        ::shade::types::ListAccessor::OutIterator out(mAccessor->set());
+        for(av::MFContainer::ContainerType::const_iterator in = container.begin(); in != container.end(); ++in, ++out)
+        {
+            av::shade::Shader* shader(dynamic_cast<av::shade::Shader*>(in->getBasePtr()));
+            if(!shader)
+                continue;
+            *out = shader->getShader();
+        }
     }
 
   private:
     shade::types::ListAccessor* mAccessor;
-  };
+};
+} // namespace
+
+::shade::types::TypeAccessor::HashType av::shade::ListFieldAdapter::hash(void) const
+{
+    static ::shade::list<std::vector<boost::shared_ptr<::shade::Shader>>> value;
+    return value.hash();
 }
 
-::shade::types::TypeAccessor::HashType
-av::shade::ListFieldAdapter::hash(void) const
+void av::shade::ListFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
 {
-  static ::shade::list<std::vector<boost::shared_ptr< ::shade::Shader> > > value;
-  return value.hash();
-}
+    ::shade::types::ListAccessor* list_accessor(dynamic_cast<::shade::types::ListAccessor*>(type));
+    if(list_accessor == 0)
+        return;
 
-void
-av::shade::ListFieldAdapter::bindField(::shade::Type* type, const std::string& name, av::FieldContainer* container) const
-{
-  ::shade::types::ListAccessor* list_accessor(dynamic_cast< ::shade::types::ListAccessor*>(type));
-  if (list_accessor == 0)
-    return;
-
-  av::MFContainer* field= new av::MFContainer;
-  field->bind(container, name, true, ListGetter(list_accessor), ListSetter(list_accessor));
+    av::MFContainer* field = new av::MFContainer;
+    field->bind(container, name, true, ListGetter(list_accessor), ListSetter(list_accessor));
 }

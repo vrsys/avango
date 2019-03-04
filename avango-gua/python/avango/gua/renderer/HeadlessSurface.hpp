@@ -3,4 +3,4 @@
 
 void init_HeadlessSurface();
 
-#endif //AV_PYTHON_GUA_HEADLESS_SURFACE_HPP
+#endif // AV_PYTHON_GUA_HEADLESS_SURFACE_HPP

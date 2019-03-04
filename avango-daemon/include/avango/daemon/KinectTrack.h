@@ -35,59 +35,57 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * An Avango NG device for processing KinectTrack udp packets (ASCII protocol).
+ * (from A.R.T. GmbH)
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL KinectTrack : public Device
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * An Avango NG device for processing KinectTrack udp packets (ASCII protocol).
-     * (from A.R.T. GmbH)
-     *
-     * \ingroup av_daemon
+     * Constructor
      */
-    class AV_DAEMON_DLL KinectTrack : public Device
-    {
-      AV_BASE_DECLARE();
+    KinectTrack();
 
-    public:
-      /**
-       * Constructor
-       */
-      KinectTrack();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~KinectTrack() {}
 
-    protected:
+    /**
+     * Inherited from base class, implements the initialization of this device.
+     */
+    void startDevice() override;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~KinectTrack() {}
+    /**
+     * Inherited from base class, implements the loop in which the device is read out.
+     */
+    void readLoop() override;
 
-      /**
-       * Inherited from base class, implements the initialization of this device.
-       */
-      void startDevice() override;
+    /**
+     * Inherited from base class, implements the closing operation of this device.
+     */
+    void stopDevice() override;
 
-      /**
-       * Inherited from base class, implements the loop in which the device is read out.
-       */
-      void readLoop() override;
+    /**
+     * Inherited from base class, returns a list of settable features.
+     */
+    const std::vector<std::string>& queryFeatures() override;
 
-      /**
-       * Inherited from base class, implements the closing operation of this device.
-       */
-      void stopDevice() override;
-
-      /**
-       * Inherited from base class, returns a list of settable features.
-       */
-      const std::vector<std::string>& queryFeatures() override;
-
-    private:
-
-      ::std::vector< ::std::string> mRequiredFeatures;
-      std::string mPort;
-      std::string mServer;
-      bool parseFeatures();
-    };
-  }
-}
+  private:
+    ::std::vector<::std::string> mRequiredFeatures;
+    std::string mPort;
+    std::string mServer;
+    bool parseFeatures();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

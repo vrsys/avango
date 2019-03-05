@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        #"/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        #"/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -86,6 +86,9 @@ def start():
         dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
         dynamic_quad.Material.connect_from(projector.Material)
+        projector.Material.value.EnableVirtualTexturing.value = True
+        dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
@@ -126,6 +129,9 @@ def start():
         dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
         projector.set_projection_object(dynamic_quad)
+        projector.Material.value.EnableVirtualTexturing.value = True
+        dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+
         # dynamic_quad.Material.connect_from(projector.Material)
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
@@ -180,8 +186,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
@@ -279,7 +285,8 @@ def setup_render_passes(camera):
     # plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.LQ_ONE_PASS
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
-        Passes=[avango.gua.nodes.TriMeshPassDescription(),
+        Passes=[
+                avango.gua.nodes.TriMeshPassDescription(),
                 plod_pass,
                 avango.gua.nodes.DynamicTrianglePassDescription(),
                 # avango.gua.nodes.DeferredVirtualTexturingPassDescription(),

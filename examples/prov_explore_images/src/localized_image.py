@@ -68,7 +68,7 @@ class LocalizedImageController:
             self.create_localized_quad(quad_id)
             # pass
 
-        # self.parent.Children.value.append(self.dynamic_triangle_node)
+        self.parent.Children.value.append(self.dynamic_triangle_node)
 
     def create_localized_quad(self, quad_id):
         view = self.aux_loader.get_view(quad_id)

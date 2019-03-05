@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        #"/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        #"/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -180,8 +180,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 

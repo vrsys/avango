@@ -273,7 +273,7 @@ device_list = []
 init_mouse()
 #init_mouse2()
 init_keyboard()
-init_keyboard2()
+# init_keyboard2()
 
 avango.daemon.run(device_list)
 print(device_list)

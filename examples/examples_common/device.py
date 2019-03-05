@@ -143,7 +143,7 @@ class KeyboardDevice(avango.script.Script):
 
         self.device_sensor = avango.daemon.nodes.DeviceSensor(
             DeviceService=avango.daemon.DeviceService())
-        self.device_sensor.Station.value = "device-keyboard"
+        self.device_sensor.Station.value = "gua-device-keyboard0"
 
         self.always_evaluate(True)
 
@@ -155,7 +155,7 @@ class KeyboardDevice(avango.script.Script):
     '''
 
     def evaluate(self):
-
+        
         self.KeyQ.value = self.device_sensor.Button0.value
         self.KeyW.value = self.device_sensor.Button1.value
         self.KeyE.value = self.device_sensor.Button2.value

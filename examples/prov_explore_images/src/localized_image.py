@@ -177,7 +177,6 @@ class LocalizedImageQuad:
         
 
     def set_selected(self, selected, show):
-        print('a')
         if show and self.show_ind_flag == False:
             # self.indicator.Transform.value = self.transform * \
             #                      avango.gua.make_scale_mat(0.001, 0.001, 2.0)
@@ -194,7 +193,6 @@ class LocalizedImageQuad:
             unselected_col = avango.gua.Vec4(0.2, 0.2, 0.6, 1.0)
             selected_col = avango.gua.Vec4(0.2, 1.0, 1.0, 1.0)
             if selected:
-                print('selected id', self.id)
                 mat.set_uniform("Color", selected_col)            
             else:
                 

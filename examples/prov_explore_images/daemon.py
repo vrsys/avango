@@ -777,7 +777,7 @@ def init_mouse2():
     print("Mouse not found")
 
 def init_keyboard2():
-    _device_list = ["AT Translated Set 2 keyboard"]
+    _device_list = ["AT Translated Set 2 keyboard", "HID 046a:0011"]
 
 
     for _device in _device_list:
@@ -1026,7 +1026,7 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 
 
 # uni
-#init_mouse()
+# init_mouse()
 #init_keyboard()
 
 # laptop

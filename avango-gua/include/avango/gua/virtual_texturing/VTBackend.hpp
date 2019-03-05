@@ -26,6 +26,7 @@ class AV_GUA_DLL VTBackend : public av::FieldContainer
 
   public:
     VTBackend();
+    ~VTBackend();
 
     const void start_backend() const;
     const void stop_backend() const;

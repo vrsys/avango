@@ -83,6 +83,30 @@ def start():
         OutputWindowName="window2",
         Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
 
+    window3 = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window3.EnableVsync.value = False
+
+    avango.gua.register_window("window3", window3)
+
+    cam3 = avango.gua.nodes.CameraNode(
+        LeftScreenPath="/screen",
+        SceneGraph="scenegraph",
+        Resolution=size,
+        OutputWindowName="window3",
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
+
+    window4 = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    window4.EnableVsync.value = False
+
+    avango.gua.register_window("window4", window4)
+
+    cam4 = avango.gua.nodes.CameraNode(
+        LeftScreenPath="/screen",
+        SceneGraph="scenegraph",
+        Resolution=size,
+        OutputWindowName="window4",
+        Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.5))
+
     res_pass = avango.gua.nodes.ResolvePassDescription()
     res_pass.EnableSSAO.value = True
     res_pass.SSAOIntensity.value = 4.0
@@ -105,24 +129,28 @@ def start():
 
     cam1.PipelineDescription.value = pipeline_description
     cam2.PipelineDescription.value = pipeline_description
+    cam3.PipelineDescription.value = pipeline_description
+    cam4.PipelineDescription.value = pipeline_description
 
     screen = avango.gua.nodes.ScreenNode(Name="screen",
                                          Width=2,
                                          Height=1.5,
-                                         Children=[cam1, cam2])
+                                         Children=[cam1, cam2, cam3, cam4])
 
     graph.Root.value.Children.value = [transform2, light, screen]
 
     vt_backend = avango.gua.VTBackend()
     vt_backend.add_camera(cam1)
     vt_backend.add_camera(cam2)
+    vt_backend.add_camera(cam3)
+    vt_backend.add_camera(cam4)
     vt_backend.start_backend()
 
     #setup viewer
     viewer = avango.gua.nodes.Viewer()
     viewer.SceneGraphs.value = [graph]
-    viewer.Windows.value = [window1, window2]
-    viewer.DesiredFPS.value = 500.0
+    viewer.Windows.value = [window1, window2, window3, window4]
+    viewer.DesiredFPS.value = 180.0
 
     monkey_updater = TimedRotate()
     monkey_updater.set_window(window1)

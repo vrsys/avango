@@ -15,6 +15,7 @@ AV_FIELD_DEFINE(av::gua::SFVTBackend);
 AV_FIELD_DEFINE(av::gua::MFVTBackend);
 
 av::gua::VTBackend::VTBackend() {}
+av::gua::VTBackend::~VTBackend() { ::gua::VTBackend::get_instance().stop_backend(); }
 
 void av::gua::VTBackend::initClass()
 {

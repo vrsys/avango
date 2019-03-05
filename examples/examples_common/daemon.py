@@ -198,6 +198,7 @@ def init_keyboard2():
             keyboard = avango.daemon.HIDInput()
             keyboard.station = avango.daemon.Station(
                 'gua-device-keyboard' + str(0))
+                # 'device-keyboard')
             keyboard.device = _string
 
             keyboard.buttons[0] = "EV_KEY::KEY_Q"
@@ -272,7 +273,7 @@ device_list = []
 #init_tuio_input()
 init_mouse()
 #init_mouse2()
-init_keyboard()
+# init_keyboard()
 init_keyboard2()
 
 avango.daemon.run(device_list)

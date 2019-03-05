@@ -1027,7 +1027,7 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 
 # uni
 #init_mouse()
-#init_keyboard()
+init_keyboard()
 
 # laptop
 init_mouse2()

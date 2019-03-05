@@ -20,7 +20,7 @@ def start():
 
   aux_loader = avango.gua.lod.nodes.Aux()
   # aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
-  aux_loader.load_aux_file("data/salem.aux");
+  aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
   aux_loader.get_filename()
   v_num = aux_loader.get_num_views()
   sp_num = aux_loader.get_num_sparse_points()
@@ -30,7 +30,6 @@ def start():
 
   print(' number of octree nodes: ', number_octree_nodes)
   
-
   for i in range(number_octree_nodes):
     octree_node = aux_loader.get_octree_node(i)
     ci = octree_node.get_child_idx()
@@ -134,7 +133,7 @@ def start():
   plod_node = lod_loader.load_lod_pointcloud(
                   #"/opt/3d_models/point_based/plod/pig_pr.bvh",
                   # "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",
-                  "data/salem_02.bvh",
+                  "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh",
                   avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
                   avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
                   )
@@ -264,7 +263,6 @@ def start():
       avango.gua.nodes.TriMeshPassDescription(),
       plod_pass,
       avango.gua.nodes.DynamicTrianglePassDescription(),
-      avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
       avango.gua.nodes.SkyMapPassDescription(
         OutputTextureName="awesome_skymap"
       ),
@@ -276,6 +274,10 @@ def start():
   )
 
   camera.PipelineDescription.value = pipeline_description
+
+  vt_backend = avango.gua.VTBackend()
+  vt_backend.add_camera(camera)
+  vt_backend.start_backend()
 
   graph.Root.value.Children.value.append(camera)
 

@@ -100,5 +100,4 @@ class Navigator(avango.script.Script):
                                               ) + target * smoothness
 
         else:
-
             self.__last_time = time.time()

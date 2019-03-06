@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -85,9 +85,9 @@ def start():
         dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
         dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-        dynamic_quad.Material.connect_from(projector.Material)
-        projector.Material.value.EnableVirtualTexturing.value = True
-        dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+        # dynamic_quad.Material.connect_from(projector.Material)
+        # projector.Material.value.EnableVirtualTexturing.value = True
+        # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
 
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
@@ -121,22 +121,27 @@ def start():
         # setup view
         cam, screen = setup_camera(graph, size)
 
+          # create backend for virtual texture and vt update
+        vt_backend = avango.gua.VTBackend()
+        vt_backend.add_camera(cam)
+        vt_backend.start_backend()
+
         setup_picker(mesh_loader, cam, graph)
 
         # add prototyp lense
-        dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane2.obj", avango.gua.LoaderFlags.DEFAULTS)
+        dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
         dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
         dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
         dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-        projector.set_projection_object(dynamic_quad)
-        projector.Material.value.EnableVirtualTexturing.value = True
+        
+        # projector.Material.value.EnableVirtualTexturing.value = True
         dynamic_quad.Material.value.EnableVirtualTexturing.value = True
-
-        # dynamic_quad.Material.connect_from(projector.Material)
+        dynamic_quad.Material.value.EnableBackfaceCulling.value = True
+        projector.set_projection_object(dynamic_quad)
 
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                       avango.gua.make_scale_mat(0.15)
+                                       avango.gua.make_scale_mat(0.00001)
         # print_graph(graph.Root.value)
         screen.Children.value.append(dynamic_quad)
         localized_image_controller.set_tracked_element(dynamic_quad)
@@ -186,8 +191,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
         # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
@@ -244,7 +249,6 @@ def setup_camera(graph, size):
                                          Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0))
     graph.Root.value.Children.value.append(camera)
 
-
     return camera, screen
 
 def setup_picker(mesh_loader, camera, graph):
@@ -286,23 +290,20 @@ def setup_render_passes(camera):
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes=[
-                avango.gua.nodes.TriMeshPassDescription(),
+                #avango.gua.nodes.TriMeshPassDescription(),
                 plod_pass,
                 avango.gua.nodes.DynamicTrianglePassDescription(),
                 # avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
                 # avango.gua.nodes.SkyMapPassDescription(OutputTextureName="awesome_skymap"),
-                avango.gua.nodes.LightVisibilityPassDescription(),
-                res_pass,
+                #avango.gua.nodes.LightVisibilityPassDescription(),
+                #res_pass,
                 # avango.gua.nodes.DebugViewPassDescription()
                 ],
         EnableABuffer=False)
 
     camera.PipelineDescription.value = pipeline_description
 
-    # create backend for virtual texture and vt update
-    vt_backend = avango.gua.VTBackend()
-    vt_backend.add_camera(camera)
-    vt_backend.start_backend()
+   
 
 def setup_window(size):
     window = avango.gua.nodes.Window(Size=size,

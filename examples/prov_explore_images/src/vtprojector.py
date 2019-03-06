@@ -208,6 +208,7 @@ class AutoVTProjector(avango.script.Script):
     self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("Emissivity", 1.0)
     self.Material.value.EnableVirtualTexturing.value = True
+    self.Material.value.EnableBackfaceCulling.value = True
 
   @field_has_changed(Button0)
   def button0_changed(self):

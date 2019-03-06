@@ -26,6 +26,8 @@ class LocalizedImageController:
         self.vt_mat = avango.gua.nodes.Material()
         # # self.vt_mat.set_uniform("vt_images", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
         self.vt_mat.set_uniform("vt_images", atlas_path)
+        self.vt_mat.EnableVirtualTexturing.value = True
+        self.vt_mat.EnableBackfaceCulling.value = True
 
         self.localized_images = []
 
@@ -54,7 +56,7 @@ class LocalizedImageController:
         self.dynamic_triangle_node.Material.value.set_uniform("Emissivity", 1.0)
         self.dynamic_triangle_node.Material.value.set_uniform("Roughness", 1.0)
         # self.dynamic_triangle_node.Material.value.set_uniform("vt_images", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        # self.dynamic_triangle_node.Material.value.set_uniform("vt_images", self.atlas_path)
+        self.dynamic_triangle_node.Material.value.set_uniform("vt_images", self.atlas_path)
         self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
 
         self.aux_loader.load_aux_file(self.aux_path);

@@ -19,8 +19,8 @@ def start():
   lod_loader.OutOfCoreBudget.value = 4096
 
   aux_loader = avango.gua.lod.nodes.Aux()
-  # aux_loader.load_aux_file("/home/senu8384/Desktop/master-thesis/data/salem.aux");
-  aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
+  aux_loader.load_aux_file("/opt/3d_models/lamure/provenance/salem/salem_atlas.aux");
+  # aux_loader.load_aux_file("/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux");
   aux_loader.get_filename()
   v_num = aux_loader.get_num_views()
   sp_num = aux_loader.get_num_sparse_points()
@@ -61,7 +61,10 @@ def start():
   line_strip_geode.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0.0) 
 
   line_strip_geode.Material.value.set_uniform("Roughness", 1.0)
-  line_strip_geode.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+  # line_strip_geode.Material.value.set_uniform("vt_test", "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+  line_strip_geode.Material.value.set_uniform("vt_test", "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+  
+        
   line_strip_geode.Material.value.EnableVirtualTexturing.value = True
 
 
@@ -132,8 +135,8 @@ def start():
   
   plod_node = lod_loader.load_lod_pointcloud(
                   #"/opt/3d_models/point_based/plod/pig_pr.bvh",
-                  # "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",
-                  "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh",
+                  "/home/senu8384/Desktop/master-thesis/data/salem_02.bvh",
+                  # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh",
                   avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
                   avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
                   )

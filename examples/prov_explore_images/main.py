@@ -34,10 +34,10 @@ def start():
     # Create localized image controller
     localized_image_controller = LocalizedImageController(graph,
         transform_node, 
-        # "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-        # "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-        "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-        "/opt/3d_models/lamure/provenance/salem/salem.atlas")
+        "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
+        "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
+        # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
+        # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
 
     projector = localized_image_controller.get_projector()
 
@@ -128,6 +128,26 @@ def start():
 
         setup_picker(mesh_loader, cam, graph)
 
+        # add light nodes
+        spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
+                                                  Type=avango.gua.LightType.SPOT,
+                                                  Color=avango.gua.Color(1.0, 1.0, 1.0),
+                                                  EnableShadows=True,
+                                                  ShadowMapSize=1024,
+                                                  ShadowOffset=0.002,
+                                                  ShadowMaxDistance=10,
+                                                  Falloff=1.5,
+                                                  ShadowNearClippingInSunDirection=0.1,
+                                                  ShadowFarClippingInSunDirection=10.0,
+                                                  Softness=2,
+                                                  Brightness=20)
+        spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+                                       avango.gua.make_rot_mat(-90, 1, 0, 0) * \
+                                       avango.gua.make_scale_mat(4)
+        # graph.Root.value.Children.value.append(spot_light_1)
+        screen.Children.value.append(spot_light_1)
+        spot_light_1.Transform.value = cam.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
+
         # add prototyp lense
         dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
         dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
@@ -143,9 +163,49 @@ def start():
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.00001)
         # print_graph(graph.Root.value)
-        screen.Children.value.append(dynamic_quad)
+        # screen.Children.value.append(dynamic_quad)
         localized_image_controller.set_tracked_element(dynamic_quad)
-       
+
+        loader = avango.gua.nodes.DynamicTriangleLoader()
+        dynamic_lense = loader.create_empty_geometry(
+            "dynamic_lense", 
+            "empty_name_2.lob", 
+            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
+
+        transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+        size = 0.5
+
+        pos = transform * avango.gua.Vec3( size, size, 0.0)
+        uv  = avango.gua.Vec2(1.0, 0.0)
+        print(type(uv.x))
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
+        print("tes")
+        
+        # pos = transform * avango.gua.Vec3(-size, -size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+        # print('dddd')
+
+        # pos = transform * avango.gua.Vec3( size, -size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+        # print('sdfsdf')
+
+        # pos = transform * avango.gua.Vec3( size, size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 0.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+        
+        # pos = transform * avango.gua.Vec3(-size, size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 0.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+        # pos = transform * avango.gua.Vec3(-size, -size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+        # screen.Children.value.append(dynamic_lense)
+        print('dsfasdf')
+
         # setup render passes
         setup_render_passes(cam)
 
@@ -191,10 +251,8 @@ def setup_scene(graph, mesh_loader, lod_loader):
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
-        # avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     # plod_node.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0))
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
@@ -210,23 +268,7 @@ def setup_scene(graph, mesh_loader, lod_loader):
     # floor.ShadowMode.value = 1
     graph.Root.value.Children.value.append(floor)
 
-    # add light nodes
-    spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
-                                              Type=avango.gua.LightType.SPOT,
-                                              Color=avango.gua.Color(1.0, 1.0, 1.0),
-                                              EnableShadows=True,
-                                              ShadowMapSize=1024,
-                                              ShadowOffset=0.002,
-                                              ShadowMaxDistance=10,
-                                              Falloff=1.5,
-                                              ShadowNearClippingInSunDirection=0.1,
-                                              ShadowFarClippingInSunDirection=10.0,
-                                              Softness=2,
-                                              Brightness=20)
-    spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 3.0, 0.0) * \
-                                   avango.gua.make_rot_mat(-90, 1, 0, 0) * \
-                                   avango.gua.make_scale_mat(4)
-    graph.Root.value.Children.value.append(spot_light_1)
+    
 
     return trans_node
 
@@ -280,8 +322,8 @@ def setup_render_passes(camera):
     res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
     res_pass.Exposure.value = 1.0
     # res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
-    # res_pass.BackgroundTexture.value = "awesome_skymap"
-    res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
+    res_pass.BackgroundTexture.value = "awesome_skymap"
+    res_pass.BackgroundColor.value = avango.gua.Color(0.40, 0.5, 0.6)
     # res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
     plod_pass = avango.gua.lod.nodes.PLodPassDescription()
@@ -295,8 +337,8 @@ def setup_render_passes(camera):
                 avango.gua.nodes.DynamicTrianglePassDescription(),
                 # avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
                 # avango.gua.nodes.SkyMapPassDescription(OutputTextureName="awesome_skymap"),
-                #avango.gua.nodes.LightVisibilityPassDescription(),
-                #res_pass,
+                avango.gua.nodes.LightVisibilityPassDescription(),
+                res_pass,
                 # avango.gua.nodes.DebugViewPassDescription()
                 ],
         EnableABuffer=False)
@@ -311,8 +353,7 @@ def setup_window(size):
                                      LeftResolution=size,
                                      RightResolution=size,
                                      EnableVsync=False,
-                                     StereoMode=avango.gua.StereoMode.MONO
-                                     )
+                                     StereoMode=avango.gua.StereoMode.MONO)
     avango.gua.register_window("window", window)
 
     return window

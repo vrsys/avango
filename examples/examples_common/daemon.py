@@ -277,7 +277,7 @@ init_mouse()
 # init_keyboard()
 # init_keyboard2()
 
-init_keyboard()
+init_keyboard2()
 
 
 avango.daemon.run(device_list)

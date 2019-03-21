@@ -89,7 +89,6 @@ def start():
         # projector.Material.value.EnableVirtualTexturing.value = True
         # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
 
-
         dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
                                        avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
                                        avango.gua.make_scale_mat(0.25)
@@ -126,7 +125,7 @@ def start():
         vt_backend.add_camera(cam)
         vt_backend.start_backend()
 
-        setup_picker(mesh_loader, cam, graph)
+        # setup_picker(mesh_loader, cam, graph)
 
         # add light nodes
         spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
@@ -149,22 +148,22 @@ def start():
         spot_light_1.Transform.value = cam.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
 
         # add prototyp lense
-        dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
-        dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
-        dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
-        dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
+        # dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane.obj", avango.gua.LoaderFlags.DEFAULTS)
+        # dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+        # dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+        # dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
         
         # projector.Material.value.EnableVirtualTexturing.value = True
-        dynamic_quad.Material.value.EnableVirtualTexturing.value = True
-        dynamic_quad.Material.value.EnableBackfaceCulling.value = True
-        projector.set_projection_object(dynamic_quad)
+        # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+        # dynamic_quad.Material.value.EnableBackfaceCulling.value = True
+        # projector.set_projection_object(dynamic_quad)
 
-        dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
-                                       avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-                                       avango.gua.make_scale_mat(0.00001)
+        # dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.1) *\
+        #                                avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
+        #                                avango.gua.make_scale_mat(0.00001)
         # print_graph(graph.Root.value)
         # screen.Children.value.append(dynamic_quad)
-        localized_image_controller.set_tracked_element(dynamic_quad)
+        # localized_image_controller.set_tracked_element(dynamic_quad)
 
         loader = avango.gua.nodes.DynamicTriangleLoader()
         dynamic_lense = loader.create_empty_geometry(
@@ -175,11 +174,11 @@ def start():
         transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
         size = 0.5
 
-        pos = transform * avango.gua.Vec3( size, size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 0.0)
-        print(type(uv.x))
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
-        print("tes")
+        # pos = transform * avango.gua.Vec3( size, size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 0.0)
+        # print(type(uv.x))
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
+        # print("tes")
         
         # pos = transform * avango.gua.Vec3(-size, -size, 0.0)
         # uv  = avango.gua.Vec2(0.0, 1.0)
@@ -190,6 +189,10 @@ def start():
         # uv  = avango.gua.Vec2(1.0, 1.0)
         # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
         # print('sdfsdf')
+
+        dynamic_lense.push_vertex(-2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
+        dynamic_lense.push_vertex( 2.0, -2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.1);
+        dynamic_lense.push_vertex( 2.0,  2.0, -2.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.2);
 
         # pos = transform * avango.gua.Vec3( size, size, 0.0)
         # uv  = avango.gua.Vec2(1.0, 0.0)
@@ -204,7 +207,7 @@ def start():
         # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
         # screen.Children.value.append(dynamic_lense)
-        print('dsfasdf')
+        graph.Root.value.Children.value.append(dynamic_lense)
 
         # setup render passes
         setup_render_passes(cam)
@@ -214,7 +217,6 @@ def start():
 
         # setup navigator
         navi = setup_navigator(cam)
-        print(navi.Mouse.ButtonLeft)
         projector.Transform2.connect_from(navi.OutTransform)
         projector.Button0.connect_from(navi.Mouse.ButtonLeft)
         # tn.Transform.connect_from(navi.)
@@ -259,14 +261,14 @@ def setup_scene(graph, mesh_loader, lod_loader):
     plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
 
-    floor = mesh_loader.create_geometry_from_file("floor",
-                                                  "data/objects/plane.obj",
-                                                  avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
-                                                  )
+    # floor = mesh_loader.create_geometry_from_file("floor",
+    #                                               "data/objects/plane.obj",
+    #                                               avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE
+    #                                               )
 
-    floor.Transform.value = avango.gua.make_trans_mat(0, -0.4, 0) * avango.gua.make_scale_mat(4, 1, 4) 
-    # floor.ShadowMode.value = 1
-    graph.Root.value.Children.value.append(floor)
+    # floor.Transform.value = avango.gua.make_trans_mat(0, -0.4, 0) * avango.gua.make_scale_mat(4, 1, 4) 
+    # # floor.ShadowMode.value = 1
+    # graph.Root.value.Children.value.append(floor)
 
     
 
@@ -332,7 +334,7 @@ def setup_render_passes(camera):
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes=[
-                #avango.gua.nodes.TriMeshPassDescription(),
+                # avango.gua.nodes.TriMeshPassDescription(),
                 plod_pass,
                 avango.gua.nodes.DynamicTrianglePassDescription(),
                 # avango.gua.nodes.DeferredVirtualTexturingPassDescription(),
@@ -348,13 +350,16 @@ def setup_render_passes(camera):
    
 
 def setup_window(size):
+    print('################## WINDOW 1')
     window = avango.gua.nodes.Window(Size=size,
                                      Title="shadows",
                                      LeftResolution=size,
                                      RightResolution=size,
-                                     EnableVsync=False,
-                                     StereoMode=avango.gua.StereoMode.MONO)
+                                     EnableVsync=True,
+                                     # StereoMode=avango.gua.StereoMode.MONO)
+                                     )
     avango.gua.register_window("window", window)
+    print('################## WINDOW 2')
 
     return window
 

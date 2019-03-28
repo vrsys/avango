@@ -1,0 +1,16 @@
+{
+  "vertex_methods" :
+  [
+    {
+      "file_name" : "data/materials/VertexOffset.gpd"
+    }
+  ],
+
+  "fragment_methods" :
+  [
+    {
+      "file_name" : "data/materials/FragmentColor.gpd"
+    }
+  ]
+
+}

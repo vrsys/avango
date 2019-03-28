@@ -65,9 +65,9 @@ av::gua::DynamicTriangleNode::DynamicTriangleNode(std::shared_ptr< ::gua::node::
                       std::bind(&DynamicTriangleNode::getTriggerUpdateCB, this,std::placeholders::_1),
                       std::bind(&DynamicTriangleNode::setTriggerUpdateCB, this,std::placeholders::_1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(PrivateLineStripDataString,
-                      std::bind(&DynamicTriangleNode::getPrivateLineStripDataStringCB, this,std::placeholders::_1),
-                      std::bind(&DynamicTriangleNode::setPrivateLineStripDataStringCB, this,std::placeholders::_1));
+  AV_FC_ADD_ADAPTOR_FIELD(PrivateDynamicTriangleDataString,
+                      std::bind(&DynamicTriangleNode::getPrivateDynamicTriangleDataStringCB, this,std::placeholders::_1),
+                      std::bind(&DynamicTriangleNode::setPrivateDynamicTriangleDataStringCB, this,std::placeholders::_1));
 
 
   if (guanode->get_material()) {
@@ -83,10 +83,10 @@ void av::gua::DynamicTriangleNode::clearVertices() const
 
 void av::gua::DynamicTriangleNode::enqueueVertex(float pos_x, float pos_y, float pos_z,
                                            float col_r, float col_g, float col_b, float col_a,
-                                           float thickness) const {
+                                           float thickness, float u_coord, float v_coord) const {
   m_guaDynamicTriangleNode->enqueue_vertex(pos_x, pos_y, pos_z,
                                      col_r, col_g, col_b, col_a,
-                                     thickness);
+                                     thickness, u_coord, v_coord);
 }
 
 void av::gua::DynamicTriangleNode::popBackVertex() const
@@ -350,20 +350,20 @@ void av::gua::DynamicTriangleNode::setTriggerUpdateCB(const SFBool::SetValueEven
 	if (!UseParabolaShape.getValue() && !UseBezierShape.getValue()) {
 		std::string compiled_buffer_string;
 		m_guaDynamicTriangleNode->compile_buffer_string(compiled_buffer_string);
-		privateLineStripData = compiled_buffer_string;
+		privateDynamicTriangleData = compiled_buffer_string;
 	}
 
   }
 
 }
 
-void av::gua::DynamicTriangleNode::getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event)
+void av::gua::DynamicTriangleNode::getPrivateDynamicTriangleDataStringCB(const SFString::GetValueEvent& event)
 {
-  *(event.getValuePtr()) = privateLineStripData;
+  *(event.getValuePtr()) = privateDynamicTriangleData;
 }
 
 
-void av::gua::DynamicTriangleNode::setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event)
+void av::gua::DynamicTriangleNode::setPrivateDynamicTriangleDataStringCB(const SFString::SetValueEvent& event)
 {
   if(1 == role_server_client_unidentified) {
 
@@ -389,6 +389,6 @@ void
 av::gua::DynamicTriangleNode::endVertexList() {
   m_guaDynamicTriangleNode->forward_queued_vertices();
   TriggerUpdate.setValue(true);
-  PrivateLineStripDataString.setValue("");
-
+  PrivateDynamicTriangleDataString.setValue("");
+  std::cout << "hello" << std::endl;
 }

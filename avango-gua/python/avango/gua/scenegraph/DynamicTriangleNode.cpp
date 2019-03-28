@@ -156,6 +156,26 @@ void enqueueVertex4(av::gua::DynamicTriangleNode const& node,
                           thickness);
 }
 
+void enqueueVertex5(av::gua::DynamicTriangleNode const& node,
+                 float x_pos, float y_pos, float z_pos,
+                 float col_r, float col_g, float col_b,
+                 float thickness, float u_coord, float v_coord) {
+
+   return node.enqueueVertex(x_pos, y_pos, z_pos,
+                          col_r, col_g, col_b, 1.0,
+                          thickness, u_coord, v_coord);
+}
+
+void enqueueVertex6(av::gua::DynamicTriangleNode const& node,
+                 float x_pos, float y_pos, float z_pos,
+                 float col_r, float col_g, float col_b, float col_a,
+                 float thickness, float u_coord, float v_coord) {
+
+   return node.enqueueVertex(x_pos, y_pos, z_pos,
+                          col_r, col_g, col_b, col_a,
+                          thickness, u_coord, v_coord);
+}
+
 void startVertexList(av::gua::DynamicTriangleNode& node) {
   node.startVertexList();
 }
@@ -191,6 +211,8 @@ void init_DynamicTriangleNode()
          .def("enqueue_vertex", &enqueueVertex2)
          .def("enqueue_vertex", &enqueueVertex3)
          .def("enqueue_vertex", &enqueueVertex4)
+         .def("enqueue_vertex", &enqueueVertex5)
+         .def("enqueue_vertex", &enqueueVertex6)
          .def("start_vertex_list", &startVertexList)
          .def("end_vertex_list", &endVertexList)
          ;

@@ -38,7 +38,7 @@ namespace av
 
       void enqueueVertex(float pos_x, float pos_y, float pos_z,
                          float col_r = 0.0f, float col_g = 0.0f, float col_b = 0.0f, float col_a = 1.0f,
-                         float thickness = 1.0f) const;
+                         float thickness = 1.0f, float u_coord = 0.0f, float v_coord= 0.0f) const;
 
       void popBackVertex() const;
 
@@ -141,22 +141,22 @@ namespace av
        */
       void startVertexList();
       /**
-       * Wrapper to trigger the setPrivateLineStripDataStringCB in a clean way 
+       * Wrapper to trigger the setPrivateDynamicTriangleDataStringCB in a clean way 
          from the application side
        */
       void endVertexList();
 
     private:
-      /* the "PrivateLineStripDataString" should not be set by a user! it is only used
+      /* the "PrivateDynamicTriangleDataString" should not be set by a user! it is only used
        * as mechanism to distribute the dynamical vertex data encoded as a string containing
        * the original binary data
        */
 
-      SFString          PrivateLineStripDataString;
-      virtual void getPrivateLineStripDataStringCB(const SFString::GetValueEvent& event);
-      virtual void setPrivateLineStripDataStringCB(const SFString::SetValueEvent& event);
+      SFString          PrivateDynamicTriangleDataString;
+      virtual void getPrivateDynamicTriangleDataStringCB(const SFString::GetValueEvent& event);
+      virtual void setPrivateDynamicTriangleDataStringCB(const SFString::SetValueEvent& event);
 
-      std::string privateLineStripData = "";
+      std::string privateDynamicTriangleData = "";
 
       //0 = server, 1 = client, 2 = unidentified
       int32_t role_server_client_unidentified = 2;

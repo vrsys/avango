@@ -4,7 +4,10 @@
 
 #include <gua/guacamole.hpp>
 #include <gua/platform.hpp>
+
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 #include <gua/virtual_texturing/VTBackend.hpp>
+#endif //AVANGO_VIRTUAL_TEXTURING_SUPPORT
 
 #include <avango/FieldContainer.h>
 #include <avango/gua/Fields.hpp>

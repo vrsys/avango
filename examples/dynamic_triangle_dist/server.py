@@ -46,6 +46,7 @@ class UpdateDynamicTriangleScript(avango.script.Script):
     def __init__(self):
         self.super(UpdateDynamicTriangleScript).__init__()
         self.StartCounting = False
+        self.FrameCount = 0
 
     def set_dynamic_triangle_node(self, dynamic_triangle_node):
         self.node_to_update = dynamic_triangle_node
@@ -53,9 +54,11 @@ class UpdateDynamicTriangleScript(avango.script.Script):
         self.StartCounting = True
 
     def evaluate(self):
-        if self.StartCounting == True:     
+        if self.StartCounting == True:  
+            self.FrameCount += 1   
 
             self.node_to_update.start_vertex_list()
+            quad_transform = avango.gua.make_trans_mat(0.5 * math.cos(self.FrameCount/100), 0.3*math.sin(self.FrameCount/100), 2.0)
 
             pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
             uv  = avango.gua.Vec2(1.0, 0.0)

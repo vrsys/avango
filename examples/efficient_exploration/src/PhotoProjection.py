@@ -319,45 +319,14 @@ class PhotoProjection(avango.script.Script):
       print('left pressed')
     else:
       if self.button0_pressed:
-        # lense_pos = self.projection_lense.WorldTransform.value.get_translate()
-        # projector_pos1 = self.localized_image_list[self.old_closest_id].transform.get_translate()
-        # projector_pos = self.Transform.value.get_translate()
         lense_mat = self.projection_lense.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
-        # projector_pos = self.Transform.value.get_translate()
-
-        # print('proj pos list ',projector_pos1)
-        # print('proj pos trans',projector_pos)
-
-        # self.offset = projector_pos - lense_pos
+        
         self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
-        print(self.offset)
 
-
-
-      # if self.button0_pressed:
-      # lense_pos = self.projection_lense.WorldTransform.value.get_translate()
-      # projector_pos = self.localized_image_list[self.old_closest_id].transform.get_translate()
-      # self.offset = projector_pos - lense_pos 
-      # print('b released')
-      # TODO: create offset and move projector according to object position
-      lense_pos = self.projection_lense.WorldTransform.value.get_translate()
-      lense_rot = self.projection_lense.WorldTransform.value.get_rotate_scale_corrected()
-      lense_scl = self.projection_lense.WorldTransform.value.get_scale()
-      
-      # self.Transform.value = avango.gua.make_trans_mat(lense_pos) * avango.gua.make_trans_mat(self.offset) *\ 
-      #                        avango.gua.make_rot_mat(lense_rot) * avango.gua.make_rot_mat(180,0,0,1) *\ 
-      #                        avango.gua.make_scale_mat(lense_scl) 
-      # self.Transform.value = avango.gua.make_trans_mat(lense_pos) * avango.gua.make_rot_mat(lense_rot) *\
-      #                        avango.gua.make_trans_mat(self.offset) #* avango.gua.make_scale_mat(lense_scl) 
       self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
-      # self.Transform.value = avango.gua.make_inverse_mat(self.projection_lense.WorldTransform.value) * avango.gua.make_trans_mat(self.offset)
 
-      self.freeze_projection = True
-      # if self.projection_lense:
-      #   self.projection_lense.Material.disconnect_from(self.Material)
       self.button0_pressed = False
-      # print('b not pressed')
 
   @field_has_changed(Button1)
   def button1_changed(self):

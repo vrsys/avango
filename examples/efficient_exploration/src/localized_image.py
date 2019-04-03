@@ -90,6 +90,7 @@ class LocalizedImageQuad:
         self.view = view
 
         self.transform = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.view.get_transform()
+        # self.transform = self.view.get_transform()
         self.rotation = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
         # HARDCODED TRANSFORM TODO
         # transform_pos = avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.transform.get_translate()

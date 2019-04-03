@@ -8,14 +8,14 @@ import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
 import subprocess
+import json
+# import lib.transformations as t3d_util
+import numpy
 
 from src.localized_image import LocalizedImageQuad
-
 from src.PhotoProjection import PhotoProjection
 from src.picker import Picker
-
 from src.MultiUserViewingSetup import MultiUserViewingSetup
-
 from src.SpheronInput import DualSpheronInput
 from src.SpheronNavigation import SpheronNavigation
 
@@ -91,6 +91,8 @@ def start():
     atlas_tiles_num = aux_loader.get_num_atlas_tiles()
     atlas = aux_loader.get_atlas()
     
+    # cam_location_list = []
+
     # for quad_id in range(5):
     for quad_id in range(view_num):
         # create_localized_quad(quad_id)
@@ -99,8 +101,15 @@ def start():
         atlas = aux_loader.get_atlas()
         quad = LocalizedImageQuad(graph, dynamic_triangle_node, quad_id, view, atlas_tile, atlas)
         localized_images.append(quad)
+        # t = str(quad.transform).replace('\n', '')
+        # cam_location_list.append(t)
 
     trans_node.Children.value.append(dynamic_triangle_node)
+
+    # with open('cam_transforms.txt', 'w') as outfile:  
+    #     for line in cam_location_list:
+    #         outfile.write(line)
+    #         outfile.write('\n')
 
     photo_projection = PhotoProjection()
     photo_projection.my_constructor()
@@ -220,25 +229,25 @@ def start():
         graph.Root.value.Children.value.append(camera)
         # setup_picker(mesh_loader, camera, graph)
 
-        # add light nodes
-        spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
-                                                  Type=avango.gua.LightType.SPOT,
-                                                  Color=avango.gua.Color(1.0, 1.0, 1.0),
-                                                  EnableShadows=True,
-                                                  ShadowMapSize=1024,
-                                                  ShadowOffset=0.002,
-                                                  ShadowMaxDistance=10,
-                                                  Falloff=1.5,
-                                                  ShadowNearClippingInSunDirection=0.1,
-                                                  ShadowFarClippingInSunDirection=10.0,
-                                                  Softness=2,
-                                                  Brightness=20)
-        spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-                                       avango.gua.make_rot_mat(-90, 1, 0, 0) * \
-                                       avango.gua.make_scale_mat(4)
+        # # add light nodes
+        # spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
+        #                                           Type=avango.gua.LightType.SPOT,
+        #                                           Color=avango.gua.Color(1.0, 1.0, 1.0),
+        #                                           EnableShadows=True,
+        #                                           ShadowMapSize=1024,
+        #                                           ShadowOffset=0.002,
+        #                                           ShadowMaxDistance=10,
+        #                                           Falloff=1.5,
+        #                                           ShadowNearClippingInSunDirection=0.1,
+        #                                           ShadowFarClippingInSunDirection=10.0,
+        #                                           Softness=2,
+        #                                           Brightness=20)
+        # spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+        #                                avango.gua.make_rot_mat(-90, 1, 0, 0) * \
+        #                                avango.gua.make_scale_mat(4)
 
-        # screen.Children.value.append(spot_light_1)
-        spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
+        # # screen.Children.value.append(spot_light_1)
+        # spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
         
         dynamic_lense = dt_loader.create_empty_geometry(
             "dynamic_lense", 
@@ -309,7 +318,7 @@ def start():
                 # res_pass,
                 # avango.gua.nodes.DebugViewPassDescription()
                 ],
-        EnableABuffer=False)
+        EnableABuffer=True)
 
         camera.PipelineDescription.value = pipeline_description
 

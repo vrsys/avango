@@ -12,7 +12,8 @@ import json
 # import lib.transformations as t3d_util
 import numpy
 
-from src.localized_image import LocalizedImageQuad
+from src.LocalizedImage import LocalizedImageQuad
+from src.DynamicQuad import DynamicQuad
 from src.PhotoProjection import PhotoProjection
 from src.picker import Picker
 from src.MultiUserViewingSetup import MultiUserViewingSetup
@@ -21,6 +22,10 @@ from src.SpheronNavigation import SpheronNavigation
 
 
 def start():
+
+    interaction_mode = 'both' # 'perspective' #  'multi'
+    environment_mode = 'desktop' #  'powerwall'
+
     # setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 
@@ -37,8 +42,15 @@ def start():
                                  avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     plod_trans_node = avango.gua.nodes.TransformNode(Name="scene")
     # plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.0)
+
     graph.Root.value.Children.value.append(trans_node)
     trans_node.Children.value.append(plod_trans_node)
+
+    multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
+    multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(2.0,0.0,1.0) *\
+                                            avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
+
+    # multi_view_explorer = MultiViewExplorer()
 
     # configure lod loader 
     lod_loader.UploadBudget.value = 64
@@ -248,46 +260,49 @@ def start():
 
         # # screen.Children.value.append(spot_light_1)
         # spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
-        
-        dynamic_lense = dt_loader.create_empty_geometry(
-            "dynamic_lense", 
-            "empty_name_3.lob", 
-            avango.gua.LoaderFlags.DEFAULTS)
+        dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
+        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
+        quad_creator = DynamicQuadCreator()
+        dynamic_lense = quad_creator.get_quad_node(dynamic_transform, width=0.2, height=0.2)
+        # dynamic_lense = dt_loader.create_empty_geometry(
+        #     "dynamic_lense", 
+        #     "empty_name_3.lob", 
+        #     avango.gua.LoaderFlags.DEFAULTS)
 
-        lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
-        lense_size = 0.2
+        # lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
+        # lense_size = 0.2
 
-        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
+        # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 0.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
         
-        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+        # pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
         
-        pos = lense_transform * avango.gua.Vec3( lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+        # pos = lense_transform * avango.gua.Vec3( lense_size, -lense_size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
 
-        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+        # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
+        # uv  = avango.gua.Vec2(1.0, 0.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
         
-        pos = lense_transform * avango.gua.Vec3(-lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+        # pos = lense_transform * avango.gua.Vec3(-lense_size, lense_size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 0.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+        # pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
+        # uv  = avango.gua.Vec2(0.0, 1.0)
+        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
         # projector.set_projection_object(dynamic_lense)
         # # dynamic_lense.Material.value.EnableVirtualTexturing.value = True
         # # dynamic_lense.Material.value.EnableBackfaceCulling.value = True
 
-        screen.Children.value.append(dynamic_lense)
+        screen.Children.value.append(dynamic_transform)
         # # graph.Root.value.Children.value.append(dynamic_lense)
-        photo_projection.set_projection_lense(dynamic_lense, screen)
+        photo_projection.set_projection_lense(dynamic_lense, dynamic_transform)
         # dynamic_lense.Material.connect_from(photo_projection.Material)
 
         # setup render passes

@@ -18,28 +18,11 @@ from src.MultiUserViewingSetup import MultiUserViewingSetup
 from src.SpheronInput import DualSpheronInput
 from src.SpheronNavigation import SpheronNavigation
 
+#   XIO:  fatal IO error 11 (Resource temporarily unavailable) on X server ":0.0"
+#       after 144 requests (144 known processed) with 0 events remaining.
+# ./start.sh: line 39: 14863 Segmentation fault      (core dumped) DISPLAY=:0.0 python3 ./main.py
+# ./start.sh: line 43: kill: %2: no such job
 
-def append_indicator(loader, fallback_mat, pos, parent):
-    indicator_trans = avango.gua.nodes.TransformNode(Name="indicator_trans")
-    indicator_trans.Transform.value = avango.gua.make_trans_mat(0, -0.00, -0.80)
-
-    # pos_indicator_geo = loader.create_geometry_from_file("indicator", "data/objects/cube.obj",
-    #                                                      fallback_mat, avango.gua.LoaderFlags.DEFAULTS)
-
-    # pos_indicator_geo.Transform.value = pos * \
-    #                                     avango.gua.make_scale_mat(0.015, 0.015, 0.015)
-
-    dir_indicator_geo = loader.create_geometry_from_file("indicator", "data/objects/cube.obj",
-                                                         fallback_mat, avango.gua.LoaderFlags.DEFAULTS)
-
-    dir_indicator_geo.Transform.value = pos * \
-                                        avango.gua.make_scale_mat(0.001, 0.001, 1.5)
-    # indicator_geo.Transform.value = avango.gua.make_trans_mat(pos[0], pos[1], pos[2]) * \
-    #                                 avango.gua.make_scale_mat(0.015, 0.015, 0.015)
-
-    parent.Children.value.append(indicator_trans)
-    # indicator_trans.Children.value.append(pos_indicator_geo)
-    indicator_trans.Children.value.append(dir_indicator_geo)
 
 
 def start():

@@ -3,63 +3,64 @@ import avango.script
 import avango.gua
 from avango.script import field_has_changed
 
+from src.DynamicQuad import DynamicQuad
+from src.PhotoProjector import PhotoProjector
+
 class MultiViewExplorer(avango.script.Script):
-	def __init__(self):
-	    self.super(MultiViewExplorer).__init__()
-	    self.always_evaluate(False)
-	    self.is_initialized = False
+    def __init__(self):
+        self.super(MultiViewExplorer).__init__()
+        self.always_evaluate(False)
+        self.is_initialized = False
 
-	def my_constructor(self):
-	    self.indicator = None
-	    loader = avango.gua.nodes.TriMeshLoader()
+    def my_constructor(self, scenegraph, parent_node, atlas_path, images, width, height, rows=2, columns=1):
 
-	    self.localized_image_list = []
-	    self.position_list = []
-	    self.projection_lense = None
-	    self.lense_parent_node = None
-	    self.show_lense = False
-	    self.min_tex_coords = avango.gua.Vec2(0.0, 0.0)
-	    self.max_tex_coords = avango.gua.Vec2(1.0, 1.0)
-	    self.last_lense_pos = None
-	    self.scene_graph = None
-	    self.old_closest_id = 0
-	    self.button0_pressed = False
-	    # self.offset = avango.gua.Vec3(0.0,0.0,0.0)
-	    self.offset = avango.gua.make_identity_mat()
-	    
-	    self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
-	    self.group_node.Transform.connect_from(self.Transform)
+        self.parent_node = parent_node
+        self.atlas_path = atlas_path
+        self.width = width
+        self.height = height
+        self.rows = rows
+        self.columns = columns
+        self.views = rows* columns
 
-	    self.geometry = loader.create_geometry_from_file("projector_geometry", "data/objects/projector.obj", 
-	      avango.gua.LoaderFlags.NORMALIZE_SCALE |
-	      avango.gua.LoaderFlags.NORMALIZE_POSITION | 
-	      avango.gua.LoaderFlags.LOAD_MATERIALS)
-	    self.geometry.Transform.value = avango.gua.make_scale_mat(0.1)
-	    # self.group_node.Children.value.append(self.geometry)
+        self.images = images
+        self.dynamic_quads = []
+        self.projectors = []
+        self.quad_transforms = [ avango.gua.nodes.TransformNode(Name='quad_trans_'+str(i)) for i in range(self.views)]
+        for i in range(self.views):
+            quad_trans_node = self.quad_transforms[i]
+            
+            x = (self.width/2) - (i // self.rows * (self.width/self.columns)) - (self.width/self.columns/2)
+            y = self.height/2 - (i % self.rows * (self.height/self.rows)) - (self.height/self.rows/2)
+            quad_trans_node.Transform.value = avango.gua.make_trans_mat(x, y, 0.0)
+            
+            dq = DynamicQuad(quad_trans_node, (self.width/self.columns) / 2, (self.height/self.rows) / 2)
+            dynamic_quad_node = dq.get_node()
+            self.dynamic_quads.append(dynamic_quad_node)
+            self.parent_node.Children.value.append(quad_trans_node)
 
-	    self.screen = avango.gua.nodes.ScreenNode(
-	      Name = "screen1",
-	      Width = 0.5,
-	      Height = 0.5,
-	      Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.1)
-	    )
-	    self.group_node.Children.value.append(self.screen)
+            projector = PhotoProjector()
+            projector.my_constructor(quad_trans_node, dynamic_quad_node, quad_trans_node, self.images)
+            projector.Graph.value = scenegraph
+            projector.Texture.value = self.atlas_path
 
-	    self.cam = avango.gua.nodes.CameraNode(
-	      LeftScreenPath = "projector_group/screen1",
-	      # LeftScreenPath = "scene_trans/projector_group/screen1",
-	      SceneGraph = "scenegraph",
-	    )
-	    self.group_node.Children.value.append(self.cam)
+            projector.update_images(i)
+            dynamic_quad_node.Material.connect_from(projector.Material)
+            projector.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.0) 
+                                        # *\
+                                        # avango.gua.make_rot_mat(90, 1.0, 0.0, 0.0)
+            # projector.Transform.connect_from(quad_trans_node.Transform)
+            self.projectors.append(projector)
+            # photo_projection = PhotoProjection()
+            # photo_projection.my_constructor()
+            # projector.set_localized_image_list(localized_images)
+            projector.set_projection_quad(dynamic_quad_node, quad_trans_node)
+            print('####', projector.Material)
 
-	    self.Material.value = avango.gua.nodes.Material(
-	      ShaderName = "proj_mat"
-	    )
+    def set_image_list(self, images):
+        self.images = images
 
-	    self.Graph.value = avango.gua.nodes.SceneGraph(Name = "dummy")
+    def update_images(self):
+        pass
 
-	    proj_mat_desc = avango.gua.nodes.MaterialShaderDescription()
-	    proj_mat_desc.load_from_file("data/materials/Projective_VT_Material.gmd")
+            
 
-	    # proj_mat_desc.EnableVirtualTexturing.value = True
-	    avango.gua.register_material_shader(proj_mat_desc, "proj_mat")

@@ -25,6 +25,7 @@
         gua_emissivity = 1.0;
         //gua_uvs.xy = 0.5 * proj_texcoord + 0.5; 
       } else {
+        
         gua_uvs.z = 0.0;
         gua_uvs.w = 0;
       }
@@ -38,9 +39,8 @@
     }
   ",
   "uniforms" :
-  [
+  [ 
     {
-
       "name" : "projective_texture_matrix",
       "type" : "mat4",
       "value": "1"

@@ -14,18 +14,33 @@ import numpy
 
 from src.LocalizedImage import LocalizedImageQuad
 from src.DynamicQuad import DynamicQuad
+from src.MultiViewExplorer import MultiViewExplorer
 from src.PhotoProjection import PhotoProjection
 from src.picker import Picker
 from src.MultiUserViewingSetup import MultiUserViewingSetup
 from src.SpheronInput import DualSpheronInput
 from src.SpheronNavigation import SpheronNavigation
 
+nettrans = avango.gua.nodes.NetTransform(Name="net",
+                                         # specify role, ip, and port
+                                         Groupname="AVSERVER|127.0.0.1|7432")
+
+def make_node_distributable(node):
+    for child in node.Children.value:
+        print(child.Name.value)
+        make_node_distributable(child)
+    nettrans.distribute_object(node)
+
+
+def make_material_distributable(mat):
+    nettrans.distribute_object(mat)
 
 def start():
 
     interaction_mode = 'both' # 'perspective' #  'multi'
     environment_mode = 'desktop' #  'powerwall'
 
+    
     # setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 
@@ -34,6 +49,9 @@ def start():
     lod_loader = avango.gua.lod.nodes.LodLoader()
     dt_loader = avango.gua.nodes.DynamicTriangleLoader()
     aux_loader = avango.gua.lod.nodes.Aux()
+
+    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
 
     # setup scene
     # add transform node for plod object
@@ -44,14 +62,10 @@ def start():
     # plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.0)
 
     graph.Root.value.Children.value.append(trans_node)
+    graph.Root.value.Children.value.append(nettrans)
     trans_node.Children.value.append(plod_trans_node)
 
-    multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
-    multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(2.0,0.0,1.0) *\
-                                            avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
-
-    # multi_view_explorer = MultiViewExplorer()
-
+    
     # configure lod loader 
     lod_loader.UploadBudget.value = 64
     lod_loader.RenderBudget.value = 1024
@@ -63,7 +77,7 @@ def start():
         # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
-    plod_node.ShadowMode.value = 1
+    # plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
 
     floor = mesh_loader.create_geometry_from_file("floor",
@@ -72,10 +86,9 @@ def start():
 
     floor.Transform.value = avango.gua.make_trans_mat(0, -0.4, 0) * avango.gua.make_scale_mat(4, 1, 4) 
     graph.Root.value.Children.value.append(floor)
+    # graph.Root.value.Children.value.append(floor)
 
     # Create localized image controller
-    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
     view_num = 0
     atlas_tiles_num = 0
     atlas = None
@@ -85,18 +98,18 @@ def start():
 
     localized_images = []
 
-    dynamic_triangle_node = dt_loader.create_empty_geometry(
-            "dynamic_triangle_node", 
-            "empty_name_1.lob", 
+    localized_images_node = dt_loader.create_empty_geometry(
+            "LozalizedImages", 
+            "localized_images.lob", 
             avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
 
-    dynamic_triangle_node.Material.value = vt_mat
-    dynamic_triangle_node.Material.value.set_uniform("Metalness", 0.0)
-    dynamic_triangle_node.Material.value.set_uniform("Emissivity", 1.0)
-    dynamic_triangle_node.Material.value.set_uniform("Roughness", 1.0)
-    dynamic_triangle_node.Material.value.set_uniform("vt_images", atlas_path)
-    dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
-    dynamic_triangle_node.Material.value.EnableBackfaceCulling.value = False
+    localized_images_node.Material.value = vt_mat
+    localized_images_node.Material.value.set_uniform("Metalness", 0.0)
+    localized_images_node.Material.value.set_uniform("Emissivity", 1.0)
+    localized_images_node.Material.value.set_uniform("Roughness", 1.0)
+    localized_images_node.Material.value.set_uniform("vt_images", atlas_path)
+    localized_images_node.Material.value.EnableVirtualTexturing.value = True
+    # localized_images_node.Material.value.EnableBackfaceCulling.value = False
 
     aux_loader.load_aux_file(aux_path);
     view_num = aux_loader.get_num_views()
@@ -111,12 +124,20 @@ def start():
         view = aux_loader.get_view(quad_id)
         atlas_tile = aux_loader.get_atlas_tile(quad_id)
         atlas = aux_loader.get_atlas()
-        quad = LocalizedImageQuad(graph, dynamic_triangle_node, quad_id, view, atlas_tile, atlas)
+        quad = LocalizedImageQuad(graph, localized_images_node, quad_id, view, atlas_tile, atlas)
         localized_images.append(quad)
         # t = str(quad.transform).replace('\n', '')
         # cam_location_list.append(t)
 
-    trans_node.Children.value.append(dynamic_triangle_node)
+    trans_node.Children.value.append(localized_images_node)
+    multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
+    multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
+                                            avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
+    nettrans.Children.value.append(multi_view_trans_node)                                            
+    multi_view_explorer = MultiViewExplorer()
+    multi_view_explorer.my_constructor(graph, multi_view_trans_node,
+                                       atlas_path, localized_images,
+                                       4.0, 2.0)
 
     # with open('cam_transforms.txt', 'w') as outfile:  
     #     for line in cam_location_list:
@@ -139,6 +160,9 @@ def start():
     # projector = localized_image_controller.get_projector()
 
     #### Create app logic above here ####
+    print(photo_projection.Material.value)
+    for p in multi_view_explorer.projectors:
+        print('prj mat',p.Material.value)
 
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
@@ -203,7 +227,7 @@ def start():
         viewingSetup.navigation_node.Children.value.append(pointer_node)
         projector.Transform2.connect_from(dynamic_quad.WorldTransform)
 
-        # print_graph(graph.Root.value)
+        
 
         ## start application/render loop
         viewingSetup.run(locals(), globals())
@@ -228,7 +252,10 @@ def start():
                                          Height=2.7)
         screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
 
+        client_screen = avango.gua.nodes.ScreenNode(Name="clientscreen", Width=4, Height=3)
+
         camera = avango.gua.nodes.CameraNode(Name="cam",
+                                             ViewID=1,
                                              LeftScreenPath="/cam/screen",
                                              RightScreenPath="/cam/screen",
                                              SceneGraph="scenegraph",
@@ -239,6 +266,7 @@ def start():
                                              Children=[screen],
                                              Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0))
         graph.Root.value.Children.value.append(camera)
+        
         # setup_picker(mesh_loader, camera, graph)
 
         # # add light nodes
@@ -262,14 +290,15 @@ def start():
         # spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
         dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
-        quad_creator = DynamicQuadCreator()
-        dynamic_lense = quad_creator.get_quad_node(dynamic_transform, width=0.2, height=0.2)
+        dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
+        dynamic_lense = dynamic_quad.get_node()
+        
         # dynamic_lense = dt_loader.create_empty_geometry(
         #     "dynamic_lense", 
         #     "empty_name_3.lob", 
         #     avango.gua.LoaderFlags.DEFAULTS)
 
-        # lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
+        # lense_transform = avango.gua.make_trans_mat(0.0, 0.0,0.0)
         # lense_size = 0.2
 
         # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
@@ -305,6 +334,12 @@ def start():
         photo_projection.set_projection_lense(dynamic_lense, dynamic_transform)
         # dynamic_lense.Material.connect_from(photo_projection.Material)
 
+        # mat_desc = avango.gua.nodes.MaterialShaderDescription()
+        # mat_desc.load_from_file("data/materials/SimplePhong.gsd")
+        # avango.gua.register_material_shader(mat_desc, "mat")
+
+        # mat = avango.gua.nodes.Material(ShaderName="mat")
+        # nettrans.distribute_object(mat)
         # setup render passes
         res_pass = avango.gua.nodes.ResolvePassDescription()
         res_pass.EnableSSAO.value = False
@@ -322,26 +357,55 @@ def start():
         plod_pass = avango.gua.lod.nodes.PLodPassDescription()
         plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.HQ_TWO_PASS
         # plod_pass.SurfelRenderMode.value = avango.gua.lod.RenderFlags.LQ_ONE_PASS
-
+        dynamic_tri_pass = avango.gua.nodes.DynamicTrianglePassDescription()
+        lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
         pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes=[
-                # avango.gua.nodes.TriMeshPassDescription(),
+                avango.gua.nodes.TriMeshPassDescription(),
                 plod_pass,
-                avango.gua.nodes.DynamicTrianglePassDescription(),
-                avango.gua.nodes.LightVisibilityPassDescription(),
-                avango.gua.nodes.ResolvePassDescription()
-                # res_pass,
+                dynamic_tri_pass,
+                lvis_pass,
+                res_pass
                 # avango.gua.nodes.DebugViewPassDescription()
-                ],
-        EnableABuffer=True)
+                ],  
+        EnableABuffer=False)  # set transparency
+
+        client_cam = avango.gua.nodes.CameraNode(
+            ViewID=2,
+            LeftScreenPath="/net/clientscreen",
+            # RightScreenPath="/net/client-screen",
+            SceneGraph="scenegraph",
+            Resolution=avango.gua.Vec2ui(800, 600),
+            OutputWindowName="client_window",
+            Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5),
+            PipelineDescription=pipeline_description)
+
+        nettrans.Children.value.append(client_screen)
+        # nettrans.Children.value.append(multi_view_trans_node)
+        client_screen.Children.value.append(client_cam)
+        make_node_distributable(client_screen)
+        # make_node_distributable(multi_view_trans_node)
+
+        
+        nettrans.distribute_object(plod_pass)
+        nettrans.distribute_object(dynamic_tri_pass)
+        nettrans.distribute_object(lvis_pass)
+        nettrans.distribute_object(res_pass)
+
+        for p in pipeline_description.Passes.value:
+            nettrans.distribute_object(p)
+        nettrans.distribute_object(pipeline_description)
 
         camera.PipelineDescription.value = pipeline_description
 
         # create backend for virtual texture and vt update
         vt_backend = avango.gua.VTBackend()
         vt_backend.add_camera(camera)
+        vt_backend.add_camera(client_cam)
         vt_backend.start_backend()
         
+
+
         # setup navigator
         navigator = examples_common.navigator.Navigator()
         navigator.StartLocation.value = camera.Transform.value.get_translate()
@@ -361,6 +425,7 @@ def start():
         # viewer.DesiredFPS.value = 200
         viewer.SceneGraphs.value = [graph]
         viewer.Windows.value = [window]
+        print_graph(graph.Root.value)
 
         timer = avango.nodes.TimeSensor()
 
@@ -414,11 +479,6 @@ def print_fields(node, print_values = False):
 
 if __name__ == '__main__':
 
-
-    a = avango.gua.Vec3(1.073,  0.915,  5.322) 
-    b = [avango.gua.Vec3(0.117,  1.234,  -0.167)]
-    b.append(avango.gua.Vec3(0.265,  1.199,  -0.168))
-    b.append(avango.gua.Vec3(0.395,  1.143,  -0.169))
-    b.append(avango.gua.Vec3(0.578,  1.092,  -0.172))
+    print('### NET TRANS ',nettrans)
 
     start()

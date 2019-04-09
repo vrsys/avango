@@ -22,6 +22,7 @@ class PhotoProjection(avango.script.Script):
   def __init__(self):
     self.super(PhotoProjection).__init__()
     self.always_evaluate(False)
+
     self.is_initialized = False
 
   def my_constructor(self):
@@ -195,7 +196,7 @@ class PhotoProjection(avango.script.Script):
 
         # print('in frustum')
         closest_id = tup[0].id
-        print('in frus', closest_id)
+        # print('in frus', closest_id)
         return closest_id
       else:
         closest_id = None
@@ -296,6 +297,7 @@ class PhotoProjection(avango.script.Script):
     # self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
     self.Material.value.set_uniform("Emissivity", 1.0)
+    # self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
     self.Material.value.set_uniform("Roughness", 1.0)
     self.Material.value.set_uniform("Metalness", 0.0)
     self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
@@ -316,7 +318,6 @@ class PhotoProjection(avango.script.Script):
 
       self.button0_pressed = True
       # self.projection_lense.Material.connect_from(self.Material)
-      print('left pressed')
     else:
       if self.button0_pressed:
         lense_mat = self.projection_lense.WorldTransform.value
@@ -360,8 +361,8 @@ class PhotoProjection(avango.script.Script):
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
       self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 2
-      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 2
+      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.8
+      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.8
       # self.localized_image_list[closest_id].set_selected(True, True)
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id

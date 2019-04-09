@@ -41,6 +41,16 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                          Groupname="AVSERVER|127.0.0.1|7432")
 
+## print the subgraph under a given node to the console
+def print_graph(root_node):
+    stack = [(root_node, 0)]
+    while stack:
+        node, level = stack.pop()
+        print("│   " * level + "├── {0} <{1}>".format(
+          node.Name.value, node.__class__.__name__))
+        stack.extend(
+          [(child, level + 1) for child in reversed(node.Children.value)])
+
 
 class UpdateDynamicTriangleScript(avango.script.Script):
     def __init__(self):
@@ -168,7 +178,8 @@ monkey_transform.Children.value = [monkey]
 group = avango.gua.nodes.TransformNode(Name="group")
 group.Children.value = [dynamic_tri_node, monkey_transform, light]
 
-screen = avango.gua.nodes.ScreenNode(Name="screen", Width=4, Height=3)
+cscreen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4, Height=3)
+sscreen = avango.gua.nodes.ScreenNode(Name="server_screen", Width=4, Height=3)
 
 size = avango.gua.Vec2ui(800, 600)
 
@@ -186,7 +197,7 @@ pipeline_description = avango.gua.nodes.PipelineDescription(
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
-    LeftScreenPath="/net/screen",
+    LeftScreenPath="/server_screen",
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="server_window",
@@ -195,20 +206,24 @@ server_cam = avango.gua.nodes.CameraNode(
 
 client_cam = avango.gua.nodes.CameraNode(
     ViewID=2,
-    LeftScreenPath="/net/screen",
+    LeftScreenPath="/net/client_screen",
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window",
     Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5),
     PipelineDescription=pipeline_description)
 
-screen.Children.value = [client_cam, server_cam]
-nettrans.Children.value = [group, screen]
+cscreen.Children.value = [client_cam]
+sscreen.Children.value = [server_cam]
+nettrans.Children.value = [group, cscreen]
 
 graph.Root.value.Children.value = [nettrans]
+trans_node_2 = avango.gua.nodes.TransformNode(Name="hellotrans")
 
+graph.Root.value.Children.value.append(trans_node_2)
+graph.Root.value.Children.value.append(sscreen)
 make_node_distributable(group)
-make_node_distributable(screen)
+make_node_distributable(cscreen)
 
 nettrans.distribute_object(dynamic_tri_pass)
 nettrans.distribute_object(tri_pass)
@@ -220,6 +235,8 @@ nettrans.distribute_object(tscreenspace_pass)
 for p in pipeline_description.Passes.value:
     nettrans.distribute_object(p)
 nettrans.distribute_object(pipeline_description)
+
+print_graph(graph.Root.value)
 
 # setup viewing
 window = avango.gua.nodes.GlfwWindow(Size=size,
@@ -233,37 +250,37 @@ viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 
-update_dt = UpdateDynamicTriangleScript()
+# update_dt = UpdateDynamicTriangleScript()
 
 #add linestrip to the spiral creator to create new vertices every frame
 # spiral_creator.set_line_strip_node(dynamic_tri_node)
-update_dt.set_dynamic_triangle_node(dynamic_tri_node)
-# dynamic_tri_node.start_vertex_list()
-# # dynamic_tri_node.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
-# pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
-# uv  = avango.gua.Vec2(1.0, 0.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# update_dt.set_dynamic_triangle_node(dynamic_tri_node)
+dynamic_tri_node.start_vertex_list()
+# dynamic_tri_node.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
+pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
+uv  = avango.gua.Vec2(1.0, 0.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-# pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
-# uv  = avango.gua.Vec2(0.0, 1.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
+uv  = avango.gua.Vec2(0.0, 1.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-# pos = quad_transform * avango.gua.Vec3( quad_size, -quad_size, 0.0)
-# uv  = avango.gua.Vec2(1.0, 1.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+pos = quad_transform * avango.gua.Vec3( quad_size, -quad_size, 0.0)
+uv  = avango.gua.Vec2(1.0, 1.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-# pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
-# uv  = avango.gua.Vec2(1.0, 0.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
+uv  = avango.gua.Vec2(1.0, 0.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-# pos = quad_transform * avango.gua.Vec3(-quad_size, quad_size, 0.0)
-# uv  = avango.gua.Vec2(0.0, 0.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+pos = quad_transform * avango.gua.Vec3(-quad_size, quad_size, 0.0)
+uv  = avango.gua.Vec2(0.0, 0.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-# pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
-# uv  = avango.gua.Vec2(0.0, 1.0)
-# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-# dynamic_tri_node.end_vertex_list()
+pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
+uv  = avango.gua.Vec2(0.0, 1.0)
+dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+dynamic_tri_node.end_vertex_list()
 
 
 guaVE = GuaVE()

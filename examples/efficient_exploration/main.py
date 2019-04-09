@@ -129,7 +129,15 @@ def start():
         # t = str(quad.transform).replace('\n', '')
         # cam_location_list.append(t)
 
+    # with open('cam_transforms.txt', 'w') as outfile:  
+    #     for line in cam_location_list:
+    #         outfile.write(line)
+    #         outfile.write('\n')
+
     trans_node.Children.value.append(localized_images_node)
+
+
+    # create multi view explorers transform node
     multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
     multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
                                             avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
@@ -138,11 +146,6 @@ def start():
     multi_view_explorer.my_constructor(graph, multi_view_trans_node,
                                        atlas_path, localized_images,
                                        4.0, 2.0)
-
-    # with open('cam_transforms.txt', 'w') as outfile:  
-    #     for line in cam_location_list:
-    #         outfile.write(line)
-    #         outfile.write('\n')
 
     photo_projection = PhotoProjection()
     photo_projection.my_constructor()

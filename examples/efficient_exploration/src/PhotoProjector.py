@@ -57,7 +57,7 @@ class PhotoProjector(avango.script.Script):
           Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.1)
         )
         self.group_node.Children.value.append(self.screen)
-        print('creating cam', self.id)
+        # print('creating cam', self.id)
         self.cam = avango.gua.nodes.CameraNode(
           LeftScreenPath = "/net/multi_view_trans_node/quad_trans_"+str(self.id)+"/projector_group_" + str(self.id) + "/photo_projector_" + str(self.id),
           SceneGraph = "scenegraph"
@@ -68,6 +68,7 @@ class PhotoProjector(avango.script.Script):
         self.Material.value = avango.gua.nodes.Material(
           ShaderName = self.shader_name
         )
+        
         print('photo projector material', self.Material.value)
 
         self.Graph.value = avango.gua.nodes.SceneGraph(Name = "dummy"+str(self.id))

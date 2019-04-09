@@ -54,7 +54,6 @@ class MultiViewExplorer(avango.script.Script):
             # photo_projection.my_constructor()
             # projector.set_localized_image_list(localized_images)
             projector.set_projection_quad(dynamic_quad_node, quad_trans_node)
-            print('####', projector.Material)
 
     def set_image_list(self, images):
         self.images = images

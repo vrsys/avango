@@ -47,8 +47,8 @@ def start():
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     plod_node.ShadowMode.value = 1
@@ -62,8 +62,11 @@ def start():
     graph.Root.value.Children.value.append(floor)
 
     # Create localized image controller
-    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    #aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    #atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+
     view_num = 0
     atlas_tiles_num = 0
     atlas = None
@@ -131,23 +134,46 @@ def start():
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
 
-    if hostname == "hydra":        
-        ## DLP wall 4-user setup
-        viewingSetup = MultiUserViewingSetup(
-            SCENEGRAPH = graph,
-            WINDOW_RESOLUTION = avango.gua.Vec2ui(3840*2, 2160),
-            SCREEN_DIMENSIONS = avango.gua.Vec2(4.91, 2.78),
-            TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.445,2.0),
-            DISPLAY_STRING_LIST = [":0.0", ":0.1", ":0.2", ":0.3"], # number of available GPUs (users)
-            LEFT_POSITION = avango.gua.Vec2ui(0, 0),
-            LEFT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
-            RIGHT_POSITION = avango.gua.Vec2ui(3840, 0),
-            RIGHT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
-            )
-        viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-A")
-        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-B")
-        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-C")
-        # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-D")      
+        
+    if hostname == "hydra" or "argos":
+        if hostname == "hydra":
+            ## DLP wall 4-user setup
+            viewingSetup = MultiUserViewingSetup(
+                SCENEGRAPH = graph,
+                WINDOW_RESOLUTION = avango.gua.Vec2ui(3840*2, 2160),
+                SCREEN_DIMENSIONS = avango.gua.Vec2(4.91, 2.78),
+                TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.445,2.0),
+                DISPLAY_STRING_LIST = [":0.0", ":0.1", ":0.2", ":0.3"], # number of available GPUs (users)
+                LEFT_POSITION = avango.gua.Vec2ui(0, 0),
+                LEFT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
+                RIGHT_POSITION = avango.gua.Vec2ui(3840, 0),
+                RIGHT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
+                )
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-A")
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-B")
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-C")
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-D")      
+        elif hostname == "argos":
+            ## large powerwall 6-user setup
+            viewingSetup = MultiUserViewingSetup(
+                SCENEGRAPH = graph,
+                WINDOW_RESOLUTION = avango.gua.Vec2ui(4096*2, 2160),
+                SCREEN_DIMENSIONS = avango.gua.Vec2(4.32, 2.7),
+                TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.62, 1.6),
+                DISPLAY_STRING_LIST = [":0.1", ":0.5", ":0.4", ":0.3", ":0.2", ":0.0"], # number of available GPUs (users)
+                LEFT_POSITION = avango.gua.Vec2ui(305, 0),
+                LEFT_RESOLUTION = avango.gua.Vec2ui(4096 - 305 - 325, 2160),
+                RIGHT_POSITION = avango.gua.Vec2ui(4096 + 305, 0),
+                RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 - 305 - 325, 2160),
+                )
+
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-A")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-B")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-C")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-D")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-H")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-F")
+            
 
         spheron_input = DualSpheronInput(
             DEVICE_STATION1 = "device-new-spheron-right",
@@ -179,19 +205,74 @@ def start():
         #                                avango.gua.make_scale_mat(0.25)
         # localized_image_controller.set_tracked_element(dynamic_quad)
 
+        dynamic_lense = dt_loader.create_empty_geometry(
+            "dynamic_lense_powerwall", 
+            "empty_name_5.lob", 
+            avango.gua.LoaderFlags.DEFAULTS)
+        dynamic_lense.Transform.value = avango.gua.make_identity_mat()
+
+        lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)
+        lense_size = 0.26
+
+        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
+        uv  = avango.gua.Vec2(1.0, 0.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
+        
+        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
+        uv  = avango.gua.Vec2(0.0, 1.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+        
+        pos = lense_transform * avango.gua.Vec3( lense_size, -lense_size, 0.0)
+        uv  = avango.gua.Vec2(1.0, 1.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
+
+        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
+        uv  = avango.gua.Vec2(1.0, 0.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+        
+        pos = lense_transform * avango.gua.Vec3(-lense_size, lense_size, 0.0)
+        uv  = avango.gua.Vec2(0.0, 0.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
+        uv  = avango.gua.Vec2(0.0, 1.0)
+        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+        # projector.set_projection_object(dynamic_lense)
+        # # dynamic_lense.Material.value.EnableVirtualTexturing.value = True
+        # # dynamic_lense.Material.value.EnableBackfaceCulling.value = True
+
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-        pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
-        pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
+        #pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
+        pointer_tracking_sensor.Station.value = "tracking-b11-large-wall-pointer-3"
+        # pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
+        pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.62, 1.6)
         pointer_tracking_sensor.ReceiverOffset.value = avango.gua.make_identity_mat()
+
+        pointer_button_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+        #pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
+        pointer_button_sensor.Station.value = "device-pointer3"
         
         pointer_node = avango.gua.nodes.TransformNode(Name = "pointer_node")
         pointer_node.Transform.connect_from(pointer_tracking_sensor.Matrix)
-        # pointer_node.Children.value.append(dynamic_quad)
 
+        
         viewingSetup.navigation_node.Children.value.append(pointer_node)
-        projector.Transform2.connect_from(dynamic_quad.WorldTransform)
+        # pointer_node.Children.value.append(dynamic_quad)
+        pointer_node.Children.value.append(dynamic_lense)
 
-        # print_graph(graph.Root.value)
+        # # graph.Root.value.Children.value.append(dynamic_lense)
+        photo_projection.set_projection_lense(dynamic_lense, pointer_node)
+        photo_projection.Button0.connect_from(pointer_button_sensor.Button0)
+        photo_projection.Button1.connect_from(pointer_button_sensor.Button2)
+        
+
+        vt_backend = avango.gua.VTBackend()
+        for _user in viewingSetup.user_list:
+            vt_backend.add_camera(_user.camera_node)
+        vt_backend.start_backend()
+        
+        print_graph(graph.Root.value)
 
         ## start application/render loop
         viewingSetup.run(locals(), globals())
@@ -210,7 +291,7 @@ def start():
                                      RightResolution=size)
         avango.gua.register_window("window", window)
 
-        # setup view
+        # setup viewer
         screen = avango.gua.nodes.ScreenNode(Name="screen",
                                          Width=4.8,
                                          Height=2.7)
@@ -229,26 +310,6 @@ def start():
         graph.Root.value.Children.value.append(camera)
         # setup_picker(mesh_loader, camera, graph)
 
-        # # add light nodes
-        # spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
-        #                                           Type=avango.gua.LightType.SPOT,
-        #                                           Color=avango.gua.Color(1.0, 1.0, 1.0),
-        #                                           EnableShadows=True,
-        #                                           ShadowMapSize=1024,
-        #                                           ShadowOffset=0.002,
-        #                                           ShadowMaxDistance=10,
-        #                                           Falloff=1.5,
-        #                                           ShadowNearClippingInSunDirection=0.1,
-        #                                           ShadowFarClippingInSunDirection=10.0,
-        #                                           Softness=2,
-        #                                           Brightness=20)
-        # spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-        #                                avango.gua.make_rot_mat(-90, 1, 0, 0) * \
-        #                                avango.gua.make_scale_mat(4)
-
-        # # screen.Children.value.append(spot_light_1)
-        # spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
-        
         dynamic_lense = dt_loader.create_empty_geometry(
             "dynamic_lense", 
             "empty_name_3.lob", 
@@ -400,10 +461,25 @@ def print_fields(node, print_values = False):
 if __name__ == '__main__':
 
 
-    a = avango.gua.Vec3(1.073,  0.915,  5.322) 
-    b = [avango.gua.Vec3(0.117,  1.234,  -0.167)]
-    b.append(avango.gua.Vec3(0.265,  1.199,  -0.168))
-    b.append(avango.gua.Vec3(0.395,  1.143,  -0.169))
-    b.append(avango.gua.Vec3(0.578,  1.092,  -0.172))
-
     start()
+
+
+# # add light nodes
+# spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
+#                                           Type=avango.gua.LightType.SPOT,
+#                                           Color=avango.gua.Color(1.0, 1.0, 1.0),
+#                                           EnableShadows=True,
+#                                           ShadowMapSize=1024,
+#                                           ShadowOffset=0.002,
+#                                           ShadowMaxDistance=10,
+#                                           Falloff=1.5,
+#                                           ShadowNearClippingInSunDirection=0.1,
+#                                           ShadowFarClippingInSunDirection=10.0,
+#                                           Softness=2,
+#                                           Brightness=20)
+# spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
+#                                avango.gua.make_rot_mat(-90, 1, 0, 0) * \
+#                                avango.gua.make_scale_mat(4)
+
+# # screen.Children.value.append(spot_light_1)
+# spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)

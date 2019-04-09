@@ -315,8 +315,9 @@ class PhotoProjection(avango.script.Script):
       self.update_perspective()
 
       self.button0_pressed = True
+      print('TASTE 0')
       # self.projection_lense.Material.connect_from(self.Material)
-      print('left pressed')
+      # print('left pressed')
     else:
       if self.button0_pressed:
         lense_mat = self.projection_lense.WorldTransform.value
@@ -332,6 +333,7 @@ class PhotoProjection(avango.script.Script):
   def button1_changed(self):
     # if right mouse pressed
     if self.Button1.value:
+      print('TASTE 1')
       if self.button1_pressed == False:
         if self.show_lense:  
           self.lense_parent_node.Children.value.remove(self.projection_lense)
@@ -349,6 +351,7 @@ class PhotoProjection(avango.script.Script):
       
   def update_perspective(self):
     if self.last_lense_pos:
+
       # if self.button0_pressed:
       # if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
       #  or self.Transform2.value.get_translate().y != self.last_lense_pos.y 

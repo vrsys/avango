@@ -89,11 +89,10 @@ class User:
         #self.resolve_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/warehouse.jpg"
 
         self.pipeline_description = avango.gua.nodes.PipelineDescription(Passes = [])
-        self.pipeline_description.EnableABuffer.value = False
-        self.pipeline_description.Passes.value.append(avango.gua.nodes.TriMeshPassDescription())
+        self.pipeline_description.EnableABuffer.value = True
+        # self.pipeline_description.Passes.value.append(avango.gua.nodes.TriMeshPassDescription())
         self.pipeline_description.Passes.value.append(avango.gua.lod.nodes.PLodPassDescription(SurfelRenderMode = avango.gua.lod.RenderFlags.HQ_TWO_PASS))
         self.pipeline_description.Passes.value.append(avango.gua.nodes.DynamicTrianglePassDescription())
-        self.pipeline_description.Passes.value.append(avango.gua.nodes.DeferredVirtualTexturingPassDescription())
         #self.pipeline_description.Passes.value.append(avango.gua.nodes.SkyMapPassDescription(OutputTextureName="awesome_skymap"))
         self.pipeline_description.Passes.value.append(avango.gua.nodes.LightVisibilityPassDescription())
         self.pipeline_description.Passes.value.append(self.resolve_pass)

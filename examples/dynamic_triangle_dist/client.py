@@ -101,6 +101,7 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          Groupname="AVCLIENT|127.0.0.1|7432")
 
 loader = avango.gua.nodes.TriMeshLoader()
+dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
 
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]

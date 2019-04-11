@@ -102,6 +102,55 @@ class UpdateDynamicTriangleScript(avango.script.Script):
             self.node_to_update.end_vertex_list()
 
 
+class UpdateImagesScript(avango.script.Script):
+    def __init__(self):
+        self.super(UpdateImagesScript).__init__()
+        self.StartCounting = False
+        self.FrameCount = 0
+
+    def set_dynamic_triangle_node(self, dynamic_triangle_node, image_list):
+        self.node_to_update = dynamic_triangle_node
+        self.always_evaluate(True)
+        self.image_list = image_list
+        self.StartCounting = True
+
+    def evaluate(self):
+        if self.StartCounting == True:  
+            self.FrameCount += 1   
+
+            self.node_to_update.start_vertex_list()
+
+            for img in self.image_list:
+                # quad_transform = avango.gua.make_trans_mat(0.5 * math.cos(self.FrameCount/100), 0.3*math.sin(self.FrameCount/100), 2.0)
+                img_transform = img.transform
+
+                pos = img_transform * avango.gua.Vec3( img.img_w_half, img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+                pos = img_transform * avango.gua.Vec3(-img.img_w_half, -img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y + img.tile_h)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+                pos = img_transform * avango.gua.Vec3( img.img_w_half, -img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y + img.tile_h)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+                pos = img_transform * avango.gua.Vec3( img.img_w_half, img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+                pos = img_transform * avango.gua.Vec3(-img.img_w_half, img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+                pos = img_transform * avango.gua.Vec3(-img.img_w_half, -img.img_h_half, 0.0)
+                uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y + img.tile_h)
+                self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+            
+            self.node_to_update.end_vertex_list()
+
+
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -120,6 +169,10 @@ graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 loader = avango.gua.nodes.TriMeshLoader()
 dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
 aux_loader = avango.gua.lod.nodes.Aux()
+trans_node = avango.gua.nodes.TransformNode(Name="scene_trans")
+trans_node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 0) * \
+                             avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+# nettrans.Children.value.append(trans_node)
 
 view_num = 0
 atlas_tiles_num = 0
@@ -143,6 +196,7 @@ localized_images_node.Material.value.set_uniform("vt_images", atlas_path)
 localized_images_node.Material.value.EnableVirtualTexturing.value = True
 print('VT MAT', vt_mat)
 # localized_images_node.Material.value.EnableBackfaceCulling.value = False
+trans_node.Children.value.append(localized_images_node)
 
 group = avango.gua.nodes.TransformNode(Name="group")
 
@@ -288,9 +342,9 @@ cscreen.Children.value = [client_cam]
 sscreen.Children.value = [server_cam]
 
 nettrans.Children.value.append(cscreen)
-trans_node_2 = avango.gua.nodes.TransformNode(Name="hellotrans")
-graph.Root.value.Children.value.append(trans_node_2)
+
 graph.Root.value.Children.value.append(sscreen)
+# make_node_distributable(trans_node)
 make_node_distributable(group)
 make_node_distributable(cscreen)
 

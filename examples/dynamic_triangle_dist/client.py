@@ -62,10 +62,22 @@ class NetInit(avango.script.Script):
     def evaluate(self):
 
       if len(self.NetChildren.value) > 0 and self.is_initialized:
-        node = self.scenegraph["/net/group/plane"]
-
-        
-        # print(node.Name.value)
+        dt_node = self.scenegraph["/net/group/plane"]
+        projector = self.scenegraph["/net/group/projector_group_p1"]
+        # print('proj material',dt_node.Material.value.ShaderName.value)
+        """
+                net <NetTransform>
+        │   │   ├── group <TransformNode>
+        │   │   │   ├── monkey_transform <TransformNode>
+        │   │   │   │   ├── monkey <TriMeshNode>
+        │   │   │   ├── plane <DynamicTriangleNode>
+        │   │   │   ├── projector_group_p1 <TransformNode>
+        │   │   │   │   ├── screen1 <ScreenNode>
+        │   │   │   │   ├──  <CameraNode>
+        │   │   │   ├── light <LightNode>
+        │   │   ├── client_screen <ScreenNode>
+        │   │   │   ├──  <CameraNode>
+        """
         # print(node.WorldTransform.value)
         #node.clear_vertices()
         #node.push_vertex(1, 0, 0, 1, 0, 0)
@@ -79,6 +91,9 @@ class NetInit(avango.script.Script):
         print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
+        cam = self.scenegraph["/net/client_screen/client_cam"]
+        vt_backend.add_camera(cam)
+        vt_backend.start_backend()
         print_graph(self.scenegraph.Root.value)
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
@@ -102,6 +117,8 @@ logger = avango.gua.nodes.Logger(EnableWarning=False)
 viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
+
+vt_backend = avango.gua.VTBackend()
 
 init = NetInit()
 init.my_constructor(graph)

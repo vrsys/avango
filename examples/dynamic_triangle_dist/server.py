@@ -250,37 +250,37 @@ viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 
-# update_dt = UpdateDynamicTriangleScript()
+update_dt = UpdateDynamicTriangleScript()
 
-#add linestrip to the spiral creator to create new vertices every frame
-# spiral_creator.set_line_strip_node(dynamic_tri_node)
-# update_dt.set_dynamic_triangle_node(dynamic_tri_node)
-dynamic_tri_node.start_vertex_list()
-# dynamic_tri_node.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
-pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
-uv  = avango.gua.Vec2(1.0, 0.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# #add linestrip to the spiral creator to create new vertices every frame
+# # spiral_creator.set_line_strip_node(dynamic_tri_node)
+update_dt.set_dynamic_triangle_node(dynamic_tri_node)
+# dynamic_tri_node.start_vertex_list()
+# # dynamic_tri_node.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
+# pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
+# uv  = avango.gua.Vec2(1.0, 0.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
-uv  = avango.gua.Vec2(0.0, 1.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
+# uv  = avango.gua.Vec2(0.0, 1.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-pos = quad_transform * avango.gua.Vec3( quad_size, -quad_size, 0.0)
-uv  = avango.gua.Vec2(1.0, 1.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# pos = quad_transform * avango.gua.Vec3( quad_size, -quad_size, 0.0)
+# uv  = avango.gua.Vec2(1.0, 1.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
-uv  = avango.gua.Vec2(1.0, 0.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
+# uv  = avango.gua.Vec2(1.0, 0.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-pos = quad_transform * avango.gua.Vec3(-quad_size, quad_size, 0.0)
-uv  = avango.gua.Vec2(0.0, 0.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# pos = quad_transform * avango.gua.Vec3(-quad_size, quad_size, 0.0)
+# uv  = avango.gua.Vec2(0.0, 0.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 
-pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
-uv  = avango.gua.Vec2(0.0, 1.0)
-dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-dynamic_tri_node.end_vertex_list()
+# pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
+# uv  = avango.gua.Vec2(0.0, 1.0)
+# dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+# dynamic_tri_node.end_vertex_list()
 
 
 guaVE = GuaVE()

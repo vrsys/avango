@@ -317,6 +317,7 @@ class PhotoProjection(avango.script.Script):
       self.update_perspective()
 
       self.button0_pressed = True
+      # print('TASTE 0')
       # self.projection_lense.Material.connect_from(self.Material)
     else:
       if self.button0_pressed:
@@ -333,6 +334,7 @@ class PhotoProjection(avango.script.Script):
   def button1_changed(self):
     # if right mouse pressed
     if self.Button1.value:
+      # print('TASTE 1')
       if self.button1_pressed == False:
         if self.show_lense:  
           self.lense_parent_node.Children.value.remove(self.projection_lense)
@@ -350,6 +352,7 @@ class PhotoProjection(avango.script.Script):
       
   def update_perspective(self):
     if self.last_lense_pos:
+
       # if self.button0_pressed:
       # if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
       #  or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
@@ -361,8 +364,8 @@ class PhotoProjection(avango.script.Script):
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
       self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.8
-      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.8
+      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 2
+      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 2
       # self.localized_image_list[closest_id].set_selected(True, True)
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id

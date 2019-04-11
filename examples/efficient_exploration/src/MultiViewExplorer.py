@@ -6,13 +6,9 @@ from avango.script import field_has_changed
 from src.DynamicQuad import DynamicQuad
 from src.PhotoProjector import PhotoProjector
 
-class MultiViewExplorer(avango.script.Script):
-    def __init__(self):
-        self.super(MultiViewExplorer).__init__()
-        self.always_evaluate(False)
-        self.is_initialized = False
+class MultiViewExplorer:
 
-    def my_constructor(self, scenegraph, parent_node, atlas_path, images, width, height, rows=2, columns=1):
+    def __init__(self, scenegraph, parent_node, atlas_path, images, width, height, rows=2, columns=1):
 
         self.parent_node = parent_node
         self.atlas_path = atlas_path
@@ -40,20 +36,29 @@ class MultiViewExplorer(avango.script.Script):
 
             projector = PhotoProjector()
             projector.my_constructor(quad_trans_node, dynamic_quad_node, quad_trans_node, self.images)
+            print('p m',projector.Material)
             projector.Graph.value = scenegraph
             projector.Texture.value = self.atlas_path
 
             projector.update_images(i)
-            dynamic_quad_node.Material.connect_from(projector.Material)
+            # dynamic_quad_node.Material.connect_from(projector.Material)
             projector.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 3.0) 
                                         # *\
                                         # avango.gua.make_rot_mat(90, 1.0, 0.0, 0.0)
             # projector.Transform.connect_from(quad_trans_node.Transform)
+            dynamic_quad_node.Material.connect_from(projector.Material.value[i])
+            print('p m2',projector.Material)
             self.projectors.append(projector)
+            print('BUUUUUUUUUUUUUGGG', self.projectors[0].Material)
             # photo_projection = PhotoProjection()
             # photo_projection.my_constructor()
             # projector.set_localized_image_list(localized_images)
+            print(i,dynamic_quad_node.Name.value, quad_trans_node.Name.value)
             projector.set_projection_quad(dynamic_quad_node, quad_trans_node)
+
+        for p in self.projectors:
+            print(p)
+            print(p.Material.value, p.Material)
 
     def set_image_list(self, images):
         self.images = images

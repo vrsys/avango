@@ -22,22 +22,22 @@ class DynamicQuad:
             "dynamic_" + str(self.id) + ".lob", 
             avango.gua.LoaderFlags.DEFAULTS)
 
-        shader_name = "dynamic_quad_" + str(self.id) + "_material"
-        material = avango.gua.nodes.Material(
-          ShaderName = shader_name
-        )
-        print('dq material:', material)
-        proj_mat_desc = avango.gua.nodes.MaterialShaderDescription()
-        proj_mat_desc.load_from_file("data/materials/Projective_VT_Material.gmd")
+        # shader_name = "dynamic_quad_" + str(self.id) + "_material"
+        # material = avango.gua.nodes.Material(
+        #   ShaderName = shader_name
+        # )
+        # print('dq material:', material)
+        # proj_mat_desc = avango.gua.nodes.MaterialShaderDescription()
+        # proj_mat_desc.load_from_file("data/materials/Projective_VT_Material.gmd")
 
-        # proj_mat_desc.EnableVirtualTexturing.value = True
-        avango.gua.register_material_shader(proj_mat_desc, shader_name)
+        # # proj_mat_desc.EnableVirtualTexturing.value = True
+        # avango.gua.register_material_shader(proj_mat_desc, shader_name)
 
 
-        self.dynamic_quad.Material.value = material
-        self.dynamic_quad.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
-        self.dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
-        self.dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
+        # self.dynamic_quad.Material.value = material
+        # self.dynamic_quad.Material.value.set_uniform("Color", avango.gua.Vec4(1.0, 0.766, 0.336, 1.0))
+        # self.dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
+        # self.dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
         # self.dynamic_quad.Material.value.EnableVirtualTexturing.value = False
 
         quad_transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)

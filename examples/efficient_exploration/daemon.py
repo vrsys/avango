@@ -48,7 +48,7 @@ def init_lcd_wall_tracking():
     print("ART Tracking started at LCD WALL")
 
 
-
+'''
 ## Initializes AR Track on DLP wall.
 def init_dlp_wall_tracking():
 
@@ -108,6 +108,70 @@ def init_dlp_wall_tracking():
 
     device_list.append(_dtrack)
     print("ART Tracking started at DLP WALL")
+'''
+
+
+## Initializes AR Track on large 6-user wall.
+def init_b11_large_wall_tracking():
+
+    # create instance of DTrack
+    _dtrack = avango.daemon.DTrack()
+    _dtrack.port = "5002" # ART port at LED wall
+
+    # glasses
+    _dtrack.stations[31] = avango.daemon.Station('tracking-b11-large-wall-glasses-n_1')
+    _dtrack.stations[32] = avango.daemon.Station('tracking-b11-large-wall-glasses-2_1')
+    _dtrack.stations[33] = avango.daemon.Station('tracking-b11-large-wall-glasses-3_1')
+
+    _dtrack.stations[1] = avango.daemon.Station('tracking-b11-large-wall-glasses-3_2')
+    _dtrack.stations[2] = avango.daemon.Station('tracking-b11-large-wall-glasses-4_2')
+    _dtrack.stations[5] = avango.daemon.Station('tracking-b11-large-wall-glasses-6_2')
+    
+    _dtrack.stations[36] = avango.daemon.Station('tracking-b11-large-wall-glasses-1_3')
+
+
+    _dtrack.stations[40] = avango.daemon.Station('tracking-b11-large-wall-glasses-A')
+    _dtrack.stations[41] = avango.daemon.Station('tracking-b11-large-wall-glasses-B')
+    _dtrack.stations[42] = avango.daemon.Station('tracking-b11-large-wall-glasses-C')
+    _dtrack.stations[43] = avango.daemon.Station('tracking-b11-large-wall-glasses-D')
+    _dtrack.stations[44] = avango.daemon.Station('tracking-b11-large-wall-glasses-E')
+    _dtrack.stations[45] = avango.daemon.Station('tracking-b11-large-wall-glasses-F')
+    _dtrack.stations[46] = avango.daemon.Station('tracking-b11-large-wall-glasses-G')
+    _dtrack.stations[47] = avango.daemon.Station('tracking-b11-large-wall-glasses-H')
+    _dtrack.stations[48] = avango.daemon.Station('tracking-b11-large-wall-glasses-I')
+    _dtrack.stations[49] = avango.daemon.Station('tracking-b11-large-wall-glasses-J')
+
+
+    ## devices
+    _dtrack.stations[18] = avango.daemon.Station('tracking-new-spheron')       # new spheron device
+
+    _dtrack.stations[24] = avango.daemon.Station('tracking-b11-large-wall-pointer-1')       # gunpointer2
+    _dtrack.stations[16] = avango.daemon.Station('tracking-b11-large-wall-pointer-2')      # Speedlink (yellow)
+    _dtrack.stations[25] = avango.daemon.Station('tracking-b11-large-wall-pointer-3')      # HAS pointer (blue)
+    _dtrack.stations[30] = avango.daemon.Station('tracking-b11-large-wall-pointer-4')      # BUW VR pointer
+    _dtrack.stations[37] = avango.daemon.Station('tracking-b11-large-wall-pointer-5')      # gunpointer (green)
+    #_dtrack.stations[24] = avango.daemon.Station('tracking-b11-large-wall-pointer-6')      # Canon pointer
+    _dtrack.stations[20] = avango.daemon.Station('tracking-b11-large-wall-pointer-10')      # BUW pointer black
+    _dtrack.stations[21] = avango.daemon.Station('tracking-b11-large-wall-pointer-11')      # BUW pointer white
+    
+    #_dtrack.stations[20] = avango.daemon.Station('tracking-b11-large-wall-calibration') # calibration target
+
+    #_dtrack.stations[25] = avango.daemon.Station('tracking-b11-large-wall-portal-camera-31')  # portal camera 3.1
+    _dtrack.stations[26] = avango.daemon.Station('tracking-b11-large-wall-portal-camera-32')  # portal camera 3.2
+    
+
+    _dtrack.stations[35] = avango.daemon.Station('tracking-b11-large-wall-video-camera')     # new video camera target
+
+    _dtrack.stations[13] = avango.daemon.Station('tracking-b11-large-wall-lht-1') # LHT1
+    _dtrack.stations[14] = avango.daemon.Station('tracking-b11-large-wall-lht-2') # LHT2
+
+    _dtrack.stations[38] = avango.daemon.Station('tracking-b11-large-wall-latency-rotator')
+
+    _dtrack.stations[8] = avango.daemon.Station('tracking-b11-large-wall-prop-1') # wooden prop (phone-shape)
+
+    device_list.append(_dtrack)
+    print("ART Tracking started at <B11 Large Wall>")
+
 
 
 ## Initializes AR Track in the DBL.
@@ -944,8 +1008,8 @@ device_list = []
 ### initialize tracking systems
 #init_pst_tracking()
 #init_lcd_wall_tracking()
-#init_dlp_wall_tracking()
-init_dbl_tracking()
+#init_dbl_tracking()
+init_b11_large_wall_tracking()
 
 
 ### init navigation devices
@@ -985,8 +1049,8 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 #init_hid_device(EVENT_STRING = get_event_string(1, "HID-compliant Mouse HID-compliant Mouse"), STATION_STRING = "device-pointer2", BUTTON_MAPPINGS = _button_mapping)
 
 ## HAS pointer (blue)
-#_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP"), (2, "EV_KEY::KEY_VOLUMEDOWN")] 
-#init_hid_device(EVENT_STRING = get_event_string(1, "HAS   HAS HS304"), STATION_STRING = "device-pointer3", BUTTON_MAPPINGS = _button_mapping)
+_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP"), (2, "EV_KEY::KEY_VOLUMEDOWN")] 
+init_hid_device(EVENT_STRING = get_event_string(1, "HAS   HAS HS304"), STATION_STRING = "device-pointer3", BUTTON_MAPPINGS = _button_mapping)
 
 ##
 #_button_mapping = [(0, "EV_KEY::KEY_PAGEUP"), (1, "EV_KEY::KEY_B")]
@@ -1031,7 +1095,7 @@ init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATIO
 # init_keyboard()
 
 # init_mouse()
-#init_keyboard()
+# init_keyboard()
 
 
 # laptop

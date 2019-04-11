@@ -26,7 +26,7 @@ class ImageExplorer(avango.script.Script):
         self.always_evaluate(False)
         self.is_initialized = False
 
-    def my_constructor(self, scenegraph, parent_node, atlas_path, images, width, height, rows=2, columns=4):
+    def my_constructor(self, scenegraph, parent_node, atlas_path, images, width, height, rows=3, columns=4):
         self.parent_node = parent_node
         self.atlas_path = atlas_path
         self.width = width
@@ -47,16 +47,16 @@ class ImageExplorer(avango.script.Script):
             x = (self.width/2) - (i // self.rows * (self.width/self.columns)) - (self.width/self.columns/2)
             y = self.height/2 - (i % self.rows * (self.height/self.rows)) - (self.height/self.rows/2)
             quad_trans_node.Transform.value = avango.gua.make_trans_mat(x, y, 0.0)
-            
+            print('QUAD SIZE',(self.width/self.columns) / 2)
             dq = DynamicQuad(quad_trans_node, (self.width/self.columns) / 2, (self.height/self.rows) / 2)
             dynamic_quad_node = dq.get_node()
             self.dynamic_quads.append(dynamic_quad_node)
             self.parent_node.Children.value.append(quad_trans_node)
 
             projector3 = MyProjector()
-            projector3.my_constructor("p"+str(i))
+            projector3.my_constructor(parent_node,"p"+str(i))
             self.projectors.append(projector3)
-            parent_node.Children.value.append(projector3.group_node)
+            # parent_node.Children.value.append(projector3.group_node)
             projector3.set_localized_image_list(self.images)
             projector3.Graph.value = scenegraph
             projector3.Texture.value = self.atlas_path

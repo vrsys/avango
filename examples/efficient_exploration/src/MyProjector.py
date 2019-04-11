@@ -22,11 +22,12 @@ class MyProjector(avango.script.Script):
 
     self.is_initialized = False
 
-  def my_constructor(self, name):
+  def my_constructor(self, parent_node, name):
     self.indicator = None
     loader = avango.gua.nodes.TriMeshLoader()
 
     self.name = name
+    self.parent_node = parent_node
 
     self.localized_image_list = []
     self.position_list = []
@@ -82,6 +83,7 @@ class MyProjector(avango.script.Script):
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat"+self.name)
+    self.parent_node.Children.value.append(self.group_node)
     
   def set_scenegraph(self, graph):
     print('scene graph got set')
@@ -111,9 +113,12 @@ class MyProjector(avango.script.Script):
 
   def set_offset(self, offset):
     self.offset = offset
+    normalize_mat  = self.parent_node.WorldTransform.value
+    self.Transform.value = avango.gua.make_inverse_mat(normalize_mat) * self.projection_lense.WorldTransform.value * self.offset 
 
   @field_has_changed(Transform)
   def update_matrices(self):
+    print('changed Transform', self.Transform.value.get_translate())
     frustum = self.cam.get_frustum(self.Graph.value, avango.gua.CameraMode.CENTER)
 
     projection_matrix = frustum.ProjectionMatrix.value
@@ -137,36 +142,33 @@ class MyProjector(avango.script.Script):
     self.Material.value.EnableVirtualTexturing.value = True
     # self.Material.value.EnableBackfaceCulling.value = True
 
-  # @field_has_changed(Button0)
-  def button0_changed(self):
-    # pass
-    # if self.Button0.value:
-    self.update_perspective()
+  # # @field_has_changed(Button0)
+  # def button0_changed(self):
+  #   # pass
+  #   # if self.Button0.value:
+  #   self.update_perspective()
       
   def change_photo_projection(self, image_id ):
-    print('change id', image_id)
+    # print('change id', image_id)
     self.set_image_id(image_id)
     self.update_perspective()
-    self.button0_changed()
-    print('update')
+    # self.button0_changed()
     
       
   def update_perspective(self):
     if self.last_lense_pos:
 
       closest_id = self.get_new_perspective()
-      print("#####################", closest_id)
       
-      # self.min_tex_coords = self.localized_image_list[closest_id].min_uv
-      # self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-      self.min_tex_coords = self.localized_image_list[closest_id].max_uv
-      self.max_tex_coords = self.localized_image_list[closest_id].min_uv
-      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 1.8
-      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 1.8
-      # self.localized_image_list[closest_id].set_selected(True, True)
+      self.min_tex_coords = self.localized_image_list[closest_id].min_uv
+      self.max_tex_coords = self.localized_image_list[closest_id].max_uv
+      # self.min_tex_coords = self.localized_image_list[closest_id].max_uv
+      # self.max_tex_coords = self.localized_image_list[closest_id].min_uv
+      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 2
+      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 2
+      
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id
-      # self.Transform.value = self.localized_image_list[closest_id].transform
       self.update_matrices()
     else:
       # self.last_lense_pos = self.Transform2.value.get_translate()

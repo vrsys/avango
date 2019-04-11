@@ -68,7 +68,6 @@ def start():
     graph.Root.value.Children.value.append(nettrans)
     trans_node.Children.value.append(plod_trans_node)
 
-    
     # configure lod loader 
     lod_loader.UploadBudget.value = 64
     lod_loader.RenderBudget.value = 1024
@@ -78,7 +77,6 @@ def start():
     plod_node = lod_loader.load_lod_pointcloud(
         "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     # plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
@@ -89,12 +87,8 @@ def start():
 
     floor.Transform.value = avango.gua.make_trans_mat(0, -0.4, 0) * avango.gua.make_scale_mat(4, 1, 4) 
     graph.Root.value.Children.value.append(floor)
-    # graph.Root.value.Children.value.append(floor)
 
     # Create localized image controller
-
-
-
     view_num = 0
     atlas_tiles_num = 0
     atlas = None
@@ -133,16 +127,8 @@ def start():
         atlas = aux_loader.get_atlas()
         quad = LocalizedImageQuad(graph, localized_images_node, quad_id, view, atlas_tile, atlas)
         localized_images.append(quad)
-        # t = str(quad.transform).replace('\n', '')
-        # cam_location_list.append(t)
-
-    # with open('cam_transforms.txt', 'w') as outfile:  
-    #     for line in cam_location_list:
-    #         outfile.write(line)
-    #         outfile.write('\n')
 
     trans_node.Children.value.append(localized_images_node)
-
 
     # create multi view explorers transform node
     multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
@@ -152,7 +138,7 @@ def start():
     image_explorer = ImageExplorer()
     image_explorer.my_constructor(graph, multi_view_trans_node,
                                    atlas_path, localized_images,
-                                   4.0, 2.0)
+                                   3.0, 1.8)
     # multi_view_explorer.my_constructor()
 
     photo_projection = PhotoProjection()
@@ -166,28 +152,8 @@ def start():
     perspective_picker = PerspectivePicker()
     perspective_picker.my_constructor()
     perspective_picker.set_localized_image_list(localized_images)
+    perspective_picker.set_visualizer(image_explorer)
 
-    # localized_image_controller = LocalizedImageController(dt_loader, aux_loader ,graph, trans_node, 
-    #     "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-    #     "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-    #     # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-    #     # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
-    # projector = localized_image_controller.get_projector()
-
-    #### Create app logic above here ####
-    # # print(photo_projection.Material.value)
-    # for p in multi_view_explorer.projectors:
-    #     print('prj num',p.Number.value)
-    #     print('prj real own',p.material)
-    #     print('prj real mat',p.material.value)
-    #     print('prj mat',p.Material.value)
-    #     print('prj sf mat',p.Material)
-
-    hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
-    hostname = hostname.strip("\n")
-
-
-        
     # config window size
     width = 1920;
     height = int(width * 9.0 / 16.0)
@@ -222,7 +188,7 @@ def start():
     graph.Root.value.Children.value.append(camera)
     
     dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
-    dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+    dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
     dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
     dynamic_lense = dynamic_quad.get_node()
 

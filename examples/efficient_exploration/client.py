@@ -77,14 +77,14 @@ class NetInit(avango.script.Script):
       if len(self.NetChildren.value) > 0 and not self.is_initialized:
         print('Receiving server nodes')
         node = self.scenegraph["/net/multi_view_trans_node"]
-        print('######################', node.Name.value)
+        # print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
         print_graph(self.scenegraph.Root.value)
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|127.0.0.1|7432")
+                                         Groupname="AVCLIENT|141.54.147.60|7432")
 
 # loader = avango.gua.nodes.TriMeshLoader()
 lod_loader = avango.gua.lod.nodes.LodLoader()
@@ -95,9 +95,10 @@ lod_loader.OutOfCoreBudget.value = 4096
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
-size = avango.gua.Vec2ui(800, 600)
+size = avango.gua.Vec2ui(7680, 4320)
 
-window = avango.gua.nodes.GlfwWindow(Size=size,
+#window = avango.gua.nodes.GlfwWindow(Size=size,
+window = avango.gua.nodes.Window(Size=size,
                                      LeftResolution=size,
                                      Title="client_window")
 avango.gua.register_window("client_window", window)

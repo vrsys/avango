@@ -23,7 +23,8 @@ from src.SpheronNavigation import SpheronNavigation
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVSERVER|127.0.0.1|7432")
+                                         # Groupname="AVSERVER|127.0.0.1|7432")
+                                         Groupname="AVSERVER|141.54.147.60|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -50,10 +51,10 @@ def start():
     dt_loader = avango.gua.nodes.DynamicTriangleLoader()
     aux_loader = avango.gua.lod.nodes.Aux()
 
-    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-    # aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-    # atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
     # setup scene
     # add transform node for plod object
@@ -63,7 +64,8 @@ def start():
     plod_trans_node = avango.gua.nodes.TransformNode(Name="scene")
     # plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.0)
 
-    graph.Root.value.Children.value.append(trans_node)
+    # graph.Root.value.Children.value.append(trans_node)
+    nettrans.Children.value.append(trans_node)
     graph.Root.value.Children.value.append(nettrans)
     trans_node.Children.value.append(plod_trans_node)
 
@@ -75,8 +77,8 @@ def start():
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     # plod_node.ShadowMode.value = 1
@@ -189,19 +191,20 @@ def start():
             ## DLP wall 4-user setup
             viewingSetup = MultiUserViewingSetup(
                 SCENEGRAPH = graph,
-                WINDOW_RESOLUTION = avango.gua.Vec2ui(3840*2, 2160),
-                SCREEN_DIMENSIONS = avango.gua.Vec2(4.91, 2.78),
-                TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.445,2.0),
-                DISPLAY_STRING_LIST = [":0.0", ":0.1", ":0.2", ":0.3"], # number of available GPUs (users)
-                LEFT_POSITION = avango.gua.Vec2ui(0, 0),
-                LEFT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
-                RIGHT_POSITION = avango.gua.Vec2ui(3840, 0),
-                RIGHT_RESOLUTION = avango.gua.Vec2ui(3840, 2160),
+                WINDOW_RESOLUTION = avango.gua.Vec2ui(4096*2, 2160),
+                SCREEN_DIMENSIONS = avango.gua.Vec2(4.97, 2.77),
+                TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.435,2.0),
+                DISPLAY_STRING_LIST = [":0.2", ":0.5", ":0.4", ":0.1", ":0.3", ":0.0"], # number of available GPUs (users)
+                LEFT_POSITION = avango.gua.Vec2ui(90, 0),
+                LEFT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
+                RIGHT_POSITION = avango.gua.Vec2ui(4096 + 90, 0),
+                RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 )
-            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-A")
-            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-B")
-            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-C")
-            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-D")      
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-E")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-J")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")                
+
+
         elif hostname == "argos":
             ## large powerwall 6-user setup
             viewingSetup = MultiUserViewingSetup(
@@ -241,6 +244,35 @@ def start():
         if viewingSetup:
             viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
 
+
+
+        # client viewing setup for tiled wall
+        client_navigation = avango.gua.nodes.TransformNode(Name = "client_navigation")
+        client_navigation.Transform.value = avango.gua.make_trans_mat(0.0,0.0,0.0)
+        nettrans.Children.value.append(client_navigation)
+
+        client_screen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4.07, Height=2.3)
+        client_navigation.Children.value.append(client_screen)
+
+        client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
+        
+        for p in client_pipeline_description.Passes.value:
+            nettrans.distribute_object(p)
+        nettrans.distribute_object(client_pipeline_description)
+
+        client_cam = avango.gua.nodes.CameraNode(
+            ViewID=2,
+            LeftScreenPath="/net/client_navigation/client_screen",
+            SceneGraph="scenegraph",
+            Resolution=avango.gua.Vec2ui(7680, 4320),
+            OutputWindowName="client_window",
+            Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.0), # head position
+            PipelineDescription=client_pipeline_description)
+        client_navigation.Children.value.append(client_cam)
+        
+        make_node_distributable(client_navigation) # distribute clien camera setup subtree
+        make_node_distributable(trans_node)
+        
         # add prototyp lense
         # dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane2.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
         # dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
@@ -320,6 +352,8 @@ def start():
         vt_backend = avango.gua.VTBackend()
         for _user in viewingSetup.user_list:
             vt_backend.add_camera(_user.camera_node)
+
+        vt_backend.add_camera(client_cam)
         vt_backend.start_backend()
         
         print_graph(graph.Root.value)
@@ -372,74 +406,11 @@ def start():
         # lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
         # lense_size = 0.2
 
-        # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        # uv  = avango.gua.Vec2(1.0, 0.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
-        
-        # pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        # uv  = avango.gua.Vec2(0.0, 1.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
-
-        # # add light nodes
-        # spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
-        #                                           Type=avango.gua.LightType.SPOT,
-        #                                           Color=avango.gua.Color(1.0, 1.0, 1.0),
-        #                                           EnableShadows=True,
-        #                                           ShadowMapSize=1024,
-        #                                           ShadowOffset=0.002,
-        #                                           ShadowMaxDistance=10,
-        #                                           Falloff=1.5,
-        #                                           ShadowNearClippingInSunDirection=0.1,
-        #                                           ShadowFarClippingInSunDirection=10.0,
-        #                                           Softness=2,
-        #                                           Brightness=20)
-        # spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-        #                                avango.gua.make_rot_mat(-90, 1, 0, 0) * \
-        #                                avango.gua.make_scale_mat(4)
-
-        # # screen.Children.value.append(spot_light_1)
-        # spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
         dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
         dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
         dynamic_lense = dynamic_quad.get_node()
-        
-        # dynamic_lense = dt_loader.create_empty_geometry(
-        #     "dynamic_lense", 
-        #     "empty_name_3.lob", 
-        #     avango.gua.LoaderFlags.DEFAULTS)
 
-        # lense_transform = avango.gua.make_trans_mat(0.0, 0.0,0.0)
-        # lense_size = 0.2
-
-        # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        # uv  = avango.gua.Vec2(1.0, 0.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
-        
-        # pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        # uv  = avango.gua.Vec2(0.0, 1.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
-
-        
-        # pos = lense_transform * avango.gua.Vec3( lense_size, -lense_size, 0.0)
-        # uv  = avango.gua.Vec2(1.0, 1.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
-
-        # pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        # uv  = avango.gua.Vec2(1.0, 0.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-        
-        # pos = lense_transform * avango.gua.Vec3(-lense_size, lense_size, 0.0)
-        # uv  = avango.gua.Vec2(0.0, 0.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-
-        # pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        # uv  = avango.gua.Vec2(0.0, 1.0)
-        # dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-
-        # projector.set_projection_object(dynamic_lense)
-        # # dynamic_lense.Material.value.EnableVirtualTexturing.value = True
-        # # dynamic_lense.Material.value.EnableBackfaceCulling.value = True
 
         screen.Children.value.append(dynamic_transform)
         photo_projection.set_projection_lense(dynamic_lense, dynamic_transform)
@@ -490,14 +461,15 @@ def start():
             SceneGraph="scenegraph",
             Resolution=avango.gua.Vec2ui(800, 600),
             OutputWindowName="client_window",
-            Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5),
+            Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5) *\
+                      avango.gua.make_rot_mat(),
             PipelineDescription=pipeline_description)
 
         nettrans.Children.value.append(client_screen)
-        # nettrans.Children.value.append(multi_view_trans_node)
+        nettrans.Children.value.append(multi_view_trans_node)
         client_screen.Children.value.append(client_cam)
         make_node_distributable(client_screen)
-        # make_node_distributable(multi_view_trans_node)
+        make_node_distributable(multi_view_trans_node)
         
         nettrans.distribute_object(plod_pass)
         nettrans.distribute_object(dynamic_tri_pass)

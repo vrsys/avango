@@ -33,7 +33,6 @@ class PerspectivePicker(avango.script.Script):
     self.offset = avango.gua.make_identity_mat()
     self.relevant_perspectives = []
     self.perspective_offsets = []
-    self.visualizer = None
 
 
   def set_projection_lense(self, obj, parent_node):
@@ -124,14 +123,6 @@ class PerspectivePicker(avango.script.Script):
     closest_id = self.find_closest_perspective()
       
     self.old_closest_id = closest_id
-    if self.visualizer:
-      # print(self.relevant_perspectives[0:8])
-      # print(self.perspective_offsets[0])
-      self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views],
-                                    self.perspective_offsets[0:self.visualizer.views])
-
-  def set_visualizer(self, visualizer):
-    self.visualizer = visualizer
 
   def evaluate(self):
     pass

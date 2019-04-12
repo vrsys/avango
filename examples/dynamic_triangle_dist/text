@@ -3,3 +3,53 @@ ichbineinehund
 hund
 KKatze
 KKATZE
+
+
+
+# class UpdateImagesScript(avango.script.Script):
+#     def __init__(self):
+#         self.super(UpdateImagesScript).__init__()
+#         self.StartCounting = False
+#         self.FrameCount = 0
+
+#     def set_dynamic_triangle_node(self, dynamic_triangle_node, image_list):
+#         self.node_to_update = dynamic_triangle_node
+#         self.always_evaluate(True)
+#         self.image_list = image_list
+#         self.StartCounting = True
+
+#     def evaluate(self):
+#         if self.StartCounting == True:  
+#             self.FrameCount += 1   
+
+#             self.node_to_update.start_vertex_list()
+
+#             for img in self.image_list:
+#                 # quad_transform = avango.gua.make_trans_mat(0.5 * math.cos(self.FrameCount/100), 0.3*math.sin(self.FrameCount/100), 2.0)
+#                 img_transform = img.transform
+
+#                 pos = img_transform * avango.gua.Vec3( img.img_w_half, img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+#                 pos = img_transform * avango.gua.Vec3(-img.img_w_half, -img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y + img.tile_h)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+#                 pos = img_transform * avango.gua.Vec3( img.img_w_half, -img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y + img.tile_h)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+#                 pos = img_transform * avango.gua.Vec3( img.img_w_half, img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x, img.tile_pos_y)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+#                 pos = img_transform * avango.gua.Vec3(-img.img_w_half, img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+
+#                 pos = img_transform * avango.gua.Vec3(-img.img_w_half, -img.img_h_half, 0.0)
+#                 uv  = avango.gua.Vec2(img.tile_pos_x + img.tile_w, img.tile_pos_y + img.tile_h)
+#                 self.node_to_update.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
+            
+#             self.node_to_update.end_vertex_list()

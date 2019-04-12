@@ -76,11 +76,11 @@ class NetInit(avango.script.Script):
     def update(self):
       if len(self.NetChildren.value) > 0 and not self.is_initialized:
         print('Receiving server nodes')
+        print_graph(self.scenegraph.Root.value)
         node = self.scenegraph["/net/multi_view_trans_node"]
         # print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
-        print_graph(self.scenegraph.Root.value)
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port

@@ -390,5 +390,4 @@ av::gua::DynamicTriangleNode::endVertexList() {
   m_guaDynamicTriangleNode->forward_queued_vertices();
   TriggerUpdate.setValue(true);
   PrivateDynamicTriangleDataString.setValue("");
-  std::cout << "hello" << std::endl;
 }

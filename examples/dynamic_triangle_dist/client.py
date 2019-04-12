@@ -91,7 +91,10 @@ class NetInit(avango.script.Script):
         node = self.scenegraph["/net/multi_window_vis"]
         if node:
           print(node.Name.value)
-          node.Material.value=vt_mat
+          print('VT flag',node.Material.value.EnableVirtualTexturing.value )
+          print("!!!!!!!!!!!!", node.Material.value.m_serializedUniforms.value)
+          #node.Material.value.EnableVirtualTexturing.value = True
+          node.Material.value.set_uniform("vt_images", atlas_path)
         # print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
@@ -103,7 +106,9 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                          Groupname="AVCLIENT|127.0.0.1|7432")
 
-atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+# atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
 loader = avango.gua.nodes.TriMeshLoader()
 dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
@@ -111,10 +116,6 @@ dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
-vt_mat = avango.gua.nodes.Material()
-vt_mat.set_uniform("vt_images", atlas_path)
-vt_mat.EnableVirtualTexturing.value = True
-# vt_mat.EnableBackfaceCulling.value = True
 
 size = avango.gua.Vec2ui(800, 600)
 

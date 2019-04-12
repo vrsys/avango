@@ -162,8 +162,10 @@ def make_node_distributable(node):
 def make_material_distributable(mat):
     nettrans.distribute_object(mat)
 
-aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+# aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+# atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
 # setup scenegraph
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")

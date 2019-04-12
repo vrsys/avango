@@ -114,8 +114,8 @@ class MultiWindowVisualizer(avango.script.Script):
                     print(vertex.uv)
                     new_u = vertex.uv[0] + 0.001
                     new_v = vertex.uv[0] +0.001
-                    # vertex.enqueue((new_u, new_v))
-                    vertex.enqueue_with_new_uv(avango.gua.Vec2(new_u, new_v))
+                    vertex.enqueue()
+                    # vertex.enqueue_with_new_uv(avango.gua.Vec2(new_u, new_v))
             
             self.dynamic_triangle_node.end_vertex_list()
 

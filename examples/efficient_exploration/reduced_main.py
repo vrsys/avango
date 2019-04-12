@@ -39,48 +39,40 @@ def make_material_distributable(mat):
 
 def start():
 
-    interaction_mode = 'both' # 'perspective' #  'multi'
-    environment_mode = 'desktop' #  'powerwall'
-
-    # setup scene graph
-    graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
-    graph.Root.value.Children.value.append(nettrans)
-
-    # Create basic loaders
-    mesh_loader = avango.gua.nodes.TriMeshLoader()
-    lod_loader = avango.gua.lod.nodes.LodLoader()
-    dt_loader = avango.gua.nodes.DynamicTriangleLoader()
-    aux_loader = avango.gua.lod.nodes.Aux()
-
     # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
     # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
     aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
     atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
-    # setup scene
-    # add transform node for plod object
+    # setup scene graph
+    graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
+    graph.Root.value.Children.value.append(nettrans)
+
     trans_node = avango.gua.nodes.TransformNode(Name="scene_trans")
     trans_node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 0) * \
                                  avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     graph.Root.value.Children.value.append(trans_node)
     # nettrans.Children.value.append(trans_node)
 
-    # plod_trans_node.Transform.value = avango.gua.make_trans_mat(0, 0, 0.0)
-    plod_trans_node = avango.gua.nodes.TransformNode(Name="scene")
-    trans_node.Children.value.append(plod_trans_node)
-    
-    # configure lod loader 
+    # Create basic loaders
+    mesh_loader = avango.gua.nodes.TriMeshLoader()
+    lod_loader = avango.gua.lod.nodes.LodLoader()
     lod_loader.UploadBudget.value = 64
     lod_loader.RenderBudget.value = 1024
     lod_loader.OutOfCoreBudget.value = 2048
 
+    dt_loader = avango.gua.nodes.DynamicTriangleLoader()
+    aux_loader = avango.gua.lod.nodes.Aux()
+
+    plod_trans_node = avango.gua.nodes.TransformNode(Name="scene")
+    trans_node.Children.value.append(plod_trans_node)
+    
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
         # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
-    # plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
 
     floor = mesh_loader.create_geometry_from_file("floor",
@@ -111,16 +103,12 @@ def start():
     localized_images_node.Material.value.set_uniform("Roughness", 1.0)
     localized_images_node.Material.value.set_uniform("vt_images", atlas_path)
     localized_images_node.Material.value.EnableVirtualTexturing.value = True
-    print('VT MAT', vt_mat)
-    # localized_images_node.Material.value.EnableBackfaceCulling.value = False
-
+    
     aux_loader.load_aux_file(aux_path);
     view_num = aux_loader.get_num_views()
     atlas_tiles_num = aux_loader.get_num_atlas_tiles()
     atlas = aux_loader.get_atlas()
     
-    # cam_location_list = []
-    # for quad_id in range(5):
     for quad_id in range(view_num):
         # create_localized_quad(quad_id)
         view = aux_loader.get_view(quad_id)
@@ -128,14 +116,7 @@ def start():
         atlas = aux_loader.get_atlas()
         quad = LocalizedImageQuad(graph, localized_images_node, quad_id, view, atlas_tile, atlas)
         localized_images.append(quad)
-        # t = str(quad.transform).replace('\n', '')
-        # cam_location_list.append(t)
-
-    # with open('cam_transforms.txt', 'w') as outfile:  
-    #     for line in cam_location_list:
-    #         outfile.write(line)
-    #         outfile.write('\n')
-
+    
     trans_node.Children.value.append(localized_images_node)
 
     multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
@@ -143,21 +124,10 @@ def start():
                                             avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
     nettrans.Children.value.append(multi_view_trans_node)                                            
 
-
     multi_window_viz = MultiWindowVisualizer()
     multi_window_viz.my_constructor(multi_view_trans_node,
                                    atlas_path, localized_images,
                                    4.07, 2.3)
-
-    # create multi view explorers transform node
-    # multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
-    # multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
-    #                                         avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
-    # nettrans.Children.value.append(multi_view_trans_node)                                            
-    # multi_view_explorer = MultiViewExplorer(graph, multi_view_trans_node,
-    #                                    atlas_path, localized_images,
-    #                                    4.0, 2.0)
-    # multi_view_explorer.my_constructor()
 
     photo_projection = PhotoProjection()
     photo_projection.my_constructor()
@@ -167,26 +137,11 @@ def start():
 
     graph.Root.value.Children.value.append(photo_projection.group_node)
 
-    # localized_image_controller = LocalizedImageController(dt_loader, aux_loader ,graph, trans_node, 
-    #     "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux",
-    #     "/home/ephtron/Documents/master-render-files/salem/salem.atlas")
-    #     # "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux",
-    #     # "/opt/3d_models/lamure/provenance/salem/salem.atlas")
-    # projector = localized_image_controller.get_projector()
-
-    #### Create app logic above here ####
-    # # print(photo_projection.Material.value)
-    # for p in multi_view_explorer.projectors:
-    #     print('prj num',p.Number.value)
-    #     print('prj real own',p.material)
-    #     print('prj real mat',p.material.value)
-    #     print('prj mat',p.Material.value)
-    #     print('prj sf mat',p.Material)
-
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
 
     print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", hostname)
+    vt_backend = avango.gua.VTBackend()
         
     if hostname == "hydra" or hostname == "argos":
         print('Init powerwall setup!')
@@ -204,10 +159,9 @@ def start():
                 RIGHT_POSITION = avango.gua.Vec2ui(4096 + 90, 0),
                 RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 )
-            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-E")
-            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-J")
-            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")                
-
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
+            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-I")                
 
         elif hostname == "argos":
             ## large powerwall 6-user setup
@@ -230,7 +184,6 @@ def start():
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-H")
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-F")
             
-
         spheron_input = DualSpheronInput(
             DEVICE_STATION1 = "device-new-spheron-right",
             DEVICE_STATION2 = "device-new-spheron-left",
@@ -248,6 +201,10 @@ def start():
         if viewingSetup:
             viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
 
+
+        nettrans.distribute_object(multi_window_viz.get_material())
+        # nettrans.distribute_object(vt_mat)
+
         # client viewing setup for tiled wall
         client_navigation = avango.gua.nodes.TransformNode(Name = "client_navigation")
         client_navigation.Transform.value = avango.gua.make_trans_mat(0.0,0.0,0.0)
@@ -256,12 +213,9 @@ def start():
         client_screen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4.07, Height=2.3)
         client_navigation.Children.value.append(client_screen)
 
-        client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
         
-        for p in client_pipeline_description.Passes.value:
-            nettrans.distribute_object(p)
-        nettrans.distribute_object(client_pipeline_description)
-
+        
+        client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
         client_cam = avango.gua.nodes.CameraNode(
             ViewID=2,
             LeftScreenPath="/net/client_navigation/client_screen",
@@ -271,62 +225,18 @@ def start():
             Transform=avango.gua.make_trans_mat(0.0, 0.0, 3.0), # head position
             PipelineDescription=client_pipeline_description)
         client_navigation.Children.value.append(client_cam)
-        
-        make_node_distributable(client_navigation) # distribute clien camera setup subtree
-        # make_node_distributable(trans_node)
+
         make_node_distributable(multi_view_trans_node)
+        make_node_distributable(client_navigation) # distribute clien camera setup subtree
         
-        
-        # add prototyp lense
-        # dynamic_quad = mesh_loader.create_geometry_from_file("dynamic_quad", "data/objects/plane2.obj", avango.gua.LoaderFlags.NORMALIZE_SCALE)
-        # dynamic_quad.Material.value.set_uniform("Metalness", 0.0)
-        # dynamic_quad.Material.value.set_uniform("Emissivity", 1.0)
-        # dynamic_quad.Material.value.set_uniform("Roughness", 1.0)
-        # # dynamic_quad.Material.connect_from(projector.Material)
-        # # projector.Material.value.EnableVirtualTexturing.value = True
-        # # dynamic_quad.Material.value.EnableVirtualTexturing.value = True
+        for p in client_pipeline_description.Passes.value:
+            nettrans.distribute_object(p)
+        nettrans.distribute_object(client_pipeline_description)
 
-        # dynamic_quad.Transform.value = avango.gua.make_trans_mat(0.0, 0.2, 0) *\
-        #                                avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * \
-        #                                avango.gua.make_scale_mat(0.25)
-        # localized_image_controller.set_tracked_element(dynamic_quad)
-
-        dynamic_lense = dt_loader.create_empty_geometry(
-            "dynamic_lense_powerwall", 
-            "empty_name_5.lob", 
-            avango.gua.LoaderFlags.DEFAULTS)
-        dynamic_lense.Transform.value = avango.gua.make_identity_mat()
-
-        lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
-        lense_size = 0.26
-
-        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y) )
-        
-        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
-        
-        pos = lense_transform * avango.gua.Vec3( lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, int(uv.x), int(uv.y))
-
-        pos = lense_transform * avango.gua.Vec3( lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(1.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-        
-        pos = lense_transform * avango.gua.Vec3(-lense_size, lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 0.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-
-        pos = lense_transform * avango.gua.Vec3(-lense_size, -lense_size, 0.0)
-        uv  = avango.gua.Vec2(0.0, 1.0)
-        dynamic_lense.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-
-        # projector.set_projection_object(dynamic_lense)
-        # # dynamic_lense.Material.value.EnableVirtualTexturing.value = True
-        # # dynamic_lense.Material.value.EnableBackfaceCulling.value = True
+        dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
+        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+        dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
+        dynamic_lense = dynamic_quad.get_node()
 
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
         #pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
@@ -353,7 +263,7 @@ def start():
         photo_projection.Button1.connect_from(pointer_button_sensor.Button2)
         
         print('test')
-        vt_backend = avango.gua.VTBackend()
+        
         for _user in viewingSetup.user_list:
             vt_backend.add_camera(_user.camera_node)
 
@@ -386,8 +296,6 @@ def start():
                                          Height=2.7)
         screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -2.5)
 
-        # client_screen = avango.gua.nodes.ScreenNode(Name="clientscreen", Width=4, Height=3)
-
         camera = avango.gua.nodes.CameraNode(Name="cam",
                                              ViewID=1,
                                              LeftScreenPath="/cam/screen",
@@ -400,35 +308,15 @@ def start():
                                              Children=[screen],
                                              Transform=avango.gua.make_trans_mat(0.0, 0.0, 2.0))
         graph.Root.value.Children.value.append(camera)
-        
-        # setup_picker(mesh_loader, camera, graph)
-
-        # dynamic_lense = dt_loader.create_empty_geometry(
-        #     "dynamic_lense", 
-        #     "empty_name_3.lob", 
-        #     avango.gua.LoaderFlags.DEFAULTS)
-
-        # lense_transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
-        # lense_size = 0.2
 
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
         dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
         dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
         dynamic_lense = dynamic_quad.get_node()
 
-
         screen.Children.value.append(dynamic_transform)
         photo_projection.set_projection_lense(dynamic_lense, dynamic_transform)
 
-        # # graph.Root.value.Children.value.append(dynamic_lense)
-        # dynamic_lense.Material.connect_from(photo_projection.Material)
-
-        # mat_desc = avango.gua.nodes.MaterialShaderDescription()
-        # mat_desc.load_from_file("data/materials/SimplePhong.gsd")
-        # avango.gua.register_material_shader(mat_desc, "mat")
-
-        # mat = avango.gua.nodes.Material(ShaderName="mat")
-        # nettrans.distribute_object(mat)
         # setup render passes
         res_pass = avango.gua.nodes.ResolvePassDescription()
         res_pass.EnableSSAO.value = False
@@ -459,48 +347,21 @@ def start():
                 ],  
         EnableABuffer=False)  # set transparency
 
-        # client_cam = avango.gua.nodes.CameraNode(
-        #     Name="client_cam",
-        #     ViewID=2,
-        #     LeftScreenPath="/net/clientscreen",
-        #     # RightScreenPath="/net/client-screen",
-        #     SceneGraph="scenegraph",
-        #     Resolution=avango.gua.Vec2ui(800, 600),
-        #     OutputWindowName="client_window",
-        #     Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5),                       
-        #     PipelineDescription=pipeline_description)
-
-        # nettrans.Children.value.append(client_screen)
-        #nettrans.Children.value.append(multi_view_trans_node)
-        # client_screen.Children.value.append(client_cam)
-        # make_node_distributable(client_screen)
-        #make_node_distributable(multi_view_trans_node)
-        
-        # nettrans.distribute_object(plod_pass)
-        # nettrans.distribute_object(dynamic_tri_pass)
-        # nettrans.distribute_object(lvis_pass)
-        # nettrans.distribute_object(res_pass)
-
-        # for p in pipeline_description.Passes.value:
-        #     nettrans.distribute_object(p)
-        # nettrans.distribute_object(pipeline_description)
-
-
          # client viewing setup for tiled wall
         client_navigation = avango.gua.nodes.TransformNode(Name = "client_navigation")
         client_navigation.Transform.value = avango.gua.make_trans_mat(0.0,0.0,0.0)
+        client_navigation.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
+                                            avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
         nettrans.Children.value.append(client_navigation)
 
         client_screen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4.07, Height=2.3)
         client_navigation.Children.value.append(client_screen)
 
-        # client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
-        
-        for p in pipeline_description.Passes.value:
-            nettrans.distribute_object(p)
-        nettrans.distribute_object(pipeline_description)
-
+        # nettrans.distribute_object(multi_window_viz.get_material())
+        # nettrans.distribute_object(vt_mat)
+      
         client_cam = avango.gua.nodes.CameraNode(
+            Name = "client_cam",
             ViewID=2,
             LeftScreenPath="/net/client_navigation/client_screen",
             SceneGraph="scenegraph",
@@ -510,15 +371,18 @@ def start():
             PipelineDescription=pipeline_description)
         client_navigation.Children.value.append(client_cam)
         
-        make_node_distributable(client_navigation)
+        make_node_distributable(multi_view_trans_node)
+        make_node_distributable(client_navigation) # distribute clien camera setup subtree
 
+        for p in pipeline_description.Passes.value:
+            nettrans.distribute_object(p)
+        nettrans.distribute_object(pipeline_description)
 
         camera.PipelineDescription.value = pipeline_description
 
         # create backend for virtual texture and vt update
-        vt_backend = avango.gua.VTBackend()
         vt_backend.add_camera(camera)
-        #vt_backend.add_camera(client_cam)
+        vt_backend.add_camera(client_cam)
         vt_backend.start_backend()
         
         # setup navigator
@@ -538,7 +402,7 @@ def start():
         viewer.SceneGraphs.value = [graph]
         viewer.Windows.value = [window]
         print_graph(graph.Root.value)
-        #multi_window_viz.distribute = True
+        multi_window_viz.distribute = True
 
         timer = avango.nodes.TimeSensor()
 
@@ -546,27 +410,6 @@ def start():
         guaVE.start(locals(), globals())
 
         viewer.run()
-
-
-def setup_picker(mesh_loader, camera, graph):
-    # setup pick ray
-    pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
-    pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
-                               avango.gua.make_scale_mat(1.0, 1.0, 1.0)
-
-    ray_geom = mesh_loader.create_geometry_from_file(
-        "ray_geom",
-        "data/objects/cylinder.obj",
-        avango.gua.LoaderFlags.DEFAULTS)
-  
-    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
-    pick_ray.Children.value.append(ray_geom)
-
-    picker = Picker()
-    picker.SceneGraph.value = graph
-    picker.Ray.value = pick_ray
-    camera.Children.value.append(pick_ray)
-
 
 ### helper functions ###
 
@@ -591,26 +434,32 @@ def print_fields(node, print_values = False):
 
 
 if __name__ == '__main__':
-
     start()
 
 
-# # add light nodes
-# spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
-#                                           Type=avango.gua.LightType.SPOT,
-#                                           Color=avango.gua.Color(1.0, 1.0, 1.0),
-#                                           EnableShadows=True,
-#                                           ShadowMapSize=1024,
-#                                           ShadowOffset=0.002,
-#                                           ShadowMaxDistance=10,
-#                                           Falloff=1.5,
-#                                           ShadowNearClippingInSunDirection=0.1,
-#                                           ShadowFarClippingInSunDirection=10.0,
-#                                           Softness=2,
-#                                           Brightness=20)
-# spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * \
-#                                avango.gua.make_rot_mat(-90, 1, 0, 0) * \
-#                                avango.gua.make_scale_mat(4)
+    # client_cam = avango.gua.nodes.CameraNode(
+    #     Name="client_cam",
+    #     ViewID=2,
+    #     LeftScreenPath="/net/clientscreen",
+    #     # RightScreenPath="/net/client-screen",
+    #     SceneGraph="scenegraph",
+    #     Resolution=avango.gua.Vec2ui(800, 600),
+    #     OutputWindowName="client_window",
+    #     Transform=avango.gua.make_trans_mat(0.0, 0.0, 4.5),                       
+    #     PipelineDescription=pipeline_description)
 
-# # screen.Children.value.append(spot_light_1)
-# spot_light_1.Transform.value = camera.Transform.value * avango.gua.make_trans_mat(0.0,0.0,0.7)
+    # nettrans.Children.value.append(client_screen)
+    #nettrans.Children.value.append(multi_view_trans_node)
+    # client_screen.Children.value.append(client_cam)
+    # make_node_distributable(client_screen)
+    #make_node_distributable(multi_view_trans_node)
+
+    # nettrans.distribute_object(plod_pass)
+    # nettrans.distribute_object(dynamic_tri_pass)
+    # nettrans.distribute_object(lvis_pass)
+    # nettrans.distribute_object(res_pass)
+
+    # for p in pipeline_description.Passes.value:
+    #     nettrans.distribute_object(p)
+    # nettrans.distribute_object(pipeline_description)
+

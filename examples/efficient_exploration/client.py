@@ -73,24 +73,37 @@ class NetInit(avango.script.Script):
         #node.push_vertex(-1, 0, 0, 1, 0, 0)
 
     @field_has_changed(NetChildren)
-    def update(self):
+    def update(self):      
       if len(self.NetChildren.value) > 0 and not self.is_initialized:
-        print('Receiving server nodes')
+        print("JAAAA  ")
         print_graph(self.scenegraph.Root.value)
-        node = self.scenegraph["/net/multi_view_trans_node"]
+        node = self.scenegraph["/net/multi_view_trans_node/multi_window_vis"]
+        if node:
+          print(node.Name.value)
+          print('VT flag',node.Material.value.EnableVirtualTexturing.value )
+          print("!!!!!!!!!!!!", node.Material.value.m_serializedUniforms.value)
+          #node.Material.value.EnableVirtualTexturing.value = True
+          node.Material.value.set_uniform("vt_images", atlas_path)
         # print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
+        cam = self.scenegraph["/net/client_navigation/client_cam"]
+        vt_backend.add_camera(cam)
+        vt_backend.start_backend()
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVCLIENT|141.54.147.60|7432")
+                                         Groupname="AVCLIENT|141.54.147.59|7432")
 
 # loader = avango.gua.nodes.TriMeshLoader()
 lod_loader = avango.gua.lod.nodes.LodLoader()
 lod_loader.UploadBudget.value = 32
 lod_loader.RenderBudget.value = 2048
 lod_loader.OutOfCoreBudget.value = 4096
+
+aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+
 
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
@@ -104,6 +117,8 @@ window = avango.gua.nodes.Window(Size=size,
 avango.gua.register_window("client_window", window)
 
 logger = avango.gua.nodes.Logger(EnableWarning=False)
+
+vt_backend = avango.gua.VTBackend()
 
 viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]

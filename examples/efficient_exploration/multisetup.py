@@ -26,7 +26,8 @@ from src.SpheronNavigation import SpheronNavigation
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVSERVER|127.0.0.1|7432")
+                                         Groupname="AVSERVER|141.54.147.59|7432")
+                                         # Groupname="AVSERVER|127.0.0.1|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -52,10 +53,10 @@ def start():
     dt_loader = avango.gua.nodes.DynamicTriangleLoader()
     aux_loader = avango.gua.lod.nodes.Aux()
 
-    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-    # aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-    # atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
     # setup scene
     # add transform node for plod object
@@ -76,8 +77,8 @@ def start():
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     # plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
@@ -111,7 +112,7 @@ def start():
     localized_images_node.Material.value.set_uniform("vt_images", atlas_path)
     localized_images_node.Material.value.EnableVirtualTexturing.value = True
     print('VT MAT', vt_mat)
-    # localized_images_node.Material.value.EnableBackfaceCulling.value = False
+    localized_images_node.Material.value.EnableBackfaceCulling.value = False
 
     aux_loader.load_aux_file(aux_path);
     view_num = aux_loader.get_num_views()
@@ -142,7 +143,7 @@ def start():
     #                                3.0, 1.8)
 
     multi_window_visualizer = MultiWindowVisualizer()
-    multi_window_visualizer.my_constructor(graph, multi_view_trans_node,
+    multi_window_visualizer.my_constructor(multi_view_trans_node,
                                    atlas_path, localized_images,
                                    3.0, 1.8)
     # multi_view_explorer.my_constructor()

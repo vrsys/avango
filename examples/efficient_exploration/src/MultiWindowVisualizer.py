@@ -45,13 +45,11 @@ class MultiWindowVisualizer(avango.script.Script):
         self.vt_mat = avango.gua.nodes.Material()
         self.vt_mat.set_uniform("vt_images", atlas_path)
         self.vt_mat.EnableVirtualTexturing.value = True
-        self.vt_mat.EnableBackfaceCulling.value = True
         self.dynamic_triangle_node.Material.value = self.vt_mat
         self.dynamic_triangle_node.Material.value.set_uniform("Metalness", 0.0)
         self.dynamic_triangle_node.Material.value.set_uniform("Emissivity", 1.0)
         self.dynamic_triangle_node.Material.value.set_uniform("Roughness", 1.0)
-        self.dynamic_triangle_node.Material.value.set_uniform("vt_images", atlas_path)
-        self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
+        # self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
 
         self.images = images
         self.dynamic_quads = []
@@ -103,19 +101,22 @@ class MultiWindowVisualizer(avango.script.Script):
     def get_node(self):
         return self.dynamic_triangle_node
 
+    def get_material(self):
+        return self.vt_mat
+
     def evaluate(self):
         if self.distribute:
-            print('uuuu')
+            # print('uuuu')
             self.dynamic_triangle_node.start_vertex_list()
 
             for quad in self.dynamic_quads:
                 # quad_transform = avango.gua.make_trans_mat(0.5 * math.cos(self.FrameCount/100), 0.3*math.sin(self.FrameCount/100), 2.0)
                 for vertex in quad:
-                    print(vertex.uv)
+                    # print(vertex.uv)
                     new_u = vertex.uv[0] + 0.001
                     new_v = vertex.uv[0] +0.001
-                    # vertex.enqueue((new_u, new_v))
-                    vertex.enqueue_with_new_uv(avango.gua.Vec2(new_u, new_v))
+                    vertex.enqueue()
+                    #vertex.enqueue_with_new_uv(avango.gua.Vec2(new_u, new_v))
             
             self.dynamic_triangle_node.end_vertex_list()
 

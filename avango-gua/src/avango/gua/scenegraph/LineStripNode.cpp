@@ -128,11 +128,11 @@ void av::gua::LineStripNode::fillWithParabola(float a, float b, float c,
 	
 }
 
-void av::gua::LineStripNode::fillWithBezier(::gua::math::vec3 const& p0,
-											::gua::math::vec3 const& p1,
-											::gua::math::vec3 const& p2,
-											float col_r, float col_g, float col_b,
-	                                        int num_segments) {
+void av::gua::LineStripNode::fillWithBezier3(::gua::math::vec3 const& p0,
+											 ::gua::math::vec3 const& p1,
+											 ::gua::math::vec3 const& p2,
+										 	 float col_r, float col_g, float col_b,
+	                                         int num_segments) {
 	
 	startVertexList();
 
@@ -145,6 +145,26 @@ void av::gua::LineStripNode::fillWithBezier(::gua::math::vec3 const& p0,
 	}
 	endVertexList();
 	
+}
+
+void av::gua::LineStripNode::fillWithBezier4(::gua::math::vec3 const& p0,
+											 ::gua::math::vec3 const& p1,
+											 ::gua::math::vec3 const& p2,
+											 ::gua::math::vec3 const& p3,
+											 float col_r, float col_g, float col_b,
+											 int num_segments) {
+	startVertexList();
+
+	for (int i = 0; i <= num_segments; ++i) {
+		float t = (1.0 / num_segments) * i;
+		::gua::math::vec3 point = (1 - t) * (1 - t) * (1 - t) * p0 +
+								  3 * (1 - t) * (1 - t) * t * p1 +
+								  3 * (1 - t) * t * t * p2 +
+								  t * t * t * p3;
+			
+	    enqueueVertex(point.x, point.y, point.z, col_r, col_g, col_b, 1.0, 1.0);
+	}
+	endVertexList();
 }
 
 
@@ -313,14 +333,21 @@ void av::gua::LineStripNode::setBezierParametersCB(const MFFloat::SetValueEvent&
 		const std::vector<float, std::allocator<float>> values = event.getValue();
 
 		if (values.size() == 13) {
-			fillWithBezier(::gua::math::vec3(values.at(0), values.at(1), values.at(2)),
-						   ::gua::math::vec3(values.at(3), values.at(4), values.at(5)),
-						   ::gua::math::vec3(values.at(6), values.at(7), values.at(8)),
-						   values.at(9), values.at(10), values.at(11), values.at(12));
+			fillWithBezier3(::gua::math::vec3(values.at(0), values.at(1), values.at(2)),
+						    ::gua::math::vec3(values.at(3), values.at(4), values.at(5)),
+						    ::gua::math::vec3(values.at(6), values.at(7), values.at(8)),
+						    values.at(9), values.at(10), values.at(11), values.at(12));
+		}
+		else if (values.size() == 16) {
+			fillWithBezier4(::gua::math::vec3(values.at(0), values.at(1), values.at(2)),
+							::gua::math::vec3(values.at(3), values.at(4), values.at(5)),
+							::gua::math::vec3(values.at(6), values.at(7), values.at(8)),
+							::gua::math::vec3(values.at(9), values.at(10), values.at(11)),
+					        values.at(12), values.at(13), values.at(14), values.at(15));
 		}
 		else {
-			std::cout << "Error: BezierParameters must contain 13 values:" << std::endl;
-			std::cout << "x0, y0, z0, x1, y1, z1, x2, y2, z2, col_r, col_g, col_b, num_segments" << std::endl;
+			std::cout << "Error: BezierParameters must contain 13 or 16 values:" << std::endl;
+			std::cout << "x0, y0, z0, x1, y1, z1, x2, y2, z2, [x3, y3, z3], col_r, col_g, col_b, num_segments" << std::endl;
 		}
 	}
 

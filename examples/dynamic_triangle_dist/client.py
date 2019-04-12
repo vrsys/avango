@@ -87,24 +87,34 @@ class NetInit(avango.script.Script):
     def update(self):      
       if len(self.NetChildren.value) > 0 and not self.is_initialized:
 
-        node = self.scenegraph["/net/group/plane"]
-        print('######################', node.Name.value)
+        print_graph(self.scenegraph.Root.value)
+        node = self.scenegraph["/net/multi_window_vis"]
+        if node:
+          print(node.Name.value)
+          node.Material.value=vt_mat
+        # print('######################', node.Name.value)
         # node.RenderVolumetric.value = False
         self.is_initialized = True
         cam = self.scenegraph["/net/client_screen/client_cam"]
         vt_backend.add_camera(cam)
         vt_backend.start_backend()
-        print_graph(self.scenegraph.Root.value)
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                          Groupname="AVCLIENT|127.0.0.1|7432")
+
+atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
 
 loader = avango.gua.nodes.TriMeshLoader()
 dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
 
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
+
+vt_mat = avango.gua.nodes.Material()
+vt_mat.set_uniform("vt_images", atlas_path)
+vt_mat.EnableVirtualTexturing.value = True
+# vt_mat.EnableBackfaceCulling.value = True
 
 size = avango.gua.Vec2ui(800, 600)
 

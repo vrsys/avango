@@ -34,6 +34,7 @@ import avango.gua.lod
 
 from examples_common.GuaVE import GuaVE
 from LocalizedImage import LocalizedImageQuad
+from MultiWindowVisualizer import MultiWindowVisualizer
 # from PhotoProjection import PhotoProjection
 from MyProjector import MyProjector
 
@@ -195,7 +196,7 @@ localized_images_node.Material.value.set_uniform("Roughness", 1.0)
 localized_images_node.Material.value.set_uniform("vt_images", atlas_path)
 localized_images_node.Material.value.EnableVirtualTexturing.value = True
 print('VT MAT', vt_mat)
-# localized_images_node.Material.value.EnableBackfaceCulling.value = False
+localized_images_node.Material.value.EnableBackfaceCulling.value = False
 trans_node.Children.value.append(localized_images_node)
 
 group = avango.gua.nodes.TransformNode(Name="group")
@@ -214,6 +215,13 @@ for quad_id in range(view_num):
     atlas = aux_loader.get_atlas()
     quad = LocalizedImageQuad(graph, localized_images_node, quad_id, view, atlas_tile, atlas)
     localized_images.append(quad)
+
+
+
+multi_window_visualizer = MultiWindowVisualizer()
+multi_window_visualizer.my_constructor(nettrans,
+                               atlas_path, localized_images,
+                               3.0, 1.8)
 
 monkey = loader.create_geometry_from_file(
     "monkey", "../simple_example/data/objects/monkey.obj")
@@ -260,7 +268,7 @@ dynamic_tri_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y
 pos = quad_transform * avango.gua.Vec3(-quad_size, -quad_size, 0.0)
 uv  = avango.gua.Vec2(0.0, 1.0)
 dynamic_tri_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
-group.Children.value.append(dynamic_tri_node)
+# group.Children.value.append(dynamic_tri_node)
 nettrans.Children.value.append(group)
 
 
@@ -345,6 +353,7 @@ nettrans.Children.value.append(cscreen)
 
 graph.Root.value.Children.value.append(sscreen)
 # make_node_distributable(trans_node)
+make_node_distributable(multi_window_visualizer.get_node())
 make_node_distributable(group)
 make_node_distributable(cscreen)
 
@@ -376,11 +385,11 @@ viewer = avango.gua.nodes.Viewer()
 viewer.SceneGraphs.value = [graph]
 viewer.Windows.value = [window]
 
-update_dt = UpdateDynamicTriangleScript()
+# update_dt = UpdateDynamicTriangleScript()
 
 # #add linestrip to the spiral creator to create new vertices every frame
 # # spiral_creator.set_line_strip_node(dynamic_tri_node)
-update_dt.set_dynamic_triangle_node(dynamic_tri_node)
+# update_dt.set_dynamic_triangle_node(dynamic_tri_node)
 # dynamic_tri_node.start_vertex_list()
 # # dynamic_tri_node.enqueue_vertex(norm_pos_x/5.0, norm_pos_y / 5.0 - 1.0, norm_pos_z/5.0, col_r, col_g, col_b, thickness)
 # pos = quad_transform * avango.gua.Vec3( quad_size, quad_size, 0.0)
@@ -407,8 +416,8 @@ update_dt.set_dynamic_triangle_node(dynamic_tri_node)
 # uv  = avango.gua.Vec2(0.0, 1.0)
 # dynamic_tri_node.enqueue_vertex(pos.x, pos.y, pos.z, 1.0, 0.0, 0.0, 1.0, uv.x, uv.y)
 # dynamic_tri_node.end_vertex_list()
-projector3.change_photo_projection(2)
-
+# projector3.change_photo_projection(2)
+multi_window_visualizer.distribute = True
 guaVE = GuaVE()
 guaVE.start(locals(), globals())
 

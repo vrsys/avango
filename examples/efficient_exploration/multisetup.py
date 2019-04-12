@@ -15,6 +15,7 @@ import numpy
 from src.LocalizedImage import LocalizedImageQuad
 from src.DynamicQuad import DynamicQuad
 from src.MultiViewExplorer import MultiViewExplorer
+from src.MultiWindowVisualizer import MultiWindowVisualizer
 from src.ImageExplorer import ImageExplorer
 from src.PhotoProjection import PhotoProjection
 from src.PerspectivePicker import PerspectivePicker
@@ -135,8 +136,13 @@ def start():
     multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
                                             avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0)
     nettrans.Children.value.append(multi_view_trans_node)                                            
-    image_explorer = ImageExplorer()
-    image_explorer.my_constructor(graph, multi_view_trans_node,
+    # image_explorer = ImageExplorer()
+    # image_explorer.my_constructor(graph, multi_view_trans_node,
+    #                                atlas_path, localized_images,
+    #                                3.0, 1.8)
+
+    multi_window_visualizer = MultiWindowVisualizer()
+    multi_window_visualizer.my_constructor(graph, multi_view_trans_node,
                                    atlas_path, localized_images,
                                    3.0, 1.8)
     # multi_view_explorer.my_constructor()
@@ -152,7 +158,7 @@ def start():
     perspective_picker = PerspectivePicker()
     perspective_picker.my_constructor()
     perspective_picker.set_localized_image_list(localized_images)
-    perspective_picker.set_visualizer(image_explorer)
+    # perspective_picker.set_visualizer(image_explorer)
 
     # config window size
     width = 1920;

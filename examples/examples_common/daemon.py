@@ -271,8 +271,8 @@ device_list = []
 
 #init_pst_tracking()
 #init_tuio_input()
-init_mouse()
-#init_mouse2()
+# init_mouse()
+init_mouse2()
 
 # init_keyboard()
 # init_keyboard2()

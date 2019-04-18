@@ -1094,13 +1094,13 @@ init_hid_device(EVENT_STRING = get_event_string(1, "HAS   HAS HS304"), STATION_S
 #init_mouse()
 # init_keyboard()
 
-init_mouse()
-init_keyboard()
+# init_mouse()
+# init_keyboard()
 
 
 # laptop
-#init_mouse2()
-#init_keyboard2()
+init_mouse2()
+init_keyboard2()
 
 
 

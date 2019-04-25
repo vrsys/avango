@@ -113,12 +113,30 @@ class MultiWindowVisualizer(avango.script.Script):
                 # quad_transform = avango.gua.make_trans_mat(0.5 * math.cos(self.FrameCount/100), 0.3*math.sin(self.FrameCount/100), 2.0)
                 for vertex in quad:
                     # print(vertex.uv)
-                    new_u = vertex.uv[0] + 0.001
-                    new_v = vertex.uv[0] +0.001
+                    # new_u = vertex.uv[0] + 0.001
+                    # new_v = vertex.uv[0] + 0.001
                     vertex.enqueue()
                     #vertex.enqueue_with_new_uv(avango.gua.Vec2(new_u, new_v))
             
             self.dynamic_triangle_node.end_vertex_list()
+
+    def update_images(self, image_id_list, tex_coords):
+        print('update', len(tex_coords), len(image_id_list), len(self.dynamic_quads))
+        for idx, img_id in enumerate(image_id_list):
+            # print(tex_coords[idx])
+            
+            uv1  = avango.gua.Vec2(tex_coords[idx][0].x, tex_coords[idx][0].y)
+            self.dynamic_quads[idx][0].update(uv=uv1)
+            uv2  = avango.gua.Vec2(tex_coords[idx][1].x, tex_coords[idx][1].y)
+            self.dynamic_quads[idx][1].update(uv=uv2)
+            uv3  = avango.gua.Vec2(tex_coords[idx][0].x, tex_coords[idx][1].y)
+            self.dynamic_quads[idx][2].update(uv=uv3)
+            uv4  = avango.gua.Vec2(tex_coords[idx][0].x, tex_coords[idx][0].y)
+            self.dynamic_quads[idx][3].update(uv=uv4)
+            uv5  = avango.gua.Vec2(tex_coords[idx][1].x, tex_coords[idx][0].y)
+            self.dynamic_quads[idx][4].update(uv=uv5)
+            uv6  = avango.gua.Vec2(tex_coords[idx][1].x, tex_coords[idx][1].y)
+            self.dynamic_quads[idx][5].update(uv=uv6)
 
 
 class ImageVertex:
@@ -133,7 +151,12 @@ class ImageVertex:
         # print()
 
     def update(self, pos=None, uv=None):
-        pass
+        if pos:
+            self.pos = pos
+        if uv:
+            # print('changed uv', uv)
+            self.uv = uv
+
 
     def enqueue(self):
         self.dt_node.enqueue_vertex(self.pos.x, self.pos.y, self.pos.z, 1.0, 0.0, 0.0, 1.0, self.uv.x, self.uv.y)

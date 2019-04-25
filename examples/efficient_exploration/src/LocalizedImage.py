@@ -127,7 +127,7 @@ class LocalizedImageQuad:
         self.create_quad()
         self.init_camera_setup()
 
-        screen_transform = avango.gua.make_trans_mat(self.position) * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
+        self.screen_transform = avango.gua.make_trans_mat(self.position) * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) *\
             avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         # self.frustum = avango.gua.make_perspective_frustum(self.transform, screen_transform, 0.05, 3.0)
 
@@ -136,7 +136,8 @@ class LocalizedImageQuad:
         group_node = avango.gua.nodes.TransformNode(Name = "quad_"+str(self.id))
         self.graph.Root.value.Children.value.append(group_node)
 
-        screen_transform = avango.gua.make_trans_mat(self.position)  * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) # *\
+        screen_transform = avango.gua.make_trans_mat(self.position) * self.rotation * avango.gua.make_trans_mat(0.0, 0.0, -0.1) # *\
+        
             # avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) #* avango.gua.make_scale_mat(self.img_w_half, self.img_h_half, self.img_h_half)
         screen = avango.gua.nodes.ScreenNode(
           Name = "dummyscreen"+str(self.id),
@@ -257,7 +258,7 @@ class LocalizedImageQuad:
 
         self.min_uv = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         self.max_uv = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-
+        print(self.id, 'min uv', self.min_uv, 'max uv', self.max_uv)
         self.quad_vertices = [t1_v1, t1_v2, t1_v3, t2_v4, t2_v5, t2_v6]
 
 

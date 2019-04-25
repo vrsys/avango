@@ -17,6 +17,7 @@ from src.DynamicQuad import DynamicQuad
 from src.MultiViewExplorer import MultiViewExplorer
 from src.MultiWindowVisualizer import MultiWindowVisualizer
 from src.PhotoProjection import PhotoProjection
+from src.PerspectivePicker import PerspectivePicker
 from src.picker import Picker
 from src.MultiUserViewingSetup import MultiUserViewingSetup
 from src.SpheronInput import DualSpheronInput
@@ -24,8 +25,8 @@ from src.SpheronNavigation import SpheronNavigation
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         # Groupname="AVSERVER|127.0.0.1|7432")
-                                         Groupname="AVSERVER|141.54.147.59|7432")
+                                         Groupname="AVSERVER|127.0.0.1|7432")
+                                         # Groupname="AVSERVER|141.54.147.59|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -39,10 +40,10 @@ def make_material_distributable(mat):
 
 def start():
 
-    # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    # aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+    # atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
     # setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
@@ -69,8 +70,8 @@ def start():
     
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     plod_trans_node.Children.value.append(plod_node)
@@ -110,6 +111,7 @@ def start():
     atlas = aux_loader.get_atlas()
     
     for quad_id in range(view_num):
+    # for quad_id in range(20):
         # create_localized_quad(quad_id)
         view = aux_loader.get_view(quad_id)
         atlas_tile = aux_loader.get_atlas_tile(quad_id)
@@ -136,6 +138,11 @@ def start():
     photo_projection.Texture.value = atlas_path
 
     graph.Root.value.Children.value.append(photo_projection.group_node)
+
+    perspective_picker = PerspectivePicker()
+    perspective_picker.my_constructor()
+    perspective_picker.set_localized_image_list(localized_images)
+    perspective_picker.set_visualizer(multi_window_viz, 'texture')
 
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
@@ -259,11 +266,10 @@ def start():
 
         # # graph.Root.value.Children.value.append(dynamic_lense)
         photo_projection.set_projection_lense(dynamic_lense, pointer_node)
+        perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform)
         photo_projection.Button0.connect_from(pointer_button_sensor.Button0)
         photo_projection.Button1.connect_from(pointer_button_sensor.Button2)
-        
-        print('test')
-        
+
         for _user in viewingSetup.user_list:
             vt_backend.add_camera(_user.camera_node)
 
@@ -310,12 +316,13 @@ def start():
         graph.Root.value.Children.value.append(camera)
 
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
-        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
         dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
         dynamic_lense = dynamic_quad.get_node()
 
         screen.Children.value.append(dynamic_transform)
         photo_projection.set_projection_lense(dynamic_lense, dynamic_transform)
+        perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform)
 
         # setup render passes
         res_pass = avango.gua.nodes.ResolvePassDescription()
@@ -395,6 +402,7 @@ def start():
         camera.Transform.connect_from(navigator.OutTransform)
         photo_projection.Button0.connect_from(navigator.Mouse.ButtonLeft)
         photo_projection.Button1.connect_from(navigator.Mouse.ButtonRight)
+        perspective_picker.Button0.connect_from(navigator.Mouse.ButtonLeft)
         
         # setup viewer with scenegraph
         viewer = avango.gua.nodes.Viewer()

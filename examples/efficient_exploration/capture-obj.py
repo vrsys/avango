@@ -14,66 +14,139 @@ import subprocess
 
 
 class CaptureScript(avango.script.Script):
+
+    Button0 = avango.SFBool()
+    Button1 = avango.SFBool()
+
     def __init__(self):
         self.super(CaptureScript).__init__()
-        self.StartCounting = False
         self.frame_count = 0
         self.image_count = 0
         self.angle = 0
         self.path = os.path.dirname(os.path.realpath(__file__))
+        self.position_list_file = self.path + '/camera_positions.lst'
+        self.free_mode = False
+        self.indicate = False
+        self.capture_mode = 'position' # take images or capture position
+        self.read_mode = False # if read mode is true camera will be set to positions of cam list
+        self.cam_location_list = []
+
+        self.button0_pressed = False
+        self.button1_pressed = False
 
         self.camera = None
         self.cam_trans = None
         self.center = avango.gua.Vec3(0.0, 0.0, 0.0)
        
-    def set_camera(self, camera, cam_trans, center):
-        self.always_evaluate(True)
-        self.StartCounting = True
+    def set_camera(self, camera, cam_trans, cam_dis, cam_x_rot, cam_y_rot, center):
+        # self.always_evaluate(True)
 
         self.camera = camera
         self.cam_trans = cam_trans
         self.center = center
 
+    def write_cam_list(self):
+        with open(self.position_list_file, 'w') as outfile:  
+            for mat in self.cam_location_list:
+                line = str(mat).replace('\n', '')
+                outfile.write(line)
+                outfile.write('\n')
+
+    def add_camera_matrix(self):
+        mat = self.camera.WorldTransform.value
+        self.cam_location_list.append(mat)
+
+    def read_cam_list(self):
+        data = []
+        with open(self.position_list_file) as f:
+            for line in f:
+                data.append(line.replace('\n', '').replace('(', '').replace(')', ''))
+
+            for item in data:
+                items = [float(x) for x in item.split(' ')]
+                mat = avango.gua.from_list(items)
+                self.cam_location_list.append(mat)
+
+
+    def change_mode(self, mode):
+        self.mode = mode
 
     def capture(self, name):
-        
-        file_name = self.path + '/' + name + self.frame_count
+        if self.capture_mode == 'position':
+            self.add_camera_matrix()
+        if self.capture_mode == 'image':
+            file_name = self.path + '/' + name + self.image_count
+            
+            bash_command = "env DISPLAY=:0.0 import -window ROOT " + file_name + ".png"
+            process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
+            output, error = process.communicate()
+        print('Captured ', self.image_count)
         self.image_count += 1  
 
-        bash_command = "env DISPLAY=:0.0 import -window ROOT " + file_name + ".png"
-        process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-        output, error = process.communicate()
-        print('Captured ', self.image_count)
+    def start_taking_images(self):
+        self.always_evaluate(True)
+        self.image_count = 0
+        self.cam_location_list = []
+        if read_mode:
+            self.read_cam_list()
+        self.free_mode = False
+
+    def stop_taking_images(self):
+        self.always_evaluate(False)
+        if self.capture_mode == 'position':
+            self.write_cam_list()
+        self.free_mode = True
 
     def evaluate(self):
-        if self.StartCounting == True:
+        if self.free_mode == False:
             self.frame_count += 1
             if self.frame_count == 59:
+                if read_mode:
+                    self.cam_trans.Transform.value = avango.gua.make_identity_mat()
+                    self.cam_dis.Transform.value = avango.gua.make_identity_mat()
+                    self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
+                    self.camera.Transform.value = avango.gua.make_identity_mat()
+                else:
+                    distance = 1.5
+                    height = 1.0
+                    levels = 3
+                    height_steps = height / levels
+                    angle_steps = 30
+                    steps = 360//angle_steps
 
-                print('Move')
-                distance = 1.5
-                height = 1.0
-                levels = 3
-                height_steps = height / levels
-                angle_steps = 30
-                steps = 360//angle_steps
+                    self.camera.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, distance)
 
-                self.camera.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, distance)
-
-                height_level = self.center.y - (height / 2) + height_steps * ((self.image_count//steps) % levels)
-                self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.y)
-                
-                self.angle = (self.angle + angle_steps) % 360
-                print(self.angle)
-                self.cam_trans.Transform.value *= avango.gua.make_rot_mat(self.angle, 0.0, 1.0, 0.0)
+                    height_level = self.center.y - (height / 2) + height_steps * ((self.image_count//steps) % levels)
+                    self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.y)
+                    
+                    self.angle = (self.angle + angle_steps) % 360
+                    # print(self.angle)
+                    self.cam_trans.Transform.value *= avango.gua.make_rot_mat(self.angle, 0.0, 1.0, 0.0)
 
             if self.frame_count == 60:
-                print('Take Image')
-                self.capture
+                
+                self.capture('obj_image')
+                if self.image_count >= 20:
+                    self.stop_taking_images()
                 self.frame_count = 0
 
+    @field_has_changed(Button0)
+    def button0_changed(self):
+        if self.Button0.value:
+            if self.button0_pressed == False:
+                self.start_taking_images()
+            self.button0_pressed = True
+        else:
+            self.button0_pressed = False
 
-            
+    @field_has_changed(Button1)
+    def button1_changed(self):
+        if self.Button1.value:
+            if self.button1_pressed == False:
+                pass
+            self.button1_pressed = True
+        else:
+            self.button1_pressed = False  
 
 
 def start():
@@ -118,6 +191,9 @@ def start():
   size = avango.gua.Vec2ui(width, height)
 
   camera_transform = avango.gua.nodes.TransformNode(Name='cam_trans')
+  camera_distance = avango.gua.nodes.TransformNode(Name='cam_dis')
+  camera_x_rot = avango.gua.nodes.TransformNode(Name='cam_x_rot')
+  camera_y_rot = avango.gua.nodes.TransformNode(Name='cam_y_rot')
 
   screen = avango.gua.nodes.ScreenNode(Name = "screen",
                                        # Width = 4.8,
@@ -129,8 +205,8 @@ def start():
 
   camera = avango.gua.nodes.CameraNode(
     Name = "cam",
-    LeftScreenPath = "/cam_trans/cam/screen",
-    RightScreenPath = "/cam_trans/cam/screen",
+    LeftScreenPath = "/cam_trans/cam_dis/cam_x_rot/cam_y_rot/cam/screen",
+    RightScreenPath = "/cam_trans/cam_dis/cam_x_rot/cam_y_rot/cam/screen",
     SceneGraph = "scene",
     Resolution = size,
     OutputWindowName = "window",
@@ -168,7 +244,10 @@ def start():
   camera.PipelineDescription.value = pipeline_description
 
   graph.Root.value.Children.value.append(camera_transform)
-  camera_transform.Children.value.append(camera)
+  camera_transform.Children.value.append(camera_distance)
+  camera_distance.Children.value.append(camera_x_rot)
+  camera_x_rot.Children.value.append(camera_y_rot)
+  camera_y_rot.Children.value.append(camera)
 
   window = avango.gua.nodes.Window(
     Size = size,
@@ -191,7 +270,9 @@ def start():
   # camera_transform.Transform.connect_from(navigator.OutTransform)
 
   capture_script = CaptureScript()
-  capture_script.set_camera(camera, camera_transform, photo_model_center)
+  capture_script.set_camera(camera, camera_transform, camera_distance,
+                            camera_x_rot, camera_y_rot, photo_model_center)
+  capture_script.Button0.connect_from(navigator.Mouse.ButtonLeft)
 
   viewer = avango.gua.nodes.Viewer()
   # viewer.DesiredFPS.value = 200

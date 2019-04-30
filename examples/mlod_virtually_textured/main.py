@@ -25,8 +25,8 @@ def print_fields(node, print_values=False):
         if print_values:
             print("  with value '{0}'".format(field.value))
 
-#screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
-#screen_grab_pass.setOutputPrefix("/home/tihi6213/Desktop/pic_")
+screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
+screen_grab_pass.setOutputPrefix("/home/tihi6213/Desktop/pic_")
 
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()

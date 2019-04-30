@@ -28,9 +28,10 @@ class CaptureScript(avango.script.Script):
     def __init__(self):
         self.super(CaptureScript).__init__()
 
-    def my_constructor(self, scenegraph, navigator):
+    def my_constructor(self, scenegraph, navigator, screen_grab_pass):
         self.graph = scenegraph
         self.navigator = navigator
+        self.screen_grab_pass = screen_grab_pass
 
         self.mesh_loader = avango.gua.nodes.TriMeshLoader()
 
@@ -114,6 +115,9 @@ class CaptureScript(avango.script.Script):
         print(self.capture_mode)
         if self.capture_mode == 'position':
             self.add_camera_matrix()
+            self.screen_grab_pass.grabNext()
+
+            print('######## TOOK IMAGE')
         if self.capture_mode == 'image':
             file_name = self.path + '/images/' + name + str(self.image_count)
             #print(file_name)
@@ -403,7 +407,7 @@ def start():
     #         outfile.write(line)
     #         outfile.write('\n')
 
-    width = 2560;
+    width = 8192;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -440,6 +444,10 @@ def start():
         Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)  * avango.gua.make_rot_mat(90,0,0,1.0)
     )
 
+    screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
+    screen_grab_pass.setOutputPrefix("/home/senu8384/Desktop/pics/image_")
+
+
     res_pass = avango.gua.nodes.ResolvePassDescription()
     res_pass.EnableSSAO.value = False
     res_pass.SSAOIntensity.value = 3.0
@@ -462,7 +470,8 @@ def start():
             #),
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
-    ],
+            screen_grab_pass,
+        ],
         EnableABuffer = False
     )
 
@@ -497,7 +506,7 @@ def start():
     # camera_transform.Transform.connect_from(navigator.OutTransform)
 
     capture_script = CaptureScript()
-    capture_script.my_constructor(graph, navigator)
+    capture_script.my_constructor(graph, navigator, screen_grab_pass)
     capture_script.set_camera(camera, camera_transform, camera_distance,
                             camera_x_rot, camera_y_rot, photo_model_center)
     capture_script.Button0.connect_from(navigator.Mouse.ButtonLeft)

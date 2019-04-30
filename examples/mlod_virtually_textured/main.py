@@ -3,7 +3,6 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
-from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
@@ -26,6 +25,9 @@ def print_fields(node, print_values=False):
         if print_values:
             print("  with value '{0}'".format(field.value))
 
+#screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
+#screen_grab_pass.setOutputPrefix("/home/tihi6213/Desktop/pic_")
+
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
@@ -41,8 +43,9 @@ class TimedRotate(avango.script.Script):
         self.MatrixOut.value = avango.gua.make_trans_mat(0, -0.75, -2.0) * \
                                avango.gua.make_rot_mat(self.TimeIn.value * 20.0, 0.0, 1.0, 0.0)
         self.frame = self.frame + 1
-        if 0 != self.Window and self.frame % 30 == 0:
+        if 0 != self.Window and self.frame % 200 == 0:
             print("RenderingFPS :" + str(self.Window.RenderingFPS.value))
+            screen_grab_pass.grabNext()
 
 
 def start():
@@ -76,7 +79,7 @@ def start():
     #    print(str(type(mlod_node)) + " is not an instance of a M-LOD Node")
     #    return
 
-    mlod_node.ErrorThreshold.Value = 0.25
+    mlod_node.ErrorThreshold.Value = 1
     mlod_node.Material.Value = vt_mat
 
     monkey = mesh_loader.create_geometry_from_file(
@@ -175,11 +178,12 @@ def start():
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes=[
-            mlod_pass,
             avango.gua.nodes.TriMeshPassDescription(),
+            mlod_pass,
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
             avango.gua.nodes.SSAAPassDescription(),
+            #screen_grab_pass,
             #avango.gua.nodes.DebugViewPassDescription()
         ],
         EnableABuffer=False
@@ -214,7 +218,7 @@ def start():
     vt_backend.start_backend()
 
     viewer = avango.gua.nodes.Viewer()
-    # viewer.DesiredFPS.value = 200
+    viewer.DesiredFPS.value = 1000
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
 

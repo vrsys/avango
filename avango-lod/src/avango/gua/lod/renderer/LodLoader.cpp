@@ -98,6 +98,15 @@ av::gua::Node* av::gua::lod::LodLoader::createChildren(std::shared_ptr<::gua::no
         }
     }
 
+    if(!av_node)
+    {
+        auto geom_cast(std::dynamic_pointer_cast<::gua::node::MLodNode>(root));
+        if(geom_cast)
+        {
+            av_node = new av::gua::lod::MLodNode(geom_cast);
+        }
+    }
+
     if(av_node)
     {
         av_node->addToParentChildren();

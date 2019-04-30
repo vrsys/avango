@@ -40,7 +40,7 @@ class CaptureScript(avango.script.Script):
         self.image_count = 0
         self.angle = 0
         self.path = os.path.dirname(os.path.realpath(__file__))
-        self.position_list_file = self.path + '/camera_positions-1.lst'
+        self.position_list_file = self.path + '/camera_positions.lst'
         self.free_mode = False
         self.indicate = False
         self.capture_mode = 'position' # take images or capture position
@@ -75,9 +75,13 @@ class CaptureScript(avango.script.Script):
     def write_cam_list(self):
         with open(self.position_list_file, 'w') as outfile:  
             for mat in self.cam_location_list:
-                line = str(mat).replace('\n', '')
+                # print(avango.gua.to_list(mat))
+                # line = str(mat).replace('\n', '')
+                line = str(avango.gua.to_list(mat)).replace(',', '')
                 outfile.write(line)
                 outfile.write('\n')
+        print(self.cam_location_list[0])
+
 
     def add_camera_matrix(self):
         mat = self.camera.WorldTransform.value
@@ -95,13 +99,13 @@ class CaptureScript(avango.script.Script):
         data = []
         with open(self.position_list_file) as f:
             for line in f:
-                data.append(line.replace('\n', '').replace('(', '').replace(')', ''))
+                data.append(line.replace('\n', '').replace('[', '').replace(']', ''))
 
             for item in data:
                 items = [float(x) for x in item.split(' ')]
                 mat = avango.gua.from_list(items)
                 self.cam_location_list.append(mat)
-
+        print(self.cam_location_list[0])        
 
     def set_mode(self, mode):
         self.capture_mode = mode
@@ -141,7 +145,7 @@ class CaptureScript(avango.script.Script):
     def toggle_indicators(self, flag):
 
         if flag:
-            print('Show indicators', len(self.indicators))
+            print('Show indicators', len(self.cam_location_list))
             self.indicate = True
             for i in self.cam_location_list:
                 # load model to take images of
@@ -152,6 +156,7 @@ class CaptureScript(avango.script.Script):
                     number_str = '00' + number_str
                 elif len(number_str) == 3:
                     number_str = '0' + number_str
+
                 indicator = self.mesh_loader.create_geometry_from_file(
                     "indicator_" + number_str, "data/objects/cube.obj",
                     avango.gua.LoaderFlags.DEFAULTS)
@@ -178,7 +183,7 @@ class CaptureScript(avango.script.Script):
                     self.cam_dis.Transform.value = avango.gua.make_identity_mat()
                     self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
                     self.cam_y_rot.Transform.value = avango.gua.make_identity_mat()
-                    self.camera.Transform.value = avango.gua.make_identity_mat() # *  avango.gua.make_rot_mat(90,0,0,1.0)
+                    self.camera.Transform.value = avango.gua.make_identity_mat() *  avango.gua.make_rot_mat(90,0,0,1.0)
 
                     if self.image_count < len(self.cam_location_list):
                         self.cam_trans.Transform.value = self.cam_location_list[self.image_count]
@@ -186,21 +191,23 @@ class CaptureScript(avango.script.Script):
                         print('image count below length of location list')
                         self.stop_taking_images()
                 else:
-                    distance = 3.0
+                    distance = 5.0
                     height = 1.0
                     levels = 5
                     height_steps = height / levels
                     angle_steps = 18
                     steps = 360//angle_steps
 
-                    self.cam_dis.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, distance)
+                    offset_x = random.uniform(-0.005, 0.005)
+                    offset_y = random.uniform(-0.005, 0.005)
+                    self.cam_dis.Transform.value = avango.gua.make_trans_mat(offset_x, offset_y, distance)
 
                     height_level = self.center.y - (height / 2) + height_steps * ((self.image_count//steps) % levels) + 0.1
                     self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.z)
                     
                     self.angle = (self.angle + angle_steps) % 360
-                    angle_x = random.uniform(-5.5, 5.5)
-                    angle_y = random.uniform(-5.5, 5.5)
+                    angle_x = random.uniform(-3.5, 3.5)
+                    angle_y = random.uniform(-3.5, 3.5)
                     print(angle_x, angle_y)
                     self.cam_x_rot.Transform.value = avango.gua.make_rot_mat(angle_x, 1.0, 0.0, 0.0)
                     self.cam_y_rot.Transform.value = avango.gua.make_rot_mat(angle_y, 0.0, 1.0, 0.0)
@@ -430,7 +437,7 @@ def start():
         EyeDistance = 0.2,
         EnableStereo = False,
         Children = [screen],
-        Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0) #  * avango.gua.make_rot_mat(90,0,0,1.0)
+        Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)  * avango.gua.make_rot_mat(90,0,0,1.0)
     )
 
     res_pass = avango.gua.nodes.ResolvePassDescription()

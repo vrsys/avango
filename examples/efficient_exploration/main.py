@@ -52,10 +52,11 @@ def start():
     dt_loader = avango.gua.nodes.DynamicTriangleLoader()
     aux_loader = avango.gua.lod.nodes.Aux()
 
-    aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-    atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-    # aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-    # atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+    # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    # atlas_path = "/home/senu8384/Desktop/master-thesis/reconstructions/captures/1-terrakotta_images/concat.atlas"
 
     # setup scene
     # add transform node for plod object
@@ -76,8 +77,8 @@ def start():
 
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
-        "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     # plod_node.ShadowMode.value = 1

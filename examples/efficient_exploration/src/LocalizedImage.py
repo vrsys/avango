@@ -213,6 +213,7 @@ class LocalizedImageQuad:
         self.focal_length = 0.1
         self.img_w_half = self.focal_length * 0.5
         self.img_h_half = self.img_w_half * self.aspect_ratio
+        print('I WANNA KNOW DIS', self.img_w_half, self.img_h_half)
         # print('img_w_half', self.img_w_half)
         # print('img_h_half', self.img_h_half)
         

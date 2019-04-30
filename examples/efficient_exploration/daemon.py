@@ -817,7 +817,7 @@ def init_hid_device(EVENT_STRING, STATION_STRING, VALUE_MAPPINGS = [], BUTTON_MA
 
 def init_mouse2():
 
-    _device_list = ["Logitech USB-PS/2 Optical Mouse", "Logitech Wireless Mouse M560"]
+    _device_list = ["Logitech USB-PS/2 Optical Mouse", "Logitech Wireless Mouse M560", "Logitech USB Optical Mouse", "Dell Dell USB Optical Mouse" ]
 
     for _device in _device_list:
         _string = get_event_string(1, _device)
@@ -841,7 +841,7 @@ def init_mouse2():
     print("Mouse not found")
 
 def init_keyboard2():
-    _device_list = ["AT Translated Set 2 keyboard", "HID 046a:0011"]
+    _device_list = ["AT Translated Set 2 keyboard", "HID 046a:0011", "Logitech USB Keyboard" ]
 
 
     for _device in _device_list:

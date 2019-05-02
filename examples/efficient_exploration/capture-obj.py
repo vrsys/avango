@@ -7,336 +7,16 @@ from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+
+from src.CaptureTool import CaptureScript
 import random
 import os
 import time
-import subprocess
+import math
 
 
-class CaptureScript(avango.script.Script):
-
-    Button0 = avango.SFBool()
-    Button1 = avango.SFBool()
-    R_Key = avango.SFBool()
-    T_Key = avango.SFBool()
-    I_Key = avango.SFBool()
-    K_Key = avango.SFBool()
-    C_Key = avango.SFBool()
-    V_Key = avango.SFBool()
-    M_Key = avango.SFBool()
-
-    def __init__(self):
-        self.super(CaptureScript).__init__()
-
-    def my_constructor(self, scenegraph, navigator, screen_grab_pass):
-        self.graph = scenegraph
-        self.navigator = navigator
-        self.screen_grab_pass = screen_grab_pass
-
-        self.mesh_loader = avango.gua.nodes.TriMeshLoader()
-
-        self.always_evaluate(False)
-        random.seed(420)
-        self.frame_count = 0
-        self.image_count = 0
-        self.angle = 0
-        self.path = os.path.dirname(os.path.realpath(__file__))
-        self.position_list_file = self.path + '/camera_positions.lst'
-        self.free_mode = False
-        self.indicate = False
-        self.capture_mode = 'position' # take images or capture position
-        self.read_mode = False # if read mode is true camera will be set to positions of cam list
-        self.cam_location_list = []
-        self.indicators = []
-
-        self.button0_pressed = False
-        self.button1_pressed = False
-        self.r_pressed = False
-        self.t_pressed = False
-        self.i_pressed = False
-        self.k_pressed = False
-        self.c_pressed = False
-        self.v_pressed = False
-        self.m_pressed = False
-
-        self.camera = None
-        self.cam_trans = None
-        self.center = avango.gua.Vec3(0.0, 0.0, 0.0)
-       
-    def set_camera(self, camera, cam_trans, cam_dis, cam_x_rot, cam_y_rot, center):
-        # self.always_evaluate(True)
-
-        self.camera = camera
-        self.cam_dis = cam_dis
-        self.cam_x_rot = cam_x_rot
-        self.cam_y_rot = cam_y_rot
-        self.cam_trans = cam_trans
-        self.center = center
-
-    def write_cam_list(self):
-        with open(self.position_list_file, 'w') as outfile:  
-            for mat in self.cam_location_list:
-                # print(avango.gua.to_list(mat))
-                # line = str(mat).replace('\n', '')
-                line = str(avango.gua.to_list(mat)).replace(',', '')
-                outfile.write(line)
-                outfile.write('\n')
-        print(self.cam_location_list[0])
 
 
-    def add_camera_matrix(self):
-        mat = self.camera.WorldTransform.value
-        self.cam_location_list.append(mat)
-        if self.indicate:
-            indicator = self.mesh_loader.create_geometry_from_file(
-                "indicator_" + str(len(self.indicators)), "data/objects/cube.obj",
-                avango.gua.LoaderFlags.DEFAULTS)
-            indicator.Transform.value = mat * avango.gua.make_scale_mat(0.05, 0.05, 0.4)
-            indicator.Material.value.set_uniform('Emissivity', 1.0)
-            self.indicators.append(indicator)
-            self.graph.Root.value.Children.value.append(indicator)
-
-    def read_cam_list(self):
-        data = []
-        with open(self.position_list_file) as f:
-            for line in f:
-                data.append(line.replace('\n', '').replace('[', '').replace(']', ''))
-
-            for item in data:
-                items = [float(x) for x in item.split(' ')]
-                mat = avango.gua.from_list(items)
-                self.cam_location_list.append(mat)
-        print(self.cam_location_list[0])        
-
-    def set_mode(self, mode):
-        self.capture_mode = mode
-
-    def capture(self, name):
-        print(self.capture_mode)
-        if self.capture_mode == 'position':
-            self.add_camera_matrix()
-            self.screen_grab_pass.grabNext()
-
-            print('######## TOOK IMAGE')
-        if self.capture_mode == 'image':
-            file_name = self.path + '/images/' + name + str(self.image_count)
-            #print(file_name)
-            bash_command = "env DISPLAY=:0.0 import -window ROOT " + file_name + ".png"
-            process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
-            output, error = process.communicate()
-            #print(bash_command)
-        print('Captured ', self.image_count)
-        self.image_count += 1  
-
-    def start_taking_images(self):
-        self.always_evaluate(True)
-        self.image_count = 0
-        self.free_mode = False
-        self.cam_trans.Transform.disconnect_from(self.navigator.OutTransform)
-
-    def stop_taking_images(self):
-        self.always_evaluate(False)
-        self.free_mode = True
-        self.cam_trans.Transform.value = avango.gua.make_identity_mat()
-        self.cam_dis.Transform.value = avango.gua.make_identity_mat()
-        self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
-        self.cam_y_rot.Transform.value = avango.gua.make_identity_mat()
-        self.camera.Transform.value = avango.gua.make_identity_mat()
-        self.cam_trans.Transform.connect_from(self.navigator.OutTransform)
-        print('Stopped taking images')
-
-
-    def toggle_indicators(self, flag):
-
-        if flag:
-            print('Show indicators', len(self.cam_location_list))
-            self.indicate = True
-            for i in self.cam_location_list:
-                # load model to take images of
-                number_str = str(len(self.indicators))
-                if len(number_str) == 1:
-                    number_str = '000' + number_str
-                elif len(number_str) == 2:
-                    number_str = '00' + number_str
-                elif len(number_str) == 3:
-                    number_str = '0' + number_str
-
-                indicator = self.mesh_loader.create_geometry_from_file(
-                    "indicator_" + number_str, "data/objects/cube.obj",
-                    avango.gua.LoaderFlags.DEFAULTS)
-                indicator.Transform.value = i * avango.gua.make_scale_mat(0.05, 0.05, 0.4)
-                indicator.Material.value.set_uniform('Emissivity', 1.0)
-                self.indicators.append(indicator)
-                self.graph.Root.value.Children.value.append(indicator)
-        else:
-            print('Dont show indicators')
-            self.indicate = False
-            for i in self.indicators:
-                self.graph.Root.value.Children.value.remove(i)
-            self.indicators = []
-            
-
-    def evaluate(self):
-        if self.free_mode == False:
-            self.frame_count += 1
-            if self.frame_count == 29:
-                print('Move in read mode:', self.read_mode, self.image_count, len(self.cam_location_list))
-                if self.read_mode:
-                    self.set_mode('image')
-                    self.cam_trans.Transform.value = avango.gua.make_identity_mat()
-                    self.cam_dis.Transform.value = avango.gua.make_identity_mat()
-                    self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
-                    self.cam_y_rot.Transform.value = avango.gua.make_identity_mat()
-                    self.camera.Transform.value = avango.gua.make_identity_mat() *  avango.gua.make_rot_mat(90,0,0,1.0)
-
-                    if self.image_count < len(self.cam_location_list):
-                        self.cam_trans.Transform.value = self.cam_location_list[self.image_count]
-                    else:
-                        print('image count below length of location list')
-                        self.stop_taking_images()
-                else:
-                    distance = 5.0
-                    height = 1.0
-                    levels = 5
-                    height_steps = height / levels
-                    angle_steps = 18
-                    steps = 360//angle_steps
-
-                    offset_x = random.uniform(-0.005, 0.005)
-                    offset_y = random.uniform(-0.005, 0.005)
-                    self.cam_dis.Transform.value = avango.gua.make_trans_mat(offset_x, offset_y, distance)
-
-                    height_level = self.center.y - (height / 2) + height_steps * ((self.image_count//steps) % levels) + 0.1
-                    self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.z)
-                    
-                    self.angle = (self.angle + angle_steps) % 360
-                    angle_x = random.uniform(-3.5, 3.5)
-                    angle_y = random.uniform(-3.5, 3.5)
-                    print(angle_x, angle_y)
-                    self.cam_x_rot.Transform.value = avango.gua.make_rot_mat(angle_x, 1.0, 0.0, 0.0)
-                    self.cam_y_rot.Transform.value = avango.gua.make_rot_mat(angle_y, 0.0, 1.0, 0.0)
-                    
-                    self.cam_trans.Transform.value *= avango.gua.make_rot_mat(self.angle, 0.0, 1.0, 0.0)
-
-            if self.frame_count == 30:
-                
-                self.capture('obj_image')
-                if self.read_mode == False and self.image_count >= 100:
-                    self.stop_taking_images()
-                self.frame_count = 0
-
-    @field_has_changed(Button0)
-    def button0_changed(self):
-        if self.Button0.value:
-            if self.button0_pressed == False:
-                self.capture('obj_image')
-            self.button0_pressed = True
-        else:
-            self.button0_pressed = False
-
-    @field_has_changed(Button1)
-    def button1_changed(self):
-        if self.Button1.value:
-            if self.button1_pressed == False:
-                if self.free_mode:
-                    self.stop_taking_images()
-
-            self.button1_pressed = True
-        else:
-            self.button1_pressed = False
-
-    @field_has_changed(R_Key)
-    def r_key_changed(self):
-        if self.R_Key.value:
-            if self.r_pressed == False:
-                if self.read_mode:
-                    print('Read mode off')
-                    self.read_mode = False
-                else:
-                    print('Read mode on')
-                    print('Locations:', len(self.cam_location_list))
-                    self.read_mode = True
-
-            self.r_pressed = True
-        else:
-            self.r_pressed = False
-
-    @field_has_changed(T_Key)
-    def t_key_changed(self):
-        if self.T_Key.value:
-            if self.t_pressed == False:
-                if self.free_mode:
-                    print('Take images')
-                    self.start_taking_images()
-                else:
-                    print('Stop taking images')
-                    self.stop_taking_images()
-
-            self.t_pressed = True
-        else:
-            self.t_pressed = False 
-
-    @field_has_changed(I_Key)
-    def i_key_changed(self):
-        if self.I_Key.value:
-            if self.i_pressed == False:
-                if self.indicate:
-                   self.toggle_indicators(False)
-                else:
-                    self.toggle_indicators(True)
-            self.i_pressed = True
-        else:
-            self.i_pressed = False
-
-    @field_has_changed(K_Key)
-    def K_key_changed(self):
-        if self.K_Key.value:
-            if self.k_pressed == False:
-                self.cam_location_list = []
-                self.read_cam_list()
-                print('Read file list')
-           
-            self.k_pressed = True
-        else:
-            self.k_pressed = False
-    
-    @field_has_changed(C_Key)
-    def c_key_changed(self):
-        # CLEAR cam list
-        if self.C_Key.value:
-            if self.c_pressed == False:
-                print('Clear camera locations')
-                self.cam_location_list = []           
-            self.c_pressed = True
-        else:
-            self.c_pressed = False
-
-    @field_has_changed(V_Key)
-    def v_key_changed(self):
-        if self.V_Key.value:
-            if self.v_pressed == False:
-                self.write_cam_list()
-                print('Saved camera locations to file', self.position_list_file)
-           
-            self.v_pressed = True
-        else:
-            self.v_pressed = False
-
-
-    @field_has_changed(M_Key)
-    def m_key_changed(self):
-        if self.M_Key.value:
-            if self.m_pressed == False:
-                if self.capture_mode == 'image':
-                    print('Set mode to "position"')
-                    self.set_mode('position')
-                elif self.capture_mode == 'position':
-                    print('Set mode to "image"')
-                    self.set_mode('image')
-           
-            self.m_pressed = True
-        else:
-            self.m_pressed = False
     
 
 def start():
@@ -349,15 +29,22 @@ def start():
     graph  = avango.gua.nodes.SceneGraph(Name = "scene")
     mesh_loader = avango.gua.nodes.TriMeshLoader()
 
-    floor = mesh_loader.create_geometry_from_file(
-        "floor",
-        "data/objects/plane.obj",
+    sphere_mat = avango.gua.nodes.Material()
+
+    sphere_color = avango.gua.Vec4(0.6, 0.6, 0.9, 1.0)
+    sphere_color.normalize()
+
+    sphere_mat.set_uniform("Color", sphere_color)
+    sphere_mat.set_uniform("Roughness", random.random())
+    sphere_mat.set_uniform("Metalness", random.random())
+    sphere = mesh_loader.create_geometry_from_file(
+        "sphere",
+        "data/objects/sphere3.obj",
+        sphere_mat,
         avango.gua.LoaderFlags.DEFAULTS
     )
 
-    floor.Transform.value = avango.gua.make_trans_mat(0, -0.1 , 0) * avango.gua.make_scale_mat(4, 1, 4)
-    floor.ShadowMode.value = 1
-    #graph.Root.value.Children.value.append(floor)
+    sphere.Transform.value = avango.gua.make_trans_mat(0, 0.0 , -1.0) * avango.gua.make_scale_mat(0.1, 0.1, 0.1)
 
     # load model to take images of
     photo_model = mesh_loader.create_geometry_from_file(
@@ -407,7 +94,9 @@ def start():
     #         outfile.write(line)
     #         outfile.write('\n')
 
-    width = 8192;
+    # width = 6144
+    # width = 8192
+    width = 2560;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -427,8 +116,6 @@ def start():
                                        # Width = 0.07492871690427698 * 2,
                                        # Height = 0.05 * 2) 
 
-    # 0.05 0.07492871690427698
-
     screen.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -0.8)
 
     camera = avango.gua.nodes.CameraNode(
@@ -441,12 +128,11 @@ def start():
         EyeDistance = 0.2,
         EnableStereo = False,
         Children = [screen],
-        Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0)  * avango.gua.make_rot_mat(90,0,0,1.0)
+        Transform = avango.gua.make_trans_mat(0.0, 0.0, 0.0) * avango.gua.make_rot_mat(90,0,0,1.0)
     )
 
     screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
     screen_grab_pass.setOutputPrefix("/home/senu8384/Desktop/pics/image_")
-
 
     res_pass = avango.gua.nodes.ResolvePassDescription()
     res_pass.EnableSSAO.value = False
@@ -460,7 +146,6 @@ def start():
     #res_pass.BackgroundTexture.value = "awesome_skymap"
     #res_pass.BackgroundMode.value = avango.gua.BackgroundMode.CUBEMAP_TEXTURE
     res_pass.BackgroundColor.value = avango.gua.Color(0.45, 0.5, 0.6)
-    # res_pass.VignetteColor.value = avango.gua.Vec4(0, 0, 0, 1)
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes = [
@@ -470,9 +155,9 @@ def start():
             #),
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
-            screen_grab_pass,
+            # screen_grab_pass,
         ],
-        EnableABuffer = False
+        EnableABuffer = True
     )
 
     camera.PipelineDescription.value = pipeline_description
@@ -499,14 +184,12 @@ def start():
     navigator = examples_common.navigator.Navigator()
     navigator.StartLocation.value = camera.Transform.value.get_translate()
     navigator.OutTransform.connect_from(camera.Transform)
-
     navigator.RotationSpeed.value = 0.2
     navigator.MotionSpeed.value = 0.04
-
     # camera_transform.Transform.connect_from(navigator.OutTransform)
 
     capture_script = CaptureScript()
-    capture_script.my_constructor(graph, navigator, screen_grab_pass)
+    capture_script.my_constructor(graph, navigator, sphere, screen_grab_pass)
     capture_script.set_camera(camera, camera_transform, camera_distance,
                             camera_x_rot, camera_y_rot, photo_model_center)
     capture_script.Button0.connect_from(navigator.Mouse.ButtonLeft)
@@ -518,6 +201,7 @@ def start():
     capture_script.C_Key.connect_from(navigator.Keyboard.KeyC)
     capture_script.V_Key.connect_from(navigator.Keyboard.KeyV)
     capture_script.M_Key.connect_from(navigator.Keyboard.KeyM)
+    capture_script.N_Key.connect_from(navigator.Keyboard.KeyN)
 
     viewer = avango.gua.nodes.Viewer()
     # viewer.DesiredFPS.value = 200

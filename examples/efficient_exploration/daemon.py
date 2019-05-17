@@ -817,7 +817,7 @@ def init_hid_device(EVENT_STRING, STATION_STRING, VALUE_MAPPINGS = [], BUTTON_MA
 
 def init_mouse2():
 
-    _device_list = ["Logitech USB-PS/2 Optical Mouse", "Logitech Wireless Mouse M560", "Logitech USB Optical Mouse", "Dell Dell USB Optical Mouse" ]
+    _device_list = ["Logitech USB-PS/2 Optical Mouse", "Logitech Wireless Mouse M560", "Logitech USB Optical Mouse", "Dell Dell USB Optical Mouse", "USB Optical Mouse" ]
 
     for _device in _device_list:
         _string = get_event_string(1, _device)

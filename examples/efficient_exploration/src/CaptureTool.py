@@ -43,8 +43,15 @@ class CaptureScript(avango.script.Script):
         self.frame_count = 0
         self.image_count = 0
         self.angle = 0
+        self.last_level = 0
+        self.current_level = 0
         self.path = os.path.dirname(os.path.realpath(__file__))
-        self.position_list_file = self.path + '/camera_positions.lst'
+        # self.position_list_file = self.path + '/cam-positions.lst'
+        # self.position_list_file = self.path + '/part151-202.lst'
+        # self.position_list_file = self.path + '/auto-cam-positions.lst'
+        self.position_list_file = self.path + '/manu-cam-positions.lst'
+        self.image_cam_positions = []
+        # self.position_list_file = self.path + '/part1-50.lst'
         self.free_mode = False
         self.indicate = False
         self.indicate_perspectives = False
@@ -117,7 +124,7 @@ class CaptureScript(avango.script.Script):
                 line = str(avango.gua.to_list(mat)).replace(',', '')
                 outfile.write(line)
                 outfile.write('\n')
-        print(self.cam_location_list[0])
+        print('Write list')
 
     def get_heatmap_material(self, alpha):
         mat = avango.gua.nodes.Material()
@@ -149,14 +156,18 @@ class CaptureScript(avango.script.Script):
 
     def read_cam_list(self):
         data = []
-        with open(self.position_list_file) as f:
-            for line in f:
-                data.append(line.replace('\n', '').replace('[', '').replace(']', ''))
+        self.image_cam_positions = []
+        try:
+            with open(self.position_list_file) as f:
+                for line in f:
+                    data.append(line.replace('\n', '').replace('[', '').replace(']', ''))
 
-            for item in data:
-                items = [float(x) for x in item.split(' ')]
-                mat = avango.gua.from_list(items)
-                self.cam_location_list.append(mat)    
+                for item in data:
+                    items = [float(x) for x in item.split(' ')]
+                    mat = avango.gua.from_list(items)
+                    self.cam_location_list.append(mat)    
+        except FileNotFoundError:
+            print('File:', self.position_list_file, 'does not exist.')
 
     def set_mode(self, mode):
         self.capture_mode = mode
@@ -169,9 +180,9 @@ class CaptureScript(avango.script.Script):
         if self.capture_mode == 'image':
             num = str(self.image_count)
             if len(num) == 1:
-                num = '00' + num 
+                num = '20' + num 
             if len(num) == 2:
-                num = '0' + num 
+                num = '2' + num 
             self.screen_grab_pass.setOutputPrefix("/home/senu8384/Desktop/pics/image_" + num + "_")
             self.screen_grab_pass.grabNext()
             # file_name = self.path + '/images/' + name + str(self.image_count)
@@ -180,12 +191,15 @@ class CaptureScript(avango.script.Script):
             # process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
             # output, error = process.communicate()
             
-            print('Captured ', self.image_count)
+            print('Captured ', self.image_count, num, avango.gua.to_list(self.camera.WorldTransform.value))
+            self.image_cam_positions.append( str(avango.gua.to_list(self.camera.WorldTransform.value)).replace(',', '') )
+
         self.image_count += 1  
 
     def start_taking_images(self):
         self.always_evaluate(True)
         self.image_count = 0
+        self.image_cam_positions = []
         self.free_mode = False
         self.cam_trans.Transform.disconnect_from(self.navigator.OutTransform)
 
@@ -200,6 +214,13 @@ class CaptureScript(avango.script.Script):
         self.camera.Transform.value = avango.gua.make_identity_mat()
         self.cam_trans.Transform.connect_from(self.navigator.OutTransform)
         print('Stopped taking images')
+        if self.capture_mode == 'image':
+            with open('/home/senu8384/Desktop/pics/image_positions.lst', 'w') as outfile:  
+                for line in self.image_cam_positions:
+                    # print(avango.gua.to_list(mat))
+                    # line = str(mat).replace('\n', '')
+                    outfile.write(line)
+                    outfile.write('\n')
 
 
     def toggle_indicators(self, flag):
@@ -290,32 +311,37 @@ class CaptureScript(avango.script.Script):
                     self.cam_dis.Transform.value = avango.gua.make_identity_mat()
                     self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
                     self.cam_y_rot.Transform.value = avango.gua.make_identity_mat()
-                    self.camera.Transform.value = avango.gua.make_identity_mat() # * avango.gua.make_rot_mat(90,0,0,1.0)
+                    # self.camera.Transform.value = avango.gua.make_identity_mat()  ############################# FOR AUTOMATED IMAGES
+                    self.camera.Transform.value = avango.gua.make_identity_mat()  * avango.gua.make_rot_mat(90,0,0,1.0)  ########## FOR MANUAL
+                    
 
                     if self.image_count < len(self.cam_location_list):
+                        print('move to pos',self.image_count)
                         self.cam_trans.Transform.value = self.cam_location_list[self.image_count]
                     else:
                         print('image count below length of location list')
                         self.stop_taking_images()
                 else:
-                    tilt = 32
+                    tilt = 35
 
-                    distance = 3.25
-                    height = 2.2
-                    levels = 7
+                    distance = 3.05
+                    height = 2.5
+                    levels = 8
                     tilt_steps = tilt/levels
                     height_steps = height / levels
-                    angle_steps = 45
+                    angle_steps = 24
                     steps = 360//angle_steps
                     self.max_artificial_images = steps * levels
                     offset_x = random.uniform(-0.02, 0.02)
                     offset_y = random.uniform(-0.005, 0.005)
                     self.cam_dis.Transform.value = avango.gua.make_trans_mat(offset_x, offset_y, distance)
-
-                    height_level = self.center.y - (height / 2) + height_steps * ((self.image_count//steps) % levels) + 0.6
-                    self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.z)
+                    self.current_level = ((self.image_count//steps) % levels)
+                    if self.current_level > self.last_level:
+                        self.angle = self.current_level * 5
                     
-                    self.angle = (self.angle + angle_steps) % 360
+                    height_level = self.center.y - (height / 2) + height_steps * self.current_level + 0.4
+                    self.cam_trans.Transform.value = avango.gua.make_trans_mat(self.center.x, height_level, self.center.z)
+                    self.angle = (self.angle + angle_steps) % (360)
                     # angle_x = random.uniform(-3.5, 3.5)
                     # angle_y = random.uniform(-3.5, 3.5)
                     print('Add position', self.image_count, 'of', steps * levels)
@@ -326,13 +352,14 @@ class CaptureScript(avango.script.Script):
                     self.cam_y_rot.Transform.value = avango.gua.make_rot_mat(angle_y, 0.0, 1.0, 0.0)
                     
                     self.cam_trans.Transform.value *= avango.gua.make_rot_mat(self.angle, 0.0, 1.0, 0.0)
+                    self.last_level = self.current_level
 
-            if self.frame_count == 30:
+            if self.frame_count ==30:
                 self.capture('obj_image')
 
-            if self.frame_count == 35:
-                # if self.read_mode == False and self.image_count >= 100:
-                if self.image_count >= self.max_artificial_images:
+            if self.frame_count == 60:
+                if self.read_mode == False and self.image_count >= self.max_artificial_images:
+                # if self.image_count >= self.max_artificial_images:
                     self.stop_taking_images()
                 self.frame_count = 0
 

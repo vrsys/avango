@@ -9,6 +9,7 @@ from examples_common.GuaVE import GuaVE
 
 
 from src.CaptureTool import CaptureScript
+from src.picker import Picker
 import random
 import os
 import time
@@ -24,7 +25,6 @@ def start():
     Capture script starts in free mode:
     Free Mode: User can move freely, by clicking the user adds 
     """
-  
 
     graph  = avango.gua.nodes.SceneGraph(Name = "scene")
     mesh_loader = avango.gua.nodes.TriMeshLoader()
@@ -50,16 +50,25 @@ def start():
     photo_model = mesh_loader.create_geometry_from_file(
         "photo_model",
         # "data/objects/cube.obj",
+        # "/home/senu8384/Desktop/master-thesis/data/01_Igeler-Saeule_Kopie/Igeler-Saeule_RLM.OBJ/Igeler-Saeule_RLM.obj",
         "/home/senu8384/Desktop/master-thesis/data/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj",
-        avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
+        # avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
+        avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
     )    
+    bb = photo_model.BoundingBox.value
+    # bb.center()
+    print(type(bb.center()), bb.center())
     photo_model_center = avango.gua.Vec3(0.0, 0.5, 0.0)
+    # photo_model_center = bb.center()    
     #photo_model.Transform.value = avango.gua.make_trans_mat(photo_model_center) * avango.gua.make_rot_mat(90,0,1,0)*\
     #                                    avango.gua.make_rot_mat(-90,1,0,0) * avango.gua.make_scale_mat(0.00015)
-    photo_model.Transform.value = avango.gua.make_trans_mat(0.0,0.83,0.0) * \
+    # photo_model.Transform.value = avango.gua.make_trans_mat(bb.center().x, bb.center().y, bb.center().z) * \
+    # photo_model.Transform.value = avango.gua.make_trans_mat(0.0,0.4,0.0) * \
+    photo_model.Transform.value = avango.gua.make_trans_mat(0.0,0.5,0.0) * \
             avango.gua.make_rot_mat(90.0,-1,0,0) * \
             avango.gua.make_rot_mat(90.0,0,0,1) * \
             avango.gua.make_scale_mat(0.0014)
+            # avango.gua.make_scale_mat(0.05)
     # photo_model.Transform.value = avango.gua.make_trans_mat(photo_model_center) * avango.gua.make_scale_mat(0.5, 1.0, 0.5)
     # photo_model.Material.value.set_uniform('Color', avango.gua.Color(0.4, 0.4, 0.2))
     # photo_model.Material.value.set_uniform('Emissivity', 1.0)
@@ -95,8 +104,8 @@ def start():
     #         outfile.write('\n')
 
     # width = 6144
-    # width = 8192
-    width = 2560;
+    width = 8192
+    # width = 2560;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -155,7 +164,7 @@ def start():
             #),
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
-            # screen_grab_pass,
+            screen_grab_pass,
         ],
         EnableABuffer = True
     )
@@ -214,6 +223,25 @@ def start():
     guaVE.start(locals(), globals())
 
     viewer.run()
+
+def setup_picker(mesh_loader, camera, graph):
+    # setup pick ray
+    pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
+    pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
+                               avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+
+    ray_geom = mesh_loader.create_geometry_from_file(
+        "ray_geom",
+        "data/objects/cylinder.obj",
+        avango.gua.LoaderFlags.DEFAULTS)
+  
+    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
+    pick_ray.Children.value.append(ray_geom)
+
+    picker = Picker()
+    picker.SceneGraph.value = graph
+    picker.Ray.value = pick_ray
+    camera.Children.value.append(pick_ray)
 
 
 if __name__ == '__main__':

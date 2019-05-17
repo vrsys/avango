@@ -27,3 +27,4 @@ class Picker(avango.script.Script):
                                                  self.WhiteList)
         if len(results.value) > 0:
             self.Results.value = results.value
+            

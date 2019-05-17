@@ -219,6 +219,7 @@ class LocalizedImageQuad:
         
         self.atlas_width  = self.atlas.get_width()
         self.atlas_height = self.atlas.get_height()
+        print('AAAAATLASS', self.atlas_width, self.atlas_height)
 
         # scale factor from image space to vt atlas space
         # float factor = get_atlas_scale_factor();

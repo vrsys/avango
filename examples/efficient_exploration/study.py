@@ -21,7 +21,7 @@ def get_atlas_scale_factor():
     
     # auto atlas = new vt::pre::AtlasFile(settings_.atlas_file_.c_str());
     image_width    = 2**17
-    image_height   = 2**16
+    image_height   = 2**17
 
     # // tile's width and height without padding
     tile_inner_width  = 8192
@@ -37,46 +37,74 @@ def get_atlas_scale_factor():
 
     factor_u  = (tile_inner_width  * 15) / image_width
     factor_v  = (tile_inner_height * 14) / image_height
-
+    # print(' factor u v', factor_u, factor_v)
     return max(factor_u, factor_v)
 
 
-def create_vt_quad(dt_node, id, trans_mat):
-    quad_transform = trans_mat
-    width = 0.05
-    height = 0.05
-    print('atlas scale: ', get_atlas_scale_factor())
-    self.atlas_width  = self.atlas.get_width()
-    self.atlas_height = self.atlas.get_height()
-   
-    tile_h = atlas_tile.get_width() / atlas_width * factor
-    tile_w = atlas_tile.get_width() / atlas_height * factor
+def create_vt_quad(dt_node, quad_id, trans_mat):
 
-    tile_pos_x = atlas_tile.get_x() / atlas_height * factor
-    tile_pos_y = atlas_tile.get_y() / atlas_tile.get_height() * tile_h + (1 - factor)
+    # factor_u  = (tile_inner_width  * 15) / image_width # 0.9375
+    factor_u  = 0.9375
+    # factor_v  = (tile_inner_height * 14) / image_height # 0.4921875
+    factor_v  = 0.4921875
+    rows = 14
+    cols = 15
+    print('quad',  quad_id, 'col:', quad_id % cols ,'row:', quad_id // cols)
+    # x = map_from_to(quad_id % cols, 0, cols, 0.0, 1.0)
+    x = quad_id % cols
+    # y = map_from_to(quad_id // cols, 0, rows, 1.0, 0.0)
+    y = quad_id // cols
+
+    print('pos x y ', x, y)
+    # y = quad_id // cols
+    quad_transform = trans_mat * avango.gua.make_rot_mat(-90,0,0,1.0)
+
+    width = 0.05
+    height = width * 9.0 / 16.0
+    # print('atlas scale: ', get_atlas_scale_factor())
+    # factor = get_atlas_scale_factor()
+    atlas_width  = 2**17
+    atlas_height = 2**17
+   
+    tile_w = 8192 / atlas_width * factor_u
+    tile_h = 8192 / atlas_height * factor_v
+    print(tile_h)
+    # tile_pos_x = x / atlas_height * factor
+    tile_pos_x =(x * tile_w )
+    # tile_pos_y = y / 64512 * tile_h + (1 - factor)
+    # tile_pos_y = map_from_to(y * tile_h, 0.0, 1.0, 1.0, 0.0 )
+    tile_pos_y = 1 - y * tile_h
+    
+    print('pos tx ty ', tile_pos_x, tile_pos_y)
 
     pos = quad_transform * avango.gua.Vec3( width, height, 0.0)
-    uv  = avango.gua.Vec2(1.0, 0.0)
+    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y + tile_h)
+    # uv  = avango.gua.Vec2(1.0, 1.0)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
     pos = quad_transform * avango.gua.Vec3(-width, -height, 0.0)
-    uv  = avango.gua.Vec2(0.0, 1.0)
+    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y)
+    # uv  = avango.gua.Vec2(0.0, 0.5)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
-    pos = quad_transform * avango.gua.Vec3( width, -height, 0.0)
-    uv  = avango.gua.Vec2(1.0, 1.0)
+    pos = quad_transform * avango.gua.Vec3(width, -height, 0.0)
+    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y)
+    # uv  = avango.gua.Vec2(1.0, 0.5)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
     pos = quad_transform * avango.gua.Vec3( width, height, 0.0)
-    uv  = avango.gua.Vec2(1.0, 0.0)
+    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y + tile_h)
+    # uv  = avango.gua.Vec2(1.0, 1.0)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
     pos = quad_transform * avango.gua.Vec3(-width, height, 0.0)
-    uv  = avango.gua.Vec2(0.0, 0.0)
+    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y + tile_h)
+    # uv  = avango.gua.Vec2(0.0, 1.0)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
     pos = quad_transform * avango.gua.Vec3(-width, -height, 0.0)
-    uv  = avango.gua.Vec2(0.0, 1.0)
+    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y)
+    # uv  = avango.gua.Vec2(0.0, 0.5)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
 def start():
@@ -297,6 +325,10 @@ def start():
     guaVE.start(locals(), globals())
 
     viewer.run()
+
+def map_from_to(x,a,b,c,d):
+    y=(x-a)/(b-a)*(d-c)+c
+    return y
 
 def setup_picker(mesh_loader, camera, graph):
     # setup pick ray

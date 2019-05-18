@@ -43,68 +43,57 @@ def get_atlas_scale_factor():
 
 def create_vt_quad(dt_node, quad_id, trans_mat):
 
-    # factor_u  = (tile_inner_width  * 15) / image_width # 0.9375
-    factor_u  = 0.9375
-    # factor_v  = (tile_inner_height * 14) / image_height # 0.4921875
-    factor_v  = 0.4921875
     rows = 14
     cols = 15
-    print('quad',  quad_id, 'col:', quad_id % cols ,'row:', quad_id // cols)
-    # x = map_from_to(quad_id % cols, 0, cols, 0.0, 1.0)
+
+    png_width = 122880
+    png_height = 64512
+
     x = quad_id % cols
-    # y = map_from_to(quad_id // cols, 0, rows, 1.0, 0.0)
     y = quad_id // cols
 
-    print('pos x y ', x, y)
-    # y = quad_id // cols
-    quad_transform = trans_mat * avango.gua.make_rot_mat(-90,0,0,1.0)
+    quad_transform = trans_mat #* avango.gua.make_rot_mat(-90,0,0,1.0)
 
-    width = 0.05
-    height = width * 9.0 / 16.0
-    # print('atlas scale: ', get_atlas_scale_factor())
-    # factor = get_atlas_scale_factor()
-    atlas_width  = 2**17
-    atlas_height = 2**17
-   
-    tile_w = 8192 / atlas_width * factor_u
-    tile_h = 8192 / atlas_height * factor_v
-    print(tile_h)
-    # tile_pos_x = x / atlas_height * factor
-    tile_pos_x =(x * tile_w )
-    # tile_pos_y = y / 64512 * tile_h + (1 - factor)
-    # tile_pos_y = map_from_to(y * tile_h, 0.0, 1.0, 1.0, 0.0 )
-    tile_pos_y = 1 - y * tile_h
+    aspect_ratio = 9.0 / 16.0
+    width = 0.3 / 2
+    height = width * aspect_ratio
+
+    padding_width = 960
+    padding_height = 510
+
+    t_w  = (png_width + padding_width) / 2**17 / cols
+    t_h  = (png_height + padding_height) / 2**17 / rows
     
-    print('pos tx ty ', tile_pos_x, tile_pos_y)
+    x = quad_id % cols
+    x_min = x * (t_w)
+    x_max = x_min + (t_w)
 
-    pos = quad_transform * avango.gua.Vec3( width, height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y + tile_h)
-    # uv  = avango.gua.Vec2(1.0, 1.0)
+    y_min = 1 - (y * t_h)
+    y_max = 1 - (y * t_h + t_h)
+    camera_distance = -0.8 / 2
+
+    pos = quad_transform * avango.gua.Vec3( width, height, camera_distance)
+    uv  = avango.gua.Vec2(x_max, y_min)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
-    pos = quad_transform * avango.gua.Vec3(-width, -height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y)
-    # uv  = avango.gua.Vec2(0.0, 0.5)
+    pos = quad_transform * avango.gua.Vec3(-width, -height, camera_distance)
+    uv  = avango.gua.Vec2(x_min, y_max)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
-    pos = quad_transform * avango.gua.Vec3(width, -height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y)
-    # uv  = avango.gua.Vec2(1.0, 0.5)
+    pos = quad_transform * avango.gua.Vec3(width, -height, camera_distance)
+    uv  = avango.gua.Vec2(x_max, y_max)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
-    pos = quad_transform * avango.gua.Vec3( width, height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x + tile_w, tile_pos_y + tile_h)
-    # uv  = avango.gua.Vec2(1.0, 1.0)
+    pos = quad_transform * avango.gua.Vec3( width, height, camera_distance)
+    uv  = avango.gua.Vec2(x_max, y_min)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
     
-    pos = quad_transform * avango.gua.Vec3(-width, height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y + tile_h)
-    # uv  = avango.gua.Vec2(0.0, 1.0)
+    pos = quad_transform * avango.gua.Vec3(-width, height, camera_distance)
+    uv  = avango.gua.Vec2(x_min, y_min)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
-    pos = quad_transform * avango.gua.Vec3(-width, -height, 0.0)
-    uv  = avango.gua.Vec2(tile_pos_x, tile_pos_y)
-    # uv  = avango.gua.Vec2(0.0, 0.5)
+    pos = quad_transform * avango.gua.Vec3(-width, -height, camera_distance)
+    uv  = avango.gua.Vec2(x_min, y_max)
     dt_node.push_vertex(pos.x, pos.y, pos.z, 1.0, 1.0, 1.0, 1.0, uv.x, uv.y)
 
 def start():
@@ -202,6 +191,7 @@ def start():
     localized_images_node.Material.value.EnableVirtualTexturing.value = True
     
     for quad_id in range(view_num):
+    # for quad_id in range(150):
         create_vt_quad(localized_images_node, quad_id, cam_location_list[quad_id])
         
     graph.Root.value.Children.value.append(localized_images_node)

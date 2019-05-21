@@ -26,8 +26,8 @@ from src.SpheronNavigation import SpheronNavigation
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         Groupname="AVSERVER|141.54.147.59|7432")
-                                         # Groupname="AVSERVER|127.0.0.1|7432")
+                                         # Groupname="AVSERVER|141.54.147.59|7432")
+                                         Groupname="AVSERVER|127.0.0.1|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:

@@ -94,6 +94,7 @@ class NetInit(avango.script.Script):
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                          # Groupname="AVCLIENT|141.54.147.59|7432")
+                                         # Groupname="AVCLIENT|141.54.147.60|7432")
                                          Groupname="AVCLIENT|127.0.0.1|7432")
 
 # loader = avango.gua.nodes.TriMeshLoader()
@@ -102,19 +103,19 @@ lod_loader.UploadBudget.value = 32
 lod_loader.RenderBudget.value = 2048
 lod_loader.OutOfCoreBudget.value = 4096
 
-aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
-atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-# aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-# atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+# aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
+# atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
+aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
+atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 
 
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
 graph.Root.value.Children.value = [nettrans]
 
-# size = avango.gua.Vec2ui(7680, 4320)
-size = avango.gua.Vec2ui(800, 600)
+size = avango.gua.Vec2ui(7680, 4320)
+# size = avango.gua.Vec2ui(800, 600)
 
-#window = avango.gua.nodes.GlfwWindow(Size=size,
+# window = avango.gua.nodes.GlfwWindow(Size=size,
 window = avango.gua.nodes.Window(Size=size,
                                      LeftResolution=size,
                                      Title="client_window")

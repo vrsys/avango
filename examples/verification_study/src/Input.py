@@ -185,6 +185,7 @@ class MultiDofInput:
         ## @var device_sensor
         # Device sensor for the device's inputs.
         self.device_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+        print('DEVICE STATION, self.id ', self.device_station)
         self.device_sensor.Station.value = self.device_station
 
 

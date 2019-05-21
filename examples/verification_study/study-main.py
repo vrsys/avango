@@ -22,12 +22,19 @@ from src.PerspectivePicker import PerspectivePicker
 from src.picker import Picker
 from src.MultiUserViewingSetup import MultiUserViewingSetup
 from src.SpheronInput import DualSpheronInput
+from src.KeyboardInput import KeyboardInput, KeyboardDevice
+from src.GriffinInput import GriffinInput
+from src.SpacemouseInput import SpacemouseInput
+from src.GriffinRotationNavigation import GriffinRotationNavigation
 from src.SpheronNavigation import SpheronNavigation
+from src.SteeringNavigation import SteeringNavigation
+
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
                                          Groupname="AVSERVER|127.0.0.1|7432")
                                          # Groupname="AVSERVER|141.54.147.59|7432")
+                                         # Groupname="AVSERVER|141.54.147.60|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -55,15 +62,19 @@ def start():
     # load model
     reconstruction = mesh_loader.create_geometry_from_file(
         "reconstruction",
+        # "/home/senu8384/Desktop/Kopf/kopf_highres.obj",
         "/home/senu8384/Desktop/master-thesis/data/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj",
         avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
     )    
 
+    # reconstruction_center = avango.gua.Vec3(0.0, -0.2, 0.0)
     reconstruction_center = avango.gua.Vec3(0.0, 0.5, 0.0)
     reconstruction.Transform.value = avango.gua.make_trans_mat(reconstruction_center) * \
             avango.gua.make_rot_mat(90.0,-1,0,0) * \
             avango.gua.make_rot_mat(90.0,0,0,1) * \
             avango.gua.make_scale_mat(0.0014)
+            # avango.gua.make_scale_mat(0.00105)
+            #avango.gua.make_scale_mat(1.0)
 
     # update material properties (in whole subtree)
     stack = [(reconstruction)]
@@ -102,6 +113,9 @@ def start():
     vt_mat.EnableVirtualTexturing.value = True
 
     atlas_tiles = []
+    atlas_trans_node = avango.gua.nodes.TransformNode(Name="atlas_trans_node",
+                                                      Transform=avango.gua.make_trans_mat(0.0,-0.7,0.0)
+                                                      )
     atlas_tiles_node = dt_loader.create_empty_geometry(
             "AtlasTiles", 
             "atlas_tiles.lob", 
@@ -115,11 +129,13 @@ def start():
     atlas_tiles_node.Material.value.EnableVirtualTexturing.value = True
     
     for quad_id in range(view_num):
-    # for quad_id in range(4):
+    # for quad_id in range(30):
         at = AtlasTile(graph, atlas_tiles_node, quad_id, atlas_image_locations[quad_id], 14, 15)
         atlas_tiles.append(at)
         
-    graph.Root.value.Children.value.append(atlas_tiles_node)
+    graph.Root.value.Children.value.append(atlas_trans_node)
+    atlas_trans_node.Children.value.append(atlas_tiles_node)
+    
 
     multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
     multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
@@ -162,14 +178,14 @@ def start():
                 WINDOW_RESOLUTION = avango.gua.Vec2ui(4096*2, 2160),
                 SCREEN_DIMENSIONS = avango.gua.Vec2(4.97, 2.77),
                 TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.435,2.0),
-                DISPLAY_STRING_LIST = [":0.2", ":0.5", ":0.4", ":0.1", ":0.3", ":0.0"], # number of available GPUs (users)
+                DISPLAY_STRING_LIST = [":0.4", ":0.1", ":0.0", ":0.3", ":0.2", ":0.5"], # number of available GPUs (users)                
                 LEFT_POSITION = avango.gua.Vec2ui(90, 0),
                 LEFT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 RIGHT_POSITION = avango.gua.Vec2ui(4096 + 90, 0),
                 RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 )
             viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")
-            #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-I")                
 
         elif hostname == "argos":
@@ -192,7 +208,7 @@ def start():
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-D")
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-H")
             #viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-b11-large-wall-glasses-F")
-            
+        ''' 
         spheron_input = DualSpheronInput(
             DEVICE_STATION1 = "device-new-spheron-right",
             DEVICE_STATION2 = "device-new-spheron-left",
@@ -206,9 +222,33 @@ def start():
             REFERENCE_TRACKING_STATION = "tracking-new-spheron",
             TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,0.045,0.0), # transformation into tracking coordinate system        
             )
-        navigation.assign_input(spheron_input)
+        '''
+
+        spacemouse_input = SpacemouseInput(            
+            DEVICE_STATION = "device-spacemouse0",
+            TRANSLATION_FACTOR = 0.1,
+            ROTATION_FACTOR = 0.25,
+            #SCALE_FACTOR = 1.0,
+            )
+
+        navigation = SteeringNavigation(            
+            #REFERENCE_TRACKING_STATION = "tracking-new-spheron",
+            #TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,0.045,0.0), # transformation into tracking coordinate system        
+            )
+
+        keyboard = KeyboardDevice()
+
+        griffin_input = GriffinInput(DEVICE_STATION = "device-griffin")
+
+        griffin_navigation = GriffinRotationNavigation()
+
+        griffin_navigation.assign_input(griffin_input)
+
+        #navigation.assign_input(spheron_input)
+        navigation.assign_input(spacemouse_input)
         if viewingSetup:
-            viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
+            # viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
+            viewingSetup.navigation_node.Transform.connect_from(griffin_navigation.get_platform_matrix_field())
 
 
         nettrans.distribute_object(multi_window_viz.get_material())
@@ -249,10 +289,12 @@ def start():
 
         pointer_tracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
         #pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
-        pointer_tracking_sensor.Station.value = "tracking-b11-large-wall-pointer-3"
-        # pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
-        pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.62, 1.6)
+        # pointer_tracking_sensor.Station.value = "tracking-b11-large-wall-pointer-3"
+        # pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.62, 1.6)
+        pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-3"
+        pointer_tracking_sensor.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,-1.445,2.0)
         pointer_tracking_sensor.ReceiverOffset.value = avango.gua.make_identity_mat()
+        # pointer_tracking_sensor.ReceiverOffset.value = avango.gua.make_rot_mat(-90.0,1,0,0) * avango.gua.make_trans_mat(0.0,0.25,0.0)
 
         pointer_button_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
         #pointer_tracking_sensor.Station.value = "tracking-dbl-pointer-1"
@@ -271,6 +313,10 @@ def start():
         perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform)
         photo_projection.Button0.connect_from(pointer_button_sensor.Button0)
         photo_projection.Button1.connect_from(pointer_button_sensor.Button2)
+
+        study_script.IndicatorButton.connect_from(keyboard.KeyI)
+        study_script.NextButton.connect_from(keyboard.KeyN)
+        study_script.PrevButton.connect_from(keyboard.KeyM)
 
         for _user in viewingSetup.user_list:
             vt_backend.add_camera(_user.camera_node)
@@ -398,9 +444,14 @@ def start():
         navigator.RotationSpeed.value = 0.2
         navigator.MotionSpeed.value = 0.04
 
+        griffin_input = GriffinInput(DEVICE_STATION = "device-griffin")
 
+        griffin_navigation = GriffinRotationNavigation()
+
+        griffin_navigation.assign_input(griffin_input)
 
         camera.Transform.connect_from(navigator.OutTransform)
+        # camera.Transform.connect_from(griffin_navigation.get_platform_matrix_field())
         photo_projection.Button0.connect_from(navigator.Mouse.ButtonLeft)
         photo_projection.Button1.connect_from(navigator.Mouse.ButtonRight)
         perspective_picker.Button0.connect_from(navigator.Mouse.ButtonLeft)

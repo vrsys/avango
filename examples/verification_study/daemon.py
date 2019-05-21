@@ -201,6 +201,8 @@ def init_dbl_tracking():
     _dtrack.stations[29] = avango.daemon.Station('tracking-dbl-glasses-H')
     _dtrack.stations[30] = avango.daemon.Station('tracking-dbl-glasses-I')
     _dtrack.stations[31] = avango.daemon.Station('tracking-dbl-glasses-J')
+    _dtrack.stations[32] = avango.daemon.Station('tracking-dbl-glasses-K')
+    _dtrack.stations[33] = avango.daemon.Station('tracking-dbl-glasses-L')
 
 
     _dtrack.stations[18] = avango.daemon.Station('tracking-dbl-video-camera') # new video camera target
@@ -448,10 +450,13 @@ def init_griffin(EVENT_STRING, STATION_STRING):
         print("Griffin NOT found!")        
         return
 
+    _value_mappings = []
+    _value_mappings.append( (0, "EV_REL::REL_DIAL") )
+
     _button_mappings = []
     _button_mappings.append( (0, "EV_KEY::BTN_0") )
 
-    init_hid_device(EVENT_STRING = EVENT_STRING, STATION_STRING = STATION_STRING, BUTTON_MAPPINGS = _button_mappings)
+    init_hid_device(EVENT_STRING = EVENT_STRING, STATION_STRING = STATION_STRING, VALUE_MAPPINGS = _value_mappings, BUTTON_MAPPINGS = _button_mappings)
 
 
 
@@ -1008,20 +1013,20 @@ device_list = []
 ### initialize tracking systems
 #init_pst_tracking()
 #init_lcd_wall_tracking()
-#init_dbl_tracking()
-init_b11_large_wall_tracking()
+init_dbl_tracking()
+# init_b11_large_wall_tracking()
 
 
 ### init navigation devices
 #init_old_spheron()
-init_spheron()
+# init_spheron()
 
-#init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator"), "device-spacemouse0", REL_FLAG = True)
+init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator"), "device-spacemouse0", REL_FLAG = True)
 #init_spacemouse(get_event_string(2, "3Dconnexion SpaceNavigator"), "device-spacemouse1", REL_FLAG = True)
 #init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator REMOTE"), "device-spacemouse0", REL_FLAG = True)
-#init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator for Notebooks"), "device-spacemouse0", REL_FLAG = True)
+# init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator for Notebooks"), "device-spacemouse0", REL_FLAG = True)
 
-#init_griffin(get_event_string(1, "Griffin PowerMate"), "device-griffin")
+init_griffin(get_event_string(1, "Griffin PowerMate"), "device-griffin")
 
 #init_new_globefish()
 
@@ -1041,15 +1046,17 @@ init_spheron()
 #os.system("xinput --set-prop keyboard:'MOUSE USB MOUSE' 'Device Enabled' 0") # disable X-forwarding of events
 
 # gunpointer 2
-_button_mapping = [(0, "EV_KEY::BTN_LEFT"), (1, "EV_KEY::BTN_RIGHT")]
-init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATION_STRING = "device-pointer1", BUTTON_MAPPINGS = _button_mapping)
+# _button_mapping = [(0, "EV_KEY::BTN_LEFT"), (1, "EV_KEY::BTN_RIGHT")]
+# init_hid_device(EVENT_STRING = get_event_string(2, "2.4G KB 2.4G Mouse"), STATION_STRING = "device-pointer1", BUTTON_MAPPINGS = _button_mapping)
 
 ## Speedlink (yellow)
 #_button_mapping = [(0, "EV_KEY::KEY_PAGEUP"), (1, "EV_KEY::KEY_PAGEDOWN")]
 #init_hid_device(EVENT_STRING = get_event_string(1, "HID-compliant Mouse HID-compliant Mouse"), STATION_STRING = "device-pointer2", BUTTON_MAPPINGS = _button_mapping)
 
 ## HAS pointer (blue)
-_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP"), (2, "EV_KEY::KEY_VOLUMEDOWN")] 
+# _button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP"), (2, "EV_KEY::KEY_VOLUMEDOWN")] 
+#_button_mapping = [(0, "EV_KEY::KEY_PAGEUP"), (1, "EV_KEY::KEY_PAGEDOWN")] 
+_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP")] 
 init_hid_device(EVENT_STRING = get_event_string(1, "HAS   HAS HS304"), STATION_STRING = "device-pointer3", BUTTON_MAPPINGS = _button_mapping)
 
 ##

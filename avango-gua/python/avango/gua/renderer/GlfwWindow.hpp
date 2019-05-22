@@ -3,4 +3,4 @@
 
 void init_GlfwWindow();
 
-#endif //AV_PYTHON_GUA_GLFW_WINDOW_HPP
+#endif // AV_PYTHON_GUA_GLFW_WINDOW_HPP

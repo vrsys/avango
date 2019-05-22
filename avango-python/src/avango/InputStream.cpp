@@ -40,32 +40,21 @@ namespace
 {
 class StringInputStream : public av::InputStream
 {
-private:
-  std::stringstream strstream;
+  private:
+    std::stringstream strstream;
 
-public:
-  StringInputStream()
-  {
-    rdbuf(strstream.rdbuf());
-  }
+  public:
+    StringInputStream() { rdbuf(strstream.rdbuf()); }
 
-  std::string get_buffer()
-  {
-    return strstream.str();
-  }
+    std::string get_buffer() { return strstream.str(); }
 
-  void set_buffer(const std::string buffer)
-  {
-    strstream << buffer;
-  }
+    void set_buffer(const std::string buffer) { strstream << buffer; }
 };
 
-}
+} // namespace
 
 void init_InputStream(void)
 {
-  class_<av::InputStream, boost::noncopyable>("InputStream", "docstring");
-  class_<StringInputStream, bases<av::InputStream>, boost::noncopyable>("StringInputStream", "docstring")
-  .add_property("buffer", &StringInputStream::get_buffer, &StringInputStream::set_buffer)
-  ;
+    class_<av::InputStream, boost::noncopyable>("InputStream", "docstring");
+    class_<StringInputStream, bases<av::InputStream>, boost::noncopyable>("StringInputStream", "docstring").add_property("buffer", &StringInputStream::get_buffer, &StringInputStream::set_buffer);
 }

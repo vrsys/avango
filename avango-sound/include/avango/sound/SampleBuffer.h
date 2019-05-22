@@ -27,64 +27,60 @@
 #define AV_SOUND_SAMPLEBUFFER_H
 
 /**
-* \file
-* \ingroup av_sound
-*/
+ * \file
+ * \ingroup av_sound
+ */
 
 #include <avango/sound/Platform.h>
 #include <avango/FieldContainer.h>
 #include <boost/shared_array.hpp>
 #include <inttypes.h>
 
-namespace av {
-  namespace sound {
+namespace av
+{
+namespace sound
+{
+class AV_SOUND_DLL SampleBuffer : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_SOUND_DLL SampleBuffer : public av::FieldContainer 
-    {
-      AV_FC_DECLARE();
+  public:
+    using SampleType = int16_t;
+    // static const unsigned int sampleRate = 48000;
 
-      public:
+    SFUInt NumSamples;
+    SFBool IsStereo;
 
-        using SampleType = int16_t;
-        // static const unsigned int sampleRate = 48000;
+    SampleBuffer();
+    SampleBuffer(boost::shared_array<SampleType> buffer, unsigned int numberOfSamples, bool stereo = false);
+    /* virtual */ ~SampleBuffer();
 
-        SFUInt NumSamples;
-        SFBool IsStereo;
+    unsigned int getNumSamples() const;
+    boost::shared_array<SampleType> getSamples() const;
 
-        SampleBuffer();
-        SampleBuffer(boost::shared_array<SampleType> buffer, unsigned int numberOfSamples, bool stereo = false);
-        /* virtual */ ~SampleBuffer();
+    unsigned int getSampleRate() const;
+    void setSampleRate(unsigned int sampleRate);
 
-        unsigned int getNumSamples() const;
-        boost::shared_array<SampleType> getSamples() const;
+  private:
+    void getNumSamplesCB(const av::SFUInt::GetValueEvent& event);
+    void setNumSamplesCB(const av::SFUInt::SetValueEvent&);
+    void getIsStereoCB(const av::SFBool::GetValueEvent& event);
+    void setIsStereoCB(const av::SFBool::SetValueEvent&);
 
-        unsigned int getSampleRate() const;
-        void setSampleRate( unsigned int sampleRate);
+    boost::shared_array<SampleType> mBuffer;
+    unsigned int mNumSamples;
+    bool mStereo;
+    unsigned int mSampleRate;
+};
 
-      private:
-
-        void getNumSamplesCB(const av::SFUInt::GetValueEvent& event);
-        void setNumSamplesCB(const av::SFUInt::SetValueEvent& );
-        void getIsStereoCB(const av::SFBool::GetValueEvent& event);
-        void setIsStereoCB(const av::SFBool::SetValueEvent& );
-
-
-        boost::shared_array<SampleType> mBuffer;
-        unsigned int mNumSamples;
-        bool         mStereo;
-        unsigned int mSampleRate;
-    };
-
-    using SFSampleBuffer = SingleField<Link<SampleBuffer> >;
-    using MFSampleBuffer = MultiField<Link<SampleBuffer> >;
-  }
+using SFSampleBuffer = SingleField<Link<SampleBuffer>>;
+using MFSampleBuffer = MultiField<Link<SampleBuffer>>;
+} // namespace sound
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_SOUND_DLL SingleField<Link<sound::SampleBuffer> >;
-  template class AV_SOUND_DLL MultiField<Link<sound::SampleBuffer> >;
+template class AV_SOUND_DLL SingleField<Link<sound::SampleBuffer>>;
+template class AV_SOUND_DLL MultiField<Link<sound::SampleBuffer>>;
 #endif
-}
-
-
+} // namespace av
 
 #endif /*AV_SOUND_SAMPLEBUFFER_H*/

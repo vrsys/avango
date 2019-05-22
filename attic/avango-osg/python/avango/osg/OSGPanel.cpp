@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGPanel(void)
- {
-  // wrapping osg::Panel functionality
-  register_field<av::osg::SFPanel>("SFPanel");
-  register_multifield<av::osg::MFPanel>("MFPanel");
-  class_<av::osg::Panel, av::Link<av::osg::Panel>, bases<av::osg::Geometry>, boost::noncopyable >("Panel", "docstring", no_init);
- }
+{
+    // wrapping osg::Panel functionality
+    register_field<av::osg::SFPanel>("SFPanel");
+    register_multifield<av::osg::MFPanel>("MFPanel");
+    class_<av::osg::Panel, av::Link<av::osg::Panel>, bases<av::osg::Geometry>, boost::noncopyable>("Panel", "docstring", no_init);
+}

@@ -40,37 +40,33 @@
 
 namespace av
 {
+// types, exported (class, enum, struct, union, typedef)
 
-  // types, exported (class, enum, struct, union, typedef)
-
-  /**
-   * %Base class for all action classes.
-   *
-   * Action allows operations to be applied to nodes in  hierarchies.
-   * Concrete actions usually re-implement apply() to add initialization
-   * code to the traversal and add per node functionality to traverse().
-   *
-   * traverse() itself calls Base::doAction(*this) for node
-   * specific recursion. You should invoke the parent traverse()
-   * function in classes inherited from Action.
-   *
-   * \ingroup av
-   *
-   */
-  class AV_DLL Action : public Base
-  {
-
+/**
+ * %Base class for all action classes.
+ *
+ * Action allows operations to be applied to nodes in  hierarchies.
+ * Concrete actions usually re-implement apply() to add initialization
+ * code to the traversal and add per node functionality to traverse().
+ *
+ * traverse() itself calls Base::doAction(*this) for node
+ * specific recursion. You should invoke the parent traverse()
+ * function in classes inherited from Action.
+ *
+ * \ingroup av
+ *
+ */
+class AV_DLL Action : public Base
+{
     AV_BASE_DECLARE();
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
     virtual ~Action();
 
   public:
-
     /**
      * Apply action to nodes.
      * \param node Node to which the action applies
@@ -84,21 +80,19 @@ namespace av
     virtual void traverse(Link<Base> node);
 
   protected:
-
     /**
      * Constructor.
      * Made protected to prevent instantiation of Action objects.
      */
     Action();
+};
 
-  };
+// variables, exported (extern)
 
-  // variables, exported (extern)
+// functions, inlined (inline)
 
-  // functions, inlined (inline)
+// functions, exported (extern)
 
-  // functions, exported (extern)
-
-}
+} // namespace av
 
 #endif // #if !defined(AV_ACTION_H)

@@ -38,64 +38,64 @@ using namespace boost::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
-namespace {
-  void DisableCulling(av::osg::viewer::Camera* camera)
-  {
-	  camera->getOsgCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR);
-  }
-}
+namespace
+{
+void DisableCulling(av::osg::viewer::Camera* camera) { camera->getOsgCamera()->setComputeNearFarMode(osg::CullSettings::DO_NOT_COMPUTE_NEAR_FAR); }
+} // namespace
 
 BOOST_PYTHON_MODULE(_viewer)
 {
-  av::osg::viewer::Init::initClass();
+    av::osg::viewer::Init::initClass();
 
-  register_field<av::osg::viewer::SFCamera>("SFCamera");
-  register_multifield<av::osg::viewer::MFCamera>("MFCamera");
-  register_field<av::osg::viewer::SFCompositeViewer>("SFCompositeViewer");
-  register_field<av::osg::viewer::SFGraphicsWindow>("SFGraphicsWindow");
-  register_multifield<av::osg::viewer::MFGraphicsWindow>("MFGraphicsWindow");
-  register_field<av::osg::viewer::SFEventFields>("SFEventFields");
-  register_multifield<av::osg::viewer::MFEventFields>("MFEventFields");
-  register_field<av::osg::viewer::SFView>("SFView");
-  register_multifield<av::osg::viewer::MFView>("MFView");
-  register_field<av::osg::viewer::SFViewer>("SFViewer");
+    register_field<av::osg::viewer::SFCamera>("SFCamera");
+    register_multifield<av::osg::viewer::MFCamera>("MFCamera");
+    register_field<av::osg::viewer::SFCompositeViewer>("SFCompositeViewer");
+    register_field<av::osg::viewer::SFGraphicsWindow>("SFGraphicsWindow");
+    register_multifield<av::osg::viewer::MFGraphicsWindow>("MFGraphicsWindow");
+    register_field<av::osg::viewer::SFEventFields>("SFEventFields");
+    register_multifield<av::osg::viewer::MFEventFields>("MFEventFields");
+    register_field<av::osg::viewer::SFView>("SFView");
+    register_multifield<av::osg::viewer::MFView>("MFView");
+    register_field<av::osg::viewer::SFViewer>("SFViewer");
 
-  class_<av::osg::viewer::Camera, av::Link<av::osg::viewer::Camera>, bases<av::osg::Object>, boost::noncopyable >("Camera", "Camera: defines Clipping-Planes ; Screen-, Viewer-, Eyetransformation ; Viewport", no_init);
-  class_<av::osg::viewer::CompositeViewer, av::Link<av::osg::viewer::CompositeViewer>, bases<av::osg::Object>, boost::noncopyable >("CompositeViewer", "CompositeViewer: contains and renders views", no_init)
-    .def("frame", &av::osg::viewer::CompositeViewer::frame)
-    .def("run", &av::osg::viewer::CompositeViewer::run)
-    .def("done", &av::osg::viewer::CompositeViewer::done)
-    .def("frame_without_evaluation", &av::osg::viewer::CompositeViewer::frameWithoutEvaluation)
-    ;
-  class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::FieldContainer>, boost::noncopyable >("GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
-  class_<av::osg::viewer::EventFields, av::Link<av::osg::viewer::EventFields>, bases<av::FieldContainer>, boost::noncopyable >("EventFields", "EventFields: setting fields for exposing events ", no_init);
-  class_<av::osg::viewer::View, av::Link<av::osg::viewer::View>, bases<av::osg::Object>, boost::noncopyable >("View", "View: contains cameras and the scene", no_init);
-  class_<av::osg::viewer::Viewer, av::Link<av::osg::viewer::Viewer>, bases<av::osg::viewer::View>, boost::noncopyable >("Viewer", "Viewer: is and renders a View", no_init)
-    .def("frame", &av::osg::viewer::Viewer::frame)
-    .def("run", &av::osg::viewer::Viewer::run)
-    .def("done", &av::osg::viewer::Viewer::done)
-    ;
+    class_<av::osg::viewer::Camera, av::Link<av::osg::viewer::Camera>, bases<av::osg::Object>, boost::noncopyable>(
+        "Camera", "Camera: defines Clipping-Planes ; Screen-, Viewer-, Eyetransformation ; Viewport", no_init);
+    class_<av::osg::viewer::CompositeViewer, av::Link<av::osg::viewer::CompositeViewer>, bases<av::osg::Object>, boost::noncopyable>(
+        "CompositeViewer", "CompositeViewer: contains and renders views", no_init)
+        .def("frame", &av::osg::viewer::CompositeViewer::frame)
+        .def("run", &av::osg::viewer::CompositeViewer::run)
+        .def("done", &av::osg::viewer::CompositeViewer::done)
+        .def("frame_without_evaluation", &av::osg::viewer::CompositeViewer::frameWithoutEvaluation);
+    class_<av::osg::viewer::GraphicsWindow, av::Link<av::osg::viewer::GraphicsWindow>, bases<av::FieldContainer>, boost::noncopyable>(
+        "GraphicsWindow", "GraphicsWindow: position and size of the outputwindow ", no_init);
+    class_<av::osg::viewer::EventFields, av::Link<av::osg::viewer::EventFields>, bases<av::FieldContainer>, boost::noncopyable>(
+        "EventFields", "EventFields: setting fields for exposing events ", no_init);
+    class_<av::osg::viewer::View, av::Link<av::osg::viewer::View>, bases<av::osg::Object>, boost::noncopyable>("View", "View: contains cameras and the scene", no_init);
+    class_<av::osg::viewer::Viewer, av::Link<av::osg::viewer::Viewer>, bases<av::osg::viewer::View>, boost::noncopyable>("Viewer", "Viewer: is and renders a View", no_init)
+        .def("frame", &av::osg::viewer::Viewer::frame)
+        .def("run", &av::osg::viewer::Viewer::run)
+        .def("done", &av::osg::viewer::Viewer::done);
 
-  enum_<av::osg::viewer::GraphicsWindow::StereoModeType>("stereo_mode")
-    .value("STEREO_MODE_QUAD_BUFFER", av::osg::viewer::GraphicsWindow::STEREO_MODE_QUAD_BUFFER)
-    .value("STEREO_MODE_ANAGLYPHIC", av::osg::viewer::GraphicsWindow::STEREO_MODE_ANAGLYPHIC)
-    .value("STEREO_MODE_HORIZONTAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_SPLIT)
-    .value("STEREO_MODE_VERTICAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTICAL_SPLIT)
-    .value("STEREO_MODE_HORIZONTAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_INTERLACE)
-    .value("STEREO_MODE_VERTIVAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTIVAL_INTERLACE)
-    .value("STEREO_MODE_CHECKERBOARD", av::osg::viewer::GraphicsWindow::STEREO_MODE_CHECKERBOARD)
-    .value("STEREO_MODE_NONE", av::osg::viewer::GraphicsWindow::STEREO_MODE_NONE)
-    .export_values()
-    ;
+    enum_<av::osg::viewer::GraphicsWindow::StereoModeType>("stereo_mode")
+        .value("STEREO_MODE_QUAD_BUFFER", av::osg::viewer::GraphicsWindow::STEREO_MODE_QUAD_BUFFER)
+        .value("STEREO_MODE_ANAGLYPHIC", av::osg::viewer::GraphicsWindow::STEREO_MODE_ANAGLYPHIC)
+        .value("STEREO_MODE_HORIZONTAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_SPLIT)
+        .value("STEREO_MODE_VERTICAL_SPLIT", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTICAL_SPLIT)
+        .value("STEREO_MODE_HORIZONTAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_HORIZONTAL_INTERLACE)
+        .value("STEREO_MODE_VERTIVAL_INTERLACE", av::osg::viewer::GraphicsWindow::STEREO_MODE_VERTIVAL_INTERLACE)
+        .value("STEREO_MODE_CHECKERBOARD", av::osg::viewer::GraphicsWindow::STEREO_MODE_CHECKERBOARD)
+        .value("STEREO_MODE_NONE", av::osg::viewer::GraphicsWindow::STEREO_MODE_NONE)
+        .export_values();
 
-  def("disable_culling",DisableCulling);
+    def("disable_culling", DisableCulling);
 }

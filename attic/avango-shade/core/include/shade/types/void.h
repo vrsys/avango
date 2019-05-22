@@ -28,13 +28,14 @@
 
 namespace shade
 {
-  template<class Qualifier = Type> class void_ : public TypeBase<void_<Qualifier>, Qualifier>
-  {
+template <class Qualifier = Type>
+class void_ : public TypeBase<void_<Qualifier>, Qualifier>
+{
   public:
     void_(void);
     /*virtual*/ std::string get_uniq_id(void) const;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/void_impl.cpp"
 

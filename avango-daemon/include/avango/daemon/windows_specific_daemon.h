@@ -32,13 +32,13 @@
  */
 
 #if defined(_MSC_VER)
-  #if defined(AV_DAEMON_LIBRARY)
-    #define AV_DAEMON_DLL __declspec( dllexport )
-  #else
-    #define AV_DAEMON_DLL __declspec( dllimport )
-  #endif
+#if defined(AV_DAEMON_LIBRARY)
+#define AV_DAEMON_DLL __declspec(dllexport)
 #else
-  #define AV_DAEMON_DLL
+#define AV_DAEMON_DLL __declspec(dllimport)
+#endif
+#else
+#define AV_DAEMON_DLL
 #endif // #if defined(_MSC_VER)
 
 #endif // #if !defined(AV_WINDOWS_SPECIFIC_DAEMON_H)

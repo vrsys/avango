@@ -36,34 +36,30 @@
 
 namespace av
 {
-  namespace utils
-  {
+namespace utils
+{
+class AV_UTILS_DLL Bool2Or : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_UTILS_DLL Bool2Or : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    Bool2Or();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Bool2Or();
 
-      Bool2Or();
+    /* virtual */ void evaluate();
 
-    protected:
+  public:
+    av::SFBool Input1;
+    av::SFBool Input2;
+    av::SFBool Output;
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Bool2Or();
-
-      /* virtual */ void evaluate();
-
-    public:
-
-      av::SFBool Input1;
-      av::SFBool Input2;
-      av::SFBool Output;
-    };
-
-  }
-}
+} // namespace utils
+} // namespace av
 
 #endif

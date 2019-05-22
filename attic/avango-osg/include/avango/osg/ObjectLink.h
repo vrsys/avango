@@ -35,47 +35,43 @@
 
 namespace av
 {
-  namespace osg
-  {
-    class Object;
+namespace osg
+{
+class Object;
+
+/**
+ * This class is used as user data for ::osg::Object. For an ::osg::Object N,
+ * it stores a link to the Avango object to which N belongs. It is needed for
+ * retrieving the Avango object when traversing the osg scene graph directly.
+ * It is also needed for implementing the Children field of the Avango group
+ * node as an adaptor field.
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL ObjectLink : public ::osg::Referenced
+{
+  public:
+    /**
+     * Constructor
+     */
+    ObjectLink(av::osg::Object* object);
 
     /**
-     * This class is used as user data for ::osg::Object. For an ::osg::Object N,
-     * it stores a link to the Avango object to which N belongs. It is needed for
-     * retrieving the Avango object when traversing the osg scene graph directly.
-     * It is also needed for implementing the Children field of the Avango group
-     * node as an adaptor field.
-     *
-     * \ingroup av_osg
+     * Get the stored av::osg::Object
      */
-    class AV_OSG_DLL ObjectLink : public ::osg::Referenced
-    {
+    av::osg::Object* getObject() const;
 
-    public:
+  protected:
+    /**
+     * Destructor, protected according to ::osg::Referenced
+     */
+    ~ObjectLink();
 
-      /**
-       * Constructor
-       */
-      ObjectLink(av::osg::Object* object);
+    av::osg::Object* mObject;
+};
 
-      /**
-       * Get the stored av::osg::Object
-       */
-      av::osg::Object* getObject() const;
+} // namespace osg
 
-    protected:
-
-      /**
-       * Destructor, protected according to ::osg::Referenced
-       */
-      ~ObjectLink();
-
-      av::osg::Object* mObject;
-
-    };
-
-  } // namespace osg
-
-} // namespave av
+} // namespace av
 
 #endif

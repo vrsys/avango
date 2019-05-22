@@ -23,29 +23,16 @@
 
 #include <shade/types/samplerCube.h>
 
-
-shade::samplerCube::samplerCube(void) :
-  TypeBase<samplerCube, shade::uniform>(formatter::Constants::samplerCube)
-{
-}
+shade::samplerCube::samplerCube(void) : TypeBase<samplerCube, shade::uniform>(formatter::Constants::samplerCube) {}
 
 void shade::samplerCube::set(boost::shared_ptr<Texture> texture)
 {
-  m_texture = texture;
-  this->touch();
+    m_texture = texture;
+    this->touch();
 }
 
-boost::shared_ptr<shade::Texture> shade::samplerCube::get(void) const
-{
-  return m_texture;
-}
+boost::shared_ptr<shade::Texture> shade::samplerCube::get(void) const { return m_texture; }
 
-void shade::samplerCube::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
-{
-  wrapper->UniformTexture(index, m_texture);
-}
+void shade::samplerCube::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const { wrapper->UniformTexture(index, m_texture); }
 
-std::string shade::samplerCube::get_uniq_id(void) const
-{
-  return "samplerCube";
-}
+std::string shade::samplerCube::get_uniq_id(void) const { return "samplerCube"; }

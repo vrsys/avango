@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Types"));
+av::Logger& logger(av::getLogger("av::osg::Types"));
 }
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
@@ -37,512 +37,520 @@ namespace
 #include <rpc/rpc.h>
 #include <avango/Msg.h>
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Matrixf& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Matrixf& buf)
 {
-  ::osg::Matrixf b;
-  XDR xdr;
+    ::osg::Matrixf b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, reinterpret_cast<caddr_t>( &b) , sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*)&buf , 16, sizeof(float), (xdrproc_t) xdr_float);
-  netMsg.push( &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, reinterpret_cast<caddr_t>(&b), sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 16, sizeof(float), (xdrproc_t)xdr_float);
+    netMsg.push(&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Matrixf& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Matrixf& buf)
 {
-  ::osg::Matrixf b;
-  XDR xdr;
+    ::osg::Matrixf b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 16, sizeof(float), (xdrproc_t) xdr_float);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 16, sizeof(float), (xdrproc_t)xdr_float);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Matrixd& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Matrixd& buf)
 {
-  ::osg::Matrixd b;
-  XDR xdr;
+    ::osg::Matrixd b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 16, sizeof(double), (xdrproc_t) xdr_double);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 16, sizeof(double), (xdrproc_t)xdr_double);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Matrixd& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Matrixd& buf)
 {
-  ::osg::Matrixd b;
-  XDR xdr;
+    ::osg::Matrixd b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 16, sizeof(double), (xdrproc_t) xdr_double);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 16, sizeof(double), (xdrproc_t)xdr_double);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec2f& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec2f& buf)
 {
-  ::osg::Vec2f b;
-  XDR xdr;
+    ::osg::Vec2f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 2, sizeof(float), (xdrproc_t) xdr_float);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 2, sizeof(float), (xdrproc_t)xdr_float);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec2f& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec2f& buf)
 {
-  ::osg::Vec2f b;
-  XDR xdr;
+    ::osg::Vec2f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 2, sizeof(float), (xdrproc_t) xdr_float);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 2, sizeof(float), (xdrproc_t)xdr_float);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec2d& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec2d& buf)
 {
-  ::osg::Vec2d b;
-  XDR xdr;
+    ::osg::Vec2d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 2, sizeof(double), (xdrproc_t) xdr_double);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 2, sizeof(double), (xdrproc_t)xdr_double);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec2d& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec2d& buf)
 {
-  ::osg::Vec2d b;
-  XDR xdr;
+    ::osg::Vec2d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 2, sizeof(double), (xdrproc_t) xdr_double);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 2, sizeof(double), (xdrproc_t)xdr_double);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec3f& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec3f& buf)
 {
-  ::osg::Vec3f b;
-  XDR xdr;
+    ::osg::Vec3f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 3, sizeof(float), (xdrproc_t) xdr_float);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 3, sizeof(float), (xdrproc_t)xdr_float);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec3f& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec3f& buf)
 {
-  ::osg::Vec3f b;
-  XDR xdr;
+    ::osg::Vec3f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 3, sizeof(float), (xdrproc_t) xdr_float);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 3, sizeof(float), (xdrproc_t)xdr_float);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec3d& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec3d& buf)
 {
-  ::osg::Vec3d b;
-  XDR xdr;
+    ::osg::Vec3d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 3, sizeof(double), (xdrproc_t) xdr_double);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 3, sizeof(double), (xdrproc_t)xdr_double);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec3d& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec3d& buf)
 {
-  ::osg::Vec3d b;
-  XDR xdr;
+    ::osg::Vec3d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 3, sizeof(double), (xdrproc_t) xdr_double);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 3, sizeof(double), (xdrproc_t)xdr_double);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec4f& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec4f& buf)
 {
-  ::osg::Vec4f b;
-  XDR xdr;
+    ::osg::Vec4f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 4, sizeof(float), (xdrproc_t) xdr_float);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 4, sizeof(float), (xdrproc_t)xdr_float);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec4f& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec4f& buf)
 {
-  ::osg::Vec4f b;
-  XDR xdr;
+    ::osg::Vec4f b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 4, sizeof(float), (xdrproc_t) xdr_float);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 4, sizeof(float), (xdrproc_t)xdr_float);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec4d& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Vec4d& buf)
 {
-  ::osg::Vec4d b;
-  XDR xdr;
+    ::osg::Vec4d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_ENCODE);
-  xdr_vector(&xdr, (char*) &buf, 4, sizeof(double), (xdrproc_t) xdr_double);
-  netMsg.push((void*) &b, sizeof(b));
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_ENCODE);
+    xdr_vector(&xdr, (char*)&buf, 4, sizeof(double), (xdrproc_t)xdr_double);
+    netMsg.push((void*)&b, sizeof(b));
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Vec4d& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Vec4d& buf)
 {
-  ::osg::Vec4d b;
-  XDR xdr;
+    ::osg::Vec4d b;
+    XDR xdr;
 
-  xdrmem_create(&xdr, (caddr_t) &b, sizeof(b), XDR_DECODE);
-  netMsg.pop((void*) &b, sizeof(b));
-  xdr_vector(&xdr, (char*) &buf, 4, sizeof(double), (xdrproc_t) xdr_double);
-  xdr_destroy(&xdr);
+    xdrmem_create(&xdr, (caddr_t)&b, sizeof(b), XDR_DECODE);
+    netMsg.pop((void*)&b, sizeof(b));
+    xdr_vector(&xdr, (char*)&buf, 4, sizeof(double), (xdrproc_t)xdr_double);
+    xdr_destroy(&xdr);
 }
 
-void
-osg::av_pushMsg(av::Msg& netMsg, const ::osg::Quat& buf)
+void osg::av_pushMsg(av::Msg& netMsg, const ::osg::Quat& buf)
 {
-  ::osg::Vec4d vec = buf.asVec4();
-  av_pushMsg(netMsg, vec);
+    ::osg::Vec4d vec = buf.asVec4();
+    av_pushMsg(netMsg, vec);
 }
 
-void
-osg::av_popMsg(av::Msg& netMsg, ::osg::Quat& buf)
+void osg::av_popMsg(av::Msg& netMsg, ::osg::Quat& buf)
 {
-  ::osg::Vec4d vec;
-  av_popMsg(netMsg, vec);
-  buf.set(vec);
+    ::osg::Vec4d vec;
+    av_popMsg(netMsg, vec);
+    buf.set(vec);
 }
-
 
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Matrixf& mat)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Matrixf& mat)
 {
-  const ::osg::Matrixf::value_type *mat_vals = mat.ptr();
+    const ::osg::Matrixf::value_type* mat_vals = mat.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) mat_vals, sizeof(mat_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    if(os.isBinaryEnabled())
     {
-      for (int j = 0; j < 4; j++)
-      {
-        (std::ostream&) os << mat(i, j) << ' ';
-      }
+        os.write((const char*)mat_vals, sizeof(mat_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Matrixf& mat)
-{
-  ::osg::Matrixf::value_type *mat_vals = mat.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) mat_vals, sizeof(mat_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    else
     {
-      for (int j = 0; j < 4; j++)
-      {
-        (std::istream&) is >> mat(i, j);
-      }
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                (std::ostream&)os << mat(i, j) << ' ';
+            }
+        }
     }
-  }
 
-  return is;
+    return os;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Matrixd& mat)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Matrixf& mat)
 {
-  const ::osg::Matrixd::value_type *mat_vals = mat.ptr();
+    ::osg::Matrixf::value_type* mat_vals = mat.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) mat_vals, sizeof(mat_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    if(is.isBinaryEnabled())
     {
-      for (int j = 0; j < 4; j++)
-      {
-        (std::ostream&) os << mat(i, j) << ' ';
-      }
+        is.read((char*)mat_vals, sizeof(mat_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Matrixd& mat)
-{
-  ::osg::Matrixd::value_type *mat_vals = mat.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) mat_vals, sizeof(mat_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    else
     {
-      for (int j = 0; j < 4; j++)
-      {
-        (std::istream&) is >> mat(i, j);
-      }
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                (std::istream&)is >> mat(i, j);
+            }
+        }
     }
-  }
 
-  return is;
+    return is;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec2f& vec)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Matrixd& mat)
 {
-  const ::osg::Vec2f::value_type *vec_vals = vec.ptr();
+    const ::osg::Matrixd::value_type* mat_vals = mat.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 2; i++)
+    if(os.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        os.write((const char*)mat_vals, sizeof(mat_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec2f& vec)
-{
-  ::osg::Vec2f::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 2; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                (std::ostream&)os << mat(i, j) << ' ';
+            }
+        }
     }
-  }
 
-  return is;
+    return os;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec2d& vec)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Matrixd& mat)
 {
-  const ::osg::Vec2d::value_type *vec_vals = vec.ptr();
+    ::osg::Matrixd::value_type* mat_vals = mat.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 2; i++)
+    if(is.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        is.read((char*)mat_vals, sizeof(mat_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec2d& vec)
-{
-  ::osg::Vec2d::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 2; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 4; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                (std::istream&)is >> mat(i, j);
+            }
+        }
     }
-  }
 
-  return is;
+    return is;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec3f& vec)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec2f& vec)
 {
-  const ::osg::Vec3f::value_type *vec_vals = vec.ptr();
+    const ::osg::Vec2f::value_type* vec_vals = vec.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 3; i++)
+    if(os.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        os.write((const char*)vec_vals, sizeof(vec_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec3f& vec)
-{
-  ::osg::Vec3f::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 3; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 2; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
     }
-  }
 
-  return is;
+    return os;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec3d& vec)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec2f& vec)
 {
-  const ::osg::Vec3d::value_type *vec_vals = vec.ptr();
+    ::osg::Vec2f::value_type* vec_vals = vec.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 3; i++)
+    if(is.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        is.read((char*)vec_vals, sizeof(vec_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec3d& vec)
-{
-  ::osg::Vec3d::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 3; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 2; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
     }
-  }
 
-  return is;
+    return is;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec4f& vec)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec2d& vec)
 {
-  const ::osg::Vec4f::value_type *vec_vals = vec.ptr();
+    const ::osg::Vec2d::value_type* vec_vals = vec.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    if(os.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        os.write((const char*)vec_vals, sizeof(vec_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec4f& vec)
-{
-  ::osg::Vec4f::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 2; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
     }
-  }
 
-  return is;
+    return os;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Vec4d& vec)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec2d& vec)
 {
-  const ::osg::Vec4d::value_type *vec_vals = vec.ptr();
+    ::osg::Vec2d::value_type* vec_vals = vec.ptr();
 
-  if (os.isBinaryEnabled()) {
-    os.write((const char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    if(is.isBinaryEnabled())
     {
-      (std::ostream&) os << vec[i] << ' ';
+        is.read((char*)vec_vals, sizeof(vec_vals));
     }
-  }
-
-  return os;
-}
-
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Vec4d& vec)
-{
-  ::osg::Vec4d::value_type *vec_vals = vec.ptr();
-
-  if (is.isBinaryEnabled()) {
-    is.read((char*) vec_vals, sizeof(vec_vals));
-  } else {
-    for (int i = 0; i < 4; i++)
+    else
     {
-      (std::istream&) is >> vec[i];
+        for(int i = 0; i < 2; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
     }
-  }
 
-  return is;
+    return is;
 }
 
-av::OutputStream&
-av::operator<<(av::OutputStream& os, const ::osg::Quat& vec)
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec3f& vec)
 {
-  return os << vec.asVec4();
+    const ::osg::Vec3f::value_type* vec_vals = vec.ptr();
+
+    if(os.isBinaryEnabled())
+    {
+        os.write((const char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
+    }
+
+    return os;
 }
 
-av::InputStream&
-av::operator>>(av::InputStream& is, ::osg::Quat& vec)
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec3f& vec)
 {
-  ::osg::Vec4d tmp;
+    ::osg::Vec3f::value_type* vec_vals = vec.ptr();
 
-  is >> tmp;
-  vec.set(tmp);
-  return is;
+    if(is.isBinaryEnabled())
+    {
+        is.read((char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
+    }
+
+    return is;
+}
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec3d& vec)
+{
+    const ::osg::Vec3d::value_type* vec_vals = vec.ptr();
+
+    if(os.isBinaryEnabled())
+    {
+        os.write((const char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
+    }
+
+    return os;
+}
+
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec3d& vec)
+{
+    ::osg::Vec3d::value_type* vec_vals = vec.ptr();
+
+    if(is.isBinaryEnabled())
+    {
+        is.read((char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 3; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
+    }
+
+    return is;
+}
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec4f& vec)
+{
+    const ::osg::Vec4f::value_type* vec_vals = vec.ptr();
+
+    if(os.isBinaryEnabled())
+    {
+        os.write((const char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
+    }
+
+    return os;
+}
+
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec4f& vec)
+{
+    ::osg::Vec4f::value_type* vec_vals = vec.ptr();
+
+    if(is.isBinaryEnabled())
+    {
+        is.read((char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
+    }
+
+    return is;
+}
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Vec4d& vec)
+{
+    const ::osg::Vec4d::value_type* vec_vals = vec.ptr();
+
+    if(os.isBinaryEnabled())
+    {
+        os.write((const char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            (std::ostream&)os << vec[i] << ' ';
+        }
+    }
+
+    return os;
+}
+
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Vec4d& vec)
+{
+    ::osg::Vec4d::value_type* vec_vals = vec.ptr();
+
+    if(is.isBinaryEnabled())
+    {
+        is.read((char*)vec_vals, sizeof(vec_vals));
+    }
+    else
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            (std::istream&)is >> vec[i];
+        }
+    }
+
+    return is;
+}
+
+av::OutputStream& av::operator<<(av::OutputStream& os, const ::osg::Quat& vec) { return os << vec.asVec4(); }
+
+av::InputStream& av::operator>>(av::InputStream& is, ::osg::Quat& vec)
+{
+    ::osg::Vec4d tmp;
+
+    is >> tmp;
+    vec.set(tmp);
+    return is;
 }

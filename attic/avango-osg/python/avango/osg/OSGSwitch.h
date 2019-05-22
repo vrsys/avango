@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_SWITCH
 #define AV_PYTHON_OSG_SWITCH
 

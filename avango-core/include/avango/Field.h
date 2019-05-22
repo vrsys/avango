@@ -36,74 +36,70 @@
 
 namespace av
 {
-
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  class Msg;
+class Msg;
 #endif
 
-  class Create;
-  class FieldContainer;
-  class InputStream;
-  class OutputStream;
+class Create;
+class FieldContainer;
+class InputStream;
+class OutputStream;
 
-  /**
-   * Base class for all field types.
-   * Fields provide a generic scripting and streaming interface for
-   * accessing object state attributes.
-   *
-   * \ingroup av
-   */
-  class AV_DLL Field : public Typed
-  {
-
+/**
+ * Base class for all field types.
+ * Fields provide a generic scripting and streaming interface for
+ * accessing object state attributes.
+ *
+ * \ingroup av
+ */
+class AV_DLL Field : public Typed
+{
     friend class FieldContainer;
 
     AV_TYPED_DECLARE_ABSTRACT();
 
   public:
-
     class Event
     {
-      friend class Field;
+        friend class Field;
 
-    public:
+      public:
+        /**
+         * Destructor
+         */
+        virtual ~Event() {}
 
-      /**
-       * Destructor
-       */
-      virtual ~Event() {}
+        /**
+         * The originating field of the event.
+         *
+         * The field gets invalid when its container is destroyed.
+         * So, you should reference the container if you are planning to hold
+         * the field or a copy of the event after the callback has returned.
+         * You can do this by storing the container in a Link (preferred) or
+         * by calling reference/dereference explicitly.
+         */
+        const Field* getField() const { return mField; }
 
-      /**
-       * The originating field of the event.
-       *
-       * The field gets invalid when its container is destroyed.
-       * So, you should reference the container if you are planning to hold
-       * the field or a copy of the event after the callback has returned.
-       * You can do this by storing the container in a Link (preferred) or
-       * by calling reference/dereference explicitly.
-       */
-      const Field* getField() const { return mField; }
+      protected:
+        Event(const Field* field) : mField(field) {}
 
-    protected:
-      Event(const Field *field) : mField(field) {}
-
-    private:
-      const Field *mField;
+      private:
+        const Field* mField;
     };
 
     enum FieldChangeSource
     {
-      script,
-      connection,
-      tune,
-      tune_n,
-      untune,
-      activate,
-      deactivate,
-      apply,
-      unapply,
-      net,
-      internal
+        script,
+        connection,
+        tune,
+        tune_n,
+        untune,
+        activate,
+        deactivate,
+        apply,
+        unapply,
+        net,
+        internal
     };
 
     using FieldPtrSet = std::set<Field*>;
@@ -290,15 +286,12 @@ namespace av
     virtual void evaluateDependencies(void);
 
   protected:
-
     /**
      *  Fields are always wrapped up in a container.
      */
     void setContainer(FieldContainer* c, unsigned int i, bool owned);
 
-    static Type registerType(const std::string& classname,
-                             const std::string& parentname,
-                             Create* creator);
+    static Type registerType(const std::string& classname, const std::string& parentname, Create* creator);
 
     void fieldChanged(bool from_net = false, Field* triggered_from = 0);
     void reset();
@@ -313,7 +306,6 @@ namespace av
     FieldContainer* mContainer;
 
   private:
-
     // disable copy construction
     Field(const Field&);
 
@@ -323,32 +315,33 @@ namespace av
     using InputFieldsList = std::list<FieldConnection>;
     InputFieldsList mConnectedFrom;
 
-    struct {
-      bool touched            :1; // has the field been touched?
-      bool dependencyEnabled  :1; // dependency on field?
-      bool notifyEnabled      :1; // notify field changes?
-      bool hasNotified        :1; // has the field been notified?
-      bool dontWrite          :1; // never write this field to a stream
-      bool dontDistribute     :1; // never distribute this field over the net
-      bool needsDistribution  :1; // does the field need distribution
-      bool multiPush          :1; // allow/disallow multiple value push to field auditors per frame
-      bool multiInput         :1; // allow/disallow multiple inputs to field
-      bool owned              :1; // is field owned by container?
+    struct
+    {
+        bool touched : 1;           // has the field been touched?
+        bool dependencyEnabled : 1; // dependency on field?
+        bool notifyEnabled : 1;     // notify field changes?
+        bool hasNotified : 1;       // has the field been notified?
+        bool dontWrite : 1;         // never write this field to a stream
+        bool dontDistribute : 1;    // never distribute this field over the net
+        bool needsDistribution : 1; // does the field need distribution
+        bool multiPush : 1;         // allow/disallow multiple value push to field auditors per frame
+        bool multiInput : 1;        // allow/disallow multiple inputs to field
+        bool owned : 1;             // is field owned by container?
     } mFlags;
 
     unsigned int mIndex;
     bool mIsNotifying;
     FieldChangeSource mSrc;
+};
 
-  };
-
-  // streaming support
-  extern AV_DLL InputStream& operator>>(InputStream& is, Field* field);
-  extern AV_DLL OutputStream& operator<<(OutputStream& os, const Field* field);
+// streaming support
+extern AV_DLL InputStream& operator>>(InputStream& is, Field* field);
+extern AV_DLL OutputStream& operator<<(OutputStream& os, const Field* field);
 
 } // namespace av
 
-#define AV_FIELD_DEFINE(thisClass)                                      \
-  template<> av::Type thisClass::sClassTypeId = av::Type::badType();
+#define AV_FIELD_DEFINE(thisClass)                                                                                                                                                                     \
+    template <>                                                                                                                                                                                        \
+    av::Type thisClass::sClassTypeId = av::Type::badType();
 
 #endif // #if !defined(AVANGO_FIELD_H)

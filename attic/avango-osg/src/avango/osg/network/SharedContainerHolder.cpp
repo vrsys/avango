@@ -26,56 +26,43 @@
 #include <avango/osg/network/SharedContainerHolder.h>
 #include <avango/osg/network/NetMatrixTransform.h>
 
-
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::SharedContainerHolder"));
+av::Logger& logger(av::getLogger("av::osg::SharedContainerHolder"));
 }
 
 AV_FC_DEFINE(av::osg::SharedContainerHolder);
 
-av::osg::SharedContainerHolder::SharedContainerHolder()
-{
-  AV_FC_ADD_FIELD(SharedContainers, std::vector<av::Link<av::FieldContainer> >());
-}
+av::osg::SharedContainerHolder::SharedContainerHolder() { AV_FC_ADD_FIELD(SharedContainers, std::vector<av::Link<av::FieldContainer>>()); }
 
 /* virtual */
-av::osg::SharedContainerHolder::~SharedContainerHolder()
+av::osg::SharedContainerHolder::~SharedContainerHolder() {}
+
+/* static */ void av::osg::SharedContainerHolder::initClass()
 {
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, av::osg::SharedContainerHolder, true);
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-/* static */ void
-av::osg::SharedContainerHolder::initClass()
+/* virtual */ void av::osg::SharedContainerHolder::fieldHasChangedLocalSideEffect(const Field& field)
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
-    AV_FC_INIT(av::FieldContainer, av::osg::SharedContainerHolder, true);
-    sClassTypeId.setDistributable(true);
-  }
+    FieldContainer::fieldHasChangedLocalSideEffect(field);
+
+    mContainersChanged = (&field == &SharedContainers);
 }
 
-/* virtual */ void
-av::osg::SharedContainerHolder::fieldHasChangedLocalSideEffect(const Field& field)
+void av::osg::SharedContainerHolder::evaluateLocalSideEffect()
 {
-  FieldContainer::fieldHasChangedLocalSideEffect(field);
+    FieldContainer::evaluateLocalSideEffect();
 
-  mContainersChanged = (&field == &SharedContainers);
+    if(mContainersChanged && mNetMatrixTransform)
+    {
+        mNetMatrixTransform->sharedContainersChanged();
+    }
 }
 
-void
-av::osg::SharedContainerHolder::evaluateLocalSideEffect()
-{
-  FieldContainer::evaluateLocalSideEffect();
-
-  if (mContainersChanged && mNetMatrixTransform) {
-    mNetMatrixTransform->sharedContainersChanged();
-  }
-}
-
-void
-av::osg::SharedContainerHolder::registerNetMatrixTransform(av::osg::NetMatrixTransform* netMatrixTransform)
-{
-  mNetMatrixTransform = netMatrixTransform;
-}
-
+void av::osg::SharedContainerHolder::registerNetMatrixTransform(av::osg::NetMatrixTransform* netMatrixTransform) { mNetMatrixTransform = netMatrixTransform; }

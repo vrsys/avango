@@ -37,70 +37,65 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Convenience node supposed to root loaded geometry,
+ * using the osgDB::readNodeFiles() mechanism
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL LoadFile : public MatrixTransform
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Convenience node supposed to root loaded geometry,
-     * using the osgDB::readNodeFiles() mechanism
-     *
-     * \ingroup av_osg
+     * Constructor. Note that there is no counterpart in osg for an av::osg::LoadFile.
      */
-    class AV_OSG_DLL LoadFile : public MatrixTransform
-    {
-      AV_FC_DECLARE();
+    LoadFile();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~LoadFile();
 
-      /**
-       * Constructor. Note that there is no counterpart in osg for an av::osg::LoadFile.
-       */
-      LoadFile();
+  public:
+    /**
+     * File name of the geometry file to load.
+     */
+    SFString Filename;
 
-    protected:
+    /**
+     * Outputs the file name of the geometry as soon as it is actually loaded.
+     * You can connect to this field to get a notification when the loading of the file was done.
+     */
+    SFString FilenameLoaded;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~LoadFile();
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-    public:
+    /**
+     * Get the loaded ::osg::Node.
+     */
+    ::osg::Node* getLoadedNode() const;
 
-      /**
-       * File name of the geometry file to load.
-       */
-      SFString Filename;
+  private:
+    ::osg::ref_ptr<::osg::Node> mLoadedNode;
+    bool mFilenameChanged;
+    std::string mFilename;
+    std::string mOldFilename;
+};
 
-      /**
-       * Outputs the file name of the geometry as soon as it is actually loaded.
-       * You can connect to this field to get a notification when the loading of the file was done.
-       */
-      SFString FilenameLoaded;
+typedef SingleField<Link<LoadFile>> SFLoadFile;
+typedef MultiField<Link<LoadFile>> MFLoadFile;
 
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
-
-      /**
-       * Get the loaded ::osg::Node.
-       */
-      ::osg::Node* getLoadedNode() const;
-
-    private:
-
-      ::osg::ref_ptr< ::osg::Node> mLoadedNode;
-      bool mFilenameChanged;
-      std::string mFilename;
-      std::string mOldFilename;
-
-    };
-
-    typedef SingleField<Link<LoadFile> > SFLoadFile;
-    typedef MultiField<Link<LoadFile> > MFLoadFile;
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::LoadFile> >;
-  template class AV_OSG_DLL MultiField<Link<osg::LoadFile> >;
+template class AV_OSG_DLL SingleField<Link<osg::LoadFile>>;
+template class AV_OSG_DLL MultiField<Link<osg::LoadFile>>;
 #endif
 
 } // namespace av

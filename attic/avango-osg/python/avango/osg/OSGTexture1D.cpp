@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGTexture1D(void)
- {
-  // wrapping osg::Texture1D functionality
-  register_field<av::osg::SFTexture1D>("SFTexture1D");
-  register_multifield<av::osg::MFTexture1D>("MFTexture1D");
-  class_<av::osg::Texture1D, av::Link<av::osg::Texture1D>, bases<av::osg::Texture>, boost::noncopyable >("Texture1D", "docstring", no_init);
- }
+{
+    // wrapping osg::Texture1D functionality
+    register_field<av::osg::SFTexture1D>("SFTexture1D");
+    register_multifield<av::osg::MFTexture1D>("MFTexture1D");
+    class_<av::osg::Texture1D, av::Link<av::osg::Texture1D>, bases<av::osg::Texture>, boost::noncopyable>("Texture1D", "docstring", no_init);
+}

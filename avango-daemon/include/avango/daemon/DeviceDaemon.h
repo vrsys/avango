@@ -26,8 +26,6 @@
 #if !defined(AVANGO_DAEMON_DEVICEDAEMON_H)
 #define AVANGO_DAEMON_DEVICEDAEMON_H
 
-
-
 /**
  * \file
  * \ingroup av_daemon
@@ -39,50 +37,46 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * The DeviceDaemon main class, contains the main loop in which for all
+ * given devices a thread is created.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL DeviceDaemon : public Base
+{
+    AV_BASE_DECLARE();
+
+  public:
     /**
-     * The DeviceDaemon main class, contains the main loop in which for all
-     * given devices a thread is created.
-     *
-     * \ingroup av_daemon
+     * Constructor.
      */
-    class AV_DAEMON_DLL DeviceDaemon : public Base
-    {
-      AV_BASE_DECLARE();
+    DeviceDaemon() = default;
 
-    public:
+    /**
+     * This method appends a device to the internal list of devices that
+     * will be started when run() is called.
+     */
+    void appendDevice(av::daemon::Device* device);
 
-      /**
-       * Constructor.
-       */
-      DeviceDaemon() = default;
+    /**
+     * This method tries to start up all given devices and then enters
+     * the main loop until devices should be shut down.
+     */
+    void run();
 
-      /**
-       * This method appends a device to the internal list of devices that
-       * will be started when run() is called.
-       */
-      void appendDevice(av::daemon::Device* device);
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    ~DeviceDaemon() = default;
 
-      /**
-       * This method tries to start up all given devices and then enters
-       * the main loop until devices should be shut down.
-       */
-      void run();
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      ~DeviceDaemon() = default;
-
-    private:
-
-      std::vector<av::Link<av::daemon::Device> > mDevices;
-
-    };
-  }
-}
+  private:
+    std::vector<av::Link<av::daemon::Device>> mDevices;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

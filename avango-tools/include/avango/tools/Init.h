@@ -36,19 +36,19 @@
 
 namespace av
 {
-  namespace tools
-  {
-    /**
-     * Initializes the Avango Tools library.
-     * Usage: \code av::tools::Init::initClass(); \endcode
-     *
-     * \ingroup av_tools
-     */
-    class AV_TOOLS_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace tools
+{
+/**
+ * Initializes the Avango Tools library.
+ * Usage: \code av::tools::Init::initClass(); \endcode
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace tools
+} // namespace av
 
 #endif

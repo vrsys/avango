@@ -30,7 +30,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::CameraAttachment"));
+av::Logger& logger(av::getLogger("av::osg::CameraAttachment"));
 }
 
 AV_FC_DEFINE(av::osg::CameraAttachment);
@@ -40,32 +40,30 @@ AV_FIELD_DEFINE(av::osg::MFCameraAttachment);
 
 av::osg::CameraAttachment::CameraAttachment()
 {
-  AV_FC_ADD_FIELD(BufferComponent, ::osg::Camera::COLOR_BUFFER);
-  AV_FC_ADD_FIELD(InternalFormat, GL_NONE);
-  AV_FC_ADD_FIELD(Texture, Link< ::av::osg::Texture >());
-  AV_FC_ADD_FIELD(Image, Link< ::av::osg::Image >());
-  AV_FC_ADD_FIELD(Level, 0);
-  AV_FC_ADD_FIELD(Face, 0);
-  AV_FC_ADD_FIELD(MIPMapGeneration, false);
-  AV_FC_ADD_FIELD(MultisampleSamples, 0);
-  AV_FC_ADD_FIELD(MultisampleColorSamples, 0);
+    AV_FC_ADD_FIELD(BufferComponent, ::osg::Camera::COLOR_BUFFER);
+    AV_FC_ADD_FIELD(InternalFormat, GL_NONE);
+    AV_FC_ADD_FIELD(Texture, Link<::av::osg::Texture>());
+    AV_FC_ADD_FIELD(Image, Link<::av::osg::Image>());
+    AV_FC_ADD_FIELD(Level, 0);
+    AV_FC_ADD_FIELD(Face, 0);
+    AV_FC_ADD_FIELD(MIPMapGeneration, false);
+    AV_FC_ADD_FIELD(MultisampleSamples, 0);
+    AV_FC_ADD_FIELD(MultisampleColorSamples, 0);
 }
 
-av::osg::CameraAttachment::~CameraAttachment()
-{}
+av::osg::CameraAttachment::~CameraAttachment() {}
 
-void
-av::osg::CameraAttachment::initClass()
+void av::osg::CameraAttachment::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::osg::CameraAttachment, true);
+        AV_FC_INIT(av::FieldContainer, av::osg::CameraAttachment, true);
 
-    SFCameraAttachment::initClass("av::osg::SFCameraAttachment", "av::Field");
-    MFCameraAttachment::initClass("av::osg::MFCameraAttachment", "av::Field");
+        SFCameraAttachment::initClass("av::osg::SFCameraAttachment", "av::Field");
+        MFCameraAttachment::initClass("av::osg::MFCameraAttachment", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }

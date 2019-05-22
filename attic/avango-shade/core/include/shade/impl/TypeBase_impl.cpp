@@ -23,20 +23,19 @@
 
 #include "../types/inout.h"
 
-
-template<class Derived, class Base> shade::TypeBase<Derived, Base>::TypeBase(void) :
-  Base()
+template <class Derived, class Base>
+shade::TypeBase<Derived, Base>::TypeBase(void) : Base()
 {
 }
 
-template<class Derived, class Base> shade::TypeBase<Derived, Base>::TypeBase(formatter::Constants::Type type) :
-  Base(type)
+template <class Derived, class Base>
+shade::TypeBase<Derived, Base>::TypeBase(formatter::Constants::Type type) : Base(type)
 {
 }
 
-template<class Derived, class Base> boost::shared_ptr<shade::Type> shade::TypeBase<Derived, Base>::clone(void) const
+template <class Derived, class Base>
+boost::shared_ptr<shade::Type> shade::TypeBase<Derived, Base>::clone(void) const
 {
-  boost::shared_ptr<Derived> retval(new Derived);
-  return retval;
+    boost::shared_ptr<Derived> retval(new Derived);
+    return retval;
 }
-

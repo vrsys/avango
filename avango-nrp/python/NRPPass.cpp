@@ -15,8 +15,8 @@ struct pointee<av::Link<T>>
 {
     typedef T type;
 };
-}
-}
+} // namespace python
+} // namespace boost
 
 void init_NRPPassDescription()
 {

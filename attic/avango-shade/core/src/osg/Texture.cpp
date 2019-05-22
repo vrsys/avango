@@ -25,27 +25,12 @@
 #include <osg/Texture>
 #include <osg/StateSet>
 
-shade::osg::Texture::Texture(::osg::Texture* texture) :
-  m_texture(texture)
-{
-}
+shade::osg::Texture::Texture(::osg::Texture* texture) : m_texture(texture) {}
 
-bool shade::osg::Texture::operator==(const Texture& other) const
-{
-  return (m_texture == other.m_texture);
-}
+bool shade::osg::Texture::operator==(const Texture& other) const { return (m_texture == other.m_texture); }
 
-bool shade::osg::Texture::operator!=(const Texture& other) const
-{
-  return (m_texture != other.m_texture);
-}
+bool shade::osg::Texture::operator!=(const Texture& other) const { return (m_texture != other.m_texture); }
 
-void shade::osg::Texture::bind(::osg::StateSet* state, unsigned int unit) const
-{
-  state->setTextureAttributeAndModes(unit, m_texture.get());
-}
+void shade::osg::Texture::bind(::osg::StateSet* state, unsigned int unit) const { state->setTextureAttributeAndModes(unit, m_texture.get()); }
 
-::osg::Texture* shade::osg::Texture::get(void) const
-{
-  return m_texture.get();
-}
+::osg::Texture* shade::osg::Texture::get(void) const { return m_texture.get(); }

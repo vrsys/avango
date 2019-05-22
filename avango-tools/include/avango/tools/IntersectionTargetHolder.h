@@ -35,55 +35,50 @@
 #include <avango/osg/Intersection.h>
 #include "windows_specific_tools.h"
 
-
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * IntersectionTargetHolder class.
+ *
+ * Is typically created by a PickSelector and holds an av::osg::Intersection object.
+ * Sets the Keep value to true by default.
+ *
+ * \ingroup av_tools
+ */
+class AV_TOOLS_DLL IntersectionTargetHolder : public NodePathTargetHolder
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * IntersectionTargetHolder class.
-     *
-     * Is typically created by a PickSelector and holds an av::osg::Intersection object.
-     * Sets the Keep value to true by default.
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class AV_TOOLS_DLL IntersectionTargetHolder : public NodePathTargetHolder
-    {
-      AV_FC_DECLARE();
+    IntersectionTargetHolder();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~IntersectionTargetHolder();
 
-      /**
-       * Constructor.
-       */
-      IntersectionTargetHolder();
+  public:
+    /**
+     * Holds the intersection object.
+     */
+    av::osg::SFIntersection Intersection;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~IntersectionTargetHolder();
-
-    public:
-
-      /**
-       * Holds the intersection object.
-       */
-      av::osg::SFIntersection Intersection;
-
-    };
-
-    using SFIntersectionTargetHolder = SingleField<Link<IntersectionTargetHolder> >;
-    using MFIntersectionTargetHolder = MultiField<Link<IntersectionTargetHolder> >;
-  }
+using SFIntersectionTargetHolder = SingleField<Link<IntersectionTargetHolder>>;
+using MFIntersectionTargetHolder = MultiField<Link<IntersectionTargetHolder>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::IntersectionTargetHolder> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::IntersectionTargetHolder> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::IntersectionTargetHolder>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::IntersectionTargetHolder>>;
 #endif
 
-}
+} // namespace av
 
 #endif

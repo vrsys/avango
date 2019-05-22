@@ -41,31 +41,30 @@
 
 namespace av
 {
-  class InputStream;
-  class OutputStream;
-  class Field;
-  class FieldRef;
+class InputStream;
+class OutputStream;
+class Field;
+class FieldRef;
 
-  /**
-   * The FieldContainer class is the base class for all classes which
-   * contain fields (see Field) to encapsulate object attributes.
-   * It provides methods to query number, name, type and value of any field
-   * it contains.
-   *
-   * It provides a complex macro package which should be used by
-   * derived classes in order for runtime typing, reference counting,
-   * field declaration and inheritance to work.
-   *
-   * \ingroup av
-   */
-  class AV_DLL FieldContainer : public Distributed
-  {
+/**
+ * The FieldContainer class is the base class for all classes which
+ * contain fields (see Field) to encapsulate object attributes.
+ * It provides methods to query number, name, type and value of any field
+ * it contains.
+ *
+ * It provides a complex macro package which should be used by
+ * derived classes in order for runtime typing, reference counting,
+ * field declaration and inheritance to work.
+ *
+ * \ingroup av
+ */
+class AV_DLL FieldContainer : public Distributed
+{
     friend class Field;
 
     AV_BASE_DECLARE_ABSTRACT();
 
   public:
-
     using IDType = long int;
 
     /**
@@ -74,14 +73,12 @@ namespace av
     FieldContainer();
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
     virtual ~FieldContainer();
 
   public:
-
     /**
      * Name of the field container.
      */
@@ -233,7 +230,6 @@ namespace av
     virtual void write(OutputStream& os);
 
   protected:
-
     /**
      * Name adaptor field getter callback
      */
@@ -283,24 +279,23 @@ namespace av
 
     struct
     {
-      bool mNeedsEvaluation:1;
-      bool mIsInEvaluationList:1;
-      bool mFieldsCalculated:1;
-      bool mAlwaysEvaluate:1;
-      bool mIsEvaluating:1;
-      bool mAllowScheduling:1;
+        bool mNeedsEvaluation : 1;
+        bool mIsInEvaluationList : 1;
+        bool mFieldsCalculated : 1;
+        bool mAlwaysEvaluate : 1;
+        bool mIsEvaluating : 1;
+        bool mAllowScheduling : 1;
     } mFlags;
 
   private:
-
     using FieldPtrVec = std::vector<Field*>;
-    FieldPtrVec mFieldPtrs;     // for fast lookup in getFields, do not use directly !
+    FieldPtrVec mFieldPtrs; // for fast lookup in getFields, do not use directly !
 
     struct FieldInfo
     {
-      FieldInfo() : mField(0) {}
-      Field*      mField;
-      std::string mName;
+        FieldInfo() : mField(0) {}
+        Field* mField;
+        std::string mName;
     };
 
     using FieldInfos = std::vector<FieldInfo>;
@@ -318,41 +313,32 @@ namespace av
 
     unsigned int mEvaluateId;
     static unsigned int sEvaluateId;
-
-  };
+};
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_DLL SingleField<Link<FieldContainer> >;
-  template class AV_DLL MultiField<Link<FieldContainer> >;
+template class AV_DLL SingleField<Link<FieldContainer>>;
+template class AV_DLL MultiField<Link<FieldContainer>>;
 #endif
 
-  using SFContainer = SingleField<Link<FieldContainer> >;
-  using MFContainer = MultiField<Link<FieldContainer> >;
+using SFContainer = SingleField<Link<FieldContainer>>;
+using MFContainer = MultiField<Link<FieldContainer>>;
 
-}
+} // namespace av
 
-#define AV_FC_DECLARE() \
-  AV_BASE_DECLARE()
+#define AV_FC_DECLARE() AV_BASE_DECLARE()
 
-#define AV_FC_DECLARE_ABSTRACT()                \
-  AV_BASE_DECLARE_ABSTRACT()
+#define AV_FC_DECLARE_ABSTRACT() AV_BASE_DECLARE_ABSTRACT()
 
-#define AV_FC_DEFINE_ABSTRACT(thisClass)        \
-  AV_BASE_DEFINE_ABSTRACT(thisClass)
+#define AV_FC_DEFINE_ABSTRACT(thisClass) AV_BASE_DEFINE_ABSTRACT(thisClass)
 
-#define AV_FC_DEFINE(thisClass)                 \
-  AV_BASE_DEFINE(thisClass)
+#define AV_FC_DEFINE(thisClass) AV_BASE_DEFINE(thisClass)
 
-#define AV_FC_INIT_ABSTRACT(parentClass, thisClass, isPublic)   \
-  AV_BASE_INIT_ABSTRACT(parentClass, thisClass, isPublic)
+#define AV_FC_INIT_ABSTRACT(parentClass, thisClass, isPublic) AV_BASE_INIT_ABSTRACT(parentClass, thisClass, isPublic)
 
-#define AV_FC_INIT(parentClass, thisClass, isPublic)    \
-  AV_BASE_INIT(parentClass, thisClass, isPublic)
+#define AV_FC_INIT(parentClass, thisClass, isPublic) AV_BASE_INIT(parentClass, thisClass, isPublic)
 
-#define AV_FC_ADD_FIELD(fieldName, initialValue)        \
-  fieldName.bind(this, #fieldName, false, initialValue)
+#define AV_FC_ADD_FIELD(fieldName, initialValue) fieldName.bind(this, #fieldName, false, initialValue)
 
-#define AV_FC_ADD_ADAPTOR_FIELD(fieldName, getcb, setcb)        \
-  fieldName.bind(this, #fieldName, false, getcb, setcb)
+#define AV_FC_ADD_ADAPTOR_FIELD(fieldName, getcb, setcb) fieldName.bind(this, #fieldName, false, getcb, setcb)
 
 #endif // #if !defined(AVANGO_FIELDCONTAINER_H)

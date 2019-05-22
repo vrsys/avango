@@ -30,33 +30,27 @@
 
 namespace shade
 {
-  template
-  <
-    template<class> class T,
-    class Q,
-    template<template<class> class, class> class Derived,
-    class Base1 = detail::EmptyShader,
-    class Base2 = detail::EmptyShader,
-    class Base3 = detail::EmptyShader,
-    class Base4 = detail::EmptyShader
-  >
-  class TemplateTQ : 
-    public ShaderBase<Derived<T, Q>, Base1, Base2, Base3, Base4 >
-  {
+template <template <class> class T,
+          class Q,
+          template <template <class> class, class> class Derived,
+          class Base1 = detail::EmptyShader,
+          class Base2 = detail::EmptyShader,
+          class Base3 = detail::EmptyShader,
+          class Base4 = detail::EmptyShader>
+class TemplateTQ : public ShaderBase<Derived<T, Q>, Base1, Base2, Base3, Base4>
+{
   public:
-
     /*virtual*/ std::string get_class_name(void) const
     {
-      T<Q> type;
-      static std::string name(ShaderBase<Derived<T, Q>, Base1, Base2, Base3, Base4>::get_class_name());
-      return name+"_"+type.get_uniq_id();
+        T<Q> type;
+        static std::string name(ShaderBase<Derived<T, Q>, Base1, Base2, Base3, Base4>::get_class_name());
+        return name + "_" + type.get_uniq_id();
     }
 
   private:
-
     friend class shade::ShaderBase<Derived<T, Q>, Base1, Base2, Base3, Base4>;
-  };
+};
 
-}
+} // namespace shade
 
 #endif /* shade_TemplateTQ_H */

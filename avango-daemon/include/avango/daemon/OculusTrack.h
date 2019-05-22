@@ -35,54 +35,51 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+class AV_DAEMON_DLL OculusTrack : public Device
+{
+    AV_BASE_DECLARE();
 
-    class AV_DAEMON_DLL OculusTrack : public Device
-    {
-      AV_BASE_DECLARE();
+  public:
+    /**
+     * Constructor
+     */
+    OculusTrack();
 
-    public:
-      /**
-       * Constructor
-       */
-      OculusTrack();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~OculusTrack() {}
 
-    protected:
+    /**
+     * Inherited from base class, implements the initialization of this device.
+     */
+    void startDevice() override;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~OculusTrack() {}
+    /**
+     * Inherited from base class, implements the loop in which the device is read out.
+     */
+    void readLoop() override;
 
-      /**
-       * Inherited from base class, implements the initialization of this device.
-       */
-      void startDevice() override;
+    /**
+     * Inherited from base class, implements the closing operation of this device.
+     */
+    void stopDevice() override;
 
-      /**
-       * Inherited from base class, implements the loop in which the device is read out.
-       */
-      void readLoop() override;
+    /**
+     * Inherited from base class, returns a list of settable features.
+     */
+    const std::vector<std::string>& queryFeatures() override;
 
-      /**
-       * Inherited from base class, implements the closing operation of this device.
-       */
-      void stopDevice() override;
-
-      /**
-       * Inherited from base class, returns a list of settable features.
-       */
-      const std::vector<std::string>& queryFeatures() override;
-
-    private:
-
-      ::std::vector< ::std::string> mRequiredFeatures;
-      std::string mPort;
-      std::string mServer;
-      bool parseFeatures();
-    };
-  }
-}
+  private:
+    ::std::vector<::std::string> mRequiredFeatures;
+    std::string mPort;
+    std::string mServer;
+    bool parseFeatures();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

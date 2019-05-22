@@ -37,120 +37,125 @@
 
 using namespace av;
 
-namespace {
+namespace
+{
+class SampleBufferFixture
+{
+  public:
+    SampleBufferFixture()
+    {
+        sound::SampleBuffer::initClass();
+        sound::SoundSource::initClass();
+    }
+};
 
-  class SampleBufferFixture {
-    public:
-      SampleBufferFixture() { sound::SampleBuffer::initClass(); sound::SoundSource::initClass(); }
-  };
-
-  /// TESTS
-  TEST(TypeCanBeInitialized)
-  {
+/// TESTS
+TEST(TypeCanBeInitialized)
+{
     sound::SampleBuffer::initClass();
     CHECK(Type::getByName("av::sound::SampleBuffer") != Type::badType());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, CreateWithArray)
-  {
+TEST_FIXTURE(SampleBufferFixture, CreateWithArray)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     {
-      sound::SampleBuffer buffer_object(sample_buffer, sample_size);
-      CHECK_EQUAL(2, sample_buffer.use_count());
+        sound::SampleBuffer buffer_object(sample_buffer, sample_size);
+        CHECK_EQUAL(2, sample_buffer.use_count());
     }
     CHECK_EQUAL(1, sample_buffer.use_count());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, CheckSize)
-  {
+TEST_FIXTURE(SampleBufferFixture, CheckSize)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     CHECK_EQUAL(sample_size, buffer_object.getNumSamples());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, CheckNumSamplesField)
-  {
+TEST_FIXTURE(SampleBufferFixture, CheckNumSamplesField)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     CHECK_EQUAL(sample_size, buffer_object.NumSamples.getValue());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, SamplesFieldIsReadOnly)
-  {
+TEST_FIXTURE(SampleBufferFixture, SamplesFieldIsReadOnly)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     buffer_object.NumSamples.setValue(2 * sample_size);
-    CHECK(2 * sample_size !=  buffer_object.NumSamples.getValue());
-  }
+    CHECK(2 * sample_size != buffer_object.NumSamples.getValue());
+}
 
-  TEST_FIXTURE(SampleBufferFixture, CheckStereoField)
-  {
+TEST_FIXTURE(SampleBufferFixture, CheckStereoField)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size, true);
     CHECK_EQUAL(true, buffer_object.IsStereo.getValue());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, DefaultIsMono)
-  {
+TEST_FIXTURE(SampleBufferFixture, DefaultIsMono)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     CHECK_EQUAL(false, buffer_object.IsStereo.getValue());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, StereoFieldIsReadOnly)
-  {
+TEST_FIXTURE(SampleBufferFixture, StereoFieldIsReadOnly)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     buffer_object.IsStereo.setValue(true);
     CHECK_EQUAL(false, buffer_object.IsStereo.getValue());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, GetSampleArray)
-  {
+TEST_FIXTURE(SampleBufferFixture, GetSampleArray)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     sound::SampleBuffer buffer_object(sample_buffer, sample_size);
     CHECK_EQUAL(sample_buffer, buffer_object.getSamples());
-  }
+}
 
-  TEST_FIXTURE(SampleBufferFixture, SetSampleBufferOnSoundSource)
-  {
+TEST_FIXTURE(SampleBufferFixture, SetSampleBufferOnSoundSource)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     Link<sound::SampleBuffer> buffer_object(new sound::SampleBuffer(sample_buffer, sample_size));
 
     Link<sound::SoundSource> source(new sound::SoundSource);
     source->NewSampleBuffer.setValue(buffer_object);
 
     CHECK_EQUAL(buffer_object.getPtr(), source->NewSampleBuffer.getValue().getPtr());
-  }
+}
 
-  class TestLocalSource : public av::sound::SoundSource::LocalSource
-  {
-    public:
-      TestLocalSource(sound::SoundRenderer* soundRenderer) : LocalSource(soundRenderer) {}
+class TestLocalSource : public av::sound::SoundSource::LocalSource
+{
+  public:
+    TestLocalSource(sound::SoundRenderer* soundRenderer) : LocalSource(soundRenderer) {}
 
-      /* virtual */ void setWorldTransform(const ::osg::Matrixf& )  {}
-      /* virtual */ void setLooping(bool loop) {}
-      /* virtual */ void setURL(const std::string& url) {}
+    /* virtual */ void setWorldTransform(const ::osg::Matrixf&) {}
+    /* virtual */ void setLooping(bool loop) {}
+    /* virtual */ void setURL(const std::string& url) {}
 
-      std::queue<av::Link<sound::SampleBuffer> > mBufferQueue;
-      const std::queue<Link<sound::SampleBuffer> >& getBufferQueue() const { return mBufferQueue; }
+    std::queue<av::Link<sound::SampleBuffer>> mBufferQueue;
+    const std::queue<Link<sound::SampleBuffer>>& getBufferQueue() const { return mBufferQueue; }
 
-      /* virtual */ void enqueueSampleBuffer(av::Link<sound::SampleBuffer> sampleBuffer) { mBufferQueue.push(sampleBuffer); }
-  };
+    /* virtual */ void enqueueSampleBuffer(av::Link<sound::SampleBuffer> sampleBuffer) { mBufferQueue.push(sampleBuffer); }
+};
 
-  TEST_FIXTURE(SampleBufferFixture, PropagateSampleBufferToLocalSource)
-  {
+TEST_FIXTURE(SampleBufferFixture, PropagateSampleBufferToLocalSource)
+{
     const unsigned int sample_size = 1000;
-    boost::shared_array<int16_t> sample_buffer(new int16_t [sample_size]);
+    boost::shared_array<int16_t> sample_buffer(new int16_t[sample_size]);
     Link<sound::SampleBuffer> buffer_object(new sound::SampleBuffer(sample_buffer, sample_size));
 
     Link<sound::SoundSource> source(new sound::SoundSource);
@@ -160,5 +165,5 @@ namespace {
     source->NewSampleBuffer.setValue(buffer_object);
 
     CHECK_EQUAL(1u, local_source->getBufferQueue().size());
-  }
 }
+} // namespace

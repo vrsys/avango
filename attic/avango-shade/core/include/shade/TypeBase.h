@@ -28,14 +28,15 @@
 
 namespace shade
 {
-  template<class Derived, class Base = Type> class TypeBase : public Base
-  {
+template <class Derived, class Base = Type>
+class TypeBase : public Base
+{
   public:
     TypeBase(void);
     TypeBase(formatter::Constants::Type type);
     /*virtual*/ boost::shared_ptr<Type> clone(void) const;
-  };
-}
+};
+} // namespace shade
 
 #include "impl/TypeBase_impl.cpp"
 

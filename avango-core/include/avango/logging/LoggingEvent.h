@@ -37,64 +37,58 @@
 
 namespace av
 {
-
-  namespace logging
-  {
+namespace logging
+{
+/**
+ * Internal representation of logging events.
+ * \todo Record process-id, thread-id etc.
+ */
+class AV_DLL LoggingEvent
+{
+  public:
+    /**
+     * Constructor.
+     */
+    LoggingEvent(Logger& logger, Level level, const std::string& msg);
 
     /**
-     * Internal representation of logging events.
-     * \todo Record process-id, thread-id etc.
+     * Destructor.
      */
-    class AV_DLL LoggingEvent
-    {
+    ~LoggingEvent();
 
-    public:
+    /**
+     * Get originating logger of this logging event.
+     */
+    Logger& getLogger();
 
-      /**
-       * Constructor.
-       */
-      LoggingEvent(Logger& logger, Level level, const std::string& msg);
+    /**
+     * Get message of this logging event.
+     */
+    const std::string& getMessage() const;
 
-      /**
-       * Destructor.
-       */
-      ~LoggingEvent();
+    /**
+     * Get timestamp of this logging event (seconds since 1970-01-01 GMT).
+     */
+    double getTimeStamp() const;
 
-      /**
-       * Get originating logger of this logging event.
-       */
-      Logger& getLogger();
+    /**
+     * Get level of this logging event.
+     */
+    Level getLevel();
 
-      /**
-       * Get message of this logging event.
-       */
-      const std::string& getMessage() const;
+    /**
+     * Get formatted string of this logging event.
+     */
+    std::string getFormattedString();
 
-      /**
-       * Get timestamp of this logging event (seconds since 1970-01-01 GMT).
-       */
-      double getTimeStamp() const;
+  private:
+    Logger& mLogger;
+    std::string mMsg;
+    Level mLevel;
+    double mTimeStamp;
+};
 
-      /**
-       * Get level of this logging event.
-       */
-      Level getLevel();
-
-      /**
-       * Get formatted string of this logging event.
-       */
-      std::string getFormattedString();
-
-    private:
-
-      Logger& mLogger;
-      std::string mMsg;
-      Level mLevel;
-      double mTimeStamp;
-
-    };
-
-  } // namespace logging
+} // namespace logging
 
 } // namespace av
 

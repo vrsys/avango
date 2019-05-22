@@ -30,30 +30,25 @@
 
 namespace av
 {
-  namespace script
-  {
+namespace script
+{
+class Update : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class Update : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    Update(void);
 
-    public:
+  protected:
+    virtual ~Update();
 
-      Update(void);
+  public:
+    /* virtual */ void evaluate(void);
 
-    protected:
-
-      virtual ~Update();
-
-    public:
-
-      /* virtual */ void evaluate(void);
-
-      SFObject Callback;
-      SFBool Active;
-
-    };
-  }
-}
+    SFObject Callback;
+    SFBool Active;
+};
+} // namespace script
+} // namespace av
 
 #endif // #if !defined(AV_SCRIPT_UPDATE_H)

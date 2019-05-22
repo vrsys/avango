@@ -37,66 +37,60 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Texture1D OsgTexture1D;
+namespace osg
+{
+typedef ::osg::Texture1D OsgTexture1D;
+
+/**
+ * Abstract Wrapper for ::osg::Texture
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Texture1D : public Texture
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    Texture1D(OsgTexture1D* osgtexture = new OsgTexture1D());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Texture1D();
+
+  public:
+    SFImage Image;
+
+    SFInt TextureWidth;
 
     /**
-     * Abstract Wrapper for ::osg::Texture
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Texture1D object.
+     * \return a pointer to the texture object
      */
-    class AV_OSG_DLL Texture1D : public Texture
-    {
-      AV_FC_DECLARE();
+    ::osg::Texture1D* getOsgTexture1D() const;
 
-    public:
+  private:
+    ::osg::Texture1D* mOsgTexture1D;
 
-      /**
-       * Constructor.
-       */
-      Texture1D(OsgTexture1D* osgtexture = new OsgTexture1D());
-      // use defined type to circumvent compiler bug in VS8
+  protected:
+    virtual void getImageCB(const av::osg::SFImage::GetValueEvent& event);
+    virtual void setImageCB(const av::osg::SFImage::SetValueEvent& event);
+    virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
+    virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Texture1D();
-
-    public:
-
-      SFImage Image;
-
-      SFInt TextureWidth;
-
-      /**
-       * Get the wrapped ::osg::Texture1D object.
-       * \return a pointer to the texture object
-       */
-      ::osg::Texture1D* getOsgTexture1D() const;
-
-    private:
-
-      ::osg::Texture1D* mOsgTexture1D;
-
-    protected:
-
-      virtual void getImageCB(const av::osg::SFImage::GetValueEvent& event);
-      virtual void setImageCB(const av::osg::SFImage::SetValueEvent& event);
-      virtual void getTextureWidthCB(const av::SFInt::GetValueEvent& event);
-      virtual void setTextureWidthCB(const av::SFInt::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Texture1D> > SFTexture1D;
-    typedef MultiField<Link<Texture1D> > MFTexture1D;
-  } // namespace osg
+typedef SingleField<Link<Texture1D>> SFTexture1D;
+typedef MultiField<Link<Texture1D>> MFTexture1D;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Texture1D> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Texture1D> >;
+template class AV_OSG_DLL SingleField<Link<osg::Texture1D>>;
+template class AV_OSG_DLL MultiField<Link<osg::Texture1D>>;
 #endif
 
 } // namespace av

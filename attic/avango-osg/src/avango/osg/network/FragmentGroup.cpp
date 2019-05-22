@@ -31,7 +31,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::FragmentGroup"));
+av::Logger& logger(av::getLogger("av::osg::FragmentGroup"));
 }
 
 AV_FC_DEFINE(av::osg::FragmentGroup);
@@ -39,51 +39,39 @@ AV_FC_DEFINE(av::osg::FragmentGroup);
 AV_FIELD_DEFINE(av::osg::SFFragmentGroup);
 AV_FIELD_DEFINE(av::osg::MFFragmentGroup);
 
-av::osg::FragmentGroup::FragmentGroup() :
-  mNetMatrixTransform(0),
-  mChildrenChanged(false)
-{}
+av::osg::FragmentGroup::FragmentGroup() : mNetMatrixTransform(0), mChildrenChanged(false) {}
 
 /* virtual */
-av::osg::FragmentGroup::~FragmentGroup()
-{}
+av::osg::FragmentGroup::~FragmentGroup() {}
 
-/* static */ void
-av::osg::FragmentGroup::initClass()
+/* static */ void av::osg::FragmentGroup::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Group::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Group::initClass();
 
-    AV_FC_INIT(av::osg::Group, av::osg::FragmentGroup, false);
+        AV_FC_INIT(av::osg::Group, av::osg::FragmentGroup, false);
 
-    SFFragmentGroup::initClass("av::osg::SFFragmentGroup", "av::Field");
-    MFFragmentGroup::initClass("av::osg::MFFragmentGroup", "av::Field");
-  }
+        SFFragmentGroup::initClass("av::osg::SFFragmentGroup", "av::Field");
+        MFFragmentGroup::initClass("av::osg::MFFragmentGroup", "av::Field");
+    }
 }
 
-/* virtual */ void
-av::osg::FragmentGroup::fieldHasChangedLocalSideEffect(const Field& field)
+/* virtual */ void av::osg::FragmentGroup::fieldHasChangedLocalSideEffect(const Field& field)
 {
-  Group::fieldHasChangedLocalSideEffect(field);
+    Group::fieldHasChangedLocalSideEffect(field);
 
-  mChildrenChanged = (&field == &Children);
+    mChildrenChanged = (&field == &Children);
 }
 
-void
-av::osg::FragmentGroup::evaluateLocalSideEffect()
+void av::osg::FragmentGroup::evaluateLocalSideEffect()
 {
-  Group::evaluateLocalSideEffect();
+    Group::evaluateLocalSideEffect();
 
-  if (mChildrenChanged && mNetMatrixTransform) {
-    mNetMatrixTransform->fragmentChildrenChanged();
-  }
+    if(mChildrenChanged && mNetMatrixTransform)
+    {
+        mNetMatrixTransform->fragmentChildrenChanged();
+    }
 }
 
-void
-av::osg::FragmentGroup::registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform)
-{
-  mNetMatrixTransform = netMatrixTransform;
-}
-
-
+void av::osg::FragmentGroup::registerNetMatrixTransform(NetMatrixTransform* netMatrixTransform) { mNetMatrixTransform = netMatrixTransform; }

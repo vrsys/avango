@@ -39,75 +39,71 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Node that creates an ::osg::Capsule as Child of a MatrixTransform
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Capsule : public MatrixTransform
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Node that creates an ::osg::Capsule as Child of a MatrixTransform
-     *
-     * \ingroup av_osg
+     * Constructor. Note that this is not a simple Wrapper for ::osg::Capsule
      */
-    class AV_OSG_DLL Capsule : public MatrixTransform
-    {
-      AV_FC_DECLARE();
+    Capsule();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Capsule();
 
-      /**
-       * Constructor. Note that this is not a simple Wrapper for ::osg::Capsule
-       */
-      Capsule();
+  public:
+    /**
+     * Radius and DetailRatio (Tesselation) of the Capsule
+     */
+    SFFloat Radius;
+    SFFloat Height;
+    SFVec4 Color;
 
-    protected:
+    /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
+    /* virtual */ void evaluateLocalSideEffect();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Capsule();
+    /**
+     * Get the ::osg::Capsule object.
+     * \return an osg::ref pointer to the Capsule object
+     */
+    ::osg::ref_ptr<::osg::Capsule> getOsgCapsule() const;
 
-    public:
+    /**
+     * Get the ::osg::ShapeDrawable object.
+     * \return an osg::ref pointer to the ShapeDrawable object
+     */
+    ::osg::ref_ptr<::osg::ShapeDrawable> getOsgShapeDrawable() const;
 
-      /**
-       * Radius and DetailRatio (Tesselation) of the Capsule
-       */
-      SFFloat Radius;
-      SFFloat Height;
-      SFVec4 Color;
+  private:
+    ::osg::ref_ptr<::osg::ShapeDrawable> mShapeDrawable;
+    ::osg::ref_ptr<::osg::Capsule> mCapsule;
+    ::osg::ref_ptr<::osg::Geode> mGeode;
 
-      /* virtual */ void fieldHasChangedLocalSideEffect(const av::Field& field);
-      /* virtual */ void evaluateLocalSideEffect();
+    bool mRadiusChanged;
+    bool mHeightChanged;
+    bool mColorChanged;
+};
 
-      /**
-       * Get the ::osg::Capsule object.
-       * \return an osg::ref pointer to the Capsule object
-       */
-      ::osg::ref_ptr< ::osg::Capsule> getOsgCapsule() const;
-
-      /**
-       * Get the ::osg::ShapeDrawable object.
-       * \return an osg::ref pointer to the ShapeDrawable object
-       */
-      ::osg::ref_ptr< ::osg::ShapeDrawable> getOsgShapeDrawable() const;
-
-    private:
-
-      ::osg::ref_ptr< ::osg::ShapeDrawable> mShapeDrawable;
-      ::osg::ref_ptr< ::osg::Capsule> mCapsule;
-      ::osg::ref_ptr< ::osg::Geode> mGeode;
-
-      bool mRadiusChanged;
-      bool mHeightChanged;
-      bool mColorChanged;
-    };
-
-    typedef SingleField<Link<Capsule> > SFCapsule;
-    typedef MultiField<Link<Capsule> > MFCapsule;
-  }
+typedef SingleField<Link<Capsule>> SFCapsule;
+typedef MultiField<Link<Capsule>> MFCapsule;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Capsule> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Capsule> >;
+template class AV_OSG_DLL SingleField<Link<osg::Capsule>>;
+template class AV_OSG_DLL MultiField<Link<osg::Capsule>>;
 #endif
 
-}
+} // namespace av
 
 #endif

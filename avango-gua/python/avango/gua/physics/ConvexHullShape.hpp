@@ -3,4 +3,4 @@
 
 void init_ConvexHullShape();
 
-#endif //AV_PYTHON_GUA_CONVEX_HULL_SHAPE_HPP
+#endif // AV_PYTHON_GUA_CONVEX_HULL_SHAPE_HPP

@@ -41,4 +41,3 @@
  */
 
 #endif // #if !defined(AVANGO_PYTHON_DOXYGEN_H)
-

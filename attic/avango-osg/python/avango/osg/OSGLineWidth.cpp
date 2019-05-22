@@ -30,20 +30,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLineWidth(void)
 {
-  // wrapping osg::LineWidth functionality
-  register_field<av::osg::SFLineWidth>("SFLineWidth");
-  register_multifield<av::osg::MFLineWidth>("MFLineWidth");
-  class_<av::osg::LineWidth, av::Link<av::osg::LineWidth>, bases<av::osg::Object>, boost::noncopyable >("LineWidth", "docstring", no_init);
+    // wrapping osg::LineWidth functionality
+    register_field<av::osg::SFLineWidth>("SFLineWidth");
+    register_multifield<av::osg::MFLineWidth>("MFLineWidth");
+    class_<av::osg::LineWidth, av::Link<av::osg::LineWidth>, bases<av::osg::Object>, boost::noncopyable>("LineWidth", "docstring", no_init);
 }

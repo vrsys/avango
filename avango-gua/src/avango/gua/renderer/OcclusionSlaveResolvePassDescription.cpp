@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::OcclusionSlaveResolvePassDescription"));
+av::Logger& logger(av::getLogger("av::gua::OcclusionSlaveResolvePassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::OcclusionSlaveResolvePassDescription);
@@ -15,16 +15,14 @@ AV_FC_DEFINE(av::gua::OcclusionSlaveResolvePassDescription);
 AV_FIELD_DEFINE(av::gua::SFOcclusionSlaveResolvePassDescription);
 AV_FIELD_DEFINE(av::gua::MFOcclusionSlaveResolvePassDescription);
 
-av::gua::OcclusionSlaveResolvePassDescription::OcclusionSlaveResolvePassDescription(
-  std::shared_ptr< ::gua::OcclusionSlaveResolvePassDescription> const& guaOcclusionSlaveResolvePassDescription)
-    : PipelinePassDescription(guaOcclusionSlaveResolvePassDescription)
-    , m_guaOcclusionSlaveResolvePassDescription(guaOcclusionSlaveResolvePassDescription)
-{}
-
-void
-av::gua::OcclusionSlaveResolvePassDescription::initClass()
+av::gua::OcclusionSlaveResolvePassDescription::OcclusionSlaveResolvePassDescription(std::shared_ptr<::gua::OcclusionSlaveResolvePassDescription> const& guaOcclusionSlaveResolvePassDescription)
+    : PipelinePassDescription(guaOcclusionSlaveResolvePassDescription), m_guaOcclusionSlaveResolvePassDescription(guaOcclusionSlaveResolvePassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::OcclusionSlaveResolvePassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 

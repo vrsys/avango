@@ -26,22 +26,14 @@
 
 using namespace shade::parser;
 
-
-ReferenceValue::ReferenceValue(Index value) :
-  m_value(value)
-{
-}
+ReferenceValue::ReferenceValue(Index value) : m_value(value) {}
 
 bool ReferenceValue::less_than(const Value& other) const
 {
-  const ReferenceValue* other_const = dynamic_cast<const ReferenceValue*>(&other);
-  assert(other_const);
+    const ReferenceValue* other_const = dynamic_cast<const ReferenceValue*>(&other);
+    assert(other_const);
 
-  return m_value < other_const->m_value;
+    return m_value < other_const->m_value;
 }
 
-bool ReferenceValue::is_constant(void) const
-{
-  return true;
-}
-
+bool ReferenceValue::is_constant(void) const { return true; }

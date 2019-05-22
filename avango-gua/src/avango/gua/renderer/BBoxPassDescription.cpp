@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::BBoxPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::BBoxPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::BBoxPassDescription);
@@ -14,16 +14,14 @@ AV_FC_DEFINE(av::gua::BBoxPassDescription);
 AV_FIELD_DEFINE(av::gua::SFBBoxPassDescription);
 AV_FIELD_DEFINE(av::gua::MFBBoxPassDescription);
 
-av::gua::BBoxPassDescription::BBoxPassDescription(
-  std::shared_ptr< ::gua::BBoxPassDescription> const& guaBBoxPassDescription)
-    : PipelinePassDescription(guaBBoxPassDescription)
-    , m_guaBBoxPassDescription(guaBBoxPassDescription)
-{}
-
-void
-av::gua::BBoxPassDescription::initClass()
+av::gua::BBoxPassDescription::BBoxPassDescription(std::shared_ptr<::gua::BBoxPassDescription> const& guaBBoxPassDescription)
+    : PipelinePassDescription(guaBBoxPassDescription), m_guaBBoxPassDescription(guaBBoxPassDescription)
 {
-    if (!isTypeInitialized())
+}
+
+void av::gua::BBoxPassDescription::initClass()
+{
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -35,10 +33,4 @@ av::gua::BBoxPassDescription::initClass()
     }
 }
 
-std::shared_ptr< ::gua::BBoxPassDescription> const&
-av::gua::BBoxPassDescription::getGuaBBoxPassDescription() const
-{
-    return m_guaBBoxPassDescription;
-}
-
-
+std::shared_ptr<::gua::BBoxPassDescription> const& av::gua::BBoxPassDescription::getGuaBBoxPassDescription() const { return m_guaBBoxPassDescription; }

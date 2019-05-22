@@ -26,71 +26,68 @@
 
 namespace
 {
-  class Base
-  {
+class Base
+{
   public:
     explicit Base(int i) {}
-    virtual ~Base(void) {};
+    virtual ~Base(void){};
+
   private:
     Base(const Base&);
-  };
+};
 
-  class Derived : public Base
-  {
+class Derived : public Base
+{
   public:
     explicit Derived(int i) : Base(i) {}
-  };
-}
-
+};
+} // namespace
 
 TEST(UnequalTypeid)
 {
-  Base b(1);
-  Derived d(1);
-  CHECK( typeid(b)!=typeid(d) );
+    Base b(1);
+    Derived d(1);
+    CHECK(typeid(b) != typeid(d));
 }
 
 TEST(UnequalDereferencedTypeid)
 {
-  boost::shared_ptr<Base> b(new Base(1));
-  boost::shared_ptr<Derived> d(new Derived(1));
-  CHECK( typeid(*b)!=typeid(*d) );
+    boost::shared_ptr<Base> b(new Base(1));
+    boost::shared_ptr<Derived> d(new Derived(1));
+    CHECK(typeid(*b) != typeid(*d));
 }
 
 TEST(UnequalPointerTypeid)
 {
-  Base b(1);
-  Derived d(1);
-  CHECK( typeid(&b)!=typeid(&d) );
+    Base b(1);
+    Derived d(1);
+    CHECK(typeid(&b) != typeid(&d));
 }
 
 TEST(BaseClassTypeid)
 {
-  boost::shared_ptr<Base> b(new Base(1));
-  boost::shared_ptr<Derived> d(new Derived(1));
-  CHECK( typeid(&*b) == typeid(static_cast<Base*>(&*d)) );
+    boost::shared_ptr<Base> b(new Base(1));
+    boost::shared_ptr<Derived> d(new Derived(1));
+    CHECK(typeid(&*b) == typeid(static_cast<Base*>(&*d)));
 }
-
 
 namespace
 {
-  template<class T> T* get_pointer(T* v)
-  {
+template <class T>
+T* get_pointer(T* v)
+{
     return v;
-  }
-  Base* get_pointer(Base& v)
-  {
-    return &v;
-  }
 }
+Base* get_pointer(Base& v) { return &v; }
+} // namespace
 
 TEST(get_pointer)
 {
-  Base* b = new Base(1);
-  Base& rb(*b);
-  boost::shared_ptr<Base> sb(b);
-  CHECK_EQUAL(b, get_pointer(b));  // Template function
-  CHECK_EQUAL(b, get_pointer(*b)); // Specific function
-  CHECK_EQUAL(b, get_pointer(rb)); // Specific function
-  CHECK_EQUAL(b, get_pointer(sb)); // ADL
+    Base* b = new Base(1);
+    Base& rb(*b);
+    boost::shared_ptr<Base> sb(b);
+    CHECK_EQUAL(b, get_pointer(b));  // Template function
+    CHECK_EQUAL(b, get_pointer(*b)); // Specific function
+    CHECK_EQUAL(b, get_pointer(rb)); // Specific function
+    CHECK_EQUAL(b, get_pointer(sb)); // ADL
 }

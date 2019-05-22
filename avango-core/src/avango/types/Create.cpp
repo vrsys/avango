@@ -40,13 +40,13 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  av::Logger& logger(av::getLogger("av::Create"));
+av::Logger& logger(av::getLogger("av::Create"));
 
-  // functions, internal
+// functions, internal
 
 } // namespace
 
@@ -55,17 +55,15 @@ namespace
 // functions, exported
 
 /* virtual */
-av::Create::~Create()
-{}
+av::Create::~Create() {}
 
-/* virtual */ av::Typed*
-av::Create::makeInstance() const
+/* virtual */ av::Typed* av::Create::makeInstance() const
 {
-  AVANGO_LOG(logger,logging::FATAL , "makeInstance(): logically 'pure virtual' function called; aborting!")
+    AVANGO_LOG(logger, logging::FATAL, "makeInstance(): logically 'pure virtual' function called; aborting!")
 
-  ::abort();
+    ::abort();
 
 #if defined(_WIN32)
-  return NULL; // and this is a special treatment to satisfy MS VS 8.
+    return NULL; // and this is a special treatment to satisfy MS VS 8.
 #endif
 }

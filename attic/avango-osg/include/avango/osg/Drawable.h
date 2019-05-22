@@ -37,59 +37,54 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Abstract Wrapper for ::osg::Drawable
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Drawable : public Object
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
     /**
-     * Abstract Wrapper for ::osg::Drawable
-     *
-     * \ingroup av_osg
+     * Constructor.
      */
-    class AV_OSG_DLL Drawable : public Object
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    Drawable(::osg::Drawable* osgdrawable);
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Drawable();
 
-      /**
-       * Constructor.
-       */
-      Drawable(::osg::Drawable* osgdrawable);
+  public:
+    SFStateSet StateSet;
 
-    protected:
+    /**
+     * Get the wrapped ::osg::Drawable.
+     */
+    ::osg::Drawable* getOsgDrawable() const;
+    const ::osg::BoundingBox getBoundingBox() const { return mOsgDrawable->getBound(); }
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Drawable();
+  protected:
+    virtual void getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event);
+    virtual void setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event);
 
-    public:
+  private:
+    ::osg::Drawable* mOsgDrawable;
+};
 
-      SFStateSet StateSet;
+typedef SingleField<Link<Drawable>> SFDrawable;
+typedef MultiField<Link<Drawable>> MFDrawable;
 
-      /**
-       * Get the wrapped ::osg::Drawable.
-       */
-      ::osg::Drawable* getOsgDrawable() const;
-      const ::osg::BoundingBox getBoundingBox() const { return mOsgDrawable->getBound(); }
-
-    protected:
-
-      virtual void getStateSetCB(const av::osg::SFStateSet::GetValueEvent& event);
-      virtual void setStateSetCB(const av::osg::SFStateSet::SetValueEvent& event);
-
-    private:
-
-      ::osg::Drawable *mOsgDrawable;
-    };
-
-    typedef SingleField<Link<Drawable> > SFDrawable;
-    typedef MultiField<Link<Drawable> > MFDrawable;
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Drawable> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Drawable> >;
+template class AV_OSG_DLL SingleField<Link<osg::Drawable>>;
+template class AV_OSG_DLL MultiField<Link<osg::Drawable>>;
 #endif
 
 } // namespace av

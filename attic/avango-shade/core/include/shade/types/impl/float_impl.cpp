@@ -21,57 +21,65 @@
 *                                                                        *
 \************************************************************************/
 
-template<class Qualifier> shade::float_<Qualifier>::float_(void) :
-  TypeBase<float_<Qualifier>, Qualifier>(formatter::Constants::float_),
-  m_value(0.)
-{}
-
-template<class Qualifier> shade::float_<Qualifier>::float_(float v) :
-  TypeBase<float_<Qualifier>, Qualifier>(formatter::Constants::float_),
-  m_value(v)
-{}
-
-template<class Qualifier> void shade::float_<Qualifier>::set(float value)
+template <class Qualifier>
+shade::float_<Qualifier>::float_(void) : TypeBase<float_<Qualifier>, Qualifier>(formatter::Constants::float_), m_value(0.)
 {
-  m_value = value;
-  this->touch();
 }
 
-template<class Qualifier> void shade::float_<Qualifier>::get(float& value) const
+template <class Qualifier>
+shade::float_<Qualifier>::float_(float v) : TypeBase<float_<Qualifier>, Qualifier>(formatter::Constants::float_), m_value(v)
 {
-  value = m_value;
 }
 
-template<class Qualifier>
-template<class Q> void shade::float_<Qualifier>::copy_value(const float_<Q>& source)
+template <class Qualifier>
+void shade::float_<Qualifier>::set(float value)
 {
-  source.get(m_value);
-  this->touch();
+    m_value = value;
+    this->touch();
 }
 
-template<class Qualifier> std::string shade::float_<Qualifier>::get_constructor_str(void) const
+template <class Qualifier>
+void shade::float_<Qualifier>::get(float& value) const
 {
-  return "0";
+    value = m_value;
 }
 
-template<class Qualifier> std::string shade::float_<Qualifier>::get_constructor_str(boost::shared_ptr<Type::State>) const
+template <class Qualifier>
+template <class Q>
+void shade::float_<Qualifier>::copy_value(const float_<Q>& source)
 {
-  std::ostringstream out;
-  out << m_value;
-  return out.str();
+    source.get(m_value);
+    this->touch();
 }
 
-template<class Qualifier> void shade::float_<Qualifier>::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
+template <class Qualifier>
+std::string shade::float_<Qualifier>::get_constructor_str(void) const
 {
-  wrapper->Uniform1f(index, m_value);
+    return "0";
 }
 
-template<class Qualifier> std::string shade::float_<Qualifier>::get_uniq_id(void) const
+template <class Qualifier>
+std::string shade::float_<Qualifier>::get_constructor_str(boost::shared_ptr<Type::State>) const
 {
-  return join_names(Qualifier::get_uniq_id(), "float");
+    std::ostringstream out;
+    out << m_value;
+    return out.str();
 }
 
-template<class Qualifier> void shade::float_<Qualifier>::generate_constructor(formatter::Generator& generator) const
+template <class Qualifier>
+void shade::float_<Qualifier>::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
 {
-  generator.handle_literal_float(m_value);
+    wrapper->Uniform1f(index, m_value);
+}
+
+template <class Qualifier>
+std::string shade::float_<Qualifier>::get_uniq_id(void) const
+{
+    return join_names(Qualifier::get_uniq_id(), "float");
+}
+
+template <class Qualifier>
+void shade::float_<Qualifier>::generate_constructor(formatter::Generator& generator) const
+{
+    generator.handle_literal_float(m_value);
 }

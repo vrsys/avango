@@ -11,64 +11,60 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * ScaledGrabTool class
+ *
+ * \ingroup av_gua
+ */
+class AV_TOOLS_DLL ScaledGrabTool : public Tool
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * ScaledGrabTool class
-     *
-     * \ingroup av_gua
+     * Constructor.
      */
-    class AV_TOOLS_DLL ScaledGrabTool : public Tool
-    {
-      AV_FC_DECLARE();
+    ScaledGrabTool();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ScaledGrabTool();
 
-      /**
-       * Constructor.
-       */
-      ScaledGrabTool();
+  public:
+    /**
+     * Defines the device transformation relative to the root node coordinate system.
+     */
+    av::gua::SFMatrix4 DeviceTransform;
 
-    protected:
+    /**
+     * Defines the head transformation relative to the root node coordinate system.
+     */
+    av::gua::SFMatrix4 HeadTransform;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ScaledGrabTool();
+  protected:
+    /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
+    /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
 
-    public:
+    ::gua::math::mat4 mTargetMat, mTargetRotMat, mTargetTransMat;
+    ::gua::math::mat4 mDeviceInvMat;
+    ::gua::math::mat4 mPivotMat, mPivotInvMat;
+    ::gua::math::vec3 mDevicePos;
+    double mScale;
+};
 
-      /**
-       * Defines the device transformation relative to the root node coordinate system.
-       */
-      av::gua::SFMatrix4 DeviceTransform;
-
-      /**
-       * Defines the head transformation relative to the root node coordinate system.
-       */
-      av::gua::SFMatrix4 HeadTransform;
-
-    protected:
-
-      /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
-      /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
-
-      ::gua::math::mat4 mTargetMat, mTargetRotMat, mTargetTransMat;
-      ::gua::math::mat4 mDeviceInvMat;
-      ::gua::math::mat4 mPivotMat, mPivotInvMat;
-      ::gua::math::vec3 mDevicePos;
-      double mScale;
-    };
-
-    using SFScaledGrabTool = SingleField<Link<ScaledGrabTool> >;
-    using MFScaledGrabTool = MultiField<Link<ScaledGrabTool> >;
-  }
+using SFScaledGrabTool = SingleField<Link<ScaledGrabTool>>;
+using MFScaledGrabTool = MultiField<Link<ScaledGrabTool>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool> >;
-  template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool> >;
+template class AV_TOOLS_DLL SingleField<Link<tools::ScaledGrabTool>>;
+template class AV_TOOLS_DLL MultiField<Link<tools::ScaledGrabTool>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_TOOLS_SCALED_GRAB_TOOL_HPP
+#endif // AVANGO_TOOLS_SCALED_GRAB_TOOL_HPP

@@ -13,68 +13,65 @@
 
 namespace av
 {
-  namespace oculus
-  {
+namespace oculus
+{
+/**
+ * Wrapper for ::gua::OculusWindow
+ */
+
+class AV_OCULUS_DLL OculusWindow : public av::gua::GlfwWindow
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-    * Wrapper for ::gua::OculusWindow
-    */
+     * Constructor. When called without arguments, a new ::gua::OculusRift is created.
+     * Otherwise, the given ::gua::OculusRift is used.
+     */
 
-    class AV_OCULUS_DLL OculusWindow : public av::gua::GlfwWindow
-    {
-      AV_FC_DECLARE();
+    OculusWindow(std::shared_ptr<::gua::OculusWindow> const& guaOculusWindow = std::shared_ptr<::gua::OculusWindow>(new ::gua::OculusWindow(":0.0")));
 
-      public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::OculusRift is created.
-         * Otherwise, the given ::gua::OculusRift is used.
-         */
+    virtual ~OculusWindow();
 
-         OculusWindow(std::shared_ptr< ::gua::OculusWindow> const& guaOculusWindow =
-                      std::shared_ptr< ::gua::OculusWindow> (new ::gua::OculusWindow(":0.0")));
+  public:
+    ::av::gua::SFMatrix SensorOrientation;
+    ::av::gua::SFVec2ui Resolution;
+    ::av::gua::SFVec2ui EyeResolution;
+    ::av::gua::SFVec2 LeftScreenSize;
+    ::av::gua::SFVec2 RightScreenSize;
+    ::av::gua::SFVec3 LeftScreenTranslation;
+    ::av::gua::SFVec3 RightScreenTranslation;
+    ::av::SFFloat EyeDistance;
 
-       protected:
+  public:
+    /**
+     * Get the wrapped ::gua::OculusRift
+     */
+    std::shared_ptr<::gua::OculusWindow> const& getGuaOculusWindow() const;
 
-         /**
-          * Destructor made protected to prevent allocation on stack.
-          */
+  private:
+    std::shared_ptr<::gua::OculusWindow> m_guaOculusWindow;
 
-         virtual ~OculusWindow();
+    void evaluate() override;
 
-       public:
-        ::av::gua::SFMatrix                 SensorOrientation;
-        ::av::gua::SFVec2ui                 Resolution;
-        ::av::gua::SFVec2ui                 EyeResolution;
-        ::av::gua::SFVec2                   LeftScreenSize;
-        ::av::gua::SFVec2                   RightScreenSize;
-        ::av::gua::SFVec3                   LeftScreenTranslation;
-        ::av::gua::SFVec3                   RightScreenTranslation;
-        ::av::SFFloat                       EyeDistance;
+    OculusWindow(const OculusWindow&);
+    OculusWindow& operator=(const OculusWindow&);
+};
 
-       public:
-         /**
-          * Get the wrapped ::gua::OculusRift
-          */
-         std::shared_ptr< ::gua::OculusWindow> const& getGuaOculusWindow() const;
+using SFOculusWindow = SingleField<Link<OculusWindow>>;
+using MFOculusWindow = MultiField<Link<OculusWindow>>;
 
-       private:
-        std::shared_ptr< ::gua::OculusWindow> m_guaOculusWindow;
-
-        void evaluate() override;
-
-        OculusWindow(const OculusWindow&);
-        OculusWindow& operator=(const OculusWindow&);
-    };
-
-    using SFOculusWindow = SingleField<Link<OculusWindow> >;
-    using MFOculusWindow = MultiField<Link<OculusWindow> >;
-
-  }
+} // namespace oculus
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OCULUS_DLL SingleField<Link<oculus::OculusWindow> >;
-  template class AV_OCULUS_DLL MultiField<Link<oculus::OculusWindow> >;
+template class AV_OCULUS_DLL SingleField<Link<oculus::OculusWindow>>;
+template class AV_OCULUS_DLL MultiField<Link<oculus::OculusWindow>>;
 #endif
-}
+} // namespace av
 
-#endif //AVANGO_OCULUS_OCULUSWINDOW_HPP
+#endif // AVANGO_OCULUS_OCULUSWINDOW_HPP

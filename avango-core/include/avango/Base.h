@@ -41,55 +41,50 @@
 
 namespace av
 {
+class InputStream;
+class OutputStream;
+class Action;
+class WriteAction;
 
-  class InputStream;
-  class OutputStream;
-  class Action;
-  class WriteAction;
+// types, exported (class, enum, struct, union, typedef)
 
-  // types, exported (class, enum, struct, union, typedef)
-
-  /**
-   * This class provides reference counting, type-safe casting and
-   * facilities for Action traversals and streaming.
-   *
-   * Base adds a public interface for streaming. An object can be
-   * written to or read from a stream using the member functions read()
-   * and write() or the provided global stream operators.
-   *
-   * Objects are automatically deleted when their reference count
-   * goes to zero. This can be override by setting the
-   * AVANGO_NO_DELETE_ON_UNREF environment variable.
-   *
-   * You cannot allocate instances of Base on the stack, but they can be
-   * created with new. They should be stored in Link smart pointers,
-   * so that they are automatically deleted when the reference count goes
-   * to zero.
-   *
-   * \ingroup av
-   *
-   */
-  class AV_DLL Base : public Typed
-  {
-
+/**
+ * This class provides reference counting, type-safe casting and
+ * facilities for Action traversals and streaming.
+ *
+ * Base adds a public interface for streaming. An object can be
+ * written to or read from a stream using the member functions read()
+ * and write() or the provided global stream operators.
+ *
+ * Objects are automatically deleted when their reference count
+ * goes to zero. This can be override by setting the
+ * AVANGO_NO_DELETE_ON_UNREF environment variable.
+ *
+ * You cannot allocate instances of Base on the stack, but they can be
+ * created with new. They should be stored in Link smart pointers,
+ * so that they are automatically deleted when the reference count goes
+ * to zero.
+ *
+ * \ingroup av
+ *
+ */
+class AV_DLL Base : public Typed
+{
     AV_TYPED_DECLARE_ABSTRACT();
 
   public:
-
     /**
      * Constructor
      */
     Base();
 
   protected:
-
     /**
      * Destructor made protected to prevent allocation on stack.
      */
     virtual ~Base();
 
   public:
-
     /**
      * Increment the reference count.
      */
@@ -116,7 +111,7 @@ namespace av
     /**
      * Return the current reference count of the object.
      */
-    int  referenceCount();
+    int referenceCount();
 
     /**
      * Sets a 'floating' reference. The floating reference ensures that an
@@ -175,7 +170,6 @@ namespace av
     virtual void write(OutputStream& os);
 
   protected:
-
     /**
      * Internally increment reference count.
      *
@@ -217,32 +211,30 @@ namespace av
     virtual void setFloatingRefImpl();
 
   private:
-
     int mRefCount;
     bool mHasFloatingRef;
 
     void writeToBinaryStream(WriteAction& action);
     void writeToASCIIStream(WriteAction& action);
+};
 
-  };
+// variables, exported (extern)
 
-  // variables, exported (extern)
+// functions, inlined (inline)
 
-  // functions, inlined (inline)
+// functions, exported (extern)
 
-  // functions, exported (extern)
+/**
+ * Read the internal state of the object obj from the stream os.
+ */
+extern AV_DLL InputStream& operator>>(InputStream& is, Base* obj);
 
-  /**
-   * Read the internal state of the object obj from the stream os.
-   */
-  extern AV_DLL InputStream& operator>>(InputStream& is, Base* obj);
+/**
+ * Write the internal state of the object obj to the stream os.
+ */
+extern AV_DLL OutputStream& operator<<(OutputStream& os, Base* obj);
 
-  /**
-   * Write the internal state of the object obj to the stream os.
-   */
-  extern AV_DLL OutputStream& operator<<(OutputStream& os, Base* obj);
-
-}
+} // namespace av
 
 // subclassing macros
 
@@ -252,8 +244,7 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_DECLARE() \
-  AV_TYPED_DECLARE()
+#define AV_BASE_DECLARE() AV_TYPED_DECLARE()
 
 /**
  * This macro must be called in the definition of all abstract classes
@@ -261,8 +252,7 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_DECLARE_ABSTRACT() \
-  AV_TYPED_DECLARE_ABSTRACT()
+#define AV_BASE_DECLARE_ABSTRACT() AV_TYPED_DECLARE_ABSTRACT()
 
 /**
  * This macro must be called at toplevel for all abstract classes
@@ -272,8 +262,7 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_DEFINE_ABSTRACT(thisClass) \
-  AV_TYPED_DEFINE_ABSTRACT(thisClass)
+#define AV_BASE_DEFINE_ABSTRACT(thisClass) AV_TYPED_DEFINE_ABSTRACT(thisClass)
 
 /**
  * This macro must be called at toplevel for all concrete classes
@@ -283,8 +272,7 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_DEFINE(thisClass) \
-  AV_TYPED_DEFINE(thisClass)
+#define AV_BASE_DEFINE(thisClass) AV_TYPED_DEFINE(thisClass)
 
 /**
  * This macro must be called in DerivedClass::initClass() for all
@@ -296,8 +284,7 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_INIT_ABSTRACT(parentClass, thisClass, isPublic) \
-  AV_TYPED_INIT_ABSTRACT(parentClass, thisClass, isPublic)
+#define AV_BASE_INIT_ABSTRACT(parentClass, thisClass, isPublic) AV_TYPED_INIT_ABSTRACT(parentClass, thisClass, isPublic)
 
 /**
  * This macro must be called in DerivedClass::initClass() for all
@@ -309,8 +296,6 @@ namespace av
  *
  * \ingroup av
  */
-#define AV_BASE_INIT(parentClass, thisClass, isPublic) \
-  AV_TYPED_INIT(parentClass, thisClass, \
-                new ::av::CreateA<thisClass>, isPublic)
+#define AV_BASE_INIT(parentClass, thisClass, isPublic) AV_TYPED_INIT(parentClass, thisClass, new ::av::CreateA<thisClass>, isPublic)
 
 #endif // #if !defined(AV_BASE_H)

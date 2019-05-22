@@ -37,286 +37,290 @@
  * \ingroup av_sound
  */
 
-namespace av {
-  namespace sound {
+namespace av
+{
+namespace sound
+{
+class SoundRenderer;
+/**
+ * This class represents a sound source in the scenegraph. Its position in world
+ * coordinates depends on the transformations of its parent nodes.
+ * This class doesn't do the sound rendering itself, but holds a list of
+ * LocalSources, which are implemented by the concrete SoundRenderers.
+ */
+// class SoundSource : public av::osg::Group {
+class AV_SOUND_DLL SoundSource : public av::gua::TransformNode
+{
+    AV_FC_DECLARE();
 
-    class SoundRenderer;
+  public:
+    SoundSource();
+    /* virtual */ ~SoundSource();
+
     /**
-    * This class represents a sound source in the scenegraph. Its position in world
-    * coordinates depends on the transformations of its parent nodes.
-    * This class doesn't do the sound rendering itself, but holds a list of
-    * LocalSources, which are implemented by the concrete SoundRenderers.
-    */
-    //class SoundSource : public av::osg::Group {
-    class AV_SOUND_DLL SoundSource : public av::gua::TransformNode {
-      AV_FC_DECLARE();
+     * Location of a sound file to play. Supported at the moment are .wav and .ogg files.
+     */
+    SFString URL;
+    /**
+     * Should the sound be looped ( Ignored when in streaming mode )
+     */
+    SFBool Loop;
+    /**
+     * The velocity of the source.
+     */
+    av::gua::SFVec3 Velocity;
+    /**
+     * The direction of the source.
+     */
+    av::gua::SFVec3 Direction;
+    /**
+     * The inner angle of the cone for a directional source (in deg)
+     */
+    SFFloat ConeInnerAngle;
+    /**
+     * The outer angle of the cone for a directional source (in deg)
+     */
+    SFFloat ConeOuterAngle;
+    /**
+     * The outer gain of the cone for a directional source
+     */
+    SFFloat ConeOuterGain;
+    /**
+     * Gain for the sound source ( in dB )
+     */
+    SFFloat Gain;
+    /**
+     * Pitch value for the sound source
+     */
+    SFFloat Pitch;
+    /**
+     * Start playing
+     */
+    SFBool Play;
+    /**
+     * Pause playing ( can be resumed )
+     */
+    SFBool Pause;
+    /**
+     * Stop playing ( restarts from the beginning )
+     */
+    SFBool Stop;
+    /**
+     * Rewind sample to the start
+     */
+    SFBool Rewind;
+    /**
+     * Is set to true when sound finishes playing
+     */
+    SFBool FinishedPlaying;
+    /**
+     * The duration of the sample in seconds
+     */
+    SFDouble PlayTime;
+    /**
+     * Input field for sample buffer. Can be used for streaming sound, for instance together
+     * with the gstreamer-module
+     */
+    SFSampleBuffer NewSampleBuffer;
+    /**
+     * To switch between a static or dynamic sound source
+     */
+    SFBool Spatialize;
+    /**
+     * for resource management
+     */
+    SFFloat Priority;
+    /**
+     * level for reverb
+     */
+    SFFloat ReverbLevel;
+
+    SFBool Free;
+
+    /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
+    /* virtual */ void evaluateLocalSideEffect();
+
+    /**
+     * Base class for concrete implementation of sound sources. SoundRenderers provide
+     * a class derived from this base class to implement their concrete sound rendering.
+     */
+    class LocalSource
+    {
       public:
-        SoundSource();
-        /* virtual */ ~SoundSource();
+        /**
+         * Constructor. Default constructor is disabled.
+         * @param soundRenderer The sound renderer which created this LocalSource.
+         */
+        LocalSource(SoundRenderer* soundRenderer);
+        virtual ~LocalSource();
+
+        // data
 
         /**
-         * Location of a sound file to play. Supported at the moment are .wav and .ogg files.
+         * Sets the position of this source in world coordinates.
+         * @param transform The matrix transform of this source.
          */
-        SFString URL;
+        virtual void setWorldTransform(const ::gua::math::mat4& transform) = 0;
         /**
-         * Should the sound be looped ( Ignored when in streaming mode )
+         * Should this source loop?
+         * @param loop Enable/Disable looping
          */
-        SFBool   Loop;
+        virtual void setLooping(bool loop) = 0;
         /**
-         * The velocity of the source.
+         * Set location of sound file
+         * @param url File localtion of sound file
          */
-        av::gua::SFVec3   Velocity;
+        virtual void setURL(const std::string& url) = 0;
         /**
-         * The direction of the source.
+         * Should sound source be spatial?
+         * @param spatialize Enable/Disable spatial sound source
          */
-        av::gua::SFVec3   Direction;
+        virtual void setSpatialize(bool spatialize) {}
         /**
-         * The inner angle of the cone for a directional source (in deg)
+         * Set velocity of sound source ( in m/s )
+         * @param velocity The velocity vector for this source
          */
-        SFFloat ConeInnerAngle;
+        virtual void setVelocity(const ::gua::math::vec3& velocity) {}
         /**
-         * The outer angle of the cone for a directional source (in deg)
+         * Set direction of sound source
+         * @param direction The direction vector for this source
          */
-        SFFloat ConeOuterAngle;
+        virtual void setDirection(const ::gua::math::vec3& direction) {}
         /**
-         * The outer gain of the cone for a directional source
+         * Set inner angle of the cone for a directional sound source
+         * @param angle The inner angle for the cone
          */
-        SFFloat ConeOuterGain;
+        virtual void setConeInnerAngle(float angle) {}
         /**
-         * Gain for the sound source ( in dB )
+         * Set outer angle of the cone for a directional sound source
+         * @param angle The outer angle for the cone
          */
-        SFFloat  Gain;
+        virtual void setConeOuterAngle(float angle) {}
         /**
-         * Pitch value for the sound source
+         * Set outer gain of the cone for a directional sound source
+         * @param gain The outer gain for the cone
          */
-        SFFloat  Pitch;
+        virtual void setConeOuterGain(float gain) {}
         /**
-         * Start playing
+         * Set gain for this source
+         * @param gain The gain value ( in dB)
          */
-        SFBool   Play;
+        virtual void setGain(float gain) {}
         /**
-         * Pause playing ( can be resumed )
+         * Set pitch for this source
+         * @param pitch The pitch value
          */
-        SFBool   Pause;
+        virtual void setPitch(float pitch) {}
         /**
-         * Stop playing ( restarts from the beginning )
+         * Set priority for this source
+         * @param priority The priority value
          */
-        SFBool   Stop;
+        virtual void setPriority(float priority) {}
         /**
-         * Rewind sample to the start
+         * Set reverb level for this source
+         * @param level The level value
          */
-        SFBool   Rewind;
-        /**
-         * Is set to true when sound finishes playing
-         */
-        SFBool   FinishedPlaying;
-        /**
-         * The duration of the sample in seconds
-         */
-        SFDouble  PlayTime;
-        /**
-         * Input field for sample buffer. Can be used for streaming sound, for instance together
-         * with the gstreamer-module
-         */
-        SFSampleBuffer NewSampleBuffer;
-        /**
-         * To switch between a static or dynamic sound source
-         */
-        SFBool Spatialize;
-        /**
-         * for resource management
-         */
-        SFFloat Priority;
-        /**
-         * level for reverb
-         */
-        SFFloat ReverbLevel;
+        virtual void setReverbLevel(float level) {}
 
-        SFBool Free;
-
-        /* virtual */ void fieldHasChangedLocalSideEffect(const Field&);
-        /* virtual */ void evaluateLocalSideEffect();
+        virtual void setFree() {}
 
         /**
-         * Base class for concrete implementation of sound sources. SoundRenderers provide
-         * a class derived from this base class to implement their concrete sound rendering.
+         * Start playback
          */
-        class LocalSource {
-          public:
-            /**
-             * Constructor. Default constructor is disabled.
-             * @param soundRenderer The sound renderer which created this LocalSource.
-             */
-            LocalSource(SoundRenderer* soundRenderer);
-            virtual ~LocalSource();
+        virtual void play() {}
+        /**
+         * Pause playback
+         */
+        virtual void pause() {}
+        /**
+         * Stop playback
+         */
+        virtual void stop() {}
+        /**
+         * Rewind source
+         */
+        virtual void rewind() {}
+        /**
+         * Is source done with playing?
+         * @return true if done, false otherwise
+         */
+        virtual bool donePlaying() const { return false; }
+        /**
+         * Return play time of sample
+         * @return Sample duration in seconds
+         */
+        virtual double getPlayTime() const { return 0.0; }
 
-            // data
-
-            /**
-             * Sets the position of this source in world coordinates.
-             * @param transform The matrix transform of this source.
-             */
-            virtual void setWorldTransform(const ::gua::math::mat4& transform) = 0;
-            /**
-             * Should this source loop?
-             * @param loop Enable/Disable looping
-             */
-            virtual void setLooping(bool loop) = 0;
-            /**
-             * Set location of sound file
-             * @param url File localtion of sound file
-             */
-            virtual void setURL(const std::string& url) = 0;
-            /**
-             * Should sound source be spatial?
-             * @param spatialize Enable/Disable spatial sound source
-             */
-            virtual void setSpatialize(bool spatialize) {}
-            /**
-             * Set velocity of sound source ( in m/s )
-             * @param velocity The velocity vector for this source
-             */
-            virtual void setVelocity(const ::gua::math::vec3& velocity) {}
-            /**
-             * Set direction of sound source
-             * @param direction The direction vector for this source
-             */
-            virtual void setDirection(const ::gua::math::vec3& direction) {}
-            /**
-             * Set inner angle of the cone for a directional sound source
-             * @param angle The inner angle for the cone
-             */
-            virtual void setConeInnerAngle(float angle) {}
-            /**
-             * Set outer angle of the cone for a directional sound source
-             * @param angle The outer angle for the cone
-             */
-            virtual void setConeOuterAngle(float angle) {}
-            /**
-             * Set outer gain of the cone for a directional sound source
-             * @param gain The outer gain for the cone
-             */
-            virtual void setConeOuterGain(float gain) {}
-            /**
-             * Set gain for this source
-             * @param gain The gain value ( in dB)
-             */
-            virtual void setGain(float gain) {}
-            /**
-             * Set pitch for this source
-             * @param pitch The pitch value
-             */
-            virtual void setPitch(float pitch) {}
-            /**
-             * Set priority for this source
-             * @param priority The priority value
-             */
-            virtual void setPriority(float priority) {}
-            /**
-             * Set reverb level for this source
-             * @param level The level value
-             */
-            virtual void setReverbLevel(float level) {}
-
-            virtual void setFree() {}
-
-            /**
-             * Start playback
-             */
-            virtual void play() {}
-            /**
-             * Pause playback
-             */
-            virtual void pause() {}
-            /**
-             * Stop playback
-             */
-            virtual void stop() {}
-            /**
-             * Rewind source
-             */
-            virtual void rewind() {}
-            /**
-             * Is source done with playing?
-             * @return true if done, false otherwise
-             */
-            virtual bool donePlaying() const { return false; }
-            /**
-             * Return play time of sample
-             * @return Sample duration in seconds
-             */
-            virtual double getPlayTime() const { return 0.0; }
-
-            // managing
-            /**
-             * Return stored pointer to  sound renderer
-             * @return the sound renderer that created this source
-             */
-            const SoundRenderer* getRenderer();
-
-            /**
-             * Enqueue the sample buffer for playback. This can be used for audio streaming.
-             * @param buffer The buffer to play
-             */
-            virtual void enqueueSampleBuffer(Link<SampleBuffer> buffer) {}
-
-          private:
-            // Hidden
-            LocalSource();
-            LocalSource(const LocalSource&);
-            LocalSource& operator=(const LocalSource&);
-
-            SoundRenderer* mSoundRenderer;
-        };
+        // managing
+        /**
+         * Return stored pointer to  sound renderer
+         * @return the sound renderer that created this source
+         */
+        const SoundRenderer* getRenderer();
 
         /**
-         * Add LocalSource instance to this SoundSource. The source accepts ownership of
-         * this LocalSource
-         * @param localSource The LocalSource to add to this SoundSource
+         * Enqueue the sample buffer for playback. This can be used for audio streaming.
+         * @param buffer The buffer to play
          */
-        void         addLocalSource(boost::shared_ptr<LocalSource> localSource);
-        /**
-         * Remove LocalSource from this SoundSource.
-         * @param localSource LocalSource to remove
-         */
-        void         removeLocalSource(boost::shared_ptr<LocalSource> localSource);
-        /**
-         * The number of LocalSource this source manages
-         * @return The number of local sources
-         */
-        unsigned int numLocalSources() const;
-        /**
-         * Return a specific local source
-         * @param index Index of the local source to return (0 <= index < numLocalSources())
-         * @return LocalSource with index
-         */
-        boost::shared_ptr<LocalSource> getLocalSource(unsigned int index);
-        /**
-         * Initialize LocalSource instance with data from this soundsource
-         * @param localSource The LocalSource to initialize
-         */
-        void         initializeLocalSource(boost::shared_ptr<SoundSource::LocalSource> localSource);
+        virtual void enqueueSampleBuffer(Link<SampleBuffer> buffer) {}
 
       private:
-        using LocalSources = std::vector<boost::shared_ptr<LocalSource> >;
-        LocalSources                     mLocalSources;
-        bool                            mPollPlaying;
+        // Hidden
+        LocalSource();
+        LocalSource(const LocalSource&);
+        LocalSource& operator=(const LocalSource&);
 
-        template <class MemFun>
-        void for_each_local_source(MemFun f);
-
-        template <class MemFun, class Arg>
-        void for_each_local_source(MemFun f, Arg arg);
+        SoundRenderer* mSoundRenderer;
     };
 
-    using SFSoundSource = SingleField<Link<SoundSource> >;
-    using MFSoundSource = MultiField<Link<SoundSource> >;
-  }
+    /**
+     * Add LocalSource instance to this SoundSource. The source accepts ownership of
+     * this LocalSource
+     * @param localSource The LocalSource to add to this SoundSource
+     */
+    void addLocalSource(boost::shared_ptr<LocalSource> localSource);
+    /**
+     * Remove LocalSource from this SoundSource.
+     * @param localSource LocalSource to remove
+     */
+    void removeLocalSource(boost::shared_ptr<LocalSource> localSource);
+    /**
+     * The number of LocalSource this source manages
+     * @return The number of local sources
+     */
+    unsigned int numLocalSources() const;
+    /**
+     * Return a specific local source
+     * @param index Index of the local source to return (0 <= index < numLocalSources())
+     * @return LocalSource with index
+     */
+    boost::shared_ptr<LocalSource> getLocalSource(unsigned int index);
+    /**
+     * Initialize LocalSource instance with data from this soundsource
+     * @param localSource The LocalSource to initialize
+     */
+    void initializeLocalSource(boost::shared_ptr<SoundSource::LocalSource> localSource);
+
+  private:
+    using LocalSources = std::vector<boost::shared_ptr<LocalSource>>;
+    LocalSources mLocalSources;
+    bool mPollPlaying;
+
+    template <class MemFun>
+    void for_each_local_source(MemFun f);
+
+    template <class MemFun, class Arg>
+    void for_each_local_source(MemFun f, Arg arg);
+};
+
+using SFSoundSource = SingleField<Link<SoundSource>>;
+using MFSoundSource = MultiField<Link<SoundSource>>;
+} // namespace sound
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_SOUND_DLL SingleField<Link<sound::SoundSource> >;
-  template class AV_SOUND_DLL MultiField<Link<sound::SoundSource> >;
+template class AV_SOUND_DLL SingleField<Link<sound::SoundSource>>;
+template class AV_SOUND_DLL MultiField<Link<sound::SoundSource>>;
 #endif
-}
+} // namespace av
 
 #endif /*AV_SOUND_SOUNDSOURCE_H*/

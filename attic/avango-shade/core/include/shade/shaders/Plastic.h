@@ -32,29 +32,27 @@
 #include "../types/uniform.h"
 #include "../types/float.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Plastic : public ShaderBase<Plastic, IlluminatedMaterial>
+{
+  public:
+    Plastic(float diffuse = 1., float specular = 0.);
 
-    class Plastic : public ShaderBase<Plastic, IlluminatedMaterial>
-    {
-    public:
-      Plastic(float diffuse = 1., float specular = 0.);
+    /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
 
-      /*virtual*/ void_<> illuminance(vec3<> color, vec3<> direction);
+    ValueReference<float_, uniform> diffuse;
+    ValueReference<float_, uniform> specular;
+    ValueReference<float_, uniform> roughness;
+    ValueReference<vec4, uniform> color;
 
-      ValueReference<float_, uniform> diffuse;
-      ValueReference<float_, uniform> specular;
-      ValueReference<float_, uniform> roughness;
-      ValueReference<vec4, uniform> color;
+  private:
+    SHADE_DERIVED_DECL(Plastic, IlluminatedMaterial)
+};
 
-    private:
-      SHADE_DERIVED_DECL(Plastic, IlluminatedMaterial)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Plastic_H */

@@ -9,21 +9,20 @@
 
 namespace UnitTest
 {
-
 class MemoryOutStream : public std::ostringstream
 {
-public:
+  public:
     MemoryOutStream() {}
     char const* GetText() const;
 
-private:
+  private:
     MemoryOutStream(MemoryOutStream const&);
-    void operator =(MemoryOutStream const&);
+    void operator=(MemoryOutStream const&);
 
     mutable std::string m_text;
 };
 
-}
+} // namespace UnitTest
 
 #else
 
@@ -31,36 +30,38 @@ private:
 
 namespace UnitTest
 {
-
 class MemoryOutStream
 {
-public:
+  public:
     explicit MemoryOutStream(int const size = 256);
     ~MemoryOutStream();
 
     char const* GetText() const;
 
-    MemoryOutStream& operator << (char const* txt);
-    MemoryOutStream& operator << (int n);
-    MemoryOutStream& operator << (long n);
-    MemoryOutStream& operator << (unsigned long n);
-    MemoryOutStream& operator << (float f);
-    MemoryOutStream& operator << (double d);
-    MemoryOutStream& operator << (void const* p);
-    MemoryOutStream& operator << (unsigned int s);
+    MemoryOutStream& operator<<(char const* txt);
+    MemoryOutStream& operator<<(int n);
+    MemoryOutStream& operator<<(long n);
+    MemoryOutStream& operator<<(unsigned long n);
+    MemoryOutStream& operator<<(float f);
+    MemoryOutStream& operator<<(double d);
+    MemoryOutStream& operator<<(void const* p);
+    MemoryOutStream& operator<<(unsigned int s);
 
-    enum { GROW_CHUNK_SIZE = 32 };
+    enum
+    {
+        GROW_CHUNK_SIZE = 32
+    };
     int GetCapacity() const;
 
-private:
-    void operator= (MemoryOutStream const&);
+  private:
+    void operator=(MemoryOutStream const&);
     void GrowBuffer(int capacity);
 
     int m_capacity;
     char* m_buffer;
 };
 
-}
+} // namespace UnitTest
 
 #endif
 

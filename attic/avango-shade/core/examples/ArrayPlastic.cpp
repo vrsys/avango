@@ -23,18 +23,8 @@
 
 #include "ArrayPlastic.h"
 
-SHADE_CLASS_INIT(ArrayPlastic, "ArrayPlastic.glsl",
-    SHADE_ENV_DEFS(shade::fragment_shader, (illuminance)),
-    SHADE_DEFS((diffuse)(specular)(uv)(texture_unit))
-    )
+SHADE_CLASS_INIT(ArrayPlastic, "ArrayPlastic.glsl", SHADE_ENV_DEFS(shade::fragment_shader, (illuminance)), SHADE_DEFS((diffuse)(specular)(uv)(texture_unit)))
 
-ArrayPlastic::ArrayPlastic(float d, float s) :
-  diffuse(d),
-  specular(s)
-{
-}
+ArrayPlastic::ArrayPlastic(float d, float s) : diffuse(d), specular(s) {}
 
-shade::void_<> ArrayPlastic::illuminance(shade::vec3<> color, shade::vec3<> direction)
-{
-  return invoke< shade::void_<> >("ArrayPlastic_illuminance_impl");
-}
+shade::void_<> ArrayPlastic::illuminance(shade::vec3<> color, shade::vec3<> direction) { return invoke<shade::void_<>>("ArrayPlastic_illuminance_impl"); }

@@ -44,13 +44,23 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
-OBSERVER_MODE = "3_CLIENTS_SIMULATED"
-#OBSERVER_MODE = "3_CLIENTS_LIVE"
+#OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
-SCENE_MODE = "EVALUATION"
-#SCENE_MODE = "SIMPLE"
+#OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
 
+#CLIENT_MODE = ""
+CLIENT_MODE = "VIDEO_POWERWALL"
+
+SCENE_MODE = "EVALUATION"
+#SCENE_MODE = "ARCHITECTURE"
+#SCENE_MODE = "LIONS"
+#SCENE_MODE = "SIMPLE"
+#SCENE_MODE = "EMPTY"
+
+RES_MODE = "POWERWALL"
+#RES_MODE = "HMD_LIKE"
 
 #USED SERVER IPS
 VR16      = "141.54.147.16"
@@ -60,7 +70,11 @@ DAEDALOS  = "141.54.147.34"
 
 HEKATE    = "141.54.147.42"
 
-CURRENTLY_USED_SERVER = DAEDALOS
+SPACEMONSTER = "141.54.147.101"
+STEELYGLINT = "141.54.147.102"
+
+CURRENTLY_USED_SERVER = SPACEMONSTER
+#CURRENTLY_USED_SERVER = VR16
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
@@ -157,15 +171,15 @@ class TimedKeyframePathAnimation(avango.script.Script):
     right_offset = 1.0
 
     indexed_keyframe_positions = [(    0, avango.gua.Vec3(0 + right_offset, 0, -11), 180),
-                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
-                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 7.2), 180),
-                                  (17095, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
-                                  (17695, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),                                  
-                                  (20230, avango.gua.Vec3(-2.2 + right_offset, 0, 2.4), 180),
-                                  (26430, avango.gua.Vec3(-2.2 + right_offset, 0, 2.4), 180),
-                                  (33000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
-                                  (34000, avango.gua.Vec3(0 + right_offset, 0, 2.4), 180),
-                                  (35500, avango.gua.Vec3(0 + right_offset, 0, 2.4), 0),
+                                  (10690, avango.gua.Vec3(0 + right_offset, 0, 5.6), 180),
+                                  (14360, avango.gua.Vec3(0 + right_offset, 0, 5.6), 180),
+                                  (17095, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),
+                                  (17695, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),                                  
+                                  (20230, avango.gua.Vec3(-2.0 + right_offset, 0, 2.1), 180),
+                                  (26430, avango.gua.Vec3(-2.0 + right_offset, 0, 2.1), 180),
+                                  (33000, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),
+                                  (34000, avango.gua.Vec3(0 + right_offset, 0, 2.1), 180),
+                                  (35500, avango.gua.Vec3(0 + right_offset, 0, 2.1), 0),
                                   (39000, avango.gua.Vec3(0 + right_offset, 0, -11), 0),
                                   (41000, avango.gua.Vec3(0 + right_offset, 0, -11), 0)
                                   #(0, avango.gua.Vec3(0, 0, -10), 180),
@@ -195,8 +209,9 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
-    nv = netvaluepy.NetValue(HEKATE+":8000")
-
+    #nv = netvaluepy.NetValue(HEKATE+":8000")
+    #nv = netvaluepy.NetValue(VR16+":8000")
+    nv = netvaluepy.NetValue(STEELYGLINT+":8000")
     @field_has_changed(TimeIn)
     def update(self):
       #  print("NetValue: " + str(self.nv.getValue()) )
@@ -236,92 +251,7 @@ class TimedKeyframePathAnimation(avango.script.Script):
         curr_angle_around_y = interpolated_angle
         self.MatrixOut.value = avango.gua.make_trans_mat(curr_pos[0], curr_pos[1], curr_pos[2]) * avango.gua.make_rot_mat(curr_angle_around_y, 0.0, 1.0, 0.0)
 
-"""
-class FeedbackSender(avango.script.Script):
-    AvatarWorldMatrixIn         = avango.gua.SFMatrix4()
-    ClientCamCenterMatrixIn     = avango.gua.SFMatrix4()
-    ClientCamLeftMatrixIn       = avango.gua.SFMatrix4()
-    ClientCamRightMatrixIn      = avango.gua.SFMatrix4()
-    ClientScreenMatrixIn        = avango.gua.SFMatrix4()
 
-    AvatarFeedbackWorldMatrix = avango.gua.SFMatrix4()
-
-    CamNodeCenter = 0
-    CamNodeLeft   = 0
-    CamNodeRight  = 0
-    SceneGraph    = 0
-
-    ClientCamCenter_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamCenter_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-    ClientCamCenter_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamCenter_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-
-    ClientCamLeft_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamLeft_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-    ClientCamLeft_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamLeft_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-
-    ClientCamRight_LeftEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamRight_LeftEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-    ClientCamRight_RightEyeFeedbackViewMatrix = avango.gua.SFMatrix4()
-    ClientCamRight_RightEyeFeedbackProjectionMatrix = avango.gua.SFMatrix4()
-    
-
-    def registerSceneGraph(self, scene_graph):
-        self.SceneGraph = scene_graph
-
-    def registerCamNodeCenter(self, cam_node):
-        self.CamNodeCenter = cam_node
-    #frame_time_dict = dict()
-
-    #num_entries = 0
-
-    @field_has_changed(AvatarWorldMatrixIn)
-    def updateAvatarFeedbackMatrix(self):
-        self.AvatarFeedbackWorldMatrix.value = self.AvatarWorldMatrixIn.value
-
-    @field_has_changed(ClientCamCenterMatrixIn)
-    def updateClientCamCenterMatrices(self):
-        if (0 != self.CamNodeCenter) and (0 != self.SceneGraph)  :
-            CentralUser_LeftEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.LEFT)
-            self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value = CentralUser_LeftEyeFrustum.ViewMatrix.value
-            self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value = CentralUser_LeftEyeFrustum.ProjectionMatrix.value
-            print("View Left")
-            print(self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value)
-            print("Proj Left")
-            print(self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value)
-
-            CentralUser_RightEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.RIGHT)
-            self.ClientCamCenter_RightEyeFeedbackViewMatrix.value = CentralUser_RightEyeFrustum.ViewMatrix.value
-            self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value = CentralUser_RightEyeFrustum.ProjectionMatrix.value
-            print("View Right")
-            print(self.ClientCamCenter_RightEyeFeedbackViewMatrix.value)
-            print("Proj Right")
-            print(self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value)
-
-    @field_has_changed(ClientCamLeftMatrixIn)
-    def updateClientCamLeftMatrices(self):
-        if (0 != self.CamNodeCenter) and (0 != self.SceneGraph)  :
-            CentralUser_LeftEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.LEFT)
-            self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value = CentralUser_LeftEyeFrustum.ViewMatrix.value
-            self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value = CentralUser_LeftEyeFrustum.ProjectionMatrix.value
-            print("View Left")
-            print(self.ClientCamCenter_LeftEyeFeedbackViewMatrix.value)
-            print("Proj Left")
-            print(self.ClientCamCenter_LeftEyeFeedbackProjectionMatrix.value)
-
-            CentralUser_RightEyeFrustum = self.CamNodeCenter.get_frustum(self.SceneGraph,  avango.gua.CameraMode.RIGHT)
-            self.ClientCamCenter_RightEyeFeedbackViewMatrix.value = CentralUser_RightEyeFrustum.ViewMatrix.value
-            self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value = CentralUser_RightEyeFrustum.ProjectionMatrix.value
-            print("View Right")
-            print(self.ClientCamCenter_RightEyeFeedbackViewMatrix.value)
-            print("Proj Right")
-            print(self.ClientCamCenter_RightEyeFeedbackProjectionMatrix.value)
-    #@field_has_changed(ClientCamCenterMatrixIn)
-    #def printMatrices(self):
-    #    pass
-        #self.AvatarFeedbackWorldMatrix.value = self.AvatarWorldMatrixIn.value
-"""
 def make_node_distributable(node):
     for child in node.Children.value:
         make_node_distributable(child)
@@ -358,10 +288,31 @@ def set_hauptgebaeude_emissivity(node):
 
 if "EVALUATION" == SCENE_MODE:
     hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, -0.2, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
     set_hauptgebaeude_emissivity(hauptgebaeude)
 
+    scale = 1.15
+    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
+    lion.Transform.value = avango.gua.make_trans_mat(-1.5, -0.05, 3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+    
+    if "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE:
+      lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+
+    lion.Material.value.EnableBackfaceCulling.value = False
+    lion.Material.value.set_uniform("Emissivity", 3.0)
+
+    lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
+    lion2.Transform.value = avango.gua.make_trans_mat(1.5, -0.05, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(scale, scale, scale) 
+
+if "ARCHITECTURE" == SCENE_MODE:
+    hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again_joined.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+    set_hauptgebaeude_emissivity(hauptgebaeude)
+
+if "LIONS" == SCENE_MODE:
     lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
 
@@ -370,7 +321,6 @@ if "EVALUATION" == SCENE_MODE:
 
     lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
-
 
 mat_desc = avango.gua.nodes.MaterialShaderDescription()
 mat_desc.load_from_file("data/materials/SimpleMaterial.gmd")
@@ -386,10 +336,15 @@ spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
-
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_steelyglint_for_hydra.sr")
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
+
+
+if ("TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  scene_transform.Transform.value = avango.gua.make_trans_mat(0.5, 0.3, 8.0)
 
 
 
@@ -402,8 +357,14 @@ non_avatar_scene_transform.Transform.value = avango.gua.make_trans_mat(1.0, 0.0,
 
 if "EVALUATION" == SCENE_MODE:
     non_avatar_scene_transform.Children.value = [street_plane, hauptgebaeude, lion, lion2]
-else:
+elif "ARCHITECTURE" == SCENE_MODE:
+    non_avatar_scene_transform.Children.value = [hauptgebaeude]
+elif "LIONS" == SCENE_MODE:
+    non_avatar_scene_transform.Children.value = [street_plane, lion, lion2]
+elif "SIMPLE" == SCENE_MODE:
     non_avatar_scene_transform.Children.value = [street_plane]
+else:
+    non_avatar_scene_transform.Children.value = []
 
 def append_trees_to_list(parent_node):
     tm_loader = avango.gua.nodes.TriMeshLoader()
@@ -432,7 +393,8 @@ def append_trees_to_list(parent_node):
         tree_label += 1
 
 
-append_trees_to_list(non_avatar_scene_transform)
+if "EMPTY" != SCENE_MODE:
+    append_trees_to_list(non_avatar_scene_transform)
 
 
 scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
@@ -449,26 +411,41 @@ scene_transform.Children.value = [non_avatar_scene_transform, avatar_transform]
 SCREEN_WIDTH  = 4.91
 SCREEN_HEIGHT = 2.78
 
+SCREEN_WIDTH_BACK  = SCREEN_WIDTH * 1.4
+SCREEN_HEIGHT_BACK = SCREEN_HEIGHT * 1.4
+
 screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
 
-
+screen_observer_back = 0
+screen_observer_back = avango.gua.nodes.ScreenNode(Name="screen_observer_back", Width=SCREEN_WIDTH_BACK, Height=SCREEN_HEIGHT_BACK)
+screen_observer_right = 0
+screen_observer_right = avango.gua.nodes.ScreenNode(Name="screen_observer_right", Width=SCREEN_WIDTH, Height=SCREEN_HEIGHT)
 
 #size = avango.gua.Vec2ui(491, 278)
 #size = avango.gua.Vec2ui(1600, 1200)
 #size = avango.gua.Vec2ui(1400, 1600) # vive pro
 size = avango.gua.Vec2ui(3840, 2160)
+
+if("HMD_LIKE" == RES_MODE):
+  size = avango.gua.Vec2ui(1920, 1080)
+
 #size = avango.gua.Vec2ui(4096, 2160)
 
+if("TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  size = avango.gua.Vec2ui(1964, 1112)
+
 tri_pass = avango.gua.nodes.TriMeshPassDescription()
-tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
+#tquad_pass = avango.gua.nodes.TexturedQuadPassDescription()
 lvis_pass = avango.gua.nodes.LightVisibilityPassDescription()
+
 res_pass = avango.gua.nodes.ResolvePassDescription()
 
 res_pass.BackgroundMode.value = avango.gua.BackgroundMode.SKYMAP_TEXTURE
 res_pass.BackgroundTexture.value = "/opt/guacamole/resources/skymaps/bright_sky.jpg"
 
 res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
-tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
+
+#tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 spoints_pass_description = avango.gua.nodes.SPointsPassDescription()
 occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
 
@@ -483,8 +460,8 @@ pipeline_description = avango.gua.nodes.PipelineDescription(
 occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes=[
         avango.gua.nodes.TriMeshPassDescription(),
-        avango.gua.nodes.LightVisibilityPassDescription(),
-        avango.gua.nodes.SPointsPassDescription(),
+        #avango.gua.nodes.LightVisibilityPassDescription(),
+        #avango.gua.nodes.SPointsPassDescription(),
         occlusion_slave_res_pass
     ])
 
@@ -492,9 +469,26 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.7
 
-camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 2.0)
-camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
-camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 2.0)
+camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
+camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
+camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
+
+# camera_translations_left = avango.gua.Vec3( 1.0, eye_height, 2.0)
+# camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
+# camera_translations_right = avango.gua.Vec3(-1.0, eye_height, 2.0)
+
+OBSERVER_BACK_DOWN_TRANSLATION = -0.5
+
+OBSERVER_RIGHT_RIGHT_TRANSLATION = 2.5
+OBSERVER_RIGHT_FORWARD_TRANSLATION = 2
+
+camera_rotation_around_y_right = 0.0
+if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  camera_translations_left = camera_translations_center
+
+if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  camera_translations_right =  camera_translations_center + avango.gua.Vec3(OBSERVER_RIGHT_RIGHT_TRANSLATION, 0.0, (-SCREEN_WIDTH/2) - OBSERVER_RIGHT_FORWARD_TRANSLATION)
+  camera_rotation_around_y_right = 90.0
 
 """
 camera_translations_right = avango.gua.Vec3( 0.0, 1.70, 0.0)
@@ -528,25 +522,37 @@ screen_geometry.Children.value = [central_user_geometry, left_user_geometry, rig
 
 screen_path = "/net/grouped_view_setups_and_scene/navigation/screen"
 
-eye_distance = 0.06
+screen_observer_back_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_back"
+screen_observer_right_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_right"
+
+eye_distance = 0.064
+#eye_distance = 0.0
+
+if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  eye_distance = 0.0
 
 if "VIDEO_CAMERA" == OBSERVER_MODE:
     eye_distance = 0.0
+
+NEARCLIP = 1.0
+
+server_size = avango.gua.Vec2ui(1920, 1080)
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
     LeftScreenPath=screen_path,
     SceneGraph="scenegraph",
-    Resolution=size,
+    Resolution=server_size,
     OutputWindowName="server_window",
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
-    BlackList = ["invisible_osaka_avatar"]
+    BlackList = ["invisible_osaka_avatar"],
+    #NearClip = NEARCLIP
     )
 
 
 client_cam_center = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=3,
     Name="viewer_0_weimar_center",
     LeftScreenPath=screen_path,
     RightScreenPath=screen_path,
@@ -558,10 +564,11 @@ client_cam_center = avango.gua.nodes.CameraNode(
 
     EyeDistance = eye_distance,
     EnableStereo = True,
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=3,
     Name="os_weimar_v0_osaka_center",
     LeftScreenPath=screen_path,
     RightScreenPath=screen_path,
@@ -573,16 +580,24 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     #PipelineDescription=pipeline_description,
     EyeDistance = eye_distance,
     EnableStereo = True,
-    BlackList = ["invisible_osaka_avatar"], 
+    BlackList = ["invisible_osaka_avatar"],
+    #NearClip = NEARCLIP,
+    #FarClip = FARCLIP,
+    #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
     )
 
 
+screen_left_path = screen_path
+
+if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  screen_left_path = screen_observer_back_path
+
 client_cam_left = avango.gua.nodes.CameraNode(
     ViewID=4,
     Name="viewer_0_weimar_left",
-    LeftScreenPath=screen_path,
-    RightScreenPath=screen_path,
+    LeftScreenPath=screen_left_path,
+    RightScreenPath=screen_left_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar_left",
@@ -591,13 +606,14 @@ client_cam_left = avango.gua.nodes.CameraNode(
 
     EyeDistance = eye_distance,
     EnableStereo = True,
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     ViewID=4,
     Name="os_weimar_v0_osaka_left",
-    LeftScreenPath=screen_path,
-    RightScreenPath=screen_path,
+    LeftScreenPath=screen_left_path,
+    RightScreenPath=screen_left_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka_left",
@@ -606,43 +622,96 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     #PipelineDescription=pipeline_description,
     EyeDistance = eye_distance,
     EnableStereo = True,
-    BlackList = ["invisible_osaka_avatar"], 
+    BlackList = ["invisible_osaka_avatar"],
+    #NearClip = NEARCLIP,
+    #FarClip = FARCLIP,
+    #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
     )
 
+screen_right_path = screen_path
+
+if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
+  screen_right_path = screen_observer_right_path
+
+
+eye_distance_user_right = eye_distance
+
+if "VIDEO_POWERWALL" == CLIENT_MODE:
+  eye_distance_user_right = 0.0
+
+
 client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=3,
+    ViewID=5,
     Name="viewer_0_weimar_right",
-    LeftScreenPath=screen_path,
-    RightScreenPath=screen_path,
+    LeftScreenPath=screen_right_path,
+    RightScreenPath=screen_right_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="client_window_weimar_right",
-    Transform=avango.gua.make_trans_mat(camera_translations_right),
+    Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = eye_distance,
+    EyeDistance = eye_distance_user_right,
     EnableStereo = True,
+    #NearClip = NEARCLIP
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=3,
+    ViewID=5,
     Name="os_weimar_v0_osaka_right",
-    LeftScreenPath=screen_path,
-    RightScreenPath=screen_path,
+    LeftScreenPath=screen_right_path,
+    RightScreenPath=screen_right_path,
     SceneGraph="scenegraph",
     Resolution=size,
     OutputWindowName="slave_weimar_v0_osaka_right",
-    Transform=avango.gua.make_trans_mat(camera_translations_right),
+    Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = eye_distance,
+    EyeDistance = eye_distance_user_right,
     EnableStereo = True,
-    BlackList = ["invisible_osaka_avatar"], 
+    BlackList = ["invisible_osaka_avatar"],
+    #NearClip = NEARCLIP,
+    #FarClip = FARCLIP,
+    #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
     )
 
+# client_cam_slot2 = avango.gua.nodes.CameraNode(
+#     ViewID=6,
+#     Name="viewer_0_weimar_cam_slot_2",
+#     LeftScreenPath=screen_right_path,
+#     RightScreenPath=screen_right_path,
+#     SceneGraph="scenegraph",
+#     Resolution=size,
+#     OutputWindowName="client_window_weimar_cam_slot_2",
+#     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
+#     PipelineDescription=pipeline_description,
 
+#     EyeDistance = 0.0,
+#     EnableStereo = True,
+#     #NearClip = NEARCLIP
+#     )
+
+# occlusion_slave_client_cam_slot2 = avango.gua.nodes.CameraNode(
+#     ViewID=6,
+#     Name="os_weimar_v0_osaka_slot_2",
+#     LeftScreenPath=screen_right_path,
+#     RightScreenPath=screen_right_path,
+#     SceneGraph="scenegraph",
+#     Resolution=size,
+#     OutputWindowName="slave_weimar_v0_osaka_cam_slot_2",
+#     Transform=avango.gua.make_trans_mat(camera_translations_right) * avango.gua.make_rot_mat(camera_rotation_around_y_right, 0.0, 1.0, 0.0),
+#     PipelineDescription=occlusion_slave_pipeline_description,
+#     #PipelineDescription=pipeline_description,
+#     EyeDistance = 0.0,
+#     EnableStereo = True,
+#     BlackList = ["invisible_osaka_avatar"],
+#     #NearClip = NEARCLIP,
+#     #FarClip = FARCLIP,
+#     #NearClip = NEARCLIP
+#     #needs to be invisible as soon as the real render-client comes into play
+#     )
 
 
 
@@ -655,14 +724,18 @@ scene_view_transform.Children.value = [scene_transform]#, screen_geometry]
 loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 
 navigation = avango.gua.nodes.TransformNode(Name="navigation")
-navigation.Children.value = [screen, server_cam, client_cam_left, client_cam_center, client_cam_right, occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
+navigation.Children.value = [screen, screen_observer_back, screen_observer_right, server_cam, client_cam_left, client_cam_center, client_cam_right,  occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
 
 navigation.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 11.0)
 
 grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
 grouped_view_setups_and_scene.Children.value = [navigation, scene_view_transform, loggings_indicator]
 
-screen.Transform.value = avango.gua.make_trans_mat(0.0, 1.445, -2.0)
+screen.Transform.value = avango.gua.make_trans_mat(0.0, SCREEN_HEIGHT / 2.0 + 0.045, -2.0)
+screen_observer_back.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, -2.0)
+#screen_observer_back.Transform.value = avango.gua.make_trans_mat(0.0, 1.445 + OBSERVER_BACK_DOWN_TRANSLATION, -2.0)
+
+screen_observer_right.Transform.value = avango.gua.make_trans_mat(OBSERVER_RIGHT_RIGHT_TRANSLATION, 0.0, -OBSERVER_RIGHT_FORWARD_TRANSLATION) * avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0) * avango.gua.make_trans_mat(0.0, eye_height, -2.0)
 #screen.Children.value = [occlusion_slave_client_cam_center, client_cam_center, occlusion_slave_client_cam_left, client_cam_left, occlusion_slave_client_cam_right, client_cam_right, server_cam]
 #screen.Transform.value = avango.gua.make_trans_mat(0.0, eye_height, 8.5)
 
@@ -707,10 +780,10 @@ make_node_distributable(grouped_view_setups_and_scene)
 #make_node_distributable(occlusion_slave_client_cam_right)
 
 nettrans.distribute_object(tri_pass)
-nettrans.distribute_object(tquad_pass)
-nettrans.distribute_object(lvis_pass)
-nettrans.distribute_object(res_pass)
-nettrans.distribute_object(tscreenspace_pass)
+#nettrans.distribute_object(tquad_pass)
+#nettrans.distribute_object(lvis_pass)
+#nettrans.distribute_object(res_pass)
+#nettrans.distribute_object(tscreenspace_pass)
 nettrans.distribute_object(spoints_pass_description)
 nettrans.distribute_object(occlusion_slave_res_pass)
 
@@ -724,8 +797,8 @@ for p in occlusion_slave_pipeline_description.Passes.value:
 nettrans.distribute_object(occlusion_slave_pipeline_description)
 
 # setup viewing
-window = avango.gua.nodes.GlfwWindow(Size=size,
-                                     LeftResolution=size,
+window = avango.gua.nodes.GlfwWindow(Size=server_size,
+                                     LeftResolution=server_size,
                                      Title="server_window")
 
 window.EnableVsync.value = False
@@ -758,27 +831,31 @@ key_event_logger.set_logging_node(loggings_indicator)
 
 
 
-if not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE):
+if (not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE)
+   and not( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE)):
 
     #tracking_target id 18 = video cam
     DeviceSensorVideoCamera = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
     DeviceSensorVideoCamera.Station.value = "tracking-dbl-video-camera"
-    DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=22
     DeviceSensorGlassesRight = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    DeviceSensorGlassesRight.Station.value = "tracking-dbl-glasses-A"
-    DeviceSensorGlassesRight.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    #if "VIDEO_POWERWALL" == CLIENT_MODE:
+    DeviceSensorGlassesRight.Station.value = "tracking-dbl-video-camera"
+    #else:
+    #  DeviceSensorGlassesRight.Station.value = "tracking-dbl-glasses-C"
+    DeviceSensorGlassesRight.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=23
     DeviceSensorGlassesCenter = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
     DeviceSensorGlassesCenter.Station.value = "tracking-dbl-glasses-B"
-    DeviceSensorGlassesCenter.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorGlassesCenter.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
     #glasses id=24
     DeviceSensorGlassesLeft = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    DeviceSensorGlassesLeft.Station.value = "tracking-dbl-glasses-C"
-    DeviceSensorGlassesLeft.TransmitterOffset.value = avango.gua.make_trans_mat(0.0,0.045,0.0)
+    DeviceSensorGlassesLeft.Station.value = "tracking-dbl-glasses-A"
+    DeviceSensorGlassesLeft.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, 0.045,0.0)
 
 
 
@@ -789,13 +866,15 @@ if not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE):
         occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
         client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
         occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
-    else:
-        client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
-        occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
-        client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
-        occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
-        client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
-        occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        # client_cam_slot2.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+
+    # else:
+    #     client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+    #     occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+    #     client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+    #     occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+    #     client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+    #     occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
 
 """
 feedback_sender = FeedbackSender()
@@ -809,5 +888,5 @@ feedback_sender.ClientCamCenterMatrixIn.connect_from(client_cam_center.WorldTran
 #guaVE = GuaVE()
 #guaVE.start(locals(), globals())
 
-viewer.DesiredFPS.value = 1000.0
+viewer.DesiredFPS.value = 1500.0
 viewer.run()

@@ -14,69 +14,60 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::BoundingSphere
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL BoundingSphere : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::BoundingSphere
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::BoundingSphere is created.
+     * Otherwise, the given ::gua::BoundingSphere is used.
      */
-    class AV_GUA_DLL BoundingSphere : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    BoundingSphere(::gua::math::BoundingSphere<::gua::math::vec3>* guaBoundingSphere = new ::gua::math::BoundingSphere<::gua::math::vec3>());
 
-    public:
+    virtual ~BoundingSphere();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::BoundingSphere is created.
-       * Otherwise, the given ::gua::BoundingSphere is used.
-       */
-      BoundingSphere(::gua::math::BoundingSphere< ::gua::math::vec3>* guaBoundingSphere =
-                  new ::gua::math::BoundingSphere< ::gua::math::vec3>());
+  public:
+    SFVec3 Center;
+    SFFloat Radius;
 
-      virtual ~BoundingSphere();
+  public:
+    virtual void getCenterCB(const SFVec3::GetValueEvent& event);
+    virtual void setCenterCB(const SFVec3::SetValueEvent& event);
 
-    public:
+    virtual void getRadiusCB(const SFFloat::GetValueEvent& event);
+    virtual void setRadiusCB(const SFFloat::SetValueEvent& event);
 
-      SFVec3  Center;
-      SFFloat Radius;
+    ::gua::math::BoundingSphere<::gua::math::vec3>* getGuaBoundingSphere() const;
 
-    public:
+    bool operator==(av::gua::BoundingSphere const& rhs) const { return *m_guaBoundingSphere == *rhs.getGuaBoundingSphere(); }
 
-      virtual void getCenterCB(const SFVec3::GetValueEvent& event);
-      virtual void setCenterCB(const SFVec3::SetValueEvent& event);
+    bool operator!=(av::gua::BoundingSphere const& rhs) const { return *m_guaBoundingSphere != *rhs.getGuaBoundingSphere(); }
 
-      virtual void getRadiusCB(const SFFloat::GetValueEvent& event);
-      virtual void setRadiusCB(const SFFloat::SetValueEvent& event);
+  private:
+    ::gua::math::BoundingSphere<::gua::math::vec3>* m_guaBoundingSphere;
 
-      ::gua::math::BoundingSphere< ::gua::math::vec3>* getGuaBoundingSphere() const;
+    // BoundingSphere(const BoundingSphere&);
+    BoundingSphere& operator=(const BoundingSphere&);
+};
 
-      bool operator==(av::gua::BoundingSphere const& rhs) const {
-        return *m_guaBoundingSphere == *rhs.getGuaBoundingSphere();
-      }
+using SFBoundingSphere = SingleField<Link<BoundingSphere>>;
+using MFBoundingSphere = MultiField<Link<BoundingSphere>>;
 
-      bool operator!=(av::gua::BoundingSphere const& rhs) const {
-        return *m_guaBoundingSphere != *rhs.getGuaBoundingSphere();
-      }
-
-    private:
-
-      ::gua::math::BoundingSphere< ::gua::math::vec3>* m_guaBoundingSphere;
-
-      // BoundingSphere(const BoundingSphere&);
-      BoundingSphere& operator=(const BoundingSphere&);
-    };
-
-    using SFBoundingSphere = SingleField<Link<BoundingSphere> >;
-    using MFBoundingSphere = MultiField<Link<BoundingSphere> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::BoundingSphere> >;
-  template class AV_GUA_DLL MultiField<Link<gua::BoundingSphere> >;
+template class AV_GUA_DLL SingleField<Link<gua::BoundingSphere>>;
+template class AV_GUA_DLL MultiField<Link<gua::BoundingSphere>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_BOUNDING_SPHERE_HPP
+#endif // AVANGO_GUA_BOUNDING_SPHERE_HPP

@@ -15,54 +15,47 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::VolumePassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_VOLUME_DLL VolumePassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::VolumePassDescription
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::VolumePassDescription is created.
+     * Otherwise, the given ::gua::VolumePassDescription is used.
      */
-    class AV_GUA_VOLUME_DLL VolumePassDescription : public av::gua::PipelinePassDescription
-    {
-      AV_FC_DECLARE();
+    VolumePassDescription(std::shared_ptr<::gua::VolumePassDescription> const& VolumePassDescription = std::shared_ptr<::gua::VolumePassDescription>(new ::gua::VolumePassDescription()));
 
-    public:
+  public:
+    /**
+     * Get the wrapped ::gua::VolumePassDescription.
+     */
+    std::shared_ptr<::gua::VolumePassDescription> const& getGuaVolumePassDescription() const;
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::VolumePassDescription is created.
-       * Otherwise, the given ::gua::VolumePassDescription is used.
-       */
-      VolumePassDescription(std::shared_ptr< ::gua::VolumePassDescription> const& VolumePassDescription =
-                             std::shared_ptr< ::gua::VolumePassDescription>(new ::gua::VolumePassDescription()) );
+  private:
+    std::shared_ptr<::gua::VolumePassDescription> m_guaVolumePassDescription;
 
+    VolumePassDescription(const VolumePassDescription&);
+    VolumePassDescription& operator=(const VolumePassDescription&);
+};
 
+using SFVolumePassDescription = SingleField<Link<VolumePassDescription>>;
+using MFVolumePassDescription = MultiField<Link<VolumePassDescription>>;
 
-    public:
-
-      /**
-       * Get the wrapped ::gua::VolumePassDescription.
-       */
-      std::shared_ptr< ::gua::VolumePassDescription> const& getGuaVolumePassDescription() const;
-
-    private:
-
-      std::shared_ptr< ::gua::VolumePassDescription> m_guaVolumePassDescription;
-
-
-      VolumePassDescription(const VolumePassDescription&);
-      VolumePassDescription& operator=(const VolumePassDescription&);
-    };
-
-    using SFVolumePassDescription = SingleField<Link<VolumePassDescription> >;
-    using MFVolumePassDescription = MultiField<Link<VolumePassDescription> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_VOLUME_DLL SingleField<Link<gua::VolumePassDescription> >;
-  template class AV_GUA_VOLUME_DLL MultiField<Link<gua::VolumePassDescription> >;
+template class AV_GUA_VOLUME_DLL SingleField<Link<gua::VolumePassDescription>>;
+template class AV_GUA_VOLUME_DLL MultiField<Link<gua::VolumePassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_VOLUME_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_VOLUME_PASS_DESCRIPTION_HPP

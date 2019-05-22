@@ -40,52 +40,38 @@
 #include "Texture.h"
 #include "example.h"
 
-
-namespace shaders=shade::shaders;
+namespace shaders = shade::shaders;
 
 namespace
 {
-  class Transform : public shade::ShaderBase<Transform>
-  {
+class Transform : public shade::ShaderBase<Transform>
+{
   public:
-
-    virtual shade::void_<> transform(void)
-    { return invoke< shade::void_<> >("Transform_transform_impl"); }
+    virtual shade::void_<> transform(void) { return invoke<shade::void_<>>("Transform_transform_impl"); }
 
   private:
-
     SHADE_BASE_DECL(Transform)
-  };
-  SHADE_CLASS_INIT(Transform, "Switch.glsl",
-      SHADE_ENV_DEFS(shade::vertex_shader, (transform)),
-      SHADE_NONE)
+};
+SHADE_CLASS_INIT(Transform, "Switch.glsl", SHADE_ENV_DEFS(shade::vertex_shader, (transform)), SHADE_NONE)
 
-    class WaveTransform : public shade::ShaderBase<WaveTransform, Transform>
-  {
+class WaveTransform : public shade::ShaderBase<WaveTransform, Transform>
+{
   public:
-
-    /*virtual*/ shade::void_<> transform(void)
-    { return invoke< shade::void_<> >("WaveTransform_transform_impl"); }
+    /*virtual*/ shade::void_<> transform(void) { return invoke<shade::void_<>>("WaveTransform_transform_impl"); }
 
     shade::float_<shade::uniform> value;
 
   private:
-
     SHADE_DERIVED_DECL(WaveTransform, Transform)
-  };
-  SHADE_CLASS_INIT(WaveTransform, "Switch.glsl",
-      SHADE_NONE,
-      SHADE_DEFS((value)))
+};
+SHADE_CLASS_INIT(WaveTransform, "Switch.glsl", SHADE_NONE, SHADE_DEFS((value)))
 
-    class Switch : public shade::ShaderBase<Switch, shaders::Enterable>
-  {
+class Switch : public shade::ShaderBase<Switch, shaders::Enterable>
+{
   public:
+    /*virtual*/ shade::void_<> enter_vertex(void) { return invoke<shade::void_<>>("Switch_vertex_impl"); }
 
-    /*virtual*/ shade::void_<> enter_vertex(void)
-    { return invoke< shade::void_<> >("Switch_vertex_impl"); }
-
-    /*virtual*/ shade::void_<> enter_fragment(void)
-    { return invoke< shade::void_<> >("Switch_fragment_impl"); }
+    /*virtual*/ shade::void_<> enter_fragment(void) { return invoke<shade::void_<>>("Switch_fragment_impl"); }
 
     shade::objref<boost::shared_ptr<Transform>, shade::const_> obj_1;
     shade::objref<boost::shared_ptr<Transform>, shade::const_> obj_2;
@@ -94,75 +80,73 @@ namespace
     shade::sampler2D texture_unit;
 
   private:
-
     SHADE_DERIVED_DECL(Switch, Enterable)
-  };
-  SHADE_CLASS_INIT(Switch, "Switch.glsl", SHADE_NONE, SHADE_DEFS((obj_1)(obj_2)(uv)(texture_unit)))
+};
+SHADE_CLASS_INIT(Switch, "Switch.glsl", SHADE_NONE, SHADE_DEFS((obj_1)(obj_2)(uv)(texture_unit)))
 
-    boost::shared_ptr<Switch> shader;
-  boost::shared_ptr<shade::Program> program;
-  boost::shared_ptr<shade::GLSLWrapper> state;
-  boost::shared_ptr<WaveTransform> wave;
-  float frame_counter = 0.;
-}
+boost::shared_ptr<Switch> shader;
+boost::shared_ptr<shade::Program> program;
+boost::shared_ptr<shade::GLSLWrapper> state;
+boost::shared_ptr<WaveTransform> wave;
+float frame_counter = 0.;
+} // namespace
 
 void init(void)
 {
-  shader = boost::shared_ptr<Switch> (new Switch);
-  shader->obj_1 = boost::shared_ptr<Transform>(new Transform);
-  wave = boost::shared_ptr<WaveTransform>(new WaveTransform);
-  shader->obj_2 = wave;
-  shader->texture_unit.set(example::make_texture("examples/pattern.dds"));
+    shader = boost::shared_ptr<Switch>(new Switch);
+    shader->obj_1 = boost::shared_ptr<Transform>(new Transform);
+    wave = boost::shared_ptr<WaveTransform>(new WaveTransform);
+    shader->obj_2 = wave;
+    shader->texture_unit.set(example::make_texture("examples/pattern.dds"));
 
-  state = shade::create_GLSL_wrapper();
-  program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
+    state = shade::create_GLSL_wrapper();
+    program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
 }
 
 void display(void)
 {
-  if (program->requires_compilation())
-    program->compile();
+    if(program->requires_compilation())
+        program->compile();
 
-  state->make_current();
+    state->make_current();
 
-  frame_counter += 0.04;
-  wave->value.set(0.05*sin(frame_counter));
+    frame_counter += 0.04;
+    wave->value.set(0.05 * sin(frame_counter));
 
-  if (program->requires_upload())
-    program->upload();
+    if(program->requires_upload())
+        program->upload();
 
-  example::setup_camera();
+    example::setup_camera();
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  int steps = 10;
-  float step_size = 1. / (2*float(steps));
-  glColor4f(1., 1., 1., 1.);
-  for (int y = -steps; y != steps; ++y)
-  {
-    glBegin(GL_TRIANGLE_STRIP);
-    for (int x = -steps; x != steps; ++x)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    int steps = 10;
+    float step_size = 1. / (2 * float(steps));
+    glColor4f(1., 1., 1., 1.);
+    for(int y = -steps; y != steps; ++y)
     {
-      glColor4f(1., 1., 1., (x*y>0)?1.:2.);
-      glTexCoord2f(x*step_size, y*step_size);
-      glVertex3f(x*step_size, y*step_size, y*step_size);
-      glColor4f(1., 1., 1., (x*(y+1)>0)?1.:2.);
-      glTexCoord2f(x*step_size, (y+1)*step_size);
-      glVertex3f(x*step_size, (y+1)*step_size, (y+1)*step_size);
+        glBegin(GL_TRIANGLE_STRIP);
+        for(int x = -steps; x != steps; ++x)
+        {
+            glColor4f(1., 1., 1., (x * y > 0) ? 1. : 2.);
+            glTexCoord2f(x * step_size, y * step_size);
+            glVertex3f(x * step_size, y * step_size, y * step_size);
+            glColor4f(1., 1., 1., (x * (y + 1) > 0) ? 1. : 2.);
+            glTexCoord2f(x * step_size, (y + 1) * step_size);
+            glVertex3f(x * step_size, (y + 1) * step_size, (y + 1) * step_size);
+        }
+        glEnd();
     }
-    glEnd();
-  }
 }
-
 
 int main(int argc, char* argv[])
 {
-  setenv("SHADE_DEBUG_NO_TRANSFORM", "1", 1);
+    setenv("SHADE_DEBUG_NO_TRANSFORM", "1", 1);
 
-  example::init(argc, argv, "SHADE Constant Material");
-  example::set_display_func(display);
+    example::init(argc, argv, "SHADE Constant Material");
+    example::set_display_func(display);
 
-  init();
+    init();
 
-  example::run_main_loop();
-  return 0;
+    example::run_main_loop();
+    return 0;
 }

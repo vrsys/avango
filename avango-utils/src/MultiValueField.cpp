@@ -42,364 +42,338 @@ AV_FIELD_DEFINE(av::utils::MVFString)
  * as soon as this class is factored into avango-core (if ever)
  */
 AV_FIELD_DEFINE(av::utils::MVFMatrixf);
-//AV_FIELD_DEFINE(av::utils::MVFMatrixd);
+// AV_FIELD_DEFINE(av::utils::MVFMatrixd);
 AV_FIELD_DEFINE(av::utils::MVFVec2f);
-//AV_FIELD_DEFINE(av::utils::MVFVec2d);
+// AV_FIELD_DEFINE(av::utils::MVFVec2d);
 AV_FIELD_DEFINE(av::utils::MVFVec3f);
-//AV_FIELD_DEFINE(av::utils::MVFVec3d);
+// AV_FIELD_DEFINE(av::utils::MVFVec3d);
 AV_FIELD_DEFINE(av::utils::MVFVec4f);
-//AV_FIELD_DEFINE(av::utils::MVFVec4d);
+// AV_FIELD_DEFINE(av::utils::MVFVec4d);
 AV_FIELD_DEFINE(av::utils::MVFQuat);
 
-
-void
-av::utils::initMultiValueFields()
+void av::utils::initMultiValueFields()
 {
-  av::initStandardFields();
+    av::initStandardFields();
 
-  av::utils::MVFBool::initClass("av::utils::MVFBool", "av::MFBool");
-  av::utils::MVFDouble::initClass("av::utils::MVFDouble", "av::MFDouble");
-  av::utils::MVFFloat::initClass("av::utils::MVFFloat", "av::MFFloat");
-  av::utils::MVFInt::initClass("av::utils::MVFInt", "av::MFInt");
-  av::utils::MVFLong::initClass("av::utils::MVFLong", "av::MFLong");
-  av::utils::MVFUInt::initClass("av::utils::MVFUInt", "av::MFInt");
-  av::utils::MVFULong::initClass("av::utils::MVFULong", "av::MFULong");
-  av::utils::MVFString::initClass("av::utils::MVFString", "av::MFString");
+    av::utils::MVFBool::initClass("av::utils::MVFBool", "av::MFBool");
+    av::utils::MVFDouble::initClass("av::utils::MVFDouble", "av::MFDouble");
+    av::utils::MVFFloat::initClass("av::utils::MVFFloat", "av::MFFloat");
+    av::utils::MVFInt::initClass("av::utils::MVFInt", "av::MFInt");
+    av::utils::MVFLong::initClass("av::utils::MVFLong", "av::MFLong");
+    av::utils::MVFUInt::initClass("av::utils::MVFUInt", "av::MFInt");
+    av::utils::MVFULong::initClass("av::utils::MVFULong", "av::MFULong");
+    av::utils::MVFString::initClass("av::utils::MVFString", "av::MFString");
 }
 
-void
-av::utils::initMultiValueOSGFields()
+void av::utils::initMultiValueOSGFields()
 {
-  av::gua::initFields();
+    av::gua::initFields();
 
-  MVFMatrixf::initClass("av::utils::MVFMatrixf", "av::gua::MFMatrixf");
-  //MVFMatrixd::initClass("av::utils::MVFMatrixd", "av::gua::MFMatrixd");
-  MVFVec2f::initClass("av::utils::MVFVec2f", "av::gua::MFVec2f");
-  //MVFVec2d::initClass("av::utils::MVFVec2d", "av::gua::MFVec2d");
-  MVFVec3f::initClass("av::utils::MVFVec3f", "av::gua::MFVec3f");
-  //MVFVec3d::initClass("av::utils::MVFVec3d", "av::gua::MFVec3d");
-  MVFVec4f::initClass("av::utils::MVFVec4f", "av::gua::MFVec4f");
-  //MVFVec4d::initClass("av::utils::MVFVec4d", "av::gua::MFVec4d");
-  MVFQuat::initClass("av::utils::MVFQuat", "av::gua::MFQuat");
+    MVFMatrixf::initClass("av::utils::MVFMatrixf", "av::gua::MFMatrixf");
+    // MVFMatrixd::initClass("av::utils::MVFMatrixd", "av::gua::MFMatrixd");
+    MVFVec2f::initClass("av::utils::MVFVec2f", "av::gua::MFVec2f");
+    // MVFVec2d::initClass("av::utils::MVFVec2d", "av::gua::MFVec2d");
+    MVFVec3f::initClass("av::utils::MVFVec3f", "av::gua::MFVec3f");
+    // MVFVec3d::initClass("av::utils::MVFVec3d", "av::gua::MFVec3d");
+    MVFVec4f::initClass("av::utils::MVFVec4f", "av::gua::MFVec4f");
+    // MVFVec4d::initClass("av::utils::MVFVec4d", "av::gua::MFVec4d");
+    MVFQuat::initClass("av::utils::MVFQuat", "av::gua::MFQuat");
 }
-
 
 namespace
 {
-
-  template <typename FieldType>
-  bool fieldHasType(av::Field* field)
-  {
+template <typename FieldType>
+bool fieldHasType(av::Field* field)
+{
     AV_ASSERT(field);
     return field->getTypeId().isOfType(av::utils::MultiValueField<FieldType>::getClassTypeId());
-  }
+}
 
-  template <typename FromType, typename ToType>
-  void setFieldValues(av::Field* fromField, av::utils::MultiValueField<ToType>* toMVField)
-  {
+template <typename FromType, typename ToType>
+void setFieldValues(av::Field* fromField, av::utils::MultiValueField<ToType>* toMVField)
+{
     AV_ASSERT(fromField);
     AV_ASSERT(toMVField);
 
-    av::utils::MultiValueField<FromType> *fromMVField = dynamic_cast<av::utils::MultiValueField<FromType>*>(fromField);
+    av::utils::MultiValueField<FromType>* fromMVField = dynamic_cast<av::utils::MultiValueField<FromType>*>(fromField);
     AV_ASSERT(fromMVField);
     unsigned int sz(fromMVField->getSize());
     toMVField->resize(sz);
     unsigned int last_changed_ind = sz;
 
-    for (unsigned int i = 0; i < sz; i++)
+    for(unsigned int i = 0; i < sz; i++)
     {
-      if (fromMVField->valueHasChanged(i))
-      {
-        toMVField->set1Value(fromMVField->get1Value(i), i, fromField, false);
-        last_changed_ind = i;
-      }
+        if(fromMVField->valueHasChanged(i))
+        {
+            toMVField->set1Value(fromMVField->get1Value(i), i, fromField, false);
+            last_changed_ind = i;
+        }
     }
 
-    if (last_changed_ind < sz)
+    if(last_changed_ind < sz)
     {
-      toMVField->triggerFieldChange(fromField);
+        toMVField->triggerFieldChange(fromField);
     }
-  }
 }
+} // namespace
 
-template<>
+template <>
 void av::utils::MultiValueField<double>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, double>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, double>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, double>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, double>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, double>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, double>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, double>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, double>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, double>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, double>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, double>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, double>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, double>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, double>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<float>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, float>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, float>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, float>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, float>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, float>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, float>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, float>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, float>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, float>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, float>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, float>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, float>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, float>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, float>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<int32_t>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, int32_t>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, int32_t>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, int32_t>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, int32_t>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<int64_t>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, int64_t>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, int64_t>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, int64_t>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, int64_t>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<uint32_t>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, uint32_t>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, uint32_t>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, uint32_t>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, uint32_t>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<uint64_t>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, uint64_t>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, uint64_t>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, uint64_t>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, uint64_t>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
-template<>
+template <>
 void av::utils::MultiValueField<bool>::pullValueImpl(av::Field* fromField)
 {
-  if (fieldHasType<double>(fromField))
-  {
-    setFieldValues<double, bool>(fromField, this);
-  }
-  else if (fieldHasType<float>(fromField))
-  {
-    setFieldValues<float, bool>(fromField, this);
-  }
-  else if (fieldHasType<int32_t>(fromField))
-  {
-    setFieldValues<int32_t, bool>(fromField, this);
-  }
-  else if (fieldHasType<int64_t>(fromField))
-  {
-    setFieldValues<int64_t, bool>(fromField, this);
-  }
-  else if (fieldHasType<uint32_t>(fromField))
-  {
-    setFieldValues<uint32_t, bool>(fromField, this);
-  }
-  else if (fieldHasType<uint64_t>(fromField))
-  {
-    setFieldValues<uint64_t, bool>(fromField, this);
-  }
-  else if (fieldHasType<bool>(fromField))
-  {
-    setFieldValues<bool, bool>(fromField, this);
-  }
-  else
-  {
-    throw std::invalid_argument("pullValue: type mismatch. " +
-                                getTypeId().getName() +
-                                " <--> " +
-                                fromField->getTypeId().getName());
-  }
+    if(fieldHasType<double>(fromField))
+    {
+        setFieldValues<double, bool>(fromField, this);
+    }
+    else if(fieldHasType<float>(fromField))
+    {
+        setFieldValues<float, bool>(fromField, this);
+    }
+    else if(fieldHasType<int32_t>(fromField))
+    {
+        setFieldValues<int32_t, bool>(fromField, this);
+    }
+    else if(fieldHasType<int64_t>(fromField))
+    {
+        setFieldValues<int64_t, bool>(fromField, this);
+    }
+    else if(fieldHasType<uint32_t>(fromField))
+    {
+        setFieldValues<uint32_t, bool>(fromField, this);
+    }
+    else if(fieldHasType<uint64_t>(fromField))
+    {
+        setFieldValues<uint64_t, bool>(fromField, this);
+    }
+    else if(fieldHasType<bool>(fromField))
+    {
+        setFieldValues<bool, bool>(fromField, this);
+    }
+    else
+    {
+        throw std::invalid_argument("pullValue: type mismatch. " + getTypeId().getName() + " <--> " + fromField->getTypeId().getName());
+    }
 }
 
 #if 0

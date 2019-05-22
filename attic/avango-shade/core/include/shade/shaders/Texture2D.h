@@ -34,30 +34,26 @@
 #include "../types/ValueReference.h"
 #include "../types/uniform.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Texture2D : public ShaderBase<Texture2D, Gettable<vec4>>
+{
+  public:
+    /*virtual*/ vec4<> get(void);
+    vec4<> get_texture(void);
 
-    class Texture2D : public ShaderBase<Texture2D, Gettable<vec4> >
-    {
-    public:
+    ValueReference<vec2, uniform> uv;
+    sampler2D texture_unit;
 
-      /*virtual*/ vec4<> get(void);
-      vec4<> get_texture(void);
+  private:
+    void get_inline(formatter::Generator& generator);
 
-      ValueReference<vec2, uniform> uv;
-      sampler2D texture_unit;
+    SHADE_DERIVED_DECL(Texture2D, Gettable<vec4>)
+};
 
-    private:
-
-      void get_inline(formatter::Generator& generator);
-
-      SHADE_DERIVED_DECL(Texture2D, Gettable<vec4>)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Texture2D_H */

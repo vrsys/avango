@@ -3,4 +3,4 @@
 
 void init_SliderConstraint();
 
-#endif //AV_PYTHON_GUA_SLIDER_CONSTRAINT_HPP
+#endif // AV_PYTHON_GUA_SLIDER_CONSTRAINT_HPP

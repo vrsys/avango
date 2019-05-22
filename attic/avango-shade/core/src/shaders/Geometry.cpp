@@ -25,11 +25,6 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(Geometry, "Geometry.glsl",
-    SHADE_ENV_DEFS(geometry_shader, (enter)(transform_inverse)),
-    SHADE_DEFS((uvw)))
+SHADE_CLASS_INIT(Geometry, "Geometry.glsl", SHADE_ENV_DEFS(geometry_shader, (enter)(transform_inverse)), SHADE_DEFS((uvw)))
 
-shade::vec3<> Geometry::transform_inverse(shade::vec3<> value)
-{
-  return invoke< shade::vec3<> >("Geometry_transform_inverse_impl");
-}
+shade::vec3<> Geometry::transform_inverse(shade::vec3<> value) { return invoke<shade::vec3<>>("Geometry_transform_inverse_impl"); }

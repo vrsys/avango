@@ -30,30 +30,25 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Enterable : public ShaderBase<Enterable>
+{
+  public:
+    std::string get_entry_name(ShaderEnvironment env);
+    bool has_entry(ShaderEnvironment env);
 
-    class Enterable : public ShaderBase<Enterable>
-    {
-    public:
+    virtual void_<> enter_vertex(void) { return void_<>(); };
 
-      std::string get_entry_name(ShaderEnvironment env);
-      bool has_entry(ShaderEnvironment env);
+    virtual void_<> enter_fragment(void) { return void_<>(); };
 
-      virtual void_<> enter_vertex(void)
-      { return void_<>(); };
+    virtual void_<> enter_geometry(void) { return void_<>(); };
 
-      virtual void_<> enter_fragment(void)
-      { return void_<>(); };
+  private:
+    SHADE_BASE_DECL(Enterable)
+};
 
-      virtual void_<> enter_geometry(void)
-      { return void_<>(); };
-
-    private:
-      SHADE_BASE_DECL(Enterable)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Enterable_H */

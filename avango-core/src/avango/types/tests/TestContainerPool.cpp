@@ -32,22 +32,21 @@
 
 namespace
 {
-  TEST(registerContainers)
-  {
+TEST(registerContainers)
+{
     av::BoolObject::initClass();
     av::Link<av::BoolObject> obj1(new av::BoolObject);
     av::FieldContainer::IDType obj1_id(obj1->getId());
     CHECK_EQUAL(obj1.getPtr(), av::ContainerPool::getContainerById(obj1_id));
     obj1.clear();
     CHECK_EQUAL(obj1.getPtr(), av::ContainerPool::getContainerById(obj1_id));
-  }
+}
 
 } // namespace
 
 int main()
 {
-  av::getRootLogger().addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+    av::getRootLogger().addConsoleAppender();
+    av::ApplicationInstance::get();
+    return UnitTest::RunAllTests();
 }
-

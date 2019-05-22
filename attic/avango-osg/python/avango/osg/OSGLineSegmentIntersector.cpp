@@ -30,20 +30,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLineSegmentIntersector(void)
 {
-  def("line_intersect", ::av::osg::lineIntersect);
+    def("line_intersect", ::av::osg::lineIntersect);
 
-  // wrapping osg::LineSegmentIntersector functionality
-  class_<av::osg::LineSegmentIntersector, av::Link<av::osg::LineSegmentIntersector>, bases<av::FieldContainer>, boost::noncopyable >("LineSegmentIntersector", "docstring", no_init);
+    // wrapping osg::LineSegmentIntersector functionality
+    class_<av::osg::LineSegmentIntersector, av::Link<av::osg::LineSegmentIntersector>, bases<av::FieldContainer>, boost::noncopyable>("LineSegmentIntersector", "docstring", no_init);
 }

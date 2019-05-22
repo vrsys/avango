@@ -28,69 +28,68 @@
 #include <vector>
 #include <boost/shared_array.hpp>
 
-class FileFormatError {};
-
+class FileFormatError
+{
+};
 
 class Texture
 {
-public:
+  public:
+    /* Create a new texture */
+    Texture(int width, int height, bool alpha = false, int levels = 1, int fill_r = -1, int fill_g = 0, int fill_b = 0, int fill_a = 255);
 
-  /* Create a new texture */
-  Texture(int width, int height, bool alpha = false, int levels = 1, int fill_r = -1, int fill_g = 0, int fill_b = 0, int fill_a = 255);
+    /* Load texture from file */
+    Texture(const char* fname, int array = 0);
 
-  /* Load texture from file */
-  Texture(const char* fname, int array = 0);
+    /* Destructor */
+    ~Texture(void);
 
-  /* Destructor */
-  ~Texture(void);
+    /* Save texture to file */
+    void save(const char* fname);
 
-  /* Save texture to file */
-  void save(const char* fname);
+    /* Returns width of given level or base if none */
+    int get_width(int level = 0) const;
 
-  /* Returns width of given level or base if none */
-  int get_width(int level = 0) const;
+    /* Returns height of given level or base if none */
+    int get_height(int level = 0) const;
 
-  /* Returns height of given level or base if none */
-  int get_height(int level = 0) const;
+    /* Returns number of level (from 1 to ...)  */
+    int get_levels(void) const { return m_levels; }
 
-  /* Returns number of level (from 1 to ...)  */
-  int get_levels(void) const { return m_levels; }
+    /* Upload to OpenGL */
+    void upload(void) const;
 
-  /* Upload to OpenGL */
-  void upload(void) const;
+    /* Sets border mode for OpenGL */
+    void set_border(int border);
 
-  /* Sets border mode for OpenGL */
-  void set_border(int border);
+    /* Read and write pixels */
+    enum component
+    {
+        R = 0,
+        G,
+        B,
+        A
+    };
 
-  /* Read and write pixels */
-  enum component {R = 0, G, B, A};
+    unsigned char get_pixel(int x, int y, int i, int level = 0) { return m_data[level][(y * get_width(level) + x) * 4 + i]; }
 
-  unsigned char get_pixel(int x, int y, int i, int level = 0)
-  {
-    return m_data[level][(y*get_width(level)+x)*4 + i];
-  }
+    void set_pixel(int x, int y, int i, unsigned char v, int level = 0) { m_data[level][(y * get_width(level) + x) * 4 + i] = v; }
 
-  void set_pixel(int x, int y, int i, unsigned char v, int level = 0)
-  {
-    m_data[level][(y*get_width(level)+x)*4 + i] = v;
-  }
+  private:
+    unsigned int read_dword(std::istream& hfile);
+    void write_dword(std::ostream& hfile, unsigned int v);
+    void align_dword(std::istream& hfile);
+    void align_dword(std::ostream& hfile);
 
-private:
+    int byte_index(unsigned int mask);
 
-  unsigned int read_dword(std::istream &hfile);
-  void write_dword(std::ostream &hfile, unsigned int v);
-  void align_dword(std::istream &hfile);
-  void align_dword(std::ostream &hfile);
+    int m_width, m_height;
+    bool m_alpha;
+    int m_levels;
+    int m_border;
+    int m_array;
 
-  int byte_index(unsigned int mask);
-
-  int m_width, m_height;
-  bool m_alpha;
-  int m_levels;
-  int m_border;
-  int m_array;
-
-  std::vector<boost::shared_array<unsigned char> > m_data;
+    std::vector<boost::shared_array<unsigned char>> m_data;
 };
 
 #endif /* Texture_H */

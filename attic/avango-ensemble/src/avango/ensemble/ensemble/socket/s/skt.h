@@ -33,34 +33,40 @@
  */
 #include "platform.h"
 /**************************************************************/
-/* Debuggin macros. 
+/* Debuggin macros.
  */
 
 //#define SKTTRACE(x) printf x; fflush(stdout)
-#define SKTTRACE(x) {}
+#define SKTTRACE(x)                                                                                                                                                                                    \
+    {                                                                                                                                                                                                  \
+    }
 //#define SKTTRACE2(x) printf x; fflush(stdout)
-#define SKTTRACE2(x) {}
+#define SKTTRACE2(x)                                                                                                                                                                                   \
+    {                                                                                                                                                                                                  \
+    }
 //#define SKTTRACE3(x) printf x; fflush(stdout)
-#define SKTTRACE3(x) {}
+#define SKTTRACE3(x)                                                                                                                                                                                   \
+    {                                                                                                                                                                                                  \
+    }
 /**************************************************************/
 /* A set of errors to ignore on receiving a UDP or a TCP packet.
  */
 void skt_udp_recv_error(void);
-int skt_tcp_recv_error(char *debug);
+int skt_tcp_recv_error(char* debug);
 
 /**************************************************************/
 
-extern void serror(char * cmdname);
+extern void serror(char* cmdname);
 
-#define GET_INET_ADDR(v) (*((uint32 *) (v)))
+#define GET_INET_ADDR(v) (*((uint32*)(v)))
 
 /* Defined inside CAML win32unix library
  *
  * BEGIN: Copied from ocaml/otherlibs/unix/{socketaddr.h,unixsupport.h}
  */
-#define Nothing ((value) 0)
+#define Nothing ((value)0)
 
-//extern union sock_addr_union sock_addr;
+// extern union sock_addr_union sock_addr;
 
 #ifdef HAS_SOCKLEN_T
 typedef socklen_t socklen_param_type;
@@ -68,12 +74,9 @@ typedef socklen_t socklen_param_type;
 typedef int socklen_param_type;
 #endif
 
-extern void get_sockaddr(value mladr,
-			 union sock_addr_union * adr /*out*/,
-			 socklen_param_type * adr_len /*out*/);
+extern void get_sockaddr(value mladr, union sock_addr_union* adr /*out*/, socklen_param_type* adr_len /*out*/);
 
-extern value alloc_sockaddr(union sock_addr_union * adr /*in*/,
-			    socklen_param_type adr_len);
+extern value alloc_sockaddr(union sock_addr_union* adr /*in*/, socklen_param_type adr_len);
 
 /* END
  */

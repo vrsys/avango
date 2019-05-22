@@ -25,8 +25,4 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(ILight, "", 
-    SHADE_ENV_DEFS(shade::vertex_shader, (transform))
-    SHADE_ENV_DEFS(shade::fragment_shader, (illuminate)),
-    SHADE_NONE
-    )
+SHADE_CLASS_INIT(ILight, "", SHADE_ENV_DEFS(shade::vertex_shader, (transform)) SHADE_ENV_DEFS(shade::fragment_shader, (illuminate)), SHADE_NONE)

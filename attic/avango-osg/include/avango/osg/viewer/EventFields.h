@@ -38,146 +38,142 @@
 
 namespace av
 {
-  namespace osg
-  {
-    namespace viewer
-    {
-      class EventFields;
+namespace osg
+{
+namespace viewer
+{
+class EventFields;
 
-      class InputEventHandler : public ::osgGA::GUIEventHandler 
-      {
-      public:
-        InputEventHandler(EventFields&);
+class InputEventHandler : public ::osgGA::GUIEventHandler
+{
+  public:
+    InputEventHandler(EventFields&);
 
-        /** handle events, return true if handled, false otherwise.*/
-        /* virtual */ bool handle(const ::osgGA::GUIEventAdapter&, ::osgGA::GUIActionAdapter&);
+    /** handle events, return true if handled, false otherwise.*/
+    /* virtual */ bool handle(const ::osgGA::GUIEventAdapter&, ::osgGA::GUIActionAdapter&);
 
-      protected:
-        EventFields *mEventFields;
-        std::set<int> mKeys;
-      };
+  protected:
+    EventFields* mEventFields;
+    std::set<int> mKeys;
+};
 
-      typedef SingleField<Link<EventFields> > SFEventFields;
-      typedef MultiField<Link<EventFields> > MFEventFields;
+typedef SingleField<Link<EventFields>> SFEventFields;
+typedef MultiField<Link<EventFields>> MFEventFields;
 
-      /**
-       * \ingroup av_osg_viewer
-       */
-      class AV_OSG_VIEWER_DLL EventFields : public av::FieldContainer
-      {
-        AV_FC_DECLARE();
+/**
+ * \ingroup av_osg_viewer
+ */
+class AV_OSG_VIEWER_DLL EventFields : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    /**
+     * Constructor. A new ::osgViewer::EventFields is created only internally.
+     */
+    EventFields();
 
-        /**
-         * Constructor. A new ::osgViewer::EventFields is created only internally.
-         */
-        EventFields();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~EventFields();
 
-      protected:
+  public:
+    /**
+     * Input: View to register the InputEventHandler.
+     */
+    SFView View;
 
-        /**
-         * Destructor made protected to prevent allocation on stack.
-         */
-        virtual ~EventFields();
+    /**
+     * Output: drag event.
+     */
+    SFVec2 DragEvent;
 
-      public:
+    /**
+     * Output: move event.
+     */
+    SFVec2 MoveEvent;
 
-        /**
-         * Input: View to register the InputEventHandler.
-         */
-        SFView View;
+    /**
+     * Output: Mouse buttons.
+     */
+    SFBool MouseButtonLeft;
+    SFBool MouseButtonMiddle;
+    SFBool MouseButtonRight;
 
-        /**
-         * Output: drag event.
-         */
-        SFVec2 DragEvent;
+    /**
+     * Output: Combinations of mouse buttons.
+     */
+    SFBool MouseButtons_OnlyLeft;
+    SFBool MouseButtons_OnlyMiddle;
+    SFBool MouseButtons_OnlyRight;
+    SFBool MouseButtons_LeftAndMiddle;
+    SFBool MouseButtons_LeftAndRight;
+    SFBool MouseButtons_MiddleAndRight;
+    SFBool MouseButtons_LeftAndMiddleAndRight;
 
-        /**
-         * Output: move event.
-         */
-        SFVec2 MoveEvent;
+    /**
+     * Output: Mouse buttons double click trigger fields.
+     * Only implemented for Windows in OSG!
+     */
+    SFBool MouseButtonLeftDoubleClick;
+    SFBool MouseButtonMiddleDoubleClick;
+    SFBool MouseButtonRightDoubleClick;
 
-        /**
-         * Output: Mouse buttons.
-         */
-        SFBool MouseButtonLeft;
-        SFBool MouseButtonMiddle;
-        SFBool MouseButtonRight;
+    /**
+     * Output: Mouse scroll wheel trigger fields.
+     */
+    SFBool MouseScrollUp;
+    SFBool MouseScrollDown;
 
-        /**
-         * Output: Combinations of mouse buttons.
-         */
-        SFBool MouseButtons_OnlyLeft;
-        SFBool MouseButtons_OnlyMiddle;
-        SFBool MouseButtons_OnlyRight;
-        SFBool MouseButtons_LeftAndMiddle;
-        SFBool MouseButtons_LeftAndRight;
-        SFBool MouseButtons_MiddleAndRight;
-        SFBool MouseButtons_LeftAndMiddleAndRight;
+    /**
+     * Output: Keys.
+     */
+    MFInt KeysPressed;
+    SFBool KeyShift;
+    SFBool KeyCtrl;
+    SFBool KeyAlt;
+    SFBool KeyInsert;
+    SFBool KeyDelete;
+    SFBool KeyHome;
+    SFBool KeyEnd;
+    SFBool KeyPageUp;
+    SFBool KeyPageDown;
+    SFBool KeyLeft;
+    SFBool KeyRight;
+    SFBool KeyUp;
+    SFBool KeyDown;
+    SFBool KeyEsc;
+    SFBool KeySpace;
+    SFBool KeyEnter;
+    SFBool KeyAltReturn;
+    SFBool KeyF1;
+    SFBool KeyF2;
+    SFBool KeyF3;
+    SFBool KeyF4;
+    SFBool KeyF5;
+    SFBool KeyF6;
+    SFBool KeyF7;
+    SFBool KeyF8;
+    SFBool KeyF9;
+    SFBool KeyF10;
+    SFBool KeyF11;
+    SFBool KeyF12;
 
-        /**
-         * Output: Mouse buttons double click trigger fields.
-         * Only implemented for Windows in OSG!
-         */
-        SFBool MouseButtonLeftDoubleClick;
-        SFBool MouseButtonMiddleDoubleClick;
-        SFBool MouseButtonRightDoubleClick;
+    /* virtual */ void fieldHasChanged(const av::Field& field);
 
-        /**
-         * Output: Mouse scroll wheel trigger fields.
-         */
-        SFBool MouseScrollUp;
-        SFBool MouseScrollDown;
+  protected:
+    ::osg::ref_ptr<::osgViewer::View> mView;
+};
 
-        /**
-         * Output: Keys.
-         */
-        MFInt KeysPressed;
-        SFBool KeyShift;
-        SFBool KeyCtrl;
-        SFBool KeyAlt;
-        SFBool KeyInsert;
-        SFBool KeyDelete;
-        SFBool KeyHome;
-        SFBool KeyEnd;
-        SFBool KeyPageUp;
-        SFBool KeyPageDown;
-        SFBool KeyLeft;
-        SFBool KeyRight;
-        SFBool KeyUp;
-        SFBool KeyDown;
-        SFBool KeyEsc;
-        SFBool KeySpace;
-        SFBool KeyEnter;
-        SFBool KeyAltReturn;
-        SFBool KeyF1;
-        SFBool KeyF2;
-        SFBool KeyF3;
-        SFBool KeyF4;
-        SFBool KeyF5;
-        SFBool KeyF6;
-        SFBool KeyF7;
-        SFBool KeyF8;
-        SFBool KeyF9;
-        SFBool KeyF10;
-        SFBool KeyF11;
-        SFBool KeyF12;
+} // namespace viewer
 
-        /* virtual */ void fieldHasChanged(const av::Field& field);
-
-      protected:
-        ::osg::ref_ptr< ::osgViewer::View> mView;
-
-      };
-
-    } // namespace viewer
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::EventFields> >;
-  template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::EventFields> >;
+template class AV_OSG_VIEWER_DLL SingleField<Link<osg::viewer::EventFields>>;
+template class AV_OSG_VIEWER_DLL MultiField<Link<osg::viewer::EventFields>>;
 #endif
 
 } // namespace av

@@ -3,4 +3,4 @@
 
 void init_Material();
 
-#endif //AV_PYTHON_GUA_MATERIAL_HPP
+#endif // AV_PYTHON_GUA_MATERIAL_HPP

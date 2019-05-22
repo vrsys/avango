@@ -3,4 +3,4 @@
 
 void init_StencilPassDescription();
 
-#endif //AV_PYTHON_GUA_STENCIL_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_STENCIL_PASS_DESCRIPTION_HPP

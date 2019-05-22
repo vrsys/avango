@@ -30,167 +30,112 @@
 
 AV_BASE_DEFINE(av::daemon::Station);
 
-av::daemon::Station::Station()
-  : mName(),
-    mMatrix(gua::math::mat4::identity()),
-    mButton(),
-    mValue(),
-    mLed(),
-    mMatrixUsed(false),
-    mButtonsUsed(0),
-    mValuesUsed(0),
-    mLedsUsed(0)
+av::daemon::Station::Station() : mName(), mMatrix(gua::math::mat4::identity()), mButton(), mValue(), mLed(), mMatrixUsed(false), mButtonsUsed(0), mValuesUsed(0), mLedsUsed(0)
 {
-  mName[sMaxNameLength - 1] = '\0';
+    mName[sMaxNameLength - 1] = '\0';
 
-  for (int i=0; i<sMaxButtons; ++i) {
-    mButton[i] = 0;
-  }
-  for (int i=0; i<sMaxValues; ++i) {
-    mValue[i] = 0;
-  }
-  for (int i=0; i<sMaxLeds; ++i) {
-    mLed[i] = false;
-  }
+    for(int i = 0; i < sMaxButtons; ++i)
+    {
+        mButton[i] = 0;
+    }
+    for(int i = 0; i < sMaxValues; ++i)
+    {
+        mValue[i] = 0;
+    }
+    for(int i = 0; i < sMaxLeds; ++i)
+    {
+        mLed[i] = false;
+    }
 }
 
-void
-av::daemon::Station::initClass()
+void av::daemon::Station::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::Base::initClass();
-    AV_BASE_INIT(av::Base, av::daemon::Station, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::Base::initClass();
+        AV_BASE_INIT(av::Base, av::daemon::Station, true);
+    }
 }
 
-const char*
-av::daemon::Station::getName() const
+const char* av::daemon::Station::getName() const { return mName; }
+
+const ::gua::math::mat4& av::daemon::Station::getMatrix() const { return mMatrix; }
+
+int av::daemon::Station::getButton(int which) const
 {
-  return mName;
+    if(sMaxButtons <= which)
+        return 0;
+
+    return mButton[which];
 }
 
-const ::gua::math::mat4&
-av::daemon::Station::getMatrix() const
+const std::vector<int> av::daemon::Station::getButtons() const { return std::vector<int>(mButton, mButton + sMaxButtons); }
+
+float av::daemon::Station::getValue(int which) const
 {
-  return mMatrix;
+    if(sMaxValues <= which)
+        return 0.0f;
+
+    return mValue[which];
 }
 
-int
-av::daemon::Station::getButton(int which) const
-{
-  if (sMaxButtons <= which)
-    return 0;
+const std::vector<float> av::daemon::Station::getValues() const { return std::vector<float>(mValue, mValue + sMaxValues); }
 
-  return mButton[which];
+bool av::daemon::Station::getLED(int which) const
+{
+    if(sMaxLeds <= which)
+        return false;
+
+    return mLed[which];
 }
 
-const std::vector<int>
-av::daemon::Station::getButtons() const
+const std::vector<bool> av::daemon::Station::getLEDs() const { return std::vector<bool>(mLed, mLed + sMaxLeds); }
+
+void av::daemon::Station::setName(const char* name)
 {
-  return std::vector<int> (mButton, mButton + sMaxButtons);
+    ::strncpy(mName, name, sMaxNameLength - 2);
+
+    mName[sMaxNameLength - 1] = '\0';
 }
 
-float
-av::daemon::Station::getValue(int which) const
-{
-  if (sMaxValues <= which)
-    return 0.0f;
+void av::daemon::Station::setMatrix(const ::gua::math::mat4& matrix) { mMatrix = matrix; }
 
-  return mValue[which];
+void av::daemon::Station::setButton(int which, int on)
+{
+    if(sMaxButtons <= which)
+        return;
+
+    mButton[which] = on;
 }
 
-const std::vector<float>
-av::daemon::Station::getValues() const
+void av::daemon::Station::setValue(int which, float val)
 {
-  return std::vector<float> (mValue, mValue + sMaxValues);
+    if(sMaxValues <= which)
+        return;
+
+    mValue[which] = val;
 }
 
-bool
-av::daemon::Station::getLED(int which) const
+void av::daemon::Station::setLED(int which, bool on)
 {
-  if (sMaxLeds <= which)
-    return false;
+    if(sMaxLeds <= which)
+        return;
 
-  return mLed[which];
+    mLed[which] = on;
 }
 
-const std::vector<bool>
-av::daemon::Station::getLEDs() const
+bool av::daemon::Station::getMatrixUsed() const { return mMatrixUsed; }
+
+int av::daemon::Station::getButtonsUsed() const { return mButtonsUsed; }
+
+int av::daemon::Station::getValuesUsed() const { return mValuesUsed; }
+
+int av::daemon::Station::getLEDsUsed() const { return mLedsUsed; }
+
+void av::daemon::Station::setUsage(bool matrix, int buttons, int values, int leds)
 {
-  return std::vector<bool> (mLed, mLed + sMaxLeds);
-}
-
-void
-av::daemon::Station::setName(const char* name)
-{
-  ::strncpy(mName, name, sMaxNameLength - 2);
-
-  mName[sMaxNameLength - 1] = '\0';
-}
-
-void
-av::daemon::Station::setMatrix(const ::gua::math::mat4& matrix)
-{
-  mMatrix = matrix;
-}
-
-void
-av::daemon::Station::setButton(int which, int on)
-{
-  if (sMaxButtons <= which)
-    return;
-
-  mButton[which] = on;
-}
-
-void
-av::daemon::Station::setValue(int which, float val)
-{
-  if (sMaxValues <= which)
-    return;
-
-  mValue[which] = val;
-}
-
-void
-av::daemon::Station::setLED(int which, bool on)
-{
-  if (sMaxLeds <= which)
-    return;
-
-  mLed[which] = on;
-}
-
-bool
-av::daemon::Station::getMatrixUsed() const
-{
-  return mMatrixUsed;
-}
-
-int
-av::daemon::Station::getButtonsUsed() const
-{
-  return mButtonsUsed;
-}
-
-int
-av::daemon::Station::getValuesUsed() const
-{
-  return mValuesUsed;
-}
-
-int
-av::daemon::Station::getLEDsUsed() const
-{
-  return mLedsUsed;
-}
-
-void
-av::daemon::Station::setUsage(bool matrix, int buttons, int values, int leds)
-{
-  mMatrixUsed = matrix;
-  mButtonsUsed = buttons;
-  mValuesUsed = values;
-  mLedsUsed = leds;
+    mMatrixUsed = matrix;
+    mButtonsUsed = buttons;
+    mValuesUsed = values;
+    mLedsUsed = leds;
 }

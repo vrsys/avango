@@ -34,26 +34,22 @@
 #include "../types/void.h"
 #include "../types/const.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Vec4ToVec2 : public ShaderBase<Vec4ToVec2, Gettable<vec2>>
+{
+  public:
+    /*virtual*/ vec2<> get(void);
 
-    class Vec4ToVec2 : public ShaderBase<Vec4ToVec2, Gettable<vec2> >
-    {
-    public:
+    objref<boost::shared_ptr<Gettable<vec4>>, const_> value;
 
-      /*virtual*/ vec2<> get(void);
+  private:
+    SHADE_DERIVED_DECL(Vec4ToVec2, Gettable<vec2>)
+};
 
-      objref<boost::shared_ptr<Gettable<vec4> >, const_> value;
-
-    private:
-
-      SHADE_DERIVED_DECL(Vec4ToVec2, Gettable<vec2>)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Vec4ToVec2_H */

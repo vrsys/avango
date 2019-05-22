@@ -33,20 +33,20 @@
 
 namespace av
 {
-  namespace shade
-  {
-    /**
-     * Registers a texture field with appropriate getter and setter functions
-     *
-     * \ingroup av_shade
-     */
-    class TextureFieldAdapter : public FieldAdapter
-    {
-    public:
-      /*virtual*/ ::shade::types::TypeAccessor::HashType hash(void) const;
-      /*virtual*/ void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const;
-    };
-  }
-}
+namespace shade
+{
+/**
+ * Registers a texture field with appropriate getter and setter functions
+ *
+ * \ingroup av_shade
+ */
+class TextureFieldAdapter : public FieldAdapter
+{
+  public:
+    /*virtual*/ ::shade::types::TypeAccessor::HashType hash(void) const;
+    /*virtual*/ void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const;
+};
+} // namespace shade
+} // namespace av
 
 #endif

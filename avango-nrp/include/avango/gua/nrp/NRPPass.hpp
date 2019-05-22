@@ -32,13 +32,13 @@ class AV_GUA_DLL NRPPassDescription : public av::gua::PipelinePassDescription
 
 using SFNRPPassDescription = av::SingleField<av::Link<av::gua::nrp::NRPPassDescription>>;
 using MFNRPPassDescription = av::MultiField<av::Link<av::gua::nrp::NRPPassDescription>>;
-}
-}
+} // namespace nrp
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
 template class AV_GUA_DLL av::SingleField<av::Link<gua::nrp::NRPPassDescription>>;
 template class AV_GUA_DLL av::MultiField<av::Link<gua::nrp::NRPPassDescription>>;
 #endif
-}
+} // namespace av
 
 #endif // AVANGO_GUA_NRP_PASS_DESCRIPTION_HPP

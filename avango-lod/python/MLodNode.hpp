@@ -3,4 +3,4 @@
 
 void init_MLodNode();
 
-#endif //AV_PYTHON_GUA_LOD_MLOD_NODE_HPP
+#endif // AV_PYTHON_GUA_LOD_MLOD_NODE_HPP

@@ -7,7 +7,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::FullscreenPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::FullscreenPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::FullscreenPassDescription);
@@ -15,25 +15,18 @@ AV_FC_DEFINE(av::gua::FullscreenPassDescription);
 AV_FIELD_DEFINE(av::gua::SFFullscreenPassDescription);
 AV_FIELD_DEFINE(av::gua::MFFullscreenPassDescription);
 
-av::gua::FullscreenPassDescription::FullscreenPassDescription(
-  std::shared_ptr< ::gua::FullscreenPassDescription> const& guaFullscreenPassDescription)
-    : PipelinePassDescription(guaFullscreenPassDescription)
-    , m_guaFullscreenPassDescription(guaFullscreenPassDescription)
+av::gua::FullscreenPassDescription::FullscreenPassDescription(std::shared_ptr<::gua::FullscreenPassDescription> const& guaFullscreenPassDescription)
+    : PipelinePassDescription(guaFullscreenPassDescription), m_guaFullscreenPassDescription(guaFullscreenPassDescription)
 {
+    AV_FC_ADD_ADAPTOR_FIELD(Source, std::bind(&FullscreenPassDescription::getSourceCB, this, std::placeholders::_1), std::bind(&FullscreenPassDescription::setSourceCB, this, std::placeholders::_1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Source,
-                    std::bind(&FullscreenPassDescription::getSourceCB, this,std::placeholders::_1),
-                    std::bind(&FullscreenPassDescription::setSourceCB, this,std::placeholders::_1));
-
-  AV_FC_ADD_ADAPTOR_FIELD(SourceFile,
-                    std::bind(&FullscreenPassDescription::getSourceFileCB, this,std::placeholders::_1),
-                    std::bind(&FullscreenPassDescription::setSourceFileCB, this,std::placeholders::_1));
+    AV_FC_ADD_ADAPTOR_FIELD(
+        SourceFile, std::bind(&FullscreenPassDescription::getSourceFileCB, this, std::placeholders::_1), std::bind(&FullscreenPassDescription::setSourceFileCB, this, std::placeholders::_1));
 }
 
-void
-av::gua::FullscreenPassDescription::initClass()
+void av::gua::FullscreenPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -45,34 +38,12 @@ av::gua::FullscreenPassDescription::initClass()
     }
 }
 
-void
-av::gua::FullscreenPassDescription::getSourceCB(const SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaFullscreenPassDescription->source();
-}
+void av::gua::FullscreenPassDescription::getSourceCB(const SFString::GetValueEvent& event) { *(event.getValuePtr()) = m_guaFullscreenPassDescription->source(); }
 
-void
-av::gua::FullscreenPassDescription::setSourceCB(const SFString::SetValueEvent& event)
-{
-  m_guaFullscreenPassDescription->source(event.getValue());
-}
+void av::gua::FullscreenPassDescription::setSourceCB(const SFString::SetValueEvent& event) { m_guaFullscreenPassDescription->source(event.getValue()); }
 
-void
-av::gua::FullscreenPassDescription::getSourceFileCB(const SFString::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = m_guaFullscreenPassDescription->source_file();
-}
+void av::gua::FullscreenPassDescription::getSourceFileCB(const SFString::GetValueEvent& event) { *(event.getValuePtr()) = m_guaFullscreenPassDescription->source_file(); }
 
-void
-av::gua::FullscreenPassDescription::setSourceFileCB(const SFString::SetValueEvent& event)
-{
-  m_guaFullscreenPassDescription->source_file(event.getValue());
-}
+void av::gua::FullscreenPassDescription::setSourceFileCB(const SFString::SetValueEvent& event) { m_guaFullscreenPassDescription->source_file(event.getValue()); }
 
-std::shared_ptr< ::gua::FullscreenPassDescription> const&
-av::gua::FullscreenPassDescription::getGuaFullscreenPassDescription() const
-{
-    return m_guaFullscreenPassDescription;
-}
-
-
+std::shared_ptr<::gua::FullscreenPassDescription> const& av::gua::FullscreenPassDescription::getGuaFullscreenPassDescription() const { return m_guaFullscreenPassDescription; }

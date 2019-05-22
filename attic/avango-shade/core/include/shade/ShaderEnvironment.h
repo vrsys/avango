@@ -28,9 +28,8 @@
 
 namespace shade
 {
-
-  enum ShaderEnvironment
-  {
+enum ShaderEnvironment
+{
     vertex_shader,
     fragment_shader,
     geometry_shader,
@@ -44,10 +43,10 @@ namespace shade
     invariant_stage = invariant_shader,
     post_geometry_stage = post_geometry_shader,
     application_stage
-  };
+};
 
-  std::string get_shader_env_define(ShaderEnvironment env);
+std::string get_shader_env_define(ShaderEnvironment env);
 
-}
+} // namespace shade
 
 #endif /* shade_ShaderEnvironment_H */

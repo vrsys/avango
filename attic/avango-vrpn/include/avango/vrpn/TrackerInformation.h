@@ -10,60 +10,53 @@
 
 namespace av
 {
-  namespace vrpn
-  {
+namespace vrpn
+{
+class AV_VRPN_DLL TrackerInformation : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_VRPN_DLL TrackerInformation : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    TrackerInformation();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~TrackerInformation();
 
-      TrackerInformation();
+  public:
+    // Number of the Sensor
+    SFLong Number;
+    // Position
+    ::av::osg::SFVec3 Pos;
+    // Quat
+    ::av::osg::SFQuat Quat;
+    // Matrix (is calculated by using the pos vector and the quat. Convenience.)
+    ::av::osg::SFMatrix Matrix;
 
-    protected:
+  private:
+    ::osg::Vec3 mPos;
+    ::osg::Quat mQuat;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~TrackerInformation();
+    void getPOSCB(const av::osg::SFVec3::GetValueEvent& event);
+    void setPOSCB(const av::osg::SFVec3::SetValueEvent& event);
 
-    public:
+    void getQUATCB(const av::osg::SFQuat::GetValueEvent& event);
+    void setQUATCB(const av::osg::SFQuat::SetValueEvent& event);
 
-      //Number of the Sensor
-      SFLong Number;
-      //Position
-      ::av::osg::SFVec3 Pos;
-      //Quat
-      ::av::osg::SFQuat Quat;
-      //Matrix (is calculated by using the pos vector and the quat. Convenience.)
-      ::av::osg::SFMatrix Matrix;
+    void updateMatrix();
+};
 
-
-    private:
-
-      ::osg::Vec3 mPos;
-      ::osg::Quat mQuat;
-
-      void getPOSCB(const av::osg::SFVec3::GetValueEvent& event);
-      void setPOSCB(const av::osg::SFVec3::SetValueEvent& event);
-
-      void getQUATCB(const av::osg::SFQuat::GetValueEvent& event);
-      void setQUATCB(const av::osg::SFQuat::SetValueEvent& event);
-
-      void updateMatrix();
-
-    };
-
-    typedef SingleField<Link<TrackerInformation> > SFTrackerInformation;
-    typedef MultiField<Link<TrackerInformation> > MFTrackerInformation;
-  }
+typedef SingleField<Link<TrackerInformation>> SFTrackerInformation;
+typedef MultiField<Link<TrackerInformation>> MFTrackerInformation;
+} // namespace vrpn
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_VRPN_DLL SingleField<Link<av::vrpn::TrackerInformation> >;
-  template class AV_VRPN_DLL MultiField<Link<av::vrpn::TrackerInformation> >;
+template class AV_VRPN_DLL SingleField<Link<av::vrpn::TrackerInformation>>;
+template class AV_VRPN_DLL MultiField<Link<av::vrpn::TrackerInformation>>;
 #endif
 
-}
+} // namespace av
 
 #endif

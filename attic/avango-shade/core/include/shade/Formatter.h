@@ -33,18 +33,19 @@
 
 namespace shade
 {
-  class Formatter
-  {
+class Formatter
+{
   public:
-    Formatter(ShaderEnvironment env) :
-      m_env(env)
-    {}
+    Formatter(ShaderEnvironment env) : m_env(env) {}
 
     virtual ~Formatter(void) {}
 
     enum ExtensionBehavior
     {
-      require, enable, warn, disable
+        require,
+        enable,
+        warn,
+        disable
     };
 
     ShaderEnvironment get_shader_env(void);
@@ -53,7 +54,8 @@ namespace shade
     unsigned int get_num_vertices_in(void) const;
 
     virtual void insert_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none) = 0;
-    virtual boost::shared_ptr<formatter::Generator> begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none) = 0;
+    virtual boost::shared_ptr<formatter::Generator>
+    begin_insert_init_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name, formatter::Constants::Qualifier qualifier = formatter::Constants::none) = 0;
     virtual void end_insert_init_attribute(void) = 0;
     virtual void insert_array_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name) = 0;
     virtual void insert_multiple_attribute(formatter::Constants::Type type, const std::string& obj, const std::string& name) = 0;
@@ -76,7 +78,8 @@ namespace shade
     virtual void begin_array_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval) = 0;
     virtual void begin_multiple_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval) = 0;
     virtual void begin_deferred_property_dispatcher(const std::string& class_, const std::string& name, formatter::Constants::Type retval) = 0;
-    virtual void insert_deferred_property_dispatcher(shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter) = 0;
+    virtual void insert_deferred_property_dispatcher(
+        shade::ObjectMap::Index i, shade::ObjectMap::Index obj, const std::string& iface_getter, const std::string& getter, const std::string& iface_setter, const std::string& setter) = 0;
     virtual void insert_property_dispatcher(shade::ObjectMap::Index i, const std::string& obj) = 0;
     virtual boost::shared_ptr<formatter::Generator> set_property_dispatcher_return(void) = 0;
     virtual void end_property_dispatcher(void) = 0;
@@ -99,7 +102,7 @@ namespace shade
     shade::ObjectMap::Index m_num_classes;
     unsigned int m_num_primitives;
     formatter::Constants::Primitive m_primitive_type;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_Formatter_H */

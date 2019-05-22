@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::NodePathTargetHolder"));
+av::Logger& logger(av::getLogger("av::tools::NodePathTargetHolder"));
 }
 
 AV_FC_DEFINE(av::tools::NodePathTargetHolder);
@@ -39,24 +39,22 @@ AV_FIELD_DEFINE(av::tools::MFNodePathTargetHolder);
 
 av::tools::NodePathTargetHolder::NodePathTargetHolder()
 {
-  AV_FC_ADD_FIELD(NodePath, av::osg::MFNode::ContainerType());
+    AV_FC_ADD_FIELD(NodePath, av::osg::MFNode::ContainerType());
 
-  Keep.setValue(true);
+    Keep.setValue(true);
 }
 
-av::tools::NodePathTargetHolder::~NodePathTargetHolder()
-{}
+av::tools::NodePathTargetHolder::~NodePathTargetHolder() {}
 
-void
-av::tools::NodePathTargetHolder::initClass()
+void av::tools::NodePathTargetHolder::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::tools::TargetHolder::initClass();
+    if(!isTypeInitialized())
+    {
+        av::tools::TargetHolder::initClass();
 
-    AV_FC_INIT(av::tools::TargetHolder, av::tools::NodePathTargetHolder, true);
+        AV_FC_INIT(av::tools::TargetHolder, av::tools::NodePathTargetHolder, true);
 
-    SFNodePathTargetHolder::initClass("av::tools::SFNodePathTargetHolder", "av::Field");
-    MFNodePathTargetHolder::initClass("av::tools::MFNodePathTargetHolder", "av::Field");
-  }
+        SFNodePathTargetHolder::initClass("av::tools::SFNodePathTargetHolder", "av::Field");
+        MFNodePathTargetHolder::initClass("av::tools::MFNodePathTargetHolder", "av::Field");
+    }
 }

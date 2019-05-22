@@ -37,56 +37,51 @@
 
 namespace av
 {
-  namespace tools
-  {
+namespace tools
+{
+/**
+ * Script tool class
+ *
+ * \ingroup av_tools
+ */
+class ScriptTool : public Tool
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Script tool class
-     *
-     * \ingroup av_tools
+     * Constructor.
      */
-    class ScriptTool : public Tool
-    {
-      AV_FC_DECLARE();
+    ScriptTool();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ScriptTool();
 
-      /**
-       * Constructor.
-       */
-      ScriptTool();
+  public:
+    av::script::SFObject TargetCallback;
+    av::script::SFObject AddedTargetCallback;
+    av::script::SFObject KeptTargetCallback;
+    av::script::SFObject RemovedTargetCallback;
 
-    protected:
+  protected:
+    /* virtual */ void evaluateTarget(TargetHolder& holder);
+    /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
+    /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
+    /* virtual */ void evaluateRemovedTarget(TargetHolder& holder);
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ScriptTool();
-
-    public:
-
-      av::script::SFObject TargetCallback;
-      av::script::SFObject AddedTargetCallback;
-      av::script::SFObject KeptTargetCallback;
-      av::script::SFObject RemovedTargetCallback;
-
-    protected:
-
-      /* virtual */ void evaluateTarget(TargetHolder& holder);
-      /* virtual */ void evaluateAddedTarget(TargetHolder& holder);
-      /* virtual */ void evaluateKeptTarget(TargetHolder& holder);
-      /* virtual */ void evaluateRemovedTarget(TargetHolder& holder);
-
-    };
-
-    using SFScriptTool = SingleField<Link<ScriptTool> >;
-    using MFScriptTool = MultiField<Link<ScriptTool> >;
-  }
+using SFScriptTool = SingleField<Link<ScriptTool>>;
+using MFScriptTool = MultiField<Link<ScriptTool>>;
+} // namespace tools
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class SingleField<Link<tools::ScriptTool> >;
-  template class MultiField<Link<tools::ScriptTool> >;
+template class SingleField<Link<tools::ScriptTool>>;
+template class MultiField<Link<tools::ScriptTool>>;
 #endif
 
-}
+} // namespace av
 
 #endif

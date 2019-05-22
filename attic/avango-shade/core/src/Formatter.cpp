@@ -23,42 +23,33 @@
 
 #include <shade/Formatter.h>
 
-shade::ShaderEnvironment shade::Formatter::get_shader_env(void)
-{
-  return m_env;
-}
+shade::ShaderEnvironment shade::Formatter::get_shader_env(void) { return m_env; }
 
 void shade::Formatter::setup(shade::ObjectMap::Index num_classes, formatter::Constants::Primitive primitive_type)
 {
-  m_num_classes = num_classes;
-  m_primitive_type = primitive_type;
+    m_num_classes = num_classes;
+    m_primitive_type = primitive_type;
 }
 
-shade::ObjectMap::Index shade::Formatter::get_num_classes(void) const
-{
-  return m_num_classes;
-}
+shade::ObjectMap::Index shade::Formatter::get_num_classes(void) const { return m_num_classes; }
 
 unsigned int shade::Formatter::get_num_vertices_in(void) const
 {
-  switch (m_primitive_type)
-  {
-  case formatter::Constants::points:
-    return 1;
-  case formatter::Constants::lines:
-    return 2;
-  case formatter::Constants::lines_adjacency:
-    return 4;
-  case formatter::Constants::triangles:
-    return 3;
-  case formatter::Constants::triangles_adjacency:
-    return 6;
-  };
+    switch(m_primitive_type)
+    {
+    case formatter::Constants::points:
+        return 1;
+    case formatter::Constants::lines:
+        return 2;
+    case formatter::Constants::lines_adjacency:
+        return 4;
+    case formatter::Constants::triangles:
+        return 3;
+    case formatter::Constants::triangles_adjacency:
+        return 6;
+    };
 
-  return 0;
+    return 0;
 }
 
-std::string shade::Formatter::get_initializer_name(void)
-{
-  return "initializer";
-}
+std::string shade::Formatter::get_initializer_name(void) { return "initializer"; }

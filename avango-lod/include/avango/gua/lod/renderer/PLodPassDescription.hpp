@@ -15,68 +15,62 @@
 
 namespace av
 {
-  namespace gua
-  {
-    namespace lod {
-      /**
-       * Wrapper for ::gua::PLodPassDescription
-       *
-       * \ingroup av_gua
-       */
-      class AV_GUA_LOD_DLL PLodPassDescription : public av::gua::PipelinePassDescription
-      {
-        AV_FC_DECLARE();
+namespace gua
+{
+namespace lod
+{
+/**
+ * Wrapper for ::gua::PLodPassDescription
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_LOD_DLL PLodPassDescription : public av::gua::PipelinePassDescription
+{
+    AV_FC_DECLARE();
 
-      public:
+  public:
+    enum Flags
+    {
+        LQ_ONE_PASS = ::gua::PLodPassDescription::SurfelRenderMode::LQ_ONE_PASS,
+        HQ_TWO_PASS = ::gua::PLodPassDescription::SurfelRenderMode::HQ_TWO_PASS,
+    };
 
-        enum Flags {
-          LQ_ONE_PASS = ::gua::PLodPassDescription::SurfelRenderMode::LQ_ONE_PASS,
-          HQ_TWO_PASS = ::gua::PLodPassDescription::SurfelRenderMode::HQ_TWO_PASS,
-        };
+    /**
+     * Constructor. When called without arguments, a new ::gua::PLodPassDescription is created.
+     * Otherwise, the given ::gua::PLodPassDescription is used.
+     */
+    PLodPassDescription(std::shared_ptr<::gua::PLodPassDescription> const& PLodPassDescription = std::shared_ptr<::gua::PLodPassDescription>(new ::gua::PLodPassDescription()));
 
-        /**
-         * Constructor. When called without arguments, a new ::gua::PLodPassDescription is created.
-         * Otherwise, the given ::gua::PLodPassDescription is used.
-         */
-        PLodPassDescription(std::shared_ptr< ::gua::PLodPassDescription> const& PLodPassDescription =
-                           std::shared_ptr< ::gua::PLodPassDescription>(new ::gua::PLodPassDescription()) );
+  public:
+    /**
+     * Get the wrapped ::gua::PLodPassDescription.
+     */
+    std::shared_ptr<::gua::PLodPassDescription> const& getGuaPLodPassDescription() const;
 
+  private:
+    std::shared_ptr<::gua::PLodPassDescription> m_guaPLodPassDescription;
 
+    PLodPassDescription(const PLodPassDescription&);
+    PLodPassDescription& operator=(const PLodPassDescription&);
 
-      public:
+  public:
+    SFInt SurfelRenderMode;
 
-        /**
-         * Get the wrapped ::gua::PLodPassDescription.
-         */
-        std::shared_ptr< ::gua::PLodPassDescription> const& getGuaPLodPassDescription() const;
+    virtual void getSurfelRenderModeCB(const SFInt::GetValueEvent& event);
+    virtual void setSurfelRenderModeCB(const SFInt::SetValueEvent& event);
+};
 
-      private:
+typedef SingleField<Link<PLodPassDescription>> SFPLodPassDescription;
+typedef MultiField<Link<PLodPassDescription>> MFPLodPassDescription;
 
-        std::shared_ptr< ::gua::PLodPassDescription> m_guaPLodPassDescription;
-
-
-        PLodPassDescription(const PLodPassDescription&);
-        PLodPassDescription& operator=(const PLodPassDescription&);
-
-      public:
-        SFInt SurfelRenderMode;
-
-        virtual void getSurfelRenderModeCB(const SFInt::GetValueEvent& event);
-        virtual void setSurfelRenderModeCB(const SFInt::SetValueEvent& event);
-
-      };
-
-      typedef SingleField<Link<PLodPassDescription> > SFPLodPassDescription;
-      typedef MultiField<Link<PLodPassDescription> > MFPLodPassDescription;
-        
-    }
-  }
+} // namespace lod
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::PLodPassDescription> >;
-  template class AV_GUA_LOD_DLL MultiField<Link<gua::lod::PLodPassDescription> >;
+template class AV_GUA_LOD_DLL SingleField<Link<gua::lod::PLodPassDescription>>;
+template class AV_GUA_LOD_DLL MultiField<Link<gua::lod::PLodPassDescription>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_PLOD_PASS_DESCRIPTION_HPP
+#endif // AVANGO_GUA_PLOD_PASS_DESCRIPTION_HPP

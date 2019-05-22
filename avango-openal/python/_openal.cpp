@@ -28,21 +28,20 @@
 
 using namespace boost::python;
 
-
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_openal)
 {
-  av::sound::openal::OpenALSoundRenderer::initClass();
-  class_<av::sound::openal::OpenALSoundRenderer, av::Link<av::sound::openal::OpenALSoundRenderer>, bases<av::sound::SoundRenderer>, boost::noncopyable >("OpenALSoundRenderer", "docstring");
+    av::sound::openal::OpenALSoundRenderer::initClass();
+    class_<av::sound::openal::OpenALSoundRenderer, av::Link<av::sound::openal::OpenALSoundRenderer>, bases<av::sound::SoundRenderer>, boost::noncopyable>("OpenALSoundRenderer", "docstring");
 }

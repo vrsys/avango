@@ -33,25 +33,22 @@
 
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Geometry : public ShaderBase<Geometry>
+{
+  public:
+    virtual void_<> enter(void) { return void_<>(); };
 
-    class Geometry : public ShaderBase<Geometry>
-    {
-    public:
+    virtual vec3<> transform_inverse(vec3<>);
 
-      virtual void_<> enter(void)
-      { return void_<>(); };
+    ValueReference<shade::vec3, shade::local> uvw;
 
-      virtual vec3<> transform_inverse(vec3<>);
+  private:
+    SHADE_BASE_DECL(Geometry)
+};
 
-      ValueReference<shade::vec3, shade::local> uvw;
-
-    private:
-      SHADE_BASE_DECL(Geometry)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Geometry_H */

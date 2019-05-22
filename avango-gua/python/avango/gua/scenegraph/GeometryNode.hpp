@@ -3,4 +3,4 @@
 
 void init_GeometryNode();
 
-#endif //AV_PYTHON_GUA_GEOMETRY_NODE_HPP
+#endif // AV_PYTHON_GUA_GEOMETRY_NODE_HPP

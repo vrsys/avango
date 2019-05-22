@@ -39,13 +39,13 @@
 
 namespace
 {
-  // types, internal
+// types, internal
 
-  // variables, internal
+// variables, internal
 
-  av::Logger& logger(av::getLogger("av::Action"));
+av::Logger& logger(av::getLogger("av::Action"));
 
-  // functions, internal
+// functions, internal
 
 } // namespace
 
@@ -55,31 +55,20 @@ namespace
 
 AV_BASE_DEFINE(av::Action);
 
-av::Action::Action()
-{}
+av::Action::Action() {}
 
 /* virtual */
-av::Action::~Action()
-{}
+av::Action::~Action() {}
 
-/* static */ void
-av::Action::initClass()
+/* static */ void av::Action::initClass()
 {
-  if (!isTypeInitialized()) {
-    Base::initClass();
-    AV_BASE_INIT_ABSTRACT(av::Base, av::Action, true);
-
-  }
+    if(!isTypeInitialized())
+    {
+        Base::initClass();
+        AV_BASE_INIT_ABSTRACT(av::Base, av::Action, true);
+    }
 }
 
-/* virtual */ void
-av::Action::apply(Link<Base> node)
-{
-  traverse(node);
-}
+/* virtual */ void av::Action::apply(Link<Base> node) { traverse(node); }
 
-/* virtual */ void
-av::Action::traverse(Link<Base> node)
-{
-  node->doAction(*this);
-}
+/* virtual */ void av::Action::traverse(Link<Base> node) { node->doAction(*this); }

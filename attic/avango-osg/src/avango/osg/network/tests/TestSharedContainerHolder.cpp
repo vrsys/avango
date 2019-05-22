@@ -28,26 +28,22 @@
 
 namespace
 {
-  class InitContainerFixture
-  {
+class InitContainerFixture
+{
   public:
-    InitContainerFixture()
-    {
-      av::osg::SharedContainerHolder::initClass();
-    }
-  };
+    InitContainerFixture() { av::osg::SharedContainerHolder::initClass(); }
+};
 
-  TEST_FIXTURE(InitContainerFixture, createSharedContainerHolder)
-  {
+TEST_FIXTURE(InitContainerFixture, createSharedContainerHolder)
+{
     av::Link<av::osg::SharedContainerHolder> holder(new av::osg::SharedContainerHolder);
     CHECK(holder.isValid());
-  }
-
-  TEST_FIXTURE(InitContainerFixture, createSharedContainerHolderByName)
-  {
-    av::Link<av::osg::SharedContainerHolder>
-      holder(dynamic_cast<av::osg::SharedContainerHolder*>(av::Type::createInstanceOfType("av::osg::SharedContainerHolder")));
-    CHECK(holder.isValid());
-  }
-
 }
+
+TEST_FIXTURE(InitContainerFixture, createSharedContainerHolderByName)
+{
+    av::Link<av::osg::SharedContainerHolder> holder(dynamic_cast<av::osg::SharedContainerHolder*>(av::Type::createInstanceOfType("av::osg::SharedContainerHolder")));
+    CHECK(holder.isValid());
+}
+
+} // namespace

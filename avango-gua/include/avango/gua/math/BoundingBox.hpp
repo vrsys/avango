@@ -14,69 +14,60 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::BoundingBox
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL BoundingBox : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::BoundingBox
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::BoundingBox is created.
+     * Otherwise, the given ::gua::BoundingBox is used.
      */
-    class AV_GUA_DLL BoundingBox : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    BoundingBox(::gua::math::BoundingBox<::gua::math::vec3>* guaBoundingBox = new ::gua::math::BoundingBox<::gua::math::vec3>());
 
-    public:
+    virtual ~BoundingBox();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::BoundingBox is created.
-       * Otherwise, the given ::gua::BoundingBox is used.
-       */
-      BoundingBox(::gua::math::BoundingBox< ::gua::math::vec3>* guaBoundingBox =
-                  new ::gua::math::BoundingBox< ::gua::math::vec3>());
+  public:
+    SFVec3 Min;
+    SFVec3 Max;
 
-      virtual ~BoundingBox();
+  public:
+    virtual void getMinCB(const SFVec3::GetValueEvent& event);
+    virtual void setMinCB(const SFVec3::SetValueEvent& event);
 
-    public:
+    virtual void getMaxCB(const SFVec3::GetValueEvent& event);
+    virtual void setMaxCB(const SFVec3::SetValueEvent& event);
 
-      SFVec3  Min;
-      SFVec3  Max;
+    ::gua::math::BoundingBox<::gua::math::vec3>* getGuaBoundingBox() const;
 
-    public:
+    bool operator==(av::gua::BoundingBox const& rhs) const { return *m_guaBoundingBox == *rhs.getGuaBoundingBox(); }
 
-      virtual void getMinCB(const SFVec3::GetValueEvent& event);
-      virtual void setMinCB(const SFVec3::SetValueEvent& event);
+    bool operator!=(av::gua::BoundingBox const& rhs) const { return *m_guaBoundingBox != *rhs.getGuaBoundingBox(); }
 
-      virtual void getMaxCB(const SFVec3::GetValueEvent& event);
-      virtual void setMaxCB(const SFVec3::SetValueEvent& event);
+  private:
+    ::gua::math::BoundingBox<::gua::math::vec3>* m_guaBoundingBox;
 
-      ::gua::math::BoundingBox< ::gua::math::vec3>* getGuaBoundingBox() const;
+    // BoundingBox(const BoundingBox&);
+    BoundingBox& operator=(const BoundingBox&);
+};
 
-      bool operator==(av::gua::BoundingBox const& rhs) const {
-        return *m_guaBoundingBox == *rhs.getGuaBoundingBox();
-      }
+using SFBoundingBox = SingleField<Link<BoundingBox>>;
+using MFBoundingBox = MultiField<Link<BoundingBox>>;
 
-      bool operator!=(av::gua::BoundingBox const& rhs) const {
-        return *m_guaBoundingBox != *rhs.getGuaBoundingBox();
-      }
-
-    private:
-
-      ::gua::math::BoundingBox< ::gua::math::vec3>* m_guaBoundingBox;
-
-      // BoundingBox(const BoundingBox&);
-      BoundingBox& operator=(const BoundingBox&);
-    };
-
-    using SFBoundingBox = SingleField<Link<BoundingBox> >;
-    using MFBoundingBox = MultiField<Link<BoundingBox> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::BoundingBox> >;
-  template class AV_GUA_DLL MultiField<Link<gua::BoundingBox> >;
+template class AV_GUA_DLL SingleField<Link<gua::BoundingBox>>;
+template class AV_GUA_DLL MultiField<Link<gua::BoundingBox>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_BOUNDING_BOX_HPP
+#endif // AVANGO_GUA_BOUNDING_BOX_HPP

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_LAYERGEODE
 #define AV_PYTHON_OSG_LAYERGEODE
 

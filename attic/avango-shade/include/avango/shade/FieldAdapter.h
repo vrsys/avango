@@ -35,28 +35,28 @@
 
 namespace shade
 {
-  class Type;
+class Type;
 }
 
 namespace av
 {
-  class FieldContainer;
+class FieldContainer;
 
-  namespace shade
-  {
-    /**
-     * Registers field with appropriate getter and setter functions
-     *
-     * \ingroup av_shade
-     */
-    class AV_SHADE_DLL FieldAdapter
-    {
-    public:
-      virtual ~FieldAdapter(void) {}
-      virtual ::shade::types::TypeAccessor::HashType hash(void) const = 0;
-      virtual void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const = 0;
-    };
-  }
-}
+namespace shade
+{
+/**
+ * Registers field with appropriate getter and setter functions
+ *
+ * \ingroup av_shade
+ */
+class AV_SHADE_DLL FieldAdapter
+{
+  public:
+    virtual ~FieldAdapter(void) {}
+    virtual ::shade::types::TypeAccessor::HashType hash(void) const = 0;
+    virtual void bindField(::shade::Type* type, const std::string& name, FieldContainer* container) const = 0;
+};
+} // namespace shade
+} // namespace av
 
 #endif

@@ -34,57 +34,51 @@
 
 namespace av
 {
-  namespace logging
-  {
-    class Logger;
-    //class LoggerManager;
+namespace logging
+{
+class Logger;
+// class LoggerManager;
+
+/**
+ * Responsible for creating and destroying logger instancies.
+ */
+
+class AV_DLL LoggerManager /* : public SingletonThreadSafe*/
+{
+    // friend class SingletonThreadSafe;//<LoggerManager>;
+
+  public:
+    /**
+     * Return the root logger, which gets all messages.
+     */
+    Logger& getRootLogger();
 
     /**
-     * Responsible for creating and destroying logger instancies.
+     * Return specific logger with the given name.
+     * If it does not yet exist, it is automatically created.
+     *
+     * \param name Name in logger hierarchy, usually the class name, e.g. "av::Logger".
+     *
+     * \throw std::invalid_argument if the logger name contains ':::' or ends with '::'
      */
+    Logger& getLogger(const std::string& name);
 
-    class AV_DLL LoggerManager/* : public SingletonThreadSafe*/
-    {
+    LoggerManager();
+    virtual ~LoggerManager();
+    LoggerManager& operator=(const LoggerManager&);
 
-      //friend class SingletonThreadSafe;//<LoggerManager>;
+  private:
+    using LoggerMap = std::map<std::string, Logger*>;
+    LoggerMap& getLoggerMap();
 
-    public:
+    boost::mutex mLoggerMapMutex;
+    Logger* mRootLogger;
+    LoggerMap mLoggerMap;
+};
 
-      /**
-       * Return the root logger, which gets all messages.
-       */
-      Logger& getRootLogger();
+using LoggerManagerInstance = Singleton<LoggerManager, CreateUsingNew, DefaultLifeTime, MultiThreaded>;
 
-      /**
-       * Return specific logger with the given name.
-       * If it does not yet exist, it is automatically created.
-       *
-       * \param name Name in logger hierarchy, usually the class name, e.g. "av::Logger".
-       *
-       * \throw std::invalid_argument if the logger name contains ':::' or ends with '::'
-       */
-      Logger& getLogger(const std::string& name);
-
-      LoggerManager();
-      virtual ~LoggerManager();
-      LoggerManager& operator=(const LoggerManager&);
-
-    private:
-      using LoggerMap = std::map<std::string, Logger*>;
-      LoggerMap& getLoggerMap();
-
-      boost::mutex mLoggerMapMutex;
-      Logger* mRootLogger;
-      LoggerMap mLoggerMap;
-
-    };
-
-    using LoggerManagerInstance = Singleton<LoggerManager,
-                                            CreateUsingNew,
-                                            DefaultLifeTime,
-                                            MultiThreaded>;
-
-  } //namespace logging
+} // namespace logging
 
 } // namespace av
 

@@ -39,46 +39,41 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class IlluminatedMaterial : public ShaderBase<IlluminatedMaterial, IMaterial, Initializeable>
+{
+  public:
+    /*virtual*/ void_<> init_vertex(void);
 
-    class IlluminatedMaterial : public ShaderBase<IlluminatedMaterial, IMaterial, Initializeable>
-    {
-    public:
+    /*virtual*/ vec4<> shade(void);
 
-      /*virtual*/ void_<> init_vertex(void);
+    virtual void_<> illuminance(vec3<> color, vec3<> direction) { return void_<>(); }
 
-      /*virtual*/ vec4<> shade(void);
+    virtual void_<> chained_init_vertex(void) { return void_<>(); }
 
-      virtual void_<> illuminance(vec3<> color, vec3<> direction)
-      { return void_<>(); }
+    void_<> init(void);
+    void_<> accum_color(vec4<> color);
+    vec4<> gather(void);
 
-      virtual void_<> chained_init_vertex(void)
-      { return void_<>(); }
+    vec3<> get_position(void);
+    vec3<> get_eyepoint(void);
+    vec3<> get_normal(void);
 
-      void_<> init(void);
-      void_<> accum_color(vec4<> color);
-      vec4<> gather(void);
+    typedef list<std::vector<boost::shared_ptr<ILight>>, const_> LightList;
+    LightList lights;
 
-      vec3<> get_position(void);
-      vec3<> get_eyepoint(void);
-      vec3<> get_normal(void);
+    objref<boost::shared_ptr<ICoordinateSystem>, const_> coordinate_system;
 
-      typedef list< std::vector< boost::shared_ptr<ILight> >, const_ > LightList;
-      LightList lights;
+  private:
+    vec4<local> acc_color;
 
-      objref< boost::shared_ptr<ICoordinateSystem>, const_ > coordinate_system;
+    SHADE_MULTI_DERIVED_DECL(IlluminatedMaterial, (IMaterial)(Initializeable))
+};
 
-    private:
-      vec4<local> acc_color;
-
-      SHADE_MULTI_DERIVED_DECL(IlluminatedMaterial, (IMaterial)(Initializeable))
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_IlluminatedMaterial_H */

@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_STATEATTRIBUTE
 #define AV_PYTHON_OSG_STATEATTRIBUTE
 

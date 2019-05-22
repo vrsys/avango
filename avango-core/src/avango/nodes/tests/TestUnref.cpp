@@ -38,64 +38,55 @@
 
 // internal unnamed namespace
 
-namespace {
-  using namespace av;
+namespace
+{
+using namespace av;
 
-  class Lifetime : public av::FieldContainer {
+class Lifetime : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     Lifetime();
     virtual ~Lifetime();
 
     static bool is_living;
-  };
+};
 
-  bool Lifetime::is_living = false;
+bool Lifetime::is_living = false;
 
-  AV_FC_DEFINE(Lifetime);
+AV_FC_DEFINE(Lifetime);
 
-  Lifetime::Lifetime()
-  {
-    is_living = true;
-  }
+Lifetime::Lifetime() { is_living = true; }
 
-  Lifetime::~Lifetime()
-  {
-    is_living = false;
-  }
+Lifetime::~Lifetime() { is_living = false; }
 
-  void
-  Lifetime::initClass()
-  {
-    if (!isTypeInitialized())
+void Lifetime::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::FieldContainer, Lifetime, true);
+        AV_FC_INIT(av::FieldContainer, Lifetime, true);
     }
-  }
+}
 
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
-      Lifetime::initClass();
-    }
-  };
+    InitNodeFixture() { Lifetime::initClass(); }
+};
 
-  TEST_FIXTURE(InitNodeFixture, UsingLinks)
-  {
+TEST_FIXTURE(InitNodeFixture, UsingLinks)
+{
     CHECK(!Lifetime::is_living);
     Link<Lifetime> node(dynamic_cast<Lifetime*>(av::Type::createInstanceOfType("Lifetime")));
     CHECK(node.isValid());
     CHECK(Lifetime::is_living);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, ManualUnrefing)
-  {
+TEST_FIXTURE(InitNodeFixture, ManualUnrefing)
+{
     CHECK(!Lifetime::is_living);
     Lifetime* node(dynamic_cast<Lifetime*>(av::Type::createInstanceOfType("Lifetime")));
     CHECK(0 != node);
@@ -103,10 +94,10 @@ namespace {
     node->reference();
     node->unreference();
     CHECK(!Lifetime::is_living);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, ManualUnrefingWithoutDeletion)
-  {
+TEST_FIXTURE(InitNodeFixture, ManualUnrefingWithoutDeletion)
+{
     CHECK(!Lifetime::is_living);
     Lifetime* node(dynamic_cast<Lifetime*>(av::Type::createInstanceOfType("Lifetime")));
     CHECK(0 != node);
@@ -119,10 +110,10 @@ namespace {
     node->reference();
     node->unreference();
     CHECK(!Lifetime::is_living);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, ManualUnrefingWithFloatingRefs)
-  {
+TEST_FIXTURE(InitNodeFixture, ManualUnrefingWithFloatingRefs)
+{
     CHECK(!Lifetime::is_living);
     Lifetime* node(dynamic_cast<Lifetime*>(av::Type::createInstanceOfType("Lifetime")));
     CHECK(0 != node);
@@ -136,8 +127,7 @@ namespace {
     node->reference();
     node->unreference();
     CHECK(!Lifetime::is_living);
-  }
-
+}
 
 } // namespace
 

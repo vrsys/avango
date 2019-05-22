@@ -34,142 +34,127 @@
 
 namespace av
 {
-  template<class T>
-  class DefaultLifeTime
-  {
+template <class T>
+class DefaultLifeTime
+{
   public:
     static void onDeadReference() { throw std::logic_error("Access to dead singleton"); }
     static void scheduleDestruction(T*, void (*pFun)()) { std::atexit(pFun); }
-  };
+};
 
-  template<class T> class CreateUsingNew //do not use for arrays
-  {
+template <class T>
+class CreateUsingNew // do not use for arrays
+{
   public:
     static T* create() { return new T(); }
-    static void destroy(T* inType) { delete inType; inType = 0; } //@note: this is not intended to be used on arrays!
-  protected:
-    ~CreateUsingNew();//do not allow CreateUsingNew<Foo>* pCreator = &foo; delete pCreator->undef behave
-  };
-
-  template<class T>
-  class SingleThreaded
-  {
-  public:
-    class Lock //fake lock
+    static void destroy(T* inType)
     {
-    public:
-      Lock() { ; }
-    };
-    using VolatileType = T; //ensure optimal variant for single threaded environment
-  };
+        delete inType;
+        inType = 0;
+    } //@note: this is not intended to be used on arrays!
+  protected:
+    ~CreateUsingNew(); // do not allow CreateUsingNew<Foo>* pCreator = &foo; delete pCreator->undef behave
+};
 
-  template<class T>
-  class MultiThreaded
-  {
+template <class T>
+class SingleThreaded
+{
+  public:
+    class Lock // fake lock
+    {
+      public:
+        Lock() { ; }
+    };
+    using VolatileType = T; // ensure optimal variant for single threaded environment
+};
+
+template <class T>
+class MultiThreaded
+{
   public:
     class Lock
     {
-    public:
-      using ScopeLock = boost::mutex::scoped_lock;
-      Lock();
-    private:
-      ScopeLock mGuard;
+      public:
+        using ScopeLock = boost::mutex::scoped_lock;
+        Lock();
+
+      private:
+        ScopeLock mGuard;
     };
-    using VolatileType = volatile T; //ensure compiler does get hints what we are trying to do
+    using VolatileType = volatile T; // ensure compiler does get hints what we are trying to do
     static boost::mutex sConstructionMutex;
-  };
+};
 
-  template<class T> MultiThreaded<T>::Lock::Lock() :
-    mGuard(sConstructionMutex)
-    {
-    }
+template <class T>
+MultiThreaded<T>::Lock::Lock() : mGuard(sConstructionMutex)
+{
+}
 
-  template<class T> boost::mutex MultiThreaded<T>::sConstructionMutex;
+template <class T>
+boost::mutex MultiThreaded<T>::sConstructionMutex;
 
-  template<typename T, template <class> class CreationPolicy = CreateUsingNew,
-  template <class> class LifeTimePolicy = DefaultLifeTime,
-  template <class> class ThreadingModel = SingleThreaded>
-  class Singleton
-  {
+template <typename T, template <class> class CreationPolicy = CreateUsingNew, template <class> class LifeTimePolicy = DefaultLifeTime, template <class> class ThreadingModel = SingleThreaded>
+class Singleton
+{
   public:
-    using InstanceTypePtr = typename ThreadingModel<T*>::VolatileType; //T or volatile T, depending on threading model
+    using InstanceTypePtr = typename ThreadingModel<T*>::VolatileType; // T or volatile T, depending on threading model
     using Type = T;
 
-    static Type& get() //no exposing of raw pointer to assure no delete call on ValueType
+    static Type& get() // no exposing of raw pointer to assure no delete call on ValueType
     {
-      // FIXME This is potentially not thread-safe if access to sInstance is
-      // non-atomic. Better use boost::call_once().
-      if ( !sInstance)
-      {
-        typename ThreadingModel<T>::Lock lock;
-        if ( !sInstance)
+        // FIXME This is potentially not thread-safe if access to sInstance is
+        // non-atomic. Better use boost::call_once().
+        if(!sInstance)
         {
-          if (sIsDead)
-          {
-            LifeTimePolicy<Type>::onDeadReference();
-            sIsDead = false;
-          }
-          sInstance = CreationPolicy<Type>::create();
-          LifeTimePolicy<T>::scheduleDestruction(sInstance,
-                                                 &destroySingleton);
+            typename ThreadingModel<T>::Lock lock;
+            if(!sInstance)
+            {
+                if(sIsDead)
+                {
+                    LifeTimePolicy<Type>::onDeadReference();
+                    sIsDead = false;
+                }
+                sInstance = CreationPolicy<Type>::create();
+                LifeTimePolicy<T>::scheduleDestruction(sInstance, &destroySingleton);
+            }
         }
-      }
-      return *sInstance;
+        return *sInstance;
     }
 
-    static boost::shared_ptr<Type> getAsSharedPtr()
-    {
-      return boost::shared_ptr<Type>(&get(), NullDeleter());
-    }
+    static boost::shared_ptr<Type> getAsSharedPtr() { return boost::shared_ptr<Type>(&get(), NullDeleter()); }
+
   private:
-
     static void destroySingleton();
 
     Singleton();
     Singleton(const Singleton&);
-    Singleton& operator=(const Singleton&); //no assignment
+    Singleton& operator=(const Singleton&); // no assignment
 
     // boost::shared_ptr must not delete the singleton
     class NullDeleter
     {
-    public:
-      void operator()(void const *) const {}
+      public:
+        void operator()(void const*) const {}
     };
 
     static InstanceTypePtr sInstance;
     static bool sIsDead;
-  };
+};
 
-  template <
-  typename T,
-  template <class> class C,
-  template <class> class L,
-  template <class> class M
-  >
-  bool Singleton<T, C, L, M>::sIsDead = false;
+template <typename T, template <class> class C, template <class> class L, template <class> class M>
+bool Singleton<T, C, L, M>::sIsDead = false;
 
-  template <
-  typename T,
-  template <class> class C,
-  template <class> class L,
-  template <class> class M
-  >
-  typename Singleton<T, C, L, M >::InstanceTypePtr Singleton<T, C, L, M >::sInstance = 0;
+template <typename T, template <class> class C, template <class> class L, template <class> class M>
+typename Singleton<T, C, L, M>::InstanceTypePtr Singleton<T, C, L, M>::sInstance = 0;
 
-  template
-  <
-  class T,
-  template <class> class CreationPolicy,
-  template <class> class L,
-  template <class> class M
-  >
-  void Singleton<T, CreationPolicy, L, M>::destroySingleton()
-  {
+template <class T, template <class> class CreationPolicy, template <class> class L, template <class> class M>
+void Singleton<T, CreationPolicy, L, M>::destroySingleton()
+{
     AV_ASSERT(!sIsDead);
     CreationPolicy<T>::destroy(sInstance);
     sInstance = 0;
     sIsDead = true;
-  }
+}
 
 } // namespace av
 

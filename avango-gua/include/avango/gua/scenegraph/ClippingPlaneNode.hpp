@@ -13,63 +13,59 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::ClippingPlaneNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL ClippingPlaneNode : public av::gua::Node
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::ClippingPlaneNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::ClippingPlaneNode is created.
+     * Otherwise, the given ::gua::ClippingPlaneNode is used.
      */
-    class AV_GUA_DLL ClippingPlaneNode : public av::gua::Node
-    {
-      AV_FC_DECLARE();
+    ClippingPlaneNode(std::shared_ptr<::gua::node::ClippingPlaneNode> guanode = std::shared_ptr<::gua::node::ClippingPlaneNode>(new ::gua::node::ClippingPlaneNode("")));
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ClippingPlaneNode();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::ClippingPlaneNode is created.
-       * Otherwise, the given ::gua::ClippingPlaneNode is used.
-       */
-      ClippingPlaneNode(std::shared_ptr< ::gua::node::ClippingPlaneNode> guanode = std::shared_ptr< ::gua::node::ClippingPlaneNode>(new ::gua::node::ClippingPlaneNode("")));
+  public:
+    MFInt ViewIDs;
 
-    protected:
+    /**
+     * Get the wrapped ::gua::ClippingPlaneNode.
+     */
+    std::shared_ptr<::gua::node::ClippingPlaneNode> getGuaNode() const;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ClippingPlaneNode();
+  public:
+    virtual void getViewIDsCB(const MFInt::GetValueEvent& event);
+    virtual void setViewIDsCB(const MFInt::SetValueEvent& event);
 
-    public:
+  private:
+    std::shared_ptr<::gua::node::ClippingPlaneNode> m_guaNode;
 
-      MFInt ViewIDs;
+    ClippingPlaneNode(const ClippingPlaneNode&);
+    ClippingPlaneNode& operator=(const ClippingPlaneNode&);
+};
 
-      /**
-       * Get the wrapped ::gua::ClippingPlaneNode.
-       */
-      std::shared_ptr< ::gua::node::ClippingPlaneNode> getGuaNode() const;
+using SFClippingPlaneNode = SingleField<Link<ClippingPlaneNode>>;
+using MFClippingPlaneNode = MultiField<Link<ClippingPlaneNode>>;
 
-    public:
-      virtual void getViewIDsCB(const MFInt::GetValueEvent& event);
-      virtual void setViewIDsCB(const MFInt::SetValueEvent& event);
-
-    private:
-
-      std::shared_ptr< ::gua::node::ClippingPlaneNode> m_guaNode;
-
-      ClippingPlaneNode(const ClippingPlaneNode&);
-      ClippingPlaneNode& operator=(const ClippingPlaneNode&);
-    };
-
-    using SFClippingPlaneNode = SingleField<Link<ClippingPlaneNode> >;
-    using MFClippingPlaneNode = MultiField<Link<ClippingPlaneNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ClippingPlaneNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ClippingPlaneNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::ClippingPlaneNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::ClippingPlaneNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_CLIPPING_PLANE_NODE_HPP
+#endif // AVANGO_GUA_CLIPPING_PLANE_NODE_HPP

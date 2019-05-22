@@ -3,4 +3,4 @@
 
 void init_SSAOPassDescription();
 
-#endif //AV_PYTHON_GUA_SSAO_PASS_DESCRIPTION_HPP
+#endif // AV_PYTHON_GUA_SSAO_PASS_DESCRIPTION_HPP

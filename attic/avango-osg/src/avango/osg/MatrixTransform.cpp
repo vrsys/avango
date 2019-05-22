@@ -31,7 +31,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::MatrixTransform"));
+av::Logger& logger(av::getLogger("av::osg::MatrixTransform"));
 }
 
 AV_FC_DEFINE(av::osg::MatrixTransform);
@@ -39,49 +39,31 @@ AV_FC_DEFINE(av::osg::MatrixTransform);
 AV_FIELD_DEFINE(av::osg::SFMatrixTransform);
 AV_FIELD_DEFINE(av::osg::MFMatrixTransform);
 
-av::osg::MatrixTransform::MatrixTransform(::osg::MatrixTransform* osgmatrixtransform) :
-  Transform(osgmatrixtransform),
-  mOsgMatrixTransform(osgmatrixtransform)
+av::osg::MatrixTransform::MatrixTransform(::osg::MatrixTransform* osgmatrixtransform) : Transform(osgmatrixtransform), mOsgMatrixTransform(osgmatrixtransform)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(Matrix,
-                          boost::bind(&MatrixTransform::getMatrixCB, this, _1),
-                          boost::bind(&MatrixTransform::setMatrixCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Matrix, boost::bind(&MatrixTransform::getMatrixCB, this, _1), boost::bind(&MatrixTransform::setMatrixCB, this, _1));
 }
 
 /* virtual */
-av::osg::MatrixTransform::~MatrixTransform()
-{}
+av::osg::MatrixTransform::~MatrixTransform() {}
 
-/* static */ void
-av::osg::MatrixTransform::initClass()
+/* static */ void av::osg::MatrixTransform::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Transform::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Transform::initClass();
 
-    AV_FC_INIT(av::osg::Transform, av::osg::MatrixTransform, true);
+        AV_FC_INIT(av::osg::Transform, av::osg::MatrixTransform, true);
 
-    SFMatrixTransform::initClass("av::osg::SFMatrixTransform", "av::Field");
-    MFMatrixTransform::initClass("av::osg::MFMatrixTransform", "av::Field");
+        SFMatrixTransform::initClass("av::osg::SFMatrixTransform", "av::Field");
+        MFMatrixTransform::initClass("av::osg::MFMatrixTransform", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-::osg::MatrixTransform*
-av::osg::MatrixTransform::getOsgMatrixTransform() const
-{
-  return mOsgMatrixTransform;
-}
+::osg::MatrixTransform* av::osg::MatrixTransform::getOsgMatrixTransform() const { return mOsgMatrixTransform; }
 
-/* virtual */ void
-av::osg::MatrixTransform::getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgMatrixTransform->getMatrix();
-}
+/* virtual */ void av::osg::MatrixTransform::getMatrixCB(const av::osg::SFMatrix::GetValueEvent& event) { *(event.getValuePtr()) = mOsgMatrixTransform->getMatrix(); }
 
-/* virtual */ void
-av::osg::MatrixTransform::setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event)
-{
-  mOsgMatrixTransform->setMatrix(event.getValue());
-}
+/* virtual */ void av::osg::MatrixTransform::setMatrixCB(const av::osg::SFMatrix::SetValueEvent& event) { mOsgMatrixTransform->setMatrix(event.getValue()); }

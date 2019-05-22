@@ -28,12 +28,11 @@
 
 namespace
 {
-  class EvaluateNode : public av::FieldContainer
-  {
+class EvaluateNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     EvaluateNode();
 
     av::SFInt IntFieldIn;
@@ -43,77 +42,67 @@ namespace
 
     int mEvaluateIndex;
     static int sEvaluateIndex;
-  };
+};
 
-  AV_FC_DEFINE(EvaluateNode);
+AV_FC_DEFINE(EvaluateNode);
 
-  int EvaluateNode::sEvaluateIndex = 0;
+int EvaluateNode::sEvaluateIndex = 0;
 
-  EvaluateNode::EvaluateNode() :
-    mEvaluateIndex(0)
-  {
+EvaluateNode::EvaluateNode() : mEvaluateIndex(0)
+{
     AV_FC_ADD_FIELD(IntFieldIn, 0);
     AV_FC_ADD_FIELD(IntFieldOut, 0);
-  }
+}
 
-  void
-  EvaluateNode::initClass()
-  {
-    if (!isTypeInitialized())
+void EvaluateNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
-      AV_FC_INIT(av::FieldContainer, EvaluateNode, false);
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, EvaluateNode, false);
     }
-  }
+}
 
-  /* virtual */ void
-  EvaluateNode::evaluate()
-  {
+/* virtual */ void EvaluateNode::evaluate()
+{
     mEvaluateIndex = sEvaluateIndex++;
-    if (IntFieldIn.getValue() < 10)
-      IntFieldOut.setValue(IntFieldIn.getValue() + 1);
-  }
+    if(IntFieldIn.getValue() < 10)
+        IntFieldOut.setValue(IntFieldIn.getValue() + 1);
+}
 
-  class DependantNode : public av::FieldContainer
-  {
+class DependantNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     DependantNode();
 
     av::SFContainer Dependency;
 
     /* virtual */ void evaluate();
-  };
+};
 
-  AV_FC_DEFINE(DependantNode);
+AV_FC_DEFINE(DependantNode);
 
-  DependantNode::DependantNode()
-  {
-    AV_FC_ADD_FIELD(Dependency, 0);
-  }
+DependantNode::DependantNode() { AV_FC_ADD_FIELD(Dependency, 0); }
 
-  void
-  DependantNode::initClass()
-  {
-    if (!isTypeInitialized())
+void DependantNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
-      AV_FC_INIT(av::FieldContainer, DependantNode, false);
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, DependantNode, false);
     }
-  }
+}
 
-  /* virtual */ void
-  DependantNode::evaluate()
-  {
-    if (Dependency.getValue().isValid())
-      evaluateDependency(*Dependency.getValue());
-  }
+/* virtual */ void DependantNode::evaluate()
+{
+    if(Dependency.getValue().isValid())
+        evaluateDependency(*Dependency.getValue());
+}
 
-
-  TEST(endlessEvaluateLoop)
-  {
+TEST(endlessEvaluateLoop)
+{
     EvaluateNode::initClass();
 
     av::Link<EvaluateNode> node1(new EvaluateNode);
@@ -128,10 +117,10 @@ namespace
 
     node1->IntFieldIn.disconnect();
     node2->IntFieldIn.disconnect();
-  }
+}
 
-  TEST(evaluationOrder)
-  {
+TEST(evaluationOrder)
+{
     EvaluateNode::initClass();
     EvaluateNode::sEvaluateIndex = 0;
 
@@ -161,10 +150,10 @@ namespace
 
     node2->IntFieldIn.disconnect();
     node3->IntFieldIn.disconnect();
-  }
+}
 
-  TEST(deactivateDependency)
-  {
+TEST(deactivateDependency)
+{
     EvaluateNode::initClass();
     EvaluateNode::sEvaluateIndex = 1;
 
@@ -183,10 +172,10 @@ namespace
 
     node1->IntFieldIn.disconnect();
     node2->IntFieldIn.disconnect();
-  }
+}
 
-  TEST(weakConnectionDependency)
-  {
+TEST(weakConnectionDependency)
+{
     EvaluateNode::initClass();
     EvaluateNode::sEvaluateIndex = 1;
 
@@ -204,10 +193,10 @@ namespace
 
     node1->IntFieldIn.disconnect();
     node2->IntFieldIn.disconnect();
-  }
+}
 
-  TEST(disableAllowScheduling)
-  {
+TEST(disableAllowScheduling)
+{
     EvaluateNode::initClass();
     EvaluateNode::sEvaluateIndex = 1;
 
@@ -218,10 +207,10 @@ namespace
     av::ApplicationInstance::get().evaluate();
 
     CHECK_EQUAL(0, node->mEvaluateIndex);
-  }
+}
 
-  TEST(disableAllowSchedulingAndPull)
-  {
+TEST(disableAllowSchedulingAndPull)
+{
     EvaluateNode::initClass();
     EvaluateNode::sEvaluateIndex = 1;
     DependantNode::initClass();
@@ -236,5 +225,5 @@ namespace
     av::ApplicationInstance::get().evaluate();
 
     CHECK_EQUAL(1, node->mEvaluateIndex);
-  }
 }
+} // namespace

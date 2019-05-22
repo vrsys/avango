@@ -39,132 +39,129 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Abstract base class of all devices. Devices are used by the DeviceDaemon to interface
+ * to external devices like tracking cameras or input devices. The DeviceDaemon communicates
+ * via shared memory with an Avango NG application.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL Device : public Base
+{
+    AV_BASE_DECLARE_ABSTRACT();
+
+  public:
+    using NumStationMap = std::map<int, Station*, std::less<int>>;
+    using StringStringMap = std::map<std::string, std::string, std::less<std::string>>;
+
     /**
-     * Abstract base class of all devices. Devices are used by the DeviceDaemon to interface
-     * to external devices like tracking cameras or input devices. The DeviceDaemon communicates
-     * via shared memory with an Avango NG application.
-     *
-     * \ingroup av_daemon
+     * Constructor.
      */
-    class AV_DAEMON_DLL Device : public Base
-    {
-      AV_BASE_DECLARE_ABSTRACT();
+    Device();
 
-    public:
+    /**
+     * Add a station to this device identified by a station number. Stations are the basic
+     * entities which are communicated to interested processes via shared memory.
+     */
+    virtual void addStation(int station_number, Station* station);
 
-      using NumStationMap = std::map<int, Station*, std::less<int> >;
-      using StringStringMap = std::map<std::string, std::string, std::less<std::string> >;
+    /**
+     * Device specific parameters can be passed via this method in a generic way. The HIDInput
+     * device for example accepts the features 'tty', 'vendor' and 'product'. Features
+     * are evaluated on startup.
+     */
+    virtual void configureFeature(const std::string& feature, const std::string& value);
 
-      /**
-       * Constructor.
-       */
-      Device();
+    /**
+     * Removes the given feature from the feature map.
+     */
+    virtual void unconfigureFeature(const std::string& feature);
 
-      /**
-       * Add a station to this device identified by a station number. Stations are the basic
-       * entities which are communicated to interested processes via shared memory.
-       */
-      virtual void addStation(int station_number, Station* station);
+    /**
+     * This function returns the value for a specific feature. If the requested feature has
+     * not previously been set, the empty string is returned.
+     */
+    virtual std::string queryFeature(const std::string& feature);
 
-      /**
-       * Device specific parameters can be passed via this method in a generic way. The HIDInput
-       * device for example accepts the features 'tty', 'vendor' and 'product'. Features
-       * are evaluated on startup.
-       */
-      virtual void configureFeature(const std::string& feature, const std::string& value);
+    /**
+     * Returns the name of a station by a given ID, if not exists an empty string is returned.
+     */
+    virtual std::string getStationName(int id);
 
-      /**
-       * Removes the given feature from the feature map.
-       */
-      virtual void unconfigureFeature(const std::string& feature);
+    /**
+     * Starts up the device. First the features are queried and evaluated. Then a separate
+     * process is started using av_thread::create. This process updates the station data
+     * in an endless loop.
+     */
+    bool startUp();
 
-      /**
-       * This function returns the value for a specific feature. If the requested feature has
-       * not previously been set, the empty string is returned.
-       */
-      virtual std::string queryFeature(const std::string& feature);
+    /**
+     * Shuts the device down.
+     */
+    bool shutDown();
 
-      /**
-       * Returns the name of a station by a given ID, if not exists an empty string is returned.
-       */
-      virtual std::string getStationName(int id);
+    /**
+     * Returns true if the device is running.
+     */
+    bool isDeviceRunning();
 
-      /**
-       * Starts up the device. First the features are queried and evaluated. Then a separate
-       * process is started using av_thread::create. This process updates the station data
-       * in an endless loop.
-       */
-      bool startUp();
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    ~Device() = default;
 
-      /**
-       * Shuts the device down.
-       */
-      bool shutDown();
+    /**
+     * This function is called once before the separate thread is created. It is
+     * supposed to be overloaded by derived classes.
+     */
+    virtual void startDevice() = 0;
 
-      /**
-       * Returns true if the device is running.
-       */
-      bool isDeviceRunning();
+    /**
+     * This function is called once in the created thread. It is supposed to be
+     * overloaded by derived classes and should contain an endless loop reading
+     * device data and updating the the station records.
+     * The loop should look like this: while (mKeepRunning) { ... }
+     */
+    virtual void readLoop() = 0;
 
-    protected:
+    /**
+     * This function is called after the thread is terminated. It is
+     * supposed to be overloaded by derived classes.
+     */
+    virtual void stopDevice() = 0;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      ~Device() = default;
+    /**
+     * This function should return a list of all available features the can be set.
+     */
+    virtual const std::vector<std::string>& queryFeatures() = 0;
 
-      /**
-       * This function is called once before the separate thread is created. It is
-       * supposed to be overloaded by derived classes.
-       */
-      virtual void startDevice() = 0;
+    /**
+     * A map of stations of this device.
+     */
+    NumStationMap mStations;
 
-      /**
-       * This function is called once in the created thread. It is supposed to be
-       * overloaded by derived classes and should contain an endless loop reading
-       * device data and updating the the station records.
-       * The loop should look like this: while (mKeepRunning) { ... }
-       */
-      virtual void readLoop() = 0;
+    /**
+     * A map of features of this device.
+     */
+    StringStringMap mFeatures;
 
-      /**
-       * This function is called after the thread is terminated. It is
-       * supposed to be overloaded by derived classes.
-       */
-      virtual void stopDevice() = 0;
+    /**
+     * Variable used to trigger the loop
+     */
+    bool mKeepRunning;
 
-      /**
-       * This function should return a list of all available features the can be set.
-       */
-      virtual const std::vector<std::string>& queryFeatures() = 0;
+  private:
+    static void threadFunction(Device* device);
 
-      /**
-       * A map of stations of this device.
-       */
-      NumStationMap mStations;
+    const std::string mEmptyFeature;
 
-      /**
-       * A map of features of this device.
-       */
-      StringStringMap mFeatures;
-
-      /**
-       * Variable used to trigger the loop
-       */
-      bool mKeepRunning;
-
-    private:
-
-      static void threadFunction(Device* device);
-
-      const std::string mEmptyFeature;
-
-      std::shared_ptr<std::thread> mThread;
-      bool mRunning;
-    };
-  }
-}
+    std::shared_ptr<std::thread> mThread;
+    bool mRunning;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

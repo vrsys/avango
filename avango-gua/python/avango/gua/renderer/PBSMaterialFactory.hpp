@@ -3,4 +3,4 @@
 
 void init_PBSMaterialFactory();
 
-#endif //AV_PYTHON_GUA_PBS_MATERIAL_FACTORY_HPP
+#endif // AV_PYTHON_GUA_PBS_MATERIAL_FACTORY_HPP

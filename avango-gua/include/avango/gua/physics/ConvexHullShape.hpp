@@ -13,58 +13,53 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::physics::ConvexHullShape
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL ConvexHullShape : public av::gua::CollisionShape
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::physics::ConvexHullShape
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::physics::ConvexHullShape is created.
+     * Otherwise, the given ::gua::physics::ConvexHullShape is used.
      */
-    class AV_GUA_DLL ConvexHullShape : public av::gua::CollisionShape
-    {
-      AV_FC_DECLARE();
+    ConvexHullShape(::gua::physics::ConvexHullShape* guashape = new ::gua::physics::ConvexHullShape()); // use defined type to circumvent compiler bug in VS8
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ConvexHullShape();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::physics::ConvexHullShape is created.
-       * Otherwise, the given ::gua::physics::ConvexHullShape is used.
-       */
-      ConvexHullShape(::gua::physics::ConvexHullShape* guashape =
-                        new ::gua::physics::ConvexHullShape()); // use defined type to circumvent compiler bug in VS8
+  public:
+    /**
+     * Get the wrapped ::gua::physics::CollisionShape.
+     */
+    ::gua::physics::ConvexHullShape* getGuaShape() const;
 
-    protected:
+  private:
+    ::gua::physics::ConvexHullShape* m_guaShape;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ConvexHullShape();
+    ConvexHullShape(const ConvexHullShape&);
+    ConvexHullShape& operator=(const ConvexHullShape&);
+};
 
-    public:
+using SFConvexHullShape = SingleField<Link<ConvexHullShape>>;
+using MFConvexHullShape = MultiField<Link<ConvexHullShape>>;
 
-      /**
-       * Get the wrapped ::gua::physics::CollisionShape.
-       */
-      ::gua::physics::ConvexHullShape* getGuaShape() const;
-
-
-    private:
-      ::gua::physics::ConvexHullShape *m_guaShape;
-
-      ConvexHullShape(const ConvexHullShape&);
-      ConvexHullShape& operator=(const ConvexHullShape&);
-    };
-
-    using SFConvexHullShape = SingleField<Link<ConvexHullShape> >;
-    using MFConvexHullShape = MultiField<Link<ConvexHullShape> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::ConvexHullShape> >;
-  template class AV_GUA_DLL MultiField<Link<gua::ConvexHullShape> >;
+template class AV_GUA_DLL SingleField<Link<gua::ConvexHullShape>>;
+template class AV_GUA_DLL MultiField<Link<gua::ConvexHullShape>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_CONVEX_HULL_SHAPE_HPP
+#endif // AVANGO_GUA_CONVEX_HULL_SHAPE_HPP

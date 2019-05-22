@@ -32,102 +32,100 @@
 #include "RaytracedSphereFrame.h"
 #include "example.h"
 
-
-namespace shaders=shade::shaders;
+namespace shaders = shade::shaders;
 
 namespace
 {
-  boost::shared_ptr<shaders::Surface> shader;
-  boost::shared_ptr<shade::Program> program;
-  boost::shared_ptr<shade::GLSLWrapper> state;
-}
+boost::shared_ptr<shaders::Surface> shader;
+boost::shared_ptr<shade::Program> program;
+boost::shared_ptr<shade::GLSLWrapper> state;
+} // namespace
 
 void setup_raytraced_sphere(void)
 {
-  boost::shared_ptr<shade::shaders::Plastic> specular(new shade::shaders::Plastic(0.4, .6));
-  boost::shared_ptr<RaytracedSphereFrame> sphere_space(new RaytracedSphereFrame);
-  specular->color.set_value(shade::vec4<>(1., 0.4, 0.4, 1.));
-  specular->coordinate_system = sphere_space;
-  shader->material = specular;
-  {
-    shaders::IlluminatedMaterial::LightList::Accessor accessor(specular->lights);
+    boost::shared_ptr<shade::shaders::Plastic> specular(new shade::shaders::Plastic(0.4, .6));
+    boost::shared_ptr<RaytracedSphereFrame> sphere_space(new RaytracedSphereFrame);
+    specular->color.set_value(shade::vec4<>(1., 0.4, 0.4, 1.));
+    specular->coordinate_system = sphere_space;
+    shader->material = specular;
+    {
+        shaders::IlluminatedMaterial::LightList::Accessor accessor(specular->lights);
 
-    boost::shared_ptr<shaders::PointLight> light(new shaders::PointLight);
-    light->position.set_value(shade::vec3<>(30., 15., 10.));
-    light->color.set_value(shade::vec3<>(1., 1., 1.));
-    accessor->push_back(light);
+        boost::shared_ptr<shaders::PointLight> light(new shaders::PointLight);
+        light->position.set_value(shade::vec3<>(30., 15., 10.));
+        light->color.set_value(shade::vec3<>(1., 1., 1.));
+        accessor->push_back(light);
 
-    boost::shared_ptr<shaders::PointLight> light2(new shaders::PointLight);
-    light2->position.set_value(shade::vec3<>(-15., -3, 0.));
-    light2->color.set_value(shade::vec3<>(1., 1., 1.));
-    accessor->push_back(light2);
-  }
+        boost::shared_ptr<shaders::PointLight> light2(new shaders::PointLight);
+        light2->position.set_value(shade::vec3<>(-15., -3, 0.));
+        light2->color.set_value(shade::vec3<>(1., 1., 1.));
+        accessor->push_back(light2);
+    }
 }
 
 void init(void)
 {
-  shader = boost::shared_ptr<shaders::Surface> (new shaders::Surface);
-  state = shade::create_GLSL_wrapper();
-  program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
+    shader = boost::shared_ptr<shaders::Surface>(new shaders::Surface);
+    state = shade::create_GLSL_wrapper();
+    program = boost::shared_ptr<shade::Program>(new shade::Program(shader, state));
 
-  setup_raytraced_sphere();
+    setup_raytraced_sphere();
 
-  example::set_distance(4.);
+    example::set_distance(4.);
 
-  glCullFace(GL_BACK);
-  glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
 }
 
 void display(void)
 {
-  if (program->requires_compilation())
-    program->compile();
+    if(program->requires_compilation())
+        program->compile();
 
-  state->make_current();
+    state->make_current();
 
-  if (program->requires_upload())
-    program->upload();
+    if(program->requires_upload())
+        program->upload();
 
-  example::setup_camera();
+    example::setup_camera();
 
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glBegin(GL_QUADS);
-  /* Front */
-  glNormal3f(0., 0., +1.);
-  glVertex3f(-1, -1, +1);
-  glVertex3f(+1, -1, +1);
-  glVertex3f(+1, +1, +1);
-  glVertex3f(-1, +1, +1);
-  /* Right */
-  glNormal3f(+1., 0., 0.);
-  glVertex3f(+1., -1, -1);
-  glVertex3f(+1., +1, -1);
-  glVertex3f(+1., +1, +1);
-  glVertex3f(+1., -1, +1);
-  /* Back */
-  glNormal3f(0., 0., -1.);
-  glVertex3f(-1, -1, -1);
-  glVertex3f(-1, +1, -1);
-  glVertex3f(+1, +1, -1);
-  glVertex3f(+1, -1, -1);
-  /* Left */
-  glNormal3f(-1., 0., 0.);
-  glVertex3f(-1., -1, -1);
-  glVertex3f(-1., -1, +1);
-  glVertex3f(-1., +1, +1);
-  glVertex3f(-1., +1, -1);
-  glEnd();
+    glBegin(GL_QUADS);
+    /* Front */
+    glNormal3f(0., 0., +1.);
+    glVertex3f(-1, -1, +1);
+    glVertex3f(+1, -1, +1);
+    glVertex3f(+1, +1, +1);
+    glVertex3f(-1, +1, +1);
+    /* Right */
+    glNormal3f(+1., 0., 0.);
+    glVertex3f(+1., -1, -1);
+    glVertex3f(+1., +1, -1);
+    glVertex3f(+1., +1, +1);
+    glVertex3f(+1., -1, +1);
+    /* Back */
+    glNormal3f(0., 0., -1.);
+    glVertex3f(-1, -1, -1);
+    glVertex3f(-1, +1, -1);
+    glVertex3f(+1, +1, -1);
+    glVertex3f(+1, -1, -1);
+    /* Left */
+    glNormal3f(-1., 0., 0.);
+    glVertex3f(-1., -1, -1);
+    glVertex3f(-1., -1, +1);
+    glVertex3f(-1., +1, +1);
+    glVertex3f(-1., +1, -1);
+    glEnd();
 }
-
 
 int main(int argc, char* argv[])
 {
-  example::init(argc, argv, "SHADE Raytraced Sphere");
-  example::set_display_func(display);
+    example::init(argc, argv, "SHADE Raytraced Sphere");
+    example::set_display_func(display);
 
-  init();
+    init();
 
-  example::run_main_loop();
-  return 0;
+    example::run_main_loop();
+    return 0;
 }

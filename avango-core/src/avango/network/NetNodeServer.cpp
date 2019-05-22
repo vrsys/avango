@@ -34,32 +34,25 @@ av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& por
 #else
 av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm)
 #endif
-  : mHost(host),
-    mPort(port),
-    mNetNode(netnode),
-    mCtx(1),
-    mSocket(mCtx, ZMQ_PUB),
-    mClientEndpoint(ce),
-    mServerEndpoint(se)
+    : mHost(host), mPort(port), mNetNode(netnode), mCtx(1), mSocket(mCtx, ZMQ_PUB), mClientEndpoint(ce), mServerEndpoint(se)
 {
-  //int64_t  rate(500);
-  //mSocket.setsockopt(ZMQ_RATE,&rate, sizeof(rate));
+    // int64_t  rate(500);
+    // mSocket.setsockopt(ZMQ_RATE,&rate, sizeof(rate));
 
 #if ZMQ_VERSION_MAJOR < 3
-  mSocket.setsockopt(ZMQ_HWM,&hwm, sizeof(hwm));
+    mSocket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
 #else
-  mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
+    mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
 #endif
-  std::string endpoint("tcp://" + mHost + ":" + mPort);
-  mSocket.bind(endpoint.c_str());
-  std::chrono::milliseconds dura(200);
-  std::this_thread::sleep_for(dura);
+    std::string endpoint("tcp://" + mHost + ":" + mPort);
+    mSocket.bind(endpoint.c_str());
+    std::chrono::milliseconds dura(200);
+    std::this_thread::sleep_for(dura);
 }
 
-void
-av::NetNodeServer::cast(av::Msg& av_msg)
+void av::NetNodeServer::cast(av::Msg& av_msg)
 {
-  zmq::message_t zmq_message(av_msg.getSize());
-  memcpy(zmq_message.data(), av_msg.getBuffer(), av_msg.getSize());
-  mSocket.send(zmq_message);
+    zmq::message_t zmq_message(av_msg.getSize());
+    memcpy(zmq_message.data(), av_msg.getBuffer(), av_msg.getSize());
+    mSocket.send(zmq_message);
 }

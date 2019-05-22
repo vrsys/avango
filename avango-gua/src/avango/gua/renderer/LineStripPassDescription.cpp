@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::LineStripPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::LineStripPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::LineStripPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::LineStripPassDescription);
 AV_FIELD_DEFINE(av::gua::SFLineStripPassDescription);
 AV_FIELD_DEFINE(av::gua::MFLineStripPassDescription);
 
-av::gua::LineStripPassDescription::LineStripPassDescription(
-  std::shared_ptr< ::gua::LineStripPassDescription> const& guaLineStripPassDescription)
-    : PipelinePassDescription(guaLineStripPassDescription)
-    , m_guaLineStripPassDescription(guaLineStripPassDescription)
+av::gua::LineStripPassDescription::LineStripPassDescription(std::shared_ptr<::gua::LineStripPassDescription> const& guaLineStripPassDescription)
+    : PipelinePassDescription(guaLineStripPassDescription), m_guaLineStripPassDescription(guaLineStripPassDescription)
 {
-
 }
 
-void
-av::gua::LineStripPassDescription::initClass()
+void av::gua::LineStripPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::LineStripPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::LineStripPassDescription> const&
-av::gua::LineStripPassDescription::getGuaLineStripPassDescription() const
-{
-    return m_guaLineStripPassDescription;
-}
-
-
+std::shared_ptr<::gua::LineStripPassDescription> const& av::gua::LineStripPassDescription::getGuaLineStripPassDescription() const { return m_guaLineStripPassDescription; }

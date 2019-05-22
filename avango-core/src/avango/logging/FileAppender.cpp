@@ -27,30 +27,20 @@
 
 #include <avango/logging/LoggingEvent.h>
 
-
-av::logging::FileAppender::FileAppender(const std::string& filename)
- : mLogFile(filename.c_str(), std::ios_base::app)
+av::logging::FileAppender::FileAppender(const std::string& filename) : mLogFile(filename.c_str(), std::ios_base::app)
 {
-  if (!mLogFile.is_open())
-    throw std::ios::failure("Could not open file " + filename);
+    if(!mLogFile.is_open())
+        throw std::ios::failure("Could not open file " + filename);
 }
 
+av::logging::FileAppender::~FileAppender() {}
 
-av::logging::FileAppender::~FileAppender()
-{}
+const std::string& av::logging::FileAppender::getFilename() const { return mFilename; }
 
-
-const std::string&
-av::logging::FileAppender::getFilename() const
+/* virtual */ void av::logging::FileAppender::doAppend(LoggingEvent& event)
 {
-  return mFilename;
-}
+    mLogFile << event.getFormattedString() << std::endl;
 
-/* virtual */ void
-av::logging::FileAppender::doAppend(LoggingEvent& event)
-{
-  mLogFile << event.getFormattedString() << std::endl;
-
-  // probably inefficient, currently needed for correct serialization of log messages, see tests
-  mLogFile.flush();
+    // probably inefficient, currently needed for correct serialization of log messages, see tests
+    mLogFile.flush();
 }

@@ -36,70 +36,66 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::Switch OsgSwitch;
+namespace osg
+{
+typedef ::osg::Switch OsgSwitch;
+
+/**
+ * Wrapper for ::osg::Switch
+ *
+ * VisibleChild = 0     (all children on)
+ * VisibleChild = 1..n  (single child on, others off)
+ * VisibleChild < 0     (all children off)
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Switch : public Group
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::Switch is created.
+     * Otherwise, the given ::osg::Switch is used.
+     */
+    Switch(OsgSwitch* osgswitch = new OsgSwitch());
+    // use defined type to circumvent compiler bug in VS8
+
+    SFInt VisibleChild;
 
     /**
-     * Wrapper for ::osg::Switch
-     *
-     * VisibleChild = 0     (all children on)
-     * VisibleChild = 1..n  (single child on, others off)
-     * VisibleChild < 0     (all children off)
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::Switch.
      */
-    class AV_OSG_DLL Switch : public Group
-    {
-      AV_FC_DECLARE();
+    ::osg::Switch* getOsgSwitch() const;
 
-    public:
+    /* virtual */ void evaluateLocalSideEffect();
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::Switch is created.
-       * Otherwise, the given ::osg::Switch is used.
-       */
-      Switch(OsgSwitch* osgswitch = new OsgSwitch());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::Switch* mOsgSwitch;
+    bool mVisibleChildChanged;
+    int mVisibleChild;
+    void updateVisibleChild();
 
-      SFInt VisibleChild;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Switch();
 
-      /**
-       * Get the wrapped ::osg::Switch.
-       */
-      ::osg::Switch* getOsgSwitch() const;
+    virtual void getVisibleChildCB(const av::SFInt::GetValueEvent& event);
+    virtual void setVisibleChildCB(const av::SFInt::SetValueEvent& event);
+    virtual void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
+};
 
-      /* virtual */ void evaluateLocalSideEffect();
-
-    private:
-
-      ::osg::Switch *mOsgSwitch;
-      bool mVisibleChildChanged;
-      int mVisibleChild;
-      void updateVisibleChild();
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Switch();
-
-      virtual void getVisibleChildCB(const av::SFInt::GetValueEvent& event);
-      virtual void setVisibleChildCB(const av::SFInt::SetValueEvent& event);
-      virtual void setChildrenCB(const av::osg::MFNode::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<Switch> > SFSwitch;
-    typedef MultiField<Link<Switch> > MFSwitch;
-  }
+typedef SingleField<Link<Switch>> SFSwitch;
+typedef MultiField<Link<Switch>> MFSwitch;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Switch> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Switch> >;
+template class AV_OSG_DLL SingleField<Link<osg::Switch>>;
+template class AV_OSG_DLL MultiField<Link<osg::Switch>>;
 #endif
 
-}
+} // namespace av
 
 #endif

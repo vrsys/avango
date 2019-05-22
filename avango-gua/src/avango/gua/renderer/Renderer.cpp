@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::Renderer"));
+av::Logger& logger(av::getLogger("av::gua::Renderer"));
 }
 
 AV_FC_DEFINE(av::gua::Renderer);
@@ -14,28 +14,25 @@ AV_FC_DEFINE(av::gua::Renderer);
 AV_FIELD_DEFINE(av::gua::SFRenderer);
 AV_FIELD_DEFINE(av::gua::MFRenderer);
 
-av::gua::Renderer::Renderer(::gua::Renderer* guaRenderer)
-    : m_guaRenderer(guaRenderer)
-{}
+av::gua::Renderer::Renderer(::gua::Renderer* guaRenderer) : m_guaRenderer(guaRenderer) {}
 
-//av::gua::Renderer::~Renderer()
+// av::gua::Renderer::~Renderer()
 //{}
 
-void
-av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const
+void av::gua::Renderer::queue_draw(std::vector<av::gua::SceneGraph const*> const& graphs) const
 {
-  std::vector< ::gua::SceneGraph const*> gua_graphs;
-  for (auto graph : graphs) {
-    gua_graphs.push_back(graph->getGuaSceneGraph());
-  }
+    std::vector<::gua::SceneGraph const*> gua_graphs;
+    for(auto graph : graphs)
+    {
+        gua_graphs.push_back(graph->getGuaSceneGraph());
+    }
 
-  m_guaRenderer->queue_draw(gua_graphs);
+    m_guaRenderer->queue_draw(gua_graphs);
 }
 
-void
-av::gua::Renderer::initClass()
+void av::gua::Renderer::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -46,10 +43,4 @@ av::gua::Renderer::initClass()
     }
 }
 
-::gua::Renderer*
-av::gua::Renderer::getGuaRenderer() const
-{
-    return m_guaRenderer;
-}
-
-
+::gua::Renderer* av::gua::Renderer::getGuaRenderer() const { return m_guaRenderer; }

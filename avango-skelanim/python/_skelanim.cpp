@@ -35,22 +35,23 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_skelanim)
 {
-  av::gua::skelanim::SkeletalAnimationLoader::initClass();
-  av::gua::skelanim::SkeletalAnimationPassDescription::initClass();
-  av::gua::skelanim::SkeletalAnimationNode::initClass();
-  init_SkeletalAnimationNode();
-  init_SkeletalAnimationPassDescription();
-  init_SkeletalAnimationLoader();
+    av::gua::skelanim::SkeletalAnimationLoader::initClass();
+    av::gua::skelanim::SkeletalAnimationPassDescription::initClass();
+    av::gua::skelanim::SkeletalAnimationNode::initClass();
+    init_SkeletalAnimationNode();
+    init_SkeletalAnimationPassDescription();
+    init_SkeletalAnimationLoader();
 }

@@ -31,28 +31,27 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class Value;
+namespace parser
+{
+class Value;
 
-    class Scope
-    {
-    public:
+class Scope
+{
+  public:
+    Scope(const ScopeLayer& global);
 
-      Scope(const ScopeLayer& global);
+    void add_value(const std::string& var, boost::shared_ptr<const Value> value);
 
-      void add_value(const std::string& var, boost::shared_ptr<const Value> value);
+    boost::shared_ptr<const Value> get_value(const std::string& var) const;
 
-      boost::shared_ptr<const Value> get_value(const std::string& var) const;
+    const ScopeLayer& get_global(void) const;
+    const ScopeLayer& get_local(void) const;
 
-      const ScopeLayer& get_global(void) const;
-      const ScopeLayer& get_local(void) const;
-
-    private:
-      ScopeLayer m_local;
-      const ScopeLayer& m_global;
-    };
-  }
-}
+  private:
+    ScopeLayer m_local;
+    const ScopeLayer& m_global;
+};
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_Scope_H */

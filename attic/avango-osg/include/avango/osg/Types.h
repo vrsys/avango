@@ -43,78 +43,78 @@
 #include <avango/OutputStream.h>
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-  #include <avango/Msg.h>
+#include <avango/Msg.h>
 #endif //#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
 namespace av
 {
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Matrixf&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Matrixf&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Matrixf&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Matrixf&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Matrixd&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Matrixd&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Matrixd&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Matrixd&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec2f&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec2f&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec2f&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec2f&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec2d&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec2d&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec2d&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec2d&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec3f&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec3f&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec3f&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec3f&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec3d&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec3d&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec3d&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec3d&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec4f&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec4f&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec4f&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec4f&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec4d&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec4d&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Vec4d&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Vec4d&);
 
-  AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Quat&);
-  AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Quat&);
+AV_OSG_DLL OutputStream& operator<<(OutputStream&, const ::osg::Quat&);
+AV_OSG_DLL InputStream& operator>>(InputStream&, ::osg::Quat&);
 
 } // namespace av
 
 /// @cond DOXYGEN_SHOULD_SKIP_THIS
-namespace osg {
-
-  // these functions need to be put into the ::osg namespace,
-  // as they are really a part of the interface for the corresponding OSG types.
-  // ADL (Argument Dependant Loopup) takes care that these functions are found in the right namespace
-  // This makes these functions visible to SIngleField<T> and MultiField<T> at the point of template instantiation,
-  // not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
+namespace osg
+{
+// these functions need to be put into the ::osg namespace,
+// as they are really a part of the interface for the corresponding OSG types.
+// ADL (Argument Dependant Loopup) takes care that these functions are found in the right namespace
+// This makes these functions visible to SIngleField<T> and MultiField<T> at the point of template instantiation,
+// not just definition ( see C++ ISO Standard 14882 from '98; Chapter 14.6.4 )
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Matrixf& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Matrixf& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Matrixf& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Matrixf& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Matrixd& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Matrixd& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Matrixd& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Matrixd& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec2f& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec2f& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec2f& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec2f& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec2d& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec2d& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec2d& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec2d& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec3f& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec3f& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec3f& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec3f& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec3d& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec3d& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec3d& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec3d& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec4f& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec4f& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec4f& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec4f& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec4d& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec4d& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Vec4d& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Vec4d& buf);
 
-  AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Quat& buf);
-  AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Quat& buf);
+AV_OSG_DLL void av_pushMsg(av::Msg& netMsg, const ::osg::Quat& buf);
+AV_OSG_DLL void av_popMsg(av::Msg& netMsg, ::osg::Quat& buf);
 #endif // #if defined(AVANGO_DISTRIBUTION_SUPPORT)
-}
+} // namespace osg
 /// @endcond
 
 #endif

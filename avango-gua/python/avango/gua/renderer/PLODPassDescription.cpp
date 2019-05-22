@@ -8,24 +8,20 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-       using type = T;
-     };
-   }
- }
-
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 void init_PLODPassDescription()
- {
-  register_field<av::gua::SFPLODPassDescription>("SFPLODPassDescription");
-  register_multifield<av::gua::MFPLODPassDescription>("MFPLODPassDescription");
-  class_<av::gua::PLODPassDescription,
-         av::Link<av::gua::PLODPassDescription>,
-         bases<av::gua::PipelinePassDescription>, boost::noncopyable >("PLODPassDescription", "docstring", no_init)
-         ;
- }
-
+{
+    register_field<av::gua::SFPLODPassDescription>("SFPLODPassDescription");
+    register_multifield<av::gua::MFPLODPassDescription>("MFPLODPassDescription");
+    class_<av::gua::PLODPassDescription, av::Link<av::gua::PLODPassDescription>, bases<av::gua::PipelinePassDescription>, boost::noncopyable>("PLODPassDescription", "docstring", no_init);
+}

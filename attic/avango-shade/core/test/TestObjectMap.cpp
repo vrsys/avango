@@ -29,64 +29,63 @@
 
 namespace
 {
-  class Simple : public shade::ShaderBase<Simple>
-  {
+class Simple : public shade::ShaderBase<Simple>
+{
   private:
     SHADE_BASE_DECL(Simple)
-  };
+};
 
-  SHADE_CLASS_INIT(Simple, "<undefined>", SHADE_NONE, SHADE_NONE)
-}
-
+SHADE_CLASS_INIT(Simple, "<undefined>", SHADE_NONE, SHADE_NONE)
+} // namespace
 
 SUITE(ObjectMap)
 {
-  TEST(EmptyMap)
-  {
-    shade::ObjectMap map;
-    CHECK_EQUAL(0u, map.get_next_index());
-  }
+    TEST(EmptyMap)
+    {
+        shade::ObjectMap map;
+        CHECK_EQUAL(0u, map.get_next_index());
+    }
 
-  TEST(InsertObjects)
-  {
-    shade::ObjectMap map;
-    CHECK_EQUAL(0u, map.get_next_index());
+    TEST(InsertObjects)
+    {
+        shade::ObjectMap map;
+        CHECK_EQUAL(0u, map.get_next_index());
 
-    boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(a));
-    CHECK_EQUAL(1u, map.get_next_index());
+        boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(a));
+        CHECK_EQUAL(1u, map.get_next_index());
 
-    boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(b));
-    CHECK_EQUAL(2u, map.get_next_index());
-  }
+        boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(b));
+        CHECK_EQUAL(2u, map.get_next_index());
+    }
 
-  TEST(GetObject)
-  {
-    shade::ObjectMap map;
+    TEST(GetObject)
+    {
+        shade::ObjectMap map;
 
-    boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(a));
-    CHECK_EQUAL(get_pointer(a), map.get_object(0));
+        boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(a));
+        CHECK_EQUAL(get_pointer(a), map.get_object(0));
 
-    boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(b));
-    CHECK_EQUAL(get_pointer(b), map.get_object(1));
+        boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(b));
+        CHECK_EQUAL(get_pointer(b), map.get_object(1));
 
-    CHECK_EQUAL(get_pointer(a), map[0]);
-    CHECK_EQUAL(get_pointer(b), map[1]);
-  }
+        CHECK_EQUAL(get_pointer(a), map[0]);
+        CHECK_EQUAL(get_pointer(b), map[1]);
+    }
 
-  TEST(GetIndex)
-  {
-    shade::ObjectMap map;
+    TEST(GetIndex)
+    {
+        shade::ObjectMap map;
 
-    boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(a));
-    CHECK_EQUAL(0u, map.get_index(get_pointer(a)));
+        boost::shared_ptr<Simple> a = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(a));
+        CHECK_EQUAL(0u, map.get_index(get_pointer(a)));
 
-    boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
-    map.add_object(get_pointer(b));
-    CHECK_EQUAL(1u, map.get_index(get_pointer(b)));
-  }
+        boost::shared_ptr<Simple> b = boost::shared_ptr<Simple>(new Simple);
+        map.add_object(get_pointer(b));
+        CHECK_EQUAL(1u, map.get_index(get_pointer(b)));
+    }
 }

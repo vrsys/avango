@@ -33,11 +33,10 @@
 
 namespace av
 {
-  class NetNode;
+class NetNode;
 
-  class NetNodeServer
-  {
-
+class NetNodeServer
+{
   public:
 #if ZMQ_VERSION_MAJOR < 3
     NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm);
@@ -49,16 +48,15 @@ namespace av
     void cast(av::Msg& av_msg);
 
   private:
-
-    std::string    mHost;
-    std::string    mPort;
-    av::NetNode*   mNetNode;
+    std::string mHost;
+    std::string mPort;
+    av::NetNode* mNetNode;
     zmq::context_t mCtx;
-    zmq::socket_t  mSocket;
-    std::string    mClientEndpoint;
-    std::string    mServerEndpoint;
-  };
-
+    zmq::socket_t mSocket;
+    std::string mClientEndpoint;
+    std::string mServerEndpoint;
 };
+
+}; // namespace av
 
 #endif // #ifndef  AVANGO_NETNODESERVER_H

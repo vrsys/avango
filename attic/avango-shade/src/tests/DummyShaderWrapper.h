@@ -28,12 +28,11 @@
 
 class DummyShaderWrapper : public av::shade::Shader
 {
-public:
+  public:
+    DummyShaderWrapper(av::Type type, boost::shared_ptr<::shade::Shader> shader);
 
-  DummyShaderWrapper(av::Type type, boost::shared_ptr< ::shade::Shader> shader);
-
-private:
-  av::SFString AStringField;
+  private:
+    av::SFString AStringField;
 };
 
 void initDummyShaderWrapper(void);

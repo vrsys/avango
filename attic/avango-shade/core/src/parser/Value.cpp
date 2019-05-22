@@ -25,25 +25,17 @@
 
 using namespace shade::parser;
 
-
 bool Value::operator<(const Value& other) const
 {
-  const std::type_info& this_type(typeid(*this));
-  const std::type_info& other_type(typeid(other));
+    const std::type_info& this_type(typeid(*this));
+    const std::type_info& other_type(typeid(other));
 
-  if (this_type == other_type)
-    return less_than(other);
+    if(this_type == other_type)
+        return less_than(other);
 
-  return this_type.before(other_type);
+    return this_type.before(other_type);
 };
 
-bool Value::is_constant(void) const
-{
-  return false;
-}
+bool Value::is_constant(void) const { return false; }
 
-bool Value::less_than(const Value& other) const
-{
-  return false;
-};
-
+bool Value::less_than(const Value& other) const { return false; };

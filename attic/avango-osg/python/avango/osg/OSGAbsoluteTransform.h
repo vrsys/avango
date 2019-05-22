@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_ABSOLUTETRANSFORM
 #define AV_PYTHON_OSG_ABSOLUTETRANSFORM
 

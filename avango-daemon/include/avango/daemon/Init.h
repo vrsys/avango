@@ -36,19 +36,19 @@
 
 namespace av
 {
-  namespace daemon
-  {
-    /**
-     * Initializes the Avango Daemon library.
-     * Usage: \code av::daemon:Init::initClass(); \endcode
-     *
-     * \ingroup av_daemon
-     */
-    class AV_DAEMON_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace daemon
+{
+/**
+ * Initializes the Avango Daemon library.
+ * Usage: \code av::daemon:Init::initClass(); \endcode
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace daemon
+} // namespace av
 
 #endif

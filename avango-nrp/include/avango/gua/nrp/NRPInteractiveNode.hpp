@@ -23,13 +23,13 @@ class AV_GUA_DLL NRPInteractiveNode : public av::gua::TransformNode
 
 using SFNRPInteractiveNode = av::SingleField<av::Link<av::gua::nrp::NRPInteractiveNode>>;
 using MFNRPInteractiveNode = av::MultiField<av::Link<av::gua::nrp::NRPInteractiveNode>>;
-}
-}
+} // namespace nrp
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
 template class AV_GUA_DLL av::SingleField<av::Link<gua::nrp::NRPInteractiveNode>>;
 template class AV_GUA_DLL av::MultiField<av::Link<gua::nrp::NRPInteractiveNode>>;
 #endif
-}
+} // namespace av
 
 #endif // AVANGO_GUA_NRP_INTERACTIVE_NODE_HPP

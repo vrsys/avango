@@ -39,106 +39,103 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+class Station;
+class StationSegment;
 
-    class Station;
-    class StationSegment;
+/**
+ * DeviceService, handles shared memory segment used to communicate with
+ * Avango Daemon instance.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL DeviceService : public Base /*, public Singleton<DeviceService>*/
+{
+    AV_BASE_DECLARE();
+
+  public:
+    /**
+     * Public Constructor, to provide ability to construct own customized services.
+     */
+    DeviceService();
+    virtual ~DeviceService();
 
     /**
-     * DeviceService, handles shared memory segment used to communicate with
-     * Avango Daemon instance.
-     *
-     * \ingroup av_daemon
+     * Connects to the shared memory segment.
      */
-    class AV_DAEMON_DLL DeviceService : public Base/*, public Singleton<DeviceService>*/
-    {
-      AV_BASE_DECLARE();
+    void connectDaemon();
 
-    public:
+    /**
+     * Disconnects from the shared memory segment.
+     */
+    void disconnectDaemon();
 
-      /**
-       * Public Constructor, to provide ability to construct own customized services.
-       */
-      DeviceService();
-      virtual ~DeviceService();
+    /**
+     * Get matrix of a specified station.
+     */
+    const ::gua::math::mat4& getMatrix(const char* station);
 
-      /**
-       * Connects to the shared memory segment.
-       */
-      void connectDaemon();
+    /**
+     * Get button state by specified station and number.
+     */
+    int getButton(const char* station, int which);
 
-      /**
-       * Disconnects from the shared memory segment.
-       */
-      void disconnectDaemon();
+    /**
+     * Get value state by specified station and number.
+     */
+    float getValue(const char* station, int which);
 
-      /**
-       * Get matrix of a specified station.
-       */
-      const ::gua::math::mat4& getMatrix(const char* station);
+    /**
+     * Get LED state by specified station and number.
+     */
+    bool getLED(const char* station, int which);
 
-      /**
-       * Get button state by specified station and number.
-       */
-      int   getButton(const char* station, int which);
+    /**
+     * Set matrix of a specified station.
+     */
+    void setMatrix(const char* station, const ::gua::math::mat4& value);
 
-      /**
-       * Get value state by specified station and number.
-       */
-      float getValue(const char* station, int which);
+    /**
+     * Set a specific button of a specific station.
+     */
+    void setButton(const char* station, int which, bool value);
 
-      /**
-       * Get LED state by specified station and number.
-       */
-      bool  getLED(const char* station, int which);
+    /**
+     * Set a specfic value of a specific station.
+     */
+    void setValue(const char* station, int which, float value);
 
-      /**
-       * Set matrix of a specified station.
-       */
-      void  setMatrix(const char* station, const ::gua::math::mat4& value);
+    /**
+     * Set LED state of a specific station.
+     */
+    void setLED(const char* station, int which, bool value);
 
-      /**
-       * Set a specific button of a specific station.
-       */
-      void  setButton(const char* station, int which, bool value);
+    bool getMatrixUsed(const char* station);
+    int getButtonsUsed(const char* station);
+    int getValuesUsed(const char* station);
+    int getLEDsUsed(const char* station);
 
-      /**
-       * Set a specfic value of a specific station.
-       */
-      void  setValue(const char* station, int which, float value);
+  protected:
+    const ::gua::math::mat4* mIdentityMatrix;
+    std::string mCachedStationName;
+    Station* mCachedStation;
+    StationSegment* mStationSegment;
 
-      /**
-       * Set LED state of a specific station.
-       */
-      void  setLED(const char* station, int which, bool value);
+    Station* lookupCachedStation(const char* name);
+    void clearStationCache();
+};
 
-      bool  getMatrixUsed(const char* station);
-      int   getButtonsUsed(const char* station);
-      int   getValuesUsed(const char* station);
-      int   getLEDsUsed(const char* station);
-
-    protected:
-
-      const ::gua::math::mat4* mIdentityMatrix;
-      std::string     mCachedStationName;
-      Station*        mCachedStation;
-      StationSegment* mStationSegment;
-
-      Station* lookupCachedStation(const char* name);
-      void     clearStationCache();
-    };
-
-    using SFDeviceService = SingleField<Link<DeviceService> >;
-    using MFDeviceService = MultiField<Link<DeviceService> >;
-    using DevService = Singleton<DeviceService>;
-  }
+using SFDeviceService = SingleField<Link<DeviceService>>;
+using MFDeviceService = MultiField<Link<DeviceService>>;
+using DevService = Singleton<DeviceService>;
+} // namespace daemon
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_DAEMON_DLL SingleField<Link<daemon::DeviceService> >;
-  template class AV_DAEMON_DLL MultiField<Link<daemon::DeviceService> >;
+template class AV_DAEMON_DLL SingleField<Link<daemon::DeviceService>>;
+template class AV_DAEMON_DLL MultiField<Link<daemon::DeviceService>>;
 #endif
 
-}
+} // namespace av
 
 #endif // #if !defined(AV_DAEMON_DEVICESERVICE_H)

@@ -31,90 +31,53 @@
 /* static */ const int av::NetID::sNetGroupRootNode = -201;
 /* static */ const int av::NetID::sWellKnownBase = -100;
 
-av::NetID::NetID()
+av::NetID::NetID() { setNull(); }
+
+av::NetID::NetID(const std::string& eid, int number) { set(eid, number); }
+
+av::NetID::NetID(const av::NetID& ni) { set(ni.mCreator, ni.mNumber); }
+
+av::NetID::~NetID() {}
+
+av::NetID& av::NetID::operator=(const NetID& ni)
 {
-  setNull();
+    set(ni.mCreator, ni.mNumber);
+    return *this;
 }
 
-av::NetID::NetID(const std::string& eid, int number)
+bool av::NetID::operator==(const NetID& ni) const { return (mNumber == ni.mNumber) && (mCreator == ni.mCreator); }
+
+void av::NetID::set(const std::string& eid, int number)
 {
-  set(eid, number);
+    mCreator = eid;
+    mNumber = number;
 }
 
-av::NetID::NetID(const av::NetID& ni)
-{
-  set(ni.mCreator, ni.mNumber);
-}
+int av::NetID::getNum() const { return mNumber; }
 
-av::NetID::~NetID()
-{}
+const std::string& av::NetID::getEID() const { return mCreator; }
 
-av::NetID&
-av::NetID::operator=(const NetID& ni)
-{
-  set(ni.mCreator, ni.mNumber);
-  return *this;
-}
+void av::NetID::setNull() { mNumber = -1; }
 
-bool
-av::NetID::operator==(const NetID& ni) const
-{
-  return
-    (mNumber == ni.mNumber) &&
-    (mCreator == ni.mCreator);
-}
+bool av::NetID::isNull() const { return mNumber == -1; }
 
-void
-av::NetID::set(const std::string& eid, int number)
-{
-  mCreator = eid;
-  mNumber = number;
-}
+av::NetID av::NetID::nullID() { return NetID(); }
 
-int
-av::NetID::getNum() const
-{
-  return mNumber;
-}
+bool av::NetID::isWellKnown() const { return mNumber <= sWellKnownBase; }
 
-const std::string&
-av::NetID::getEID() const
+std::ostream& av::operator<<(std::ostream& os, const NetID& id)
 {
-  return mCreator;
-}
-
-void
-av::NetID::setNull()
-{
-  mNumber = -1;
-}
-
-bool
-av::NetID::isNull() const
-{
-  return mNumber == -1;
-}
-
-av::NetID
-av::NetID::nullID()
-{
-  return NetID();
-}
-
-bool
-av::NetID::isWellKnown() const
-{
-  return mNumber <= sWellKnownBase;
-}
-
-std::ostream& av::operator<< (std::ostream& os, const NetID& id)
-{
-  if (id.isNull()) {
-    os << "<null-id>";
-  } else if (id.isWellKnown()) {
-    os << id.mCreator << "#<" << id.mNumber << ">";
-  } else {
-    os << id.mCreator << "#" << id.mNumber;
-  }
-  return os;
+    if(id.isNull())
+    {
+        os << "<null-id>";
+    }
+    else if(id.isWellKnown())
+    {
+        os << id.mCreator << "#<" << id.mNumber << ">";
+    }
+    else
+    {
+        os << id.mCreator << "#" << id.mNumber;
+    }
+    return os;
 }

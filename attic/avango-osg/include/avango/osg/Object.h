@@ -37,79 +37,74 @@
 
 namespace av
 {
-  namespace osg
-  {
-    template <class T> T* get_from_osg_object(::osg::Object* osg_object)
-    {
-      if (osg_object == 0)
+namespace osg
+{
+template <class T>
+T* get_from_osg_object(::osg::Object* osg_object)
+{
+    if(osg_object == 0)
         return 0;
 
-      av::osg::ObjectLink *av_object_link =
-        dynamic_cast<av::osg::ObjectLink*>(osg_object->getUserData());
+    av::osg::ObjectLink* av_object_link = dynamic_cast<av::osg::ObjectLink*>(osg_object->getUserData());
 
-      return (av_object_link != 0 ? dynamic_cast<T*>(av_object_link->getObject()) : 0);
-    }
+    return (av_object_link != 0 ? dynamic_cast<T*>(av_object_link->getObject()) : 0);
+}
+
+/**
+ * Abstract Wrapper for ::osg::Object
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL Object : public av::FieldContainer, public ::osg::Observer
+{
+    AV_FC_DECLARE_ABSTRACT();
+
+  public:
+    /**
+     * Create av::osg::Object from existing osg::Object.
+     */
+    Object(::osg::Object* osgobject);
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~Object();
+
+  public:
+    /**
+     * Get the wrapped ::osg::Object.
+     */
+    ::osg::Object* getOsgObject() const;
+
+  protected:
+    /**
+     * Use OSGs reference count for avango-osg objects.
+     */
+    /* virtual */ void refImpl();
+    /* virtual */ void unrefImpl();
+    /* virtual */ void unrefWithoutDeletionImpl();
+    /* virtual */ int refCountImpl();
 
     /**
-     * Abstract Wrapper for ::osg::Object
-     *
-     * \ingroup av_osg
+     * Virtual method from osg::Observer, is called on delete from osg
+     * and is used to delete the Avango wrapper object.
      */
-    class AV_OSG_DLL Object : public av::FieldContainer, public ::osg::Observer
-    {
-      AV_FC_DECLARE_ABSTRACT();
+    /* virtual */ void objectDeleted(void*);
 
-    public:
+  private:
+    ::osg::Object* mOsgObject;
+};
 
-      /**
-       * Create av::osg::Object from existing osg::Object.
-       */
-      Object(::osg::Object* osgobject);
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~Object();
-
-    public:
-
-      /**
-       * Get the wrapped ::osg::Object.
-       */
-      ::osg::Object* getOsgObject() const;
-
-    protected:
-
-      /**
-       * Use OSGs reference count for avango-osg objects.
-       */
-      /* virtual */ void refImpl();
-      /* virtual */ void unrefImpl();
-      /* virtual */ void unrefWithoutDeletionImpl();
-      /* virtual */ int refCountImpl();
-
-      /**
-       * Virtual method from osg::Observer, is called on delete from osg
-       * and is used to delete the Avango wrapper object.
-       */
-      /* virtual */ void objectDeleted(void*);
-
-    private:
-
-      ::osg::Object *mOsgObject;
-    };
-
-    typedef SingleField<Link<Object> > SFObject;
-    typedef MultiField<Link<Object> > MFObject;
-  }
+typedef SingleField<Link<Object>> SFObject;
+typedef MultiField<Link<Object>> MFObject;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::Object> >;
-  template class AV_OSG_DLL MultiField<Link<osg::Object> >;
+template class AV_OSG_DLL SingleField<Link<osg::Object>>;
+template class AV_OSG_DLL MultiField<Link<osg::Object>>;
 #endif
 
-}
+} // namespace av
 
 #endif

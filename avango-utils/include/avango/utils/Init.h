@@ -34,19 +34,19 @@
 
 namespace av
 {
-  namespace utils
-  {
-    /**
-     * Initializes the AVANGO utility library.
-     * Usage: \code av::utils::Init::initClass(); \endcode
-     *
-     * \ingroup av_utils
-     */
-    class AV_UTILS_DLL Init
-    {
-      AV_TYPED_DECLARE_ABSTRACT();
-    };
-  }
-}
+namespace utils
+{
+/**
+ * Initializes the AVANGO utility library.
+ * Usage: \code av::utils::Init::initClass(); \endcode
+ *
+ * \ingroup av_utils
+ */
+class AV_UTILS_DLL Init
+{
+    AV_TYPED_DECLARE_ABSTRACT();
+};
+} // namespace utils
+} // namespace av
 
 #endif

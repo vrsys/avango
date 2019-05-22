@@ -33,169 +33,115 @@
 #undef AVANGO_UPCALLSERIALIZER_DEBUG
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-#  include <iostream>
-#  include <typeinfo>
+#include <iostream>
+#include <typeinfo>
 #endif
 
 av::Upcall::Upcall()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "Upcall::Upcall(): @0x" << static_cast<const void*> (this) << " ..." << std::endl;
+    std::cerr << "Upcall::Upcall(): @0x" << static_cast<const void*>(this) << " ..." << std::endl;
 #endif
 }
 
 av::Upcall::~Upcall()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "Upcall::~Upcall(): @0x" << static_cast<const void*> (this) << " ..." << std::endl;
+    std::cerr << "Upcall::~Upcall(): @0x" << static_cast<const void*>(this) << " ..." << std::endl;
 #endif
 }
 
 // called from net process
-void
-av::JoinUpcall::upcallQueued(UpcallSerializer&)
-{}
+void av::JoinUpcall::upcallQueued(UpcallSerializer&) {}
 
 // called from app process
-void
-av::JoinUpcall::handle(NetNode* netNode, UpcallSerializer&)
-{
-  netNode->joined(mEID);
+void av::JoinUpcall::handle(NetNode* netNode, UpcallSerializer&) { netNode->joined(mEID); }
 
+// called from net process
+void av::SetStateUpcall::upcallQueued(UpcallSerializer&) {}
+
+// called from app process
+void av::SetStateUpcall::handle(NetNode* netNode, UpcallSerializer&) { netNode->setStateFragment(mFragment, mStateMsg); }
+
+// called from net process
+void av::GetStateUpcall::upcallQueued(UpcallSerializer& serializer) { serializer.netWait(); }
+
+// called from app process
+void av::GetStateUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
+{
+    netNode->getStateFragment(mFragment, mStateMsg);
+    serializer.signalWait();
 }
 
 // called from net process
-void
-av::SetStateUpcall::upcallQueued(UpcallSerializer&)
-{}
+void av::RemoveStateUpcall::upcallQueued(UpcallSerializer&) {}
 
 // called from app process
-void
-av::SetStateUpcall::handle(NetNode* netNode, UpcallSerializer&)
-{
-  netNode->setStateFragment(mFragment, mStateMsg);
+void av::RemoveStateUpcall::handle(NetNode* netNode, UpcallSerializer&) { netNode->removeStateFragment(mFragment); }
 
+// called from net process
+void av::MessageUpcall::upcallQueued(UpcallSerializer&) {}
+
+// called from app process
+void av::MessageUpcall::handle(NetNode* netNode, UpcallSerializer&)
+{
+    Msg sm(mMsg);
+    sm.setNetNode(netNode);
+    netNode->consumeMessage(sm);
 }
 
 // called from net process
-void
-av::GetStateUpcall::upcallQueued(UpcallSerializer& serializer)
-{
-  serializer.netWait();
-}
+void av::AcceptedViewUpcall::upcallQueued(UpcallSerializer&) {}
 
 // called from app process
-void
-av::GetStateUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
+void av::AcceptedViewUpcall::handle(NetNode* netNode, UpcallSerializer&) { netNode->acceptNewView(mMembers, mNewMembers, mDepartedMembers, mMsg); }
+
+// called from net process
+void av::BlockUpcall::upcallQueued(UpcallSerializer& serializer) { serializer.netWait(); }
+
+// called from app process
+void av::BlockUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
 {
-  netNode->getStateFragment(mFragment, mStateMsg);
-  serializer.signalWait();
+    netNode->block();
+    serializer.signalWait();
 }
 
 // called from net process
-void
-av::RemoveStateUpcall::upcallQueued(UpcallSerializer&)
-{}
+void av::UnblockUpcall::upcallQueued(UpcallSerializer& /* serializer */)
+{
+    // serializer.net_wait();
+}
 
 // called from app process
-void
-av::RemoveStateUpcall::handle(NetNode* netNode, UpcallSerializer&)
+void av::UnblockUpcall::handle(NetNode* netNode, UpcallSerializer& /* serializer */)
 {
-  netNode->removeStateFragment(mFragment);
-
+    netNode->unblock();
+    // serializer.signal_wait();
 }
 
 // called from net process
-void
-av::MessageUpcall::upcallQueued(UpcallSerializer&)
-{}
+void av::ExitUpcall::upcallQueued(UpcallSerializer& serializer) { serializer.netWait(); }
 
 // called from app process
-void
-av::MessageUpcall::handle(NetNode* netNode, UpcallSerializer&)
+void av::ExitUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
 {
-  Msg sm(mMsg);
-  sm.setNetNode(netNode);
-  netNode->consumeMessage(sm);
-
+    netNode->exitCompleted();
+    serializer.signalWait();
 }
 
-// called from net process
-void
-av::AcceptedViewUpcall::upcallQueued(UpcallSerializer&)
-{}
-
-// called from app process
-void
-av::AcceptedViewUpcall::handle(NetNode* netNode, UpcallSerializer&)
-{
-  netNode->acceptNewView(mMembers, mNewMembers, mDepartedMembers, mMsg);
-
-}
-
-// called from net process
-void
-av::BlockUpcall::upcallQueued(UpcallSerializer& serializer)
-{
-  serializer.netWait();
-}
-
-// called from app process
-void
-av::BlockUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
-{
-  netNode->block();
-  serializer.signalWait();
-}
-
-// called from net process
-void
-av::UnblockUpcall::upcallQueued(UpcallSerializer& /* serializer */)
-{
-  // serializer.net_wait();
-}
-
-// called from app process
-void
-av::UnblockUpcall::handle(NetNode* netNode, UpcallSerializer& /* serializer */)
-{
-  netNode->unblock();
-  // serializer.signal_wait();
-}
-
-// called from net process
-void
-av::ExitUpcall::upcallQueued(UpcallSerializer& serializer)
-{
-  serializer.netWait();
-}
-
-// called from app process
-void
-av::ExitUpcall::handle(NetNode* netNode, UpcallSerializer& serializer)
-{
-  netNode->exitCompleted();
-  serializer.signalWait();
-}
-
-av::UpcallSerializer::UpcallSerializer()
-  : mUpcallQueueLock(),
-    mUpcallQueue(),
-    mSyncSema(0)
+av::UpcallSerializer::UpcallSerializer() : mUpcallQueueLock(), mUpcallQueue(), mSyncSema(0)
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::UpcallSerializer(): "
-            << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::UpcallSerializer(): "
+              << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
 #endif
 }
 
 av::UpcallSerializer::~UpcallSerializer()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::~UpcallSerializer(): "
-            << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::~UpcallSerializer(): "
+              << "w/ sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
 #endif
 }
 
@@ -208,113 +154,98 @@ av::UpcallSerializer::~UpcallSerializer()
 #define BOOST_IS_RIGHT_VERSION (BOOST_VERSION >= 103300)
 
 // called from net process
-void
-av::UpcallSerializer::makeUpcall(boost::shared_ptr<Upcall> upcall)
+void av::UpcallSerializer::makeUpcall(boost::shared_ptr<Upcall> upcall)
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::make_upcall(): "
-            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall.get())
-            << " ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::make_upcall(): "
+              << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*>(upcall.get()) << " ..." << std::endl;
 #endif
 
-  BOOST_STATIC_ASSERT(BOOST_IS_RIGHT_VERSION && BOOST_SHAREDPTR_THREAD_SUPPORT_ENABLED);
+    BOOST_STATIC_ASSERT(BOOST_IS_RIGHT_VERSION && BOOST_SHAREDPTR_THREAD_SUPPORT_ENABLED);
 
-  {
-    boost::mutex::scoped_lock lock(mUpcallQueueLock);
+    {
+        boost::mutex::scoped_lock lock(mUpcallQueueLock);
 
-    mUpcallQueue.push_back(upcall);
-  }
-
-  upcall->upcallQueued(*this);
-}
-
-// called from app process
-void
-av::UpcallSerializer::handleUpcall(boost::shared_ptr<Upcall> upcall, NetNode* netNode)
-{
-#if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::handle_upcall(): "
-            << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*> (upcall.get())
-            << " ..."
-            << std::endl;
-#endif
-
-  upcall->handle(netNode, *this);
-}
-
-// called from app process
-bool
-av::UpcallSerializer::handleNextUpcall(NetNode* netNode)
-{
-  boost::shared_ptr<Upcall> upcall;
-
-  {
-    boost::mutex::scoped_lock lock(mUpcallQueueLock);
-
-    if (!mUpcallQueue.empty()) {
-      upcall = mUpcallQueue.front();
-
-      mUpcallQueue.pop_front();
+        mUpcallQueue.push_back(upcall);
     }
-  }
 
-  if (upcall) {
-    handleUpcall(upcall, netNode);
-
-    return true;
-  }
-
-  return false;
+    upcall->upcallQueued(*this);
 }
 
-void
-av::UpcallSerializer::netWait()
+// called from app process
+void av::UpcallSerializer::handleUpcall(boost::shared_ptr<Upcall> upcall, NetNode* netNode)
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::net_wait(): "
-            << "waiting on sema @" << &mSyncSema
-            << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::handle_upcall(): "
+              << "'" << typeid(upcall).name() << "' @0x" << static_cast<const void*>(upcall.get()) << " ..." << std::endl;
 #endif
 
-  mSyncSema.wait();
+    upcall->handle(netNode, *this);
+}
+
+// called from app process
+bool av::UpcallSerializer::handleNextUpcall(NetNode* netNode)
+{
+    boost::shared_ptr<Upcall> upcall;
+
+    {
+        boost::mutex::scoped_lock lock(mUpcallQueueLock);
+
+        if(!mUpcallQueue.empty())
+        {
+            upcall = mUpcallQueue.front();
+
+            mUpcallQueue.pop_front();
+        }
+    }
+
+    if(upcall)
+    {
+        handleUpcall(upcall, netNode);
+
+        return true;
+    }
+
+    return false;
+}
+
+void av::UpcallSerializer::netWait()
+{
+#if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
+    std::cerr << "UpcallSerializer::net_wait(): "
+              << "waiting on sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
+#endif
+
+    mSyncSema.wait();
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::net_wait(): "
-            << "done waiting on sema @" << &mSyncSema << " ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::net_wait(): "
+              << "done waiting on sema @" << &mSyncSema << " ..." << std::endl;
 #endif
 }
 
-void
-av::UpcallSerializer::signalWait()
+void av::UpcallSerializer::signalWait()
 {
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::signal_wait(): "
-            << "sleeping while <snapshot() == 0> for sema @" << &mSyncSema
-            << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::signal_wait(): "
+              << "sleeping while <snapshot() == 0> for sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
 #endif
 
-  // wait until a wait has really been performed
-  while (mSyncSema.snapshot() == 0) {
-    usleep(1);
-  }
+    // wait until a wait has really been performed
+    while(mSyncSema.snapshot() == 0)
+    {
+        usleep(1);
+    }
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::signal_wait(): "
-            << "done sleeping on sema @" << &mSyncSema
-            << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::signal_wait(): "
+              << "done sleeping on sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
 #endif
 
-  mSyncSema.post();
+    mSyncSema.post();
 
 #if defined(AVANGO_UPCALLSERIALIZER_DEBUG)
-  std::cerr << "UpcallSerializer::signal_wait(): "
-            << "posted sema @" << &mSyncSema
-            << " (val: " << mSyncSema.snapshot() << ") ..."
-            << std::endl;
+    std::cerr << "UpcallSerializer::signal_wait(): "
+              << "posted sema @" << &mSyncSema << " (val: " << mSyncSema.snapshot() << ") ..." << std::endl;
 #endif
 }

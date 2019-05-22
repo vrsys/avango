@@ -31,7 +31,6 @@
  * \ingroup av_osg
  */
 
-
 #include <avango/FieldContainer.h>
 #include <avango/StandardFields.h>
 #include <avango/osg/Texture.h>
@@ -39,52 +38,50 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * Data structure for camera attachments, e.g textures
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL CameraAttachment : public FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
+    CameraAttachment(void);
+
     /**
-     * Data structure for camera attachments, e.g textures
-     *
-     * \ingroup av_osg
+     * Buffer component to map attachment to
      */
-    class AV_OSG_DLL CameraAttachment : public FieldContainer
-    {
-      AV_FC_DECLARE();
+    SFInt BufferComponent;
 
-    public:
+    SFInt InternalFormat;
+    SFTexture Texture;
+    SFImage Image;
+    SFUInt Level;
+    SFUInt Face;
+    SFBool MIPMapGeneration;
+    SFUInt MultisampleSamples;
+    SFUInt MultisampleColorSamples;
 
-      CameraAttachment(void);
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CameraAttachment();
+};
 
-      /**
-       * Buffer component to map attachment to
-       */
-      SFInt BufferComponent;
-
-      SFInt InternalFormat;
-      SFTexture Texture;
-      SFImage Image;
-      SFUInt Level;
-      SFUInt Face;
-      SFBool MIPMapGeneration;
-      SFUInt MultisampleSamples;
-      SFUInt MultisampleColorSamples;
-
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~CameraAttachment();
-    };
-
-    typedef SingleField<Link<CameraAttachment> > SFCameraAttachment;
-    typedef MultiField<Link<CameraAttachment> > MFCameraAttachment;
-  }
+typedef SingleField<Link<CameraAttachment>> SFCameraAttachment;
+typedef MultiField<Link<CameraAttachment>> MFCameraAttachment;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::CameraAttachment> >;
-  template class AV_OSG_DLL MultiField<Link<osg::CameraAttachment> >;
+template class AV_OSG_DLL SingleField<Link<osg::CameraAttachment>>;
+template class AV_OSG_DLL MultiField<Link<osg::CameraAttachment>>;
 #endif
 
-}
+} // namespace av
 
 #endif

@@ -34,23 +34,21 @@
 #include <shade/types/uniform.h>
 #include <shade/types/float.h>
 
-
 class ArrayPlastic : public shade::ShaderBase<ArrayPlastic, shade::shaders::IlluminatedMaterial>
 {
-public:
-  ArrayPlastic(float diffuse = 1., float specular = 0.);
+  public:
+    ArrayPlastic(float diffuse = 1., float specular = 0.);
 
-  /*virtual*/ shade::void_<> illuminance(shade::vec3<> color, shade::vec3<> direction);
+    /*virtual*/ shade::void_<> illuminance(shade::vec3<> color, shade::vec3<> direction);
 
-  shade::ValueReference<shade::vec2, shade::uniform> uv;
-  shade::sampler2DArray texture_unit;
+    shade::ValueReference<shade::vec2, shade::uniform> uv;
+    shade::sampler2DArray texture_unit;
 
-private:
-  shade::float_<shade::uniform> diffuse;
-  shade::float_<shade::uniform> specular;
+  private:
+    shade::float_<shade::uniform> diffuse;
+    shade::float_<shade::uniform> specular;
 
-  SHADE_DERIVED_DECL(ArrayPlastic, shade::shaders::IlluminatedMaterial)
+    SHADE_DERIVED_DECL(ArrayPlastic, shade::shaders::IlluminatedMaterial)
 };
-
 
 #endif /* shade_shaders_ArrayPlastic_H */

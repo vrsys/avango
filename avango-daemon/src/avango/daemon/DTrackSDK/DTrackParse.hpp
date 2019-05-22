@@ -3,10 +3,10 @@
  * Functions for processing data
  *
  * Copyright (c) 2007-2017, Advanced Realtime Tracking GmbH
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
@@ -15,7 +15,7 @@
  * 3. Neither the name of copyright holder nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,7 +26,7 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * Version v2.5.0
  *
  */
@@ -36,8 +36,8 @@
 
 #include <string>
 
-namespace DTrackSDK_Parse {
-
+namespace DTrackSDK_Parse
+{
 /**
  *	\brief	Search next line in buffer
  *	@param[in] 	str		buffer (total)
@@ -93,7 +93,7 @@ char* string_get_f(char* str, float* f);
  *	@param[out] ddat	array for 'double' values (long enough due to fmt)
  *	@return 	pointer behind read value in str; NULL in case of error
  */
-char* string_get_block(char* str, const char* fmt, int* idat = NULL, float* fdat = NULL, double *ddat = NULL);
+char* string_get_block(char* str, const char* fmt, int* idat = NULL, float* fdat = NULL, double* ddat = NULL);
 
 /**
  * 	\brief	Read next 'word' value from string
@@ -122,6 +122,6 @@ char* string_get_quoted_text(char* str, std::string& qt);
  */
 char* string_cmp_parameter(char* str, const char* p);
 
-}
+} // namespace DTrackSDK_Parse
 
 #endif /* _ART_DTRACKPARSE_H_ */

@@ -25,17 +25,8 @@
 
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(UVCoord, "UVCoord.glsl", 
-    SHADE_NONE,
-    SHADE_DEFS((uv_coord))
-    )
+SHADE_CLASS_INIT(UVCoord, "UVCoord.glsl", SHADE_NONE, SHADE_DEFS((uv_coord)))
 
-shade::vec2<> UVCoord::get_fragment(void)
-{
-  return invoke< vec2<> >("UVCoord_get_fragment_impl");
-}
+shade::vec2<> UVCoord::get_fragment(void) { return invoke<vec2<>>("UVCoord_get_fragment_impl"); }
 
-shade::void_<> UVCoord::init_vertex(void)
-{
-  return invoke< void_<> >("UVCoord_init_vertex_impl");
-}
+shade::void_<> UVCoord::init_vertex(void) { return invoke<void_<>>("UVCoord_init_vertex_impl"); }

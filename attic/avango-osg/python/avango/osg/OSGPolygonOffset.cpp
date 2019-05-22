@@ -32,20 +32,21 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      typedef T type;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGPolygonOffset(void)
- {
-  // wrapping osg::PolygonOffset functionality
-  register_field<av::osg::SFPolygonOffset>("SFPolygonOffset");
-  register_multifield<av::osg::MFPolygonOffset>("MFPolygonOffset");
-  class_<av::osg::PolygonOffset, av::Link<av::osg::PolygonOffset>, bases<av::osg::Object>, boost::noncopyable >("PolygonOffset", "docstring", no_init);
- }
+{
+    // wrapping osg::PolygonOffset functionality
+    register_field<av::osg::SFPolygonOffset>("SFPolygonOffset");
+    register_multifield<av::osg::MFPolygonOffset>("MFPolygonOffset");
+    class_<av::osg::PolygonOffset, av::Link<av::osg::PolygonOffset>, bases<av::osg::Object>, boost::noncopyable>("PolygonOffset", "docstring", no_init);
+}

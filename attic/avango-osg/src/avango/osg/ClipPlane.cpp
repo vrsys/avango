@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::ClipPlane"));
+av::Logger& logger(av::getLogger("av::osg::ClipPlane"));
 }
 
 AV_FC_DEFINE(av::osg::ClipPlane);
@@ -37,63 +37,38 @@ AV_FC_DEFINE(av::osg::ClipPlane);
 AV_FIELD_DEFINE(av::osg::SFClipPlane);
 AV_FIELD_DEFINE(av::osg::MFClipPlane);
 
-av::osg::ClipPlane::ClipPlane(::osg::ClipPlane* osgClipPlane) :
-  StateAttribute(osgClipPlane),
-  mOsgClipPlane(osgClipPlane)
+av::osg::ClipPlane::ClipPlane(::osg::ClipPlane* osgClipPlane) : StateAttribute(osgClipPlane), mOsgClipPlane(osgClipPlane)
 {
-  AV_FC_ADD_ADAPTOR_FIELD(PlaneNumber,
-                             boost::bind(&ClipPlane::getPlaneNumberCB, this, _1),
-                             boost::bind(&ClipPlane::setPlaneNumberCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(PlaneNumber, boost::bind(&ClipPlane::getPlaneNumberCB, this, _1), boost::bind(&ClipPlane::setPlaneNumberCB, this, _1));
 
-  AV_FC_ADD_ADAPTOR_FIELD(Plane,
-                           boost::bind(&ClipPlane::getPlaneCB, this, _1),
-                           boost::bind(&ClipPlane::setPlaneCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Plane, boost::bind(&ClipPlane::getPlaneCB, this, _1), boost::bind(&ClipPlane::setPlaneCB, this, _1));
 }
 
-av::osg::ClipPlane::~ClipPlane()
-{}
+av::osg::ClipPlane::~ClipPlane() {}
 
-void
-av::osg::ClipPlane::initClass()
+void av::osg::ClipPlane::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::StateAttribute::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::StateAttribute::initClass();
 
-    AV_FC_INIT(av::osg::StateAttribute, av::osg::ClipPlane, true);
+        AV_FC_INIT(av::osg::StateAttribute, av::osg::ClipPlane, true);
 
-    SFClipPlane::initClass("av::osg::SFClipPlane", "av::Field");
-    MFClipPlane::initClass("av::osg::MFClipPlane", "av::Field");
-  }
+        SFClipPlane::initClass("av::osg::SFClipPlane", "av::Field");
+        MFClipPlane::initClass("av::osg::MFClipPlane", "av::Field");
+    }
 }
 
-::osg::ClipPlane*
-av::osg::ClipPlane::getOsgClipPlane() const
-{
-  return mOsgClipPlane;
-}
+::osg::ClipPlane* av::osg::ClipPlane::getOsgClipPlane() const { return mOsgClipPlane; }
 
-/* virtual */ void
-av::osg::ClipPlane::getPlaneNumberCB(const av::SFInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgClipPlane->getClipPlaneNum();
-}
+/* virtual */ void av::osg::ClipPlane::getPlaneNumberCB(const av::SFInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgClipPlane->getClipPlaneNum(); }
 
-/* virtual */ void
-av::osg::ClipPlane::setPlaneNumberCB(const av::SFInt::SetValueEvent& event)
-{
-  mOsgClipPlane->setClipPlaneNum(event.getValue());
-}
+/* virtual */ void av::osg::ClipPlane::setPlaneNumberCB(const av::SFInt::SetValueEvent& event) { mOsgClipPlane->setClipPlaneNum(event.getValue()); }
 
-/* virtual */ void
-av::osg::ClipPlane::getPlaneCB(const av::osg::SFVec4::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgClipPlane->getClipPlane();
-}
+/* virtual */ void av::osg::ClipPlane::getPlaneCB(const av::osg::SFVec4::GetValueEvent& event) { *(event.getValuePtr()) = mOsgClipPlane->getClipPlane(); }
 
-/* virtual */ void
-av::osg::ClipPlane::setPlaneCB(const av::osg::SFVec4::SetValueEvent& event)
+/* virtual */ void av::osg::ClipPlane::setPlaneCB(const av::osg::SFVec4::SetValueEvent& event)
 {
-  ::osg::Vec4d plane = event.getValue();
-  mOsgClipPlane->setClipPlane(plane);
+    ::osg::Vec4d plane = event.getValue();
+    mOsgClipPlane->setClipPlane(plane);
 }

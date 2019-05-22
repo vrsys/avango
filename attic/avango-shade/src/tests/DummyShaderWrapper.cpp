@@ -25,20 +25,14 @@
 #include "DummyShader.h"
 #include <avango/shade/Init.h>
 
-
-DummyShaderWrapper::DummyShaderWrapper(av::Type type, boost::shared_ptr< ::shade::Shader> shader) :
-  Shader(type, shader)
-{
-  AV_FC_ADD_FIELD(AStringField, "Dummy");
-}
-
+DummyShaderWrapper::DummyShaderWrapper(av::Type type, boost::shared_ptr<::shade::Shader> shader) : Shader(type, shader) { AV_FC_ADD_FIELD(AStringField, "Dummy"); }
 
 void initDummyShaderWrapper(void)
 {
-  static bool once = true;
-  if (once)
-  {
-    once = false;
-    av::shade::Init::registerWrappedShader<DummyShader, DummyShaderWrapper>("DummyShaderWrapper");
-  }
+    static bool once = true;
+    if(once)
+    {
+        once = false;
+        av::shade::Init::registerWrappedShader<DummyShader, DummyShaderWrapper>("DummyShaderWrapper");
+    }
 }

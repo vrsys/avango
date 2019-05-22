@@ -5,33 +5,25 @@
 
 namespace UnitTest
 {
-
-namespace 
+namespace
 {
-
 #ifdef UNITTEST_USE_CUSTOM_STREAMS
-	MemoryOutStream& operator <<(MemoryOutStream& lhs, const std::string& rhs)
-	{
-		lhs << rhs.c_str();
-		return lhs;
-	}
+MemoryOutStream& operator<<(MemoryOutStream& lhs, const std::string& rhs)
+{
+    lhs << rhs.c_str();
+    return lhs;
+}
 #endif
 
 struct MockDeferredTestReporter : public DeferredTestReporter
 {
-    virtual void ReportSummary(int, int, int, float) 
-    {
-    }
+    virtual void ReportSummary(int, int, int, float) {}
 };
 
 struct DeferredTestReporterFixture
 {
     DeferredTestReporterFixture()
-        : testName("UniqueTestName")
-        , testSuite("UniqueTestSuite")
-        , fileName("filename.h")
-        , lineNumber(12)
-        , details(testName.c_str(), testSuite.c_str(), fileName.c_str(), lineNumber)
+        : testName("UniqueTestName"), testSuite("UniqueTestSuite"), fileName("filename.h"), lineNumber(12), details(testName.c_str(), testSuite.c_str(), fileName.c_str(), lineNumber)
     {
     }
 
@@ -102,8 +94,8 @@ TEST_FIXTURE(DeferredTestReporterFixture, DeferredTestReporterTakesCopyOfFailure
     char failureMessage[128];
     char const* goodStr = "Real failure message";
     char const* badStr = "Bogus failure message";
-    
-	using namespace std;
+
+    using namespace std;
 
     strcpy(failureMessage, goodStr);
     reporter.ReportFailure(details, failureMessage);
@@ -114,4 +106,5 @@ TEST_FIXTURE(DeferredTestReporterFixture, DeferredTestReporterTakesCopyOfFailure
     CHECK_EQUAL(goodStr, failure.second);
 }
 
-}}
+} // namespace
+} // namespace UnitTest

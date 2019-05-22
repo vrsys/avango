@@ -3,4 +3,4 @@
 
 void init_SPointsNode();
 
-#endif //AV_PYTHON_GUA_SPOINTS_NODE_HPP
+#endif // AV_PYTHON_GUA_SPOINTS_NODE_HPP

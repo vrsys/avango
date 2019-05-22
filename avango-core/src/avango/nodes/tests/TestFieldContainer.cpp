@@ -28,71 +28,61 @@
 
 namespace
 {
-  TEST(TypeIdOfFields)
-  {
+TEST(TypeIdOfFields)
+{
     MockFieldContainer::initClass();
 
-    av::Link<av::FieldContainer> fc =
-      dynamic_cast<av::FieldContainer*>(av::Type::createInstanceOfType("MockFieldContainer"));
-    CHECK(&*fc != 0 );
+    av::Link<av::FieldContainer> fc = dynamic_cast<av::FieldContainer*>(av::Type::createInstanceOfType("MockFieldContainer"));
+    CHECK(&*fc != 0);
     av::Field& self_p = *fc->getField("AnIntField");
-    CHECK(&self_p != 0 );
-  }
+    CHECK(&self_p != 0);
+}
 
-  using namespace av;
+using namespace av;
 
-  class TestNode : public av::FieldContainer {
+class TestNode : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     TestNode();
     virtual ~TestNode();
 
-    SFFloat  FloatField;
-  };
+    SFFloat FloatField;
+};
 
-  AV_FC_DEFINE(TestNode);
+AV_FC_DEFINE(TestNode);
 
-  TestNode::TestNode()
-  {
-    AV_FC_ADD_FIELD(FloatField, 0.0f);
-  }
+TestNode::TestNode() { AV_FC_ADD_FIELD(FloatField, 0.0f); }
 
-  TestNode::~TestNode()
-  {}
+TestNode::~TestNode() {}
 
-  void
-  TestNode::initClass()
-  {
-    if (!isTypeInitialized())
+void TestNode::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
+        av::FieldContainer::initClass();
 
-      AV_FC_INIT(av::FieldContainer, TestNode, false);
+        AV_FC_INIT(av::FieldContainer, TestNode, false);
     }
-  }
+}
 
-  class InitNodeFixture
-  {
+class InitNodeFixture
+{
   public:
-    InitNodeFixture()
-    {
+    InitNodeFixture() { TestNode::initClass(); }
+};
 
-      TestNode::initClass();
-    }
-  };
-
-  TEST_FIXTURE(InitNodeFixture, getFieldWithInvalidArguments)
-  {
+TEST_FIXTURE(InitNodeFixture, getFieldWithInvalidArguments)
+{
     Link<TestNode> node(new TestNode);
 
     CHECK(node->getField("NonExistingField") == 0);
     CHECK(node->getField(15u) == 0);
-  }
+}
 
-  TEST_FIXTURE(InitNodeFixture, disconnectAllFieldsWorks)
-  {
+TEST_FIXTURE(InitNodeFixture, disconnectAllFieldsWorks)
+{
     Link<TestNode> node1(new TestNode);
     Link<TestNode> node2(new TestNode);
 
@@ -101,5 +91,5 @@ namespace
     CHECK_EQUAL(1u, node2->FloatField.getNumberOfConnectedFields());
     node2->disconnectAllFields();
     CHECK_EQUAL(0u, node2->FloatField.getNumberOfConnectedFields());
-  }
 }
+} // namespace

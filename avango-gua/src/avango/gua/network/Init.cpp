@@ -32,19 +32,18 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::network::Init"));
+av::Logger& logger(av::getLogger("av::gua::network::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::gua::network::Init);
 
-/* static */ void
-av::gua::network::Init::initClass()
+/* static */ void av::gua::network::Init::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::gua::NetTransform::initClass();
-    av::gua::SharedContainerHolder::initClass();
+    if(!isTypeInitialized())
+    {
+        av::gua::NetTransform::initClass();
+        av::gua::SharedContainerHolder::initClass();
 
-    AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::network::Init", true);
-  }
+        AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::network::Init", true);
+    }
 }

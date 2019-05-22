@@ -14,81 +14,75 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Video3DNode
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Video3DNode : public av::gua::GeometryNode
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Video3DNode
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Video3DNode
+     * is created.
+     * Otherwise, the given ::gua::Video3DNode is used.
      */
-    class AV_GUA_DLL Video3DNode : public av::gua::GeometryNode
-    {
-      AV_FC_DECLARE();
+    Video3DNode(std::shared_ptr<::gua::node::Video3DNode> guanode = std::shared_ptr<::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
 
-    public:
+    virtual void on_distribute(av::gua::NetTransform& netNode);
+    virtual void on_undistribute(av::gua::NetTransform& netNode);
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Video3DNode
-       * is created.
-       * Otherwise, the given ::gua::Video3DNode is used.
-       */
-      Video3DNode(std::shared_ptr< ::gua::node::Video3DNode> guanode =
-          std::shared_ptr< ::gua::node::Video3DNode>(new ::gua::node::Video3DNode("")));
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    //      virtual ~Video3DNode();
 
-      virtual void on_distribute(av::gua::NetTransform& netNode);
-      virtual void on_undistribute(av::gua::NetTransform& netNode);
+  public:
+    SFString Geometry;
+    SFMaterial Material;
+    SFBool RenderToGBuffer;
+    SFBool RenderToStencilBuffer;
 
+    virtual void getGeometryCB(const SFString::GetValueEvent& event);
+    virtual void setGeometryCB(const SFString::SetValueEvent& event);
 
-    protected:
+    virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
+    virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-//      virtual ~Video3DNode();
+    virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
+    virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
 
-    public:
+    virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
+    virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
 
-      SFString   Geometry;
-      SFMaterial Material;
-      SFBool     RenderToGBuffer;
-      SFBool     RenderToStencilBuffer;
+    /**
+     * Get the wrapped ::gua::Video3DNode.
+     */
+    std::shared_ptr<::gua::node::Video3DNode> getGuaVideo3DNode() const;
 
-      virtual void getGeometryCB(const SFString::GetValueEvent& event);
-      virtual void setGeometryCB(const SFString::SetValueEvent& event);
+  private:
+    std::shared_ptr<::gua::node::Video3DNode> m_guaVideo3DNode;
+    av::Link<av::gua::Material> m_Material;
 
-      virtual void getMaterialCB(const SFMaterial::GetValueEvent& event);
-      virtual void setMaterialCB(const SFMaterial::SetValueEvent& event);
+    Video3DNode(const Video3DNode&);
+    Video3DNode& operator=(const Video3DNode&);
+};
 
-      virtual void getRenderToGBufferCB(const SFBool::GetValueEvent& event);
-      virtual void setRenderToGBufferCB(const SFBool::SetValueEvent& event);
+using SFVideo3DNode = SingleField<Link<Video3DNode>>;
+using MFVideo3DNode = MultiField<Link<Video3DNode>>;
 
-      virtual void getRenderToStencilBufferCB(const SFBool::GetValueEvent& event);
-      virtual void setRenderToStencilBufferCB(const SFBool::SetValueEvent& event);
-
-      /**
-       * Get the wrapped ::gua::Video3DNode.
-       */
-      std::shared_ptr< ::gua::node::Video3DNode> getGuaVideo3DNode() const;
-
-    private:
-
-      std::shared_ptr< ::gua::node::Video3DNode> m_guaVideo3DNode;
-      av::Link< av::gua::Material> m_Material;
-
-      Video3DNode(const Video3DNode&);
-      Video3DNode& operator=(const Video3DNode&);
-    };
-
-    using SFVideo3DNode = SingleField<Link<Video3DNode> >;
-    using MFVideo3DNode = MultiField<Link<Video3DNode> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Video3DNode> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Video3DNode> >;
+template class AV_GUA_DLL SingleField<Link<gua::Video3DNode>>;
+template class AV_GUA_DLL MultiField<Link<gua::Video3DNode>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_VIDEO3D_NODE_HPP
+#endif // AVANGO_GUA_VIDEO3D_NODE_HPP

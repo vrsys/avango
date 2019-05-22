@@ -23,18 +23,14 @@
 
 #include <shade/UVWInstance.h>
 
+boost::shared_ptr<shade::shaders::Value<shade::vec3, shade::local>> shade::UVWInstance::m_value;
 
-boost::shared_ptr<shade::shaders::Value<shade::vec3, shade::local> > shade::UVWInstance::m_value;
+void shade::UVWInstance::init(void) { m_value = boost::shared_ptr<shaders::Value<vec3, local>>(new shaders::Value<vec3, local>); }
 
-void shade::UVWInstance::init(void)
+boost::shared_ptr<shade::shaders::Value<shade::vec3, shade::local>> shade::UVWInstance::get(void)
 {
-  m_value = boost::shared_ptr<shaders::Value<vec3, local> >(new shaders::Value<vec3, local>);
-}
+    if(m_value)
+        return m_value;
 
-boost::shared_ptr<shade::shaders::Value<shade::vec3, shade::local> > shade::UVWInstance::get(void)
-{
-  if (m_value)
-    return m_value;
-
-  throw NotInitialized();
+    throw NotInitialized();
 }

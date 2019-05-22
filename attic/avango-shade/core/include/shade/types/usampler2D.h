@@ -29,15 +29,12 @@
 #include "uniform.h"
 #include <boost/shared_ptr.hpp>
 
-
 namespace shade
 {
-  class Texture;
+class Texture;
 
-  class usampler2D :
-    public TypeBase<usampler2D, uniform>,
-    public types::TextureAccessor
-  {
+class usampler2D : public TypeBase<usampler2D, uniform>, public types::TextureAccessor
+{
   public:
     usampler2D(void);
 
@@ -49,7 +46,7 @@ namespace shade
 
   private:
     boost::shared_ptr<Texture> m_texture;
-  };
-}
+};
+} // namespace shade
 
 #endif /* shade_types_usampler2D_H */

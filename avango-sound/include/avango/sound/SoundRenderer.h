@@ -36,46 +36,49 @@
  * \ingroup av_sound
  */
 
-namespace av {
-  namespace sound {
+namespace av
+{
+namespace sound
+{
+class AV_SOUND_DLL SoundRenderer : public FieldContainer
+{
+    AV_FC_DECLARE_ABSTRACT();
 
-    class AV_SOUND_DLL SoundRenderer : public FieldContainer {
+  public:
+    SoundRenderer();
 
-      AV_FC_DECLARE_ABSTRACT();
+  protected:
+    /* virtual */ ~SoundRenderer();
 
-      public:
-        SoundRenderer();
-      protected:
-        /* virtual */~SoundRenderer();
-      public:
-        av::gua::SFMatrix ListenerPosition;
-        av::gua::SFVec3 ListenerVelocity;
+  public:
+    av::gua::SFMatrix ListenerPosition;
+    av::gua::SFVec3 ListenerVelocity;
 
-        virtual boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
-        virtual void updateSoundSourcePosition(Link<SoundSource> source, const ::gua::math::mat4& transform);
-        virtual void resetRenderer() {}
+    virtual boost::shared_ptr<SoundSource::LocalSource> createLocalSource();
+    virtual void updateSoundSourcePosition(Link<SoundSource> source, const ::gua::math::mat4& transform);
+    virtual void resetRenderer() {}
 
-      protected:
-        virtual void setListenerPosition(const ::gua::math::mat4& /* position */) {}
-        virtual ::gua::math::mat4 getListenerPosition() const {return ::gua::math::mat4::identity();}
+  protected:
+    virtual void setListenerPosition(const ::gua::math::mat4& /* position */) {}
+    virtual ::gua::math::mat4 getListenerPosition() const { return ::gua::math::mat4::identity(); }
 
-        virtual void setListenerVelocity(const ::gua::math::vec3& /* velocity */) {}
-        virtual ::gua::math::vec3 getListenerVelocity() const {return ::gua::math::vec3(0.0f, 0.0f, 0.0f);}
-      private:
-        void getListenerPosCB(const av::gua::SFMatrix::GetValueEvent& event);
-        void setListenerPosCB(const av::gua::SFMatrix::SetValueEvent& event);
-        
-        void getListenerVeloCB(const av::gua::SFVec3::GetValueEvent& event);
-        void setListenerVeloCB(const av::gua::SFVec3::SetValueEvent& event);
+    virtual void setListenerVelocity(const ::gua::math::vec3& /* velocity */) {}
+    virtual ::gua::math::vec3 getListenerVelocity() const { return ::gua::math::vec3(0.0f, 0.0f, 0.0f); }
 
-    };
-    using SFSoundRenderer = SingleField<Link<SoundRenderer> >;
-    using MFSoundRenderer = MultiField<Link<SoundRenderer> >;
-  }
+  private:
+    void getListenerPosCB(const av::gua::SFMatrix::GetValueEvent& event);
+    void setListenerPosCB(const av::gua::SFMatrix::SetValueEvent& event);
+
+    void getListenerVeloCB(const av::gua::SFVec3::GetValueEvent& event);
+    void setListenerVeloCB(const av::gua::SFVec3::SetValueEvent& event);
+};
+using SFSoundRenderer = SingleField<Link<SoundRenderer>>;
+using MFSoundRenderer = MultiField<Link<SoundRenderer>>;
+} // namespace sound
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_SOUND_DLL SingleField<Link<sound::SoundRenderer> >;
-  template class AV_SOUND_DLL MultiField<Link<sound::SoundRenderer> >;
+template class AV_SOUND_DLL SingleField<Link<sound::SoundRenderer>>;
+template class AV_SOUND_DLL MultiField<Link<sound::SoundRenderer>>;
 #endif
-}
+} // namespace av
 #endif /*AV_SOUND_SOUNDRENDERER_H*/

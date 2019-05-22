@@ -31,16 +31,13 @@
 
 namespace shade
 {
-  namespace parser
-  {
-    class ValueList;
-    class ScopeLayer;
+namespace parser
+{
+class ValueList;
+class ScopeLayer;
 
-    typedef boost::function
-    <
-      std::string (const std::string&, const ValueList&, const ScopeLayer& scope, std::ostream& error_log)
-    > FunctionCall;
-  }
-}
+typedef boost::function<std::string(const std::string&, const ValueList&, const ScopeLayer& scope, std::ostream& error_log)> FunctionCall;
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_FunctionCall_H */

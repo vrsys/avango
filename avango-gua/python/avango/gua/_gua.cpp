@@ -84,9 +84,6 @@
 #include "renderer/SPointsPassDescription.hpp"
 #include "renderer/SPointsLoader.hpp"
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-#include "renderer/DeferredVirtualTexturingPassDescription.hpp"
-#endif
 #include "renderer/TexturedQuadPassDescription.hpp"
 #include "renderer/DebugViewPassDescription.hpp"
 #include "renderer/BackgroundPassDescription.hpp"
@@ -125,6 +122,9 @@
 #include "utils/Ray.hpp"
 #include "utils/NamedSharedMemoryController.hpp"
 
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include "virtual_texturing/VTBackend.hpp"
+#endif
 
 #if defined(AVANGO_DISTRIBUTION_SUPPORT)
 #include "network/NetTransform.h"
@@ -133,22 +133,21 @@
 using namespace boost::python;
 using namespace av::python;
 
-
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-       using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
 BOOST_PYTHON_MODULE(_gua)
 {
     PyEval_InitThreads();
-
 
     av::gua::Init::initClass();
 
@@ -242,9 +241,6 @@ BOOST_PYTHON_MODULE(_gua)
     init_SPointsPassDescription();
     init_SPointsLoader();
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-    init_DeferredVirtualTexturingPassDescription();
-#endif
     init_TexturedQuadPassDescription();
     init_DebugViewPassDescription();
     init_BackgroundPassDescription();
@@ -262,6 +258,9 @@ BOOST_PYTHON_MODULE(_gua)
     init_Databases();
     init_TriMeshLoader();
     init_LineStripLoader();
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+    init_VTBackend();
+#endif
 #if defined(AVANGO_PBR_SUPPORT)
     init_PLODLoader();
     init_PLODPassDescription();
@@ -281,5 +280,4 @@ BOOST_PYTHON_MODULE(_gua)
     init_Logger();
     init_Ray();
     init_NamedSharedMemoryController();
-
 }

@@ -30,56 +30,53 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("TestFieldReferencing"));
+av::Logger& logger(av::getLogger("TestFieldReferencing"));
 
-  class MyObject : public av::FieldContainer
-  {
+class MyObject : public av::FieldContainer
+{
     AV_FC_DECLARE();
 
   public:
-
     MyObject(bool* deleted = 0);
     ~MyObject();
 
   private:
+    bool* mDeleted;
+};
 
-    bool *mDeleted;
+AV_FC_DEFINE(MyObject);
 
-  };
+MyObject::MyObject(bool* deleted) : FieldContainer(), mDeleted(deleted)
+{
+    if(mDeleted)
+        *mDeleted = false;
+}
 
-  AV_FC_DEFINE(MyObject);
+MyObject::~MyObject()
+{
+    if(mDeleted)
+        *mDeleted = true;
+}
 
-  MyObject::MyObject(bool* deleted) :
-    FieldContainer(),
-    mDeleted(deleted)
-  {
-    if (mDeleted) *mDeleted = false;
-  }
-
-  MyObject::~MyObject()
-  {
-    if (mDeleted) *mDeleted = true;
-  }
-
-  void MyObject::initClass()
-  {
-    if (!isTypeInitialized())
+void MyObject::initClass()
+{
+    if(!isTypeInitialized())
     {
-      av::FieldContainer::initClass();
-      AV_FC_INIT(av::FieldContainer, MyObject, true);
+        av::FieldContainer::initClass();
+        AV_FC_INIT(av::FieldContainer, MyObject, true);
     }
-  }
+}
 
-  TEST(fieldReferencing)
-  {
+TEST(fieldReferencing)
+{
     MyObject::initClass();
 
     bool src_deleted = false;
-    MyObject *src(new MyObject(&src_deleted));
+    MyObject* src(new MyObject(&src_deleted));
     src->reference();
 
     bool dst_deleted = false;
-    MyObject *dst(new MyObject(&dst_deleted));
+    MyObject* dst(new MyObject(&dst_deleted));
     dst->reference();
 
     AVANGO_LOG(logger, av::logging::INFO, "before connect");
@@ -100,27 +97,30 @@ namespace
 
     dst->unreference();
     AVANGO_LOG(logger, av::logging::INFO, "after dst unref");
-    if (!src_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
-    if (!dst_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
+    if(!src_deleted)
+        AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    if(!dst_deleted)
+        AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     src->unreference();
     AVANGO_LOG(logger, av::logging::INFO, "after src unref");
-    if (!src_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
-    if (!dst_deleted) AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
+    if(!src_deleted)
+        AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("src: %1%") % src->referenceCount()));
+    if(!dst_deleted)
+        AVANGO_LOG(logger, av::logging::INFO, boost::str(boost::format("dst: %1%") % dst->referenceCount()));
 
     // simulate application exit
     av::ApplicationInstance::get().exit(false);
 
     CHECK(src_deleted);
     CHECK(dst_deleted);
-  }
+}
 
 } // namespace
 
 int main()
 {
-  logger.addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+    logger.addConsoleAppender();
+    av::ApplicationInstance::get();
+    return UnitTest::RunAllTests();
 }
-

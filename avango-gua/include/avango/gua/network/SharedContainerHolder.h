@@ -35,29 +35,30 @@
 
 namespace av
 {
-  namespace gua
-  {
-    class NetTransform;
+namespace gua
+{
+class NetTransform;
 
-    class SharedContainerHolder : public av::FieldContainer {
+class SharedContainerHolder : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-      AV_FC_DECLARE();
+  public:
+    SharedContainerHolder();
+    virtual ~SharedContainerHolder();
 
-    public:
-      SharedContainerHolder();
-      virtual ~SharedContainerHolder();
+    MFContainer SharedContainers;
 
-      MFContainer SharedContainers;
+    void fieldHasChangedLocalSideEffect(const Field&);
+    void evaluateLocalSideEffect();
 
-      void fieldHasChangedLocalSideEffect(const Field&);
-      void evaluateLocalSideEffect();
+    void registerNetTransform(NetTransform* netMatrixTransform);
 
-      void registerNetTransform(NetTransform* netMatrixTransform);
-    private:
-      NetTransform* mNetTransform;
-      bool      mContainersChanged;
-    };
-  } // namespace gua
+  private:
+    NetTransform* mNetTransform;
+    bool mContainersChanged;
+};
+} // namespace gua
 
 } // namespace av
 

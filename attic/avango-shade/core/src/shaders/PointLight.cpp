@@ -26,17 +26,8 @@
 using namespace shade;
 using namespace shade::shaders;
 
-SHADE_CLASS_INIT(PointLight, "PointLight.glsl",
-    SHADE_NONE,
-    SHADE_ENV_DEFS(shade::application_stage, (position)(color))
-    SHADE_DEFS((transformed_position)))
+SHADE_CLASS_INIT(PointLight, "PointLight.glsl", SHADE_NONE, SHADE_ENV_DEFS(shade::application_stage, (position)(color)) SHADE_DEFS((transformed_position)))
 
-void_<> PointLight::illuminate(objref<> surface, vec3<> position)
-{
-  return invoke< shade::void_<> >("PointLight_illuminate_impl");
-}
+void_<> PointLight::illuminate(objref<> surface, vec3<> position) { return invoke<shade::void_<>>("PointLight_illuminate_impl"); }
 
-void_<> PointLight::transform(objref<> material)
-{
-  return invoke< shade::void_<> >("PointLight_transform_impl");
-}
+void_<> PointLight::transform(objref<> material) { return invoke<shade::void_<>>("PointLight_transform_impl"); }

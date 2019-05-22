@@ -8,33 +8,28 @@ using namespace boost::python;
 using namespace av::python;
 
 namespace boost
- {
-  namespace python
-   {
-    template <class T> struct pointee<av::Link<T> >
-     {
-      using type = T;
-     };
-   }
- }
+{
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    using type = T;
+};
+} // namespace python
+} // namespace boost
 
-av::Link<av::gua::PipelineDescription> create_default_pipeline_description() {
-  return av::Link<av::gua::PipelineDescription>(
-          new av::gua::PipelineDescription(
-            ::gua::PipelineDescription::make_default()
-          )
-        );
+av::Link<av::gua::PipelineDescription> create_default_pipeline_description()
+{
+    return av::Link<av::gua::PipelineDescription>(new av::gua::PipelineDescription(::gua::PipelineDescription::make_default()));
 }
 
 void init_PipelineDescription()
- {
-   register_ptr_to_python<av::Link<av::gua::PipelineDescription> >();
-  register_field<av::gua::SFPipelineDescription>("SFPipelineDescription");
-  register_multifield<av::gua::MFPipelineDescription>("MFPipelineDescription");
-  class_<av::gua::PipelineDescription,
-         av::Link<av::gua::PipelineDescription>,
-         bases<av::FieldContainer>, boost::noncopyable >("PipelineDescription", "docstring", no_init)
-         ;
+{
+    register_ptr_to_python<av::Link<av::gua::PipelineDescription>>();
+    register_field<av::gua::SFPipelineDescription>("SFPipelineDescription");
+    register_multifield<av::gua::MFPipelineDescription>("MFPipelineDescription");
+    class_<av::gua::PipelineDescription, av::Link<av::gua::PipelineDescription>, bases<av::FieldContainer>, boost::noncopyable>("PipelineDescription", "docstring", no_init);
 
-  def("create_default_pipeline_description", &create_default_pipeline_description);
- }
+    def("create_default_pipeline_description", &create_default_pipeline_description);
+}

@@ -25,56 +25,49 @@
 
 #include "avango/Semaphore.h"
 
-av::Semaphore::Semaphore(unsigned int initial)
+av::Semaphore::Semaphore(unsigned int initial) { mValue = initial; }
+
+av::Semaphore::~Semaphore() {}
+
+void av::Semaphore::wait()
 {
-  mValue = initial;
-}
+    boost::mutex::scoped_lock mLock(mMutex);
 
-av::Semaphore::~Semaphore()
-{}
-
-void
-av::Semaphore::wait()
-{
-  boost::mutex::scoped_lock mLock(mMutex);
-
-  --mValue;
-
-  while (mValue < 0) {
-    mCondition.wait(mLock);
-  }
-}
-
-int
-av::Semaphore::trywait()
-{
-  boost::mutex::scoped_lock mLock(mMutex);
-
-  if (mValue == 0)
-  {
-    return 0;
-  }
-  else
-  {
     --mValue;
-    return 1;
-  }
+
+    while(mValue < 0)
+    {
+        mCondition.wait(mLock);
+    }
 }
 
-void
-av::Semaphore::post()
+int av::Semaphore::trywait()
 {
-  boost::mutex::scoped_lock mLock(mMutex);
+    boost::mutex::scoped_lock mLock(mMutex);
 
-  ++mValue;
-  mLock.unlock();
-  mCondition.notify_one();
+    if(mValue == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        --mValue;
+        return 1;
+    }
 }
 
-int
-av::Semaphore::snapshot()
+void av::Semaphore::post()
 {
-  boost::mutex::scoped_lock mLock(mMutex);
-  int result = mValue;
-  return result;
+    boost::mutex::scoped_lock mLock(mMutex);
+
+    ++mValue;
+    mLock.unlock();
+    mCondition.notify_one();
+}
+
+int av::Semaphore::snapshot()
+{
+    boost::mutex::scoped_lock mLock(mMutex);
+    int result = mValue;
+    return result;
 }

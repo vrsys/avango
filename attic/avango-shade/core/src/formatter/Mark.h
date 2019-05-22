@@ -26,14 +26,14 @@
 
 namespace shade
 {
-  namespace formatter
-  {
-    class Mark
-    {
-    public:
-      virtual ~Mark(void) {};
-    };
-  }
-}
+namespace formatter
+{
+class Mark
+{
+  public:
+    virtual ~Mark(void){};
+};
+} // namespace formatter
+} // namespace shade
 
 #endif /* shade_formatter_Mark */

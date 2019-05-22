@@ -3,4 +3,4 @@
 
 void init_OculusWindow();
 
-#endif //AV_PYTHON_OCULUS_OCULUSWINDOW_HPP
+#endif // AV_PYTHON_OCULUS_OCULUSWINDOW_HPP

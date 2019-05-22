@@ -27,41 +27,20 @@
 
 void render_teapot(void)
 {
-  glBegin(GL_TRIANGLES);
-  for (int i = 0; i != TEAPOT_NUM_INDICES; ++i)
-  {
-    int offset = 16*teapot_indices[i];
+    glBegin(GL_TRIANGLES);
+    for(int i = 0; i != TEAPOT_NUM_INDICES; ++i)
+    {
+        int offset = 16 * teapot_indices[i];
 
-    glTexCoord2f(
-        teapot_verts[offset+4],
-        teapot_verts[offset+5]
-        );
+        glTexCoord2f(teapot_verts[offset + 4], teapot_verts[offset + 5]);
 
-    glMultiTexCoord3f(
-        GL_TEXTURE1,
-        teapot_verts[offset+6],
-        teapot_verts[offset+7],
-        teapot_verts[offset+8]
-        );
+        glMultiTexCoord3f(GL_TEXTURE1, teapot_verts[offset + 6], teapot_verts[offset + 7], teapot_verts[offset + 8]);
 
-    glMultiTexCoord3f(
-        GL_TEXTURE2,
-        teapot_verts[offset+9],
-        teapot_verts[offset+10],
-        teapot_verts[offset+11]
-        );
+        glMultiTexCoord3f(GL_TEXTURE2, teapot_verts[offset + 9], teapot_verts[offset + 10], teapot_verts[offset + 11]);
 
-    glNormal3f(
-        teapot_verts[offset+12],
-        teapot_verts[offset+13],
-        teapot_verts[offset+14]
-        );
+        glNormal3f(teapot_verts[offset + 12], teapot_verts[offset + 13], teapot_verts[offset + 14]);
 
-    glVertex3f(
-        teapot_verts[offset+0],
-        teapot_verts[offset+1],
-        teapot_verts[offset+2]
-        );
-  }
-  glEnd();
+        glVertex3f(teapot_verts[offset + 0], teapot_verts[offset + 1], teapot_verts[offset + 2]);
+    }
+    glEnd();
 }

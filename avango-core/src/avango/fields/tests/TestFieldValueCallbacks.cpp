@@ -36,67 +36,47 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("TestFieldValueCallbacks"));
+av::Logger& logger(av::getLogger("TestFieldValueCallbacks"));
 
-  class MyObject : public av::BoolObject
-  {
+class MyObject : public av::BoolObject
+{
     AV_FC_DECLARE();
 
   public:
-
     av::MFBool Values;
 
-    MyObject() :
-      mValue(false)
+    MyObject() : mValue(false)
     {
-      AV_FC_ADD_ADAPTOR_FIELD(Value,
-                              std::bind(&MyObject::getValueCallback, this, std::placeholders::_1),
-                              std::bind(&MyObject::setValueCallback, this, std::placeholders::_1));
-      AV_FC_ADD_ADAPTOR_FIELD(Values,
-                              std::bind(&MyObject::getValuesCallback, this, std::placeholders::_1),
-                              std::bind(&MyObject::setValuesCallback, this, std::placeholders::_1));
+        AV_FC_ADD_ADAPTOR_FIELD(Value, std::bind(&MyObject::getValueCallback, this, std::placeholders::_1), std::bind(&MyObject::setValueCallback, this, std::placeholders::_1));
+        AV_FC_ADD_ADAPTOR_FIELD(Values, std::bind(&MyObject::getValuesCallback, this, std::placeholders::_1), std::bind(&MyObject::setValuesCallback, this, std::placeholders::_1));
     }
 
     bool mValue;
     std::vector<bool> mValues;
 
   private:
+    void getValueCallback(av::SFBool::GetValueEvent event) { *(event.getValuePtr()) = mValue; }
 
-    void getValueCallback(av::SFBool::GetValueEvent event)
+    void setValueCallback(av::SFBool::SetValueEvent event) { mValue = event.getValue(); }
+
+    void getValuesCallback(av::MFBool::GetValueEvent event) { *(event.getValuePtr()) = mValues; }
+
+    void setValuesCallback(av::MFBool::SetValueEvent event) { mValues = event.getValue(); }
+};
+
+AV_FC_DEFINE(MyObject);
+
+void MyObject::initClass()
+{
+    if(!isTypeInitialized())
     {
-      *(event.getValuePtr()) = mValue;
+        av::BoolObject::initClass();
+        AV_FC_INIT(av::BoolObject, MyObject, true);
     }
+}
 
-    void setValueCallback(av::SFBool::SetValueEvent event)
-    {
-      mValue = event.getValue();
-    }
-
-    void getValuesCallback(av::MFBool::GetValueEvent event)
-    {
-      *(event.getValuePtr()) = mValues;
-    }
-
-    void setValuesCallback(av::MFBool::SetValueEvent event)
-    {
-      mValues = event.getValue();
-    }
-
-  };
-
-  AV_FC_DEFINE(MyObject);
-
-  void MyObject::initClass()
-  {
-    if (!isTypeInitialized())
-    {
-      av::BoolObject::initClass();
-      AV_FC_INIT(av::BoolObject, MyObject, true);
-    }
-  }
-
-  TEST(fieldValueValue)
-  {
+TEST(fieldValueValue)
+{
     MyObject::initClass();
     av::Link<MyObject> obj(new MyObject);
 
@@ -121,13 +101,13 @@ namespace
     obj->Values.clear();
     CHECK(obj->Values.isEmpty());
     CHECK(obj->mValues.empty());
-  }
+}
 
 } // namespace
 
 int main()
 {
-  logger.addConsoleAppender();
-  av::ApplicationInstance::get();
-  return UnitTest::RunAllTests();
+    logger.addConsoleAppender();
+    av::ApplicationInstance::get();
+    return UnitTest::RunAllTests();
 }

@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::PipelinePassDescription"));
+av::Logger& logger(av::getLogger("av::gua::PipelinePassDescription"));
 }
 
 AV_FC_DEFINE_ABSTRACT(av::gua::PipelinePassDescription);
@@ -14,17 +14,13 @@ AV_FC_DEFINE_ABSTRACT(av::gua::PipelinePassDescription);
 AV_FIELD_DEFINE(av::gua::SFPipelinePassDescription);
 AV_FIELD_DEFINE(av::gua::MFPipelinePassDescription);
 
-av::gua::PipelinePassDescription::PipelinePassDescription(
-  std::shared_ptr< ::gua::PipelinePassDescription> const& guaPipelinePassDescription)
-    : m_guaPipelinePassDescription(guaPipelinePassDescription)
+av::gua::PipelinePassDescription::PipelinePassDescription(std::shared_ptr<::gua::PipelinePassDescription> const& guaPipelinePassDescription) : m_guaPipelinePassDescription(guaPipelinePassDescription)
 {
-
 }
 
-void
-av::gua::PipelinePassDescription::initClass()
+void av::gua::PipelinePassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::FieldContainer::initClass();
 
@@ -36,11 +32,4 @@ av::gua::PipelinePassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::PipelinePassDescription> const&
-av::gua::PipelinePassDescription::getGuaPipelinePassDescription() const
-{
-    return m_guaPipelinePassDescription;
-}
-
-
+std::shared_ptr<::gua::PipelinePassDescription> const& av::gua::PipelinePassDescription::getGuaPipelinePassDescription() const { return m_guaPipelinePassDescription; }

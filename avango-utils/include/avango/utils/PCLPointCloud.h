@@ -20,48 +20,41 @@
 
 namespace av
 {
-  namespace utils
-  {
+namespace utils
+{
+class AV_UTILS_DLL PCLPointCloud : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    class AV_UTILS_DLL PCLPointCloud : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+  public:
+    PCLPointCloud();
 
-    public:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~PCLPointCloud();
 
-      PCLPointCloud();
+    /* virtual */ void fieldHasChanged(const av::Field& field);
+    /* virtual */ void evaluate();
 
-    protected:
+  public:
+    av::SFString Filename;
+    av::osg::MFVec3 Points;
+    av::osg::MFVec4 Colors;
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~PCLPointCloud();
+  private:
+    void loadPCDFile(std::string filename);
+};
 
-      /* virtual */ void fieldHasChanged(const av::Field& field);
-      /* virtual */ void evaluate();
-
-    public:
-
-      av::SFString Filename;
-      av::osg::MFVec3 Points;
-      av::osg::MFVec4 Colors;
-
-    private:
-
-      void loadPCDFile(std::string filename);
-
-    };
-
-    using SFPCLPointCloud = SingleField<Link<PCLPointCloud> >;
-    using MFPCLPointCloud = MultiField<Link<PCLPointCloud> >;
-  }
+using SFPCLPointCloud = SingleField<Link<PCLPointCloud>>;
+using MFPCLPointCloud = MultiField<Link<PCLPointCloud>>;
+} // namespace utils
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_UTILS_DLL SingleField<Link<utils::PCLPointCloud> >;
-  template class AV_UTILS_DLL MultiField<Link<utils::PCLPointCloud> >;
+template class AV_UTILS_DLL SingleField<Link<utils::PCLPointCloud>>;
+template class AV_UTILS_DLL MultiField<Link<utils::PCLPointCloud>>;
 #endif
-}
-
+} // namespace av
 
 #endif /* PCLPOINTCLOUD_H_ */

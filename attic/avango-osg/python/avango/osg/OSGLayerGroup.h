@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_LAYERGROUP
 #define AV_PYTHON_OSG_LAYERGROUP
 

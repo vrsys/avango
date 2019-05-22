@@ -26,7 +26,6 @@
 #if !defined(AV_DAEMON_DEVICESENSOR_H)
 #define AV_DAEMON_DEVICESENSOR_H
 
-
 /**
  * \file
  * \ingroup av_daemon
@@ -40,202 +39,198 @@
 
 namespace av
 {
-  namespace daemon
-  {
+namespace daemon
+{
+/**
+ * Communicates with DeviceService and provides input data
+ * of the device the associated DeviceService is connected with.
+ * Depending on how the corresponding device is configured
+ * the data is provided via fields for Values, Buttons, LEDs and
+ * a Matrix.
+ *
+ * Note: A sensor can only be used to readout input data. Setting
+ * field values by hand will have no effect. To send commands
+ * to a device you should use an actuator.
+ *
+ * \ingroup av_daemon
+ */
+class AV_DAEMON_DLL DeviceSensor : public FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
+    DeviceSensor();
+    virtual ~DeviceSensor();
+
     /**
-     * Communicates with DeviceService and provides input data
-     * of the device the associated DeviceService is connected with.
-     * Depending on how the corresponding device is configured
-     * the data is provided via fields for Values, Buttons, LEDs and
-     * a Matrix.
-     *
-     * Note: A sensor can only be used to readout input data. Setting
-     * field values by hand will have no effect. To send commands
-     * to a device you should use an actuator.
-     *
-     * \ingroup av_daemon
+     * Name of device service to communicate with.
      */
-    class AV_DAEMON_DLL DeviceSensor : public FieldContainer
-    {
+    SFDeviceService DeviceService;
 
-      AV_FC_DECLARE();
+    /**
+     * Name of station to connect with.
+     */
+    SFString Station;
 
-    public:
+    /**
+     * Reset station values to '0' after read.
+     */
+    SFBool ResetValuesOnRead;
 
-      DeviceSensor();
-      virtual ~DeviceSensor();
+    /**
+     * Transformation matrix provided by given station (read-only).
+     */
+    av::gua::SFMatrix Matrix;
 
-      /**
-       * Name of device service to communicate with.
-       */
-      SFDeviceService DeviceService;
+    /**
+     * Read-only fields: Button states of connected station.
+     */
+    SFBool Button0;
+    SFBool Button1;
+    SFBool Button2;
+    SFBool Button3;
+    SFBool Button4;
+    SFBool Button5;
+    SFBool Button6;
+    SFBool Button7;
+    SFBool Button8;
+    SFBool Button9;
+    SFBool Button10;
+    SFBool Button11;
+    SFBool Button12;
+    SFBool Button13;
+    SFBool Button14;
+    SFBool Button15;
+    SFBool Button16;
+    SFBool Button17;
+    SFBool Button18;
+    SFBool Button19;
+    SFBool Button20;
+    SFBool Button21;
+    SFBool Button22;
+    SFBool Button23;
+    SFBool Button24;
+    SFBool Button25;
+    SFBool Button26;
+    SFBool Button27;
+    SFBool Button28;
+    SFBool Button29;
+    SFBool Button30;
+    SFBool Button31;
 
-      /**
-       * Name of station to connect with.
-       */
-      SFString Station;
+    /**
+     * Read-only fields: Value states of connected station.
+     */
+    SFFloat Value0;
+    SFFloat Value1;
+    SFFloat Value2;
+    SFFloat Value3;
+    SFFloat Value4;
+    SFFloat Value5;
+    SFFloat Value6;
+    SFFloat Value7;
+    SFFloat Value8;
+    SFFloat Value9;
+    SFFloat Value10;
+    SFFloat Value11;
+    SFFloat Value12;
+    SFFloat Value13;
+    SFFloat Value14;
+    SFFloat Value15;
 
-      /**
-       * Reset station values to '0' after read.
-       */
-      SFBool   ResetValuesOnRead;
+    /**
+     * Read-only fields: LED states of connected station.
+     */
+    SFBool LED0;
+    SFBool LED1;
+    SFBool LED2;
+    SFBool LED3;
+    SFBool LED4;
+    SFBool LED5;
+    SFBool LED6;
+    SFBool LED7;
+    SFBool LED8;
+    SFBool LED9;
+    SFBool LED10;
+    SFBool LED11;
+    SFBool LED12;
+    SFBool LED13;
+    SFBool LED14;
+    SFBool LED15;
 
-      /**
-       * Transformation matrix provided by given station (read-only).
-       */
-      av::gua::SFMatrix  Matrix;
+    /**
+     * Tracker to world transformation.
+     */
+    av::gua::SFMatrix TransmitterOffset;
 
-      /**
-       * Read-only fields: Button states of connected station.
-       */
-      SFBool   Button0;
-      SFBool   Button1;
-      SFBool   Button2;
-      SFBool   Button3;
-      SFBool   Button4;
-      SFBool   Button5;
-      SFBool   Button6;
-      SFBool   Button7;
-      SFBool   Button8;
-      SFBool   Button9;
-      SFBool   Button10;
-      SFBool   Button11;
-      SFBool   Button12;
-      SFBool   Button13;
-      SFBool   Button14;
-      SFBool   Button15;
-      SFBool   Button16;
-      SFBool   Button17;
-      SFBool   Button18;
-      SFBool   Button19;
-      SFBool   Button20;
-      SFBool   Button21;
-      SFBool   Button22;
-      SFBool   Button23;
-      SFBool   Button24;
-      SFBool   Button25;
-      SFBool   Button26;
-      SFBool   Button27;
-      SFBool   Button28;
-      SFBool   Button29;
-      SFBool   Button30;
-      SFBool   Button31;
+    /**
+     * Sensor to device transformation.
+     */
+    av::gua::SFMatrix ReceiverOffset;
 
-      /**
-       * Read-only fields: Value states of connected station.
-       */
-      SFFloat  Value0;
-      SFFloat  Value1;
-      SFFloat  Value2;
-      SFFloat  Value3;
-      SFFloat  Value4;
-      SFFloat  Value5;
-      SFFloat  Value6;
-      SFFloat  Value7;
-      SFFloat  Value8;
-      SFFloat  Value9;
-      SFFloat  Value10;
-      SFFloat  Value11;
-      SFFloat  Value12;
-      SFFloat  Value13;
-      SFFloat  Value14;
-      SFFloat  Value15;
+    /**
+     * Device rotation (read-only).
+     */
+    av::gua::SFQuat Rotation;
 
-      /**
-       * Read-only fields: LED states of connected station.
-       */
-      SFBool   LED0;
-      SFBool   LED1;
-      SFBool   LED2;
-      SFBool   LED3;
-      SFBool   LED4;
-      SFBool   LED5;
-      SFBool   LED6;
-      SFBool   LED7;
-      SFBool   LED8;
-      SFBool   LED9;
-      SFBool   LED10;
-      SFBool   LED11;
-      SFBool   LED12;
-      SFBool   LED13;
-      SFBool   LED14;
-      SFBool   LED15;
+    /**
+     * Device translation (read-only).
+     */
+    av::gua::SFVec3 Translation;
 
-      /**
-       * Tracker to world transformation.
-       */
-      av::gua::SFMatrix TransmitterOffset;
+    /* virtual */ void evaluate();
 
-      /**
-       * Sensor to device transformation.
-       */
-      av::gua::SFMatrix ReceiverOffset;
+  private:
+    /**
+     * Update matrix if changed.
+     */
+    void updateMatrix();
 
-      /**
-       * Device rotation (read-only).
-       */
-      av::gua::SFQuat   Rotation;
+    /**
+     * Update button states if changed.
+     */
+    void updateButtons();
 
-      /**
-       * Device translation (read-only).
-       */
-      av::gua::SFVec3   Translation;
+    /**
+     * Update value states if changed.
+     */
+    void updateValues();
 
-      /* virtual */ void evaluate();
+    /**
+     * Update LED states if changed.
+     */
+    void updateLEDs();
 
-    private:
+    /**
+     * Readout Matrix provided by a specific device.
+     */
+    void getMatrix(::gua::math::mat4&);
 
-      /**
-       * Update matrix if changed.
-       */
-      void updateMatrix();
+    /**
+     * Readout state of a specified Button provided by a specific device station.
+     */
+    bool getButton(int b);
 
-      /**
-       * Update button states if changed.
-       */
-      void updateButtons();
+    /**
+     * Readout state of a specified LED provided by a specific device station.
+     */
+    bool getLED(int l);
 
-      /**
-       * Update value states if changed.
-       */
-      void updateValues();
+    /**
+     * Readout state of a specified Value provided by a specific device station.
+     */
+    float getValue(int v);
 
-      /**
-       * Update LED states if changed.
-       */
-      void updateLEDs();
+    /**
+     * Set state of a specified LED.
+     */
+    void setLED(int l, bool val);
 
-      /**
-       * Readout Matrix provided by a specific device.
-       */
-      void getMatrix(::gua::math::mat4&);
-
-      /**
-       * Readout state of a specified Button provided by a specific device station.
-       */
-      bool getButton(int b);
-
-      /**
-       * Readout state of a specified LED provided by a specific device station.
-       */
-      bool getLED(int l);
-
-      /**
-       * Readout state of a specified Value provided by a specific device station.
-       */
-      float getValue(int v);
-
-      /**
-       * Set state of a specified LED.
-       */
-      void setLED(int l, bool val);
-
-      static const int sMaxButtons = 32;
-      static const int sMaxLEDs = 16;
-      static const int sMaxValues = 16;
-
-    };
-  }
-}
+    static const int sMaxButtons = 32;
+    static const int sMaxLEDs = 16;
+    static const int sMaxValues = 16;
+};
+} // namespace daemon
+} // namespace av
 
 #endif

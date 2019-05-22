@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::TexturedQuadPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::TexturedQuadPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::TexturedQuadPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::TexturedQuadPassDescription);
 AV_FIELD_DEFINE(av::gua::SFTexturedQuadPassDescription);
 AV_FIELD_DEFINE(av::gua::MFTexturedQuadPassDescription);
 
-av::gua::TexturedQuadPassDescription::TexturedQuadPassDescription(
-  std::shared_ptr< ::gua::TexturedQuadPassDescription> const& guaTexturedQuadPassDescription)
-    : PipelinePassDescription(guaTexturedQuadPassDescription)
-    , m_guaTexturedQuadPassDescription(guaTexturedQuadPassDescription)
+av::gua::TexturedQuadPassDescription::TexturedQuadPassDescription(std::shared_ptr<::gua::TexturedQuadPassDescription> const& guaTexturedQuadPassDescription)
+    : PipelinePassDescription(guaTexturedQuadPassDescription), m_guaTexturedQuadPassDescription(guaTexturedQuadPassDescription)
 {
-
 }
 
-void
-av::gua::TexturedQuadPassDescription::initClass()
+void av::gua::TexturedQuadPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::TexturedQuadPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::TexturedQuadPassDescription> const&
-av::gua::TexturedQuadPassDescription::getGuaTexturedQuadPassDescription() const
-{
-    return m_guaTexturedQuadPassDescription;
-}
-
-
+std::shared_ptr<::gua::TexturedQuadPassDescription> const& av::gua::TexturedQuadPassDescription::getGuaTexturedQuadPassDescription() const { return m_guaTexturedQuadPassDescription; }

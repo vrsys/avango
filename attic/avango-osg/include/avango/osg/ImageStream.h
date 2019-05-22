@@ -36,72 +36,66 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::ImageStream OsgImageStream;
+namespace osg
+{
+typedef ::osg::ImageStream OsgImageStream;
+
+/**
+ * Abstract Wrapper for ::osg::ImageStream
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL ImageStream : public Image
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor.
+     */
+    ImageStream(OsgImageStream* osgimage = new OsgImageStream);
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~ImageStream();
+
+  public:
+    /**
+     * Should the video be looped
+     */
+    SFBool Loop;
 
     /**
-     * Abstract Wrapper for ::osg::ImageStream
-     *
-     * \ingroup av_osg
+     * Status might be INVALID, PLAYING, PAUSED, or REWINDING
      */
-    class AV_OSG_DLL ImageStream : public Image
-    {
-      AV_FC_DECLARE();
+    SFInt Status;
 
-    public:
+    /**
+     * Get the wrapped ::osg::ImageStream object.
+     * \return a pointer to the imagestream object
+     */
+    ::osg::ImageStream* getOsgImageStream() const;
 
-      /**
-       * Constructor.
-       */
-      ImageStream(OsgImageStream* osgimage = new OsgImageStream);
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::ImageStream* mOsgImageStream;
 
-    protected:
+  protected:
+    virtual void getLoopCB(const av::SFBool::GetValueEvent& event);
+    virtual void setLoopCB(const av::SFBool::SetValueEvent& event);
+    virtual void getStatusCB(const av::SFInt::GetValueEvent& event);
+    virtual void setStatusCB(const av::SFInt::SetValueEvent& event);
+};
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~ImageStream();
-
-    public:
-
-      /**
-       * Should the video be looped 
-       */
-      SFBool Loop;
-
-      /**
-       * Status might be INVALID, PLAYING, PAUSED, or REWINDING
-       */
-      SFInt Status;
-
-      /**
-       * Get the wrapped ::osg::ImageStream object.
-       * \return a pointer to the imagestream object
-       */
-      ::osg::ImageStream* getOsgImageStream() const;
-
-    private:
-
-      ::osg::ImageStream* mOsgImageStream;
-
-    protected:
-
-      virtual void getLoopCB(const av::SFBool::GetValueEvent& event);
-      virtual void setLoopCB(const av::SFBool::SetValueEvent& event);
-      virtual void getStatusCB(const av::SFInt::GetValueEvent& event);
-      virtual void setStatusCB(const av::SFInt::SetValueEvent& event);
-
-    };
-
-    typedef SingleField<Link<ImageStream> > SFImageStream;
-    typedef MultiField<Link<ImageStream> > MFImageStream;
-  } // namespace osg
+typedef SingleField<Link<ImageStream>> SFImageStream;
+typedef MultiField<Link<ImageStream>> MFImageStream;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::ImageStream> >;
-  template class AV_OSG_DLL MultiField<Link<osg::ImageStream> >;
+template class AV_OSG_DLL SingleField<Link<osg::ImageStream>>;
+template class AV_OSG_DLL MultiField<Link<osg::ImageStream>>;
 #endif
 
 } // namespace av

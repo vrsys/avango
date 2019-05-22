@@ -38,18 +38,18 @@ class Maestro_ClSv_Options;
 
 namespace av
 {
-  //
-  // NetGroup -- interface to ensemble, contain all Maestro include files,
-  //                 bridge the process barrier for the callbacks.
-  //
+//
+// NetGroup -- interface to ensemble, contain all Maestro include files,
+//                 bridge the process barrier for the callbacks.
+//
 
-  // This class implements the ensemble group member
+// This class implements the ensemble group member
 
-  class NetGroup : public MaestroMerge {
+class NetGroup : public MaestroMerge
+{
   public:
-
     // create a new group member and join the named group
-    NetGroup(NetNode* netNode, Maestro_ClSv_Options &options);
+    NetGroup(NetNode* netNode, Maestro_ClSv_Options& options);
 
     // destroy this group member and leave the group
     ~NetGroup();
@@ -57,12 +57,11 @@ namespace av
     UpcallSerializer& upcallSerializer();
 
     // Sending messages.
-    virtual void cast(Msg &msg);
+    virtual void cast(Msg& msg);
 
-    virtual void send(const std::string &destEID, Msg &msg);
+    virtual void send(const std::string& destEID, Msg& msg);
 
   private:
-
     // the NetNode which created us
     NetNode* mNetNode;
 
@@ -74,8 +73,8 @@ namespace av
     virtual void Merge_RemoveState_Callback(Maestro_EndpID& fragment);
 
     // Message callbacks:
-    virtual void Merge_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_Message &msg);
-    virtual void Merge_ReceiveSend_Callback(Maestro_EndpID &origin, Maestro_Message &msg);
+    virtual void Merge_ReceiveCast_Callback(Maestro_EndpID& origin, Maestro_Message& msg);
+    virtual void Merge_ReceiveSend_Callback(Maestro_EndpID& origin, Maestro_Message& msg);
 
     // view change callbacks
     virtual void Merge_AcceptedView_Callback(MaestroMergeViewData&, Maestro_Message&);
@@ -89,15 +88,12 @@ namespace av
     virtual void Merge_Exit_Callback();
 
   private:
-
     // declared but never defined
-    //NetGroup();
-    //NetGroup(const NetGroup&);
-    //const NetGroup& operator= (const NetGroup&);
-
-  };
+    // NetGroup();
+    // NetGroup(const NetGroup&);
+    // const NetGroup& operator= (const NetGroup&);
+};
 
 } // namespace av
 
 #endif // #if !defined(AVANGO_NETGROUP_H)
-

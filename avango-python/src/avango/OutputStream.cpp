@@ -38,36 +38,24 @@ using namespace av::python;
 
 namespace
 {
-
 class StringOutputStream : public av::OutputStream
 {
-private:
-  std::ostringstream strstream;
+  private:
+    std::ostringstream strstream;
 
-public:
-  StringOutputStream()
-  {
-    rdbuf(strstream.rdbuf());
-  }
+  public:
+    StringOutputStream() { rdbuf(strstream.rdbuf()); }
 
-  std::string get_buffer()
-  {
-    return strstream.str();
-  }
+    std::string get_buffer() { return strstream.str(); }
 
-  void set_buffer(const std::string buffer)
-  {
-    strstream << buffer;
-  }
+    void set_buffer(const std::string buffer) { strstream << buffer; }
 };
 
-}
+} // namespace
 
 void init_OutputStream(void)
 {
-  class_<av::OutputStream, boost::noncopyable>("OutputStream", "docstring");
+    class_<av::OutputStream, boost::noncopyable>("OutputStream", "docstring");
 
-  class_<StringOutputStream, bases<av::OutputStream>, boost::noncopyable>("StringOutputStream", "docstring")
-  .add_property("buffer", &StringOutputStream::get_buffer, &StringOutputStream::set_buffer)
-  ;
+    class_<StringOutputStream, bases<av::OutputStream>, boost::noncopyable>("StringOutputStream", "docstring").add_property("buffer", &StringOutputStream::get_buffer, &StringOutputStream::set_buffer);
 }

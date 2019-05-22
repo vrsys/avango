@@ -30,7 +30,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Billboard"));
+av::Logger& logger(av::getLogger("av::osg::Billboard"));
 }
 
 AV_FC_DEFINE(av::osg::Billboard);
@@ -38,77 +38,38 @@ AV_FC_DEFINE(av::osg::Billboard);
 AV_FIELD_DEFINE(av::osg::SFBillboard);
 AV_FIELD_DEFINE(av::osg::MFBillboard);
 
-av::osg::Billboard::Billboard(::osg::Billboard* osgbillboard) :
-  Geode(osgbillboard),
-  mOsgBillboard(osgbillboard)
+av::osg::Billboard::Billboard(::osg::Billboard* osgbillboard) : Geode(osgbillboard), mOsgBillboard(osgbillboard)
 {
-   AV_FC_ADD_ADAPTOR_FIELD(Mode,
-                         boost::bind(&Billboard::getModeCB, this, _1),
-                         boost::bind(&Billboard::setModeCB, this, _1));
-   AV_FC_ADD_ADAPTOR_FIELD(Axis,
-                         boost::bind(&Billboard::getAxisCB, this, _1),
-                         boost::bind(&Billboard::setAxisCB, this, _1));
-   AV_FC_ADD_ADAPTOR_FIELD(Normal,
-                         boost::bind(&Billboard::getNormalCB, this, _1),
-                         boost::bind(&Billboard::setNormalCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Mode, boost::bind(&Billboard::getModeCB, this, _1), boost::bind(&Billboard::setModeCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Axis, boost::bind(&Billboard::getAxisCB, this, _1), boost::bind(&Billboard::setAxisCB, this, _1));
+    AV_FC_ADD_ADAPTOR_FIELD(Normal, boost::bind(&Billboard::getNormalCB, this, _1), boost::bind(&Billboard::setNormalCB, this, _1));
 }
 
-av::osg::Billboard::~Billboard()
-{}
+av::osg::Billboard::~Billboard() {}
 
-void
-av::osg::Billboard::initClass()
+void av::osg::Billboard::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::osg::Geode::initClass();
+    if(!isTypeInitialized())
+    {
+        av::osg::Geode::initClass();
 
-    AV_FC_INIT(av::osg::Geode, av::osg::Billboard, true);
+        AV_FC_INIT(av::osg::Geode, av::osg::Billboard, true);
 
-    SFBillboard::initClass("av::osg::SFBillboard", "av::Field");
-    MFBillboard::initClass("av::osg::MFBillboard", "av::Field");
-  }
+        SFBillboard::initClass("av::osg::SFBillboard", "av::Field");
+        MFBillboard::initClass("av::osg::MFBillboard", "av::Field");
+    }
 }
 
-osg::Billboard*
-av::osg::Billboard::getOsgBillboard() const
-{
-  return mOsgBillboard;
-}
+osg::Billboard* av::osg::Billboard::getOsgBillboard() const { return mOsgBillboard; }
 
+/* virtual */ void av::osg::Billboard::getModeCB(const SFUInt::GetValueEvent& event) { *(event.getValuePtr()) = mOsgBillboard->getMode(); }
 
-/* virtual */ void
-av::osg::Billboard::getModeCB(const SFUInt::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgBillboard->getMode();
-}
+/* virtual */ void av::osg::Billboard::setModeCB(const SFUInt::SetValueEvent& event) { mOsgBillboard->setMode(static_cast<::osg::Billboard::Mode>(event.getValue())); }
 
-/* virtual */ void
-av::osg::Billboard::setModeCB(const SFUInt::SetValueEvent& event)
-{
-  mOsgBillboard->setMode(static_cast< ::osg::Billboard::Mode>(event.getValue()));
-}
+/* virtual */ void av::osg::Billboard::getAxisCB(const av::osg::SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = mOsgBillboard->getAxis(); }
 
-/* virtual */ void
-av::osg::Billboard::getAxisCB(const av::osg::SFVec3::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgBillboard->getAxis();
-}
+/* virtual */ void av::osg::Billboard::setAxisCB(const av::osg::SFVec3::SetValueEvent& event) { mOsgBillboard->setAxis(event.getValue()); }
 
-/* virtual */ void
-av::osg::Billboard::setAxisCB(const av::osg::SFVec3::SetValueEvent& event)
-{
-  mOsgBillboard->setAxis(event.getValue());
-}
+/* virtual */ void av::osg::Billboard::getNormalCB(const av::osg::SFVec3::GetValueEvent& event) { *(event.getValuePtr()) = mOsgBillboard->getNormal(); }
 
-/* virtual */ void
-av::osg::Billboard::getNormalCB(const av::osg::SFVec3::GetValueEvent& event)
-{
-  *(event.getValuePtr()) = mOsgBillboard->getNormal();
-}
-
-/* virtual */ void
-av::osg::Billboard::setNormalCB(const av::osg::SFVec3::SetValueEvent& event)
-{
-  mOsgBillboard->setNormal(event.getValue());
-}
+/* virtual */ void av::osg::Billboard::setNormalCB(const av::osg::SFVec3::SetValueEvent& event) { mOsgBillboard->setNormal(event.getValue()); }

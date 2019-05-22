@@ -21,9 +21,6 @@
 #include <avango/gua/renderer/SPointsLoader.hpp>
 #include <avango/gua/renderer/SPointsPassDescription.hpp>
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-#include <avango/gua/renderer/DeferredVirtualTexturingPassDescription.hpp>
-#endif
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/scenegraph/PBRNode.hpp>
 #include <avango/gua/scenegraph/PLODNode.hpp>
@@ -80,6 +77,10 @@
 #include <avango/gua/renderer/TV_3VolumePassDescription.hpp>
 #endif
 
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+#include <avango/gua/virtual_texturing/VTBackend.hpp>
+#endif
+
 #include <avango/gua/renderer/WindowBase.hpp>
 #include <avango/gua/renderer/Window.hpp>
 #include <avango/gua/renderer/HeadlessSurface.hpp>
@@ -121,17 +122,16 @@
 
 namespace
 {
-    av::Logger& logger(av::getLogger("av::gua::Init"));
+av::Logger& logger(av::getLogger("av::gua::Init"));
 }
 
 AV_TYPED_DEFINE_ABSTRACT(av::gua::Init);
 
-/* static */ void
-av::gua::Init::initClass()
+/* static */ void av::gua::Init::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
-		char** argv;
+        char** argv;
         ::gua::init(1, argv);
         av::gua::initFields();
 
@@ -141,7 +141,7 @@ av::gua::Init::initClass()
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
-        av::gua::LineStripNode::initClass();        
+        av::gua::LineStripNode::initClass();
         av::gua::DepthMapNode::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -213,9 +213,6 @@ av::gua::Init::initClass()
         av::gua::SPointsLoader::initClass();
         av::gua::SPointsPassDescription::initClass();
 #endif
-#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
-        av::gua::DeferredVirtualTexturingPassDescription::initClass();
-#endif
         av::gua::TexturedQuadPassDescription::initClass();
         av::gua::DebugViewPassDescription::initClass();
         av::gua::BackgroundPassDescription::initClass();
@@ -233,6 +230,10 @@ av::gua::Init::initClass()
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         av::gua::LineStripLoader::initClass();
+
+#if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
+        av::gua::VTBackend::initClass();
+#endif
 
 #if defined(AVANGO_PBR_SUPPORT)
         // av::gua::PBRLoader::initClass();
@@ -255,7 +256,6 @@ av::gua::Init::initClass()
         av::gua::Ray::initClass();
 
         av::gua::NamedSharedMemoryController::initClass();
-
 
         AV_TYPED_INIT_ABSTRACT(av::Type::badType(), "av::gua::Init", true);
     }

@@ -23,29 +23,16 @@
 
 #include <shade/types/usampler2D.h>
 
-
-shade::usampler2D::usampler2D(void) :
-  TypeBase<usampler2D, shade::uniform>(formatter::Constants::usampler2D)
-{
-}
+shade::usampler2D::usampler2D(void) : TypeBase<usampler2D, shade::uniform>(formatter::Constants::usampler2D) {}
 
 void shade::usampler2D::set(boost::shared_ptr<Texture> texture)
 {
-  m_texture = texture;
-  this->touch();
+    m_texture = texture;
+    this->touch();
 }
 
-boost::shared_ptr<shade::Texture> shade::usampler2D::get(void) const
-{
-  return m_texture;
-}
+boost::shared_ptr<shade::Texture> shade::usampler2D::get(void) const { return m_texture; }
 
-void shade::usampler2D::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const
-{
-  wrapper->UniformTexture(index, m_texture);
-}
+void shade::usampler2D::upload_uniform(boost::shared_ptr<GLSLWrapper> wrapper, shade::Type::LinkIndex index) const { wrapper->UniformTexture(index, m_texture); }
 
-std::string shade::usampler2D::get_uniq_id(void) const
-{
-  return "usampler2D";
-}
+std::string shade::usampler2D::get_uniq_id(void) const { return "usampler2D"; }

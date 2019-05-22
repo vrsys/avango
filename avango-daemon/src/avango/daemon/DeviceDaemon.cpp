@@ -40,55 +40,46 @@ using namespace av::logging;
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::daemon::DeviceDaemon"));
+av::Logger& logger(av::getLogger("av::daemon::DeviceDaemon"));
 
-  void
-  printVersion()
-  {
-    std::cout << "AvangoDaemon Version "
-              << AVANGO_DAEMON_VERSION_MAJOR
-              << "." << AVANGO_DAEMON_VERSION_MINOR
+void printVersion()
+{
+    std::cout << "AvangoDaemon Version " << AVANGO_DAEMON_VERSION_MAJOR << "."
+              << AVANGO_DAEMON_VERSION_MINOR
               //<< "." << AVANGO_DAEMON_VERSION_MAINT
               << std::endl;
-  }
 }
-
+} // namespace
 
 AV_BASE_DEFINE(av::daemon::DeviceDaemon);
 
-void
-av::daemon::DeviceDaemon::initClass()
+void av::daemon::DeviceDaemon::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::Base::initClass();
-    AV_BASE_INIT(av::Base, av::daemon::DeviceDaemon, true);
-  }
+    if(!isTypeInitialized())
+    {
+        av::Base::initClass();
+        AV_BASE_INIT(av::Base, av::daemon::DeviceDaemon, true);
+    }
 }
 
-void
-av::daemon::DeviceDaemon::appendDevice(Device* device)
+void av::daemon::DeviceDaemon::appendDevice(Device* device) { mDevices.push_back(Link<Device>(device)); }
+
+void av::daemon::DeviceDaemon::run()
 {
-  mDevices.push_back(Link<Device>(device));
-}
+    // print info string
+    printVersion();
+    std::cout << "Press 'q' to stop daemon." << std::endl;
 
-void
-av::daemon::DeviceDaemon::run()
-{
-  // print info string
-  printVersion();
-  std::cout << "Press 'q' to stop daemon." << std::endl;
+    // start all devices
+    for(auto const& d : mDevices)
+        d->startUp();
 
-  // start all devices
-  for (auto const& d : mDevices)
-    d->startUp();
+    // wait for 'exit' command
+    char key = 0;
+    while(key != 'q')
+        std::cin >> key;
 
-  // wait for 'exit' command
-  char key = 0;
-  while (key != 'q')
-    std::cin >> key;
-
-  // shutdown all devices
-  for (auto const& d : mDevices)
-    d->shutDown();
+    // shutdown all devices
+    for(auto const& d : mDevices)
+        d->shutDown();
 }

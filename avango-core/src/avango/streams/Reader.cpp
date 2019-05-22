@@ -35,150 +35,132 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::Reader"));
+av::Logger& logger(av::getLogger("av::Reader"));
 }
 
-av::Reader::Reader() :
-  mBinary(true)
-{}
+av::Reader::Reader() : mBinary(true) {}
 
-av::Reader::~Reader()
-{}
+av::Reader::~Reader() {}
 
-av::Base*
-av::Reader::readObject(av::InputStream& stream)
+av::Base* av::Reader::readObject(av::InputStream& stream)
 {
-  // read object type
-  std::string type_str;
-  stream >> type_str;
+    // read object type
+    std::string type_str;
+    stream >> type_str;
 
-  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: type: %1%") % type_str));
+    AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: type: %1%") % type_str));
 
-  if (stream.eof())
-  {
-    AVANGO_LOG(logger, logging::WARN, "readObject: eof encountered");
-    return 0;
-  }
-
-  Link<Base> object = (Base*) Type::createInstanceOfType(type_str);
-
-  if (!object.isValid())
-  {
-    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: illegal type name '%1%'") % type_str));
-    return 0;
-  }
-
-  // read object id
-  std::string obj_id;
-  stream >> obj_id;
-
-  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: id: ") % obj_id));
-
-  if (stream.fail() || stream.bad())
-  {
-    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object id for '%1%'") % type_str))
-    return 0;
-  }
-
-  // read object
-  stream >> object.getPtr();
-
-  if (stream.fail() || stream.bad())
-  {
-    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object of type '%1%'") % type_str));
-    return 0;
-  }
-
-  mObjectMap.insert(StringBaseMap::value_type(obj_id, object));
-
-  return object.getPtr();
-}
-
-av::Base*
-av::Reader::readFromFile(const std::string& filename)
-{
-  std::ifstream* file = new std::ifstream(filename.c_str());
-
-  if (!file || file->bad())
-  {
-    AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: can't open file '%1%'") % filename));
-    return 0;
-  }
-
-  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: '%1%'") % filename));
-
-  InputStream* stream = new InputStream(*file);
-
-  stream->enableBinary(isBinaryEnabled());
-  stream->setReader(this);
-
-  mObjectMap.clear();
-  mConnectionMap.clear();
-
-  // recursively read object hierachy
-  Base* root = readObject(*stream);
-
-  delete stream;
-  delete file;
-
-  // resolve pending connections
-  for (ConnectionMap::iterator i = mConnectionMap.begin();
-       i != mConnectionMap.end(); ++i)
-  {
-    Field*      to_field =    (*i).first;
-    std::string from_id =     (*i).second.first;
-    int         from_index =  (*i).second.second;
-
-    Base* from_base = lookupObject(from_id);
-    if (from_base &&
-        from_base->getTypeId().isOfType(FieldContainer::getClassTypeId()))
+    if(stream.eof())
     {
-      FieldContainer* fc = (FieldContainer*) from_base;
-      Field* from_field = fc->getField(from_index);
-
-      to_field->connectFrom(from_field);
-
+        AVANGO_LOG(logger, logging::WARN, "readObject: eof encountered");
+        return 0;
     }
-    else
+
+    Link<Base> object = (Base*)Type::createInstanceOfType(type_str);
+
+    if(!object.isValid())
     {
-      AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: error resolving connection from object '%1%'!") % from_id));
+        AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: illegal type name '%1%'") % type_str));
+        return 0;
     }
-  }
 
-  AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: %1% connections resolved!") % mConnectionMap.size()));
+    // read object id
+    std::string obj_id;
+    stream >> obj_id;
 
-  mObjectMap.clear();
-  mConnectionMap.clear();
-  return root;
+    AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readObject: id: ") % obj_id));
+
+    if(stream.fail() || stream.bad())
+    {
+        AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object id for '%1%'") % type_str))
+        return 0;
+    }
+
+    // read object
+    stream >> object.getPtr();
+
+    if(stream.fail() || stream.bad())
+    {
+        AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readObject: error reading object of type '%1%'") % type_str));
+        return 0;
+    }
+
+    mObjectMap.insert(StringBaseMap::value_type(obj_id, object));
+
+    return object.getPtr();
 }
 
-av::Base*
-av::Reader::lookupObject(const std::string& id)
+av::Base* av::Reader::readFromFile(const std::string& filename)
 {
-  StringBaseMap::iterator i = mObjectMap.find(id);
+    std::ifstream* file = new std::ifstream(filename.c_str());
 
-  if (i != mObjectMap.end()) {
-    return (*i).second.getPtr();
-  }
+    if(!file || file->bad())
+    {
+        AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: can't open file '%1%'") % filename));
+        return 0;
+    }
 
-  return 0;
+    AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: '%1%'") % filename));
+
+    InputStream* stream = new InputStream(*file);
+
+    stream->enableBinary(isBinaryEnabled());
+    stream->setReader(this);
+
+    mObjectMap.clear();
+    mConnectionMap.clear();
+
+    // recursively read object hierachy
+    Base* root = readObject(*stream);
+
+    delete stream;
+    delete file;
+
+    // resolve pending connections
+    for(ConnectionMap::iterator i = mConnectionMap.begin(); i != mConnectionMap.end(); ++i)
+    {
+        Field* to_field = (*i).first;
+        std::string from_id = (*i).second.first;
+        int from_index = (*i).second.second;
+
+        Base* from_base = lookupObject(from_id);
+        if(from_base && from_base->getTypeId().isOfType(FieldContainer::getClassTypeId()))
+        {
+            FieldContainer* fc = (FieldContainer*)from_base;
+            Field* from_field = fc->getField(from_index);
+
+            to_field->connectFrom(from_field);
+        }
+        else
+        {
+            AVANGO_LOG(logger, logging::WARN, boost::str(boost::format("readFromFile: error resolving connection from object '%1%'!") % from_id));
+        }
+    }
+
+    AVANGO_LOG(logger, logging::INFO, boost::str(boost::format("readFromFile: %1% connections resolved!") % mConnectionMap.size()));
+
+    mObjectMap.clear();
+    mConnectionMap.clear();
+    return root;
 }
 
-void
-av::Reader::addConnection(av::Field* toField, const std::string& fromId, int fromIndex)
+av::Base* av::Reader::lookupObject(const std::string& id)
 {
-  mConnectionMap.insert(ConnectionMap::value_type(toField,
-                                                  std::pair<std::string, int>(fromId, fromIndex)));
+    StringBaseMap::iterator i = mObjectMap.find(id);
+
+    if(i != mObjectMap.end())
+    {
+        return (*i).second.getPtr();
+    }
+
+    return 0;
 }
 
-void
-av::Reader::enableBinary(bool bin)
+void av::Reader::addConnection(av::Field* toField, const std::string& fromId, int fromIndex)
 {
-  mBinary = bin;
+    mConnectionMap.insert(ConnectionMap::value_type(toField, std::pair<std::string, int>(fromId, fromIndex)));
 }
 
-bool
-av::Reader::isBinaryEnabled()
-{
-  return mBinary;
-}
+void av::Reader::enableBinary(bool bin) { mBinary = bin; }
+
+bool av::Reader::isBinaryEnabled() { return mBinary; }

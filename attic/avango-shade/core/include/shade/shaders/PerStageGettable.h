@@ -32,29 +32,27 @@
 
 namespace shade
 {
-  namespace shaders
-  {
-    template<template<class> class T> class PerStageGettable :
-      public TemplateT<T, Type, PerStageGettable, Gettable<T> >
-    {
-    protected:
+namespace shaders
+{
+template <template <class> class T>
+class PerStageGettable : public TemplateT<T, Type, PerStageGettable, Gettable<T>>
+{
+  protected:
+    /*virtual*/ T<Type> get(void);
 
-      /*virtual*/ T<Type> get(void);
+    // TODO make methods const (requires new 'def' methods in ShaderBase)
+    virtual T<Type> get_vertex(void);
+    virtual T<Type> get_fragment(void);
+    virtual T<Type> get_geometry(void);
 
-      // TODO make methods const (requires new 'def' methods in ShaderBase)
-      virtual T<Type> get_vertex(void);
-      virtual T<Type> get_fragment(void);
-      virtual T<Type> get_geometry(void);
+  private:
+    void get_inline(formatter::Generator&);
+    void get_default_inline(formatter::Generator&);
 
-    private:
-
-      void get_inline(formatter::Generator&);
-      void get_default_inline(formatter::Generator&);
-
-      SHADE_TEMPLATE_T_DERIVED_DECL(T, PerStageGettable, Gettable<T>)
-    };
-  }
-}
+    SHADE_TEMPLATE_T_DERIVED_DECL(T, PerStageGettable, Gettable<T>)
+};
+} // namespace shaders
+} // namespace shade
 
 #include "impl/PerStageGettable_impl.cpp"
 

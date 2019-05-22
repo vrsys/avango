@@ -33,28 +33,28 @@
 
 namespace
 {
-
-  TEST(SetValueInUncontainedField)
-  {
+TEST(SetValueInUncontainedField)
+{
     av::SFInt field;
     field.setValue(42);
     CHECK_EQUAL(42, field.getValue());
-  }
+}
 
-  TEST(CloneSingleField)
-  {
+TEST(CloneSingleField)
+{
     av::SFInt field;
     field.setValue(42);
 
     av::Field* clone = field.clone();
     CHECK_EQUAL(42, dynamic_cast<av::SFInt*>(clone)->getValue());
-  }
+}
 
-  TEST(CloneMultiField)
-  {
+TEST(CloneMultiField)
+{
     av::MFInt field;
     std::vector<int> values;
-    values.push_back(42); values.push_back(21);
+    values.push_back(42);
+    values.push_back(21);
     field.setValue(values);
 
     av::Field* clone = field.clone();
@@ -62,15 +62,15 @@ namespace
     CHECK_EQUAL(2u, clone_values.size());
     CHECK_EQUAL(42, clone_values[0]);
     CHECK_EQUAL(21, clone_values[1]);
-  }
+}
 
-  TEST(CloneGenericField)
-  {
+TEST(CloneGenericField)
+{
     av::Field* field = new av::SFInt;
     dynamic_cast<av::SFInt*>(field)->setValue(42);
 
     av::Field* clone = field->clone();
     CHECK_EQUAL(42, dynamic_cast<av::SFInt*>(clone)->getValue());
-  }
+}
 
 } // namespace

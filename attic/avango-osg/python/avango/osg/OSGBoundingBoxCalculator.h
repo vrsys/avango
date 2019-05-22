@@ -23,7 +23,6 @@
 *                                                                        *
 \************************************************************************/
 
-
 #ifndef AV_PYTHON_OSG_BOUNDINGBOXCALCULATOR
 #define AV_PYTHON_OSG_BOUNDINGBOXCALCULATOR
 

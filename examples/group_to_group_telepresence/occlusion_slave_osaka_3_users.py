@@ -41,7 +41,61 @@ PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
 DAEDALOS  = "141.54.147.34"
 
-CURRENTLY_USED_SERVER = DAEDALOS
+SPACEMONSTER = "141.54.147.101"
+
+CURRENTLY_USED_SERVER = SPACEMONSTER
+
+CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
+#CLIENT_MODE = "VIDEO_POWERWALL"
+#CLIENT_MODE = "SCREENSHOT_DESKTOP"
+##CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
+
+DEBUG_MODE = "NONE"
+#DEBUG_MODE = "CENTRAL_USER"
+
+STEREO_MODE = 0
+WINDOW_RESOLUTION = 0
+RENDERING_RESOLUTION = 0
+LEFT_VIEWPORT_START  = 0
+RIGHT_VIEWPORT_START = 0
+
+if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
+  STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1920, 1080)
+  RENDERING_RESOLUTION = WINDOW_RESOLUTION
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0.1"
+  DISPLAY_VARIABLE_CENTER = ":0.1"
+  DISPLAY_VARIABLE_RIGHT  = ":0.1" # for the occlusion slave, one GPU is rendering everything
+elif "VIDEO_POWERWALL" == CLIENT_MODE:
+  STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*100, 100)
+  RENDERING_RESOLUTION = avango.gua.Vec2ui( int(WINDOW_RESOLUTION[0]/2), WINDOW_RESOLUTION[1])
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(int(WINDOW_RESOLUTION[0]/2), 0)
+elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
+  STEREO_MODE          = avango.gua.StereoMode.MONO
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
+  RENDERING_RESOLUTION = WINDOW_RESOLUTION
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0.4"
+  DISPLAY_VARIABLE_CENTER = ":0.2"
+  DISPLAY_VARIABLE_RIGHT  = ":0.1"
+elif "DEBUG_3_USERS_WEAK_PC" == CLIENT_MODE:
+  STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
+  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+  WINDOW_RESOLUTION       = avango.gua.Vec2ui(100, 100)
+  RENDERING_RESOLUTION    = WINDOW_RESOLUTION
+  LEFT_VIEWPORT_START     = avango.gua.Vec2ui(0, 0)
+  RIGHT_VIEWPORT_START    = avango.gua.Vec2ui(0, 0)
+  DISPLAY_VARIABLE_LEFT   = ":0"
+  DISPLAY_VARIABLE_CENTER = ":0"
+  DISPLAY_VARIABLE_RIGHT  = ":0"
 
 class Initializer(avango.script.Script):
 
@@ -59,34 +113,37 @@ class Initializer(avango.script.Script):
 
     # viewing setup
     #size = avango.gua.Vec2ui(1600, 1200)
-    size = avango.gua.Vec2ui(1920, 1080)
+    #size = avango.gua.Vec2ui(1920, 1080)
+    size = avango.gua.Vec2ui(100, 100)
     #size = avango.gua.Vec2ui(3840, 2160)
     self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
-                                              Display = ":0.1",  # ":0.1",
+                                              Display = DISPLAY_VARIABLE_CENTER,  # ":0.1",
                                               LeftResolution=size,
                                               RightResolution=size,
                                               Title="slave_weimar_v0_osaka_center")
 
     self.window_center.EnableVsync.value = False
     avango.gua.register_window("slave_weimar_v0_osaka_center", self.window_center)
+    
+    if "CENTRAL_USER" != DEBUG_MODE: 
+      self.window_left = avango.gua.nodes.GlfwWindow(Size=size,
+                                                Display = DISPLAY_VARIABLE_LEFT,  # ":0.1",
+                                                LeftResolution=size,
+                                                RightResolution=size,
+                                                Title="slave_weimar_v0_osaka_left")
 
-    self.window_left = avango.gua.nodes.GlfwWindow(Size=size,
-                                              Display = ":0.1",  # ":0.1",
-                                              LeftResolution=size,
-                                              RightResolution=size,
-                                              Title="slave_weimar_v0_osaka_left")
+      self.window_left.EnableVsync.value = False
+      avango.gua.register_window("slave_weimar_v0_osaka_left", self.window_left)
 
-    self.window_left.EnableVsync.value = False
-    avango.gua.register_window("slave_weimar_v0_osaka_left", self.window_left)
+    if "CENTRAL_USER" != DEBUG_MODE: 
+      self.window_right = avango.gua.nodes.GlfwWindow(Size=size,
+                                                Display = DISPLAY_VARIABLE_RIGHT,  # ":0.1",
+                                                LeftResolution=size,
+                                                RightResolution=size,
+                                                Title="slave_weimar_v0_osaka_right")
 
-    self.window_right = avango.gua.nodes.GlfwWindow(Size=size,
-                                              Display = ":0.1",  # ":0.1",
-                                              LeftResolution=size,
-                                              RightResolution=size,
-                                              Title="slave_weimar_v0_osaka_right")
-
-    self.window_right.EnableVsync.value = False
-    avango.gua.register_window("slave_weimar_v0_osaka_right", self.window_right)
+      self.window_right.EnableVsync.value = False
+      avango.gua.register_window("slave_weimar_v0_osaka_right", self.window_right)
 
     logger = avango.gua.nodes.Logger(EnableWarning=False)
 
@@ -101,7 +158,11 @@ class Initializer(avango.script.Script):
 
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
-    self.viewer.Windows.value = [self.window_center, self.window_left, self.window_right]
+    
+    if "CENTRAL_USER" != DEBUG_MODE: 
+      self.viewer.Windows.value = [self.window_center, self.window_left, self.window_right]
+    else:
+      self.viewer.Windows.value = [self.window_center]
 
     self.viewer.DesiredFPS.value = 1000.0
 

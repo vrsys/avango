@@ -36,53 +36,50 @@
 
 namespace av
 {
-  namespace osg
-  {
+namespace osg
+{
+/**
+ * \ingroup av_osg
+ * Something that can be added as a leaf node to a scene graph in order
+ * to compute the absolute transform of the path to the root. Moreover,
+ * the evaluation of all nodes of that path is triggered from here.
+ *
+ */
+class AV_OSG_DLL AbsoluteTransform : public av::osg::Group
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * \ingroup av_osg
-     * Something that can be added as a leaf node to a scene graph in order
-     * to compute the absolute transform of the path to the root. Moreover,
-     * the evaluation of all nodes of that path is triggered from here.
-     *
+     * Constructor.
      */
-    class AV_OSG_DLL AbsoluteTransform : public av::osg::Group
-    {
-      AV_FC_DECLARE();
+    AbsoluteTransform();
 
-    public:
+    /**
+     * output field, should be used in read only mode
+     */
+    SFMatrix AbsoluteMatrix;
 
-      /**
-       * Constructor.
-       */
-      AbsoluteTransform();
+    /**
+     * sets AbsoluteMatrix
+     */
+    /* virtual */ void evaluate();
 
-      /**
-       * output field, should be used in read only mode
-       */
-      SFMatrix AbsoluteMatrix;
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~AbsoluteTransform();
+};
 
-      /**
-       * sets AbsoluteMatrix
-       */
-      /* virtual */ void evaluate();
+typedef SingleField<Link<AbsoluteTransform>> SFAbsoluteTransform;
+typedef MultiField<Link<AbsoluteTransform>> MFAbsoluteTransform;
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~AbsoluteTransform();
-
-    };
-
-    typedef SingleField<Link<AbsoluteTransform> > SFAbsoluteTransform;
-    typedef MultiField<Link<AbsoluteTransform> > MFAbsoluteTransform;
-
-  } // namespace osg
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::AbsoluteTransform> >;
-  template class AV_OSG_DLL MultiField<Link<osg::AbsoluteTransform> >;
+template class AV_OSG_DLL SingleField<Link<osg::AbsoluteTransform>>;
+template class AV_OSG_DLL MultiField<Link<osg::AbsoluteTransform>>;
 #endif
 
 } // namespace av

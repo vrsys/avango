@@ -25,13 +25,6 @@
 
 using namespace shade::formatter;
 
-FileMark::FileMark(void) :
-  m_line_number(0)
-{
-}
+FileMark::FileMark(void) : m_line_number(0) {}
 
-FileMark::FileMark(const std::string& filename, unsigned int line_number) :
-  m_filename(filename),
-  m_line_number(line_number)
-{
-}
+FileMark::FileMark(const std::string& filename, unsigned int line_number) : m_filename(filename), m_line_number(line_number) {}

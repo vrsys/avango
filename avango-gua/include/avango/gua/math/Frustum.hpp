@@ -14,83 +14,78 @@
 
 namespace av
 {
-  namespace gua
-  {
+namespace gua
+{
+/**
+ * Wrapper for ::gua::Frustum
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL Frustum : public av::FieldContainer
+{
+    AV_FC_DECLARE();
+
+  public:
     /**
-     * Wrapper for ::gua::Frustum
-     *
-     * \ingroup av_gua
+     * Constructor. When called without arguments, a new ::gua::Frustum is created.
+     * Otherwise, the given ::gua::Frustum is used.
      */
-    class AV_GUA_DLL Frustum : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+    Frustum(::gua::Frustum* guaFrustum = new ::gua::Frustum());
 
-    public:
+    virtual ~Frustum();
 
-      /**
-       * Constructor. When called without arguments, a new ::gua::Frustum is created.
-       * Otherwise, the given ::gua::Frustum is used.
-       */
-      Frustum(::gua::Frustum* guaFrustum =
-                  new ::gua::Frustum());
+  public:
+    SFDouble ClipNear;
+    SFDouble ClipFar;
 
-      virtual ~Frustum();
+    SFMatrix4 CameraTransform;
+    SFMatrix4 ScreenTransform;
+    SFMatrix4 ViewMatrix;
+    SFMatrix4 ProjectionMatrix;
 
-    public:
+    MFVec3 Corners;
 
-      SFDouble ClipNear;
-      SFDouble ClipFar;
+  public:
+    virtual void getClipNearCB(const SFDouble::GetValueEvent& event);
+    virtual void setClipNearCB(const SFDouble::SetValueEvent& event);
 
-      SFMatrix4 CameraTransform;
-      SFMatrix4 ScreenTransform;
-      SFMatrix4 ViewMatrix;
-      SFMatrix4 ProjectionMatrix;
+    virtual void getClipFarCB(const SFDouble::GetValueEvent& event);
+    virtual void setClipFarCB(const SFDouble::SetValueEvent& event);
 
-      MFVec3 Corners;
+    virtual void getCameraTransformCB(const SFMatrix4::GetValueEvent& event);
+    virtual void setCameraTransformCB(const SFMatrix4::SetValueEvent& event);
 
-    public:
+    virtual void getScreenTransformCB(const SFMatrix4::GetValueEvent& event);
+    virtual void setScreenTransformCB(const SFMatrix4::SetValueEvent& event);
 
-      virtual void getClipNearCB(const SFDouble::GetValueEvent& event);
-      virtual void setClipNearCB(const SFDouble::SetValueEvent& event);
+    virtual void getViewMatrixCB(const SFMatrix4::GetValueEvent& event);
+    virtual void setViewMatrixCB(const SFMatrix4::SetValueEvent& event);
 
-      virtual void getClipFarCB(const SFDouble::GetValueEvent& event);
-      virtual void setClipFarCB(const SFDouble::SetValueEvent& event);
+    virtual void getProjectionMatrixCB(const SFMatrix4::GetValueEvent& event);
+    virtual void setProjectionMatrixCB(const SFMatrix4::SetValueEvent& event);
 
-      virtual void getCameraTransformCB(const SFMatrix4::GetValueEvent& event);
-      virtual void setCameraTransformCB(const SFMatrix4::SetValueEvent& event);
+    virtual void getCornersCB(const MFVec3::GetValueEvent& event);
+    virtual void setCornersCB(const MFVec3::SetValueEvent& event);
 
-      virtual void getScreenTransformCB(const SFMatrix4::GetValueEvent& event);
-      virtual void setScreenTransformCB(const SFMatrix4::SetValueEvent& event);
+    ::gua::Frustum* getGuaFrustum() const;
 
-      virtual void getViewMatrixCB(const SFMatrix4::GetValueEvent& event);
-      virtual void setViewMatrixCB(const SFMatrix4::SetValueEvent& event);
+  private:
+    ::gua::Frustum* m_guaFrustum;
 
-      virtual void getProjectionMatrixCB(const SFMatrix4::GetValueEvent& event);
-      virtual void setProjectionMatrixCB(const SFMatrix4::SetValueEvent& event);
+    // Frustum(const Frustum&);
+    Frustum& operator=(const Frustum&);
+};
 
-      virtual void getCornersCB(const MFVec3::GetValueEvent& event);
-      virtual void setCornersCB(const MFVec3::SetValueEvent& event);
+using SFFrustum = SingleField<Link<Frustum>>;
+using MFFrustum = MultiField<Link<Frustum>>;
 
-      ::gua::Frustum* getGuaFrustum() const;
-
-    private:
-
-      ::gua::Frustum* m_guaFrustum;
-
-      // Frustum(const Frustum&);
-      Frustum& operator=(const Frustum&);
-    };
-
-    using SFFrustum = SingleField<Link<Frustum> >;
-    using MFFrustum = MultiField<Link<Frustum> >;
-
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::Frustum> >;
-  template class AV_GUA_DLL MultiField<Link<gua::Frustum> >;
+template class AV_GUA_DLL SingleField<Link<gua::Frustum>>;
+template class AV_GUA_DLL MultiField<Link<gua::Frustum>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_FRUSTUM_HPP
+#endif // AVANGO_GUA_FRUSTUM_HPP

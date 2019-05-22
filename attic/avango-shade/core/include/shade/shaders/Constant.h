@@ -33,25 +33,22 @@
 #include "../types/uniform.h"
 #include "../types/const.h"
 
-
 namespace shade
 {
-  namespace shaders
-  {
+namespace shaders
+{
+class Constant : public ShaderBase<Constant, IMaterial>
+{
+  public:
+    /*virtual*/ vec4<> shade(void);
 
-    class Constant : public ShaderBase<Constant, IMaterial>
-    {
-    public:
+    ValueReference<vec4, uniform> color;
 
-      /*virtual*/ vec4<> shade(void);
+  private:
+    SHADE_DERIVED_DECL(Constant, IMaterial)
+};
 
-      ValueReference<vec4, uniform> color;
-
-    private:
-      SHADE_DERIVED_DECL(Constant, IMaterial)
-    };
-
-  }
-}
+} // namespace shaders
+} // namespace shade
 
 #endif /* shade_shaders_Constant_H */

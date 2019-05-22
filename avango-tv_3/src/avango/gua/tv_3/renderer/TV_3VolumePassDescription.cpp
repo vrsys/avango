@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::tv_3::TV_3VolumePassDescription"));
+av::Logger& logger(av::getLogger("av::gua::tv_3::TV_3VolumePassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::tv_3::TV_3VolumePassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::tv_3::TV_3VolumePassDescription);
 AV_FIELD_DEFINE(av::gua::tv_3::SFTV_3VolumePassDescription);
 AV_FIELD_DEFINE(av::gua::tv_3::MFTV_3VolumePassDescription);
 
-av::gua::tv_3::TV_3VolumePassDescription::TV_3VolumePassDescription(
-  std::shared_ptr< ::gua::TV_3VolumePassDescription> const& guaTV_3VolumePassDescription)
-    : PipelinePassDescription(guaTV_3VolumePassDescription)
-    , m_guaTV_3VolumePassDescription(guaTV_3VolumePassDescription)
+av::gua::tv_3::TV_3VolumePassDescription::TV_3VolumePassDescription(std::shared_ptr<::gua::TV_3VolumePassDescription> const& guaTV_3VolumePassDescription)
+    : PipelinePassDescription(guaTV_3VolumePassDescription), m_guaTV_3VolumePassDescription(guaTV_3VolumePassDescription)
 {
-
 }
 
-void
-av::gua::tv_3::TV_3VolumePassDescription::initClass()
+void av::gua::tv_3::TV_3VolumePassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::tv_3::TV_3VolumePassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::TV_3VolumePassDescription> const&
-av::gua::tv_3::TV_3VolumePassDescription::getGuaTV_3VolumePassDescription() const
-{
-    return m_guaTV_3VolumePassDescription;
-}
-
-
+std::shared_ptr<::gua::TV_3VolumePassDescription> const& av::gua::tv_3::TV_3VolumePassDescription::getGuaTV_3VolumePassDescription() const { return m_guaTV_3VolumePassDescription; }

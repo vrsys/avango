@@ -3,4 +3,4 @@
 
 void init_CylinderShape();
 
-#endif //AV_PYTHON_GUA_CYLINDER_SHAPE_HPP
+#endif // AV_PYTHON_GUA_CYLINDER_SHAPE_HPP

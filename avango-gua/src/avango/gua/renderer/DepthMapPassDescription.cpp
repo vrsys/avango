@@ -6,7 +6,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::gua::DepthMapPassDescription"));
+av::Logger& logger(av::getLogger("av::gua::DepthMapPassDescription"));
 }
 
 AV_FC_DEFINE(av::gua::DepthMapPassDescription);
@@ -14,18 +14,14 @@ AV_FC_DEFINE(av::gua::DepthMapPassDescription);
 AV_FIELD_DEFINE(av::gua::SFDepthMapPassDescription);
 AV_FIELD_DEFINE(av::gua::MFDepthMapPassDescription);
 
-av::gua::DepthMapPassDescription::DepthMapPassDescription(
-  std::shared_ptr< ::gua::DepthCubeMapPassDesciption> const& guaDepthCubeMapPassDescription)
-    : PipelinePassDescription(guaDepthCubeMapPassDescription)
-    , m_guaDepthMapPassDescription(guaDepthCubeMapPassDescription)
+av::gua::DepthMapPassDescription::DepthMapPassDescription(std::shared_ptr<::gua::DepthCubeMapPassDesciption> const& guaDepthCubeMapPassDescription)
+    : PipelinePassDescription(guaDepthCubeMapPassDescription), m_guaDepthMapPassDescription(guaDepthCubeMapPassDescription)
 {
-
 }
 
-void
-av::gua::DepthMapPassDescription::initClass()
+void av::gua::DepthMapPassDescription::initClass()
 {
-    if (!isTypeInitialized())
+    if(!isTypeInitialized())
     {
         av::gua::PipelinePassDescription::initClass();
 
@@ -37,11 +33,4 @@ av::gua::DepthMapPassDescription::initClass()
     }
 }
 
-
-std::shared_ptr< ::gua::DepthCubeMapPassDesciption> const&
-av::gua::DepthMapPassDescription::getGuaDepthMapPassDescription() const
-{
-    return m_guaDepthMapPassDescription;
-}
-
-
+std::shared_ptr<::gua::DepthCubeMapPassDesciption> const& av::gua::DepthMapPassDescription::getGuaDepthMapPassDescription() const { return m_guaDepthMapPassDescription; }

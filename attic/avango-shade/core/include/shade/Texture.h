@@ -26,15 +26,11 @@
 
 namespace shade
 {
-  class Texture
-  {
+class Texture
+{
   public:
-
-    virtual ~Texture()
-    {
-    }
-
-  };
-}
+    virtual ~Texture() {}
+};
+} // namespace shade
 
 #endif /* shade_Texture_H */

@@ -27,7 +27,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::Object"));
+av::Logger& logger(av::getLogger("av::osg::Object"));
 }
 
 AV_FC_DEFINE_ABSTRACT(av::osg::Object);
@@ -35,64 +35,37 @@ AV_FC_DEFINE_ABSTRACT(av::osg::Object);
 AV_FIELD_DEFINE(av::osg::SFObject);
 AV_FIELD_DEFINE(av::osg::MFObject);
 
-av::osg::Object::Object(::osg::Object *osgobject) :
-  mOsgObject(osgobject)
+av::osg::Object::Object(::osg::Object* osgobject) : mOsgObject(osgobject)
 {
-  AV_ASSERT(mOsgObject != 0);
-  mOsgObject->setUserData(new ObjectLink(this));
-  mOsgObject->addObserver(this);
-  av::Base::refImpl();
+    AV_ASSERT(mOsgObject != 0);
+    mOsgObject->setUserData(new ObjectLink(this));
+    mOsgObject->addObserver(this);
+    av::Base::refImpl();
 }
 
-av::osg::Object::~Object()
-{}
+av::osg::Object::~Object() {}
 
-void
-av::osg::Object::initClass()
+void av::osg::Object::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        av::FieldContainer::initClass();
 
-    AV_FC_INIT_ABSTRACT(av::FieldContainer, av::osg::Object, true);
+        AV_FC_INIT_ABSTRACT(av::FieldContainer, av::osg::Object, true);
 
-    SFObject::initClass("av::osg::SFObject", "av::Field");
-    MFObject::initClass("av::osg::MFObject", "av::Field");
-  }
+        SFObject::initClass("av::osg::SFObject", "av::Field");
+        MFObject::initClass("av::osg::MFObject", "av::Field");
+    }
 }
 
-::osg::Object*
-av::osg::Object::getOsgObject() const
-{
-  return mOsgObject;
-}
+::osg::Object* av::osg::Object::getOsgObject() const { return mOsgObject; }
 
-/* virtual */ void
-av::osg::Object::refImpl()
-{
-  mOsgObject->ref();
-}
+/* virtual */ void av::osg::Object::refImpl() { mOsgObject->ref(); }
 
-/* virtual */ void
-av::osg::Object::unrefImpl()
-{
-  mOsgObject->unref();
-}
+/* virtual */ void av::osg::Object::unrefImpl() { mOsgObject->unref(); }
 
-/* virtual */ void
-av::osg::Object::unrefWithoutDeletionImpl()
-{
-  mOsgObject->unref_nodelete();
-}
+/* virtual */ void av::osg::Object::unrefWithoutDeletionImpl() { mOsgObject->unref_nodelete(); }
 
-/* virtual */ int
-av::osg::Object::refCountImpl()
-{
-  return mOsgObject->referenceCount();
-}
+/* virtual */ int av::osg::Object::refCountImpl() { return mOsgObject->referenceCount(); }
 
-/* virtual */ void
-av::osg::Object::objectDeleted(void*)
-{
-  av::Base::unrefImpl();
-}
+/* virtual */ void av::osg::Object::objectDeleted(void*) { av::Base::unrefImpl(); }

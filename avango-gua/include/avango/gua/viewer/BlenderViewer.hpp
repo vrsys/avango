@@ -26,30 +26,30 @@
 
 namespace av
 {
-  namespace gua
-  {
-    /**
-     * Wrapper for ::gua::BlenderViewer
-     *
-     * \ingroup av_gua
-     */
-    class AV_GUA_DLL BlenderViewer : public av::FieldContainer
-    {
-      AV_FC_DECLARE();
+namespace gua
+{
+/**
+ * Wrapper for ::gua::BlenderViewer
+ *
+ * \ingroup av_gua
+ */
+class AV_GUA_DLL BlenderViewer : public av::FieldContainer
+{
+    AV_FC_DECLARE();
 
-    public:
+  public:
+    BlenderViewer();
 
-      BlenderViewer();
-
-      MFSceneGraph SceneGraphs;
-      SFHeadlessSurface Window;
+    MFSceneGraph SceneGraphs;
+    SFHeadlessSurface Window;
 #if defined(AVANGO_PHYSICS_SUPPORT)
-      SFPhysics    Physics;
+    SFPhysics Physics;
 #endif
 
-      void frame(std::string const& engine, std::string const& camera);
+    void frame(std::string const& engine, std::string const& camera);
 
-      struct Image {
+    struct Image
+    {
         int32_t width = 0;
         int32_t height = 0;
         uint32_t bpp = 0;
@@ -58,63 +58,57 @@ namespace av
         uint32_t gl_type = 0;
         std::vector<char> data = {};
 
-        size_t size_header() const {
-        return sizeof(width) + sizeof(height) + sizeof(bpp) +
-               sizeof(gl_internal_format) + sizeof(gl_base_format) +
-               sizeof(gl_type);
-        }
+        size_t size_header() const { return sizeof(width) + sizeof(height) + sizeof(bpp) + sizeof(gl_internal_format) + sizeof(gl_base_format) + sizeof(gl_type); }
         size_t size() const { return size_header() + data.size(); }
-      };
+    };
 
-      void unregister_engine(std::string const& uuid);
+    void unregister_engine(std::string const& uuid);
 
-    protected:
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~BlenderViewer();
 
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~BlenderViewer();
+  private:
+    BlenderViewer(const BlenderViewer&) = delete;
+    BlenderViewer& operator=(const BlenderViewer&) = delete;
 
-    private:
+    void render_thread();
+    Image screenshot(::gua::Pipeline& pipe);
 
-      BlenderViewer(const BlenderViewer&) = delete;
-      BlenderViewer& operator=(const BlenderViewer&) = delete;
+    std::mutex m_mutex;
+    std::condition_variable m_condition;
+    std::vector<std::unique_ptr<const ::gua::SceneGraph>> m_gua_graphs;
+    std::string m_current_engine = "";
+    std::string m_camera_name = "";
+    Image m_image;
+    bool m_ready = false;
+    bool m_processed = false;
+    bool m_done = false;
+    std::thread m_worker;
 
-      void render_thread();
-      Image screenshot(::gua::Pipeline& pipe);
-
-      std::mutex m_mutex;
-      std::condition_variable m_condition;
-      std::vector<std::unique_ptr<const ::gua::SceneGraph> > m_gua_graphs;
-      std::string m_current_engine = "";
-      std::string m_camera_name = "";
-      Image m_image;
-      bool m_ready = false;
-      bool m_processed = false;
-      bool m_done = false;
-      std::thread m_worker;
-
-      struct EngineData
-      {
+    struct EngineData
+    {
         scm::gl::frame_buffer_ptr fbo = nullptr;
         scm::gl::texture_2d_ptr rgba8_texture = nullptr;
         unsigned blendertex_id = 0;
         bool resize = true;
-      };
-      std::map<std::string, EngineData> m_engines;
-      boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128> > m_unregister_queue;
     };
+    std::map<std::string, EngineData> m_engines;
+    boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128>> m_unregister_queue;
+};
 
-    using SFBlenderViewer = SingleField<Link<BlenderViewer> >;
-    using MFBlenderViewer = MultiField<Link<BlenderViewer> >;
+using SFBlenderViewer = SingleField<Link<BlenderViewer>>;
+using MFBlenderViewer = MultiField<Link<BlenderViewer>>;
 
-  }
+} // namespace gua
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_GUA_DLL SingleField<Link<gua::BlenderViewer> >;
-  template class AV_GUA_DLL MultiField<Link<gua::BlenderViewer> >;
+template class AV_GUA_DLL SingleField<Link<gua::BlenderViewer>>;
+template class AV_GUA_DLL MultiField<Link<gua::BlenderViewer>>;
 #endif
 
-}
+} // namespace av
 
-#endif //AVANGO_GUA_BLENDER_VIEWER_HPP
+#endif // AVANGO_GUA_BLENDER_VIEWER_HPP

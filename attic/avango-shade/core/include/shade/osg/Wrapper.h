@@ -33,46 +33,43 @@
 
 namespace shade
 {
-  namespace osg
-  {  
-    class Wrapper : public shade::GLSLWrapper
-    {
-    public:
+namespace osg
+{
+class Wrapper : public shade::GLSLWrapper
+{
+  public:
+    Wrapper(::osg::StateSet* state);
 
-      Wrapper(::osg::StateSet* state);
+  protected:
+    /*virtual*/ void set_texture(unsigned int unit, boost::shared_ptr<shade::Texture> texture);
 
-    protected:
+    /*virtual*/ Handle CreateShader(ShaderType type);
+    /*virtual*/ Handle CreateProgram(void);
+    /*virtual*/ void AttachShader(Handle program, Handle shader);
+    /*virtual*/ void ShaderSource(Handle shader, unsigned int count, const char** code, const int* length);
+    /*virtual*/ void CompileShader(Handle shader);
+    /*virtual*/ void LinkProgram(Handle program);
+    /*virtual*/ void UseProgram(Handle program);
+    /*virtual*/ void ProgramParameter(Handle program, Enum name, int value);
+    /*virtual*/ Handle GetUniformLocation(Handle program, const char* name);
 
-      /*virtual*/ void set_texture(unsigned int unit, boost::shared_ptr<shade::Texture> texture);
+  public:
+    /*virtual*/ boost::shared_ptr<shade::Texture> make_canvas_texture(void) const;
 
-      /*virtual*/ Handle CreateShader(ShaderType type);
-      /*virtual*/ Handle CreateProgram(void);
-      /*virtual*/ void AttachShader(Handle program, Handle shader);
-      /*virtual*/ void ShaderSource(Handle shader, unsigned int count, const char** code, const int* length);
-      /*virtual*/ void CompileShader(Handle shader);
-      /*virtual*/ void LinkProgram(Handle program);
-      /*virtual*/ void UseProgram(Handle program);
-      /*virtual*/ void ProgramParameter(Handle program, Enum name, int value);
-      /*virtual*/ Handle GetUniformLocation(Handle program, const char* name);
+    /*virtual*/ void Uniform1i(Handle index, int value);
+    /*virtual*/ void Uniform1f(Handle index, float x);
+    /*virtual*/ void Uniform2f(Handle index, float x, float y);
+    /*virtual*/ void Uniform3f(Handle index, float x, float y, float z);
+    /*virtual*/ void Uniform4f(Handle index, float x, float y, float z, float w);
+    /*virtual*/ void UniformMatrix4fv(Handle index, int count, bool transpose, const float* values);
 
-    public:
-
-      /*virtual*/ boost::shared_ptr<shade::Texture> make_canvas_texture(void) const;
-
-      /*virtual*/ void Uniform1i(Handle index, int value);
-      /*virtual*/ void Uniform1f(Handle index, float x);
-      /*virtual*/ void Uniform2f(Handle index, float x, float y);
-      /*virtual*/ void Uniform3f(Handle index, float x, float y, float z);
-      /*virtual*/ void Uniform4f(Handle index, float x, float y, float z, float w);
-      /*virtual*/ void UniformMatrix4fv(Handle index, int count, bool transpose, const float* values);
-
-    private:
-      ::osg::ref_ptr< ::osg::StateSet > m_state;
-      std::vector< ::osg::ref_ptr< ::osg::Program > > m_programs;
-      std::vector< ::osg::ref_ptr< ::osg::Shader > > m_shaders;
-      std::vector< ::osg::ref_ptr< ::osg::Uniform > > m_uniforms;
-    };
-  }
-}
+  private:
+    ::osg::ref_ptr<::osg::StateSet> m_state;
+    std::vector<::osg::ref_ptr<::osg::Program>> m_programs;
+    std::vector<::osg::ref_ptr<::osg::Shader>> m_shaders;
+    std::vector<::osg::ref_ptr<::osg::Uniform>> m_uniforms;
+};
+} // namespace osg
+} // namespace shade
 
 #endif /* shade_osg_Wrapper_H */

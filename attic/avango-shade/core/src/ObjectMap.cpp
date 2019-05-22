@@ -25,26 +25,14 @@
 
 void shade::ObjectMap::add_object(Shader* shader)
 {
-  m_indices[shader] = get_next_index();
-  m_objects.push_back(shader);
+    m_indices[shader] = get_next_index();
+    m_objects.push_back(shader);
 }
 
-shade::ObjectMap::Index shade::ObjectMap::get_next_index(void) const
-{
-  return m_objects.size();
-}
+shade::ObjectMap::Index shade::ObjectMap::get_next_index(void) const { return m_objects.size(); }
 
-shade::Shader* shade::ObjectMap::get_object(Index index) const
-{
-  return m_objects[index];
-}
+shade::Shader* shade::ObjectMap::get_object(Index index) const { return m_objects[index]; }
 
-shade::Shader* shade::ObjectMap::operator[](Index index) const
-{
-  return get_object(index);
-}
+shade::Shader* shade::ObjectMap::operator[](Index index) const { return get_object(index); }
 
-shade::ObjectMap::Index shade::ObjectMap::get_index(Shader* shader) const
-{
-  return m_indices.find(shader)->second;
-}
+shade::ObjectMap::Index shade::ObjectMap::get_index(Shader* shader) const { return m_indices.find(shader)->second; }

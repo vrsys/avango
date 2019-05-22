@@ -23,29 +23,12 @@
 
 #include <shade/AttributeAccessor.h>
 
-shade::AttributeAccessor::AttributeAccessor(void) :
-  m_name("")
-{
-}
+shade::AttributeAccessor::AttributeAccessor(void) : m_name("") {}
 
-shade::AttributeAccessor::AttributeAccessor(boost::shared_ptr<AttributeType> impl, const std::string& name) :
-  m_impl(impl),
-  m_name(name)
-{
-}
+shade::AttributeAccessor::AttributeAccessor(boost::shared_ptr<AttributeType> impl, const std::string& name) : m_impl(impl), m_name(name) {}
 
+const std::string& shade::AttributeAccessor::get_name(void) const { return m_name; }
 
-const std::string& shade::AttributeAccessor::get_name(void) const
-{
-  return m_name;
-}
+const shade::Type& shade::AttributeAccessor::get_type(const Shader* obj) const { return m_impl->get_type(obj); }
 
-const shade::Type& shade::AttributeAccessor::get_type(const Shader* obj) const
-{
-  return m_impl->get_type(obj);
-}
-
-shade::Type* shade::AttributeAccessor::get_public_type(Shader* obj) const
-{
-  return m_impl->get_public_type(obj);
-}
+shade::Type* shade::AttributeAccessor::get_public_type(Shader* obj) const { return m_impl->get_public_type(obj); }

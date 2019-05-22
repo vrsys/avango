@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::osg::LoadImageStream"));
+av::Logger& logger(av::getLogger("av::osg::LoadImageStream"));
 }
 
 AV_FC_DEFINE(av::osg::LoadImageStream);
@@ -37,41 +37,38 @@ AV_FC_DEFINE(av::osg::LoadImageStream);
 AV_FIELD_DEFINE(av::osg::SFLoadImageStream);
 AV_FIELD_DEFINE(av::osg::MFLoadImageStream);
 
-av::osg::LoadImageStream::LoadImageStream() 
+av::osg::LoadImageStream::LoadImageStream()
 {
-  AV_FC_ADD_FIELD(Filename, "");
-  AV_FC_ADD_FIELD(ImageStream, 0);
+    AV_FC_ADD_FIELD(Filename, "");
+    AV_FC_ADD_FIELD(ImageStream, 0);
 }
 
-av::osg::LoadImageStream::~LoadImageStream()
-{}
+av::osg::LoadImageStream::~LoadImageStream() {}
 
-void
-av::osg::LoadImageStream::initClass()
+void av::osg::LoadImageStream::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    ::av::FieldContainer::initClass();
+    if(!isTypeInitialized())
+    {
+        ::av::FieldContainer::initClass();
 
-    AV_FC_INIT(av::FieldContainer, av::osg::LoadImageStream, true);
+        AV_FC_INIT(av::FieldContainer, av::osg::LoadImageStream, true);
 
-    SFLoadImageStream::initClass("av::osg::SFLoadImageStream", "av::Field");
-    MFLoadImageStream::initClass("av::osg::MFLoadImageStream", "av::Field");
+        SFLoadImageStream::initClass("av::osg::SFLoadImageStream", "av::Field");
+        MFLoadImageStream::initClass("av::osg::MFLoadImageStream", "av::Field");
 
-    sClassTypeId.setDistributable(true);
-  }
+        sClassTypeId.setDistributable(true);
+    }
 }
 
-/* virtual */ void
-av::osg::LoadImageStream::evaluateLocalSideEffect()
+/* virtual */ void av::osg::LoadImageStream::evaluateLocalSideEffect()
 {
-  FieldContainer::evaluateLocalSideEffect();
-  LOG_TRACE(logger) << "evaluateLocalSideEffect()";
+    FieldContainer::evaluateLocalSideEffect();
+    LOG_TRACE(logger) << "evaluateLocalSideEffect()";
 
-  ::osg::ref_ptr< ::osg::Image> image = osgDB::readImageFile(Filename.getValue());
-  //if (imagestream.valid())
-  if (dynamic_cast< ::osg::ImageStream*>(image.get()))
-    ImageStream.setValue(new av::osg::ImageStream(dynamic_cast< ::osg::ImageStream*>(image.get())));
-  else
-    ImageStream.setValue(0);
+    ::osg::ref_ptr<::osg::Image> image = osgDB::readImageFile(Filename.getValue());
+    // if (imagestream.valid())
+    if(dynamic_cast<::osg::ImageStream*>(image.get()))
+        ImageStream.setValue(new av::osg::ImageStream(dynamic_cast<::osg::ImageStream*>(image.get())));
+    else
+        ImageStream.setValue(0);
 }

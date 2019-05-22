@@ -38,114 +38,113 @@
 
 SUITE(TestMarkBuffer)
 {
-  TEST(StringOutput)
-  {
-    shade::formatter::MarkBuffer buffer;
-    std::string text("Flip\nFlop\n");
+    TEST(StringOutput)
+    {
+        shade::formatter::MarkBuffer buffer;
+        std::string text("Flip\nFlop\n");
 
-    buffer.append(text);
+        buffer.append(text);
 
-    CHECK_EQUAL(text, buffer.str());
-  }
+        CHECK_EQUAL(text, buffer.str());
+    }
 
-  TEST(StringStreamOutput)
-  {
-    shade::formatter::MarkBuffer buffer;
-    std::string text("Flip\nFlop\n");
+    TEST(StringStreamOutput)
+    {
+        shade::formatter::MarkBuffer buffer;
+        std::string text("Flip\nFlop\n");
 
-    buffer << text;
+        buffer << text;
 
-    CHECK_EQUAL(text, buffer.str());
-  }
+        CHECK_EQUAL(text, buffer.str());
+    }
 
-  class TestMark :
-    public shade::formatter::Mark
-  {
-  };
+    class TestMark : public shade::formatter::Mark
+    {
+    };
 
-  TEST(SetMark)
-  {
-    shade::formatter::MarkBuffer buffer;
-    boost::shared_ptr<TestMark> mark(new TestMark);
+    TEST(SetMark)
+    {
+        shade::formatter::MarkBuffer buffer;
+        boost::shared_ptr<TestMark> mark(new TestMark);
 
-    buffer << "{\n";
-    buffer.set_mark(mark);
-    buffer << "5;\n";
-    buffer << "}\n";
+        buffer << "{\n";
+        buffer.set_mark(mark);
+        buffer << "5;\n";
+        buffer << "}\n";
 
-    CHECK_EQUAL(2u, buffer.get_mark_line_number(mark));
-  }
+        CHECK_EQUAL(2u, buffer.get_mark_line_number(mark));
+    }
 
-  TEST(CopyStringWithIterators)
-  {
-    shade::formatter::MarkBuffer buffer;
-    buffer.append("Flip\nFlop\n");
+    TEST(CopyStringWithIterators)
+    {
+        shade::formatter::MarkBuffer buffer;
+        buffer.append("Flip\nFlop\n");
 
-    std::stringstream result;
-    std::copy(buffer.begin(), buffer.end(), std::ostream_iterator<char>(result));
+        std::stringstream result;
+        std::copy(buffer.begin(), buffer.end(), std::ostream_iterator<char>(result));
 
-    CHECK_EQUAL(buffer.str(), result.str());
-  }
+        CHECK_EQUAL(buffer.str(), result.str());
+    }
 
-  TEST(ParsingWithIterators)
-  {
-    shade::formatter::MarkBuffer buffer;
-    buffer.append("1.234");
+    TEST(ParsingWithIterators)
+    {
+        shade::formatter::MarkBuffer buffer;
+        buffer.append("1.234");
 
-    CHECK(boost::spirit::classic::parse(buffer.begin(), buffer.end(), boost::spirit::classic::real_p).full);
-  }
+        CHECK(boost::spirit::classic::parse(buffer.begin(), buffer.end(), boost::spirit::classic::real_p).full);
+    }
 
-  TEST(GetLineNumberOfIterator)
-  {
-    shade::formatter::MarkBuffer buffer;
-    buffer.append("A\nB\n");
+    TEST(GetLineNumberOfIterator)
+    {
+        shade::formatter::MarkBuffer buffer;
+        buffer.append("A\nB\n");
 
-    shade::formatter::MarkBuffer::iterator iter(buffer.begin());
-    CHECK_EQUAL(0u, iter.get_file_mark().get_line_number());
-    ++iter;
-    CHECK_EQUAL(0u, iter.get_file_mark().get_line_number());
-    ++iter;
-    CHECK_EQUAL(1u, iter.get_file_mark().get_line_number());
-    ++iter;
-    CHECK_EQUAL(1u, iter.get_file_mark().get_line_number());
-  }
+        shade::formatter::MarkBuffer::iterator iter(buffer.begin());
+        CHECK_EQUAL(0u, iter.get_file_mark().get_line_number());
+        ++iter;
+        CHECK_EQUAL(0u, iter.get_file_mark().get_line_number());
+        ++iter;
+        CHECK_EQUAL(1u, iter.get_file_mark().get_line_number());
+        ++iter;
+        CHECK_EQUAL(1u, iter.get_file_mark().get_line_number());
+    }
 
-  TEST(GetLineNumberOfIteratorWithFileMarks)
-  {
-    shade::formatter::MarkBuffer buffer;
-    boost::shared_ptr<shade::formatter::FileMark> markA(new shade::formatter::FileMark("A", 10));
-    boost::shared_ptr<shade::formatter::FileMark> markB(new shade::formatter::FileMark("B", 111));
+    TEST(GetLineNumberOfIteratorWithFileMarks)
+    {
+        shade::formatter::MarkBuffer buffer;
+        boost::shared_ptr<shade::formatter::FileMark> markA(new shade::formatter::FileMark("A", 10));
+        boost::shared_ptr<shade::formatter::FileMark> markB(new shade::formatter::FileMark("B", 111));
 
-    buffer.set_mark(markA);
-    buffer.append("x\ny\n");
-    buffer.set_mark(markB);
-    buffer.append("x\ny\n");
+        buffer.set_mark(markA);
+        buffer.append("x\ny\n");
+        buffer.set_mark(markB);
+        buffer.append("x\ny\n");
 
-    shade::formatter::MarkBuffer::iterator iter(buffer.begin());
+        shade::formatter::MarkBuffer::iterator iter(buffer.begin());
 
-    CHECK_EQUAL(markA->get_line_number(), iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markA->get_line_number(), iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markA->get_line_number()+1, iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markA->get_line_number()+1, iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
+        CHECK_EQUAL(markA->get_line_number(), iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markA->get_line_number(), iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markA->get_line_number() + 1, iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markA->get_line_number() + 1, iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markA->get_filename(), iter.get_file_mark().get_filename());
 
-    ++iter;
-    CHECK_EQUAL(markB->get_line_number(), iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markB->get_line_number(), iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markB->get_line_number()+1, iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
-    ++iter;
-    CHECK_EQUAL(markB->get_line_number()+1, iter.get_file_mark().get_line_number());
-    CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
-  }
+        ++iter;
+        CHECK_EQUAL(markB->get_line_number(), iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markB->get_line_number(), iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markB->get_line_number() + 1, iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
+        ++iter;
+        CHECK_EQUAL(markB->get_line_number() + 1, iter.get_file_mark().get_line_number());
+        CHECK_EQUAL(markB->get_filename(), iter.get_file_mark().get_filename());
+    }
 }

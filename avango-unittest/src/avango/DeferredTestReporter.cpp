@@ -4,10 +4,7 @@
 
 using namespace UnitTest;
 
-void DeferredTestReporter::ReportTestStart(TestDetails const& details)
-{
-    m_results.push_back(DeferredTestResult(details.suiteName, details.testName));
-}
+void DeferredTestReporter::ReportTestStart(TestDetails const& details) { m_results.push_back(DeferredTestResult(details.suiteName, details.testName)); }
 
 void DeferredTestReporter::ReportFailure(TestDetails const& details, char const* failure)
 {
@@ -23,7 +20,4 @@ void DeferredTestReporter::ReportTestFinish(TestDetails const&, float secondsEla
     r.timeElapsed = secondsElapsed;
 }
 
-DeferredTestReporter::DeferredTestResultList& DeferredTestReporter::GetResults()
-{
-    return m_results;
-}
+DeferredTestReporter::DeferredTestResultList& DeferredTestReporter::GetResults() { return m_results; }

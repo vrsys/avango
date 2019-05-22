@@ -32,37 +32,36 @@
 
 namespace av
 {
-  enum Maestro_MergeMsgType
-  {
+enum Maestro_MergeMsgType
+{
     MAESTRO_MERGE_CAST,
     MAESTRO_MERGE_SEND,
     MAESTRO_MERGE_STATE_CAST
-  };
+};
 
-  struct MaestroMergeViewData : public Maestro_GrpMemb_ViewData
-  {
+struct MaestroMergeViewData : public Maestro_GrpMemb_ViewData
+{
     MaestroMergeViewData();
-    MaestroMergeViewData(Maestro_GrpMemb_ViewData &gmView);
+    MaestroMergeViewData(Maestro_GrpMemb_ViewData& gmView);
     void blend_in(Maestro_Message& msg);
     void splice_out(Maestro_Message& msg);
 
     int stateCounter; // counts the number of cast and send upcalls, added by Roy Friedman
-  };
+};
 
-  using MaestroMergeOptions = Maestro_GrpMemb_Options;
+using MaestroMergeOptions = Maestro_GrpMemb_Options;
 
-  /**
-   * MaestroMerge is a specialization of Maestro_GroupMember providing additional features
-   * for clients
-   * - State transfer callbacks
-   * - Automatic delaying of messages send during a state transfer
-   * - ...
-   */
-  class MaestroMerge : public Maestro_GroupMember
-  {
+/**
+ * MaestroMerge is a specialization of Maestro_GroupMember providing additional features
+ * for clients
+ * - State transfer callbacks
+ * - Automatic delaying of messages send during a state transfer
+ * - ...
+ */
+class MaestroMerge : public Maestro_GroupMember
+{
   public:
-
-    MaestroMerge(MaestroMergeOptions &ops);
+    MaestroMerge(MaestroMergeOptions& ops);
     MaestroMerge(MaestroMerge& hMerge);
     virtual ~MaestroMerge() {}
     virtual MaestroMerge& operator=(MaestroMerge& hMerge);
@@ -71,18 +70,17 @@ namespace av
     virtual void join();
 
     // Sending messages.
-    virtual void cast(Maestro_Message &msg);
-    virtual void cast(Maestro_Message &msg, Maestro_MsgSendView &sendView);
+    virtual void cast(Maestro_Message& msg);
+    virtual void cast(Maestro_Message& msg, Maestro_MsgSendView& sendView);
 
-    virtual void send(Maestro_EndpID &dest, Maestro_Message &msg);
-    virtual void send(Maestro_EndpID &dest, Maestro_Message &msg, Maestro_MsgSendView &sendView);
+    virtual void send(Maestro_EndpID& dest, Maestro_Message& msg);
+    virtual void send(Maestro_EndpID& dest, Maestro_Message& msg, Maestro_MsgSendView& sendView);
 
     virtual void leave();
 
     virtual const Maestro_EndpID& eid();
 
   protected:
-
     /**************** Client-Server interface upcalls ***********************/
 
     // State transfer callbacks
@@ -91,12 +89,12 @@ namespace av
     virtual void Merge_RemoveState_Callback(Maestro_EndpID&) {}
 
     // View callbacks
-    virtual void Merge_ViewMsg_Callback(MaestroMergeViewData &, /*OUT*/Maestro_Message &) {}
-    virtual void Merge_AcceptedView_Callback(MaestroMergeViewData&, Maestro_Message &) {}
+    virtual void Merge_ViewMsg_Callback(MaestroMergeViewData&, /*OUT*/ Maestro_Message&) {}
+    virtual void Merge_AcceptedView_Callback(MaestroMergeViewData&, Maestro_Message&) {}
 
     // Message callbacks
-    virtual void Merge_ReceiveCast_Callback(Maestro_EndpID &, Maestro_Message &) {}
-    virtual void Merge_ReceiveSend_Callback(Maestro_EndpID &, Maestro_Message &) {}
+    virtual void Merge_ReceiveCast_Callback(Maestro_EndpID&, Maestro_Message&) {}
+    virtual void Merge_ReceiveSend_Callback(Maestro_EndpID&, Maestro_Message&) {}
 
     // The group is blocked for a view change
     virtual void Merge_Block_Callback() {}
@@ -113,7 +111,6 @@ namespace av
     virtual void Merge_Heartbeat_Callback(unsigned time);
 
   private:
-
     int mFirstViewInstalled;
     MaestroMergeViewData mMyView;
 
@@ -122,7 +119,7 @@ namespace av
     void unblock_client();
 
     void cast_state();
-    void receive_state(Maestro_EndpID &origin, Maestro_Message &msg);
+    void receive_state(Maestro_EndpID& origin, Maestro_Message& msg);
 
     // Added by Roy Friedman for new state xfer
     int mValidStateGuro;
@@ -136,17 +133,15 @@ namespace av
     /**************************** Callbacks ************************************/
 
     // View callbacks
-    void grpMemb_ViewMsg_Callback(Maestro_GrpMemb_ViewData &viewData,
-                                  /*OUT*/Maestro_Message &viewMsg);
-    void grpMemb_ViewStateInfo_Callback(Maestro_EndpID /*in*/&origin,
-                                        Maestro_GrpMemb_ViewData /*in*/&viewData,
-                                        Maestro_Message /*in*/&msg,
-                                        Maestro_Message /*out*/&next_view_msg, int /*out*/&final);
-    void grpMemb_AcceptedView_Callback(Maestro_GrpMemb_ViewData& viewData, Maestro_Message &msg);
+    void grpMemb_ViewMsg_Callback(Maestro_GrpMemb_ViewData& viewData,
+                                  /*OUT*/ Maestro_Message& viewMsg);
+    void
+    grpMemb_ViewStateInfo_Callback(Maestro_EndpID /*in*/& origin, Maestro_GrpMemb_ViewData /*in*/& viewData, Maestro_Message /*in*/& msg, Maestro_Message /*out*/& next_view_msg, int /*out*/& final);
+    void grpMemb_AcceptedView_Callback(Maestro_GrpMemb_ViewData& viewData, Maestro_Message& msg);
 
     // Message Callbacks
-    void grpMemb_ReceiveCast_Callback(Maestro_EndpID &origin, Maestro_Message &msg);
-    void grpMemb_ReceiveSend_Callback(Maestro_EndpID &origin, Maestro_Message &msg);
+    void grpMemb_ReceiveCast_Callback(Maestro_EndpID& origin, Maestro_Message& msg);
+    void grpMemb_ReceiveSend_Callback(Maestro_EndpID& origin, Maestro_Message& msg);
 
     // The group is blocked for a view change
     void grpMemb_Block_Callback();
@@ -160,49 +155,37 @@ namespace av
     // delay messages sent during xfer
     class DelayMsg
     {
+      public:
+        DelayMsg() : _use_view(false), _use_dest(false) {}
 
-    public:
+        DelayMsg(const DelayMsg& m) : _msg((Maestro_Message&)m._msg), _view(m._view), _dest((Maestro_EndpID&)m._dest), _use_view(m._use_view), _use_dest(m._use_dest) {}
 
-      DelayMsg() :
-        _use_view(false),
-        _use_dest(false)
-      {}
+        const DelayMsg& operator=(const DelayMsg& m)
+        {
+            _msg = (Maestro_Message&)m._msg;
+            _view = m._view;
+            _dest = (Maestro_EndpID&)m._dest;
+            _use_dest = m._use_dest;
+            _use_view = m._use_view;
+            return *this;
+        };
 
-      DelayMsg(const DelayMsg& m) :
-        _msg((Maestro_Message&)m._msg),
-        _view(m._view),
-        _dest((Maestro_EndpID&)m._dest),
-        _use_view(m._use_view),
-        _use_dest(m._use_dest)
-      {}
-
-      const DelayMsg& operator=(const DelayMsg& m)
-      {
-        _msg = (Maestro_Message&)m._msg;
-        _view = m._view;
-        _dest = (Maestro_EndpID&)m._dest;
-        _use_dest = m._use_dest;
-        _use_view = m._use_view;
-        return *this;
-      };
-
-      Maestro_Message _msg;
-      Maestro_MsgSendView _view;
-      Maestro_EndpID _dest;
-      bool _use_view;
-      bool _use_dest;
+        Maestro_Message _msg;
+        Maestro_MsgSendView _view;
+        Maestro_EndpID _dest;
+        bool _use_view;
+        bool _use_dest;
     };
 
     using DelayMsgVec = std::vector<DelayMsg>;
     DelayMsgVec mDelayedMsgs;
 
-    void delayMessage(Maestro_Message &msg);
-    void delayMessage(Maestro_Message &msg, Maestro_MsgSendView &sendView);
-    void delayMessage(Maestro_EndpID &dest, Maestro_Message &msg);
-    void delayMessage(Maestro_EndpID &dest, Maestro_Message &msg, Maestro_MsgSendView &sendView);
+    void delayMessage(Maestro_Message& msg);
+    void delayMessage(Maestro_Message& msg, Maestro_MsgSendView& sendView);
+    void delayMessage(Maestro_EndpID& dest, Maestro_Message& msg);
+    void delayMessage(Maestro_EndpID& dest, Maestro_Message& msg, Maestro_MsgSendView& sendView);
     void deliverDelayedMessages();
-
-  };
+};
 
 } // namespace av
 

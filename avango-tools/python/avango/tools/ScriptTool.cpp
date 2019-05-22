@@ -29,7 +29,7 @@
 
 namespace
 {
-  av::Logger& logger(av::getLogger("av::tools::ScriptTool"));
+av::Logger& logger(av::getLogger("av::tools::ScriptTool"));
 }
 
 AV_FC_DEFINE(av::tools::ScriptTool);
@@ -39,57 +39,51 @@ AV_FIELD_DEFINE(av::tools::MFScriptTool);
 
 av::tools::ScriptTool::ScriptTool()
 {
-  AV_FC_ADD_FIELD(TargetCallback, av::script::SFObject::ValueType());
-  AV_FC_ADD_FIELD(AddedTargetCallback, av::script::SFObject::ValueType());
-  AV_FC_ADD_FIELD(KeptTargetCallback, av::script::SFObject::ValueType());
-  AV_FC_ADD_FIELD(RemovedTargetCallback, av::script::SFObject::ValueType());
+    AV_FC_ADD_FIELD(TargetCallback, av::script::SFObject::ValueType());
+    AV_FC_ADD_FIELD(AddedTargetCallback, av::script::SFObject::ValueType());
+    AV_FC_ADD_FIELD(KeptTargetCallback, av::script::SFObject::ValueType());
+    AV_FC_ADD_FIELD(RemovedTargetCallback, av::script::SFObject::ValueType());
 }
 
-av::tools::ScriptTool::~ScriptTool()
-{}
+av::tools::ScriptTool::~ScriptTool() {}
 
-void
-av::tools::ScriptTool::initClass()
+void av::tools::ScriptTool::initClass()
 {
-  if (!isTypeInitialized())
-  {
-    av::tools::Tool::initClass();
+    if(!isTypeInitialized())
+    {
+        av::tools::Tool::initClass();
 
-    AV_FC_INIT(av::tools::Tool, av::tools::ScriptTool, true);
+        AV_FC_INIT(av::tools::Tool, av::tools::ScriptTool, true);
 
-    SFScriptTool::initClass("av::tools::SFScriptTool", "av::Field");
-    MFScriptTool::initClass("av::tools::MFScriptTool", "av::Field");
-  }
+        SFScriptTool::initClass("av::tools::SFScriptTool", "av::Field");
+        MFScriptTool::initClass("av::tools::MFScriptTool", "av::Field");
+    }
 }
 
-/* virtual */ void
-av::tools::ScriptTool::evaluateTarget(TargetHolder& holder)
+/* virtual */ void av::tools::ScriptTool::evaluateTarget(TargetHolder& holder)
 {
-  av::script::SFObject::ValueType callback = TargetCallback.getValue();
-  if (callback.ptr() != Py_None)
-    callback(Link<TargetHolder>(&holder));
+    av::script::SFObject::ValueType callback = TargetCallback.getValue();
+    if(callback.ptr() != Py_None)
+        callback(Link<TargetHolder>(&holder));
 }
 
-/* virtual */ void
-av::tools::ScriptTool::evaluateAddedTarget(TargetHolder& holder)
+/* virtual */ void av::tools::ScriptTool::evaluateAddedTarget(TargetHolder& holder)
 {
-  av::script::SFObject::ValueType callback = AddedTargetCallback.getValue();
-  if (callback.ptr() != Py_None)
-    callback(Link<TargetHolder>(&holder));
+    av::script::SFObject::ValueType callback = AddedTargetCallback.getValue();
+    if(callback.ptr() != Py_None)
+        callback(Link<TargetHolder>(&holder));
 }
 
-/* virtual */ void
-av::tools::ScriptTool::evaluateKeptTarget(TargetHolder& holder)
+/* virtual */ void av::tools::ScriptTool::evaluateKeptTarget(TargetHolder& holder)
 {
-  av::script::SFObject::ValueType callback = KeptTargetCallback.getValue();
-  if (callback.ptr() != Py_None)
-    callback(Link<TargetHolder>(&holder));
+    av::script::SFObject::ValueType callback = KeptTargetCallback.getValue();
+    if(callback.ptr() != Py_None)
+        callback(Link<TargetHolder>(&holder));
 }
 
-/* virtual */ void
-av::tools::ScriptTool::evaluateRemovedTarget(TargetHolder& holder)
+/* virtual */ void av::tools::ScriptTool::evaluateRemovedTarget(TargetHolder& holder)
 {
-  av::script::SFObject::ValueType callback = RemovedTargetCallback.getValue();
-  if (callback.ptr() != Py_None)
-    callback(Link<TargetHolder>(&holder));
+    av::script::SFObject::ValueType callback = RemovedTargetCallback.getValue();
+    if(callback.ptr() != Py_None)
+        callback(Link<TargetHolder>(&holder));
 }

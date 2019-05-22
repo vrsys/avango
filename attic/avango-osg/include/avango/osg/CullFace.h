@@ -37,63 +37,58 @@
 
 namespace av
 {
-  namespace osg
-  {
-    typedef ::osg::CullFace OsgCullFace;
+namespace osg
+{
+typedef ::osg::CullFace OsgCullFace;
+
+/**
+ * Wrapper for ::osg::CullFace
+ *
+ * \ingroup av_osg
+ */
+class AV_OSG_DLL CullFace : public StateAttribute
+{
+    AV_FC_DECLARE();
+
+  public:
+    /**
+     * Constructor. When called without arguments, a new ::osg::CullFace is created.
+     * Otherwise, the given ::osg::CullFace is used.
+     */
+    CullFace(OsgCullFace* osgcullface = new OsgCullFace());
+    // use defined type to circumvent compiler bug in VS8
+
+  protected:
+    /**
+     * Destructor made protected to prevent allocation on stack.
+     */
+    virtual ~CullFace();
+
+  public:
+    SFInt Mode;
 
     /**
-     * Wrapper for ::osg::CullFace
-     *
-     * \ingroup av_osg
+     * Get the wrapped ::osg::CullFace.
      */
-    class AV_OSG_DLL CullFace : public StateAttribute
-    {
-      AV_FC_DECLARE();
+    ::osg::CullFace* getOsgCullFace() const;
 
-    public:
+  protected:
+    virtual void getModeCB(const av::SFInt::GetValueEvent& event);
+    virtual void setModeCB(const av::SFInt::SetValueEvent& event);
 
-      /**
-       * Constructor. When called without arguments, a new ::osg::CullFace is created.
-       * Otherwise, the given ::osg::CullFace is used.
-       */
-      CullFace(OsgCullFace* osgcullface = new OsgCullFace());
-      // use defined type to circumvent compiler bug in VS8
+  private:
+    ::osg::CullFace* mOsgCullFace;
+};
 
-    protected:
-
-      /**
-       * Destructor made protected to prevent allocation on stack.
-       */
-      virtual ~CullFace();
-
-    public:
-
-      SFInt Mode;
-
-      /**
-       * Get the wrapped ::osg::CullFace.
-       */
-      ::osg::CullFace* getOsgCullFace() const;
-
-    protected:
-
-      virtual void getModeCB(const av::SFInt::GetValueEvent& event);
-      virtual void setModeCB(const av::SFInt::SetValueEvent& event);
-
-    private:
-
-      ::osg::CullFace *mOsgCullFace;
-    };
-
-    typedef SingleField<Link<CullFace> > SFCullFace;
-    typedef MultiField<Link<CullFace> > MFCullFace;
-  }
+typedef SingleField<Link<CullFace>> SFCullFace;
+typedef MultiField<Link<CullFace>> MFCullFace;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::CullFace> >;
-  template class AV_OSG_DLL MultiField<Link<osg::CullFace> >;
+template class AV_OSG_DLL SingleField<Link<osg::CullFace>>;
+template class AV_OSG_DLL MultiField<Link<osg::CullFace>>;
 #endif
 
-}
+} // namespace av
 
 #endif

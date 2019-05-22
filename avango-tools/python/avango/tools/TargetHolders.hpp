@@ -3,4 +3,4 @@
 
 void init_TargetHolders();
 
-#endif //AV_PYTHON_TOOLS_TARGET_HOLDERS_HPP
+#endif // AV_PYTHON_TOOLS_TARGET_HOLDERS_HPP

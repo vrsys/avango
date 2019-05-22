@@ -29,32 +29,28 @@
 
 namespace shade
 {
-  namespace parser
-  {
+namespace parser
+{
+class ReferenceValue : public IntConvertableValue
+{
+  public:
+    typedef ObjectMap::Index Index;
 
-    class ReferenceValue : public IntConvertableValue
-    {
-    public:
+    ReferenceValue(Index value);
 
-      typedef ObjectMap::Index Index;
+    Index get(void) const { return m_value; }
 
-      ReferenceValue(Index value);
+    /*virtual*/ int get_int(void) const { return static_cast<int>(m_value); }
 
-      Index get(void) const { return m_value; }
+    /*virtual*/ bool is_constant(void) const;
 
-      /*virtual*/ int get_int(void) const { return static_cast<int>(m_value); }
+  private:
+    /*virtual*/ bool less_than(const Value& other) const;
 
-      /*virtual*/ bool is_constant(void) const;
+    Index m_value;
+};
 
-    private:
-
-      /*virtual*/ bool less_than(const Value& other) const;
-
-      Index m_value;
-    };
-
-  }
-}
-
+} // namespace parser
+} // namespace shade
 
 #endif /* shade_parser_ReferenceValue */

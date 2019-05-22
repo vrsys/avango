@@ -29,18 +29,17 @@
 #include <boost/thread/thread.hpp>
 #include <boost/version.hpp>
 
-
 #if BOOST_VERSION > 103800
 #include <boost/thread/condition_variable.hpp>
 namespace av
 {
-	using condition = boost::condition_variable;
+using condition = boost::condition_variable;
 }
 #else
 #include <boost/thread/condition.hpp>
 namespace av
 {
-	using condition = boost::condition;
+using condition = boost::condition;
 }
 #endif
 
@@ -48,15 +47,14 @@ namespace av
 
 namespace av
 {
-  /**
-   * Semaphore implementation using boost::mutex
-   *
-   * \ingroup av
-   */
-  class AV_DLL Semaphore
-  {
-    public:
-
+/**
+ * Semaphore implementation using boost::mutex
+ *
+ * \ingroup av
+ */
+class AV_DLL Semaphore
+{
+  public:
     Semaphore(unsigned int initial = 1);
     ~Semaphore();
 
@@ -84,7 +82,6 @@ namespace av
     int snapshot();
 
   private:
-
     // dummy copy constructor and operator= to prevent copying
     Semaphore(const Semaphore&);
     const Semaphore& operator=(const Semaphore&);
@@ -92,38 +89,28 @@ namespace av
     av::condition mCondition;
     boost::mutex mMutex;
     int mValue;
+};
 
-  };
-
-  /**
-   * Scoped semaphore lock
-   *
-   * \ingroup av
-   */
-  class SemaphoreLock {
-
+/**
+ * Scoped semaphore lock
+ *
+ * \ingroup av
+ */
+class SemaphoreLock
+{
   public:
+    SemaphoreLock(Semaphore& s) : mSemaphore(s) { mSemaphore.wait(); }
 
-    SemaphoreLock(Semaphore& s) : mSemaphore(s)
-    {
-      mSemaphore.wait();
-    }
-
-    ~SemaphoreLock()
-    {
-      mSemaphore.post();
-    }
+    ~SemaphoreLock() { mSemaphore.post(); }
 
   private:
-
     // dummy copy constructor and operator= to prevent copying
     SemaphoreLock(const SemaphoreLock&);
     const SemaphoreLock& operator=(const SemaphoreLock&);
 
     Semaphore& mSemaphore;
+};
 
-  };
-
-}
+} // namespace av
 
 #endif // #if !defined(AVANGO_SEMAPHORE_H)

@@ -32,53 +32,52 @@
 
 namespace av
 {
-  namespace osg
-  {
-    class AV_OSG_DLL TriangleContainer : public Geometry
-    {
-      AV_FC_DECLARE();
+namespace osg
+{
+class AV_OSG_DLL TriangleContainer : public Geometry
+{
+    AV_FC_DECLARE();
 
-    public:
-      TriangleContainer();
-      virtual ~TriangleContainer();
+  public:
+    TriangleContainer();
+    virtual ~TriangleContainer();
 
-      void fieldHasChangedLocalSideEffect(const av::Field& field);
-      void evaluateLocalSideEffect();
+    void fieldHasChangedLocalSideEffect(const av::Field& field);
+    void evaluateLocalSideEffect();
 
-      MFVec3 Vertices;
-      MFVec4 Colors;
-      MFVec3 Normals;
-      SFInt Mode;
-      SFBool ModeToggle;
-      SFFloat PointSize;
+    MFVec3 Vertices;
+    MFVec4 Colors;
+    MFVec3 Normals;
+    SFInt Mode;
+    SFBool ModeToggle;
+    SFFloat PointSize;
 
-      unsigned getTriangleCount() const;
-      unsigned getNormalCount() const;
+    unsigned getTriangleCount() const;
+    unsigned getNormalCount() const;
 
-    private:
+  private:
+    void update(); // rebuilds the osg geometry buffer upon call
+    void updateVertexBuffer();
+    void updateColor();
+    void updateMode();
+    void updateNormal();
 
-      void update(); //rebuilds the osg geometry buffer upon call
-      void updateVertexBuffer();
-      void updateColor();
-      void updateMode();
-      void updateNormal();
+    bool mVecFieldHasChanged;
+    bool mColorFieldHasChanged;
+    bool mModeFieldHasChanged;
+    bool mNormalFieldHasChanged;
 
-      bool mVecFieldHasChanged;
-      bool mColorFieldHasChanged;
-      bool mModeFieldHasChanged;
-      bool mNormalFieldHasChanged;
+    unsigned mNormalCount;
+    unsigned mTriangleCount;
+};
 
-      unsigned mNormalCount;
-      unsigned mTriangleCount;
-    };
-
-    typedef SingleField<Link<TriangleContainer> > SFTriangleContainer;
-    typedef MultiField<Link<TriangleContainer> > MFTriangleContainer;
-  } // namespace osg
+typedef SingleField<Link<TriangleContainer>> SFTriangleContainer;
+typedef MultiField<Link<TriangleContainer>> MFTriangleContainer;
+} // namespace osg
 
 #ifdef AV_INSTANTIATE_FIELD_TEMPLATES
-  template class AV_OSG_DLL SingleField<Link<osg::TriangleContainer> >;
-  template class AV_OSG_DLL MultiField<Link<osg::TriangleContainer> >;
+template class AV_OSG_DLL SingleField<Link<osg::TriangleContainer>>;
+template class AV_OSG_DLL MultiField<Link<osg::TriangleContainer>>;
 #endif
 
 } // namespace av

@@ -3,4 +3,4 @@
 
 void init_TexturedScreenSpaceQuadNode();
 
-#endif //AV_PYTHON_GUA_TEXTURED__SCREEN_SPACE_QUAD_NODE_HPP
+#endif // AV_PYTHON_GUA_TEXTURED__SCREEN_SPACE_QUAD_NODE_HPP

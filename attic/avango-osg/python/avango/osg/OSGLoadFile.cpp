@@ -33,19 +33,20 @@ using namespace av::python;
 
 namespace boost
 {
-  namespace python
-  {
-    template <class T> struct pointee<av::Link<T> >
-    {
-      typedef T type;
-    };
-  }
-}
+namespace python
+{
+template <class T>
+struct pointee<av::Link<T>>
+{
+    typedef T type;
+};
+} // namespace python
+} // namespace boost
 
 void init_OSGLoadFile(void)
 {
-  // wrapping osg::LoadFile functionality
-  register_field<av::osg::SFLoadFile>("SFLoadFile");
-  register_multifield<av::osg::MFLoadFile>("MFLoadFile");
-  class_<av::osg::LoadFile, av::Link<av::osg::LoadFile>, bases<av::osg::MatrixTransform>, boost::noncopyable >("LoadFile", "docstring", no_init);
+    // wrapping osg::LoadFile functionality
+    register_field<av::osg::SFLoadFile>("SFLoadFile");
+    register_multifield<av::osg::MFLoadFile>("MFLoadFile");
+    class_<av::osg::LoadFile, av::Link<av::osg::LoadFile>, bases<av::osg::MatrixTransform>, boost::noncopyable>("LoadFile", "docstring", no_init);
 }

@@ -40,6 +40,7 @@ class AtlasTile:
         self.y_max = 0.0
 
         self.transform = trans_mat # * avango.gua.make_rot_mat(180,0,0,1.0)
+        print(self.transform.get_scale())
         self.rotation = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
         self.position = avango.gua.Vec3(self.transform.get_translate()[0], 
                                         self.transform.get_translate()[1], 

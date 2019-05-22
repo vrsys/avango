@@ -96,69 +96,23 @@ class PhotoProjection(avango.script.Script):
   def set_localized_image_list(self, localized_image_list):
     self.localized_image_list = localized_image_list
     self.position_list = [li.position for li in self.localized_image_list]
-    print(len(self.localized_image_list), len(self.position_list))
+    print('set atlas tile list',len(self.localized_image_list), len(self.position_list))
     self.min_tex_coords = self.localized_image_list[self.old_closest_id].min_uv
     self.max_tex_coords = self.localized_image_list[self.old_closest_id].max_uv
 
-  def find_orthogonal_image_plane_view(self):
-    closest_id = None
-    # get direction vector of hendheld lense
-    pos = self.Transform2.value.get_translate()
-
-    # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected())
-    _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
-    _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
-
-    angle_list = []
-    # get angles between hendheld lense and images
-    for img in self.localized_image_list:
-      dot = _abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z
-      # make sure values are in range for acos
-      dot = 1 if dot >= 1 else dot
-      dot = -1 if dot <= -1 else dot
-      a = math.acos(dot)
-      # filter by angle
-      if a < 1:
-        tup = (img, a)
-        # if angle between image nad quad is small show img direction indicator 
-        # img.set_selected(False, True)
-        angle_list.append(tup)
-      else:
-        # if image and handheld quad angle is too big dont show indicator
-        pass
-    angle_list.sort(key=lambda tup: tup[1])
-
-    lense_center_pos = self.Transform2.value.get_translate()
-    for tup in angle_list:
-      if tup[0].frustum.contains(lense_center_pos):
-        # TODO: Might be good ideas:
-        # - adapt frustum size based on distance of hendheld lense 
-        # - check if the corners of the quad are in the frustum
-
-        # print('in frustum')
-        closest_id = tup[0].id
-        return closest_id
-      else:
-        closest_id = None
-
-    # if hendheld is in no frustum, get images just by angle
-    if closest_id is None:
-      # print('not in any frustum')
-      if len(angle_list) > 0:
-        closest_id = angle_list[0][0].id
-      else: 
-        print('NO view')
-        closest_id = 0
-
-    return closest_id
 
   def find_closest_perspective(self):
     closest_id = None
+    print('wt ', self.projection_lense.WorldTransform.value.get_translate())
+    print('lt ', self.projection_lense.Transform.value.get_translate())
 
     # get direction vector of hendheld lense
     # pos = self.Transform2.value.get_translate()
-    lense_pos= self.projection_lense.WorldTransform.value.get_translate()
+    lense_mat =  avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0)) * self.projection_lense.WorldTransform.value 
+    print('wt und inv',lense_mat.get_translate())
+    lense_pos= self.projection_lense.WorldTransform.value.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
+    # lense_pos= lense_mat.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
+    # avango.gua.make_trans_mat(0.0,-1.445,2.0)
     # print(lense_pos)
     # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
     # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
@@ -171,16 +125,18 @@ class PhotoProjection(avango.script.Script):
 
     for img in self.localized_image_list:
       dir_vec = lense_pos - img.position
+
       dir_vec.normalize()
       dot = _abs_dir.x*dir_vec.x + _abs_dir.y*dir_vec.y + _abs_dir.z*dir_vec.z
       # make sure values are in range for acos
       dot = 1 if dot >= 1 else dot
       dot = -1 if dot <= -1 else dot
       a = math.acos(dot)
-      # print(img.id, a)
+      
       # filter by angle
-      if a < 10:
+      if math.degrees(a) < 120:
         t = (img, a)
+        print(img.id, math.degrees(a))
         # if angle between image nad quad is small show img direction indicator 
         # img.set_selected(False, True)
         angle_list.append(t)
@@ -196,6 +152,7 @@ class PhotoProjection(avango.script.Script):
 
         # print('in frustum')
         closest_id = tup[0].id
+        print(self.localized_image_list[closest_id].position)
         # print('in frus', closest_id)
         return closest_id
       else:
@@ -212,75 +169,7 @@ class PhotoProjection(avango.script.Script):
     print('image id :', closest_id)
     return closest_id
 
-  def find_closest_view(self):
-    closest_id = None
-
-    # get direction vector of hendheld lense
-    pos = self.Transform2.value.get_translate()
-    # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
-    # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-    _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected())
-    _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
-    _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
-
-    angle_list = []
-    angle_list2 = []
-    
-    # get angles between hendheld lense and images
-    for img in self.localized_image_list:
-      dot = _abs_dir.x*img.direction.x + _abs_dir.y*img.direction.y + _abs_dir.z*img.direction.z
-      # make sure values are in range for acos
-      dot = 1 if dot >= 1 else dot
-      dot = -1 if dot <= -1 else dot
-      a = math.acos(dot)
-      # filter by angle
-      if a < 10:
-        tup = (img, a)
-        # if angle between image nad quad is small show img direction indicator 
-        # img.set_selected(False, True)
-        angle_list.append(tup)
-
-    for tup in angle_list:
-      dir_vec = pos - tup[0].position
-      dot = _abs_dir.x*dir_vec.x + _abs_dir.y*dir_vec.y + _abs_dir.z*dir_vec.z
-      # make sure values are in range for acos
-      dot = 1 if dot >= 1 else dot
-      dot = -1 if dot <= -1 else dot
-      a = math.acos(dot)
-      # filter by angle
-      if a < 1:
-        t = (tup[0], a)
-        # if angle between image nad quad is small show img direction indicator 
-        # img.set_selected(False, True)
-        angle_list2.append(t)
-
-    angle_list2.sort(key=lambda tup: tup[1])
-
-    lense_center_pos = self.Transform2.value.get_translate()
-    for tup in angle_list2:
-
-      if tup[0].frustum.contains(lense_center_pos):
-        # TODO: Might be good ideas:
-        # - adapt frustum size based on distance of hendheld lense 
-        # - check if the corners of the quad are in the frustum
-
-        # print('in frustum')
-        closest_id = tup[0].id
-        return closest_id
-      else:
-        closest_id = None
-
-    # if hendheld is in no frustum, get images just by angle
-    if closest_id is None:
-      # print('not in any frustum')
-      if len(angle_list2) > 0:
-        closest_id = angle_list2[0][0].id
-      else: 
-        print('NO view')
-        closest_id = 0
-
-    return closest_id
-
+ 
 
   @field_has_changed(Transform)
   def update_matrices(self):
@@ -297,7 +186,7 @@ class PhotoProjection(avango.script.Script):
     # self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
     self.Material.value.set_uniform("Emissivity", 1.0)
-    # self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
+    self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
     self.Material.value.set_uniform("Roughness", 1.0)
     self.Material.value.set_uniform("Metalness", 0.0)
     self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
@@ -312,15 +201,15 @@ class PhotoProjection(avango.script.Script):
 
   @field_has_changed(Button0)
   def button0_changed(self):
-    # pass
     if self.Button0.value:
       self.update_perspective()
 
       self.button0_pressed = True
-      # print('TASTE 0')
+      print('TASTE 0')
       # self.projection_lense.Material.connect_from(self.Material)
     else:
       if self.button0_pressed:
+        print('always')
         lense_mat = self.projection_lense.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
         
@@ -334,7 +223,7 @@ class PhotoProjection(avango.script.Script):
   def button1_changed(self):
     # if right mouse pressed
     if self.Button1.value:
-      # print('TASTE 1')
+      print('TASTE 1')
       if self.button1_pressed == False:
         if self.show_lense:  
           self.lense_parent_node.Children.value.remove(self.projection_lense)
@@ -358,16 +247,19 @@ class PhotoProjection(avango.script.Script):
       #  or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
       #  or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
        
+      print('update_perspective')
       # closest_id = self.find_closest_view()
       closest_id = self.find_closest_perspective()
       
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
       self.max_tex_coords = self.localized_image_list[closest_id].max_uv
+      tile_scale =  self.localized_image_list[closest_id].tile_scale
       # self.min_tex_coords = self.localized_image_list[closest_id].max_uv
       # self.max_tex_coords = self.localized_image_list[closest_id].min_uv
-      self.screen.Width.value = self.localized_image_list[closest_id].tile_width 
-      self.screen.Height.value = self.localized_image_list[closest_id].tile_height 
+      self.screen.Width.value = self.localized_image_list[closest_id].tile_width / 4 * (1/tile_scale)
+      
+      self.screen.Height.value = self.localized_image_list[closest_id].tile_height /4 * (1/tile_scale)
       # self.localized_image_list[closest_id].set_selected(True, True)
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id

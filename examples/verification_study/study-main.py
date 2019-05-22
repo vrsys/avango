@@ -1,3 +1,4 @@
+import sys
 import avango
 import avango.script
 from avango.script import field_has_changed
@@ -18,6 +19,7 @@ from src.DynamicQuad import DynamicQuad
 # from src.MultiViewExplorer import MultiViewExplorer
 from src.MultiWindowVisualizer import MultiWindowVisualizer
 from src.PhotoProjection import PhotoProjection
+from src.TrackedLenseProjection import TrackedLenseProjection
 from src.PerspectivePicker import PerspectivePicker
 from src.picker import Picker
 from src.MultiUserViewingSetup import MultiUserViewingSetup
@@ -46,12 +48,13 @@ def make_node_distributable(node):
 def make_material_distributable(mat):
     nettrans.distribute_object(mat)
 
-def start():
+def start(user_id):
+    print("USER   ", user_id)
+    study_group = 'A' if user_id % 2 == 0 else "B"
 
     # setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     graph.Root.value.Children.value.append(nettrans)
-
     # nettrans.Children.value.append(trans_node)
 
     # Create basic loaders
@@ -67,14 +70,13 @@ def start():
         avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
     )    
 
-    # reconstruction_center = avango.gua.Vec3(0.0, -0.2, 0.0)
+    # reconstruction_center = avango.gua.Vec3(0.0, -0.2, 0.0) # good value for figure
     reconstruction_center = avango.gua.Vec3(0.0, 0.5, 0.0)
     reconstruction.Transform.value = avango.gua.make_trans_mat(reconstruction_center) * \
             avango.gua.make_rot_mat(90.0,-1,0,0) * \
             avango.gua.make_rot_mat(90.0,0,0,1) * \
             avango.gua.make_scale_mat(0.0014)
-            # avango.gua.make_scale_mat(0.00105)
-            #avango.gua.make_scale_mat(1.0)
+            # avango.gua.make_scale_mat(0.00105) # good size for figure
 
     # update material properties (in whole subtree)
     stack = [(reconstruction)]
@@ -114,7 +116,7 @@ def start():
 
     atlas_tiles = []
     atlas_trans_node = avango.gua.nodes.TransformNode(Name="atlas_trans_node",
-                                                      Transform=avango.gua.make_trans_mat(0.0,-0.7,0.0)
+                                                      # Transform=avango.gua.make_trans_mat(0.0,-0.5,0.0)
                                                       )
     atlas_tiles_node = dt_loader.create_empty_geometry(
             "AtlasTiles", 
@@ -129,7 +131,7 @@ def start():
     atlas_tiles_node.Material.value.EnableVirtualTexturing.value = True
     
     for quad_id in range(view_num):
-    # for quad_id in range(30):
+    # for quad_id in range(3):
         at = AtlasTile(graph, atlas_tiles_node, quad_id, atlas_image_locations[quad_id], 14, 15)
         atlas_tiles.append(at)
         
@@ -147,30 +149,30 @@ def start():
                                    atlas_path, atlas_tiles,
                                    4.07, 2.3)
 
-    photo_projection = PhotoProjection()
-    photo_projection.my_constructor()
-    photo_projection.set_localized_image_list(atlas_tiles)
-    photo_projection.Graph.value = graph
-    photo_projection.Texture.value = atlas_path
-    graph.Root.value.Children.value.append(photo_projection.group_node)
-
     perspective_picker = PerspectivePicker()
     perspective_picker.my_constructor()
     perspective_picker.set_localized_image_list(atlas_tiles)
     perspective_picker.set_visualizer(multi_window_viz, 'texture')
 
     study_script = StudyScript()
-    study_script.my_constructor(graph)
+    study_script.my_constructor(graph, user_id, "/home/senu8384/Desktop/master-thesis/avango/examples/verification_study/src/study_files/part_1_" + study_group + ".json")
 
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
 
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", hostname)
     vt_backend = avango.gua.VTBackend()
         
     if hostname == "hydra" or hostname == "argos":
         print('Init powerwall setup!')
         viewingSetup = None
+
+        tracked_lense_projection = TrackedLenseProjection()
+        tracked_lense_projection.my_constructor()
+        tracked_lense_projection.set_localized_image_list(atlas_tiles)
+        tracked_lense_projection.Graph.value = graph
+        tracked_lense_projection.Texture.value = atlas_path
+        graph.Root.value.Children.value.append(tracked_lense_projection.group_node)
+
         if hostname == "hydra":
             ## DLP wall 4-user setup
             viewingSetup = MultiUserViewingSetup(
@@ -247,9 +249,8 @@ def start():
         #navigation.assign_input(spheron_input)
         navigation.assign_input(spacemouse_input)
         if viewingSetup:
-            # viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
-            viewingSetup.navigation_node.Transform.connect_from(griffin_navigation.get_platform_matrix_field())
-
+            viewingSetup.navigation_node.Transform.connect_from(navigation.get_platform_matrix_field())
+            # viewingSetup.navigation_node.Transform.connect_from(griffin_navigation.get_platform_matrix_field())
 
         nettrans.distribute_object(multi_window_viz.get_material())
         # nettrans.distribute_object(vt_mat)
@@ -261,8 +262,6 @@ def start():
 
         client_screen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4.07, Height=2.3)
         client_navigation.Children.value.append(client_screen)
-
-        
         
         client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
         client_cam = avango.gua.nodes.CameraNode(
@@ -283,7 +282,7 @@ def start():
         nettrans.distribute_object(client_pipeline_description)
 
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
-        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+        # dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
         dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
         dynamic_lense = dynamic_quad.get_node()
 
@@ -309,12 +308,15 @@ def start():
         pointer_node.Children.value.append(dynamic_lense)
 
         # # graph.Root.value.Children.value.append(dynamic_lense)
-        photo_projection.set_projection_lense(dynamic_lense, pointer_node)
+        tracked_lense_projection.set_projection_lense(dynamic_lense, pointer_node)
         perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform)
-        photo_projection.Button0.connect_from(pointer_button_sensor.Button0)
-        photo_projection.Button1.connect_from(pointer_button_sensor.Button2)
+        tracked_lense_projection.Button0.connect_from(pointer_button_sensor.Button0)
+        tracked_lense_projection.Button1.connect_from(pointer_button_sensor.Button1)
 
-        study_script.IndicatorButton.connect_from(keyboard.KeyI)
+        study_script.set_screen(viewingSetup.screen_node)
+        study_script.StudyStateButton.connect_from(keyboard.KeySpace )
+        study_script.StudyStateButton.connect_from(griffin_input.get_button0_field() )
+        # study_script.IndicatorButton.connect_from(griffin_input.get_button0_field() )
         study_script.NextButton.connect_from(keyboard.KeyN)
         study_script.PrevButton.connect_from(keyboard.KeyM)
 
@@ -332,6 +334,14 @@ def start():
         print('Setup Powerwall')
     else:
         print("Desktop setup")
+
+        photo_projection = PhotoProjection()
+        photo_projection.my_constructor()
+        photo_projection.set_localized_image_list(atlas_tiles)
+        photo_projection.Graph.value = graph
+        photo_projection.Texture.value = atlas_path
+        graph.Root.value.Children.value.append(photo_projection.group_node)
+
         # config window size
         width = 1920;
         height = int(width * 9.0 / 16.0)
@@ -436,7 +446,10 @@ def start():
         vt_backend.add_camera(camera)
         vt_backend.add_camera(client_cam)
         vt_backend.start_backend()
-        
+
+        keyboard = KeyboardDevice()
+        study_script.set_screen(screen)
+
         # setup navigator
         navigator = examples_common.navigator.Navigator()
         navigator.StartLocation.value = camera.Transform.value.get_translate()
@@ -456,6 +469,7 @@ def start():
         photo_projection.Button1.connect_from(navigator.Mouse.ButtonRight)
         perspective_picker.Button0.connect_from(navigator.Mouse.ButtonLeft)
         study_script.IndicatorButton.connect_from(navigator.Keyboard.KeyI)
+        study_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
         study_script.NextButton.connect_from(navigator.Keyboard.KeyN)
         study_script.PrevButton.connect_from(navigator.Keyboard.KeyM)
         # capture_script.K_Key.connect_from(navigator.Keyboard.KeyK)
@@ -502,7 +516,10 @@ def print_fields(node, print_values = False):
 
 
 if __name__ == '__main__':
-    start()
+    user_id = 0
+    if len(sys.argv) > 1:
+        user_id = int(sys.argv[1])
+    start(user_id)
 
 
     # client_cam = avango.gua.nodes.CameraNode(

@@ -863,7 +863,8 @@ def init_keyboard2():
             keyboard.buttons[2] = "EV_KEY::KEY_E"
             keyboard.buttons[3] = "EV_KEY::KEY_R"
             keyboard.buttons[4] = "EV_KEY::KEY_T"
-            keyboard.buttons[5] = "EV_KEY::KEY_Z"
+            keyboard.buttons[5] = "EV_KEY::KEY_SPACE"
+            # keyboard.buttons[5] = "EV_KEY::KEY_Z"
             keyboard.buttons[6] = "EV_KEY::KEY_U"
             keyboard.buttons[7] = "EV_KEY::KEY_I"
             keyboard.buttons[8] = "EV_KEY::KEY_O"
@@ -892,6 +893,7 @@ def init_keyboard2():
             keyboard.buttons[29] = "EV_KEY::KEY_2"
             keyboard.buttons[30] = "EV_KEY::KEY_LEFT"
             keyboard.buttons[31] = "EV_KEY::KEY_RIGHT"
+            # keyboard.buttons[32] = "EV_KEY::KEY_SPACE"
 
             device_list.append(keyboard)
             print("Keyboard started at:", _string)
@@ -944,7 +946,8 @@ def init_keyboard():
         keyboard.buttons[2] = "EV_KEY::KEY_E"
         keyboard.buttons[3] = "EV_KEY::KEY_R"
         keyboard.buttons[4] = "EV_KEY::KEY_T"
-        keyboard.buttons[5] = "EV_KEY::KEY_Z"
+        # keyboard.buttons[5] = "EV_KEY::KEY_Z"
+        keyboard.buttons[5] = "EV_KEY::KEY_SPACE"
         keyboard.buttons[6] = "EV_KEY::KEY_U"
         keyboard.buttons[7] = "EV_KEY::KEY_I"
         keyboard.buttons[8] = "EV_KEY::KEY_O"
@@ -973,6 +976,7 @@ def init_keyboard():
         keyboard.buttons[29] = "EV_KEY::KEY_2"
         keyboard.buttons[30] = "EV_KEY::KEY_LEFT"
         keyboard.buttons[31] = "EV_KEY::KEY_RIGHT"
+        # keyboard.buttons[32] = "EV_KEY::KEY_SPACE"
 
         device_list.append(keyboard)
         print("Keyboard " + str(i) + " started at:", name)
@@ -1056,7 +1060,7 @@ init_griffin(get_event_string(1, "Griffin PowerMate"), "device-griffin")
 ## HAS pointer (blue)
 # _button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP"), (2, "EV_KEY::KEY_VOLUMEDOWN")] 
 #_button_mapping = [(0, "EV_KEY::KEY_PAGEUP"), (1, "EV_KEY::KEY_PAGEDOWN")] 
-_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP")] 
+_button_mapping = [(0, "EV_KEY::KEY_VOLUMEUP"), (1, "EV_KEY::KEY_PAGEUP")] 
 init_hid_device(EVENT_STRING = get_event_string(1, "HAS   HAS HS304"), STATION_STRING = "device-pointer3", BUTTON_MAPPINGS = _button_mapping)
 
 ##

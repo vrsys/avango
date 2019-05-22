@@ -28,6 +28,7 @@ class GriffinRotationScript(avango.script.Script):
     ## @var mf_dof
     # The relative input values of the device.
     mf_dof = avango.MFFloat()
+    sf_griffin_button = avango.SFBool()
 
 
     ### Default constructor.
@@ -51,6 +52,13 @@ class GriffinRotationScript(avango.script.Script):
                 self.mf_dof.value[0],
                 )
             # print(' self.mf_dof.value[0]',  self.mf_dof.value[0])
+
+     ## Evaluated when value changes.
+    @field_has_changed(sf_griffin_button)
+    def sf_griffin_button_changed(self):
+        if self.CLASS is not None and self.sf_griffin_button.value == True: # button pressed
+            pass
+
 
     
 
@@ -155,13 +163,9 @@ class GriffinRotationNavigation(Navigation):
         self.script.mf_dof.disconnect()
         self.script.mf_dof.connect_from(INPUT.get_dofs_field())
 
-        '''
         if self.INPUT.get_button0_field() is not None:
-            self.script.sf_groundfollowing_trigger.disconnect()
-            self.script.sf_groundfollowing_trigger.connect_from(INPUT.get_button0_field())
-            #self.script.sf_groundfollowing_trigger.connect_from(INPUT.get_button1_field()) # for spacemouse (left-side button)
-        '''
-        
+            self.script.sf_griffin_button.disconnect()
+            self.script.sf_griffin_button.connect_from(INPUT.get_button0_field())
         
 
     def set_nav_mode(self, INT):

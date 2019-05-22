@@ -181,6 +181,7 @@ def init_keyboard():
             keyboard.buttons[29] = "EV_KEY::KEY_2"
             keyboard.buttons[30] = "EV_KEY::KEY_LEFT"
             keyboard.buttons[31] = "EV_KEY::KEY_RIGHT"
+            keyboard.buttons[32] = "EV_KEY::KEY_SPACE"
             
             device_list.append(keyboard)
             print("Keyboard " + " started at:", _string)
@@ -235,6 +236,7 @@ def init_keyboard2():
             keyboard.buttons[29] = "EV_KEY::KEY_2"
             keyboard.buttons[30] = "EV_KEY::KEY_LEFT"
             keyboard.buttons[31] = "EV_KEY::KEY_RIGHT"
+            keyboard.buttons[32] = "EV_KEY::KEY_SPACE"
 
             device_list.append(keyboard)
             print("Keyboard started at:", _string)

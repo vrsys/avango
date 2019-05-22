@@ -50,7 +50,7 @@ class StudyScript(avango.script.Script):
 
 
         self.indicator_transform = avango.gua.nodes.TransformNode(Name='indicator_offset',
-                                                                  Transform=avango.gua.make_trans_mat(0.0,0.1,0.0)
+                                                                  # Transform=avango.gua.make_trans_mat(0.0,0.1,0.0)
                                                                   )
         self.indicator = avango.gua.nodes.TriMeshLoader().create_geometry_from_file(
             "error_indicator", "data/objects/cube.obj",
@@ -143,6 +143,23 @@ class StudyScript(avango.script.Script):
             print('Study is over')
 
     
+    @field_has_changed(IndicatorButton)
+    def indicator_key_changed(self):
+        if self.IndicatorButton.value:
+            if self.indicator_pressed == False:
+                if self.show_indicator:
+                    print('Off')
+                    self.show_indicator = False
+                    self.indicator_transform.Children.value.remove(self.indicator)
+                else:
+                    print('On')
+                    self.show_indicator = True
+                    self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *\
+                                                     avango.gua.make_scale_mat(0.1,0.1,0.3)
+                    self.indicator_transform.Children.value.append(self.indicator)
+                self.indicator_pressed = True
+        else:
+            self.indicator_pressed = False
 
 
     @field_has_changed(StudyStateButton)
@@ -154,8 +171,47 @@ class StudyScript(avango.script.Script):
     def study_state_changed_by_keyboard(self):
         if self.StudyStateKeyboardButton.value:
             if self.keyboard_button_pressed == False:
-
+                
                 self.change_study_state()
                 self.keyboard_button_pressed = True
         else:
             self.keyboard_button_pressed = False
+
+
+    @field_has_changed(NextButton)
+    def next_key_changed(self):
+        if self.NextButton.value:
+            if self.next_pressed == False:
+                print('id', self.indicator_id)
+                if self.indicator_id < len(self.error_indicator_locations) - 1:
+
+                    self.indicator_id += 1
+                    print('id ++', self.indicator_id)
+                else:
+                    self.indicator_id = 0
+                    print('id r+', self.indicator_id)
+                    
+                self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *\
+                                                     avango.gua.make_scale_mat(0.1,0.1,0.3)
+                self.next_pressed = True
+        else:
+            self.next_pressed = False
+
+
+    @field_has_changed(PrevButton)
+    def prev_key_changed(self):
+        if self.PrevButton.value:
+            if self.prev_pressed == False:
+                print('id', self.indicator_id)
+                if self.indicator_id > 0:
+                    self.indicator_id -= 1
+                    print('id --', self.indicator_id)
+                else:
+                    self.indicator_id = len(self.error_indicator_locations) - 1
+                    print('id r-', self.indicator_id)
+
+                self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id]*\
+                                                     avango.gua.make_scale_mat(0.1,0.1,0.3)
+                self.prev_pressed = True
+        else:
+            self.prev_pressed = False

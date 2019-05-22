@@ -69,10 +69,11 @@ class PerspectivePicker(avango.script.Script):
       dot = 1 if dot >= 1 else dot
       dot = -1 if dot <= -1 else dot
       a = math.acos(dot)
-      # print(img.id, a)
       # filter by angle
-      if a < 10:
-        t = (img, a)
+      if math.degrees(a) < 25:
+  
+        print(img.id, math.degrees(a))
+        t = (img, math.degrees(a))
         # if angle between image nad quad is small show img direction indicator 
         # img.set_selected(False, True)
         angle_list.append(t)

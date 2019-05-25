@@ -846,7 +846,7 @@ def init_mouse2():
     print("Mouse not found")
 
 def init_keyboard2():
-    _device_list = ["AT Translated Set 2 keyboard", "HID 046a:0011", "Logitech USB Keyboard" ]
+    _device_list = ["AT Translated Set 2 keyboard", "HID 046a:0011", "Logitech USB Keyboard" , "MOSART Semi. 2.4G Keyboard Mouse"]
 
 
     for _device in _device_list:

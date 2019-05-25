@@ -9,18 +9,46 @@ import src.provenance_utils as pu
 import time
 
 
-class PerspectivePicker(avango.script.Script):
+class WallPerspectivePicker(avango.script.Script):
 
   Button0 = avango.SFBool()
+  PickedNodes    = avango.gua.MFPickResult()
+  SceneGraph = avango.gua.SFSceneGraph()
+  Ray        = avango.gua.SFRayNode()
+  Options    = avango.SFInt()
+  Results    = avango.gua.MFPickResult()
+
+
+
+    
 
   def __init__(self):
-    self.super(PerspectivePicker).__init__()
-    self.always_evaluate(False)
+    self.super(WallPerspectivePicker).__init__()
+    self.always_evaluate(True)
+    self.SceneGraph.value = avango.gua.nodes.SceneGraph()
+    self.Ray.value  = avango.gua.nodes.RayNode()
+    self.Options.value = avango.gua.PickingOptions.GET_TEXTURE_COORDS \
+                         | avango.gua.PickingOptions.GET_WORLD_NORMALS \
+                         | avango.gua.PickingOptions.INTERPOLATE_NORMALS \
+                         | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE
 
     self.is_initialized = False
 
-  def my_constructor(self, graph):
-    self.graph = graph
+  def my_constructor(self, node):
+    self.node = node
+    self.pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
+    self.pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
+                               avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+
+    self.ray_geom = avango.gua.nodes.TriMeshLoader().create_geometry_from_file(
+        "ray_geom",
+        "data/objects/cylinder.obj",
+        avango.gua.LoaderFlags.DEFAULTS)
+    self.BlackList = ["not"]
+    self.ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
+    self.pick_ray.Children.value.append(self.ray_geom)
+    self.Ray.value = self.pick_ray
+    self.node.Children.value.append(self.pick_ray)
     self.localized_image_list = []
     self.position_list = []
     self.projection_lense = None
@@ -41,12 +69,7 @@ class PerspectivePicker(avango.script.Script):
   def set_projection_lense(self, obj, parent_node):
     self.projection_lense = obj
     self.lense_parent_node = parent_node
-    self.indicator = avango.gua.nodes.TriMeshLoader().create_geometry_from_file(
-            "error_indicator", "data/objects/cube.obj",
-            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-    self.indicator.Transform.value = avango.gua.make_scale_mat(0.01,0.01,0.1)
-
-    self.graph.Root.value.Children.value.append(self.indicator)
+    # self.projection_lense.Children.value.append(self.indicator5)
 
   def set_localized_image_list(self, localized_image_list):
     self.localized_image_list = localized_image_list
@@ -57,9 +80,8 @@ class PerspectivePicker(avango.script.Script):
 
     # get direction vector of hendheld lense
     lense_pos = self.projection_lense.WorldTransform.value.get_translate()
-    print('LENSE POS',lense_pos)
     # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
-    # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+    # _rot_mat = avango.gua.make_rot_mat(self.projection_lense.WorldTransform.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(180.0, 1.0, 0.0, 0.0)
     _rot_mat = avango.gua.make_rot_mat(self.projection_lense.WorldTransform.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
@@ -75,11 +97,10 @@ class PerspectivePicker(avango.script.Script):
       dot = 1 if dot >= 1 else dot
       dot = -1 if dot <= -1 else dot
       a = math.acos(dot)
+      # print(img.id, a)
       # filter by angle
-      if math.degrees(a) < 180:
-  
-        # print(img.id, math.degrees(a))
-        t = (img, math.degrees(a))
+      if a < 10:
+        t = (img, a)
         # if angle between image nad quad is small show img direction indicator 
         # img.set_selected(False, True)
         angle_list.append(t)
@@ -101,68 +122,55 @@ class PerspectivePicker(avango.script.Script):
         # lense_pos = lense_trans.WorldTransform.value.get_translate()
         line_p = _img.position
         line_d = lense_pos - line_p
+        print(lense_pos)
         line_d.normalize()
 
         # step 2: direction vector of the camera
         plane_p = _img.screen_transform.get_translate()
-        _rot_mat = avango.gua.make_rot_mat(_img.transform.get_rotate_scale_corrected()) #* avango.gua.make_rot_mat(-90.0,0.0,0.0,1.0)
-        # normal on plane
+        _rot_mat = avango.gua.make_rot_mat(_img.transform.get_rotate_scale_corrected())
         plane_n = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
         plane_n = avango.gua.Vec3(plane_n.x,plane_n.y,plane_n.z) # cast to vec3
 
-        # calculate intersection of vector between camera and lense with plane
         pnpp_dot = plane_n.x*plane_p.x + plane_n.y*plane_p.y + plane_n.z*plane_p.z
         pnlp_dot = plane_n.x*line_p.x + plane_n.y*line_p.y + plane_n.z*line_p.z
         pnld_dot = plane_n.x*line_d.x + plane_n.y*line_d.y + plane_n.z*line_d.z
+
+
         t = (pnpp_dot - pnlp_dot) / pnld_dot;
+        print(t)
 
+        # print('scalar', t)
         intersection_pos =  line_p + (line_d * t);
+        print('inters at', intersection_pos)
+        img_w_half = _img.tile_width #/ 4 #* #(1/_img.tile_scale) 
+        img_h_half = _img.tile_height #/ 4 #* #(1/_img.tile_scale)
 
-        # when atlas images are not turned this is right
-        # x_values = [plane_p.x - _img.tile_width/2, plane_p.x + _img.tile_width/2]
-        # y_values = [plane_p.y - _img.tile_height/2, plane_p.y + _img.tile_height/2]
+        # height and width needs to be exchanged
+        _temp = img_w_half
+        img_w_half = img_h_half
+        img_h_half = _temp
 
-        # when atlas images are turned by 90degree
-        # x_values = [plane_p.y - _img.tile_height / 2, plane_p.y + _img.tile_height / 2]
-        # y_values = [plane_p.x - _img.tile_width / 2, plane_p.x + _img.tile_width / 2]
-        x_values = [plane_p.y - _img.tile_width, plane_p.y + _img.tile_width]
-        y_values = [plane_p.x - _img.tile_height, plane_p.x + _img.tile_height]
-        print('plane x y', x_values, y_values)
+        x_values = [plane_p.x - img_w_half, plane_p.x + img_w_half]
+        y_values = [plane_p.y - img_h_half, plane_p.y + img_h_half]
+        
+        print('x and y values', x_values, y_values) 
 
-        # self.indicator.Transform.value = avango.gua.make_trans_mat() * avango.gua.make_scale_mat(0.02,0.02,0.1)
-        self.indicator.Transform.value = avango.gua.make_trans_mat(intersection_pos) * avango.gua.make_scale_mat(0.005, 0.005, 0.1)
-        # 0 x vals  0.0 0.06298828125
-        # 1 x vals  0.06298828125 0.1259765625
-        # 2 x vals  0.1259765625 0.18896484375
-        # 0 y vals 1.0 0.9645658220563617
-        # 1 y vals 1.0 0.9645658220563617
-        # 2 y vals 1.0 0.9645658220563617
-
-
-        ratio = 4.07 / 2.30
-        # u_coord = map_from_to(intersection_pos.x, x_values[0], x_values[1], _img.min_uv.x, _img.max_uv.x)
-        # v_coord = map_from_to(intersection_pos.y, y_values[0], y_values[1], _img.min_uv.y, _img.max_uv.y)
-        u_coord = map_from_to(intersection_pos.y, x_values[1], x_values[0], 0.0, 1.0)
-        v_coord = map_from_to(intersection_pos.x, y_values[0], y_values[1], 0.0, 1.0)
-        print(' #### U V coords', u_coord, v_coord)
-        # u_coord = map_from_to(intersection_pos.y, x_values[1], x_values[0], _img.x_max, _img.x_min)
-        # v_coord = map_from_to(intersection_pos.x, y_values[0], y_values[1], _img.y_max, _img.y_min)
-        print('y',_img.y_max, _img.y_min )
-        print('x',_img.x_max, _img.x_min )
-        u_coord = map_from_to(intersection_pos.y, x_values[1], x_values[0], _img.y_min, _img.y_max)
-        v_coord = map_from_to(intersection_pos.x, y_values[0], y_values[1], _img.x_max, _img.x_min)
-        print('U V coords', u_coord, v_coord)
-
+        u_coord = map_from_to(intersection_pos.x, x_values[0], x_values[1], _img.min_uv.x, _img.max_uv.x)
+        v_coord = map_from_to(intersection_pos.y, y_values[0], y_values[1], _img.min_uv.y, _img.max_uv.y)
+        print(_img.id, 'ORG uv coords min max', _img.min_uv, _img.max_uv)
+        print(_img.id, 'U and V coord', u_coord, v_coord)
         if u_coord > _img.min_uv.x and u_coord < _img.max_uv.x:
           print('yes')
-        zoom_factor = 3.0
+        zoom_factor = 1.0
         max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) , v_coord - (_img.t_w / 2 / zoom_factor))
+        # ORIG max_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_w / 2 / zoom_factor))
         # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
         min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) , v_coord + (_img.t_w / 2 / zoom_factor))
+        # ORIG min_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_w / 2 / zoom_factor))
         # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
         min_max_coords = [min_uv, max_uv]
-        print('coords', min_max_coords)
-        # min_max_coords = [max_uv, min_uv]
+        # print(_img.id, 'min max U V COORDS', u_coord, v_coord)
+        # print(_img.id, 'min max U V COORDS', min_uv, max_uv)
 
         closest_id = tup[0].id
         lense_mat = self.projection_lense.WorldTransform.value
@@ -191,13 +199,20 @@ class PerspectivePicker(avango.script.Script):
   @field_has_changed(Button0)
   def button0_changed(self):
     if self.Button0.value:
+      results = self.SceneGraph.value.ray_test(self.Ray.value,
+                                             self.Options.value,
+                                             ["not"],
+                                             [])
+      if len(results.value) > 0:
+        self.Results.value = results.value
+        print(self.Results.value[0].Name.value)
+      else:
+        print('no pick')
       print('update perspective')
-      if self.mode is 'texture':
-        print('texture mode')
-        self.update_textures()
-
-      if self.mode is 'projector':
-        self.update_perspective()
+      # if self.mode is 'texture':
+      #   self.update_textures()
+      # if self.mode is 'projector':
+      #   self.update_perspective()
       print(self.relevant_perspectives[0:16])
       self.button0_pressed = True
     else:

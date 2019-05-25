@@ -41,6 +41,7 @@ class TrackedLenseProjection(avango.script.Script):
     self.old_closest_id = 0
     self.button0_pressed = False
     # self.offset = avango.gua.Vec3(0.0,0.0,0.0)
+    self.freeze_flag = False
     self.offset = avango.gua.make_identity_mat()
     
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
@@ -54,7 +55,7 @@ class TrackedLenseProjection(avango.script.Script):
     self.group_node.Children.value.append(self.geometry)
 
     self.screen = avango.gua.nodes.ScreenNode(
-      Name = "screen1",
+      Name = "screen1", 
       Width = 0.5,
       Height = 0.5,
       Transform = avango.gua.make_trans_mat(0.0, 0.0, -0.1)
@@ -79,6 +80,7 @@ class TrackedLenseProjection(avango.script.Script):
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
+    self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
     
   def set_scenegraph(self, graph):
     print('scene graph got set')
@@ -103,13 +105,13 @@ class TrackedLenseProjection(avango.script.Script):
 
   def find_closest_perspective(self):
     closest_id = None
-    print('wt ', self.projection_lense.WorldTransform.value.get_translate())
-    print('lt ', self.projection_lense.Transform.value.get_translate())
+    # print('wt ', self.projection_lense.WorldTransform.value.get_translate())
+    # print('lt ', self.projection_lense.Transform.value.get_translate())
 
     # get direction vector of hendheld lense
     # pos = self.Transform2.value.get_translate()
     lense_mat =  avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0)) * self.projection_lense.WorldTransform.value 
-    print('wt und inv',lense_mat.get_translate())
+    # print('wt und inv',lense_mat.get_translate())
     lense_pos= self.projection_lense.WorldTransform.value.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
     # lense_pos= lense_mat.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
     # avango.gua.make_trans_mat(0.0,-1.445,2.0)
@@ -136,7 +138,7 @@ class TrackedLenseProjection(avango.script.Script):
       # filter by angle
       if math.degrees(a) < 20:
         t = (img, a)
-        print(img.id, math.degrees(a))
+        # print(img.id, math.degrees(a))
         # if angle between image nad quad is small show img direction indicator 
         # img.set_selected(False, True)
         angle_list.append(t)
@@ -152,7 +154,7 @@ class TrackedLenseProjection(avango.script.Script):
 
         # print('in frustum')
         closest_id = tup[0].id
-        print(self.localized_image_list[closest_id].position)
+        # print(self.localized_image_list[closest_id].position)
         # print('in frus', closest_id)
         return closest_id
       else:
@@ -169,6 +171,11 @@ class TrackedLenseProjection(avango.script.Script):
     print('image id :', closest_id)
     return closest_id
 
+  def freeze(self):
+    lense_mat = self.projection_lense.WorldTransform.value
+    projector_mat = self.localized_image_list[self.old_closest_id].transform
+    self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
+    self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
  
 
   @field_has_changed(Transform)
@@ -186,12 +193,12 @@ class TrackedLenseProjection(avango.script.Script):
     # self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
     self.Material.value.set_uniform("Emissivity", 1.0)
-    self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
+    # self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
     self.Material.value.set_uniform("Roughness", 1.0)
     self.Material.value.set_uniform("Metalness", 0.0)
     self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
     self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(self.max_tex_coords))
-    self.Material.value.set_uniform("my_color", avango.gua.Vec4(1.0,1.0,1.0,1.0))
+    # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
 
   @field_has_changed(Texture)
   def update_texture(self):
@@ -203,20 +210,24 @@ class TrackedLenseProjection(avango.script.Script):
   @field_has_changed(Button0)
   def button0_changed(self):
     if self.Button0.value:
+      self.freeze_flag = False
       self.always_evaluate(True)
       self.update_perspective()
+      self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
 
       self.button0_pressed = True
       print('TASTE 0')
       # self.projection_lense.Material.connect_from(self.Material)
     else:
+      print('arrive')
       if self.button0_pressed:
         print('always')
+        self.freeze_flag = True
         lense_mat = self.projection_lense.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
-        
+        self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
         self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
-        self.always_evaluate(False)
+        self.always_evaluate(True)
       self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
 
       self.button0_pressed = False
@@ -241,17 +252,12 @@ class TrackedLenseProjection(avango.script.Script):
       
       
       
-  def update_perspective(self):
+  def update_perspective(self, freeze_flag=False):
     if self.last_lense_pos:
-
-      # if self.button0_pressed:
-      # if (self.Transform2.value.get_translate().x != self.last_lense_pos.x
-      #  or self.Transform2.value.get_translate().y != self.last_lense_pos.y 
-      #  or self.Transform2.value.get_translate().z != self.last_lense_pos.z):
-       
       print('update_perspective')
       # closest_id = self.find_closest_view()
-      closest_id = self.find_closest_perspective()
+      if freeze_flag == False:
+        closest_id = self.find_closest_perspective()
       
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
@@ -273,6 +279,9 @@ class TrackedLenseProjection(avango.script.Script):
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
 
   def evaluate(self):
-    self.update_perspective()
+    if self.freeze_flag:
+      self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
+    else:
+      self.update_perspective()
 
 

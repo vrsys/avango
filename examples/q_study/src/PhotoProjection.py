@@ -79,6 +79,7 @@ class PhotoProjection(avango.script.Script):
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
+    self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
     
   def set_scenegraph(self, graph):
     print('scene graph got set')
@@ -184,11 +185,12 @@ class PhotoProjection(avango.script.Script):
     # self.Material.value.set_uniform("projective_texture", self.Texture.value)
     self.Material.value.set_uniform("view_texture_matrix", view_matrix) 
     self.Material.value.set_uniform("Emissivity", 1.0)
-    self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
+    # self.Material.value.set_uniform("color", avango.gua.Vec4(1.0, 1.0, 1.0, 1.0) )
     self.Material.value.set_uniform("Roughness", 1.0)
     self.Material.value.set_uniform("Metalness", 0.0)
     self.Material.value.set_uniform("view_port_min", avango.gua.Vec2(self.min_tex_coords))
     self.Material.value.set_uniform("view_port_max", avango.gua.Vec2(self.max_tex_coords))
+    # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.5, 0.5, 0.5, 1.0) )
 
   @field_has_changed(Texture)
   def update_texture(self):
@@ -204,13 +206,14 @@ class PhotoProjection(avango.script.Script):
 
       self.button0_pressed = True
       print('TASTE 0')
+      self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
       # self.projection_lense.Material.connect_from(self.Material)
     else:
       if self.button0_pressed:
         print('always')
         lense_mat = self.projection_lense.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
-        
+        self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
         self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
 
       self.Transform.value = self.projection_lense.WorldTransform.value * self.offset

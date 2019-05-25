@@ -21,8 +21,10 @@ class AtlasTile:
         self.x = self.id % cols
         self.y = self.id // cols
 
-        self.png_width = 69120 #122880
-        self.png_height = 114688 # 64512
+        # self.png_width = 69120 #122880
+        self.png_width = 64800 #122880
+        # self.png_height = 114688 # 64512
+        self.png_height = 107520 # 64512
 
         self.aspect_ratio = 9.0 / 16.0
         self.tile_scale = 0.2
@@ -30,8 +32,8 @@ class AtlasTile:
         self.tile_width = self.tile_height * self.aspect_ratio
         self.tile_cam_distance = -0.8 * self.tile_scale
 
-        self.padding_width = 540 - 1
-        self.padding_height = 896 - 1
+        self.padding_width = (self.png_width/256) * 2 - 1
+        self.padding_height = (self.png_height/256) * 2 - 1
 
         self.x_min = 0
         self.x_max = 1.0
@@ -40,7 +42,7 @@ class AtlasTile:
         self.y_max = 1.0
 
         self.transform = trans_mat # * avango.gua.make_rot_mat(180.0, 0.0, 0.0, 1.0)
-        print(self.transform.get_scale())
+        # print(self.transform.get_scale())
         self.rotation = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
         self.position = avango.gua.Vec3(self.transform.get_translate()[0], 
                                         self.transform.get_translate()[1], 

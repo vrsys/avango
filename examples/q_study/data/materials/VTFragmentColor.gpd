@@ -36,8 +36,8 @@
       gua_metalness = 1.0;
       gua_emissivity = 0.0;
       gua_flags_passthrough = false;*/
-      //gua_alpha = c.a;
-      gua_alpha = 1.0;
+      gua_alpha = c.a;
+      //gua_alpha = 1.0;
     }
   ",
   "uniforms" :

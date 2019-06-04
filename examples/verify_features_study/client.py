@@ -26,7 +26,7 @@ avango.osg.simpleviewer and connects to the distribution group "testgroup". If
 there is another instance loading some geometry under this node this model
 should also appear in the client.  (see also simpleviewer-srv.py)
 '''
-
+import sys
 import avango
 import avango.script
 import avango.gua
@@ -95,30 +95,47 @@ class NetInit(avango.script.Script):
 
 if __name__ == '__main__':
   user_id = 0
-  if len(sys.argv) == 2:
+  if len(sys.argv) == 3:
     task = str(sys.argv[1])
     part = int(sys.argv[2])
-    if study_task == 'points':
-        if study_part == 1 or study_part == 4:
-            study_geo_version = 1 if study_part == 1 else 2
+    if task == 'points':
+        if part == 1 or part == 4:
+            study_geo_version = 1 if part == 1 else 2
             if study_geo_version == 1:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-terra-version1/tp_terra_version1_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version1/tp_terra_version1_tex.atlas"
             elif study_geo_version == 2:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-terra-version2/tp_terra_version2_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version2/tp_terra_version2_tex.atlas"
 
-        elif study_part == 2 or study_part == 5:
-            study_geo_version = 1 if study_part == 2 else 2
+        elif part == 2 or part == 5:
+            study_geo_version = 1 if part == 2 else 2
             if study_geo_version == 1:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-head-version1/tp_head_version1_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-head-version1/tp_head_version1_tex.atlas"
             elif study_geo_version == 2:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-head-version2/tp_head_version2_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-head-version2/tp_head_version2_tex.atlas"
 
-        elif study_part == 3 or study_part == 6:
-            study_geo_version = 1 if study_part == 3 else 2            
+        elif part == 3 or part == 6:
+            study_geo_version = 1 if part == 3 else 2            
             if study_geo_version == 1:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-wappen-version1/tp_wappen_version1_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-wappen-version1/tp_wappen_version1_tex.atlas"
             elif study_geo_version == 2:
-                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-atlases/task-points/tp-wappen-version2/tp_wappen_version2_tex.atlas"
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-wappen-version2/tp_wappen_version2_tex.atlas"
+    if task == 'real':
+        if part == 1 or part == 3:
+            study_geo_version = 1 if part == 1 else 2
+            
+            if study_geo_version == 1:
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-head-version1/tr_head_version1_tex.atlas"
+            elif study_geo_version == 2:
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-head-version2/tr_head_version2_tex.atlas"
+
+        elif part == 2 or part == 4:
+            study_geo_version = 1 if part == 2 else 2
+            
+            if study_geo_version == 1:
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version1/tr_wappen_version1_tex.atlas"
+            elif study_geo_version == 2:
+                atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version2/tr_wappen_version2_tex.atlas"
+
 
     nettrans = avango.gua.nodes.NetTransform(Name="net",
                                              # specify role, ip, and port

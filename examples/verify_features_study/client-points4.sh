@@ -41,5 +41,3 @@ fi
 # kill daemon & client
 kill %1
 kill %2
-
-reset

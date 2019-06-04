@@ -22,6 +22,8 @@ class StudyScript(avango.script.Script):
     IndicatorButton = avango.SFBool()
     StudyStateButton = avango.SFBool()
     StudyStateKeyboardButton = avango.SFBool()
+    StudyStateCorrectButton = avango.SFBool()
+    StudyStateFalseButton = avango.SFBool()
 
     def __init__(self):
         self.super(StudyScript).__init__()
@@ -29,7 +31,7 @@ class StudyScript(avango.script.Script):
 
         self.is_initialized = False
 
-    def my_constructor(self, graph, user_id, study_task, study_part, study_condition, study_geo, study_geo_version, marker_path):
+    def my_constructor(self, graph, user_id, study_task, study_part, study_condition, study_geo, study_geo_version, marker_path, wall_perspectives_path, feature_values_path):
 
         self.graph = graph
         self.user_id = user_id
@@ -39,9 +41,15 @@ class StudyScript(avango.script.Script):
         self.study_geo = study_geo
         self.study_geo_version = study_geo_version 
         self.marker_path = marker_path
+        self.wall_perspectives_path = wall_perspectives_path
+        self.feature_values_path = feature_values_path
+        self.study_start_time = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         self.study_group = 'A' if self.user_id % 2 == 0 else "B"
         
         self.error_indicator_locations = []
+        self.wall_perspectives = []
+        self.wall_centers = []
+        self.feature_values = []
 
         with open(self.marker_path, 'r') as marker_location_f:
             locas = json.load(marker_location_f)
@@ -55,6 +63,36 @@ class StudyScript(avango.script.Script):
                 marker_matrix = avango.gua.from_list(marker['mat'])
                 self.error_indicator_locations.append(marker_matrix)
             print('Loaded',len(self.error_indicator_locations),'markers')
+
+        if self.wall_perspectives_path:
+            with open(self.wall_perspectives_path, 'r') as wall_perspectives_f:
+                persps = json.load(wall_perspectives_f)
+                perspectives = persps['perspectives']            
+                n = len(persps['perspectives'])
+                print('length of perspectives', n)
+                for i in range(n):
+                    pers = perspectives[i]
+                    
+                    _perspective_ids_per_feature = []
+                    _centers_per_feature = []
+                    for i, idx in enumerate(pers['perspective_ids']):
+                        _perspective_ids_per_feature.append(idx)
+                    for k, center in enumerate(pers['center_uvs']):
+                        _centers_per_feature.append(avango.gua.Vec2(center['u'], center['v']) )
+
+                    self.wall_perspectives.append(_perspective_ids_per_feature)
+                    self.wall_centers.append(_centers_per_feature)
+        with open(self.feature_values_path, 'r') as truths:
+            print(truths)
+            vals = json.load(truths)
+            if vals['geo'] == self.study_geo:
+                print('GEO CORRECT')
+            if vals['version'] == self.study_geo_version:
+                print('VERSION CORRECT')
+            for v in vals['feature_values']:
+                self.feature_values.append(v)
+            print('LENGTH', len(self.feature_values), self.feature_values)
+                    
         
         print('init study part: ', self.study_part, self.study_group, self.study_condition, self.study_geo, self.study_geo_version)
 
@@ -98,14 +136,24 @@ class StudyScript(avango.script.Script):
         self.screen = None
         self.start_time = None
         self.times = []
-        self.search_times = []
+        self.time_stamps = []
+        self.user_answers = []
+        self.locks = []
         self.perspective_picker = None
         self.navigation = None
+        self.wall = None
+        self.question_flag = False
+
+        self.image_updater = None
+        self.perspectives_per_feature = []
+        self.perspectives_coords = []
 
         self.next_pressed = False
         self.prev_pressed = False
         self.indicator_pressed = False
         self.keyboard_button_pressed = False
+        self.correct_button_pressed = False
+        self.false_button_pressed = False
 
         self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
                                          avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
@@ -116,6 +164,10 @@ class StudyScript(avango.script.Script):
         # needs to be set in order to disable navigation or trigger some stuff
         self.perspective_picker = perspective_picker
         self.navigation = navigation
+
+    def set_wall(self, wall_viz):
+        self.wall = wall_viz
+
 
     def write_csv_file(self):
         
@@ -132,23 +184,23 @@ class StudyScript(avango.script.Script):
             folder_ok = True
 
         if folder_ok:
-            file_fix = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
             # print(file_fix)
             part = str(self.study_part)
             task = str(self.study_task)
             vers = str(self.study_geo_version)
-            file_name = folder_name + '/part_' + part + '_task_' + task + '_' + self.study_geo + '_v' + vers + '_' + str(file_fix) +'.csv'
+            file_name = folder_name + '/part_' + part + '_task_' + task + '_' + self.study_geo + '_v' + vers + '_' + self.study_start_time + '.csv'
             # file_name = folder_name + '/part_' + part + '_task_' + task + '_' + self.study_geo + '_v' + vers +'.csv'
             with open(file_name, 'w+') as csvfile:
                 date=datetime.datetime.now()
+                self.time_stamps.append(date)
             # with open(file_name, 'w+', newline='') as csvfile:  
             # with open('names.csv', 'w', newline='') as csvfile:
-                fieldnames = ['date','user_id', 'task', 'part', 'group', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'search_time', 'verification_time']
+                fieldnames = ['date','user_id', 'task', 'part', 'group', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'frozen', 'answer']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
                 for idx, t in enumerate(self.times):
-                    writer.writerow( {'date':date,
+                    writer.writerow( {'date':self.time_stamps[idx],
                                       'user_id':self.user_id,
                                       'task':self.study_task,
                                       'part':self.study_part,
@@ -157,13 +209,34 @@ class StudyScript(avango.script.Script):
                                       'version':self.study_geo_version,
                                       'condition':self.study_condition,
                                       'trail':idx,
-                                      'feature_value':'True',
+                                      'feature_value':self.feature_values[idx],
                                       'time':self.times[idx],
-                                      'search_time':self.search_times[idx],
-                                      'verification_time':(self.times[idx] - self.search_times[idx])
+                                      'frozen': self.locks[idx],
+                                      'answer': self.user_answers[idx],
                                       })
                     
 
+    def write_perspectives(self):
+        file_name = 'wall_perspectives_' + self.study_geo + '_task_' + self.study_task + '.json'
+        # print('!!!!!!!!!!!!!!!!!!!!!!!',self.perspectives_coords[0][0][0])
+        with open(file_name, 'w') as jsonfile:  
+                json_data = {}
+                json_data['perspectives'] = [] 
+                for idx, per_list in enumerate(self.perspectives_per_feature):
+                    uv_coords = []
+                    for k, item in enumerate(self.perspectives_coords[idx]):
+                        uv_coords.append({
+                            'c_id':k,
+                            'u':item.x,
+                            'v':item.y,
+                            })
+                    json_data['perspectives'].append({
+                        'feature_id': idx,
+                        'perspective_ids': per_list,
+                        'center_uvs': uv_coords
+                    })
+                json.dump(json_data, jsonfile)
+        
     def set_screen(self, screen):
         self.screen = screen
         if self.state == 0:
@@ -171,12 +244,15 @@ class StudyScript(avango.script.Script):
             self.screen.Children.value.append(self.sign)
         # TODO: APPEND SIGN WITH INSTRUCTION in state 0
 
-    def change_study_state(self):
+    def set_image_updater(self, updater):
+        self.image_updater = updater
+
+    def change_study_state(self, answer=2):
         if self.state == 0:
             if self.perspective_picker == None:
                 print("SET PICKER")
 
-            print('STARTING STUDY WITH MARKER 0')
+            self.sign.Material.value.set_uniform("ColorMap", self.navigation_sign_path)
             self.state = 1
             
         elif self.state == 1: # stops pause state -> starts navigation state
@@ -190,33 +266,93 @@ class StudyScript(avango.script.Script):
             self.indicator_transform.Children.value.remove(self.indicator)
             self.state = 3
             self.start_time = time.time()
-            self.perspective_picker.start_count_time()
-            self.perspective_picker.turn_on()
+            if self.study_condition == 'lense':
+                self.perspective_picker.turn_on()
+
+            elif self.study_condition == 'wall':
+                print('wall')
+                self.wall.show(True)
+                self.update_textures(self.indicator_id)
 
         elif self.state == 3: # stops verification state -> starts pause state
-            perspective_search_time = self.perspective_picker.get_elapsed_time()
             elapsed_time = time.time() - self.start_time
+            
             self.times.append(elapsed_time)
-            self.search_times.append(perspective_search_time)
+            self.locks.append(self.perspective_picker.frozen)
+            # self.perspectives_per_feature.append(self.image_updater.last_relevants)
+            # self.perspectives_coords.append(self.image_updater.last_centers)
+            # print(self.perspectives_coords)
+            # print(self.perspectives_per_feature)
+            # self.write_perspectives()
             # self.search_times.append(perspective_search_time)
             print('Elapsed Time in sec?',elapsed_time)
+            self.wall.show(False)
+
             if self.indicator_id < len(self.error_indicator_locations) - 1:
                 self.indicator_id += 1
-                self.state = 1
+                self.state = 4
                 self.screen.Children.value.append(self.sign)
-                self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
+                
+                self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/CorrectQuestion.png")
                 self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
                                          avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
                 self.indicator_transform.Children.value.append(self.indicator)
+                
                 self.perspective_picker.turn_off()
-                self.write_csv_file()
+                
             else:
                 print('ID TOO BIG')
-                self.state = 4 # STUDY IS OVER
+                self.state = 5 # STUDY IS OVER
 
-        elif self.state == 4: # stops pause state -> starts navigation state
+        elif self.state == 4:
+            if answer == 0:
+                self.user_answers.append(False)
+                self.state = 1
+                self.write_csv_file()
+            elif answer == 1:
+                self.user_answers.append(True)
+                self.state = 1
+                self.write_csv_file()
+            else:
+                print('Give answer.')
+            self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
+
+
+        elif self.state == 5: # stops pause state -> starts navigation state
             print('Study is over')
             self.write_csv_file()
+
+    def update_textures(self, feature_id):
+
+        if self.wall:
+            print(self.wall_perspectives[feature_id][0:8])
+            print(self.wall_centers[feature_id][0:8])
+
+            zoom_factor = 3
+            wall_ratio1 = 4.07 / 2.3
+            wall_ratio1 = 2.035 / 1.15
+            wall_ratio2 = 2.3 / 4.07
+            width = 0.033215967814127605
+            texture_coordinates = []
+            for vec in self.wall_centers[feature_id]:
+
+
+                max_uv = avango.gua.Vec2(vec.x - (width * wall_ratio1/ 2 / zoom_factor), vec.y - (width/ 2 / zoom_factor))
+                # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
+                min_uv = avango.gua.Vec2(vec.x + (width * wall_ratio1/ 2 / zoom_factor), vec.y + (width / 2 / zoom_factor))
+                # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
+                min_max_coords = [min_uv, max_uv]
+                texture_coordinates.append(min_max_coords)
+            # self.wall_perspectives = []
+            # self.wall_centers = []
+            # self.last_relevants = self.wall_perspectives[0:8]
+            # self.last_centers = self.wall_centers[0:8]
+            # self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views], 
+                                        # self.texture_coordinates[0:self.visualizer.views])
+            self.wall.update_images(self.wall_perspectives[feature_id][0:self.wall.views], 
+                                    texture_coordinates[0:self.wall.views])
+        else:
+            print('No texture visualizer is set.')
 
     @field_has_changed(StudyStateButton)
     def study_state_changed(self):
@@ -233,3 +369,23 @@ class StudyScript(avango.script.Script):
                 self.keyboard_button_pressed = True
         else:
             self.keyboard_button_pressed = False
+
+    @field_has_changed(StudyStateCorrectButton)
+    def study_state_changed_by_correct_button(self):
+        if self.StudyStateCorrectButton.value:
+            if self.correct_button_pressed == False:
+
+                self.change_study_state(1)
+                self.correct_button_pressed = True
+        else:
+            self.correct_button_pressed = False
+
+    @field_has_changed(StudyStateFalseButton)
+    def study_state_changed_by_false_button(self):
+        if self.StudyStateFalseButton.value:
+            if self.false_button_pressed == False:
+
+                self.change_study_state(0)
+                self.false_button_pressed = True
+        else:
+            self.false_button_pressed = False

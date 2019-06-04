@@ -1,3 +1,0 @@
-date,user_id,task,part,group,geometry,version,condition,trail,feature_value,time,search_time,verification_time
-2019-05-31 21:39:53.083396,1,points,1,B,terra,1,lense,0,True,5.077516555786133,4.285950422286987,0.7915661334991455
-2019-05-31 21:39:53.083396,1,points,1,B,terra,1,lense,1,True,0.2974116802215576,4.285950422286987,-3.9885387420654297

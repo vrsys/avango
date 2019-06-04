@@ -42,11 +42,11 @@ class TrackedLenseProjection(avango.script.Script):
     self.last_lense_pos = None
     self.old_closest_id = 0
     self.button0_pressed = False
-    # self.offset = avango.gua.Vec3(0.0,0.0,0.0)
     self.freeze_flag = False
-    self.start_time = 0
-    self.last_elapsed_time = 0
+    self.frozen = 0
+    
     self.offset = avango.gua.make_identity_mat()
+    
     
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
     self.group_node.Transform.connect_from(self.Transform)
@@ -199,7 +199,7 @@ class TrackedLenseProjection(avango.script.Script):
       if len(angle_list) > 0:
         closest_id = angle_list[0][0].id
       else: 
-        print('NO view')
+        # print('NO view')
         closest_id = 0
 
     # print('image id :', closest_id)
@@ -213,18 +213,6 @@ class TrackedLenseProjection(avango.script.Script):
     # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
     self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
 
-  def start_count_time(self):
-    self.start_time = time.time()
-    return self.start_time
-  
-  def stop_count_time(self):
-    elapsed_time = time.time() - self.start_time
-    # self.start_time = time.time()
-    self.last_elapsed_time = elapsed_time
-    return elapsed_time
-
-  def get_elapsed_time(self):
-    return self.last_elapsed_time
 
   @field_has_changed(Transform)
   def update_matrices(self):
@@ -257,6 +245,7 @@ class TrackedLenseProjection(avango.script.Script):
 
   @field_has_changed(Button0)
   def button0_changed(self):
+    print('pressed')
     if self.Button0.value:
       self.freeze_flag = False
       self.always_evaluate(True)
@@ -272,7 +261,7 @@ class TrackedLenseProjection(avango.script.Script):
       if self.button0_pressed:
         print('Freeze')
         self.freeze_flag = True
-        self.stop_count_time()
+        self.frozen += 1
         # lense_mat = self.projection_lense.WorldTransform.value
         lense_mat = self.tracked_node.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
@@ -314,6 +303,7 @@ class TrackedLenseProjection(avango.script.Script):
     self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
     self.freeze_flag = True
     self.always_evaluate(False)
+    self.frozen = 0
       
   def update_perspective(self, freeze_flag=False):
     if self.last_lense_pos:
@@ -330,7 +320,7 @@ class TrackedLenseProjection(avango.script.Script):
       # self.max_tex_coords = self.localized_image_list[closest_id].min_uv
       self.screen.Width.value = self.localized_image_list[closest_id].tile_width / 4 * (1/tile_scale)
       
-      self.screen.Height.value = self.localized_image_list[closest_id].tile_height /4 * (1/tile_scale)
+      self.screen.Height.value = self.localized_image_list[closest_id].tile_height / 4 * (1/tile_scale)
       # self.localized_image_list[closest_id].set_selected(True, True)
       # self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.last_lense_pos = self.tracked_node.WorldTransform.value.get_translate()

@@ -48,7 +48,7 @@ class WallPerspectivePicker(avango.script.Script):
     self.ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
     self.pick_ray.Children.value.append(self.ray_geom)
     self.Ray.value = self.pick_ray
-    self.node.Children.value.append(self.pick_ray)
+    # self.node.Children.value.append(self.pick_ray)
     self.localized_image_list = []
     self.position_list = []
     self.projection_lense = None
@@ -64,6 +64,8 @@ class WallPerspectivePicker(avango.script.Script):
     self.texture_coordinates = []
     self.visualizer = None
     self.mode = 'texture' # 'projector'
+    self.frozen = 0
+
 
 
   def set_projection_lense(self, obj, parent_node):
@@ -74,7 +76,8 @@ class WallPerspectivePicker(avango.script.Script):
   def set_localized_image_list(self, localized_image_list):
     self.localized_image_list = localized_image_list
     self.position_list = [li.position for li in self.localized_image_list]
-    
+
+
   def find_closest_perspective(self):
     closest_id = None
 
@@ -122,7 +125,7 @@ class WallPerspectivePicker(avango.script.Script):
         # lense_pos = lense_trans.WorldTransform.value.get_translate()
         line_p = _img.position
         line_d = lense_pos - line_p
-        print(lense_pos)
+        
         line_d.normalize()
 
         # step 2: direction vector of the camera
@@ -195,6 +198,13 @@ class WallPerspectivePicker(avango.script.Script):
 
     print('image id :', closest_id)
     return closest_id
+
+  def turn_on(self):
+    print('wall on')
+      
+  def turn_off(self):
+    print('wall off')
+
 
   @field_has_changed(Button0)
   def button0_changed(self):

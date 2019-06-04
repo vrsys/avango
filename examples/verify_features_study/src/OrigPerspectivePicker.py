@@ -25,6 +25,7 @@ class PerspectivePicker(avango.script.Script):
     self.position_list = []
     self.projection_lense = None
     self.lense_parent_node = None
+    self.tracked_node = None
     self.min_tex_coords = avango.gua.Vec2(0.0, 0.0)
     self.max_tex_coords = avango.gua.Vec2(1.0, 1.0)
     self.old_closest_id = 0
@@ -34,13 +35,18 @@ class PerspectivePicker(avango.script.Script):
     self.relevant_perspectives = []
     self.perspective_offsets = []
     self.texture_coordinates = []
+    self.centers = []
     self.visualizer = None
     self.mode = 'texture' # 'projector'
+    self.last_relevants = []
+    self.last_centers = []
 
 
-  def set_projection_lense(self, obj, parent_node):
+
+  def set_projection_lense(self, obj, parent_node, tracked_node):
     self.projection_lense = obj
     self.lense_parent_node = parent_node
+    self.tracked_node = tracked_node
 
   def set_localized_image_list(self, localized_image_list):
     self.localized_image_list = localized_image_list
@@ -51,10 +57,10 @@ class PerspectivePicker(avango.script.Script):
     closest_id = None
 
     # get direction vector of hendheld lense
-    lense_pos = self.projection_lense.WorldTransform.value.get_translate()
+    lense_pos = self.tracked_node.WorldTransform.value.get_translate()
     # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
     # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-    _rot_mat = avango.gua.make_rot_mat(self.projection_lense.WorldTransform.value.get_rotate_scale_corrected())
+    _rot_mat = avango.gua.make_rot_mat(self.tracked_node.WorldTransform.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
     # print(_abs_dir)
@@ -71,7 +77,7 @@ class PerspectivePicker(avango.script.Script):
       a = math.acos(dot)
       # print(img.id, a)
       # filter by angle
-      if a < 10:
+      if a < 20:
         t = (img, a)
         # if angle between image nad quad is small show img direction indicator 
         # img.set_selected(False, True)
@@ -81,6 +87,7 @@ class PerspectivePicker(avango.script.Script):
     self.relevant_perspectives = []
     self.perspective_offsets = []
     self.texture_coordinates = []
+    self.centers = []
 
     for tup in angle_list:
       
@@ -94,7 +101,7 @@ class PerspectivePicker(avango.script.Script):
         # lense_pos = lense_trans.WorldTransform.value.get_translate()
         line_p = _img.position
         line_d = lense_pos - line_p
-        print(lense_pos)
+        # print(lense_pos)
         line_d.normalize()
 
         # step 2: direction vector of the camera
@@ -143,23 +150,30 @@ class PerspectivePicker(avango.script.Script):
         # print(_img.id, 'U and V coord', u_coord, v_coord)
         if u_coord > _img.min_uv.x and u_coord < _img.max_uv.x:
           print('yes')
-        zoom_factor = 3.5
+        zoom_factor = 3
+        wall_ratio1 = 4.07 / 2.3
+        wall_ratio1 = 2.035 / 1.15
+        wall_ratio2 = 2.3 / 4.07
 
-        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor), v_coord - (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
+        max_uv = avango.gua.Vec2(u_coord - (_img.t_w *wall_ratio1/ 2 / zoom_factor), v_coord - (_img.t_w / 2 / zoom_factor))
         # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
-        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor), v_coord + (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
+        min_uv = avango.gua.Vec2(u_coord + (_img.t_w * wall_ratio1/ 2 / zoom_factor), v_coord + (_img.t_w / 2 / zoom_factor))
+
+        # print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',_img.t_w)
         # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
         min_max_coords = [min_uv, max_uv]
+        center = avango.gua.Vec2(u_coord, v_coord)
 
 
         closest_id = tup[0].id
-        lense_mat = self.projection_lense.WorldTransform.value
+        lense_mat = self.tracked_node.WorldTransform.value
         projector_mat = self.localized_image_list[closest_id].transform
         offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
 
         self.relevant_perspectives.append(closest_id)
         self.perspective_offsets.append(offset)
         self.texture_coordinates.append(min_max_coords)
+        self.centers.append(center)
       else:
         closest_id = None
     if closest_id != None:
@@ -170,7 +184,7 @@ class PerspectivePicker(avango.script.Script):
       if len(angle_list) > 0:
         closest_id = angle_list[0][0].id
       else: 
-        print('NO view')
+        # print('NO view')
         closest_id = 0
 
     print('image id :', closest_id)
@@ -194,7 +208,7 @@ class PerspectivePicker(avango.script.Script):
       
     self.old_closest_id = closest_id
     if self.visualizer:
-      # print(self.relevant_perspectives[0:8])
+      print(self.relevant_perspectives[0:8])
       # print(self.perspective_offsets[0])
       self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views],
                                     self.perspective_offsets[0:self.visualizer.views])
@@ -207,10 +221,13 @@ class PerspectivePicker(avango.script.Script):
       
     self.old_closest_id = closest_id
     if self.visualizer:
+      print(self.relevant_perspectives[0:8])
+      self.last_relevants = self.relevant_perspectives[0:8]
+      self.last_centers = self.centers[0:8]
       # self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views], 
                                     # self.texture_coordinates[0:self.visualizer.views])
-      self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views], 
-                                    self.texture_coordinates[0:self.visualizer.views])
+      # self.visualizer.update_images(self.relevant_perspectives[0:self.visualizer.views], 
+                                    # self.texture_coordinates[0:self.visualizer.views])
     else:
       print('No texture visualizer is set.')
 

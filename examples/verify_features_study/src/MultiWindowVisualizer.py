@@ -49,6 +49,9 @@ class MultiWindowVisualizer(avango.script.Script):
         self.dynamic_triangle_node.Material.value.set_uniform("Metalness", 0.0)
         self.dynamic_triangle_node.Material.value.set_uniform("Emissivity", 1.0)
         self.dynamic_triangle_node.Material.value.set_uniform("Roughness", 1.0)
+        self.dynamic_triangle_node.Material.value.set_uniform("Color", avango.gua.Vec4(0.0,0.0,0.0,0.0))
+        
+        # self.dir_indicator_mat.set_uniform("Color", avango.gua.Vec4(0.0,0.0,0.0,0.0))
         # self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
 
         self.images = images
@@ -110,6 +113,14 @@ class MultiWindowVisualizer(avango.script.Script):
 
     def get_material(self):
         return self.vt_mat
+
+    def show(self, flag):
+        if flag:
+            self.dynamic_triangle_node.Material.value.set_uniform("Color", avango.gua.Vec4(0.0,0.0,0.0,1.0))
+            self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = True
+        else:
+            self.dynamic_triangle_node.Material.value.set_uniform("Color", avango.gua.Vec4(0.0,0.0,0.0,0.0))
+            self.dynamic_triangle_node.Material.value.EnableVirtualTexturing.value = False
 
     def evaluate(self):
         if self.distribute:

@@ -34,8 +34,10 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
      */
     PLodNode(std::shared_ptr<::gua::node::PLodNode> guanode = std::shared_ptr<::gua::node::PLodNode>(new ::gua::node::PLodNode("")));
 
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
     virtual void on_distribute(av::gua::NetTransform& netNode);
     virtual void on_undistribute(av::gua::NetTransform& netNode);
+#endif
 
   protected:
     /**

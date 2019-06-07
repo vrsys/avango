@@ -1,9 +1,9 @@
-
-#include "VTBackend.hpp"
-
-#include <avango/gua/virtual_texturing/VTBackend.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
+
+#include <avango/gua/virtual_texturing/VTBackend.hpp>
+
+#include "VTBackend.hpp"
 
 #ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 using namespace boost::python;

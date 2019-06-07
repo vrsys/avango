@@ -21,7 +21,7 @@ av::gua::lod::MLodNode::MLodNode(std::shared_ptr<::gua::node::MLodNode> guanode)
         m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
     }
 }
-
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::lod::MLodNode::on_distribute(av::gua::NetTransform& netNode)
 {
     GeometryNode::on_distribute(netNode);
@@ -43,6 +43,7 @@ void av::gua::lod::MLodNode::on_undistribute(av::gua::NetTransform& netNode)
     }
     netNode.undistributeFieldContainer(m_Material);
 }
+#endif
 
 void av::gua::lod::MLodNode::initClass()
 {

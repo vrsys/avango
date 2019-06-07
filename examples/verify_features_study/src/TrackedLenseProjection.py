@@ -9,6 +9,9 @@ import src.provenance_utils as pu
 import time
 import json
 
+import statistics 
+from statistics import mode 
+
 
 class TrackedLenseProjection(avango.script.Script):
 
@@ -43,6 +46,7 @@ class TrackedLenseProjection(avango.script.Script):
     self.old_closest_id = 0
     self.button0_pressed = False
     self.freeze_flag = False
+    self.sliding_window = []
     self.frozen = 0
     
     self.offset = avango.gua.make_identity_mat()
@@ -245,13 +249,17 @@ class TrackedLenseProjection(avango.script.Script):
 
   @field_has_changed(Button0)
   def button0_changed(self):
-    print('pressed')
     if self.Button0.value:
-      self.freeze_flag = False
+      if self.freeze_flag == True:
+        self.freeze_flag = False
+        self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
+      elif self.freeze_flag == False:
+        self.freeze_flag = True
+        self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
       self.always_evaluate(True)
       self.update_perspective()
       # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.00))
-      self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
+      # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
 
       self.button0_pressed = True
       print('TASTE 0')
@@ -259,13 +267,12 @@ class TrackedLenseProjection(avango.script.Script):
     else:
       
       if self.button0_pressed:
-        print('Freeze')
-        self.freeze_flag = True
+        # self.freeze_flag = False
         self.frozen += 1
         # lense_mat = self.projection_lense.WorldTransform.value
         lense_mat = self.tracked_node.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
-        self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
+        # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
         # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
         self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
         self.always_evaluate(True)
@@ -311,6 +318,19 @@ class TrackedLenseProjection(avango.script.Script):
       # closest_id = self.find_closest_view()
       if freeze_flag == False:
         closest_id = self.find_closest_perspective()
+
+        # sliding window approach
+        window_size = 10
+        if len(self.sliding_window) < window_size:
+          self.sliding_window.append(closest_id)
+        elif len(self.sliding_window) == window_size:
+          self.sliding_window.pop(0)
+          self.sliding_window.append(closest_id)
+
+        closest_id = most_frequent(self.sliding_window)
+        # print(closest_id, self.sliding_window)
+
+
       
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
@@ -339,5 +359,8 @@ class TrackedLenseProjection(avango.script.Script):
       self.Transform.value = self.tracked_node.WorldTransform.value * self.offset
     else:
       self.update_perspective()
+
+def most_frequent(List): 
+    return max(set(List), key = List.count) 
 
 

@@ -90,28 +90,54 @@ def start(task, part, user_id):
     study_part = part
     study_user = user_id
     study_group = 'A' if user_id % 2 == 0 else 'B'
+    study_start_block = user_id % 3
 
     study_condition = None
     study_geo = None
     study_geo_version = None
 
     geometry_object_path = None
-    # atlas_path = None
 
     tile_position_path = None
     wall_perspectives_path = None
-    print('STAAAAAAAAAAAAAAAART', study_group, study_task)
+    
     if study_task == 'points':
-        print('points')
         if study_part == 1 or study_part == 4:
-            print('terra')
-            study_geo = 'terra'
-            study_geo_version = 1 if study_part == 1 else 2
+            if study_start_block == 0:
+                study_geo = 'terra'
+                study_geo_version = 1 if study_part == 1 else 2
+            elif study_start_block == 1:
+                study_geo = 'head'
+                study_geo_version = 1 if study_part == 1 else 2
+            elif study_start_block == 2:
+                study_geo = 'wappen'
+                study_geo_version = 1 if study_part == 1 else 2
+        elif study_part == 2 or study_part == 5:
+            if study_start_block == 0:
+                study_geo = 'head'
+                study_geo_version = 1 if study_part == 2 else 2
+            elif study_start_block == 1:
+                study_geo = 'wappen'
+                study_geo_version = 1 if study_part == 2 else 2
+            elif study_start_block == 2:
+                study_geo = 'terra'
+                study_geo_version = 1 if study_part == 2 else 2
+        elif study_part == 3 or study_part == 6:
+            if study_start_block == 0:
+                study_geo = 'wappen'
+                study_geo_version = 1 if study_part == 3 else 2
+            elif study_start_block == 1:
+                study_geo = 'terra'
+                study_geo_version = 1 if study_part == 3 else 2
+            elif study_start_block == 2:
+                study_geo = 'head'
+                study_geo_version = 1 if study_part == 3 else 2
+
+        if study_geo == 'terra':
             geometry_object_path = "/home/senu8384/Desktop/master-thesis/data/study/geometry/terra-points/Bogenschuetze-01.obj"
             tile_position_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version1/image_positions_rot.lst"
             marker_path = "/home/senu8384/Desktop/master-thesis/data/study/points_terra_marker_list_corrected.json"
             wall_perspectives_path = "/home/senu8384/Desktop/master-thesis/avango/examples/verify_features_study/wall_perspectives_terra_task_points_perfect.json"
-
 
             if study_geo_version == 1:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version1/tp_terra_version1_tex.atlas"
@@ -119,10 +145,7 @@ def start(task, part, user_id):
             elif study_geo_version == 2:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version2/tp_terra_version2_tex.atlas"
 
-        elif study_part == 2 or study_part == 5:
-            print('head')
-            study_geo = 'head'
-            study_geo_version = 1 if study_part == 2 else 2
+        elif study_geo == 'head':
             geometry_object_path = "/home/senu8384/Desktop/master-thesis/data/study/geometry/head-points/kopf_midres.obj"
             tile_position_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-head-version1/image_positions_rot.lst"
             marker_path = "/home/senu8384/Desktop/master-thesis/data/study/points_head_marker_list.json"
@@ -133,10 +156,7 @@ def start(task, part, user_id):
             elif study_geo_version == 2:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-head-version2/tp_head_version2_tex.atlas"
 
-        elif study_part == 3 or study_part == 6:
-            print('wappen')
-            study_geo = 'wappen'
-            study_geo_version = 1 if study_part == 3 else 2
+        elif study_geo == 'wappen':
             geometry_object_path = "/home/senu8384/Desktop/master-thesis/data/study/geometry/wappen-points/wappen_midres.obj"
             tile_position_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-wappen-version1/image_positions_rot.lst"
             marker_path = "/home/senu8384/Desktop/master-thesis/data/study/points_wappen_marker_list.json"
@@ -147,21 +167,30 @@ def start(task, part, user_id):
             elif study_geo_version == 2:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-wappen-version2/tp_wappen_version2_tex.atlas"
 
-        print('GROUP', study_group)
-
         if study_group == 'A':
             study_condition = 'lense' if study_part <= 3 else 'wall'
-            print('hello A', study_condition)
         elif study_group == 'B':
-            print('hello B', study_condition)
             study_condition = 'wall' if study_part <= 3 else 'lense'
 
         feature_values_path = "/home/senu8384/Desktop/master-thesis/data/study/" + study_task + "_" + study_geo + "_v" + str(study_geo_version) + "_feature_values.json"
 
     elif study_task == 'real':
         if study_part == 1 or study_part == 3:
-            study_geo = 'head'
-            study_geo_version = 1 if study_part == 1 else 2
+            if study_start_block == 0:
+                study_geo = 'head'
+                study_geo_version = 1 if study_part == 1 else 2
+            elif study_start_block == 1:
+                study_geo = 'wappen'
+                study_geo_version = 1 if study_part == 1 else 2
+        elif study_part == 2 or study_part == 4:
+            if study_start_block == 0:
+                study_geo = 'wappen'
+                study_geo_version = 1 if study_part == 2 else 2
+            elif study_start_block == 1:
+                study_geo = 'head'
+                study_geo_version = 1 if study_part == 2 else 2
+
+        if study_geo == 'head':
             geometry_object_path = "/home/senu8384/Desktop/master-thesis/data/study/geometry/head-real/kopf_midres.obj"
             tile_position_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-head-version2/image_positions_rot.lst"
             marker_path = "/home/senu8384/Desktop/master-thesis/data/study/real_head_marker_list.json"
@@ -172,9 +201,7 @@ def start(task, part, user_id):
             elif study_geo_version == 2:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-head-version2/tr_head_version2_tex.atlas"
 
-        elif study_part == 2 or study_part == 4:
-            study_geo = 'wappen'
-            study_geo_version = 1 if study_part == 2 else 2
+        elif study_geo == 'wappen':
             geometry_object_path = "/home/senu8384/Desktop/master-thesis/data/study/geometry/wappen-real/wappen_midres.obj"
             tile_position_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version1/image_positions_rot.lst"
             marker_path = "/home/senu8384/Desktop/master-thesis/data/study/real_wappen_marker_list.json"
@@ -347,7 +374,7 @@ def start(task, part, user_id):
                 RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 )
             viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")
-            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
             # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-I")
 
         # setup navigation and input devices
@@ -383,10 +410,10 @@ def start(task, part, user_id):
             tracked_lense_projection.Graph.value = graph
             tracked_lense_projection.Texture.value = atlas_path
             graph.Root.value.Children.value.append(tracked_lense_projection.group_node)
-            perspective_picker = PerspectivePicker()
-            perspective_picker.my_constructor()
-            perspective_picker.set_localized_image_list(atlas_tiles)
-            perspective_picker.set_visualizer(multi_window_viz, 'texture')
+            # perspective_picker = PerspectivePicker()
+            # perspective_picker.my_constructor()
+            # perspective_picker.set_localized_image_list(atlas_tiles)
+            # perspective_picker.set_visualizer(multi_window_viz, 'texture')
 
             dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
             dynamic_transform.Transform.value = avango.gua.make_rot_mat(90.0,0,1,0) * avango.gua.make_rot_mat(-90.0,1,0,0) *\
@@ -397,8 +424,8 @@ def start(task, part, user_id):
             # pointer_node.Children.value.append(dynamic_lense)
             pointer_node.Children.value.append(dynamic_transform)
             pointer_node.Children.value.append(tracked_lense_projection.marker_transform)
-            perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform, dynamic_transform)
-            perspective_picker.Button0.connect_from(pointer_button_sensor.Button0)
+            # perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform, dynamic_transform)
+            # perspective_picker.Button0.connect_from(pointer_button_sensor.Button0)
 
         elif study_condition == 'wall':
             print('condition wall!!!!!!!!!')
@@ -420,19 +447,11 @@ def start(task, part, user_id):
         client_screen = avango.gua.nodes.ScreenNode(Name="client_screen", Width=4.07, Height=2.3)
         client_navigation.Children.value.append(client_screen)
 
-        # client_resolve_pass = avango.gua.nodes.ResolvePassDescription()
-        # client_resolve_pass.EnableSSAO.value = False
-        # client_resolve_pass.SSAOIntensity.value = 3.0
-        # client_resolve_pass.SSAOFalloff.value = 10.0
-        # client_resolve_pass.SSAORadius.value = 2.0
-        # client_resolve_pass.EnvironmentLightingColor.value = avango.gua.Color(0.2, 0.2, 0.2)
-        # client_resolve_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
-        # client_resolve_pass.Exposure.value = 1.0
+
         # client_resolve_pass.BackgroundColor.value = avango.gua.Color(0.0, 0.0, 0.0)
 
         client_pipeline_description = viewingSetup.user_list[0].pipeline_description # hacky !!!
-        # print('RESLOVE PASS', client_pipeline_description.Passes.value[3]) # hacky !!!
-        # client_pipeline_description.Passes.value[3] = client_resolve_pass
+
 
         client_cam = avango.gua.nodes.CameraNode(
             Name = "client_cam",
@@ -459,18 +478,21 @@ def start(task, part, user_id):
         # # graph.Root.value.Children.value.append(dynamic_lense)
         if tracked_lense_projection:
             tracked_lense_projection.set_projection_lense(dynamic_lense, pointer_node, dynamic_transform)
-            tracked_lense_projection.Button0.connect_from(pointer_button_sensor.Button0)
-            tracked_lense_projection.Button1.connect_from(pointer_button_sensor.Button1)
+            tracked_lense_projection.Button0.connect_from(pointer_button_sensor.Button1)
+            tracked_lense_projection.Button1.connect_from(pointer_button_sensor.Button0)
 
 
         study_script.set_screen(viewingSetup.screen_node)
         study_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
-        study_script.StudyStateCorrectButton.connect_from(keyboard.KeyLeft)
-        study_script.StudyStateFalseButton.connect_from(keyboard.KeyRight)
+
+        study_script.StudyStateCorrectButton.connect_from(keyboard.KeyRight)
+        study_script.StudyStateFalseButton.connect_from(keyboard.KeyLeft)
+
         study_script.StudyStateButton.connect_from(griffin_input.get_button0_field() )
         # study_script.IndicatorButton.connect_from(griffin_input.get_button0_field() )
         study_script.NextButton.connect_from(keyboard.KeyN)
         study_script.PrevButton.connect_from(keyboard.KeyM)
+
         if study_condition == 'lense':
 
             study_script.set_picker_and_navigation(tracked_lense_projection, griffin_navigation)

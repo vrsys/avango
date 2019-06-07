@@ -45,6 +45,7 @@ class StudyScript(avango.script.Script):
         self.feature_values_path = feature_values_path
         self.study_start_time = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         self.study_group = 'A' if self.user_id % 2 == 0 else "B"
+        self.study_block = self.study_part % 3
         
         self.error_indicator_locations = []
         self.wall_perspectives = []
@@ -154,6 +155,7 @@ class StudyScript(avango.script.Script):
         self.keyboard_button_pressed = False
         self.correct_button_pressed = False
         self.false_button_pressed = False
+        self.answer = None
 
         self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
                                          avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
@@ -195,7 +197,7 @@ class StudyScript(avango.script.Script):
                 self.time_stamps.append(date)
             # with open(file_name, 'w+', newline='') as csvfile:  
             # with open('names.csv', 'w', newline='') as csvfile:
-                fieldnames = ['date','user_id', 'task', 'part', 'group', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'frozen', 'answer']
+                fieldnames = ['date','user_id', 'task', 'part', 'group', 'block', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'frozen', 'answer']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
                 writer.writeheader()
@@ -205,6 +207,7 @@ class StudyScript(avango.script.Script):
                                       'task':self.study_task,
                                       'part':self.study_part,
                                       'group':self.study_group,
+                                      'block':self.study_block,
                                       'geometry':self.study_geo,
                                       'version':self.study_geo_version,
                                       'condition':self.study_condition,
@@ -263,11 +266,12 @@ class StudyScript(avango.script.Script):
         elif self.state == 2: # stops navigation state -> starts verification state
             self.screen.Children.value.remove(self.sign)
             print('Marker', self.indicator_id, '/', len(self.error_indicator_locations))
-            self.indicator_transform.Children.value.remove(self.indicator)
+            
             self.state = 3
             self.start_time = time.time()
             if self.study_condition == 'lense':
                 self.perspective_picker.turn_on()
+                self.indicator_transform.Children.value.remove(self.indicator)
 
             elif self.study_condition == 'wall':
                 print('wall')
@@ -288,39 +292,63 @@ class StudyScript(avango.script.Script):
             print('Elapsed Time in sec?',elapsed_time)
             self.wall.show(False)
 
-            if self.indicator_id < len(self.error_indicator_locations) - 1:
-                self.indicator_id += 1
-                self.state = 4
-                self.screen.Children.value.append(self.sign)
+            self.state = 4
+            self.screen.Children.value.append(self.sign)
                 
-                self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/CorrectQuestion.png")
-                self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
-                                         avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
-                self.indicator_transform.Children.value.append(self.indicator)
+            self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/CorrectQuestion.png")
+            
                 
-                self.perspective_picker.turn_off()
+            self.perspective_picker.turn_off()
                 
-            else:
-                print('ID TOO BIG')
-                self.state = 5 # STUDY IS OVER
 
         elif self.state == 4:
-            if answer == 0:
-                self.user_answers.append(False)
-                self.state = 1
-                self.write_csv_file()
-            elif answer == 1:
-                self.user_answers.append(True)
-                self.state = 1
-                self.write_csv_file()
+
+            if self.answer is not None:
+                if self.answer == True:
+                    if self.indicator_id < len(self.error_indicator_locations) - 1:
+                        self.indicator_id += 1
+                        self.user_answers.append(self.answer)
+                        self.state = 1
+                        self.write_csv_file()
+                        self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
+                        self.answer = None
+                        self.indicator_transform.Children.value.remove(self.indicator)
+                        self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
+                                                 avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
+                        self.indicator_transform.Children.value.append(self.indicator)
+                    else:
+                        print('ID TOO BIG')
+                        self.user_answers.append(self.answer)
+                        self.state = 5 # STUDY IS OVER
+
+                elif self.answer == False:
+                    if self.indicator_id < len(self.error_indicator_locations) - 1:
+                        self.indicator_id += 1
+                        self.user_answers.append(self.answer)
+                        print(len(self.user_answers))
+                        self.state = 1
+                        self.write_csv_file()
+                        self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
+                        self.answer = None
+                        self.indicator_transform.Children.value.remove(self.indicator)
+                        self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
+                                                 avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
+                        self.indicator_transform.Children.value.append(self.indicator)
+                    else:
+                        print('ID TOO BIG')
+                        self.user_answers.append(self.answer)
+                        self.state = 5 # STUDY IS OVER
             else:
                 print('Give answer.')
-            self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
+            
 
 
         elif self.state == 5: # stops pause state -> starts navigation state
             print('Study is over')
-            self.write_csv_file()
+            if self.answer != None:
+                self.write_csv_file()
+            self.answer = None
+            self.sign.Material.value.set_uniform("ColorMap",self.start_study_sign_path)
 
     def update_textures(self, feature_id):
 
@@ -374,8 +402,9 @@ class StudyScript(avango.script.Script):
     def study_state_changed_by_correct_button(self):
         if self.StudyStateCorrectButton.value:
             if self.correct_button_pressed == False:
-
-                self.change_study_state(1)
+                if self.state == 4:
+                    self.answer = True
+                    self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/CorrectSign.png")
                 self.correct_button_pressed = True
         else:
             self.correct_button_pressed = False
@@ -384,8 +413,9 @@ class StudyScript(avango.script.Script):
     def study_state_changed_by_false_button(self):
         if self.StudyStateFalseButton.value:
             if self.false_button_pressed == False:
-
-                self.change_study_state(0)
+                if self.state == 4:
+                    self.answer = False
+                    self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/WrongSign.png")
                 self.false_button_pressed = True
         else:
             self.false_button_pressed = False

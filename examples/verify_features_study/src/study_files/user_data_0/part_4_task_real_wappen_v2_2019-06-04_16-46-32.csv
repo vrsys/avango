@@ -1,4 +1,0 @@
-date,user_id,task,part,group,geometry,version,condition,trail,feature_value,time,frozen,answer
-2019-06-04 16:48:09.032278,0,real,4,A,wappen,2,wall,0,False,26.359922885894775,0,True
-2019-06-04 16:48:27.750969,0,real,4,A,wappen,2,wall,1,False,8.342318296432495,0,False
-2019-06-04 16:48:36.674221,0,real,4,A,wappen,2,wall,2,False,2.4427173137664795,0,True

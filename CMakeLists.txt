@@ -31,6 +31,15 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 ################################################################
 set(GLOBAL_EXT_DIR ${AVANGO_SOURCE_DIR}/externals)
 
+if(MSVC)
+    option(CONTAINER_DEPLOYMENT_BUILD "Set to enable Docker-based deployment behaviors" ON)
+endif()
+
+if(CONTAINER_DEPLOYMENT_BUILD)
+    set(GLOBAL_EXT_DIR ${DEPLOYMENT_EXTERNALS})
+endif(CONTAINER_DEPLOYMENT_BUILD)
+
+
 if (UNIX)
   pkg_check_modules(GL REQUIRED gl)
 endif (UNIX)

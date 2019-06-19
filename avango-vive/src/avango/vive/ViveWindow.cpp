@@ -87,10 +87,31 @@ void av::vive::ViveWindow::triggerHapticPulse(unsigned int controllerId, float s
     }
 }
 
+void
+av::vive::ViveWindow::register_node(av::Link<av::gua::Node> n, int t) {
+	//std::cout << "av::vive::ViveWindow::register_node " << n->getGuaNode()->get_name() << std::endl;
+	switch (t) {
+	case 0:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_0);
+		break;
+	case 1:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_1);
+		break;
+	case 2:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0);
+		break;
+	case 3:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1);
+		break;
+	default:
+		break;
+	}
+}
+
 void av::vive::ViveWindow::evaluate()
 {
-    // update the state all components of the system
-    m_guaViveWindow->update_sensor_orientations();
+    // the state of all sensors is updated by the rendering thread
+    // deprecated: m_guaViveWindow->update_sensor_orientations();
 
     // forward the current sensor orientations
     HMDSensorOrientation.setValue(m_guaViveWindow->get_sensor_orientation(::gua::ViveWindow::DeviceID::HMD));

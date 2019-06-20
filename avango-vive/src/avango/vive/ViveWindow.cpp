@@ -92,15 +92,24 @@ av::vive::ViveWindow::register_node(av::Link<av::gua::Node> n, int t) {
 	//std::cout << "av::vive::ViveWindow::register_node " << n->getGuaNode()->get_name() << std::endl;
 	switch (t) {
 	case 0:
-		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_0);
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::HMD);
 		break;
 	case 1:
-		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_1);
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_0);
+		break;
+	case 11:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_0_YAW);
 		break;
 	case 2:
-		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0);
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_1);
+		break;
+	case 21:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::CONTROLLER_1_YAW);
 		break;
 	case 3:
+		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_0);
+		break;
+	case 4:
 		m_guaViveWindow->register_node(n->getGuaNode(), ::gua::ViveWindow::DeviceID::TRACKING_REFERENCE_1);
 		break;
 	default:

@@ -75,21 +75,21 @@ def start():
     camera_node.Children.value.append(right_screen_node)
     navigation_node.Children.value.append(camera_node)
 
-    vive_controller_0 = trimesh_loader.create_geometry_from_file("Vive-HMD-Controller_0", "data/objects/vive_controller/vive_controller.obj")
-    window.register_node(vive_controller_0, 0)
+    vive_controller_0 = trimesh_loader.create_geometry_from_file("c0", "data/objects/vive_controller/vive_controller.obj")
     navigation_node.Children.value.append(vive_controller_0)
+    window.register_node(vive_controller_0, 1)
 
-    vive_controller_1 = trimesh_loader.create_geometry_from_file("Vive-HMD-Controller_1", "data/objects/vive_controller/vive_controller.obj")
-    window.register_node(vive_controller_1, 1)
+    vive_controller_1 = trimesh_loader.create_geometry_from_file("c1", "data/objects/vive_controller/vive_controller.obj")
     navigation_node.Children.value.append(vive_controller_1)
+    window.register_node(vive_controller_1, 2)
 
-    lighthose_station_0 = trimesh_loader.create_geometry_from_file("Vive-HMD-Lighthouse_0", "data/objects/vive_lighthouse/vive_lighthouse.obj")
-    window.register_node(lighthose_station_0, 2)
+    lighthose_station_0 = trimesh_loader.create_geometry_from_file("l0", "data/objects/vive_lighthouse/vive_lighthouse.obj")
     navigation_node.Children.value.append(lighthose_station_0)
+    window.register_node(lighthose_station_0, 3)
 
-    lighthose_station_1 = trimesh_loader.create_geometry_from_file("Vive-HMD-Lighthouse_1", "data/objects/vive_lighthouse/vive_lighthouse.obj")
-    window.register_node(lighthose_station_1, 3)
+    lighthose_station_1 = trimesh_loader.create_geometry_from_file("l1", "data/objects/vive_lighthouse/vive_lighthouse.obj")
     navigation_node.Children.value.append(lighthose_station_1)
+    window.register_node(lighthose_station_1, 4)
 
 
     monkey2 = trimesh_loader.create_geometry_from_file("monke2", "data/objects/monkey.obj")

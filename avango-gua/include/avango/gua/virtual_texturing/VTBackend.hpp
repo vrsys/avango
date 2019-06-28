@@ -6,8 +6,6 @@
 #include <gua/platform.hpp>
 
 #ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
-#include <gua/virtual_texturing/VTBackend.hpp>
-#endif //AVANGO_VIRTUAL_TEXTURING_SUPPORT
 
 #include <avango/FieldContainer.h>
 #include <avango/gua/Fields.hpp>
@@ -16,8 +14,7 @@
 
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
-
-#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
+#include <gua/virtual_texturing/VTBackend.hpp>
 
 namespace av
 {

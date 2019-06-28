@@ -19,7 +19,14 @@ struct pointee<av::Link<T>>
 } // namespace python
 } // namespace boost
 
-void triggerHapticPulse(av::vive::ViveWindow const& window, unsigned int controllerId, float strength) { window.triggerHapticPulse(controllerId, strength); }
+void triggerHapticPulse(av::vive::ViveWindow const& window, unsigned int controllerId, float strength) { 
+	window.triggerHapticPulse(controllerId, strength); 
+}
+
+void register_node(av::vive::ViveWindow& window,
+  av::Link<av::gua::Node> n, int t) {
+  window.register_node(n, t);
+}
 
 void init_ViveWindow()
 {
@@ -28,5 +35,7 @@ void init_ViveWindow()
     register_field<av::vive::SFViveWindow>("SFViveWindow");
     register_multifield<av::vive::MFViveWindow>("MFViveWindow");
 
-    class_<av::vive::ViveWindow, av::Link<av::vive::ViveWindow>, bases<av::gua::GlfwWindow>, boost::noncopyable>("ViveWindow", "docstring").def("trigger_haptic_pulse", &triggerHapticPulse);
+    class_<av::vive::ViveWindow, av::Link<av::vive::ViveWindow>, bases<av::gua::GlfwWindow>, boost::noncopyable>("ViveWindow", "docstring")
+		.def("trigger_haptic_pulse", &triggerHapticPulse)
+		.def("register_node", &register_node);
 }

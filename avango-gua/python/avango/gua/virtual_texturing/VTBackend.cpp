@@ -1,11 +1,11 @@
 
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 #include "VTBackend.hpp"
 
 #include <avango/gua/virtual_texturing/VTBackend.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 
-#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 using namespace boost::python;
 using namespace av::python;
 
@@ -40,4 +40,4 @@ void init_VTBackend()
     register_multifield<av::gua::MFVTBackend>("MFVTBackend");
 }
 
-#endif
+#endif // AVANGO_VIRTUAL_TEXTURING_SUPPORT

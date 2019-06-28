@@ -1,8 +1,7 @@
-
-#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 #include "VTBackend.hpp"
 
 #include <avango/gua/virtual_texturing/VTBackend.hpp>
+#ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 

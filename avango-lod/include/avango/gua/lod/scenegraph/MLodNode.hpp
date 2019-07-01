@@ -54,6 +54,7 @@ class AV_GUA_LOD_DLL MLodNode : public av::gua::GeometryNode
     SFString Geometry;
     SFMaterial Material;
     SFFloat ErrorThreshold;
+    SFInt MinLodDepth;
 
     virtual void getGeometryCB(const SFString::GetValueEvent& event);
     virtual void setGeometryCB(const SFString::SetValueEvent& event);
@@ -63,6 +64,9 @@ class AV_GUA_LOD_DLL MLodNode : public av::gua::GeometryNode
 
     virtual void getErrorThresholdCB(const SFFloat::GetValueEvent& event);
     virtual void setErrorThresholdCB(const SFFloat::SetValueEvent& event);
+
+    virtual void getMinLodDepthCB(const SFInt::GetValueEvent& event);
+    virtual void setMinLodDepthCB(const SFInt::SetValueEvent& event);
 
   private:
     std::shared_ptr<::gua::node::MLodNode> m_guaMLodNode;

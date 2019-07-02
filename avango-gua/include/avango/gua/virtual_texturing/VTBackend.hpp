@@ -32,7 +32,11 @@ class AV_GUA_DLL VTBackend : public av::FieldContainer
     const void stop_backend() const;
     const void add_camera(const av::gua::CameraNode& camera) const;
 
-  private:
+    const void set_physical_texture_size(uint32_t size) const;
+    const void set_update_throughput_size(uint32_t size) const;
+    const void set_ram_cache_size(uint32_t size) const;
+
+private:
     VTBackend(const VTBackend&);
     VTBackend& operator=(const VTBackend&);
 };

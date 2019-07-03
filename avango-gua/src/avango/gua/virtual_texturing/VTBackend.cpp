@@ -33,4 +33,8 @@ const void av::gua::VTBackend::start_backend() const { ::gua::VTBackend::get_ins
 const void av::gua::VTBackend::stop_backend() const { ::gua::VTBackend::get_instance().stop_backend(); }
 const void av::gua::VTBackend::add_camera(av::gua::CameraNode const& camera) const { ::gua::VTBackend::get_instance().add_camera(camera.getGuaNode()); }
 
+const void av::gua::VTBackend::set_physical_texture_size(uint32_t size) const { ::gua::VTBackend::get_instance().set_physical_texture_size(size); }
+const void av::gua::VTBackend::set_update_throughput_size(uint32_t size) const { ::gua::VTBackend::get_instance().set_update_throughput_size(size); }
+const void av::gua::VTBackend::set_ram_cache_size(uint32_t size) const { ::gua::VTBackend::get_instance().set_ram_cache_size(size); }
+
 #endif

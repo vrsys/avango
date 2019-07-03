@@ -3,7 +3,6 @@ import avango.script
 from avango.script import field_has_changed
 import avango.gua
 import avango.gua.lod
-from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
@@ -26,6 +25,9 @@ def print_fields(node, print_values=False):
         if print_values:
             print("  with value '{0}'".format(field.value))
 
+#screen_grab_pass = avango.gua.nodes.ScreenGrabPassDescription()
+#screen_grab_pass.setOutputPrefix("/home/tihi6213/Desktop/pic_")
+
 class TimedRotate(avango.script.Script):
     TimeIn = avango.SFFloat()
     MatrixOut = avango.gua.SFMatrix4()
@@ -37,11 +39,10 @@ class TimedRotate(avango.script.Script):
         self.Window = window
 
     def evaluate(self):
-        # move the abstract geometry in a pseudo-random manner
         self.MatrixOut.value = avango.gua.make_trans_mat(0, -0.75, -2.0) * \
                                avango.gua.make_rot_mat(self.TimeIn.value * 20.0, 0.0, 1.0, 0.0)
         self.frame = self.frame + 1
-        if 0 != self.Window and self.frame % 30 == 0:
+        if 0 != self.Window and self.frame % 200 == 0:
             print("RenderingFPS :" + str(self.Window.RenderingFPS.value))
 
 
@@ -54,44 +55,60 @@ def start():
 
     # configure lod backend
     lod_loader = avango.gua.lod.nodes.LodLoader()
-    lod_loader.OutOfCoreBudget.value = 16384
+    lod_loader.OutOfCoreBudget.value = 32768
     lod_loader.RenderBudget.value = 4096
-    lod_loader.UploadBudget.value = 16
+    lod_loader.UploadBudget.value = 64
 
-    vt_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE | avango.gua.MaterialCapabilities.ROUGHNESS_VALUE |
-                                              avango.gua.MaterialCapabilities.METALNESS_VALUE | avango.gua.MaterialCapabilities.EMISSIVITY_VALUE)
+    vt_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.ROUGHNESS_VALUE |
+                                        avango.gua.MaterialCapabilities.METALNESS_VALUE |
+                                        avango.gua.MaterialCapabilities.EMISSIVITY_VALUE)
 
-    vt_mat.set_uniform("Color", avango.gua.Vec4(1.0, 0.0, 0.0, 1.0))
-    vt_mat.set_uniform("Emissivity", 0.0)
-    vt_mat.set_uniform("Roughness", 0.0)
-    vt_mat.set_uniform("Metalness", 1.0)
-    vt_mat.set_uniform("vt_test", "/mnt/terabytes_of_textures/output_sensitive_rendering/SchieferTurm/schiefer_coarse/combined_texture.atlas")
-    vt_mat.ShowBackFaces = False
+    vt_mat.set_uniform("Emissivity", 0.75)
+    vt_mat.set_uniform("Roughness", 0.75)
+    vt_mat.set_uniform("Metalness", 0.25)
+    # vt_mat.set_uniform("vt_test", "/mnt/terabytes_of_textures/output_sensitive_rendering/SchieferTurm/schiefer_coarse/combined_texture.atlas")
+    vt_mat.set_uniform("vt_test", "/mnt/terabytes_of_textures/output_sensitive_rendering/halberstadt/halberstadt_ultra/Dom_Halberstadt_ultra_fixed.atlas")
+    vt_mat.EnableBackfaceCulling.value = True
     vt_mat.EnableVirtualTexturing.value = True
 
-    mlod_node = lod_loader.load_lod_trimesh("mlod_node_slot", "/mnt/terabytes_of_textures/output_sensitive_rendering/SchieferTurm/schiefer_coarse/Schiefer_Turm_charts_uv.bvh",
+    # mlod_node = lod_loader.load_lod_trimesh("mlod_node_slot", "/mnt/terabytes_of_textures/output_sensitive_rendering/SchieferTurm/schiefer_coarse/Schiefer_Turm_charts_uv.bvh",
+    #                                         vt_mat, avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
+    mlod_node = lod_loader.load_lod_trimesh("mlod_node_slot", "/mnt/terabytes_of_textures/output_sensitive_rendering/halberstadt/halberstadt_ultra/Dom_Halberstadt_ultra_fixed.bvh",
                                             vt_mat, avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
     # if not isinstance(mlod_node, avango.gua.lod.MLodNode):
     #    print(str(type(mlod_node)) + " is not an instance of a M-LOD Node")
     #    return
 
-    mlod_node.ErrorThreshold.Value = 0.25
+    mlod_node.ErrorThreshold.Value = 1.0
+    mlod_node.MinLodDepth.Value = 6
     mlod_node.Material.Value = vt_mat
 
-    monkey = mesh_loader.create_geometry_from_file(
-        "monkey",
-        "data/objects/monkey.obj",
-        vt_mat,
-        avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION
+    vt_mat_lion = avango.gua.create_material(avango.gua.MaterialCapabilities.ROUGHNESS_VALUE |
+                                        avango.gua.MaterialCapabilities.METALNESS_VALUE |
+                                        avango.gua.MaterialCapabilities.EMISSIVITY_VALUE)
+
+    vt_mat_lion.set_uniform("Emissivity", 0.75)
+    vt_mat_lion.set_uniform("Roughness", 0.75)
+    vt_mat_lion.set_uniform("Metalness", 0.25)
+    vt_mat_lion.set_uniform("vt_test", "/mnt/terabytes_of_textures/output_sensitive_rendering/lion_250k/loewe_static.atlas")
+    vt_mat_lion.EnableBackfaceCulling.value = True
+    vt_mat_lion.EnableVirtualTexturing.value = True
+
+    lion = mesh_loader.create_geometry_from_file(
+        "lion",
+        "/mnt/terabytes_of_textures/output_sensitive_rendering/lion_250k/lion_fixed_vt.obj",
+        vt_mat_lion,
+        avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.NORMALIZE_POSITION
     )
 
-    monkey.Transform.value = avango.gua.make_trans_mat(-1, 0.3, 0) * avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+    lion.Transform.value = avango.gua.make_trans_mat(-1, 0.3, 0) * avango.gua.make_scale_mat(0.3, 0.3, 0.3)
+    lion.Material.Value = vt_mat_lion
 
     transform.Children.value.append(mlod_node)
     mlod_node.ShadowMode.value = 1
-    transform.Children.value.append(monkey)
-    monkey.ShadowMode.value = 1
+    transform.Children.value.append(lion)
+    lion.ShadowMode.value = 1
 
     spot_light_1 = avango.gua.nodes.LightNode(Name="spot_light_1",
                                               Type=avango.gua.LightType.SPOT,
@@ -139,7 +156,7 @@ def start():
     sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
     graph.Root.value.Children.value.append(sun_light)
 
-    width = 3840
+    width = 1920
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -175,17 +192,19 @@ def start():
 
     pipeline_description = avango.gua.nodes.PipelineDescription(
         Passes=[
-            mlod_pass,
             avango.gua.nodes.TriMeshPassDescription(),
+            mlod_pass,
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
             avango.gua.nodes.SSAAPassDescription(),
+            #screen_grab_pass,
             #avango.gua.nodes.DebugViewPassDescription()
         ],
         EnableABuffer=False
     )
 
     camera.PipelineDescription.value = pipeline_description
+    camera.EnableFrustumCulling.value = False
 
     graph.Root.value.Children.value.append(camera)
 
@@ -212,9 +231,12 @@ def start():
     vt_backend = avango.gua.VTBackend()
     vt_backend.add_camera(camera)
     vt_backend.start_backend()
+    vt_backend.set_physical_texture_size(2048)
+    vt_backend.set_update_throughput_size(4)
+    vt_backend.set_ram_cache_size(32768)
 
     viewer = avango.gua.nodes.Viewer()
-    # viewer.DesiredFPS.value = 200
+    viewer.DesiredFPS.value = 1000
     viewer.SceneGraphs.value = [graph]
     viewer.Windows.value = [window]
 

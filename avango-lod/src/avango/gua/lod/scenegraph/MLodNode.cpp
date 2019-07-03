@@ -16,12 +16,14 @@ av::gua::lod::MLodNode::MLodNode(std::shared_ptr<::gua::node::MLodNode> guanode)
 
     AV_FC_ADD_ADAPTOR_FIELD(ErrorThreshold, std::bind(&MLodNode::getErrorThresholdCB, this, std::placeholders::_1), std::bind(&MLodNode::setErrorThresholdCB, this, std::placeholders::_1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(MinLodDepth, std::bind(&MLodNode::getMinLodDepthCB, this, std::placeholders::_1), std::bind(&MLodNode::setMinLodDepthCB, this, std::placeholders::_1));
+
     if(guanode->get_material())
     {
         m_Material = av::Link<av::gua::Material>(new av::gua::Material(guanode->get_material()));
     }
 }
-
+#if defined(AVANGO_DISTRIBUTION_SUPPORT)
 void av::gua::lod::MLodNode::on_distribute(av::gua::NetTransform& netNode)
 {
     GeometryNode::on_distribute(netNode);
@@ -43,6 +45,7 @@ void av::gua::lod::MLodNode::on_undistribute(av::gua::NetTransform& netNode)
     }
     netNode.undistributeFieldContainer(m_Material);
 }
+#endif
 
 void av::gua::lod::MLodNode::initClass()
 {
@@ -83,5 +86,9 @@ void av::gua::lod::MLodNode::setMaterialCB(const SFMaterial::SetValueEvent& even
 void av::gua::lod::MLodNode::getErrorThresholdCB(const SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaMLodNode->get_error_threshold(); }
 
 void av::gua::lod::MLodNode::setErrorThresholdCB(const SFFloat::SetValueEvent& event) { m_guaMLodNode->set_error_threshold(event.getValue()); }
+
+void av::gua::lod::MLodNode::getMinLodDepthCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = m_guaMLodNode->get_min_lod_depth(); }
+
+void av::gua::lod::MLodNode::setMinLodDepthCB(const SFInt::SetValueEvent& event) { m_guaMLodNode->set_min_lod_depth(event.getValue()); }
 
 std::shared_ptr<::gua::node::MLodNode> av::gua::lod::MLodNode::getGuaMLodNode() const { return m_guaMLodNode; }

@@ -89,6 +89,7 @@
 #include "renderer/BackgroundPassDescription.hpp"
 #include "renderer/SkyMapPassDescription.hpp"
 #include "renderer/BBoxPassDescription.hpp"
+#include "renderer/ScreenGrabPassDescription.hpp"
 #include "renderer/EmissivePassDescription.hpp"
 #include "renderer/PhysicallyBasedShadingPassDescription.hpp"
 #include "renderer/TexturedScreenSpaceQuadPassDescription.hpp"
@@ -246,6 +247,7 @@ BOOST_PYTHON_MODULE(_gua)
     init_BackgroundPassDescription();
     init_SkyMapPassDescription();
     init_BBoxPassDescription();
+    init_ScreenGrabPassDescription();
     init_EmissivePassDescription();
     init_PhysicallyBasedShadingPassDescription();
     init_TexturedScreenSpaceQuadPassDescription();

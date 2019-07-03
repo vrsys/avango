@@ -1,11 +1,5 @@
-
 #ifndef AVANGO_GUA_VTBACKEND_HPP
 #define AVANGO_GUA_VTBACKEND_HPP
-
-#include <gua/guacamole.hpp>
-#include <gua/platform.hpp>
-
-
 
 #include <avango/FieldContainer.h>
 #include <avango/gua/Fields.hpp>
@@ -14,6 +8,10 @@
 
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
+#include <gua/virtual_texturing/VTBackend.hpp>
+
+#include <gua/guacamole.hpp>
+#include <gua/platform.hpp>
 #include <gua/virtual_texturing/VTBackend.hpp>
 
 #ifdef AVANGO_VIRTUAL_TEXTURING_SUPPORT
@@ -34,7 +32,11 @@ class AV_GUA_DLL VTBackend : public av::FieldContainer
     const void stop_backend() const;
     const void add_camera(const av::gua::CameraNode& camera) const;
 
-  private:
+    const void set_physical_texture_size(uint32_t size) const;
+    const void set_update_throughput_size(uint32_t size) const;
+    const void set_ram_cache_size(uint32_t size) const;
+
+private:
     VTBackend(const VTBackend&);
     VTBackend& operator=(const VTBackend&);
 };

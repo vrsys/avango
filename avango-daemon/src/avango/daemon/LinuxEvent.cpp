@@ -351,6 +351,29 @@ av::daemon::LinuxEvent::LinuxEvent()
     insert(std::make_pair("BTN_WHEEL", 0x150));
     insert(std::make_pair("BTN_GEAR_DOWN", 0x150));
     insert(std::make_pair("BTN_GEAR_UP", 0x151));
+
+    insert(std::make_pair("BTN_SOUTH", 0x130));
+    insert(std::make_pair("BTN_EAST", 0x131));
+    insert(std::make_pair("BTN_NORTH", 0x133));
+    insert(std::make_pair("BTN_WEST", 0x134));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY", 0x2c0));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY1", 0x2c0));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY2", 0x2c1));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY3", 0x2c2));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY4", 0x2c3));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY5", 0x2c4));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY6", 0x2c5));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY7", 0x2c6));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY8", 0x2c7));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY9", 0x2c8));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY10", 0x2c9));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY11", 0x2ca));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY12", 0x2cb));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY13", 0x2cc));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY14", 0x2cd));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY15", 0x2ce));
+    insert(std::make_pair("BTN_TRIGGER_HAPPY16", 0x2cf));
+
     insert(std::make_pair("KEY_OK", 0x160));
     insert(std::make_pair("KEY_SELECT", 0x161));
     insert(std::make_pair("KEY_GOTO", 0x162));

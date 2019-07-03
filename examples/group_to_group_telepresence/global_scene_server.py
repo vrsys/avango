@@ -44,8 +44,8 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
-#OBSERVER_MODE = "3_CLIENTS_SIMULATED"
-OBSERVER_MODE = "3_CLIENTS_LIVE"
+OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+#OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
 #OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
@@ -53,10 +53,10 @@ OBSERVER_MODE = "3_CLIENTS_LIVE"
 #CLIENT_MODE = ""
 CLIENT_MODE = "VIDEO_POWERWALL"
 
-SCENE_MODE = "EVALUATION"
+#SCENE_MODE = "EVALUATION"
 #SCENE_MODE = "ARCHITECTURE"
 #SCENE_MODE = "LIONS"
-#SCENE_MODE = "SIMPLE"
+SCENE_MODE = "SIMPLE"
 #SCENE_MODE = "EMPTY"
 
 RES_MODE = "POWERWALL"
@@ -67,13 +67,15 @@ VR16      = "141.54.147.16"
 PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
 DAEDALOS  = "141.54.147.34"
+LADON     = "141.54.147.47"
+ARGOS     = "141.54.147.26"
 
 HEKATE    = "141.54.147.42"
 
 SPACEMONSTER = "141.54.147.101"
 STEELYGLINT = "141.54.147.102"
 
-CURRENTLY_USED_SERVER = SPACEMONSTER
+CURRENTLY_USED_SERVER = ARGOS
 #CURRENTLY_USED_SERVER = VR16
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
@@ -211,7 +213,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
     #nv = netvaluepy.NetValue(HEKATE+":8000")
     #nv = netvaluepy.NetValue(VR16+":8000")
-    nv = netvaluepy.NetValue(STEELYGLINT+":8000")
+    #nv = netvaluepy.NetValue(STEELYGLINT+":8000")
+    nv = netvaluepy.NetValue(LADON+":8000")
     @field_has_changed(TimeIn)
     def update(self):
       #  print("NetValue: " + str(self.nv.getValue()) )
@@ -338,7 +341,9 @@ spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_steelyglint_for_hydra.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_steelyglint_for_hydra.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_ladon_for_argos.sr")
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
 

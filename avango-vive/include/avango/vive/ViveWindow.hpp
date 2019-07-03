@@ -8,6 +8,7 @@
 #include <gua/math/math.hpp>
 #include <avango/gua/Fields.hpp>
 #include <avango/FieldContainer.h>
+#include <avango/gua/scenegraph/Node.hpp>
 
 #include <avango/vive/windows_specific.hpp>
 #include <chrono>
@@ -73,6 +74,7 @@ class AV_VIVE_DLL ViveWindow : public av::gua::GlfwWindow
      */
     std::shared_ptr<::gua::ViveWindow> const& getGuaViveWindow() const;
     void triggerHapticPulse(unsigned int controllerId, float strength) const;
+	void register_node(av::Link<av::gua::Node> n, int t);
 
   private:
     std::shared_ptr<::gua::ViveWindow> m_guaViveWindow;

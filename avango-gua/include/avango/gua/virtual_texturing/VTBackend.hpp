@@ -1,4 +1,3 @@
-
 #ifndef AVANGO_GUA_VTBACKEND_HPP
 #define AVANGO_GUA_VTBACKEND_HPP
 
@@ -9,6 +8,7 @@
 
 #include <avango/gua/scenegraph/CameraNode.hpp>
 #include <avango/gua/windows_specific_gua.hpp>
+#include <gua/virtual_texturing/VTBackend.hpp>
 
 #include <gua/guacamole.hpp>
 #include <gua/platform.hpp>

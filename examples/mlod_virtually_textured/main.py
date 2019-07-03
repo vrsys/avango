@@ -231,6 +231,9 @@ def start():
     vt_backend = avango.gua.VTBackend()
     vt_backend.add_camera(camera)
     vt_backend.start_backend()
+    vt_backend.set_physical_texture_size(2048)
+    vt_backend.set_update_throughput_size(4)
+    vt_backend.set_ram_cache_size(32768)
 
     viewer = avango.gua.nodes.Viewer()
     viewer.DesiredFPS.value = 1000

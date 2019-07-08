@@ -48,7 +48,7 @@ def start():
     vt_mat.set_uniform("Roughness", 0.75)
     vt_mat.set_uniform("Metalness", 0.25)
     vt_mat.set_uniform("vt_test", "C://Data\Repositories/MESHLOD/low_resolution_meshlod/Erfurt_Obelisk_low_fix_texture.atlas")
-    vt_mat.EnableBackfaceCulling = True
+    vt_mat.EnableBackfaceCulling.value = True
     vt_mat.EnableVirtualTexturing.value = True
 
     mlod_node = lod_loader.load_lod_trimesh("mlod_node_slot", "C://Data/Repositories/MESHLOD/low_resolution_meshlod/Erfurt_Obelisk_low_fix.bvh", vt_mat, avango.gua.lod.LoaderFlags.NORMALIZE_SCALE | avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)

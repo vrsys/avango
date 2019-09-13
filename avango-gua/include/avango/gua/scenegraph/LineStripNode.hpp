@@ -44,7 +44,18 @@ class AV_GUA_DLL LineStripNode : public av::gua::GeometryNode
 
     void fillWithParabola(float a, float b, float c, float sample_distance, float maximal_distance, float col_r, float col_g, float col_b);
 
-    void fillWithBezier(::gua::math::vec3 const& p0, ::gua::math::vec3 const& p1, ::gua::math::vec3 const& p2, float col_r, float col_g, float col_b, int num_segments);
+    void fillWithBezier3(::gua::math::vec3 const& p0, 
+					     ::gua::math::vec3 const& p1, 
+					     ::gua::math::vec3 const& p2,
+					     float col_r, float col_g, float col_b,
+					     int num_segments);
+
+    void fillWithBezier4(::gua::math::vec3 const& p0,
+					     ::gua::math::vec3 const& p1,
+					     ::gua::math::vec3 const& p2,
+					     ::gua::math::vec3 const& p3,
+					     float col_r, float col_g, float col_b,
+					     int num_segments);
 
     // void submitVertices();
 

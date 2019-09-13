@@ -51,23 +51,24 @@ def start():
         "photo_model",
         # "data/objects/cube.obj",
         # "/home/senu8384/Desktop/master-thesis/data/01_Igeler-Saeule_Kopie/Igeler-Saeule_RLM.OBJ/Igeler-Saeule_RLM.obj",
-        "/home/senu8384/Desktop/master-thesis/data/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj",
+        # "/home/senu8384/Desktop/master-thesis/data/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj",
+        "/home/senu8384/Desktop/master-thesis/data/study/geometry/terra-points/Bogenschuetze-01.obj",
         # avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
         avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
     )    
     bb = photo_model.BoundingBox.value
     # bb.center()
     print(type(bb.center()), bb.center())
-    photo_model_center = avango.gua.Vec3(0.0, 0.5, 0.0)
+    photo_model_center = avango.gua.Vec3(0.0, -0.2, 0.0)
     # photo_model_center = bb.center()    
     #photo_model.Transform.value = avango.gua.make_trans_mat(photo_model_center) * avango.gua.make_rot_mat(90,0,1,0)*\
     #                                    avango.gua.make_rot_mat(-90,1,0,0) * avango.gua.make_scale_mat(0.00015)
     # photo_model.Transform.value = avango.gua.make_trans_mat(bb.center().x, bb.center().y, bb.center().z) * \
     # photo_model.Transform.value = avango.gua.make_trans_mat(0.0,0.4,0.0) * \
-    photo_model.Transform.value = avango.gua.make_trans_mat(0.0,0.5,0.0) * \
+    photo_model.Transform.value = avango.gua.make_trans_mat(photo_model_center) * \
             avango.gua.make_rot_mat(90.0,-1,0,0) * \
             avango.gua.make_rot_mat(90.0,0,0,1) * \
-            avango.gua.make_scale_mat(0.0014)
+            avango.gua.make_scale_mat(0.00105)
             # avango.gua.make_scale_mat(0.05)
     # photo_model.Transform.value = avango.gua.make_trans_mat(photo_model_center) * avango.gua.make_scale_mat(0.5, 1.0, 0.5)
     # photo_model.Material.value.set_uniform('Color', avango.gua.Color(0.4, 0.4, 0.2))
@@ -104,8 +105,8 @@ def start():
     #         outfile.write('\n')
 
     # width = 6144
-    width = 8192
-    # width = 2560;
+    # width = 8192
+    width = 2560;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -164,7 +165,7 @@ def start():
             #),
             avango.gua.nodes.LightVisibilityPassDescription(),
             res_pass,
-            screen_grab_pass,
+            # screen_grab_pass,
         ],
         EnableABuffer = True
     )
@@ -211,6 +212,7 @@ def start():
     capture_script.V_Key.connect_from(navigator.Keyboard.KeyV)
     capture_script.M_Key.connect_from(navigator.Keyboard.KeyM)
     capture_script.N_Key.connect_from(navigator.Keyboard.KeyN)
+    capture_script.U_Key.connect_from(navigator.Keyboard.KeyU)
 
     viewer = avango.gua.nodes.Viewer()
     # viewer.DesiredFPS.value = 200
@@ -245,6 +247,8 @@ def setup_picker(mesh_loader, camera, graph):
 
 
 if __name__ == '__main__':
+    print('AAA',avango.gua.make_rot_mat(0.0,0.0,0.0,0.0).get_rotate_scale_corrected())
+    print('BBB',avango.gua.make_rot_mat(90.0,0.0,0.0,1.0).get_rotate_scale_corrected())
     start()
 
 '''

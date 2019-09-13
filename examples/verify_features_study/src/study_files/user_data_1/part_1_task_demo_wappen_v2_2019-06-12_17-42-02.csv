@@ -1,0 +1,12 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-12 17:42:29.153309,1,demo,1,B,1,wappen,2,demo,0,True,0.13585758209228516,0,True,-1
+2019-06-12 17:42:29.955490,1,demo,1,B,1,wappen,2,demo,1,False,0.1610572338104248,0,True,-1
+2019-06-12 17:42:31.105992,1,demo,1,B,1,wappen,2,demo,2,False,0.17126893997192383,0,True,-1
+2019-06-12 17:42:32.201129,1,demo,1,B,1,wappen,2,demo,3,False,0.17634010314941406,0,True,-1
+2019-06-12 17:42:33.402100,1,demo,1,B,1,wappen,2,demo,4,True,0.16635584831237793,0,True,-1
+2019-06-12 17:42:34.627992,1,demo,1,B,1,wappen,2,demo,5,True,0.13595318794250488,0,True,-1
+2019-06-12 17:42:35.868897,1,demo,1,B,1,wappen,2,demo,6,True,0.15126347541809082,0,True,-1
+2019-06-12 17:42:37.170813,1,demo,1,B,1,wappen,2,demo,7,True,0.1661989688873291,0,True,-1
+2019-06-12 17:42:38.603641,1,demo,1,B,1,wappen,2,demo,8,False,0.17616748809814453,0,True,-1
+2019-06-12 17:42:40.197775,1,demo,1,B,1,wappen,2,demo,9,True,0.20649480819702148,0,True,-1
+2019-06-12 17:42:43.437065,1,demo,1,B,1,wappen,2,demo,10,False,0.19127559661865234,0,True,-1

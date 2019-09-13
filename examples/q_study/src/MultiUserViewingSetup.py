@@ -139,7 +139,8 @@ class User:
 
 
         ## init camera node
-        self.camera_node = avango.gua.nodes.CameraNode(Name = "camera_node")
+        self.camera_node = avango.gua.nodes.CameraNode(Name = "camera_node",
+                                                       BlackList = ["client"])
         self.camera_node.SceneGraph.value = SCENEGRAPH.Name.value
         self.camera_node.LeftScreenPath.value = SCREEN_NODE.Path.value
         self.camera_node.RightScreenPath.value = SCREEN_NODE.Path.value 
@@ -149,6 +150,7 @@ class User:
         self.camera_node.OutputWindowName.value = self.window.Title.value
         self.camera_node.PipelineDescription.value = self.pipeline_description
         self.camera_node.EnableStereo.value = True
+        print('############################################',self.camera_node.BlackList.value)
         self.head_node.Children.value = [self.camera_node]
 
 

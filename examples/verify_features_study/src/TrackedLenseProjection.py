@@ -320,7 +320,7 @@ class TrackedLenseProjection(avango.script.Script):
         closest_id = self.find_closest_perspective()
 
         # sliding window approach
-        window_size = 10
+        window_size = 3
         if len(self.sliding_window) < window_size:
           self.sliding_window.append(closest_id)
         elif len(self.sliding_window) == window_size:

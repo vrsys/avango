@@ -19,6 +19,7 @@ class StudyScript(avango.script.Script):
     Button0 = avango.SFBool()
     NextButton = avango.SFBool()
     PrevButton = avango.SFBool()
+    PhotoButton = avango.SFBool()
     IndicatorButton = avango.SFBool()
     StudyStateButton = avango.SFBool()
     StudyStateKeyboardButton = avango.SFBool()
@@ -31,10 +32,11 @@ class StudyScript(avango.script.Script):
 
         self.is_initialized = False
 
-    def my_constructor(self, graph, user_id, study_task, study_part, study_condition, study_geo, study_geo_version, marker_path, wall_perspectives_path, feature_values_path):
+    def my_constructor(self, graph, user_id, study_task, study_part, study_condition, study_geo, study_geo_version, marker_path, wall_perspectives_path, feature_values_path, study_user_two):
 
         self.graph = graph
         self.user_id = user_id
+        self.study_user_two = study_user_two
         self.study_task = study_task
         self.study_part = study_part
         self.study_condition = study_condition
@@ -144,6 +146,7 @@ class StudyScript(avango.script.Script):
         self.navigation = None
         self.wall = None
         self.question_flag = False
+        self.viewing_setup = None
 
         self.image_updater = None
         self.perspectives_per_feature = []
@@ -151,6 +154,7 @@ class StudyScript(avango.script.Script):
 
         self.next_pressed = False
         self.prev_pressed = False
+        self.photo_button_pressed = False
         self.indicator_pressed = False
         self.keyboard_button_pressed = False
         self.correct_button_pressed = False
@@ -173,8 +177,9 @@ class StudyScript(avango.script.Script):
 
     def write_csv_file(self):
         
-        
         folder_name = 'src/study_files/user_data_' + str(self.user_id) #+ folder_fix
+        if self.study_task == 'real':
+            folder_name = folder_name + '_' + str(self.study_user_two) + '_real'
         folder_ok = False
         try:
             # Create target Directory
@@ -195,11 +200,13 @@ class StudyScript(avango.script.Script):
             with open(file_name, 'w+') as csvfile:
                 date=datetime.datetime.now()
                 self.time_stamps.append(date)
+                print('time stamps length ',len(self.time_stamps))
             # with open(file_name, 'w+', newline='') as csvfile:  
             # with open('names.csv', 'w', newline='') as csvfile:
-                fieldnames = ['date','user_id', 'task', 'part', 'group', 'block', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'frozen', 'answer']
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                fieldnames = ['date','user_id', 'task', 'part', 'group', 'block', 'geometry', 'version', 'condition', 'trail', 'feature_value', 'time', 'frozen', 'answer', 'user_two_id']
 
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                user_two_id = -1 if self.study_user_two is None else self.study_user_two
                 writer.writeheader()
                 for idx, t in enumerate(self.times):
                     writer.writerow( {'date':self.time_stamps[idx],
@@ -216,6 +223,7 @@ class StudyScript(avango.script.Script):
                                       'time':self.times[idx],
                                       'frozen': self.locks[idx],
                                       'answer': self.user_answers[idx],
+                                      'user_two_id': user_two_id
                                       })
                     
 
@@ -277,6 +285,11 @@ class StudyScript(avango.script.Script):
                 print('wall')
                 self.wall.show(True)
                 self.update_textures(self.indicator_id)
+            elif self.study_condition == 'demo':
+                print('demo')
+                self.perspective_picker.turn_on()
+                self.wall.show(True)
+                self.update_textures(self.indicator_id)
 
         elif self.state == 3: # stops verification state -> starts pause state
             elapsed_time = time.time() - self.start_time
@@ -309,7 +322,10 @@ class StudyScript(avango.script.Script):
                         self.indicator_id += 1
                         self.user_answers.append(self.answer)
                         self.state = 1
-                        self.write_csv_file()
+                        if self.study_task == 'demo':
+                            print('dont save demo')
+                        else:
+                            self.write_csv_file()
                         self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
                         self.answer = None
                         self.indicator_transform.Children.value.remove(self.indicator)
@@ -319,15 +335,24 @@ class StudyScript(avango.script.Script):
                     else:
                         print('ID TOO BIG')
                         self.user_answers.append(self.answer)
-                        self.state = 5 # STUDY IS OVER
+                        if self.study_task == 'demo':
+                            self.indicator_id = 0
+                            self.state = 1
+                        else:
+                            self.state = 5 # STUDY IS OVER
+                        
 
                 elif self.answer == False:
                     if self.indicator_id < len(self.error_indicator_locations) - 1:
                         self.indicator_id += 1
                         self.user_answers.append(self.answer)
                         print(len(self.user_answers))
+                        
                         self.state = 1
-                        self.write_csv_file()
+                        if self.study_task == 'demo':
+                            print('dont save demo')    
+                        else:
+                            self.write_csv_file()
                         self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
                         self.answer = None
                         self.indicator_transform.Children.value.remove(self.indicator)
@@ -337,7 +362,11 @@ class StudyScript(avango.script.Script):
                     else:
                         print('ID TOO BIG')
                         self.user_answers.append(self.answer)
-                        self.state = 5 # STUDY IS OVER
+                        if self.study_task == 'demo':
+                            self.indicator_id = 0
+                            self.state = 1
+                        else:
+                            self.state = 5 # STUDY IS OVER
             else:
                 print('Give answer.')
             
@@ -349,6 +378,8 @@ class StudyScript(avango.script.Script):
                 self.write_csv_file()
             self.answer = None
             self.sign.Material.value.set_uniform("ColorMap",self.start_study_sign_path)
+    def set_viewing_setup(self, viewing_setup):
+        self.viewing_setup = viewing_setup
 
     def update_textures(self, feature_id):
 
@@ -419,3 +450,15 @@ class StudyScript(avango.script.Script):
                 self.false_button_pressed = True
         else:
             self.false_button_pressed = False
+
+    @field_has_changed(PhotoButton)
+    def study_photo_button_changed(self):
+        if self.PhotoButton.value:
+            if self.photo_button_pressed == False:
+                if self.state == 4:
+                    self.answer = False
+                    self.sign.Material.value.set_uniform("ColorMap","/home/senu8384/Desktop/master-thesis/data/WrongSign.png")
+                self.photo_button_pressed = True
+        else:
+            self.false_button_pressed = False
+            self.photo_button_pressed

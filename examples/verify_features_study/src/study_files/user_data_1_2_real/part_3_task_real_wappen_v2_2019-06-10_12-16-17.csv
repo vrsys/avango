@@ -1,0 +1,12 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-10 12:17:52.378100,1,real,3,B,0,wappen,2,lense,0,True,19.469463109970093,0,True,2
+2019-06-10 12:18:20.348897,1,real,3,B,0,wappen,2,lense,1,False,12.362385749816895,0,False,2
+2019-06-10 12:18:36.362218,1,real,3,B,0,wappen,2,lense,2,False,9.896140813827515,0,False,2
+2019-06-10 12:19:03.536565,1,real,3,B,0,wappen,2,lense,3,False,18.718584299087524,0,False,2
+2019-06-10 12:19:22.146796,1,real,3,B,0,wappen,2,lense,4,True,5.856785774230957,0,False,2
+2019-06-10 12:19:54.971364,1,real,3,B,0,wappen,2,lense,5,True,21.999619960784912,0,True,2
+2019-06-10 12:20:27.802305,1,real,3,B,0,wappen,2,lense,6,True,26.888676166534424,4,True,2
+2019-06-10 12:20:57.481002,1,real,3,B,0,wappen,2,lense,7,True,21.312630891799927,0,True,2
+2019-06-10 12:21:22.928461,1,real,3,B,0,wappen,2,lense,8,False,16.748271226882935,0,False,2
+2019-06-10 12:22:06.405207,1,real,3,B,0,wappen,2,lense,9,True,31.040879249572754,0,True,2
+2019-06-10 12:22:24.312537,1,real,3,B,0,wappen,2,lense,10,False,6.11785101890564,0,False,2

@@ -75,7 +75,7 @@ class PerspectivePicker(avango.script.Script):
     self.position_list = [li.position for li in self.localized_image_list]
     
   def find_closest_perspective(self):
-    print('find')
+    print('find pp')
     closest_id = None
 
     # get direction vector of hendheld lense
@@ -122,7 +122,7 @@ class PerspectivePicker(avango.script.Script):
         # lense_pos = lense_trans.WorldTransform.value.get_translate()
         line_p = _img.position
         line_d = lense_pos - line_p
-        print(lense_pos)
+        # print(lense_pos)
         line_d.normalize()
 
         # step 2: direction vector of the camera
@@ -137,11 +137,11 @@ class PerspectivePicker(avango.script.Script):
 
 
         t = (pnpp_dot - pnlp_dot) / pnld_dot;
-        print(t)
+        # print(t)
 
         # print('scalar', t)
         intersection_pos =  line_p + (line_d * t);
-        print('inters at', intersection_pos)
+        # print('inters at', intersection_pos)
         img_w_half = _img.tile_width #/ 4 #* #(1/_img.tile_scale) 
         img_h_half = _img.tile_height #/ 4 #* #(1/_img.tile_scale)
 
@@ -157,7 +157,7 @@ class PerspectivePicker(avango.script.Script):
         self.indicator3.Transform.value = avango.gua.make_trans_mat(x_values[0], y_values[1], plane_p.z) * self.indicator_scale
         self.indicator4.Transform.value = avango.gua.make_trans_mat(x_values[1], y_values[0], plane_p.z) * self.indicator_scale
 
-        print('x and y values', x_values, y_values) 
+        # print('x and y values', x_values, y_values) 
 
         # print(_img.img_h_half, y_values[1] - y_values[0])
         # ratio = 4.07 / 2.30
@@ -165,15 +165,16 @@ class PerspectivePicker(avango.script.Script):
 
         u_coord = map_from_to(intersection_pos.x, x_values[0], x_values[1], _img.min_uv.x, _img.max_uv.x)
         v_coord = map_from_to(intersection_pos.y, y_values[0], y_values[1], _img.min_uv.y, _img.max_uv.y)
-        print(_img.id, 'ORG uv coords min max', _img.min_uv, _img.max_uv)
-        print(_img.id, 'U and V coord', u_coord, v_coord)
+        # print(_img.id, 'ORG uv coords min max', _img.min_uv, _img.max_uv)
+        # print(_img.id, 'U and V coord', u_coord, v_coord)
         if u_coord > _img.min_uv.x and u_coord < _img.max_uv.x:
           print('yes')
         zoom_factor = 1.0
-        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) , v_coord - (_img.t_w / 2 / zoom_factor))
+        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) , v_coord - (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
+        print('RATIO applied')
         # ORIG max_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_w / 2 / zoom_factor))
         # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
-        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) , v_coord + (_img.t_w / 2 / zoom_factor))
+        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) , v_coord + (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
         # ORIG min_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_w / 2 / zoom_factor))
         # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
         min_max_coords = [min_uv, max_uv]

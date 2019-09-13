@@ -47,7 +47,7 @@ class PerspectivePicker(avango.script.Script):
     self.position_list = [li.position for li in self.localized_image_list]
     
   def find_closest_perspective(self):
-    print('find')
+    print('find OrigPerspectivePicker')
     closest_id = None
 
     # get direction vector of hendheld lense
@@ -144,9 +144,10 @@ class PerspectivePicker(avango.script.Script):
         if u_coord > _img.min_uv.x and u_coord < _img.max_uv.x:
           print('yes')
         zoom_factor = 3.5
-        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) , v_coord - (_img.t_w / 2 / zoom_factor))
+
+        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor), v_coord - (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
         # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
-        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) , v_coord + (_img.t_w / 2 / zoom_factor))
+        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor), v_coord + (_img.t_w / 2 / zoom_factor) * 0.565110565110565)
         # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
         min_max_coords = [min_uv, max_uv]
 

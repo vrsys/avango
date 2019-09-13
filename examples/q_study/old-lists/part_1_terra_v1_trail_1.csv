@@ -1,0 +1,9 @@
+user_id,part,group,geometry,version,trail,condition,feature,feature_value,time
+0,1,A,terra,1,1,lense,0,True,0.16723155975341797
+0,1,A,terra,1,1,lense,1,True,0.09952688217163086
+0,1,A,terra,1,1,lense,2,True,0.23392915725708008
+0,1,A,terra,1,1,lense,3,True,0.15038037300109863
+0,1,A,terra,1,1,lense,4,True,0.15019869804382324
+0,1,A,terra,1,1,lense,5,True,0.13337278366088867
+0,1,A,terra,1,1,lense,6,True,0.15035176277160645
+0,1,A,terra,1,1,lense,7,True,0.16685199737548828

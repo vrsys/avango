@@ -7,6 +7,7 @@ import random
 import math
 import src.provenance_utils as pu
 import time
+import json
 
 
 class TrackedLenseProjection(avango.script.Script):
@@ -25,19 +26,20 @@ class TrackedLenseProjection(avango.script.Script):
 
     self.is_initialized = False
 
-  def my_constructor(self):
+  def my_constructor(self, graph):
     self.indicator = None
-    loader = avango.gua.nodes.TriMeshLoader()
+    self.loader = avango.gua.nodes.TriMeshLoader()
+    self.graph = graph
 
     self.localized_image_list = []
     self.position_list = []
     self.projection_lense = None
+    self.tracked_node = None
     self.lense_parent_node = None
     self.show_lense = False
     self.min_tex_coords = avango.gua.Vec2(0.0, 0.0)
     self.max_tex_coords = avango.gua.Vec2(1.0, 1.0)
     self.last_lense_pos = None
-    self.scene_graph = None
     self.old_closest_id = 0
     self.button0_pressed = False
     # self.offset = avango.gua.Vec3(0.0,0.0,0.0)
@@ -47,7 +49,7 @@ class TrackedLenseProjection(avango.script.Script):
     self.group_node = avango.gua.nodes.TransformNode(Name = "projector_group")
     self.group_node.Transform.connect_from(self.Transform)
 
-    self.geometry = loader.create_geometry_from_file("projector_geometry", "data/objects/projector.obj", 
+    self.geometry = self.loader.create_geometry_from_file("projector_geometry", "data/objects/projector.obj", 
       avango.gua.LoaderFlags.NORMALIZE_SCALE |
       avango.gua.LoaderFlags.NORMALIZE_POSITION | 
       avango.gua.LoaderFlags.LOAD_MATERIALS)
@@ -75,21 +77,40 @@ class TrackedLenseProjection(avango.script.Script):
 
     self.Graph.value = avango.gua.nodes.SceneGraph(Name = "dummy")
 
+    self.marker_mat = avango.gua.nodes.Material()
+    marker_color = avango.gua.Vec4(1.0, 0.1, 0.1, 0.7)
+    # sphere_color.normalize()
+    self.marker_mat.set_uniform("Color", marker_color)
+    self.marker_mat.set_uniform("Roughness", 1.0)
+    self.marker_mat.set_uniform("Emissivity", 1.0)
+    self.marker_mat.EnableBackfaceCulling.value = False
+
+    self.marker_transform = avango.gua.nodes.TransformNode(Name='marker_transform')
+
+    self.marker_indicator = self.loader.create_geometry_from_file(
+        "marker_indicator", "data/objects/marker.obj",
+        self.marker_mat, avango.gua.LoaderFlags.DEFAULTS)
+    self.marker_indicator.Transform.value = avango.gua.make_scale_mat(0.1,0.1, 0.10) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)   
+    # self.marker_transform.Children.value.append(self.marker_indicator)
+
     proj_mat_desc = avango.gua.nodes.MaterialShaderDescription()
     proj_mat_desc.load_from_file("data/materials/Projective_VT_Material.gmd")
 
     # proj_mat_desc.EnableVirtualTexturing.value = True
     avango.gua.register_material_shader(proj_mat_desc, "proj_mat")
     self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
+    self.marker_matrices_list = []
+    self.markers = []
     
   def set_scenegraph(self, graph):
     print('scene graph got set')
-    self.scene_graph = graph
+    self.graph = graph
 
-  def set_projection_lense(self, obj, parent_node):
+  def set_projection_lense(self, obj, parent_node, tracked_node):
     if self.projection_lense is not None:
       self.projection_lense.Material.disconnect_from(self.Material)
     self.projection_lense = obj
+    self.tracked_node = tracked_node
     self.lense_parent_node = parent_node
     if self.projection_lense and self.lense_parent_node:
       self.show_lense = True
@@ -102,26 +123,45 @@ class TrackedLenseProjection(avango.script.Script):
     self.min_tex_coords = self.localized_image_list[self.old_closest_id].min_uv
     self.max_tex_coords = self.localized_image_list[self.old_closest_id].max_uv
 
+  def set_marker(self):
+    mat = self.marker_transform.WorldTransform.value
+    self.marker_matrices_list.append(mat)
+    marker = self.loader.create_geometry_from_file(
+      "marker_" + str(len(self.markers)), "data/objects/marker.obj",
+      self.marker_mat, avango.gua.LoaderFlags.DEFAULTS)
+    marker.Transform.value = mat * avango.gua.make_scale_mat(0.1, 0.1, 0.1) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) 
+    marker.Material.value.set_uniform('Emissivity', 1.0)
+    self.graph.Root.value.Children.value.append(marker)
+    self.markers.append(marker)
+    print('added marker', len(self.markers))
+    print(len(self.marker_matrices_list))
+    with open('marker_list.json', 'w') as jsonfile:  
+      json_data = {}
+      json_data['markers'] = [] 
+      for idx, mat in enumerate(self.marker_matrices_list):
+        json_data['markers'].append({
+            'id': idx,
+            'mat': avango.gua.to_list(mat)
+        })# print(avango.gua.to_list(mat))
+        # line = str(mat).replace('\n', '')
+        # line = str(avango.gua.to_list(mat)).replace(',', '')
+      
+      json.dump(json_data, jsonfile)
+
 
   def find_closest_perspective(self):
     closest_id = None
-    # print('wt ', self.projection_lense.WorldTransform.value.get_translate())
-    # print('lt ', self.projection_lense.Transform.value.get_translate())
 
-    # get direction vector of hendheld lense
-    # pos = self.Transform2.value.get_translate()
-    lense_mat =  avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0)) * self.projection_lense.WorldTransform.value 
-    # print('wt und inv',lense_mat.get_translate())
-    lense_pos= self.projection_lense.WorldTransform.value.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
-    # lense_pos= lense_mat.get_translate()#  * avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0))
-    # avango.gua.make_trans_mat(0.0,-1.445,2.0)
-    # print(lense_pos)
-    # inv *avango.osg.make_inverse_mat(self.HeadTransform.value)
-    # _rot_mat = avango.gua.make_rot_mat(self.Transform2.value.get_rotate_scale_corrected()) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
-    _rot_mat = avango.gua.make_rot_mat(self.projection_lense.WorldTransform.value.get_rotate_scale_corrected())
+    # lense_mat =  avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0)) * self.projection_lense.WorldTransform.value 
+    lense_mat =  avango.gua.make_inverse_mat(avango.gua.make_trans_mat(0.0,-1.445,2.0)) * self.tracked_node.WorldTransform.value 
+
+    # lense_pos= self.projection_lense.WorldTransform.value.get_translate()
+    lense_pos= self.tracked_node.WorldTransform.value.get_translate()
+    
+    # _rot_mat = avango.gua.make_rot_mat(self.projection_lense.WorldTransform.value.get_rotate_scale_corrected())
+    _rot_mat = avango.gua.make_rot_mat(self.tracked_node.WorldTransform.value.get_rotate_scale_corrected())
     _abs_dir = _rot_mat * avango.gua.Vec3(0.0,0.0,-1.0)
     _abs_dir = avango.gua.Vec3(_abs_dir.x,_abs_dir.y,_abs_dir.z) # cast to vec3
-    # print(_abs_dir)
 
     angle_list = []
 
@@ -138,9 +178,7 @@ class TrackedLenseProjection(avango.script.Script):
       # filter by angle
       if math.degrees(a) < 20:
         t = (img, a)
-        # print(img.id, math.degrees(a))
-        # if angle between image nad quad is small show img direction indicator 
-        # img.set_selected(False, True)
+
         angle_list.append(t)
 
     angle_list.sort(key=lambda tup: tup[1])
@@ -148,14 +186,8 @@ class TrackedLenseProjection(avango.script.Script):
     for tup in angle_list:
 
       if tup[0].frustum.contains(lense_pos):
-        # TODO: Might be good ideas:
-        # - adapt frustum size based on distance of hendheld lense 
-        # - check if the corners of the quad are in the frustum
-
-        # print('in frustum')
         closest_id = tup[0].id
-        # print(self.localized_image_list[closest_id].position)
-        # print('in frus', closest_id)
+
         return closest_id
       else:
         closest_id = None
@@ -168,13 +200,15 @@ class TrackedLenseProjection(avango.script.Script):
         print('NO view')
         closest_id = 0
 
-    print('image id :', closest_id)
+    # print('image id :', closest_id)
     return closest_id
 
   def freeze(self):
-    lense_mat = self.projection_lense.WorldTransform.value
+    # lense_mat = self.projection_lense.WorldTransform.value
+    lense_mat = self.tracked_node.WorldTransform.value
     projector_mat = self.localized_image_list[self.old_closest_id].transform
     self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
+    # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
     self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
  
 
@@ -213,22 +247,26 @@ class TrackedLenseProjection(avango.script.Script):
       self.freeze_flag = False
       self.always_evaluate(True)
       self.update_perspective()
+      # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.00))
       self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.85))
 
       self.button0_pressed = True
       print('TASTE 0')
       # self.projection_lense.Material.connect_from(self.Material)
     else:
-      print('arrive')
+      
       if self.button0_pressed:
-        print('always')
+        print('Freeze')
         self.freeze_flag = True
-        lense_mat = self.projection_lense.WorldTransform.value
+        # lense_mat = self.projection_lense.WorldTransform.value
+        lense_mat = self.tracked_node.WorldTransform.value
         projector_mat = self.localized_image_list[self.old_closest_id].transform
         self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,1.0))
+        # self.Material.value.set_uniform("my_color", avango.gua.Vec4(0.2,0.2,0.2,0.0))
         self.offset = avango.gua.make_inverse_mat(lense_mat) * projector_mat
         self.always_evaluate(True)
-      self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
+      # self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
+      self.Transform.value = self.tracked_node.WorldTransform.value * self.offset
 
       self.button0_pressed = False
 
@@ -239,10 +277,11 @@ class TrackedLenseProjection(avango.script.Script):
       print('TASTE 1')
       if self.button1_pressed == False:
         if self.show_lense:  
-          self.lense_parent_node.Children.value.remove(self.projection_lense)
+          # self.set_marker()
+          # self.lense_parent_node.Children.value.remove(self.projection_lense)
           self.show_lense = False
         else:
-          self.lense_parent_node.Children.value.append(self.projection_lense)
+          # self.lense_parent_node.Children.value.append(self.projection_lense)
           self.show_lense = True
 
       self.button1_pressed = True
@@ -254,7 +293,7 @@ class TrackedLenseProjection(avango.script.Script):
       
   def update_perspective(self, freeze_flag=False):
     if self.last_lense_pos:
-      print('update_perspective')
+      # print('update_perspective')
       # closest_id = self.find_closest_view()
       if freeze_flag == False:
         closest_id = self.find_closest_perspective()
@@ -269,18 +308,21 @@ class TrackedLenseProjection(avango.script.Script):
       
       self.screen.Height.value = self.localized_image_list[closest_id].tile_height /4 * (1/tile_scale)
       # self.localized_image_list[closest_id].set_selected(True, True)
-      self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
+      # self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
+      self.last_lense_pos = self.tracked_node.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id
       self.Transform.value = self.localized_image_list[closest_id].transform
       
       # self.localized_image_list[self.old_closest_id].set_selected(True, True)
     else:
       # self.last_lense_pos = self.Transform2.value.get_translate()
-      self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
+      # self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
+      self.last_lense_pos = self.tracked_node.WorldTransform.value.get_translate()
 
   def evaluate(self):
     if self.freeze_flag:
-      self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
+      # self.Transform.value = self.projection_lense.WorldTransform.value * self.offset
+      self.Transform.value = self.tracked_node.WorldTransform.value * self.offset
     else:
       self.update_perspective()
 

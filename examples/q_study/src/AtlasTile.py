@@ -21,9 +21,7 @@ class AtlasTile:
         self.x = self.id % cols
         self.y = self.id // cols
 
-        # self.png_width = 69120 #122880
         self.png_width = 64800 #122880
-        # self.png_height = 114688 # 64512
         self.png_height = 107520 # 64512
 
         self.aspect_ratio = 9.0 / 16.0
@@ -92,32 +90,15 @@ class AtlasTile:
 
     def create_quad(self):
 
-        # self.t_w  = (self.png_width + self.padding_width) / 2**16 / self.cols
-        # self.t_h  = (self.png_height + self.padding_height) / 2**17 / self.rows
-        # self.x_min = self.x * (self.t_w)
-        # self.x_max = self.x_min + (self.t_w)
-        # self.y_min = 1 - (self.y * self.t_h)
-        # self.y_max = 1 - (self.y * self.t_h + self.t_h)
 
         self.t_w  = (self.png_width + self.padding_width) / 2**17 / self.cols
         self.t_h  = (self.png_height + self.padding_height) / 2**17 / self.rows
         
-        #self.t_w  = 0.03515625 + 1/256/2**17  #self.png_width / 2**17 / self.cols # + 1/256
-        #self.t_h  = 0.0625 + 1/256/2**17# self.png_height / 2**17 / self.rows # + 1/256
-
         self.x_min = self.x * (self.t_w)
-        # self.x_max = 1.0
         self.x_max = self.x * (self.t_w) + self.t_w
 
-        # self.y_min = (self.png_height) / 2**17 - self.t_h
-        # self.y_min = 1.0
-        # self.y_max = 1 - ((self.png_height) / 2**17 ) #(self.png_height) / 2**17
         self.y_min = 1 - (self.y * self.t_h)
         self.y_max = 1 - (self.y * self.t_h + self.t_h)
-
-
-
-        
 
         pos = self.transform * avango.gua.Vec3( self.tile_width, self.tile_height, self.tile_cam_distance)
         # uv  = avango.gua.Vec2(self.x_min, self.y_min)
@@ -156,12 +137,7 @@ class AtlasTile:
         t2_v3 = AtlasTileVertex(self.dt_node, self.id * 6 + 5, pos, uv)
 
         # swap x_max and x_min to flip projection
-        print(self.id, 'w min - max',-self.tile_width, self.tile_width)
-        print(self.id, 'h min - max',-self.tile_height, self.tile_height)
-        print(self.id, 'U min - max ',self.x_min, self.x_max)
-        print(self.id, 'V min - max',self.y_min, self.y_max)
-        print(self.id, 'projected U min - max ', self.x_max, self.x_min)
-        print(self.id, 'proj V min - max',self.y_min, self.y_max)
+ 
         self.min_uv = avango.gua.Vec2(self.x_max, self.y_min)
         self.max_uv = avango.gua.Vec2(self.x_min, self.y_max)
         self.quad_vertices = [t1_v1, t1_v2, t1_v3, t2_v1, t2_v2, t2_v3]

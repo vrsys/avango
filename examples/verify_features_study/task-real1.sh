@@ -35,7 +35,7 @@ else
 echo "starting daemon && application"
 python3 ./daemon.py > /dev/null &
 
-cd "$DIR" && DISPLAY=:0.0 python3 ./main.py 'real' 1 $1
+cd "$DIR" && DISPLAY=:0.0 python3 ./main.py 'real' 1 $1 $2
 fi
 
 # kill daemon & client

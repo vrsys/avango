@@ -159,6 +159,7 @@ if __name__ == '__main__':
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-wappen-version2/tp_wappen_version2_tex.atlas"
 
     elif study_task == 'real':
+        study_block = study_user % 2
         if study_part == 1 or study_part == 3:
             if study_block == 0:
                 study_geo = 'head'
@@ -187,6 +188,19 @@ if __name__ == '__main__':
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version1/tr_wappen_version1_tex.atlas"
             elif study_geo_version == 2:
                 atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version2/tr_wappen_version2_tex.atlas"
+
+
+    elif study_task == 'demo':
+        study_block = study_user % 2
+       
+        study_geo = 'wappen'
+        study_geo_version = 1
+        if study_user == 0:
+            atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-points/tp-terra-version1/tp_terra_version1_tex.atlas"
+        else:
+            atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/task-real/tr-wappen-version2/tr_wappen_version2_tex.atlas"
+
+
 
 
     nettrans = avango.gua.nodes.NetTransform(Name="net",

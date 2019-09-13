@@ -12,6 +12,7 @@ import os
 import time
 import math
 import subprocess
+import json
 
 
 class CaptureScript(avango.script.Script):
@@ -26,6 +27,7 @@ class CaptureScript(avango.script.Script):
     V_Key = avango.SFBool()
     M_Key = avango.SFBool()
     N_Key = avango.SFBool()
+    U_Key = avango.SFBool()
 
     def __init__(self):
         self.super(CaptureScript).__init__()
@@ -37,7 +39,6 @@ class CaptureScript(avango.script.Script):
         self.screen_grab_pass = screen_grab_pass
 
         self.mesh_loader = avango.gua.nodes.TriMeshLoader()
-
         self.always_evaluate(False)
         random.seed(420)
         self.frame_count = 0
@@ -49,13 +50,17 @@ class CaptureScript(avango.script.Script):
         # self.position_list_file = self.path + '/cam-positions.lst'
         # self.position_list_file = self.path + '/part151-202.lst'
         # self.position_list_file = self.path + '/auto-cam-positions.lst'
-        self.position_list_file = self.path + '/manu-cam-positions.lst'
+        # self.position_list_file = self.path + '/image-positions'
+        self.position_list_file = self.path + '/25-locations'
+        self.marker_list_file = self.path + '/markers'
         self.image_cam_positions = []
+        self.marker_matrices_list = []
         # self.position_list_file = self.path + '/part1-50.lst'
         self.free_mode = False
         self.indicate = False
         self.indicate_perspectives = False
         self.mouse_click_flag = False
+        self.set_marker_flag = False
         self.capture_mode = 'position' # take images or capture position
         self.read_mode = False # if read mode is true camera will be set to positions of cam list
         self.cam_location_list = []
@@ -71,6 +76,7 @@ class CaptureScript(avango.script.Script):
         self.v_pressed = False
         self.m_pressed = False
         self.n_pressed = False
+        self.u_pressed = False
 
         self.camera = None
         self.cam_trans = None
@@ -99,11 +105,29 @@ class CaptureScript(avango.script.Script):
         self.cam_indicator_mat.set_uniform("Roughness", 1.0)
         self.cam_indicator_mat.set_uniform("Emissivity", 1.0)
 
+        self.marker_mat = avango.gua.nodes.Material()
+        marker_color = avango.gua.Vec4(1.0, 0.1, 0.1, 0.7)
+        # sphere_color.normalize()
+        self.marker_mat.set_uniform("Color", marker_color)
+        self.marker_mat.set_uniform("Roughness", 1.0)
+        self.marker_mat.set_uniform("Emissivity", 1.0)
+
         self.indicators = []
         self.direction_indicators = []
-        self.camera_indicator = indicator = self.mesh_loader.create_geometry_from_file(
+        self.markers = []
+        self.camera_indicator = self.mesh_loader.create_geometry_from_file(
                 "cam_indicator", "data/objects/cube.obj",
                 self.cam_indicator_mat, avango.gua.LoaderFlags.DEFAULTS)
+
+        self.marker_transform = avango.gua.nodes.TransformNode(Name='marker_transform')
+
+        self.marker_indicator = self.mesh_loader.create_geometry_from_file(
+            "marker_indicator", "data/objects/torus.obj",
+            self.marker_mat, avango.gua.LoaderFlags.DEFAULTS)
+        self.marker_indicator.Transform.value = avango.gua.make_scale_mat(0.05,0.05, 0.75) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0)   
+        self.marker_transform.Children.value.append(self.marker_indicator)
+
+
         
        
     def set_camera(self, camera, cam_trans, cam_dis, cam_x_rot, cam_y_rot, center):
@@ -116,15 +140,54 @@ class CaptureScript(avango.script.Script):
         self.cam_trans = cam_trans
         self.center = center
 
+    def set_marker(self):
+        mat = self.marker_transform.WorldTransform.value
+        self.marker_matrices_list.append(mat)
+        marker = self.mesh_loader.create_geometry_from_file(
+                "marker_" + str(len(self.markers)), "data/objects/torus.obj",
+                self.marker_mat, avango.gua.LoaderFlags.DEFAULTS)
+        marker.Transform.value = mat * avango.gua.make_scale_mat(0.05, 0.05, 0.75) * avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) 
+        marker.Material.value.set_uniform('Emissivity', 1.0)
+        self.graph.Root.value.Children.value.append(marker)
+        self.markers.append(marker)
+        print('added marker', len(self.markers))
+
+
     def write_cam_list(self):
-        with open(self.position_list_file, 'w') as outfile:  
-            for mat in self.cam_location_list:
-                # print(avango.gua.to_list(mat))
-                # line = str(mat).replace('\n', '')
-                line = str(avango.gua.to_list(mat)).replace(',', '')
-                outfile.write(line)
-                outfile.write('\n')
-        print('Write list')
+        if self.set_marker_flag == False:
+            with open(self.position_list_file+'.lst', 'w') as outfile:  
+                for mat in self.cam_location_list:
+                    # print(avango.gua.to_list(mat))
+                    # line = str(mat).replace('\n', '')
+                    line = str(avango.gua.to_list(mat)).replace(',', '')
+                    outfile.write(line)
+                    outfile.write('\n')
+            with open(self.position_list_file+'.json', 'w') as jsonfile:  
+                json_data = {}
+                json_data['locations'] = [] 
+                for idx, mat in enumerate(self.cam_location_list):
+                    json_data['locations'].append({
+                        'id': idx,
+                        'mat': avango.gua.to_list(mat)
+                    })# print(avango.gua.to_list(mat))
+                    # line = str(mat).replace('\n', '')
+                    # line = str(avango.gua.to_list(mat)).replace(',', '')
+                
+                json.dump(json_data, jsonfile)
+        else:
+            with open(self.marker_list_file+'.json', 'w') as jsonfile:  
+                json_data = {}
+                json_data['markers'] = [] 
+                for idx, mat in enumerate(self.marker_matrices_list):
+                    json_data['markers'].append({
+                        'id': idx,
+                        'mat': avango.gua.to_list(mat)
+                    })# print(avango.gua.to_list(mat))
+                    # line = str(mat).replace('\n', '')
+                    # line = str(avango.gua.to_list(mat)).replace(',', '')
+                
+                json.dump(json_data, jsonfile)
+        print('Wrote list', self.position_list_file+'.json', self.marker_list_file+'.json')
 
     def get_heatmap_material(self, alpha):
         mat = avango.gua.nodes.Material()
@@ -158,7 +221,7 @@ class CaptureScript(avango.script.Script):
         data = []
         self.image_cam_positions = []
         try:
-            with open(self.position_list_file) as f:
+            with open(self.position_list_file+'.lst') as f:
                 for line in f:
                     data.append(line.replace('\n', '').replace('[', '').replace(']', ''))
 
@@ -180,19 +243,21 @@ class CaptureScript(avango.script.Script):
         if self.capture_mode == 'image':
             num = str(self.image_count)
             if len(num) == 1:
-                num = '20' + num 
+                num = '00' + num 
             if len(num) == 2:
-                num = '2' + num 
+                num = '0' + num 
             self.screen_grab_pass.setOutputPrefix("/home/senu8384/Desktop/pics/image_" + num + "_")
             self.screen_grab_pass.grabNext()
             # file_name = self.path + '/images/' + name + str(self.image_count)
-            # #print(file_name)
             # bash_command = "env DISPLAY=:0.0 import -window ROOT " + file_name + ".png"
             # process = subprocess.Popen(bash_command.split(), stdout=subprocess.PIPE)
             # output, error = process.communicate()
+
+            mat_to_save = self.camera.WorldTransform.value # * avango.gua.make_rot_mat(90.0, 0.0, 0.0, 1.0)
             
             print('Captured ', self.image_count, num, avango.gua.to_list(self.camera.WorldTransform.value))
-            self.image_cam_positions.append( str(avango.gua.to_list(self.camera.WorldTransform.value)).replace(',', '') )
+            print('Check Rotation ', self.image_count, num, self.camera.WorldTransform.value.get_rotate_scale_corrected())
+            self.image_cam_positions.append( str(avango.gua.to_list(mat_to_save)).replace(',', '') )
 
         self.image_count += 1  
 
@@ -311,9 +376,9 @@ class CaptureScript(avango.script.Script):
                     self.cam_dis.Transform.value = avango.gua.make_identity_mat()
                     self.cam_x_rot.Transform.value = avango.gua.make_identity_mat()
                     self.cam_y_rot.Transform.value = avango.gua.make_identity_mat()
-                    # self.camera.Transform.value = avango.gua.make_identity_mat()  ############################# FOR AUTOMATED IMAGES
-                    self.camera.Transform.value = avango.gua.make_identity_mat()  * avango.gua.make_rot_mat(90,0,0,1.0)  ########## FOR MANUAL
-                    
+                    self.camera.Transform.value = avango.gua.make_identity_mat()  ############################# FOR AUTOMATED IMAGES
+                    # self.camera.Transform.value = avango.gua.make_identity_mat()  * avango.gua.make_rot_mat(90,0,0,1.0)  ########## FOR MANUAL
+        
 
                     if self.image_count < len(self.cam_location_list):
                         print('move to pos',self.image_count)
@@ -322,14 +387,15 @@ class CaptureScript(avango.script.Script):
                         print('image count below length of location list')
                         self.stop_taking_images()
                 else:
-                    tilt = 35
+                    tilt = 33
 
-                    distance = 3.05
+                    distance = 2.8
                     height = 2.5
-                    levels = 8
+                    levels = 10
                     tilt_steps = tilt/levels
                     height_steps = height / levels
                     angle_steps = 24
+                    angle_steps = 18
                     steps = 360//angle_steps
                     self.max_artificial_images = steps * levels
                     offset_x = random.uniform(-0.02, 0.02)
@@ -354,6 +420,8 @@ class CaptureScript(avango.script.Script):
                     self.cam_trans.Transform.value *= avango.gua.make_rot_mat(self.angle, 0.0, 1.0, 0.0)
                     self.last_level = self.current_level
 
+                   
+
             if self.frame_count ==30:
                 self.capture('obj_image')
 
@@ -369,6 +437,8 @@ class CaptureScript(avango.script.Script):
             if self.button0_pressed == False:
                 if self.mouse_click_flag:
                     self.capture('obj_image')
+                if self.set_marker_flag:
+                    self.set_marker()
             self.button0_pressed = True
         else:
             self.button0_pressed = False
@@ -468,7 +538,7 @@ class CaptureScript(avango.script.Script):
         if self.V_Key.value:
             if self.v_pressed == False:
                 self.write_cam_list()
-                print('Saved camera locations to file', self.position_list_file)
+                print('Saved camera locations to file', self.position_list_file+'.lst')
            
             self.v_pressed = True
         else:
@@ -501,6 +571,21 @@ class CaptureScript(avango.script.Script):
             self.n_pressed = True
         else:
             self.n_pressed = False
+
+    @field_has_changed(U_Key)
+    def u_key_changed(self):
+        if self.U_Key.value:
+            if self.u_pressed == False:
+                if self.set_marker_flag:
+                    self.set_marker_flag = False
+                    self.camera.Children.value.remove(self.marker_transform)
+                else:
+                    self.set_marker_flag = True
+                    self.camera.Children.value.append(self.marker_transform)
+                    self.marker_transform.Transform.value = avango.gua.make_trans_mat(0.0,0.0,-0.5)
+            self.u_pressed = True
+        else:
+            self.u_pressed = False
 
 
 def map_from_to(x,a,b,c,d):

@@ -231,31 +231,39 @@ class LocalizedImageQuad:
         self.tile_pos_x = self.atlas_tile.get_x() / self.atlas_height * self.factor
         self.tile_pos_y = self.atlas_tile.get_y() / self.atlas_tile.get_height() * self.tile_h + (1 - self.factor)
 
+        print('x min max y min max', self.tile_pos_x, self.tile_pos_x + self.tile_w, self.tile_pos_y, self.tile_pos_y + self.tile_h)
+
     def create_quad(self):
         transform = self.view.get_transform() #* avango.gua.make_rot_mat(180.0, 0.0, 1.0,0.0)
 
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        uv  = avango.gua.Vec2(0.0, 0.0)
         t1_v1 = LocalizedImageVertex(self.dt_node, self.id * 6, pos, uv)
         
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        uv  = avango.gua.Vec2(1.0,1.0)
         t1_v2 = LocalizedImageVertex(self.dt_node, self.id * 6 + 1, pos, uv)
         
         pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
+        uv  = avango.gua.Vec2(0.0,1.0)
         t1_v3 = LocalizedImageVertex(self.dt_node, self.id * 6 + 2, pos, uv)
         
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        uv  = avango.gua.Vec2(0.0,0.0)
         t2_v4 = LocalizedImageVertex(self.dt_node, self.id * 6 + 3, pos, uv)
         
         pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y )
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y )
+        uv  = avango.gua.Vec2(1.0,0.0)
         t2_v5 = LocalizedImageVertex(self.dt_node, self.id * 6 + 4, pos, uv)
 
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
-        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        uv  = avango.gua.Vec2(1.0,1.0)
         t2_v6 = LocalizedImageVertex(self.dt_node, self.id * 6 + 5, pos, uv)
 
         self.min_uv = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)

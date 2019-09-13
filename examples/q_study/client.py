@@ -103,7 +103,8 @@ nettrans = avango.gua.nodes.NetTransform(Name="net",
 # atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
 # atlas_path = '/home/senu8384/Desktop/master-thesis/data/study/trial_a_tex.atlas'
 atlas_path = '/home/senu8384/Desktop/master-thesis/data/study/test-study/test_trial_all.atlas'
-atlas_path = '/home/senu8384/Desktop/master-thesis/data/study/test-study/test_trial_all.atlas'
+# atlas_path = '/home/senu8384/Desktop/master-thesis/data/study/test-study/test_trial_all.atlas'
+atlas_path = "/home/senu8384/Desktop/master-thesis/data/study/condition-real/cr-head-version1/cr_head_version1_tex.atlas"
 
 
 graph = avango.gua.nodes.SceneGraph(Name="scenegraph")

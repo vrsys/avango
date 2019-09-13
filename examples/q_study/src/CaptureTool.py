@@ -32,7 +32,7 @@ class CaptureScript(avango.script.Script):
     def __init__(self):
         self.super(CaptureScript).__init__()
 
-    def my_constructor(self, scenegraph, navigator, sphere, screen_grab_pass):
+    def my_constructor(self, scenegraph, geo_name, navigator, sphere, screen_grab_pass):
         self.graph = scenegraph
         self.navigator = navigator
         self.sphere = sphere
@@ -50,7 +50,8 @@ class CaptureScript(avango.script.Script):
         self.path = os.path.dirname(os.path.realpath(__file__))
 
         # self.geo = 'terra'
-        self.geo = 'wappen'
+        # self.geo = 'wappen'
+        self.geo = geo_name
         # self.geo = 'head'
         # self.position_list_file = self.path + '/cam-positions.lst'
         # self.position_list_file = self.path + '/part151-202.lst'

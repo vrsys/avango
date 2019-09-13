@@ -54,7 +54,8 @@ def start():
             "photo_model",
             # "data/objects/cube.obj",
             # "/home/senu8384/Desktop/master-thesis/data/01_Igeler-Saeule_Kopie/Igeler-Saeule_RLM.OBJ/Igeler-Saeule_RLM.obj",
-            "/home/senu8384/Desktop/master-thesis/data/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj",
+            # "/home/senu8384/Desktop/master-thesis/data/study/terra/Bogenschuetze-01.obj",
+            "/home/senu8384/Desktop/master-thesis/data/study/geometry/terra-points/Bogenschuetze-01.obj",
             # '/home/senu8384/Desktop/master-thesis/data/study/wappen/wappen_midres.obj',
             # avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
             avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
@@ -75,7 +76,8 @@ def start():
     elif object_name == 'wappen':
         photo_model = mesh_loader.create_geometry_from_file(
             "photo_model",
-            '/home/senu8384/Desktop/master-thesis/data/study/wappen/wappen_midres.obj',
+            # '/home/senu8384/Desktop/master-thesis/data/study/wappen/wappen_midres.obj',
+            "/home/senu8384/Desktop/master-thesis/data/study/geometry/wappen-real/wappen_midres.obj",
             # avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
             avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
         )    
@@ -89,7 +91,9 @@ def start():
     elif object_name == 'head':
         photo_model = mesh_loader.create_geometry_from_file(
             "reconstruction",
-            "/home/senu8384/Desktop/master-thesis/data/study/head/kopf_midres.obj",
+            # "/home/senu8384/Desktop/master-thesis/data/study/head/kopf_midres.obj",
+            "/home/senu8384/Desktop/master-thesis/data/study/geometry/head-points/kopf_midres.obj",
+            # "/home/senu8384/Desktop/master-thesis/data/study/geometry/wappen-real/wappen_midres.obj",
             # avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS
             avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS
         )    
@@ -131,9 +135,9 @@ def start():
     #         outfile.write(line)
     #         outfile.write('\n')
 
-    width = 7680
+    # width = 7680
     # width = 8192
-    # width = 2560;
+    width = 2560;
     height = int(width * 9.0 / 16.0)
     size = avango.gua.Vec2ui(width, height)
 
@@ -226,7 +230,7 @@ def start():
     # camera_transform.Transform.connect_from(navigator.OutTransform)
 
     capture_script = CaptureScript()
-    capture_script.my_constructor(graph, navigator, sphere, screen_grab_pass)
+    capture_script.my_constructor(graph, object_name, navigator, sphere, screen_grab_pass)
     capture_script.set_camera(camera, camera_transform, camera_distance,
                             camera_x_rot, camera_y_rot, photo_model_center)
     capture_script.Button0.connect_from(navigator.Mouse.ButtonLeft)

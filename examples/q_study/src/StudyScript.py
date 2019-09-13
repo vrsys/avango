@@ -37,7 +37,9 @@ class StudyScript(avango.script.Script):
         self.study_group = 'A' if self.user_id % 2 == 0 else "B"
         
         self.error_indicator_locations = []
-        with open('src/study_files/test.json', 'r') as marker_location_f:
+        # /home/senu8384/Desktop/master-thesis/avango/examples/q_study/real_head_marker_list.json
+        # with open('/home/senu8384/Desktop/master-thesis/avango/examples/q_study/real_wappen_marker_list.json', 'r') as marker_location_f:
+        with open('/home/senu8384/Desktop/master-thesis/avango/examples/q_study/real_head_marker_list.json', 'r') as marker_location_f:
         # with open('src/study_files/markers.json', 'r') as marker_location_f:
             locas = json.load(marker_location_f)
 
@@ -63,16 +65,17 @@ class StudyScript(avango.script.Script):
         print('init study part: ', self.study_part, self.study_group, self.study_condition, self.study_geo, self.geometry_version, self.geometry_trail)
 
         self.indicator_transform = avango.gua.nodes.TransformNode(Name='indicator_offset',
-                                                                  Transform=avango.gua.make_trans_mat(0.0,0.1,0.0))
+                                                                  Transform=avango.gua.make_trans_mat(0.0,0.0,0.0))
         self.marker_mat = avango.gua.nodes.Material()
         marker_color = avango.gua.Vec4(1.0, 0.1, 0.1, 0.2)
         # sphere_color.normalize()
         self.marker_mat.set_uniform("Color", marker_color)
         self.marker_mat.set_uniform("Roughness", 1.0)
         self.marker_mat.set_uniform("Emissivity", 1.0)
+        self.marker_mat.EnableBackfaceCulling.value = False
 
         self.indicator = avango.gua.nodes.TriMeshLoader().create_geometry_from_file(
-            "error_indicator", "data/objects/torus.obj", self.marker_mat,
+            "error_indicator", "data/objects/marker.obj", self.marker_mat,
             avango.gua.LoaderFlags.DEFAULTS)
 
         self.sign = avango.gua.nodes.TriMeshLoader().create_geometry_from_file(
@@ -109,8 +112,8 @@ class StudyScript(avango.script.Script):
         # self.error_indicator_locations = []
         # self.read_indicator_locations()
 
-        self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.1,0.10)*\
-                                         avango.gua.make_scale_mat(0.1,0.1,1.5) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
+        self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
+                                         avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
         self.indicator_transform.Children.value.append(self.indicator)
 
     def write_csv_file(self):
@@ -189,8 +192,8 @@ class StudyScript(avango.script.Script):
                 self.state = 1
                 self.screen.Children.value.append(self.sign)
                 self.sign.Material.value.set_uniform("ColorMap","data/textures/NavigationSign2.png")
-                self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.1,0.14)*\
-                                         avango.gua.make_scale_mat(0.1,0.1,1.5) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
+                self.indicator.Transform.value = self.error_indicator_locations[self.indicator_id] *  avango.gua.make_trans_mat(0.0,-0.0,0.00)*\
+                                         avango.gua.make_scale_mat(0.1,0.1,0.1) * avango.gua.make_rot_mat(90.0,1.0,0.0,0.0)
                 self.indicator_transform.Children.value.append(self.indicator)
             else:
                 print('ID TOO BIG')

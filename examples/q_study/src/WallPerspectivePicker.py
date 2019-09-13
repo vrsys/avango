@@ -162,10 +162,10 @@ class WallPerspectivePicker(avango.script.Script):
         if u_coord > _img.min_uv.x and u_coord < _img.max_uv.x:
           print('yes')
         zoom_factor = 1.0
-        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) , v_coord - (_img.t_w / 2 / zoom_factor))
+        max_uv = avango.gua.Vec2(u_coord - (_img.t_w / 2 / zoom_factor) * 0.565110565110565 , v_coord - (_img.t_w / 2 / zoom_factor) )
         # ORIG max_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_w / 2 / zoom_factor))
         # min_uv = avango.gua.Vec2(u_coord - (_img.tile_w / 2 / zoom_factor) , v_coord - (_img.tile_h / 2 / zoom_factor))
-        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) , v_coord + (_img.t_w / 2 / zoom_factor))
+        min_uv = avango.gua.Vec2(u_coord + (_img.t_w / 2 / zoom_factor) * 0.565110565110565, v_coord + (_img.t_w / 2 / zoom_factor) )
         # ORIG min_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_w / 2 / zoom_factor))
         # max_uv = avango.gua.Vec2(u_coord + (_img.tile_w / 2 / zoom_factor) , v_coord + (_img.tile_h / 2 / zoom_factor))
         min_max_coords = [min_uv, max_uv]

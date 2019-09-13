@@ -38,7 +38,7 @@ class MultiWindowVisualizer(avango.script.Script):
         self.dynamic_triangle_node = self.dynamic_tri_loader.create_empty_geometry(
             "multi_window_vis", 
             "multi_window_vis.lob", 
-            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
+            avango.gua.LoaderFlags.DEFAULTS)
         self.view_num = 0
         self.atlas_tiles_num = 0
         self.atlas = None

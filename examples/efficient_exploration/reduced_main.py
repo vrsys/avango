@@ -140,7 +140,7 @@ def start():
     graph.Root.value.Children.value.append(photo_projection.group_node)
 
     perspective_picker = PerspectivePicker()
-    perspective_picker.my_constructor()
+    perspective_picker.my_constructor(graph)
     perspective_picker.set_localized_image_list(localized_images)
     perspective_picker.set_visualizer(multi_window_viz, 'texture')
 

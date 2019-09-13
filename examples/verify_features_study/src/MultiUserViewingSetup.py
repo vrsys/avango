@@ -138,6 +138,7 @@ class User:
             self.head_node.Transform.connect_from(self.headtracking_sensor.Matrix)
 
 
+
         ## init camera node
         self.camera_node = avango.gua.nodes.CameraNode(Name = "camera_node",BlackList=["client"])
         self.camera_node.SceneGraph.value = SCENEGRAPH.Name.value
@@ -154,12 +155,25 @@ class User:
 
 
         self.set_eye_distance(0.064)
+        # self.set_eye_distance(0.000)
+
+        if HEADTRACKING_SENSOR_STATION == 'tracking-dbl-video-camera':
+            self.set_eye_distance(0.0)
         
 
 
     ### functions ###
     def set_eye_distance(self, FLOAT):
         self.camera_node.EyeDistance.value = FLOAT
+
+    def set_head_sensor(self, HEAD_SENSOR):
+        self.headtracking_sensor = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
+        self.headtracking_sensor.Station.value = HEAD_SENSOR
+        self.headtracking_sensor.TransmitterOffset.value = self.tracking_transmitter_offset
+        self.headtracking_sensor.ReceiverOffset.value = avango.gua.make_identity_mat()
+
+        self.head_node.Transform.connect_from(self.headtracking_sensor.Matrix)
+        # self.camera_node.EyeDistance.value = FLOAT
 
 
 

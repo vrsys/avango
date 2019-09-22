@@ -7,7 +7,7 @@ file(GLOB_RECURSE AVANGO_LOD_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   src/avango/gua/lod/renderer/LodLoader.cpp
   src/avango/gua/lod/renderer/AuxFeature.cpp
   src/avango/gua/lod/renderer/OctreeNode.cpp
-  src/avango/gua/lod/renderer/Aux.cpp
+  src/avango/gua/lod/renderer/Auxi.cpp
   src/avango/gua/lod/renderer/AuxAtlas.cpp
   src/avango/gua/lod/renderer/AuxAtlasTile.cpp
   src/avango/gua/lod/renderer/AuxSparsePoint.cpp
@@ -19,7 +19,7 @@ file(GLOB_RECURSE AVANGO_LOD_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
   include/avango/gua/lod/renderer/LodLoader.hpp
   include/avango/gua/lod/renderer/AuxFeature.hpp
   include/avango/gua/lod/renderer/OctreeNode.hpp
-  include/avango/gua/lod/renderer/Aux.hpp
+  include/avango/gua/lod/renderer/Auxi.hpp
   include/avango/gua/lod/renderer/AuxAtlas.hpp
   include/avango/gua/lod/renderer/AuxAtlasTile.hpp
   include/avango/gua/lod/renderer/AuxSparsePoint.hpp

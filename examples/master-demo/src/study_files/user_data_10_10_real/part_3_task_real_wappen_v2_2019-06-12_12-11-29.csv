@@ -1,0 +1,12 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-12 12:12:17.287702,10,real,3,A,0,wappen,2,wall,0,True,13.629406452178955,0,True,10
+2019-06-12 12:12:34.309256,10,real,3,A,0,wappen,2,wall,1,False,3.1183650493621826,0,False,10
+2019-06-12 12:12:54.338950,10,real,3,A,0,wappen,2,wall,2,False,9.629911661148071,0,False,10
+2019-06-12 12:13:30.821429,10,real,3,A,0,wappen,2,wall,3,False,27.39910078048706,0,True,10
+2019-06-12 12:14:02.985167,10,real,3,A,0,wappen,2,wall,4,True,6.241745710372925,0,False,10
+2019-06-12 12:14:18.660115,10,real,3,A,0,wappen,2,wall,5,True,7.688306570053101,0,True,10
+2019-06-12 12:14:40.633955,10,real,3,A,0,wappen,2,wall,6,True,13.919065952301025,0,True,10
+2019-06-12 12:15:09.282836,10,real,3,A,0,wappen,2,wall,7,True,20.438246488571167,0,True,10
+2019-06-12 12:15:35.466298,10,real,3,A,0,wappen,2,wall,8,False,11.138453960418701,0,True,10
+2019-06-12 12:16:01.989315,10,real,3,A,0,wappen,2,wall,9,True,16.28702735900879,0,True,10
+2019-06-12 12:16:24.666923,10,real,3,A,0,wappen,2,wall,10,False,9.95264983177185,0,False,10

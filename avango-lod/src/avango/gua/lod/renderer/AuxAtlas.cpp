@@ -10,7 +10,7 @@ AV_FC_DEFINE(av::gua::lod::AuxAtlas);
 AV_FIELD_DEFINE(av::gua::lod::SFAuxAtlas);
 AV_FIELD_DEFINE(av::gua::lod::MFAuxAtlas);
 
-av::gua::lod::AuxAtlas::AuxAtlas(std::shared_ptr< ::gua::Aux::atlas> guanode)
+av::gua::lod::AuxAtlas::AuxAtlas(std::shared_ptr< ::gua::Auxi::atlas> guanode)
     : m_guaAuxAtlas(guanode)
 {
   
@@ -52,7 +52,7 @@ av::gua::lod::AuxAtlas::getRotatedCB(const SFUInt::GetValueEvent& event){
 
 
 
-std::shared_ptr< ::gua::Aux::atlas>
+std::shared_ptr< ::gua::Auxi::atlas>
 av::gua::lod::AuxAtlas::getGuaAuxAtlas() const {
   return m_guaAuxAtlas;
 }

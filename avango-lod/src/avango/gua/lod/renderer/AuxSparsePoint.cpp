@@ -12,7 +12,7 @@ AV_FC_DEFINE(av::gua::lod::AuxSparsePoint);
 AV_FIELD_DEFINE(av::gua::lod::SFAuxSparsePoint);
 AV_FIELD_DEFINE(av::gua::lod::MFAuxSparsePoint);
 
-av::gua::lod::AuxSparsePoint::AuxSparsePoint(std::shared_ptr< ::gua::Aux::sparse_point> guanode)
+av::gua::lod::AuxSparsePoint::AuxSparsePoint(std::shared_ptr< ::gua::Auxi::sparse_point> guanode)
     : m_guaAuxSparsePoint(guanode)
 {}
 
@@ -64,7 +64,7 @@ else
   return av::Link<av::gua::lod::AuxFeature>(new av::gua::lod::AuxFeature(m_guaAuxSparsePoint->getFeatureById(-1)));
 }
 
-std::shared_ptr< ::gua::Aux::sparse_point>
+std::shared_ptr< ::gua::Auxi::sparse_point>
 av::gua::lod::AuxSparsePoint::getGuaAuxSparsePoint() const {
   return m_guaAuxSparsePoint;
 }

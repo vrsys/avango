@@ -1,0 +1,76 @@
+{
+  "name" : "FragmentColor",
+  "source" : "
+
+    void FragmentColor() {
+      //vec4 c = vec4(0.2, 0.2, 0.2, 1.0);
+      vec4 c = my_color;
+
+      // project fragment position into the projective texture
+      vec4 proj_tex_space_pos = projective_texture_matrix * view_texture_matrix * vec4(gua_world_position, 1.0);
+      vec4 view_tex_space_pos = view_texture_matrix * vec4(gua_world_position, 1.0);
+      
+      // projective normalization
+      proj_tex_space_pos = proj_tex_space_pos / proj_tex_space_pos.w;
+      view_tex_space_pos = view_tex_space_pos / view_tex_space_pos.w;
+
+      // [-1, 1] -> [0, 1]
+      vec2 proj_texcoord = proj_tex_space_pos.xy;
+      
+      if ( (abs(proj_texcoord.x) < 1.0) && (abs(proj_texcoord.y) < 1.0) && (view_tex_space_pos.z < 0.0) )
+      { 
+        vec2 scaled_proj_txcrd = 0.5 * proj_texcoord + 0.5;
+        vec2 rescaled_texcoords = ((vec2(1.0, 1.0) - scaled_proj_txcrd.xy) * view_port_max) + (scaled_proj_txcrd.xy * view_port_min);
+
+        gua_uvs.xy = rescaled_texcoords;
+        gua_emissivity = 1.0;
+        //gua_uvs.xy = 0.5 * proj_texcoord + 0.5; 
+      } else {
+        gua_color = c.rgb;  
+        gua_uvs.z = 0.0;
+        gua_uvs.w = 0;
+      }
+      
+      //gua_color = c.rgb;
+/*      gua_roughness = 1.0;
+      gua_metalness = 1.0;
+      gua_emissivity = 0.0;
+      gua_flags_passthrough = false;*/
+      gua_alpha = c.a;
+      //gua_alpha = 1.0;
+    }
+  ",
+  "uniforms" :
+  [ 
+    {
+      "name" : "projective_texture_matrix",
+      "type" : "mat4",
+      "value": "1"
+    },
+    {
+      "name" : "view_texture_matrix",
+      "type" : "mat4",
+      "value": "1"
+    },
+    {
+      "name" : "projective_texture",
+      "type" : "sampler2D",
+      "value": "1"
+    },
+    {
+      "name" : "view_port_min",
+      "type" : "vec2",
+      "value": "1"
+    },
+    {
+      "name" : "view_port_max",
+      "type" : "vec2",
+      "value": "1"
+    },
+    {
+      "name" : "my_color",
+      "type" : "vec4",
+      "value": "1"
+    }
+  ]
+}

@@ -364,8 +364,9 @@ class PhotoProjection(avango.script.Script):
       # self.localized_image_list[self.old_closest_id].set_selected(False, False)
       self.min_tex_coords = self.localized_image_list[closest_id].min_uv
       self.max_tex_coords = self.localized_image_list[closest_id].max_uv
-      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half * 2
-      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half * 2
+      self.screen.Width.value = self.localized_image_list[closest_id].img_w_half / 3.0 * (1/0.2)
+      self.screen.Height.value = self.localized_image_list[closest_id].img_h_half / 3.0 * (1/0.2)
+      print('width value',self.localized_image_list[closest_id].img_w_half / 3 * (1/0.2))
       # self.localized_image_list[closest_id].set_selected(True, True)
       self.last_lense_pos = self.projection_lense.WorldTransform.value.get_translate()
       self.old_closest_id = closest_id

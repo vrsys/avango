@@ -50,12 +50,19 @@ def start():
     mesh_loader = avango.gua.nodes.TriMeshLoader()
     lod_loader = avango.gua.lod.nodes.LodLoader()
     dt_loader = avango.gua.nodes.DynamicTriangleLoader()
-    aux_loader = avango.gua.lod.nodes.Aux()
+    aux_loader = avango.gua.lod.nodes.Auxi()
 
     # aux_path = "/home/ephtron/Documents/master-render-files/salem/salem_atlas.aux"
     # atlas_path = "/home/ephtron/Documents/master-render-files/salem/salem.atlas"
-    aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux"
-    atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas"
+    # aux_path = "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib_small_atlas.auxi"
+    aux_path = "/home/senu8384/Desktop/weissabgleich_halfsize.auxi"
+    #aux_path = "/opt/3d_models/lamure/provenance/salem/salem_atlas.aux" OLD (17.09.19)
+    # atlas_path = "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib_small_atlas.atlas"
+    # FACTOR LOWRES
+    atlas_path = "/home/senu8384/Desktop/salem_weissabgleich_halfsize_correct.atlas" 
+    # FACTOR HALFRES 0.594242
+    # cols 20 rows 21
+    #atlas_path = "/opt/3d_models/lamure/provenance/salem/salem.atlas" OLD (17.09.19)
     # atlas_path = "/home/senu8384/Desktop/master-thesis/reconstructions/captures/1-terrakotta_images/concat.atlas"
 
     # setup scene
@@ -78,7 +85,9 @@ def start():
     # load salem point cloud
     plod_node = lod_loader.load_lod_pointcloud(
         # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
-        "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS) OLD (17.09.19)
+        "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib.bvh", avango.gua.LoaderFlags.DEFAULTS)
+    
 
     plod_node.Material.value.set_uniform("Emissivity", 1.0)
     # plod_node.ShadowMode.value = 1
@@ -371,6 +380,7 @@ def start():
         print("Desktop setup")
         # config window size
         width = 1920;
+        width = 3000;
         height = int(width * 9.0 / 16.0)
         size = avango.gua.Vec2ui(width, height)
 
@@ -413,7 +423,7 @@ def start():
         # lense_size = 0.2
 
         dynamic_transform = avango.gua.nodes.TransformNode(Name='dynamic_quad_trans')
-        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 1.0)
+        dynamic_transform.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
         dynamic_quad = DynamicQuad(dynamic_transform, width=0.2, height=0.2)
         dynamic_lense = dynamic_quad.get_node()
 

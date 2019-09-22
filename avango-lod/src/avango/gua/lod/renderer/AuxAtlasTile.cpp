@@ -10,7 +10,7 @@ AV_FC_DEFINE(av::gua::lod::AuxAtlasTile);
 AV_FIELD_DEFINE(av::gua::lod::SFAuxAtlasTile);
 AV_FIELD_DEFINE(av::gua::lod::MFAuxAtlasTile);
 
-av::gua::lod::AuxAtlasTile::AuxAtlasTile(std::shared_ptr< ::gua::Aux::atlas_tile> guanode)
+av::gua::lod::AuxAtlasTile::AuxAtlasTile(std::shared_ptr< ::gua::Auxi::atlas_tile> guanode)
     : m_guaAuxAtlasTile(guanode)
 {}
 
@@ -56,7 +56,7 @@ av::gua::lod::AuxAtlasTile::getHeightCB(const SFUInt::GetValueEvent& event){
 
 
 
-std::shared_ptr< ::gua::Aux::atlas_tile>
+std::shared_ptr< ::gua::Auxi::atlas_tile>
 av::gua::lod::AuxAtlasTile::getGuaAuxAtlasTile() const {
   return m_guaAuxAtlasTile;
 }

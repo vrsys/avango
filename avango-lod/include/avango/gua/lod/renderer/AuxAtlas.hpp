@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/Aux.hpp>
+#include <gua/renderer/Auxi.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -33,8 +33,8 @@ namespace av
          * Constructor. When called without arguments, a new ::gua::AuxAtlas is created.
          * Otherwise, the given ::gua::AuxAtlas is used.
          */
-        AuxAtlas(std::shared_ptr< ::gua::Aux::atlas> guanode =
-            std::shared_ptr< ::gua::Aux::atlas>(new ::gua::Aux::atlas()));
+        AuxAtlas(std::shared_ptr< ::gua::Auxi::atlas> guanode =
+            std::shared_ptr< ::gua::Auxi::atlas>(new ::gua::Auxi::atlas()));
             
 
       protected:
@@ -48,7 +48,7 @@ namespace av
         /**
          * Get the wrapped ::gua::AuxAtlas.
          */
-        std::shared_ptr< ::gua::Aux::atlas> getGuaAuxAtlas() const;
+        std::shared_ptr< ::gua::Auxi::atlas> getGuaAuxAtlas() const;
 
 
         SFUInt NumAtlasTiles;
@@ -93,7 +93,7 @@ namespace av
 
 
       private:
-        std::shared_ptr< ::gua::Aux::atlas> m_guaAuxAtlas;
+        std::shared_ptr< ::gua::Auxi::atlas> m_guaAuxAtlas;
 
         AuxAtlas(const AuxAtlas&);
         AuxAtlas& operator=(const AuxAtlas&);

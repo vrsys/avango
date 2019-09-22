@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/Aux.hpp>
+#include <gua/renderer/Auxi.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -33,8 +33,8 @@ namespace av
          * Constructor. When called without arguments, a new ::gua::AuxAtlasTile is created.
          * Otherwise, the given ::gua::AuxAtlasTile is used.
          */
-        AuxAtlasTile(std::shared_ptr< ::gua::Aux::atlas_tile> guanode =
-            std::shared_ptr< ::gua::Aux::atlas_tile>(new ::gua::Aux::atlas_tile()));
+        AuxAtlasTile(std::shared_ptr< ::gua::Auxi::atlas_tile> guanode =
+            std::shared_ptr< ::gua::Auxi::atlas_tile>(new ::gua::Auxi::atlas_tile()));
             
 
       protected:
@@ -48,7 +48,7 @@ namespace av
         /**
          * Get the wrapped ::gua::AuxAtlasTile.
          */
-        std::shared_ptr< ::gua::Aux::atlas_tile> getGuaAuxAtlasTile() const;
+        std::shared_ptr< ::gua::Auxi::atlas_tile> getGuaAuxAtlasTile() const;
 
 
         SFUInt AtlasTileId;
@@ -102,7 +102,7 @@ namespace av
 
 
       private:
-        std::shared_ptr< ::gua::Aux::atlas_tile> m_guaAuxAtlasTile;
+        std::shared_ptr< ::gua::Auxi::atlas_tile> m_guaAuxAtlasTile;
 
         AuxAtlasTile(const AuxAtlasTile&);
         AuxAtlasTile& operator=(const AuxAtlasTile&);

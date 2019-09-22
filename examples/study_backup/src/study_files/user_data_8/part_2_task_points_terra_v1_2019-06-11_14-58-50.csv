@@ -1,0 +1,26 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-11 14:59:12.343223,8,points,2,A,2,terra,1,lense,0,True,2.2888612747192383,0,True,-1
+2019-06-11 14:59:22.416387,8,points,2,A,2,terra,1,lense,1,False,3.4036636352539062,0,False,-1
+2019-06-11 14:59:31.045315,8,points,2,A,2,terra,1,lense,2,False,2.4273030757904053,0,False,-1
+2019-06-11 14:59:37.044410,8,points,2,A,2,terra,1,lense,3,True,1.8399224281311035,0,True,-1
+2019-06-11 14:59:46.126961,8,points,2,A,2,terra,1,lense,4,True,1.9764976501464844,0,True,-1
+2019-06-11 14:59:54.175047,8,points,2,A,2,terra,1,lense,5,True,1.4267332553863525,0,True,-1
+2019-06-11 15:00:02.828114,8,points,2,A,2,terra,1,lense,6,True,1.224867820739746,0,True,-1
+2019-06-11 15:00:08.736888,8,points,2,A,2,terra,1,lense,7,False,1.5934748649597168,0,True,-1
+2019-06-11 15:00:35.864969,8,points,2,A,2,terra,1,lense,8,True,1.0941317081451416,0,True,-1
+2019-06-11 15:00:45.357076,8,points,2,A,2,terra,1,lense,9,True,1.1648995876312256,0,True,-1
+2019-06-11 15:00:51.644955,8,points,2,A,2,terra,1,lense,10,False,1.281712532043457,0,False,-1
+2019-06-11 15:00:57.670177,8,points,2,A,2,terra,1,lense,11,False,1.0887470245361328,0,False,-1
+2019-06-11 15:01:05.102684,8,points,2,A,2,terra,1,lense,12,False,1.2955849170684814,0,False,-1
+2019-06-11 15:01:11.446291,8,points,2,A,2,terra,1,lense,13,False,1.2053072452545166,0,False,-1
+2019-06-11 15:01:18.048890,8,points,2,A,2,terra,1,lense,14,True,2.047071695327759,0,True,-1
+2019-06-11 15:01:25.325360,8,points,2,A,2,terra,1,lense,15,False,1.1442711353302002,0,False,-1
+2019-06-11 15:01:31.516624,8,points,2,A,2,terra,1,lense,16,False,1.639254093170166,0,False,-1
+2019-06-11 15:01:39.791866,8,points,2,A,2,terra,1,lense,17,False,2.622457981109619,0,False,-1
+2019-06-11 15:01:47.613398,8,points,2,A,2,terra,1,lense,18,False,1.2553048133850098,0,False,-1
+2019-06-11 15:01:53.239710,8,points,2,A,2,terra,1,lense,19,True,0.9981145858764648,0,True,-1
+2019-06-11 15:02:00.647719,8,points,2,A,2,terra,1,lense,20,True,1.6082656383514404,0,True,-1
+2019-06-11 15:02:09.560748,8,points,2,A,2,terra,1,lense,21,False,1.6961853504180908,0,False,-1
+2019-06-11 15:02:16.231396,8,points,2,A,2,terra,1,lense,22,True,1.567777156829834,0,True,-1
+2019-06-11 15:02:22.008827,8,points,2,A,2,terra,1,lense,23,True,1.5071053504943848,0,True,-1
+2019-06-11 15:02:30.357687,8,points,2,A,2,terra,1,lense,24,False,2.122054100036621,0,False,-1

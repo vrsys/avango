@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/Aux.hpp>
+#include <gua/renderer/Auxi.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -16,7 +16,7 @@
 #include <avango/gua/lod/renderer/AuxFeature.hpp>
 namespace gua {
 namespace renderer {
-  class aux;
+  class auxi;
   // namespace aux{
   struct feature;
   // }
@@ -44,8 +44,8 @@ namespace av
          * Constructor. When called without arguments, a new ::gua::AuxSparsePoint is created.
          * Otherwise, the given ::gua::AuxSparsePoint is used.
          */
-        AuxSparsePoint(std::shared_ptr< ::gua::Aux::sparse_point> guanode =
-            std::shared_ptr< ::gua::Aux::sparse_point>(new ::gua::Aux::sparse_point()));
+        AuxSparsePoint(std::shared_ptr< ::gua::Auxi::sparse_point> guanode =
+            std::shared_ptr< ::gua::Auxi::sparse_point>(new ::gua::Auxi::sparse_point()));
             
 
       protected:
@@ -59,7 +59,7 @@ namespace av
         /**
          * Get the wrapped ::gua::AuxSparsePoint.
          */
-        std::shared_ptr< ::gua::Aux::sparse_point> getGuaAuxSparsePoint() const;
+        std::shared_ptr< ::gua::Auxi::sparse_point> getGuaAuxSparsePoint() const;
 
 
         
@@ -127,7 +127,7 @@ namespace av
 
 
       private:
-        std::shared_ptr< ::gua::Aux::sparse_point> m_guaAuxSparsePoint;
+        std::shared_ptr< ::gua::Auxi::sparse_point> m_guaAuxSparsePoint;
 
         AuxSparsePoint(const AuxSparsePoint&);
         AuxSparsePoint& operator=(const AuxSparsePoint&);

@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/Aux.hpp>
+#include <gua/renderer/Auxi.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -33,8 +33,8 @@ namespace av
          * Constructor. When called without arguments, a new ::gua::AuxView is created.
          * Otherwise, the given ::gua::AuxView is used.
          */
-        AuxView(std::shared_ptr< ::gua::Aux::view> guanode =
-            std::shared_ptr< ::gua::Aux::view>(new ::gua::Aux::view()));
+        AuxView(std::shared_ptr< ::gua::Auxi::view> guanode =
+            std::shared_ptr< ::gua::Auxi::view>(new ::gua::Auxi::view()));
             
 
       protected:
@@ -48,13 +48,17 @@ namespace av
         /**
          * Get the wrapped ::gua::AuxView.
          */
-        std::shared_ptr< ::gua::Aux::view> getGuaAuxView() const;
+        std::shared_ptr< ::gua::Auxi::view> getGuaAuxView() const;
 
 
         SFUInt CameraId;
         SFVec3 Position;
         SFMatrix4 Transform;
-        SFFloat FocalLength;
+        // SFFloat FocalLength; old
+        SFFloat FocalValueX;
+        SFFloat FocalValueY;
+        SFFloat CenterX;
+        SFFloat CenterY;
         SFFloat Distortion;
         SFUInt ImageWidth;
         SFUInt ImageHeight;
@@ -65,7 +69,10 @@ namespace av
         virtual void getCameraIdCB(const SFUInt::GetValueEvent& event);
         virtual void getPositionCB(const SFVec3::GetValueEvent& event);
         virtual void getTransformCB(const SFMatrix4::GetValueEvent& event);
-        virtual void getFocalLengthCB(const SFFloat::GetValueEvent& event);
+        virtual void getFocalValueXCB(const SFFloat::GetValueEvent& event);
+        virtual void getFocalValueYCB(const SFFloat::GetValueEvent& event);
+        virtual void getCenterXCB(const SFFloat::GetValueEvent& event);
+        virtual void getCenterYCB(const SFFloat::GetValueEvent& event);
         virtual void getDistortionCB(const SFFloat::GetValueEvent& event);
         virtual void getImageWidthCB(const SFUInt::GetValueEvent& event);
         virtual void getImageHeightCB(const SFUInt::GetValueEvent& event);
@@ -93,9 +100,27 @@ namespace av
           else
             return ::gua::math::mat4::identity();
         }
-        inline float getFocalLength() {
+        inline float getFocalValueX() {
           if (m_guaAuxView)
-            return m_guaAuxView->focal_length_;
+            return m_guaAuxView->focal_value_x_;
+          else
+            return 1.0f;
+        }
+        inline float getFocalValueY() {
+          if (m_guaAuxView)
+            return m_guaAuxView->focal_value_y_;
+          else
+            return 1.0f;
+        }
+        inline float getCenterX() {
+          if (m_guaAuxView)
+            return m_guaAuxView->center_x_;
+          else
+            return 1.0f;
+        }
+        inline float getCenterY() {
+          if (m_guaAuxView)
+            return m_guaAuxView->center_y_;
           else
             return 1.0f;
         }
@@ -133,7 +158,7 @@ namespace av
 
 
       private:
-        std::shared_ptr< ::gua::Aux::view> m_guaAuxView;
+        std::shared_ptr< ::gua::Auxi::view> m_guaAuxView;
 
         AuxView(const AuxView&);
         AuxView& operator=(const AuxView&);

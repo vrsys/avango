@@ -33,7 +33,7 @@ class MultiWindowVisualizer(avango.script.Script):
 
          # Create loaders
         self.dynamic_tri_loader = avango.gua.nodes.DynamicTriangleLoader()
-        self.aux_loader = avango.gua.lod.nodes.Aux()
+        self.aux_loader = avango.gua.lod.nodes.Auxi()
         
         self.dynamic_triangle_node = self.dynamic_tri_loader.create_empty_geometry(
             "multi_window_vis", 

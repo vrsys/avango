@@ -1,0 +1,26 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-10 11:23:25.611014,2,points,4,A,1,wappen,2,wall,0,False,10.532788038253784,0,False,-1
+2019-06-10 11:23:43.038310,2,points,4,A,1,wappen,2,wall,1,False,10.936403512954712,0,False,-1
+2019-06-10 11:23:49.674286,2,points,4,A,1,wappen,2,wall,2,True,2.3921396732330322,0,True,-1
+2019-06-10 11:23:58.021448,2,points,4,A,1,wappen,2,wall,3,False,3.1289007663726807,0,False,-1
+2019-06-10 11:24:08.412530,2,points,4,A,1,wappen,2,wall,4,True,2.9521121978759766,0,True,-1
+2019-06-10 11:24:17.138602,2,points,4,A,1,wappen,2,wall,5,True,2.2911107540130615,0,True,-1
+2019-06-10 11:24:24.593185,2,points,4,A,1,wappen,2,wall,6,True,2.952613115310669,0,True,-1
+2019-06-10 11:24:38.250821,2,points,4,A,1,wappen,2,wall,7,True,5.465778350830078,0,True,-1
+2019-06-10 11:24:50.142476,2,points,4,A,1,wappen,2,wall,8,False,5.26384162902832,0,False,-1
+2019-06-10 11:24:55.477122,2,points,4,A,1,wappen,2,wall,9,True,1.9784681797027588,0,True,-1
+2019-06-10 11:25:04.092686,2,points,4,A,1,wappen,2,wall,10,False,4.74443793296814,0,False,-1
+2019-06-10 11:25:12.260190,2,points,4,A,1,wappen,2,wall,11,True,3.4324707984924316,0,True,-1
+2019-06-10 11:25:23.233197,2,points,4,A,1,wappen,2,wall,12,False,4.219750881195068,0,False,-1
+2019-06-10 11:25:31.065849,2,points,4,A,1,wappen,2,wall,13,True,3.477123975753784,0,True,-1
+2019-06-10 11:25:42.946907,2,points,4,A,1,wappen,2,wall,14,False,4.648229122161865,0,False,-1
+2019-06-10 11:25:49.260616,2,points,4,A,1,wappen,2,wall,15,True,1.7462048530578613,0,True,-1
+2019-06-10 11:25:57.396796,2,points,4,A,1,wappen,2,wall,16,False,3.452439069747925,0,False,-1
+2019-06-10 11:26:06.194697,2,points,4,A,1,wappen,2,wall,17,True,1.903548002243042,0,True,-1
+2019-06-10 11:26:13.915332,2,points,4,A,1,wappen,2,wall,18,False,2.7606656551361084,0,False,-1
+2019-06-10 11:26:21.302786,2,points,4,A,1,wappen,2,wall,19,False,1.9028327465057373,0,False,-1
+2019-06-10 11:26:27.569934,2,points,4,A,1,wappen,2,wall,20,True,1.8673663139343262,0,True,-1
+2019-06-10 11:26:37.603736,2,points,4,A,1,wappen,2,wall,21,False,4.406238079071045,0,False,-1
+2019-06-10 11:26:46.219019,2,points,4,A,1,wappen,2,wall,22,False,4.97625207901001,0,False,-1
+2019-06-10 11:26:55.621598,2,points,4,A,1,wappen,2,wall,23,False,2.2307686805725098,0,False,-1
+2019-06-10 11:27:12.118798,2,points,4,A,1,wappen,2,wall,24,True,9.210967063903809,0,True,-1

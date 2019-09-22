@@ -6,7 +6,7 @@
  * \ingroup av_gua
  */
 
-#include <gua/renderer/Aux.hpp>
+#include <gua/renderer/Auxi.hpp>
 #include <gua/math/math.hpp>
 
 #include <avango/gua/Fields.hpp>
@@ -33,8 +33,8 @@ namespace av
          * Constructor. When called without arguments, a new ::gua::AuxFeature is created.
          * Otherwise, the given ::gua::AuxFeature is used.
          */
-        AuxFeature(std::shared_ptr< ::gua::Aux::feature> guanode =
-            std::shared_ptr< ::gua::Aux::feature>(new ::gua::Aux::feature()));
+        AuxFeature(std::shared_ptr< ::gua::Auxi::feature> guanode =
+            std::shared_ptr< ::gua::Auxi::feature>(new ::gua::Auxi::feature()));
             
 
       protected:
@@ -48,7 +48,7 @@ namespace av
         /**
          * Get the wrapped ::gua::AuxFeature.
          */
-        std::shared_ptr< ::gua::Aux::feature> getGuaAuxFeature() const;
+        std::shared_ptr< ::gua::Auxi::feature> getGuaAuxFeature() const;
 
 
         SFUInt CameraId;
@@ -93,7 +93,7 @@ namespace av
 
 
       private:
-        std::shared_ptr< ::gua::Aux::feature> m_guaAuxFeature;
+        std::shared_ptr< ::gua::Auxi::feature> m_guaAuxFeature;
 
         AuxFeature(const AuxFeature&);
         AuxFeature& operator=(const AuxFeature&);

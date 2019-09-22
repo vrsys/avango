@@ -1,0 +1,19 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-14 16:41:03.605313,18,points,1,A,1,terra,1,lense,0,True,2191.948417901993,0,True,-1
+2019-06-14 16:41:11.271517,18,points,1,A,1,terra,1,lense,1,False,1.4708881378173828,0,True,-1
+2019-06-14 16:41:21.726857,18,points,1,A,1,terra,1,lense,2,False,0.6198205947875977,0,False,-1
+2019-06-14 16:41:26.035469,18,points,1,A,1,terra,1,lense,3,True,0.8992080688476562,0,True,-1
+2019-06-14 16:41:28.814145,18,points,1,A,1,terra,1,lense,4,True,0.21744799613952637,0,False,-1
+2019-06-14 16:41:37.774205,18,points,1,A,1,terra,1,lense,5,True,0.6801586151123047,0,False,-1
+2019-06-14 16:42:09.007862,18,points,1,A,1,terra,1,lense,6,True,25.23784327507019,1,True,-1
+2019-06-14 16:42:35.667612,18,points,1,A,1,terra,1,lense,7,False,18.755130290985107,1,False,-1
+2019-06-14 16:42:58.101601,18,points,1,A,1,terra,1,lense,8,True,15.057503461837769,1,True,-1
+2019-06-14 16:43:55.387991,18,points,1,A,1,terra,1,lense,9,True,5.244882345199585,0,True,-1
+2019-06-14 16:45:20.694462,18,points,1,A,1,terra,1,lense,10,False,52.00199794769287,2,True,-1
+2019-06-14 16:45:51.423533,18,points,1,A,1,terra,1,lense,11,False,19.71760106086731,1,False,-1
+2019-06-14 16:46:16.012437,18,points,1,A,1,terra,1,lense,12,False,15.522568702697754,1,False,-1
+2019-06-14 16:46:41.722832,18,points,1,A,1,terra,1,lense,13,False,18.9369797706604,1,False,-1
+2019-06-14 16:47:08.058681,18,points,1,A,1,terra,1,lense,14,True,19.40841817855835,1,True,-1
+2019-06-14 16:47:54.742754,18,points,1,A,1,terra,1,lense,15,False,24.812316417694092,1,False,-1
+2019-06-14 16:48:17.039360,18,points,1,A,1,terra,1,lense,16,False,15.832252740859985,1,False,-1
+2019-06-14 16:48:50.114771,18,points,1,A,1,terra,1,lense,17,False,19.935872077941895,1,False,-1

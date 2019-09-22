@@ -10,7 +10,7 @@ AV_FC_DEFINE(av::gua::lod::AuxView);
 AV_FIELD_DEFINE(av::gua::lod::SFAuxView);
 AV_FIELD_DEFINE(av::gua::lod::MFAuxView);
 
-av::gua::lod::AuxView::AuxView(std::shared_ptr< ::gua::Aux::view> guanode)
+av::gua::lod::AuxView::AuxView(std::shared_ptr< ::gua::Auxi::view> guanode)
     : m_guaAuxView(guanode)
 {}
 
@@ -42,9 +42,26 @@ av::gua::lod::AuxView::getTransformCB(const SFMatrix4::GetValueEvent& event){
   *(event.getValuePtr()) = m_guaAuxView->transform_;
 }
 void 
-av::gua::lod::AuxView::getFocalLengthCB(const SFFloat::GetValueEvent& event){
-  *(event.getValuePtr()) = m_guaAuxView->focal_length_;
+av::gua::lod::AuxView::getFocalValueXCB(const SFFloat::GetValueEvent& event){
+  *(event.getValuePtr()) = m_guaAuxView->focal_value_x_;
 }
+void 
+av::gua::lod::AuxView::getFocalValueYCB(const SFFloat::GetValueEvent& event){
+  *(event.getValuePtr()) =  m_guaAuxView->focal_value_y_;
+}
+
+void 
+av::gua::lod::AuxView::getCenterXCB(const SFFloat::GetValueEvent& event){
+  *(event.getValuePtr()) =  m_guaAuxView->center_x_;
+}
+
+
+void 
+av::gua::lod::AuxView::getCenterYCB(const SFFloat::GetValueEvent& event){
+  *(event.getValuePtr()) =  m_guaAuxView->center_y_;
+}
+
+
 void 
 av::gua::lod::AuxView::getDistortionCB(const SFFloat::GetValueEvent& event){
   *(event.getValuePtr()) = m_guaAuxView->distortion_;
@@ -67,7 +84,7 @@ av::gua::lod::AuxView::getImageFileCB(const SFString::GetValueEvent& event){
 }
 
 
-std::shared_ptr< ::gua::Aux::view>
+std::shared_ptr< ::gua::Auxi::view>
 av::gua::lod::AuxView::getGuaAuxView() const {
   return m_guaAuxView;
 }

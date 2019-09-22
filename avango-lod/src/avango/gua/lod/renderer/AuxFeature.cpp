@@ -10,7 +10,7 @@ AV_FC_DEFINE(av::gua::lod::AuxFeature);
 AV_FIELD_DEFINE(av::gua::lod::SFAuxFeature);
 AV_FIELD_DEFINE(av::gua::lod::MFAuxFeature);
 
-av::gua::lod::AuxFeature::AuxFeature(std::shared_ptr< ::gua::Aux::feature> guanode)
+av::gua::lod::AuxFeature::AuxFeature(std::shared_ptr< ::gua::Auxi::feature> guanode)
     : m_guaAuxFeature(guanode)
 {}
 
@@ -51,7 +51,7 @@ av::gua::lod::AuxFeature::getErrorCB(const SFVec2::GetValueEvent& event){
 
 
 
-std::shared_ptr< ::gua::Aux::feature>
+std::shared_ptr< ::gua::Auxi::feature>
 av::gua::lod::AuxFeature::getGuaAuxFeature() const {
   return m_guaAuxFeature;
 }

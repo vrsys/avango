@@ -1,0 +1,26 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer
+2019-06-08 11:49:01.413876,1,points,5,B,2,wappen,2,lense,0,False,1.7190074920654297,0,False
+2019-06-08 11:49:08.918780,1,points,5,B,2,wappen,2,lense,1,False,2.7900354862213135,0,False
+2019-06-08 11:49:15.562972,1,points,5,B,2,wappen,2,lense,2,True,2.2549216747283936,0,True
+2019-06-08 11:49:22.714834,1,points,5,B,2,wappen,2,lense,3,False,1.8967039585113525,0,False
+2019-06-08 11:49:29.470056,1,points,5,B,2,wappen,2,lense,4,True,1.7113728523254395,0,True
+2019-06-08 11:49:34.574734,1,points,5,B,2,wappen,2,lense,5,True,1.656374216079712,0,True
+2019-06-08 11:49:40.162852,1,points,5,B,2,wappen,2,lense,6,True,2.132115125656128,0,True
+2019-06-08 11:49:45.250807,1,points,5,B,2,wappen,2,lense,7,True,2.0796942710876465,0,True
+2019-06-08 11:49:52.974331,1,points,5,B,2,wappen,2,lense,8,False,3.390655279159546,0,False
+2019-06-08 11:49:58.281134,1,points,5,B,2,wappen,2,lense,9,True,1.063927412033081,0,True
+2019-06-08 11:50:04.795862,1,points,5,B,2,wappen,2,lense,10,False,2.096728801727295,0,True
+2019-06-08 11:50:10.197356,1,points,5,B,2,wappen,2,lense,11,True,2.150284767150879,0,True
+2019-06-08 11:50:17.821553,1,points,5,B,2,wappen,2,lense,12,False,3.059253454208374,0,False
+2019-06-08 11:50:24.789669,1,points,5,B,2,wappen,2,lense,13,True,2.1512303352355957,0,True
+2019-06-08 11:50:32.658762,1,points,5,B,2,wappen,2,lense,14,False,3.5670056343078613,0,False
+2019-06-08 11:50:39.196904,1,points,5,B,2,wappen,2,lense,15,True,1.5751206874847412,0,True
+2019-06-08 11:50:44.764528,1,points,5,B,2,wappen,2,lense,16,False,1.5533299446105957,0,False
+2019-06-08 11:50:51.219799,1,points,5,B,2,wappen,2,lense,17,True,1.404768943786621,0,True
+2019-06-08 11:50:57.025459,1,points,5,B,2,wappen,2,lense,18,False,1.724987506866455,0,False
+2019-06-08 11:51:04.562750,1,points,5,B,2,wappen,2,lense,19,False,1.9987387657165527,0,False
+2019-06-08 11:51:10.908375,1,points,5,B,2,wappen,2,lense,20,True,1.5032970905303955,0,True
+2019-06-08 11:51:20.060972,1,points,5,B,2,wappen,2,lense,21,False,3.8613059520721436,0,False
+2019-06-08 11:51:28.634659,1,points,5,B,2,wappen,2,lense,22,False,4.2825446128845215,0,False
+2019-06-08 11:51:34.221624,1,points,5,B,2,wappen,2,lense,23,False,1.2810564041137695,0,False
+2019-06-08 11:51:43.982308,1,points,5,B,2,wappen,2,lense,24,True,3.2449276447296143,0,True

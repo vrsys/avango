@@ -1,0 +1,26 @@
+date,user_id,task,part,group,block,geometry,version,condition,trail,feature_value,time,frozen,answer,user_two_id
+2019-06-11 14:25:33.533913,7,points,6,B,0,terra,2,lense,0,True,1.6632733345031738,0,True,-1
+2019-06-11 14:25:44.105781,7,points,6,B,0,terra,2,lense,1,False,1.472571611404419,0,False,-1
+2019-06-11 14:25:56.376555,7,points,6,B,0,terra,2,lense,2,True,2.4100735187530518,0,True,-1
+2019-06-11 14:26:07.469729,7,points,6,B,0,terra,2,lense,3,False,2.3039212226867676,0,False,-1
+2019-06-11 14:26:19.358317,7,points,6,B,0,terra,2,lense,4,True,2.374680995941162,0,True,-1
+2019-06-11 14:26:26.888017,7,points,6,B,0,terra,2,lense,5,True,1.759657621383667,0,True,-1
+2019-06-11 14:26:38.942923,7,points,6,B,0,terra,2,lense,6,False,1.7189571857452393,0,False,-1
+2019-06-11 14:26:47.205295,7,points,6,B,0,terra,2,lense,7,False,1.3266692161560059,0,False,-1
+2019-06-11 14:26:55.430334,7,points,6,B,0,terra,2,lense,8,True,1.4317567348480225,0,True,-1
+2019-06-11 14:27:05.205664,7,points,6,B,0,terra,2,lense,9,False,1.2804176807403564,0,False,-1
+2019-06-11 14:27:13.623568,7,points,6,B,0,terra,2,lense,10,False,1.250171422958374,0,False,-1
+2019-06-11 14:27:19.876715,7,points,6,B,0,terra,2,lense,11,True,0.982926607131958,0,True,-1
+2019-06-11 14:27:28.809771,7,points,6,B,0,terra,2,lense,12,False,1.3371775150299072,0,False,-1
+2019-06-11 14:27:36.119676,7,points,6,B,0,terra,2,lense,13,True,1.2450287342071533,0,True,-1
+2019-06-11 14:27:47.252723,7,points,6,B,0,terra,2,lense,14,True,2.4617373943328857,0,True,-1
+2019-06-11 14:27:57.271354,7,points,6,B,0,terra,2,lense,15,True,2.048051595687866,0,True,-1
+2019-06-11 14:28:06.966453,7,points,6,B,0,terra,2,lense,16,True,1.608079433441162,0,True,-1
+2019-06-11 14:28:19.346205,7,points,6,B,0,terra,2,lense,17,False,1.7818362712860107,0,False,-1
+2019-06-11 14:28:28.606669,7,points,6,B,0,terra,2,lense,18,False,1.1242899894714355,0,False,-1
+2019-06-11 14:28:38.551534,7,points,6,B,0,terra,2,lense,19,False,1.8799874782562256,0,False,-1
+2019-06-11 14:28:45.140868,7,points,6,B,0,terra,2,lense,20,True,1.1897590160369873,0,True,-1
+2019-06-11 14:28:58.512340,7,points,6,B,0,terra,2,lense,21,True,1.3306562900543213,0,True,-1
+2019-06-11 14:29:09.416525,7,points,6,B,0,terra,2,lense,22,False,1.4164652824401855,0,False,-1
+2019-06-11 14:29:17.928895,7,points,6,B,0,terra,2,lense,23,False,1.2094511985778809,0,False,-1
+2019-06-11 14:29:27.422852,7,points,6,B,0,terra,2,lense,24,False,1.4469521045684814,0,False,-1

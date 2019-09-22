@@ -223,7 +223,9 @@ class LocalizedImageQuad:
 
         # scale factor from image space to vt atlas space
         # float factor = get_atlas_scale_factor();
-        self.factor = 0.950787
+        # self.factor = 0.950787
+        self.factor = 0.594242
+        # self.factor = get_atlas_scale_factor();
 
         self.tile_h = self.atlas_tile.get_width() / self.atlas_width * self.factor
         self.tile_w = self.atlas_tile.get_width() / self.atlas_height * self.factor
@@ -237,33 +239,33 @@ class LocalizedImageQuad:
         transform = self.view.get_transform() #* avango.gua.make_rot_mat(180.0, 0.0, 1.0,0.0)
 
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
-        uv  = avango.gua.Vec2(0.0, 0.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        # uv  = avango.gua.Vec2(0.0, 0.0)
         t1_v1 = LocalizedImageVertex(self.dt_node, self.id * 6, pos, uv)
         
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-        uv  = avango.gua.Vec2(1.0,1.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(1.0,1.0)
         t1_v2 = LocalizedImageVertex(self.dt_node, self.id * 6 + 1, pos, uv)
         
         pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
-        uv  = avango.gua.Vec2(0.0,1.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(0.0,1.0)
         t1_v3 = LocalizedImageVertex(self.dt_node, self.id * 6 + 2, pos, uv)
         
         pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
-        uv  = avango.gua.Vec2(0.0,0.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
+        # uv  = avango.gua.Vec2(0.0,0.0)
         t2_v4 = LocalizedImageVertex(self.dt_node, self.id * 6 + 3, pos, uv)
         
         pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y )
-        uv  = avango.gua.Vec2(1.0,0.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y )
+        # uv  = avango.gua.Vec2(1.0,0.0)
         t2_v5 = LocalizedImageVertex(self.dt_node, self.id * 6 + 4, pos, uv)
 
         pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
-        # uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
-        uv  = avango.gua.Vec2(1.0,1.0)
+        uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
+        # uv  = avango.gua.Vec2(1.0,1.0)
         t2_v6 = LocalizedImageVertex(self.dt_node, self.id * 6 + 5, pos, uv)
 
         self.min_uv = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
@@ -284,24 +286,24 @@ class LocalizedImageVertex:
         # print()
 
     def update(self, pos=None, uv=None):
-        pass
+        pass 
     
 # def get_atlas_scale_factor():
     
-    # atlas_width  = atlas.get_width()
-    # atlas_height = atlas.get_height()
-    # auto atlas = new vt::pre::AtlasFile(settings_.atlas_file_.c_str());
-    # uint64_t image_width    = atlas->getImageWidth();
-    # uint64_t image_height   = atlas->getImageHeight();
+#     atlas_width  = atlas.get_width()
+#     atlas_height = atlas.get_height()
 
-    # // tile's width and height without padding
-    # uint64_t tile_inner_width  = atlas->getInnerTileWidth();
-    # uint64_t tile_inner_height = atlas->getInnerTileHeight();
+#     tile_inner_width = 
+#     tile_inner_height
 
-    # // Quadtree depth counter, ranges from 0 to depth-1
-    # uint64_t depth = atlas->getDepth();
+#     // tile's width and height without padding
+#     uint64_t tile_inner_width  = atlas->getInnerTileWidth();
+#     uint64_t tile_inner_height = atlas->getInnerTileHeight();
 
-    # double factor_u  = (double) image_width  / (tile_inner_width  * std::pow(2, depth-1));
-    # double factor_v  = (double) image_height / (tile_inner_height * std::pow(2, depth-1));
+#     // Quadtree depth counter, ranges from 0 to depth-1
+#     uint64_t depth = atlas->getDepth();
 
-    # return std::max(factor_u, factor_v);
+#     double factor_u  = (double) image_width  / (tile_inner_width  * std::pow(2, depth-1));
+#     double factor_v  = (double) image_height / (tile_inner_height * std::pow(2, depth-1));
+
+#     return std::max(factor_u, factor_v);

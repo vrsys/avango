@@ -245,8 +245,8 @@ def get_event_string(STRING_NUM, DEVICE_NAME):
 
 device_list = []
 
-#init_pst_tracking()
-#init_tuio_input()
+init_pst_tracking()
+init_tuio_input()
 init_mouse()
 # init_mouse2()
 

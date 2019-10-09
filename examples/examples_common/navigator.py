@@ -25,7 +25,7 @@ class Navigator(avango.script.Script):
 
     def __init__(self):
         self.super(Navigator).__init__()
-        
+
         self.__rot_x = 0.0
         self.__rot_y = 0.0
 
@@ -100,4 +100,5 @@ class Navigator(avango.script.Script):
                                               ) + target * smoothness
 
         else:
+
             self.__last_time = time.time()

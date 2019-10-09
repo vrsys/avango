@@ -44,10 +44,6 @@ class TimedRotate(avango.script.Script):
         self.frame = self.frame + 1
         if 0 != self.Window and self.frame % 200 == 0:
             print("RenderingFPS :" + str(self.Window.RenderingFPS.value))
-<<<<<<< HEAD
-            #screen_grab_pass.grabNext()
-=======
->>>>>>> upstream/master
 
 
 def start():

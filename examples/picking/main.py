@@ -58,6 +58,7 @@ def start():
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
   loader = avango.gua.nodes.TriMeshLoader()
+
   for x in range(0, CUBE_COUNT_X):
     for y in range(0, CUBE_COUNT_Y):
       for z in range(0, CUBE_COUNT_Z):
@@ -91,7 +92,7 @@ def start():
     "data/objects/cylinder.obj",
     avango.gua.LoaderFlags.DEFAULTS
   )
-  
+
   ray_geom.Transform.value = avango.gua.make_scale_mat(0.1, 0.1, 100)
   pick_ray.Children.value.append(ray_geom)
 
@@ -150,8 +151,10 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   viewer.SceneGraphs.value = [graph]
   viewer.Windows.value = [window]
+
   guaVE = GuaVE()
   guaVE.start(locals(), globals())
+
   viewer.run()
 
 

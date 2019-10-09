@@ -9,6 +9,8 @@
 #include <avango/gua/scenegraph/LODNode.hpp>
 #include <avango/gua/scenegraph/TriMeshNode.hpp>
 #include <avango/gua/scenegraph/LineStripNode.hpp>
+// #include <avango/gua/scenegraph/DynamicGeometryNode.hpp>
+#include <avango/gua/scenegraph/DynamicTriangleNode.hpp>
 #include <avango/gua/scenegraph/DepthMapNode.hpp>
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -65,6 +67,7 @@
 #include <avango/gua/renderer/Renderer.hpp>
 #include <avango/gua/renderer/TriMeshLoader.hpp>
 #include <avango/gua/renderer/LineStripLoader.hpp>
+#include <avango/gua/renderer/DynamicTriangleLoader.hpp>
 #if defined(AVANGO_PBR_SUPPORT)
 #include <avango/gua/renderer/PBRLoader.hpp>
 #include <avango/gua/renderer/PLODLoader.hpp>
@@ -92,6 +95,7 @@
 #include <avango/gua/renderer/StencilPassDescription.hpp>
 #include <avango/gua/renderer/TriMeshPassDescription.hpp>
 #include <avango/gua/renderer/LineStripPassDescription.hpp>
+#include <avango/gua/renderer/DynamicTrianglePassDescription.hpp>
 #include <avango/gua/renderer/DepthMapPassDescription.hpp>
 #include <avango/gua/renderer/TexturedQuadPassDescription.hpp>
 #include <avango/gua/renderer/DebugViewPassDescription.hpp>
@@ -142,7 +146,8 @@ AV_TYPED_DEFINE_ABSTRACT(av::gua::Init);
         av::gua::ClippingPlaneNode::initClass();
         av::gua::LODNode::initClass();
         av::gua::TriMeshNode::initClass();
-        av::gua::LineStripNode::initClass();
+        av::gua::LineStripNode::initClass();        
+        av::gua::DynamicTriangleNode::initClass();        
         av::gua::DepthMapNode::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -204,6 +209,7 @@ AV_TYPED_DEFINE_ABSTRACT(av::gua::Init);
         av::gua::StencilPassDescription::initClass();
         av::gua::TriMeshPassDescription::initClass();
         av::gua::LineStripPassDescription::initClass();
+        av::gua::DynamicTrianglePassDescription::initClass();
         av::gua::DepthMapPassDescription::initClass();
 
 #if defined(AVANGO_VIDEO3D_SUPPORT)
@@ -232,6 +238,7 @@ AV_TYPED_DEFINE_ABSTRACT(av::gua::Init);
         av::gua::PipelineDescription::initClass();
         av::gua::TriMeshLoader::initClass();
         av::gua::LineStripLoader::initClass();
+        av::gua::DynamicTriangleLoader::initClass();
 
 #if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
         av::gua::VTBackend::initClass();

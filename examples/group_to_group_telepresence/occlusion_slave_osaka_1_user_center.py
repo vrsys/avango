@@ -41,7 +41,33 @@ PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
 DAEDALOS  = "141.54.147.34"
 
-CURRENTLY_USED_SERVER = DAEDALOS
+CHARON = "141.54.147.33"
+
+CURRENTLY_USED_SERVER = CHARON
+
+
+class TimedPrintFPS(avango.script.Script):
+    
+    def __init__(self):
+        self.super(TimedPrintFPS).__init__()
+
+    def set_window(self, window):
+        self.accumulated_time = 0.0
+        self.accumulated_time_samples = 0
+        self.window_to_print_fps_from = window
+        self.always_evaluate(True)
+
+
+
+    def evaluate(self):
+      if 0 != self.window_to_print_fps_from:
+        if self.window_to_print_fps_from.RenderingFPS.value > 2:
+          self.accumulated_time += 1.0 / self.window_to_print_fps_from.RenderingFPS.value
+          self.accumulated_time_samples += 1
+          print("Avg. Rendering Times: " + str(self.accumulated_time / self.accumulated_time_samples) )
+          print("Current Rendering Times: " + str(1.0 / self.window_to_print_fps_from.RenderingFPS.value) )
+
+
 
 class Initializer(avango.script.Script):
 
@@ -61,7 +87,8 @@ class Initializer(avango.script.Script):
     #size = avango.gua.Vec2ui(1600, 1200)
     #size = avango.gua.Vec2ui(1920, 1080)
     #size = avango.gua.Vec2ui(3840, 2160)
-    size = avango.gua.Vec2ui(100, 100)
+    #size = avango.gua.Vec2ui(100, 100)
+    size = avango.gua.Vec2ui(128, 72)
     self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
                                               Display = ":0.1",  # ":0.1",
                                               LeftResolution=size,
@@ -76,7 +103,10 @@ class Initializer(avango.script.Script):
     self.viewer.SceneGraphs.value = [self.graph]
     self.viewer.Windows.value = [self.window_center]
 
-    self.viewer.DesiredFPS.value = 1000.0
+    self.viewer.DesiredFPS.value = 5000.0
+
+    self.bla = TimedPrintFPS()
+    self.bla.set_window(self.window_center)
 
     self.viewer.run()
 

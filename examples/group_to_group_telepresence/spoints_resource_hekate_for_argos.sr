@@ -1,2 +1,4 @@
 serversocket 141.54.147.42:7050
 feedbacksocket 141.54.147.26:7051
+uv_volume_res 128 128 128
+inv_xyz_volume_res 36 36 36

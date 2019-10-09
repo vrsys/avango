@@ -53,10 +53,10 @@ OBSERVER_MODE = "3_CLIENTS_SIMULATED"
 #CLIENT_MODE = ""
 CLIENT_MODE = "VIDEO_POWERWALL"
 
-#SCENE_MODE = "EVALUATION"
+SCENE_MODE = "EVALUATION"
 #SCENE_MODE = "ARCHITECTURE"
 #SCENE_MODE = "LIONS"
-SCENE_MODE = "SIMPLE"
+#SCENE_MODE = "SIMPLE"
 #SCENE_MODE = "EMPTY"
 
 RES_MODE = "POWERWALL"
@@ -75,7 +75,12 @@ HEKATE    = "141.54.147.42"
 SPACEMONSTER = "141.54.147.101"
 STEELYGLINT = "141.54.147.102"
 
-CURRENTLY_USED_SERVER = ARGOS
+CHARON = "141.54.147.33"
+
+CURRENTLY_USED_SERVER = CHARON
+
+OCCLUDER_PROFILING = 1
+#OCCLUDER_PROFILING = 0
 #CURRENTLY_USED_SERVER = VR16
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
@@ -208,13 +213,15 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
     animation_length_in_ms = indexed_keyframe_positions[-1][0]
 
-    #nv = netvaluepy.NetValue("127.0.0.1:8000")
+    nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
     #nv = netvaluepy.NetValue(HEKATE+":8000")
     #nv = netvaluepy.NetValue(VR16+":8000")
     #nv = netvaluepy.NetValue(STEELYGLINT+":8000")
-    nv = netvaluepy.NetValue(LADON+":8000")
+    #nv = netvaluepy.NetValue(LADON+":8000")
+    #nv = netvaluepy.NetValue(DAEDALOS+":8000")
+
     @field_has_changed(TimeIn)
     def update(self):
       #  print("NetValue: " + str(self.nv.getValue()) )
@@ -275,7 +282,12 @@ loader = avango.gua.nodes.TriMeshLoader()
 #kaisersaal.Transform.value = avango.gua.make_trans_mat(-2.5, 0.0, 1.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
 
 #kaisersaal = loader.create_geometry_from_file("kaisersaal", "/mnt/data_internal/geometry_data/confidential/Kaisersaal/Ktris_7500/Bam_Kai_o_L_12_ct_0750.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+
+
+if 0 == OCCLUDER_PROFILING:
+  street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+else:
+    street_plane = loader.create_geometry_from_file("street_plane", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/data/objects/street_plane.obj", avango.gua.LoaderFlags.DEFAULTS)
 street_plane.Material.value.set_uniform("Emissivity", 3.0)
 
 def set_hauptgebaeude_emissivity(node):
@@ -290,36 +302,45 @@ def set_hauptgebaeude_emissivity(node):
 
 
 if "EVALUATION" == SCENE_MODE:
-    hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    if 0 == OCCLUDER_PROFILING:
+      hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again_joined.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    else:
+      hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again_joined.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
     hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, -0.2, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
     set_hauptgebaeude_emissivity(hauptgebaeude)
 
     scale = 1.15
-    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    if 0 == OCCLUDER_PROFILING:
+      lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    else:
+      lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.DEFAULTS)
     #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
     lion.Transform.value = avango.gua.make_trans_mat(-1.5, -0.05, 3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
     
     if "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE:
       lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
 
-    lion.Material.value.EnableBackfaceCulling.value = False
+    lion.Material.value.EnableBackfaceCulling.value = True
     lion.Material.value.set_uniform("Emissivity", 3.0)
 
-    lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    if 0 == OCCLUDER_PROFILING:
+      lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
+    else:
+      lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.DEFAULTS)
     lion2.Transform.value = avango.gua.make_trans_mat(1.5, 0.0, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) 
     lion2.Transform.value = avango.gua.make_trans_mat(1.5, -0.05, 3.0) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(scale, scale, scale) 
 
 if "ARCHITECTURE" == SCENE_MODE:
-    hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/opt/3d_models/architecture/BHU_MainBuilding/BHU_cut_again_joined.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-    hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+    hauptgebaeude = loader.create_geometry_from_file("hauptgeb", "/home/wabi7015/Desktop/joined_test_scene_2.obj", avango.gua.LoaderFlags.DEFAULTS)
+    #hauptgebaeude.Transform.value = avango.gua.make_trans_mat(-15.0, 0.0, -25.0) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0)
     set_hauptgebaeude_emissivity(hauptgebaeude)
 
 if "LIONS" == SCENE_MODE:
     lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
     lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
 
-    lion.Material.value.EnableBackfaceCulling.value = False
+    lion.Material.value.EnableBackfaceCulling.value = True
     lion.Material.value.set_uniform("Emissivity", 3.0)
 
     lion2 = loader.create_geometry_from_file("loewe2", "/home/wabi7015/Desktop/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.LOAD_MATERIALS)
@@ -342,8 +363,10 @@ spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hydra.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_steelyglint_for_hydra.sr")
-#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_ladon_for_argos.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_ladon_for_argos.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_argos.sr")
+
 scene_transform = avango.gua.nodes.TransformNode(Name="scene_transform")
 scene_transform.Transform.value = avango.gua.make_trans_mat(-1.0, 0.0, 4.3)
 
@@ -378,7 +401,10 @@ def append_trees_to_list(parent_node):
 
     tree_label = 0
     for i in range(3):
-        tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        if 0 == OCCLUDER_PROFILING:
+          tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        else:
+          tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value = avango.gua.make_trans_mat(-4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) #* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
         tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
@@ -389,7 +415,10 @@ def append_trees_to_list(parent_node):
         tree_label += 1
 
     for i in range(3):
-        tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        if 0 == OCCLUDER_PROFILING:
+          tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+        else:
+          tree_to_append = loader.create_geometry_from_file("tree_" + str(tree_label), "/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj", avango.gua.LoaderFlags.DEFAULTS)
         #/opt/3d_models/paperHouses/Modelle_Baschdi/Modell/Baum.obj
         tree_to_append.Transform.value =  avango.gua.make_trans_mat(4.5, 0.0, 1.2 - depth_offset_pre_tree*i) * avango.gua.make_rot_mat(180.0, 0.0, 1.0, 0.0)#* avango.gua.make_rot_mat(90.0, 0.0, -1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
         tree_to_append.Material.value.set_uniform("Emissivity", 3.0)
@@ -429,10 +458,20 @@ screen_observer_right = avango.gua.nodes.ScreenNode(Name="screen_observer_right"
 #size = avango.gua.Vec2ui(491, 278)
 #size = avango.gua.Vec2ui(1600, 1200)
 #size = avango.gua.Vec2ui(1400, 1600) # vive pro
+#size = avango.gua.Vec2ui(3840, 2160)
+#size = avango.gua.Vec2ui(1920, 1080)
+#size = avango.gua.Vec2ui(1280, 720)
+#size = avango.gua.Vec2ui(128, 72)
+#size = avango.gua.Vec2ui(384, 144)
+#size = avango.gua.Vec2ui(768, 288)
+#size = avango.gua.Vec2ui(1280, 720)
+#size = avango.gua.Vec2ui(1920, 1080)
+#size = avango.gua.Vec2ui(2560, 1440)
+#size = avango.gua.Vec2ui(3200, 1800)
 size = avango.gua.Vec2ui(3840, 2160)
 
-if("HMD_LIKE" == RES_MODE):
-  size = avango.gua.Vec2ui(1920, 1080)
+#if("HMD_LIKE" == RES_MODE):
+#  size = avango.gua.Vec2ui(1920, 1080)
 
 #size = avango.gua.Vec2ui(4096, 2160)
 
@@ -541,7 +580,10 @@ if "VIDEO_CAMERA" == OBSERVER_MODE:
 
 NEARCLIP = 1.0
 
-server_size = avango.gua.Vec2ui(1920, 1080)
+
+server_size = avango.gua.Vec2ui(384, 216)
+
+#server_size = avango.gua.Vec2ui(1920, 1080)
 
 server_cam = avango.gua.nodes.CameraNode(
     ViewID=1,
@@ -893,5 +935,5 @@ feedback_sender.ClientCamCenterMatrixIn.connect_from(client_cam_center.WorldTran
 #guaVE = GuaVE()
 #guaVE.start(locals(), globals())
 
-viewer.DesiredFPS.value = 1500.0
+viewer.DesiredFPS.value = 5000.0
 viewer.run()

@@ -1,4 +1,3 @@
-
 import avango
 import avango.daemon
 import math
@@ -145,21 +144,17 @@ class KeyboardDevice(avango.script.Script):
 
         self.device_sensor = avango.daemon.nodes.DeviceSensor(
             DeviceService=avango.daemon.DeviceService())
-        # self.device_sensor.Station.value = "device-keyboard"
-        self.device_sensor.Station.value = "gua-device-keyboard" + str(0)
-        # self.device_sensor.Station.value = "gua-device-keyboard0"
+        self.device_sensor.Station.value = "device-keyboard"
+        
 
         self.always_evaluate(True)
 
-    
     def set_device_number(self, number):
         self.device_sensor = avango.daemon.nodes.DeviceSensor(
             DeviceService=avango.daemon.DeviceService())
         self.device_sensor.Station.value = "gua-device-keyboard" + str(number)
     
-
     def evaluate(self):
-        
         self.KeyQ.value = self.device_sensor.Button0.value
         self.KeyW.value = self.device_sensor.Button1.value
         self.KeyE.value = self.device_sensor.Button2.value

@@ -76,35 +76,10 @@ def init_mouse():
         mouse.buttons[1] = "EV_KEY::BTN_RIGHT"
 
         device_list.append(mouse)
-        print("Mouse started at:", mouse.device)
+        print("Mouse started at:", mouse_name)
 
     else:
         print("Mouse NOT found !")
-
-def init_mouse2():
-
-    _device_list = ["Logitech USB-PS/2 Optical Mouse", "Logitech Wireless Mouse M560"]
-
-    for _device in _device_list:
-        _string = get_event_string(1, _device)
-
-        if _string is not None:
-            mouse = avango.daemon.HIDInput()
-            mouse.station = avango.daemon.Station("gua-device-mouse")
-            mouse.device = _string
-
-            mouse.values[0] = "EV_REL::REL_X"
-            mouse.values[1] = "EV_REL::REL_Y"
-
-            mouse.buttons[0] = "EV_KEY::BTN_LEFT"
-            mouse.buttons[1] = "EV_KEY::BTN_RIGHT"
-
-            device_list.append(mouse)
-            print("Mouse started at:", mouse.device)
-
-            break
-
-    print("Mouse not found")
 
 
 def get_event_string(STRING_NUM, DEVICE_NAME):
@@ -135,7 +110,6 @@ def get_event_string(STRING_NUM, DEVICE_NAME):
 
 
 def init_keyboard():
-    print("start KEYBOARD #################################################################")
 
     _device_list = ["Cherry GmbH", "HID 046a:0011", "MOSART Semi. 2.4G Keyboard Mouse", "Logitech USB Keyboard", "DELL Dell QuietKey Keyboard"]
 

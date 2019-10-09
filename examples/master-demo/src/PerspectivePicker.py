@@ -213,7 +213,7 @@ class PerspectivePicker(avango.script.Script):
         self.update_textures()
       if self.mode is 'projector':
         self.update_perspective()
-      print(self.relevant_perspectives[0:16])
+      # print(self.relevant_perspectives[0:16])
       self.button0_pressed = True
     else:
       self.button0_pressed = False

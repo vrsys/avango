@@ -31,7 +31,7 @@ class DemoScript(avango.script.Script):
 
         self.is_initialized = False
 
-    def my_constructor(self):
+    def my_constructor(self, plod_node, atlas_tiles_node):
 
         # self.wall_perspectives = []
         # self.wall_centers = []
@@ -66,7 +66,9 @@ class DemoScript(avango.script.Script):
         #                      2 = VERIFICATION STATE: Time is calculated
         #                      3 = PAUSE STATE: Stop calculating time
         #                      4 = STUDY IS OVER
-        
+        self.plod_node = plod_node
+        self.atlas_tiles_node = atlas_tiles_node
+        self.show_images = True
         self.indicator_id = 0
         self.state = 0
         self.screen = None
@@ -99,7 +101,7 @@ class DemoScript(avango.script.Script):
         # function to set picker and navigation so that we can get timings from the picker e.g how long did search for a perspective
         # needs to be set in order to disable navigation or trigger some stuff
         self.perspective_picker = perspective_picker
-        self.perspective_picker.turn_on()
+        # self.perspective_picker.turn_on()
         self.navigation = navigation
 
     def set_wall(self, wall_viz):
@@ -163,15 +165,29 @@ class DemoScript(avango.script.Script):
     def study_state_changed(self):
         print(self.StudyStateButton.value)
         if self.StudyStateButton.value:
-            print('study button')
+            print('TASTE')
+            # if self.show_images:
+            #     self.plod_node.Tags = ['client']
+            #     self.show_images = False
+            # elif self.show_images == False:
+            #     self.plod_node.Tags = ['client']
+            #     self.show_images = True
+
+
             # self.change_study_state()
 
     @field_has_changed(StudyStateKeyboardButton)
     def study_state_changed_by_keyboard(self):
         if self.StudyStateKeyboardButton.value:
             if self.keyboard_button_pressed == False:
+                print('Space pressed - toggle images')
 
-                print('study key board button')
+                if self.show_images:
+                    self.atlas_tiles_node.Tags.value = ['client']
+                    self.show_images = False
+                elif self.show_images == False:
+                    self.atlas_tiles_node.Tags.value = []
+                    self.show_images = True
                 self.keyboard_button_pressed = True
         else:
             self.keyboard_button_pressed = False

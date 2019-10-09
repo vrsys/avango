@@ -19,7 +19,7 @@ class AtlasTile:
         self.atlas = atlas
 
         # self.transform = self.view.get_transform()
-        self.transform = avango.gua.make_trans_mat(0.0, -1.000, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.view.get_transform()
+        self.transform = avango.gua.make_trans_mat(0.0, -1.000, 0.1) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0) * self.view.get_transform()
 
         self.rotation = avango.gua.make_rot_mat(self.transform.get_rotate_scale_corrected())
 
@@ -79,14 +79,18 @@ class AtlasTile:
     def setup(self):
         self.aspect_ratio = self.view.get_image_height() / self.view.get_image_width()
         # print('aspect_ratio', self.aspect_ratio)
+        # opening_ratio_x = self.view.get_focal_value_x() / self.view.get_image_width()
+        self.opening_ratio_x = 6114.757 / 4910.0 # hardcoded - adjust from aux file TODO 1.245368024
 
         # focal_length = view.get_focal_length() // Problem: Return 0 carl said not perfect yet
         self.focal_length = 0.1
+        # self.img_w_half = self.focal_length / self.opening_ratio_x
         self.img_w_half = self.focal_length * 0.5
         self.img_h_half = self.img_w_half * self.aspect_ratio
-        # print('img_w_half', self.img_w_half)
-        # print('img_h_half', self.img_h_half)
         
+
+        # opening_ratio_y = self.view.get_focal_value_y() / self.view.get_image_height()
+
         self.atlas_width  = self.atlas.get_width()
         self.atlas_height = self.atlas.get_height()
         # print('AAAAATLASS', self.atlas_width, self.atlas_height)
@@ -111,32 +115,32 @@ class AtlasTile:
     def create_quad(self):
         transform = self.view.get_transform() #* avango.gua.make_rot_mat(180.0, 0.0, 1.0,0.0)
 
-        pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length - 0.02)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         # uv  = avango.gua.Vec2(0.0, 0.0)
         t1_v1 = AtlasTileVertex(self.dt_node, self.id * 6, pos, uv)
         
-        pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length - 0.02)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
         # uv  = avango.gua.Vec2(1.0,1.0)
         t1_v2 = AtlasTileVertex(self.dt_node, self.id * 6 + 1, pos, uv)
         
-        pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(self.img_w_half, -self.img_h_half, -self.focal_length - 0.02)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y + self.tile_h)
         # uv  = avango.gua.Vec2(0.0,1.0)
         t1_v3 = AtlasTileVertex(self.dt_node, self.id * 6 + 2, pos, uv)
         
-        pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(self.img_w_half, self.img_h_half, -self.focal_length - 0.02)
         uv  = avango.gua.Vec2(self.tile_pos_x, self.tile_pos_y)
         # uv  = avango.gua.Vec2(0.0,0.0)
         t2_v4 = AtlasTileVertex(self.dt_node, self.id * 6 + 3, pos, uv)
         
-        pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(-self.img_w_half, self.img_h_half, -self.focal_length- 0.02)
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y )
         # uv  = avango.gua.Vec2(1.0,0.0)
         t2_v5 = AtlasTileVertex(self.dt_node, self.id * 6 + 4, pos, uv)
 
-        pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length)
+        pos = transform * avango.gua.Vec3(-self.img_w_half, -self.img_h_half, -self.focal_length- 0.02 )
         uv  = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
         # uv  = avango.gua.Vec2(1.0,1.0)
         t2_v6 = AtlasTileVertex(self.dt_node, self.id * 6 + 5, pos, uv)
@@ -145,37 +149,6 @@ class AtlasTile:
         self.max_uv = avango.gua.Vec2(self.tile_pos_x + self.tile_w, self.tile_pos_y + self.tile_h)
         print(self.id, 'min uv', self.min_uv, 'max uv', self.max_uv)
         self.quad_vertices = [t1_v1, t1_v2, t1_v3, t2_v4, t2_v5, t2_v6]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ###

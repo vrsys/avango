@@ -157,8 +157,8 @@ class User:
         self.set_eye_distance(0.064)
         # self.set_eye_distance(0.000)
 
-        if HEADTRACKING_SENSOR_STATION == 'tracking-dbl-video-camera':
-            self.set_eye_distance(0.0)
+        # if HEADTRACKING_SENSOR_STATION == 'tracking-dbl-video-camera':
+            # self.set_eye_distance(0.0)
         
 
 

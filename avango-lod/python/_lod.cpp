@@ -27,11 +27,25 @@
 #include "PLodPassDescription.hpp"
 #include "MLodNode.hpp"
 #include "PLodNode.hpp"
+#include "Auxi.hpp"
+#include "OctreeNode.hpp"
+#include "AuxAtlas.hpp"
+#include "AuxAtlasTile.hpp"
+#include "AuxFeature.hpp"
+#include "AuxSparsePoint.hpp"
+#include "AuxView.hpp"
 #include <avango/gua/lod/renderer/LodLoader.hpp>
 #include <avango/gua/lod/renderer/MLodPassDescription.hpp>
 #include <avango/gua/lod/renderer/PLodPassDescription.hpp>
 #include <avango/gua/lod/scenegraph/MLodNode.hpp>
 #include <avango/gua/lod/scenegraph/PLodNode.hpp>
+#include <avango/gua/lod/renderer/Auxi.hpp>
+#include <avango/gua/lod/renderer/OctreeNode.hpp>
+#include <avango/gua/lod/renderer/AuxAtlas.hpp>
+#include <avango/gua/lod/renderer/AuxAtlasTile.hpp>
+#include <avango/gua/lod/renderer/AuxFeature.hpp>
+#include <avango/gua/lod/renderer/AuxSparsePoint.hpp>
+#include <avango/gua/lod/renderer/AuxView.hpp>
 #include <avango/python/register_field.h>
 #include <boost/python.hpp>
 
@@ -57,9 +71,24 @@ BOOST_PYTHON_MODULE(_lod)
     av::gua::lod::PLodPassDescription::initClass();
     av::gua::lod::MLodNode::initClass();
     av::gua::lod::PLodNode::initClass();
+    av::gua::lod::Auxi::initClass();
+    av::gua::lod::OctreeNode::initClass();
+    av::gua::lod::AuxAtlas::initClass();
+    av::gua::lod::AuxAtlasTile::initClass();
+    av::gua::lod::AuxFeature::initClass();
+    av::gua::lod::AuxSparsePoint::initClass();
+    av::gua::lod::AuxView::initClass();
     init_MLodNode();
     init_PLodNode();
     init_MLodPassDescription();
     init_PLodPassDescription();
     init_LodLoader();
+    init_Auxi();
+    init_OctreeNode();
+    init_AuxAtlas();
+    init_AuxAtlasTile();
+    init_AuxFeature();
+    init_AuxSparsePoint();
+    init_AuxView();
+
 }

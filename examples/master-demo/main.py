@@ -33,17 +33,19 @@ from src.GriffinRotationNavigation import GriffinRotationNavigation
 from src.SpheronNavigation import SpheronNavigation
 from src.SteeringNavigation import SteeringNavigation
 
-class Picker(avango.script.Script):
-    SceneGraph = avango.gua.SFSceneGraph()
-    Ray        = avango.gua.SFRayNode()
-    Options    = avango.SFInt()
-    BlackList  = []
-    WhiteList  = []
-    Results    = avango.gua.MFPickResult()
+class ThisPicker(avango.script.Script):
 
     def __init__(self):
-        self.super(Picker).__init__()
+        self.super(ThisPicker).__init__()
         self.always_evaluate(True)
+        print('INIT THIS PICKER')
+
+        self.SceneGraph = avango.gua.SFSceneGraph()
+        self.Ray        = avango.gua.SFRayNode()
+        self.Options    = avango.SFInt()
+        self.BlackList  = []
+        self.WhiteList  = []
+        self.Results    = avango.gua.MFPickResult()
 
         self.SceneGraph.value = avango.gua.nodes.SceneGraph()
         self.Ray.value  = avango.gua.nodes.RayNode()
@@ -54,25 +56,30 @@ class Picker(avango.script.Script):
                              # | avango.gua.PickingOptions.PICK_ONLY_FIRST_FACE
 
     def evaluate(self):
+        print('black list: ',self.BlackList)
         results = self.SceneGraph.value.ray_test(self.Ray.value,
                                              self.Options.value,
-                                             self.BlackList,
-                                             self.WhiteList)
-        print(self.BlackList)
+                                             self.WhiteList,
+                                             self.BlackList)
 
         # print('aa ',len(results.value) )
         if len(results.value) > 0:
-            print(results.value[0].Name.value)
-            print(results.value[0].Name)
+            print('pick')
+            # print(results.value[0].Name.value)
+            print(results.value[0].Object.value.Name.value)
+            print(results.value[0].Object.value.Path.value)
             first_hit = results.value[0]
             # print(first_hit.WorldPosition.value)
+            for tag in results.value[0].Object.value.Tags.value:
+                print("tag: ", tag)
+
         self.Results.value = results.value
 
 nettrans = avango.gua.nodes.NetTransform(Name="net",
                                          # specify role, ip, and port
-                                         # Groupname="AVSERVER|127.0.0.1|7432")
+                                         Groupname="AVSERVER|127.0.0.1|7432")
                                          # Groupname="AVSERVER|141.54.147.59|7432")
-                                         Groupname="AVSERVER|141.54.147.60|7432")
+                                         # Groupname="AVSERVER|141.54.147.60|7432")
 
 def make_node_distributable(node):
     for child in node.Children.value:
@@ -86,8 +93,8 @@ def make_material_distributable(mat):
 
 
 def start():
-    aux_path = "/home/senu8384/Desktop/weissabgleich_halfsize.auxi"
-    atlas_path = "/home/senu8384/Desktop/salem_weissabgleich_halfsize_correct.atlas" 
+    aux_path = "/home/senu8384/Desktop/salem_weissabgleich/weissabgleich_halfsize.auxi"
+    atlas_path = "/home/senu8384/Desktop/salem_weissabgleich/salem_weissabgleich_halfsize_correct.atlas" 
 
     # Setup scene graph
     graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
@@ -100,11 +107,11 @@ def start():
     aux_loader = avango.gua.lod.nodes.Auxi()
     
     # setup study script
-    study_script = DemoScript()
-    study_script.my_constructor()
+    demo_script = DemoScript()
+    
 
     trans_node = avango.gua.nodes.TransformNode(Name="scene_trans")
-    trans_node.Transform.value = avango.gua.make_trans_mat(0, -1.0, 0) * \
+    trans_node.Transform.value = avango.gua.make_trans_mat(0, -1.0, 0.1) * \
                                  avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
     graph.Root.value.Children.value.append(trans_node)
 
@@ -120,14 +127,34 @@ def start():
     plod_node = lod_loader.load_lod_pointcloud(
         # "/home/ephtron/Documents/master-render-files/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS)
         # "/opt/3d_models/lamure/provenance/salem/salem_02.bvh", avango.gua.LoaderFlags.DEFAULTS) #OLD (17.09.19)
-        "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib.bvh", avango.gua.LoaderFlags.DEFAULTS)
+        "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib.bvh", avango.gua.lod.LoaderFlags.DEFAULTS | avango.gua.lod.LoaderFlags.MAKE_PICKABLE)
 
     plod_node.Material.value.set_uniform("Metalness", 0.0)
-    plod_node.Material.value.set_uniform("Emissivity", 1.0)
+    plod_node.Material.value.set_uniform("Emissivity", 2.0)
     plod_node.Material.value.set_uniform("Roughness", 1.0)
-    plod_node.Tags.value = ["pick"]
+    # plod_node.Tags.value = ["client"]
     # plod_node.ShadowMode.value = 1
     plod_trans_node.Children.value.append(plod_node)
+
+    box = mesh_loader.create_geometry_from_file(
+            "box",
+            "data/objects/cube.obj",
+            avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.MAKE_PICKABLE)
+    box.Tags.value = ['nopick']
+
+
+
+    # reconstruction = mesh_loader.create_geometry_from_file(
+    #     "reconstruction",
+    #     "/opt/3d_models/lamure/provenance/salem_weissabgleich/salem_calib.obj",
+    #     avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.MAKE_PICKABLE)
+    # reconstruction.Material.value.set_uniform("Metalness", 0.0)
+    # reconstruction.Material.value.set_uniform("Emissivity", 2.0)
+    # reconstruction.Material.value.set_uniform("Roughness", 1.0)
+    # reconstruction.Tags.value = ["pick"]  
+
+
+    # trans_node.Children.value.append(reconstruction)
 
     # Init Atlas Images
     vt_mat = avango.gua.nodes.Material()
@@ -137,6 +164,7 @@ def start():
 
     atlas_tiles = []
     atlas_trans_node = avango.gua.nodes.TransformNode(Name="atlas_trans_node")
+    atlas_trans_node.Children.value.append(box)
     # atlas_trans_node.Tags.value = ["client"]
 
     atlas_tiles_node = dt_loader.create_empty_geometry(
@@ -161,13 +189,18 @@ def start():
     for quad_id in range(view_num):
     # for quad_id in range(10):
         view = aux_loader.get_view(quad_id)
+        print('Image Width: ', view.get_image_width() )
+        print('Focal Length X: ', view.get_focal_value_x() )
+        print('Focal Length Y: ', view.get_focal_value_y() )
+        print('Dist: ', view.get_distortion() )
         atlas_tile = aux_loader.get_atlas_tile(quad_id)
+        print('Tile Width: ', atlas_tile.get_width() )
         atlas = aux_loader.get_atlas()
         at = AtlasTile(graph, atlas_tiles_node, quad_id, view, atlas_tile, atlas)
         atlas_tiles.append(at)
         
     trans_node.Children.value.append(atlas_trans_node)
-    atlas_trans_node.Children.value.append(atlas_tiles_node)
+    # atlas_trans_node.Children.value.append(atlas_tiles_node)
 
     multi_view_trans_node = avango.gua.nodes.TransformNode(Name="multi_view_trans_node")
     multi_view_trans_node.Transform.value = avango.gua.make_trans_mat(-4.0,1.0,1.0) *\
@@ -184,6 +217,7 @@ def start():
     # perspective_picker.my_constructor()
     # perspective_picker.set_localized_image_list(atlas_tiles)
     # perspective_picker.set_visualizer(multi_window_viz, 'texture')
+    demo_script.my_constructor(plod_node, atlas_tiles_node)
 
     hostname = subprocess.Popen(["hostname"], stdout=subprocess.PIPE, universal_newlines=True).communicate()[0]
     hostname = hostname.strip("\n")
@@ -201,18 +235,31 @@ def start():
                 SCREEN_DIMENSIONS = avango.gua.Vec2(4.97, 2.77),
                 # TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.435,2.0), # OLD
                 TRACKING_TRANSMITTER_OFFSET = avango.gua.make_trans_mat(0.0,-1.435,1.6), # new 21.06.2019
-                # DISPLAY_STRING_LIST = [":0.4", ":0.1", ":0.0", ":0.3", ":0.2", ":0.5"], # number of available GPUs (users)  ORIGINAL
-                DISPLAY_STRING_LIST = [":0.3", ":0.5", ":0.4", ":0.1", ":0.0", ":0.2"], # number of available GPUs (users)
+                DISPLAY_STRING_LIST = [":0.4", ":0.1", ":0.0", ":0.3", ":0.2", ":0.5"], # number of available GPUs (users)  ORIGINAL
+                # DISPLAY_STRING_LIST = [":0.3", ":0.5", ":0.4", ":0.1", ":0.0", ":0.2"], # number of available GPUs (users)
                 LEFT_POSITION = avango.gua.Vec2ui(90, 0),
                 LEFT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 RIGHT_POSITION = avango.gua.Vec2ui(4096 + 90, 0),
                 RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 -90 -95, 2160),
                 )
+
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-G")
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-H")
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "tracking-dbl-glasses-I")
             viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni1") # S/N nummer auf der brille
+            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni3") # U3 Kleber 
             viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni2") # Weisser kleber mit 8 auf der brille
-            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni3") # U3 kleber auf der brille
-            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni4") # Kleber 2A
-            viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni5") # U1 Kleber
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni3") # U3 kleber auf der brille
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni4") # Kleber 2A
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni5") # U1 Kleber
+
+            # Volifoni setup
+            # DISPLAY_STRING_LIST = [":0.3", ":0.5", ":0.4", ":0.1", ":0.0", ":0.2"], # number of available GPUs (users)
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni1") # S/N nummer auf der brille
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni2") # Weisser kleber mit 8 auf der brille
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni3") # U3 kleber auf der brille
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni4") # Kleber 2A
+            # viewingSetup.init_user(HEADTRACKING_SENSOR_STATION = "Volifoni5") # U1 Kleber
 
         # setup navigation and input devices
         keyboard = KeyboardDevice()
@@ -265,6 +312,7 @@ def start():
             # pointer_node.Children.value.append(dynamic_lense)
             pointer_node.Children.value.append(dynamic_transform)
             pointer_node.Children.value.append(tracked_lense_projection.frame_transform)
+            pointer_node.Children.value.append(tracked_lense_projection.direction_transform)
             # perspective_picker.set_projection_lense(dynamic_lense, dynamic_transform, dynamic_transform)
             # perspective_picker.Button0.connect_from(pointer_button_sensor.Button0)
             tracked_lense_projection.set_lens_center(avango.gua.make_trans_mat(-0.30, -0.05, 0.0))
@@ -322,32 +370,32 @@ def start():
             tracked_lense_projection.Button2.connect_from(pointer_button_sensor.Button2)
 
 
-        study_script.set_screen(viewingSetup.screen_node)
-        study_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
-        # study_script.Button0.connect_from(pointer_button_sensor.Button0)
-        # study_script.Button1.connect_from(pointer_button_sensor.Button1)
-        # study_script.Button2.connect_from(pointer_button_sensor.Button2)
+        demo_script.set_screen(viewingSetup.screen_node)
+        demo_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
+        # demo_script.Button0.connect_from(pointer_button_sensor.Button0)
+        # demo_script.Button1.connect_from(pointer_button_sensor.Button1)
+        # demo_script.Button2.connect_from(pointer_button_sensor.Button2)
 
-        study_script.StudyStateCorrectButton.connect_from(keyboard.KeyRight)
-        study_script.StudyStateFalseButton.connect_from(keyboard.KeyLeft)
+        demo_script.StudyStateCorrectButton.connect_from(keyboard.KeyRight)
+        demo_script.StudyStateFalseButton.connect_from(keyboard.KeyLeft)
 
-        study_script.StudyStateButton.connect_from(griffin_input.get_button0_field() )
-        # # study_script.IndicatorButton.connect_from(griffin_input.get_button0_field() )
-        study_script.NextButton.connect_from(keyboard.KeyN)
-        study_script.PrevButton.connect_from(keyboard.KeyM)
+        demo_script.StudyStateButton.connect_from(griffin_input.get_button0_field() )
+        # # demo_script.IndicatorButton.connect_from(griffin_input.get_button0_field() )
+        demo_script.NextButton.connect_from(keyboard.KeyN)
+        demo_script.PrevButton.connect_from(keyboard.KeyM)
 
         # if study_condition == 'lense':
 
-        study_script.set_picker_and_navigation(tracked_lense_projection, griffin_navigation)
+        demo_script.set_picker_and_navigation(tracked_lense_projection, griffin_navigation)
         # elif study_condition == 'wall':
 
-        #     study_script.set_picker_and_navigation(perspective_picker, griffin_navigation)
+        #     demo_script.set_picker_and_navigation(perspective_picker, griffin_navigation)
         # elif study_condition == 'demo':
-        #     study_script.set_picker_and_navigation(tracked_lense_projection, griffin_navigation)
+        #     demo_script.set_picker_and_navigation(tracked_lense_projection, griffin_navigation)
         
-        study_script.set_image_updater(perspective_picker)
-        study_script.set_wall(multi_window_viz)
-        study_script.set_viewing_setup(viewingSetup)
+        demo_script.set_image_updater(perspective_picker)
+        demo_script.set_wall(multi_window_viz)
+        demo_script.set_viewing_setup(viewingSetup)
 
         for _user in viewingSetup.user_list:
             vt_backend.add_camera(_user.camera_node)
@@ -422,7 +470,8 @@ def start():
         ray_geom.Transform.value = avango.gua.make_scale_mat(0.1, 0.1, 100)
         pick_ray.Children.value.append(ray_geom)
 
-        picker = Picker()
+        picker = ThisPicker()
+        picker.BlackList = ["nopick"]
         picker.SceneGraph.value = graph
         picker.Ray.value = pick_ray
 
@@ -499,7 +548,7 @@ def start():
         vt_backend.start_backend()
 
         keyboard = KeyboardDevice()
-        # study_script.set_screen(screen)
+        # demo_script.set_screen(screen)
 
         # setup navigator
         navigator = examples_common.navigator.Navigator()
@@ -519,10 +568,10 @@ def start():
         photo_projection.Button0.connect_from(navigator.Mouse.ButtonLeft)
         photo_projection.Button1.connect_from(navigator.Mouse.ButtonRight)
         perspective_picker.Button0.connect_from(navigator.Mouse.ButtonLeft)
-        # study_script.IndicatorButton.connect_from(navigator.Keyboard.KeyI)
-        # study_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
-        # study_script.NextButton.connect_from(navigator.Keyboard.KeyN)
-        # study_script.PrevButton.connect_from(navigator.Keyboard.KeyM)
+        # demo_script.IndicatorButton.connect_from(navigator.Keyboard.KeyI)
+        # demo_script.StudyStateKeyboardButton.connect_from(keyboard.KeySpace)
+        # demo_script.NextButton.connect_from(navigator.Keyboard.KeyN)
+        # demo_script.PrevButton.connect_from(navigator.Keyboard.KeyM)
         # capture_script.K_Key.connect_from(navigator.Keyboard.KeyK)
         # capture_script.C_Key.connect_from(navigator.Keyboard.KeyC)
         # capture_script.V_Key.connect_from(navigator.Keyboard.KeyV)
@@ -564,26 +613,26 @@ def print_fields(node, print_values = False):
     if print_values:
         print("  with value '{0}'".format(field.value))
 
-def setup_picker(mesh_loader, node, graph):
-    # setup pick ray
-    pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
-    pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
-                               avango.gua.make_scale_mat(1.0, 1.0, 1.0)
+# def setup_picker(mesh_loader, node, graph):
+#     # setup pick ray
+#     pick_ray = avango.gua.nodes.RayNode(Name = "pick_ray")
+#     pick_ray.Transform.value = avango.gua.make_trans_mat(0.0, -0.15, 0.0) * \
+#                                avango.gua.make_scale_mat(1.0, 1.0, 1.0)
 
-    ray_geom = mesh_loader.create_geometry_from_file(
-        "ray_geom",
-        "data/objects/cylinder.obj",
-        avango.gua.LoaderFlags.DEFAULTS)
+#     ray_geom = mesh_loader.create_geometry_from_file(
+#         "ray_geom",
+#         "data/objects/cylinder.obj",
+#         avango.gua.LoaderFlags.DEFAULTS)
   
-    ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
-    pick_ray.Children.value.append(ray_geom)
+#     ray_geom.Transform.value = avango.gua.make_scale_mat(0.01, 0.01, 10)
+#     pick_ray.Children.value.append(ray_geom)
 
-    picker = Picker()
-    picker.BlackList = ['hallo']
-    picker.SceneGraph.value = graph
-    picker.Ray.value = pick_ray
-    node.Children.value.append(pick_ray)
-    return Picker
+#     picker = Picker()
+#     picker.BlackList = ['nopick']
+#     picker.SceneGraph.value = graph
+#     picker.Ray.value = pick_ray
+#     node.Children.value.append(pick_ray)
+#     return Picker
 
 if __name__ == '__main__':
     

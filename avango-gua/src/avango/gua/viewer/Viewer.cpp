@@ -70,7 +70,6 @@ void av::gua::Viewer::initClass()
     }
 }
 
-
 void av::gua::Viewer::frame()
 {
     if(!m_renderer)
@@ -115,7 +114,6 @@ void av::gua::Viewer::frame()
     {
         window->process_events();
 
-
         if(window->should_close())
         {
             window->close();
@@ -139,9 +137,7 @@ void av::gua::Viewer::run()
     }
 #endif
 
-
     // PyThreadState* save_state(PyEval_SaveThread());
-
 
     m_ticker.on_tick.connect([&, this]() {
         // PyEval_RestoreThread(save_state);
@@ -150,7 +146,6 @@ void av::gua::Viewer::run()
 
         // save_state = PyEval_SaveThread();
     });
-
 
     m_loop.start();
 

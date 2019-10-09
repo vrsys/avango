@@ -1,6 +1,0 @@
-#ifndef AV_PYTHON_GUA_LOD_AUXATLAS_HPP
-#define AV_PYTHON_GUA_LOD_AUXATLAS_HPP
-
-void init_AuxAtlas();
-
-#endif //AV_PYTHON_GUA_LOD_AUXATLAS_HPP

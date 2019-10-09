@@ -1,6 +1,0 @@
-#ifndef AV_PYTHON_GUA_LOD_OCTREE_NODE_HPP
-#define AV_PYTHON_GUA_LOD_OCTREE_NODE_HPP
-
-void init_OctreeNode();
-
-#endif //AV_PYTHON_GUA_LOD_OCTREE_NODE_HPP

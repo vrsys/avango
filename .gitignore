@@ -59,12 +59,4 @@ avango-daemon/include/avango/daemon/Config.h
 #examples/zmq_distribution/data
 avango-skelanim/examples/skeletal_animation/data/
 
-examples/ephras_app/data/salem.*
-examples/ephras_app/data/salem_02.*
-
-examples/prov_explore_images/.idea/*
-examples/prov_explore_images/.idea
-
-
 .idea*
-

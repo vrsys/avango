@@ -137,6 +137,7 @@ class KeyboardDevice(avango.script.Script):
     Key2 = avango.SFBool()
     KeyLeft = avango.SFBool()
     KeyRight = avango.SFBool()
+    KeySpace = avango.SFBool()
 
     def __init__(self):
         self.super(KeyboardDevice).__init__()
@@ -144,24 +145,23 @@ class KeyboardDevice(avango.script.Script):
         self.device_sensor = avango.daemon.nodes.DeviceSensor(
             DeviceService=avango.daemon.DeviceService())
         self.device_sensor.Station.value = "device-keyboard"
+        
 
         self.always_evaluate(True)
 
-    '''
     def set_device_number(self, number):
         self.device_sensor = avango.daemon.nodes.DeviceSensor(
             DeviceService=avango.daemon.DeviceService())
         self.device_sensor.Station.value = "gua-device-keyboard" + str(number)
-    '''
-
+    
     def evaluate(self):
-
         self.KeyQ.value = self.device_sensor.Button0.value
         self.KeyW.value = self.device_sensor.Button1.value
         self.KeyE.value = self.device_sensor.Button2.value
         self.KeyR.value = self.device_sensor.Button3.value
         self.KeyT.value = self.device_sensor.Button4.value
-        self.KeyZ.value = self.device_sensor.Button5.value
+        # self.KeyZ.value = self.device_sensor.Button5.value
+        self.KeySpace.value = self.device_sensor.Button5.value
         self.KeyU.value = self.device_sensor.Button6.value
         self.KeyI.value = self.device_sensor.Button7.value
         self.KeyO.value = self.device_sensor.Button8.value
@@ -190,6 +190,7 @@ class KeyboardDevice(avango.script.Script):
         self.Key2.value = self.device_sensor.Button29.value
         self.KeyLeft.value = self.device_sensor.Button30.value
         self.KeyRight.value = self.device_sensor.Button31.value
+        # self.KeySpace.value = self.device_sensor.Button32.value
 
 # class PointerDevice(avango.script.Script):
 

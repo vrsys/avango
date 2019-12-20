@@ -61,7 +61,7 @@ av::gua::MFPickResult* av::gua::PLODLoader::pick_plod_interpolate(::gua::math::v
     auto gua_results = m_guaPLODLoader->pick_plod_interpolate(bundle_origin, bundle_forward, bundle_up, bundle_radius, max_distance, max_depth, surfel_skip, aabb_scale);
 
     auto results(new av::gua::MFPickResult());
-    for(auto result : gua_results)
+    for(auto const& result : gua_results)
     {
         results->add1Value(new av::gua::PickResult(result));
     }

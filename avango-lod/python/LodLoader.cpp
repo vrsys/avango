@@ -21,6 +21,19 @@ struct pointee<av::Link<T>>
 } // namespace python
 } // namespace boost
 
+av::gua::MFNode*
+loadLodPointcloudsFromVisFile1(av::gua::lod::LodLoader const& loader, std::string const& visFileName, av::Link<av::gua::Material> const& fallbackMaterial, int flags)
+{
+    return loader.loadLodPointcloudsFromVisFile(visFileName, fallbackMaterial, static_cast<av::gua::lod::LodLoader::Flags>(flags));
+}
+
+av::gua::MFNode*
+loadLodPointcloudsFromVisFile2(av::gua::lod::LodLoader const& loader, std::string const& visFileName, int flags)
+{
+    return loader.loadLodPointcloudsFromVisFile(visFileName, static_cast<av::gua::lod::LodLoader::Flags>(flags));
+}
+
+
 av::Link<av::gua::Node>
 loadLodPointcloud1(av::gua::lod::LodLoader const& loader, std::string const& nodeName, std::string const& fileName, av::Link<av::gua::Material> const& fallbackMaterial, int flags)
 {
@@ -76,7 +89,10 @@ void init_LodLoader()
         .def("load_lod_trimesh", &loadLodTrimesh1)
         .def("load_lod_trimesh", &loadLodTrimesh2)
         .def("pick_plod_bvh", &pick_plod_bvh)
-        .def("pick_plod_interpolate", &pick_plod_interp, return_value_policy<manage_new_object>());
+        .def("pick_plod_interpolate", &pick_plod_interp, return_value_policy<manage_new_object>())
+        .def("load_lod_pointclouds_from_vis_file", &loadLodPointcloudsFromVisFile1, return_value_policy<manage_new_object>())
+        .def("load_lod_pointclouds_from_vis_file", &loadLodPointcloudsFromVisFile2, return_value_policy<manage_new_object>())
+        ;
 
     enum_<av::gua::lod::LodLoader::Flags>("LoaderFlags")
         .value("DEFAULTS", av::gua::lod::LodLoader::DEFAULTS)

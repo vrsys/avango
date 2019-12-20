@@ -48,6 +48,9 @@ class AV_GUA_LOD_DLL LodLoader : public av::FieldContainer
      */
     LodLoader(::gua::LodLoader* guaLodLoader = new ::gua::LodLoader());
 
+    av::gua::MFNode* loadLodPointcloudsFromVisFile(std::string const& visFileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags = DEFAULTS) const;
+    av::gua::MFNode* loadLodPointcloudsFromVisFile(std::string const& visFileName, Flags flags = DEFAULTS) const;
+
     av::Link<av::gua::Node> loadLodPointcloud(std::string const& nodeName, std::string const& fileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags = DEFAULTS) const;
 
     av::Link<av::gua::Node> loadLodPointcloud(std::string const& fileName, Flags flags = DEFAULTS) const;

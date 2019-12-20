@@ -25,6 +25,37 @@ av::gua::lod::LodLoader::LodLoader(::gua::LodLoader* guaLodLoader) : m_guaLodLoa
 // av::gua::lod::LodLoader::~LodLoader()
 //{}
 
+av::gua::MFNode* av::gua::lod::LodLoader::loadLodPointcloudsFromVisFile(std::string const& visFileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags) const {
+    auto gua_node_vector(m_guaLodLoader->load_lod_pointclouds_from_vis_file(visFileName, fallbackMaterial->getGuaMaterial(), flags));
+
+    std::vector<av::Link<av::gua::Node>> av_linked_gua_nodes(gua_node_vector.size(), nullptr);
+
+    auto mf_nodes(new av::gua::MFNode());
+
+    for(auto const& gua_node : gua_node_vector)
+    {
+        mf_nodes->add1Value(createChildren(gua_node));
+    }
+
+    return mf_nodes;
+}
+
+av::gua::MFNode* av::gua::lod::LodLoader::loadLodPointcloudsFromVisFile(std::string const& visFileName, Flags flags) const {
+    auto gua_node_vector(m_guaLodLoader->load_lod_pointclouds_from_vis_file(visFileName, flags));
+
+    std::vector<av::Link<av::gua::Node>> av_linked_gua_nodes(gua_node_vector.size(), nullptr);
+
+    auto mf_nodes(new av::gua::MFNode());
+
+    for(auto const& gua_node : gua_node_vector)
+    {
+        mf_nodes->add1Value(createChildren(gua_node));
+    }
+
+    return mf_nodes;
+}
+
+
 av::Link<av::gua::Node> av::gua::lod::LodLoader::loadLodPointcloud(std::string const& nodeName, std::string const& fileName, av::Link<av::gua::Material> const& fallbackMaterial, Flags flags) const
 {
     auto gua_node(m_guaLodLoader->load_lod_pointcloud(nodeName, fileName, fallbackMaterial->getGuaMaterial(), flags));
@@ -116,7 +147,7 @@ av::gua::Node* av::gua::lod::LodLoader::createChildren(std::shared_ptr<::gua::no
         std::cout << "Unexpected node type encountered while loading geometry!" << std::endl;
     }
 
-    for(auto c : root->get_children())
+    for(auto const& c : root->get_children())
     {
         createChildren(c);
     }
@@ -154,7 +185,7 @@ av::gua::MFPickResult* av::gua::lod::LodLoader::pick_plod_interpolate(::gua::mat
     auto gua_results = m_guaLodLoader->pick_lod_interpolate(bundle_origin, bundle_forward, bundle_up, bundle_radius, max_distance, max_depth, surfel_skip, aabb_scale);
 
     auto results(new av::gua::MFPickResult());
-    for(auto result : gua_results)
+    for(auto const& result : gua_results)
     {
         results->add1Value(new av::gua::PickResult(result));
     }

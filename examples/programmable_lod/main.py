@@ -7,6 +7,8 @@ from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+OPEN_2_WINDOWS = True
+
 def start():
 
   graph  = avango.gua.nodes.SceneGraph(Name = "scene")
@@ -32,6 +34,11 @@ def start():
     graph.Root.value.Children.value.append(node)
     node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 1.5) * node.Transform.value
     node.ShadowMode.value = 1
+
+    node.TimeCursorPosition.value = 10.0
+    node.TimeSeriesDeformFactor.value = 1000.0
+
+    node.AttributeToVisualizeIndex.value = 3
 
   new_cube = mesh_loader.create_geometry_from_file(
     "cube",
@@ -123,11 +130,33 @@ def start():
     SceneGraph = "scene",
     Resolution = size,
     OutputWindowName = "window",
-    EyeDistance = 0.2,
+    EyeDistance = 0.06,
     EnableStereo = False,
     Children = [screen],
     Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
   )
+
+
+  if OPEN_2_WINDOWS:
+    screen2 = avango.gua.nodes.ScreenNode(Name = "screen2",
+                                         Width = 4.8,
+                                         Height = 2.7)
+
+    screen2.Transform.value = avango.gua.make_trans_mat(0.0, 0.0, -6.5)
+
+    camera2 = avango.gua.nodes.CameraNode(
+      Name = "cam2",
+      LeftScreenPath = "/cam2/screen2",
+      RightScreenPath = "/cam2/screen2",
+      SceneGraph = "scene",
+      Resolution = size,
+      OutputWindowName = "window2",
+      EyeDistance = 0.06,
+      EnableStereo = False,
+      Children = [screen2],
+      Transform = avango.gua.make_trans_mat(0.0, 0.0, 2.0)
+    )
+
 
   res_pass = avango.gua.nodes.ResolvePassDescription()
   res_pass.EnableSSAO.value = False
@@ -161,19 +190,36 @@ def start():
   )
 
   camera.PipelineDescription.value = pipeline_description
-
   graph.Root.value.Children.value.append(camera)
+
+  if OPEN_2_WINDOWS:
+    camera2.PipelineDescription.value = pipeline_description
+    graph.Root.value.Children.value.append(camera2)
 
   window = avango.gua.nodes.Window(
     Size = size,
-    Title = "shadows",
+    Title = "Programmable LOD",
     LeftResolution = size,
     RightResolution = size,
     EnableVsync = False,
     StereoMode = avango.gua.StereoMode.MONO
   )
 
+  if OPEN_2_WINDOWS:
+    window2 = avango.gua.nodes.Window(
+      Size = size,
+      Title = "Programmable LOD",
+      LeftResolution = size,
+      RightResolution = size,
+      EnableVsync = False,
+      StereoMode = avango.gua.StereoMode.MONO
+      #StereoMode = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
+    )
+
   avango.gua.register_window("window", window)
+
+  if OPEN_2_WINDOWS:
+    avango.gua.register_window("window2", window2)
 
   navigator = examples_common.navigator.Navigator()
   navigator.StartLocation.value = camera.Transform.value.get_translate()
@@ -187,7 +233,12 @@ def start():
   viewer = avango.gua.nodes.Viewer()
   # viewer.DesiredFPS.value = 200
   viewer.SceneGraphs.value = [graph]
-  viewer.Windows.value = [window]
+
+
+  if OPEN_2_WINDOWS:
+    viewer.Windows.value = [window, window2]
+  else:
+    viewer.Windows.value = [window]
 
   timer = avango.nodes.TimeSensor()
 

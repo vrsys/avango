@@ -58,6 +58,17 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
     SFFloat ErrorThreshold;
     SFBool EnableBackfaceCulling;
 
+    SFBool EnableTimeSeriesColoring;
+    SFBool EnableTimeSeriesDeformation;
+    SFBool EnableAutomaticPlayback;
+
+    SFFloat TimeSeriesPlaybackSpeed;
+    SFFloat TimeSeriesDeformFactor;
+    SFFloat TimeCursorPosition;
+
+    SFInt AttributeToVisualizeIndex;
+
+
     virtual void setGeometryCB(const SFString::SetValueEvent& event);
     virtual void getGeometryCB(const SFString::GetValueEvent& event);
 
@@ -75,6 +86,28 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
 
     virtual void setEnableBackfaceCullingCB(const SFBool::SetValueEvent& event);
     virtual void getEnableBackfaceCullingCB(const SFBool::GetValueEvent& event);
+
+    // time series visualization related
+    virtual void setEnableTimeSeriesColoringCB(const SFBool::SetValueEvent& event);
+    virtual void getEnableTimeSeriesColoringCB(const SFBool::GetValueEvent& event);
+
+    virtual void setEnableTimeSeriesDeformationCB(const SFBool::SetValueEvent& event);
+    virtual void getEnableTimeSeriesDeformationCB(const SFBool::GetValueEvent& event);
+
+    virtual void setEnableAutomaticPlaybackCB(const SFBool::SetValueEvent& event);
+    virtual void getEnableAutomaticPlaybackCB(const SFBool::GetValueEvent& event);
+
+    virtual void setTimeSeriesPlaybackSpeedCB(const SFFloat::SetValueEvent& event);
+    virtual void getTimeSeriesPlaybackSpeedCB(const SFFloat::GetValueEvent& event);
+
+    virtual void setTimeCursorPositionCB(const SFFloat::SetValueEvent& event);
+    virtual void getTimeCursorPositionCB(const SFFloat::GetValueEvent& event);
+
+    virtual void setTimeSeriesDeformFactorCB(const SFFloat::SetValueEvent& event);
+    virtual void getTimeSeriesDeformFactorCB(const SFFloat::GetValueEvent& event);
+
+    virtual void setAttributeToVisualizeIndexCB(const SFInt::SetValueEvent& event);
+    virtual void getAttributeToVisualizeIndexCB(const SFInt::GetValueEvent& event);
 
   private:
     std::shared_ptr<::gua::node::PLodNode> m_guaPLodNode;

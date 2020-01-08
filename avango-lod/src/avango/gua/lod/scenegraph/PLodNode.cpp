@@ -186,3 +186,22 @@ void av::gua::lod::PLodNode::update_cursor_position(float elapsed_frametime_ms) 
 {
     m_guaPLodNode->update_time_cursor(elapsed_frametime_ms);
 }
+
+av::gua::SFMatrix* av::gua::lod::PLodNode::get_active_time_series_transform() const {
+    auto gua_matrix = scm::math::mat4d(m_guaPLodNode->get_active_time_series_transform());
+
+    auto result(new av::gua::SFMatrix());
+    
+    result->setValue( (gua_matrix) );
+ 
+    return result;
+}
+
+av::SFFloat* av::gua::lod::PLodNode::get_current_time_step() const {
+    float current_time_step = m_guaPLodNode->get_current_time_step();
+
+    auto result(new av::SFFloat());
+    result->setValue(current_time_step);
+
+    return result;
+}

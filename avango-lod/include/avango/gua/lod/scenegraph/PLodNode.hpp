@@ -132,6 +132,8 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
 
   public:
     void update_cursor_position(float elapsed_frametime_ms) const;
+    SFFloat* get_current_time_step() const;
+    av::gua::SFMatrix* get_active_time_series_transform() const;
 };
 
 typedef SingleField<Link<PLodNode>> SFPLodNode;

@@ -21,8 +21,16 @@ struct pointee<av::Link<T>>
 } // namespace boost
 
 void update_cursor_position(av::gua::lod::PLodNode const& plod_node,
-					  float elapsed_frame_time_ms) {
+					  	    float elapsed_frame_time_ms) {
 	plod_node.update_cursor_position(elapsed_frame_time_ms);
+}
+
+av::gua::SFMatrix* get_active_time_series_transform(av::gua::lod::PLodNode const& plod_node) {
+	return plod_node.get_active_time_series_transform();
+}
+
+av::SFFloat* get_current_time_step(av::gua::lod::PLodNode const& plod_node) {
+	return plod_node.get_current_time_step();
 }
 
 void init_PLodNode()
@@ -32,5 +40,7 @@ void init_PLodNode()
 
     class_<av::gua::lod::PLodNode, av::Link<av::gua::lod::PLodNode>, bases<av::gua::GeometryNode>, boost::noncopyable>("PLodNode", "docstring", no_init)
         .def("update_cursor_position", &update_cursor_position)
+        .def("get_active_time_series_transform", &get_active_time_series_transform, return_value_policy<manage_new_object>())
+        .def("get_current_time_step", &get_current_time_step, return_value_policy<manage_new_object>())
         ;
 }

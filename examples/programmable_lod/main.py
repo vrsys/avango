@@ -38,6 +38,8 @@ class TimedFEMUpdate(avango.script.Script):
         #the cursor position is updates using milliseconds
         self.reference_node.update_cursor_position(elapsed_seconds * 1000.0)
 
+        #print(self.reference_node.get_current_time_step().value) #timestep for interpolating train position
+        #print(self.reference_node.get_active_time_series_transform().value ) #transform for train position from fem space to point cloud space
 
 def start():
 
@@ -66,7 +68,7 @@ def start():
 
     node.TimeSeriesDeformFactor.value = 10000.0
     node.TimeSeriesPlaybackSpeed.value = 1.0
-    
+
     node.EnableAutomaticPlayback.value = True
 
     node.AttributeToVisualizeIndex.value = 3

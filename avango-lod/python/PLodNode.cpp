@@ -20,10 +20,17 @@ struct pointee<av::Link<T>>
 } // namespace python
 } // namespace boost
 
+void update_cursor_position(av::gua::lod::PLodNode const& plod_node,
+					  float elapsed_frame_time_ms) {
+	plod_node.update_cursor_position(elapsed_frame_time_ms);
+}
+
 void init_PLodNode()
 {
     register_field<av::gua::lod::SFPLodNode>("SFPLodNode");
     register_multifield<av::gua::lod::MFPLodNode>("MFPLodNode");
 
-    class_<av::gua::lod::PLodNode, av::Link<av::gua::lod::PLodNode>, bases<av::gua::GeometryNode>, boost::noncopyable>("PLodNode", "docstring", no_init);
+    class_<av::gua::lod::PLodNode, av::Link<av::gua::lod::PLodNode>, bases<av::gua::GeometryNode>, boost::noncopyable>("PLodNode", "docstring", no_init)
+        .def("update_cursor_position", &update_cursor_position)
+        ;
 }

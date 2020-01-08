@@ -33,13 +33,22 @@ av::gua::lod::PLodNode::PLodNode(std::shared_ptr<::gua::node::PLodNode> guanode)
         EnableAutomaticPlayback, std::bind(&PLodNode::getEnableAutomaticPlaybackCB, this, std::placeholders::_1), std::bind(&PLodNode::setEnableAutomaticPlaybackCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(
+        EnableTemporalInterpolation, std::bind(&PLodNode::getEnableTemporalInterpolationCB, this, std::placeholders::_1), std::bind(&PLodNode::setEnableTemporalInterpolationCB, this, std::placeholders::_1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(
         TimeSeriesPlaybackSpeed, std::bind(&PLodNode::getTimeSeriesPlaybackSpeedCB, this, std::placeholders::_1), std::bind(&PLodNode::setTimeSeriesPlaybackSpeedCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(
         TimeSeriesDeformFactor, std::bind(&PLodNode::getTimeSeriesDeformFactorCB, this, std::placeholders::_1), std::bind(&PLodNode::setTimeSeriesDeformFactorCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(
+        AttributeColorToMixInFactor, std::bind(&PLodNode::getAttributeColorToMixInFactorCB, this, std::placeholders::_1), std::bind(&PLodNode::setAttributeColorToMixInFactorCB, this, std::placeholders::_1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(
         AttributeToVisualizeIndex, std::bind(&PLodNode::getAttributeToVisualizeIndexCB, this, std::placeholders::_1), std::bind(&PLodNode::setAttributeToVisualizeIndexCB, this, std::placeholders::_1));
+
+    AV_FC_ADD_ADAPTOR_FIELD(
+        ActiveTimeSeriesIndex, std::bind(&PLodNode::getActiveTimeSeriesIndexCB, this, std::placeholders::_1), std::bind(&PLodNode::setActiveTimeSeriesIndexCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(
         TimeCursorPosition, std::bind(&PLodNode::getTimeCursorPositionCB, this, std::placeholders::_1), std::bind(&PLodNode::setTimeCursorPositionCB, this, std::placeholders::_1));
@@ -142,6 +151,10 @@ void av::gua::lod::PLodNode::getEnableAutomaticPlaybackCB(const SFBool::GetValue
 
 void av::gua::lod::PLodNode::setEnableAutomaticPlaybackCB(const SFBool::SetValueEvent& event) { m_guaPLodNode->set_enable_automatic_playback(event.getValue()); }
 
+void av::gua::lod::PLodNode::getEnableTemporalInterpolationCB(const SFBool::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_enable_temporal_interpolation(); }
+
+void av::gua::lod::PLodNode::setEnableTemporalInterpolationCB(const SFBool::SetValueEvent& event) { m_guaPLodNode->set_enable_temporal_interpolation(event.getValue()); }
+
 void av::gua::lod::PLodNode::getTimeSeriesPlaybackSpeedCB(const SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_time_series_playback_speed(); }
 
 void av::gua::lod::PLodNode::setTimeSeriesPlaybackSpeedCB(const SFFloat::SetValueEvent& event) { m_guaPLodNode->set_time_series_playback_speed(event.getValue()); }
@@ -150,12 +163,26 @@ void av::gua::lod::PLodNode::getTimeSeriesDeformFactorCB(const SFFloat::GetValue
 
 void av::gua::lod::PLodNode::setTimeSeriesDeformFactorCB(const SFFloat::SetValueEvent& event) { m_guaPLodNode->set_time_series_deform_factor(event.getValue()); }
 
+void av::gua::lod::PLodNode::getAttributeColorToMixInFactorCB(const SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_attribute_color_mix_in_factor(); }
+
+void av::gua::lod::PLodNode::setAttributeColorToMixInFactorCB(const SFFloat::SetValueEvent& event) { m_guaPLodNode->set_attribute_color_mix_in_factor(event.getValue()); }
+
 void av::gua::lod::PLodNode::getAttributeToVisualizeIndexCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_attribute_to_visualize_index(); }
 
 void av::gua::lod::PLodNode::setAttributeToVisualizeIndexCB(const SFInt::SetValueEvent& event) { m_guaPLodNode->set_attribute_to_visualize_index(event.getValue()); }
+
+void av::gua::lod::PLodNode::getActiveTimeSeriesIndexCB(const SFInt::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_active_time_series_index(); }
+
+void av::gua::lod::PLodNode::setActiveTimeSeriesIndexCB(const SFInt::SetValueEvent& event) { m_guaPLodNode->set_active_time_series_index(event.getValue()); }
+
 
 void av::gua::lod::PLodNode::getTimeCursorPositionCB(const SFFloat::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPLodNode->get_time_cursor_position(); }
 
 void av::gua::lod::PLodNode::setTimeCursorPositionCB(const SFFloat::SetValueEvent& event) { m_guaPLodNode->set_time_cursor_position(event.getValue()); }
 
 std::shared_ptr<::gua::node::PLodNode> av::gua::lod::PLodNode::getGuaPLodNode() const { return m_guaPLodNode; }
+
+void av::gua::lod::PLodNode::update_cursor_position(float elapsed_frametime_ms) const
+{
+    m_guaPLodNode->update_time_cursor(elapsed_frametime_ms);
+}

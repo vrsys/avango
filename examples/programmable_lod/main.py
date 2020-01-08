@@ -7,7 +7,37 @@ from examples_common.GuaVE import GuaVE
 import examples_common.navigator
 from examples_common.GuaVE import GuaVE
 
+from time import sleep
+
 OPEN_2_WINDOWS = True
+
+
+class TimedFEMUpdate(avango.script.Script):
+    TimeIn = avango.SFFloat()
+    
+    is_first_frame = True
+    last_timestamp = 0.0 
+
+    reference_node = 0
+
+    def set_reference_node(self, ref_node):
+      self.reference_node = ref_node
+
+    @field_has_changed(TimeIn)
+    def update(self):
+      if True == self.is_first_frame:
+        self.is_first_frame = False
+        self.last_timestamp = self.TimeIn.value
+        return
+
+      current_timestamp = self.TimeIn.value
+      elapsed_seconds = current_timestamp - self.last_timestamp 
+      self.last_timestamp = current_timestamp
+
+      if 0 != self.reference_node:
+        #the cursor position is updates using milliseconds
+        self.reference_node.update_cursor_position(elapsed_seconds * 1000.0)
+
 
 def start():
 
@@ -24,37 +54,23 @@ def start():
 
 
   #the vis file loader functions return MFNodes instead of a single Node
-  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/home/wabi7015/Programming/avango/examples/programmable_lod/fe_vis_mat.vis",
+  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2019_10_24/vis_files/fe_vis_mat_150kmh.vis",
                                                               avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
                                                               avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
 
-  print(plod_nodes.value)
 
   for node in plod_nodes.value:
     graph.Root.value.Children.value.append(node)
     node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 1.5) * node.Transform.value
     node.ShadowMode.value = 1
 
-    node.TimeCursorPosition.value = 10.0
-    node.TimeSeriesDeformFactor.value = 1000.0
+    node.TimeSeriesDeformFactor.value = 10000.0
+    node.TimeSeriesPlaybackSpeed.value = 1.0
+    
+    node.EnableAutomaticPlayback.value = True
 
     node.AttributeToVisualizeIndex.value = 3
 
-  new_cube = mesh_loader.create_geometry_from_file(
-    "cube",
-    "data/objects/monkey.obj",
-    fallback_mat,
-    avango.gua.LoaderFlags.DEFAULTS
-  )
-  
-  new_cube.Transform.value = avango.gua.make_trans_mat(-1, 0.3, 0) * \
-                             avango.gua.make_scale_mat(0.3, 0.3, 0.3)
-  
-
-  #graph.Root.value.Children.value.append(plod_node)
-  #plod_node.ShadowMode.value = 1
-  graph.Root.value.Children.value.append(new_cube)
-  new_cube.ShadowMode.value = 1
 
 
   spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
@@ -101,17 +117,8 @@ def start():
                                          Brightness = 2
                                          )
   sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
-  #graph.Root.value.Children.value.append(sun_light)
 
-  floor = mesh_loader.create_geometry_from_file(
-    "floor",
-    "data/objects/plane.obj",
-    avango.gua.LoaderFlags.DEFAULTS
-  )
-  
-  floor.Transform.value = avango.gua.make_scale_mat(4, 1, 4) * avango.gua.make_trans_mat(0, -0.2, 0)
-  floor.ShadowMode.value = 1
-  graph.Root.value.Children.value.append(floor)
+
 
   width = 1920;
   height = int(width * 9.0 / 16.0)
@@ -242,8 +249,13 @@ def start():
 
   timer = avango.nodes.TimeSensor()
 
+  timed_fem_updater = TimedFEMUpdate()
+  timed_fem_updater.TimeIn.connect_from(timer.Time)
+  timed_fem_updater.set_reference_node(plod_nodes.value[0])
+
   guaVE = GuaVE()
   guaVE.start(locals(), globals())
+
 
   viewer.run()
 

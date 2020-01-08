@@ -61,13 +61,16 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
     SFBool EnableTimeSeriesColoring;
     SFBool EnableTimeSeriesDeformation;
     SFBool EnableAutomaticPlayback;
+    SFBool EnableTemporalInterpolation;
 
     SFFloat TimeSeriesPlaybackSpeed;
     SFFloat TimeSeriesDeformFactor;
     SFFloat TimeCursorPosition;
 
-    SFInt AttributeToVisualizeIndex;
+    SFFloat AttributeColorToMixInFactor;
 
+    SFInt AttributeToVisualizeIndex;
+    SFInt ActiveTimeSeriesIndex;
 
     virtual void setGeometryCB(const SFString::SetValueEvent& event);
     virtual void getGeometryCB(const SFString::GetValueEvent& event);
@@ -97,6 +100,9 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
     virtual void setEnableAutomaticPlaybackCB(const SFBool::SetValueEvent& event);
     virtual void getEnableAutomaticPlaybackCB(const SFBool::GetValueEvent& event);
 
+    virtual void setEnableTemporalInterpolationCB(const SFBool::SetValueEvent& event);
+    virtual void getEnableTemporalInterpolationCB(const SFBool::GetValueEvent& event);
+
     virtual void setTimeSeriesPlaybackSpeedCB(const SFFloat::SetValueEvent& event);
     virtual void getTimeSeriesPlaybackSpeedCB(const SFFloat::GetValueEvent& event);
 
@@ -106,8 +112,15 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
     virtual void setTimeSeriesDeformFactorCB(const SFFloat::SetValueEvent& event);
     virtual void getTimeSeriesDeformFactorCB(const SFFloat::GetValueEvent& event);
 
+    virtual void setAttributeColorToMixInFactorCB(const SFFloat::SetValueEvent& event);
+    virtual void getAttributeColorToMixInFactorCB(const SFFloat::GetValueEvent& event);
+
     virtual void setAttributeToVisualizeIndexCB(const SFInt::SetValueEvent& event);
     virtual void getAttributeToVisualizeIndexCB(const SFInt::GetValueEvent& event);
+
+    virtual void setActiveTimeSeriesIndexCB(const SFInt::SetValueEvent& event);
+    virtual void getActiveTimeSeriesIndexCB(const SFInt::GetValueEvent& event);
+
 
   private:
     std::shared_ptr<::gua::node::PLodNode> m_guaPLodNode;
@@ -115,6 +128,10 @@ class AV_GUA_LOD_DLL PLodNode : public av::gua::GeometryNode
 
     PLodNode(const PLodNode&);
     PLodNode& operator=(const PLodNode&);
+
+
+  public:
+    void update_cursor_position(float elapsed_frametime_ms) const;
 };
 
 typedef SingleField<Link<PLodNode>> SFPLodNode;

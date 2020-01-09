@@ -33,6 +33,14 @@ av::SFFloat* get_current_time_step(av::gua::lod::PLodNode const& plod_node) {
 	return plod_node.get_current_time_step();
 }
 
+av::SFInt* get_number_of_simulation_positions(av::gua::lod::PLodNode const& plod_node) {
+	return plod_node.get_number_of_simulation_positions();
+}
+
+av::gua::MFVec3* get_current_simulation_positions(av::gua::lod::PLodNode const& plod_node) {
+	return plod_node.get_current_simulation_positions();
+}
+
 void init_PLodNode()
 {
     register_field<av::gua::lod::SFPLodNode>("SFPLodNode");
@@ -42,5 +50,7 @@ void init_PLodNode()
         .def("update_cursor_position", &update_cursor_position)
         .def("get_active_time_series_transform", &get_active_time_series_transform, return_value_policy<manage_new_object>())
         .def("get_current_time_step", &get_current_time_step, return_value_policy<manage_new_object>())
+        .def("get_number_of_simulation_positions", &get_number_of_simulation_positions, return_value_policy<manage_new_object>())
+        .def("get_current_simulation_positions", &get_current_simulation_positions, return_value_policy<manage_new_object>())
         ;
 }

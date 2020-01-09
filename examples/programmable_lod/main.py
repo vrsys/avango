@@ -12,7 +12,7 @@ from time import sleep
 OPEN_2_WINDOWS = True
 
 
-class TimedFEMUpdate(avango.script.Script):
+class TimedFEMVisualizationUpdate(avango.script.Script):
     TimeIn = avango.SFFloat()
     
     is_first_frame = True
@@ -20,8 +20,13 @@ class TimedFEMUpdate(avango.script.Script):
 
     reference_node = 0
 
+    arrow_geometry_list = 0
+
     def set_reference_node(self, ref_node):
       self.reference_node = ref_node
+
+    def set_arrow_node_list(self, arrow_geometry_list):
+      self.arrow_geometry_list = arrow_geometry_list
 
     @field_has_changed(TimeIn)
     def update(self):
@@ -34,12 +39,17 @@ class TimedFEMUpdate(avango.script.Script):
       elapsed_seconds = current_timestamp - self.last_timestamp 
       self.last_timestamp = current_timestamp
 
+      #ask one of the nodes for the current simulation positions (train axes)
       if 0 != self.reference_node:
-        #the cursor position is updates using milliseconds
+        #the cursor position is updates using milliseconds (for auto playback)
         self.reference_node.update_cursor_position(elapsed_seconds * 1000.0)
+        current_positions = self.reference_node.get_current_simulation_positions()
 
-        #print(self.reference_node.get_current_time_step().value) #timestep for interpolating train position
-        #print(self.reference_node.get_active_time_series_transform().value ) #transform for train position from fem space to point cloud space
+        #update all the train geometry by getting the multi field of axes translation
+        if 0 != self.arrow_geometry_list:
+          for arrow_index in range(self.reference_node.get_number_of_simulation_positions().value):
+            current_arrow_translation_matrix = avango.gua.make_trans_mat(current_positions.value[arrow_index])
+            self.arrow_geometry_list[arrow_index].Transform.value = current_arrow_translation_matrix
 
 def start():
 
@@ -55,70 +65,61 @@ def start():
   fallback_mat = avango.gua.create_material(avango.gua.MaterialCapabilities.COLOR_VALUE)
 
 
+
+
+
+  #add (registered) fem model as reference coordinate system at normalized position and scale
+  fem_model_geode = mesh_loader.create_geometry_from_file("fem_model", "/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/FEM_OBJS/2020_01_06/flipped_normals_Scherkonde_Geom_registered_2020_01_06.obj", 
+                                                            avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS);
+
+  #fem_model_geode.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * fem_model_geode.Transform.value
+  fem_model_geode.RenderToGBuffer.value = False
+  graph.Root.value.Children.value.append(fem_model_geode)
+
+
+
   #the vis file loader functions return MFNodes instead of a single Node
-  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2019_10_24/vis_files/fe_vis_mat_150kmh.vis",
-                                                              avango.gua.lod.LoaderFlags.NORMALIZE_SCALE |
-                                                              avango.gua.lod.LoaderFlags.NORMALIZE_POSITION)
+  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2020_01_06/vis_files/fe_vis_mat_300kmh.vis",
+                                                              avango.gua.lod.LoaderFlags.MAKE_PICKABLE)
 
-
+  #set the parameters for every node (I put the nodes under the fem_model to be in a meaningful reference coordinate system)
   for node in plod_nodes.value:
-    graph.Root.value.Children.value.append(node)
-    node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 1.5) * node.Transform.value
+    fem_model_geode.Children.value.append(node)
+    #node.Transform.value = avango.gua.make_trans_mat(0, 0.0, 1.5) * node.Transform.value
     node.ShadowMode.value = 1
 
-    node.TimeSeriesDeformFactor.value = 10000.0
+    node.EnableTimeSeriesColoring.value = True
+    node.EnableTimeSeriesDeformation.value = True
+
+    #sets the mixin factor between fe coloring and original color (0.0 = full point cloud color, 1.0 = full FEM color)
+    node.AttributeColorToMixInFactor.value = 0.7
+    #exaggeration factor for the deformation
+    node.TimeSeriesDeformFactor.value = 1000.0
+    #playback speed for the time series (1.0 = real-time). setting the playback speed affects the FE simulation, so all nodes refer to the same model
     node.TimeSeriesPlaybackSpeed.value = 1.0
-
+    
+    #if this is set, the bridge keeps on playing back if the update_time_cursor function is called (see timer script)
     node.EnableAutomaticPlayback.value = True
-
+    
+    #index of the FE attribute to visualize. At least 4 are available, usually 10
     node.AttributeToVisualizeIndex.value = 3
 
 
+  #ask one of the nodes (we just assume that we have at least one mode in the vis file) for the number of simulation positions (= train axes)
+  arrow_geometry_list = []
+  reference_node = plod_nodes.value[0]
+  number_of_train_axes = reference_node.get_number_of_simulation_positions().value
 
-  spot_light_1 = avango.gua.nodes.LightNode(Name = "spot_light_1",
-                                         Type = avango.gua.LightType.SPOT,
-                                         Color = avango.gua.Color(1.0, 1.0, 1.0),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 1024,
-                                         ShadowOffset = 0.002,
-                                         ShadowMaxDistance = 10,
-                                         Falloff = 1.5,
-                                         ShadowNearClippingInSunDirection = 0.1,
-                                         ShadowFarClippingInSunDirection = 10.0,
-                                         Softness = 2,
-                                         Brightness = 20)
-  spot_light_1.Transform.value = avango.gua.make_trans_mat(0.0, 3.0, 0.0) * avango.gua.make_rot_mat(-90, 1, 0, 0) * avango.gua.make_scale_mat(4)
-  graph.Root.value.Children.value.append(spot_light_1)
+  #load the right amount of arrows
+  for arrow_index in range(number_of_train_axes):
 
-  point_light1 = avango.gua.nodes.LightNode(
-                                         Type = avango.gua.LightType.POINT,
-                                         Name = "point_light1",
-                                         Color = avango.gua.Color(0.2, 1.0, 1.7),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 1024,
-                                         ShadowMaxDistance = 10,
-                                         ShadowOffset = 0.03,
-                                         Falloff = 0.5,
-                                         ShadowNearClippingInSunDirection = 0.1,
-                                         ShadowFarClippingInSunDirection = 10.0,
-                                         Brightness = 20)
-                                         
-  point_light1.Transform.value = avango.gua.make_trans_mat(1.5, 1.0, 1.5) * avango.gua.make_scale_mat(4)
-  graph.Root.value.Children.value.append(point_light1)
+    new_arrow_geometry_node = mesh_loader.create_geometry_from_file(
+        "arrow_geometry_" + str(arrow_index), "/opt/3d_models/symbols/arrow.obj",
+        avango.gua.LoaderFlags.LOAD_MATERIALS)
 
-  sun_light = avango.gua.nodes.LightNode(Name = "sun_light",
-                                         Type = avango.gua.LightType.SUN,
-                                         Color = avango.gua.Color(1.0, 1.0, 0.7),
-                                         EnableShadows = True,
-                                         ShadowMapSize = 1024,
-                                         ShadowOffset = 0.0005,
-                                         ShadowCascadedSplits = [0.1, 4, 7, 20],
-                                         ShadowMaxDistance = 30,
-                                         ShadowNearClippingInSunDirection = 100,
-                                         ShadowFarClippingInSunDirection = 100,
-                                         Brightness = 2
-                                         )
-  sun_light.Transform.value = avango.gua.make_rot_mat(210, 0, 1, 0) * avango.gua.make_rot_mat(-50.0, 1.0, 0.0, 0.0)
+    arrow_geometry_list.append(new_arrow_geometry_node)
+    fem_model_geode.Children.value.append(new_arrow_geometry_node)
+
 
 
 
@@ -250,10 +251,10 @@ def start():
     viewer.Windows.value = [window]
 
   timer = avango.nodes.TimeSensor()
-
-  timed_fem_updater = TimedFEMUpdate()
+  timed_fem_updater = TimedFEMVisualizationUpdate()
   timed_fem_updater.TimeIn.connect_from(timer.Time)
   timed_fem_updater.set_reference_node(plod_nodes.value[0])
+  timed_fem_updater.set_arrow_node_list(arrow_geometry_list)
 
   guaVE = GuaVE()
   guaVE.start(locals(), globals())

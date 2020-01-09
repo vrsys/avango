@@ -188,11 +188,11 @@ void av::gua::lod::PLodNode::update_cursor_position(float elapsed_frametime_ms) 
 }
 
 av::gua::SFMatrix* av::gua::lod::PLodNode::get_active_time_series_transform() const {
-    auto gua_matrix = scm::math::mat4d(m_guaPLodNode->get_active_time_series_transform());
+    auto gua_matrix = ::gua::math::mat4d(m_guaPLodNode->get_active_time_series_transform());
 
-    auto result(new av::gua::SFMatrix());
+    auto result(new av::gua::SFMatrix4());
     
-    result->setValue( (gua_matrix) );
+    result->setValue( gua_matrix );
  
     return result;
 }
@@ -204,4 +204,25 @@ av::SFFloat* av::gua::lod::PLodNode::get_current_time_step() const {
     result->setValue(current_time_step);
 
     return result;
+}
+
+av::SFInt* av::gua::lod::PLodNode::get_number_of_simulation_positions() const {
+    int number_of_simulation_positions = m_guaPLodNode->get_number_of_simulation_positions();
+
+    auto result(new av::SFInt());
+    result->setValue(number_of_simulation_positions);
+
+    return result;
+}
+
+av::gua::MFVec3* av::gua::lod::PLodNode::get_current_simulation_positions() const {
+    auto const& current_positions = m_guaPLodNode->get_current_simulation_positions();
+
+    auto results(new av::gua::MFVec3());
+    
+    for(auto const& position : current_positions) {
+        results->add1Value( scm::math::vec3d(position) );
+    }
+
+    return results;
 }

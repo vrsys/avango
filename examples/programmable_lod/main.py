@@ -79,7 +79,7 @@ def start():
 
 
   #the vis file loader functions return MFNodes instead of a single Node
-  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2020_01_06/vis_files/fe_vis_mat_300kmh.vis",
+  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2020_01_06/vis_files/fixed_simulation_train_test.vis",
                                                               avango.gua.lod.LoaderFlags.MAKE_PICKABLE)
 
   #set the parameters for every node (I put the nodes under the fem_model to be in a meaningful reference coordinate system)

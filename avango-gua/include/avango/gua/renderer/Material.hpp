@@ -36,6 +36,7 @@ class AV_GUA_DLL Material : public av::FieldContainer
     SFString ShaderName;
     SFBool EnableBackfaceCulling;
     SFBool EnableWireframeRendering;
+    SFBool EnableEarlyFragmentTest;
 
 #if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
     SFBool EnableVirtualTexturing;
@@ -49,6 +50,9 @@ class AV_GUA_DLL Material : public av::FieldContainer
 
     virtual void getEnableWireframeRenderingCB(const SFBool::GetValueEvent& event);
     virtual void setEnableWireframeRenderingCB(const SFBool::SetValueEvent& event);
+
+    virtual void getEnableEarlyFragmentTestCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableEarlyFragmentTestCB(const SFBool::SetValueEvent& event);
 
 #if defined(AVANGO_VIRTUAL_TEXTURING_SUPPORT)
     virtual void getEnableVirtualTexturingCB(const SFBool::GetValueEvent& event);

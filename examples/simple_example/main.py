@@ -81,13 +81,13 @@ def start():
                                        avango.gua.Vec4(0.662, 0.655, 0.784, 1))
     monkey1.Material.value.set_uniform("Roughness", 0.3)
     monkey1.Material.value.set_uniform("Metalness", 1.0)
-
+    monkey1.Material.value.EnableEarlyFragmentTest.value = True
     #rather matte red
     monkey2.Material.value.set_uniform("Color",
                                        avango.gua.Vec4(1.0, 0.266, 0.136, 1.0))
     monkey2.Material.value.set_uniform("Roughness", 0.7)
     monkey2.Material.value.set_uniform("Metalness", 0.0)
-
+    monkey2.Material.value.EnableEarlyFragmentTest.value = True
 
     transform1_additional_scale = avango.gua.nodes.TransformNode(Transform=avango.gua.make_scale_mat(0.66),
                                                 Children=[abstract_model])
@@ -138,8 +138,11 @@ def start():
 
     anti_aliasing = avango.gua.nodes.SSAAPassDescription()
 
+    trimeshpass = avango.gua.nodes.TriMeshPassDescription()
+    trimeshpass.EnableDepthSorting.value = True
+
     pipeline_description = avango.gua.nodes.PipelineDescription(Passes=[
-        avango.gua.nodes.TriMeshPassDescription(),
+        trimeshpass,
         avango.gua.nodes.LightVisibilityPassDescription(),
         res_pass,
         anti_aliasing,

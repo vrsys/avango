@@ -34,6 +34,10 @@ class AV_GUA_DLL PipelinePassDescription : public av::FieldContainer
     // virtual ~PipelinePassDescription() {}
 
   public:
+    SFBool EnableDepthSorting;
+    virtual void getEnableDepthSortingCB(const SFBool::GetValueEvent& event);
+    virtual void setEnableDepthSortingCB(const SFBool::SetValueEvent& event);
+
     /**
      * Get the wrapped ::gua::PipelinePassDescription.
      */

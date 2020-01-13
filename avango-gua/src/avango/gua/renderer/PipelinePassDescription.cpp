@@ -16,6 +16,9 @@ AV_FIELD_DEFINE(av::gua::MFPipelinePassDescription);
 
 av::gua::PipelinePassDescription::PipelinePassDescription(std::shared_ptr<::gua::PipelinePassDescription> const& guaPipelinePassDescription) : m_guaPipelinePassDescription(guaPipelinePassDescription)
 {
+    AV_FC_ADD_ADAPTOR_FIELD(
+        EnableDepthSorting, std::bind(&PipelinePassDescription::getEnableDepthSortingCB, this, std::placeholders::_1), std::bind(&PipelinePassDescription::setEnableDepthSortingCB, this, std::placeholders::_1));
+    
 }
 
 void av::gua::PipelinePassDescription::initClass()
@@ -31,5 +34,10 @@ void av::gua::PipelinePassDescription::initClass()
         sClassTypeId.setDistributable(true);
     }
 }
+
+void av::gua::PipelinePassDescription::getEnableDepthSortingCB(const SFBool::GetValueEvent& event) { *(event.getValuePtr()) = m_guaPipelinePassDescription->get_enable_depth_sorting(); }
+
+void av::gua::PipelinePassDescription::setEnableDepthSortingCB(const SFBool::SetValueEvent& event) { m_guaPipelinePassDescription->set_enable_depth_sorting(event.getValue()); }
+
 
 std::shared_ptr<::gua::PipelinePassDescription> const& av::gua::PipelinePassDescription::getGuaPipelinePassDescription() const { return m_guaPipelinePassDescription; }

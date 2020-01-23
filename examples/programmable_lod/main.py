@@ -69,7 +69,7 @@ def start():
 
 
   #add (registered) fem model as reference coordinate system at normalized position and scale
-  fem_model_geode = mesh_loader.create_geometry_from_file("fem_model", "/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/FEM_OBJS/2020_01_06/flipped_normals_Scherkonde_Geom_registered_2020_01_06.obj", 
+  fem_model_geode = mesh_loader.create_geometry_from_file("fem_model", "/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/FEM_OBJS/2020_01_23_Verbundtreffen_3_Demostate/Joined_Scherkonde_Geom_2020_01_23_registered.obj", 
                                                             avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS);
 
   #fem_model_geode.Transform.value = avango.gua.make_rot_mat(90.0, 1.0, 0.0, 0.0) * fem_model_geode.Transform.value
@@ -79,7 +79,7 @@ def start():
 
 
   #the vis file loader functions return MFNodes instead of a single Node
-  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2020_01_06/vis_files/fixed_simulation_train_test.vis",
+  plod_nodes = lod_loader.load_lod_pointclouds_from_vis_file("/mnt/pitoti/AISTec/FEM_simulation/Scherkondetal_Time_Series_20190822/Scherkondetal_Pointclouds/2020_01_23_Verbundtreffen_3_Demostate/vis_files/train_simulation.vis",
                                                               avango.gua.lod.LoaderFlags.MAKE_PICKABLE)
 
   #set the parameters for every node (I put the nodes under the fem_model to be in a meaningful reference coordinate system)

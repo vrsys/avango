@@ -70,7 +70,7 @@ av::NetNode::NetNode() : mMember(0), mNumMembers(0), mWellKnownObjects(), mBlock
 
 av::NetNode::~NetNode() { leave(); }
 
-void av::NetNode::join(const std::string& groupName)
+void av::NetNode::join(const std::string& groupName, int numClients)
 {
 #ifdef AVANGO_DEBUG
     logger.debug() << "av::NetNode::NetNode: joining group: " << groupName;
@@ -123,7 +123,7 @@ void av::NetNode::join(const std::string& groupName)
 
     if(isServer)
     {
-        gServer = new NetNodeServer(hostName, port, this, gClientEndpoint, gServerEndpoint, serverHWM);
+        gServer = new NetNodeServer(hostName, port, numClients, this, gClientEndpoint, gServerEndpoint, serverHWM);
         joined(gServerEndpoint);
 
         av::Msg av_msg;

@@ -82,20 +82,12 @@ void av::NetNodeClient::loop()
 {
     // open connection
     zmq::context_t ctx(1);              // means single threaded
-    zmq::socket_t socket(ctx, ZMQ_SUB); // means a subscriber
-
-    socket.setsockopt(ZMQ_SUBSCRIBE, "", 0);
-
-#if ZMQ_VERSION_MAJOR < 3
-    uint64_t hwm = 1;
-    socket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
-#else
-    uint32_t hwm = 1;
-    socket.setsockopt(ZMQ_RCVHWM, &hwm, sizeof(hwm));
-#endif
+    zmq::socket_t socket(ctx, ZMQ_PULL); // means a subscriber
 
     std::string endpoint("tcp://" + mHost + ":" + mPort);
     socket.connect(endpoint.c_str());
+
+	std::cout << "Started with a ZMQ_PULL socket on port " << mPort << std::endl;
 
     while(mRunning)
     {

@@ -27,32 +27,38 @@
 
 #include <avango/NetNode.h>
 #include <chrono>
+#include <iostream>
 #include <thread>
 
 #if ZMQ_VERSION_MAJOR < 3
-av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm)
+av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, int numClients, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm)
 #else
-av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm)
+av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& port, int numClients, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm)
 #endif
-    : mHost(host), mPort(port), mNetNode(netnode), mCtx(1), mSocket(mCtx, ZMQ_PUB), mClientEndpoint(ce), mServerEndpoint(se)
-{
-    // int64_t  rate(500);
-    // mSocket.setsockopt(ZMQ_RATE,&rate, sizeof(rate));
-
+    : mHost(host), mPort(port), mNetNode(netnode), mCtx(1), mClientEndpoint(ce), mServerEndpoint(se) {
 #if ZMQ_VERSION_MAJOR < 3
-    mSocket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
+    //mSocket.setsockopt(ZMQ_HWM, &hwm, sizeof(hwm));
 #else
-    mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
+    //mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
 #endif
-    std::string endpoint("tcp://" + mHost + ":" + mPort);
-    mSocket.bind(endpoint.c_str());
-    std::chrono::milliseconds dura(200);
-    std::this_thread::sleep_for(dura);
+
+	for(int i = 0; i < numClients; ++i)
+    {
+        zmq::socket_t* socket = new zmq::socket_t(mCtx, ZMQ_PUSH);
+        std::string endpoint("tcp://" + mHost + ":" + std::to_string(std::stoi(mPort)+i));
+        socket->bind(endpoint.c_str());
+        mSockets.push_back(socket);
+	}
+
+	std::cout << "Started with " << numClients << " ZMQ_PUSH sockets from ports " << mPort << " to " << std::to_string(std::stoi(mPort)+numClients-1) << std::endl;
 }
 
 void av::NetNodeServer::cast(av::Msg& av_msg)
 {
-    zmq::message_t zmq_message(av_msg.getSize());
-    memcpy(zmq_message.data(), av_msg.getBuffer(), av_msg.getSize());
-    mSocket.send(zmq_message);
+    for(zmq::socket_t* socket : mSockets)
+    {
+        zmq::message_t zmq_message(av_msg.getSize());
+        memcpy(zmq_message.data(), av_msg.getBuffer(), av_msg.getSize());
+        socket->send(zmq_message);
+    }
 }

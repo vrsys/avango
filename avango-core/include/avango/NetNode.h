@@ -66,7 +66,7 @@ class AV_DLL NetNode
      * Create a new group member and join the group
      * @param groupName The group to join
      */
-    void join(const std::string& groupName);
+    void join(const std::string& groupName, int numClients);
 
     /**
      * Leave the currently joined group

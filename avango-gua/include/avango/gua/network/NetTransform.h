@@ -64,6 +64,7 @@ class AV_GUA_DLL NetTransform : public TransformNode, public NetNode
      *  group this node will represent. The empty string will result in no distribution.
      */
     SFString Groupname; ///< distribution group name
+    SFInt TotalNumClients; // total number of clients (relevant if server node)
 
     /**
      *  The Members field gives the endponit identifiers for all processes

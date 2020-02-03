@@ -46,6 +46,7 @@ av::gua::NetTransform::NetTransform() : TransformNode(), NetNode()
 {
     // the name of the network goup to join
     AV_FC_ADD_FIELD(Groupname, "");
+	AV_FC_ADD_FIELD(TotalNumClients, 1);
 
     // the list of current group members.
     AV_FC_ADD_FIELD(Members, std::vector<std::string>());
@@ -56,6 +57,7 @@ av::gua::NetTransform::NetTransform() : TransformNode(), NetNode()
         SharedContainers, std::bind(&NetTransform::getSharedContainersCB, this, std::placeholders::_1), std::bind(&NetTransform::setSharedContainersCB, this, std::placeholders::_1));
 
     Groupname.dontDistribute(true);
+    TotalNumClients.dontDistribute(true);
     Members.dontDistribute(true);
     NewMembers.dontDistribute(true);
     DepartedMembers.dontDistribute(true);
@@ -97,7 +99,7 @@ av::gua::NetTransform::~NetTransform()
         {
             AVANGO_LOG(logger, av::logging::TRACE, boost::str(boost::format("fpNetDCS::fieldHasChangedLocalSideEffect: joining net-group '%1%'.") % Groupname.getValue().c_str()));
             // if the groupname is not empty try to join
-            join(Groupname.getValue());
+            join(Groupname.getValue(), TotalNumClients.getValue());
             // Name.setValue(Groupname.getValue());
         }
         else

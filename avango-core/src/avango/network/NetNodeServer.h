@@ -27,6 +27,7 @@
 #define AVANGO_NETNODESERVER_H
 
 #include <string>
+#include <vector>
 #include <zmq.hpp>
 
 #include <avango/Msg.h>
@@ -39,9 +40,9 @@ class NetNodeServer
 {
   public:
 #if ZMQ_VERSION_MAJOR < 3
-    NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm);
+    NetNodeServer(const std::string& host, const std::string& port, int numClients, av::NetNode* netnode, const std::string& ce, const std::string& se, uint64_t hwm);
 #else
-    NetNodeServer(const std::string& host, const std::string& port, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm);
+    NetNodeServer(const std::string& host, const std::string& port, int numClients, av::NetNode* netnode, const std::string& ce, const std::string& se, uint32_t hwm);
 #endif
 
     // called from NetNode
@@ -52,7 +53,7 @@ class NetNodeServer
     std::string mPort;
     av::NetNode* mNetNode;
     zmq::context_t mCtx;
-    zmq::socket_t mSocket;
+    std::vector<zmq::socket_t*> mSockets;
     std::string mClientEndpoint;
     std::string mServerEndpoint;
 };

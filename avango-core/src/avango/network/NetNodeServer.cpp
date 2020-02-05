@@ -41,7 +41,6 @@ av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& por
 #else
     //mSocket.setsockopt(ZMQ_SNDHWM, &hwm, sizeof(hwm));
 #endif
-
 	for(int i = 0; i < numClients; ++i)
     {
         zmq::socket_t* socket = new zmq::socket_t(mCtx, ZMQ_PUSH);
@@ -50,7 +49,15 @@ av::NetNodeServer::NetNodeServer(const std::string& host, const std::string& por
         mSockets.push_back(socket);
 	}
 
-	std::cout << "Started with " << numClients << " ZMQ_PUSH sockets from ports " << mPort << " to " << std::to_string(std::stoi(mPort)+numClients-1) << std::endl;
+	if(numClients > 0)
+    {
+       std::cout << "Started with " << numClients << " ZMQ_PUSH sockets from ports " << mPort << " to " << std::to_string(std::stoi(mPort) + numClients - 1) << std::endl;
+    }
+    else
+    {
+       std::cout << "Started without sockets, server-only mode" << std::endl;
+	}
+	
 }
 
 void av::NetNodeServer::cast(av::Msg& av_msg)

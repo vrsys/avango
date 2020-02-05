@@ -46,7 +46,7 @@ av::gua::NetTransform::NetTransform() : TransformNode(), NetNode()
 {
     // the name of the network goup to join
     AV_FC_ADD_FIELD(Groupname, "");
-	AV_FC_ADD_FIELD(TotalNumClients, 1);
+	AV_FC_ADD_FIELD(TotalNumClients, 0);
 
     // the list of current group members.
     AV_FC_ADD_FIELD(Members, std::vector<std::string>());

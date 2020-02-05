@@ -126,6 +126,8 @@ def init_dbl_tracking():
     _dtrack.stations[11] = avango.daemon.Station('tracking-dbl-glasses-3_1')
     _dtrack.stations[1] = avango.daemon.Station('tracking-dbl-glasses-1_3')
 
+    _dtrack.stations[13] = avango.daemon.Station('glasses_old_x')
+
     _dtrack.stations[22] = avango.daemon.Station('tracking-dbl-glasses-A')
     _dtrack.stations[23] = avango.daemon.Station('tracking-dbl-glasses-B')
     _dtrack.stations[24] = avango.daemon.Station('tracking-dbl-glasses-C')
@@ -162,6 +164,30 @@ def init_dbl_tracking():
     print("ART Tracking started at DBL")
 
 
+def init_front_projection_wall_tracking():
+    print("INIT FRONT PROJECTION WALL TRACKING")
+    # create instance of DTrack
+    _dtrack = avango.daemon.DTrack()
+    _dtrack.port = "5000" # ART port at LCD wall
+
+    #_dtrack.stations[11] = avango.daemon.Station('tracking-dbl-glasses-3_1')
+    #_dtrack.stations[10] = avango.daemon.Station('tracking-dbl-glasses-4_1')
+
+    #_dtrack.stations[19] = avango.daemon.Station('tracking-lcd-cam') # new camera shutter
+
+    #_dtrack.stations[3] = avango.daemon.Station('tracking-dbl-glasses-1_2')
+    #_dtrack.stations[5] = avango.daemon.Station('tracking-dbl-glasses-3_2')
+    #_dtrack.stations[4] = avango.daemon.Station('tracking-dbl-glasses-4_2') 
+    #_dtrack.stations[6] = avango.daemon.Station('tracking-dbl-glasses-6_2')
+
+    #_dtrack.stations[11] = avango.daemon.Station('tracking-dbl-glasses-3_1')
+    #_dtrack.stations[1] = avango.daemon.Station('tracking-dbl-glasses-1_3')
+
+    _dtrack.stations[13] = avango.daemon.Station('glasses_old_x')
+    _dtrack.stations[14] = avango.daemon.Station('glasses_old_y')
+    _dtrack.stations[15] = avango.daemon.Station('glasses_old_z')
+
+    device_list.append(_dtrack)
 
 '''
 def init_pst_tracking():
@@ -714,12 +740,12 @@ device_list = []
 #init_lcd_wall_tracking()
 #init_dlp_wall_tracking()
 print("Executing Init Function")
-init_dbl_tracking()
-
+#init_dbl_tracking()
+init_front_projection_wall_tracking()
 
 ### init navigation devices
 #init_old_spheron()
-init_spheron()
+#init_spheron()
 
 #init_spacemouse(get_event_string(1, "3Dconnexion SpaceNavigator"), "device-spacemouse0", REL_FLAG = True)
 #init_spacemouse(get_event_string(2, "3Dconnexion SpaceNavigator"), "device-spacemouse1", REL_FLAG = True)

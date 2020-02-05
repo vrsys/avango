@@ -39,8 +39,8 @@ import time
 #avango.enable_logging(4, "client.log")
 
 #CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
-#CLIENT_MODE = "VIDEO_POWERWALL"
-CLIENT_MODE = "SCREENSHOT_DESKTOP"
+CLIENT_MODE = "VIDEO_POWERWALL"
+#CLIENT_MODE = "SCREENSHOT_DESKTOP"
 #CLIENT_MODE = "DEVELOPMENT"
 
 
@@ -50,25 +50,31 @@ RENDERING_RESOLUTION = 0
 LEFT_VIEWPORT_START  = 0
 RIGHT_VIEWPORT_START = 0
 
+LEFT_POSITION = avango.gua.Vec2ui(308, 0),
+LEFT_RESOLUTION = avango.gua.Vec2ui(4096 - 308 - 345, 2160),
+RIGHT_POSITION = avango.gua.Vec2ui(4096 + 308, 0),
+RIGHT_RESOLUTION = avango.gua.Vec2ui(4096 - 308 - 345, 2160),
+
 VR16      = "141.54.147.16"
 PAN       = "141.54.147.52"
 LOCALHOST = "127.0.0.1"
 DAEDALOS  = "141.54.147.34"
+ARACHNE   = "141.54.147.27"
 
-CURRENTLY_USED_SERVER = DAEDALOS
+CURRENTLY_USED_SERVER = ARACHNE#LOCALHOST
 
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
-  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(308, 0)
   RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*3840, 2160)
-  RENDERING_RESOLUTION = avango.gua.Vec2ui(WINDOW_RESOLUTION[0]/2, WINDOW_RESOLUTION[1])
-  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(WINDOW_RESOLUTION[0]/2, 0)
+  RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 308 - 345, 2160)
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(308, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 308, 0)
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
@@ -113,6 +119,11 @@ class TimedFPSPrinter(avango.script.Script):
   @field_has_changed(TimeIn)
   def update(self):
 
+    if self.WindowCenter != 0:
+      if self.WindowCenter.RenderingFPS.value != 0.0:
+        #print("xxx: " + str(1.0/self.WindowCenter.RenderingFPS.value) )
+        pass
+
     if self.LoggingIndicatorNode == 0:
       return
 
@@ -126,6 +137,7 @@ class TimedFPSPrinter(avango.script.Script):
 
         if (0 == self.WindowCenter.RenderingFPS.value):
           return
+
 
         current_draw_time_center      = 1.0 / self.WindowCenter.RenderingFPS.value
 
@@ -202,7 +214,7 @@ class Initializer(avango.script.Script):
     self.viewer.SceneGraphs.value = [self.graph]
     self.viewer.Windows.value = [self.window_center]
 
-    self.viewer.DesiredFPS.value = 1000.0
+    self.viewer.DesiredFPS.value = 5000.0
 
 
     self.timer = avango.nodes.TimeSensor()
@@ -229,6 +241,8 @@ class Initializer(avango.script.Script):
         
         self.fps_printer.set_logging_indicator_node(self.graph["/net/grouped_view_setups_and_scene/logging_indicator"])
         self.always_evaluate(False)
+
+
 
   def on_arrival(self):
     pass

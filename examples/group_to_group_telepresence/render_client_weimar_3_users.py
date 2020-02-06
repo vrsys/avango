@@ -68,7 +68,9 @@ SPACEMONSTER = "141.54.147.101"
 
 ARACHNE   = "141.54.147.27"
 
-CURRENTLY_USED_SERVER = ARACHNE
+KERBEROS = "141.54.147.20"
+
+CURRENTLY_USED_SERVER = KERBEROS
 
 #CURRENTLY_USED_SERVER = ARGOS
 
@@ -100,9 +102,9 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
-  RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 308 - 345, 2160)
-  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(308, 0)
-  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 308, 0)
+  RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
@@ -168,14 +170,14 @@ class TimedFPSPrinter(avango.script.Script):
 
   @field_has_changed(TimeIn)
   def update(self):
-    return
+    #return
 
     self.frame_counter += 1
 
-    # if(self.WindowCenter != 0):
-    #   if(0 != self.WindowCenter.RenderingFPS.value):
-    #     if(self.frame_counter % 100 == 0):
-    #       print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
+    if(self.WindowCenter != 0):
+      if(0 != self.WindowCenter.RenderingFPS.value):
+        if(self.frame_counter % 100 == 0):
+          print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
 
     if self.LoggingIndicatorNode == 0:
       return
@@ -353,7 +355,7 @@ class Initializer(avango.script.Script):
     self.viewer = avango.gua.nodes.Viewer()
     self.viewer.SceneGraphs.value = [self.graph]
     
-    self.viewer.DesiredFPS.value = 1500.0
+    self.viewer.DesiredFPS.value = 5000.0
 
     if "CENTRAL_USER" != DEBUG_MODE:
       # if "VIDEO_POWERWALL" == CLIENT_MODE:

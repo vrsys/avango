@@ -43,10 +43,13 @@ DAEDALOS  = "141.54.147.34"
 
 SPACEMONSTER = "141.54.147.101"
 
-CURRENTLY_USED_SERVER = SPACEMONSTER
+KERBEROS = "141.54.147.20"
 
-CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
-#CLIENT_MODE = "VIDEO_POWERWALL"
+CURRENTLY_USED_SERVER = KERBEROS
+
+
+#CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
+CLIENT_MODE = "VIDEO_POWERWALL"
 #CLIENT_MODE = "SCREENSHOT_DESKTOP"
 ##CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
 
@@ -61,21 +64,55 @@ RIGHT_VIEWPORT_START = 0
 
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
-  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
-  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
-  #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1920, 1080)
-  RENDERING_RESOLUTION = WINDOW_RESOLUTION
-  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+  if True:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+  else:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0) 
   DISPLAY_VARIABLE_LEFT   = ":0.1"
   DISPLAY_VARIABLE_CENTER = ":0.1"
   DISPLAY_VARIABLE_RIGHT  = ":0.1" # for the occlusion slave, one GPU is rendering everything
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
+  DISPLAY_VARIABLE_LEFT   = ":0.1"
+  DISPLAY_VARIABLE_CENTER = ":0.1"
+  DISPLAY_VARIABLE_RIGHT  = ":0.1" 
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
-  WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*100, 100)
-  RENDERING_RESOLUTION = avango.gua.Vec2ui( int(WINDOW_RESOLUTION[0]/2), WINDOW_RESOLUTION[1])
-  LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-  RIGHT_VIEWPORT_START = avango.gua.Vec2ui(int(WINDOW_RESOLUTION[0]/2), 0)
+  """
+  if True:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+  else:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0)    
+  """
+
+  if False:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+  else:
+    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*1024, 512)
+    RENDERING_RESOLUTION = avango.gua.Vec2ui(1024, 512)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(1024, 0) 
+
+
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
@@ -89,7 +126,7 @@ elif "DEBUG_3_USERS_WEAK_PC" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
-  WINDOW_RESOLUTION       = avango.gua.Vec2ui(100, 100)
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
   RENDERING_RESOLUTION    = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START     = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START    = avango.gua.Vec2ui(0, 0)
@@ -111,10 +148,13 @@ class Initializer(avango.script.Script):
     self.graph = avango.gua.nodes.SceneGraph(Name="scenegraph")
     self.graph.Root.value.Children.value = [self.nettrans]
 
+    print("Before setting is initialized")
+
     # viewing setup
     #size = avango.gua.Vec2ui(1600, 1200)
     #size = avango.gua.Vec2ui(1920, 1080)
-    size = avango.gua.Vec2ui(100, 100)
+    #size = avango.gua.Vec2ui(100, 100)
+    size = avango.gua.Vec2ui(100, 100)    
     #size = avango.gua.Vec2ui(3840, 2160)
     self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
                                               Display = DISPLAY_VARIABLE_CENTER,  # ":0.1",
@@ -160,7 +200,7 @@ class Initializer(avango.script.Script):
     self.viewer.SceneGraphs.value = [self.graph]
     
     if "CENTRAL_USER" != DEBUG_MODE: 
-      self.viewer.Windows.value = [self.window_center, self.window_left, self.window_right]
+      self.viewer.Windows.value = [self.window_center, self.window_right, self.window_left]
     else:
       self.viewer.Windows.value = [self.window_center]
 

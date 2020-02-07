@@ -186,7 +186,8 @@ def init_front_projection_wall_tracking():
     _dtrack.stations[13] = avango.daemon.Station('glasses_old_x')
     _dtrack.stations[14] = avango.daemon.Station('glasses_old_y')
     _dtrack.stations[15] = avango.daemon.Station('glasses_old_z')
-
+    _dtrack.stations[16] = avango.daemon.Station('cam_target')
+    
     device_list.append(_dtrack)
 
 '''

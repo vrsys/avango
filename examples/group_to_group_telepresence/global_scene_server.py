@@ -60,6 +60,10 @@ SCENE_MODE = "MUSEUM"
 #SCENE_MODE = "SIMPLE"
 #SCENE_MODE = "EMPTY"
 
+#SEGMENT_NUMBER = 1 #sequence 1
+SEGMENT_NUMBER = 2 #sequence 2
+#SEGMENT_NUMBER = 3 #sequence 3
+
 RES_MODE = "POWERWALL"
 #RES_MODE = "HMD_LIKE"
 
@@ -224,8 +228,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
-    #nv = netvaluepy.NetValue(HEKATE+":8000")
-    nv = netvaluepy.NetValue(KERBEROS+":8000")
+    nv = netvaluepy.NetValue(HEKATE+":8000")
+    #nv = netvaluepy.NetValue(KERBEROS+":8000")
     #nv = netvaluepy.NetValue(VR16+":8000")
     #nv = netvaluepy.NetValue(STEELYGLINT+":8000")
     #nv = netvaluepy.NetValue(LADON+":8000")
@@ -399,7 +403,7 @@ if "LION_SCENE" == SCENE_MODE:
         Brightness = 100
       )
 
-      light_scaling = 400
+      light_scaling = 40
 
       if i < 10:
         light.Transform.value =  avango.gua.make_trans_mat(-3.0, 2.5, -i*5) * avango.gua.make_scale_mat(light_scaling)
@@ -408,32 +412,45 @@ if "LION_SCENE" == SCENE_MODE:
       light_list.append(light)
 
 if "MUSEUM" == SCENE_MODE:
+    scale = 1.45
     if 0 == OCCLUDER_PROFILING:
       sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       #sponza = loader.create_geometry_from_file("sponza", "/home/wabi7015/test_grid/test_grid.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
-      vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
-      pillar = loader.create_geometry_from_file("pillar", "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION  | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)    
+      #vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+     # pillar = loader.create_geometry_from_file("pillar", "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION  | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)    
     else:
       sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       #sponza = loader.create_geometry_from_file("sponza", "/home/wabi7015/test_grid/test_grid.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
-      vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)   
-      pillar = loader.create_geometry_from_file("pillar",  "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NO_SHARED_MATERIALS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)        
+      #vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)   
+    #  pillar = loader.create_geometry_from_file("pillar",  "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NO_SHARED_MATERIALS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)        
+    
+    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/binarized_loewe/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
+    lion.Transform.value = avango.gua.make_trans_mat(0.5, -0.05, -3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+    
+    if "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE:
+      lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+
+    lion.Material.value.EnableBackfaceCulling.value = False
+    lion.Material.value.set_uniform("Emissivity", 0.6)
+    lion.Material.value.set_uniform("Roughess", 0.7)
+
     sponza.Transform.value = avango.gua.make_scale_mat(2 * 2.0 / 283.9899,2 * 2.0/ 283.9899, 2 * 2.0/ 283.9899)  * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) 
  
-    pillar.Transform.value = avango.gua.make_trans_mat(0.0, 1.0, -5.0) * pillar.Transform.value  * avango.gua.make_scale_mat(2.0) * avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
+    #lion.Transform.value = avango.gua.make_trans_mat(0.0, 0.955, -5.0) * pillar.Transform.value  * avango.gua.make_scale_mat(2.0) * avango.gua.make_rot_mat(90.0, 0.0, 1.0, 0.0) * avango.gua.make_rot_mat(-90.0, 1.0, 0.0, 0.0)
 
 
     global global_model_node_idx    
 
-    set_roughness_recursively(pillar, 0.5)
+    set_roughness_recursively(lion, 0.3)
 
     set_roughness_recursively(sponza, 0.7)
     set_emissivity_recursively(sponza, 0.2)
-    set_roughness_for_recursively_for_specific_child(sponza, 0.2, 18)
+    set_roughness_for_recursively_for_specific_child(sponza, 0.35, 18)
     global_model_node_idx = 0
-    set_roughness_for_recursively_for_specific_child(sponza, 0.1, 4)
+    set_roughness_for_recursively_for_specific_child(sponza, 0.4, 4)
     global_model_node_idx = 0
-    set_roughness_for_recursively_for_specific_child(sponza, 0.1, 7)
+    set_roughness_for_recursively_for_specific_child(sponza, 0.4, 7)
     global_model_node_idx = 0
     #for child in pillar.Children.value:
     #  child.Material.value.set_uniform("Roughness", 0.8)
@@ -451,10 +468,10 @@ if "MUSEUM" == SCENE_MODE:
         Type=avango.gua.LightType.POINT,
         Name = "light",
         Color = avango.gua.Color(1.0, 1.0, 1.0),
-        Brightness = 50
+        Brightness = 80
       )
 
-      light_scaling = 400
+      light_scaling = 100
 
       if i < 10:
         light.Transform.value =  avango.gua.make_trans_mat(-3.0, 2.5, -i*5) * avango.gua.make_scale_mat(light_scaling)
@@ -514,7 +531,7 @@ nettrans.distribute_object(mat)
 
 spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_kerberos_for_achill.sr")
+avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_achill.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
@@ -549,7 +566,7 @@ if "LION_SCENE" == SCENE_MODE:
     for light in light_list:
       non_avatar_scene_transform.Children.value.append(light)
 elif "MUSEUM" == SCENE_MODE:
-    non_avatar_scene_transform.Children.value = [sponza, pillar]
+    non_avatar_scene_transform.Children.value = [sponza, lion]
     for light in light_list:
       non_avatar_scene_transform.Children.value.append(light)
 elif "ARCHITECTURE" == SCENE_MODE:
@@ -637,8 +654,9 @@ screen = avango.gua.nodes.ScreenNode(Name="screen", Width=SCREEN_WIDTH, Height=S
 #size = avango.gua.Vec2ui(1920, 1080)
 #size = avango.gua.Vec2ui(2560, 1440)
 #size = avango.gua.Vec2ui(3200, 1800)
-size = avango.gua.Vec2ui(4096, 2160)
+size = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
 
+#size = avango.gua.Vec2ui(3840, 2160)
 #if("HMD_LIKE" == RES_MODE):
 #  size = avango.gua.Vec2ui(1920, 1080)
 
@@ -708,7 +726,7 @@ screen_path = "/net/grouped_view_setups_and_scene/navigation/screen"
 screen_observer_back_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_back"
 screen_observer_right_path = "/net/grouped_view_setups_and_scene/navigation/screen_observer_right"
 
-eye_distance = 0.064
+eye_distance = 0.0#64
 #eye_distance = 0.0
 
 if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
@@ -717,8 +735,8 @@ if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
 if "VIDEO_CAMERA" == OBSERVER_MODE:
     eye_distance = 0.0
 
-NEARCLIP = 1.0
-
+NEARCLIP = 0.1
+FARCLIP = 300.0
 
 #server_size = avango.gua.Vec2ui(384, 216)
 
@@ -735,7 +753,8 @@ server_cam = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
     BlackList = ["invisible_osaka_avatar"],
-    #NearClip = NEARCLIP
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     )
 
 
@@ -752,7 +771,8 @@ client_cam_center = avango.gua.nodes.CameraNode(
 
     EyeDistance = 0.064,
     EnableStereo = True,
-    #NearClip = NEARCLIP
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     )
 
 occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
@@ -769,7 +789,8 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    #NearClip = NEARCLIP,
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
@@ -792,9 +813,10 @@ client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.064,
+    EyeDistance = 0.0, #0.064,
     EnableStereo = True,
-    #NearClip = NEARCLIP
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     )
 
 occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
@@ -808,10 +830,11 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.064,
+    EyeDistance = 0.0, #0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    #NearClip = NEARCLIP,
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
@@ -842,7 +865,8 @@ client_cam_right = avango.gua.nodes.CameraNode(
 
     EyeDistance = 0.064,
     EnableStereo = True,
-    #NearClip = NEARCLIP
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
@@ -859,11 +883,17 @@ occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
     EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
-    #NearClip = NEARCLIP,
+    NearClip = NEARCLIP,
+    FarClip = FARCLIP
     #FarClip = FARCLIP,
     #NearClip = NEARCLIP
     #needs to be invisible as soon as the real render-client comes into play
     )
+
+
+
+
+
 
 
 scene_view_transform = avango.gua.nodes.TransformNode(Name="scene_view_transform")
@@ -877,7 +907,12 @@ loggings_indicator = avango.gua.nodes.TransformNode(Name="logging_indicator")
 navigation = avango.gua.nodes.TransformNode(Name="navigation")
 navigation.Children.value = [screen, server_cam, client_cam_left, client_cam_center, client_cam_right,  occlusion_slave_client_cam_left, occlusion_slave_client_cam_center, occlusion_slave_client_cam_right]
 
-navigation.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 8.0)
+
+if 1 == SEGMENT_NUMBER:
+  navigation.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 15.0)
+
+if 2 == SEGMENT_NUMBER:
+  navigation.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 3.0)
 
 grouped_view_setups_and_scene = avango.gua.nodes.TransformNode(Name="grouped_view_setups_and_scene")
 grouped_view_setups_and_scene.Children.value = [navigation, scene_view_transform, loggings_indicator]
@@ -971,8 +1006,8 @@ timer = avango.nodes.TimeSensor()
 avatar_path_animator = TimedKeyframePathAnimation()
 avatar_path_animator.TimeIn.connect_from(timer.Time)
 
-if "LION_SCENE" == SCENE_MODE:
-  avatar_transform.Transform.connect_from(avatar_path_animator.MatrixOut)
+#if "LION_SCENE" == SCENE_MODE:
+avatar_transform.Transform.connect_from(avatar_path_animator.MatrixOut)
 
 
 
@@ -993,7 +1028,7 @@ if (not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE)
 
     #tracking_target id 18 = video cam
     DeviceSensorVideoCamera = avango.daemon.nodes.DeviceSensor(DeviceService = avango.daemon.DeviceService())
-    DeviceSensorVideoCamera.Station.value = "tracking-dbl-video-camera"
+    DeviceSensorVideoCamera.Station.value = "cam_target"
     DeviceSensorVideoCamera.TransmitterOffset.value = avango.gua.make_trans_mat(0.0, -0.045,0.0)
 
     """
@@ -1023,13 +1058,20 @@ if (not ("3_CLIENTS_SIMULATED" == OBSERVER_MODE)
 
 
 
+
     if "3_CLIENTS_LIVE" == OBSERVER_MODE:
         client_cam_right.Transform.connect_from(DeviceSensorGlassesRight.Matrix)
         occlusion_slave_client_cam_right.Transform.connect_from(DeviceSensorGlassesRight.Matrix)
+
+
         client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
         occlusion_slave_client_cam_center.Transform.connect_from(DeviceSensorGlassesCenter.Matrix)
-        client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
-        occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+        #client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+        #occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorGlassesLeft.Matrix)
+        client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
+        occlusion_slave_client_cam_left.Transform.connect_from(DeviceSensorVideoCamera.Matrix)       
+
+        #DeviceSensorVideoCamera
         # client_cam_slot2.Transform.connect_from(DeviceSensorVideoCamera.Matrix)
 
     # else:

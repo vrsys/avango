@@ -44,6 +44,7 @@ CLIENT_MODE = "VIDEO_POWERWALL"
 #CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
 
 DEBUG_MODE = "NONE"
+DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
 LOGGING_MODE = "DISABLED"
@@ -89,8 +90,6 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
   WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
 
-  if("HMD_LIKE" == RES_MODE):
-    WINDOW_RESOLUTION = avango.gua.Vec2ui(1920, 1080)
 
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1920, 1080)
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
@@ -102,18 +101,33 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
 
-  if True:
-    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
-    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
-    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
-    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+  if "OCCLUSION_SLAVE_DEBUG" == DEBUG_MODE:
+    if True:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*3840, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(3840, 2160)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(3840, 0)
+    else:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*1280, 720)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(1280, 720)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(1280, 0)
+      
   else:
-    WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
-    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0)    
+    if True:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+    else:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0)    
 
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO

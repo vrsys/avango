@@ -48,12 +48,13 @@ KERBEROS = "141.54.147.20"
 CURRENTLY_USED_SERVER = KERBEROS
 
 
-#CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
-CLIENT_MODE = "VIDEO_POWERWALL"
+CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
+#CLIENT_MODE = "VIDEO_POWERWALL"
 #CLIENT_MODE = "SCREENSHOT_DESKTOP"
 ##CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
 
-DEBUG_MODE = "NONE"
+#DEBUG_MODE = "NONE"
+DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
 STEREO_MODE = 0
@@ -64,18 +65,36 @@ RIGHT_VIEWPORT_START = 0
 
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
-  if True:
-    WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
-    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+
+  if "OCCLUSION_SLAVE_DEBUG" == DEBUG_MODE:
+    #WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+    #RENDERING_RESOLUTION = avango.gua.Vec2ui(3840, 2160)
     #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
-    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096 + 400, 0)
+    if True:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(3840, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+    else:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(1280, 720)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(1280, 720)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
+
   else:
-    WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
-    RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
-    LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
-    RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0) 
+    if True:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(400, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(400, 0)
+    else:
+      WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
+      RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
+      LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
+      RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0)
+  
   DISPLAY_VARIABLE_LEFT   = ":0.1"
   DISPLAY_VARIABLE_CENTER = ":0.1"
   DISPLAY_VARIABLE_RIGHT  = ":0.1" # for the occlusion slave, one GPU is rendering everything
@@ -84,7 +103,8 @@ elif "VIDEO_POWERWALL" == CLIENT_MODE:
   DISPLAY_VARIABLE_CENTER = ":0.1"
   DISPLAY_VARIABLE_RIGHT  = ":0.1" 
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
-  """
+  
+  
   if True:
     WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
     RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
@@ -97,7 +117,7 @@ elif "VIDEO_POWERWALL" == CLIENT_MODE:
     #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
     LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
     RIGHT_VIEWPORT_START = avango.gua.Vec2ui(4096, 0)    
-  """
+  
 
   if False:
     WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)

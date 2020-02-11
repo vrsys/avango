@@ -51,7 +51,7 @@ OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
 
 DEBUG_MODE = "NONE"
-DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
+#DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
 #CLIENT_MODE = ""
@@ -74,10 +74,10 @@ SCENE_MODE = "MUSEUM"
 #SEQUENCE THREE POSITION
 #(    0, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
 
-SEGMENT_NUMBER = 1 #sequence 1
+#SEGMENT_NUMBER = 1 #sequence 1
 #SEGMENT_NUMBER = 2 #sequence 2
-SEGMENT_NUMBER = 3 #sequence 3
-
+#SEGMENT_NUMBER = 3 #sequence 3
+SEGMENT_NUMBER = 4 #sequence 2
 RES_MODE = "POWERWALL"
 #RES_MODE = "HMD_LIKE"
 
@@ -209,8 +209,12 @@ class TimedKeyframePathAnimation(avango.script.Script):
 
 
     if 1 == SEGMENT_NUMBER:
-      indexed_keyframe_positions = [(    0, avango.gua.Vec3(1.5 + right_offset, 6.4 + down_offset, -14.5), 180),
-                                    (41000, avango.gua.Vec3(1.5 + right_offset, 6.4 + down_offset, -14.5), 180),
+      indexed_keyframe_positions = [(    0, avango.gua.Vec3( -1.0 + right_offset, 6.4 + down_offset, -22.5), 180),
+                                    ( 2000, avango.gua.Vec3( -1.0 + right_offset, 6.4 + down_offset, -15.4), 180),
+                                    ( 6000, avango.gua.Vec3( -1.0 + right_offset, 6.4 + down_offset, -15.4), 180),
+                                    ( 8100, avango.gua.Vec3( -1.0 + right_offset, 6.4 + down_offset, -15.4), 180),
+                                    ( 8700, avango.gua.Vec3( -1.0 + right_offset, 6.4 + down_offset, -15.4),  90),
+                                    (11000, avango.gua.Vec3(-10.0 + right_offset, 6.4 + down_offset, -15.4),  90),
                                     #(10690, avango.gua.Vec3(0 + right_offset, 0 + down_offset, 5.6), 180),
                                     #(14360, avango.gua.Vec3(0 + right_offset, 0 + down_offset, 5.6), 180),
                                     #(17095, avango.gua.Vec3(0 + right_offset, 0 + down_offset, 2.1), 180),
@@ -225,13 +229,23 @@ class TimedKeyframePathAnimation(avango.script.Script):
                                    ]
 
     if 2 == SEGMENT_NUMBER:
-      indexed_keyframe_positions = [(    0, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset, 0.7), 180),
-                                    (41000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset, 0.7), 180),
+      indexed_keyframe_positions = [(    0, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset,-17.7), 180),
+                                    #( 6000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset,4.7), 180),
+                                    (10000, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset, -0.0), 180),
+                                    (25000, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset, -7.0), 180),
+                                   ]
+
+    if 3 == SEGMENT_NUMBER:
+      indexed_keyframe_positions = [(    0, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset, 8.5), 180),
+                                    #( 6000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset,4.7), 180),
+                                    (10000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset, 8.5), 180),
+                                    (25000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset, 8.5), 180),
                                    ]
       
-    if 3 == SEGMENT_NUMBER:
-      indexed_keyframe_positions = [(    0, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
-                                    (41000, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
+    if 4 == SEGMENT_NUMBER:
+      indexed_keyframe_positions = [(     0, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -4.2), 170),
+                                    (10000, avango.gua.Vec3( 1.3 + right_offset, 0 + down_offset, -4.2), 170),
+                                    #(41000, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
 
                                   #(0, avango.gua.Vec3(0, 0, -10), 180),
                                   #(7000, avango.gua.Vec3(0, 0, 5),180),
@@ -446,17 +460,20 @@ if "LION_SCENE" == SCENE_MODE:
 if "MUSEUM" == SCENE_MODE:
     scale = 1.15
     if 0 == OCCLUDER_PROFILING:
-      sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+      #sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_and_missing_background.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+      sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_big_pillar.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+
       #sponza = loader.create_geometry_from_file("sponza", "/home/wabi7015/test_grid/test_grid.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       #vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
      # pillar = loader.create_geometry_from_file("pillar", "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NORMALIZE_POSITION  | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)    
     else:
-      sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+      sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_big_pillar.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
+      #sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_and_missing_background.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       #sponza = loader.create_geometry_from_file("sponza", "/home/wabi7015/test_grid/test_grid.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       #vase = loader.create_geometry_from_file("vase", "/home/wabi7015/Downloads/Ancient_Vase.3ds", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)   
     #  pillar = loader.create_geometry_from_file("pillar",  "/mnt/data_internal/geometry_data/arctron_point_scans/Terrakottaarmee_Bogenschuetze_T21_G18_01/avango_lod/Bogenschuetze-01.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.NO_SHARED_MATERIALS | avango.gua.LoaderFlags.NORMALIZE_POSITION | avango.gua.LoaderFlags.NORMALIZE_SCALE | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)        
     
-    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/binarized_loewe/250k_hq_texture_loewe_quickfix_3.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
+    lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/binarized_loewe/even_more_cleaned_loewe.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
     #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
     lion.Transform.value = avango.gua.make_trans_mat(1.5, -0.05, -3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
     
@@ -777,8 +794,20 @@ if( "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE):
 if "VIDEO_CAMERA" == OBSERVER_MODE:
     eye_distance = 0.0
 
-NEARCLIP = 0.1
-FARCLIP = 300.0
+
+if 1 == SEGMENT_NUMBER:
+  NEARCLIP = 1.0
+  FARCLIP = 150.0
+elif 2 == SEGMENT_NUMBER:
+  NEARCLIP = 0.1
+  FARCLIP = 150.0
+elif 3 == SEGMENT_NUMBER:
+  NEARCLIP = 0.1
+  FARCLIP = 150.0
+else:
+  NEARCLIP = 0.01
+  FARCLIP = 150.0
+
 
 #server_size = avango.gua.Vec2ui(384, 216)
 #server_size = avango.gua.Vec2ui(1280, 720)
@@ -845,7 +874,7 @@ screen_left_path = screen_path
 #  screen_left_path = screen_observer_back_path
 
 client_cam_left = avango.gua.nodes.CameraNode(
-    ViewID=4,
+    ViewID=5,
     Name="viewer_0_weimar_left",
     LeftScreenPath=screen_left_path,
     RightScreenPath=screen_left_path,
@@ -862,7 +891,7 @@ client_cam_left = avango.gua.nodes.CameraNode(
     )
 
 occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
-    ViewID=4,
+    ViewID=5,
     Name="os_weimar_v0_osaka_left",
     LeftScreenPath=screen_left_path,
     RightScreenPath=screen_left_path,
@@ -895,7 +924,7 @@ if "VIDEO_POWERWALL" == CLIENT_MODE:
 
 
 client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=4,
     Name="viewer_0_weimar_right",
     LeftScreenPath=screen_right_path,
     RightScreenPath=screen_right_path,
@@ -912,7 +941,7 @@ client_cam_right = avango.gua.nodes.CameraNode(
     )
 
 occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
-    ViewID=5,
+    ViewID=4,
     Name="os_weimar_v0_osaka_right",
     LeftScreenPath=screen_right_path,
     RightScreenPath=screen_right_path,
@@ -954,10 +983,11 @@ if 1 == SEGMENT_NUMBER:
   navigation.Transform.value = avango.gua.make_trans_mat(0.0, -1.0, 15.0)
 
 if 2 == SEGMENT_NUMBER:
-  navigation.Transform.value = avango.gua.make_trans_mat(-1.0, -1.0, 4.5)
-
-
+  navigation.Transform.value = avango.gua.make_trans_mat(-0.8, -1.0, 12.4)
 if 3 == SEGMENT_NUMBER:
+  navigation.Transform.value = avango.gua.make_trans_mat(-1.0, -1.0, 12.4)
+
+if 4 == SEGMENT_NUMBER:
   navigation.Transform.value = avango.gua.make_trans_mat(1.5, -1.0, 1.5)
 
 

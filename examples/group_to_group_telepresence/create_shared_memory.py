@@ -48,7 +48,7 @@ MemoryController.add_memory_segment("DEPTH_FEEDBACK_SEGMENT", 1000)
 MemoryController.construct_named_atomic_int("DEPTH_FEEDBACK_SEGMENT", "DEPTH_FEEDBACK_SEMAPHOR")
 MemoryController.set_value_for_named_object("DEPTH_FEEDBACK_SEMAPHOR", 99)
 
-
+"""
 MemoryController.add_memory_segment("segment_for_DB_0L", 65536*2);
 MemoryController.construct_named_64KB_char_buffer("segment_for_DB_0L", "DB_0L")
 
@@ -66,6 +66,24 @@ MemoryController.add_memory_segment("segment_for_DB_5L", 65536*2);
 MemoryController.add_memory_segment("segment_for_DB_5R", 65536*2);
 MemoryController.construct_named_64KB_char_buffer("segment_for_DB_5L", "DB_5L")
 MemoryController.construct_named_64KB_char_buffer("segment_for_DB_5R", "DB_5R")
+"""
 
+MemoryController.add_memory_segment("segment_for_DB_0L", 1500000*2);
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_0L", "DB_0L")
+
+MemoryController.add_memory_segment("segment_for_DB_3L", 1500000*2);
+MemoryController.add_memory_segment("segment_for_DB_3R", 1500000*2);
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_3L", "DB_3L")
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_3R", "DB_3R")
+
+MemoryController.add_memory_segment("segment_for_DB_4L", 1500000*2);
+MemoryController.add_memory_segment("segment_for_DB_4R", 1500000*2);
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_4L", "DB_4L")
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_4R", "DB_4R")
+
+MemoryController.add_memory_segment("segment_for_DB_5L", 1500000*2);
+MemoryController.add_memory_segment("segment_for_DB_5R", 1500000*2);
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_5L", "DB_5L")
+MemoryController.construct_named_1MB_char_buffer("segment_for_DB_5R", "DB_5R")
 
 print("Successfully created shared memory segment!")

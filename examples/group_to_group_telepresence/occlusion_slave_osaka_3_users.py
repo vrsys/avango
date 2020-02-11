@@ -53,8 +53,8 @@ CLIENT_MODE = "MEASUREMENT_ANAGLYPH"
 #CLIENT_MODE = "SCREENSHOT_DESKTOP"
 ##CLIENT_MODE = "DEBUG_3_USERS_WEAK_PC"
 
-#DEBUG_MODE = "NONE"
-DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
+DEBUG_MODE = "NONE"
+#DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
 STEREO_MODE = 0
@@ -135,7 +135,7 @@ elif "VIDEO_POWERWALL" == CLIENT_MODE:
 
 elif "SCREENSHOT_DESKTOP" == CLIENT_MODE:
   STEREO_MODE          = avango.gua.StereoMode.MONO
-  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(128, 72)
   RENDERING_RESOLUTION = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START  = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
@@ -146,7 +146,7 @@ elif "DEBUG_3_USERS_WEAK_PC" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
-  WINDOW_RESOLUTION    = avango.gua.Vec2ui(100, 100)
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(128, 72)
   RENDERING_RESOLUTION    = WINDOW_RESOLUTION
   LEFT_VIEWPORT_START     = avango.gua.Vec2ui(0, 0)
   RIGHT_VIEWPORT_START    = avango.gua.Vec2ui(0, 0)
@@ -174,7 +174,7 @@ class Initializer(avango.script.Script):
     #size = avango.gua.Vec2ui(1600, 1200)
     #size = avango.gua.Vec2ui(1920, 1080)
     #size = avango.gua.Vec2ui(100, 100)
-    size = avango.gua.Vec2ui(100, 100)    
+    size = avango.gua.Vec2ui(128, 72)    
     #size = avango.gua.Vec2ui(3840, 2160)
     self.window_center = avango.gua.nodes.GlfwWindow(Size=size,
                                               Display = DISPLAY_VARIABLE_CENTER,  # ":0.1",

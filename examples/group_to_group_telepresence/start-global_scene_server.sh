@@ -40,9 +40,10 @@ export LD_LIBRARY_PATH="$LOCAL_GUACAMOLE/lib":$GUACAMOLE/lib:$LD_LIBRARY_PATH
 echo "BEFORE EXECUTING DEMON"
 python3 ./daemon.py > /dev/null &
 
+SCENE_NUMBER=$1
 
 # run program
-cd "$DIR" && python3 ./global_scene_server.py
+cd "$DIR" && python3 ./global_scene_server.py $SCENE_NUMBER
 
 
 # kill daemon

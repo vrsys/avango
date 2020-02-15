@@ -25,6 +25,7 @@ A distributed viewer setup: This Python scripts starts an
 avango.osg.simpleviewer to load a given geometry. Any client connected to the
 group "testgroup" should receive this model. (see also simpleviewer-clnt.py)
 '''
+import sys
 
 import avango
 import avango.script
@@ -44,8 +45,8 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
-#OBSERVER_MODE = "3_CLIENTS_SIMULATED"
-OBSERVER_MODE = "3_CLIENTS_LIVE"
+OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+#OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
 #OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
@@ -74,10 +75,16 @@ SCENE_MODE = "MUSEUM"
 #SEQUENCE THREE POSITION
 #(    0, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
 
-#SEGMENT_NUMBER = 1 #sequence 1
+SEGMENT_NUMBER = 1 #sequence 1
 #SEGMENT_NUMBER = 2 #sequence 2
 #SEGMENT_NUMBER = 3 #sequence 3
-SEGMENT_NUMBER = 4 #sequence 2
+#SEGMENT_NUMBER = 4 #sequence 2
+
+
+if len(sys.argv) == 2:
+    SEGMENT_NUMBER = int(sys.argv[1]) + 1
+
+
 RES_MODE = "POWERWALL"
 #RES_MODE = "HMD_LIKE"
 
@@ -458,7 +465,7 @@ if "LION_SCENE" == SCENE_MODE:
       light_list.append(light)
 
 if "MUSEUM" == SCENE_MODE:
-    scale = 1.15
+    scale = 1.20
     if 0 == OCCLUDER_PROFILING:
       #sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_and_missing_background.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
       sponza = loader.create_geometry_from_file("sponza", "/opt/3d_models/Sponza/sponzaPBR_without_lion_heads_big_pillar.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS | avango.gua.LoaderFlags.OPTIMIZE_GEOMETRY)
@@ -757,11 +764,15 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 
 
-eye_height = 1.7
+eye_height = 1.75
 
 camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
 camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
 camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
+
+#camera_translations_right = avango.gua.Vec3( 0.0, eye_height, 0.0)
+#camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
+#camera_translations_left  = avango.gua.Vec3(0.0, eye_height, 0.0)
 
 # camera_translations_left = avango.gua.Vec3( 1.0, eye_height, 2.0)
 # camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
@@ -805,8 +816,9 @@ elif 3 == SEGMENT_NUMBER:
   NEARCLIP = 0.1
   FARCLIP = 150.0
 else:
-  NEARCLIP = 0.01
+  NEARCLIP = 0.1
   FARCLIP = 150.0
+
 
 
 #server_size = avango.gua.Vec2ui(384, 216)
@@ -884,7 +896,7 @@ client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.0, #0.064,
+    EyeDistance = 0.064,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -901,7 +913,7 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.0, #0.064,
+    EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,

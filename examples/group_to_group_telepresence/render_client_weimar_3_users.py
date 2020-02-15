@@ -27,6 +27,10 @@ there is another instance loading some geometry under this node this model
 should also appear in the client.  (see also simpleviewer-srv.py)
 '''
 
+import sys
+import subprocess
+
+
 import avango
 import avango.script
 import avango.gua
@@ -47,8 +51,8 @@ DEBUG_MODE = "NONE"
 #DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
-LOGGING_MODE = "DISABLED"
-#LOGGING_MODE = "ENABLED"
+#LOGGING_MODE = "DISABLED"
+LOGGING_MODE = "ENABLED"
 
 STEREO_MODE = 0
 WINDOW_RESOLUTION = 0
@@ -177,6 +181,18 @@ class TimedFPSPrinter(avango.script.Script):
   num_files_logged = 0
 
   frame_counter = 0
+
+  logged_valid_frames = 0
+
+  have_one_valid_timestamp = 0
+  last_timestamp = 0
+
+  stop_logging = 0
+
+  already_logged_seconds = 0.0
+
+  num_seconds_to_log = 0 
+
   def set_window_left(self, window_left):
     self.WindowLeft = window_left
 
@@ -196,18 +212,59 @@ class TimedFPSPrinter(avango.script.Script):
   def update(self):
     #return
 
+    if len(sys.argv) == 2:
+      self.num_seconds_to_log = int(sys.argv[1])
+
     self.frame_counter += 1
 
     if(self.WindowCenter != 0):
       if(0 != self.WindowCenter.RenderingFPS.value):
-        if(self.frame_counter % 100 == 0):
-          print("Center FPS: " + str(1.0 / self.WindowCenter.RenderingFPS.value) )
+        #if(self.frame_counter % 100 == 0):
+        elapsed_seconds = 1.0 / self.WindowCenter.RenderingFPS.value
 
-    if self.LoggingIndicatorNode == 0:
+
+        if elapsed_seconds != 1.0:
+          #print("Center FPS: " + str(elapsed_seconds) )
+          self.logged_valid_frames += 1
+
+          #if self.logged_valid_frames > 100:
+
+
+    #if self.LoggingIndicatorNode == 0:
+    #  return
+
+    if not "ENABLED" == LOGGING_MODE:
       return
+    else:
+      pass
+      #return
 
-    if (self.AvatarNode != 0) and (self.WindowCenter != 0) and (self.WindowLeft != 0) and (self.WindowRight != 0):
-      if len(self.LoggingIndicatorNode.Tags.value) > 0:
+
+    if self.logged_valid_frames > 100:
+      print("Started Logging")
+
+      if 1 == self.have_one_valid_timestamp:
+        current_timestamp =  time.time()
+
+        elapsed_time_since_last_evaluate_call = current_timestamp - self.last_timestamp
+        print(elapsed_time_since_last_evaluate_call)
+        self.last_timestamp = current_timestamp
+        self.already_logged_seconds += elapsed_time_since_last_evaluate_call
+
+        if self.already_logged_seconds > self.num_seconds_to_log:
+          self.stop_logging = 1
+      else:
+         self.last_timestamp = time.time()
+         self.have_one_valid_timestamp = 1
+      #pass
+    else:
+      return
+      #exit(-1)
+
+    if (self.AvatarNode != 0) or (self.WindowCenter != 0) or (self.WindowLeft != 0) or (self.WindowRight != 0):
+      #if len(self.LoggingIndicatorNode.Tags.value) > 0:
+
+      if self.stop_logging == 0:
         self.AvatarNode.fetch_stats()
 
         current_stream_timestamp      = round(self.AvatarNode.get_stats_timestamp(), 5)
@@ -216,7 +273,7 @@ class TimedFPSPrinter(avango.script.Script):
         current_request_reply_latency = self.AvatarNode.get_stats_request_reply_latency()
         current_total_message_payload = self.AvatarNode.get_stats_total_message_payload_in_byte()
 
-        if (0 == self.WindowCenter.RenderingFPS.value) and (0 == self.WindowLeft.RenderingFPS.value) and (0 == self.WindowRight.RenderingFPS.value):
+        if (0 == self.WindowCenter.RenderingFPS.value) or (0 == self.WindowLeft.RenderingFPS.value) or (0 == self.WindowRight.RenderingFPS.value):
           return
 
         current_draw_time_center      = 1.0 / self.WindowCenter.RenderingFPS.value
@@ -245,37 +302,37 @@ class TimedFPSPrinter(avango.script.Script):
         self.num_entries = self.num_entries + 1
       else:
         if self.num_entries > 0:
-          log_tri_count = open("log_tri_count_mode_" + str(self.num_files_logged) , 'w')
+          log_tri_count = open("log_tri_count", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_tri_count.write(str(key) + " " + str(int(self.tri_count_dict[key] / value) ) + "\n" )
           log_tri_count.close()
 
-          log_payload_count = open("log_payload_count_mode_" + str(self.num_files_logged) , 'w')
+          log_payload_count = open("log_payload_count", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_payload_count.write(str(key) + " " + str(int(self.payload_count_dict[key] / value) ) + "\n" )
           log_payload_count.close()
 
-          log_recon_times = open("log_recon_times_mode_" + str(self.num_files_logged) , 'w')
+          log_recon_times = open("log_recon_times", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_recon_times.write(str(key) + " " + str(self.recon_time_dict[key] / value) + "\n" )
           log_recon_times.close()
 
-          log_reply_times = open("log_reply_times_mode_" + str(self.num_files_logged) , 'w')
+          log_reply_times = open("log_reply_times", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_reply_times.write(str(key) + " " + str(self.reply_time_dict[key] / value) + "\n" )
           log_reply_times.close()
 
-          log_draw_times_left = open("log_draw_times_left_mode_" + str(self.num_files_logged) , 'w')
+          log_draw_times_left = open("log_draw_times_left", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_draw_times_left.write(str(key) + " " + str(self.draw_time_left_dict[key] / value) + "\n" )
           log_draw_times_left.close()
 
-          log_draw_times_right = open("log_draw_times_right_mode_" + str(self.num_files_logged) , 'w')
+          log_draw_times_right = open("log_draw_times_right", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_draw_times_right.write(str(key) + " " + str(self.draw_time_right_dict[key] / value) + "\n" )
           log_draw_times_right.close()
 
-          log_draw_times_center = open("log_draw_times_center_mode_" + str(self.num_files_logged) , 'w')
+          log_draw_times_center = open("log_draw_times_center", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_draw_times_center.write(str(key) + " " + str(self.draw_time_center_dict[key] / value) + "\n" )
           log_draw_times_center.close()
@@ -294,6 +351,9 @@ class TimedFPSPrinter(avango.script.Script):
           self.num_files_logged += 1
             #print(key, value)
 
+
+          subprocess.check_output(['killall','python3'])
+          sys.exit()
           #perform logging
     #if self.LoggingIndicatorNode != 0:
     #  if len(self.LoggingIndicatorNode.Tags.value) > 0:

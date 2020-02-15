@@ -32,8 +32,10 @@ else
     python3 $AVANGO/examples/examples_common/daemon.py > /dev/null &
 fi
 
+NUM_SECONDS_TO_LOG=$1
+
 # run program
-cd "$DIR" && python3 ./render_client_weimar_3_users.py
+cd "$DIR" && python3 render_client_weimar_3_users.py $NUM_SECONDS_TO_LOG
 
 # kill daemon
 kill %1

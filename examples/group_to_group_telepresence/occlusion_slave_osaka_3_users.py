@@ -82,7 +82,7 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
       RIGHT_VIEWPORT_START = avango.gua.Vec2ui(0, 0)
 
   else:
-    if True:
+    if False:
       WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
       RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
       #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)

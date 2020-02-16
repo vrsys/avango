@@ -92,7 +92,7 @@ DISPLAY_VARIABLE_CAM_SLOT_2  = ":0.3"
 if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.ANAGLYPH_RED_CYAN
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1400, 1600)
-  WINDOW_RESOLUTION    = avango.gua.Vec2ui(3840, 2160)
+  WINDOW_RESOLUTION    = avango.gua.Vec2ui(4096, 2160)
 
 
   #WINDOW_RESOLUTION    = avango.gua.Vec2ui(1920, 1080)
@@ -120,7 +120,7 @@ elif "VIDEO_POWERWALL" == CLIENT_MODE:
       RIGHT_VIEWPORT_START = avango.gua.Vec2ui(1280, 0)
       
   else:
-    if True:
+    if False:
       WINDOW_RESOLUTION    = avango.gua.Vec2ui(2*4096, 2160)
       RENDERING_RESOLUTION = avango.gua.Vec2ui(4096 - 400 - 425, 2160)
       #RENDERING_RESOLUTION = avango.gua.Vec2ui(4096, 2160)
@@ -218,14 +218,12 @@ class TimedFPSPrinter(avango.script.Script):
     self.frame_counter += 1
 
     if(self.WindowCenter != 0):
-      if(0 != self.WindowCenter.RenderingFPS.value):
+      if(0.0 != self.WindowCenter.RenderingFPS.value):
         #if(self.frame_counter % 100 == 0):
-        elapsed_seconds = 1.0 / self.WindowCenter.RenderingFPS.value
-
-
-        if elapsed_seconds != 1.0:
-          #print("Center FPS: " + str(elapsed_seconds) )
-          self.logged_valid_frames += 1
+          elapsed_seconds = 1.0 / self.WindowCenter.RenderingFPS.value
+          if elapsed_seconds != 1.0:
+            #print("Center FPS: " + str(elapsed_seconds) )
+            self.logged_valid_frames += 1
 
           #if self.logged_valid_frames > 100:
 
@@ -240,7 +238,7 @@ class TimedFPSPrinter(avango.script.Script):
       #return
 
 
-    if self.logged_valid_frames > 100:
+    if self.logged_valid_frames > 250:
       print("Started Logging")
 
       if 1 == self.have_one_valid_timestamp:

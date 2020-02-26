@@ -53,6 +53,7 @@ class AV_GUA_DLL WindowBase : public av::FieldContainer
     SFVec2ui LeftPosition;
     SFVec2ui RightResolution;
     SFVec2ui RightPosition;
+    SFVec2ui  WindowPosition;
 
     SFBool EnableVsync;
     SFBool EnableFullscreen;
@@ -97,6 +98,9 @@ class AV_GUA_DLL WindowBase : public av::FieldContainer
 
     virtual void getRightPositionCB(const SFVec2ui::GetValueEvent& event);
     virtual void setRightPositionCB(const SFVec2ui::SetValueEvent& event);
+
+    virtual void getWindowPositionCB(const SFVec2ui::GetValueEvent& event);
+    virtual void setWindowPositionCB(const SFVec2ui::SetValueEvent& event);
 
     virtual void getEnableVsyncCB(const SFBool::GetValueEvent& event);
     virtual void setEnableVsyncCB(const SFBool::SetValueEvent& event);

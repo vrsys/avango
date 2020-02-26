@@ -114,7 +114,9 @@ def start():
 
     size = avango.gua.Vec2ui(1024, 768)
 
-    window = avango.gua.nodes.GlfwWindow(Size=size, LeftResolution=size)
+    win_pos = avango.gua.Vec2ui(1000, 0)
+
+    window = avango.gua.nodes.Window(Size=size, LeftResolution=size, WindowPosition=win_pos)
 
     avango.gua.register_window("window", window)
 

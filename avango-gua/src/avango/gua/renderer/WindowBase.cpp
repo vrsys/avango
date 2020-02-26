@@ -35,6 +35,8 @@ av::gua::WindowBase::WindowBase(std::shared_ptr<::gua::WindowBase> const& guaWin
 
     AV_FC_ADD_ADAPTOR_FIELD(RightPosition, std::bind(&WindowBase::getRightPositionCB, this, std::placeholders::_1), std::bind(&WindowBase::setRightPositionCB, this, std::placeholders::_1));
 
+    AV_FC_ADD_ADAPTOR_FIELD(WindowPosition, std::bind(&WindowBase::getWindowPositionCB, this, std::placeholders::_1), std::bind(&WindowBase::setWindowPositionCB, this, std::placeholders::_1));
+
     AV_FC_ADD_ADAPTOR_FIELD(EnableVsync, std::bind(&WindowBase::getEnableVsyncCB, this, std::placeholders::_1), std::bind(&WindowBase::setEnableVsyncCB, this, std::placeholders::_1));
 
     AV_FC_ADD_ADAPTOR_FIELD(WarpMatrixRedRight, std::bind(&WindowBase::getWarpMatrixRedRight, this, std::placeholders::_1), std::bind(&WindowBase::setWarpMatrixRedRight, this, std::placeholders::_1));
@@ -111,6 +113,10 @@ void av::gua::WindowBase::setRightResolutionCB(const SFVec2ui::SetValueEvent& ev
 void av::gua::WindowBase::getRightPositionCB(const SFVec2ui::GetValueEvent& event) { *(event.getValuePtr()) = m_guaWindowBase->config.get_right_position(); }
 
 void av::gua::WindowBase::setRightPositionCB(const SFVec2ui::SetValueEvent& event) { m_guaWindowBase->config.set_right_position(event.getValue()); }
+
+void av::gua::WindowBase::getWindowPositionCB(const SFVec2ui::GetValueEvent& event) { *(event.getValuePtr()) = m_guaWindowBase->config.get_window_position(); }
+
+void av::gua::WindowBase::setWindowPositionCB(const SFVec2ui::SetValueEvent& event) { m_guaWindowBase->config.set_window_position(event.getValue()); }
 
 void av::gua::WindowBase::getEnableVsyncCB(const SFBool::GetValueEvent& event) { *(event.getValuePtr()) = m_guaWindowBase->config.get_enable_vsync(); }
 

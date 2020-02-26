@@ -51,9 +51,19 @@ float get_stats_timestamp(av::gua::SPointsNode const& node) { return node.getSta
 
 float get_stats_reconstruction_time(av::gua::SPointsNode const& node) { return node.getStatReconTimeReceived(); }
 
+float get_stats_box_division_time(av::gua::SPointsNode const& node) { return node.getStatBoxDivisionTimeReceived(); }
+float get_stats_texture_processing_time(av::gua::SPointsNode const& node) { return node.getStatTextureProcessingTimeReceived(); }
+float get_stats_frustum_and_occlusion_culling_time(av::gua::SPointsNode const& node) { return node.getStatFrustumAndOcclusionCullingTimeReceived(); }
+float get_stats_integration_time(av::gua::SPointsNode const& node) { return node.getStatIntegrationTimeReceived(); }
+float get_stats_marching_cubes_time(av::gua::SPointsNode const& node) { return node.getStatMarchingCubesTimeReceived(); }
+float get_stats_atlas_generation_time(av::gua::SPointsNode const& node) { return node.getStatAtlasGenerationTimeReceived(); }
+
+
 float get_stats_request_reply_latency(av::gua::SPointsNode const& node) { return node.getStatRequestReplyLatencyReceived(); }
 
 int get_stats_total_message_payload_in_byte(av::gua::SPointsNode const& node) { return node.getStatTotaMessagePayloadInByteReceived(); }
+
+bool get_stats_is_calibration_data(av::gua::SPointsNode const& node) { return node.getStatIsCalibrationData(); }
 
 void init_SPointsNode()
 {
@@ -65,5 +75,14 @@ void init_SPointsNode()
         .def("get_stats_timestamp", &get_stats_timestamp)
         .def("get_stats_reconstruction_time", &get_stats_reconstruction_time)
         .def("get_stats_request_reply_latency", &get_stats_request_reply_latency)
-        .def("get_stats_total_message_payload_in_byte", &get_stats_total_message_payload_in_byte);
+        .def("get_stats_total_message_payload_in_byte", &get_stats_total_message_payload_in_byte)
+        .def("get_stats_is_calibration_data", &get_stats_is_calibration_data)
+        .def("get_stats_box_division_time", &get_stats_box_division_time  )
+        .def("get_stats_texture_processing_time", &get_stats_texture_processing_time  )
+        .def("get_stats_frustum_and_occlusion_culling_time", &get_stats_frustum_and_occlusion_culling_time  )
+        .def("get_stats_integration_time", &get_stats_integration_time  )
+        .def("get_stats_marching_cubes_time", &get_stats_marching_cubes_time  )
+        .def("get_stats_atlas_generation_time", &get_stats_atlas_generation_time  )
+
+        ;
 }

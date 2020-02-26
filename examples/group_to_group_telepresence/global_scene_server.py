@@ -239,7 +239,6 @@ class TimedKeyframePathAnimation(avango.script.Script):
       indexed_keyframe_positions = [(    0, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset,-17.7), 180),
                                     #( 6000, avango.gua.Vec3(-1.0 + right_offset, 0 + down_offset,4.7), 180),
                                     (10000, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset, -0.0), 180),
-                                    (25000, avango.gua.Vec3(-0.8 + right_offset, 0 + down_offset, -7.0), 180),
                                    ]
 
     if 3 == SEGMENT_NUMBER:
@@ -766,13 +765,13 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.75
 
-camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
-camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
-camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
-
-#camera_translations_right = avango.gua.Vec3( 0.0, eye_height, 0.0)
+#camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
 #camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
-#camera_translations_left  = avango.gua.Vec3(0.0, eye_height, 0.0)
+#camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
+
+camera_translations_right = avango.gua.Vec3( 0.0, eye_height, 0.0)
+camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
+camera_translations_left  = avango.gua.Vec3(0.0, eye_height, 0.0)
 
 # camera_translations_left = avango.gua.Vec3( 1.0, eye_height, 2.0)
 # camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
@@ -852,7 +851,7 @@ client_cam_center = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -869,7 +868,7 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,
@@ -896,7 +895,7 @@ client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -913,7 +912,7 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,
@@ -946,7 +945,7 @@ client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -963,7 +962,7 @@ occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.064,
+    EyeDistance = 0.0,#64,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,

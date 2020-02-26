@@ -30,7 +30,7 @@ should also appear in the client.  (see also simpleviewer-srv.py)
 import sys
 import subprocess
 
-
+import math
 import avango
 import avango.script
 import avango.gua
@@ -171,11 +171,27 @@ class TimedFPSPrinter(avango.script.Script):
   draw_time_center_dict = dict()
 
   recon_time_dict    = dict()
+  
+  #following attributes make up reco time
+  box_division_time_dict = dict()
+  texture_processing_time_dict = dict()
+  frustum_and_occlusion_culling_time_dict = dict()
+  integration_time_dict = dict()
+  marching_cubes_time_dict = dict()
+  atlas_generation_time_dict = dict()
+
   reply_time_dict    = dict()
   tri_count_dict     = dict()
   payload_count_dict = dict()
 
   entry_count_dict = dict()
+
+
+
+  entry_count_draw_time_left = 0
+  entry_count_draw_time_right = 0
+  entry_count_draw_time_center = 0    
+
 
   num_entries = 0
   num_files_logged = 0
@@ -192,6 +208,8 @@ class TimedFPSPrinter(avango.script.Script):
   already_logged_seconds = 0.0
 
   num_seconds_to_log = 0 
+
+  max_valid_draw_time = 0
 
   def set_window_left(self, window_left):
     self.WindowLeft = window_left
@@ -218,13 +236,15 @@ class TimedFPSPrinter(avango.script.Script):
     self.frame_counter += 1
 
     if(self.WindowCenter != 0):
-      if(0.0 != self.WindowCenter.RenderingFPS.value):
+      if(self.WindowCenter.RenderingFPS.value):
         #if(self.frame_counter % 100 == 0):
-          elapsed_seconds = 1.0 / self.WindowCenter.RenderingFPS.value
-          if elapsed_seconds != 1.0:
-            #print("Center FPS: " + str(elapsed_seconds) )
-            self.logged_valid_frames += 1
-
+          try:
+            elapsed_seconds = 1.0 / self.WindowCenter.RenderingFPS.value
+            if elapsed_seconds != 1.0:
+              #print("Center FPS: " + str(elapsed_seconds) )
+              self.logged_valid_frames += 1
+          except ZeroDivisionError:
+            pass
           #if self.logged_valid_frames > 100:
 
 
@@ -238,7 +258,7 @@ class TimedFPSPrinter(avango.script.Script):
       #return
 
 
-    if self.logged_valid_frames > 250:
+    if self.logged_valid_frames > 150:
       print("Started Logging")
 
       if 1 == self.have_one_valid_timestamp:
@@ -268,8 +288,23 @@ class TimedFPSPrinter(avango.script.Script):
         current_stream_timestamp      = round(self.AvatarNode.get_stats_timestamp(), 5)
         current_tri_count             = self.AvatarNode.get_stats_num_triangles()
         current_recon_time            = self.AvatarNode.get_stats_reconstruction_time()
+        #
+        current_box_division_time = self.AvatarNode.get_stats_box_division_time()
+        current_texture_processing_time = self.AvatarNode.get_stats_texture_processing_time()
+        current_frustum_and_occlusion_culling_time = self.AvatarNode.get_stats_frustum_and_occlusion_culling_time()
+        current_integration_time = self.AvatarNode.get_stats_integration_time()
+        current_marching_cubes_time = self.AvatarNode.get_stats_marching_cubes_time()
+        current_atlas_generation_time = self.AvatarNode.get_stats_atlas_generation_time()
+
+
         current_request_reply_latency = self.AvatarNode.get_stats_request_reply_latency()
         current_total_message_payload = self.AvatarNode.get_stats_total_message_payload_in_byte()
+
+        #if 0.0 != current_stream_timestamp:
+        #clearly a calib volume package
+        if self.AvatarNode.get_stats_total_message_payload_in_byte() > 100000000:
+          return
+
 
         if (0 == self.WindowCenter.RenderingFPS.value) or (0 == self.WindowLeft.RenderingFPS.value) or (0 == self.WindowRight.RenderingFPS.value):
           return
@@ -278,11 +313,25 @@ class TimedFPSPrinter(avango.script.Script):
         current_draw_time_left        = 1.0 / self.WindowLeft.RenderingFPS.value
         current_draw_time_right       = 1.0 / self.WindowRight.RenderingFPS.value
 
+
+        #self.max_valid_draw_time = max(self.max_valid_draw_time, current_draw_time_center) 
+
+        if (current_draw_time_center > 0.02 ) or (current_draw_time_left > 0.02 ) or (current_draw_time_right > 0.02 ):
+          return
+
         if not current_stream_timestamp in self.entry_count_dict:
           self.draw_time_left_dict[current_stream_timestamp] = 0.0
           self.draw_time_right_dict[current_stream_timestamp] = 0.0
           self.draw_time_center_dict[current_stream_timestamp] = 0.0
           self.recon_time_dict[current_stream_timestamp] = 0.0
+          #
+          self.box_division_time_dict[current_stream_timestamp] = 0.0
+          self.texture_processing_time_dict[current_stream_timestamp] = 0.0
+          self.frustum_and_occlusion_culling_time_dict[current_stream_timestamp] = 0.0
+          self.integration_time_dict[current_stream_timestamp] = 0.0
+          self.marching_cubes_time_dict[current_stream_timestamp] = 0.0
+          self.atlas_generation_time_dict[current_stream_timestamp] = 0.0
+
           self.reply_time_dict[current_stream_timestamp] = 0.0
           self.tri_count_dict[current_stream_timestamp] = 0
           self.payload_count_dict[current_stream_timestamp] = 0
@@ -292,10 +341,22 @@ class TimedFPSPrinter(avango.script.Script):
         self.draw_time_right_dict[current_stream_timestamp] += current_draw_time_right
         self.draw_time_center_dict[current_stream_timestamp] += current_draw_time_center
         self.recon_time_dict[current_stream_timestamp] += current_recon_time
+        #
+        self.box_division_time_dict[current_stream_timestamp] += current_box_division_time
+        self.texture_processing_time_dict[current_stream_timestamp] += current_texture_processing_time
+        self.frustum_and_occlusion_culling_time_dict[current_stream_timestamp] += current_frustum_and_occlusion_culling_time
+        self.integration_time_dict[current_stream_timestamp] += current_integration_time
+        self.marching_cubes_time_dict[current_stream_timestamp] += current_marching_cubes_time
+        self.atlas_generation_time_dict[current_stream_timestamp] += current_atlas_generation_time
+
         self.reply_time_dict[current_stream_timestamp] += current_request_reply_latency
         self.tri_count_dict[current_stream_timestamp] += current_tri_count
         self.payload_count_dict[current_stream_timestamp] += current_total_message_payload
         self.entry_count_dict[current_stream_timestamp] += 1
+
+        #self.entry_count_draw_time_left += 1
+        #self.entry_count_draw_time_right += 1
+        #self.entry_count_draw_time_center += 1        
 
         self.num_entries = self.num_entries + 1
       else:
@@ -314,6 +375,39 @@ class TimedFPSPrinter(avango.script.Script):
           for key, value in sorted(self.entry_count_dict.items()):
             log_recon_times.write(str(key) + " " + str(self.recon_time_dict[key] / value) + "\n" )
           log_recon_times.close()
+          #
+          log_box_division_times = open("log_box_division_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_box_division_times.write(str(key) + " " + str(self.box_division_time_dict[key] / value) + "\n" )
+          log_box_division_times.close()
+
+          log_texture_processing_times = open("log_texture_processing_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_texture_processing_times.write(str(key) + " " + str(self.texture_processing_time_dict[key] / value) + "\n" )
+          log_texture_processing_times.close()
+
+          log_frustum_and_occlusion_culling_times = open("log_frustum_and_occlusion_culling_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_frustum_and_occlusion_culling_times.write(str(key) + " " + str(self.frustum_and_occlusion_culling_time_dict[key] / value) + "\n" )
+          log_frustum_and_occlusion_culling_times.close()
+
+          log_integration_times = open("log_integration_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_integration_times.write(str(key) + " " + str(self.integration_time_dict[key] / value) + "\n" )
+          log_integration_times.close()
+
+          log_marching_cubes_times = open("log_marching_cubes_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_marching_cubes_times.write(str(key) + " " + str(self.marching_cubes_time_dict[key] / value) + "\n" )
+          log_marching_cubes_times.close()
+
+          log_atlas_generation_times = open("log_atlas_generation_times", 'w')
+          for key, value in sorted(self.entry_count_dict.items()):
+            log_atlas_generation_times.write(str(key) + " " + str(self.atlas_generation_time_dict[key] / value) + "\n" )
+          log_atlas_generation_times.close()
+
+
+
 
           log_reply_times = open("log_reply_times", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
@@ -333,6 +427,8 @@ class TimedFPSPrinter(avango.script.Script):
           log_draw_times_center = open("log_draw_times_center", 'w')
           for key, value in sorted(self.entry_count_dict.items()):
             log_draw_times_center.write(str(key) + " " + str(self.draw_time_center_dict[key] / value) + "\n" )
+            #log_draw_times_center.write(str(key) + " " + str(self.max_valid_draw_time) + "\n" )
+  
           log_draw_times_center.close()
 
           self.draw_time_left_dict.clear()

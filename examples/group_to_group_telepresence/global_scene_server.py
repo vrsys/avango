@@ -45,8 +45,8 @@ from time import sleep
 #avango.enable_logging(4, "server.log")
 
 
-OBSERVER_MODE = "3_CLIENTS_SIMULATED"
-#OBSERVER_MODE = "3_CLIENTS_LIVE"
+#OBSERVER_MODE = "3_CLIENTS_SIMULATED"
+OBSERVER_MODE = "3_CLIENTS_LIVE"
 #OBSERVER_MODE = "VIDEO_CAMERA"
 
 #OBSERVER_MODE = "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS"
@@ -75,9 +75,9 @@ SCENE_MODE = "MUSEUM"
 #SEQUENCE THREE POSITION
 #(    0, avango.gua.Vec3(1.3 + right_offset, 0 + down_offset, -3.9), 180),
 
-SEGMENT_NUMBER = 1 #sequence 1
+#SEGMENT_NUMBER = 1 #sequence 1
 #SEGMENT_NUMBER = 2 #sequence 2
-#SEGMENT_NUMBER = 3 #sequence 3
+SEGMENT_NUMBER = 3 #sequence 3
 #SEGMENT_NUMBER = 4 #sequence 2
 
 
@@ -95,6 +95,7 @@ LOCALHOST = "127.0.0.1"
 DAEDALOS  = "141.54.147.34"
 LADON     = "141.54.147.47"
 ARGOS     = "141.54.147.26"
+ATHENA    = "141.54.147.30"
 
 HEKATE    = "141.54.147.42"
 
@@ -280,7 +281,8 @@ class TimedKeyframePathAnimation(avango.script.Script):
     #nv = netvaluepy.NetValue("127.0.0.1:8000")
     #nv = netvaluepy.NetValue("141.54.147.52:8000") # hier socket passend zu ./play 
     #nv = netvaluepy.NetValue(CURRENTLY_USED_SERVER+":8000")
-    nv = netvaluepy.NetValue(HEKATE+":8000")
+    nv = netvaluepy.NetValue(ATHENA+":8000")
+    #nv = netvaluepy.NetValue(HEKATE+":8000")
     #nv = netvaluepy.NetValue(KERBEROS+":8000")
     #nv = netvaluepy.NetValue(VR16+":8000")
     #nv = netvaluepy.NetValue(STEELYGLINT+":8000")
@@ -481,7 +483,7 @@ if "MUSEUM" == SCENE_MODE:
     
     lion = loader.create_geometry_from_file("loewe", "/home/wabi7015/Desktop/binarized_loewe/even_more_cleaned_loewe.obj", avango.gua.LoaderFlags.DEFAULTS | avango.gua.LoaderFlags.LOAD_MATERIALS)
     #lion.Transform.value = avango.gua.make_trans_mat(-1.5, 0.0, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.3, 1.3, 1.3) * avango.gua.make_scale_mat(1, 1, -1)
-    lion.Transform.value = avango.gua.make_trans_mat(1.5, -0.05, -3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
+    lion.Transform.value = avango.gua.make_trans_mat(2.5, -0.05, -3.0)  * avango.gua.make_scale_mat(scale, scale, scale) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
     
     if "TEASER_GRAFIK_1_OBSERVER_3_POSITIONS" == OBSERVER_MODE:
       lion.Transform.value = avango.gua.make_trans_mat(2.5, 0.25, 3.0)  * avango.gua.make_scale_mat(1, 1, 1) * avango.gua.make_rot_mat(-90.0, 0.0, 1.0, 0.0) * avango.gua.make_scale_mat(1.0, 1.0, 1.0) * avango.gua.make_scale_mat(1, 1, -1)
@@ -588,7 +590,12 @@ nettrans.distribute_object(mat)
 spointsloader = avango.gua.nodes.SPointsLoader()
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_localhost_without_feedback.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_kerberos_for_achill.sr")
-avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_achill.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_achill.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_athena_for_achill.sr")
+#avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_athena_for_argos.sr")
+video3dloader = avango.gua.nodes.Video3DLoader()
+avatar_geode = video3dloader.load("kinect", "/mnt/telepresence/kinect_recordings/adrian_post_paper/22_06_2020/1440p_NFOV/surface_423_424_425_426_eris.ks")
+
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_vr16_for_vr16.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_artemis.sr")
 #avatar_geode = spointsloader.load("kinect", "/home/wabi7015/Programming/avango/examples/group_to_group_telepresence/spoints_resource_hekate_for_hekate.sr")
@@ -743,13 +750,15 @@ res_pass.ToneMappingMode.value = avango.gua.ToneMappingMode.UNCHARTED
 
 #tscreenspace_pass = avango.gua.nodes.TexturedScreenSpaceQuadPassDescription()
 spoints_pass_description = avango.gua.nodes.SPointsPassDescription()
+video3d_pass_description = avango.gua.nodes.Video3DPassDescription()
 occlusion_slave_res_pass = avango.gua.nodes.OcclusionSlaveResolvePassDescription()
 
 pipeline_description = avango.gua.nodes.PipelineDescription(
     Passes=[
         avango.gua.nodes.TriMeshPassDescription(),
         avango.gua.nodes.LightVisibilityPassDescription(),
-        avango.gua.nodes.SPointsPassDescription(),
+        #avango.gua.nodes.SPointsPassDescription(),
+        #avango.gua.nodes.Video3DPassDescription(),
         res_pass
     ])
 
@@ -765,13 +774,13 @@ occlusion_slave_pipeline_description = avango.gua.nodes.PipelineDescription(
 
 eye_height = 1.75
 
-#camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
-#camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
-#camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
-
-camera_translations_right = avango.gua.Vec3( 0.0, eye_height, 0.0)
+camera_translations_right = avango.gua.Vec3( 1.0, eye_height, 0.0)
 camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
-camera_translations_left  = avango.gua.Vec3(0.0, eye_height, 0.0)
+camera_translations_left = avango.gua.Vec3(-1.0, eye_height, 0.0)
+
+#camera_translations_right = avango.gua.Vec3( 0.0, eye_height, 0.0)
+#camera_translations_center = avango.gua.Vec3(0.0, eye_height, 0.0)
+#camera_translations_left  = avango.gua.Vec3(0.0, eye_height, 0.0)
 
 # camera_translations_left = avango.gua.Vec3( 1.0, eye_height, 2.0)
 # camera_translations_center = avango.gua.Vec3(0.0, eye_height, 2.0)
@@ -851,7 +860,7 @@ client_cam_center = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -868,7 +877,7 @@ occlusion_slave_client_cam_center = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_center),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,
@@ -895,7 +904,7 @@ client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -912,7 +921,7 @@ occlusion_slave_client_cam_left = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_left),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,
@@ -945,7 +954,7 @@ client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=pipeline_description,
 
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     NearClip = NEARCLIP,
     FarClip = FARCLIP
@@ -962,7 +971,7 @@ occlusion_slave_client_cam_right = avango.gua.nodes.CameraNode(
     Transform=avango.gua.make_trans_mat(camera_translations_right),
     PipelineDescription=occlusion_slave_pipeline_description,
     #PipelineDescription=pipeline_description,
-    EyeDistance = 0.0,#64,
+    EyeDistance = 0.064,
     EnableStereo = True,
     BlackList = ["invisible_osaka_avatar"],
     NearClip = NEARCLIP,

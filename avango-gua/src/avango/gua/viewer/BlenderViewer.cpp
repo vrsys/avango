@@ -29,6 +29,8 @@
 #include <chrono>
 #include <algorithm>
 
+
+
 namespace
 {
 av::Logger& logger(av::getLogger("av::gua::BlenderViewer"));
@@ -260,6 +262,8 @@ void av::gua::BlenderViewer::render_thread()
                         pipe = pipe_iter->second;
                     }
 
+                    //quick hack to allow simple compilation
+                    #if 0
                     if(serialized_cam.config.get_enable_stereo())
                     {
                         pipe->render_scene(::gua::CameraMode::LEFT, serialized_cam, m_gua_graphs);
@@ -269,6 +273,7 @@ void av::gua::BlenderViewer::render_thread()
                     {
                         pipe->render_scene(serialized_cam.config.get_mono_mode(), serialized_cam, m_gua_graphs);
                     }
+                    #endif
                     m_image = screenshot(*pipe);
 
                     pipe->clear_frame_cache();

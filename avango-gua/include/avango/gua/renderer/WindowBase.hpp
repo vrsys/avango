@@ -29,6 +29,8 @@ class AV_GUA_DLL WindowBase : public av::FieldContainer
     {
         MONO = static_cast<unsigned>(::gua::StereoMode::MONO),
         SIDE_BY_SIDE = static_cast<unsigned>(::gua::StereoMode::SIDE_BY_SIDE),
+        SIDE_BY_SIDE_SOFTWARE_MVR = static_cast<unsigned>(::gua::StereoMode::SIDE_BY_SIDE_SOFTWARE_MVR),
+        SIDE_BY_SIDE_HARDWARE_MVR = static_cast<unsigned>(::gua::StereoMode::SIDE_BY_SIDE_HARDWARE_MVR),
         ANAGLYPH_RED_GREEN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_GREEN),
         ANAGLYPH_RED_CYAN = static_cast<unsigned>(::gua::StereoMode::ANAGLYPH_RED_CYAN),
         CHECKERBOARD = static_cast<unsigned>(::gua::StereoMode::CHECKERBOARD),

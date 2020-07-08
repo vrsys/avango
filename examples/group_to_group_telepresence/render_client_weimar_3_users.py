@@ -51,8 +51,12 @@ DEBUG_MODE = "NONE"
 #DEBUG_MODE = "OCCLUSION_SLAVE_DEBUG"
 #DEBUG_MODE = "CENTRAL_USER"
 
-#LOGGING_MODE = "DISABLED"
-LOGGING_MODE = "ENABLED"
+LOGGING_MODE = "DISABLED"
+#LOGGING_MODE = "ENABLED"
+
+PRINT_FPS = "DISABLED"
+PRINT_FPS = "ENABLED"
+
 
 STEREO_MODE = 0
 WINDOW_RESOLUTION = 0
@@ -104,6 +108,8 @@ if "MEASUREMENT_ANAGLYPH" == CLIENT_MODE:
   DISPLAY_VARIABLE_RIGHT  = ":0.0"
 elif "VIDEO_POWERWALL" == CLIENT_MODE:
   STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE
+  #STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE_SOFTWARE_MVR
+  #STEREO_MODE = avango.gua.StereoMode.SIDE_BY_SIDE_HARDWARE_MVR
 
   if "OCCLUSION_SLAVE_DEBUG" == DEBUG_MODE:
     if True:
@@ -229,6 +235,11 @@ class TimedFPSPrinter(avango.script.Script):
   @field_has_changed(TimeIn)
   def update(self):
     #return
+    if(self.WindowCenter != 0):
+      if (0 != self.WindowCenter.RenderingFPS.value):
+        print(self.WindowCenter.RenderingFPS.value)
+
+    return
 
     if len(sys.argv) == 2:
       self.num_seconds_to_log = int(sys.argv[1])
@@ -574,7 +585,7 @@ class Initializer(avango.script.Script):
       if len(self.nettrans.Children.value) > 0:
         #self.on_arrival()
 
-        if "ENABLED" == LOGGING_MODE:
+        if "ENABLED" == LOGGING_MODE or "ENABLED" == PRINT_FPS:
           self.is_initialized = True
 
           self.fps_printer.set_avatar_node(self.graph["/net/grouped_view_setups_and_scene/scene_view_transform/scene_transform/avatar_transform/kinect"])
